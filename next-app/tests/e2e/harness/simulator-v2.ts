@@ -1,0 +1,337 @@
+import type { Page } from "@playwright/test";
+import { Archetype } from "./archetype";
+
+/**
+ * Simulator v2 — fixes the fidelity gaps the engine audit flagged:
+ *   1. Seeds real training_maxes for whitelist exercises (back_squat_highbar,
+ *      block_pull_midshin, front_squat) so `suggest.ts` has a baseline to
+ *      autoreg against.
+ *   2. Logs to real `<block_id>:<exercise_id>` keys that match the program's
+ *      phase-scheduled blocks — not a synthetic `sim:` block the whitelist
+ *      ignores.
+ *   3. Routes symptoms via a symptom_scores + derived_state pair per day so
+ *      `derived_state` drives the amber/red load reduction path.
+ *   4. Simulates Accept flow by directly writing `day_adjustments` when the
+ *      archetype's `acceptProposal` probability fires and the day is a red
+ *      state.
+ *   5. Varies per-set RPE across the 3 sets so `detectRpeDrift` has data.
+ */
+
+const TM_EXERCISES = ["back_squat_highbar", "block_pull_midshin", "front_squat"] as const;
+
+// Realistic starting TMs based on Margus's context (intermediate lifter, ~30% under peak).
+// These are the anchor for all load prescriptions the engine derives.
+const INITIAL_TMS: Record<string, number> = {
+  back_squat_highbar: 110,
+  block_pull_midshin: 140,
+  front_squat: 85,
+  deadlift_conventional: 150,
+  trap_bar_dl_floor: 145,
+};
+
+type ProgramShape = {
+  slug: string;
+  phases: Array<{ id: string; starts: string; ends?: string | null; blocks: string[] }>;
+  blocks: Array<{
+    id: string;
+    category?: string;
+    items?: Array<{ exercise_id?: string | null }>;
+  }>;
+  weekly_template?: unknown;
+};
+
+async function loadProgramClientSide(page: Page, slug: string): Promise<ProgramShape> {
+  return page.evaluate(async (slug) => {
+    const res = await fetch(`/data/programs/${slug}.json`);
+    return (await res.json()) as ProgramShape;
+  }, slug);
+}
+
+/**
+ * For a given date, resolve which block IDs the schedule wants. Simplified
+ * dow-based logic that mirrors src/lib/engine/schedule.ts:
+ * - Phase 1 rebuild: Mon/Wed/Thu/Sat reintro; Tue/Fri evaluate in week 2
+ * - Phase 2/3/4 main: use weekly_template
+ * - Phase 5: Mon Hatch A, Wed pull_heavy, Thu Hatch B
+ * For simulator purposes, we approximate: pick the strength blocks from the
+ * phase's block list and rotate Mon/Wed/Fri.
+ */
+function pickBlocksForDate(
+  program: ProgramShape,
+  dateISO: string,
+): string[] {
+  const phase = program.phases.find((p) => dateISO >= p.starts && (!p.ends || dateISO <= p.ends));
+  if (!phase) return [];
+  const dow = new Date(dateISO + "T12:00:00Z").getUTCDay();
+  // Only train Mon (1) / Wed (3) / Fri (5) — 3-day upper-body-esque split for sim.
+  if (dow !== 1 && dow !== 3 && dow !== 5) return [];
+  // Prefer specific known blocks by name pattern; fall back to first strength block.
+  const strengthBlocks = program.blocks.filter(
+    (b) => phase.blocks.includes(b.id) && (b.category ?? "strength") === "strength",
+  );
+  if (!strengthBlocks.length) return [];
+  // Alternate by day-of-week: Mon → first, Wed → second, Fri → third.
+  const idx = dow === 1 ? 0 : dow === 3 ? 1 : 2;
+  const chosen = strengthBlocks[idx % strengthBlocks.length];
+  return [chosen.id];
+}
+
+function itemsForBlock(program: ProgramShape, blockId: string): string[] {
+  const block = program.blocks.find((b) => b.id === blockId);
+  if (!block?.items) return [];
+  return block.items
+    .map((it) => it.exercise_id)
+    .filter((x): x is string => !!x && TM_EXERCISES.some((t) => t === x));
+}
+
+/**
+ * Compute derived_state from symptoms. Mirrors the app's rules:
+ * - Any symptom ≥ 6 or life_load ≥ 8 → "red"
+ * - Any symptom ≥ 4 or life_load ≥ 5 → "amber"
+ * - Otherwise → "green"
+ */
+function computeDerivedState(sym: Record<string, number | undefined>): "red" | "amber" | "green" {
+  const scores = ["low_back", "groin_left", "buttock_left", "shoulder_right"]
+    .map((k) => sym[k] ?? 0)
+    .filter((n) => n > 0);
+  const lifeLoad = sym.life_load ?? 0;
+  if (scores.some((s) => s >= 6) || lifeLoad >= 8) return "red";
+  if (scores.some((s) => s >= 4) || lifeLoad >= 5) return "amber";
+  return "green";
+}
+
+export async function runSimulationV2(
+  page: Page,
+  opts: {
+    archetype: Archetype;
+    programSlug: string;
+    tier?: string;
+    startDate: string;
+    days: number;
+    snapshotDays: number[];
+    screenshotDir: string;
+  },
+): Promise<{
+  archetypeId: string;
+  programSlug: string;
+  daysSimulated: number;
+  finalStore: unknown;
+  program: ProgramShape;
+}> {
+  const { archetype, programSlug, tier, startDate, days, snapshotDays, screenshotDir } = opts;
+
+  await page.clock.install({ time: new Date(startDate + "T08:00:00Z") });
+  const program = await loadProgramClientSide(page, programSlug);
+
+  // Seed store with tier + initial TMs + uid so StoreHydrator.syncToSession
+  // sees storedUid === sessionUid and doesn't fire resetForNewSession — which
+  // is what clears the onboarding-done flag and re-shows the modal.
+  const sessionUid = await page.evaluate(() => {
+    // Supabase stores its auth session in localStorage under a well-known key.
+    // Sniff it once so we can stamp storedUid to match.
+    const keys = Object.keys(localStorage).filter((k) => k.startsWith("sb-") && k.endsWith("-auth-token"));
+    for (const k of keys) {
+      try {
+        const raw = localStorage.getItem(k);
+        if (!raw) continue;
+        const parsed = JSON.parse(raw);
+        const uid = parsed?.user?.id ?? parsed?.currentSession?.user?.id;
+        if (uid) return uid as string;
+      } catch { /* ignore */ }
+    }
+    return null;
+  });
+  await page.evaluate(
+    ({ slug, tier, tms, uid }) => {
+      const raw = localStorage.getItem("program.store.v2");
+      const store = raw ? JSON.parse(raw) : {
+        version: 2,
+        logs: {},
+        training_maxes: {},
+        cycle: null,
+        updated_at: Date.now(),
+        scheduled_overrides: {},
+        skipped: {},
+        dismissed_proposals: {},
+      };
+      store.user_profile = {
+        ...(store.user_profile ?? {}),
+        uid: uid ?? store.user_profile?.uid,
+        active_program_id: slug,
+        active_program_ids: [slug],
+        active_program_started_at: new Date().toISOString(),
+        tier: "beta_forever",
+      };
+      if (tier) {
+        store.user_profile.program_states = {
+          ...(store.user_profile.program_states ?? {}),
+          [slug]: { ...(store.user_profile.program_states?.[slug] ?? {}), tier },
+        };
+      }
+      store.training_maxes = { ...store.training_maxes, ...tms };
+      store.updated_at = Date.now();
+      localStorage.setItem("program.store.v2", JSON.stringify(store));
+      localStorage.setItem("program.onboarding.done", "1");
+    },
+    { slug: programSlug, tier: tier ?? null, tms: INITIAL_TMS, uid: sessionUid },
+  );
+
+  await page.goto("/");
+  await page.waitForLoadState("networkidle");
+
+  if (snapshotDays.includes(0)) {
+    await page.screenshot({ path: `${screenshotDir}/day-0.png`, fullPage: true });
+  }
+
+  for (let day = 1; day <= days; day++) {
+    const target = new Date(new Date(startDate + "T08:00:00Z").getTime() + day * 864e5);
+    const dateISO = target.toISOString().slice(0, 10);
+    const dow = target.getUTCDay();
+    const decision = archetype.logDecision(day, dow);
+    const symptoms = archetype.symptoms(day);
+    const derivedState = computeDerivedState(symptoms as Record<string, number | undefined>);
+
+    const blockIds = pickBlocksForDate(program, dateISO);
+    const factor = archetype.loadFactor(day);
+    const baseRpe = archetype.rpeTarget;
+    const jitter = archetype.rpeJitter;
+
+    await page.evaluate(
+      ({ dateISO, decision, blockIds, symptoms, derivedState, note, tms, factor, baseRpe, jitter, itemsByBlock }) => {
+        const raw = localStorage.getItem("program.store.v2");
+        if (!raw) return;
+        const store = JSON.parse(raw);
+
+        // Always write morning check + symptoms.
+        store.logs = store.logs ?? {};
+        if (!store.logs[dateISO]) {
+          store.logs[dateISO] = { date: dateISO, exercises: {}, symptoms, notes: note ?? undefined };
+        } else {
+          store.logs[dateISO].symptoms = symptoms;
+          if (note) store.logs[dateISO].notes = note;
+        }
+        store.logs[dateISO].derived_state = derivedState;
+
+        // Skip → mark skipped, done.
+        if (decision === "skip") {
+          store.skipped = store.skipped ?? {};
+          store.skipped[dateISO] = { blocks: [], reason: "sim: archetype skipped" };
+        } else if (decision === "log") {
+          for (const blockId of blockIds) {
+            const items = itemsByBlock[blockId] ?? [];
+            for (const exId of items) {
+              const key = `${blockId}:${exId}`;
+              const tm = tms[exId];
+              if (!tm) continue;
+              // 3 sets with varied RPE — simulate drift where relevant.
+              const sets = [0, 1, 2].map((i) => {
+                const rpe = Math.max(4, Math.min(10, baseRpe + i * 0.5 + (Math.random() - 0.5) * jitter));
+                return {
+                  weight_kg: Math.round(tm * 0.85 * factor * 2) / 2,
+                  reps: 5,
+                  rpe: Math.round(rpe * 2) / 2,
+                };
+              });
+              store.logs[dateISO].exercises[key] = { done: true, sets };
+            }
+          }
+
+          // Accept proposal on red/amber days per archetype probability.
+          if (derivedState !== "green" && Math.random() < 0.7) {
+            store.day_adjustments = store.day_adjustments ?? {};
+            store.day_adjustments[dateISO] = {
+              load_multiplier: derivedState === "red" ? 0.9 : 0.95,
+              reason: `sim: ${derivedState} state`,
+              source: "notes",
+              accepted_at: Date.now(),
+            };
+          }
+        }
+
+        store.updated_at = Date.now();
+        localStorage.setItem("program.store.v2", JSON.stringify(store));
+      },
+      {
+        dateISO,
+        decision,
+        blockIds,
+        symptoms: symptoms as Record<string, number>,
+        derivedState,
+        note: archetype.sessionNote(day, dow),
+        tms: INITIAL_TMS,
+        factor,
+        baseRpe,
+        jitter,
+        itemsByBlock: Object.fromEntries(
+          blockIds.map((bid) => [bid, itemsForBlock(program, bid)]),
+        ),
+      },
+    );
+
+    // Cycle-end acceptance simulation (v3): at every 28-day boundary from
+    // program start, roll archetype.acceptProposal. If accepted, apply a TM
+    // decision informed by the archetype's loadFactor:
+    //   >1.02 → overperformer: bump squat +5, pull +7.5, deadlift +7.5
+    //   ~1.00 → consistent green cycle: same +5/+7.5/+7.5
+    //   0.95-1.00 → amber cycle: hold TM
+    //   <0.95 → red cycle: TM -10%
+    if (decision === "log" && day % 28 === 0 && day > 0) {
+      const cycleAvgFactor = archetype.loadFactor(day);
+      const accept = Math.random() < archetype.acceptProposal;
+      if (accept) {
+        await page.evaluate(
+          ({ cycleAvgFactor, dateISO }) => {
+            const raw = localStorage.getItem("program.store.v2");
+            if (!raw) return;
+            const store = JSON.parse(raw);
+            const tms = store.training_maxes ?? {};
+            const round = (v: number, step = 0.5) => Math.round(v / step) * step;
+            const isSquat = (id: string) => id.includes("squat");
+            let anyChanged = false;
+            for (const [lift, currentTM] of Object.entries(tms) as [string, number][]) {
+              let newTM = currentTM;
+              if (cycleAvgFactor > 1.02) {
+                newTM = round(currentTM + (isSquat(lift) ? 5 : 7.5));
+              } else if (cycleAvgFactor >= 0.98) {
+                newTM = round(currentTM + (isSquat(lift) ? 5 : 7.5));
+              } else if (cycleAvgFactor >= 0.95) {
+                // hold
+              } else {
+                newTM = round(currentTM * 0.9);
+              }
+              if (newTM !== currentTM) {
+                tms[lift] = newTM;
+                anyChanged = true;
+              }
+            }
+            if (anyChanged) {
+              store.training_maxes = tms;
+              store.tm_history = store.tm_history ?? [];
+              store.tm_history.push({ date: dateISO, snapshot: { ...tms }, source: "sim:cycle_end_accept" });
+              store.updated_at = Date.now();
+              localStorage.setItem("program.store.v2", JSON.stringify(store));
+            }
+          },
+          { cycleAvgFactor, dateISO },
+        );
+      }
+    }
+
+    await page.clock.setFixedTime(target);
+
+    if (snapshotDays.includes(day)) {
+      await page.goto("/");
+      await page.waitForLoadState("networkidle");
+      await page.screenshot({ path: `${screenshotDir}/day-${day}.png`, fullPage: true });
+    }
+  }
+
+  const finalStoreRaw = await page.evaluate(() => localStorage.getItem("program.store.v2"));
+  return {
+    archetypeId: archetype.id,
+    programSlug,
+    daysSimulated: days,
+    finalStore: finalStoreRaw ? JSON.parse(finalStoreRaw) : null,
+    program,
+  };
+}

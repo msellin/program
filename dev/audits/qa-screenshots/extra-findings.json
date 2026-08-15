@@ -1,0 +1,80 @@
+[
+  {
+    "stage": "after-wipe",
+    "store": {
+      "version": 2,
+      "logs": {},
+      "training_maxes": {},
+      "cycle": {
+        "phase_id": null,
+        "cycle_number": 1,
+        "week_in_cycle": 1
+      }
+    }
+  },
+  {
+    "stage": "after-reload",
+    "store": {
+      "version": 2,
+      "logs": {},
+      "training_maxes": {
+        "back_squat_highbar": 110,
+        "front_squat": 90,
+        "block_pull_midshin": 130
+      },
+      "cycle": {
+        "phase_id": null,
+        "cycle_number": 1,
+        "week_in_cycle": 1
+      }
+    }
+  },
+  {
+    "stage": "network-fail",
+    "fatal": true,
+    "msg": "Failed to fetch",
+    "prePath": "cd /Users/margussellin/www/program\npython3 -m http.server 8000\n# then open http://localhost:8000/"
+  },
+  {
+    "stage": "tm-negative",
+    "tm": {
+      "back_squat_highbar": -50,
+      "front_squat": 90,
+      "block_pull_midshin": 130
+    }
+  },
+  {
+    "stage": "tm-huge",
+    "tm": {
+      "back_squat_highbar": 9999,
+      "front_squat": 90,
+      "block_pull_midshin": 130
+    }
+  },
+  {
+    "stage": "tm-abc",
+    "tms": {
+      "front_squat": 90,
+      "block_pull_midshin": 130
+    },
+    "inputVal": ""
+  },
+  {
+    "stage": "modal-open",
+    "modalOpen": true
+  },
+  {
+    "stage": "modal-a11y",
+    "ariaHidden": "false",
+    "activeIsTrigger": "BODY"
+  },
+  {
+    "stage": "modal-reclick",
+    "modalTitle": "Adductor isometric squeeze, knees bent",
+    "bodyHtml": "<div class=\"modal-fallback\">No embedded video for this one yet.<br><br>\n      <a href=\"https://www.youtube.com/results?search_query=adductor%20squeeze%20test%20isometric%20rehab\" target=\"_blank\" rel=\""
+  },
+  {
+    "stage": "modal-close-outside",
+    "closed": true
+  }
+]

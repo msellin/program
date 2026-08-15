@@ -1,0 +1,131 @@
+{
+  "schema_version": "1.0.0",
+  "generated": "2026-08-01",
+  "purpose": "Answering these converts program.json from PROVISIONAL to actual. Each entry states why it matters and what changes based on the answer, so a fresh session can apply answers without re-deriving the reasoning.",
+  "instructions": "Fill the `answer` field. Leave `answered_date` when you do. Then regenerate program.json.",
+
+  "questions": [
+    {
+      "id": "q1_current_symptoms",
+      "priority": "critical",
+      "question": "What actually hurts right now, in 2026? Left groin, low back, left buttock, right shoulder — which are live, and at what intensity 0-10?",
+      "why": "All imaging is 2022 or older, newest clinical contact is 2023-11. Everything downstream depends on current state, not the historical picture.",
+      "answer_format": { "groin_left": "0-10", "low_back": "0-10", "buttock_left": "0-10", "shoulder_right": "0-10", "other": "string" },
+      "impact": {
+        "all_low": "Skip most of the isometric on-ramp. Start Block A at the progressed variants and bring Block B forward.",
+        "groin_live": "Iliopsoas hypothesis confirmed. Isometric on-ramp stays, and hip flexor loading becomes the priority thread.",
+        "back_or_buttock_live": "Lumbosacral segment still irritable. Delay all barbell reintroduction, prioritise anti-extension and anti-rotation trunk work.",
+        "shoulder_live": "Add a separate shoulder thread — currently out of scope in program.json."
+      },
+      "answer": { "groin_left": 1, "low_back": 1, "buttock_left": 1, "shoulder_right": 3.5, "other": "Groin/back/buttock all 1-2 — could be soreness rather than pain. Shoulder is the live one at 3-4." },
+      "answered_date": "2026-08-06"
+    },
+    {
+      "id": "q2_clicking",
+      "priority": "critical",
+      "question": "Is the clicking still there, and does it hurt when it clicks?",
+      "why": "Documented 2020-12-10 in the LOWERING phase of hanging leg raises. Painless click versus painful click is the fork between leaving it alone and loading the iliopsoas progressively.",
+      "answer_format": { "present": "boolean", "painful": "boolean", "context": "which movements" },
+      "impact": {
+        "absent": "Remove monitor:click flags. Strict knee raises can progress normally.",
+        "present_painless": "Common and usually benign. Keep loading, keep monitoring, do not chase it.",
+        "present_painful": "Active iliopsoas irritation. Isometrics only for 4-6 weeks before any dynamic hip flexion loading."
+      },
+      "answer": { "present": true, "painful": false, "context": "Occurred previously with hanging knee raises. No clicking in toes-to-bar now — that only happened during the worst period." },
+      "answered_date": "2026-08-06"
+    },
+    {
+      "id": "q3_squat_deadlift_tolerance",
+      "priority": "critical",
+      "question": "Can you currently squat and deadlift heavy? Have you tested since 2021, and what happened?",
+      "why": "Sets the entire starting point. The presenting complaint in 2020 was inability to stand up from a deadlift. If that has resolved, the whole reintroduction ladder in program.json is unnecessary caution.",
+      "answer_format": { "squat_max_recent": "kg or null", "deadlift_max_recent": "kg or null", "last_tested": "date", "symptoms_during_or_after": "string" },
+      "impact": {
+        "tolerating_both": "Delete the barbell_reintroduction ladder. Start Block B at working loads and periodise normally.",
+        "tolerating_neither": "Ladder stands as written.",
+        "one_but_not_other": "Keep the tolerated lift, ladder the other."
+      },
+      "answer": { "squat_max_recent": null, "deadlift_max_recent": null, "last_tested": null, "symptoms_during_or_after": "Not tested recently. Best proxy: 3-rep power clean at 100 kg completed 2 days ago (2026-08-04) with no adverse symptoms. Testing is the first job in the program." },
+      "answered_date": "2026-08-06"
+    },
+    {
+      "id": "q4_inflammatory_screen",
+      "priority": "critical",
+      "question": "Have HLA-B27, CRP or ESR ever been checked? How long does morning stiffness last? Does back pain improve with movement and worsen with rest? Does it wake you in the second half of the night?",
+      "why": "Possible sacroiliitis was explicitly raised 2021-01-20 and never formally excluded. Onset at 32, male, 5+ years persistent buttock and low back pain, bilateral SI signal, and pain AT REST documented in 2020 (throbbing and tense when not moving). No inflammatory bloodwork anywhere in the record. This is not a claim that axial spondyloarthritis is present — it is a cheap thing to rule out that nobody appears to have ruled out.",
+      "answer_format": { "hla_b27": "positive|negative|never_tested", "crp": "value or never_tested", "esr": "value or never_tested", "morning_stiffness_min": "int", "better_with_movement": "boolean", "night_waking_second_half": "boolean" },
+      "impact": {
+        "inflammatory_features_present": "STOP programme design. This is a rheumatology referral, not a training question. Exercise prescription for inflammatory disease differs substantially.",
+        "features_absent_or_ruled_out": "Mechanical model confirmed. Proceed as designed."
+      },
+      "answer": { "hla_b27": "never_tested", "crp": "never_tested", "esr": "never_tested", "morning_stiffness_min": 0, "better_with_movement": null, "night_waking_second_half": false, "note": "No inflammatory bloodwork. But: no morning back pain or stiffness, no second-half-of-night waking. On symptom pattern alone, inflammatory features are absent. Bloodwork would be belt-and-suspenders; mechanical plan proceeds." },
+      "answered_date": "2026-08-06"
+    },
+    {
+      "id": "q5_what_worked_2021",
+      "priority": "high",
+      "question": "What were the exercises that produced the documented improvement in early 2021?",
+      "why": "Orthopaedist recorded on 2021-01-21: positive dynamics on exercise, strength indicators significantly improved. Objective evidence that loading helped. Rebuilding on something known to have worked beats guessing.",
+      "answer_format": { "exercises": "list", "frequency": "string", "source": "who prescribed it" },
+      "impact": { "any": "Fold the known-effective movements into Block A and B, weighted ahead of my selections where they overlap in purpose." },
+      "answer": { "exercises": null, "frequency": null, "source": null, "note": "Not recovered. The specific exercises that produced the documented improvement in Jan 2021 aren't remembered. Program builds on first-principles instead — unilateral emphasis, trunk anti-extension, mid-range progressive loading." },
+      "answered_date": "2026-08-06"
+    },
+    {
+      "id": "q6_disc_golf",
+      "priority": "high",
+      "question": "Do you still play disc golf?",
+      "why": "Named as the trigger in both physiatry notes — CrossFit 3x/week plus disc golf competition prep, load through the left leg. A right-handed backhand drive plants and rotates over the left leg: repeated forceful rotation-extension through a left-sided transitional segment.",
+      "answer_format": { "still_playing": "boolean", "frequency": "string", "handedness": "string", "symptoms_after": "string" },
+      "impact": {
+        "yes": "Highest-leverage single change available. Load management here likely outweighs anything in the gym programme. Add rotational tolerance work and a throw-volume cap.",
+        "no": "Confirms the mechanism is historical. One less variable."
+      },
+      "answer": { "still_playing": false, "frequency": null, "handedness": null, "symptoms_after": "Not currently playing." },
+      "answered_date": "2026-08-06"
+    },
+    {
+      "id": "q7_current_training_week",
+      "priority": "high",
+      "question": "What does a training week look like now — CrossFit sessions, Runna runs, anything else?",
+      "why": "Block A, B and C have to fit into real weekly load. Last documented figure is 5x/week CrossFit (2023-09).",
+      "answer_format": { "crossfit_sessions": "int", "runs": "int", "other": "list", "total_hours": "number" },
+      "impact": { "any": "Determines Block B placement and whether total weekly load needs reducing before adding anything." },
+      "answer": { "crossfit_sessions": 4, "runs": 2, "other": ["hyrox-style sessions"], "total_hours": null, "note": "Trains 5-7 times/week. Mixes CrossFit classes with hyrox-style work and runs. Fitness as lifestyle. Can absorb 4 barbell sessions/week within existing schedule." },
+      "answered_date": "2026-08-06"
+    },
+    {
+      "id": "q8_shoulder_status",
+      "priority": "medium",
+      "question": "Has the right shoulder ever dislocated or felt like it slipped out? Any weakness in external rotation, or one shoulder blade looking different from the other? Can you go fully overhead now?",
+      "why": "Two reasons. First, glenoid dysplasia with 30 degrees retroversion plus dorsal 12-3 labral detachment plus possible Hill-Sachs suggests a prior posterior instability event. Second, the 3.3 cm spinoglenoid ganglion cyst sits in the suprascapular nerve's course — no atrophy was noted in 2022, but that was over three years ago, and these cysts can compress the nerve and weaken infraspinatus.",
+      "answer_format": { "dislocation_history": "boolean", "er_weakness": "boolean", "scapular_asymmetry": "boolean", "overhead_range": "full|partial|limited" },
+      "impact": {
+        "er_weakness_or_asymmetry": "Escalate to clinician before any overhead or hanging progression. Possible nerve compression.",
+        "clean": "Shoulder stays as a class-modification constraint only, no separate thread needed."
+      },
+      "answer": { "dislocation_history": false, "er_weakness": null, "scapular_asymmetry": null, "overhead_range": "workable_with_prep", "note": "No dislocations. Shoulder is stiff but workable — front squat is fine, overhead squats also OK with mobility prep and weightlifting shoes. Low-bar back squat rack still off the menu due to the posterior instability picture, but high-bar and front-rack positions are both usable. Zercher / paused as backups if a specific day the rack is uncomfortable." },
+      "answered_date": "2026-08-06"
+    },
+    {
+      "id": "q9_home_equipment",
+      "priority": "low",
+      "question": "What do you have at home — bands, dumbbells, kettlebell, bench, floor space?",
+      "why": "Block A currently assumes only a mini-band and something to squeeze.",
+      "answer_format": { "equipment": "list" },
+      "impact": { "more_available": "Block A can absorb some of Block B's load, reducing dependency on getting to the box." },
+      "answer": { "equipment": ["20 kg barbell", "2x10 kg plates", "2x5 kg plates", "2x2.5 kg plates"], "max_loaded_kg": 55, "note": "See program.json.equipment_inventory.home_garage. Enough for technique + unilateral work; not enough for heavy squat/deadlift." },
+      "answered_date": "2026-08-06"
+    },
+    {
+      "id": "q10_time_budget",
+      "priority": "low",
+      "question": "Realistically, how many minutes a day for the home work?",
+      "why": "Block A is written at 10-12 min. Consistency beats volume here, and an honest smaller number is better than an aspirational larger one.",
+      "answer_format": { "minutes_per_day": "int", "days_per_week": "int" },
+      "impact": { "under_10": "Cut Block A to the three highest-value items: hip flexor isometric, single-leg glute bridge, dead bug." },
+      "answer": { "minutes_per_day": 15, "days_per_week": 6, "note": "Effectively answered by q7 — user trains 5-7x/week. Home block scales to 10-15 min on non-box days. Box barbell sessions run 60 min." },
+      "answered_date": "2026-08-06"
+    }
+  ]
+}

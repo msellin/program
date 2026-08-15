@@ -1,0 +1,2522 @@
+{
+  "version": 2,
+  "logs": {
+    "2026-08-13": {
+      "date": "2026-08-13",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-08-14": {
+      "date": "2026-08-14",
+      "exercises": {
+        "block_reintro:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        },
+        "block_reintro:block_pull_midshin": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-08-15": {
+      "date": "2026-08-15",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-08-16": {
+      "date": "2026-08-16",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 4,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-08-17": {
+      "date": "2026-08-17",
+      "exercises": {
+        "block_reintro:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        },
+        "block_reintro:block_pull_midshin": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 4,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "notes": "Tired. Bar felt heavy.",
+      "derived_state": "amber"
+    },
+    "2026-08-18": {
+      "date": "2026-08-18",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-08-19": {
+      "date": "2026-08-19",
+      "exercises": {
+        "block_evaluate:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        },
+        "block_evaluate:block_pull_midshin": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 3,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-08-20": {
+      "date": "2026-08-20",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-08-21": {
+      "date": "2026-08-21",
+      "exercises": {
+        "block_reintro:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        },
+        "block_reintro:block_pull_midshin": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-08-22": {
+      "date": "2026-08-22",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "notes": "Soreness lingering into next day.",
+      "derived_state": "amber"
+    },
+    "2026-08-23": {
+      "date": "2026-08-23",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-08-24": {
+      "date": "2026-08-24",
+      "exercises": {
+        "block_reintro:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        },
+        "block_reintro:block_pull_midshin": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "notes": "Tired. Bar felt heavy.",
+      "derived_state": "amber"
+    },
+    "2026-08-25": {
+      "date": "2026-08-25",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-08-26": {
+      "date": "2026-08-26",
+      "exercises": {
+        "block_evaluate:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        },
+        "block_evaluate:block_pull_midshin": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 3,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-08-27": {
+      "date": "2026-08-27",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 4,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-08-28": {
+      "date": "2026-08-28",
+      "exercises": {
+        "block_reintro:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        },
+        "block_reintro:block_pull_midshin": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-08-29": {
+      "date": "2026-08-29",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-08-30": {
+      "date": "2026-08-30",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 4,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-08-31": {
+      "date": "2026-08-31",
+      "exercises": {
+        "block_squat_heavy:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 4,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "notes": "Tired. Bar felt heavy.",
+      "derived_state": "amber"
+    },
+    "2026-09-01": {
+      "date": "2026-09-01",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 4,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "notes": "Soreness lingering into next day.",
+      "derived_state": "amber"
+    },
+    "2026-09-02": {
+      "date": "2026-09-02",
+      "exercises": {
+        "block_pull_heavy:block_pull_midshin": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-09-03": {
+      "date": "2026-09-03",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-09-04": {
+      "date": "2026-09-04",
+      "exercises": {
+        "block_squat_variant:front_squat": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 66.5,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 66.5,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 66.5,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 3,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-09-05": {
+      "date": "2026-09-05",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-09-06": {
+      "date": "2026-09-06",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 4,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-09-07": {
+      "date": "2026-09-07",
+      "exercises": {
+        "block_squat_heavy:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "notes": "Tired. Bar felt heavy.",
+      "derived_state": "amber"
+    },
+    "2026-09-08": {
+      "date": "2026-09-08",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-09-09": {
+      "date": "2026-09-09",
+      "exercises": {
+        "block_pull_heavy:block_pull_midshin": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 4,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-09-10": {
+      "date": "2026-09-10",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 4,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-09-11": {
+      "date": "2026-09-11",
+      "exercises": {
+        "block_squat_variant:front_squat": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 66.5,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 66.5,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 66.5,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "notes": "Soreness lingering into next day.",
+      "derived_state": "amber"
+    },
+    "2026-09-12": {
+      "date": "2026-09-12",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-09-13": {
+      "date": "2026-09-13",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 4,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-09-14": {
+      "date": "2026-09-14",
+      "exercises": {
+        "block_squat_heavy:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 3,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "notes": "Tired. Bar felt heavy.",
+      "derived_state": "amber"
+    },
+    "2026-09-15": {
+      "date": "2026-09-15",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 4,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-09-16": {
+      "date": "2026-09-16",
+      "exercises": {
+        "block_pull_heavy:block_pull_midshin": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 4,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-09-17": {
+      "date": "2026-09-17",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-09-18": {
+      "date": "2026-09-18",
+      "exercises": {
+        "block_squat_variant:front_squat": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 66.5,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 66.5,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 66.5,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 3,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-09-19": {
+      "date": "2026-09-19",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-09-20": {
+      "date": "2026-09-20",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-09-21": {
+      "date": "2026-09-21",
+      "exercises": {
+        "block_squat_heavy:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "notes": "Tired. Bar felt heavy.",
+      "derived_state": "amber"
+    },
+    "2026-09-22": {
+      "date": "2026-09-22",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-09-23": {
+      "date": "2026-09-23",
+      "exercises": {
+        "block_pull_heavy:block_pull_midshin": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-09-24": {
+      "date": "2026-09-24",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-09-25": {
+      "date": "2026-09-25",
+      "exercises": {
+        "block_squat_variant:front_squat": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 66.5,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 66.5,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 66.5,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-09-26": {
+      "date": "2026-09-26",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-09-27": {
+      "date": "2026-09-27",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-09-28": {
+      "date": "2026-09-28",
+      "exercises": {
+        "block_squat_heavy:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 4,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "notes": "Tired. Bar felt heavy.",
+      "derived_state": "amber"
+    },
+    "2026-09-29": {
+      "date": "2026-09-29",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-09-30": {
+      "date": "2026-09-30",
+      "exercises": {
+        "block_pull_heavy:block_pull_midshin": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 4,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-10-01": {
+      "date": "2026-10-01",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 4,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "notes": "Soreness lingering into next day.",
+      "derived_state": "amber"
+    },
+    "2026-10-02": {
+      "date": "2026-10-02",
+      "exercises": {
+        "block_squat_variant:front_squat": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 66.5,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 66.5,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 66.5,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-10-03": {
+      "date": "2026-10-03",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-10-04": {
+      "date": "2026-10-04",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-10-05": {
+      "date": "2026-10-05",
+      "exercises": {
+        "block_squat_heavy:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 3,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "notes": "Tired. Bar felt heavy.",
+      "derived_state": "amber"
+    },
+    "2026-10-06": {
+      "date": "2026-10-06",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-10-07": {
+      "date": "2026-10-07",
+      "exercises": {
+        "block_pull_heavy:block_pull_midshin": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-10-08": {
+      "date": "2026-10-08",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-10-09": {
+      "date": "2026-10-09",
+      "exercises": {
+        "block_squat_variant:front_squat": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 66.5,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 66.5,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 66.5,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-10-10": {
+      "date": "2026-10-10",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-10-11": {
+      "date": "2026-10-11",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "notes": "Soreness lingering into next day.",
+      "derived_state": "amber"
+    },
+    "2026-10-12": {
+      "date": "2026-10-12",
+      "exercises": {
+        "block_squat_heavy:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 4,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "notes": "Tired. Bar felt heavy.",
+      "derived_state": "amber"
+    },
+    "2026-10-13": {
+      "date": "2026-10-13",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 4,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-10-14": {
+      "date": "2026-10-14",
+      "exercises": {
+        "block_pull_heavy:block_pull_midshin": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 3,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-10-15": {
+      "date": "2026-10-15",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 4,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-10-16": {
+      "date": "2026-10-16",
+      "exercises": {
+        "block_squat_variant:front_squat": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 66.5,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 66.5,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 66.5,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-10-17": {
+      "date": "2026-10-17",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-10-18": {
+      "date": "2026-10-18",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-10-19": {
+      "date": "2026-10-19",
+      "exercises": {
+        "block_squat_heavy:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 4,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "notes": "Tired. Bar felt heavy.",
+      "derived_state": "amber"
+    },
+    "2026-10-20": {
+      "date": "2026-10-20",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 4,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-10-21": {
+      "date": "2026-10-21",
+      "exercises": {
+        "block_pull_heavy:block_pull_midshin": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 3,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "notes": "Soreness lingering into next day.",
+      "derived_state": "amber"
+    },
+    "2026-10-22": {
+      "date": "2026-10-22",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-10-23": {
+      "date": "2026-10-23",
+      "exercises": {
+        "block_squat_variant:front_squat": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 66.5,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 66.5,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 66.5,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 4,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-10-24": {
+      "date": "2026-10-24",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-10-25": {
+      "date": "2026-10-25",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-10-26": {
+      "date": "2026-10-26",
+      "exercises": {
+        "block_squat_heavy:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 3,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "notes": "Tired. Bar felt heavy.",
+      "derived_state": "amber"
+    },
+    "2026-10-27": {
+      "date": "2026-10-27",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-10-28": {
+      "date": "2026-10-28",
+      "exercises": {
+        "block_pull_heavy:block_pull_midshin": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 4,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-10-29": {
+      "date": "2026-10-29",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-10-30": {
+      "date": "2026-10-30",
+      "exercises": {
+        "block_squat_variant:front_squat": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 66.5,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 66.5,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 66.5,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-10-31": {
+      "date": "2026-10-31",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "notes": "Soreness lingering into next day.",
+      "derived_state": "amber"
+    },
+    "2026-11-01": {
+      "date": "2026-11-01",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-11-02": {
+      "date": "2026-11-02",
+      "exercises": {
+        "block_squat_heavy:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 3,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "notes": "Tired. Bar felt heavy.",
+      "derived_state": "amber"
+    },
+    "2026-11-03": {
+      "date": "2026-11-03",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 4,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-11-04": {
+      "date": "2026-11-04",
+      "exercises": {
+        "block_pull_heavy:block_pull_midshin": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 109.5,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 4,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-11-05": {
+      "date": "2026-11-05",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-11-06": {
+      "date": "2026-11-06",
+      "exercises": {
+        "block_squat_variant:front_squat": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 66.5,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 66.5,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 66.5,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-11-07": {
+      "date": "2026-11-07",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-11-08": {
+      "date": "2026-11-08",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "derived_state": "amber"
+    },
+    "2026-11-09": {
+      "date": "2026-11-09",
+      "exercises": {
+        "block_squat_heavy:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 9.5
+            },
+            {
+              "weight_kg": 86,
+              "reps": 5,
+              "rpe": 10
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "notes": "Tired. Bar felt heavy.",
+      "derived_state": "amber"
+    },
+    "2026-11-10": {
+      "date": "2026-11-10",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 5,
+        "groin_left": 2,
+        "buttock_left": 1,
+        "shoulder_right": 2,
+        "life_load": 6
+      },
+      "notes": "Soreness lingering into next day.",
+      "derived_state": "amber"
+    }
+  },
+  "training_maxes": {
+    "back_squat_highbar": 89,
+    "block_pull_midshin": 113.5,
+    "front_squat": 69,
+    "deadlift_conventional": 121.5,
+    "trap_bar_dl_floor": 117.5
+  },
+  "cycle": null,
+  "updated_at": 1794211200000,
+  "scheduled_overrides": {},
+  "skipped": {},
+  "dismissed_proposals": {},
+  "user_profile": {
+    "active_program_id": "anterior-hip-rebuild",
+    "active_program_ids": [
+      "anterior-hip-rebuild"
+    ],
+    "active_program_started_at": "2026-08-12T08:00:00.090Z",
+    "tier": "beta_forever"
+  },
+  "day_adjustments": {
+    "2026-08-13": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1786521601280
+    },
+    "2026-08-14": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1786608000000
+    },
+    "2026-08-16": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1786780800000
+    },
+    "2026-08-17": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1786867200000
+    },
+    "2026-08-18": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1786953600000
+    },
+    "2026-08-19": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1787040000000
+    },
+    "2026-08-21": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1787212800000
+    },
+    "2026-08-23": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1787385600000
+    },
+    "2026-08-24": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1787472000000
+    },
+    "2026-08-25": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1787558400000
+    },
+    "2026-08-26": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1787644800000
+    },
+    "2026-08-27": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1787731200000
+    },
+    "2026-08-28": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1787817600000
+    },
+    "2026-08-29": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1787904000000
+    },
+    "2026-08-30": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1787990400000
+    },
+    "2026-08-31": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1788076800000
+    },
+    "2026-09-01": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1788163200000
+    },
+    "2026-09-04": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1788422400000
+    },
+    "2026-09-05": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1788508800000
+    },
+    "2026-09-06": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1788595200000
+    },
+    "2026-09-08": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1788768000000
+    },
+    "2026-09-09": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1788854400000
+    },
+    "2026-09-10": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1788940800000
+    },
+    "2026-09-11": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1789027200000
+    },
+    "2026-09-12": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1789113600000
+    },
+    "2026-09-13": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1789200000000
+    },
+    "2026-09-14": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1789286400000
+    },
+    "2026-09-15": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1789372800000
+    },
+    "2026-09-16": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1789459200000
+    },
+    "2026-09-17": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1789545600000
+    },
+    "2026-09-18": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1789632000000
+    },
+    "2026-09-20": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1789804800000
+    },
+    "2026-09-21": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1789891200000
+    },
+    "2026-09-22": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1789977600000
+    },
+    "2026-09-23": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1790064000000
+    },
+    "2026-09-24": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1790150400000
+    },
+    "2026-09-25": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1790236800000
+    },
+    "2026-09-26": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1790323200000
+    },
+    "2026-09-29": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1790582400000
+    },
+    "2026-10-02": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1790841600000
+    },
+    "2026-10-03": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1790928000000
+    },
+    "2026-10-05": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1791100800000
+    },
+    "2026-10-06": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1791187200000
+    },
+    "2026-10-07": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1791273600000
+    },
+    "2026-10-08": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1791360000000
+    },
+    "2026-10-09": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1791446400000
+    },
+    "2026-10-10": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1791532800000
+    },
+    "2026-10-11": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1791619200000
+    },
+    "2026-10-12": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1791705600000
+    },
+    "2026-10-14": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1791878400000
+    },
+    "2026-10-15": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1791964800000
+    },
+    "2026-10-16": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1792051200000
+    },
+    "2026-10-17": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1792137600000
+    },
+    "2026-10-18": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1792224000000
+    },
+    "2026-10-19": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1792310400000
+    },
+    "2026-10-23": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1792656000000
+    },
+    "2026-10-24": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1792742400000
+    },
+    "2026-10-25": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1792828800000
+    },
+    "2026-10-28": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1793088000000
+    },
+    "2026-10-29": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1793174400000
+    },
+    "2026-10-30": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1793260800000
+    },
+    "2026-10-31": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1793347200000
+    },
+    "2026-11-01": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1793433600000
+    },
+    "2026-11-02": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1793520000000
+    },
+    "2026-11-03": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1793606400000
+    },
+    "2026-11-04": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1793692800000
+    },
+    "2026-11-05": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1793779200000
+    },
+    "2026-11-06": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1793865600000
+    },
+    "2026-11-07": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1793952000000
+    },
+    "2026-11-08": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1794038400000
+    },
+    "2026-11-09": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1794124800000
+    },
+    "2026-11-10": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1794211200000
+    }
+  },
+  "tm_history": [
+    {
+      "date": "2026-09-09",
+      "snapshot": {
+        "back_squat_highbar": 99,
+        "block_pull_midshin": 126,
+        "front_squat": 76.5,
+        "deadlift_conventional": 135,
+        "trap_bar_dl_floor": 130.5
+      },
+      "source": "sim:cycle_end_accept"
+    },
+    {
+      "date": "2026-11-04",
+      "snapshot": {
+        "back_squat_highbar": 89,
+        "block_pull_midshin": 113.5,
+        "front_squat": 69,
+        "deadlift_conventional": 121.5,
+        "trap_bar_dl_floor": 117.5
+      },
+      "source": "sim:cycle_end_accept"
+    }
+  ]
+}

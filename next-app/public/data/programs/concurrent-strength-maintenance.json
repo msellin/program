@@ -1,0 +1,923 @@
+{
+  "schema_version": "1.0",
+  "generated": "2026-08-12",
+  "status": "PROVISIONAL",
+  "status_note": "First-authored draft. Evidence base is fully sourced from whitepaper 02_concurrent_training.md \u2014 32 primary citations. Weekly template + block structure are the initial engineering proposal; will refine after beta feedback.",
+  "generation_strategy": "correlated_tier",
+  "goals": {
+    "primary": "Add aerobic capacity without losing strength",
+    "secondary": "Preserve explosive strength within the documented Schumann 2022 SMD \u22120.28 bound",
+    "explicit_non_goals": [
+      "Hitting new 1RM PRs during this block (PR chasing violates RPE \u2264 7 ceiling)",
+      "Chasing marathon-style aerobic volume",
+      "Replacing the athlete's sport-specific block"
+    ]
+  },
+  "principles": [
+    {
+      "id": "cost_bounded",
+      "rule": "Concurrent training has a cost. We bound and cite it, we don't pretend it's zero.",
+      "detail": "Schumann 2022 meta (43 studies): maximal strength SMD \u22120.06 (n.s.), hypertrophy SMD \u22120.01 (n.s.), explosive strength SMD \u22120.28 (p=0.007). We accept the max/hypertrophy bounds; we structure to protect explosive strength."
+    },
+    {
+      "id": "six_hour_separation",
+      "rule": "Minimum 6 hours between endurance and strength sessions on same day.",
+      "detail": "Robineau 2016 dose-response: 0h separation reduced bench + half-squat gains significantly vs 6h and 24h. Below the 6h threshold, molecular interference (AMPK-mTOR) is active."
+    },
+    {
+      "id": "lift_first_if_same_day",
+      "rule": "When same-day pairing is unavoidable, lift first.",
+      "detail": "Eddens 2018: resistance-before-endurance produced +6.91% greater lower-body dynamic strength gain vs endurance-first (p=0.006)."
+    },
+    {
+      "id": "modality_bias",
+      "rule": "Cycling / rowing / ski-erg preferred over running for the strength athlete.",
+      "detail": "Wilson 2012 (r = \u22120.26 to \u22120.35 frequency, \u22120.29 to \u22120.75 duration): running produces more interference than cycling; cycling near-zero. Doma 2019: bidirectional damage \u2014 running-induced damage impairs subsequent squat/deadlift force 24-48h."
+    },
+    {
+      "id": "rpe_ceiling",
+      "rule": "RPE \u2264 7 on all strength sessions during the block.",
+      "detail": "Prevents chasing the explosive-strength cost (Schumann 2022 SMD \u22120.28). Maintenance dose, not build."
+    },
+    {
+      "id": "endurance_volume_over_intensity",
+      "rule": "Endurance volume mediates interference. Intensity does not (much).",
+      "detail": "Fyfe 2016: HIT+RT and MICT+RT produced same strength decrement (~0.9% difference). Cap total endurance minutes; don't fear intensity per session."
+    },
+    {
+      "id": "protein_floor",
+      "rule": "\u2265 1.6 g/kg/day protein throughout the block.",
+      "detail": "Morton 2018 meta: hypertrophy response plateaus at 1.62 g/kg/day. Below this floor, concurrent losses are amplified. ISSN position stand (J\u00e4ger 2017): 1.4-2.0 g/kg/day."
+    }
+  ],
+  "plan_tiers": [
+    {
+      "id": "foundation",
+      "label": "Foundation",
+      "condition": "cardio_hours_per_week < 3 && has_squat_prs == true",
+      "typical_outcome": "By week 8: submax HR down 5-10 bpm at fixed pace, back squat / bench / deadlift maintained within 2.5 kg of pre-block TM.",
+      "outcome_confidence": "realistic",
+      "full_goal_weeks_estimate": 8,
+      "starting_phase_id": "phase_1_intro"
+    },
+    {
+      "id": "progression",
+      "label": "Progression",
+      "condition": "cardio_hours_per_week >= 3 && cardio_hours_per_week < 6",
+      "typical_outcome": "Submax HR down 8-15 bpm, strength held or +2.5 kg on any lift (only via green cycle-end).",
+      "outcome_confidence": "realistic",
+      "full_goal_weeks_estimate": 8,
+      "starting_phase_id": "phase_1_intro"
+    },
+    {
+      "id": "push",
+      "label": "Push",
+      "condition": "cardio_hours_per_week >= 6",
+      "typical_outcome": "VO2max +2-4%; strength floor held. Above this bar, concurrent gains become stochastic per HERITAGE non-response data.",
+      "outcome_confidence": "stretch",
+      "full_goal_weeks_estimate": 8,
+      "starting_phase_id": "phase_1_intro"
+    }
+  ],
+  "program_goal": {
+    "metric": "submax_hr_at_fixed_pace_bpm",
+    "target_value": -10,
+    "stretch_value": -15,
+    "display_name": "Submax HR reduction at fixed pace",
+    "unit": "bpm",
+    "direction": "lower_is_better"
+  },
+  "intake": {
+    "duration_days": 3,
+    "questions": [
+      {
+        "id": "days_per_week",
+        "label": "Realistically, how many days per week can you commit?",
+        "help": "Honest answer wins. If your ceiling is 2, we'll tell you upfront whether this program can deliver on its claim at that dose.",
+        "type": "select",
+        "required": true,
+        "options": [
+          {
+            "value": "2",
+            "label": "2 days"
+          },
+          {
+            "value": "3",
+            "label": "3 days"
+          },
+          {
+            "value": "4",
+            "label": "4 days"
+          },
+          {
+            "value": "5",
+            "label": "5 days"
+          },
+          {
+            "value": "6",
+            "label": "6 days"
+          },
+          {
+            "value": "7",
+            "label": "7 days"
+          }
+        ]
+      },
+      {
+        "id": "cardio_hours_per_week",
+        "label": "Current weekly cardio hours (Z1/Z2 combined)?",
+        "type": "select",
+        "required": true,
+        "options": [
+          {
+            "value": "under_1",
+            "label": "Under 1",
+            "hint": "Foundation"
+          },
+          {
+            "value": "1_3",
+            "label": "1\u20133",
+            "hint": "Foundation"
+          },
+          {
+            "value": "3_6",
+            "label": "3\u20136",
+            "hint": "Progression"
+          },
+          {
+            "value": "over_6",
+            "label": "6+",
+            "hint": "Push"
+          }
+        ]
+      },
+      {
+        "id": "has_squat_prs",
+        "label": "Do you have a current back-squat 5RM you'd rather not lose?",
+        "type": "boolean",
+        "required": true
+      },
+      {
+        "id": "hypertension_unmanaged",
+        "label": "Do you have unmanaged high blood pressure (resting > 160/100, not treated)?",
+        "type": "select",
+        "required": true,
+        "options": [
+          {
+            "value": "no"
+          },
+          {
+            "value": "unsure"
+          },
+          {
+            "value": "yes"
+          }
+        ]
+      },
+      {
+        "id": "exertional_syncope_history",
+        "label": "Ever fainted or had unexplained cardiac symptoms during exertion?",
+        "type": "boolean",
+        "required": true
+      },
+      {
+        "id": "flaring_tendon",
+        "label": "Currently flaring tendon (Achilles, patellar, elbow)?",
+        "type": "boolean",
+        "required": true
+      },
+      {
+        "id": "consent_symptom_data",
+        "label": "I consent to storing training log and symptom scores.",
+        "type": "boolean",
+        "required": true
+      }
+    ],
+    "consent": [
+      {
+        "id": "not_medical_advice",
+        "label": "I understand this is training programming, not medical advice.",
+        "required": true
+      }
+    ],
+    "safety_gates": [
+      {
+        "question_id": "hypertension_unmanaged",
+        "unsafe_values": [
+          "yes"
+        ],
+        "block_title": "See your clinician first",
+        "block_body": "Unmanaged hypertension makes high-intensity interval work unsafe. Get BP under management before starting concurrent programming."
+      },
+      {
+        "question_id": "exertional_syncope_history",
+        "unsafe_values": [
+          "true"
+        ],
+        "block_title": "Get full cardiac clearance first",
+        "block_body": "History of exertional syncope requires medical clearance before any interval-based program."
+      },
+      {
+        "question_id": "flaring_tendon",
+        "unsafe_values": [
+          "true"
+        ],
+        "block_title": "Resolve the flare first",
+        "block_body": "Running-based intervals will amplify a flaring tendon. Consider deferring, or the strength-only variant while it settles."
+      }
+    ]
+  },
+  "phases": [
+    {
+      "id": "phase_1_intro",
+      "name": "Intro \u00b7 Weeks 1\u20132",
+      "starts": "2026-08-12",
+      "ends": "2026-08-25",
+      "duration_weeks": 2,
+      "blocks": [
+        "block_strength_heavy",
+        "block_strength_moderate",
+        "block_z2_bike",
+        "block_z2_row",
+        "block_deload"
+      ],
+      "goal": "Anchor the strength floor. Introduce Z2 volume. No high-intensity yet.",
+      "rationale": "The molecular-interference window (Baar 2014: AMPK stays elevated ~3h post-endurance; mTORC1 sensitised 18-24h post-lifting) matters most when intensity is introduced. Weeks 1-2 give the athlete a settled aerobic baseline before we add stress."
+    },
+    {
+      "id": "phase_2_intervals",
+      "name": "Intervals \u00b7 Weeks 3\u20136",
+      "starts": "2026-08-26",
+      "ends": "2026-09-22",
+      "duration_weeks": 4,
+      "blocks": [
+        "block_strength_heavy",
+        "block_strength_moderate",
+        "block_z2_bike",
+        "block_z2_row",
+        "block_4x4_row"
+      ],
+      "goal": "Add Norwegian 4\u00d74 once/week. Hold strength at RPE \u2264 7.",
+      "rationale": "Helgerud 2007 dose (4\u00d74 \u00d7 3/wk \u00d7 8 wk \u2192 +7.2% VO2max) is fully compatible with maintenance strength IF the 6h separation rule holds (Robineau 2016)."
+    },
+    {
+      "id": "phase_3_test",
+      "name": "Retest \u00b7 Weeks 7\u20138",
+      "starts": "2026-09-23",
+      "ends": "2026-10-06",
+      "duration_weeks": 2,
+      "blocks": [
+        "block_strength_heavy",
+        "block_z2_row",
+        "block_retest_hr",
+        "block_retest_strength"
+      ],
+      "goal": "Retest submax HR at pace-5. Confirm strength held.",
+      "rationale": "Pre/post submax HR at fixed pace is a threshold-shift proxy (Joyner & Coyle 2008 \u2014 track threshold, not VO2max)."
+    }
+  ],
+  "blocks": [
+    {
+      "id": "block_strength_heavy",
+      "name": "Strength \u00b7 Heavy",
+      "category": "strength",
+      "frequency": "1\u00d7/wk",
+      "duration_min": 60,
+      "note": "RPE 6-7 top set. No PRs. 3 warm-ups + top set + FSL 5\u00d75 @ 65%.",
+      "items": [
+        {
+          "exercise_id": "back_squat_highbar",
+          "role": "top_set",
+          "scheme": "5\u00d75 @ 75% TM, RPE \u2264 7"
+        },
+        {
+          "exercise_id": "block_pull_midshin",
+          "role": "top_set",
+          "scheme": "5\u00d73 @ 78% TM, RPE \u2264 7"
+        }
+      ]
+    },
+    {
+      "id": "block_strength_moderate",
+      "name": "Strength \u00b7 Moderate",
+      "category": "strength",
+      "frequency": "1\u00d7/wk",
+      "duration_min": 45,
+      "note": "Front squat + press pattern. Volume day, RPE 6.",
+      "items": [
+        {
+          "exercise_id": "front_squat",
+          "role": "top_set",
+          "scheme": "5\u00d75 @ 65% TM"
+        }
+      ]
+    },
+    {
+      "id": "block_z2_bike",
+      "name": "Zone 2 \u00b7 Bike",
+      "category": "run",
+      "frequency": "2\u00d7/wk",
+      "duration_min": [
+        30,
+        60
+      ],
+      "note": "HR at ~70-75% max. Bike preferred over run (Wilson 2012 modality bias)."
+    },
+    {
+      "id": "block_z2_row",
+      "name": "Zone 2 \u00b7 Row / Ski",
+      "category": "run",
+      "frequency": "1\u00d7/wk",
+      "duration_min": 45,
+      "note": "Sustainable pace. Add to Z2 bike volume, don't replace."
+    },
+    {
+      "id": "block_4x4_row",
+      "name": "Norwegian 4\u00d74 \u00b7 Row / Ski",
+      "category": "run",
+      "frequency": "1\u00d7/wk",
+      "duration_min": 32,
+      "note": "4\u00d74 min @ 90-95% max HR, 3 min active recovery. \u22656h from any lift (Robineau 2016)."
+    },
+    {
+      "id": "block_retest_hr",
+      "name": "Retest \u00b7 Submax HR",
+      "category": "run",
+      "frequency": "1\u00d7/wk",
+      "duration_min": 20,
+      "note": "5 min at fixed pace (e.g. row 2:00/500m), record steady-state HR. Compare to pre-block baseline."
+    },
+    {
+      "id": "block_retest_strength",
+      "name": "Retest \u00b7 5RM confirm",
+      "category": "strength",
+      "frequency": "1\u00d7/wk",
+      "duration_min": 45,
+      "note": "Confirm back-squat + block-pull 5RM held vs pre-block."
+    },
+    {
+      "id": "block_deload",
+      "name": "Deload \u00b7 Week 4",
+      "category": "strength",
+      "frequency": "week 4",
+      "duration_min": 30,
+      "note": "40-50% TM \u00d7 5 for all lifts. Volume down 50%. Symptom check."
+    }
+  ],
+  "training_maxes": {
+    "note": "Lifts CSM users actually train in the strength blocks. Values are examples — replaced by the user's own numbers on Progress.",
+    "starting_values_kg": {
+      "back_squat_highbar": 100,
+      "front_squat": 85,
+      "block_pull_midshin": 120
+    }
+  },
+  "weekly_template": {
+    "note": "Correlated tier: all three tiers use the same weekly layout, scaled by intensity. Foundation drops one Z2 session; Push adds one.",
+    "week": [
+      {
+        "day": "Sun",
+        "session": "block_z2_bike",
+        "conditioning": ""
+      },
+      {
+        "day": "Mon",
+        "session": "block_strength_heavy",
+        "conditioning": ""
+      },
+      {
+        "day": "Tue",
+        "session": "block_z2_bike",
+        "conditioning": ""
+      },
+      {
+        "day": "Wed",
+        "session": "block_strength_moderate",
+        "conditioning": ""
+      },
+      {
+        "day": "Thu",
+        "session": "block_4x4_row",
+        "conditioning": ""
+      },
+      {
+        "day": "Fri",
+        "session": "block_z2_row",
+        "conditioning": ""
+      },
+      {
+        "day": "Sat",
+        "session": "",
+        "conditioning": ""
+      }
+    ],
+    "principles": [
+      "Lift Mon + Wed. Cardio Sun / Tue / Thu / Fri.",
+      "Never lift + hard intervals on the same day.",
+      "6h min between any two sessions same day."
+    ]
+  },
+  "progression_rules": {
+    "note": "See adapt.ts + suggest.ts. RPE \u2264 7 ceiling holds throughout. Cycle-end evaluation not run (this is a maintenance block, not a 5/3/1 arc).",
+    "states": [
+      {
+        "state": "green",
+        "trigger": "submax HR \u2193 \u2265 3 bpm at pace-5, no strength loss",
+        "action": "hold plan"
+      },
+      {
+        "state": "amber",
+        "trigger": "strength holding but submax HR flat",
+        "action": "add 1 Z2 session Push tier"
+      },
+      {
+        "state": "red",
+        "trigger": "strength loss > 2.5 kg on any lift OR \u2265 3 amber symptom days in a week",
+        "action": "drop 4\u00d74 for a week; resume next week at 3\u00d74"
+      }
+    ]
+  },
+  "daily_log_schema": {
+    "strength": [
+      "weight_kg",
+      "reps",
+      "rpe"
+    ],
+    "endurance": [
+      "duration_min",
+      "avg_hr_bpm",
+      "modality"
+    ],
+    "symptoms": [
+      "life_load",
+      "sleep_hours"
+    ]
+  },
+  "immediate_actions": [
+    {
+      "action": "Establish baseline submax HR at pace-5 in week 1",
+      "timing": "day_1"
+    },
+    {
+      "action": "Confirm current back-squat + block-pull 5RM before starting",
+      "timing": "day_1"
+    }
+  ],
+  "evidence_base": {
+    "physiological_targets": {
+      "submax_hr_pct": "-8 to -15",
+      "resting_hr_bpm": "-3 to -8",
+      "vo2max_pct": "+2 to +5",
+      "strength_1rm_kg_change": "0 \u00b1 2.5",
+      "confidence": "realistic for Progression tier; stretch for Push"
+    },
+    "outcome_by_tier": {
+      "foundation": {
+        "submax_hr_bpm": "-5 to -10",
+        "strength_1rm_kg_change": "0 \u00b1 2.5",
+        "confidence": "realistic"
+      },
+      "progression": {
+        "submax_hr_bpm": "-8 to -15",
+        "strength_1rm_kg_change": "0 \u00b1 2.5",
+        "confidence": "realistic"
+      },
+      "push": {
+        "submax_hr_bpm": "-10 to -15",
+        "vo2max_pct": "+2 to +4",
+        "strength_1rm_kg_change": "0 \u00b1 2.5",
+        "confidence": "stretch \u2014 HERITAGE non-response distribution begins to dominate at this dose"
+      }
+    },
+    "session_rationale": {
+      "why_lift_twice_weekly": "Murach & Bagley 2016 + Schumann 2022 \u2014 2\u00d7/wk is sufficient for maintenance in trained lifters. Adding a third session accelerates hypertrophy but also raises the interference cost.",
+      "why_norwegian_4x4": "Helgerud 2007 4\u00d74 protocol delivered +7.2% VO2max at 3\u00d7/wk \u00d7 8wk in soccer players. We prescribe 1\u00d7/wk to keep the interference cost within Schumann 2022 SMD \u22120.28 bounds while still driving central adaptations.",
+      "why_z2_dominates": "Seiler 2010 polarised model \u2014 ~80% volume at low intensity, ~10-20% at high. This program follows the shape: 3-4 Z2 sessions to 1 hard session.",
+      "why_row_not_run": "Wilson 2012 modality interference (running > cycling > rowing). Doma 2019 bidirectional damage. For the strength athlete, rowing / cycling preserve the pull the day after."
+    },
+    "concurrent_strength_prescription": {
+      "rpe_ceiling": 7,
+      "reason": "Schumann 2022 SMD \u22120.28 for explosive strength (p=0.007). RPE 7 keeps the athlete out of the neural-fatigue zone that drives the explosive-strength cost.",
+      "minimum_separation_hours": 6,
+      "reason_separation": "Robineau 2016 dose-response \u2014 0h significantly reduced gains; 6h preserved them; 24h optimized VO2max.",
+      "lift_first_rule": "Eddens 2018 \u2014 +6.91% lower-body dynamic strength when resistance precedes endurance same day."
+    },
+    "engineering_choices_flagged": [
+      {
+        "choice": "1\u00d7 Norwegian 4\u00d74 per week (vs Helgerud's 3\u00d7)",
+        "rationale": "Concurrent context; full Helgerud dose has never been tested against maintenance strength. Engineering choice biased to strength preservation.",
+        "flag": "engineering"
+      },
+      {
+        "choice": "8-week duration",
+        "rationale": "Matches published concurrent RCTs (Wilson 2012 meta window 6-24 wk); minimum for detectable submax HR change per Ross 2015.",
+        "flag": "engineering"
+      },
+      {
+        "choice": "RPE 7 ceiling (not 8)",
+        "rationale": "Coaching-consensus buffer against neural fatigue overshoot. No RCT specifies the exact ceiling.",
+        "flag": "coaching_consensus"
+      },
+      {
+        "choice": "Block pull over conventional deadlift",
+        "rationale": "Bertolotti-friendly reference from the founder's clinical context. Substitutable per athlete.",
+        "flag": "engineering"
+      }
+    ],
+    "contraindications": [
+      "Unmanaged hypertension (BP > 160/100 at rest) \u2014 see clinician before Norwegian 4\u00d74 sessions.",
+      "History of exertional syncope or unexplained cardiac symptoms \u2014 full clearance first.",
+      "First-trimester pregnancy \u2014 HR zones are unreliable; work with a specialist.",
+      "Flaring lower-limb tendinopathy (Achilles, patellar) \u2014 no running variant of intervals.",
+      "Post-COVID convalescence with elevated resting HR \u2014 defer intervals until baseline HR normalises."
+    ],
+    "adaptive_engine_hooks": [
+      "day_adjustment on notes-signal 'legs feel dead / low fuel' \u2192 load \u00d70.95 on next strength session",
+      "amber week detection (\u22653 amber days) \u2192 drop 4\u00d74 next week",
+      "no cycle-end TM proposal (maintenance block; TMs held by design)"
+    ],
+    "references": [
+      {
+        "id": "helgerud_2007",
+        "authors": "Helgerud J, H\u00f8ydal K, Wang E, et al.",
+        "year": 2007,
+        "title": "Aerobic high-intensity intervals improve VO2max more than moderate training",
+        "source": "MSSE 39(4):665-671",
+        "used_for": "The 4\u00d74 protocol; +7.2% VO2max in 8 wk"
+      },
+      {
+        "id": "wisloff_2007",
+        "authors": "Wisl\u00f8ff U, St\u00f8ylen A, Loennechen JP, et al.",
+        "year": 2007,
+        "title": "Superior cardiovascular effect of aerobic interval training vs moderate continuous training in heart failure patients",
+        "source": "Circulation 115(24):3086-3094",
+        "used_for": "Interval-vs-continuous SV response; 46% vs 14%"
+      },
+      {
+        "id": "seiler_2010",
+        "authors": "Seiler S",
+        "year": 2010,
+        "title": "What is best practice for training intensity and duration distribution in endurance athletes?",
+        "source": "Int J Sports Physiol Perform 5(3):276-291",
+        "used_for": "Polarised training model (80/20 low/high)"
+      },
+      {
+        "id": "joyner_coyle_2008",
+        "authors": "Joyner MJ, Coyle EF",
+        "year": 2008,
+        "title": "Endurance exercise performance: the physiology of champions",
+        "source": "J Physiol 586(1):35-44",
+        "used_for": "Threshold > VO2max as primary metric to track"
+      },
+      {
+        "id": "san_millan_brooks_2018",
+        "authors": "San-Mill\u00e1n I, Brooks GA",
+        "year": 2018,
+        "title": "Assessment of metabolic flexibility by means of measuring blood lactate",
+        "source": "Sports Med 48:467-479",
+        "used_for": "Zone 2 = lactate <2 mmol/L; substrate oxidation"
+      },
+      {
+        "id": "atherton_2005",
+        "authors": "Atherton PJ, Babraj J, Smith K, et al.",
+        "year": 2005,
+        "title": "Selective activation of AMPK-PGC-1\u03b1 or PKB-TSC2-mTOR signalling by low- vs high-frequency stimulation",
+        "source": "FASEB J 19(7):786-788",
+        "used_for": "AMPK-PKB switch \u2014 molecular basis of concurrent interference"
+      },
+      {
+        "id": "coffey_hawley_2007",
+        "authors": "Coffey VG, Hawley JA",
+        "year": 2007,
+        "title": "The molecular bases of training adaptation",
+        "source": "Sports Med 37(9):737-763",
+        "used_for": "Foundational integrative review of concurrent-training mechanism"
+      },
+      {
+        "id": "baar_2014",
+        "authors": "Baar K",
+        "year": 2014,
+        "title": "Using molecular biology to maximize concurrent training",
+        "source": "Sports Med 44(S2):S117-S125",
+        "used_for": "AMPK window ~3h post-endurance; mTORC1 sensitised 18-24h post-lifting"
+      },
+      {
+        "id": "fyfe_bishop_stepto_2014",
+        "authors": "Fyfe JJ, Bishop DJ, Stepto NK",
+        "year": 2014,
+        "title": "Interference between concurrent resistance and endurance exercise",
+        "source": "Sports Med 44(6):743-762",
+        "used_for": "Definitive mechanism review + modulators"
+      },
+      {
+        "id": "wilson_2012",
+        "authors": "Wilson JM, Marin PJ, Rhea MR, et al.",
+        "year": 2012,
+        "title": "Concurrent training: a meta-analysis examining interference of aerobic and resistance exercises",
+        "source": "J Strength Cond Res 26(8):2293-2307",
+        "used_for": "The interference numbers \u2014 strength ES \u221218%, hypertrophy \u221231%, power \u221240%. Frequency + duration + modality dose-response."
+      },
+      {
+        "id": "schumann_2022",
+        "authors": "Schumann M, Feuerbacher JF, S\u00fcnkeler M, et al.",
+        "year": 2022,
+        "title": "Compatibility of concurrent aerobic and strength training for skeletal muscle size and function: an updated systematic review and meta-analysis",
+        "source": "Sports Med 52(3):601-612",
+        "used_for": "The updated meta \u2014 max strength SMD \u22120.06 (n.s.), hypertrophy SMD \u22120.01 (n.s.), explosive strength SMD \u22120.28 (p=0.007). The reconciliation."
+      },
+      {
+        "id": "murach_bagley_2016",
+        "authors": "Murach KA, Bagley JR",
+        "year": 2016,
+        "title": "Skeletal muscle hypertrophy with concurrent exercise training",
+        "source": "Sports Med 46(8):1029-1039",
+        "used_for": "Contrary evidence \u2014 hypertrophy not consistently reduced in ecologically valid protocols"
+      },
+      {
+        "id": "eddens_2018",
+        "authors": "Eddens L, van Someren K, Howatson G",
+        "year": 2018,
+        "title": "The role of intra-session exercise sequence in the interference effect",
+        "source": "Sports Med 48(1):177-188",
+        "used_for": "Lift-first rule: +6.91% lower-body dynamic strength gain (p=0.006)"
+      },
+      {
+        "id": "robineau_2016",
+        "authors": "Robineau J, Babault N, Piscione J, et al.",
+        "year": 2016,
+        "title": "Specific training effects of concurrent aerobic and strength exercises depend on recovery duration",
+        "source": "J Strength Cond Res 30(3):672-683",
+        "used_for": "The 6h separation dose-response \u2014 the key rule the program applies"
+      },
+      {
+        "id": "doma_2019",
+        "authors": "Doma K, Deakin GB, Bentley DJ",
+        "year": 2019,
+        "title": "Implications of impaired endurance performance following single bouts of resistance training",
+        "source": "Sports Med 49(5):669-682",
+        "used_for": "Bidirectional damage \u2014 running-induced damage impairs squat/deadlift 24-48h"
+      },
+      {
+        "id": "berryman_2018",
+        "authors": "Berryman N, Mujika I, Bosquet L",
+        "year": 2018,
+        "title": "Effects of short-term concurrent training cessation on the energy cost of running and neuromuscular performances",
+        "source": "Int J Sports Physiol Perform 13(1):57-64",
+        "used_for": "Cycling as cleanest bidirectional compatibility with strength"
+      },
+      {
+        "id": "fyfe_2016",
+        "authors": "Fyfe JJ, Bishop DJ, Zacharewicz E, et al.",
+        "year": 2016,
+        "title": "Concurrent exercise incorporating high-intensity interval or continuous training modulates mTORC1 signaling and microRNA expression",
+        "source": "Front Physiol 7:487",
+        "used_for": "Endurance INTENSITY does not mediate interference \u2014 VOLUME does"
+      },
+      {
+        "id": "petre_2018",
+        "authors": "Petr\u00e9 H, Hemmingsson E, Rosdahl H, Psilander N",
+        "year": 2018,
+        "title": "Development of maximal dynamic strength during concurrent resistance and endurance training in untrained, moderately trained and trained individuals",
+        "source": "J Sports Sci Med 17(2):167-173",
+        "used_for": "Trained lifters: HIIT vs continuous produced same squat gains"
+      },
+      {
+        "id": "aragon_schoenfeld_2013",
+        "authors": "Aragon AA, Schoenfeld BJ",
+        "year": 2013,
+        "title": "Nutrient timing revisited: is there a post-exercise anabolic window?",
+        "source": "J Int Soc Sports Nutr 10:5",
+        "used_for": "Anabolic window is 4-6h, not 30 min \u2014 supports 6h separation compatibility"
+      },
+      {
+        "id": "morton_2018",
+        "authors": "Morton RW, Murphy KT, McKellar SR, et al.",
+        "year": 2018,
+        "title": "A systematic review, meta-analysis and meta-regression of the effect of protein supplementation on resistance training-induced gains",
+        "source": "Br J Sports Med 52(6):376-384",
+        "used_for": "Protein floor: no further hypertrophy benefit above 1.62 g/kg/day"
+      },
+      {
+        "id": "jager_2017",
+        "authors": "J\u00e4ger R, Kerksick CM, Campbell BI, et al.",
+        "year": 2017,
+        "title": "International Society of Sports Nutrition position stand: protein and exercise",
+        "source": "J Int Soc Sports Nutr 14:20",
+        "used_for": "1.4-2.0 g/kg/day for exercising individuals"
+      },
+      {
+        "id": "bartlett_2015",
+        "authors": "Bartlett JD, Hawley JA, Morton JP",
+        "year": 2015,
+        "title": "Carbohydrate availability and exercise training adaptation: too much of a good thing?",
+        "source": "Eur J Sport Sci 15(1):3-12",
+        "used_for": "Train-low framework \u2014 low CHO amplifies AMPK/PGC-1\u03b1/p53"
+      },
+      {
+        "id": "impey_2018",
+        "authors": "Impey SG, Hearris MA, Hammond KM, et al.",
+        "year": 2018,
+        "title": "Fuel for the work required",
+        "source": "Sports Med 48(5):1031-1048",
+        "used_for": "Fuel-for-work framework for concurrent programming"
+      },
+      {
+        "id": "bouchard_1999_heritage",
+        "authors": "Bouchard C, An P, Rice T, et al.",
+        "year": 1999,
+        "title": "Familial aggregation of VO2max response to exercise training: results from the HERITAGE Family Study",
+        "source": "J Appl Physiol 87(3):1003-1008",
+        "used_for": "Heritability of VO2max response = 47%; 2.5\u00d7 between-family variance"
+      },
+      {
+        "id": "bouchard_2011",
+        "authors": "Bouchard C, Sarzynski MA, Rice TK, et al.",
+        "year": 2011,
+        "title": "Genomic predictors of the maximal O2 uptake response to standardized exercise training programs",
+        "source": "J Appl Physiol 110(5):1160-1170",
+        "used_for": "21-SNP model explains 49% of variance \u2014 honest range in outcomes"
+      },
+      {
+        "id": "ross_2015",
+        "authors": "Ross R, de Lannoy L, Stotz PJ",
+        "year": 2015,
+        "title": "Separate effects of intensity and amount of exercise on interindividual cardiorespiratory fitness response",
+        "source": "Mayo Clin Proc 90(11):1506-1514",
+        "used_for": "Non-response drops from 50% intensity to 0% at 75% \u2014 often dose, not genotype"
+      },
+      {
+        "id": "butcher_2015",
+        "authors": "Butcher SJ, Neyedly TJ, Horvey KJ, Benko CR",
+        "year": 2015,
+        "title": "Do physiological measures predict selected CrossFit benchmark performance?",
+        "source": "Open Access J Sports Med 6:241-247",
+        "used_for": "CrossFit Total = strongest Fran/Grace predictor \u2014 strength floor matters"
+      },
+      {
+        "id": "meyer_morrison_zuniga_2017",
+        "authors": "Meyer J, Morrison J, Zuniga J",
+        "year": 2017,
+        "title": "The benefits and risks of CrossFit: a systematic review",
+        "source": "Workplace Health Saf 65(12):612-618",
+        "used_for": "10-week CrossFit \u2014 VO2max + body comp + strength all improve concurrently"
+      },
+      {
+        "id": "feito_2018",
+        "authors": "Feito Y, Heinrich KM, Butcher SJ, Poston WSC",
+        "year": 2018,
+        "title": "High-Intensity Functional Training (HIFT): definition and research implications for improved fitness",
+        "source": "Sports 6(3):76",
+        "used_for": "16 wk HIFT \u2014 strength AND VO2max improved concurrently"
+      },
+      {
+        "id": "brandt_2025",
+        "authors": "Brandt K, Krieger K, Kerner J, et al.",
+        "year": 2025,
+        "title": "First physiological profiling of HYROX athletes",
+        "source": "Front Physiol 16:1519240",
+        "used_for": "VO2max = strongest HYROX predictor; grip / muscle mass NOT reliable"
+      },
+      {
+        "id": "andersen_henriksson_1977",
+        "authors": "Andersen P, Henriksson J",
+        "year": 1977,
+        "title": "Capillary supply of the quadriceps femoris muscle of man: adaptive response to exercise",
+        "source": "J Physiol 270(3):677-690",
+        "used_for": "Foundational capillary density +20% in 8 wk endurance"
+      },
+      {
+        "id": "coyle_1984",
+        "authors": "Coyle EF, Martin WH 3rd, Sinacore DR, et al.",
+        "year": 1984,
+        "title": "Time course of loss of adaptations after stopping prolonged intense endurance training",
+        "source": "J Appl Physiol 57(6):1857-1864",
+        "used_for": "Detraining timeline \u2014 VO2max \u22127% at 12 days, informs deload week planning"
+      }
+    ]
+  },
+  "positioning": "main_track",
+  "schedule_constraints": {
+    "available_days_min": 4,
+    "available_days_max": 6,
+    "session_length_min_range": [
+      30,
+      75
+    ],
+    "session_count_per_week_range": [
+      4,
+      6
+    ],
+    "hard_day_separation_h": 48,
+    "interference_ceiling_h": 6
+  },
+  "deload_window": {
+    "every_weeks_min": 4,
+    "every_weeks_max": 5,
+    "trigger": "either"
+  },
+  "interference_hints": {
+    "incompatible_with": [
+      "engine-builder"
+    ],
+    "compatible_with": [
+      "handstand-walk"
+    ],
+    "contraindicated_modalities": [
+      "hiit_glycolytic_daily"
+    ],
+    "min_recovery_h_from": {
+      "engine-builder": 6
+    }
+  },
+  "modality_options": {
+    "block_z2_bike": {
+      "primary": "bike",
+      "alternatives": [
+        "row",
+        "ski"
+      ]
+    },
+    "block_z2_row": {
+      "primary": "row",
+      "alternatives": [
+        "ski",
+        "bike"
+      ]
+    },
+    "block_4x4_row": {
+      "primary": "row",
+      "alternatives": [
+        "ski",
+        "bike"
+      ]
+    }
+  },
+  "retest_metrics": [
+    {
+      "metric_id": "back_squat_5rm_kg",
+      "display_name": "Back squat 5RM",
+      "unit": "kg",
+      "direction": "higher_is_better",
+      "source": "log_field",
+      "source_ref": "training_maxes.back_squat_highbar",
+      "cadence_weeks": 8,
+      "trigger": "phase_end",
+      "targets": [
+        {
+          "tier_id": "foundation",
+          "baseline": 0,
+          "target": 0,
+          "stretch": 2.5,
+          "at_week": 8
+        },
+        {
+          "tier_id": "progression",
+          "baseline": 0,
+          "target": 2.5,
+          "stretch": 5,
+          "at_week": 8
+        },
+        {
+          "tier_id": "push",
+          "baseline": 0,
+          "target": 0,
+          "stretch": 2.5,
+          "at_week": 8
+        }
+      ],
+      "aggregation": "latest"
+    },
+    {
+      "metric_id": "submax_hr_pace5_bpm",
+      "display_name": "Submax HR at pace-5",
+      "unit": "bpm",
+      "direction": "lower_is_better",
+      "source": "run_field",
+      "source_ref": "runs[].avg_hr where intensity == 'easy'",
+      "cadence_weeks": 4,
+      "trigger": "phase_end",
+      "targets": [
+        {
+          "tier_id": "foundation",
+          "target": -5,
+          "stretch": -10,
+          "at_week": 8
+        },
+        {
+          "tier_id": "progression",
+          "target": -8,
+          "stretch": -15,
+          "at_week": 8
+        },
+        {
+          "tier_id": "push",
+          "target": -10,
+          "stretch": -15,
+          "at_week": 8
+        }
+      ],
+      "aggregation": "trend_slope",
+      "window_days": 28
+    }
+  ]
+}

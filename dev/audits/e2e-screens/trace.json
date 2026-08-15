@@ -1,0 +1,485 @@
+{
+  "steps": [
+    {
+      "kind": "morning-check",
+      "date": "2026-08-10",
+      "derived": "green"
+    },
+    {
+      "kind": "session",
+      "date": "2026-08-10",
+      "label": "w1 Mon squat",
+      "morning_check": "green",
+      "squat": {
+        "expected": {
+          "top_kg": 60.5,
+          "reps": "5",
+          "mode": "phase1 cold start 55% TM"
+        },
+        "actual": {
+          "label": "Suggested today",
+          "bigNum": "60.5 kg × 5",
+          "platesRow": "20 kg /side +0.25 kg short",
+          "reasoning": "No prior log. Start moderate: ~55% TM. Ramp in fives from empty bar to 60.5 kg."
+        }
+      },
+      "pull": null
+    },
+    {
+      "kind": "session-after",
+      "date": "2026-08-10",
+      "pr_badges": [],
+      "hero": "Mon 10 AugReady to liftProgress load. Feel it.",
+      "suggestions_after": [
+        {
+          "name": "High-bar back squat",
+          "sug": "88 kg × 5"
+        },
+        {
+          "name": "Block pull, mid-shin height",
+          "sug": "71.5 kg × 5"
+        },
+        {
+          "name": "Bulgarian split squat, dumbbells",
+          "sug": null
+        },
+        {
+          "name": "Single-leg Romanian deadlift",
+          "sug": null
+        },
+        {
+          "name": "Dead bug, slow",
+          "sug": null
+        },
+        {
+          "name": "High-bar back squat",
+          "sug": "88 kg × 5"
+        },
+        {
+          "name": "Block pull, mid-shin height",
+          "sug": "71.5 kg × 5"
+        }
+      ]
+    },
+    {
+      "kind": "session",
+      "date": "2026-08-12",
+      "label": "w1 Wed pull",
+      "morning_check": null,
+      "squat": null,
+      "pull": {
+        "expected": {
+          "top_kg": 71.5,
+          "reps": "5",
+          "mode": "phase1 cold start 55% TM"
+        },
+        "actual": {
+          "label": "Suggested today",
+          "bigNum": "71.5 kg × 5",
+          "platesRow": "25 kg /side +0.75 kg short",
+          "reasoning": "No prior log. Start moderate: ~55% TM. Ramp in fives from empty bar to 71.5 kg."
+        }
+      }
+    },
+    {
+      "kind": "session-after",
+      "date": "2026-08-12",
+      "pr_badges": [],
+      "hero": "Wed 12 AugNo check yetSave a morning check to calibrate today.",
+      "suggestions_after": [
+        {
+          "name": "High-bar back squat",
+          "sug": "88 kg × 5"
+        },
+        {
+          "name": "Block pull, mid-shin height",
+          "sug": "104 kg × 5"
+        },
+        {
+          "name": "Bulgarian split squat, dumbbells",
+          "sug": null
+        },
+        {
+          "name": "Single-leg Romanian deadlift",
+          "sug": null
+        },
+        {
+          "name": "Dead bug, slow",
+          "sug": null
+        },
+        {
+          "name": "High-bar back squat",
+          "sug": "88 kg × 5"
+        },
+        {
+          "name": "Block pull, mid-shin height",
+          "sug": "104 kg × 5"
+        }
+      ]
+    },
+    {
+      "kind": "session",
+      "date": "2026-08-17",
+      "label": "w2 Mon squat",
+      "morning_check": null,
+      "squat": {
+        "expected": {
+          "top_kg": 88,
+          "reps": "5",
+          "mode": "phase1 auto rpe 7 +5 (capped)",
+          "cap_applied": true
+        },
+        "actual": {
+          "label": "Suggested today",
+          "bigNum": "88 kg × 5",
+          "platesRow": "25 + 5 + 2.5 + 1.25 kg /side +0.25 kg short",
+          "reasoning": "Last 2026-08-10: 90 kg × 5 @ RPE 7. Bump +5 kg to target RPE ~7. Capped at 80% TM = 88 kg (reintro)."
+        }
+      },
+      "pull": null
+    },
+    {
+      "kind": "session-after",
+      "date": "2026-08-17",
+      "pr_badges": [],
+      "hero": "Mon 17 AugNo check yetSave a morning check to calibrate today.",
+      "suggestions_after": [
+        {
+          "name": "High-bar back squat",
+          "sug": "88 kg × 5"
+        },
+        {
+          "name": "Block pull, mid-shin height",
+          "sug": "104 kg × 5"
+        },
+        {
+          "name": "Bulgarian split squat, dumbbells",
+          "sug": null
+        },
+        {
+          "name": "Single-leg Romanian deadlift",
+          "sug": null
+        },
+        {
+          "name": "Dead bug, slow",
+          "sug": null
+        },
+        {
+          "name": "High-bar back squat",
+          "sug": "88 kg × 5"
+        },
+        {
+          "name": "Block pull, mid-shin height",
+          "sug": "104 kg × 5"
+        }
+      ]
+    },
+    {
+      "kind": "session",
+      "date": "2026-08-19",
+      "label": "w2 Wed pull",
+      "morning_check": null,
+      "squat": null,
+      "pull": {
+        "expected": {
+          "top_kg": 104,
+          "reps": "5",
+          "mode": "phase1 auto rpe 7 +5 (capped)",
+          "cap_applied": true
+        },
+        "actual": {
+          "label": "Suggested today",
+          "bigNum": "104 kg × 5",
+          "platesRow": "25 + 15 + 1.25 kg /side +0.75 kg short",
+          "reasoning": "Last 2026-08-12: 100 kg × 5 @ RPE 7. Bump +5 kg to target RPE ~7. Capped at 80% TM = 104 kg (reintro)."
+        }
+      }
+    },
+    {
+      "kind": "session-after",
+      "date": "2026-08-19",
+      "pr_badges": [],
+      "hero": "Wed 19 AugNo check yetSave a morning check to calibrate today.",
+      "suggestions_after": [
+        {
+          "name": "High-bar back squat",
+          "sug": "88 kg × 5"
+        },
+        {
+          "name": "Block pull, mid-shin height",
+          "sug": "104 kg × 5"
+        },
+        {
+          "name": "Bulgarian split squat, dumbbells",
+          "sug": null
+        },
+        {
+          "name": "Single-leg Romanian deadlift",
+          "sug": null
+        },
+        {
+          "name": "Dead bug, slow",
+          "sug": null
+        },
+        {
+          "name": "High-bar back squat",
+          "sug": "88 kg × 5"
+        },
+        {
+          "name": "Block pull, mid-shin height",
+          "sug": "104 kg × 5"
+        }
+      ]
+    },
+    {
+      "kind": "session",
+      "date": "2026-08-24",
+      "label": "w3 Mon squat",
+      "morning_check": null,
+      "squat": {
+        "expected": {
+          "top_kg": 88,
+          "reps": "5",
+          "mode": "phase1 auto rpe 8 +2.5 (capped)",
+          "cap_applied": true
+        },
+        "actual": {
+          "label": "Suggested today",
+          "bigNum": "88 kg × 5",
+          "platesRow": "25 + 5 + 2.5 + 1.25 kg /side +0.25 kg short",
+          "reasoning": "Last 2026-08-17: 92.5 kg × 5 @ RPE 8. Bump +2.5 kg to target RPE ~7. Capped at 80% TM = 88 kg (reintro)."
+        }
+      },
+      "pull": null
+    },
+    {
+      "kind": "session-after",
+      "date": "2026-08-24",
+      "pr_badges": [],
+      "hero": "Mon 24 AugNo check yetSave a morning check to calibrate today.",
+      "suggestions_after": [
+        {
+          "name": "High-bar back squat",
+          "sug": "88 kg × 5"
+        },
+        {
+          "name": "Block pull, mid-shin height",
+          "sug": "104 kg × 5"
+        },
+        {
+          "name": "Bulgarian split squat, dumbbells",
+          "sug": null
+        },
+        {
+          "name": "Single-leg Romanian deadlift",
+          "sug": null
+        },
+        {
+          "name": "Dead bug, slow",
+          "sug": null
+        },
+        {
+          "name": "High-bar back squat",
+          "sug": "88 kg × 5"
+        },
+        {
+          "name": "Block pull, mid-shin height",
+          "sug": "104 kg × 5"
+        }
+      ]
+    },
+    {
+      "kind": "session",
+      "date": "2026-08-26",
+      "label": "w3 Wed pull",
+      "morning_check": null,
+      "squat": null,
+      "pull": {
+        "expected": {
+          "top_kg": 104,
+          "reps": "5",
+          "mode": "phase1 auto rpe 8 +2.5 (capped)",
+          "cap_applied": true
+        },
+        "actual": {
+          "label": "Suggested today",
+          "bigNum": "104 kg × 5",
+          "platesRow": "25 + 15 + 1.25 kg /side +0.75 kg short",
+          "reasoning": "Last 2026-08-19: 102.5 kg × 5 @ RPE 8. Bump +2.5 kg to target RPE ~7. Capped at 80% TM = 104 kg (reintro)."
+        }
+      }
+    },
+    {
+      "kind": "session-after",
+      "date": "2026-08-26",
+      "pr_badges": [],
+      "hero": "Wed 26 AugNo check yetSave a morning check to calibrate today.",
+      "suggestions_after": [
+        {
+          "name": "High-bar back squat",
+          "sug": "88 kg × 5"
+        },
+        {
+          "name": "Block pull, mid-shin height",
+          "sug": "104 kg × 5"
+        },
+        {
+          "name": "Bulgarian split squat, dumbbells",
+          "sug": null
+        },
+        {
+          "name": "Single-leg Romanian deadlift",
+          "sug": null
+        },
+        {
+          "name": "Dead bug, slow",
+          "sug": null
+        },
+        {
+          "name": "High-bar back squat",
+          "sug": "88 kg × 5"
+        },
+        {
+          "name": "Block pull, mid-shin height",
+          "sug": "104 kg × 5"
+        }
+      ]
+    },
+    {
+      "kind": "morning-check",
+      "date": "2026-08-31",
+      "derived": "amber"
+    },
+    {
+      "kind": "session",
+      "date": "2026-08-31",
+      "label": "w4 Mon squat",
+      "morning_check": "amber",
+      "squat": {
+        "expected": {
+          "top_kg": 89,
+          "reps": "5+",
+          "mode": "phase2 5/3/1 wk1"
+        },
+        "actual": {
+          "label": "Suggested — hold (amber day)",
+          "bigNum": "89 kg × 5+",
+          "platesRow": "25 + 5 + 2.5 + 1.25 kg /side +0.75 kg short",
+          "reasoning": "Cycle 1, week 1. Top set: 85% TM × 5+. ⚠ Amber morning state → load reduced 5%. Hold, don't push."
+        }
+      },
+      "pull": null
+    },
+    {
+      "kind": "session-after",
+      "date": "2026-08-31",
+      "pr_badges": [],
+      "hero": "Mon 31 AugLoad with careHold today's weight. Don't push.",
+      "suggestions_after": [
+        {
+          "name": "High-bar back squat",
+          "sug": "89 kg × 5+"
+        },
+        {
+          "name": "High-bar back squat",
+          "sug": "89 kg × 5+"
+        },
+        {
+          "name": "Bulgarian split squat, dumbbells",
+          "sug": null
+        },
+        {
+          "name": "Dead bug, slow",
+          "sug": null
+        },
+        {
+          "name": "Pallof press",
+          "sug": null
+        }
+      ]
+    },
+    {
+      "kind": "session",
+      "date": "2026-09-02",
+      "label": "w4 Wed pull",
+      "morning_check": null,
+      "squat": null,
+      "pull": {
+        "expected": {
+          "top_kg": 110.5,
+          "reps": "5+",
+          "mode": "phase2 5/3/1 wk1"
+        },
+        "actual": {
+          "label": "Suggested today",
+          "bigNum": "110.5 kg × 5+",
+          "platesRow": "25 + 20 kg /side +0.25 kg short",
+          "reasoning": "Cycle 1, week 1. Top set: 85% TM × 5+."
+        }
+      }
+    },
+    {
+      "kind": "session-after",
+      "date": "2026-09-02",
+      "pr_badges": [],
+      "hero": "Wed 2 SeptNo check yetSave a morning check to calibrate today.",
+      "suggestions_after": [
+        {
+          "name": "Block pull, mid-shin height",
+          "sug": "110.5 kg × 5+"
+        },
+        {
+          "name": "Block pull, mid-shin height",
+          "sug": "110.5 kg × 5+"
+        },
+        {
+          "name": "Barbell hip thrust",
+          "sug": null
+        },
+        {
+          "name": "Single-leg Romanian deadlift",
+          "sug": null
+        },
+        {
+          "name": "Hollow hold",
+          "sug": null
+        }
+      ]
+    },
+    {
+      "kind": "progress-page",
+      "state": {
+        "cycleBanner": true,
+        "pauseBanner": false,
+        "accelerateBanner": false,
+        "hasChart": true,
+        "chartText": "Peak symptom (0-10)Pull top set kgSquat top set kg",
+        "milestonesRendered": true,
+        "firstMilestoneCard": "2026-09-27 · 2 cycle 1TM target 120 kg Cycle 1 end. Muscle memory return — +10 kg from 110 start.-10.0 kg52d away",
+        "tmSquatCurrent": "110"
+      }
+    },
+    {
+      "kind": "tm-bump-check",
+      "tm_new": 120,
+      "expected_top": 97,
+      "actual": "97 kg × 5+"
+    },
+    {
+      "kind": "red-day-check",
+      "hero": [
+        "Sat 5 SeptRest todayConsider skipping the barbell. Extras only.",
+        "Check"
+      ],
+      "squat": {
+        "label": "Suggested — reduced (red day)",
+        "bigNum": "92 kg × 5+",
+        "platesRow": "25 + 10 kg /side +1.00 kg short",
+        "reasoning": "Cycle 1, week 1. Top set: 85% TM × 5+. ⚠ Red morning state → load reduced 10%. Consider skipping and doing Extras only."
+      },
+      "pull": null
+    }
+  ],
+  "bugs_observed": [],
+  "summary": null
+}

@@ -1,0 +1,30 @@
+[
+  {
+    "name": "today: type \"80\" in weight input",
+    "ms": 198
+  },
+  {
+    "name": "today: change weight 80 -> 85",
+    "ms": 109
+  },
+  {
+    "name": "today: type \"5\" reps",
+    "ms": 111
+  },
+  {
+    "name": "today: click \"Add set\"",
+    "ms": 58
+  },
+  {
+    "name": "today: expand cues",
+    "ms": 79
+  },
+  {
+    "name": "today: open video modal (YouTube iframe)",
+    "ms": 5072
+  },
+  {
+    "name": "progress: type TM 120",
+    "ms": 227
+  }
+]

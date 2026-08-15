@@ -1,0 +1,35 @@
+{
+  "runAt": "2026-08-06T22:53:54.417Z",
+  "findings": [
+    {
+      "sev": "MED",
+      "id": "POST-WIPE-NO-ONBOARDING",
+      "title": "After Wipe, no first-run / onboarding UI reappears — the Today page just shows an empty session",
+      "details": {
+        "homeText": "REHAB & LEG STRENGTH\n\nToday\n\nRebuild + evaluate (race prep sub-goal)\n\nFriday 7 Aug\n\nTODAY\n\nTODAY\n\nNo check yet\n\nSave a morning check to calibrate today.\n\nRest day — no barbell scheduled.\n\nAccessory / "
+      }
+    }
+  ],
+  "notes": [
+    "Check-page ranges: [{\"aria\":\"Left Groin\",\"min\":\"0\",\"max\":\"10\",\"step\":\"1\",\"value\":\"0\"},{\"aria\":\"Low back\",\"min\":\"0\",\"max\":\"10\",\"step\":\"1\",\"value\":\"0\"},{\"aria\":\"Left Buttock\",\"min\":\"0\",\"max\":\"10\",\"step\":\"1\",\"value\":\"0\"},{\"aria\":\"Right Shoulder\",\"min\":\"0\",\"max\":\"10\",\"step\":\"1\",\"value\":\"0\"},{\"aria\":\"Morning stiffness in min\",\"min\":\"0\",\"max\":\"90\",\"step\":\"5\",\"value\":\"0\"}]",
+    "Aug 31 derived (after real save): green",
+    "Aug 31 verdict panel text: GREEN",
+    "Aug 31 hero readiness text: Ready to lift",
+    "Sep 5 derived (amber test): amber",
+    "Sep 5 card snippets: [\"Sat — moderate volume + carries1×/week · 45 minFourth leg session. Higher volume at moderate load — 5×5 at 60-70% back squat TM. Followed by unilateral and loaded carries. This is where fractionated volume goes to work.•High-bar back squat5 sets · 5 reps5×5 at 60-70% TM, all sets same weight, tempo 3-0-1-0TM: 110 kgSuggested — hold (amber day)89 kg × 5+25 + 5 + 2.5 + 1.25 + 1.25 kg /side → 90 kg (+1.00)FSL 5×5 @ 68 kg(20 + 2.5 + 1.25 kg /side → 67.5 kg (-0.50))Warm-up: 68×5 → 78.5×5Cycle 1, week 1. Top set: 85% TM × 5+. ⚠ Amber morning state → load reduced 5%. Hold, don't push.#Prev / RxWeight\",\"•High-bar back squat5 sets · 5 reps5×5 at 60-70% TM, all sets same weight, tempo 3-0-1-0TM: 110 kgSuggested — hold (amber day)89 kg × 5+25 + 5 + 2.5 + 1.25 + 1.25 kg /side → 90 kg (+1.00)FSL 5×5 @ 68 kg(20 + 2.5 + 1.25 kg /side → 67.5 kg (-0.50))Warm-up: 68×5 → 78.5×5Cycle 1, week 1. Top set: 85% TM × 5+. ⚠ Amber morning state → load reduced 5%. Hold, don't push.#Prev / RxWeight kgRepsRPE168×5268×5368×5468×5589×5+Add setNotesCueshistorical provocateurshoulder load:grip\"]",
+    "Sep 5 Suggested today text: not found",
+    "Sep 14 Set TM button count: 1",
+    "Sep 14 TM chip context text: → est 1RM ~132.5 kg · suggested TM 112.5 kg (+2.5)Set TM",
+    "Sep 14 TM after real click: 112.5",
+    "Progress TM readback: 112.5",
+    "Sep 12 button texts: [\"Add set\",\"Cues\",\"Add set\",\"Cues\",\"Cues\",\"Add set\",\"Cues\",\"Move day\",\"Skip today\",\"Whole week\"]",
+    "Wipe: before {\"logs\":3,\"tm\":4}, after {\"logs\":0,\"tm\":0}",
+    "Post-wipe home page top text: REHAB & LEG STRENGTH\n\nToday\n\nRebuild + evaluate (race prep sub-goal)\n\nFriday 7 Aug\n\nTODAY\n\nTODAY\n\nNo check yet\n\nSave a morning check to calibrate today.\n\nRest day — no barbell scheduled.\n\nAccessory / rehab / run blocks live on the Extras tab — do them if you want, they still log to today.\n\nTODAY\nWEEK\nEXTRAS\nCHECK\nCOACH\nPROGRESS\nHISTORY",
+    "Import verified? true. TMs={\"back_squat_highbar\":115,\"block_pull_midshin\":135}. logs=2026-09-01",
+    "Aug 31 set row inputs snapshot: {\"ok\":true,\"count\":16,\"first\":[{\"type\":\"checkbox\",\"ph\":null,\"val\":\"on\"},{\"type\":\"number\",\"ph\":\"kg\",\"val\":\"\"},{\"type\":\"number\",\"ph\":\"reps\",\"val\":\"\"},{\"type\":\"number\",\"ph\":\"RPE\",\"val\":\"\"},{\"type\":\"number\",\"ph\":\"kg\",\"val\":\"\"},{\"type\":\"number\",\"ph\":\"reps\",\"val\":\"\"}]}",
+    "Aug 31 filled fields count: 2",
+    "Aug 31 post-typing timer state: {\"text\":\"3:00\",\"hasEl\":false}",
+    "Sep 13 streak chip after skip: null"
+  ],
+  "surprises": []
+}

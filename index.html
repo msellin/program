@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14202B">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Program">
+<title>Program</title>
+<style>
+  :root{
+    --ground:#EDF0F2; --surface:#FFFFFF; --ink:#14202B; --muted:#64757F;
+    --line:#D3DAE0; --line-soft:#E5EAEE;
+    --green:#2F7D5D; --amber:#B07A16; --red:#A63A32; --slate:#2B5F7E;
+    --left:#2B5F7E; --right:#7A4E86;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --pad:clamp(16px,4vw,32px);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--ground); color:var(--ink); font-family:var(--sans);
+    font-size:16px; line-height:1.5; -webkit-font-smoothing:antialiased;
+    font-variant-numeric:tabular-nums;
+  }
+  .wrap{max-width:760px; margin:0 auto; padding:0 var(--pad) calc(140px + env(safe-area-inset-bottom))}
+
+  header{padding:28px 0 0}
+  .eyebrow{
+    font-family:var(--mono); font-size:11px; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--muted); margin:0 0 6px;
+  }
+  h1{font-size:clamp(26px,6vw,34px); line-height:1.1; margin:0; letter-spacing:-.02em; font-weight:650}
+  .datestamp{font-family:var(--mono); font-size:13px; color:var(--muted); margin-top:6px}
+
+  .vitals{
+    display:flex; align-items:stretch; gap:1px; margin:18px 0 0;
+    background:var(--line); border:1px solid var(--line); border-radius:3px; overflow:hidden;
+  }
+  .vitals > div{
+    flex:1 1 0; background:var(--surface); padding:10px 12px; min-width:0;
+    display:flex; flex-direction:column; justify-content:flex-start; gap:2px;
+  }
+  .vitals .k{font-family:var(--mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .vitals .v{font-size:18px; font-weight:650; letter-spacing:-.01em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:1.15}
+  .statebar{height:4px; background:var(--line)}
+  .statebar[data-s=green]{background:var(--green)}
+  .statebar[data-s=amber]{background:var(--amber)}
+  .statebar[data-s=red]{background:var(--red)}
+
+  nav{display:flex; gap:2px; margin:22px 0 0; border-bottom:1px solid var(--line); flex-wrap:wrap}
+  nav button{
+    font:inherit; font-size:13px; font-weight:550; background:none; border:0; cursor:pointer;
+    padding:9px 14px; color:var(--muted); border-bottom:2px solid transparent; margin-bottom:-1px;
+  }
+  nav button[aria-selected=true]{color:var(--ink); border-bottom-color:var(--ink)}
+  nav button:focus-visible{outline:2px solid var(--slate); outline-offset:-2px}
+
+  section[hidden]{display:none}
+  .block{margin:26px 0 0}
+  .block-head{display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:10px}
+  .block-head h2{font-size:13px; font-family:var(--mono); letter-spacing:.14em; text-transform:uppercase; margin:0; font-weight:600}
+  .block-meta{font-family:var(--mono); font-size:11px; color:var(--muted)}
+  .block-note{background:var(--surface); border:1px solid var(--line-soft); border-left:3px solid var(--slate); padding:8px 10px; font-size:13px; color:var(--muted); margin-bottom:8px; border-radius:0 2px 2px 0}
+
+  /* exercise card */
+  .card{
+    display:grid; grid-template-columns:26px 1fr; background:var(--surface);
+    border:1px solid var(--line); border-radius:3px; margin-bottom:8px; overflow:hidden;
+  }
+  .spine{
+    background:var(--line-soft); display:flex; flex-direction:column; align-items:center;
+    justify-content:center; gap:3px; font-family:var(--mono); font-size:10px; font-weight:700;
+    color:var(--muted); letter-spacing:.04em; padding:8px 0;
+  }
+  .spine b{display:block; line-height:1.15}
+  .spine .hot{color:var(--left)}
+  .card-body{padding:12px 14px}
+  .card.done .ex-name{text-decoration:line-through; text-decoration-thickness:1px}
+  .card.done{opacity:.85}
+  .ex-top{display:flex; align-items:flex-start; gap:10px}
+  .ex-top input[type=checkbox]{width:20px; height:20px; margin:1px 0 0; accent-color:var(--ink); flex:0 0 auto; cursor:pointer}
+  .ex-name{font-weight:600; letter-spacing:-.01em}
+  .ex-dose{font-family:var(--mono); font-size:12px; color:var(--muted); margin-top:2px}
+  .ex-scheme{font-family:var(--mono); font-size:11.5px; color:var(--slate); margin-top:3px}
+
+  /* log inputs */
+  .logrow{display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; margin-top:10px}
+  .logrow label{font-family:var(--mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:2px}
+  .logrow input{font:inherit; font-family:var(--mono); font-size:14px; padding:7px 8px; border:1px solid var(--line); border-radius:2px; width:100%; background:var(--surface); color:var(--ink)}
+  .logrow input:focus{outline:2px solid var(--slate); outline-offset:-1px; border-color:var(--slate)}
+  .noteswrap{margin-top:8px}
+  .noteswrap label{font-family:var(--mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:2px}
+  .noteswrap textarea{font:inherit; font-size:13.5px; padding:7px 8px; border:1px solid var(--line); border-radius:2px; width:100%; background:var(--surface); color:var(--ink); resize:vertical; min-height:36px; line-height:1.4; font-family:var(--sans)}
+  .noteswrap textarea:focus{outline:2px solid var(--slate); outline-offset:-1px; border-color:var(--slate)}
+
+  details{margin-top:8px}
+  summary{
+    font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--slate); cursor:pointer; list-style:none;
+  }
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:"+ "; font-weight:700}
+  details[open] summary::before{content:"– "}
+  details ul{margin:8px 0 0; padding-left:16px; font-size:14px}
+  details li{margin-bottom:3px}
+  .warn{
+    background:#FBF3F2; border-left:3px solid var(--red); padding:8px 10px; margin-top:8px;
+    font-size:13.5px; border-radius:0 2px 2px 0;
+  }
+  .flag{
+    display:inline-block; font-family:var(--mono); font-size:10px; letter-spacing:.08em;
+    text-transform:uppercase; background:var(--line-soft); color:var(--muted);
+    padding:2px 6px; border-radius:2px; margin:6px 6px 0 0;
+  }
+  .flag.hot{background:#FBF1E4; color:var(--amber)}
+  .videolink{font-family:var(--mono); font-size:11px; color:var(--slate); text-decoration:none; border-bottom:1px solid currentColor; cursor:pointer; background:none; border-top:none; border-left:none; border-right:none; padding:0}
+
+  .locked{
+    background:repeating-linear-gradient(135deg,var(--surface),var(--surface) 7px,#F5F7F8 7px,#F5F7F8 14px);
+    border:1px dashed var(--line); border-radius:3px; padding:16px; font-size:14px; color:var(--muted);
+  }
+  .locked strong{color:var(--ink); display:block; margin-bottom:4px; font-size:15px}
+
+  /* morning check */
+  .sym{background:var(--surface); border:1px solid var(--line); border-radius:3px; padding:14px; margin-bottom:8px}
+  .sym-row{display:grid; grid-template-columns:1fr 46px; gap:12px; align-items:center; padding:7px 0}
+  .sym-row + .sym-row{border-top:1px solid var(--line-soft)}
+  .sym-label{font-size:14px; display:flex; align-items:center; gap:7px}
+  .lat{
+    font-family:var(--mono); font-size:9px; font-weight:700; letter-spacing:.06em;
+    padding:1px 4px; border-radius:2px; color:#fff;
+  }
+  .lat.L{background:var(--left)} .lat.R{background:var(--right)}
+  input[type=range]{width:100%; accent-color:var(--slate)}
+  .sym-val{font-family:var(--mono); font-size:15px; text-align:right; font-weight:600}
+  .chk{display:flex; align-items:center; gap:8px; font-size:14px; padding:7px 0; border-top:1px solid var(--line-soft)}
+  .chk input{width:18px;height:18px;accent-color:var(--ink)}
+  button.primary{
+    font:inherit; font-weight:600; font-size:15px; background:var(--ink); color:#fff; border:0;
+    border-radius:3px; padding:12px 20px; cursor:pointer; width:100%; margin-top:12px;
+  }
+  button.primary:focus-visible{outline:2px solid var(--slate); outline-offset:2px}
+  button.secondary{
+    font:inherit; font-weight:550; font-size:14px; background:var(--surface); color:var(--ink);
+    border:1px solid var(--line); border-radius:3px; padding:10px 16px; cursor:pointer;
+  }
+  button.secondary:hover{background:var(--line-soft)}
+  .verdict{margin-top:12px; padding:12px 14px; border-radius:3px; font-size:14.5px; border-left:3px solid}
+  .verdict[data-s=green]{background:#F0F6F3; border-color:var(--green)}
+  .verdict[data-s=amber]{background:#FBF6EC; border-color:var(--amber)}
+  .verdict[data-s=red]{background:#FBF3F2; border-color:var(--red)}
+  .verdict b{display:block; margin-bottom:3px}
+
+  /* TM editor */
+  .tm-grid{display:grid; grid-template-columns:1fr 90px 90px; gap:8px; align-items:center; padding:8px 0; border-bottom:1px solid var(--line-soft)}
+  .tm-grid:last-child{border-bottom:none}
+  .tm-name{font-size:14px; font-weight:550}
+  .tm-input{font:inherit; font-family:var(--mono); font-size:14px; padding:6px 8px; border:1px solid var(--line); border-radius:2px; text-align:right; width:100%}
+  .tm-input:focus{outline:2px solid var(--slate); outline-offset:-1px; border-color:var(--slate)}
+  .tm-unit{font-family:var(--mono); font-size:11px; color:var(--muted); text-align:left}
+
+  /* history */
+  .hist-row{display:grid; grid-template-columns:104px 1fr; gap:12px; align-items:center; padding:9px 0; border-bottom:1px solid var(--line-soft)}
+  .hist-label{font-family:var(--mono); font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted)}
+  .spark{display:flex; align-items:flex-end; gap:2px; height:34px}
+  .spark i{flex:1; min-width:2px; background:var(--slate); opacity:.75; border-radius:1px 1px 0 0}
+  .spark i[data-z]{background:var(--line); height:2px!important}
+  .empty{color:var(--muted); font-size:14.5px; background:var(--surface); border:1px dashed var(--line); border-radius:3px; padding:20px; text-align:center}
+  .rowlog{display:flex; justify-content:space-between; gap:10px; font-family:var(--mono); font-size:12px; padding:7px 0; border-bottom:1px solid var(--line-soft)}
+  .dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px}
+  .dot[data-s=green]{background:var(--green)} .dot[data-s=amber]{background:var(--amber)} .dot[data-s=red]{background:var(--red)}
+
+  /* video modal */
+  .modal{position:fixed; inset:0; background:rgba(20,32,43,0.75); z-index:100; display:flex; align-items:center; justify-content:center; padding:16px}
+  .modal[hidden]{display:none}
+  .modal-inner{background:var(--surface); border-radius:3px; max-width:720px; width:100%; max-height:90vh; overflow:auto; box-shadow:0 10px 40px rgba(0,0,0,0.3)}
+  .modal-head{display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-bottom:1px solid var(--line)}
+  .modal-head h3{margin:0; font-size:15px; font-family:var(--mono); letter-spacing:.1em; text-transform:uppercase; font-weight:600}
+  .modal-close{font:inherit; background:none; border:0; font-size:22px; cursor:pointer; padding:0; color:var(--muted); line-height:1; width:28px; height:28px}
+  .modal-close:hover{color:var(--ink)}
+  .modal-body{padding:0}
+  .modal-body iframe{width:100%; aspect-ratio:16/9; border:0; display:block}
+  .modal-fallback{padding:20px; text-align:center; font-size:14px; color:var(--muted)}
+  .modal-fallback a{color:var(--slate); text-decoration:underline}
+
+  /* export/import */
+  .io-buttons{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
+  .io-buttons button, .io-buttons label.file-btn{
+    font:inherit; font-weight:550; font-size:13px; background:var(--surface); color:var(--ink);
+    border:1px solid var(--line); border-radius:3px; padding:8px 14px; cursor:pointer; display:inline-block;
+  }
+  .io-buttons label.file-btn input{display:none}
+  .io-buttons button:hover, .io-buttons label.file-btn:hover{background:var(--line-soft)}
+  .io-hint{font-size:12.5px; color:var(--muted); margin-top:8px; line-height:1.5}
+  .io-hint code{font-family:var(--mono); font-size:11.5px; background:var(--surface); padding:1px 5px; border:1px solid var(--line); border-radius:2px}
+
+  footer{margin-top:34px; padding-top:16px; border-top:1px solid var(--line); font-size:12.5px; color:var(--muted)}
+  footer code{font-family:var(--mono); font-size:12px; background:var(--surface); padding:1px 5px; border:1px solid var(--line); border-radius:2px}
+  .fatal{background:var(--surface); border:1px solid var(--red); border-left-width:3px; border-radius:3px; padding:18px; margin-top:24px}
+  .fatal h2{margin:0 0 8px; font-size:17px}
+  .fatal pre{font-family:var(--mono); font-size:12.5px; background:var(--ground); padding:10px; border-radius:2px; overflow-x:auto; margin:10px 0 0}
+
+  /* timer */
+  .timer{
+    position:fixed; left:0; right:0; bottom:0; z-index:50;
+    background:var(--surface); border-top:1px solid var(--line);
+    padding:8px var(--pad) calc(10px + env(safe-area-inset-bottom));
+  }
+  .timer-inner{max-width:760px; margin:0 auto}
+  .timer-presets{display:flex; gap:6px; justify-content:center; margin-bottom:7px}
+  .timer-presets button{
+    font:inherit; font-size:12px; font-family:var(--mono); font-weight:600;
+    background:var(--line-soft); color:var(--muted); border:0; border-radius:12px;
+    padding:5px 12px; cursor:pointer; letter-spacing:.02em;
+  }
+  .timer-presets button[aria-pressed=true]{background:var(--ink); color:#fff}
+  .timer-bar{height:3px; background:var(--line-soft); border-radius:2px; overflow:hidden; margin-bottom:8px}
+  .timer-bar i{display:block; height:100%; background:var(--slate); width:0%; transition:width .1s linear}
+  .timer-bar i[data-hit=true]{background:var(--green)}
+  .timer-row{display:flex; align-items:center; gap:12px}
+  .timer-time{
+    flex:1; text-align:center; font-family:var(--mono); font-size:26px; font-weight:600;
+    letter-spacing:.02em; transition:color .3s; line-height:1;
+  }
+  .timer-time.hit{color:var(--green)}
+  .timer-btn{
+    width:46px; height:46px; border-radius:50%; border:1px solid var(--line);
+    background:var(--surface); font-size:18px; cursor:pointer; padding:0; flex:0 0 auto;
+    display:flex; align-items:center; justify-content:center; color:var(--ink);
+  }
+  .timer-btn:focus-visible{outline:2px solid var(--slate); outline-offset:2px}
+  .timer-btn.play{background:var(--ink); color:#fff; border-color:var(--ink); font-size:20px}
+  .timer-btn.play[data-r=true]{background:var(--amber); border-color:var(--amber)}
+  .timer-btn.reset{font-size:22px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Rehab &amp; leg strength</p>
+    <h1>Program</h1>
+    <p class="datestamp" id="datestamp"></p>
+    <div class="vitals" id="vitals" hidden>
+      <div><div class="k">Phase</div><div class="v" id="v-phase">–</div><div class="statebar"></div></div>
+      <div><div class="k">Today</div><div class="v" id="v-done">–</div><div class="statebar"></div></div>
+      <div><div class="k">State</div><div class="v" id="v-state">–</div><div class="statebar" id="v-bar"></div></div>
+      <div><div class="k">Streak</div><div class="v" id="v-streak">–</div><div class="statebar"></div></div>
+    </div>
+  </header>
+
+  <nav id="tabs" hidden role="tablist">
+    <button role="tab" aria-selected="true" data-t="today">Today</button>
+    <button role="tab" aria-selected="false" data-t="week">Week</button>
+    <button role="tab" aria-selected="false" data-t="extras">Extras</button>
+    <button role="tab" aria-selected="false" data-t="check">Check</button>
+    <button role="tab" aria-selected="false" data-t="progress">Progress</button>
+    <button role="tab" aria-selected="false" data-t="history">History</button>
+    <button role="tab" aria-selected="false" data-t="data">Data</button>
+    <button role="tab" aria-selected="false" data-t="guide">Guide</button>
+  </nav>
+
+  <section id="today" hidden></section>
+  <section id="week" hidden></section>
+  <section id="extras" hidden></section>
+  <section id="check" hidden></section>
+  <section id="progress" hidden></section>
+  <section id="history" hidden></section>
+  <section id="data" hidden></section>
+  <section id="guide" hidden></section>
+
+  <div id="fatal" class="fatal" hidden>
+    <h2>Can't load the data files</h2>
+    <p id="fatal-msg"></p>
+    <p>If you opened the file directly with <code>file://</code>, the browser blocks the JSON fetch. Serve the folder from a local HTTP server instead (e.g. <code>python3 -m http.server 8000</code>).</p>
+  </div>
+
+  <footer id="foot" hidden>
+    Logs are stored in this browser only, under <code>program.log.v2</code>. Export button on the Data tab writes a JSON file for backup or Claude-Code sync.
+    Not medical advice — a supplement to clinical care, not a substitute for it.
+  </footer>
+</div>
+
+<div class="timer" id="timer" hidden>
+  <div class="timer-inner">
+    <div class="timer-presets" id="tPresets" role="group" aria-label="Target hold">
+      <button type="button" data-t="20" aria-pressed="false">20s</button>
+      <button type="button" data-t="30" aria-pressed="false">30s</button>
+      <button type="button" data-t="45" aria-pressed="false">45s</button>
+      <button type="button" data-t="60" aria-pressed="false">60s</button>
+    </div>
+    <div class="timer-bar"><i id="tbFill"></i></div>
+    <div class="timer-row">
+      <button type="button" class="timer-btn reset" id="tReset" aria-label="Reset">↺</button>
+      <div class="timer-time" id="tTime">0:00</div>
+      <button type="button" class="timer-btn play" id="tPlay" data-r="false" aria-label="Start">▶</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="videoModal" hidden aria-hidden="true">
+  <div class="modal-inner">
+    <div class="modal-head">
+      <h3 id="videoTitle">Demo</h3>
+      <button type="button" class="modal-close" id="videoClose" aria-label="Close">×</button>
+    </div>
+    <div class="modal-body" id="videoBody"></div>
+  </div>
+</div>
+
+<script>
+const KEY='program.log.v2';
+const OLD_KEY='program.log.v1';
+const $=id=>document.getElementById(id);
+const iso=d=>d.toISOString().slice(0,10);
+const TODAY=iso(new Date());
+let DATA={}, STORE=loadStore();
+
+const EMPTY_STORE=()=>({version:2, logs:{}, training_maxes:{}, cycle:{phase_id:null, cycle_number:1, week_in_cycle:1}});
+
+function sanityCheckStore(s){
+  if(!s || typeof s!=='object') return null;
+  if(!s.logs || typeof s.logs!=='object' || Array.isArray(s.logs)) return null;
+  if(!s.training_maxes || typeof s.training_maxes!=='object' || Array.isArray(s.training_maxes)) return null;
+  if(s.cycle!=null && (typeof s.cycle!=='object' || Array.isArray(s.cycle))) return null;
+  // wipe corrupt log entries but keep good ones
+  const clean={};
+  for(const [date, entry] of Object.entries(s.logs)){
+    if(entry && typeof entry==='object' && !Array.isArray(entry)){
+      clean[date]={
+        date: typeof entry.date==='string'?entry.date:date,
+        exercises: (entry.exercises && typeof entry.exercises==='object' && !Array.isArray(entry.exercises)) ? entry.exercises : {},
+        symptoms: (entry.symptoms && typeof entry.symptoms==='object' && !Array.isArray(entry.symptoms)) ? entry.symptoms : null,
+        derived_state: entry.derived_state||null,
+        notes: typeof entry.notes==='string'?entry.notes:''
+      };
+    }
+  }
+  s.logs=clean;
+  return s;
+}
+
+function loadStore(){
+  try{
+    const s=localStorage.getItem(KEY);
+    if(s){
+      const parsed=JSON.parse(s);
+      const cleaned=sanityCheckStore(parsed);
+      if(cleaned) return cleaned;
+      console.warn('Stored data had wrong shape; falling back to empty store. Old data still in localStorage under', KEY+'.corrupt');
+      try{ localStorage.setItem(KEY+'.corrupt', s); }catch{}
+    }
+  }catch(e){
+    console.warn('Store parse failed:', e.message);
+  }
+  // migrate v1 → v2 if present
+  try{
+    const v1=JSON.parse(localStorage.getItem(OLD_KEY)||'null');
+    if(v1 && typeof v1==='object' && !Array.isArray(v1)){
+      const logs={};
+      for(const [date,entry] of Object.entries(v1)){
+        if(!entry || typeof entry!=='object') continue;
+        const exs={};
+        for(const [k,v] of Object.entries(entry.exercises||{})){
+          exs[k]=typeof v==='boolean' ? {done:v, weight_kg:null, reps:null, notes:''} : v;
+        }
+        logs[date]={date, exercises:exs, symptoms:entry.symptoms||null, derived_state:entry.derived_state||null, notes:entry.notes||''};
+      }
+      return {version:2, logs, training_maxes:{}, cycle:{phase_id:null, cycle_number:1, week_in_cycle:1}};
+    }
+  }catch{}
+  return EMPTY_STORE();
+}
+function saveStore(){ try{localStorage.setItem(KEY,JSON.stringify(STORE))}catch(e){console.error('save failed',e)} }
+function day(d=TODAY){
+  if(!STORE.logs[d]) STORE.logs[d]={date:d, exercises:{}, symptoms:null, derived_state:null, notes:''};
+  return STORE.logs[d];
+}
+function exlog(blockId, exId){
+  const d=day(); const key=`${blockId}:${exId}`;
+  if(!d.exercises[key]) d.exercises[key]={done:false, weight_kg:null, reps:null, notes:''};
+  return {key, entry:d.exercises[key]};
+}
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+(async function init(){
+  try{
+    const names=['program','exercises','clinical-context'];
+    const res=await Promise.all(names.map(n=>fetch(`data/${n}.json`).then(r=>{
+      if(!r.ok) throw new Error(`${n}.json → HTTP ${r.status}`); return r.json();
+    })));
+    names.forEach((n,i)=>DATA[n]=res[i]);
+    DATA.byId=Object.fromEntries(DATA.exercises.exercises.map(e=>[e.id,e]));
+    // seed TMs from program starting_values if store is empty
+    const seed=DATA.program.training_maxes && DATA.program.training_maxes.starting_values_kg;
+    if(seed && Object.keys(STORE.training_maxes).length===0){
+      for(const [k,v] of Object.entries(seed)){ if(v!=null) STORE.training_maxes[k]=v; }
+      saveStore();
+    }
+    boot();
+  }catch(err){
+    $('fatal-msg').textContent=err.message;
+    $('fatal').hidden=false;
+  }
+})();
+
+function boot(){
+  $('datestamp').textContent=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  $('vitals').hidden=$('tabs').hidden=$('foot').hidden=$('timer').hidden=false;
+  initTimer(); initModal();
+  $('tabs').addEventListener('click',e=>{
+    const b=e.target.closest('button[data-t]'); if(!b) return;
+    [...$('tabs').children].forEach(x=>x.setAttribute('aria-selected',x===b));
+    ['today','week','extras','check','progress','history','data','guide'].forEach(t=>$(t).hidden=(t!==b.dataset.t));
+  });
+  render();
+}
+
+function activePhase(){
+  const ph=DATA.program.phases;
+  return ph.find(p=>TODAY>=p.starts && (!p.ends||TODAY<=p.ends)) || ph[ph.length-1];
+}
+
+function render(){ renderToday(); renderWeek(); renderExtras(); renderCheck(); renderProgress(); renderHistory(); renderData(); renderGuide(); renderVitals(); }
+
+/* ---------- helpers: block category + weight suggestion ---------- */
+function blockCategory(b){ return b.category || 'strength'; }
+
+// Suggest a weight for today based on: TM, last logged set, current phase, and today's symptom state.
+// Returns { top_set: {kg, reps_label}, fsl: {kg, sets, reps}?, reasoning, state? }
+function suggestForExercise(exId, blockId){
+  const tm=(STORE.training_maxes||{})[exId];
+  if(!tm) return null;
+  const phase=activePhase();
+  const inMainCycle=['phase_2_cycle_1','phase_3_cycle_2','phase_4_cycles_3_4_test','phase_6_peak_test'].includes(phase.id);
+  const rnd=(v,step=0.5)=>Math.round(v/step)*step;
+
+  // Symptom-state modifier — the "self-adjusting" wiring from morning check
+  const todayState=day().derived_state;
+  const stateMod = todayState==='red' ? 0.9 : (todayState==='amber' ? 0.95 : 1.0);
+  const stateNote = todayState==='red'
+    ? ' ⚠ Red morning state → suggested load reduced 10%. Consider skipping and doing Extras only.'
+    : (todayState==='amber' ? ' ⚠ Amber morning state → suggested load reduced 5%. Hold, don\'t push.' : '');
+
+  // Find prior logged set for this exercise across recent days
+  const priorEntries=Object.values(STORE.logs||{})
+    .filter(d=>d.date!==TODAY)
+    .sort((a,b)=>b.date.localeCompare(a.date))
+    .flatMap(d=>Object.entries(d.exercises||{}).filter(([k,v])=>k.endsWith(':'+exId) && v && v.done && v.weight_kg).map(([k,v])=>({...v, date:d.date})))
+    .slice(0,3);
+  const last=priorEntries[0];
+
+  if(inMainCycle){
+    // 5/3/1 FSL — compute cycle week
+    const start=new Date(phase.starts+'T00:00:00'), today=new Date(TODAY+'T00:00:00');
+    const week=Math.floor((today-start)/(7*864e5))+1; // 1..4
+    const pcts=[
+      {top:[65,75,85], topReps:['5','5','5+'], fsl:65},
+      {top:[70,80,90], topReps:['3','3','3+'], fsl:70},
+      {top:[75,85,95], topReps:['5','3','1+'], fsl:75},
+      {top:[40,50,60], topReps:['5','5','5'],  fsl:null}
+    ][Math.min(3,Math.max(0,week-1))];
+    const kg=pcts.top.map(p=>rnd(tm*p/100*stateMod));
+    return {
+      warmups:kg.slice(0,2).map((w,i)=>({kg:w, reps:pcts.topReps[i]})),
+      top_set:{kg:kg[2], reps:pcts.topReps[2]},
+      fsl: pcts.fsl?{kg:rnd(tm*pcts.fsl/100*stateMod), sets:5, reps:5}:null,
+      state: todayState,
+      reasoning:`Cycle ${phase.id.includes('cycle_1')?1:phase.id.includes('cycle_2')?2:'3/4'}, week ${week}. Top set: ${pcts.top[2]}% TM × ${pcts.topReps[2]}.${stateNote}`
+    };
+  }
+
+  // Phase 1 (reintro/eval) or other — autoregulate from last set + TM
+  if(last){
+    const lastRPE=last.rpe;
+    let bump=0;
+    if(lastRPE!=null){
+      if(lastRPE<=5) bump=10;
+      else if(lastRPE<=6) bump=7.5;
+      else if(lastRPE<=7) bump=5;
+      else if(lastRPE<=8) bump=2.5;
+      else bump=0;
+    } else bump=5;
+    // Enforce the 80% TM cap in reintro
+    const cap=rnd(tm*0.8);
+    const suggested=Math.min(rnd(last.weight_kg + bump), cap) * stateMod;
+    return {
+      top_set:{kg:rnd(suggested), reps:5},
+      state: todayState,
+      reasoning:`Last ${last.date}: ${last.weight_kg} kg × ${last.reps} @ RPE ${lastRPE ?? '?'}. Bump ${bump>0?'+':''}${bump} kg to target RPE ~7. Reintro cap: 80% TM = ${cap} kg.${stateNote}`
+    };
+  }
+  // No prior — reintro cold start
+  const cold=rnd(tm*0.55*stateMod);
+  return {
+    top_set:{kg:cold, reps:5},
+    state: todayState,
+    reasoning:`No prior log. Start moderate: ~55% TM. Ramp in fives from empty bar to ${cold} kg.${stateNote}`
+  };
+}
+
+/* ---------- TM inference from logged sets ---------- */
+// Given a logged top set (weight, reps, optional RPE), estimate 1RM (Epley),
+// account for reps left in reserve when RPE is present, and derive a suggested TM.
+// TM = 0.85 × est1RM — leaves headroom, matches 5/3/1 convention.
+function inferTMFromSet(weight, reps, rpe){
+  if(!weight || !reps || weight<=0 || reps<=0) return null;
+  const rir = (rpe!=null && rpe>=1 && rpe<=10) ? Math.max(0, 10-rpe) : 0;
+  const maxReps = reps + rir;
+  const est1RM = weight * (1 + maxReps/30);         // Epley
+  const suggestedTM = Math.round(est1RM * 0.85 * 2) / 2;  // round to 0.5 kg
+  return { est1RM: Math.round(est1RM*2)/2, suggestedTM, maxReps, rir };
+}
+
+// Which exercises drive TMs (used for "should we show a suggestion?" logic)
+const TM_EXERCISES = new Set(['back_squat_highbar','back_squat_ssb','front_squat','block_pull_midshin','deadlift_conventional','trap_bar_dl_blocks','trap_bar_dl_floor']);
+
+/* ---------- guide ---------- */
+function renderGuide(){
+  const el=$('guide');
+  el.innerHTML=`
+    <div class="block"><div class="block-head"><h2>What this program is</h2></div>
+      <div class="sym" style="font-size:14.5px; line-height:1.55">
+        <p style="margin:0 0 10px"><strong>Goal:</strong> back squat 180 kg and deadlift 200+ kg by mid-2027, without re-triggering the L5 pseudoarthrosis / left hip flexor / right shoulder history.</p>
+        <p style="margin:0 0 10px"><strong>Method:</strong> 5/3/1 with First Set Last 5×5. Four leg sessions per week. Progression is by <em>training max</em>, not by 1RM.</p>
+        <p style="margin:0"><strong>Shape:</strong> six phases across ~12 months. Each phase is 4 weeks or a multiple. Cycles reset at the end of each 4 weeks and training maxes adjust based on how the last cycle felt.</p>
+      </div>
+    </div>
+
+    <div class="block"><div class="block-head"><h2>Terms glossary</h2></div>
+      <div class="sym" style="font-size:14px; line-height:1.55">
+        <p style="margin:0 0 10px"><strong>TM (Training Max).</strong> The number all percentages calculate from. ≈ 90% of a solid 5-rep max. If your TM is 110 kg, the app schedules top sets at percentages of 110 (65%, 75%, 85%…). TM is deliberately below your true 1RM — that headroom is what keeps you progressing.</p>
+        <p style="margin:0 0 10px"><strong>1RM.</strong> Your one-rep max. In this program you only test 1RM at the end of cycle 4 (Dec) and phase 6 (Jun).</p>
+        <p style="margin:0 0 10px"><strong>5RM.</strong> The heaviest weight you can move for 5 clean reps. Used in evaluation week to set your initial TM. Formula: TM = 5RM × 0.90.</p>
+        <p style="margin:0 0 10px"><strong>Sets × reps.</strong> "5×5" means five sets of five reps. "3×8" means three sets of eight. Sets are complete rest periods between; reps are inside a set.</p>
+        <p style="margin:0 0 10px"><strong>AMRAP.</strong> As Many Reps As Possible. Week 1 top set is "5+" — do at least 5, then go until form breaks. This is where the strength jump comes from.</p>
+        <p style="margin:0 0 10px"><strong>FSL (First Set Last).</strong> After the main top set, do 5 more sets of 5 at the <em>first</em> working weight of the day. Volume work that drives hypertrophy without asking for more nervous-system output.</p>
+        <p style="margin:0 0 10px"><strong>BBB (Boring But Big).</strong> The alternative volume scheme — 5×10 same lift at 50% TM. Not in the current plan.</p>
+        <p style="margin:0 0 10px"><strong>Cycle.</strong> One 4-week block of 5/3/1: week 1 (5s), week 2 (3s), week 3 (1s), week 4 (deload).</p>
+        <p style="margin:0 0 10px"><strong>Deload.</strong> Week 4 of every cycle. Same movements, low load (40/50/60% TM). Not optional — this is what lets you keep progressing.</p>
+        <p style="margin:0 0 10px"><strong>Top set.</strong> The heaviest set of the day for the main lift. In 5/3/1 it's always followed by "+", meaning AMRAP.</p>
+        <p style="margin:0 0 10px"><strong>Working weight.</strong> Any set at the prescribed percentage. Warmups don't count.</p>
+        <p style="margin:0 0 10px"><strong>RPE (Rate of Perceived Exertion) 0–10.</strong> How hard the set felt. 10 = failure, 9 = one rep left in the tank, 8 = two reps, 7 = three, and so on. Log RPE on the top set to catch trends.</p>
+        <p style="margin:0 0 10px"><strong>Tempo (e.g. "3-0-1-0").</strong> Eccentric-pause-concentric-pause seconds. 3-0-1-0 = 3 sec down, no pause, 1 sec up, no pause. Used in the moderate volume day to build control.</p>
+        <p style="margin:0 0 10px"><strong>Rest.</strong> Not written on cards but assume 2–3 min between working sets of squats and pulls, 60–90 sec on accessories.</p>
+        <p style="margin:0"><strong>Reset rule.</strong> If you fail to hit reps on the week-3 top set, drop your TM by 10% next cycle. This is normal — don't muscle through failed reps.</p>
+      </div>
+    </div>
+
+    <div class="block"><div class="block-head"><h2>How to use the tabs</h2></div>
+      <div class="sym" style="font-size:14px; line-height:1.55">
+        <p style="margin:0 0 8px"><strong>Today.</strong> Just today's session. Check off each exercise. Enter your top-set weight, top-set reps, RPE if you tracked it, and any notes. Tapping any weight/rep field auto-marks the exercise done.</p>
+        <p style="margin:0 0 8px"><strong>Week.</strong> The full 7-day rhythm. Today is highlighted. Use it to plan ahead — "what's Thursday going to be?"</p>
+        <p style="margin:0 0 8px"><strong>Morning check.</strong> Symptom scoring 0-10 for groin / low back / buttock / shoulder plus a few boolean red-flag questions. Judged BY the next morning, not by how you feel during. Save it and the app derives Green / Amber / Red.</p>
+        <p style="margin:0 0 8px"><strong>Progress.</strong> Edit your training maxes here (top). Below: every dated milestone with your current TM vs the target. If you beat a milestone by 4+ weeks, a green banner appears offering to stretch the remaining targets forward.</p>
+        <p style="margin:0 0 8px"><strong>History.</strong> Symptom trends over time + day-by-day log of what was done and what state it landed on.</p>
+        <p style="margin:0"><strong>Data.</strong> Export / share / import your log. On mobile, Share → AirDrop to Mac and save as <code>data/log.json</code> so future Claude Code sessions can read it directly.</p>
+      </div>
+    </div>
+
+    <div class="block"><div class="block-head"><h2>How to read a workout card</h2></div>
+      <div class="sym" style="font-size:14px; line-height:1.55">
+        <ul style="margin:0; padding-left:20px">
+          <li style="margin-bottom:8px"><strong>Exercise name</strong> at the top.</li>
+          <li style="margin-bottom:8px"><strong>Dose line</strong> (mono font) shows the default sets/reps/hold from the exercise library.</li>
+          <li style="margin-bottom:8px"><strong>Scheme line</strong> (blue mono) shows what THIS session prescribes — e.g. "5/3/1 top set" or "FSL 5×5" or a percentage.</li>
+          <li style="margin-bottom:8px"><strong>TM line</strong> appears if you have a TM set for that lift. Multiply the scheme percentage by this to get today's weight.</li>
+          <li style="margin-bottom:8px"><strong>Weight / Top-set reps / RPE inputs</strong> — log what you actually did. Only strength/unilateral exercises show these.</li>
+          <li style="margin-bottom:8px"><strong>Notes</strong> — anything worth remembering: form cues, how a side felt, mood.</li>
+          <li style="margin-bottom:8px"><strong>Cues (expandable)</strong> — technique reminders and the video demo link.</li>
+          <li><strong>Flags</strong> — small pills like <code>historical provocateur</code> or <code>monitor click</code>. Not warnings, just reminders of what to watch.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="block"><div class="block-head"><h2>Green / Amber / Red</h2></div>
+      <div class="sym" style="font-size:14px; line-height:1.55">
+        <p style="margin:0 0 8px">Symptom state, judged by the morning check the day after training.</p>
+        <p style="margin:0 0 6px"><span class="dot" data-s="green"></span> <strong>Green.</strong> Nothing above 3/10, back to baseline within 24h. → Progress the load. TM +5 kg squats / +7.5 kg pulls at cycle end.</p>
+        <p style="margin:0 0 6px"><span class="dot" data-s="amber"></span> <strong>Amber.</strong> A 4-5/10 or morning stiffness over 30 min. → Hold the load. Repeat the week. TM does NOT increment at cycle end.</p>
+        <p style="margin:0"><span class="dot" data-s="red"></span> <strong>Red.</strong> Painful click, night pain, gait change, or anything over 5. → Back off two steps. Cycle end: TM –10%. Three ambers in a row = same action. Real red flags = see the orthopaedist, not the app.</p>
+      </div>
+    </div>
+
+    <div class="block"><div class="block-head"><h2>What to expect week by week</h2></div>
+      <div class="sym" style="font-size:14px; line-height:1.55">
+        <ul style="margin:0; padding-left:20px">
+          <li style="margin-bottom:6px"><strong>Weeks 0-2:</strong> Pattern reintroduction. Loads feel light. This is not the strength jump.</li>
+          <li style="margin-bottom:6px"><strong>Week 2:</strong> Evaluation. Test a real 5RM on high-bar squat (Tue) and block pull (Fri). Enter results in Progress → Training maxes.</li>
+          <li style="margin-bottom:6px"><strong>Week 3 (race week):</strong> Legs stay light. Race Saturday.</li>
+          <li style="margin-bottom:6px"><strong>Weeks 4-7:</strong> Cycle 1. Week 3 of the cycle has the first AMRAP top set — this is your first real PR moment.</li>
+          <li style="margin-bottom:6px"><strong>Sept 12:</strong> Local comp mid-cycle. Nothing to peak for; you'll already feel stronger than pre-injury.</li>
+          <li style="margin-bottom:6px"><strong>Weeks 8-11:</strong> Cycle 2. TM +5 kg / +7.5 kg if cycle 1 was green.</li>
+          <li style="margin-bottom:6px"><strong>Dec 2026:</strong> 1RM test week — first real max attempt.</li>
+          <li><strong>Jun 2027:</strong> 180 kg squat / 200 kg deadlift attempt window.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="block"><div class="block-head"><h2>Red flags — stop the app, call the clinician</h2></div>
+      <div class="sym" style="font-size:14px; line-height:1.55">
+        <p style="margin:0 0 8px">These aren't training decisions. If any happen, book the orthopaedist and skip today's session.</p>
+        <ul style="margin:0; padding-left:20px">
+          <li style="margin-bottom:5px">Night pain that wakes you</li>
+          <li style="margin-bottom:5px">Any pain that shortens your running stride</li>
+          <li style="margin-bottom:5px">Sharp catch or click WITH groin pain (not the painless kind)</li>
+          <li style="margin-bottom:5px">Persistent left SI or buttock ache lasting more than 48h</li>
+          <li style="margin-bottom:5px">New shoulder external-rotation weakness or scapular asymmetry (possible suprascapular nerve compression from the ganglion cyst)</li>
+          <li>Morning back stiffness over 30 min, worse with rest, better with movement, or second-half-of-night waking (inflammatory pattern screen)</li>
+        </ul>
+      </div>
+    </div>
+  `;
+}
+
+/* ---------- day / week routing ---------- */
+// Map JS Date.getDay() (0=Sun,1=Mon,...6=Sat) → weekly_template.week index (0=Mon..6=Sun)
+const DOW_TO_TEMPLATE_IDX=[6,0,1,2,3,4,5];
+
+function todaysScheduledBlocks(){
+  const phase=activePhase();
+  const dow=new Date(TODAY+'T12:00:00').getDay();
+  const wt=DATA.program.weekly_template;
+  const isMainPhase=['phase_2_cycle_1','phase_3_cycle_2','phase_4_cycles_3_4_test','phase_6_peak_test'].includes(phase.id);
+  let blockIds;
+  let weekdayEntry=null;
+  if(isMainPhase && wt && wt.week){
+    weekdayEntry=wt.week[DOW_TO_TEMPLATE_IDX[dow]];
+    blockIds=(weekdayEntry.session.match(/block_[a-z_]+/g)||[]).filter(id=>DATA.program.blocks.some(b=>b.id===id));
+  } else {
+    blockIds=phase.blocks;
+  }
+  // Filter to STRENGTH blocks only for the Today view
+  const strengthIds=blockIds.filter(id=>{
+    const b=DATA.program.blocks.find(x=>x.id===id);
+    return b && blockCategory(b)==='strength';
+  });
+  return {phase, weekdayEntry, blockIds:strengthIds, allBlockIds:blockIds};
+}
+
+function cycleContext(phase){
+  // best-effort cycle+week label based on today vs phase.starts
+  if(!phase.starts) return null;
+  const start=new Date(phase.starts+'T00:00:00');
+  const today=new Date(TODAY+'T00:00:00');
+  const daysIn=Math.floor((today-start)/(1000*60*60*24));
+  if(daysIn<0) return null;
+  const wk=Math.floor(daysIn/7)+1;
+  return `Week ${wk}`;
+}
+
+/* ---------- today ---------- */
+function renderToday(){
+  const el=$('today'); el.innerHTML='';
+  const {phase, weekdayEntry, blockIds}=todaysScheduledBlocks();
+  const dayName=new Date(TODAY+'T12:00:00').toLocaleDateString('en-GB',{weekday:'long'});
+  const cw=cycleContext(phase);
+
+  // phase + day header
+  const phBox=document.createElement('div'); phBox.className='block';
+  phBox.innerHTML=`<div class="block-head"><h2>Today — ${esc(dayName)}</h2><span class="block-meta">${esc(phase.name)}${cw?' · '+esc(cw):''}</span></div>
+    <div class="block-note"><strong>${esc(phase.name)}.</strong> ${esc(phase.goal||phase.rationale||'')}</div>
+    ${weekdayEntry?`<div class="block-note"><strong>Scheduled:</strong> ${esc(weekdayEntry.session)}${weekdayEntry.conditioning?' — '+esc(weekdayEntry.conditioning):''}</div>`:''}`;
+  el.appendChild(phBox);
+
+  // render only today's strength block(s)
+  const blocksToShow=DATA.program.blocks.filter(b=>blockIds.includes(b.id));
+  if(!blocksToShow.length){
+    const div=document.createElement('div'); div.className='block';
+    div.innerHTML=`<div class="block-head"><h2>Rest day — no barbell scheduled</h2><span class="block-meta">strength off</span></div>
+      <div class="block-note"><strong>No strength session today.</strong> Accessory / rehab / run blocks live on the <em>Extras</em> tab — do them if you want, they still log to today.</div>
+      <div class="block-note">Peek at tomorrow: open the <em>Week</em> tab.</div>`;
+    el.appendChild(div);
+    return;
+  }
+  blocksToShow.forEach(b=>{
+    const div=document.createElement('div'); div.className='block';
+    const meta=[b.frequency||(b.frequency_per_week?b.frequency_per_week+'×/week':''),
+                b.duration_min?(Array.isArray(b.duration_min)?b.duration_min.join('–'):b.duration_min)+' min':'']
+                .filter(Boolean).join(' · ');
+    div.innerHTML=`<div class="block-head"><h2>${esc(b.name)}</h2><span class="block-meta">${esc(meta)}</span></div>`;
+    if(b.note) div.innerHTML+=`<div class="block-note">${esc(b.note)}</div>`;
+    const items=b.items||(b.segments||[]).flatMap(s=>s.items.map(i=>({...i,_seg:s.name})));
+    let seg=null;
+    items.forEach(it=>{
+      if(it._seg&&it._seg!==seg){seg=it._seg;
+        const h=document.createElement('div'); h.className='block-meta'; h.style.margin='12px 0 6px';
+        h.textContent=seg.toUpperCase(); div.appendChild(h);}
+      div.appendChild(card(it,b.id));
+    });
+    el.appendChild(div);
+  });
+}
+
+/* ---------- extras ---------- */
+function renderExtras(){
+  const el=$('extras'); el.innerHTML='';
+  // ALL non-strength blocks, always available
+  const groups=[
+    {cat:'accessory', title:'Accessories & home rehab', note:'Do these when you can — they log to today, no calendar constraint.'},
+    {cat:'run',       title:'Around runs',              note:'Attach these to your run sessions. Log to today.'}
+  ];
+  groups.forEach(g=>{
+    const blocks=DATA.program.blocks.filter(b=>blockCategory(b)===g.cat);
+    if(!blocks.length) return;
+    const heading=document.createElement('div'); heading.className='block';
+    heading.innerHTML=`<div class="block-head"><h2>${esc(g.title)}</h2></div>
+      <div class="block-note">${esc(g.note)}</div>`;
+    el.appendChild(heading);
+    blocks.forEach(b=>{
+      const div=document.createElement('div'); div.className='block';
+      const meta=[b.frequency||(b.frequency_per_week?b.frequency_per_week+'×/week':''),
+                  b.duration_min?(Array.isArray(b.duration_min)?b.duration_min.join('–'):b.duration_min)+' min':'']
+                  .filter(Boolean).join(' · ');
+      div.innerHTML=`<div class="block-head"><h2>${esc(b.name)}</h2><span class="block-meta">${esc(meta)}</span></div>`;
+      if(b.note) div.innerHTML+=`<div class="block-note">${esc(b.note)}</div>`;
+      const items=b.items||(b.segments||[]).flatMap(s=>s.items.map(i=>({...i,_seg:s.name})));
+      let seg=null;
+      items.forEach(it=>{
+        if(it._seg&&it._seg!==seg){seg=it._seg;
+          const h=document.createElement('div'); h.className='block-meta'; h.style.margin='12px 0 6px';
+          h.textContent=seg.toUpperCase(); div.appendChild(h);}
+        div.appendChild(card(it,b.id));
+      });
+      el.appendChild(div);
+    });
+  });
+}
+
+/* ---------- week ---------- */
+function renderWeek(){
+  const el=$('week'); el.innerHTML='';
+  const {phase}=todaysScheduledBlocks();
+  const wt=DATA.program.weekly_template;
+  const dow=new Date(TODAY+'T12:00:00').getDay();
+  const todayTemplateIdx=DOW_TO_TEMPLATE_IDX[dow];
+
+  const head=document.createElement('div'); head.className='block';
+  head.innerHTML=`<div class="block-head"><h2>Week overview</h2><span class="block-meta">${esc(phase.name)}</span></div>
+    <div class="block-note">The weekly rhythm during phases 2-4 and 6. Phase 1 is more flexible — see Today tab for the reintro schedule. Phase 5 (Hatch) swaps in the two Hatch days.</div>`;
+  el.appendChild(head);
+
+  if(!wt || !wt.week){
+    const div=document.createElement('div'); div.className='block';
+    div.innerHTML=`<div class="block-note">No weekly template in program.json.</div>`;
+    el.appendChild(div);
+    return;
+  }
+
+  const grid=document.createElement('div'); grid.className='block';
+  grid.innerHTML=`<div class="sym" id="weekGrid"></div>`;
+  el.appendChild(grid);
+  const gridInner=grid.querySelector('#weekGrid');
+
+  wt.week.forEach((d,i)=>{
+    const row=document.createElement('div');
+    row.style.cssText='padding:12px 0; border-bottom:1px solid var(--line-soft); '+(i===todayTemplateIdx?'background:#F0F6F3; margin:0 -14px; padding:12px 14px; border-radius:2px;':'');
+    const blockIds=(d.session.match(/block_[a-z_]+/g)||[]);
+    const blockNames=blockIds.map(id=>{const b=DATA.program.blocks.find(x=>x.id===id); return b?b.name:id;}).join(' + ');
+    const isRest=/rest/i.test(d.session);
+    row.innerHTML=`<div style="display:flex; justify-content:space-between; gap:12px; align-items:baseline">
+        <div style="font-weight:650; font-size:15px">${esc(d.day)}${i===todayTemplateIdx?' <span class="flag" style="background:var(--green);color:#fff">TODAY</span>':''}</div>
+        <div class="block-meta">${isRest?'rest':esc(blockIds.join(' · ')||d.session)}</div>
+      </div>
+      <div style="font-size:13.5px; color:var(--muted); margin-top:4px">${esc(blockNames||d.session)}</div>
+      ${d.conditioning?`<div style="font-size:12.5px; color:var(--muted); margin-top:3px; font-style:italic">${esc(d.conditioning)}</div>`:''}`;
+    gridInner.appendChild(row);
+  });
+
+  // principles
+  if(wt.principles && wt.principles.length){
+    const p=document.createElement('div'); p.className='block';
+    p.innerHTML=`<div class="block-head"><h2>Rules of the week</h2></div>
+      <div class="sym"><ul style="margin:0; padding-left:20px; font-size:14px">${wt.principles.map(x=>`<li style="margin-bottom:6px">${esc(x)}</li>`).join('')}</ul></div>`;
+    el.appendChild(p);
+  }
+}
+
+/* ---------- progress ---------- */
+function renderProgress(){
+  const el=$('progress'); el.innerHTML='';
+
+  // TM editor at the top of Progress
+  const primary=['back_squat_highbar','front_squat','block_pull_midshin','deadlift_conventional'];
+  const tmNoteData=DATA.program.training_maxes||{};
+  const tmBlock=document.createElement('div'); tmBlock.className='block';
+  tmBlock.innerHTML=`<div class="block-head"><h2>Training maxes</h2><span class="block-meta">edit anytime</span></div>
+    <div class="block-note">${esc(tmNoteData.note||'')}</div>
+    ${tmNoteData.evaluation_week?`<div class="block-note"><strong>Evaluation week.</strong> ${esc(tmNoteData.evaluation_week.protocol||'')} · <em>${esc(tmNoteData.evaluation_week.tm_formula||'')}</em></div>`:''}`;
+  const tmGrid=document.createElement('div'); tmGrid.className='sym';
+  primary.forEach(id=>{
+    const ex=DATA.byId[id]; if(!ex) return;
+    const val=(STORE.training_maxes||{})[id]??'';
+    const row=document.createElement('div'); row.className='tm-grid';
+    row.innerHTML=`<div><div class="tm-name">${esc(ex.name)}</div><div class="ex-dose" style="margin-top:2px">${esc(id)}</div></div>
+      <input type="number" inputmode="decimal" step="0.5" min="0" max="500" class="tm-input" data-tm="${esc(id)}" value="${val}" placeholder="—">
+      <div class="tm-unit">kg</div>`;
+    tmGrid.appendChild(row);
+  });
+  tmBlock.appendChild(tmGrid);
+  if(tmNoteData.progression_rule){
+    const rule=document.createElement('div'); rule.className='block-note'; rule.style.marginTop='12px';
+    rule.textContent=tmNoteData.progression_rule;
+    tmBlock.appendChild(rule);
+  }
+  el.appendChild(tmBlock);
+  tmBlock.querySelectorAll('input[data-tm]').forEach(inp=>{
+    inp.addEventListener('input',e=>{
+      const id=e.target.dataset.tm;
+      const raw=e.target.value;
+      let v=null;
+      if(raw!==''){
+        const n=Number(raw);
+        if(isFinite(n) && n>0 && n<=500) v=n;
+      }
+      if(!STORE.training_maxes) STORE.training_maxes={};
+      if(v==null) delete STORE.training_maxes[id]; else STORE.training_maxes[id]=v;
+      saveStore();
+      // re-render just the progression targets section by re-calling renderProgress next tick
+      setTimeout(()=>renderProgress(),0);
+    });
+  });
+
+  // milestones
+  const gt=DATA.program.goals && DATA.program.goals.progression_targets;
+  if(!gt || !gt.milestones){
+    el.innerHTML+=`<div class="block"><div class="empty">No progression targets defined.</div></div>`;
+    return;
+  }
+  const tms=STORE.training_maxes||{};
+  const overrides=STORE.stretch_targets||{};
+  const now=new Date(TODAY+'T12:00:00');
+  let beatenEarly=[];
+
+  // group milestones by lift
+  const byLift={};
+  gt.milestones.forEach(m=>{
+    if(!byLift[m.lift]) byLift[m.lift]=[];
+    const effectiveTarget=overrides[m.lift+':'+m.date] ?? m.target_tm_kg;
+    byLift[m.lift].push({...m, effective_target:effectiveTarget});
+  });
+
+  // header
+  const head=document.createElement('div'); head.className='block';
+  head.innerHTML=`<div class="block-head"><h2>Progression targets</h2><span class="block-meta">TM = target × 0.9 of 5RM ≈ 85-90% of 1RM</span></div>
+    <div class="block-note">${esc(gt.note||'')}</div>
+    <div class="block-note"><strong>Auto-adjust policy.</strong> ${esc(gt.auto_adjust_policy||'')}</div>`;
+  el.appendChild(head);
+
+  Object.entries(byLift).forEach(([lift,items])=>{
+    const ex=DATA.byId[lift];
+    const currentTM=tms[lift];
+    const block=document.createElement('div'); block.className='block';
+    block.innerHTML=`<div class="block-head"><h2>${esc(ex?ex.name:lift)}</h2><span class="block-meta">TM now: ${currentTM!=null?currentTM+' kg':'—'}</span></div>`;
+    const table=document.createElement('div'); table.className='sym';
+    items.forEach(m=>{
+      const mDate=new Date(m.date+'T12:00:00');
+      const daysToTarget=Math.round((mDate-now)/(1000*60*60*24));
+      let status='pending', tag='';
+      if(currentTM!=null && currentTM >= m.effective_target){
+        status='beaten';
+        tag=`<span class="flag" style="background:var(--green);color:#fff">BEATEN</span>`;
+        // count how many WEEKS early
+        if(daysToTarget > 28) beatenEarly.push({lift, milestone:m, currentTM, weeksEarly:Math.round(daysToTarget/7)});
+      } else if(daysToTarget < 0){
+        status='overdue'; tag=`<span class="flag" style="background:var(--red);color:#fff">MISSED</span>`;
+      } else if(daysToTarget <= 14){
+        status='near'; tag=`<span class="flag" style="background:var(--amber);color:#fff">SOON</span>`;
+      }
+      const row=document.createElement('div');
+      row.style.cssText='padding:9px 0; border-bottom:1px solid var(--line-soft); display:flex; justify-content:space-between; gap:12px; align-items:baseline; flex-wrap:wrap';
+      row.innerHTML=`<div>
+          <div style="font-family:var(--mono); font-size:12px; color:var(--muted)">${esc(m.date)} · ${esc(m.phase.replace(/^phase_/,'').replace(/_/g,' '))}</div>
+          <div style="font-weight:600; font-size:14px; margin-top:2px">TM target ${m.effective_target} kg ${tag}</div>
+          ${m.note?`<div style="font-size:12.5px; color:var(--muted); margin-top:2px">${esc(m.note)}</div>`:''}
+        </div>
+        <div style="font-family:var(--mono); font-size:12px; color:var(--muted); text-align:right">
+          ${currentTM!=null?(currentTM>=m.effective_target?'+':'')+(currentTM-m.effective_target).toFixed(1)+' kg':'no TM set'}<br>
+          ${daysToTarget>=0?daysToTarget+'d away':Math.abs(daysToTarget)+'d ago'}
+        </div>`;
+      table.appendChild(row);
+    });
+    block.appendChild(table);
+    el.appendChild(block);
+  });
+
+  if(beatenEarly.length){
+    const notice=document.createElement('div'); notice.className='block';
+    notice.innerHTML=`<div class="verdict" data-s="green"><b>You are ahead of the plan</b>
+      ${beatenEarly.length} milestone${beatenEarly.length>1?'s':''} beaten by 4+ weeks. Stretch the remaining targets forward?
+      <div class="io-buttons" style="margin-top:10px">
+        <button type="button" id="stretchBtn">Push targets forward</button>
+        <button type="button" id="keepBtn" class="secondary">Keep as is</button>
+      </div>
+    </div>`;
+    el.appendChild(notice);
+    $('stretchBtn').addEventListener('click',()=>stretchTargets(beatenEarly));
+    $('keepBtn').addEventListener('click',()=>{});
+  }
+}
+
+function stretchTargets(beaten){
+  // For each lift that has been beaten, extrapolate: how much did we exceed by, and shift ALL remaining milestones for that lift up by that delta.
+  const gt=DATA.program.goals.progression_targets;
+  const overrides=STORE.stretch_targets||{};
+  const byLift={};
+  beaten.forEach(b=>{
+    if(!byLift[b.lift]) byLift[b.lift]={maxDelta:0};
+    const delta=b.currentTM - b.milestone.effective_target;
+    if(delta > byLift[b.lift].maxDelta) byLift[b.lift].maxDelta=delta;
+  });
+  gt.milestones.forEach(m=>{
+    if(byLift[m.lift]){
+      const key=m.lift+':'+m.date;
+      const cur=overrides[key] ?? m.target_tm_kg;
+      const mDate=new Date(m.date+'T12:00:00');
+      if(mDate > new Date()){
+        overrides[key]=cur + byLift[m.lift].maxDelta;
+      }
+    }
+  });
+  STORE.stretch_targets=overrides;
+  saveStore();
+  renderProgress();
+  alert('Remaining targets stretched forward. See Progress tab.');
+}
+
+function card(item,blockId){
+  const ex=DATA.byId[item.exercise_id];
+  const c=document.createElement('div'); c.className='card';
+  if(!ex){
+    c.innerHTML=`<div class="spine">–</div><div class="card-body"><div class="ex-name">${esc(item.name||item.exercise_id||'—')}</div></div>`;
+    return c;
+  }
+  const d={...(ex.default||{}),...item};
+  const {key, entry}=exlog(blockId, ex.id);
+  if(entry.done) c.classList.add('done');
+
+  const dose=[
+    d.sets?`${d.sets} sets`:null,
+    d.reps?`${d.reps} reps`:null,
+    d.hold_seconds?`${d.hold_seconds}s hold`:null,
+    d.distance_m?`${d.distance_m} m`:null,
+    d.intensity_pct?`@ ${d.intensity_pct}%`:null,
+    d.tempo?d.tempo:null
+  ].filter(Boolean).join(' · ');
+
+  const side=d.per_side, extra=d.extra_set_side;
+  const spine=side
+    ? `<b class="${extra==='left'?'hot':''}">L</b><b class="${extra==='right'?'hot':''}">R</b>`
+    : `<b>•</b>`;
+
+  const cues=(ex.cues||[]).map(x=>`<li>${esc(x)}</li>`).join('');
+  const flags=(ex.flags||[]).map(f=>`<span class="flag ${f.startsWith('monitor')||f.startsWith('historical_provocateur')?'hot':''}">${esc(f.replace(/_/g,' '))}</span>`).join('');
+  const warn=[ex.warning,ex.avoid].filter(Boolean).map(w=>`<div class="warn">${esc(w)}</div>`).join('');
+  const extraNote=extra?`<div class="ex-dose">Extra set on the ${esc(extra)}</div>`:'';
+  const schemeLine=item.scheme?`<div class="ex-scheme">${esc(item.scheme)}</div>`:'';
+
+  // TM hint + concrete weight suggestion
+  const tm=(STORE.training_maxes||{})[ex.id];
+  const tmHint=tm?`<div class="ex-scheme">TM: ${tm} kg</div>`:'';
+  let weightBox='';
+  if(TM_EXERCISES.has(ex.id) && tm){
+    const sug=suggestForExercise(ex.id, blockId);
+    if(sug){
+      const warmups=sug.warmups?sug.warmups.map(w=>`${w.kg}×${w.reps}`).join(' → '):'';
+      const topLine=`<strong style="color:var(--slate); font-size:15px">${sug.top_set.kg} kg × ${sug.top_set.reps}</strong>`;
+      const fslLine=sug.fsl?`<div style="font-size:12.5px; color:var(--muted); margin-top:2px">FSL: ${sug.fsl.sets}×${sug.fsl.reps} @ ${sug.fsl.kg} kg</div>`:'';
+      const warmLine=warmups?`<div style="font-size:12px; color:var(--muted); margin-top:2px">Warm-up: ${warmups}</div>`:'';
+      weightBox=`<div style="background:#F0F6F3; border-left:3px solid var(--green); padding:10px 12px; margin-top:10px; border-radius:0 2px 2px 0">
+        <div style="font-family:var(--mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-bottom:4px">Suggested today</div>
+        ${topLine}
+        ${fslLine}
+        ${warmLine}
+        <div style="font-size:11.5px; color:var(--muted); margin-top:6px; font-style:italic">${esc(sug.reasoning)}</div>
+      </div>`;
+    }
+  }
+
+  const isLoaded=['strength','unilateral'].includes(ex.category);
+  const logInputs=isLoaded?`
+    <div class="logrow">
+      <div><label>Weight kg</label><input type="number" inputmode="decimal" step="0.5" min="0" max="500" data-log="weight_kg" value="${entry.weight_kg??''}"></div>
+      <div><label>Top-set reps</label><input type="number" inputmode="numeric" step="1" min="0" max="50" data-log="reps" value="${entry.reps??''}"></div>
+      <div><label>RPE (0-10)</label><input type="number" inputmode="decimal" step="0.5" min="0" max="10" data-log="rpe" value="${entry.rpe??''}"></div>
+    </div>
+    <div class="tm-suggest" data-suggest style="margin-top:8px; font-family:var(--mono); font-size:12px; color:var(--muted); display:none"></div>`:'';
+
+  c.innerHTML=`<div class="spine">${spine}</div>
+  <div class="card-body">
+    <div class="ex-top">
+      <input type="checkbox" data-done ${entry.done?'checked':''} aria-label="Mark ${esc(ex.name)} done">
+      <div style="flex:1">
+        <div class="ex-name">${esc(ex.name)}</div>
+        <div class="ex-dose">${esc(dose||'—')}${side?' · each side':''}</div>
+        ${schemeLine}
+        ${tmHint}
+        ${extraNote}
+      </div>
+    </div>
+    ${warn}
+    ${weightBox}
+    ${logInputs}
+    <div class="noteswrap"><label>Notes</label><textarea data-log="notes" rows="1" placeholder="How did it feel? Anything to flag?">${esc(entry.notes||'')}</textarea></div>
+    ${(cues.length||ex.rationale||ex.setup)?`<details><summary>Cues</summary>
+      ${ex.setup?`<p style="font-size:14px;margin:8px 0 0">${esc(ex.setup)}</p>`:''}
+      ${cues?`<ul>${cues}</ul>`:''}
+      ${ex.rationale?`<p style="font-size:13.5px;color:var(--muted);margin:8px 0 0">${esc(ex.rationale)}</p>`:''}
+      ${ex.video_search||ex.video_url?`<p style="margin:10px 0 0"><button type="button" class="videolink" data-video="${esc(ex.video_url||'')}" data-search="${esc(ex.video_search||'')}" data-title="${esc(ex.name)}">Watch demo →</button></p>`:''}
+    </details>`:''}
+    ${flags}
+  </div>`;
+
+  // handlers
+  const chk=c.querySelector('input[data-done]');
+  chk.addEventListener('change',e=>{
+    entry.done=e.target.checked; saveStore(); c.classList.toggle('done',e.target.checked); renderVitals();
+  });
+  c.querySelectorAll('input[data-log], textarea[data-log]').forEach(inp=>{
+    inp.addEventListener('input',e=>{
+      const k=e.target.dataset.log;
+      let v=e.target.value;
+      if(k==='weight_kg'||k==='reps'||k==='rpe'){
+        if(v==='') v=null;
+        else {
+          const n=Number(v);
+          if(!isFinite(n) || n<0) v=null;
+          else if(k==='weight_kg') v=Math.min(n,500);
+          else if(k==='reps') v=Math.min(Math.round(n),50);
+          else if(k==='rpe') v=Math.min(n,10);
+        }
+      }
+      entry[k]=v;
+      // auto-mark done if any log input has content
+      if((k==='weight_kg'||k==='reps') && v!=null && !entry.done){
+        entry.done=true; chk.checked=true; c.classList.add('done'); renderVitals();
+      }
+      saveStore();
+      updateTMSuggestion();
+    });
+  });
+
+  // live TM suggestion for main lifts
+  function updateTMSuggestion(){
+    const suggest=c.querySelector('[data-suggest]');
+    if(!suggest || !TM_EXERCISES.has(ex.id)) return;
+    const est=inferTMFromSet(entry.weight_kg, entry.reps, entry.rpe);
+    if(!est){ suggest.style.display='none'; return; }
+    const currentTM=(STORE.training_maxes||{})[ex.id];
+    const delta = currentTM!=null ? (est.suggestedTM - currentTM) : null;
+    const arrow = delta==null ? '' : (delta>=0 ? ` (+${delta.toFixed(1)} vs current TM)` : ` (${delta.toFixed(1)} vs current TM)`);
+    const rirTxt = est.rir>0 ? ` · assumed ${est.rir} rep${est.rir>1?'s':''} in reserve (RPE ${entry.rpe})` : '';
+    suggest.style.display='block';
+    suggest.innerHTML=`→ implies 1RM ~${est.est1RM} kg · suggested TM <strong style="color:var(--slate)">${est.suggestedTM} kg</strong>${arrow}${rirTxt}
+      ${currentTM==null || Math.abs(delta)>=2.5 ? `<button type="button" class="videolink" style="margin-left:8px" data-accept-tm>Set TM to ${est.suggestedTM}</button>`:''}`;
+    const btn=suggest.querySelector('[data-accept-tm]');
+    if(btn) btn.addEventListener('click',()=>{
+      if(!STORE.training_maxes) STORE.training_maxes={};
+      STORE.training_maxes[ex.id]=est.suggestedTM;
+      saveStore();
+      suggest.innerHTML=`✓ TM set to <strong style="color:var(--green)">${est.suggestedTM} kg</strong>`;
+      renderVitals();
+    });
+  }
+  updateTMSuggestion();
+  const vidBtn=c.querySelector('button[data-video]');
+  if(vidBtn) vidBtn.addEventListener('click',()=>{
+    openVideo(vidBtn.dataset.title, vidBtn.dataset.video, vidBtn.dataset.search);
+  });
+  return c;
+}
+
+/* ---------- morning check ---------- */
+const REGIONS=[
+  {k:'groin_left',   label:'Groin',     lat:'L'},
+  {k:'low_back',     label:'Low back',  lat:null},
+  {k:'buttock_left', label:'Buttock',   lat:'L'},
+  {k:'shoulder_right',label:'Shoulder', lat:'R'}
+];
+
+function renderCheck(){
+  const s=day().symptoms||{};
+  $('check').innerHTML=`
+   <div class="block"><div class="block-head"><h2>Morning check</h2><span class="block-meta">${TODAY}</span></div>
+    <div class="sym">
+      ${REGIONS.map(r=>`<div class="sym-row">
+        <div>
+          <div class="sym-label">${r.lat?`<span class="lat ${r.lat}">${r.lat}</span>`:''}${r.label}</div>
+          <input type="range" min="0" max="10" step="1" data-k="${r.k}" value="${s[r.k]??0}">
+        </div>
+        <div class="sym-val" data-v="${r.k}">${s[r.k]??0}</div>
+      </div>`).join('')}
+      <label class="chk"><input type="checkbox" data-b="click_present" ${s.click_present?'checked':''}> Clicking present</label>
+      <label class="chk"><input type="checkbox" data-b="click_painful" ${s.click_painful?'checked':''}> Clicking is painful</label>
+      <label class="chk"><input type="checkbox" data-b="night_pain" ${s.night_pain?'checked':''}> Woke me at night</label>
+      <label class="chk"><input type="checkbox" data-b="gait_change" ${s.gait_change?'checked':''}> Shortened my stride when running</label>
+      <div class="sym-row"><div>
+        <div class="sym-label">Morning stiffness (minutes)</div>
+        <input type="range" min="0" max="90" step="5" data-k="morning_stiffness_min" value="${s.morning_stiffness_min??0}">
+      </div><div class="sym-val" data-v="morning_stiffness_min">${s.morning_stiffness_min??0}</div></div>
+      <button class="primary" id="saveSym">Save check</button>
+      <div id="verdict"></div>
+    </div></div>`;
+
+  $('check').querySelectorAll('input[type=range]').forEach(r=>
+    r.addEventListener('input',e=>{ $('check').querySelector(`[data-v="${e.target.dataset.k}"]`).textContent=e.target.value; }));
+  $('saveSym').addEventListener('click',()=>{
+    const o={};
+    $('check').querySelectorAll('input[type=range]').forEach(r=>o[r.dataset.k]=+r.value);
+    $('check').querySelectorAll('input[data-b]').forEach(b=>o[b.dataset.b]=b.checked);
+    const d=day(); d.symptoms=o; d.derived_state=derive(o); saveStore();
+    showVerdict(d.derived_state); renderVitals(); renderHistory();
+  });
+  if(day().derived_state) showVerdict(day().derived_state);
+}
+
+function derive(s){
+  const peak=Math.max(s.groin_left||0,s.low_back||0,s.buttock_left||0,s.shoulder_right||0);
+  if(s.night_pain||s.gait_change||(s.click_present&&s.click_painful)||peak>5) return 'red';
+  if(peak>=4||(s.morning_stiffness_min||0)>30) return 'amber';
+  return 'green';
+}
+
+function showVerdict(state){
+  const r=DATA.program.progression_rules.states.find(x=>x.id===state);
+  const extra=state==='red'?`<br>${esc(DATA.program.progression_rules.escalation)}`:'';
+  $('verdict').innerHTML=`<div class="verdict" data-s="${state}"><b>${state.toUpperCase()} — ${esc(r.label)}</b>
+    Judged on ${esc(DATA.program.progression_rules.assessment_timing.replace('_',' '))}.${extra}</div>`;
+}
+
+/* ---------- history ---------- */
+function renderHistory(){
+  const days=Object.values(STORE.logs).sort((a,b)=>a.date.localeCompare(b.date));
+  if(!days.length){ $('history').innerHTML=`<div class="block"><div class="empty">No entries yet. Log a session or a morning check.</div></div>`; return; }
+  const recent=days.slice(-30);
+  const bars=k=>recent.map(d=>{
+    const v=d.symptoms?d.symptoms[k]:null;
+    return v==null?`<i data-z></i>`:`<i style="height:${Math.max(6,(v/10)*34)}px" title="${d.date}: ${v}"></i>`;
+  }).join('');
+  $('history').innerHTML=`
+   <div class="block"><div class="block-head"><h2>Symptoms</h2><span class="block-meta">last ${recent.length} entries</span></div>
+     <div class="sym">${REGIONS.map(r=>`<div class="hist-row">
+       <div class="hist-label">${r.lat?`<span class="lat ${r.lat}">${r.lat}</span> `:''}${r.label}</div>
+       <div class="spark">${bars(r.k)}</div></div>`).join('')}
+     </div></div>
+   <div class="block"><div class="block-head"><h2>Log</h2><span class="block-meta">${days.length} days</span></div>
+     <div class="sym">${days.slice().reverse().slice(0,30).map(d=>`<div class="rowlog">
+       <span>${d.derived_state?`<span class="dot" data-s="${esc(d.derived_state)}"></span>`:''}${esc(d.date)}</span>
+       <span>${Object.values(d.exercises||{}).filter(e=>e && e.done).length} done</span></div>`).join('')}
+     </div></div>`;
+}
+
+/* ---------- data / export ---------- */
+function renderData(){
+  const bytes=(new Blob([JSON.stringify(STORE)])).size;
+  const nLogs=Object.keys(STORE.logs).length;
+  $('data').innerHTML=`
+    <div class="block"><div class="block-head"><h2>Data</h2><span class="block-meta">${nLogs} days · ${(bytes/1024).toFixed(1)} KB</span></div>
+      <div class="sym">
+        <div style="font-size:14px; margin-bottom:6px"><strong>Export</strong> — download the full log as JSON. Drop it into <code>data/log.json</code> in the repo so Claude Code sessions can read it in future chats.</div>
+        <div class="io-buttons">
+          <button type="button" id="shareBtn" hidden>Share (mobile)</button>
+          <button type="button" id="exportBtn">Download JSON</button>
+          <button type="button" id="copyBtn">Copy to clipboard</button>
+          <label class="file-btn">Import JSON <input type="file" id="importFile" accept="application/json"></label>
+          <button type="button" id="clearBtn" style="border-color:var(--red); color:var(--red)">Wipe local log</button>
+        </div>
+        <div class="io-hint">
+          <strong>On mobile:</strong> tap <em>Share</em> → AirDrop (or Messages / Files) to send the log to your Mac.
+          Once on the Mac, save it as <code>data/log.json</code> in the repo. Any future Claude Code session in that repo will read it.<br><br>
+          <strong>On desktop:</strong> tap <em>Download JSON</em>, move the file into <code>data/log.json</code> in the repo.<br><br>
+          The log is stored in this browser's localStorage under <code>program.log.v2</code>. Wiping affects only this browser.
+          Import replaces the current log after confirmation.
+        </div>
+      </div>
+    </div>
+    <div class="block"><div class="block-head"><h2>Storage schema</h2><span class="block-meta">v2</span></div>
+      <div class="sym" style="font-size:13.5px; color:var(--muted); line-height:1.5">
+        Per-day entries have <code>exercises</code> (keyed by <code>blockId:exerciseId</code>, each with
+        <code>done</code>, <code>weight_kg</code>, <code>reps</code>, <code>rpe</code>, <code>notes</code>),
+        <code>symptoms</code>, <code>derived_state</code>, and free-text <code>notes</code>.
+        Training maxes live at the top level in <code>training_maxes</code>.
+      </div>
+    </div>`;
+
+  $('exportBtn').addEventListener('click',()=>{
+    const blob=new Blob([JSON.stringify(STORE,null,2)],{type:'application/json'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url; a.download=`program-log-${TODAY}.json`;
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+  });
+
+  // mobile: use native share sheet if available (works on iOS Safari + Android Chrome PWAs)
+  if(navigator.share){
+    $('shareBtn').hidden=false;
+    $('shareBtn').addEventListener('click',async()=>{
+      const filename=`program-log-${TODAY}.json`;
+      const text=JSON.stringify(STORE,null,2);
+      // try file-share first (best UX — AirDrop, Files, Mail attach the file)
+      try{
+        if(navigator.canShare){
+          const file=new File([text], filename, {type:'application/json'});
+          if(navigator.canShare({files:[file]})){
+            await navigator.share({files:[file], title:'Program log', text:filename});
+            return;
+          }
+        }
+        // fallback: share as text (older iOS Safari)
+        await navigator.share({title:'Program log', text});
+      }catch(e){
+        if(e.name!=='AbortError') alert('Share failed: '+e.message);
+      }
+    });
+  }
+  $('copyBtn').addEventListener('click',async()=>{
+    try{
+      await navigator.clipboard.writeText(JSON.stringify(STORE,null,2));
+      $('copyBtn').textContent='Copied ✓';
+      setTimeout(()=>$('copyBtn').textContent='Copy to clipboard',1500);
+    }catch(e){ alert('Clipboard copy failed: '+e.message); }
+  });
+  $('importFile').addEventListener('change',e=>{
+    const f=e.target.files[0]; if(!f) return;
+    const rd=new FileReader();
+    rd.onload=()=>{
+      try{
+        const parsed=JSON.parse(rd.result);
+        if(!confirm(`Replace current log with imported file? Current: ${Object.keys(STORE.logs).length} days. Imported: ${Object.keys(parsed.logs||{}).length} days.`)) return;
+        STORE=parsed; saveStore(); render(); alert('Import complete.');
+      }catch(err){ alert('Import failed: '+err.message); }
+    };
+    rd.readAsText(f);
+  });
+  $('clearBtn').addEventListener('click',()=>{
+    if(!confirm('Wipe the local log? This cannot be undone (export first).')) return;
+    STORE={version:2, logs:{}, training_maxes:{}, cycle:{phase_id:null, cycle_number:1, week_in_cycle:1}};
+    saveStore(); render();
+  });
+}
+
+/* ---------- vitals ---------- */
+function renderVitals(){
+  const phase=activePhase(), d=day();
+  // Short phase name for the vitals cell — long labels break the row
+  const shortNames={
+    'phase_1_rebuild_evaluate':'Rebuild',
+    'phase_2_cycle_1':'Cycle 1',
+    'phase_3_cycle_2':'Cycle 2',
+    'phase_4_cycles_3_4_test':'Cycles 3-4',
+    'phase_5_hatch_specialise':'Hatch',
+    'phase_6_peak_test':'Peak'
+  };
+  $('v-phase').textContent=shortNames[phase.id] || phase.name.split(' ')[0];
+  // Only count today's STRENGTH blocks in the "done" ratio — matches what Today tab shows
+  const {blockIds:strengthIds}=todaysScheduledBlocks();
+  const strengthKeys=new Set();
+  DATA.program.blocks.filter(b=>strengthIds.includes(b.id)).forEach(b=>{
+    (b.items||[]).forEach(it=>{ if(it.exercise_id) strengthKeys.add(`${b.id}:${it.exercise_id}`); });
+    (b.segments||[]).forEach(s=>s.items.forEach(it=>{ if(it.exercise_id) strengthKeys.add(`${b.id}:${it.exercise_id}`); }));
+  });
+  const doneCount=[...strengthKeys].filter(k=>d.exercises[k]&&d.exercises[k].done).length;
+  $('v-done').textContent=`${doneCount}/${strengthKeys.size}`;
+  const st=d.derived_state;
+  $('v-state').textContent=st?st[0].toUpperCase()+st.slice(1):'—';
+  $('v-bar').dataset.s=st||'';
+  let streak=0;
+  for(let i=0;;i++){
+    const k=iso(new Date(Date.now()-i*864e5));
+    const e=STORE.logs[k];
+    const has=e && (Object.values(e.exercises||{}).some(x=>x&&x.done) || e.symptoms);
+    if(has) streak++;
+    else if(i>0) break;
+    else if(i===0) continue;
+  }
+  $('v-streak').textContent=streak+'d';
+}
+
+/* ---------- video modal ---------- */
+function initModal(){
+  $('videoClose').addEventListener('click',closeVideo);
+  $('videoModal').addEventListener('click',e=>{ if(e.target===$('videoModal')) closeVideo(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && !$('videoModal').hidden) closeVideo(); });
+}
+function ytEmbed(url){
+  if(!url) return null;
+  const m=url.match(/(?:youtu\.be\/|v=|embed\/)([A-Za-z0-9_-]{6,})/);
+  return m?`https://www.youtube.com/embed/${m[1]}`:null;
+}
+function openVideo(title, url, search){
+  $('videoTitle').textContent=title;
+  const embed=ytEmbed(url);
+  if(embed){
+    $('videoBody').innerHTML=`<iframe src="${esc(embed)}" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+  } else if(search){
+    $('videoBody').innerHTML=`<div class="modal-fallback">No embedded video for this one yet.<br><br>
+      <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(search)}" target="_blank" rel="noopener">Search YouTube: “${esc(search)}” →</a></div>`;
+  } else {
+    $('videoBody').innerHTML=`<div class="modal-fallback">No demo linked for this exercise.</div>`;
+  }
+  $('videoModal').hidden=false;
+  $('videoModal').setAttribute('aria-hidden','false');
+}
+function closeVideo(){
+  $('videoModal').hidden=true;
+  $('videoModal').setAttribute('aria-hidden','true');
+  $('videoBody').innerHTML='';
+}
+
+/* ---------- timer ---------- */
+const TMAX=180000;
+const T={running:false, start:0, acc:0, target:null, tick:null, hit:false};
+
+function tElapsed(){ return T.running ? T.acc + (performance.now() - T.start) : T.acc; }
+function tFmt(ms){ const s=Math.min(180, Math.floor(ms/1000)); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); }
+
+function tRender(){
+  const raw=tElapsed(), ms=Math.min(raw, TMAX);
+  $('tTime').textContent=tFmt(ms);
+  $('tbFill').style.width=(ms/TMAX*100)+'%';
+  if(T.target && !T.hit && raw >= T.target*1000){
+    T.hit=true;
+    $('tTime').classList.add('hit');
+    $('tbFill').dataset.hit='true';
+    if(navigator.vibrate) navigator.vibrate([80,60,80]);
+    setTimeout(()=>$('tTime').classList.remove('hit'), 700);
+  }
+  if(raw >= TMAX && T.running) tPause();
+}
+
+function tPlay(){
+  if(T.running) return;
+  if(T.acc >= TMAX) return;
+  T.running=true; T.start=performance.now();
+  $('tPlay').dataset.r='true';
+  $('tPlay').textContent='❚❚';
+  $('tPlay').setAttribute('aria-label','Pause');
+  T.tick=setInterval(tRender, 50);
+}
+
+function tPause(){
+  if(!T.running) return;
+  T.acc=tElapsed(); T.running=false;
+  clearInterval(T.tick); T.tick=null;
+  $('tPlay').dataset.r='false';
+  $('tPlay').textContent='▶';
+  $('tPlay').setAttribute('aria-label','Start');
+  tRender();
+}
+
+function tReset(){
+  clearInterval(T.tick); T.tick=null;
+  T.running=false; T.acc=0; T.hit=false;
+  $('tPlay').dataset.r='false';
+  $('tPlay').textContent='▶';
+  $('tPlay').setAttribute('aria-label','Start');
+  $('tbFill').dataset.hit='false';
+  tRender();
+}
+
+function initTimer(){
+  $('tPlay').addEventListener('click',()=> T.running ? tPause() : tPlay());
+  $('tReset').addEventListener('click', tReset);
+  $('tPresets').querySelectorAll('button').forEach(b=>{
+    b.addEventListener('click',()=>{
+      const v=+b.dataset.t;
+      const already=T.target===v;
+      T.target = already ? null : v;
+      T.hit=false;
+      $('tbFill').dataset.hit='false';
+      $('tPresets').querySelectorAll('button').forEach(x=>
+        x.setAttribute('aria-pressed', String(!already && x===b))
+      );
+    });
+  });
+  tRender();
+}
+</script>
+</body>
+</html>

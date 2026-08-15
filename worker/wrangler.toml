@@ -1,0 +1,22 @@
+name = "program-coach"
+main = "src/index.ts"
+compatibility_date = "2026-01-15"
+compatibility_flags = ["nodejs_compat"]
+
+# ANTHROPIC_API_KEY is set via `wrangler secret put ANTHROPIC_API_KEY`
+# Do NOT put the key in this file.
+
+[vars]
+# Origin of the frontend for CORS + fetching canonical data files.
+# Change if you deploy the frontend elsewhere.
+FRONTEND_ORIGIN = "https://program-v2.pages.dev"
+
+# Model used for the coach. Sonnet is the sweet spot for cost + quality.
+CLAUDE_MODEL = "claude-sonnet-4-6"
+
+# KV namespace holding the user's synced state as a single JSON blob per user.
+# Created via `wrangler kv namespace create program-store` + `--preview`.
+[[kv_namespaces]]
+binding = "STORE"
+id = "76a7068ea10b4128a7339dcbd2183793"
+preview_id = "e31b1f1032694e7cba22b97edc63b1cc"

@@ -1,0 +1,46 @@
+{
+  "_comment": "Example entries only — synthetic, not real data. Shows the shape the app writes to localStorage under 'program.log.v1'. Real logs are gitignored.",
+  "2026-08-01": {
+    "date": "2026-08-01",
+    "exercises": {
+      "block_a_home:hip_flexor_iso_seated": true,
+      "block_a_home:adductor_iso_bent": true,
+      "block_a_home:glute_bridge": true,
+      "block_a_home:dead_bug": true
+    },
+    "symptoms": {
+      "groin_left": 2,
+      "low_back": 1,
+      "buttock_left": 0,
+      "shoulder_right": 3,
+      "morning_stiffness_min": 10,
+      "click_present": true,
+      "click_painful": false,
+      "night_pain": false,
+      "gait_change": false
+    },
+    "derived_state": "green",
+    "notes": "Painless click on the left during knee raises. No groin pain."
+  },
+  "2026-08-02": {
+    "date": "2026-08-02",
+    "exercises": {
+      "block_c_runs:glute_bridge": true,
+      "block_c_runs:a_march": true,
+      "block_c_runs:hip_switch_9090": true
+    },
+    "symptoms": {
+      "groin_left": 4,
+      "low_back": 3,
+      "buttock_left": 2,
+      "shoulder_right": 2,
+      "morning_stiffness_min": 20,
+      "click_present": true,
+      "click_painful": false,
+      "night_pain": false,
+      "gait_change": false
+    },
+    "derived_state": "amber",
+    "notes": "Groin sore the morning after the tempo run. Holding load this week."
+  }
+}

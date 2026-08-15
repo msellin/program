@@ -1,0 +1,1159 @@
+{
+  "01_pre_program_2026-08-05": {
+    "url": "https://program-v2.pages.dev/?today=2026-08-05",
+    "dateISO": "2026-08-05",
+    "h1": "Today",
+    "phaseLabel": "—",
+    "dateHeader": "Wednesday 5 Aug",
+    "offset": "Rehab & leg strength",
+    "blocks": [],
+    "cardsText": [
+      "Wednesday 5 AugToday",
+      "Before the program starts.No strength session scheduled for this date — you're looking at a day before Phase 1 begins. Use the Home button (top-right of the date bar) to jump back to today."
+    ],
+    "buttonLabels": []
+  },
+  "01b_pre_program_2026-07-01": {
+    "url": "https://program-v2.pages.dev/?today=2026-07-01",
+    "dateISO": "2026-07-01",
+    "h1": "Today",
+    "phaseLabel": "—",
+    "dateHeader": "Wednesday 1 Jul",
+    "offset": "Rehab & leg strength",
+    "blocks": [],
+    "cardsText": [
+      "Wednesday 1 JulToday",
+      "Before the program starts.No strength session scheduled for this date — you're looking at a day before Phase 1 begins. Use the Home button (top-right of the date bar) to jump back to today."
+    ],
+    "buttonLabels": []
+  },
+  "01c_pre_program_2020-01-01": {
+    "url": "https://program-v2.pages.dev/?today=2020-01-01",
+    "dateISO": "2020-01-01",
+    "h1": "Today",
+    "phaseLabel": "—",
+    "dateHeader": "Wednesday 1 Jan",
+    "offset": "Rehab & leg strength",
+    "blocks": [],
+    "cardsText": [
+      "Wednesday 1 JanToday",
+      "Before the program starts.No strength session scheduled for this date — you're looking at a day before Phase 1 begins. Use the Home button (top-right of the date bar) to jump back to today."
+    ],
+    "buttonLabels": []
+  },
+  "02_phase1_day1_2026-08-06": {
+    "url": "https://program-v2.pages.dev/?today=2026-08-06",
+    "dateISO": "2026-08-06",
+    "h1": "Today",
+    "phaseLabel": "Rebuild + evaluate (race prep sub-goal)",
+    "dateHeader": "Thursday 6 Aug",
+    "offset": "Rehab & leg strength",
+    "blocks": [],
+    "cardsText": [
+      "Thursday 6 AugToday",
+      "Rest day — no barbell scheduled.Accessory / rehab / run blocks live on the Extras tab — do them if you want, they still log to today."
+    ],
+    "buttonLabels": []
+  },
+  "02b_phase1_fri_2026-08-07": {
+    "url": "https://program-v2.pages.dev/?today=2026-08-07",
+    "dateISO": "2026-08-07",
+    "h1": "Today",
+    "phaseLabel": "Rebuild + evaluate (race prep sub-goal)",
+    "dateHeader": "Friday 7 Aug",
+    "offset": "Rehab & leg strength",
+    "blocks": [
+      "Barbell reintro session (Phase 1 weeks 0-1)"
+    ],
+    "cardsText": [
+      "Friday 7 AugToday",
+      "#Prev / RxWeight kgRepsRPE1—2—3—4—5100×5Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—4—571.5×5Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set"
+    ],
+    "buttonLabels": [
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Cues",
+      "Move day",
+      "Skip today",
+      "Whole week"
+    ]
+  },
+  "02c_phase1_sat_2026-08-08": {
+    "url": "https://program-v2.pages.dev/?today=2026-08-08",
+    "dateISO": "2026-08-08",
+    "h1": "Today",
+    "phaseLabel": "Rebuild + evaluate (race prep sub-goal)",
+    "dateHeader": "Saturday 8 Aug",
+    "offset": "Rehab & leg strength",
+    "blocks": [
+      "Barbell reintro session (Phase 1 weeks 0-1)"
+    ],
+    "cardsText": [
+      "Saturday 8 AugToday",
+      "#Prev / RxWeight kgRepsRPE1—2—3—4—5100×5Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—4—571.5×5Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set"
+    ],
+    "buttonLabels": [
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Cues",
+      "Move day",
+      "Skip today",
+      "Whole week"
+    ]
+  },
+  "03_phase1_rest_tue_2026-08-11": {
+    "url": "https://program-v2.pages.dev/?today=2026-08-11",
+    "dateISO": "2026-08-11",
+    "h1": "Today",
+    "phaseLabel": "Rebuild + evaluate (race prep sub-goal)",
+    "dateHeader": "Tuesday 11 Aug",
+    "offset": "Rehab & leg strength",
+    "blocks": [],
+    "cardsText": [
+      "Tuesday 11 AugToday",
+      "Rest day — no barbell scheduled.Accessory / rehab / run blocks live on the Extras tab — do them if you want, they still log to today."
+    ],
+    "buttonLabels": []
+  },
+  "03b_phase1_thu_2026-08-13": {
+    "url": "https://program-v2.pages.dev/?today=2026-08-13",
+    "dateISO": "2026-08-13",
+    "h1": "Today",
+    "phaseLabel": "Rebuild + evaluate (race prep sub-goal)",
+    "dateHeader": "Thursday 13 Aug",
+    "offset": "Rehab & leg strength",
+    "blocks": [],
+    "cardsText": [
+      "Thursday 13 AugToday",
+      "Rest day — no barbell scheduled.Accessory / rehab / run blocks live on the Extras tab — do them if you want, they still log to today."
+    ],
+    "buttonLabels": []
+  },
+  "03c_phase1_sun_2026-08-16": {
+    "url": "https://program-v2.pages.dev/?today=2026-08-16",
+    "dateISO": "2026-08-16",
+    "h1": "Today",
+    "phaseLabel": "Rebuild + evaluate (race prep sub-goal)",
+    "dateHeader": "Sunday 16 Aug",
+    "offset": "Rehab & leg strength",
+    "blocks": [],
+    "cardsText": [
+      "Sunday 16 AugToday",
+      "Rest day — no barbell scheduled.Accessory / rehab / run blocks live on the Extras tab — do them if you want, they still log to today."
+    ],
+    "buttonLabels": []
+  },
+  "04_phase1_eval_tue_2026-08-18": {
+    "url": "https://program-v2.pages.dev/?today=2026-08-18",
+    "dateISO": "2026-08-18",
+    "h1": "Today",
+    "phaseLabel": "Rebuild + evaluate (race prep sub-goal)",
+    "dateHeader": "Tuesday 18 Aug",
+    "offset": "Rehab & leg strength",
+    "blocks": [],
+    "cardsText": [
+      "Tuesday 18 AugToday",
+      "Rest day — no barbell scheduled.Accessory / rehab / run blocks live on the Extras tab — do them if you want, they still log to today."
+    ],
+    "buttonLabels": []
+  },
+  "04b_phase1_eval_wed_2026-08-19": {
+    "url": "https://program-v2.pages.dev/?today=2026-08-19",
+    "dateISO": "2026-08-19",
+    "h1": "Today",
+    "phaseLabel": "Rebuild + evaluate (race prep sub-goal)",
+    "dateHeader": "Wednesday 19 Aug",
+    "offset": "Rehab & leg strength",
+    "blocks": [
+      "Barbell reintro session (Phase 1 weeks 0-1)"
+    ],
+    "cardsText": [
+      "Wednesday 19 AugToday",
+      "#Prev / RxWeight kgRepsRPE1—2—3—4—5100×5Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—4—571.5×5Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set"
+    ],
+    "buttonLabels": [
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Cues",
+      "Move day",
+      "Skip today",
+      "Whole week"
+    ]
+  },
+  "04c_phase1_eval_thu_2026-08-20": {
+    "url": "https://program-v2.pages.dev/?today=2026-08-20",
+    "dateISO": "2026-08-20",
+    "h1": "Today",
+    "phaseLabel": "Rebuild + evaluate (race prep sub-goal)",
+    "dateHeader": "Thursday 20 Aug",
+    "offset": "Rehab & leg strength",
+    "blocks": [],
+    "cardsText": [
+      "Thursday 20 AugToday",
+      "Rest day — no barbell scheduled.Accessory / rehab / run blocks live on the Extras tab — do them if you want, they still log to today."
+    ],
+    "buttonLabels": []
+  },
+  "04d_phase1_eval_fri_2026-08-21": {
+    "url": "https://program-v2.pages.dev/?today=2026-08-21",
+    "dateISO": "2026-08-21",
+    "h1": "Today",
+    "phaseLabel": "Rebuild + evaluate (race prep sub-goal)",
+    "dateHeader": "Friday 21 Aug",
+    "offset": "Rehab & leg strength",
+    "blocks": [
+      "5RM evaluation (Phase 1 week 2)"
+    ],
+    "cardsText": [
+      "Friday 21 AugToday",
+      "#Prev / RxWeight kgRepsRPE1—2—3—4—5100×5Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—4—571.5×5Add set"
+    ],
+    "buttonLabels": [
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Move day",
+      "Skip today",
+      "Whole week"
+    ]
+  },
+  "04e_phase1_eval_sat_2026-08-22": {
+    "url": "https://program-v2.pages.dev/?today=2026-08-22",
+    "dateISO": "2026-08-22",
+    "h1": "Today",
+    "phaseLabel": "Rebuild + evaluate (race prep sub-goal)",
+    "dateHeader": "Saturday 22 Aug",
+    "offset": "Rehab & leg strength",
+    "blocks": [
+      "Barbell reintro session (Phase 1 weeks 0-1)"
+    ],
+    "cardsText": [
+      "Saturday 22 AugToday",
+      "#Prev / RxWeight kgRepsRPE1—2—3—4—5100×5Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—4—571.5×5Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set"
+    ],
+    "buttonLabels": [
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Cues",
+      "Move day",
+      "Skip today",
+      "Whole week"
+    ]
+  },
+  "04f_phase1_eval_sun_2026-08-23": {
+    "url": "https://program-v2.pages.dev/?today=2026-08-23",
+    "dateISO": "2026-08-23",
+    "h1": "Today",
+    "phaseLabel": "Rebuild + evaluate (race prep sub-goal)",
+    "dateHeader": "Sunday 23 Aug",
+    "offset": "Rehab & leg strength",
+    "blocks": [],
+    "cardsText": [
+      "Sunday 23 AugToday",
+      "Rest day — no barbell scheduled.Accessory / rehab / run blocks live on the Extras tab — do them if you want, they still log to today."
+    ],
+    "buttonLabels": []
+  },
+  "05_phase1_last_sat_2026-08-29": {
+    "url": "https://program-v2.pages.dev/?today=2026-08-29",
+    "dateISO": "2026-08-29",
+    "h1": "Today",
+    "phaseLabel": "Rebuild + evaluate (race prep sub-goal)",
+    "dateHeader": "Saturday 29 Aug",
+    "offset": "Rehab & leg strength",
+    "blocks": [
+      "Barbell reintro session (Phase 1 weeks 0-1)"
+    ],
+    "cardsText": [
+      "Saturday 29 AugToday",
+      "#Prev / RxWeight kgRepsRPE1—2—3—4—5100×5Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—4—571.5×5Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set"
+    ],
+    "buttonLabels": [
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Cues",
+      "Move day",
+      "Skip today",
+      "Whole week"
+    ]
+  },
+  "05b_phase2_first_sun_2026-08-30": {
+    "url": "https://program-v2.pages.dev/?today=2026-08-30",
+    "dateISO": "2026-08-30",
+    "h1": "Today",
+    "phaseLabel": "Cycle 1 — first real 5/3/1 FSL (Sept 12 comp mid-cycle)",
+    "dateHeader": "Sunday 30 Aug",
+    "offset": "Rehab & leg strength",
+    "blocks": [],
+    "cardsText": [
+      "Sunday 30 AugToday",
+      "Rest day — no barbell scheduled.Accessory / rehab / run blocks live on the Extras tab — do them if you want, they still log to today."
+    ],
+    "buttonLabels": []
+  },
+  "06_phase2_mon_2026-08-31": {
+    "url": "https://program-v2.pages.dev/?today=2026-08-31",
+    "dateISO": "2026-08-31",
+    "h1": "Today",
+    "phaseLabel": "Cycle 1 — first real 5/3/1 FSL (Sept 12 comp mid-cycle)",
+    "dateHeader": "Monday 31 Aug",
+    "offset": "Rehab & leg strength",
+    "blocks": [
+      "Mon — heavy squat day"
+    ],
+    "cardsText": [
+      "Monday 31 AugToday",
+      "#Prev / RxWeight kgRepsRPE171.5×5271.5×5371.5×5471.5×5593.5×5+Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set"
+    ],
+    "buttonLabels": [
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Cues",
+      "Cues",
+      "Move day",
+      "Skip today",
+      "Whole week"
+    ]
+  },
+  "07_phase2_tue_2026-09-01": {
+    "url": "https://program-v2.pages.dev/?today=2026-09-01",
+    "dateISO": "2026-09-01",
+    "h1": "Today",
+    "phaseLabel": "Cycle 1 — first real 5/3/1 FSL (Sept 12 comp mid-cycle)",
+    "dateHeader": "Tuesday 1 Sept",
+    "offset": "Rehab & leg strength",
+    "blocks": [],
+    "cardsText": [
+      "Tuesday 1 SeptToday",
+      "Rest day — no barbell scheduled.Accessory / rehab / run blocks live on the Extras tab — do them if you want, they still log to today."
+    ],
+    "buttonLabels": []
+  },
+  "07b_phase2_thu_2026-09-03": {
+    "url": "https://program-v2.pages.dev/?today=2026-09-03",
+    "dateISO": "2026-09-03",
+    "h1": "Today",
+    "phaseLabel": "Cycle 1 — first real 5/3/1 FSL (Sept 12 comp mid-cycle)",
+    "dateHeader": "Thursday 3 Sept",
+    "offset": "Rehab & leg strength",
+    "blocks": [
+      "Thu — front squat + unilateral"
+    ],
+    "cardsText": [
+      "Thursday 3 SeptToday",
+      "#Prev / RxWeight kgRepsRPE158.5×5258.5×5376.5×5+Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—4—5—6—Add set"
+    ],
+    "buttonLabels": [
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Move day",
+      "Skip today",
+      "Whole week"
+    ]
+  },
+  "07c_phase2_sun_2026-09-06": {
+    "url": "https://program-v2.pages.dev/?today=2026-09-06",
+    "dateISO": "2026-09-06",
+    "h1": "Today",
+    "phaseLabel": "Cycle 1 — first real 5/3/1 FSL (Sept 12 comp mid-cycle)",
+    "dateHeader": "Sunday 6 Sept",
+    "offset": "Rehab & leg strength",
+    "blocks": [],
+    "cardsText": [
+      "Sunday 6 SeptToday",
+      "Rest day — no barbell scheduled.Accessory / rehab / run blocks live on the Extras tab — do them if you want, they still log to today."
+    ],
+    "buttonLabels": []
+  },
+  "07d_phase3_sun_2026-10-04": {
+    "url": "https://program-v2.pages.dev/?today=2026-10-04",
+    "dateISO": "2026-10-04",
+    "h1": "Today",
+    "phaseLabel": "Cycle 2",
+    "dateHeader": "Sunday 4 Oct",
+    "offset": "Rehab & leg strength",
+    "blocks": [],
+    "cardsText": [
+      "Sunday 4 OctToday",
+      "Rest day — no barbell scheduled.Accessory / rehab / run blocks live on the Extras tab — do them if you want, they still log to today."
+    ],
+    "buttonLabels": []
+  },
+  "07e_phase4_sun_2026-11-01": {
+    "url": "https://program-v2.pages.dev/?today=2026-11-01",
+    "dateISO": "2026-11-01",
+    "h1": "Today",
+    "phaseLabel": "Cycles 3 + 4 (with 1RM test)",
+    "dateHeader": "Sunday 1 Nov",
+    "offset": "Rehab & leg strength",
+    "blocks": [],
+    "cardsText": [
+      "Sunday 1 NovToday",
+      "Rest day — no barbell scheduled.Accessory / rehab / run blocks live on the Extras tab — do them if you want, they still log to today."
+    ],
+    "buttonLabels": []
+  },
+  "08_gap_dec21_2026-12-21": {
+    "url": "https://program-v2.pages.dev/?today=2026-12-21",
+    "dateISO": "2026-12-21",
+    "h1": "Today",
+    "phaseLabel": "Post-birthday — ongoing progression",
+    "dateHeader": "Monday 21 Dec",
+    "offset": "Rehab & leg strength",
+    "blocks": [
+      "Mon — heavy squat day"
+    ],
+    "cardsText": [
+      "Monday 21 DecToday",
+      "#Prev / RxWeight kgRepsRPE1—2—3—4—5100×5Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set"
+    ],
+    "buttonLabels": [
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Cues",
+      "Cues",
+      "Move day",
+      "Skip today",
+      "Whole week"
+    ]
+  },
+  "08b_gap_dec25_2026-12-25": {
+    "url": "https://program-v2.pages.dev/?today=2026-12-25",
+    "dateISO": "2026-12-25",
+    "h1": "Today",
+    "phaseLabel": "Post-birthday — ongoing progression",
+    "dateHeader": "Friday 25 Dec",
+    "offset": "Rehab & leg strength",
+    "blocks": [],
+    "cardsText": [
+      "Friday 25 DecToday",
+      "Rest day — no barbell scheduled.Accessory / rehab / run blocks live on the Extras tab — do them if you want, they still log to today."
+    ],
+    "buttonLabels": []
+  },
+  "08c_gap_dec28_2026-12-28": {
+    "url": "https://program-v2.pages.dev/?today=2026-12-28",
+    "dateISO": "2026-12-28",
+    "h1": "Today",
+    "phaseLabel": "Post-birthday — ongoing progression",
+    "dateHeader": "Monday 28 Dec",
+    "offset": "Rehab & leg strength",
+    "blocks": [
+      "Mon — heavy squat day"
+    ],
+    "cardsText": [
+      "Monday 28 DecToday",
+      "#Prev / RxWeight kgRepsRPE1—2—3—4—5100×5Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set"
+    ],
+    "buttonLabels": [
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Cues",
+      "Cues",
+      "Move day",
+      "Skip today",
+      "Whole week"
+    ]
+  },
+  "08d_gap_jan01_2027-01-01": {
+    "url": "https://program-v2.pages.dev/?today=2027-01-01",
+    "dateISO": "2027-01-01",
+    "h1": "Today",
+    "phaseLabel": "Post-birthday — ongoing progression",
+    "dateHeader": "Friday 1 Jan",
+    "offset": "Rehab & leg strength",
+    "blocks": [],
+    "cardsText": [
+      "Friday 1 JanToday",
+      "Rest day — no barbell scheduled.Accessory / rehab / run blocks live on the Extras tab — do them if you want, they still log to today."
+    ],
+    "buttonLabels": []
+  },
+  "08e_gap_jan04_2027-01-04": {
+    "url": "https://program-v2.pages.dev/?today=2027-01-04",
+    "dateISO": "2027-01-04",
+    "h1": "Today",
+    "phaseLabel": "Post-birthday — ongoing progression",
+    "dateHeader": "Monday 4 Jan",
+    "offset": "Rehab & leg strength",
+    "blocks": [
+      "Mon — heavy squat day"
+    ],
+    "cardsText": [
+      "Monday 4 JanToday",
+      "#Prev / RxWeight kgRepsRPE1—2—3—4—5100×5Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set"
+    ],
+    "buttonLabels": [
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Cues",
+      "Cues",
+      "Move day",
+      "Skip today",
+      "Whole week"
+    ]
+  },
+  "09_hatch_mon_2027-01-05": {
+    "url": "https://program-v2.pages.dev/?today=2027-01-05",
+    "dateISO": "2027-01-05",
+    "h1": "Today",
+    "phaseLabel": "Hatch Squat Program (12-week specialisation)",
+    "dateHeader": "Tuesday 5 Jan",
+    "offset": "Rehab & leg strength",
+    "blocks": [],
+    "cardsText": [
+      "Tuesday 5 JanToday",
+      "Rest day — no barbell scheduled.Accessory / rehab / run blocks live on the Extras tab — do them if you want, they still log to today."
+    ],
+    "buttonLabels": []
+  },
+  "09b_hatch_wed_2027-01-06": {
+    "url": "https://program-v2.pages.dev/?today=2027-01-06",
+    "dateISO": "2027-01-06",
+    "h1": "Today",
+    "phaseLabel": "Hatch Squat Program (12-week specialisation)",
+    "dateHeader": "Wednesday 6 Jan",
+    "offset": "Rehab & leg strength",
+    "blocks": [
+      "Wed — heavy pull day"
+    ],
+    "cardsText": [
+      "Wednesday 6 JanToday",
+      "#Prev / RxWeight kgRepsRPE1—2—3—4—571.5×5Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—4—Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set"
+    ],
+    "buttonLabels": [
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Move day",
+      "Skip today",
+      "Whole week"
+    ]
+  },
+  "09c_hatch_thu_2027-01-07": {
+    "url": "https://program-v2.pages.dev/?today=2027-01-07",
+    "dateISO": "2027-01-07",
+    "h1": "Today",
+    "phaseLabel": "Hatch Squat Program (12-week specialisation)",
+    "dateHeader": "Thursday 7 Jan",
+    "offset": "Rehab & leg strength",
+    "blocks": [
+      "Hatch day B — front squat heavy, back squat light"
+    ],
+    "cardsText": [
+      "Thursday 7 JanToday",
+      "#Prev / RxWeight kgRepsRPE1—2—349.5×5Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—4—5100×5Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set"
+    ],
+    "buttonLabels": [
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Move day",
+      "Skip today",
+      "Whole week"
+    ]
+  },
+  "09d_hatch_fri_2027-01-08": {
+    "url": "https://program-v2.pages.dev/?today=2027-01-08",
+    "dateISO": "2027-01-08",
+    "h1": "Today",
+    "phaseLabel": "Hatch Squat Program (12-week specialisation)",
+    "dateHeader": "Friday 8 Jan",
+    "offset": "Rehab & leg strength",
+    "blocks": [],
+    "cardsText": [
+      "Friday 8 JanToday",
+      "Rest day — no barbell scheduled.Accessory / rehab / run blocks live on the Extras tab — do them if you want, they still log to today."
+    ],
+    "buttonLabels": []
+  },
+  "09g_hatch_mon_2027-01-11": {
+    "url": "https://program-v2.pages.dev/?today=2027-01-11",
+    "dateISO": "2027-01-11",
+    "h1": "Today",
+    "phaseLabel": "Hatch Squat Program (12-week specialisation)",
+    "dateHeader": "Monday 11 Jan",
+    "offset": "Rehab & leg strength",
+    "blocks": [
+      "Hatch day A — back squat heavy, front squat light"
+    ],
+    "cardsText": [
+      "Monday 11 JanToday",
+      "#Prev / RxWeight kgRepsRPE1—2—3—4—5100×5Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—349.5×5Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set"
+    ],
+    "buttonLabels": [
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Cues",
+      "Move day",
+      "Skip today",
+      "Whole week"
+    ]
+  },
+  "10_peak_start_2027-03-29": {
+    "url": "https://program-v2.pages.dev/?today=2027-03-29",
+    "dateISO": "2027-03-29",
+    "h1": "Today",
+    "phaseLabel": "Peak — birthday waypoint",
+    "dateHeader": "Monday 29 Mar",
+    "offset": "Rehab & leg strength",
+    "blocks": [
+      "Mon — heavy squat day"
+    ],
+    "cardsText": [
+      "Monday 29 MarToday",
+      "#Prev / RxWeight kgRepsRPE177×5277×5377×5477×5596.5×5Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set"
+    ],
+    "buttonLabels": [
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Cues",
+      "Cues",
+      "Move day",
+      "Skip today",
+      "Whole week"
+    ]
+  },
+  "10b_peak_wed_2027-03-31": {
+    "url": "https://program-v2.pages.dev/?today=2027-03-31",
+    "dateISO": "2027-03-31",
+    "h1": "Today",
+    "phaseLabel": "Peak — birthday waypoint",
+    "dateHeader": "Wednesday 31 Mar",
+    "offset": "Rehab & leg strength",
+    "blocks": [
+      "Wed — heavy pull day"
+    ],
+    "cardsText": [
+      "Wednesday 31 MarToday",
+      "#Prev / RxWeight kgRepsRPE191×5291×5391×5491×55114×5Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—4—Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set"
+    ],
+    "buttonLabels": [
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Move day",
+      "Skip today",
+      "Whole week"
+    ]
+  },
+  "10c_peak_thu_2027-04-01": {
+    "url": "https://program-v2.pages.dev/?today=2027-04-01",
+    "dateISO": "2027-04-01",
+    "h1": "Today",
+    "phaseLabel": "Peak — birthday waypoint",
+    "dateHeader": "Thursday 1 Apr",
+    "offset": "Rehab & leg strength",
+    "blocks": [
+      "Thu — front squat + unilateral"
+    ],
+    "cardsText": [
+      "Thursday 1 AprToday",
+      "#Prev / RxWeight kgRepsRPE163×5263×5379×5Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—4—5—6—Add set"
+    ],
+    "buttonLabels": [
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Move day",
+      "Skip today",
+      "Whole week"
+    ]
+  },
+  "10d_peak_sat_2027-04-03": {
+    "url": "https://program-v2.pages.dev/?today=2027-04-03",
+    "dateISO": "2027-04-03",
+    "h1": "Today",
+    "phaseLabel": "Peak — birthday waypoint",
+    "dateHeader": "Saturday 3 Apr",
+    "offset": "Rehab & leg strength",
+    "blocks": [
+      "Sat — moderate volume + carries"
+    ],
+    "cardsText": [
+      "Saturday 3 AprToday",
+      "#Prev / RxWeight kgRepsRPE177×5277×5377×5477×5596.5×5Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set"
+    ],
+    "buttonLabels": [
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Move day",
+      "Skip today",
+      "Whole week"
+    ]
+  },
+  "10e_peak_sun_2027-04-04": {
+    "url": "https://program-v2.pages.dev/?today=2027-04-04",
+    "dateISO": "2027-04-04",
+    "h1": "Today",
+    "phaseLabel": "Peak — birthday waypoint",
+    "dateHeader": "Sunday 4 Apr",
+    "offset": "Rehab & leg strength",
+    "blocks": [],
+    "cardsText": [
+      "Sunday 4 AprToday",
+      "Rest day — no barbell scheduled.Accessory / rehab / run blocks live on the Extras tab — do them if you want, they still log to today."
+    ],
+    "buttonLabels": []
+  },
+  "10f_peak_tue_2027-04-06": {
+    "url": "https://program-v2.pages.dev/?today=2027-04-06",
+    "dateISO": "2027-04-06",
+    "h1": "Today",
+    "phaseLabel": "Peak — birthday waypoint",
+    "dateHeader": "Tuesday 6 Apr",
+    "offset": "Rehab & leg strength",
+    "blocks": [],
+    "cardsText": [
+      "Tuesday 6 AprToday",
+      "Rest day — no barbell scheduled.Accessory / rehab / run blocks live on the Extras tab — do them if you want, they still log to today."
+    ],
+    "buttonLabels": []
+  },
+  "11_birthday_2027-04-24": {
+    "url": "https://program-v2.pages.dev/?today=2027-04-24",
+    "dateISO": "2027-04-24",
+    "h1": "Today",
+    "phaseLabel": "Peak — birthday waypoint",
+    "dateHeader": "Saturday 24 Apr",
+    "offset": "Rehab & leg strength",
+    "blocks": [
+      "Sat — moderate volume + carries"
+    ],
+    "cardsText": [
+      "Saturday 24 AprToday",
+      "#Prev / RxWeight kgRepsRPE1—2—3—4—566×5Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set"
+    ],
+    "buttonLabels": [
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Move day",
+      "Skip today",
+      "Whole week"
+    ]
+  },
+  "12_phase7_first_sun_2027-04-25": {
+    "url": "https://program-v2.pages.dev/?today=2027-04-25",
+    "dateISO": "2027-04-25",
+    "h1": "Today",
+    "phaseLabel": "Post-birthday — ongoing progression",
+    "dateHeader": "Sunday 25 Apr",
+    "offset": "Rehab & leg strength",
+    "blocks": [],
+    "cardsText": [
+      "Sunday 25 AprToday",
+      "Rest day — no barbell scheduled.Accessory / rehab / run blocks live on the Extras tab — do them if you want, they still log to today."
+    ],
+    "buttonLabels": []
+  },
+  "12b_phase7_mon_2027-04-26": {
+    "url": "https://program-v2.pages.dev/?today=2027-04-26",
+    "dateISO": "2027-04-26",
+    "h1": "Today",
+    "phaseLabel": "Post-birthday — ongoing progression",
+    "dateHeader": "Monday 26 Apr",
+    "offset": "Rehab & leg strength",
+    "blocks": [
+      "Mon — heavy squat day"
+    ],
+    "cardsText": [
+      "Monday 26 AprToday",
+      "#Prev / RxWeight kgRepsRPE1—2—3—4—5100×5Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set"
+    ],
+    "buttonLabels": [
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Cues",
+      "Cues",
+      "Move day",
+      "Skip today",
+      "Whole week"
+    ]
+  },
+  "12c_phase7_tue_2027-04-27": {
+    "url": "https://program-v2.pages.dev/?today=2027-04-27",
+    "dateISO": "2027-04-27",
+    "h1": "Today",
+    "phaseLabel": "Post-birthday — ongoing progression",
+    "dateHeader": "Tuesday 27 Apr",
+    "offset": "Rehab & leg strength",
+    "blocks": [],
+    "cardsText": [
+      "Tuesday 27 AprToday",
+      "Rest day — no barbell scheduled.Accessory / rehab / run blocks live on the Extras tab — do them if you want, they still log to today."
+    ],
+    "buttonLabels": []
+  },
+  "12d_phase7_wed_2027-04-28": {
+    "url": "https://program-v2.pages.dev/?today=2027-04-28",
+    "dateISO": "2027-04-28",
+    "h1": "Today",
+    "phaseLabel": "Post-birthday — ongoing progression",
+    "dateHeader": "Wednesday 28 Apr",
+    "offset": "Rehab & leg strength",
+    "blocks": [
+      "Wed — heavy pull day"
+    ],
+    "cardsText": [
+      "Wednesday 28 AprToday",
+      "#Prev / RxWeight kgRepsRPE1—2—3—4—571.5×5Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—4—Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set"
+    ],
+    "buttonLabels": [
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Move day",
+      "Skip today",
+      "Whole week"
+    ]
+  },
+  "12e_phase7_thu_2027-04-29": {
+    "url": "https://program-v2.pages.dev/?today=2027-04-29",
+    "dateISO": "2027-04-29",
+    "h1": "Today",
+    "phaseLabel": "Post-birthday — ongoing progression",
+    "dateHeader": "Thursday 29 Apr",
+    "offset": "Rehab & leg strength",
+    "blocks": [
+      "Thu — front squat + unilateral"
+    ],
+    "cardsText": [
+      "Thursday 29 AprToday",
+      "#Prev / RxWeight kgRepsRPE1—2—349.5×5Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—4—5—6—Add set"
+    ],
+    "buttonLabels": [
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Move day",
+      "Skip today",
+      "Whole week"
+    ]
+  },
+  "12f_phase7_fri_2027-04-30": {
+    "url": "https://program-v2.pages.dev/?today=2027-04-30",
+    "dateISO": "2027-04-30",
+    "h1": "Today",
+    "phaseLabel": "Post-birthday — ongoing progression",
+    "dateHeader": "Friday 30 Apr",
+    "offset": "Rehab & leg strength",
+    "blocks": [],
+    "cardsText": [
+      "Friday 30 AprToday",
+      "Rest day — no barbell scheduled.Accessory / rehab / run blocks live on the Extras tab — do them if you want, they still log to today."
+    ],
+    "buttonLabels": []
+  },
+  "12g_phase7_sat_2027-05-01": {
+    "url": "https://program-v2.pages.dev/?today=2027-05-01",
+    "dateISO": "2027-05-01",
+    "h1": "Today",
+    "phaseLabel": "Post-birthday — ongoing progression",
+    "dateHeader": "Saturday 1 May",
+    "offset": "Rehab & leg strength",
+    "blocks": [
+      "Sat — moderate volume + carries"
+    ],
+    "cardsText": [
+      "Saturday 1 MayToday",
+      "#Prev / RxWeight kgRepsRPE1—2—3—4—5100×5Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set"
+    ],
+    "buttonLabels": [
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Move day",
+      "Skip today",
+      "Whole week"
+    ]
+  },
+  "13_far_future_2028-01-01": {
+    "url": "https://program-v2.pages.dev/?today=2028-01-01",
+    "dateISO": "2028-01-01",
+    "h1": "Today",
+    "phaseLabel": "Post-birthday — ongoing progression",
+    "dateHeader": "Saturday 1 Jan",
+    "offset": "Rehab & leg strength",
+    "blocks": [
+      "Sat — moderate volume + carries"
+    ],
+    "cardsText": [
+      "Saturday 1 JanToday",
+      "#Prev / RxWeight kgRepsRPE1—2—3—4—5100×5Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set"
+    ],
+    "buttonLabels": [
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Move day",
+      "Skip today",
+      "Whole week"
+    ]
+  },
+  "13b_far_future_2030-06-15": {
+    "url": "https://program-v2.pages.dev/?today=2030-06-15",
+    "dateISO": "2030-06-15",
+    "h1": "Today",
+    "phaseLabel": "Post-birthday — ongoing progression",
+    "dateHeader": "Saturday 15 Jun",
+    "offset": "Rehab & leg strength",
+    "blocks": [
+      "Sat — moderate volume + carries"
+    ],
+    "cardsText": [
+      "Saturday 15 JunToday",
+      "#Prev / RxWeight kgRepsRPE1—2—3—4—5100×5Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set"
+    ],
+    "buttonLabels": [
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Move day",
+      "Skip today",
+      "Whole week"
+    ]
+  },
+  "15_dst_before_2026-10-24": {
+    "url": "https://program-v2.pages.dev/?today=2026-10-24",
+    "dateISO": "2026-10-24",
+    "h1": "Today",
+    "phaseLabel": "Cycle 2",
+    "dateHeader": "Saturday 24 Oct",
+    "offset": "Rehab & leg strength",
+    "blocks": [
+      "Sat — moderate volume + carries"
+    ],
+    "cardsText": [
+      "Saturday 24 OctToday",
+      "#Prev / RxWeight kgRepsRPE1—2—3—4—566×5Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set"
+    ],
+    "buttonLabels": [
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Move day",
+      "Skip today",
+      "Whole week"
+    ]
+  },
+  "15b_dst_day_2026-10-25": {
+    "url": "https://program-v2.pages.dev/?today=2026-10-25",
+    "dateISO": "2026-10-25",
+    "h1": "Today",
+    "phaseLabel": "Cycle 2",
+    "dateHeader": "Sunday 25 Oct",
+    "offset": "Rehab & leg strength",
+    "blocks": [],
+    "cardsText": [
+      "Sunday 25 OctToday",
+      "Rest day — no barbell scheduled.Accessory / rehab / run blocks live on the Extras tab — do them if you want, they still log to today."
+    ],
+    "buttonLabels": []
+  },
+  "15c_dst_after_2026-10-26": {
+    "url": "https://program-v2.pages.dev/?today=2026-10-26",
+    "dateISO": "2026-10-26",
+    "h1": "Today",
+    "phaseLabel": "Cycles 3 + 4 (with 1RM test)",
+    "dateHeader": "Monday 26 Oct",
+    "offset": "Rehab & leg strength",
+    "blocks": [
+      "Mon — heavy squat day"
+    ],
+    "cardsText": [
+      "Monday 26 OctToday",
+      "#Prev / RxWeight kgRepsRPE171.5×5271.5×5371.5×5471.5×5593.5×5+Add set",
+      "#Prev / RxWeight kgRepsRPE1—2—3—Add set"
+    ],
+    "buttonLabels": [
+      "Add set",
+      "Cues",
+      "Add set",
+      "Cues",
+      "Cues",
+      "Cues",
+      "Move day",
+      "Skip today",
+      "Whole week"
+    ]
+  },
+  "14_perf": {
+    "taps": 100,
+    "perfMs": 586,
+    "avgMs": 5.9,
+    "medianMs": 6,
+    "p95Ms": 8,
+    "maxMs": 51,
+    "afterState": {
+      "dateHeader": "Saturday 14 Nov",
+      "offset": "Rehab & leg strength"
+    },
+    "expectedDaysAdvance": 100
+  },
+  "16_reload": {
+    "beforeReload": {
+      "dateHeader": "Tuesday 11 Aug",
+      "offset": "Rehab & leg strength",
+      "url": "https://program-v2.pages.dev/?today=2026-08-06"
+    },
+    "afterReload": {
+      "dateHeader": "Thursday 6 Aug",
+      "offset": "Rehab & leg strength",
+      "url": "https://program-v2.pages.dev/?today=2026-08-06"
+    }
+  }
+}

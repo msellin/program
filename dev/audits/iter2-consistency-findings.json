@@ -1,0 +1,74 @@
+[
+  {
+    "sev": "high",
+    "id": "S2-red-modifier-missing",
+    "title": "Today does not display red-modifier note when derived_state=red",
+    "repro": "1) Save symptoms with peak > 5 → derived_state=red for today. 2) Load /. 3) Look for '⚠ Red morning state'.",
+    "file": "src/lib/engine/suggest.ts:80 stateNote",
+    "note": "String is emitted only if suggestion path runs; may be hidden for non-strength days"
+  },
+  {
+    "sev": "medium",
+    "id": "S3-heatmap-no-today",
+    "title": "Heatmap does not expose an element identifying today",
+    "repro": "Log a set for today, load /history, inspect DOM",
+    "file": "src/components/charts/Heatmap.tsx",
+    "note": "Could not find [title] or [data-date] pointing to today"
+  },
+  {
+    "sev": "medium",
+    "id": "S5-history-no-skip-cell",
+    "title": "History heatmap doesn't render an identifiable cell for a skipped today",
+    "repro": "Set store.skipped[today], load /history",
+    "file": "src/components/charts/Heatmap.tsx",
+    "note": "No DOM element found for today's cell"
+  },
+  {
+    "sev": "high",
+    "id": "S9-chat-no-persist",
+    "title": "Coach chat does not restore messages from localStorage after reload",
+    "repro": "Set program.coach.history.v1, reload /coach",
+    "file": "src/app/coach/page.tsx:34-42",
+    "note": "Effect fetches HISTORY_KEY on mount but may not render if 'not configured' path is taken"
+  },
+  {
+    "sev": "low",
+    "id": "S16-native-confirm",
+    "title": "4 uses of browser confirm() — inaccessible on some platforms, unstyleable",
+    "repro": "Grep for 'confirm(' in src/app/data + src/app/coach",
+    "file": "src/app/data/page.tsx:87,166,216 + src/app/coach/page.tsx:95",
+    "note": "Recommend replacing with in-app dialog for consistency + a11y"
+  },
+  {
+    "sev": "critical",
+    "id": "S17-reload-offline",
+    "title": "Offline reload failed — SW is not serving app shell",
+    "repro": "Load /, go offline, reload",
+    "file": "src/app/sw.ts",
+    "note": "page.reload: net::ERR_INTERNET_DISCONNECTED\nCall log:\n\u001b[2m  - waiting for navigation until \"domcontentloaded\"\u001b[22m\n"
+  },
+  {
+    "sev": "high",
+    "id": "S22-orphaned-override",
+    "title": "skip → move → skip leaves an orphaned scheduled_override on 2026-08-09 with reason='moved from 2026-08-06'",
+    "repro": "Emulate skipDay, moveSession, skipDay in that order on the same day",
+    "file": "src/lib/useStore.ts:210,352,364",
+    "note": "skipDay does not clear a previously-created moveSession override; downstream Week/Today may still show the move-in target"
+  },
+  {
+    "sev": "high",
+    "id": "S24-no-tm-crash",
+    "title": "With no TM set, Today shows undefined/NaN/error text",
+    "repro": "1) Set TM=120. 2) Delete TM key. 3) Load /.",
+    "file": "src/lib/engine/suggest.ts",
+    "note": ""
+  },
+  {
+    "sev": "high",
+    "id": "S24-progress-no-tm",
+    "title": "Progress renders undefined/NaN when TM is null",
+    "repro": "Clear TM, load /progress",
+    "file": "src/app/progress/page.tsx",
+    "note": ""
+  }
+]

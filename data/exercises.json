@@ -1,0 +1,820 @@
+{
+  "schema_version": "1.0.0",
+  "generated": "2026-08-01",
+  "note": "Movement library. Stable across program revisions \u2014 program.json references these by id.",
+  "categories": [
+    "isometric",
+    "activation",
+    "strength",
+    "unilateral",
+    "trunk",
+    "mobility",
+    "primer",
+    "conditioning"
+  ],
+  "targets": [
+    "hip_flexor",
+    "adductor",
+    "glute_max",
+    "glute_med",
+    "hamstring",
+    "quad",
+    "trunk_anti_extension",
+    "trunk_anti_rotation",
+    "posterior_chain",
+    "general"
+  ],
+  "exercises": [
+    {
+      "id": "hip_flexor_iso_seated",
+      "name": "Seated hip flexor isometric, mid-range",
+      "name_et": "Puusapainutaja isomeetriline pinge istudes",
+      "category": "isometric",
+      "targets": [
+        "hip_flexor"
+      ],
+      "default": {
+        "sets": 5,
+        "hold_seconds": 20,
+        "per_side": true,
+        "intensity_pct": 60
+      },
+      "setup": "Sit on a chair, knee at 90 degrees.",
+      "cues": [
+        "Press the thigh up into your own hands at about 60 percent effort",
+        "Keep breathing throughout the hold",
+        "Loads the flexors in the range that does not provoke you"
+      ],
+      "avoid": "This is NOT a straight-leg raise and NOT a hanging movement.",
+      "progression": "hip_flexor_iso_long_lever",
+      "regression": null,
+      "video_search": "seated hip flexor isometric hold rehab",
+      "video_url": "https://www.youtube.com/watch?v=LOxkaeCcpNQ"
+    },
+    {
+      "id": "hip_flexor_iso_long_lever",
+      "name": "Long-lever hip flexor isometric",
+      "category": "isometric",
+      "targets": [
+        "hip_flexor"
+      ],
+      "default": {
+        "sets": 4,
+        "hold_seconds": 20,
+        "per_side": true,
+        "intensity_pct": 60
+      },
+      "setup": "Supine, leg extended to roughly 30 degrees of hip flexion, hold against a band or partner resistance.",
+      "cues": [
+        "Longer lever means more load \u2014 only progress here once the seated version is easy and symptom-free"
+      ],
+      "flags": [
+        "approaches_provocative:resisted_slr"
+      ],
+      "progression": "banded_march_standing",
+      "regression": "hip_flexor_iso_seated",
+      "video_search": "long lever hip flexor isometric",
+      "video_url": "https://www.youtube.com/watch?v=OHYY6OvCP2k"
+    },
+    {
+      "id": "banded_march_standing",
+      "name": "Standing banded march",
+      "category": "strength",
+      "targets": [
+        "hip_flexor"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 12,
+        "per_side": true
+      },
+      "cues": [
+        "Knee to roughly 90 degrees only",
+        "Controlled lowering \u2014 the lowering phase is where clicking was documented"
+      ],
+      "flags": [
+        "monitor:click"
+      ],
+      "regression": "hip_flexor_iso_long_lever",
+      "video_search": "standing banded march hip flexor",
+      "video_url": "https://www.youtube.com/watch?v=C7abjfzbpV4"
+    },
+    {
+      "id": "adductor_iso_bent",
+      "name": "Adductor isometric squeeze, knees bent",
+      "name_et": "Reie l\u00e4hendajate isomeetriline pigistus",
+      "category": "isometric",
+      "targets": [
+        "adductor"
+      ],
+      "default": {
+        "sets": 5,
+        "hold_seconds": 20,
+        "intensity_pct": 60
+      },
+      "setup": "Supine, ball or rolled towel between the knees, knees bent to 90 degrees.",
+      "progression": "adductor_iso_extended",
+      "video_search": "adductor squeeze test isometric rehab",
+      "video_url": "https://www.youtube.com/watch?v=tB6lWiuR7eE"
+    },
+    {
+      "id": "adductor_iso_extended",
+      "name": "Adductor isometric squeeze, knees at 45 degrees",
+      "category": "isometric",
+      "targets": [
+        "adductor"
+      ],
+      "default": {
+        "sets": 5,
+        "hold_seconds": 20,
+        "intensity_pct": 60
+      },
+      "cues": [
+        "Longer lever, more load"
+      ],
+      "progression": "copenhagen_short",
+      "regression": "adductor_iso_bent",
+      "video_search": "long lever adductor squeeze",
+      "video_url": "https://www.youtube.com/watch?v=PVi_DHNu9Fs"
+    },
+    {
+      "id": "copenhagen_short",
+      "name": "Copenhagen plank, short lever",
+      "category": "strength",
+      "targets": [
+        "adductor",
+        "trunk_anti_rotation"
+      ],
+      "default": {
+        "sets": 3,
+        "hold_seconds": 15,
+        "per_side": true
+      },
+      "cues": [
+        "Knee on the bench, not the ankle",
+        "Long-lever version is a later goal, not a starting point"
+      ],
+      "prerequisite": "adductor_iso_extended",
+      "flags": [
+        "loads_adduction"
+      ],
+      "regression": "adductor_iso_extended",
+      "video_search": "short lever copenhagen plank",
+      "video_url": "https://www.youtube.com/watch?v=nhGK-DxiGBE"
+    },
+    {
+      "id": "glute_bridge",
+      "name": "Glute bridge",
+      "name_et": "Vaagnat\u00f5ste",
+      "category": "activation",
+      "targets": [
+        "glute_max"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 10
+      },
+      "cues": [
+        "Ribs down",
+        "Do not arch the lower back to finish the rep \u2014 finish with the glute"
+      ],
+      "progression": "glute_bridge_single",
+      "video_search": "glute bridge form",
+      "video_url": "https://www.youtube.com/watch?v=tl6xvm4-Qk0"
+    },
+    {
+      "id": "glute_bridge_single",
+      "name": "Single-leg glute bridge",
+      "category": "activation",
+      "targets": [
+        "glute_max"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 10,
+        "per_side": true,
+        "extra_set_side": "left"
+      },
+      "cues": [
+        "Left side first, one extra set on the left \u2014 documented left gluteus maximus deficit"
+      ],
+      "progression": "hip_thrust_barbell",
+      "regression": "glute_bridge",
+      "video_search": "single leg glute bridge",
+      "video_url": "https://www.youtube.com/watch?v=t5D6ktqa_mY"
+    },
+    {
+      "id": "hip_thrust_barbell",
+      "name": "Barbell hip thrust",
+      "category": "strength",
+      "targets": [
+        "glute_max"
+      ],
+      "default": {
+        "sets": 4,
+        "reps": 8,
+        "progression_model": "linear_load"
+      },
+      "cues": [
+        "Chin tucked",
+        "Ribs down",
+        "Finish with the glute, not the lower back"
+      ],
+      "rationale": "Best heavy glute-max builder with essentially zero spinal shear and no lumbar extension moment. The anchor lift \u2014 progress it aggressively.",
+      "regression": "glute_bridge_single",
+      "video_search": "barbell hip thrust technique",
+      "video_url": "https://www.youtube.com/watch?v=lBZZFJ6Z3Dg"
+    },
+    {
+      "id": "dead_bug",
+      "name": "Dead bug, slow",
+      "category": "trunk",
+      "targets": [
+        "trunk_anti_extension"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 6,
+        "per_side": true,
+        "tempo": "slow"
+      },
+      "cues": [
+        "Lower back stays flat against the floor throughout",
+        "If it lifts, shorten the range"
+      ],
+      "rationale": "Anti-extension trunk work \u2014 the single most relevant home exercise for the Bertolotti segment.",
+      "video_search": "dead bug exercise form",
+      "video_url": "https://www.youtube.com/watch?v=GbSC02oU3To"
+    },
+    {
+      "id": "pallof_press",
+      "name": "Pallof press",
+      "category": "trunk",
+      "targets": [
+        "trunk_anti_rotation"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 10,
+        "per_side": true
+      },
+      "rationale": "The transitional segment dislikes rotation under load. Builds tolerance for it.",
+      "video_search": "pallof press anti rotation",
+      "video_url": "https://www.youtube.com/watch?v=dBAmQ9bx3JA"
+    },
+    {
+      "id": "split_squat_rfe",
+      "name": "Rear-foot-elevated split squat",
+      "category": "unilateral",
+      "targets": [
+        "quad",
+        "glute_max"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 8,
+        "per_side": true,
+        "extra_set_side": "left"
+      },
+      "cues": [
+        "Dumbbells at your sides, or front-racked",
+        "Front foot far enough forward that the shin stays fairly vertical",
+        "Knee tracks over the toe \u2014 knee caving inward is FADIR under load"
+      ],
+      "flags": [
+        "monitor:knee_valgus"
+      ],
+      "video_search": "rear foot elevated split squat setup",
+      "video_url": "https://www.youtube.com/watch?v=V8DlQ7EgYbc"
+    },
+    {
+      "id": "sled_push",
+      "name": "Heavy sled push or drag",
+      "category": "strength",
+      "targets": [
+        "quad",
+        "glute_max",
+        "general"
+      ],
+      "default": {
+        "sets": 6,
+        "distance_m": 20
+      },
+      "rationale": "Near-zero spinal load, high leg force, transfers directly to running mechanics. If you only did hip thrusts and heavy sled you would still get most of the result.",
+      "video_search": "heavy sled push technique",
+      "video_url": "https://www.youtube.com/watch?v=3KWK7SIdPz4"
+    },
+    {
+      "id": "nordic_curl",
+      "name": "Nordic curl (or GHR, or slider leg curl)",
+      "category": "strength",
+      "targets": [
+        "hamstring",
+        "posterior_chain"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 5,
+        "tempo": "eccentric"
+      },
+      "rationale": "Posterior chain strength with no spinal load at all.",
+      "video_search": "nordic hamstring curl progression",
+      "video_url": "https://www.youtube.com/watch?v=_e9vFU9-tkc"
+    },
+    {
+      "id": "front_squat",
+      "name": "Front squat",
+      "category": "strength",
+      "targets": [
+        "quad",
+        "trunk_anti_extension"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 5,
+        "intensity": "moderate"
+      },
+      "cues": [
+        "More upright torso, smaller lumbar extension moment than back squat",
+        "Knees out",
+        "Use lifting straps in the rack if the standard front-rack aggravates the right shoulder"
+      ],
+      "flags": [
+        "shoulder_load:front_rack"
+      ],
+      "video_search": "front squat technique straps",
+      "video_url": "https://www.youtube.com/watch?v=I5BkhSnHhbs"
+    },
+    {
+      "id": "back_squat_highbar",
+      "name": "High-bar back squat",
+      "category": "strength",
+      "targets": [
+        "quad",
+        "glute_max"
+      ],
+      "default": {
+        "sets": 5,
+        "reps": 5,
+        "progression_model": "tm_based"
+      },
+      "cues": [
+        "Bar sits on the traps, not the rear delts \u2014 low-bar rack position is OFF the menu due to shoulder retroversion",
+        "Upright torso, knees out, controlled descent",
+        "If the grip aggravates the right shoulder, take a wider grip or use lifting straps around the bar"
+      ],
+      "rationale": "Primary working squat variant. High-bar produces a more vertical torso than low-bar and a smaller lumbar extension moment \u2014 safer over a Bertolotti segment. It's also the version this user can rack given the posterior shoulder pathology.",
+      "flags": [
+        "historical_provocateur",
+        "shoulder_load:grip"
+      ],
+      "video_search": "high bar back squat technique",
+      "video_url": "https://www.youtube.com/watch?v=7v_V6xiA_AA"
+    },
+    {
+      "id": "back_squat_ssb",
+      "name": "Safety squat bar back squat",
+      "category": "strength",
+      "targets": [
+        "quad",
+        "glute_max",
+        "trunk_anti_extension"
+      ],
+      "default": {
+        "sets": 5,
+        "reps": 5,
+        "progression_model": "tm_based"
+      },
+      "cues": [
+        "SSB handles in front \u2014 no shoulder external rotation required to rack the bar",
+        "The camber pushes you forward, so brace hard and stay upright"
+      ],
+      "rationale": "The friendliest heavy squat variant for this shoulder. If the box has one, prefer SSB for the main squat slot until the shoulder is a solved problem.",
+      "video_search": "safety squat bar squat technique",
+      "video_url": "https://www.youtube.com/watch?v=B3LpibMixF0"
+    },
+    {
+      "id": "bulgarian_split_squat_db",
+      "name": "Bulgarian split squat, dumbbells",
+      "category": "unilateral",
+      "targets": [
+        "quad",
+        "glute_max",
+        "adductor"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 8,
+        "per_side": true,
+        "extra_set_side": "left"
+      },
+      "cues": [
+        "Dumbbells at your sides",
+        "Front shin close to vertical \u2014 knee-forward drive loads the labrum",
+        "Left side gets the extra set \u2014 documented left glute-max and left hip-flexor deficit"
+      ],
+      "prerequisite": "split_squat_rfe",
+      "flags": [
+        "monitor:knee_valgus"
+      ],
+      "rationale": "Heavier progression of the RFE split squat. Unilateral loading is the primary tool for closing the left-right strength gap the record documents.",
+      "video_search": "bulgarian split squat dumbbell",
+      "video_url": "https://www.youtube.com/watch?v=Ozv-OPuVw6A"
+    },
+    {
+      "id": "single_leg_rdl",
+      "name": "Single-leg Romanian deadlift",
+      "category": "unilateral",
+      "targets": [
+        "hamstring",
+        "glute_max",
+        "posterior_chain"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 8,
+        "per_side": true,
+        "extra_set_side": "left"
+      },
+      "cues": [
+        "Kettlebell or dumbbell in the opposite hand to the working leg",
+        "Hinge at the hip, keep the spine long, do not round the low back",
+        "Left side gets the extra set"
+      ],
+      "rationale": "Unilateral posterior-chain loading, teaches hip hinge with a stable spine, and closes the left glute-max gap. Non-negotiable in every training week.",
+      "video_search": "single leg romanian deadlift form",
+      "video_url": "https://www.youtube.com/watch?v=Zfr6wizR8rs"
+    },
+    {
+      "id": "block_pull_midshin",
+      "name": "Block pull, mid-shin height",
+      "category": "strength",
+      "targets": [
+        "posterior_chain",
+        "glute_max"
+      ],
+      "default": {
+        "sets": 5,
+        "reps": 5,
+        "progression_model": "tm_based",
+        "setup_note": "bar starts at mid-shin, ~10-15 cm elevated"
+      },
+      "cues": [
+        "Shortens the range of motion, reduces the flexion demand at the pull start",
+        "Neutral spine, brace before you lift, drive with the legs",
+        "This is the primary heavy pull until conventional deadlift is symptom-free"
+      ],
+      "flags": [
+        "historical_provocateur:deadlift"
+      ],
+      "progression": "deadlift_conventional",
+      "regression": "trap_bar_dl_blocks",
+      "video_search": "block pull deadlift technique",
+      "video_url": "https://www.youtube.com/watch?v=jfSxbT-65ow"
+    },
+    {
+      "id": "deadlift_conventional",
+      "name": "Conventional deadlift from the floor",
+      "category": "strength",
+      "targets": [
+        "posterior_chain",
+        "glute_max"
+      ],
+      "default": {
+        "sets": 5,
+        "reps": 3,
+        "progression_model": "tm_based"
+      },
+      "cues": [
+        "Only if the block pull has been symptom-free at ~150 kg for at least 4 weeks",
+        "Brace hard, neutral spine, lats engaged, drive the floor away",
+        "Any left SI or groin symptom in the next-morning check means back to block pulls"
+      ],
+      "phase_gated": true,
+      "flags": [
+        "historical_provocateur:primary",
+        "reintroduction_step:final"
+      ],
+      "regression": "block_pull_midshin",
+      "video_search": "conventional deadlift technique",
+      "video_url": "https://www.youtube.com/watch?v=Y1IGeJEXpF4"
+    },
+    {
+      "id": "air_squat_daily",
+      "name": "Daily air-squat skill practice",
+      "category": "primer",
+      "targets": [
+        "general",
+        "hip_flexor"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 10,
+        "duration_min": 5
+      },
+      "cues": [
+        "Bodyweight or empty bar only",
+        "Slow tempo, full depth without pain, focus on knees tracking over toes",
+        "This is technique work and joint nutrition, NOT stimulus \u2014 do not chase fatigue"
+      ],
+      "rationale": "Frequency practice. The research signal on daily squatting is that it produces better technique and consistency, not more hypertrophy. Treat it as skill practice.",
+      "video_search": "air squat form",
+      "video_url": "https://www.youtube.com/watch?v=rMvwVtlqjTE"
+    },
+    {
+      "id": "goblet_squat",
+      "name": "Goblet squat",
+      "category": "strength",
+      "targets": [
+        "quad",
+        "trunk_anti_extension"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 8
+      },
+      "cues": [
+        "Dumbbell or kettlebell held at the chest",
+        "Full depth without knees caving"
+      ],
+      "video_search": "goblet squat form",
+      "video_url": "https://www.youtube.com/watch?v=Uli12Etq4-U"
+    },
+    {
+      "id": "suitcase_carry",
+      "name": "Suitcase carry",
+      "category": "trunk",
+      "targets": [
+        "trunk_anti_rotation",
+        "glute_med",
+        "general"
+      ],
+      "default": {
+        "sets": 3,
+        "distance_m": 20,
+        "per_side": true
+      },
+      "cues": [
+        "Heavy weight in one hand only",
+        "Stay tall, ribs down, do not lean toward the load"
+      ],
+      "rationale": "Anti-lateral-flexion + anti-rotation loaded carry \u2014 direct fit for the left transitional segment.",
+      "video_search": "suitcase carry technique",
+      "video_url": "https://www.youtube.com/watch?v=y-hn_Ha1-RE"
+    },
+    {
+      "id": "farmer_carry",
+      "name": "Farmer's carry",
+      "category": "strength",
+      "targets": [
+        "trunk_anti_extension",
+        "general"
+      ],
+      "default": {
+        "sets": 3,
+        "distance_m": 30
+      },
+      "cues": [
+        "Heavy weight in both hands",
+        "Tall posture, controlled breathing, small fast steps"
+      ],
+      "video_search": "farmers carry technique",
+      "video_url": "https://www.youtube.com/watch?v=lLAw6fUccKA"
+    },
+    {
+      "id": "trap_bar_dl_blocks",
+      "name": "Trap-bar deadlift from blocks",
+      "category": "strength",
+      "targets": [
+        "posterior_chain",
+        "glute_max"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 5,
+        "setup_note": "bar approx 10 cm elevated"
+      },
+      "cues": [
+        "Neutral grip, less shear than a straight bar"
+      ],
+      "phase_gated": true,
+      "flags": [
+        "reintroduction_step:2"
+      ],
+      "progression": "trap_bar_dl_floor",
+      "video_search": "trap bar deadlift from blocks",
+      "video_url": "https://www.youtube.com/watch?v=TU2xZ7s4jus"
+    },
+    {
+      "id": "trap_bar_dl_floor",
+      "name": "Trap-bar deadlift from floor",
+      "category": "strength",
+      "targets": [
+        "posterior_chain"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 5
+      },
+      "phase_gated": true,
+      "flags": [
+        "reintroduction_step:3"
+      ],
+      "regression": "trap_bar_dl_blocks",
+      "video_search": "trap bar deadlift form",
+      "video_url": "https://www.youtube.com/watch?v=TU2xZ7s4jus"
+    },
+    {
+      "id": "back_squat",
+      "name": "Back squat, moderate",
+      "category": "strength",
+      "targets": [
+        "quad",
+        "glute_max"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 5,
+        "intensity": "moderate"
+      },
+      "phase_gated": true,
+      "flags": [
+        "reintroduction_step:4",
+        "historical_provocateur"
+      ],
+      "video_search": "back squat technique",
+      "video_url": "https://www.youtube.com/watch?v=7v_V6xiA_AA"
+    },
+    {
+      "id": "hip_flexor_stretch_kneeling",
+      "name": "Half-kneeling hip flexor stretch",
+      "category": "mobility",
+      "targets": [
+        "hip_flexor"
+      ],
+      "default": {
+        "sets": 2,
+        "hold_seconds": 30,
+        "per_side": true
+      },
+      "cues": [
+        "Posterior pelvic tilt FIRST",
+        "Squeeze the glute of the kneeling leg",
+        "Only lean until you feel a mild stretch"
+      ],
+      "warning": "You should feel it in the front of the thigh, not deep in the groin or the front of the hip joint. Deep anterior hip pinching means you are loading the labrum \u2014 back off immediately.",
+      "video_search": "half kneeling hip flexor stretch posterior pelvic tilt",
+      "video_url": "https://www.youtube.com/watch?v=HxlWP5BG2EU"
+    },
+    {
+      "id": "hip_switch_9090",
+      "name": "90/90 hip switches",
+      "category": "mobility",
+      "targets": [
+        "hip_flexor",
+        "general"
+      ],
+      "default": {
+        "reps": 10,
+        "tempo": "slow"
+      },
+      "cues": [
+        "Controlled, no bouncing",
+        "Stay inside the pain-free range",
+        "Skip if it pinches"
+      ],
+      "video_search": "90 90 hip switch mobility",
+      "video_url": "https://www.youtube.com/watch?v=wnFTIPhNySI"
+    },
+    {
+      "id": "a_march",
+      "name": "A-march",
+      "category": "primer",
+      "targets": [
+        "hip_flexor",
+        "general"
+      ],
+      "default": {
+        "distance_m": 20
+      },
+      "cues": [
+        "Knee to approximately 90 degrees only"
+      ],
+      "video_search": "a march running drill",
+      "video_url": "https://www.youtube.com/watch?v=c8il_EjiBWQ"
+    },
+    {
+      "id": "leg_swing_controlled",
+      "name": "Controlled leg swings, front to back",
+      "category": "primer",
+      "targets": [
+        "general"
+      ],
+      "default": {
+        "reps": 10,
+        "per_side": true
+      },
+      "cues": [
+        "Small range \u2014 this is a primer, not a stretch"
+      ],
+      "video_search": "controlled leg swings warm up",
+      "video_url": "https://www.youtube.com/watch?v=korxBhGzzJE"
+    },
+    {
+      "id": "hollow_hold",
+      "name": "Hollow hold",
+      "category": "trunk",
+      "targets": [
+        "trunk_anti_extension"
+      ],
+      "default": {
+        "sets": 3,
+        "hold_seconds": 20
+      },
+      "notes": "Substitute for GHD sit-ups and kipping toes-to-bar in class.",
+      "video_search": "hollow hold form",
+      "video_url": "https://www.youtube.com/watch?v=ytenqCqCIyU"
+    },
+    {
+      "id": "strict_knee_raise",
+      "name": "Strict knee raise to 90 degrees",
+      "category": "trunk",
+      "targets": [
+        "hip_flexor",
+        "trunk_anti_extension"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 8
+      },
+      "cues": [
+        "Stop at 90 degrees",
+        "Slow, controlled lowering"
+      ],
+      "flags": [
+        "monitor:click",
+        "shoulder_load"
+      ],
+      "notes": "Substitute for kipping toes-to-bar. Watch the shoulder as well as the hip.",
+      "video_search": "strict hanging knee raise",
+      "video_url": "https://www.youtube.com/watch?v=lW4onyuCkzA"
+    }
+  ],
+  "class_modifications": [
+    {
+      "avoid": "GHD sit-ups",
+      "reason": "End-range lumbar extension over a pseudoarthrosis with bone oedema. Worst single movement on the list.",
+      "substitute": [
+        "hollow_hold",
+        "pallof_press",
+        "carry"
+      ]
+    },
+    {
+      "avoid": "Kipping toes-to-bar",
+      "reason": "Doubles up: hanging loaded hip flexion (documented provocateur, with clicking) plus a hanging shoulder with a SLAP and posterior labral detachment.",
+      "substitute": [
+        "strict_knee_raise",
+        "hollow_hold"
+      ]
+    },
+    {
+      "avoid": "Kipping pull-ups, bar muscle-ups",
+      "reason": "Shoulder \u2014 SLAP plus posterior labrum plus spinoglenoid ganglion cyst.",
+      "substitute": [
+        "strict pull-up",
+        "ring row"
+      ]
+    },
+    {
+      "avoid": "Heavy back squat or deadlift for time",
+      "reason": "Fatigue plus load plus lumbar flexion-extension cycling.",
+      "substitute": [
+        "sled_push",
+        "hip_thrust_barbell"
+      ]
+    },
+    {
+      "avoid": "Overhead squat, snatch",
+      "reason": "Lumbar extension plus overhead shoulder demand.",
+      "substitute": [
+        "front_squat",
+        "hang power snatch at moderate load"
+      ]
+    },
+    {
+      "modify": "Deep squat under fatigue",
+      "reason": "Knees caving equals flexion plus adduction plus internal rotation under load \u2014 the positive test position.",
+      "action": "Cue knees out, reduce depth when form degrades"
+    },
+    {
+      "allowed": [
+        "Box jumps",
+        "Wall balls",
+        "Running",
+        "Rowing"
+      ],
+      "reason": "No specific contraindication"
+    }
+  ]
+}

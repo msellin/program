@@ -1,0 +1,1862 @@
+{
+  "version": 2,
+  "logs": {
+    "2026-08-13": {
+      "date": "2026-08-13",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 6,
+        "low_back": 3,
+        "life_load": 6
+      },
+      "notes": "Symptoms high — going light.",
+      "derived_state": "red"
+    },
+    "2026-08-14": {
+      "date": "2026-08-14",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 6,
+        "low_back": 3,
+        "life_load": 6
+      },
+      "notes": "Symptoms high — going light.",
+      "derived_state": "red"
+    },
+    "2026-08-15": {
+      "date": "2026-08-15",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 6,
+        "low_back": 3,
+        "life_load": 6
+      },
+      "notes": "Symptoms high — going light.",
+      "derived_state": "red"
+    },
+    "2026-08-16": {
+      "date": "2026-08-16",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 6,
+        "low_back": 3,
+        "life_load": 6
+      },
+      "notes": "Symptoms high — going light.",
+      "derived_state": "red"
+    },
+    "2026-08-17": {
+      "date": "2026-08-17",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 5,
+        "low_back": 2,
+        "life_load": 6
+      },
+      "notes": "Symptoms high — going light.",
+      "derived_state": "amber"
+    },
+    "2026-08-18": {
+      "date": "2026-08-18",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 5,
+        "low_back": 2,
+        "life_load": 6
+      },
+      "notes": "Symptoms high — going light.",
+      "derived_state": "amber"
+    },
+    "2026-08-19": {
+      "date": "2026-08-19",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 5,
+        "low_back": 2,
+        "life_load": 6
+      },
+      "notes": "Feeling it come back, but cautious.",
+      "derived_state": "amber"
+    },
+    "2026-08-20": {
+      "date": "2026-08-20",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 5,
+        "low_back": 2,
+        "life_load": 6
+      },
+      "notes": "Feeling it come back, but cautious.",
+      "derived_state": "amber"
+    },
+    "2026-08-21": {
+      "date": "2026-08-21",
+      "exercises": {
+        "block_reintro:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 65.5,
+              "reps": 5,
+              "rpe": 6.5
+            },
+            {
+              "weight_kg": 65.5,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 65.5,
+              "reps": 5,
+              "rpe": 8.5
+            }
+          ]
+        },
+        "block_reintro:block_pull_midshin": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 83.5,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 83.5,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 83.5,
+              "reps": 5,
+              "rpe": 8
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 5,
+        "low_back": 2,
+        "life_load": 6
+      },
+      "notes": "Feeling it come back, but cautious.",
+      "derived_state": "amber"
+    },
+    "2026-08-22": {
+      "date": "2026-08-22",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 4,
+        "low_back": 2,
+        "life_load": 6
+      },
+      "notes": "Feeling it come back, but cautious.",
+      "derived_state": "amber"
+    },
+    "2026-08-23": {
+      "date": "2026-08-23",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 4,
+        "low_back": 2,
+        "life_load": 6
+      },
+      "notes": "Feeling it come back, but cautious.",
+      "derived_state": "amber"
+    },
+    "2026-08-24": {
+      "date": "2026-08-24",
+      "exercises": {
+        "block_reintro:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 65.5,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 65.5,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 65.5,
+              "reps": 5,
+              "rpe": 8.5
+            }
+          ]
+        },
+        "block_reintro:block_pull_midshin": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 83.5,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 83.5,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 83.5,
+              "reps": 5,
+              "rpe": 8.5
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 4,
+        "low_back": 2,
+        "life_load": 6
+      },
+      "notes": "Feeling it come back, but cautious.",
+      "derived_state": "amber"
+    },
+    "2026-08-25": {
+      "date": "2026-08-25",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 4,
+        "low_back": 2,
+        "life_load": 6
+      },
+      "notes": "Feeling it come back, but cautious.",
+      "derived_state": "amber"
+    },
+    "2026-08-26": {
+      "date": "2026-08-26",
+      "exercises": {
+        "block_evaluate:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 79.5,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 79.5,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 79.5,
+              "reps": 5,
+              "rpe": 8
+            }
+          ]
+        },
+        "block_evaluate:block_pull_midshin": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 101,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 101,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 101,
+              "reps": 5,
+              "rpe": 7.5
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 4,
+        "low_back": 2,
+        "life_load": 3
+      },
+      "notes": "Feeling it come back, but cautious.",
+      "derived_state": "amber"
+    },
+    "2026-08-27": {
+      "date": "2026-08-27",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 3,
+        "low_back": 1,
+        "life_load": 3
+      },
+      "notes": "Feeling it come back, but cautious.",
+      "derived_state": "green"
+    },
+    "2026-08-28": {
+      "date": "2026-08-28",
+      "exercises": {
+        "block_reintro:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 79.5,
+              "reps": 5,
+              "rpe": 6.5
+            },
+            {
+              "weight_kg": 79.5,
+              "reps": 5,
+              "rpe": 8
+            },
+            {
+              "weight_kg": 79.5,
+              "reps": 5,
+              "rpe": 8
+            }
+          ]
+        },
+        "block_reintro:block_pull_midshin": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 101,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 101,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 101,
+              "reps": 5,
+              "rpe": 7.5
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 3,
+        "low_back": 1,
+        "life_load": 3
+      },
+      "notes": "Feeling it come back, but cautious.",
+      "derived_state": "green"
+    },
+    "2026-08-29": {
+      "date": "2026-08-29",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 3,
+        "low_back": 1,
+        "life_load": 3
+      },
+      "notes": "Feeling it come back, but cautious.",
+      "derived_state": "green"
+    },
+    "2026-08-30": {
+      "date": "2026-08-30",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 3,
+        "low_back": 1,
+        "life_load": 3
+      },
+      "notes": "Feeling it come back, but cautious.",
+      "derived_state": "green"
+    },
+    "2026-08-31": {
+      "date": "2026-08-31",
+      "exercises": {
+        "block_squat_heavy:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 79.5,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 79.5,
+              "reps": 5,
+              "rpe": 8
+            },
+            {
+              "weight_kg": 79.5,
+              "reps": 5,
+              "rpe": 7.5
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 3,
+        "low_back": 1,
+        "life_load": 3
+      },
+      "notes": "Feeling it come back, but cautious.",
+      "derived_state": "green"
+    },
+    "2026-09-01": {
+      "date": "2026-09-01",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 2,
+        "low_back": 1,
+        "life_load": 3
+      },
+      "notes": "Feeling it come back, but cautious.",
+      "derived_state": "green"
+    },
+    "2026-09-02": {
+      "date": "2026-09-02",
+      "exercises": {
+        "block_pull_heavy:block_pull_midshin": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 101,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 101,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 101,
+              "reps": 5,
+              "rpe": 8
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 2,
+        "low_back": 1,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-09-03": {
+      "date": "2026-09-03",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 2,
+        "low_back": 1,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-09-04": {
+      "date": "2026-09-04",
+      "exercises": {
+        "block_squat_variant:front_squat": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 61.5,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 61.5,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 61.5,
+              "reps": 5,
+              "rpe": 8.5
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 2,
+        "low_back": 1,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-09-05": {
+      "date": "2026-09-05",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 2,
+        "low_back": 1,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-09-06": {
+      "date": "2026-09-06",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 1,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-09-07": {
+      "date": "2026-09-07",
+      "exercises": {
+        "block_squat_heavy:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 79.5,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 79.5,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 79.5,
+              "reps": 5,
+              "rpe": 8
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 1,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-09-08": {
+      "date": "2026-09-08",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 1,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-09-09": {
+      "date": "2026-09-09",
+      "exercises": {
+        "block_pull_heavy:block_pull_midshin": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 101,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 101,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 101,
+              "reps": 5,
+              "rpe": 8
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 1,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-09-10": {
+      "date": "2026-09-10",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 1,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-09-11": {
+      "date": "2026-09-11",
+      "exercises": {
+        "block_squat_variant:front_squat": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 72.5,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 72.5,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 72.5,
+              "reps": 5,
+              "rpe": 8
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-09-12": {
+      "date": "2026-09-12",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-09-13": {
+      "date": "2026-09-13",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-09-14": {
+      "date": "2026-09-14",
+      "exercises": {
+        "block_squat_heavy:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 93.5,
+              "reps": 5,
+              "rpe": 6.5
+            },
+            {
+              "weight_kg": 93.5,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 93.5,
+              "reps": 5,
+              "rpe": 8
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-09-15": {
+      "date": "2026-09-15",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-09-16": {
+      "date": "2026-09-16",
+      "exercises": {
+        "block_pull_heavy:block_pull_midshin": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 119,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 119,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 119,
+              "reps": 5,
+              "rpe": 7.5
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-09-17": {
+      "date": "2026-09-17",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-09-18": {
+      "date": "2026-09-18",
+      "exercises": {
+        "block_squat_variant:front_squat": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 72.5,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 72.5,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 72.5,
+              "reps": 5,
+              "rpe": 7.5
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-09-19": {
+      "date": "2026-09-19",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-09-20": {
+      "date": "2026-09-20",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-09-21": {
+      "date": "2026-09-21",
+      "exercises": {
+        "block_squat_heavy:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 93.5,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 93.5,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 93.5,
+              "reps": 5,
+              "rpe": 8
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-09-22": {
+      "date": "2026-09-22",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-09-23": {
+      "date": "2026-09-23",
+      "exercises": {
+        "block_pull_heavy:block_pull_midshin": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 119,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 119,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 119,
+              "reps": 5,
+              "rpe": 7.5
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-09-24": {
+      "date": "2026-09-24",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-09-25": {
+      "date": "2026-09-25",
+      "exercises": {
+        "block_squat_variant:front_squat": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 72.5,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 72.5,
+              "reps": 5,
+              "rpe": 8
+            },
+            {
+              "weight_kg": 72.5,
+              "reps": 5,
+              "rpe": 7.5
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-09-26": {
+      "date": "2026-09-26",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-09-27": {
+      "date": "2026-09-27",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-09-28": {
+      "date": "2026-09-28",
+      "exercises": {
+        "block_squat_heavy:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 93.5,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 93.5,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 93.5,
+              "reps": 5,
+              "rpe": 8.5
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-09-29": {
+      "date": "2026-09-29",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-09-30": {
+      "date": "2026-09-30",
+      "exercises": {
+        "block_pull_heavy:block_pull_midshin": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 119,
+              "reps": 5,
+              "rpe": 6.5
+            },
+            {
+              "weight_kg": 119,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 119,
+              "reps": 5,
+              "rpe": 8
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-10-01": {
+      "date": "2026-10-01",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-10-02": {
+      "date": "2026-10-02",
+      "exercises": {
+        "block_squat_variant:front_squat": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 72.5,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 72.5,
+              "reps": 5,
+              "rpe": 8
+            },
+            {
+              "weight_kg": 72.5,
+              "reps": 5,
+              "rpe": 7.5
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-10-03": {
+      "date": "2026-10-03",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-10-04": {
+      "date": "2026-10-04",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-10-05": {
+      "date": "2026-10-05",
+      "exercises": {
+        "block_squat_heavy:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 93.5,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 93.5,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 93.5,
+              "reps": 5,
+              "rpe": 7.5
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-10-06": {
+      "date": "2026-10-06",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-10-07": {
+      "date": "2026-10-07",
+      "exercises": {
+        "block_pull_heavy:block_pull_midshin": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 119,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 119,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 119,
+              "reps": 5,
+              "rpe": 8
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-10-08": {
+      "date": "2026-10-08",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-10-09": {
+      "date": "2026-10-09",
+      "exercises": {
+        "block_squat_variant:front_squat": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 72.5,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 72.5,
+              "reps": 5,
+              "rpe": 8
+            },
+            {
+              "weight_kg": 72.5,
+              "reps": 5,
+              "rpe": 8.5
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-10-10": {
+      "date": "2026-10-10",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-10-11": {
+      "date": "2026-10-11",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-10-12": {
+      "date": "2026-10-12",
+      "exercises": {
+        "block_squat_heavy:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 93.5,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 93.5,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 93.5,
+              "reps": 5,
+              "rpe": 8
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-10-13": {
+      "date": "2026-10-13",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-10-14": {
+      "date": "2026-10-14",
+      "exercises": {
+        "block_pull_heavy:block_pull_midshin": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 119,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 119,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 119,
+              "reps": 5,
+              "rpe": 8
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-10-15": {
+      "date": "2026-10-15",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-10-16": {
+      "date": "2026-10-16",
+      "exercises": {
+        "block_squat_variant:front_squat": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 72.5,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 72.5,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 72.5,
+              "reps": 5,
+              "rpe": 7.5
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-10-17": {
+      "date": "2026-10-17",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-10-18": {
+      "date": "2026-10-18",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-10-19": {
+      "date": "2026-10-19",
+      "exercises": {
+        "block_squat_heavy:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 93.5,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 93.5,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 93.5,
+              "reps": 5,
+              "rpe": 8
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-10-20": {
+      "date": "2026-10-20",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-10-21": {
+      "date": "2026-10-21",
+      "exercises": {
+        "block_pull_heavy:block_pull_midshin": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 119,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 119,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 119,
+              "reps": 5,
+              "rpe": 8.5
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-10-22": {
+      "date": "2026-10-22",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-10-23": {
+      "date": "2026-10-23",
+      "exercises": {
+        "block_squat_variant:front_squat": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 72.5,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 72.5,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 72.5,
+              "reps": 5,
+              "rpe": 7.5
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-10-24": {
+      "date": "2026-10-24",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-10-25": {
+      "date": "2026-10-25",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-10-26": {
+      "date": "2026-10-26",
+      "exercises": {
+        "block_squat_heavy:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 93.5,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 93.5,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 93.5,
+              "reps": 5,
+              "rpe": 8.5
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-10-27": {
+      "date": "2026-10-27",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-10-28": {
+      "date": "2026-10-28",
+      "exercises": {
+        "block_pull_heavy:block_pull_midshin": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 119,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 119,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 119,
+              "reps": 5,
+              "rpe": 8
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-10-29": {
+      "date": "2026-10-29",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-10-30": {
+      "date": "2026-10-30",
+      "exercises": {
+        "block_squat_variant:front_squat": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 72.5,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 72.5,
+              "reps": 5,
+              "rpe": 8
+            },
+            {
+              "weight_kg": 72.5,
+              "reps": 5,
+              "rpe": 8.5
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-10-31": {
+      "date": "2026-10-31",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-11-01": {
+      "date": "2026-11-01",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-11-02": {
+      "date": "2026-11-02",
+      "exercises": {
+        "block_squat_heavy:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 93.5,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 93.5,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 93.5,
+              "reps": 5,
+              "rpe": 7.5
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-11-03": {
+      "date": "2026-11-03",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-11-04": {
+      "date": "2026-11-04",
+      "exercises": {
+        "block_pull_heavy:block_pull_midshin": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 119,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 119,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 119,
+              "reps": 5,
+              "rpe": 8
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-11-05": {
+      "date": "2026-11-05",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-11-06": {
+      "date": "2026-11-06",
+      "exercises": {
+        "block_squat_variant:front_squat": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 72.5,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 72.5,
+              "reps": 5,
+              "rpe": 8
+            },
+            {
+              "weight_kg": 72.5,
+              "reps": 5,
+              "rpe": 8
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-11-07": {
+      "date": "2026-11-07",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-11-08": {
+      "date": "2026-11-08",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-11-09": {
+      "date": "2026-11-09",
+      "exercises": {
+        "block_squat_heavy:back_squat_highbar": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 93.5,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 93.5,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 93.5,
+              "reps": 5,
+              "rpe": 8
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    },
+    "2026-11-10": {
+      "date": "2026-11-10",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "low_back": 0,
+        "life_load": 3
+      },
+      "derived_state": "green"
+    }
+  },
+  "training_maxes": {
+    "back_squat_highbar": 109,
+    "block_pull_midshin": 141,
+    "front_squat": 86.5,
+    "deadlift_conventional": 150,
+    "trap_bar_dl_floor": 145.5
+  },
+  "cycle": null,
+  "updated_at": 1794211200000,
+  "scheduled_overrides": {},
+  "skipped": {
+    "2026-08-13": {
+      "blocks": [],
+      "reason": "sim: archetype skipped"
+    },
+    "2026-08-14": {
+      "blocks": [],
+      "reason": "sim: archetype skipped"
+    },
+    "2026-08-15": {
+      "blocks": [],
+      "reason": "sim: archetype skipped"
+    },
+    "2026-08-16": {
+      "blocks": [],
+      "reason": "sim: archetype skipped"
+    },
+    "2026-08-17": {
+      "blocks": [],
+      "reason": "sim: archetype skipped"
+    },
+    "2026-08-18": {
+      "blocks": [],
+      "reason": "sim: archetype skipped"
+    },
+    "2026-08-19": {
+      "blocks": [],
+      "reason": "sim: archetype skipped"
+    },
+    "2026-08-20": {
+      "blocks": [],
+      "reason": "sim: archetype skipped"
+    },
+    "2026-08-22": {
+      "blocks": [],
+      "reason": "sim: archetype skipped"
+    },
+    "2026-08-23": {
+      "blocks": [],
+      "reason": "sim: archetype skipped"
+    }
+  },
+  "dismissed_proposals": {},
+  "user_profile": {
+    "active_program_id": "anterior-hip-rebuild",
+    "active_program_ids": [
+      "anterior-hip-rebuild"
+    ],
+    "active_program_started_at": "2026-08-12T08:00:00.088Z",
+    "tier": "beta_forever"
+  },
+  "day_adjustments": {
+    "2026-08-21": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1787212800000
+    },
+    "2026-08-24": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1787472000000
+    },
+    "2026-08-25": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1787558400000
+    },
+    "2026-08-26": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1787644800000
+    }
+  },
+  "tm_history": [
+    {
+      "date": "2026-09-09",
+      "snapshot": {
+        "back_squat_highbar": 99,
+        "block_pull_midshin": 126,
+        "front_squat": 76.5,
+        "deadlift_conventional": 135,
+        "trap_bar_dl_floor": 130.5
+      },
+      "source": "sim:cycle_end_accept"
+    },
+    {
+      "date": "2026-10-07",
+      "snapshot": {
+        "back_squat_highbar": 104,
+        "block_pull_midshin": 133.5,
+        "front_squat": 81.5,
+        "deadlift_conventional": 142.5,
+        "trap_bar_dl_floor": 138
+      },
+      "source": "sim:cycle_end_accept"
+    },
+    {
+      "date": "2026-11-04",
+      "snapshot": {
+        "back_squat_highbar": 109,
+        "block_pull_midshin": 141,
+        "front_squat": 86.5,
+        "deadlift_conventional": 150,
+        "trap_bar_dl_floor": 145.5
+      },
+      "source": "sim:cycle_end_accept"
+    }
+  ]
+}

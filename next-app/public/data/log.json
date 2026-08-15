@@ -1,0 +1,65 @@
+{
+  "version": 2,
+  "logs": {
+    "2026-08-02": {
+      "date": "2026-08-02",
+      "exercises": {
+        "block_a_home:hip_flexor_iso_seated": {"done": true, "weight_kg": null, "reps": null, "notes": ""}
+      },
+      "symptoms": null,
+      "derived_state": null,
+      "notes": ""
+    },
+    "2026-08-03": {
+      "date": "2026-08-03",
+      "exercises": {
+        "block_a_home:hip_switch_9090": {"done": true, "weight_kg": null, "reps": null, "notes": ""},
+        "block_a_home:glute_bridge": {"done": true, "weight_kg": null, "reps": null, "notes": ""},
+        "block_a_home:dead_bug": {"done": true, "weight_kg": null, "reps": null, "notes": ""}
+      },
+      "symptoms": null,
+      "derived_state": null,
+      "notes": ""
+    },
+    "2026-08-04": {
+      "date": "2026-08-04",
+      "exercises": {
+        "block_a_home:hip_switch_9090": {"done": true, "weight_kg": null, "reps": null, "notes": ""},
+        "block_a_home:dead_bug": {"done": true, "weight_kg": null, "reps": null, "notes": ""},
+        "block_a_home:glute_bridge": {"done": true, "weight_kg": null, "reps": null, "notes": ""}
+      },
+      "symptoms": null,
+      "derived_state": null,
+      "notes": "Power clean 3×100 kg done outside the app today (per session chat)."
+    },
+    "2026-08-06": {
+      "date": "2026-08-06",
+      "exercises": {
+        "block_reintro:back_squat_highbar": {"done": true, "weight_kg": 90, "reps": 5, "rpe": 5, "notes": "easy, controlled — could have done 100 at higher RPE"},
+        "block_reintro:bulgarian_split_squat_db": {"done": true, "weight_kg": 10, "reps": 8, "rpe": 6, "notes": "controlled — LEFT side weaker, needed control"},
+        "block_reintro:dead_bug": {"done": true, "weight_kg": null, "reps": null, "notes": ""},
+        "block_daily_skill:air_squat_daily": {"done": true, "weight_kg": null, "reps": null, "notes": ""},
+        "block_daily_skill:goblet_squat": {"done": true, "weight_kg": 16, "reps": 10, "rpe": 4, "notes": "too easy — warmup only"},
+        "block_reintro:block_pull_midshin": {"done": false, "weight_kg": null, "reps": null, "notes": "skipped — first session, hip felt more important"},
+        "block_reintro:single_leg_rdl": {"done": false, "weight_kg": null, "reps": null, "notes": "skipped"}
+      },
+      "symptoms": null,
+      "derived_state": null,
+      "notes": "First real session using the app. UI density was too much — see dev/active/ui-restructure.md."
+    }
+  },
+  "training_maxes": {
+    "back_squat_highbar": 110,
+    "front_squat": 90,
+    "block_pull_midshin": 130
+  },
+  "training_maxes_suggested_by_claude_2026_08_06": {
+    "back_squat_highbar": 105,
+    "note": "Based on 90×5 @ RPE 5 (5 RIR → est 1RM 120). Conservative for a first day back. Bump to 110-115 if next session confirms easy at higher load."
+  },
+  "cycle": {
+    "phase_id": "phase_1_rebuild_evaluate",
+    "cycle_number": 1,
+    "week_in_cycle": 1
+  }
+}

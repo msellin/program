@@ -1,0 +1,38 @@
+{
+  "archetypeId": "overperformer",
+  "programSlug": "engine-builder",
+  "daysSimulated": 90,
+  "snapshots": [
+    {
+      "day": 0,
+      "screenshot": "tests/e2e/screenshots/matrix/overperformer_engine-builder/day-0.png"
+    },
+    {
+      "day": 7,
+      "screenshot": "tests/e2e/screenshots/matrix/overperformer_engine-builder/day-7.png"
+    },
+    {
+      "day": 14,
+      "screenshot": "tests/e2e/screenshots/matrix/overperformer_engine-builder/day-14.png"
+    },
+    {
+      "day": 30,
+      "screenshot": "tests/e2e/screenshots/matrix/overperformer_engine-builder/day-30.png"
+    },
+    {
+      "day": 60,
+      "screenshot": "tests/e2e/screenshots/matrix/overperformer_engine-builder/day-60.png"
+    },
+    {
+      "day": 90,
+      "screenshot": "tests/e2e/screenshots/matrix/overperformer_engine-builder/day-90.png"
+    }
+  ],
+  "summary": {
+    "logs_count": 90,
+    "skipped_count": 0,
+    "day_adjustments_count": 0,
+    "dismissed_proposals_count": 0,
+    "training_maxes": {}
+  }
+}

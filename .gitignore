@@ -1,0 +1,45 @@
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+
+# Local settings + IDE
+.DS_Store
+.wrangler/
+.idea/
+.vscode/
+.claude/
+
+# Node
+node_modules/
+.pnp
+.pnp.js
+
+# Next.js build outputs
+.next/
+out/
+next-env.d.ts
+
+# TypeScript
+*.tsbuildinfo
+
+# Testing / coverage
+coverage/
+
+# Log files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Source medical PDFs — contain isikukood + provider identifiers.
+# Kept locally for reference, never committed, never deployed.
+source-pdfs/
+
+# Real user log data — de-identified but personal.
+data/log.json
+
+# Backup / temp / scratch
+*.bak
+*~
+.tmp/

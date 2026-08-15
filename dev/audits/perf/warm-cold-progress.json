@@ -1,0 +1,52 @@
+{
+  "swInfo": {
+    "hasRegistration": true,
+    "controller": false
+  },
+  "results": [
+    {
+      "label": "cold",
+      "status": 200,
+      "wall": 2960,
+      "domContentLoaded": 724.0999994277954,
+      "loadEvent": 2346,
+      "fcp": 852,
+      "resources": 25,
+      "transferredBytes": 408848,
+      "swController": false
+    },
+    {
+      "label": "warm",
+      "status": 200,
+      "wall": 826,
+      "domContentLoaded": 359.80000019073486,
+      "loadEvent": 460.5,
+      "fcp": 364,
+      "resources": 22,
+      "transferredBytes": 6600,
+      "swController": false
+    },
+    {
+      "label": "warm-newtab",
+      "status": 200,
+      "wall": 976,
+      "domContentLoaded": 483.8999996185303,
+      "loadEvent": 571.0999994277954,
+      "fcp": 484,
+      "resources": 20,
+      "transferredBytes": 6000,
+      "swController": false
+    },
+    {
+      "label": "offline",
+      "status": 200,
+      "wall": 802,
+      "domContentLoaded": 344,
+      "loadEvent": 454.6000003814697,
+      "fcp": 360,
+      "resources": 20,
+      "transferredBytes": 6000,
+      "swController": false
+    }
+  ]
+}

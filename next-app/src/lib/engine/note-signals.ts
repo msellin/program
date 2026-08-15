@@ -1,0 +1,258 @@
+/**
+ * Keyword-based signal extractor for free-text training notes.
+ *
+ * Stopgap until the Coach (LLM) is wired up. The engine reads these signals to
+ * PROPOSE (never auto-apply) a load reduction on the following session.
+ *
+ * The Estonian training vocabulary is included alongside English because the
+ * user thinks in both. Additions are cheap — patterns are conservative on purpose.
+ */
+
+import type { DayLog } from "../schemas";
+
+export type FatigueLevel = "high" | "elevated" | "normal";
+
+export type NoteSignals = {
+  fatigue: FatigueLevel;
+  externalLoad: boolean; // padel, hiking, long day, etc.
+  pain: boolean;
+  easy: boolean;
+  /** Within-session RPE drift (avg of last 2 sets − avg of first 2 sets). null when unmeasurable. */
+  rpeDrift: number | null;
+  /** Human-readable labels of what matched, for surfacing in the UI. */
+  matches: string[];
+};
+
+// Word-boundary matchers. `\b` is fine for both English and Estonian roots here.
+const HIGH_FATIGUE = /\b(exhaust\w*|wrecked|toast|hangover|hungover|sick|flu|fever|no ?sleep|didn['’]?t ?sleep|tough ?week|beat ?up|beaten|väsi\w*|magamata|haige)\b/i;
+const STIFF = /\b(stiff|sore|tight|tired|fatigued|drained|dead|heavy|slow|sluggish|krambid|krampis|kanged?|väsinud|jäik|jäigad)\b/i;
+const EXTERNAL_LOAD = /\b(padel|padle|tennis|hike|hiked|hiking|climbed|climbing|match|game|long ?day|late ?night|long ?weekend|festival|party|long ?run|ran \d+ ?km|drive|drove \d+|walked \d+|matk|matkasin|reisisin|reisil|pidu|peol)\b/i;
+// Includes movement-quality words (click, catch, stuck) that skill/mobility
+// users type without meaning clinical pain. Feeds the load-reduction signal
+// (proposes 5-10% off next session), NOT any rehab-specific escalation —
+// Terav is a training app, not a rehab tool.
+const PAIN = /\b(pain|hurt\w*|sharp|twinge|flare|shooting|pinch|ache|aching|click\w*|clunk\w*|catch\w*|stuck|giving ?way|gave ?way|valu\w*|valus|torkab|kipitab)\b/i;
+const EASY = /\b(easy|light|grooved|snappy|smooth|effortless|too ?easy|felt ?good|felt ?great|felt ?strong|kerge|hea tunne|lihtne|sujus)\b/i;
+
+/**
+ * Parse a single free-text string into a signal set.
+ * Empty / whitespace input returns a normal-fatigue, no-flag baseline.
+ */
+export function extractSignals(text: string | undefined | null): NoteSignals {
+  const t = (text ?? "").trim();
+  const base: NoteSignals = {
+    fatigue: "normal",
+    externalLoad: false,
+    pain: false,
+    easy: false,
+    rpeDrift: null,
+    matches: [],
+  };
+  if (!t) return base;
+
+  const isHigh = HIGH_FATIGUE.test(t);
+  const isStiff = STIFF.test(t);
+  const isExtLoad = EXTERNAL_LOAD.test(t);
+  const isPain = PAIN.test(t);
+  const isEasy = EASY.test(t);
+
+  const matches: string[] = [];
+  if (isHigh) matches.push("high fatigue");
+  if (isStiff) matches.push("stiff/sore");
+  if (isExtLoad) matches.push("outside load");
+  if (isPain) matches.push("pain");
+  if (isEasy) matches.push("felt easy");
+
+  let fatigue: FatigueLevel = "normal";
+  if (isHigh || (isStiff && isExtLoad)) fatigue = "high";
+  else if (isStiff || isExtLoad) fatigue = "elevated";
+
+  return {
+    fatigue,
+    externalLoad: isExtLoad,
+    pain: isPain,
+    easy: isEasy,
+    rpeDrift: null,
+    matches,
+  };
+}
+
+/**
+ * Compute the largest cross-set RPE drift across every exercise on the day.
+ * Drift = (mean RPE of last two sets) − (mean RPE of first two sets).
+ * Requires ≥ 3 sets with RPE recorded on at least one exercise. Otherwise null.
+ *
+ * A steep positive drift (6 → 9 across a 5-set squat) means the athlete cooked
+ * himself. It's a stronger fatigue signal than any single-set RPE.
+ */
+export function detectRpeDrift(
+  day: import("../schemas").DayLog | null | undefined,
+): { drift: number; from: number; to: number; exerciseKey: string } | null {
+  if (!day) return null;
+  let best: { drift: number; from: number; to: number; exerciseKey: string } | null = null;
+  for (const [key, ex] of Object.entries(day.exercises)) {
+    const sets = ex.sets ?? [];
+    const rpes = sets.map((s) => s.rpe).filter((r): r is number => typeof r === "number");
+    if (rpes.length < 3) continue;
+    const first = (rpes[0] + rpes[1]) / 2;
+    const last = (rpes[rpes.length - 1] + rpes[rpes.length - 2]) / 2;
+    const drift = last - first;
+    if (!best || drift > best.drift) {
+      best = {
+        drift,
+        from: Math.round(first * 10) / 10,
+        to: Math.round(last * 10) / 10,
+        exerciseKey: key,
+      };
+    }
+  }
+  return best;
+}
+
+/**
+ * Merge two signal sets. Used to fold day-note + exercise-notes + set-notes into
+ * one aggregate view for a given date.
+ */
+function merge(a: NoteSignals, b: NoteSignals): NoteSignals {
+  const rank = { normal: 0, elevated: 1, high: 2 } as const;
+  const fatigue = rank[a.fatigue] >= rank[b.fatigue] ? a.fatigue : b.fatigue;
+  const seen = new Set(a.matches);
+  const merged = [...a.matches];
+  for (const m of b.matches) if (!seen.has(m)) { merged.push(m); seen.add(m); }
+  // Keep the larger drift signal.
+  const rpeDrift =
+    a.rpeDrift == null ? b.rpeDrift : b.rpeDrift == null ? a.rpeDrift : Math.max(a.rpeDrift, b.rpeDrift);
+  return {
+    fatigue,
+    externalLoad: a.externalLoad || b.externalLoad,
+    pain: a.pain || b.pain,
+    easy: a.easy || b.easy,
+    rpeDrift,
+    matches: merged,
+  };
+}
+
+/**
+ * Aggregate signals from every text field on a day: day.notes + each exercise's
+ * `notes` + each set's `notes`. Returns the normal baseline for undefined days.
+ */
+export function daySignals(day: DayLog | null | undefined): NoteSignals {
+  const base: NoteSignals = {
+    fatigue: "normal",
+    externalLoad: false,
+    pain: false,
+    easy: false,
+    rpeDrift: null,
+    matches: [],
+  };
+  if (!day) return base;
+  let acc = merge(base, extractSignals(day.notes));
+  // Structured outside-load field from the morning check — treat it as a note.
+  if (day.symptoms?.outside_training) {
+    acc = merge(acc, extractSignals(day.symptoms.outside_training));
+    // Any content in the field itself flags external load, even if no keyword matched.
+    if (day.symptoms.outside_training.trim() && !acc.externalLoad) {
+      acc.externalLoad = true;
+      if (!acc.matches.includes("outside load")) acc.matches = [...acc.matches, "outside load"];
+    }
+  }
+  // Structured life_load 0-10 slider from the morning check.
+  const life = day.symptoms?.life_load ?? 0;
+  if (life >= 7) {
+    if (!acc.matches.includes(`life load ${life}/10`)) acc.matches = [...acc.matches, `life load ${life}/10`];
+    const rank = { normal: 0, elevated: 1, high: 2 } as const;
+    if (rank["high"] > rank[acc.fatigue]) acc.fatigue = "high";
+  } else if (life >= 4) {
+    if (!acc.matches.includes(`life load ${life}/10`)) acc.matches = [...acc.matches, `life load ${life}/10`];
+    const rank = { normal: 0, elevated: 1, high: 2 } as const;
+    if (rank["elevated"] > rank[acc.fatigue]) acc.fatigue = "elevated";
+  }
+  for (const ex of Object.values(day.exercises)) {
+    if (ex.notes) acc = merge(acc, extractSignals(ex.notes));
+    if (ex.sets) {
+      for (const st of ex.sets) if (st.notes) acc = merge(acc, extractSignals(st.notes));
+    }
+  }
+  // Fold in cross-set RPE drift — a stronger signal than any single-set RPE.
+  const drift = detectRpeDrift(day);
+  if (drift && drift.drift >= 1.5) {
+    const label = `RPE drift ${drift.from}→${drift.to}`;
+    if (!acc.matches.includes(label)) acc.matches = [...acc.matches, label];
+    acc.rpeDrift = drift.drift;
+    const rank = { normal: 0, elevated: 1, high: 2 } as const;
+    const next: FatigueLevel = drift.drift >= 2.5 ? "high" : "elevated";
+    if (rank[next] > rank[acc.fatigue]) acc.fatigue = next;
+  }
+  // Cardio load from logged runs. Each run contributes to a load score based
+  // on duration + intensity (or HR, when present). Rules:
+  //   - >45 min OR max HR >170 OR intensity "hard" → elevated
+  //   - >60 min at hard OR max HR >180 OR total >90 min combined → high
+  //   - Any run at all → externalLoad flag (so next-day proposal sees it)
+  let cardioMinutes = 0;
+  let cardioHardBucket = 0;
+  let cardioHrMax = 0;
+  for (const r of day.runs ?? []) {
+    const mins = r.minutes ?? (r.total_seconds ? r.total_seconds / 60 : 0);
+    cardioMinutes += mins;
+    if (r.intensity === "hard") cardioHardBucket += mins;
+    if (r.max_hr && r.max_hr > cardioHrMax) cardioHrMax = r.max_hr;
+    if (r.intensity === "hard") cardioHardBucket += 5; // small nudge even on short hard efforts
+  }
+  if (cardioMinutes > 0) {
+    if (!acc.externalLoad) {
+      acc.externalLoad = true;
+      acc.matches = [...acc.matches, `cardio ${Math.round(cardioMinutes)} min`];
+    } else {
+      acc.matches = [...acc.matches, `cardio ${Math.round(cardioMinutes)} min`];
+    }
+    const rank = { normal: 0, elevated: 1, high: 2 } as const;
+    const isHigh =
+      cardioMinutes >= 90 ||
+      cardioHardBucket >= 60 ||
+      cardioHrMax >= 180;
+    const isElevated =
+      cardioMinutes >= 45 ||
+      cardioHardBucket >= 15 ||
+      cardioHrMax >= 170;
+    const next: FatigueLevel = isHigh ? "high" : isElevated ? "elevated" : "normal";
+    if (rank[next] > rank[acc.fatigue]) acc.fatigue = next;
+    if (cardioHrMax >= 170) acc.matches = [...acc.matches, `max HR ${cardioHrMax}`];
+  }
+  return acc;
+}
+
+/**
+ * Given detected signals, propose a load multiplier for the *next* strength suggestion.
+ * The multiplier is a *proposal only* — the engine must not apply it without an explicit
+ * user Accept. Returns `null` when signals don't warrant a proposal.
+ */
+export function proposedLoadMultiplier(sig: NoteSignals): {
+  multiplier: number;
+  reason: string;
+} | null {
+  if (sig.pain) {
+    return {
+      multiplier: 0.85,
+      reason: "Pain mentioned — proposing a lighter session and prioritising rehab work.",
+    };
+  }
+  if (sig.fatigue === "high") {
+    const driftBit = sig.rpeDrift != null && sig.rpeDrift >= 2.5
+      ? " RPE climbed steeply across last session — real fatigue signal."
+      : "";
+    return {
+      multiplier: 0.9,
+      reason: `High fatigue / outside load detected.${driftBit} Take 10% off the top set today?`,
+    };
+  }
+  if (sig.fatigue === "elevated") {
+    const driftBit = sig.rpeDrift != null && sig.rpeDrift >= 1.5
+      ? " RPE drift across sets last session."
+      : " Fatigue signals in recent notes.";
+    return {
+      multiplier: 0.95,
+      reason: `${driftBit} Consider trimming 5% from the top set.`,
+    };
+  }
+  return null;
+}

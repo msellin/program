@@ -1,0 +1,2303 @@
+{
+  "schema_version": "1.0.0",
+  "generated": "2026-08-01",
+  "note": "Movement library. Stable across program revisions \u2014 program.json references these by id.",
+  "categories": [
+    "isometric",
+    "activation",
+    "strength",
+    "unilateral",
+    "trunk",
+    "mobility",
+    "primer",
+    "conditioning"
+  ],
+  "targets": [
+    "hip_flexor",
+    "adductor",
+    "glute_max",
+    "glute_med",
+    "hamstring",
+    "quad",
+    "trunk_anti_extension",
+    "trunk_anti_rotation",
+    "posterior_chain",
+    "general"
+  ],
+  "exercises": [
+    {
+      "id": "hip_flexor_iso_seated",
+      "name": "Seated hip flexor isometric, mid-range",
+      "name_et": "Puusapainutaja isomeetriline pinge istudes",
+      "category": "isometric",
+      "targets": [
+        "hip_flexor"
+      ],
+      "default": {
+        "sets": 5,
+        "hold_seconds": 20,
+        "per_side": true,
+        "intensity_pct": 60
+      },
+      "setup": "Sit on a chair, knee at 90 degrees.",
+      "cues": [
+        "Press the thigh up into your own hands at about 60 percent effort",
+        "Keep breathing throughout the hold",
+        "Loads the flexors in the range that does not provoke you"
+      ],
+      "avoid": "This is NOT a straight-leg raise and NOT a hanging movement.",
+      "progression": "hip_flexor_iso_long_lever",
+      "regression": null,
+      "video_search": "seated hip flexor isometric hold rehab",
+      "video_url": "https://www.youtube.com/watch?v=LOxkaeCcpNQ"
+    },
+    {
+      "id": "hip_flexor_iso_long_lever",
+      "name": "Long-lever hip flexor isometric",
+      "category": "isometric",
+      "targets": [
+        "hip_flexor"
+      ],
+      "default": {
+        "sets": 4,
+        "hold_seconds": 20,
+        "per_side": true,
+        "intensity_pct": 60
+      },
+      "setup": "Supine, leg extended to roughly 30 degrees of hip flexion, hold against a band or partner resistance.",
+      "cues": [
+        "Longer lever means more load \u2014 only progress here once the seated version is easy and symptom-free"
+      ],
+      "flags": [
+        "approaches_provocative:resisted_slr"
+      ],
+      "progression": "banded_march_standing",
+      "regression": "hip_flexor_iso_seated",
+      "video_search": "long lever hip flexor isometric",
+      "video_url": "https://www.youtube.com/watch?v=OHYY6OvCP2k"
+    },
+    {
+      "id": "banded_march_standing",
+      "name": "Standing banded march",
+      "category": "strength",
+      "targets": [
+        "hip_flexor"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 12,
+        "per_side": true
+      },
+      "cues": [
+        "Knee to roughly 90 degrees only",
+        "Controlled lowering \u2014 the lowering phase is where clicking was documented"
+      ],
+      "flags": [
+        "monitor:click"
+      ],
+      "regression": "hip_flexor_iso_long_lever",
+      "video_search": "standing banded march hip flexor",
+      "video_url": "https://www.youtube.com/watch?v=C7abjfzbpV4"
+    },
+    {
+      "id": "adductor_iso_bent",
+      "name": "Adductor isometric squeeze, knees bent",
+      "name_et": "Reie l\u00e4hendajate isomeetriline pigistus",
+      "category": "isometric",
+      "targets": [
+        "adductor"
+      ],
+      "default": {
+        "sets": 5,
+        "hold_seconds": 20,
+        "intensity_pct": 60
+      },
+      "setup": "Supine, ball or rolled towel between the knees, knees bent to 90 degrees.",
+      "progression": "adductor_iso_extended",
+      "video_search": "adductor squeeze test isometric rehab",
+      "video_url": "https://www.youtube.com/watch?v=tB6lWiuR7eE"
+    },
+    {
+      "id": "adductor_iso_extended",
+      "name": "Adductor isometric squeeze, knees at 45 degrees",
+      "category": "isometric",
+      "targets": [
+        "adductor"
+      ],
+      "default": {
+        "sets": 5,
+        "hold_seconds": 20,
+        "intensity_pct": 60
+      },
+      "cues": [
+        "Longer lever, more load"
+      ],
+      "progression": "copenhagen_short",
+      "regression": "adductor_iso_bent",
+      "video_search": "long lever adductor squeeze",
+      "video_url": "https://www.youtube.com/watch?v=PVi_DHNu9Fs"
+    },
+    {
+      "id": "copenhagen_short",
+      "name": "Copenhagen plank, short lever",
+      "category": "strength",
+      "targets": [
+        "adductor",
+        "trunk_anti_rotation"
+      ],
+      "default": {
+        "sets": 3,
+        "hold_seconds": 15,
+        "per_side": true
+      },
+      "cues": [
+        "Knee on the bench, not the ankle",
+        "Long-lever version is a later goal, not a starting point"
+      ],
+      "prerequisite": "adductor_iso_extended",
+      "flags": [
+        "loads_adduction"
+      ],
+      "regression": "adductor_iso_extended",
+      "video_search": "short lever copenhagen plank",
+      "video_url": "https://www.youtube.com/watch?v=nhGK-DxiGBE"
+    },
+    {
+      "id": "glute_bridge",
+      "name": "Glute bridge",
+      "name_et": "Vaagnat\u00f5ste",
+      "category": "activation",
+      "targets": [
+        "glute_max"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 10
+      },
+      "cues": [
+        "Ribs down",
+        "Do not arch the lower back to finish the rep \u2014 finish with the glute"
+      ],
+      "progression": "glute_bridge_single",
+      "video_search": "glute bridge form",
+      "video_url": "https://www.youtube.com/watch?v=tl6xvm4-Qk0"
+    },
+    {
+      "id": "glute_bridge_single",
+      "name": "Single-leg glute bridge",
+      "category": "activation",
+      "targets": [
+        "glute_max"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 10,
+        "per_side": true,
+        "extra_set_side": "left"
+      },
+      "cues": [
+        "Left side first, one extra set on the left \u2014 documented left gluteus maximus deficit"
+      ],
+      "progression": "hip_thrust_barbell",
+      "regression": "glute_bridge",
+      "video_search": "single leg glute bridge",
+      "video_url": "https://www.youtube.com/watch?v=t5D6ktqa_mY"
+    },
+    {
+      "id": "hip_thrust_barbell",
+      "name": "Barbell hip thrust",
+      "category": "strength",
+      "targets": [
+        "glute_max"
+      ],
+      "default": {
+        "sets": 4,
+        "reps": 8,
+        "progression_model": "linear_load"
+      },
+      "cues": [
+        "Chin tucked",
+        "Ribs down",
+        "Finish with the glute, not the lower back"
+      ],
+      "rationale": "Best heavy glute-max builder with essentially zero spinal shear and no lumbar extension moment. The anchor lift \u2014 progress it aggressively.",
+      "regression": "glute_bridge_single",
+      "video_search": "barbell hip thrust technique",
+      "video_url": "https://www.youtube.com/watch?v=lBZZFJ6Z3Dg"
+    },
+    {
+      "id": "dead_bug",
+      "name": "Dead bug, slow",
+      "category": "trunk",
+      "targets": [
+        "trunk_anti_extension"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 6,
+        "per_side": true,
+        "tempo": "slow"
+      },
+      "cues": [
+        "Lower back stays flat against the floor throughout",
+        "If it lifts, shorten the range"
+      ],
+      "rationale": "Anti-extension trunk work \u2014 the single most relevant home exercise for the Bertolotti segment.",
+      "video_search": "dead bug exercise form",
+      "video_url": "https://www.youtube.com/watch?v=GbSC02oU3To"
+    },
+    {
+      "id": "pallof_press",
+      "name": "Pallof press",
+      "category": "trunk",
+      "targets": [
+        "trunk_anti_rotation"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 10,
+        "per_side": true
+      },
+      "rationale": "The transitional segment dislikes rotation under load. Builds tolerance for it.",
+      "video_search": "pallof press anti rotation",
+      "video_url": "https://www.youtube.com/watch?v=dBAmQ9bx3JA"
+    },
+    {
+      "id": "split_squat_rfe",
+      "name": "Rear-foot-elevated split squat",
+      "category": "unilateral",
+      "targets": [
+        "quad",
+        "glute_max"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 8,
+        "per_side": true,
+        "extra_set_side": "left"
+      },
+      "cues": [
+        "Dumbbells at your sides, or front-racked",
+        "Front foot far enough forward that the shin stays fairly vertical",
+        "Knee tracks over the toe \u2014 knee caving inward is FADIR under load"
+      ],
+      "flags": [
+        "monitor:knee_valgus"
+      ],
+      "video_search": "rear foot elevated split squat setup",
+      "video_url": "https://www.youtube.com/watch?v=V8DlQ7EgYbc"
+    },
+    {
+      "id": "sled_push",
+      "name": "Heavy sled push or drag",
+      "category": "strength",
+      "targets": [
+        "quad",
+        "glute_max",
+        "general"
+      ],
+      "default": {
+        "sets": 6,
+        "distance_m": 20
+      },
+      "rationale": "Near-zero spinal load, high leg force, transfers directly to running mechanics. If you only did hip thrusts and heavy sled you would still get most of the result.",
+      "video_search": "heavy sled push technique",
+      "video_url": "https://www.youtube.com/watch?v=3KWK7SIdPz4"
+    },
+    {
+      "id": "nordic_curl",
+      "name": "Nordic curl (or GHR, or slider leg curl)",
+      "category": "strength",
+      "targets": [
+        "hamstring",
+        "posterior_chain"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 5,
+        "tempo": "eccentric"
+      },
+      "rationale": "Posterior chain strength with no spinal load at all.",
+      "video_search": "nordic hamstring curl progression",
+      "video_url": "https://www.youtube.com/watch?v=_e9vFU9-tkc"
+    },
+    {
+      "id": "front_squat",
+      "name": "Front squat",
+      "category": "strength",
+      "targets": [
+        "quad",
+        "trunk_anti_extension"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 5,
+        "intensity": "moderate"
+      },
+      "cues": [
+        "More upright torso, smaller lumbar extension moment than back squat",
+        "Knees out",
+        "Use lifting straps in the rack if the standard front-rack aggravates the right shoulder"
+      ],
+      "flags": [
+        "shoulder_load:front_rack"
+      ],
+      "video_search": "front squat technique straps",
+      "video_url": "https://www.youtube.com/watch?v=I5BkhSnHhbs"
+    },
+    {
+      "id": "back_squat_highbar",
+      "name": "High-bar back squat",
+      "category": "strength",
+      "targets": [
+        "quad",
+        "glute_max"
+      ],
+      "default": {
+        "sets": 5,
+        "reps": 5,
+        "progression_model": "tm_based"
+      },
+      "cues": [
+        "Bar sits on the traps, not the rear delts \u2014 low-bar rack position is OFF the menu due to shoulder retroversion",
+        "Upright torso, knees out, controlled descent",
+        "If the grip aggravates the right shoulder, take a wider grip or use lifting straps around the bar"
+      ],
+      "rationale": "Primary working squat variant. High-bar produces a more vertical torso than low-bar and a smaller lumbar extension moment \u2014 safer over a Bertolotti segment. It's also the version this user can rack given the posterior shoulder pathology.",
+      "flags": [
+        "historical_provocateur",
+        "shoulder_load:grip"
+      ],
+      "video_search": "high bar back squat technique",
+      "video_url": "https://www.youtube.com/watch?v=7v_V6xiA_AA"
+    },
+    {
+      "id": "back_squat_ssb",
+      "name": "Safety squat bar back squat",
+      "category": "strength",
+      "targets": [
+        "quad",
+        "glute_max",
+        "trunk_anti_extension"
+      ],
+      "default": {
+        "sets": 5,
+        "reps": 5,
+        "progression_model": "tm_based"
+      },
+      "cues": [
+        "SSB handles in front \u2014 no shoulder external rotation required to rack the bar",
+        "The camber pushes you forward, so brace hard and stay upright"
+      ],
+      "rationale": "The friendliest heavy squat variant for this shoulder. If the box has one, prefer SSB for the main squat slot until the shoulder is a solved problem.",
+      "video_search": "safety squat bar squat technique",
+      "video_url": "https://www.youtube.com/watch?v=B3LpibMixF0"
+    },
+    {
+      "id": "bulgarian_split_squat_db",
+      "name": "Bulgarian split squat, dumbbells",
+      "category": "unilateral",
+      "targets": [
+        "quad",
+        "glute_max",
+        "adductor"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 8,
+        "per_side": true,
+        "extra_set_side": "left"
+      },
+      "cues": [
+        "Dumbbells at your sides",
+        "Front shin close to vertical \u2014 knee-forward drive loads the labrum",
+        "Left side gets the extra set \u2014 documented left glute-max and left hip-flexor deficit"
+      ],
+      "prerequisite": "split_squat_rfe",
+      "flags": [
+        "monitor:knee_valgus"
+      ],
+      "rationale": "Heavier progression of the RFE split squat. Unilateral loading is the primary tool for closing the left-right strength gap the record documents.",
+      "video_search": "bulgarian split squat dumbbell",
+      "video_url": "https://www.youtube.com/watch?v=Ozv-OPuVw6A"
+    },
+    {
+      "id": "single_leg_rdl",
+      "name": "Single-leg Romanian deadlift",
+      "category": "unilateral",
+      "targets": [
+        "hamstring",
+        "glute_max",
+        "posterior_chain"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 8,
+        "per_side": true,
+        "extra_set_side": "left"
+      },
+      "cues": [
+        "Kettlebell or dumbbell in the opposite hand to the working leg",
+        "Hinge at the hip, keep the spine long, do not round the low back",
+        "Left side gets the extra set"
+      ],
+      "rationale": "Unilateral posterior-chain loading, teaches hip hinge with a stable spine, and closes the left glute-max gap. Non-negotiable in every training week.",
+      "video_search": "single leg romanian deadlift form",
+      "video_url": "https://www.youtube.com/watch?v=Zfr6wizR8rs"
+    },
+    {
+      "id": "block_pull_midshin",
+      "name": "Block pull, mid-shin height",
+      "category": "strength",
+      "targets": [
+        "posterior_chain",
+        "glute_max"
+      ],
+      "default": {
+        "sets": 5,
+        "reps": 5,
+        "progression_model": "tm_based",
+        "setup_note": "bar starts at mid-shin, ~10-15 cm elevated"
+      },
+      "cues": [
+        "Shortens the range of motion, reduces the flexion demand at the pull start",
+        "Neutral spine, brace before you lift, drive with the legs",
+        "This is the primary heavy pull until conventional deadlift is symptom-free"
+      ],
+      "flags": [
+        "historical_provocateur:deadlift"
+      ],
+      "progression": "deadlift_conventional",
+      "regression": "trap_bar_dl_blocks",
+      "video_search": "block pull deadlift technique",
+      "video_url": "https://www.youtube.com/watch?v=jfSxbT-65ow"
+    },
+    {
+      "id": "deadlift_conventional",
+      "name": "Conventional deadlift from the floor",
+      "category": "strength",
+      "targets": [
+        "posterior_chain",
+        "glute_max"
+      ],
+      "default": {
+        "sets": 5,
+        "reps": 3,
+        "progression_model": "tm_based"
+      },
+      "cues": [
+        "Only if the block pull has been symptom-free at ~150 kg for at least 4 weeks",
+        "Brace hard, neutral spine, lats engaged, drive the floor away",
+        "Any left SI or groin symptom in the next-morning check means back to block pulls"
+      ],
+      "phase_gated": true,
+      "flags": [
+        "historical_provocateur:primary",
+        "reintroduction_step:final"
+      ],
+      "regression": "block_pull_midshin",
+      "video_search": "conventional deadlift technique",
+      "video_url": "https://www.youtube.com/watch?v=Y1IGeJEXpF4"
+    },
+    {
+      "id": "air_squat_daily",
+      "name": "Daily air-squat skill practice",
+      "category": "primer",
+      "targets": [
+        "general",
+        "hip_flexor"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 10,
+        "duration_min": 5
+      },
+      "cues": [
+        "Bodyweight or empty bar only",
+        "Slow tempo, full depth without pain, focus on knees tracking over toes",
+        "This is technique work and joint nutrition, NOT stimulus \u2014 do not chase fatigue"
+      ],
+      "rationale": "Frequency practice. The research signal on daily squatting is that it produces better technique and consistency, not more hypertrophy. Treat it as skill practice.",
+      "video_search": "air squat form",
+      "video_url": "https://www.youtube.com/watch?v=rMvwVtlqjTE"
+    },
+    {
+      "id": "goblet_squat",
+      "name": "Goblet squat",
+      "category": "strength",
+      "targets": [
+        "quad",
+        "trunk_anti_extension"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 8
+      },
+      "cues": [
+        "Dumbbell or kettlebell held at the chest",
+        "Full depth without knees caving"
+      ],
+      "video_search": "goblet squat form",
+      "video_url": "https://www.youtube.com/watch?v=Uli12Etq4-U"
+    },
+    {
+      "id": "suitcase_carry",
+      "name": "Suitcase carry",
+      "category": "trunk",
+      "targets": [
+        "trunk_anti_rotation",
+        "glute_med",
+        "general"
+      ],
+      "default": {
+        "sets": 3,
+        "distance_m": 20,
+        "per_side": true
+      },
+      "cues": [
+        "Heavy weight in one hand only",
+        "Stay tall, ribs down, do not lean toward the load"
+      ],
+      "rationale": "Anti-lateral-flexion + anti-rotation loaded carry \u2014 direct fit for the left transitional segment.",
+      "video_search": "suitcase carry technique",
+      "video_url": "https://www.youtube.com/watch?v=y-hn_Ha1-RE"
+    },
+    {
+      "id": "farmer_carry",
+      "name": "Farmer's carry",
+      "category": "strength",
+      "targets": [
+        "trunk_anti_extension",
+        "general"
+      ],
+      "default": {
+        "sets": 3,
+        "distance_m": 30
+      },
+      "cues": [
+        "Heavy weight in both hands",
+        "Tall posture, controlled breathing, small fast steps"
+      ],
+      "video_search": "farmers carry technique",
+      "video_url": "https://www.youtube.com/watch?v=lLAw6fUccKA"
+    },
+    {
+      "id": "trap_bar_dl_blocks",
+      "name": "Trap-bar deadlift from blocks",
+      "category": "strength",
+      "targets": [
+        "posterior_chain",
+        "glute_max"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 5,
+        "setup_note": "bar approx 10 cm elevated"
+      },
+      "cues": [
+        "Neutral grip, less shear than a straight bar"
+      ],
+      "phase_gated": true,
+      "flags": [
+        "reintroduction_step:2"
+      ],
+      "progression": "trap_bar_dl_floor",
+      "video_search": "trap bar deadlift from blocks",
+      "video_url": "https://www.youtube.com/watch?v=TU2xZ7s4jus"
+    },
+    {
+      "id": "trap_bar_dl_floor",
+      "name": "Trap-bar deadlift from floor",
+      "category": "strength",
+      "targets": [
+        "posterior_chain"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 5
+      },
+      "phase_gated": true,
+      "flags": [
+        "reintroduction_step:3"
+      ],
+      "regression": "trap_bar_dl_blocks",
+      "video_search": "trap bar deadlift form",
+      "video_url": "https://www.youtube.com/watch?v=TU2xZ7s4jus"
+    },
+    {
+      "id": "back_squat",
+      "name": "Back squat, moderate",
+      "category": "strength",
+      "targets": [
+        "quad",
+        "glute_max"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 5,
+        "intensity": "moderate"
+      },
+      "phase_gated": true,
+      "flags": [
+        "reintroduction_step:4",
+        "historical_provocateur"
+      ],
+      "video_search": "back squat technique",
+      "video_url": "https://www.youtube.com/watch?v=7v_V6xiA_AA"
+    },
+    {
+      "id": "hip_flexor_stretch_kneeling",
+      "name": "Half-kneeling hip flexor stretch",
+      "category": "mobility",
+      "targets": [
+        "hip_flexor"
+      ],
+      "default": {
+        "sets": 2,
+        "hold_seconds": 30,
+        "per_side": true
+      },
+      "cues": [
+        "Posterior pelvic tilt FIRST",
+        "Squeeze the glute of the kneeling leg",
+        "Only lean until you feel a mild stretch"
+      ],
+      "warning": "You should feel it in the front of the thigh, not deep in the groin or the front of the hip joint. Deep anterior hip pinching means you are loading the labrum \u2014 back off immediately.",
+      "video_search": "half kneeling hip flexor stretch posterior pelvic tilt",
+      "video_url": "https://www.youtube.com/watch?v=HxlWP5BG2EU"
+    },
+    {
+      "id": "hip_switch_9090",
+      "name": "90/90 hip switches",
+      "category": "mobility",
+      "targets": [
+        "hip_flexor",
+        "general"
+      ],
+      "default": {
+        "reps": 10,
+        "tempo": "slow"
+      },
+      "cues": [
+        "Controlled, no bouncing",
+        "Stay inside the pain-free range",
+        "Skip if it pinches"
+      ],
+      "video_search": "90 90 hip switch mobility",
+      "video_url": "https://www.youtube.com/watch?v=wnFTIPhNySI"
+    },
+    {
+      "id": "a_march",
+      "name": "A-march",
+      "category": "primer",
+      "targets": [
+        "hip_flexor",
+        "general"
+      ],
+      "default": {
+        "distance_m": 20
+      },
+      "cues": [
+        "Knee to approximately 90 degrees only"
+      ],
+      "video_search": "a march running drill",
+      "video_url": "https://www.youtube.com/watch?v=c8il_EjiBWQ"
+    },
+    {
+      "id": "leg_swing_controlled",
+      "name": "Controlled leg swings, front to back",
+      "category": "primer",
+      "targets": [
+        "general"
+      ],
+      "default": {
+        "reps": 10,
+        "per_side": true
+      },
+      "cues": [
+        "Small range \u2014 this is a primer, not a stretch"
+      ],
+      "video_search": "controlled leg swings warm up",
+      "video_url": "https://www.youtube.com/watch?v=korxBhGzzJE"
+    },
+    {
+      "id": "hollow_hold",
+      "name": "Hollow hold",
+      "category": "trunk",
+      "targets": [
+        "trunk_anti_extension"
+      ],
+      "default": {
+        "sets": 3,
+        "hold_seconds": 20
+      },
+      "notes": "Substitute for GHD sit-ups and kipping toes-to-bar in class.",
+      "video_search": "hollow hold form",
+      "video_url": "https://www.youtube.com/watch?v=ytenqCqCIyU"
+    },
+    {
+      "id": "strict_knee_raise",
+      "name": "Strict knee raise to 90 degrees",
+      "category": "trunk",
+      "targets": [
+        "hip_flexor",
+        "trunk_anti_extension"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 8
+      },
+      "cues": [
+        "Stop at 90 degrees",
+        "Slow, controlled lowering"
+      ],
+      "flags": [
+        "monitor:click",
+        "shoulder_load"
+      ],
+      "notes": "Substitute for kipping toes-to-bar. Watch the shoulder as well as the hip.",
+      "video_search": "strict hanging knee raise",
+      "video_url": "https://www.youtube.com/watch?v=lW4onyuCkzA"
+    },
+    {
+      "id": "aerobic_z1_steady",
+      "name": "Zone 1/2 steady-state cardio (row / bike / ski-erg / run)",
+      "category": "conditioning",
+      "targets": [
+        "general"
+      ],
+      "default": {
+        "minutes": 45,
+        "intensity": "Z1-low Z2"
+      },
+      "setup": "Pick your intake modality. Warm up 5 min at very easy effort, then hold the target zone for the prescribed duration. Cool down 3-5 min.",
+      "cues": [
+        "Nose-breathing pace, or 'you could hold a conversation in full sentences'",
+        "Heart rate 60-70% max, RPE 3-4/10",
+        "Cadence steady, form clean \u2014 this is not a slog to grind out"
+      ],
+      "rationale": "Zone 1/2 steady-state builds mitochondrial density, capillary networks, and fat oxidation. It is the largest single driver of aerobic capacity across the whole 3-block arc. Boring and non-negotiable.",
+      "notes": "If you finish and want to keep going, you were probably at the right effort. If you finish gassed, you went too hard.",
+      "video_search": "zone 2 training pace how to",
+      "video_url": "https://www.youtube.com/watch?v=MDEqrjKMPFs"
+    },
+    {
+      "id": "aerobic_sustained_tempo",
+      "name": "Sustained tempo (row / bike / ski-erg / run)",
+      "category": "conditioning",
+      "targets": [
+        "general"
+      ],
+      "default": {
+        "minutes": 25,
+        "intensity": "high Z3 / sweetspot"
+      },
+      "setup": "Warm up 10-12 min including 2 x 30s pickups. Then hold a comfortably hard, sustainable pace for the prescribed block. Cool down 5 min.",
+      "cues": [
+        "83-88% of VDOT pace / 88-94% of FTP / 82-87% HRmax",
+        "'Comfortably hard' \u2014 you could talk in short sentences, not full paragraphs",
+        "If you can't finish the block at the same pace you started, back off next time"
+      ],
+      "rationale": "Sub-threshold sustained work drives mitochondrial biogenesis and lifts the lactate curve without generating the fatigue cost of true threshold intervals. Sits between Z2 and Norwegian 4x4 in the arc.",
+      "video_search": "tempo run sweetspot cycling how to",
+      "video_url": "https://www.youtube.com/watch?v=YR4C7cJ8sq4"
+    },
+    {
+      "id": "aerobic_threshold_cruise",
+      "name": "Threshold cruise intervals (row / bike / ski-erg / run)",
+      "category": "conditioning",
+      "targets": [
+        "general"
+      ],
+      "default": {
+        "sets": 3,
+        "minutes_per_set": 8,
+        "rest_minutes": 2,
+        "intensity": "lactate threshold"
+      },
+      "setup": "Warm up 12-15 min including 3 x 30s pickups. Hold threshold pace on each interval; walk / very easy spin between. Cool down 5-8 min.",
+      "cues": [
+        "85-90% HRmax, RPE 7/10",
+        "The pace you could hold for a hard hour",
+        "Even splits across sets \u2014 if set 3 is 10s slower than set 1, you started too hot"
+      ],
+      "rationale": "Longer sub-VO2max intervals raise lactate clearance capacity and central cardiac output without the recovery hit of 4x4. Complements the Norwegian block by widening the sub-threshold plateau.",
+      "video_search": "threshold intervals training",
+      "video_url": "https://www.youtube.com/watch?v=X8xUvKfmpsQ"
+    },
+    {
+      "id": "aerobic_norwegian_4x4",
+      "name": "Norwegian 4x4 intervals (row / bike / ski-erg / run)",
+      "category": "conditioning",
+      "targets": [
+        "general"
+      ],
+      "default": {
+        "sets": 4,
+        "minutes_per_set": 4,
+        "recovery_minutes": 3,
+        "intensity": "90-95% HRmax"
+      },
+      "setup": "Warm up 12-15 min including 3 x 30s pickups. 4 x 4 minutes at 90-95% HRmax with 3 minutes of active recovery (very easy) between. Cool down 8-10 min.",
+      "cues": [
+        "First minute is a lie \u2014 pace should feel comfortable, then progressively hurt",
+        "By interval 3-4, HR should sit in the top window from about minute 2 onwards",
+        "Active recovery is easy pedal / stride / stroke, not a full stop"
+      ],
+      "rationale": "The single best-studied VO2max protocol (Helgerud 2007). Time-in-zone at 90-95% HRmax drives stroke volume adaptation faster than any other interval structure of comparable duration.",
+      "notes": "This session costs more recovery than any other in Block 1. Never place it within 48 h of another hard session. If HR won't come up on set 1, you're too tired \u2014 swap to Z1 and try again in 48 h.",
+      "video_search": "norwegian 4x4 vo2max intervals",
+      "video_url": "https://www.youtube.com/watch?v=CQXjaLp15UI"
+    },
+    {
+      "id": "aerobic_easy_recovery",
+      "name": "Easy recovery spin / row / walk-jog",
+      "category": "conditioning",
+      "targets": [
+        "general"
+      ],
+      "default": {
+        "minutes": 30,
+        "intensity": "Z1 flush"
+      },
+      "setup": "Very easy effort on your chosen modality. Purpose is blood flow and recovery, not adaptation.",
+      "cues": [
+        "Nose-breathing throughout",
+        "HR under 65% max",
+        "If it feels like a workout, back off"
+      ],
+      "rationale": "Recovery sessions accelerate lactate clearance and glycogen replenishment vs total rest, without adding fatigue cost. Sits in the same category as the daily home block for legs \u2014 protective, not productive.",
+      "video_search": "recovery ride how easy",
+      "video_url": "https://www.youtube.com/watch?v=vHXY4vsK4gw"
+    },
+    {
+      "id": "aerobic_retest",
+      "name": "Engine retest session",
+      "category": "conditioning",
+      "targets": [
+        "general"
+      ],
+      "default": {
+        "minutes": 30
+      },
+      "setup": "Repeat whichever benchmarks you set at intake. In order: (1) resting HR \u2014 take before getting out of bed; (2) 5-min submax HR at the same easy pace you used at intake; (3) 500m row TT if you rowed at intake; (4) 1km run TT if you ran at intake. Space TTs by at least 15 min of easy spin.",
+      "cues": [
+        "Same modality, same equipment, same time of day if you can",
+        "Not every metric will apply \u2014 record what you can do",
+        "Rest HR + submax HR at fixed pace are always measurable and the most sensitive early indicators"
+      ],
+      "rationale": "Same protocol at start and end so the delta means something. Rest HR drop and submax HR drop at the same pace are the two cleanest indicators of aerobic adaptation in 8 weeks."
+    },
+    {
+      "id": "hs_wrist_ext_prep",
+      "name": "Wrist extension prep on floor",
+      "category": "mobility",
+      "targets": [
+        "general"
+      ],
+      "setup": "Kneel with palms flat on the floor, fingers spread, fingertips pointing toward knees. Gently rock weight forward onto the heels of the hands, then rotate to fingertips-out, then fingertips-in. 5 slow reps per direction.",
+      "capability_domains": [
+        "wrist_extension_mobility",
+        "wrist_load_tolerance"
+      ],
+      "level": 1,
+      "prerequisites": [],
+      "cues_external_focus": [
+        "Rock your weight over the floor like you're smoothing wet sand",
+        "Spread the fingers so each knuckle takes an even share of the floor"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "retest_metric": {
+        "name": "passive_wrist_extension_deg",
+        "unit": "degrees",
+        "better": "higher"
+      },
+      "default_dose": {
+        "sets": 2,
+        "reps": 10,
+        "duration_s": 60
+      },
+      "rest_between_s": 30,
+      "evidence_refs": [
+        "vidal_torija_2025",
+        "barlow_2020",
+        "wiesinger_2019"
+      ],
+      "video_search": "wrist prep handstand warmup"
+    },
+    {
+      "id": "hs_wrist_pushups_floor",
+      "name": "Wrist push-ups on floor",
+      "category": "strength",
+      "targets": [
+        "general"
+      ],
+      "setup": "Kneel, place backs of the hands on the floor with palms up, then push off the floor onto knuckles or palms. Slow tempo, 3s down, 1s up.",
+      "capability_domains": [
+        "wrist_load_tolerance"
+      ],
+      "level": 2,
+      "prerequisites": [
+        {
+          "capability_domain": "wrist_extension_mobility",
+          "minimum_level": 1,
+          "rationale": "load_tolerance",
+          "source": "literature",
+          "evidence_ref": "wiesinger_2019"
+        }
+      ],
+      "cues_external_focus": [
+        "Push the floor away smoothly, like closing a heavy drawer",
+        "Land quietly on the backs of the hands \u2014 no slap"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "retest_metric": {
+        "name": "wrist_pushups_reps_no_pain",
+        "unit": "reps",
+        "better": "higher"
+      },
+      "default_dose": {
+        "sets": 3,
+        "reps": 8,
+        "duration_s": 60
+      },
+      "rest_between_s": 60,
+      "evidence_refs": [
+        "wiesinger_2019",
+        "vidal_torija_2025"
+      ],
+      "video_search": "wrist push up handstand prep"
+    },
+    {
+      "id": "hs_finger_raises",
+      "name": "Finger raises (planche prep)",
+      "category": "activation",
+      "targets": [
+        "general"
+      ],
+      "setup": "On all fours or in a plank, press hands flat then lift the fingers off the floor one at a time (thumb \u2192 pinky) and back. Keep palm pressure through the heel of the hand.",
+      "capability_domains": [
+        "wrist_load_tolerance"
+      ],
+      "level": 1,
+      "prerequisites": [],
+      "cues_external_focus": [
+        "Peel each finger off the floor like it's stuck to paper",
+        "Keep the whole palm heel pressing down as you lift"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "retest_metric": {
+        "name": "finger_raise_control_score",
+        "unit": "0-10",
+        "better": "higher"
+      },
+      "default_dose": {
+        "sets": 2,
+        "reps": 10,
+        "duration_s": 60
+      },
+      "rest_between_s": 30,
+      "evidence_refs": [
+        "vidal_torija_2025"
+      ],
+      "video_search": "finger raises handstand wrist prep"
+    },
+    {
+      "id": "hs_fingertip_taps",
+      "name": "Fingertip taps against wall",
+      "category": "activation",
+      "targets": [
+        "general"
+      ],
+      "setup": "Stand facing a wall, arms extended, fingertips lightly on the wall. Tap fingers rhythmically on the wall while holding a soft plank shape through the torso.",
+      "capability_domains": [
+        "wrist_load_tolerance"
+      ],
+      "level": 2,
+      "prerequisites": [],
+      "cues_external_focus": [
+        "Drum the wall like a piano \u2014 light, even, no thump",
+        "Hold your ribs stacked over your hips as if a book balanced on your chest"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "retest_metric": {
+        "name": "fingertip_tap_seconds",
+        "unit": "seconds",
+        "better": "higher"
+      },
+      "default_dose": {
+        "sets": 3,
+        "reps": 1,
+        "duration_s": 30
+      },
+      "rest_between_s": 45,
+      "evidence_refs": [
+        "kerwin_trewartha_2001",
+        "blenkinsop_2017"
+      ],
+      "video_search": "fingertip tapping drill balance"
+    },
+    {
+      "id": "hs_hollow_body_hold",
+      "name": "Hollow body hold",
+      "category": "trunk",
+      "targets": [
+        "trunk_anti_extension"
+      ],
+      "setup": "Supine, low back pressed to the floor, arms overhead, legs straight and low. Hold the shape without letting the low back arch up.",
+      "capability_domains": [
+        "hollow_body_shape"
+      ],
+      "level": 1,
+      "prerequisites": [],
+      "cues_external_focus": [
+        "Press the small of your back into the floor like you're pinning a card there",
+        "Aim fingertips at one wall and toes at the opposite wall \u2014 long line"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "retest_metric": {
+        "name": "hollow_hold_seconds",
+        "unit": "seconds",
+        "better": "higher"
+      },
+      "default_dose": {
+        "sets": 3,
+        "reps": 1,
+        "duration_s": 30
+      },
+      "rest_between_s": 60,
+      "evidence_refs": [
+        "baker_2025_review"
+      ],
+      "video_search": "hollow body hold gymnastics"
+    },
+    {
+      "id": "hs_hollow_rock",
+      "name": "Hollow body rock",
+      "category": "trunk",
+      "targets": [
+        "trunk_anti_extension"
+      ],
+      "setup": "From a hollow hold, rock forward and back along the length of the spine without breaking the shape.",
+      "capability_domains": [
+        "hollow_body_shape"
+      ],
+      "level": 2,
+      "prerequisites": [
+        {
+          "capability_domain": "hollow_body_shape",
+          "minimum_level": 1,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Rock the whole shape like a rocking chair \u2014 no wobble in the middle",
+        "Keep the low back glued to the floor at the bottom of every rock"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "retest_metric": {
+        "name": "hollow_rocks_reps",
+        "unit": "reps",
+        "better": "higher"
+      },
+      "default_dose": {
+        "sets": 3,
+        "reps": 15,
+        "duration_s": 45
+      },
+      "rest_between_s": 45,
+      "evidence_refs": [
+        "baker_2025_review"
+      ],
+      "video_search": "hollow rock gymnastics"
+    },
+    {
+      "id": "hs_arch_hold",
+      "name": "Arch hold (superman)",
+      "category": "trunk",
+      "targets": [
+        "posterior_chain"
+      ],
+      "setup": "Prone, arms overhead, lift chest and legs off the floor, hold. Balances the hollow-body shape with posterior-chain engagement.",
+      "capability_domains": [
+        "hollow_body_shape"
+      ],
+      "level": 1,
+      "prerequisites": [],
+      "cues_external_focus": [
+        "Reach fingertips and toes toward opposite walls",
+        "Lift the ribs off the floor as if a string is pulling your sternum up"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "retest_metric": {
+        "name": "arch_hold_seconds",
+        "unit": "seconds",
+        "better": "higher"
+      },
+      "default_dose": {
+        "sets": 3,
+        "reps": 1,
+        "duration_s": 20
+      },
+      "rest_between_s": 45,
+      "evidence_refs": [
+        "baker_2025_review"
+      ],
+      "video_search": "arch hold superman gymnastics"
+    },
+    {
+      "id": "hs_incline_90_hold",
+      "name": "Kinoshita position 1 \u2014 90 degree incline hold",
+      "category": "skill",
+      "targets": [
+        "general"
+      ],
+      "setup": "Hands on the floor, feet elevated on a low box or step so the hip is at roughly 90 degrees flexion. Support the inverted upper body with straight arms. Small easy dose while shoulder overhead endurance is built.",
+      "capability_domains": [
+        "shoulder_overhead_endurance",
+        "wrist_load_tolerance",
+        "handstand_hold_static"
+      ],
+      "level": 1,
+      "prerequisites": [
+        {
+          "capability_domain": "wrist_load_tolerance",
+          "minimum_level": 1,
+          "rationale": "load_tolerance",
+          "source": "literature",
+          "evidence_ref": "wiesinger_2019"
+        }
+      ],
+      "cues_external_focus": [
+        "Push the floor away so your shoulders sit high above the hands",
+        "Look at a spot on the floor between your hands, not forward"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "retest_metric": {
+        "name": "incline_90_hold_seconds",
+        "unit": "seconds",
+        "better": "higher"
+      },
+      "default_dose": {
+        "sets": 3,
+        "reps": 1,
+        "duration_s": 20
+      },
+      "rest_between_s": 60,
+      "evidence_refs": [
+        "kinoshita_2022",
+        "sadowski_2021"
+      ],
+      "video_search": "pike handstand hold feet elevated"
+    },
+    {
+      "id": "hs_incline_135_hold",
+      "name": "Kinoshita position 2 \u2014 135 degree incline hold",
+      "category": "skill",
+      "targets": [
+        "general"
+      ],
+      "setup": "Hands on the floor, feet elevated higher (e.g. bench, plyo box) so hip angle opens to roughly 135 degrees. Straighter line, more shoulder overhead demand than the 90 position.",
+      "capability_domains": [
+        "shoulder_overhead_endurance",
+        "wrist_load_tolerance",
+        "handstand_hold_static"
+      ],
+      "level": 2,
+      "prerequisites": [
+        {
+          "capability_domain": "shoulder_overhead_endurance",
+          "minimum_level": 1,
+          "rationale": "load_tolerance",
+          "source": "literature",
+          "evidence_ref": "ludewig_cook_2000"
+        },
+        {
+          "capability_domain": "wrist_load_tolerance",
+          "minimum_level": 2,
+          "rationale": "load_tolerance",
+          "source": "literature",
+          "evidence_ref": "wiesinger_2019"
+        }
+      ],
+      "cues_external_focus": [
+        "Drive the box away from your hands, not your hands away from the box",
+        "Point the crown of your head at the wall opposite you"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "retest_metric": {
+        "name": "incline_135_hold_seconds",
+        "unit": "seconds",
+        "better": "higher"
+      },
+      "default_dose": {
+        "sets": 3,
+        "reps": 1,
+        "duration_s": 20
+      },
+      "rest_between_s": 60,
+      "evidence_refs": [
+        "kinoshita_2022",
+        "sadowski_2021",
+        "ludewig_cook_2000"
+      ],
+      "video_search": "elevated pike push handstand progression"
+    },
+    {
+      "id": "hs_elbow_stand_straddle_l",
+      "name": "Kinoshita position 3 \u2014 elbow stand / straddle L stand",
+      "category": "skill",
+      "targets": [
+        "general"
+      ],
+      "setup": "From the floor, invert into a straddle-L stand (legs wide, hips over hands) or an elbow stand. Both develop the near-vertical shoulder position without full overhead demand.",
+      "capability_domains": [
+        "shoulder_overhead_endurance",
+        "handstand_hold_static",
+        "hollow_body_shape"
+      ],
+      "level": 3,
+      "prerequisites": [
+        {
+          "capability_domain": "shoulder_overhead_endurance",
+          "minimum_level": 2,
+          "rationale": "load_tolerance",
+          "source": "literature",
+          "evidence_ref": "sadowski_2021"
+        },
+        {
+          "capability_domain": "hollow_body_shape",
+          "minimum_level": 2,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Push the floor down toward China \u2014 long arms, high shoulders",
+        "Spread your feet toward opposite corners of the ceiling"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "retest_metric": {
+        "name": "straddle_l_hold_seconds",
+        "unit": "seconds",
+        "better": "higher"
+      },
+      "default_dose": {
+        "sets": 3,
+        "reps": 1,
+        "duration_s": 15
+      },
+      "rest_between_s": 90,
+      "evidence_refs": [
+        "kinoshita_2022"
+      ],
+      "video_search": "straddle L stand handstand progression"
+    },
+    {
+      "id": "hs_wall_walk",
+      "name": "Wall walk",
+      "category": "skill",
+      "targets": [
+        "general"
+      ],
+      "setup": "Start prone with feet against a wall. Walk feet up the wall while walking hands closer to the wall until chest is near the wall. Reverse to return.",
+      "capability_domains": [
+        "handstand_hold_static",
+        "shoulder_overhead_endurance",
+        "wrist_load_tolerance"
+      ],
+      "level": 1,
+      "prerequisites": [
+        {
+          "capability_domain": "wrist_load_tolerance",
+          "minimum_level": 1,
+          "rationale": "load_tolerance",
+          "source": "literature",
+          "evidence_ref": "wiesinger_2019"
+        }
+      ],
+      "cues_external_focus": [
+        "Walk your hands toward the wall, not your feet up the wall",
+        "Point your toes at the ceiling at the top"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "retest_metric": {
+        "name": "wall_walk_distance_from_wall_cm",
+        "unit": "cm",
+        "better": "lower"
+      },
+      "default_dose": {
+        "sets": 3,
+        "reps": 3,
+        "duration_s": 60
+      },
+      "rest_between_s": 90,
+      "evidence_refs": [
+        "kinoshita_2022",
+        "wiesinger_2019"
+      ],
+      "video_search": "wall walk handstand progression"
+    },
+    {
+      "id": "hs_wall_hs_hold_chest",
+      "name": "Wall handstand hold \u2014 chest to wall",
+      "category": "skill",
+      "targets": [
+        "general"
+      ],
+      "setup": "Kick or wall-walk into a handstand facing the wall (chest and thighs lightly on wall). Hold the plumb-line shape.",
+      "capability_domains": [
+        "handstand_hold_static",
+        "shoulder_overhead_endurance",
+        "hollow_body_shape",
+        "wrist_load_tolerance"
+      ],
+      "level": 2,
+      "prerequisites": [
+        {
+          "capability_domain": "shoulder_overhead_endurance",
+          "minimum_level": 2,
+          "rationale": "load_tolerance",
+          "source": "literature",
+          "evidence_ref": "sadowski_2021"
+        },
+        {
+          "capability_domain": "hollow_body_shape",
+          "minimum_level": 2,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        },
+        {
+          "capability_domain": "wrist_load_tolerance",
+          "minimum_level": 2,
+          "rationale": "load_tolerance",
+          "source": "literature",
+          "evidence_ref": "wiesinger_2019"
+        }
+      ],
+      "cues_external_focus": [
+        "Push the floor away \u2014 imagine growing an inch taller against the wall",
+        "Point toes at the ceiling and squeeze a coin between the heels"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "retest_metric": {
+        "name": "wall_chest_hold_seconds",
+        "unit": "seconds",
+        "better": "higher"
+      },
+      "default_dose": {
+        "sets": 3,
+        "reps": 1,
+        "duration_s": 30
+      },
+      "rest_between_s": 90,
+      "evidence_refs": [
+        "kinoshita_2022",
+        "sadowski_2021"
+      ],
+      "video_search": "chest to wall handstand hold"
+    },
+    {
+      "id": "hs_wall_hs_hold_belly",
+      "name": "Wall handstand hold \u2014 belly to wall (kick-up)",
+      "category": "skill",
+      "targets": [
+        "general"
+      ],
+      "setup": "Kick up to a handstand back-to-wall, heels lightly touching wall. Wrist strategy dominates balance here (Kerwin & Trewartha 2001) \u2014 press fingers or heels of palms to adjust.",
+      "capability_domains": [
+        "handstand_hold_static",
+        "shoulder_overhead_endurance",
+        "wrist_load_tolerance"
+      ],
+      "level": 2,
+      "prerequisites": [
+        {
+          "capability_domain": "handstand_hold_static",
+          "minimum_level": 2,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Press fingertips into the floor when you feel the toes drift away from the wall",
+        "Point toes to the ceiling \u2014 long line from wrists to heels"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "retest_metric": {
+        "name": "wall_belly_hold_seconds",
+        "unit": "seconds",
+        "better": "higher"
+      },
+      "default_dose": {
+        "sets": 4,
+        "reps": 1,
+        "duration_s": 30
+      },
+      "rest_between_s": 90,
+      "evidence_refs": [
+        "kerwin_trewartha_2001",
+        "blenkinsop_2017",
+        "sobera_2019"
+      ],
+      "video_search": "back to wall handstand kick up hold"
+    },
+    {
+      "id": "hs_wall_supported_shrugs",
+      "name": "Wall-supported handstand shrugs",
+      "category": "strength",
+      "targets": [
+        "general"
+      ],
+      "setup": "Chest-to-wall handstand. Shrug shoulders up (protract / elevate) then let them settle. Slow tempo. Builds serratus + trap endurance in the overhead position.",
+      "capability_domains": [
+        "shoulder_overhead_endurance",
+        "handstand_hold_static"
+      ],
+      "level": 2,
+      "prerequisites": [
+        {
+          "capability_domain": "handstand_hold_static",
+          "minimum_level": 2,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Push the floor away hard, then let it come 2cm closer, then push again",
+        "Grow tall each rep as if reaching for a shelf above"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "retest_metric": {
+        "name": "wall_shrug_reps",
+        "unit": "reps",
+        "better": "higher"
+      },
+      "default_dose": {
+        "sets": 3,
+        "reps": 8,
+        "duration_s": 60
+      },
+      "rest_between_s": 90,
+      "evidence_refs": [
+        "ludewig_cook_2000",
+        "reinold_2007",
+        "sadowski_2021"
+      ],
+      "video_search": "handstand shoulder shrug wall"
+    },
+    {
+      "id": "hs_wall_shoulder_taps",
+      "name": "Wall handstand shoulder taps",
+      "category": "skill",
+      "targets": [
+        "general"
+      ],
+      "setup": "Chest-to-wall handstand. Slowly shift weight onto one hand and tap the opposite shoulder with the free hand. Alternate.",
+      "capability_domains": [
+        "handstand_hold_static",
+        "handstand_walk_dynamic",
+        "wrist_load_tolerance"
+      ],
+      "level": 3,
+      "prerequisites": [
+        {
+          "capability_domain": "handstand_hold_static",
+          "minimum_level": 3,
+          "rationale": "coordination_prerequisite",
+          "source": "literature",
+          "evidence_ref": "kinoshita_2022"
+        }
+      ],
+      "cues_external_focus": [
+        "Shift over the loaded hand as slowly as pouring honey",
+        "Tap and place softly \u2014 no rush back to the floor"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "retest_metric": {
+        "name": "wall_shoulder_taps_reps",
+        "unit": "reps",
+        "better": "higher"
+      },
+      "default_dose": {
+        "sets": 3,
+        "reps": 6,
+        "duration_s": 45
+      },
+      "rest_between_s": 90,
+      "evidence_refs": [
+        "kinoshita_2022",
+        "ferrari_2021"
+      ],
+      "video_search": "handstand shoulder taps wall"
+    },
+    {
+      "id": "hs_kickup_practice",
+      "name": "Freestanding kick-up practice",
+      "category": "skill",
+      "targets": [
+        "general"
+      ],
+      "setup": "Away from any wall. Kick up to what should be a handstand and try to hold the top for a beat before coming down. Use a spotter or a soft floor. Focus on kicking to balance, not past it.",
+      "capability_domains": [
+        "handstand_hold_static",
+        "handstand_walk_dynamic"
+      ],
+      "level": 3,
+      "prerequisites": [
+        {
+          "capability_domain": "handstand_hold_static",
+          "minimum_level": 3,
+          "rationale": "injury_mitigation",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Aim the kick to reach the top and stop, not fly past",
+        "Send the crown of your head toward the wall in front of you as you kick"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "retest_metric": {
+        "name": "kickup_to_balance_attempts_percent",
+        "unit": "percent",
+        "better": "higher"
+      },
+      "default_dose": {
+        "sets": 5,
+        "reps": 3,
+        "duration_s": 60
+      },
+      "rest_between_s": 60,
+      "evidence_refs": [
+        "kinoshita_2022",
+        "chiviacowsky_wulf_2002"
+      ],
+      "video_search": "handstand kick up practice"
+    },
+    {
+      "id": "hs_freestand_attempt",
+      "name": "Freestanding hold attempt",
+      "category": "skill",
+      "targets": [
+        "general"
+      ],
+      "setup": "Kick up and try to hold freestanding as long as possible. Log seconds each attempt.",
+      "capability_domains": [
+        "handstand_hold_static"
+      ],
+      "level": 3,
+      "prerequisites": [
+        {
+          "capability_domain": "handstand_hold_static",
+          "minimum_level": 3,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Fingertips press small circles on the floor to steer",
+        "Aim toes at one fixed spot on the ceiling"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "retest_metric": {
+        "name": "freestand_hold_seconds",
+        "unit": "seconds",
+        "better": "higher"
+      },
+      "default_dose": {
+        "sets": 5,
+        "reps": 1,
+        "duration_s": 30
+      },
+      "rest_between_s": 90,
+      "evidence_refs": [
+        "kerwin_trewartha_2001",
+        "blenkinsop_2017",
+        "sobera_2019",
+        "chiviacowsky_wulf_2002"
+      ],
+      "video_search": "freestanding handstand hold beginner"
+    },
+    {
+      "id": "hs_tuck_freestand",
+      "name": "Tuck freestand hold",
+      "category": "skill",
+      "targets": [
+        "general"
+      ],
+      "setup": "Freestanding with knees tucked to chest. Reduces the moment of inertia so balance is easier \u2014 a bridging step for early freestanders.",
+      "capability_domains": [
+        "handstand_hold_static"
+      ],
+      "level": 3,
+      "prerequisites": [
+        {
+          "capability_domain": "handstand_hold_static",
+          "minimum_level": 2,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Squeeze knees to chest like hugging a ball",
+        "Press fingertips into the floor to hunt the balance point"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "retest_metric": {
+        "name": "tuck_freestand_seconds",
+        "unit": "seconds",
+        "better": "higher"
+      },
+      "default_dose": {
+        "sets": 5,
+        "reps": 1,
+        "duration_s": 20
+      },
+      "rest_between_s": 90,
+      "evidence_refs": [
+        "kinoshita_2022",
+        "sobera_2019"
+      ],
+      "video_search": "tuck freestanding handstand"
+    },
+    {
+      "id": "hs_single_step_attempt",
+      "name": "Single-step walk attempts",
+      "category": "skill",
+      "targets": [
+        "general"
+      ],
+      "setup": "Freestand and deliberately shift weight onto one hand, take one step, replace the other. Even one clean step counts as a rep.",
+      "capability_domains": [
+        "handstand_walk_dynamic",
+        "handstand_hold_static"
+      ],
+      "level": 3,
+      "prerequisites": [
+        {
+          "capability_domain": "handstand_hold_static",
+          "minimum_level": 3,
+          "rationale": "coordination_prerequisite",
+          "source": "literature",
+          "evidence_ref": "ferrari_2021"
+        }
+      ],
+      "cues_external_focus": [
+        "Lean the shape toward the far wall so the step happens on its own",
+        "Land the moving hand quietly, no slap"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "retest_metric": {
+        "name": "clean_single_step_percent",
+        "unit": "percent",
+        "better": "higher"
+      },
+      "default_dose": {
+        "sets": 6,
+        "reps": 3,
+        "duration_s": 45
+      },
+      "rest_between_s": 60,
+      "evidence_refs": [
+        "ferrari_2021",
+        "kinoshita_2022"
+      ],
+      "video_search": "handstand walk first step drill"
+    },
+    {
+      "id": "hs_walk_shuttle_2_3",
+      "name": "2-3 step shuttle walks",
+      "category": "skill",
+      "targets": [
+        "general"
+      ],
+      "setup": "Freestand, walk 2-3 steps, come down, reset. Repeat. Short shuttles beat one long attempt (Shea & Morgan 1979 CI + spacing).",
+      "capability_domains": [
+        "handstand_walk_dynamic",
+        "handstand_hold_static"
+      ],
+      "level": 4,
+      "prerequisites": [
+        {
+          "capability_domain": "handstand_walk_dynamic",
+          "minimum_level": 3,
+          "rationale": "coordination_prerequisite",
+          "source": "literature",
+          "evidence_ref": "shea_morgan_1979"
+        }
+      ],
+      "cues_external_focus": [
+        "Send the shape toward the far end of the room",
+        "Break the walk into small quiet steps, not big lunges"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "retest_metric": {
+        "name": "shuttle_steps_avg",
+        "unit": "steps",
+        "better": "higher"
+      },
+      "default_dose": {
+        "sets": 6,
+        "reps": 1,
+        "duration_s": 30
+      },
+      "rest_between_s": 60,
+      "evidence_refs": [
+        "shea_morgan_1979",
+        "ferrari_2021",
+        "kinoshita_2022"
+      ],
+      "video_search": "handstand walk short shuttle"
+    },
+    {
+      "id": "hs_walk_continuous_line",
+      "name": "Continuous walk along a line",
+      "category": "skill",
+      "targets": [
+        "general"
+      ],
+      "setup": "Mark a straight line on the floor with tape. Kick up and walk as far as possible along the line before coming down. Log distance.",
+      "capability_domains": [
+        "handstand_walk_dynamic"
+      ],
+      "level": 4,
+      "prerequisites": [
+        {
+          "capability_domain": "handstand_walk_dynamic",
+          "minimum_level": 3,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Track the line with your eyes as it passes between your hands",
+        "Lean the shape toward the far end and let steps chase"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "retest_metric": {
+        "name": "walk_distance_m",
+        "unit": "m",
+        "better": "higher"
+      },
+      "default_dose": {
+        "sets": 5,
+        "reps": 1,
+        "duration_s": 30
+      },
+      "rest_between_s": 90,
+      "evidence_refs": [
+        "ferrari_2021",
+        "sci_reports_2026_handstand_shoulder"
+      ],
+      "video_search": "handstand walk on line"
+    },
+    {
+      "id": "hs_walk_marker_path",
+      "name": "Walking between markers (path variability)",
+      "category": "skill",
+      "targets": [
+        "general"
+      ],
+      "setup": "Place small markers (chalk / floor stickers) 1-2 hand-widths apart along a path. Walk hand-over-hand landing each hand near a marker. Trains contact placement precision.",
+      "capability_domains": [
+        "handstand_walk_dynamic"
+      ],
+      "level": 4,
+      "prerequisites": [
+        {
+          "capability_domain": "handstand_walk_dynamic",
+          "minimum_level": 4,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Land each hand next to its marker like stepping stones",
+        "Follow the trail of markers with your eyes"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "retest_metric": {
+        "name": "marker_path_hits_percent",
+        "unit": "percent",
+        "better": "higher"
+      },
+      "default_dose": {
+        "sets": 4,
+        "reps": 1,
+        "duration_s": 30
+      },
+      "rest_between_s": 90,
+      "evidence_refs": [
+        "ferrari_2021",
+        "shea_morgan_1979",
+        "potdevin_2018"
+      ],
+      "video_search": "handstand walk marker precision"
+    },
+    {
+      "id": "hs_half_pirouette_wall",
+      "name": "Half pirouette on wall (180 turn)",
+      "category": "skill",
+      "targets": [
+        "general"
+      ],
+      "setup": "Chest-to-wall handstand. Walk hands around 180 degrees to end back-to-wall (or vice versa). Slow, controlled \u2014 this is the turn pattern in half-scale.",
+      "capability_domains": [
+        "handstand_turns",
+        "handstand_hold_static",
+        "wrist_load_tolerance"
+      ],
+      "level": 4,
+      "prerequisites": [
+        {
+          "capability_domain": "handstand_hold_static",
+          "minimum_level": 3,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Walk your hands around the clock face slowly \u2014 one o'clock, two o'clock",
+        "Keep the crown of your head over the same tile the whole turn"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "retest_metric": {
+        "name": "wall_pirouette_success_percent",
+        "unit": "percent",
+        "better": "higher"
+      },
+      "default_dose": {
+        "sets": 4,
+        "reps": 2,
+        "duration_s": 45
+      },
+      "rest_between_s": 90,
+      "evidence_refs": [
+        "kinoshita_2022",
+        "potdevin_2018"
+      ],
+      "video_search": "wall handstand pirouette 180"
+    },
+    {
+      "id": "hs_half_pirouette_free",
+      "name": "Half pirouette freestanding (180 turn)",
+      "category": "skill",
+      "targets": [
+        "general"
+      ],
+      "setup": "From a freestanding handstand, turn 180 degrees on the hands and continue. Advanced skill \u2014 attempt with a spotter or over a soft mat.",
+      "capability_domains": [
+        "handstand_turns",
+        "handstand_hold_static",
+        "handstand_walk_dynamic"
+      ],
+      "level": 5,
+      "prerequisites": [
+        {
+          "capability_domain": "handstand_hold_static",
+          "minimum_level": 4,
+          "rationale": "injury_mitigation",
+          "source": "coaching_consensus"
+        },
+        {
+          "capability_domain": "handstand_walk_dynamic",
+          "minimum_level": 4,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Look for the wall behind you as if turning to check traffic",
+        "Push one hand into the floor to swing the shape around"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "retest_metric": {
+        "name": "free_pirouette_success_percent",
+        "unit": "percent",
+        "better": "higher"
+      },
+      "default_dose": {
+        "sets": 5,
+        "reps": 2,
+        "duration_s": 45
+      },
+      "rest_between_s": 90,
+      "evidence_refs": [
+        "potdevin_2018",
+        "chiviacowsky_wulf_2002"
+      ],
+      "video_search": "freestanding handstand 180 pirouette"
+    },
+    {
+      "id": "hs_full_pirouette_free",
+      "name": "Full pirouette freestanding (360 turn)",
+      "category": "skill",
+      "targets": [
+        "general"
+      ],
+      "setup": "From a freestanding handstand walk, execute a full 360-degree turn and continue walking. Elite-level skill.",
+      "capability_domains": [
+        "handstand_turns",
+        "handstand_hold_static",
+        "handstand_walk_dynamic"
+      ],
+      "level": 5,
+      "prerequisites": [
+        {
+          "capability_domain": "handstand_turns",
+          "minimum_level": 5,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Spot the same wall twice on the way round",
+        "Let each hand-plant power the next arc of the turn"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "retest_metric": {
+        "name": "full_pirouette_success_percent",
+        "unit": "percent",
+        "better": "higher"
+      },
+      "default_dose": {
+        "sets": 5,
+        "reps": 1,
+        "duration_s": 45
+      },
+      "rest_between_s": 120,
+      "evidence_refs": [
+        "potdevin_2018"
+      ],
+      "video_search": "handstand 360 pirouette"
+    },
+    {
+      "id": "hs_walk_over_plate",
+      "name": "Walking over a 5kg plate",
+      "category": "skill",
+      "targets": [
+        "general"
+      ],
+      "setup": "Place a 5kg (or bumper) plate on the floor mid-path. Handstand walk toward and over it, placing one hand past the plate at a time.",
+      "capability_domains": [
+        "handstand_obstacles",
+        "handstand_walk_dynamic"
+      ],
+      "level": 5,
+      "prerequisites": [
+        {
+          "capability_domain": "handstand_walk_dynamic",
+          "minimum_level": 4,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "See the plate arrive between your hands and step past it",
+        "Land the far hand past the plate before lifting the near hand"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "retest_metric": {
+        "name": "plate_traverse_success_percent",
+        "unit": "percent",
+        "better": "higher"
+      },
+      "default_dose": {
+        "sets": 4,
+        "reps": 2,
+        "duration_s": 45
+      },
+      "rest_between_s": 90,
+      "evidence_refs": [
+        "ferrari_2021",
+        "simunkova_2024"
+      ],
+      "video_search": "handstand walk over plate crossfit"
+    },
+    {
+      "id": "hs_walk_through_cones",
+      "name": "Walking through cones (path variability)",
+      "category": "skill",
+      "targets": [
+        "general"
+      ],
+      "setup": "Space small cones or blocks along a serpentine path. Walk on hands through the pattern, weaving as required.",
+      "capability_domains": [
+        "handstand_obstacles",
+        "handstand_walk_dynamic",
+        "handstand_turns"
+      ],
+      "level": 5,
+      "prerequisites": [
+        {
+          "capability_domain": "handstand_walk_dynamic",
+          "minimum_level": 4,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Weave your shape between the cones like a skier",
+        "Look ahead at the next cone, not down at the one you're at"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "retest_metric": {
+        "name": "cones_cleared_count",
+        "unit": "cones",
+        "better": "higher"
+      },
+      "default_dose": {
+        "sets": 4,
+        "reps": 1,
+        "duration_s": 45
+      },
+      "rest_between_s": 90,
+      "evidence_refs": [
+        "ferrari_2021",
+        "shea_morgan_1979",
+        "simunkova_2024"
+      ],
+      "video_search": "handstand walk cones weave"
+    },
+    {
+      "id": "hs_walk_precision_path",
+      "name": "Precision path (narrow-lane walking)",
+      "category": "skill",
+      "targets": [
+        "general"
+      ],
+      "setup": "Mark a narrow lane (2 parallel tape lines about a shoulder-width apart). Walk the full length without crossing the lines. Precision constraint sharpens balance control.",
+      "capability_domains": [
+        "handstand_obstacles",
+        "handstand_walk_dynamic"
+      ],
+      "level": 5,
+      "prerequisites": [
+        {
+          "capability_domain": "handstand_walk_dynamic",
+          "minimum_level": 4,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Track the two tape lines like train tracks running under you",
+        "Land each hand between the lines \u2014 quiet and precise"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "retest_metric": {
+        "name": "precision_lane_lane_hits_percent",
+        "unit": "percent",
+        "better": "higher"
+      },
+      "default_dose": {
+        "sets": 4,
+        "reps": 1,
+        "duration_s": 45
+      },
+      "rest_between_s": 90,
+      "evidence_refs": [
+        "ferrari_2021",
+        "kerwin_trewartha_2001",
+        "blenkinsop_2017"
+      ],
+      "video_search": "handstand walk narrow lane precision"
+    },
+    {
+      "id": "hs_wrist_downdog_recovery",
+      "name": "Downward-dog wrist recovery",
+      "category": "mobility",
+      "targets": [
+        "general"
+      ],
+      "setup": "After session, hold a downward-dog / pike position with soft knees. Shift weight side to side across the palms. Aim for a 30-60 second decompression.",
+      "capability_domains": [
+        "wrist_extension_mobility",
+        "wrist_load_tolerance"
+      ],
+      "level": 1,
+      "prerequisites": [],
+      "cues_external_focus": [
+        "Rock the palms side to side as if wringing out a towel",
+        "Send the sternum toward the thighs"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "retest_metric": {
+        "name": "wrist_symptom_score_next_day",
+        "unit": "0-10",
+        "better": "lower"
+      },
+      "default_dose": {
+        "sets": 2,
+        "reps": 1,
+        "duration_s": 45
+      },
+      "rest_between_s": 20,
+      "evidence_refs": [
+        "vidal_torija_2025",
+        "wiesinger_2019"
+      ],
+      "video_search": "downward dog wrist recovery"
+    },
+    {
+      "id": "hs_wrist_childs_recovery",
+      "name": "Child's pose + wrist stretches",
+      "category": "mobility",
+      "targets": [
+        "general"
+      ],
+      "setup": "Kneel back into child's pose. From here perform the reverse-hand + palm-out wrist stretches for 20-30s each direction.",
+      "capability_domains": [
+        "wrist_extension_mobility"
+      ],
+      "level": 1,
+      "prerequisites": [],
+      "cues_external_focus": [
+        "Melt the chest toward the floor",
+        "Send fingertips toward opposite walls in each stretch"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "retest_metric": {
+        "name": "wrist_symptom_score_next_day",
+        "unit": "0-10",
+        "better": "lower"
+      },
+      "default_dose": {
+        "sets": 2,
+        "reps": 1,
+        "duration_s": 45
+      },
+      "rest_between_s": 20,
+      "evidence_refs": [
+        "vidal_torija_2025"
+      ],
+      "video_search": "childs pose wrist stretch"
+    },
+    {
+      "id": "hs_video_review",
+      "name": "Video review of last set",
+      "category": "skill",
+      "targets": [
+        "general"
+      ],
+      "setup": "Optional self-selected feedback: record one attempt and re-watch it once before the next set. Do NOT re-watch every attempt. Self-controlled schedule outperforms forced schedules (Chiviacowsky & Wulf 2002).",
+      "capability_domains": [
+        "handstand_hold_static",
+        "handstand_walk_dynamic"
+      ],
+      "level": 1,
+      "prerequisites": [],
+      "cues_external_focus": [
+        "Watch the shape against the vertical line of the wall in the clip",
+        "Pick one thing to change on the next attempt \u2014 no more"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "retest_metric": {
+        "name": "video_review_self_select_frequency",
+        "unit": "reviews_per_week",
+        "better": "higher"
+      },
+      "default_dose": {
+        "sets": 1,
+        "reps": 1,
+        "duration_s": 60
+      },
+      "rest_between_s": 0,
+      "evidence_refs": [
+        "potdevin_2018",
+        "chiviacowsky_wulf_2002",
+        "rohleder_vogt_2018"
+      ],
+      "video_search": "video feedback handstand practice"
+    }
+  ],
+  "class_modifications": [
+    {
+      "avoid": "GHD sit-ups",
+      "reason": "End-range lumbar extension over a pseudoarthrosis with bone oedema. Worst single movement on the list.",
+      "substitute": [
+        "hollow_hold",
+        "pallof_press",
+        "carry"
+      ]
+    },
+    {
+      "avoid": "Kipping toes-to-bar",
+      "reason": "Doubles up: hanging loaded hip flexion (documented provocateur, with clicking) plus a hanging shoulder with a SLAP and posterior labral detachment.",
+      "substitute": [
+        "strict_knee_raise",
+        "hollow_hold"
+      ]
+    },
+    {
+      "avoid": "Kipping pull-ups, bar muscle-ups",
+      "reason": "Shoulder \u2014 SLAP plus posterior labrum plus spinoglenoid ganglion cyst.",
+      "substitute": [
+        "strict pull-up",
+        "ring row"
+      ]
+    },
+    {
+      "avoid": "Heavy back squat or deadlift for time",
+      "reason": "Fatigue plus load plus lumbar flexion-extension cycling.",
+      "substitute": [
+        "sled_push",
+        "hip_thrust_barbell"
+      ]
+    },
+    {
+      "avoid": "Overhead squat, snatch",
+      "reason": "Lumbar extension plus overhead shoulder demand.",
+      "substitute": [
+        "front_squat",
+        "hang power snatch at moderate load"
+      ]
+    },
+    {
+      "modify": "Deep squat under fatigue",
+      "reason": "Knees caving equals flexion plus adduction plus internal rotation under load \u2014 the positive test position.",
+      "action": "Cue knees out, reduce depth when form degrades"
+    },
+    {
+      "allowed": [
+        "Box jumps",
+        "Wall balls",
+        "Running",
+        "Rowing"
+      ],
+      "reason": "No specific contraindication"
+    }
+  ]
+}

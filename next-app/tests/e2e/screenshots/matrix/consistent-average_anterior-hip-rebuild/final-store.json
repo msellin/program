@@ -1,0 +1,2355 @@
+{
+  "version": 2,
+  "logs": {
+    "2026-08-13": {
+      "date": "2026-08-13",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-08-14": {
+      "date": "2026-08-14",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-08-15": {
+      "date": "2026-08-15",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-08-16": {
+      "date": "2026-08-16",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-08-17": {
+      "date": "2026-08-17",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 2,
+        "life_load": 4
+      }
+    },
+    "2026-08-18": {
+      "date": "2026-08-18",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-08-19": {
+      "date": "2026-08-19",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-08-20": {
+      "date": "2026-08-20",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-08-21": {
+      "date": "2026-08-21",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-08-22": {
+      "date": "2026-08-22",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-08-23": {
+      "date": "2026-08-23",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-08-24": {
+      "date": "2026-08-24",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-08-25": {
+      "date": "2026-08-25",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-08-26": {
+      "date": "2026-08-26",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 2,
+        "life_load": 4
+      }
+    },
+    "2026-08-27": {
+      "date": "2026-08-27",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-08-28": {
+      "date": "2026-08-28",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-08-29": {
+      "date": "2026-08-29",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 2,
+        "life_load": 4
+      }
+    },
+    "2026-08-30": {
+      "date": "2026-08-30",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-08-31": {
+      "date": "2026-08-31",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-09-01": {
+      "date": "2026-09-01",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-09-02": {
+      "date": "2026-09-02",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-09-04": {
+      "date": "2026-09-04",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-09-05": {
+      "date": "2026-09-05",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-09-06": {
+      "date": "2026-09-06",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 2,
+        "life_load": 4
+      }
+    },
+    "2026-09-07": {
+      "date": "2026-09-07",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 2,
+        "life_load": 4
+      }
+    },
+    "2026-09-08": {
+      "date": "2026-09-08",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-09-10": {
+      "date": "2026-09-10",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-09-12": {
+      "date": "2026-09-12",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-09-13": {
+      "date": "2026-09-13",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-09-14": {
+      "date": "2026-09-14",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-09-15": {
+      "date": "2026-09-15",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-09-16": {
+      "date": "2026-09-16",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-09-17": {
+      "date": "2026-09-17",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-09-18": {
+      "date": "2026-09-18",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 2,
+        "life_load": 4
+      }
+    },
+    "2026-09-19": {
+      "date": "2026-09-19",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-09-20": {
+      "date": "2026-09-20",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-09-22": {
+      "date": "2026-09-22",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-09-23": {
+      "date": "2026-09-23",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-09-25": {
+      "date": "2026-09-25",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-09-26": {
+      "date": "2026-09-26",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-09-28": {
+      "date": "2026-09-28",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-09-29": {
+      "date": "2026-09-29",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-09-30": {
+      "date": "2026-09-30",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-10-01": {
+      "date": "2026-10-01",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-10-02": {
+      "date": "2026-10-02",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-10-03": {
+      "date": "2026-10-03",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-10-04": {
+      "date": "2026-10-04",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-10-05": {
+      "date": "2026-10-05",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-10-06": {
+      "date": "2026-10-06",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-10-07": {
+      "date": "2026-10-07",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-10-08": {
+      "date": "2026-10-08",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-10-09": {
+      "date": "2026-10-09",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-10-10": {
+      "date": "2026-10-10",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-10-11": {
+      "date": "2026-10-11",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-10-12": {
+      "date": "2026-10-12",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-10-13": {
+      "date": "2026-10-13",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 2,
+        "life_load": 4
+      }
+    },
+    "2026-10-14": {
+      "date": "2026-10-14",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-10-15": {
+      "date": "2026-10-15",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-10-18": {
+      "date": "2026-10-18",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-10-19": {
+      "date": "2026-10-19",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-10-21": {
+      "date": "2026-10-21",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 2,
+        "life_load": 4
+      }
+    },
+    "2026-10-23": {
+      "date": "2026-10-23",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-10-24": {
+      "date": "2026-10-24",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-10-25": {
+      "date": "2026-10-25",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-10-26": {
+      "date": "2026-10-26",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-10-28": {
+      "date": "2026-10-28",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 2,
+        "life_load": 4
+      }
+    },
+    "2026-10-29": {
+      "date": "2026-10-29",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 2,
+        "life_load": 4
+      }
+    },
+    "2026-10-30": {
+      "date": "2026-10-30",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-10-31": {
+      "date": "2026-10-31",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-11-01": {
+      "date": "2026-11-01",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-11-02": {
+      "date": "2026-11-02",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-11-03": {
+      "date": "2026-11-03",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 2,
+        "life_load": 4
+      }
+    },
+    "2026-11-04": {
+      "date": "2026-11-04",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-11-05": {
+      "date": "2026-11-05",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-11-06": {
+      "date": "2026-11-06",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-11-07": {
+      "date": "2026-11-07",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    },
+    "2026-11-08": {
+      "date": "2026-11-08",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 2,
+        "life_load": 4
+      }
+    },
+    "2026-11-09": {
+      "date": "2026-11-09",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 2,
+        "life_load": 4
+      }
+    },
+    "2026-11-10": {
+      "date": "2026-11-10",
+      "exercises": {
+        "sim:strength:sim_lift": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 80,
+              "reps": 5,
+              "rpe": 7
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      }
+    }
+  },
+  "training_maxes": {},
+  "cycle": null,
+  "updated_at": 1794211200000,
+  "scheduled_overrides": {},
+  "skipped": {
+    "2026-09-03": {
+      "blocks": [],
+      "reason": "sim: archetype skipped this day"
+    },
+    "2026-09-09": {
+      "blocks": [],
+      "reason": "sim: archetype skipped this day"
+    },
+    "2026-09-11": {
+      "blocks": [],
+      "reason": "sim: archetype skipped this day"
+    },
+    "2026-09-21": {
+      "blocks": [],
+      "reason": "sim: archetype skipped this day"
+    },
+    "2026-09-24": {
+      "blocks": [],
+      "reason": "sim: archetype skipped this day"
+    },
+    "2026-09-27": {
+      "blocks": [],
+      "reason": "sim: archetype skipped this day"
+    },
+    "2026-10-16": {
+      "blocks": [],
+      "reason": "sim: archetype skipped this day"
+    },
+    "2026-10-17": {
+      "blocks": [],
+      "reason": "sim: archetype skipped this day"
+    },
+    "2026-10-20": {
+      "blocks": [],
+      "reason": "sim: archetype skipped this day"
+    },
+    "2026-10-22": {
+      "blocks": [],
+      "reason": "sim: archetype skipped this day"
+    },
+    "2026-10-27": {
+      "blocks": [],
+      "reason": "sim: archetype skipped this day"
+    }
+  },
+  "dismissed_proposals": {},
+  "user_profile": {
+    "active_program_id": "anterior-hip-rebuild",
+    "active_program_ids": [
+      "anterior-hip-rebuild"
+    ],
+    "active_program_started_at": "2026-08-12T08:00:00.003Z",
+    "tier": "beta_forever"
+  }
+}

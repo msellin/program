@@ -1,0 +1,322 @@
+{
+  "url": "https://program-v2.pages.dev/",
+  "viewport": "390x844",
+  "runs": [
+    {
+      "label": "pass1_cold_load",
+      "heights": {
+        "scrollHeight": 844,
+        "innerHeight": 844,
+        "innerWidth": 390
+      },
+      "headings": [
+        {
+          "tag": "h1",
+          "text": "Today",
+          "top": 61
+        }
+      ],
+      "dayHits": [
+        {
+          "text": "Thursday 6 Aug",
+          "tag": "p",
+          "className": "text-[15px] font-semibold text-strong leading-tight",
+          "top": 158,
+          "left": 71,
+          "w": 248,
+          "h": 19,
+          "section": "main.max-w-[760px].mx-auto.w-full"
+        }
+      ],
+      "dom": {
+        "tag": "main",
+        "cls": "max-w-[760px].mx-auto",
+        "top": 0,
+        "h": 780,
+        "text": "",
+        "kids": [
+          {
+            "tag": "div",
+            "cls": "space-y-5",
+            "top": 24,
+            "h": 423,
+            "text": "",
+            "kids": [
+              {
+                "tag": "header",
+                "cls": "pt-4.space-y-2.5",
+                "top": 24,
+                "h": 103,
+                "text": "",
+                "kids": [
+                  {
+                    "tag": "div",
+                    "cls": "flex.items-center",
+                    "top": 40,
+                    "h": 11,
+                    "text": "",
+                    "kids": [
+                      {
+                        "tag": "p",
+                        "cls": "mono-caps",
+                        "top": 40,
+                        "h": 11,
+                        "text": "Rehab & leg strength",
+                        "kids": []
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "h1",
+                    "cls": "text-3xl.font-semibold",
+                    "top": 61,
+                    "h": 36,
+                    "text": "Today",
+                    "kids": []
+                  },
+                  {
+                    "tag": "p",
+                    "cls": "text-[13px].text-muted",
+                    "top": 107,
+                    "h": 20,
+                    "text": "Rebuild + evaluate (race prep sub-goal)",
+                    "kids": []
+                  }
+                ]
+              },
+              {
+                "tag": "div",
+                "cls": "flex.items-center",
+                "top": 147,
+                "h": 54,
+                "text": "",
+                "kids": [
+                  {
+                    "tag": "button",
+                    "cls": "w-11.h-11",
+                    "top": 152,
+                    "h": 44,
+                    "text": "",
+                    "kids": [
+                      {
+                        "tag": "svg",
+                        "cls": "lucide.lucide-chevron-left",
+                        "top": 165,
+                        "h": 18,
+                        "text": "",
+                        "kids": []
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "div",
+                    "cls": "flex-1.text-center",
+                    "top": 158,
+                    "h": 32,
+                    "text": "",
+                    "kids": [
+                      {
+                        "tag": "p",
+                        "cls": "text-[15px].font-semibold",
+                        "top": 158,
+                        "h": 19,
+                        "text": "Thursday 6 Aug",
+                        "kids": []
+                      },
+                      {
+                        "tag": "p",
+                        "cls": "mono-caps.mt-0.5",
+                        "top": 178,
+                        "h": 11,
+                        "text": "Today",
+                        "kids": []
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "button",
+                    "cls": "w-11.h-11",
+                    "top": 152,
+                    "h": 44,
+                    "text": "",
+                    "kids": [
+                      {
+                        "tag": "svg",
+                        "cls": "lucide.lucide-chevron-right",
+                        "top": 165,
+                        "h": 18,
+                        "text": "",
+                        "kids": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "tag": "a",
+                "cls": "block.rounded-lg",
+                "top": 221,
+                "h": 108,
+                "text": "",
+                "kids": [
+                  {
+                    "tag": "div",
+                    "cls": "flex.items-center",
+                    "top": 237,
+                    "h": 11,
+                    "text": "",
+                    "kids": [
+                      {
+                        "tag": "span",
+                        "cls": "w-2.h-2",
+                        "top": 238,
+                        "h": 8,
+                        "text": "",
+                        "kids": []
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "p",
+                    "cls": "text-2xl.font-semibold",
+                    "top": 256,
+                    "h": 32,
+                    "text": "No check yet",
+                    "kids": []
+                  },
+                  {
+                    "tag": "p",
+                    "cls": "text-[14px].text-muted",
+                    "top": 292,
+                    "h": 21,
+                    "text": "Save a morning check to calibrate today.",
+                    "kids": []
+                  }
+                ]
+              },
+              {
+                "tag": "div",
+                "cls": "rounded.border",
+                "top": 349,
+                "h": 98,
+                "text": "",
+                "kids": [
+                  {
+                    "tag": "p",
+                    "cls": "font-semibold",
+                    "top": 366,
+                    "h": 20,
+                    "text": "Rest day — no barbell scheduled.",
+                    "kids": []
+                  },
+                  {
+                    "tag": "p",
+                    "cls": "mt-1.text-muted",
+                    "top": 390,
+                    "h": 40,
+                    "text": "Accessory / rehab / run blocks live on the Extras tab — do t",
+                    "kids": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "pass2_empty_storage",
+      "heights": {
+        "scrollHeight": 844,
+        "innerHeight": 844,
+        "innerWidth": 390
+      },
+      "headings": [
+        {
+          "tag": "h1",
+          "text": "Today",
+          "top": 61
+        }
+      ],
+      "dayHits": [
+        {
+          "text": "Thursday 6 Aug",
+          "tag": "p",
+          "className": "text-[15px] font-semibold text-strong leading-tight",
+          "top": 158,
+          "left": 71,
+          "w": 248,
+          "h": 19,
+          "section": "main.max-w-[760px].mx-auto.w-full"
+        }
+      ]
+    },
+    {
+      "label": "pass3_seeded_week",
+      "heights": {
+        "scrollHeight": 844,
+        "innerHeight": 844,
+        "innerWidth": 390
+      },
+      "headings": [
+        {
+          "tag": "h1",
+          "text": "Today",
+          "top": 61
+        }
+      ],
+      "dayHits": [
+        {
+          "text": "Thursday 6 Aug",
+          "tag": "p",
+          "className": "text-[15px] font-semibold text-strong leading-tight",
+          "top": 158,
+          "left": 71,
+          "w": 248,
+          "h": 19,
+          "section": "main.max-w-[760px].mx-auto.w-full"
+        }
+      ]
+    },
+    {
+      "label": "pass4_week_tab_comparison",
+      "heights": {
+        "scrollHeight": 1425,
+        "innerHeight": 844,
+        "innerWidth": 390
+      },
+      "headings": [
+        {
+          "tag": "h1",
+          "text": "Week",
+          "top": 40
+        },
+        {
+          "tag": "h2",
+          "text": "Rules of the week",
+          "top": 999
+        }
+      ],
+      "dayHits": [
+        {
+          "text": "Sunday is a full rest day. No barbell, no skill squat, no CrossFit. Home block optional and easy.",
+          "tag": "li",
+          "className": "",
+          "top": 1176,
+          "left": 41,
+          "w": 320,
+          "h": 60,
+          "section": "section.space-y-2"
+        }
+      ]
+    }
+  ],
+  "seedResult": {
+    "keys": [
+      "program.store.v2",
+      "program.log.v2",
+      "program-log-v2"
+    ],
+    "sampleLen": 1121
+  }
+}

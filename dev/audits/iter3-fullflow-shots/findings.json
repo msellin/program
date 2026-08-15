@@ -1,0 +1,130 @@
+{
+  "runAt": "2026-08-06T22:48:06.451Z",
+  "ua": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5 Mobile/15E148 Safari/604.1",
+  "findingsCount": 8,
+  "findings": [
+    {
+      "sev": "MED",
+      "id": "AUG31-DERIVED",
+      "title": "Morning check with all scores ≤3 did not derive green",
+      "details": {
+        "inputs": "back 1, hip 1, buttock 0, shoulder 3, stiffness 5",
+        "expected": "green",
+        "actual": null
+      }
+    },
+    {
+      "sev": "MED",
+      "id": "SEP5-AMBER-REDUCE",
+      "title": "Sep 5 volume day: amber-reduced suggestion 68 kg not surfaced on card",
+      "details": {
+        "cardText": "•High-bar back squat5 sets · 5 reps5×5 at 60-70% TM, all sets same weight, tempo 3-0-1-0TM: 110 kgSuggested today93.5 kg × 5+25 + 10 + 1.25 kg /side → 92.5 kg (-1.00)FSL 5×5 @ 71.5 kg(25 + 1.25 kg /side → 72.5 kg (+1.00))Warm-up: 71.5×5 → 82.5×5Cycle 1, week 1. Top set: 85% TM × 5+.#Prev / RxWeight kgRepsRPE171.5×5271.5×5371.5×5471.5×5593.5×5+Add setNotesCueshistorical provocateurshoulder load:gri"
+      }
+    },
+    {
+      "sev": "MED",
+      "id": "SEP7-W2-TOP",
+      "title": "Sep 7 week-2 top set 99 kg × 3+ not shown",
+      "details": {
+        "cardText": "•High-bar back squat5 sets · 5 reps5/3/1 top set (weekly percentages per cycle_structure) · then FSL 5×5 at first-set working weightTM: 110 kgSuggested today99 kg × 3+25 + 10 + 2.5 + 1.25 + 1.25 kg /side → 100 kg (+1.00)FSL 5×5 @ 77 kg(25 + 2.5 + 1.25 kg /side → 77.5 kg (+0.50))Warm-up: 77×3 → 88×3Cycle 1, week 2. Top set: 90% TM × 3+.#Prev / RxWeight kgRepsRPE177×5277×5377×5477×5599×3+Add setNote"
+      }
+    },
+    {
+      "sev": "MED",
+      "id": "SEP12-SKIP-UI",
+      "title": "Skip today with a custom reason is not discoverable from the Today page UI",
+      "details": {
+        "details": "Skip button appears but modal path for \"just this session with a reason like comp\" was not obviously exposed. User had to guess."
+      }
+    },
+    {
+      "sev": "MED",
+      "id": "SEP21-DELOAD",
+      "title": "Sep 21 deload suggestion missing 78 kg (60% × TM 130)",
+      "details": {
+        "cardText": "•High-bar back squat5 sets · 5 reps5/3/1 top set (weekly percentages per cycle_structure) · then FSL 5×5 at first-set working weightTM: 130 kgSuggested today78 kg × 525 + 2.5 + 1.25 kg /side → 77.5 kg (-0.50)Warm-up: 52×5 → 65×5Cycle 1, week 4. Top set: 60% TM × 5.#Prev / RxWeight kgRepsRPE1—2—3—4—578×5Add setNotesCueshistorical provocateurshoulder load:grip"
+      }
+    },
+    {
+      "sev": "HIGH",
+      "id": "WIPE-NOT-CLEAN",
+      "title": "Wipe left log entries behind",
+      "details": {
+        "remaining": [
+          "2026-08-02",
+          "2026-08-03",
+          "2026-08-04",
+          "2026-08-06",
+          "2026-08-31",
+          "2026-09-02",
+          "2026-09-03",
+          "2026-09-05",
+          "2026-09-07",
+          "2026-09-09",
+          "2026-09-10",
+          "2026-09-14",
+          "2026-09-16",
+          "2026-09-17",
+          "2026-09-19",
+          "2026-09-21",
+          "2026-09-23"
+        ]
+      }
+    },
+    {
+      "sev": "MED",
+      "id": "WIPE-NO-ONBOARD",
+      "title": "After wipe, onboarding / first-run guidance does not reappear",
+      "details": {}
+    },
+    {
+      "sev": "MED",
+      "id": "IMPORT-INCOMPLETE",
+      "title": "Importing an export JSON did not restore prior state",
+      "details": {
+        "via": {
+          "via": "textarea"
+        },
+        "tm": {
+          "back_squat_highbar": 130,
+          "front_squat": 85,
+          "block_pull_midshin": 130,
+          "deadlift_conventional": 130
+        }
+      }
+    }
+  ],
+  "notes": [
+    "Aug 31 hero: title=\"Today\" phase=\"Cycle 1 — first real 5/3/1 FSL (Sept 12 comp mid-cycle)\" readiness snip=\"\"",
+    "Aug 31 derived_state stored = null",
+    "Aug 31 back squat card snippet: •High-bar back squat5 sets · 5 reps5/3/1 top set (weekly percentages per cycle_structure) · then FSL 5×5 at first-set working weightTM: 110 kgSuggested today93.5 kg × 5+25 + 10 + 1.25 kg /side → 92.5 kg (-1.00)FSL 5×5 @ 71.5 kg(25 + 1.25 kg /side → 72.5 kg (+1.00))Warm-up: 71.5×5 → 82.5×5Cycle 1, we",
+    "Aug 31 after logging: PR badge count in card = 1, total on page = 1",
+    "Aug 31 rest-timer visible after log: false",
+    "Sep 2 block pull suggestion snip: •Block pull, mid-shin height5 sets · 5 reps5/3/1 top set · then FSL 5×5TM: 130 kgSuggested today110.5 kg × 5+25 + 20 kg /side → 110 kg (-0.50)FSL 5×5 @ 84.5 kg(25 + 5 + 1.25 + 1.25 kg /side → 85 kg (+0.50))Warm-up: 84.5×5 → 97.5×5Cycle 1, week 1. Top set: 85% TM × 5+.#Prev / RxWeight kgRepsRPE184.5×",
+    "Sep 3 front squat snip: •Front squat3 sets · 5 reps5×5 at 65-75% front squat TM. Progress load when all sets clean.TM: 85 kgSuggested today72.5 kg × 5+25 + 1.25 kg /sideFSL 5×5 @ 55.5 kg(15 + 2.5 kg /side → 55 kg (-0.50))Warm-up: 55.5×5 → 64×5Cycle 1, week 1. Top ",
+    "Sep 5 squat volume card snip (amber expected): •High-bar back squat5 sets · 5 reps5×5 at 60-70% TM, all sets same weight, tempo 3-0-1-0TM: 110 kgSuggested today93.5 kg × 5+25 + 10 + 1.25 kg /side → 92.5 kg (-1.00)FSL 5×5 @ 71.5 kg(25 + 1.25 kg /side → 72.5 kg (+1.00))Warm-up: 71.5×5 → 82.5×5Cycle 1, week 1. Top set: 85% TM × 5+.#Prev / RxWeight kgRepsRPE171.5×5271.5×5371.5×5471.5×5593.5×5+Add setNotesCueshistorical provocateurshoulder load:gri",
+    "Sep 5 derived_state = null",
+    "Sep 7 week-2 squat 3+ snip: •High-bar back squat5 sets · 5 reps5/3/1 top set (weekly percentages per cycle_structure) · then FSL 5×5 at first-set working weightTM: 110 kgSuggested today99 kg × 3+25 + 10 + 2.5 + 1.25 + 1.25 kg /side → 100 kg (+1.00)FSL 5×5 @ 77 kg(25 + 2.5 + 1.25 kg /side → 77.5 kg (+0.50))Warm-up: 77×3 → 88×3C",
+    "Sep 12: Skip UI did not complete (no discoverable \"Skip today\"/reason path). Falling back to programmatic skip.",
+    "Sep 12 streak chip: null",
+    "Sep 14 AMRAP week snip: •High-bar back squat5 sets · 5 reps5/3/1 top set (weekly percentages per cycle_structure) · then FSL 5×5 at first-set working weightTM: 110 kgSuggested today104.5 kg × 1+25 + 15 + 1.25 + 1.25 kg /side → 105 kg (+0.50)FSL 5×5 @ 82.5 kg(25 + 5 + 1.25 kg /side)Warm-up: 82.5×5 → 93.5×3Cycle 1, week 3. T",
+    "Sep 14 TM chip surface: TM: 110 kg",
+    "Sep 14 TM chip accepted? false",
+    "Sep 14 TM after (before manual override): 110",
+    "Progress tab back-squat TM readback: back squat\nTM now: 110 kg\n\n2026-09-27 · 2 cycle 1\n\nTM target 120",
+    "Sep 21 deload squat snip: •High-bar back squat5 sets · 5 reps5/3/1 top set (weekly percentages per cycle_structure) · then FSL 5×5 at first-set working weightTM: 130 kgSuggested today78 kg × 525 + 2.5 + 1.25 kg /side → 77.5 kg (-0.50)Warm-up: 52×5 → 65×5Cycle 1, week 4. Top set: 60% TM × 5.#Prev / RxWeight kgRepsRPE1—2—3—4—5",
+    "Sep 27 cycle-end banner: Cycle end all-green: TM +5 kg squat variants, +7.5 kg pull variants. Any amber week: hold TM. Any red week: TM -10%.\n\nSYMPTOM VS LOAD\n\nThe KPI no other strength app tracks: peak symptom score alongside top-set kg over time. What the next specialist visit should actually see.\n\nPeak symptom (0-10)Pull top set kgSquat top set kg\n08-02\n08-31\n09-07\n09-16\n09-23\n0\n35\n70\n105\n140\nkg\n0\n3\n6\n9\n10\npain\nMILESTONES\n→ 2027-04-24\n\nTrajectory milestones anchored to the April 24 2027 birthday waypoint. TM = training max, ≈ 90% of 5RM. These are what the plan needs to hit to be on-track for AT LEAST ONE of the birthday go",
+    "Reload URL preservation: before=https://program-v2.pages.dev/?today=2026-09-09 after=https://program-v2.pages.dev/?today=2026-09-09",
+    "Reload hero title: Today",
+    "Nav link targets: /check/, /, /week/, /extras/, /check/, /coach/, /progress/, /history/",
+    "Nav home from /history: url=https://program-v2.pages.dev/ hero=Today",
+    "Wipe button click: {\"ok\":true,\"label\":\"Wipe local log\"}",
+    "Wipe: before logs count=17, after logs count=17, TM keys=4",
+    "After wipe: onboarding visible? false",
+    "Import UI: {\"via\":\"textarea\"}",
+    "Import result: logs restored? false, TM back_squat now=130"
+  ],
+  "surprises": [
+    "After leaving /?today=2026-09-09 for /history then home, active date resets. A user mid-review would lose their spot."
+  ]
+}

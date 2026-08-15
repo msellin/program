@@ -1,0 +1,273 @@
+{
+  "schema_version": "1.0.0",
+  "generated": "2026-08-01",
+  "note": "De-identified. No name, isikukood, or provider identifiers. Source documents remain in Terviseportaal.",
+  "source_period": {
+    "first": "2020-12-10",
+    "last": "2023-11-09"
+  },
+  "staleness_warning": "Newest imaging is 2022-03-10; newest clinical contact 2023-11-09. Treat all findings as historical background, not current status.",
+  "findings": [
+    {
+      "id": "lumbosacral_transitional",
+      "region": "lumbosacral",
+      "label": "L5 left-sided sacralization with pseudoarthrosis (Bertolotti type)",
+      "detail": "Pseudoarthrosis between left L5 transverse process and sacrum, with bone marrow oedema at the articulating surfaces. L5/S1 disc space narrowed, osteochondrosis at that level. Serial lumbar MRIs across 2021 also confirmed: no significant disc protrusions or prolapses, spinal canal of uniform width, spinal cord intact, neural foramina not narrowed — nerve root compression is NOT part of this picture.",
+      "severity": "primary",
+      "trajectory": [
+        {
+          "date": "2021-01-19",
+          "state": "sharp, intense oedema"
+        },
+        {
+          "date": "2021-04-26",
+          "state": "more diffuse, spread over wider area"
+        },
+        {
+          "date": "2021-10-04",
+          "state": "unchanged vs April"
+        },
+        {
+          "date": "2022-03-10",
+          "state": "reduced"
+        }
+      ],
+      "clinical_significance": "Considered the main pain generator. Aggravated by lumbar extension combined with rotation and axial load."
+    },
+    {
+      "id": "si_oedema_right",
+      "region": "sacroiliac",
+      "label": "Minimal right SI subchondral bone oedema",
+      "detail": "Described as nonspecific, consistent with overload. Joint surfaces even, no erosions, no fusion.",
+      "severity": "secondary",
+      "trajectory": [
+        {
+          "date": "2021-04-26",
+          "state": "minimal"
+        },
+        {
+          "date": "2022-03-10",
+          "state": "smaller than previous"
+        }
+      ],
+      "radiologist_recommendation": "2021-01-20 lumbar MRI report explicitly recommended a dedicated SI-joint MRI to clarify possible sacroiliitis. That MRI was carried out 2021-04-26 and found no erosions or joint fusion — a partial structural exclusion, but inflammatory bloodwork (HLA-B27, CRP, ESR) was never done.",
+      "open_question": "Possible sacroiliitis was explicitly raised 2021-01-20 and structurally ruled out on imaging 2021-04-26, but inflammatory bloodwork was never obtained. See open-questions.json q4."
+    },
+    {
+      "id": "labrum_left_hip",
+      "region": "hip_left",
+      "label": "Left acetabular labral lesion, superior-posterior",
+      "detail": "Cystic formation up to 8 mm with fluid signal, superior-posterior labrum. Alpha angle 47 degrees.",
+      "severity": "possibly_incidental",
+      "clinical_significance": "Location is POSTERIOR; documented symptoms are ANTERIOR (groin). Discordant. May be incidental — labral changes are common in asymptomatic athletes."
+    },
+    {
+      "id": "labrum_right_hip",
+      "region": "hip_right",
+      "label": "Right acetabular labral lesion, superior-anterior",
+      "detail": "1.2 cm cystic collection, superior labrum slightly anterior to the left-side lesion. Possible additional 3.5 mm cyst on anterior chondral/labral contour. Alpha angle 43 degrees.",
+      "severity": "possibly_incidental",
+      "clinical_significance": "Anterior lesion is on the ASYMPTOMATIC side. Reinforces that labral findings may not be driving symptoms."
+    },
+    {
+      "id": "iliopsoas_left",
+      "region": "hip_left",
+      "label": "Suspected left iliopsoas involvement (inferred, not formally diagnosed)",
+      "detail": "Inference from three consistent findings: anterior groin pain on resisted straight-leg raise (documented 2022-02-02 and 2023-09-20), clicking during the LOWERING phase of hanging leg raises (2020-12-10), and anterior hip joint surface pain location.",
+      "severity": "probable_primary_hip_driver",
+      "clinical_significance": "If correct, hip flexor loading is the right target — but as graded tendon loading, not end-range strength work."
+    },
+    {
+      "id": "cam_morphology",
+      "region": "hip_bilateral",
+      "label": "Minor cam morphology",
+      "detail": "Small bump at femoral head-neck junction, left greater than right. Alpha angles within normal range (L 47, R 43). Small spindle-shaped calcification at right superior acetabular rim.",
+      "severity": "minor"
+    },
+    {
+      "id": "shoulder_right_instability",
+      "region": "shoulder_right",
+      "label": "Right shoulder posterior instability picture (posterior Bankart + SLAP + glenoid dysplasia)",
+      "detail": "Glenoid flat and dysplastic, approx 30 degrees retroversion. Labrum detached dorsally 12-3 o'clock — a posterior Bankart lesion, as named by the treating physiatrist. Possible old Hill-Sachs lesion. SLAP-type lesion at long head of biceps attachment. Grade III cartilage damage middle third of glenoid. Anterior-superior labrum not distinguishable (detachment or Buford complex). Supraspinatus tendon lower contour slightly uneven (scarring or synovitis), but no rotator cuff tear.",
+      "severity": "significant",
+      "date": "2022-12-21",
+      "clinical_significance": "Three findings together — posterior Bankart, dysplastic retroverted glenoid, possible Hill-Sachs — suggest a prior posterior instability event, not just a SLAP. Limits low-bar back squat rack position and heavy front rack overhead work."
+    },
+    {
+      "id": "spinoglenoid_cyst",
+      "region": "shoulder_right",
+      "label": "Spinoglenoid notch ganglion cyst",
+      "detail": "3.3 x 1.3 x 3 cm, in the suprascapular nerve region. No muscle atrophy noted at time of imaging (2022-12).",
+      "severity": "monitor",
+      "clinical_significance": "Can compress the suprascapular nerve and weaken infraspinatus. Last assessed over 3 years ago. Watch for external rotation weakness or scapular asymmetry."
+    },
+    {
+      "id": "shoulder_right_other",
+      "region": "shoulder_right",
+      "label": "Mild subacromial bursitis, early AC joint arthrosis, humeral osteochondroma",
+      "detail": "Small subacromial-subdeltoid effusion. Osteochondroma approx 9 x 8 x 13 mm on medial humeral contour. Acromion Bigliani type I. No rotator cuff tear. Subacromial space normal width.",
+      "severity": "minor"
+    }
+  ],
+  "clinical_exam": {
+    "date": "2020-12-10",
+    "hip_rom": {
+      "flexion_deg": 120,
+      "external_rotation_deg": 70,
+      "internal_rotation_deg": 20,
+      "comment": "Internal rotation on the low side of normal."
+    },
+    "special_tests": {
+      "FADIR_left": "++",
+      "FADIR_right": "+",
+      "SI_compression_left": "uncomfortable",
+      "SI_compression_right": "negative",
+      "Lasegue": "negative",
+      "rotation_test": "Pushing to the LEFT is weaker. Documented 2020-12-10. Consistent with a rotation-based deficit through the left transitional segment."
+    },
+    "strength": {
+      "gluteus_medius": "symmetrical",
+      "gluteus_minimus": "symmetrical",
+      "gluteus_maximus": "weaker on LEFT",
+      "trunk": "possible deficit noted by examiner"
+    },
+    "followups": [
+      {
+        "date": "2022-02-02",
+        "finding": "Pain in groin on resisted straight-leg raise, left. Left SI tender to palpation. Hip ROM free."
+      },
+      {
+        "date": "2023-09-20",
+        "finding": "Same as above, unchanged. Plus restricted right shoulder movement bringing arm from overhead to behind."
+      }
+    ]
+  },
+  "history": {
+    "onset": "2020-09",
+    "mechanism": "3x/week CrossFit plus disc golf competition preparation, loading through the left leg. Named as the trigger in both physiatry notes.",
+    "mechanism_note": "A right-handed backhand drive plants and rotates over the left leg — repeated forceful rotation-extension through a left-sided transitional segment.",
+    "working_diagnosis": {
+      "date": "2021-01-21",
+      "clinician": "orthopaedist",
+      "diagnosis": "SI joint irritation and sacralized-vertebra transition-site irritation",
+      "source": "Recorded verbatim in the ortho note the day after the first lumbar MRI. This is the treating clinician's synthesised working diagnosis, distinct from the discrete imaging findings."
+    },
+    "symptom_localization_trajectory": {
+      "2020-12-10": "Left hip AND buttock pain (broad).",
+      "2023-09-20": "Left hip ANTERIOR surface + low back (localized).",
+      "significance": "Location description narrowed from broad hip/buttock to anterior hip surface over 3 years. This anterior-surface localization is what reinforces the iliopsoas hypothesis over a labral or SI-primary explanation."
+    },
+    "current_functional_asymmetry_2026": {
+      "reported": "2026-08-06 by user during first session in the app",
+      "observation": "Visible SIDE-HOP / LATERAL SHIFT on ascent from a bilateral back squat. Ascent is not parallel — zig-zags to compensate. Bulgarian split squats also confirmed left side notably weaker, needed more control.",
+      "clinical_meaning": "Active bilateral asymmetry, not just historical. Consistent with the documented left gluteus maximus deficit, left iliopsoas irritability, and left-directional rotation weakness. The 2021 four-month load restriction was followed by no dedicated rehab — six years of compensation habits are now baked into the squat pattern.",
+      "programme_priority": [
+        "Unilateral loading (Bulgarian split squat, single-leg RDL) becomes the highest-value bilateral corrective, not just a supporting movement.",
+        "Front squats are corrective for the shift — the bar falls off the rack if the ascent isn't symmetric.",
+        "Paused squats at the bottom force even weight distribution.",
+        "Consider filming the squat regularly to track visible shift as a KPI, not just weight and reps.",
+        "Physiotherapy remains the highest-value unaddressed clinical action — flag this specifically to the physio if/when the appointment happens."
+      ]
+    },
+    "what_worked": {
+      "date": "2021-01-21",
+      "note": "Orthopaedist recorded positive dynamics on exercise, strength indicators significantly improved. Specific exercises not documented in the record.",
+      "significance": "Objective evidence that loading helped. Argues against treating this as fragile."
+    },
+    "load_restriction_period": {
+      "prescribed": "2021-04-29",
+      "duration_months": 4,
+      "content": "Avoid squat, deadlift, and other movements loading the lower limb and lumbosacral junction."
+    },
+    "injections": [
+      {
+        "date": "2021-04-29",
+        "site": "left SI region",
+        "status": "considered_and_declined",
+        "reason": "Orthopedist elected NOT to inject. Reasoning: dominant irritation focus is in BONE (oedema), not the joint capsule. An intra-articular blockade wouldn't address bone-stress. Load modulation prescribed instead."
+      },
+      {
+        "date": "2022-12-29",
+        "site": "right subacromial space",
+        "agent": "Kenalog",
+        "outcome": "Pain substantially relieved, mobility restriction persisted",
+        "note": "Subacromial injection treats bursitis. Does not address labral or instability pathology — consistent with the partial response."
+      }
+    ],
+    "declined": [
+      "shoulder surgery (2022-12-29)"
+    ],
+    "physiotherapy_engagement": {
+      "referrals": [
+        "2022-02-02",
+        "2023-09-20"
+      ],
+      "attended": 1,
+      "detail": "First referral not attended. Second: missed appointment 2023-10-18, one session 2023-11-02 where meaningful mobilization was not possible due to significant muscle guarding. Acupuncture and EMTT given.",
+      "flag": "Highest-value unaddressed action in the entire record."
+    },
+    "surgical_fallback_mentioned": "Lumbosacral fusion or facet resection, if symptoms persist and do not respond to load modulation (2021-04-29)."
+  },
+  "provocative_positions": [
+    {
+      "id": "deep_flexion_adduction_ir",
+      "label": "Deep hip flexion + adduction + internal rotation",
+      "reason": "FADIR was positive bilaterally, left worse. Occurs under load when knees cave in a squat."
+    },
+    {
+      "id": "lumbar_extension_rotation",
+      "label": "Lumbar extension combined with rotation",
+      "reason": "Directly loads the L5 pseudoarthrosis."
+    },
+    {
+      "id": "loaded_end_range_hip_flexion",
+      "label": "Loaded end-range hip flexion, especially eccentric",
+      "reason": "Clicking documented in the lowering phase of hanging leg raises."
+    },
+    {
+      "id": "resisted_slr",
+      "label": "Resisted straight-leg raise, left",
+      "reason": "Reproduces groin pain. Documented twice, a year apart."
+    },
+    {
+      "id": "heavy_axial_load",
+      "label": "Heavy axial spinal load (back squat, conventional deadlift)",
+      "reason": "The original presenting complaint — could not stand up from a deadlift due to sharp pain."
+    }
+  ],
+  "red_flags": [
+    {
+      "id": "night_pain",
+      "label": "Pain that wakes you at night",
+      "action": "escalate_to_clinician"
+    },
+    {
+      "id": "painful_click",
+      "label": "Sharp catch or click WITH pain in the groin",
+      "action": "back_off_two_steps"
+    },
+    {
+      "id": "persistent_si_ache",
+      "label": "Deep dull ache in left buttock / SI area lasting over 48h",
+      "action": "back_off_two_steps"
+    },
+    {
+      "id": "gait_change",
+      "label": "Pain that shortens your stride when running",
+      "action": "stop_running_session"
+    },
+    {
+      "id": "shoulder_er_weakness",
+      "label": "New weakness in shoulder external rotation, or scapular asymmetry",
+      "action": "escalate_to_clinician",
+      "reason": "Possible suprascapular nerve compression from the spinoglenoid cyst."
+    },
+    {
+      "id": "inflammatory_pattern",
+      "label": "Morning stiffness over 30 min, back pain improving with movement and worsening with rest, second-half-of-night waking",
+      "action": "escalate_to_clinician",
+      "reason": "Inflammatory back pain screen. Never formally excluded."
+    }
+  ],
+  "open_questions_ref": "data/open-questions.json"
+}

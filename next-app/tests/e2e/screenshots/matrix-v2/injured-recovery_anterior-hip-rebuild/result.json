@@ -1,0 +1,17 @@
+{
+  "archetypeId": "injured-recovery",
+  "programSlug": "anterior-hip-rebuild",
+  "daysSimulated": 90,
+  "summary": {
+    "logs_count": 90,
+    "skipped_count": 10,
+    "day_adjustments_count": 4,
+    "training_maxes": {
+      "back_squat_highbar": 109,
+      "block_pull_midshin": 141,
+      "front_squat": 86.5,
+      "deadlift_conventional": 150,
+      "trap_bar_dl_floor": 145.5
+    }
+  }
+}

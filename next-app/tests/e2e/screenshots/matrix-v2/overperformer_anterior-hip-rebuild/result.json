@@ -1,0 +1,17 @@
+{
+  "archetypeId": "overperformer",
+  "programSlug": "anterior-hip-rebuild",
+  "daysSimulated": 90,
+  "summary": {
+    "logs_count": 90,
+    "skipped_count": 0,
+    "day_adjustments_count": 0,
+    "training_maxes": {
+      "back_squat_highbar": 120,
+      "block_pull_midshin": 155,
+      "front_squat": 95,
+      "deadlift_conventional": 165,
+      "trap_bar_dl_floor": 160
+    }
+  }
+}

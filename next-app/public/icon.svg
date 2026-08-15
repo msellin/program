@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Terav">
+  <title>Terav</title>
+  <!-- Background: app ground color, matches theme_color in webmanifest -->
+  <rect width="512" height="512" fill="#0E0F12"/>
+
+  <!-- Bronze chisel-stroke T monogram. Two beveled strokes echoing the
+       landing's chisel motif. Gradient runs bronze-hi → bronze → teal so the
+       mark carries the same signature as the landing hero. -->
+  <defs>
+    <linearGradient id="terav-chisel" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E8B988"/>
+      <stop offset="55%" stop-color="#D09A68"/>
+      <stop offset="100%" stop-color="#7FC4D0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Horizontal stroke: tapered ends, slightly beveled -->
+  <path
+    d="M112 148 L400 128 L400 196 L112 216 Z"
+    fill="url(#terav-chisel)"
+    stroke="none"
+  />
+
+  <!-- Vertical stroke: tapered bottom -->
+  <path
+    d="M224 148 L288 148 L296 400 L216 400 Z"
+    fill="url(#terav-chisel)"
+    stroke="none"
+  />
+</svg>

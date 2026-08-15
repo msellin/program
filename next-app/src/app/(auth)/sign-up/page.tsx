@@ -1,0 +1,179 @@
+"use client";
+
+import { useState, FormEvent } from "react";
+import Link from "next/link";
+import { createClient } from "@/lib/supabase/client";
+
+/**
+ * Sign-up requires:
+ * - Terms of service acceptance
+ * - Explicit consent to store symptom / health-related data (GDPR — this is
+ *   special-category data; needs an affirmative, separate opt-in)
+ *
+ * We save consent timestamps to the user_profiles row after first sign-in so
+ * the record shows exactly when the user agreed to what.
+ */
+export default function SignUpPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [acceptTerms, setAcceptTerms] = useState(false);
+  const [consentSymptom, setConsentSymptom] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [sent, setSent] = useState(false);
+
+  const submit = async (e: FormEvent) => {
+    e.preventDefault();
+    setError(null);
+
+    if (!acceptTerms) {
+      setError("Please accept the terms of service and medical disclaimer.");
+      return;
+    }
+    if (!consentSymptom) {
+      setError("Please tick the health-data consent — the app can't work without it.");
+      return;
+    }
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters.");
+      return;
+    }
+
+    setSubmitting(true);
+    const supabase = createClient();
+    const { error: err } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          accepted_terms_at: new Date().toISOString(),
+          consented_symptom_data_at: new Date().toISOString(),
+        },
+        emailRedirectTo:
+          typeof window !== "undefined"
+            ? `${window.location.origin}/sign-in`
+            : undefined,
+      },
+    });
+    setSubmitting(false);
+    if (err) {
+      setError(err.message);
+      return;
+    }
+    setSent(true);
+  };
+
+  if (sent) {
+    return (
+      <div className="max-w-sm mx-auto pt-8 space-y-4">
+        <h1 className="text-2xl font-semibold text-strong">Check your email</h1>
+        <p className="text-[13.5px] text-ink">
+          We sent a confirmation link to <strong>{email}</strong>. Tap it, then sign in.
+        </p>
+        <p className="text-[12px] text-muted">
+          Nothing arrived after a couple of minutes? Check the spam folder, or use a different email.
+        </p>
+        <Link
+          href="/sign-in"
+          className="inline-block font-mono text-[11.5px] uppercase tracking-wider px-3 py-2 rounded border border-line hover:bg-line-soft"
+        >
+          Back to sign in
+        </Link>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-sm mx-auto pt-8 space-y-5">
+      <div className="flex items-center gap-1.5 mb-4">
+        <span className="font-mono text-[13px] uppercase tracking-[0.2em] text-bronze">Terav</span>
+      </div>
+      <header className="space-y-1">
+        <h1 className="text-2xl font-semibold tracking-tight text-strong">Sign up</h1>
+      </header>
+
+      <form onSubmit={submit} className="space-y-3" noValidate>
+        <label className="block text-[13px]">
+          <span className="block text-muted mb-1">Email</span>
+          <input
+            type="email"
+            required
+            autoComplete="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="block w-full text-[14px] px-3 py-2.5 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze/40 focus:border-bronze"
+          />
+        </label>
+        <label className="block text-[13px]">
+          <span className="block text-muted mb-1">
+            Password <span className="text-[11px] text-muted">(8+ characters)</span>
+          </span>
+          <input
+            type="password"
+            required
+            autoComplete="new-password"
+            minLength={8}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="block w-full text-[14px] px-3 py-2.5 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze/40 focus:border-bronze"
+          />
+        </label>
+
+        <label className="flex items-start gap-2 text-[12.5px] pt-1">
+          <input
+            type="checkbox"
+            checked={acceptTerms}
+            onChange={(e) => setAcceptTerms(e.target.checked)}
+            className="mt-0.5 w-4 h-4 accent-bronze flex-shrink-0"
+          />
+          <span>
+            I&apos;ve read and accept the{" "}
+            <Link href="/legal/terms" target="_blank" className="text-slate border-b border-slate">
+              terms
+            </Link>{" "}
+            and{" "}
+            <Link href="/legal/disclaimer" target="_blank" className="text-slate border-b border-slate">
+              medical disclaimer
+            </Link>
+            . This app is a training log, not medical advice.
+          </span>
+        </label>
+
+        <label className="flex items-start gap-2 text-[12.5px]">
+          <input
+            type="checkbox"
+            checked={consentSymptom}
+            onChange={(e) => setConsentSymptom(e.target.checked)}
+            className="mt-0.5 w-4 h-4 accent-bronze flex-shrink-0"
+          />
+          <span>
+            I consent to storing my training log and symptom scores. See{" "}
+            <Link href="/legal/privacy" target="_blank" className="text-slate border-b border-slate">
+              privacy policy
+            </Link>{" "}
+            for what&apos;s kept and how to delete it.
+          </span>
+        </label>
+
+        {error ? (
+          <p className="text-[13px] text-red border-l-4 border-red pl-2">{error}</p>
+        ) : null}
+
+        <button
+          type="submit"
+          disabled={submitting}
+          className="w-full font-mono text-[12.5px] uppercase tracking-wider py-3 rounded bg-bronze text-ground hover:bg-bronze/90 disabled:opacity-50 min-h-[44px]"
+        >
+          {submitting ? "Creating account…" : "Create account"}
+        </button>
+      </form>
+
+      <p className="text-[13px] text-muted">
+        Already have an account?{" "}
+        <Link href="/sign-in" className="text-slate border-b border-slate">
+          Sign in
+        </Link>
+      </p>
+    </div>
+  );
+}

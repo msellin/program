@@ -1,0 +1,17 @@
+{
+  "archetypeId": "erratic",
+  "programSlug": "anterior-hip-rebuild",
+  "daysSimulated": 90,
+  "summary": {
+    "logs_count": 90,
+    "skipped_count": 38,
+    "day_adjustments_count": 32,
+    "training_maxes": {
+      "back_squat_highbar": 110,
+      "block_pull_midshin": 140,
+      "front_squat": 85,
+      "deadlift_conventional": 150,
+      "trap_bar_dl_floor": 145
+    }
+  }
+}
