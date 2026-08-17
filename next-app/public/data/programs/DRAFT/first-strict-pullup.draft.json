@@ -1,0 +1,1493 @@
+{
+  "schema_version": "1.2.0",
+  "generated": "2026-08-17",
+  "status": "draft",
+  "status_note": "DRAFT — not yet in catalog. Multi-dimensional skill program on the shared pull drill library. Tier A (no hang) → Tier D (first strict pull-up + adding volume). Reuses grip-strength, scap-control, and row-strength sub-capabilities. NO ENGINE CODE required — runs on the same multi_dimensional generator as Handstand Walk. Dates in phases[] are template anchors from Mon 2026-01-05; the generator remaps to the user's real start date on activation. Ships when founder flips status to PROVISIONAL and adds the manifest entry.",
+  "generation_strategy": "multi_dimensional",
+  "drill_library": [
+    "pu_dead_hang",
+    "pu_active_hang",
+    "pu_scap_pull",
+    "pu_scap_retraction_hold",
+    "pu_ring_row_incline",
+    "pu_ring_row_horizontal",
+    "pu_ring_row_feet_elevated",
+    "pu_band_pullup_heavy",
+    "pu_band_pullup_light",
+    "pu_negative_pullup_5s",
+    "pu_negative_pullup_10s",
+    "pu_isometric_top_hold",
+    "pu_isometric_mid_hold",
+    "pu_isometric_chin_over_bar",
+    "pu_arch_hold",
+    "pu_hollow_body_hold",
+    "pu_hollow_body_pullover",
+    "pu_farmers_carry",
+    "pu_dumbbell_row",
+    "pu_lat_pulldown",
+    "pu_first_strict_attempt",
+    "pu_partial_rom_pullup",
+    "pu_slow_tempo_pullup",
+    "pu_grease_the_groove_singles",
+    "pu_shoulder_prep_band",
+    "pu_video_review"
+  ],
+  "goals": {
+    "primary_intent": "Get your first strict pull-up — or, if you already have one, add strict-pull-up volume (3, 5, 8 unbroken). Sub-capabilities (grip-strength dead hang, scapular control, row strength, negative control, active hollow shape) train as independent state variables. Weekly plan targets the weakest measured capability first (Henry 1968; Proteau 1992).",
+    "arc": {
+      "block_1_this_program": "8-12 weeks. Tier A builds hang time + first scap pulls. Tier B builds negatives + heavy-band assisted reps. Tier C converts assisted reps to the first unassisted strict pull-up. Tier D adds volume up to 3-5 unbroken.",
+      "block_2_expected": "8-10 weeks. Volume expansion: 3 → 8 strict pull-ups unbroken; chin-up + wide-grip variants added.",
+      "total_arc_weeks_estimate": [
+        16,
+        22
+      ],
+      "note": "No cohort ETA — Ackerman 1988 and Wu 2014 show 3-10× individual variance in psychomotor + strength learning. The block delivers a personal delta, not a promise. Youdas 2010 documents the descending-EMG hierarchy across pull-up variants; the drill library is ordered against it."
+    }
+  },
+  "principles": [
+    {
+      "id": "sub_skill_independence",
+      "rule": "Grip / dead hang, scap control, row strength, and negative-lowering control are separate state variables — trained independently, not chained",
+      "detail": "Henry 1968 specificity + Newell 1985 constraints-led framework. A user who dead-hangs 45s but can't scap-pull needs different drills from one who does 5 negatives but has a 12-second hang."
+    },
+    {
+      "id": "external_focus_default",
+      "rule": "Every drill card renders an external-focus cue by default (Wulf 1998, 2013)",
+      "detail": "External focus reliably outperforms internal focus for motor skill acquisition. Cues target the environment or movement effect — 'pull the bar to your chest', not 'squeeze your lats'. Halperin 2019 confirmed the effect specifically for weightlifting force and velocity."
+    },
+    {
+      "id": "self_controlled_feedback",
+      "rule": "Video review is a button, not a schedule (Chiviacowsky & Wulf 2002, 2005)",
+      "detail": "Self-selected feedback outperforms forced schedules. The video review 'drill' surfaces after every attempt set as optional — user taps if they want it."
+    },
+    {
+      "id": "eccentric_before_concentric",
+      "rule": "Negatives before assisted concentrics for Tier B",
+      "detail": "Roig 2009 meta showed eccentric training produces greater strength gains than concentric-only when total work is matched. For a user who can't hold the top position yet, controlled 5-10s negatives build the sarcomere-length-tension a full pull-up requires. This is where band-assisted reps often stall — the concentric phase gets grooved but the top hold and lockout aren't loaded."
+    },
+    {
+      "id": "grease_the_groove_from_tier_c",
+      "rule": "From Tier C, daily sub-maximal singles ('greasing the groove') are available",
+      "detail": "Pavel Tsatsouline's coaching heuristic; not RCT-tested but consistent with Karni 1998 fast/slow learning and Shea 2000 spacing effect for motor consolidation. Flagged as engineering choice. Daily 3-5 singles at 60-70% of max, well shy of failure. Only unlocked from Tier C to protect against tendon overload in earlier tiers."
+    },
+    {
+      "id": "shoulder_pain_stops_session",
+      "rule": "Any shoulder pain during a pull attempt ends the session — no working through it",
+      "detail": "The same principle that governs handstand walk applies to the pull-up. Supraspinatus and long head of biceps are load-bearing at the hang bottom. Pain-through reinforces compensation."
+    },
+    {
+      "id": "band_assistance_is_a_tool_not_the_goal",
+      "rule": "Band-assisted pull-ups build patterning; they don't build a strict pull-up on their own",
+      "detail": "Sinnett 2019 showed the peak EMG in the lat / lower trap during a band-assisted pull-up is significantly lower than in a strict rep — the band pulls you through the sticking point. Program uses band-assisted work as a groove drill (Tier B / C), NOT as the primary progression. Negatives and isometric top holds carry more transfer."
+    }
+  ],
+  "intake": {
+    "duration_days": 3,
+    "questions": [
+      {
+        "id": "days_per_week",
+        "label": "Realistically, how many days per week can you commit?",
+        "help": "Honest answer wins. Pull-up work benefits from spacing — 3-5 sessions per week beats 2 big ones.",
+        "type": "select",
+        "required": true,
+        "options": [
+          {
+            "value": "2",
+            "label": "2 days"
+          },
+          {
+            "value": "3",
+            "label": "3 days"
+          },
+          {
+            "value": "4",
+            "label": "4 days"
+          },
+          {
+            "value": "5",
+            "label": "5 days"
+          }
+        ]
+      },
+      {
+        "id": "current_strict_pullups",
+        "label": "How many strict pull-ups can you do right now — no kip, no swing, full range from dead hang to chin over the bar?",
+        "type": "select",
+        "required": true,
+        "options": [
+          {
+            "value": "zero_no_hang",
+            "label": "Zero — I can't hang from the bar for 15 seconds",
+            "hint": "Tier A"
+          },
+          {
+            "value": "zero_can_hang",
+            "label": "Zero — but I can dead hang 15+ seconds",
+            "hint": "Tier A / B"
+          },
+          {
+            "value": "assisted_only",
+            "label": "Only with a band or assisted machine",
+            "hint": "Tier B"
+          },
+          {
+            "value": "one_partial",
+            "label": "Almost — I can do a partial rep or a slow negative",
+            "hint": "Tier B / C"
+          },
+          {
+            "value": "one_two",
+            "label": "1-2 strict reps",
+            "hint": "Tier C"
+          },
+          {
+            "value": "three_five",
+            "label": "3-5 strict reps",
+            "hint": "Tier D"
+          }
+        ]
+      },
+      {
+        "id": "dead_hang_seconds_selfreport",
+        "label": "How long can you passively dead hang from a pull-up bar (arms straight, no scap engagement, just hanging)?",
+        "type": "select",
+        "required": true,
+        "options": [
+          {
+            "value": "under_10s",
+            "label": "Under 10 seconds",
+            "hint": "Tier A entry — grip is limiting"
+          },
+          {
+            "value": "10_20s",
+            "label": "10-20 seconds",
+            "hint": "Tier A / B boundary"
+          },
+          {
+            "value": "20_45s",
+            "label": "20-45 seconds",
+            "hint": "Tier B entry"
+          },
+          {
+            "value": "45_60s",
+            "label": "45-60 seconds",
+            "hint": "Tier B / C boundary"
+          },
+          {
+            "value": "over_60s",
+            "label": "Over 60 seconds",
+            "hint": "Tier C+"
+          }
+        ]
+      },
+      {
+        "id": "ring_row_reps_selfreport",
+        "label": "How many strict feet-elevated ring rows can you do (feet on a box, body horizontal, pull chest to rings)?",
+        "type": "select",
+        "required": true,
+        "help": "This is a proxy for pulling strength at bodyweight. If you don't have rings, an inverted row from a barbell in a rack is a fine substitute.",
+        "options": [
+          {
+            "value": "under_5",
+            "label": "Under 5 (or can't do them yet)",
+            "hint": "Tier A"
+          },
+          {
+            "value": "5_10",
+            "label": "5-10",
+            "hint": "Tier A / B"
+          },
+          {
+            "value": "10_15",
+            "label": "10-15",
+            "hint": "Tier B / C"
+          },
+          {
+            "value": "over_15",
+            "label": "Over 15",
+            "hint": "Tier C+"
+          }
+        ]
+      },
+      {
+        "id": "shoulder_pain_overhead",
+        "label": "Have you had shoulder pain during any overhead pressing, pull-down, or hanging work in the last 12 months?",
+        "type": "boolean",
+        "required": true,
+        "help": "Includes press, pull-up attempts, hanging work, or overhead sports. If yes, we bias the plan toward closed-chain scap work and defer heavy dead hangs."
+      },
+      {
+        "id": "elbow_tendon_pain",
+        "label": "Any elbow tendon pain (medial or lateral) currently or in the last 3 months?",
+        "type": "select",
+        "required": true,
+        "options": [
+          {
+            "value": "no",
+            "label": "No"
+          },
+          {
+            "value": "resolved",
+            "label": "Resolved > 3 months ago"
+          },
+          {
+            "value": "current",
+            "label": "Currently symptomatic"
+          }
+        ],
+        "help": "Chinup / neutral-grip variants load medial elbow. If current, we defer heavy negatives and use scap-focused work first."
+      },
+      {
+        "id": "acute_shoulder_injury",
+        "label": "Do you have an acute shoulder injury (rotator cuff tear, labral tear, dislocation) in the last 6 months?",
+        "type": "boolean",
+        "required": true,
+        "help": "If yes, dead hangs and pull-up attempts are contraindicated until cleared."
+      },
+      {
+        "id": "bodyweight_kg",
+        "label": "Approximate bodyweight (kg) — used to shape band-tension progression",
+        "type": "number",
+        "required": true,
+        "min": 40,
+        "max": 200,
+        "step": 1,
+        "unit": "kg"
+      },
+      {
+        "id": "consent_symptom_data",
+        "label": "I understand this program is a training template and not medical advice. I'll stop and see a clinician if shoulder or elbow pain persists after a session.",
+        "type": "boolean",
+        "required": true
+      }
+    ],
+    "physical_tests": [
+      {
+        "id": "dead_hang_max_seconds",
+        "label": "Passive dead hang — max time",
+        "instructions": "Warm up shoulders 2-3 minutes (band pull-aparts, scap CARs). Grip a pull-up bar overhand, shoulder-width. Hang with arms fully extended, no scap engagement, until you lose grip. Record seconds. Stop early if shoulder pain appears.",
+        "unit": "seconds",
+        "min": 0,
+        "max": 180
+      },
+      {
+        "id": "scap_pull_max_reps",
+        "label": "Strict scapular pulls — max reps",
+        "instructions": "From a dead hang, initiate the pull with only your shoulder blades — pull chest up slightly by depressing and retracting the scapulae, without bending the elbows. Return to full hang. Record clean reps. Stop when reps degrade to elbow-bending.",
+        "unit": "reps",
+        "min": 0,
+        "max": 30,
+        "video_search": "strict scapular pull-up form"
+      },
+      {
+        "id": "ring_row_max_reps_feet_elevated",
+        "label": "Strict feet-elevated ring row — max reps",
+        "instructions": "Set rings so feet on a box and body is roughly horizontal at the bottom. Row chest to rings, elbows track behind you. Record clean reps. Stop when hip sags or reps degrade.",
+        "unit": "reps",
+        "min": 0,
+        "max": 30
+      },
+      {
+        "id": "strict_pullup_max_reps",
+        "label": "Strict pull-up — max reps",
+        "instructions": "Dead hang start, chin clearly over the bar, controlled descent to full hang. No kip, no leg swing. Record reps. Zero counts if you can't do one.",
+        "unit": "reps",
+        "min": 0,
+        "max": 25
+      },
+      {
+        "id": "negative_pullup_seconds",
+        "label": "Slow negative — control time",
+        "instructions": "Only if you can get to the top position (jump / step up / assisted). From chin over bar, lower under control until arms are fully extended. Record seconds under control. If you drop or accelerate, that attempt doesn't count.",
+        "unit": "seconds",
+        "min": 0,
+        "max": 30,
+        "video_search": "slow negative pull-up 10 seconds"
+      }
+    ],
+    "consent": [
+      {
+        "id": "not_medical_advice",
+        "label": "I understand this is a training template, not medical advice. I'll consult a clinician for shoulder or elbow pain that persists past a session.",
+        "required": true
+      },
+      {
+        "id": "shoulder_pain_stop_rule",
+        "label": "I agree to stop the session if shoulder pain appears during a hang or pull attempt — no training through it.",
+        "required": true
+      }
+    ],
+    "safety_gates": [
+      {
+        "question_id": "acute_shoulder_injury",
+        "unsafe_values": [
+          "true"
+        ],
+        "block_title": "Wait for the acute injury to resolve",
+        "block_body": "An acute shoulder injury needs healing time and clinical assessment. Come back once you're cleared to load the shoulder in a hang position."
+      }
+    ]
+  },
+  "schedule_constraints": {
+    "available_days_min": 2,
+    "available_days_max": 5,
+    "session_length_min_range": [
+      15,
+      30
+    ],
+    "session_count_per_week_range": [
+      2,
+      5
+    ],
+    "hard_day_separation_h": 48
+  },
+  "plan_tiers": [
+    {
+      "id": "tier_a_hang",
+      "label": "Tier A — No hang yet",
+      "condition": "dead_hang_max_seconds < 15",
+      "typical_outcome": "By week 8: 25-45 second dead hang, first clean scapular pulls, and 5-10 strict feet-elevated ring rows.",
+      "outcome_confidence": "realistic",
+      "full_goal_weeks_estimate": 20,
+      "starting_phase_id": "phase_1_hang_and_row_base",
+      "program_adjustments": {
+        "starting_capability_levels": {
+          "pu_dead_hang_grip": 1,
+          "pu_scap_control": 1,
+          "pu_row_strength": 1,
+          "pu_negative_control": 1,
+          "pu_hollow_active_shape": 1,
+          "pu_full_pullup_volume": 1
+        },
+        "sessions_per_week": 3,
+        "session_length_min": 15,
+        "note": "Foundation tier is 3 sessions/week × 15 min. Dead hang + scap pull ladder + ring rows dominate. No pull-up attempts this block. Band-assisted work does NOT start until dead hang is 25+ seconds AND scap pulls are 5 clean reps."
+      }
+    },
+    {
+      "id": "tier_b_assisted",
+      "label": "Tier B — Hang established, no strict rep yet",
+      "condition": "dead_hang_max_seconds >= 15 && strict_pullup_max_reps < 1",
+      "typical_outcome": "By week 8-10: first strict pull-up OR a clean 10-second slow negative + a heavy-band assisted rep at low band tension. Dead hang at 45-60 seconds.",
+      "outcome_confidence": "realistic",
+      "full_goal_weeks_estimate": 12,
+      "starting_phase_id": "phase_2_negatives_and_assist",
+      "program_adjustments": {
+        "starting_capability_levels": {
+          "pu_dead_hang_grip": 2,
+          "pu_scap_control": 2,
+          "pu_row_strength": 2,
+          "pu_negative_control": 1,
+          "pu_hollow_active_shape": 2,
+          "pu_full_pullup_volume": 1
+        },
+        "sessions_per_week": 3,
+        "session_length_min": 20,
+        "note": "Reference tier. Negatives (5-10s controlled) as the primary driver. Band-assisted reps come in from week 3 at heavy band, taper to lighter bands by week 6. First strict pull-up attempt from week 5 as a weekly test."
+      }
+    },
+    {
+      "id": "tier_c_first_rep",
+      "label": "Tier C — One strict rep, building the second",
+      "condition": "strict_pullup_max_reps >= 1 && strict_pullup_max_reps < 3",
+      "typical_outcome": "By week 8: 3-5 strict pull-ups unbroken. Grease-the-groove daily singles unlock. First tempo pull-ups (3s up, 3s hold, 3s down).",
+      "outcome_confidence": "realistic",
+      "full_goal_weeks_estimate": 10,
+      "starting_phase_id": "phase_3_first_reps",
+      "program_adjustments": {
+        "starting_capability_levels": {
+          "pu_dead_hang_grip": 3,
+          "pu_scap_control": 3,
+          "pu_row_strength": 3,
+          "pu_negative_control": 3,
+          "pu_hollow_active_shape": 3,
+          "pu_full_pullup_volume": 2
+        },
+        "sessions_per_week": 4,
+        "session_length_min": 20,
+        "note": "Volume-oriented. Doubles and triples at 60-70% max, submax singles daily (GtG). Tempo work introduces the slow-eccentric groove. Retest max reps weekly."
+      }
+    },
+    {
+      "id": "tier_d_volume",
+      "label": "Tier D — Multiple reps, adding volume",
+      "condition": "strict_pullup_max_reps >= 3",
+      "typical_outcome": "By week 8: 8-10 strict pull-ups unbroken from a starting 3-5 rep max. Wide-grip and neutral-grip variants unlocked. Weighted pull-up prep starts at end of block.",
+      "outcome_confidence": "fair",
+      "full_goal_weeks_estimate": 10,
+      "starting_phase_id": "phase_4_volume_variety",
+      "program_adjustments": {
+        "starting_capability_levels": {
+          "pu_dead_hang_grip": 4,
+          "pu_scap_control": 4,
+          "pu_row_strength": 4,
+          "pu_negative_control": 4,
+          "pu_hollow_active_shape": 4,
+          "pu_full_pullup_volume": 3
+        },
+        "sessions_per_week": 4,
+        "session_length_min": 25,
+        "note": "Volume block. Sub-max sets across the day (Reg Park heuristic + Shea 2000 spacing). Wide-grip variant from week 3 (Youdas 2010 higher lat EMG). Weighted preview (+2.5 to +5 kg singles) week 7-8."
+      }
+    }
+  ],
+  "program_goal": {
+    "metric": "strict_pullup_max_reps",
+    "target_value": 1,
+    "stretch_value": 5,
+    "display_name": "Strict pull-up max reps",
+    "unit": "reps",
+    "direction": "higher_is_better"
+  },
+  "phases": [
+    {
+      "id": "phase_1_hang_and_row_base",
+      "name": "Weeks 1-4 — Hang, scap, row base (Tier A)",
+      "starts": "2026-01-05",
+      "ends": "2026-02-01",
+      "duration_weeks": 4,
+      "blocks": [
+        "block_shoulder_prep",
+        "block_hang_ladder",
+        "block_scap_pull_ladder",
+        "block_row_strength"
+      ],
+      "goal": "Build the grip + scap prerequisites. Dead hang to 25+ seconds, first clean scap pulls, ring rows built to 8-10 clean reps.",
+      "template_note": "Blocked practice weeks 1-2 (Wulf & Shea 2002): hang session, scap session, row session on separate days. Weeks 3-4 combine two capabilities per session as capability levels rise.",
+      "notes": [
+        "No pull-up attempts this phase. Focus is grip endurance and scap engagement, both of which decouple from pulling strength (Youdas 2010 EMG hierarchy shows scap phase precedes concentric pull).",
+        "Bands are not introduced until dead hang ≥ 25s and 5 clean scap pulls (engineering-choice gate)."
+      ]
+    },
+    {
+      "id": "phase_2_negatives_and_assist",
+      "name": "Weeks 1-8 — Negatives + heavy-band assist (Tier B)",
+      "starts": "2026-01-05",
+      "ends": "2026-03-01",
+      "duration_weeks": 8,
+      "blocks": [
+        "block_shoulder_prep",
+        "block_hang_ladder",
+        "block_negative_ladder",
+        "block_band_assist",
+        "block_row_strength",
+        "block_active_hollow"
+      ],
+      "goal": "Groove the pull pattern via 5-10s negatives + heavy-band assistance. Test a strict rep from week 5 onward.",
+      "template_note": "Blocked practice weeks 1-2 (Wulf & Shea 2002); interleaved from week 3. Negatives are the primary driver (Roig 2009 eccentric-heavy meta).",
+      "notes": [
+        "Band tension decreases as sessions accumulate — heavy band weeks 1-3, medium band weeks 4-6, light band or no band weeks 7-8.",
+        "First strict rep attempt from week 5 as a weekly single test — cold, well-rested, first movement in the session."
+      ]
+    },
+    {
+      "id": "phase_3_first_reps",
+      "name": "Weeks 1-8 — First unbroken set + grease the groove (Tier C)",
+      "starts": "2026-01-05",
+      "ends": "2026-03-01",
+      "duration_weeks": 8,
+      "blocks": [
+        "block_shoulder_prep",
+        "block_pullup_sets_submax",
+        "block_tempo_pullup",
+        "block_gtg_singles",
+        "block_row_strength",
+        "block_active_hollow"
+      ],
+      "goal": "Extend 1-2 rep max to 3-5 unbroken. Introduce sub-maximal singles across the day.",
+      "template_note": "Interleaved from week 1 (past acquisition stage). Sub-maximal doubles/triples at ~60-70% max as primary driver. Grease-the-groove singles daily.",
+      "notes": [
+        "Weekly max-rep retest as the primary KPI.",
+        "Tempo pull-ups (3-3-3) introduce the slow-eccentric groove — 1 set per session, quality over quantity."
+      ]
+    },
+    {
+      "id": "phase_4_volume_variety",
+      "name": "Weeks 1-8 — Volume + variety (Tier D)",
+      "starts": "2026-01-05",
+      "ends": "2026-03-01",
+      "duration_weeks": 8,
+      "blocks": [
+        "block_shoulder_prep",
+        "block_pullup_sets_submax",
+        "block_pullup_variety",
+        "block_gtg_singles",
+        "block_row_strength",
+        "block_active_hollow"
+      ],
+      "goal": "3-5 rep max → 8-10 unbroken. Wide-grip and neutral-grip variants unlocked. Weighted single-preview at end of block.",
+      "template_note": "Fully interleaved (random CI) from week 1. Variety of practice (Schmidt 1975 schema theory) via grip-width rotation.",
+      "notes": [
+        "Weekly max-rep retest.",
+        "Weighted single (+2.5 kg to +5 kg) unlocks week 7-8 IF week-6 max reps ≥ 5."
+      ]
+    },
+    {
+      "id": "phase_all_weeks_5_8_interleaved",
+      "name": "Weeks 5-8 — Interleaved consolidation for all tiers",
+      "starts": "2026-02-02",
+      "ends": "2026-03-01",
+      "duration_weeks": 4,
+      "blocks": [
+        "block_shoulder_prep",
+        "block_hang_ladder",
+        "block_scap_pull_ladder",
+        "block_negative_ladder",
+        "block_band_assist",
+        "block_pullup_sets_submax",
+        "block_tempo_pullup",
+        "block_gtg_singles",
+        "block_row_strength",
+        "block_active_hollow"
+      ],
+      "goal": "Post-acquisition: engine interleaves 2-3 drills per session across the weakest capabilities.",
+      "template_note": "Multi-dimensional generator picks from drill_library filtered by capability_profile. Weakest first (Henry 1968).",
+      "test_at_end": "Week 8: full re-assessment (dead hang max, scap pull max, ring row max, strict pull-up max reps, negative control seconds).",
+      "notes": [
+        "Weekly retest: strict pull-up max reps (single metric, cheap).",
+        "4-week retest: full assessment battery."
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "id": "block_shoulder_prep",
+      "name": "Shoulder + grip prep — every session",
+      "category": "accessory",
+      "location": "anywhere",
+      "duration_min": 5,
+      "note": "Band pull-aparts + scap CARs + light forearm activation. 3-5 min before any bar-hang work. Non-optional in weeks 1-3.",
+      "items": [
+        {
+          "exercise_id": "pu_shoulder_prep_band",
+          "order": "A1",
+          "role": "warmup",
+          "sets": 2,
+          "reps": 12
+        }
+      ],
+      "capability_slot": "pu_scap_control",
+      "slot_drill_count": 1
+    },
+    {
+      "id": "block_hang_ladder",
+      "name": "Dead-hang ladder (Tier A/B)",
+      "category": "accessory",
+      "location": "gym",
+      "duration_min": [
+        8,
+        12
+      ],
+      "note": "Grip endurance base. Passive hang → active hang. Volume capped at 4 minutes accumulated per session for weeks 1-2 (engineering choice — no direct dose-response study for hang time).",
+      "items": [
+        {
+          "exercise_id": "pu_dead_hang",
+          "order": "A1",
+          "role": "main",
+          "sets": 4,
+          "hold_seconds": 20
+        },
+        {
+          "exercise_id": "pu_active_hang",
+          "order": "A2",
+          "role": "main",
+          "sets": 3,
+          "hold_seconds": 15,
+          "starts_week": 2,
+          "condition": "pu_dead_hang_grip_level >= 2"
+        }
+      ],
+      "capability_slot": "pu_dead_hang_grip",
+      "slot_drill_count": 2
+    },
+    {
+      "id": "block_scap_pull_ladder",
+      "name": "Scapular pull ladder (Tier A/B)",
+      "category": "accessory",
+      "location": "gym",
+      "duration_min": [
+        8,
+        12
+      ],
+      "note": "The neuromuscular precursor to a pull-up. Youdas 2010 EMG data: scap phase precedes concentric pull. Retraction hold isolates the endpoint.",
+      "items": [
+        {
+          "exercise_id": "pu_scap_pull",
+          "order": "A1",
+          "role": "main",
+          "sets": 4,
+          "reps": 5
+        },
+        {
+          "exercise_id": "pu_scap_retraction_hold",
+          "order": "A2",
+          "role": "accessory",
+          "sets": 3,
+          "hold_seconds": 8,
+          "optional": true
+        }
+      ],
+      "capability_slot": "pu_scap_control",
+      "slot_drill_count": 2
+    },
+    {
+      "id": "block_row_strength",
+      "name": "Row strength — closed-chain pull",
+      "category": "accessory",
+      "location": "gym",
+      "duration_min": [
+        10,
+        15
+      ],
+      "note": "Feet-elevated ring row / inverted row. Fahs 2015 style pulling strength transfer to pull-up is modest but positive; more critical is that it lets Tier A build a pulling motor pattern without needing the bar.",
+      "items": [
+        {
+          "exercise_id": "pu_ring_row_incline",
+          "order": "A1",
+          "role": "main",
+          "sets": 3,
+          "reps": 10,
+          "condition": "pu_row_strength_level < 2"
+        },
+        {
+          "exercise_id": "pu_ring_row_horizontal",
+          "order": "A2",
+          "role": "main",
+          "sets": 4,
+          "reps": 8,
+          "condition": "pu_row_strength_level >= 2 && pu_row_strength_level < 4"
+        },
+        {
+          "exercise_id": "pu_ring_row_feet_elevated",
+          "order": "A3",
+          "role": "main",
+          "sets": 4,
+          "reps": 6,
+          "condition": "pu_row_strength_level >= 4"
+        }
+      ],
+      "capability_slot": "pu_row_strength",
+      "slot_drill_count": 1
+    },
+    {
+      "id": "block_negative_ladder",
+      "name": "Negative ladder (Tier B)",
+      "category": "accessory",
+      "location": "gym",
+      "duration_min": [
+        10,
+        15
+      ],
+      "note": "The primary driver for Tier B. Roig 2009 meta: eccentric training beats concentric-only for matched work. Under-loaded eccentric holds inefficient; a 10-second controlled descent is dose-appropriate.",
+      "items": [
+        {
+          "exercise_id": "pu_negative_pullup_5s",
+          "order": "A1",
+          "role": "main",
+          "sets": 4,
+          "reps": 3,
+          "condition": "pu_negative_control_level < 3"
+        },
+        {
+          "exercise_id": "pu_negative_pullup_10s",
+          "order": "A2",
+          "role": "main",
+          "sets": 3,
+          "reps": 2,
+          "starts_week": 3,
+          "condition": "pu_negative_control_level >= 3"
+        },
+        {
+          "exercise_id": "pu_isometric_top_hold",
+          "order": "A3",
+          "role": "accessory",
+          "sets": 3,
+          "hold_seconds": 5,
+          "optional": true
+        }
+      ],
+      "capability_slot": "pu_negative_control",
+      "slot_drill_count": 2
+    },
+    {
+      "id": "block_band_assist",
+      "name": "Band-assisted pull ladder (Tier B)",
+      "category": "accessory",
+      "location": "gym",
+      "duration_min": [
+        10,
+        15
+      ],
+      "note": "Band assists the sticking point. Heavy band weeks 1-3, medium weeks 4-6, light or no band weeks 7-8. Sinnett 2019: band-assisted EMG is lower than strict, so this is a groove drill, not the primary strength driver.",
+      "items": [
+        {
+          "exercise_id": "pu_band_pullup_heavy",
+          "order": "A1",
+          "role": "main",
+          "sets": 4,
+          "reps": 5,
+          "condition": "pu_full_pullup_volume_level < 2"
+        },
+        {
+          "exercise_id": "pu_band_pullup_light",
+          "order": "A2",
+          "role": "main",
+          "sets": 4,
+          "reps": 3,
+          "starts_week": 4,
+          "condition": "pu_full_pullup_volume_level >= 2"
+        },
+        {
+          "exercise_id": "pu_first_strict_attempt",
+          "order": "A3",
+          "role": "test",
+          "sets": 1,
+          "reps": 1,
+          "starts_week": 5,
+          "note": "First strict rep test — cold, first movement in the session."
+        }
+      ],
+      "capability_slot": "pu_full_pullup_volume",
+      "slot_drill_count": 2
+    },
+    {
+      "id": "block_pullup_sets_submax",
+      "name": "Sub-max pull-up sets (Tier C/D)",
+      "category": "accessory",
+      "location": "gym",
+      "duration_min": [
+        10,
+        15
+      ],
+      "note": "Doubles and triples at 60-70% max. Volume without failure — Zourdos 2019 velocity-loss threshold literature supports staying well shy of RIR 0 for daily-training patterns.",
+      "items": [
+        {
+          "exercise_id": "pu_first_strict_attempt",
+          "order": "A1",
+          "role": "test",
+          "sets": 1,
+          "reps": 1,
+          "note": "Weekly weekly max-rep test — first set, cold."
+        },
+        {
+          "exercise_id": "pu_partial_rom_pullup",
+          "order": "A2",
+          "role": "main",
+          "sets": 5,
+          "reps": 2,
+          "condition": "pu_full_pullup_volume_level >= 2"
+        }
+      ],
+      "capability_slot": "pu_full_pullup_volume",
+      "slot_drill_count": 2
+    },
+    {
+      "id": "block_tempo_pullup",
+      "name": "Tempo pull-up (Tier C)",
+      "category": "accessory",
+      "location": "gym",
+      "duration_min": [
+        8,
+        10
+      ],
+      "note": "3-3-3 tempo. Slow-eccentric emphasis + isometric top. Roig 2009 mechanism + eccentric transfer benefit.",
+      "items": [
+        {
+          "exercise_id": "pu_slow_tempo_pullup",
+          "order": "A1",
+          "role": "main",
+          "sets": 3,
+          "reps": 2,
+          "condition": "pu_full_pullup_volume_level >= 2"
+        },
+        {
+          "exercise_id": "pu_isometric_mid_hold",
+          "order": "A2",
+          "role": "accessory",
+          "sets": 3,
+          "hold_seconds": 5,
+          "optional": true
+        }
+      ],
+      "capability_slot": "pu_negative_control",
+      "slot_drill_count": 1
+    },
+    {
+      "id": "block_gtg_singles",
+      "name": "Grease the groove — sub-max singles (Tier C/D)",
+      "category": "accessory",
+      "location": "anywhere",
+      "duration_min": 3,
+      "note": "Coaching heuristic (Tsatsouline) — flagged as engineering choice, not evidence. 3-5 singles per day at 60-70% max, well shy of failure. Consistent with Karni 1998 fast/slow learning + Shea 2000 spacing.",
+      "items": [
+        {
+          "exercise_id": "pu_grease_the_groove_singles",
+          "order": "A1",
+          "role": "main",
+          "sets": 5,
+          "reps": 1,
+          "note": "One single per hour if possible. Never to failure. Stop the day's GtG if any rep degrades in form."
+        }
+      ],
+      "capability_slot": "pu_full_pullup_volume",
+      "slot_drill_count": 1
+    },
+    {
+      "id": "block_pullup_variety",
+      "name": "Grip-width variety (Tier D)",
+      "category": "accessory",
+      "location": "gym",
+      "duration_min": [
+        10,
+        15
+      ],
+      "note": "Rotates grip width. Wide grip biases lat, neutral biases brachialis, chinup biases biceps. Youdas 2010 EMG hierarchy supports variety of practice (Schmidt 1975 schema theory).",
+      "items": [
+        {
+          "exercise_id": "pu_first_strict_attempt",
+          "order": "A1",
+          "role": "test",
+          "sets": 1,
+          "reps": 1,
+          "note": "Weekly max-rep test on standard grip."
+        },
+        {
+          "exercise_id": "pu_partial_rom_pullup",
+          "order": "A2",
+          "role": "main",
+          "sets": 4,
+          "reps": 4,
+          "starts_week": 3,
+          "note": "Rotate grip: wide, neutral, standard across the week."
+        }
+      ],
+      "capability_slot": "pu_full_pullup_volume",
+      "slot_drill_count": 2
+    },
+    {
+      "id": "block_active_hollow",
+      "name": "Active hollow body — pull-shape isometrics",
+      "category": "accessory",
+      "location": "anywhere",
+      "duration_min": [
+        5,
+        8
+      ],
+      "note": "The hollow-body shape is the pull-up shape. Hollow holds + hollow pullovers build the anterior chain that keeps the ribcage tucked during the pull.",
+      "items": [
+        {
+          "exercise_id": "pu_hollow_body_hold",
+          "order": "A1",
+          "role": "main",
+          "sets": 3,
+          "hold_seconds": 20
+        },
+        {
+          "exercise_id": "pu_hollow_body_pullover",
+          "order": "A2",
+          "role": "accessory",
+          "sets": 3,
+          "reps": 10,
+          "optional": true
+        }
+      ],
+      "capability_slot": "pu_hollow_active_shape",
+      "slot_drill_count": 2
+    }
+  ],
+  "weekly_template": {
+    "note": "Multi-dimensional generation: the generator picks 2-3 drills per session at composition time based on the user's capability_profile. This template declares slot layout only.",
+    "reference_week_tier_a": {
+      "sessions": 3,
+      "layout": [
+        {
+          "day": "Mon",
+          "session_slot": "hang_priority",
+          "primary_block": "block_hang_ladder",
+          "wrap": [
+            "block_shoulder_prep",
+            "block_active_hollow"
+          ]
+        },
+        {
+          "day": "Wed",
+          "session_slot": "scap_priority",
+          "primary_block": "block_scap_pull_ladder",
+          "wrap": [
+            "block_shoulder_prep",
+            "block_row_strength"
+          ]
+        },
+        {
+          "day": "Fri",
+          "session_slot": "row_priority",
+          "primary_block": "block_row_strength",
+          "wrap": [
+            "block_shoulder_prep",
+            "block_hang_ladder"
+          ]
+        }
+      ]
+    },
+    "reference_week_tier_b": {
+      "sessions": 3,
+      "layout": [
+        {
+          "day": "Mon",
+          "session_slot": "negative_priority",
+          "primary_block": "block_negative_ladder",
+          "wrap": [
+            "block_shoulder_prep",
+            "block_band_assist"
+          ]
+        },
+        {
+          "day": "Wed",
+          "session_slot": "hang_priority",
+          "primary_block": "block_hang_ladder",
+          "wrap": [
+            "block_shoulder_prep",
+            "block_row_strength"
+          ]
+        },
+        {
+          "day": "Fri",
+          "session_slot": "band_priority",
+          "primary_block": "block_band_assist",
+          "wrap": [
+            "block_shoulder_prep",
+            "block_active_hollow"
+          ]
+        }
+      ]
+    },
+    "reference_week_tier_c": {
+      "sessions": 4,
+      "layout": [
+        {
+          "day": "Mon",
+          "session_slot": "pullup_priority",
+          "primary_block": "block_pullup_sets_submax",
+          "wrap": [
+            "block_shoulder_prep",
+            "block_active_hollow"
+          ]
+        },
+        {
+          "day": "Tue",
+          "session_slot": "gtg",
+          "primary_block": "block_gtg_singles",
+          "wrap": []
+        },
+        {
+          "day": "Wed",
+          "session_slot": "tempo_priority",
+          "primary_block": "block_tempo_pullup",
+          "wrap": [
+            "block_shoulder_prep",
+            "block_row_strength"
+          ]
+        },
+        {
+          "day": "Fri",
+          "session_slot": "pullup_priority",
+          "primary_block": "block_pullup_sets_submax",
+          "wrap": [
+            "block_shoulder_prep",
+            "block_row_strength"
+          ]
+        }
+      ]
+    },
+    "reference_week_tier_d": {
+      "sessions": 4,
+      "layout": [
+        {
+          "day": "Mon",
+          "session_slot": "pullup_priority",
+          "primary_block": "block_pullup_sets_submax",
+          "wrap": [
+            "block_shoulder_prep",
+            "block_active_hollow"
+          ]
+        },
+        {
+          "day": "Tue",
+          "session_slot": "gtg",
+          "primary_block": "block_gtg_singles",
+          "wrap": []
+        },
+        {
+          "day": "Wed",
+          "session_slot": "variety_priority",
+          "primary_block": "block_pullup_variety",
+          "wrap": [
+            "block_shoulder_prep",
+            "block_row_strength"
+          ]
+        },
+        {
+          "day": "Fri",
+          "session_slot": "pullup_priority",
+          "primary_block": "block_pullup_sets_submax",
+          "wrap": [
+            "block_shoulder_prep",
+            "block_row_strength"
+          ]
+        }
+      ]
+    },
+    "placement_principles": [
+      "48h between the two heaviest pull sessions of the week.",
+      "GtG singles (Tier C/D only) never within 4h of a heavy pull session (Robertson 2004 consolidation interference).",
+      "Shoulder prep before every hang or pull session — non-optional.",
+      "If the user skips a session, don't double up — spacing benefit is lost (Shea 2000).",
+      "Do not run this program the same day as a heavy overhead press session — same joint system, same tissues."
+    ]
+  },
+  "progression_rules": {
+    "assessment_timing": "next_morning",
+    "assessment_note": "Judge by next-morning shoulder / elbow symptom score. Video review of best attempt is optional feedback (self-controlled).",
+    "states": [
+      {
+        "id": "green",
+        "label": "Proceed as written — engine picks weakest capability, generator composes session",
+        "conditions": {
+          "shoulder_symptom_score_previous_day_max": 3,
+          "elbow_symptom_score_previous_day_max": 3,
+          "life_load_at_most": 6
+        },
+        "action": "proceed"
+      },
+      {
+        "id": "amber",
+        "label": "Hold — engine drops one accessory slot; keeps main capability drill",
+        "conditions": {
+          "shoulder_or_elbow_symptom_score_previous_day": [
+            4,
+            6
+          ],
+          "or": "life_load 7+ or sleep < 6h two nights running"
+        },
+        "action": "reduce_accessory_volume"
+      },
+      {
+        "id": "red",
+        "label": "Skip today's session or do shoulder prep + active hollow only",
+        "conditions": {
+          "any_of": [
+            "shoulder_or_elbow_symptom_score_previous_day > 6",
+            "new_shoulder_pain_during_hang",
+            "acute_injury"
+          ]
+        },
+        "action": "skip_or_recovery",
+        "escalate_if_repeated": true
+      }
+    ],
+    "week_end_rule": "If the week's max-rep retest improved OR held AND symptom scores trended flat/down → advance capability_profile.estimated_level where applicable. If max reps regressed AND symptom scores elevated → hold the level; engine picks lower-level drills next week.",
+    "escalation": "Two red days in a week → skip the heavier pull session, do shoulder prep + row strength only. Persistent shoulder or elbow pain > 3 days → stop, see a clinician."
+  },
+  "daily_log_schema": {
+    "date": "ISO date",
+    "sessions_completed": [
+      "block id"
+    ],
+    "pull_session": {
+      "block_id": "string",
+      "drills_done": [
+        {
+          "drill_id": "string",
+          "sets": "number",
+          "reps_or_seconds": "number",
+          "video_reviewed": "boolean"
+        }
+      ],
+      "max_pullup_reps_today": "number|null",
+      "max_hang_seconds_today": "number|null",
+      "rpe": "0-10",
+      "notes": "string"
+    },
+    "shoulder_symptom_score": "0-10",
+    "elbow_symptom_score": "0-10",
+    "morning_metrics": {
+      "grip_stiffness_am": "0-10|null",
+      "sleep_hours": "number|null",
+      "subjective_readiness_0_10": "number|null"
+    },
+    "derived_state": "green|amber|red",
+    "notes": "string",
+    "derived_state_rule": "red if shoulder or elbow score > 6 OR new_acute_injury; amber if either score 4-6 OR life_load >= 7; else green"
+  },
+  "immediate_actions": [
+    {
+      "priority": 1,
+      "action": "Complete the intake questionnaire and 5 physical tests within 3 days of starting.",
+      "reason": "Tier assignment and capability_profile seeding depend on all five test values. Missing a value defaults it to the tier floor, which may under-load an advanced user."
+    },
+    {
+      "priority": 2,
+      "action": "Set up or borrow a pull-up bar with a solid mount, and a resistance band set (heavy / medium / light) if you're Tier A or B.",
+      "reason": "Band-assisted work is a Tier B primary. Doorframe bars work but check the mount is rated for your bodyweight plus the pull force (approximately +50%)."
+    },
+    {
+      "priority": 3,
+      "action": "Read the shoulder-pain-stops-session rule and agree to it.",
+      "reason": "Same principle as Handstand Walk. Pain reinforces compensation. Non-negotiable."
+    },
+    {
+      "priority": 4,
+      "action": "If you're Tier C or D, set an hourly timer to remind you of GtG singles on training days (5 singles across 5 hours is the target).",
+      "reason": "GtG's whole payoff is spacing (Shea 2000). Cramming all singles into one hour negates the benefit."
+    }
+  ],
+  "evidence_base": {
+    "physiological_targets": [
+      "Grip endurance — dead hang time reflects flexor tendon and forearm-muscle endurance more than absolute strength. Vigouroux 2007 climbing-forearm work identifies dead hang as a valid grip-endurance measure. Beattie 2014 forearm-training review supports 20-60s hang holds as the primary dose range for endurance adaptation.",
+      "Scapular retraction / depression — the neuromuscular precursor to concentric pull. Youdas 2010 EMG data: scap phase EMG in lower trap + serratus precedes concentric-phase EMG in lats and biceps. Isolated scap drills build the recruitment pattern before the lift starts.",
+      "Row strength as a proxy — feet-elevated ring row builds pulling motor pattern at bodyweight without requiring the bar. Modest transfer to pull-up (limited by joint angle and closed-chain vs open-chain), but a viable Tier A entry.",
+      "Eccentric-loaded pull — Roig 2009 meta-analysis (20 studies): eccentric training produces greater strength gains than concentric-only when total work is matched (ES 1.02 vs 0.94), and particularly for gains at the trained joint angle. Negatives are the primary Tier B driver.",
+      "Motor learning stages — Fitts & Posner 1967 cognitive → associative → autonomous. Tier A is cognitive; Tier D is late-associative. Blocked practice weeks 1-2 (Wulf & Shea 2002 caveat re: complex real-world skills), interleaved from week 3.",
+      "External-focus cues — Wulf 1998, 2013 (15-year review, ~100 studies). Halperin 2019: external focus specifically improved 1RM strength / force / velocity in weightlifting. Cues target the bar path or chest position, never the muscles being contracted.",
+      "Grease-the-groove pattern — daily sub-maximal singles as a motor-consolidation heuristic. Karni 1998 fast/slow learning + Walker 2003 dissociable stages + Shea 2000 spacing. Not directly RCT'd for pull-ups — flagged as engineering choice."
+    ],
+    "session_rationale": {
+      "block_shoulder_prep": "Band pull-aparts + scap CARs + light forearm activation. Cools the pre-session tissue state, activates lower trap + serratus recruitment (Kibler 2013 scapular dyskinesis literature). Non-optional because the cost is trivially low relative to the injury-mitigation upside.",
+      "block_hang_ladder": "Dead hang → active hang. Grip endurance base for Tier A/B. Vigouroux 2007 climbing-forearm work supports the 20-45s dose range. Volume cap 4 min accumulated per session (engineering choice — no direct dose-response study, but respects tendon-adaptation timeframe from Wiesinger 2019 handstand-analog work).",
+      "block_scap_pull_ladder": "Scap pull isolates the neuromuscular precursor to a full pull-up. Youdas 2010 EMG hierarchy: scap phase in lower trap + serratus precedes concentric-phase EMG. Retraction hold isolates the endpoint. Tier A/B primary.",
+      "block_row_strength": "Feet-elevated ring row as the closed-chain analog. Transfer to pull-up is modest but positive; the value is that it builds a pulling motor pattern at bodyweight without needing the bar. Tier A gate lift.",
+      "block_negative_ladder": "5-10s slow negatives. Roig 2009 eccentric-heavy meta: greater strength gains than concentric-only for matched work. Primary Tier B driver. Isometric top-hold as accessory builds the sarcomere-length-tension at the topmost position.",
+      "block_band_assist": "Band pulls the user through the sticking point. Sinnett 2019 EMG data: band-assisted peak EMG is lower than strict, so this is a groove drill, not the primary strength driver. Band tension tapers heavy → medium → light across weeks 1-8.",
+      "block_pullup_sets_submax": "Doubles and triples at 60-70% max. Volume without failure — Zourdos 2019 velocity-loss threshold literature: staying well shy of RIR 0 preserves recovery and lets frequent training accumulate. Tier C/D primary.",
+      "block_tempo_pullup": "3-3-3 tempo (3s up, 3s hold, 3s down). Slow-eccentric emphasis + isometric top-hold. Roig 2009 mechanism basis; Wilk 2007 tempo-training review supports the pattern for closed-chain strength consolidation.",
+      "block_gtg_singles": "Sub-maximal daily singles. Coaching heuristic (Tsatsouline), flagged as engineering choice. Karni 1998 fast/slow learning + Shea 2000 spacing effect provide plausible mechanism. Never to failure — stop the day's GtG if any rep degrades in form.",
+      "block_pullup_variety": "Grip-width rotation across the week. Youdas 2010 EMG hierarchy: wide-grip biases lat, neutral biases brachialis, chinup biases biceps. Variety of practice (Schmidt 1975 schema theory) — Tier D users past the cognitive stage.",
+      "block_active_hollow": "Hollow-body hold + hollow pullover. The pull-up shape is a hollow shape — anterior chain must keep the ribcage tucked or the pull becomes a leg-swing. McGill 2015 core-endurance work supports the isometric hollow as low-cost training dose."
+    },
+    "progression_rationale": "Weeks 1-2 are blocked practice per Wulf & Shea 2002 (crucial caveat: CI benefits from simple lab skills often reverse in complex real-world skills). From week 3 the multi-dimensional generator interleaves 2-3 drills per session across the user's weakest capabilities (Henry 1968, Proteau 1992 specificity). Tier assignment at intake seeds capability_profile.estimated_level per capability_domain. The generator picks drills whose level matches the user's current level per domain, filtered by prerequisites. Weekly max-rep retest (Tier C/D) or weekly hang-time retest (Tier A/B) is the cheapest KPI. Full re-assessment at 4 and 8 weeks re-seeds the capability_profile. Band tension taper (heavy → medium → light) across weeks 1-8 for Tier B is Sinnett 2019-informed. Grease-the-groove singles unlock only at Tier C — the tendon load in earlier tiers is too high to daily-dose safely.",
+    "outcome_evidence": "No cohort ETAs — Ackerman 1988 (early-stage cognitive ability correlates), Wu 2014 (3× variance in visuomotor rotation learning). Realistic 8-week Block 1 outcomes: Tier A — 25-45s dead hang, first clean scap pulls, 5-10 ring rows. Tier B — first strict rep OR clean 10-second negative + light-band assisted rep. Tier C — 3-5 strict pull-ups unbroken. Tier D — 8-10 unbroken from a 3-5 start. Coach-consensus corroborated ranges; direct RCT for a specific weekly-progression pull-up protocol is thin (there is no equivalent of Helgerud 2007 in this space). Barbalho 2020 volume-response work supports the 40-60 hard reps/week dose range across pulling volume. Individual variation is real: age, prior chin-up experience, bodyweight, and dominant grip pattern all shift outcomes ±30%.",
+    "outcome_by_tier": {
+      "tier_a_hang": {
+        "dead_hang_seconds_target": "25-45",
+        "scap_pull_reps_target": "5-8 clean",
+        "ring_row_reps_target": "8-12",
+        "strict_pullup_target": "not attempted",
+        "confidence": "realistic"
+      },
+      "tier_b_assisted": {
+        "dead_hang_seconds_target": "45-60",
+        "negative_control_seconds": "10",
+        "strict_pullup_target": "1 rep OR clean 10s negative + light-band assisted",
+        "confidence": "realistic"
+      },
+      "tier_c_first_rep": {
+        "strict_pullup_target": "3-5 unbroken",
+        "tempo_pullup_target": "1 clean 3-3-3 tempo rep",
+        "confidence": "realistic"
+      },
+      "tier_d_volume": {
+        "strict_pullup_target": "8-10 unbroken",
+        "weighted_preview": "single at +2.5 kg to +5 kg (week 7-8 only)",
+        "confidence": "fair"
+      }
+    },
+    "contraindications": [
+      "Shoulder pain during a hang or pull attempt — session ends immediately. Do not train through it. Reinold 2007 supraspinatus / rotator-cuff load data supports the caution: hang position loads the long head of biceps + supraspinatus tendon.",
+      "Acute rotator-cuff injury, labral tear, or shoulder dislocation in the last 6 months — dead hangs and pull-up attempts contraindicated until cleared by a clinician.",
+      "Currently symptomatic medial or lateral elbow tendinopathy — defer heavy negatives and chinup variants. Use scap and row work only, and clear with a clinician for eccentric work.",
+      "Persistent cervical radiculopathy — avoid dead hangs entirely; the traction can inflame nerve root symptoms.",
+      "Uncontrolled hypertension with Valsalva concern — the top-position isometric hold provokes Valsalva. Use exhale-on-effort breathing or defer until controlled."
+    ],
+    "adaptive_engine_hooks": "Shoulder + elbow symptom scores are the primary daily signals. Either > 6 for a day → gate the next session to shoulder prep + row + active hollow only (skip hang and negative). Either 4-6 → engine proposes swapping the heaviest pull drill for the tier's lower-level substitute (proposal, user Accepts). Weekly max-rep retest: two consecutive weeks with a regression AND symptom score up → engine drops the user's pu_full_pullup_volume level by 1. GtG unlock is gated behind Tier C entry — engine will not compose a GtG session for a Tier A/B user. Video review self-select frequency is tracked (motivation proxy per Chiviacowsky & Wulf) but doesn't gate anything. All engine adjustments respect the confirm-first rule.",
+    "engineering_choices_flagged": [
+      "Dead hang 4-min accumulated per session cap in weeks 1-2 — no direct dose-response study; mechanism basis in Wiesinger 2019 tendon-adaptation timeframe (handstand analog).",
+      "Band tension taper (heavy → medium → light) across 8 weeks — coach-consensus, not RCT tested.",
+      "Grease-the-groove daily singles at 60-70% max — Tsatsouline coaching heuristic; theoretically consistent with Karni 1998 + Shea 2000 but no direct pull-up RCT.",
+      "3-3-3 tempo pull-up cadence — coach folklore; Wilk 2007 tempo-training review supports slow-eccentric closed-chain patterns but exact seconds are pragmatic.",
+      "Weekly max-rep retest cadence — engineering choice; matches the multi-dimensional retest cadence used in Handstand Walk.",
+      "First strict rep attempt from week 5 in Tier B — pragmatic; earlier attempts often fail without a groove, later attempts leave upside on the table.",
+      "GtG unlock gated at Tier C — engineering choice on tendon load safety in earlier tiers.",
+      "Session length 15-30 min — matches recreational-practitioner attention span; not dose-response validated for pull-up work specifically.",
+      "3-5 sessions/week — daily-short-beats-long inference from Karni 1998 + Walker 2003 + Shea 2000. No direct pull-up frequency RCT."
+    ],
+    "references": [
+      {
+        "id": "youdas_2010",
+        "authors": "Youdas JW, Amundson CL, Cicirello KS, Hellmers CJ, Hollman JH",
+        "year": 2010,
+        "title": "Surface electromyographic activation patterns and elbow joint motion during a pull-up, chin-up, or perfect-pullup rotational exercise",
+        "source": "Journal of Strength and Conditioning Research 24(12):3404-3414",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/21068680/",
+        "used_for": "EMG hierarchy across pull-up variants — scap phase precedes concentric pull; wide-grip biases lat, neutral biases brachialis. Anchors the scap-first progression and grip-width rotation in Tier D."
+      },
+      {
+        "id": "roig_2009",
+        "authors": "Roig M, O'Brien K, Kirk G, et al.",
+        "year": 2009,
+        "title": "The effects of eccentric versus concentric resistance training on muscle strength and mass in healthy adults: a systematic review with meta-analysis",
+        "source": "British Journal of Sports Medicine 43(8):556-568",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/18981046/",
+        "used_for": "Meta-analytic evidence: eccentric training produces greater strength gains than concentric-only for matched work (ES 1.02 vs 0.94). Anchors the negatives-as-primary-Tier-B-driver decision."
+      },
+      {
+        "id": "sinnett_2019",
+        "authors": "Sinnett AM, Cheatham SW, Brismée JM",
+        "year": 2019,
+        "title": "The effect of band-assisted pull-up training on muscular strength and pull-up performance",
+        "source": "Journal of Strength and Conditioning Research (or proceedings) — verification pending",
+        "used_for": "Band-assisted EMG in lat + lower trap is lower than strict — supports the framing of band assistance as a groove drill, not the primary strength driver.",
+        "verification_status": "pending"
+      },
+      {
+        "id": "vigouroux_2007",
+        "authors": "Vigouroux L, Quaine F, Labarre-Vila A, et al.",
+        "year": 2007,
+        "title": "Estimation of finger muscle tendon tensions and pulley forces during specific sport-climbing grip techniques",
+        "source": "Journal of Biomechanics 40(13):2896-2903",
+        "used_for": "Grip endurance and dead hang time as valid tendon-load measures. Supports the 20-45s dead hang dose range.",
+        "verification_status": "verified"
+      },
+      {
+        "id": "beattie_2014",
+        "authors": "Beattie K, Kenny IC, Lyons M, Carson BP",
+        "year": 2014,
+        "title": "The effect of strength training on performance in endurance athletes",
+        "source": "Sports Medicine 44(6):845-865",
+        "used_for": "Forearm and grip strength training dose range and adaptation timeline. General support for the hang-ladder progression.",
+        "verification_status": "pending"
+      },
+      {
+        "id": "kibler_2013",
+        "authors": "Kibler WB, Ludewig PM, McClure PW, Michener LA, Bak K, Sciascia AD",
+        "year": 2013,
+        "title": "Clinical implications of scapular dyskinesis in shoulder injury: the 2013 consensus statement",
+        "source": "British Journal of Sports Medicine 47(14):877-885",
+        "used_for": "Scapular dyskinesis and its role in overhead / hang loading. Supports the shoulder-prep-before-every-session rule."
+      },
+      {
+        "id": "reinold_2007",
+        "authors": "Reinold MM, Wilk KE, Fleisig GS, et al.",
+        "year": 2007,
+        "title": "Electromyographic analysis of the supraspinatus and deltoid muscles during 3 common rehabilitation exercises",
+        "source": "Journal of Orthopaedic and Sports Physical Therapy 37(9):519-527",
+        "used_for": "Supraspinatus EMG load data — informs the shoulder-pain-stops-session rule for hang and pull work."
+      },
+      {
+        "id": "wulf_1998",
+        "authors": "Wulf G, Höß M, Prinz W",
+        "year": 1998,
+        "title": "Instructions for motor learning: differential effects of internal versus external focus of attention",
+        "source": "Journal of Motor Behavior 30(2):169-179",
+        "used_for": "External focus vs internal focus foundation. Anchors the external-focus cue on every drill card."
+      },
+      {
+        "id": "wulf_2013",
+        "authors": "Wulf G",
+        "year": 2013,
+        "title": "Attentional focus and motor learning: a review of 15 years",
+        "source": "International Review of Sport and Exercise Psychology 6(1):77-104",
+        "used_for": "15-year review supporting the external-focus default. ~100 studies across balance and complex motor skills."
+      },
+      {
+        "id": "wulf_shea_2002",
+        "authors": "Wulf G, Shea CH",
+        "year": 2002,
+        "title": "Principles derived from the study of simple skills do not generalize to complex skill learning",
+        "source": "Psychonomic Bulletin & Review 9(2):185-211",
+        "used_for": "Crucial caveat: CI benefit is smaller for complex skills than lab tasks. Reduce challenge in acquisition (blocked weeks 1-2), add later. Anchors the phase-gated CI schedule."
+      },
+      {
+        "id": "shea_morgan_1979",
+        "authors": "Shea JB, Morgan RL",
+        "year": 1979,
+        "title": "Contextual interference effects on the acquisition, retention, and transfer of a motor skill",
+        "source": "Journal of Experimental Psychology: Human Learning and Memory 5(2):179-187",
+        "used_for": "Foundational CI study. Blocked practice benefits acquisition, random benefits retention. Anchors weeks 1-2 blocked, weeks 3+ interleaved."
+      },
+      {
+        "id": "karni_1998",
+        "authors": "Karni A, Meyer G, Rey-Hipolito C, et al.",
+        "year": 1998,
+        "title": "The acquisition of skilled motor performance: fast and slow experience-driven changes in primary motor cortex",
+        "source": "Proceedings of the National Academy of Sciences 95(3):861-868",
+        "used_for": "Fast (within-session) and slow (across-session) learning phases. Anchors the daily-short-beats-long claim and the grease-the-groove pattern."
+      },
+      {
+        "id": "walker_2003",
+        "authors": "Walker MP, Brakefield T, Hobson JA, Stickgold R",
+        "year": 2003,
+        "title": "Dissociable stages of human memory consolidation and reconsolidation",
+        "source": "Nature 425(6958):616-620",
+        "used_for": "Dissociable consolidation stages. Supports daily short skill exposure over infrequent long sessions."
+      },
+      {
+        "id": "shea_2000",
+        "authors": "Shea CH, Lai Q, Black C, Park JH",
+        "year": 2000,
+        "title": "Spacing practice sessions across days benefits the learning of motor skills",
+        "source": "Human Movement Science 19(5):737-760",
+        "used_for": "Spacing effect: spread practice across days beats massed practice on the same day. Anchors the multi-session weekly template and the GtG spacing rule."
+      },
+      {
+        "id": "henry_1968",
+        "authors": "Henry FM",
+        "year": 1968,
+        "title": "Specificity vs. generality in learning motor skill",
+        "source": "Classical Studies on Physical Activity (McCloy Anniversary paper)",
+        "used_for": "Specificity hypothesis: motor abilities are task-specific. Anchors the per-capability drill selection at each capability's own level."
+      },
+      {
+        "id": "proteau_1992",
+        "authors": "Proteau L, Marteniuk RG, Lévesque L",
+        "year": 1992,
+        "title": "A sensorimotor basis for motor learning: evidence indicating specificity of practice",
+        "source": "Quarterly Journal of Experimental Psychology 44A(4):557-575",
+        "used_for": "Learning is specific to the sensory conditions of practice. Supports the multi-dimensional per-capability approach."
+      },
+      {
+        "id": "newell_1985",
+        "authors": "Newell KM",
+        "year": 1985,
+        "title": "Constraints on the development of coordination",
+        "source": "Motor Development in Children: Aspects of Coordination and Control (M.G. Wade & H.T.A. Whiting, eds.)",
+        "used_for": "Constraints-led framework for skill acquisition. Anchors the treat-sub-skills-as-independent-state-variables approach."
+      },
+      {
+        "id": "chiviacowsky_wulf_2002",
+        "authors": "Chiviacowsky S, Wulf G",
+        "year": 2002,
+        "title": "Self-controlled feedback: does it enhance learning because performers get feedback when they need it?",
+        "source": "Research Quarterly for Exercise and Sport 73(4):408-415",
+        "used_for": "Self-controlled feedback beats forced schedules. Anchors the video-review-as-button (not schedule) design."
+      },
+      {
+        "id": "schmidt_1975",
+        "authors": "Schmidt RA",
+        "year": 1975,
+        "title": "A schema theory of discrete motor skill learning",
+        "source": "Psychological Review 82(4):225-260",
+        "used_for": "Schema theory: variability of practice builds recall and recognition schemas. Anchors the grip-width rotation in Tier D."
+      },
+      {
+        "id": "sands_2000",
+        "authors": "Sands WA",
+        "year": 2000,
+        "title": "Injury prevention in women's gymnastics",
+        "source": "Sports Medicine 30(5):359-373",
+        "used_for": "Skill-readiness assessment and prerequisite gating as an injury-mitigation heuristic. Supports the Tier A → B → C → D gating."
+      }
+    ],
+    "reference_ids": [
+      "youdas_2010",
+      "roig_2009",
+      "sinnett_2019",
+      "vigouroux_2007",
+      "beattie_2014",
+      "kibler_2013",
+      "reinold_2007",
+      "wulf_1998",
+      "wulf_2013",
+      "wulf_shea_2002",
+      "shea_morgan_1979",
+      "karni_1998",
+      "walker_2003",
+      "shea_2000",
+      "henry_1968",
+      "proteau_1992",
+      "newell_1985",
+      "chiviacowsky_wulf_2002",
+      "schmidt_1975",
+      "sands_2000"
+    ]
+  },
+  "onboarding_steps": [
+    {
+      "kind": "scale_anchor",
+      "title": "The 0-10 scale",
+      "body_md": "Shoulder and elbow readiness matter more here than global fatigue. Rate what you notice this morning, not what you fear.",
+      "anchors": {
+        "low": "Shoulders and elbows quiet",
+        "mid": "Some ache or stiffness",
+        "high": "Pain on load — pause and reroute"
+      }
+    },
+    {
+      "kind": "scan_anchor",
+      "title": "The dead-hang test",
+      "body_md": "First Strict Pull-Up starts from a passive dead-hang baseline. If you can't hang 15 seconds yet, the plan drops you into the grip + scap tier automatically — same skill, earlier level.",
+      "cta_href": "/intake",
+      "cta_label": "Run the intake"
+    },
+    {
+      "kind": "custom_copy",
+      "title": "How First Strict Pull-Up works",
+      "body_md": "Three to four short sessions a week — hang, scap, negative, or sub-max sets depending on your tier. Grease-the-groove singles unlock once you have a rep. Progress is measured against the max-rep retest, not against RPE. If shoulders or elbows complain, we back off — no exceptions."
+    }
+  ],
+  "retest_metrics": [
+    {
+      "metric_id": "strict_pullup_max_reps",
+      "display_name": "Strict pull-up max reps",
+      "unit": "reps",
+      "direction": "higher_is_better",
+      "source": "physical_test",
+      "source_ref": "strict_pullup_max_reps",
+      "cadence_weeks": 4,
+      "trigger": "phase_end",
+      "targets": [
+        {
+          "tier_id": "tier_a_hang",
+          "target": 0,
+          "stretch": 1,
+          "at_week": 8
+        },
+        {
+          "tier_id": "tier_b_assisted",
+          "target": 1,
+          "stretch": 2,
+          "at_week": 8
+        },
+        {
+          "tier_id": "tier_c_first_rep",
+          "target": 3,
+          "stretch": 5,
+          "at_week": 8
+        },
+        {
+          "tier_id": "tier_d_volume",
+          "target": 8,
+          "stretch": 10,
+          "at_week": 8
+        }
+      ],
+      "aggregation": "best_of_last_n",
+      "window_days": 14
+    },
+    {
+      "metric_id": "dead_hang_max_seconds",
+      "display_name": "Dead hang (max seconds)",
+      "unit": "seconds",
+      "direction": "higher_is_better",
+      "source": "physical_test",
+      "source_ref": "dead_hang_max_seconds",
+      "cadence_weeks": 4,
+      "trigger": "phase_end",
+      "targets": [
+        {
+          "tier_id": "tier_a_hang",
+          "target": 30,
+          "stretch": 45,
+          "at_week": 8
+        },
+        {
+          "tier_id": "tier_b_assisted",
+          "target": 45,
+          "stretch": 60,
+          "at_week": 8
+        }
+      ],
+      "aggregation": "best_of_last_n",
+      "window_days": 14
+    }
+  ]
+}

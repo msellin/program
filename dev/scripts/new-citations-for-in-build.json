@@ -1,0 +1,142 @@
+{
+  "schema_version": "1.0",
+  "generated": "2026-08-17",
+  "purpose": "Additive-only citation patch for the three in_build programs. Do NOT apply directly to citations.json. Each entry needs founder approval + verification status confirmed BEFORE the migration script commits them. Entries with verification_status: 'pending' need the founder or a science advisor to confirm the reference is real and correctly cited BEFORE any of the three programs flip from 'draft' to 'PROVISIONAL'.",
+  "instructions": "1. Founder reviews each entry. 2. For 'pending' entries: verify PubMed / DOI or replace with a verified alternative. 3. Once verified, a follow-up migration script appends each verified entry to citations.json in alphabetical id order. 4. Remove the 'verification_status' key on commit (canonical citations.json does not carry that field).",
+  "affected_programs": {
+    "first-strict-pullup": [
+      "youdas_2010",
+      "roig_2009",
+      "sinnett_2019",
+      "vigouroux_2007",
+      "beattie_2014",
+      "dickie_2017"
+    ],
+    "muscle-up": [
+      "youdas_2010",
+      "roig_2009",
+      "sinnett_2019",
+      "dickie_2017",
+      "vidal_rovira_2024"
+    ],
+    "engine-builder-block-2": [],
+    "note": "youdas_2010, roig_2009, sinnett_2019, dickie_2017 are shared across the two skill programs — they only need adding once."
+  },
+  "new_citations": [
+    {
+      "id": "youdas_2010",
+      "authors": "Youdas JW, Amundson CL, Cicirello KS, Hellmers CJ, Hollman JH",
+      "year": 2010,
+      "title": "Surface electromyographic activation patterns and elbow joint motion during a pull-up, chin-up, or perfect-pullup rotational exercise",
+      "source": "Journal of Strength and Conditioning Research 24(12):3404-3414",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21068680/",
+      "display_short": "Youdas et al. 2010",
+      "display_line": "Youdas et al. (2010), JSCR 24(12)",
+      "verification_status": "verified",
+      "affects_programs": [
+        "first-strict-pullup",
+        "muscle-up"
+      ],
+      "used_for_note": "Pull-up variant EMG hierarchy — scap phase precedes concentric pull; grip width shifts lat vs brachialis vs biceps activation. Anchors scap-first ladder + grip-width rotation in Tier D of First Strict Pull-Up; used indirectly by Muscle-Up drill library."
+    },
+    {
+      "id": "roig_2009",
+      "authors": "Roig M, O'Brien K, Kirk G, Murray R, McKinnon P, Shadgan B, Reid WD",
+      "year": 2009,
+      "title": "The effects of eccentric versus concentric resistance training on muscle strength and mass in healthy adults: a systematic review with meta-analysis",
+      "source": "British Journal of Sports Medicine 43(8):556-568",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18981046/",
+      "display_short": "Roig et al. 2009",
+      "display_line": "Roig et al. (2009), BJSM 43(8)",
+      "verification_status": "verified",
+      "affects_programs": [
+        "first-strict-pullup",
+        "muscle-up"
+      ],
+      "used_for_note": "Eccentric training produces greater strength gains than concentric-only for matched work (ES 1.02 vs 0.94). Anchors negatives-as-primary-Tier-B-driver in First Strict Pull-Up and transition-negatives-from-support in Muscle-Up."
+    },
+    {
+      "id": "sinnett_2019",
+      "authors": "Sinnett AM, Cheatham SW, Brismée JM",
+      "year": 2019,
+      "title": "The effect of band-assisted pull-up training on muscular strength and pull-up performance",
+      "source": "Journal of Strength and Conditioning Research (or proceedings)",
+      "url": null,
+      "display_short": "Sinnett et al. 2019",
+      "display_line": "Sinnett et al. (2019), JSCR",
+      "verification_status": "pending",
+      "affects_programs": [
+        "first-strict-pullup",
+        "muscle-up"
+      ],
+      "used_for_note": "Band-assisted pull-up EMG in lat + lower trap is lower than strict. Frames band assistance as groove drill, not primary strength driver. FOUNDER REVIEW: confirm PubMed / DOI or replace. If not verifiable, remove citation and reframe drill rationale on Roig 2009 mechanism alone."
+    },
+    {
+      "id": "vigouroux_2007",
+      "authors": "Vigouroux L, Quaine F, Labarre-Vila A, Moutet F",
+      "year": 2007,
+      "title": "Estimation of finger muscle tendon tensions and pulley forces during specific sport-climbing grip techniques",
+      "source": "Journal of Biomechanics 40(13):2896-2903",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17442324/",
+      "display_short": "Vigouroux et al. 2007",
+      "display_line": "Vigouroux et al. (2007), J Biomech 40(13)",
+      "verification_status": "verified",
+      "affects_programs": [
+        "first-strict-pullup"
+      ],
+      "used_for_note": "Finger tendon tensions during climbing grips. Supports dead hang as valid tendon-load / grip-endurance measure. Anchors the 20-45s dead hang dose range in block_hang_ladder."
+    },
+    {
+      "id": "beattie_2014",
+      "authors": "Beattie K, Kenny IC, Lyons M, Carson BP",
+      "year": 2014,
+      "title": "The effect of strength training on performance in endurance athletes",
+      "source": "Sports Medicine 44(6):845-865",
+      "url": null,
+      "display_short": "Beattie et al. 2014",
+      "display_line": "Beattie et al. (2014), Sports Medicine 44(6)",
+      "verification_status": "pending",
+      "affects_programs": [
+        "first-strict-pullup"
+      ],
+      "used_for_note": "General strength-training + endurance-athlete review. Used peripherally for forearm/grip training dose range. Weak load on this citation in the program; FOUNDER REVIEW: acceptable to drop if not verifiable — no load-bearing claim depends on it."
+    },
+    {
+      "id": "dickie_2017",
+      "authors": "Dickie JA, Faulkner JA, Barnes MJ, Lark SD",
+      "year": 2017,
+      "title": "Electromyographic analysis of muscle activation during pull-up variations",
+      "source": "Journal of Electromyography and Kinesiology 32:30-36",
+      "url": null,
+      "display_short": "Dickie et al. 2017",
+      "display_line": "Dickie et al. (2017), J Electromyogr Kinesiol 32",
+      "verification_status": "pending",
+      "affects_programs": [
+        "first-strict-pullup",
+        "muscle-up"
+      ],
+      "used_for_note": "Pull-up variant EMG complementing Youdas 2010. Supports the false-grip-as-separate-capability framing and grip-width rotation. FOUNDER REVIEW: verify or drop. Youdas 2010 alone can carry the load-bearing claim if Dickie is not verifiable."
+    },
+    {
+      "id": "vidal_rovira_2024",
+      "authors": "Vidal-Rovira R, et al.",
+      "year": 2024,
+      "title": "Forearm activation patterns in false-grip vs standard grip on gymnastic rings",
+      "source": "Preprint / conference — verification required",
+      "url": null,
+      "display_short": "Vidal-Rovira et al. 2024",
+      "display_line": "Vidal-Rovira et al. (2024), preprint (verification pending)",
+      "verification_status": "pending",
+      "affects_programs": [
+        "muscle-up"
+      ],
+      "used_for_note": "Small-sample forearm activation data for false grip vs standard on rings. Non-load-bearing; supports the false-grip-as-separate-capability framing but the claim also has Roig 2009 + coach-consensus backing. FOUNDER REVIEW: verify existence, sample size, and journal / preprint venue. Acceptable to drop if not a real study — Roig 2009 + coach commentary can carry the framing."
+    }
+  ],
+  "summary": {
+    "total_new_citations": 7,
+    "verified": 3,
+    "pending_verification": 4,
+    "note": "Engine Builder Block 2 requires zero new citations — everything already exists in citations.json from Block 1's authoring. All 7 new citations are for the two skill programs (First Strict Pull-Up and Muscle-Up), with 4 shared. Two pending citations (sinnett_2019, dickie_2017) can be dropped if verification fails — the programs remain defensible with Youdas 2010 + Roig 2009 alone. Two more (beattie_2014, vidal_rovira_2024) are already flagged as non-load-bearing."
+  }
+}

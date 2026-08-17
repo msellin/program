@@ -1,0 +1,109 @@
+{
+  "note": "PROPOSED manifest entries for the three in_build programs. DO NOT copy into manifest.json without founder review. Match the schema and shape of existing entries. When applied, the DRAFT/*.draft.json files should be renamed to their slug (drop the .draft) and moved out of the DRAFT/ folder into public/data/programs/. Program 'status' field in each JSON should flip from 'draft' to 'PROVISIONAL' at the same time.",
+  "manifest_entries": [
+    {
+      "id": "first-strict-pullup",
+      "slug": "first-strict-pullup",
+      "name": "First Strict Pull-Up",
+      "category": "skill",
+      "weakness_target": "first_strict_pullup",
+      "duration_weeks": 8,
+      "difficulty": "multi-tier",
+      "levels": [
+        "Hang",
+        "Assisted",
+        "First Rep",
+        "Volume"
+      ],
+      "adapts": "Intake picks your tier; drills adapt weekly to your weakest capability (grip, scap, row, negative).",
+      "prerequisites": [],
+      "short_description": "Multi-tier skill program on the shared pull drill library. Grip → scap → negative → band → unassisted, then volume. Personalised sessions target your weakest sub-capability first.",
+      "who_this_is_for": "You want a strict pull-up. Some athletes can't dead-hang 15 seconds yet; some do 1-2 reps and want to hit 5. The app meets you where you are and builds each sub-capability separately. Not for kipping pull-ups — that's a different skill.",
+      "what_youll_achieve": "Beginners: 25-45 second dead hang, clean scap pulls, first ring rows. Assisted-only lifters: first strict rep from a 10-second negative. First-repper: 3-5 unbroken. Volume tier: 8-10 unbroken with wide-grip variety unlocked.",
+      "retest": "Weekly max-rep retest (Tier C/D) or weekly hang-time retest (Tier A/B); every 4 weeks: full assessment (dead hang, scap pull, ring row, strict pull-up, negative control).",
+      "tags": [
+        "skill",
+        "gymnastics",
+        "pull_up",
+        "calisthenics",
+        "multi_dimensional"
+      ],
+      "status": "PROVISIONAL",
+      "featured": false,
+      "positioning": "main_track",
+      "load_hint": "~1.5 hr/week (3-4 sessions/wk, 15-30 min each)"
+    },
+    {
+      "id": "muscle-up",
+      "slug": "muscle-up",
+      "name": "Muscle-Up Acquisition (strict ring)",
+      "category": "skill",
+      "weakness_target": "strict_ring_muscle_up",
+      "duration_weeks": 10,
+      "difficulty": "multi-tier",
+      "levels": [
+        "Prep",
+        "Transition",
+        "First Rep"
+      ],
+      "adapts": "Intake gates on prerequisites (3+ strict pull-ups, 3+ ring dips), then picks your tier by muscle-up experience.",
+      "prerequisites": [
+        "3+ strict pull-ups (no kip, no swing, dead hang to chin over bar).",
+        "3+ strict ring dips (support → 90° elbow → lockout, no leg swing).",
+        "If either is below the threshold, intake routes you to First Strict Pull-Up or an equivalent dip build first."
+      ],
+      "short_description": "Multi-tier strict ring muscle-up program. Reuses pull-up + handstand drill libraries. False-grip base, transition mechanics, ring dip strength. Not for kipping muscle-ups — different skill, different program.",
+      "who_this_is_for": "You have your strict pull-ups and ring dips and now want the strict ring muscle-up. The transition is the bottleneck — not the pull, not the dip. This program isolates it: seated-band, low-ring negatives, jump-assist, first strict attempt.",
+      "what_youll_achieve": "Prep tier: 3-5 strict ring dips, 15s false-grip hang. Transition tier: seated-band mastered, first low-ring muscle-up, first strict attempt week 8-10. First Rep tier: 2-3 strict ring muscle-ups unbroken with weighted-preview singles.",
+      "retest": "Weekly max-rep retest (Tier C) or false-grip hang + ring dip retest (Tier A/B); every 4 weeks: full assessment battery.",
+      "tags": [
+        "skill",
+        "gymnastics",
+        "muscle_up",
+        "rings",
+        "calisthenics",
+        "multi_dimensional"
+      ],
+      "status": "PROVISIONAL",
+      "featured": false,
+      "positioning": "main_track",
+      "load_hint": "~2-2.5 hr/week (3-4 sessions/wk, 20-35 min each)"
+    },
+    {
+      "id": "engine-builder-block-2",
+      "slug": "engine-builder-block-2",
+      "name": "Engine Builder — Block 2: Volume",
+      "category": "endurance",
+      "weakness_target": "aerobic_threshold",
+      "duration_weeks": 10,
+      "difficulty": "multi-tier",
+      "levels": [
+        "Foundation",
+        "Progression",
+        "Push"
+      ],
+      "adapts": "Intake gates on Block 1 completion (or equivalent base) and picks tier by current cardio hours + Block 1 delta.",
+      "prerequisites": [
+        "Engine Builder Block 1 completed within the last 4 weeks OR an equivalent 8-week aerobic base (5+ hrs/week cardio, can hold Z1 for 75+ min).",
+        "Chest-strap HR monitor strongly recommended — half the block's target zones sit in the range where wrist-optical HR drops out."
+      ],
+      "short_description": "Block 2 of the 3-block engine transformation. 8-12 weeks. Two hard sessions per week — a threshold cruise + a VO2max session that alternates 4×4 and short-interval formats — on top of a rising Z1 volume floor. Threshold pace shift is the headline metric.",
+      "who_this_is_for": "You finished Block 1 (or have an equivalent base) and want to keep going. Block 2 is where the majority of VO2max and threshold gains land — but only after the base is in. This is a sharp-end block: two hard sessions per week, more time, more intensity.",
+      "what_youll_achieve": "Threshold pace / power shift 2-5% by tier. Additional VO2max +4-9% on top of Block 1. Submax HR at fixed pace additional -3 to -8 bpm. Retest at week 4 (mid-block check) and week 8-10 (end-of-block).",
+      "retest": "20-min TT + submax HR at fixed pace at week 4 and week 8-10. Modality-specific TT (2K row / 5K run) at end-of-block if applicable.",
+      "physical_test_prerequisite": "Fresh 20-min TT within the last 4 weeks OR schedule one in week 1 Wednesday.",
+      "tags": [
+        "endurance",
+        "threshold",
+        "vo2max",
+        "polarised",
+        "concurrent-training",
+        "block-2"
+      ],
+      "status": "PROVISIONAL",
+      "featured": false,
+      "positioning": "main_track",
+      "load_hint": "~5-6 hr/week (4-5 sessions/wk, 35-105 min each)"
+    }
+  ]
+}
