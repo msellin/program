@@ -110,7 +110,15 @@ export function IntakeClient({ slug }: Props) {
   // wiped the founder mid-test. Persist per-slug in localStorage and hydrate
   // on mount. Cleared in `commit()` after tier is chosen and answers are
   // committed to the user_profile store.
+  //
+  // Hydration order (first non-empty wins):
+  //   1. localStorage draft (in-progress session)
+  //   2. user_profile.program_states[slug].intake_answers (previously
+  //      committed — user returning to edit)
   const draftKey = `terav.intake.draft.${slug}`;
+  const committedAnswers = useStore(
+    (s) => s.store.user_profile?.program_states?.[slug]?.intake_answers,
+  );
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => {
     try {
@@ -124,11 +132,17 @@ export function IntakeClient({ slug }: Props) {
         if (parsed.answers && typeof parsed.answers === "object") setAnswers(parsed.answers);
         if (parsed.testResults && typeof parsed.testResults === "object") setTestResults(parsed.testResults);
         if (parsed.consents && typeof parsed.consents === "object") setConsents(parsed.consents);
+      } else if (committedAnswers && Object.keys(committedAnswers).length > 0) {
+        // No draft in localStorage but the user has committed answers from a
+        // prior session — re-hydrate so they can adjust rather than re-enter.
+        setAnswers({ ...committedAnswers });
       }
     } catch {
       // Corrupt draft — ignore; user will re-enter.
     }
     setHydrated(true);
+    // committedAnswers intentionally read once at mount; skipping deps rule.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [draftKey]);
   useEffect(() => {
     if (!hydrated) return;
