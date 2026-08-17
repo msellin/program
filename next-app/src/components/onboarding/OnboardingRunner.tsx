@@ -85,12 +85,17 @@ export function OnboardingRunner() {
     else setStep(step + 1);
   };
 
+  // M5 fix (2026-08-17): z-[60] beats the z-50 baseline used by ConfirmSheet,
+  // InfoSheet, VideoModal, ExerciseDetailsSheet, SessionActions sheets.
+  // OnboardingRunner is the "app is unusable until dismissed" modal on fresh
+  // signup and must always win the z-race — prevents the IntroGallery-ate-
+  // OnboardingRunner-clicks class of bug from recurring.
   return (
     <div
       role="dialog"
       aria-modal="true"
       aria-labelledby="onboarding-title"
-      className="fixed inset-0 z-50 bg-ground/95 backdrop-blur-sm flex items-center justify-center p-4"
+      className="fixed inset-0 z-[60] bg-ground/95 backdrop-blur-sm flex items-center justify-center p-4"
     >
       <div ref={panelRef} className="w-full max-w-md space-y-6">
         <div className="text-center space-y-1">

@@ -269,7 +269,7 @@ const STATUS_META: Record<Status, { title: string; note: string; tone: string }>
 
 export default function RoadmapPage() {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[var(--color-ground)] text-white">
+    <div className="relative min-h-dvh overflow-hidden bg-[var(--color-ground)] text-white">
       <Ambient />
       <div className="relative">
         <Nav />

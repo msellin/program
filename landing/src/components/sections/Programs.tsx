@@ -139,7 +139,7 @@ function ProgramCard({ p }: { p: Program }) {
   return (
     <a
       href={href}
-      className="group relative block overflow-hidden rounded-2xl border border-white/[0.08] bg-[var(--color-ground-2)] p-6 backdrop-blur transition hover:border-white/20 hover:bg-white/[0.04]"
+      className="group relative block overflow-hidden rounded-2xl border border-white/[0.08] bg-[var(--color-ground-2)] p-6 backdrop-blur transition hover:border-white/20 hover:bg-white/[0.04] active:border-white/35 active:bg-white/[0.07] focus-visible:border-white/25 focus-visible:bg-white/[0.05]"
     >
       <div className="mb-5 flex items-center justify-between">
         <div className="flex items-center gap-2">

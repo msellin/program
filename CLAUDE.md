@@ -4,13 +4,20 @@ Project context for Claude Code sessions in this repo.
 
 ## What this is
 
-A personal rehab and strength-training tracker for one user (Margus). Data model lives
-in `data/`. No app code yet — that's the work.
+**Terav** — a focused-improvement training app. Landing: https://terav.fit. App: https://app.terav.fit.
+Positioning: pick one focus (an engine, a skill, a lift, a stubborn joint); Terav sharpens that
+arc every session against your log; runs alongside your existing week. NOT a full training plan.
 
-Derived from ten Digilugu / Terviseportaal documents covering 2020-12 to 2023-11:
-pelvic and lumbar X-ray, hip MRI, lumbar spine MRI x3, SI joint MRI, right shoulder
-MR arthrogram, and four specialist consultation summaries. The source PDFs are NOT in
-this repo and should not be added — they contain isikukood and provider identifiers.
+Multi-user beta (Supabase auth + KV state sync). 5 shipping programs across strength (5/3/1
+anterior-hip), aerobic (Engine Builder), concurrent (CSM), skill (Handstand Walk), mobility
+(Overhead), and race-anchored (Rowing 2K Test Prep). Confirm-first mechanic — engine proposes,
+user Accepts, every change cites a study OR names its log signal.
+
+Data model at `data/` was originally seeded from Margus's own multi-year rehab logs (still the
+`anterior-hip-rebuild` program's clinical context) — derived from ten Digilugu / Terviseportaal
+documents covering 2020-12 to 2023-11. The source PDFs are NOT in this repo and should not be
+added — they contain isikukood and provider identifiers. Hip-rebuild remains `personal: true`
+in the manifest; other programs are catalog-public.
 
 ## Read these first
 
