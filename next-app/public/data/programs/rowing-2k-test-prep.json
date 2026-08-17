@@ -28,7 +28,7 @@
     {
       "id": "threshold_dominant_middle",
       "rule": "Weeks 3-4: threshold sessions replace one Z2 session per week.",
-      "detail": "Joyner & Coyle 2008 — post-VO2max ceiling, threshold IS the primary metric. Threshold shifts up by 3-6% in trained rowers over 4 weeks (Astorino 2013)."
+      "detail": "Joyner & Coyle 2008 — post-VO2max ceiling, threshold IS the primary metric. Threshold shifts of 3-6% over 4-8 weeks were measured by Astorino 2013 in trained cyclists; we extrapolate that range to rowing as an engineering read — see engineering_choices_flagged."
     },
     {
       "id": "taper_last_week",
@@ -579,7 +579,7 @@
     },
     "session_rationale": {
       "why_polarised": "Seiler 2010 — polarised 80/20 distribution outperforms threshold-dominant in trained endurance athletes over 12 weeks. Race prep respects the distribution but concentrates the 20% in threshold + race-pace work rather than VO2max.",
-      "why_threshold": "Joyner & Coyle 2008 — post-VO2max ceiling, running / cycling / rowing threshold IS the primary trainable metric. Astorino 2013 documented ~3-6% threshold pace shift in 4-8 wk in trained rowers.",
+      "why_threshold": "Joyner & Coyle 2008 — post-VO2max ceiling, running / cycling / rowing threshold IS the primary trainable metric. Astorino 2013 documented ~3-6% threshold-pace shift in 4-8 wk in trained cyclists; we extrapolate that range to rowing (see engineering_choices_flagged).",
       "why_race_pace_specificity": "Proteau 1992 specificity + Henry 1968 — the coordination of the row stroke at 2K pace is task-specific. Only 2K-pace work develops it.",
       "why_taper": "Mujika & Padilla 2000 (I+II): reducing volume 40-60% while holding intensity produces a ~3% performance uplift on race day, mostly via neuromuscular / hematological restoration."
     },
@@ -607,6 +607,11 @@
       {
         "choice": "Astorino 2013 threshold-shift range applied to rowing",
         "rationale": "The 3-6% threshold shift is documented in cycling / running populations. Applied to rowing here as engineering inference — no RCT specifically for rowing threshold-shift at this dose. Would need direct citation from rowing literature to remove this flag.",
+        "flag": "engineering"
+      },
+      {
+        "choice": "Rønnestad's short-interval work not cited",
+        "rationale": "Rønnestad & Hansen 2020 is the dominant contemporary short-vs-long-interval literature for trained cyclists and rowers. Not currently cited in this race-prep block — a conscious engineering choice given the 2K-specific focus, but worth noting so an auditor doesn't read the absence as an oversight.",
         "flag": "engineering"
       }
     ],
@@ -637,7 +642,7 @@
         "year": 2010,
         "title": "What is best practice for training intensity and duration distribution in endurance athletes?",
         "source": "Int J Sports Physiol Perform 5(3):276-291",
-        "used_for": "Polarised 80/20 distribution"
+        "used_for": "Polarised 80/20 distribution. Note: Seiler's original prescription was for general endurance blocks. Our race-prep application (20% of hard work split between threshold and race pace) is a race-prep adaptation of the polarised model, not the base-block Seiler distribution."
       },
       {
         "id": "joyner_coyle_2008",
@@ -677,7 +682,7 @@
         "year": 2012,
         "title": "Concurrent training: a meta-analysis examining interference of aerobic and resistance exercises",
         "source": "J Strength Cond Res 26(8):2293-2307",
-        "used_for": "Modality-interference rationale — rowing near-zero interference with strength"
+        "used_for": "Modality-interference rationale. Wilson's meta measured cycling and running against strength; rowing was not a primary studied modality. Terav infers rowing sits close to cycling on the interference gradient (non-eccentric, seated) — an engineering extrapolation, not a directly measured Wilson finding."
       },
       {
         "id": "eddens_2018",
@@ -701,7 +706,7 @@
         "year": 2013,
         "title": "Effect of high-intensity interval training on cardiovascular function, VO2max, and muscular force",
         "source": "JSCR 27(1):138-145",
-        "used_for": "Threshold pace shift 3-6% in 4-8 wk in trained cyclists/rowers"
+        "used_for": "Threshold-pace shift of 3-6% in 4-8 wk measured in trained cyclists — extrapolated to rowing as an engineering read, not directly studied. See engineering_choices_flagged."
       },
       {
         "id": "billat_2001",
@@ -765,7 +770,7 @@
         "year": 2008,
         "title": "Repeated-sprint ability - Part II: recommendations for training",
         "source": "Sports Med 41(9):741-756",
-        "used_for": "Race-pace repeat-set programming"
+        "used_for": "Repeated-sprint-ability programming. Note (2026-08-17 review): RSA is not the correct energy-system framing for 6×500m at 2K pace. Buchheit & Laursen 2013 covers this better; kept in the library but the race-pace justification now defers to Buchheit & Laursen."
       },
       {
         "id": "wisloff_2007",
@@ -815,7 +820,7 @@
         "source": "Endurance in Sport (Blackwell Scientific)",
         "used_for": "Rowing-specific physiology overview",
         "url": "https://scholar.google.com/scholar?q=Hagerman+physiology+of+competitive+rowing+Endurance+in+Sport+Blackwell",
-        "verification_status": "verified"
+        "verification_status": "unverified"
       },
       {
         "id": "steinacker_1993",
@@ -825,7 +830,7 @@
         "source": "Int J Sports Med 14(S1):S3-S10",
         "used_for": "Rowing-specific interval + volume prescription",
         "url": "https://pubmed.ncbi.nlm.nih.gov/?term=Steinacker+physiological+aspects+training+rowing+1993",
-        "verification_status": "verified"
+        "verification_status": "unverified"
       },
       {
         "id": "mikulic_2011",
@@ -835,7 +840,7 @@
         "source": "Eur J Appl Physiol 111(9):2363-2368",
         "used_for": "Elite rower development trajectory context",
         "url": "https://pubmed.ncbi.nlm.nih.gov/?term=Mikulic+maturation+elite+rowing+crew+2011",
-        "verification_status": "verified"
+        "verification_status": "unverified"
       },
       {
         "id": "das_2019",
@@ -845,7 +850,7 @@
         "source": "J Phys Ed Sports Manage 6(1):5-11",
         "used_for": "Rowing metabolic profile — informs Z2 dose",
         "url": "https://scholar.google.com/scholar?q=Das+Kumar+physiological+demands+rowing+sport+2019",
-        "verification_status": "verified"
+        "verification_status": "unverified"
       },
       {
         "id": "kilding_2012",
@@ -855,7 +860,7 @@
         "source": "Int J Sports Med 33(1):11-16",
         "used_for": "MLSS validity for threshold prescription",
         "url": "https://pubmed.ncbi.nlm.nih.gov/?term=Kilding+Winter+maximal+lactate+steady+state+trained+runners+2012",
-        "verification_status": "verified"
+        "verification_status": "unverified"
       }
     ],
     "reference_ids": [

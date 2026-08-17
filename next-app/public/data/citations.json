@@ -504,12 +504,13 @@
     {
       "id": "kibler_2013",
       "authors": "Kibler WB, Sciascia A",
-      "year": 2013,
+      "year": 2010,
       "title": "Current concepts: scapular dyskinesis",
       "source": "BJSM 44(5):300-305",
       "url": "https://pubmed.ncbi.nlm.nih.gov/?term=Kibler+Sciascia+scapular+dyskinesis+current+concepts",
-      "display_short": "Kibler et al. 2013",
-      "display_line": "Kibler et al. (2013), BJSM 44(5)"
+      "display_short": "Kibler & Sciascia 2010",
+      "display_line": "Kibler & Sciascia (2010), BJSM 44(5)",
+      "review_note": "Year corrected 2013 → 2010 per overhead-mobility review 2026-08-17. BJSM 44(5) is the 2010 current-concepts paper. `id` kept as `kibler_2013` for stability of downstream references."
     },
     {
       "id": "kilding_2012",
@@ -832,7 +833,8 @@
       "title": "Kinematic and kinetic analysis of the straight-arm press to handstand",
       "source": "PLOS One 16(7):e0253951",
       "display_short": "Sadowski et al. 2021",
-      "display_line": "Sadowski et al. (2021), PLOS One 16(7)"
+      "display_line": "Sadowski et al. (2021), PLOS One 16(7)",
+      "review_note": "FLAGGED for founder review 2026-08-17: WebFetch of DOI 10.1371/journal.pone.0253951 returned Mizutori et al. — a parallel-bars study. Downstream `used_for` on handstand-walk + overhead-mobility over-claims 3× BW shoulder moment on the FLOOR press-to-handstand. Author/paper verification unresolved. See dev/active/citations-under-review-2026-08-17.md."
     },
     {
       "id": "salmoni_schmidt_walter_1984",
@@ -978,12 +980,13 @@
     },
     {
       "id": "walker_2003",
-      "authors": "Walker MP, Stickgold R, Alsop D, et al.",
+      "authors": "Walker MP, Brakefield T, Hobson JA, Stickgold R",
       "year": 2003,
-      "title": "Sleep-dependent motor memory plasticity in the human brain",
-      "source": "Neuroscience 133(4):911-917",
+      "title": "Dissociable stages of human memory consolidation and reconsolidation",
+      "source": "Learning & Memory 10(4):275-284",
       "display_short": "Walker et al. 2003",
-      "display_line": "Walker et al. (2003), Neuroscience 133(4)"
+      "display_line": "Walker et al. (2003), Learning & Memory 10(4)",
+      "review_note": "Journal + byline corrected per whitepaper 04 and program-review 2026-08-17. The prior Neuroscience 133(4):911-917 entry was a different Walker 2003 paper — three real Walker 2003 papers exist (Neuroscience, Nature, Learning & Memory); the one Terav's motor-consolidation rationale actually leans on is Learning & Memory."
     },
     {
       "id": "wiesinger_2019",

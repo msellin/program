@@ -28,7 +28,7 @@
     {
       "id": "scap_first_shoulder_second",
       "rule": "Scap upward-rotation drills come before shoulder-flexion drills in every session.",
-      "detail": "Ludewig & Reynolds 2009 — scap dyskinesis (upper-trap dominance) is the most common single kinematic cause of shoulder impingement in athletes. Fix the sequence, not just the range."
+      "detail": "Ludewig & Reynolds 2009 — scap dyskinesis (upper-trap dominance) is the most consistently documented kinematic association with symptomatic impingement in athletes. Fix the sequence, not just the range."
     },
     {
       "id": "no_ballistic_end_range",
@@ -621,7 +621,7 @@
     "session_rationale": {
       "why_scap_first": "Ludewig & Cook 2000, Ludewig & Reynolds 2009 — scap upward-rotation timing is the dominant driver of subacromial space. Fix sequence before adding load.",
       "why_daily_short": "Karni 1998, Walker 2003 consolidation — motor patterns require inter-session sleep for stabilisation. 10 min daily > 45 min biweekly.",
-      "why_load_early": "Reinold 2007 — rotator-cuff activation is greater under light load than at bodyweight. Light load in Phase 2 accelerates the pattern.",
+      "why_load_early": "Reinold 2007 catalogued rotator-cuff EMG activation across a wide range of common drills; many light-load and banded variants produced cuff activation greater than typical bodyweight drills at comparable positions. Light load in Phase 2 leverages that catalogue to bias cuff engagement earlier. This is an engineering read of an EMG review, not an RCT of light-load vs bodyweight for shoulder-mobility outcome — see engineering_choices_flagged.",
       "why_external_focus_cues": "Wulf 1998, 2013 — external-focus cues (reach the ceiling) outperform internal (contract your lats) for motor retention."
     },
     "engineering_choices_flagged": [
@@ -648,6 +648,11 @@
       {
         "choice": "Supine flexion goniometer as primary retest",
         "rationale": "Kim 2013 documented supine flexion reliability; whether supine translates to loaded overhead is engineering inference — hence retest_metrics includes both supine AND OHS depth.",
+        "flag": "engineering"
+      },
+      {
+        "choice": "Light external load in Phase 2 to bias cuff activation early",
+        "rationale": "Reinold 2007 is a cross-drill EMG catalogue, not an RCT of light-load vs bodyweight for shoulder-mobility outcome. We treat the earlier-load bias as an engineering read of that catalogue.",
         "flag": "engineering"
       }
     ],
@@ -694,7 +699,8 @@
         "year": 2021,
         "title": "Straight-arm press to handstand: shoulder joint moment analysis",
         "source": "PLOS One 16(7):e0253951",
-        "used_for": "3×BW shoulder moment reference — informs no-heavy-load-early rule"
+        "used_for": "Shoulder-moment analysis for the straight-arm press to handstand — informs the no-heavy-load-early rule. Attribution flagged for founder review (see citations.json review_note): DOI resolves to a Mizutori-authored parallel-bars study; the 3× BW figure is a parallel-bars finding, not a floor finding. Terav uses this only for the general 'heavy shoulder moment early is unsafe' principle, not for a specific numeric threshold.",
+        "verification_status": "unverified"
       },
       {
         "id": "wulf_1998",
@@ -722,11 +728,11 @@
       },
       {
         "id": "walker_2003",
-        "authors": "Walker MP, Stickgold R, Alsop D, et al.",
+        "authors": "Walker MP, Brakefield T, Hobson JA, Stickgold R",
         "year": 2003,
-        "title": "Sleep-dependent motor memory plasticity in the human brain",
-        "source": "Neuroscience 133(4):911-917",
-        "used_for": "Sleep-dependent consolidation of motor patterns — daily-short rationale"
+        "title": "Dissociable stages of human memory consolidation and reconsolidation",
+        "source": "Learning & Memory 10(4):275-284",
+        "used_for": "Sleep-dependent consolidation of motor patterns — the daily-short rationale relies on the sleep-consolidation finding. Journal + byline corrected from Neuroscience 133(4):911-917 per review of whitepaper 04."
       },
       {
         "id": "chiviacowsky_wulf_2002",
@@ -755,12 +761,12 @@
       {
         "id": "kibler_2013",
         "authors": "Kibler WB, Sciascia A",
-        "year": 2013,
+        "year": 2010,
         "title": "Current concepts: scapular dyskinesis",
         "source": "BJSM 44(5):300-305",
-        "used_for": "SICK scapula screening pattern",
+        "used_for": "SICK scapula screening pattern. Year corrected from 2013 → 2010 per review — BJSM 44(5) is the 2010 current-concepts paper. Keeping the citation `id: kibler_2013` for stability of downstream references.",
         "url": "https://pubmed.ncbi.nlm.nih.gov/?term=Kibler+Sciascia+scapular+dyskinesis+current+concepts",
-        "verification_status": "verified"
+        "verification_status": "unverified"
       },
       {
         "id": "kim_2013",
@@ -786,9 +792,9 @@
         "year": 2019,
         "title": "Shoulder range of motion and baseball throwing performance",
         "source": "J Athl Train 54(6):679-687",
-        "used_for": "Thoracic mobility → shoulder function; informs thoracic-prep block",
+        "used_for": "Shoulder rotational ROM (IR + total arc) in throwers — supports the retest choice to include a rotational component alongside supine flexion. Does NOT directly support the thoracic→shoulder pathway; the thoracic-prep rationale rests on Kim 2013 + coaching consensus.",
         "url": "https://pubmed.ncbi.nlm.nih.gov/?term=Bullock+shoulder+range+of+motion+baseball+throwing+2019",
-        "verification_status": "verified"
+        "verification_status": "unverified"
       },
       {
         "id": "manske_2010",

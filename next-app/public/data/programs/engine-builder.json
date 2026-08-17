@@ -1176,7 +1176,7 @@
       "block_retest": "Same protocol at intake and retest so the delta is trustworthy. Rest HR + submax HR at fixed pace are the two most sensitive early indicators of aerobic adaptation (both move faster than VO2max) and are equipment-independent. 500m row TT + 1km run TT add modality-specific measurements when equipment is available."
     },
     "progression_rationale": "Weeks 1-2 are pure Z1 because mitochondrial signalling protein bursts precede functional enzyme upregulation by 5-10 sessions (Perry 2010, Little 2010) — hard intervals on a missing base generate fatigue signals without adaptation payoff. First tempo lands week 3 as an MCT1 stimulus. First Norwegian 4×4 lands week 4 for Progression/Push tiers — Foundation delays hard work to week 5 because Ross 2015 showed non-response at low intensity converts to response at 75%, but pushing under-conditioned users straight into 4×4 amplifies dropout risk. Volume peaks weeks 6-7 with an added easy Z1 recovery session — Fyfe 2016 showed endurance VOLUME (not intensity) drives concurrent-training interference, so the peak-volume weeks are precisely where the strength cap tightens (RPE ≤ 6, no PR chasing). Week 8 deloads to a single easy Z1, retests midweek, and finishes easy — mirroring taper practice; Baar 2014's 3h AMPK-recovery window plus Robineau 2016's demonstrated 6h separation advantage inform the same-day sequencing rule (lift first if forced; 6+ h separation preferred; alternate days ideal).",
-    "outcome_evidence": "Effect-size expectations synthesised across primary sources for a strength-trained user new to aerobic work. VO2max: Foundation tier +5-8%, Progression +8-12%, Push +2-5% (Push has less headroom). Anchor: Helgerud 2007 measured +7.2% at 3×/wk 4×4 in moderately trained subjects. Mitochondrial oxidative enzymes +40-100% (Konopka 2014, Perry 2010). Capillary-to-fibre ratio +10-20% (Andersen 1977, Cocks 2013). Stroke volume +5-10% if intervals present (Helgerud 2007). Resting HR −5 to −10 bpm by week 8 (visible from week 2-4). Submax HR at fixed pace −8 to −15 bpm (the fastest-moving, most motivating early metric). 500m row TT: 3-8s improvement, mostly from pacing + stroke efficiency, not raw physiology. 2km row or 1km run TT: 5-12% improvement — physiology + running/rowing economy. Individual variation is real: HERITAGE (Bouchard 1999) showed heritability of VO2max training response = 47% and ~10× range in individual gains under identical prescription. Ross 2015 showed ~18% of subjects were 'non-responders' at 50% intensity — this drops to 0% at 75% intensity. Non-response is usually under-dosing, not genotype. Block 2 (volume expansion) and Block 3 (polarised specialisation) capture the majority of VO2max-available gains — Block 1 is the base that lets them work.",
+    "outcome_evidence": "Effect-size expectations synthesised across primary sources for a strength-trained user new to aerobic work. VO2max: Foundation tier +5-8%, Progression +8-12%, Push +2-5% (Push has less headroom). Anchor: Helgerud 2007 measured +7.2% at 3×/wk 4×4 in moderately trained subjects. Mitochondrial oxidative enzymes +40-100% (Konopka 2014, Perry 2010). Capillary-to-fibre ratio +10-20% (Andersen 1977, Cocks 2013). Stroke volume +5-10% if intervals present (Helgerud 2007). Resting HR −5 to −10 bpm by week 8 (visible from week 2-4). Submax HR at fixed pace −8 to −15 bpm (the fastest-moving, most motivating early metric). 500m row TT: 3-8s improvement, mostly from pacing + stroke efficiency, not raw physiology. 2km row or 1km run TT: 5-12% improvement — physiology + running/rowing economy. Individual variation is real: HERITAGE (Bouchard 1999) showed heritability of VO2max training response = 47% and ~10× range in individual gains under identical prescription. Ross 2015 showed ~18% of subjects were 'non-responders' at 50% intensity — non-response was substantially reduced at 75% intensity. Non-response is usually under-dosing, not genotype. Block 2 (volume expansion) and Block 3 (polarised specialisation) capture the majority of VO2max-available gains — Block 1 is the base that lets them work.",
     "outcome_by_tier": {
       "foundation": {
         "vo2max_pct": "+3-6%",
@@ -1215,7 +1215,10 @@
       "Number of intervals per interval session (3 vs 4 vs 5) — coaching consensus, not directly RCT-tested",
       "Recovery ratio for 4×4 (3 min at 60% HRmax) — Helgerud 2007 protocol, but exact ratio is not empirically optimised",
       "Warm-up duration (10 min) — engineering choice",
-      "The specific HRmax formula (211 − 0.64 × age from HUNT / Nes 2013) — has ~11 bpm SEE; personalised max derived from observed workout HRs when available"
+      "The specific HRmax formula (211 − 0.64 × age from HUNT / Nes 2013) — has ~11 bpm SEE; personalised max derived from observed workout HRs when available",
+      "One hard session per week in Block 1 — Stöggl & Sperlich support polarised distribution but do not prescribe a single-session ceiling. Our engineering choice biased to strength-preservation in a concurrent-context user.",
+      "Sub-threshold tempo as MCT1 stimulus — Pilegaard 2000 measured MCT1 upregulation across a range of intensities; the sub-threshold framing is our engineering read of where the base-first stimulus fits the polarised model, not a paper-validated intensity anchor.",
+      "Push-tier week-2 4×4 introduction — Ross 2015 justifies 75% intensity over 50% but does not prescribe the specific week of introduction. Engineering choice biased to giving Push users an earlier hard-session signal."
     ],
     "hr_zone_methodology": "Default: HRmax from HUNT formula (211 − 0.64 × age) per Nes 2013 — has 10.8 bpm standard error but no sex/BMI/fitness interaction. Zone floors set as %HRR (Karvonen 1957) rather than %HRmax because %HRR accounts for resting HR, which is itself the trained-fitness signal. Preferred: observed HRmax from a hard interval session, stored per-user, updated as fitness changes. Optional (chest-strap owners): DFA a1 = 0.75 as VT1 anchor per Rogers 2021 — validated in elite and recreational populations, non-invasive proxy for the aerobic threshold.",
     "concurrent_strength_prescription": "During the 8-week block, keep barbell strength at RPE ≤ 7 maintenance: 2-3 sessions/week, same lifts, same volume, no PR chasing. Schumann 2022 meta-analysis of 43 studies: maximal strength SMD = -0.06 (not significant), hypertrophy SMD = -0.01 (not significant), BUT explosive strength SMD = -0.28 (significant, meaningful). Chasing explosive PRs during aerobic emphasis is the specific loss zone. If same day is unavoidable, lift first (Eddens 2018 meta: +6.91% lower-body strength gain vs endurance-first). Minimum 6 h separation (Robineau 2016). Protein floor 1.6 g/kg/day (Morton 2018 meta). Fuel resistance sessions fully (Impey 2018 'Fuel for the Work Required').",
@@ -1308,7 +1311,7 @@
         "title": "Markers of human skeletal muscle mitochondrial biogenesis and quality control: effects of age and aerobic exercise training",
         "source": "Journal of Gerontology A 69(4):371-378",
         "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3968823/",
-        "used_for": "Effect sizes for oxidative enzyme changes (β-HAD +397-435%, CS +65-102%, PGC-1α +55-62% in 12 weeks) — cited in physiological_targets and block_z1_steady rationale. Also: no age blunting of relative response."
+        "used_for": "Effect sizes for oxidative enzyme changes (β-HAD +397-435%, CS +65-102%, PGC-1α +55-62% in 12 weeks) — cited in physiological_targets and block_z1_steady rationale. Also: no age blunting of relative response. Population caveat: cohort was older adults over 12 weeks; healthy strength-trained users on an 8-week block should not treat the top of these ranges as their ceiling."
       },
       {
         "id": "bishop_2019",
@@ -1344,7 +1347,7 @@
         "title": "Superior cardiovascular effect of aerobic interval training versus moderate continuous training in heart failure patients: a randomized study",
         "source": "Circulation 115(24):3086-3094",
         "url": "https://pubmed.ncbi.nlm.nih.gov/17548726/",
-        "used_for": "12-week 4×4-min interval trial showed VO2peak +46% and LV ejection fraction +35% in HF patients. Reinforces Helgerud 2007's finding that intervals — not continuous training — drive cardiac remodelling."
+        "used_for": "12-week 4×4-min interval trial showed VO2peak +46% and LV ejection fraction +35% in HF patients. Reinforces Helgerud 2007's finding that intervals — not continuous training — drive cardiac remodelling. Population caveat: cohort was heart-failure patients with substantial adaptive headroom; healthy trained users should not expect the +46% response magnitude — Helgerud 2007's +7.2% is the appropriate healthy-cohort anchor."
       },
       {
         "id": "baggish_wood_2011",
@@ -1407,7 +1410,7 @@
         "title": "Precision exercise medicine: understanding exercise response variability",
         "source": "Mayo Clinic Proceedings 90(11):1506-1514",
         "url": "https://pubmed.ncbi.nlm.nih.gov/26586576/",
-        "used_for": "Non-response at 50% intensity drops to 0% at 75%. Informs the tier progression logic — under-dosing is often the cause of apparent non-response."
+        "used_for": "Non-response at 50% intensity is substantially reduced at 75% intensity. Informs the tier progression logic — under-dosing is often the cause of apparent non-response."
       },
       {
         "id": "tanaka_2001",
@@ -1619,8 +1622,20 @@
       "targets": [
         {
           "tier_id": "foundation",
-          "target": -3,
+          "target": -5,
           "stretch": -8,
+          "at_week": 8
+        },
+        {
+          "tier_id": "progression",
+          "target": -5,
+          "stretch": -10,
+          "at_week": 8
+        },
+        {
+          "tier_id": "push",
+          "target": -3,
+          "stretch": -6,
           "at_week": 8
         }
       ],

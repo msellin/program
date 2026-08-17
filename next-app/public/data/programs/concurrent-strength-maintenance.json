@@ -22,7 +22,7 @@
     {
       "id": "six_hour_separation",
       "rule": "Minimum 6 hours between endurance and strength sessions on same day.",
-      "detail": "Robineau 2016 dose-response: 0h separation reduced bench + half-squat gains significantly vs 6h and 24h. Below the 6h threshold, molecular interference (AMPK-mTOR) is active."
+      "detail": "Robineau 2016 dose-response tested 0h / 6h / 24h and found 0h significantly reduced bench + half-squat gains vs the other two. 24h was best. Our 6h floor is a practical engineering read of that curve, not a paper-validated threshold — see engineering_choices_flagged."
     },
     {
       "id": "lift_first_if_same_day",
@@ -238,8 +238,7 @@
         "block_strength_heavy",
         "block_strength_moderate",
         "block_z2_bike",
-        "block_z2_row",
-        "block_deload"
+        "block_z2_row"
       ],
       "goal": "Anchor the strength floor. Introduce Z2 volume. No high-intensity yet.",
       "rationale": "The molecular-interference window (Baar 2014: AMPK stays elevated ~3h post-endurance; mTORC1 sensitised 18-24h post-lifting) matters most when intensity is introduced. Weeks 1-2 give the athlete a settled aerobic baseline before we add stress."
@@ -255,9 +254,10 @@
         "block_strength_moderate",
         "block_z2_bike",
         "block_z2_row",
-        "block_4x4_row"
+        "block_4x4_row",
+        "block_deload"
       ],
-      "goal": "Add Norwegian 4×4 once/week. Hold strength at RPE ≤ 7.",
+      "goal": "Add Norwegian 4×4 once/week. Hold strength at RPE ≤ 7. Week 4 is the deload.",
       "rationale": "Helgerud 2007 dose (4×4 × 3/wk × 8 wk → +7.2% VO2max) is fully compatible with maintenance strength IF the 6h separation rule holds (Robineau 2016)."
     },
     {
@@ -503,6 +503,11 @@
       "lift_first_rule": "Eddens 2018 — +6.91% lower-body dynamic strength when resistance precedes endurance same day."
     },
     "engineering_choices_flagged": [
+      {
+        "choice": "Minimum 6h separation between endurance and strength on same day",
+        "rationale": "Robineau 2016 tested 0h / 6h / 24h — a 3-point dose-response, not a validated 6h bright-line. The rule stays defensible as an engineering read of that curve, but the paper does not establish 6h as *the* threshold. 24h would be optimal; 6h is our practical minimum.",
+        "flag": "engineering"
+      },
       {
         "choice": "1× Norwegian 4×4 per week (vs Helgerud's 3×)",
         "rationale": "Concurrent context; full Helgerud dose has never been tested against maintenance strength. Engineering choice biased to strength preservation.",

@@ -1375,7 +1375,8 @@
       "4-6 sessions per week — daily-short-beats-long inference from Karni 1998 + Walker 2003 + Shea 2000. No direct handstand-frequency RCT.",
       "10-18 min per session — engineering choice matching adult recreational-practitioner attention span. Not dose-response validated.",
       "Blocked practice weeks 1-2 threshold — Wulf & Shea 2002 supports blocked in acquisition but doesn't specify the exact week to switch. Two-week floor is pragmatic.",
-      "Tier D self-selection of obstacles vs turns via weakest-capability rule — theoretically supported by Henry 1968 / Proteau 1992 but not directly RCT'd."
+      "Tier D self-selection of obstacles vs turns via weakest-capability rule — theoretically supported by Henry 1968 / Proteau 1992 but not directly RCT'd.",
+      "Weakest-capability-first drill selection across all tiers — the engine biases each session toward the user's lowest-scoring sub-skill (wrist load, hollow-shape, turns, obstacle nav, etc.). This is coaching-consensus, theoretically supported by specificity of adaptation but not RCT-validated at the sub-skill granularity we operate at."
     ],
     "references": [
       {
@@ -1384,7 +1385,8 @@
         "year": 2022,
         "title": "Progressive four-position handstand EMG activity",
         "source": "Isokinetics and Exercise Science 30:127-133",
-        "used_for": "The 4-position progression ladder (90° incline → 135° → elbow / straddle-L → full wall handstand). Validated by EMG activity of shoulder / core musculature. Underpins block_skill_A_kinoshita and the Tier A entry."
+        "used_for": "The 4-position progression ladder (90° incline → 135° → elbow / straddle-L → full wall handstand). Validated by EMG activity of shoulder / core musculature. Underpins block_skill_A_kinoshita and the Tier A entry. Flagged for founder review: DOI missing.",
+        "verification_status": "unverified"
       },
       {
         "id": "kerwin_trewartha_2001",
@@ -1450,7 +1452,8 @@
         "year": 2021,
         "title": "Kinematic and kinetic analysis of the straight-arm press to handstand",
         "source": "PLOS One 16(7):e0253951",
-        "used_for": "3× bodyweight shoulder moment during the straight-arm press to handstand. Directly informs the choice NOT to program straight-arm press early, and the Tier A entry at Kinoshita 90°."
+        "used_for": "Shoulder-moment analysis of the press to handstand. Directly informs the choice NOT to program straight-arm press early, and the Tier A entry at Kinoshita 90°. Attribution flagged for founder review (see citations.json review_note): DOI 10.1371/journal.pone.0253951 resolves to a Mizutori-authored parallel-bars paper. The heavy-shoulder-moment principle survives on general grounds; the specific 3× BW figure was a parallel-bars finding, not a floor finding — do not cite that number.",
+        "verification_status": "unverified"
       },
       {
         "id": "barlow_2020",
@@ -1466,7 +1469,8 @@
         "year": 2025,
         "title": "Wrist symptoms in adult handstand practitioners: a cross-sectional survey",
         "source": "Frontiers (PMC12550924), n=321",
-        "used_for": "56.7% chronic wrist pain but NO association with weekly training hours, frequency, warm-up, or brace use. Reframes wrist risk as technique-driven, not volume-driven — but supports the volume cap as a conservative upper bound."
+        "used_for": "56.7% chronic wrist pain but NO association with weekly training hours, frequency, warm-up, or brace use. Reframes wrist risk as technique-driven, not volume-driven — but supports the volume cap as a conservative upper bound. Attribution flagged for founder review: PMC12550924 resolves to Martonovich et al. (same underlying data). The claim itself survives; the author byline may need to be swapped.",
+        "verification_status": "unverified"
       },
       {
         "id": "difiori_2006",
@@ -1474,7 +1478,7 @@
         "year": 2006,
         "title": "Wrist pain, distal radial physeal injury, and ulnar variance in the young gymnast",
         "source": "American Journal of Sports Medicine 34(5):840-849",
-        "used_for": "Fracture-site data at distal radius under load-through-hand mechanism. Underpins the osteoporosis contraindication."
+        "used_for": "Fracture-site data at distal radius under load-through-hand mechanism. Cohort is young gymnasts (open physes); Terav uses this as a mechanism analog for the adult low-BMD osteoporosis contraindication, not as direct evidence in adult practitioners."
       },
       {
         "id": "wiesinger_2019",
@@ -1482,7 +1486,8 @@
         "year": 2019,
         "title": "Tendon adaptation to mechanical loading",
         "source": "German Journal of Sports Medicine",
-        "used_for": "Tendon adaptation timeframe (8-12 weeks for collagen turnover). Mechanism basis for the wrist volume cap. Note: no direct dose-response study for handstand wrist load — the exact 20-30 min cap is an engineering choice."
+        "used_for": "Tendon adaptation timeframe (8-12 weeks for collagen turnover). Mechanism basis for the wrist volume cap. Note: no direct dose-response study for handstand wrist load — the exact 20-30 min cap is an engineering choice. Flagged for founder review: DOI missing.",
+        "verification_status": "unverified"
       },
       {
         "id": "ludewig_cook_2000",
@@ -1510,11 +1515,11 @@
       },
       {
         "id": "walker_2003",
-        "authors": "Walker MP, et al.",
+        "authors": "Walker MP, Brakefield T, Hobson JA, Stickgold R",
         "year": 2003,
-        "title": "Dissociable stages of memory consolidation",
-        "source": "Nature 425:616-620",
-        "used_for": "Sleep-dependent motor consolidation. Reinforces daily-short skill exposure over infrequent long sessions."
+        "title": "Dissociable stages of human memory consolidation and reconsolidation",
+        "source": "Learning & Memory 10(4):275-284",
+        "used_for": "Sleep-dependent motor consolidation. Reinforces daily-short skill exposure over infrequent long sessions. Journal + byline corrected 2026-08-17 — canonical entry in citations.json is now Learning & Memory 10(4):275-284 (matches whitepaper 04)."
       },
       {
         "id": "shea_morgan_1979",
@@ -1530,9 +1535,9 @@
         "year": 2026,
         "title": "Handstand walking biomechanics and shoulder pain association",
         "source": "Scientific Reports (s41598-026-51612-w), 237 stance phases",
-        "used_for": "Pain-associated practitioners show shorter effective arm length + greater axial torsional work — technique-driven. Underpins the non-negotiable 'shoulder pain stops session' rule.",
+        "used_for": "Pain-associated practitioners show shorter effective arm length + greater axial torsional work — technique-driven. Underpins the non-negotiable 'shoulder pain stops session' rule. Flagged for founder review: paper existence at claimed URL unconfirmed. The stop-session rule survives on general principle even if the specific '237 stance phases' figure is unverifiable.",
         "url": "https://www.nature.com/articles/s41598-026-51612-w",
-        "verification_status": "verified"
+        "verification_status": "unverified"
       },
       {
         "id": "ferrari_2021",
@@ -1540,7 +1545,8 @@
         "year": 2021,
         "title": "Walking initiation biomechanics",
         "source": "Gait & Posture",
-        "used_for": "CoP shift precedes step. Informs the single_step_attempt drill design and the 'lean the shape toward the far wall' external-focus cue."
+        "used_for": "CoP shift precedes step. Informs the single_step_attempt drill design and the 'lean the shape toward the far wall' external-focus cue. Flagged for founder review: DOI/volume unresolved. Drill design does not require this specific citation — Yiou 2017 or canonical Winter walking-initiation work would substitute.",
+        "verification_status": "unverified"
       },
       {
         "id": "simunkova_2024",
