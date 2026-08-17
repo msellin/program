@@ -160,6 +160,48 @@ Ship in this order to avoid the double-polish problem:
 
 ---
 
+## Research queue (not yet designed, agent-dispatchable)
+
+Ideas surfaced during founder conversation that deserve prior-art research before any implementation call. Each entry frames the question + the specific agent brief. Not on the F track.
+
+### E · Diagnostic intake for mobility + skill measurement (not just mobility programs)
+
+**Surfaced by:** founder + friend, 2026-08-17. Prompted by GoWOD's model (~500K users, ~$10-15/mo, mobility-only) which does a structured 15-25 movement screen at intake, quantifies weakness dimensions, prescribes program targeting the gap.
+
+**Question for a future research agent:**
+
+*"Terav's positioning is focused-improvement across strength/aerobic/skill/mobility/concurrent — NOT a mobility app. But a diagnostic-intake pattern (measure baseline before we start, retest at cadence) would improve every skill/mobility program's trackability grade from C to B, and probably help the strength/aerobic programs too (ROM affects overhead, ankle affects squat depth, etc.).*
+
+*The question: what's the right shape of a diagnostic intake for Terav — not GoWOD's specifically-mobility 25-movement battery, but the RIGHT battery for a focused-improvement tool that runs alongside your training?*
+
+*Research targets:*
+- *Functional Movement Screen (FMS) — 7 tests, $ certification industry, published sensitivity/specificity*
+- *Selective Functional Movement Assessment (SFMA) — clinical version, 10+ tests*
+- *Beighton hypermobility scale — 9 measurements, sub-second per measurement*
+- *Y-Balance Test, single-leg squat, Thomas test — sport-adjacent*
+- *GoWOD's public materials — what movements do they screen, how do they validate*
+- *Kneesovertoesguy's ATG assessment battery — published free*
+- *NBA / NFL / NCAA combine mobility screens — public methodology*
+
+*Deliverable: `dev/audits/product-concerns/E-diagnostic-intake-battery.md` with 3-5 candidate movement batteries + trade-offs (accuracy vs. time cost vs. measurement equipment vs. cross-program relevance), and a recommended MVP shape (Shape 1 free / Shape 2 paid video-assisted from earlier chat).*
+
+**Do NOT build without the E-brief.** Scope discipline: GoWOD-shaped feature could easily eat the roadmap if we mistake it for a mobility-track feature instead of an intake-tier upgrade.
+
+### F · Video demo library for exercises (free tier)
+
+**Surfaced by:** founder, 2026-08-17. Concern C validates video demos as legitimately free-tier. But: build it ourselves vs. embed YouTube vs. license from a stock library? Storage + delivery cost at scale? Estonian language subtitles? Should each program author its OWN demos or share a global drill library?
+
+**Question for a future research agent:**
+
+*What are the actual delivery + hosting patterns for exercise demo libraries in fitness apps at Terav's scale (10-10K users)? Fitbod embeds YouTube, Hevy hosts its own MP4s, Ladder shoots pro video, MacroFactor has no video at all. What's the cost/quality/legal trade-off? Video accessibility (captions, audio descriptions, playback speed) for WCAG.*
+
+*Deliverable: `dev/audits/product-concerns/F-video-demo-library.md` — hosting patterns, cost estimates, WCAG requirements, build vs. license recommendation.*
+
+### Later additions
+
+- Wearable ingest deep-dive (Garmin FIT vs. Whoop OAuth vs. Oura API — F4 pillar) — has spec at `dev/active/saas-launch/future-features.md`, could use a stronger competitive analysis before starting
+- Community / social layer (validated NEGATIVE by Concern C — Terav's positioning rejects streaks + leaderboards — but folks always ask, worth documenting the "no" explicitly)
+
 ## Auth polish queued separately (not the F/P track)
 
 Signup + sign-in currently support only email + password. Adds queued:
