@@ -5,7 +5,7 @@
 # Prereqs:
 #   - next-app/.env.local has SUPABASE_URL + SERVICE_ROLE_KEY
 #   - Playwright installed (npx playwright install chromium if first time)
-#   - E2E_BASE_URL env var if you want to hit prod (defaults to program-v2.pages.dev)
+#   - E2E_BASE_URL env var if you want to hit prod (defaults to app.terav.fit)
 #
 # Usage:
 #   ./dev/scripts/run-app-audit.sh              # personas + audits

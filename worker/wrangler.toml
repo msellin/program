@@ -9,7 +9,7 @@ compatibility_flags = ["nodejs_compat"]
 [vars]
 # Origin of the frontend for CORS + fetching canonical data files.
 # Change if you deploy the frontend elsewhere.
-FRONTEND_ORIGIN = "https://program-v2.pages.dev"
+FRONTEND_ORIGIN = "https://app.terav.fit"
 
 # Model used for the coach. Sonnet is the sweet spot for cost + quality.
 CLAUDE_MODEL = "claude-sonnet-4-6"

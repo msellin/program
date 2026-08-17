@@ -37,18 +37,18 @@ What to do after the daily-use habit is established. Ordered by honest value, no
    size forever). Migration path: export from `localStorage`, POST to the API once,
    mark migrated, read from API onward. Shape is already the right shape.
 
-8. **Custom domain.** Only really matters *before* a host change, so localStorage
-   survives the move. If you never leave Cloudflare Pages, `program-f3r.pages.dev`
-   is fine.
+8. **Custom domain — DONE 2026-08-17.** Landing at `terav.fit`, app at
+   `app.terav.fit`. Both bound to Cloudflare Pages custom domains; SSL auto.
 
 ## Ops reference
 
-- Live URL: **https://program-f3r.pages.dev**
-- Project: Cloudflare Pages, project name `program`, production branch `main`
-- Redeploy after edits (from `/Users/margussellin/www/program`):
-  ```
-  wrangler pages deploy . --project-name=program --branch=main --commit-dirty=true
-  ```
+- Landing URL: **https://terav.fit** (Pages project `terav-landing`)
+- App URL: **https://app.terav.fit** (Pages project `program-v2`)
+- Coach worker: `program-coach` (Cloudflare Worker, source in `worker/`)
+- Old project `program-f3r.pages.dev` currently 301-redirects to `program-v2.pages.dev`; both are backup routes to the same app.
+- Redeploy landing: `cd landing && npm run build && wrangler pages deploy out --project-name=terav-landing --branch=main --commit-dirty=true`
+- Redeploy app: `cd next-app && npm run build && wrangler pages deploy out --project-name=program-v2 --branch=main --commit-dirty=true`
+- Redeploy coach worker: `cd worker && wrangler deploy`
 - Vercel is not available on this account — the `sellinmargus-projects` team hit
   fair-use limits and was blocked. Cloudflare Pages was picked because of that,
   not because it's better. Portable either way — pure static files.

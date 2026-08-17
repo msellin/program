@@ -101,6 +101,5 @@ src/
 
 ## Sign-in link
 
-The Sign in link in the nav currently points at
-`https://program-v2.pages.dev/sign-in` (the current app URL). Update to
-`https://app.terav.fit/sign-in` once the app moves.
+The Sign in link in the nav points at `https://app.terav.fit/sign-in` via
+the `APP_URL` constant in `src/config.ts`.
