@@ -8,6 +8,7 @@ import { DateNav } from "@/components/workout/DateNav";
 import { useStore } from "@/lib/useStore";
 import { today as todayISO } from "@/lib/utils";
 import type { Program, Block, Exercise } from "@/lib/schemas";
+import { EmptyStateCard } from "@/components/EmptyStateCard";
 
 export default function ExtrasPage() {
   const [program, setProgram] = useState<Program | null>(null);
@@ -30,18 +31,11 @@ export default function ExtrasPage() {
   if (!hydrated) return <div className="mt-8 text-sm text-muted">Loading…</div>;
   if (!primarySlug) {
     return (
-      <div className="pt-8 space-y-4">
-        <h1 className="text-3xl font-semibold tracking-tight">Extras</h1>
-        <p className="text-[14px] text-muted leading-relaxed">
-          Pick a program to see accessory work, mobility, and around-session blocks here.
-        </p>
-        <a
-          href="/programs"
-          className="inline-block font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground"
-        >
-          Pick a program →
-        </a>
-      </div>
+      <EmptyStateCard
+        title="Pick your focus."
+        body="Accessory work, mobility drills, and around-session blocks show up here once you pick a program. Optional — the plan's core sessions live on Today."
+        cta={{ href: "/programs/", label: "Browse programs" }}
+      />
     );
   }
   if (!program) return <div className="mt-8 text-sm text-muted">Loading…</div>;

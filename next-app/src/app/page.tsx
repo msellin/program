@@ -8,6 +8,7 @@ import { HeroStateCard } from "@/components/workout/HeroStateCard";
 import { SessionActions } from "@/components/workout/SessionActions";
 import { DateNav } from "@/components/workout/DateNav";
 import { FirstRunBanner } from "@/components/FirstRunBanner";
+import { EmptyStateCard } from "@/components/EmptyStateCard";
 import { YourPlanCard } from "@/components/workout/YourPlanCard";
 import { SignalsStrip } from "@/components/workout/SignalsStrip";
 import { RunSlotCard } from "@/components/workout/RunSlotCard";
@@ -364,25 +365,17 @@ function programDisplayName(program: Program, slug: string): string {
 
 function NoActiveProgram() {
   return (
-    <div className="pt-8 space-y-5">
-      <header className="space-y-2">
-        <h1 className="text-2xl font-semibold tracking-tight text-strong">Pick a program</h1>
-        <p className="text-[14px] text-muted leading-relaxed">
-          Each program starts with a short intake so the plan is calibrated to
-          your baseline, not a template with your name on it.
-        </p>
-      </header>
-      <Link
-        href="/programs"
-        className="inline-block font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground"
-      >
-        Browse programs →
-      </Link>
+    <>
+      <EmptyStateCard
+        title="Pick your focus."
+        body="Each program starts with a short intake so the plan is calibrated to your baseline, not a template with your name on it."
+        cta={{ href: "/programs/", label: "Browse programs" }}
+      />
       {/* Fresh-signup privacy pitch — the FirstRunBanner would otherwise never
           show for a signed-in user landing on this state (the earlier code
           short-circuited to render this component before mounting the banner). */}
       <FirstRunBanner />
-    </div>
+    </>
   );
 }
 

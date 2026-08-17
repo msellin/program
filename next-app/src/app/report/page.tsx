@@ -11,6 +11,7 @@ import { RetestMetricsPanel } from "@/components/progress/RetestMetricsPanel";
 import { today as todayISO, iso } from "@/lib/utils";
 import type { Program, Exercise } from "@/lib/schemas";
 import { HIP_FLEXOR_PACK } from "@/lib/assessments-data";
+import { EmptyStateCard } from "@/components/EmptyStateCard";
 
 const SymptomLoadChart = dynamic(
   () => import("@/components/charts/SymptomLoadChart").then((m) => ({ default: m.SymptomLoadChart })),
@@ -84,18 +85,11 @@ export default function ReportPage() {
   if (!hydrated) return <div className="mt-8 text-sm text-muted">Loading…</div>;
   if (!primarySlug) {
     return (
-      <div className="pt-8 space-y-4">
-        <h1 className="text-2xl font-semibold tracking-tight text-strong">Training summary</h1>
-        <p className="text-[14px] text-muted leading-relaxed">
-          Pick a program to generate a training summary here.
-        </p>
-        <a
-          href="/programs"
-          className="inline-block font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground"
-        >
-          Start a program →
-        </a>
-      </div>
+      <EmptyStateCard
+        title="Pick your focus."
+        body="A shareable training summary — for your coach or clinician — generates here once you pick a program and log a few sessions."
+        cta={{ href: "/programs/", label: "Browse programs" }}
+      />
     );
   }
   if (!program || !report) return <div className="mt-8 text-sm text-muted">Loading…</div>;

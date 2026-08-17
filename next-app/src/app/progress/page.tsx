@@ -9,6 +9,7 @@ import { HipProgressTile } from "@/components/HipProgressTile";
 import { WeeklyNarrativeTile } from "@/components/WeeklyNarrativeTile";
 import { RetestMetricsPanel } from "@/components/progress/RetestMetricsPanel";
 import { SignalCompletenessCard } from "@/components/progress/SignalCompletenessCard";
+import { EmptyStateCard } from "@/components/EmptyStateCard";
 import { InfoSheet } from "@/components/InfoSheet";
 import { today } from "@/lib/utils";
 import { cn } from "@/lib/utils";
@@ -79,18 +80,11 @@ export default function ProgressPage() {
   if (!hydrated) return <div className="mt-8 text-sm text-muted">Loading…</div>;
   if (!primarySlug) {
     return (
-      <div className="pt-8 space-y-4">
-        <h1 className="text-3xl font-semibold tracking-tight">Progress</h1>
-        <p className="text-[14px] text-muted leading-relaxed">
-          Pick a program to see your training maxes, milestones, and trends here.
-        </p>
-        <a
-          href="/programs"
-          className="inline-block font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground"
-        >
-          Start a program →
-        </a>
-      </div>
+      <EmptyStateCard
+        title="Pick your focus."
+        body="Training maxes, milestones, trends, and the signal-completeness card show up here once you pick a program."
+        cta={{ href: "/programs/", label: "Browse programs" }}
+      />
     );
   }
   if (!program) return <div className="mt-8 text-sm text-muted">Loading…</div>;

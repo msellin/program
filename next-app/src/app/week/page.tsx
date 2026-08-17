@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { loadProgram } from "@/lib/data-loader";
+import { EmptyStateCard } from "@/components/EmptyStateCard";
 import { useStore } from "@/lib/useStore";
 import { today as todayISO, iso, cn } from "@/lib/utils";
 import { activePhaseFor } from "@/lib/engine/schedule";
@@ -67,18 +68,11 @@ export default function WeekPage() {
   if (!hydrated) return <div className="mt-8 text-sm text-muted">Loading…</div>;
   if (!activeSlugs.length) {
     return (
-      <div className="pt-8 space-y-4">
-        <h1 className="text-2xl font-semibold tracking-tight text-strong">Week</h1>
-        <p className="text-[14px] text-muted leading-relaxed">
-          Pick a program to see the weekly rhythm here.
-        </p>
-        <Link
-          href="/programs"
-          className="inline-block font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground"
-        >
-          Pick your program →
-        </Link>
-      </div>
+      <EmptyStateCard
+        title="Pick your focus."
+        body="The weekly rhythm shows up here once you pick a program — one session per row, colored by domain, with skipped-day cascade visible at a glance."
+        cta={{ href: "/programs/", label: "Browse programs" }}
+      />
     );
   }
   if (!program) return <div className="mt-8 text-sm text-muted">Loading…</div>;

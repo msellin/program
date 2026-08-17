@@ -6,6 +6,7 @@ import { useStore } from "@/lib/useStore";
 import { loadExercises } from "@/lib/data-loader";
 import { Heatmap } from "@/components/charts/Heatmap";
 import type { Exercise, DayLog, ExerciseLog } from "@/lib/schemas";
+import { EmptyStateCard } from "@/components/EmptyStateCard";
 
 // The full palette of possible symptom regions across all program schemas.
 // History only renders the ones the user has actually logged data for — so a
@@ -59,12 +60,11 @@ export default function HistoryPage() {
 
   if (!days.length) {
     return (
-      <div className="pt-4">
-        <h1 className="text-3xl font-semibold tracking-tight mb-4">History</h1>
-        <div className="rounded border border-dashed border-line bg-surface p-6 text-center text-muted text-sm">
-          No entries yet. Log a session or save a morning check.
-        </div>
-      </div>
+      <EmptyStateCard
+        title="Nothing to look back on yet."
+        body="Your log history shows up here — a heatmap of morning-check states, sessions logged per week, symptom trends, and the days you skipped. Starts the moment you save your first check or session."
+        cta={{ href: "/check/", label: "Open morning check" }}
+      />
     );
   }
 
