@@ -4,6 +4,7 @@ import {
   assessWaypoints,
   evaluateCycleEnd,
   averageTopSetRPE,
+  evaluateOverperformer,
 } from "./adapt";
 import type { Store, Program, DayLog } from "../schemas";
 
@@ -333,5 +334,150 @@ describe("evaluateCycleEnd — RPE integration", () => {
     expect(out).not.toBeNull();
     expect(out!.worstState).toBe("amber");
     expect(out!.recommendation).toHaveLength(0); // hold
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// evaluateOverperformer (A1) — off-cycle TM-bump proposal
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe("evaluateOverperformer", () => {
+  const evalDay = "2026-08-17";
+  const trainingProgram: Program = {
+    ...makeProgram("2026-08-03", "2026-08-30"),
+    slug: "custom-strength",
+  };
+
+  function overStore(
+    args: {
+      days: Array<{ date: string; state: DayLog["derived_state"]; notes?: string; sets?: number[][] }>;
+      tms?: Record<string, number>;
+    },
+  ): Store {
+    const logs: Record<string, DayLog> = {};
+    for (const d of args.days) {
+      const sets = d.sets ?? [[100, 5, 6]];
+      logs[d.date] = buildDay(
+        d.date,
+        { "block:back_squat_highbar": { done: true, sets: sets.map((s) => set(s[0], s[1], s[2] ?? null)), notes: "" } },
+        null,
+        d.state,
+      );
+      if (d.notes) logs[d.date] = { ...logs[d.date], notes: d.notes };
+    }
+    return {
+      version: 2,
+      logs,
+      training_maxes: args.tms ?? { back_squat_highbar: 100, deadlift_conventional: 140 },
+      cycle: { phase_id: "phase_test", cycle_number: 1, week_in_cycle: 2 },
+    };
+  }
+
+  it("fires with 3 green days + a 'felt strong' note on a strength program", () => {
+    const s = overStore({
+      days: [
+        { date: "2026-08-15", state: "green" },
+        { date: "2026-08-16", state: "green", notes: "felt strong today" },
+        { date: "2026-08-17", state: "green" },
+      ],
+    });
+    const out = evaluateOverperformer(trainingProgram, s, evalDay);
+    expect(out).not.toBeNull();
+    expect(out!.lifts.length).toBeGreaterThan(0);
+    expect(out!.lifts[0].delta).toBeGreaterThan(0);
+    const squat = out!.lifts.find((l) => l.exerciseId === "back_squat_highbar");
+    expect(squat?.delta).toBe(2.5);
+  });
+
+  it("does not fire without an easy signal", () => {
+    const s = overStore({
+      days: [
+        { date: "2026-08-15", state: "green" },
+        { date: "2026-08-16", state: "green" },
+        { date: "2026-08-17", state: "green" },
+      ],
+    });
+    const out = evaluateOverperformer(trainingProgram, s, evalDay);
+    expect(out).toBeNull();
+  });
+
+  it("does not fire when any of the last 3 stated days is not green", () => {
+    const s = overStore({
+      days: [
+        { date: "2026-08-15", state: "green" },
+        { date: "2026-08-16", state: "amber", notes: "felt strong" },
+        { date: "2026-08-17", state: "green" },
+      ],
+    });
+    const out = evaluateOverperformer(trainingProgram, s, evalDay);
+    expect(out).toBeNull();
+  });
+
+  it("does not fire on ineligible programs (engine-builder)", () => {
+    const s = overStore({
+      days: [
+        { date: "2026-08-15", state: "green", notes: "felt strong" },
+        { date: "2026-08-16", state: "green" },
+        { date: "2026-08-17", state: "green" },
+      ],
+    });
+    const aerobic: Program = { ...trainingProgram, slug: "engine-builder" };
+    const out = evaluateOverperformer(aerobic, s, evalDay);
+    expect(out).toBeNull();
+  });
+
+  it("does not fire in a reintro phase", () => {
+    const s = overStore({
+      days: [
+        { date: "2026-08-15", state: "green", notes: "felt strong" },
+        { date: "2026-08-16", state: "green" },
+        { date: "2026-08-17", state: "green" },
+      ],
+    });
+    const rehab: Program = {
+      ...trainingProgram,
+      phases: [
+        { id: "phase_1_reintro", name: "Reintro", starts: "2026-08-03", ends: "2026-08-30" } as unknown as Program["phases"][number],
+      ],
+    };
+    const out = evaluateOverperformer(rehab, s, evalDay);
+    expect(out).toBeNull();
+  });
+
+  it("does not fire when training_maxes is empty", () => {
+    const s = overStore({
+      days: [
+        { date: "2026-08-15", state: "green", notes: "felt strong" },
+        { date: "2026-08-16", state: "green" },
+        { date: "2026-08-17", state: "green" },
+      ],
+      tms: {},
+    });
+    const out = evaluateOverperformer(trainingProgram, s, evalDay);
+    expect(out).toBeNull();
+  });
+
+  it("uses +5 kg for non-squat lifts", () => {
+    const s = overStore({
+      days: [
+        { date: "2026-08-15", state: "green" },
+        { date: "2026-08-16", state: "green", notes: "felt strong" },
+        { date: "2026-08-17", state: "green" },
+      ],
+      tms: { deadlift_conventional: 140 },
+    });
+    // But the day logs only include back_squat_highbar — deadlift wasn't trained.
+    // Add a deadlift log day.
+    s.logs["2026-08-16"] = {
+      ...s.logs["2026-08-16"],
+      exercises: {
+        ...s.logs["2026-08-16"].exercises,
+        "block:deadlift_conventional": { done: true, sets: [set(140, 3, 7)], notes: "" },
+      },
+    };
+    const out = evaluateOverperformer(trainingProgram, s, evalDay);
+    expect(out).not.toBeNull();
+    const dl = out!.lifts.find((l) => l.exerciseId === "deadlift_conventional");
+    expect(dl?.delta).toBe(5);
   });
 });

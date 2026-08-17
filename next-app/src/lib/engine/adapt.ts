@@ -1,6 +1,7 @@
 import type { Store, Program, DayLog, Milestone } from "../schemas";
 import { inferTMFromSet } from "./suggest";
 import { iso } from "../utils";
+import { daySignals } from "./note-signals";
 
 // Legacy fallback: these phase IDs run cycle-end eval even if the program
 // JSON was authored before the `runs_cycle_end_eval` field existed. New
@@ -327,6 +328,145 @@ export function assessWaypoints(
     reasoning: beatenEarly.length
       ? `Ahead of plan on ${beatenEarly.length} lift${beatenEarly.length > 1 ? "s" : ""} — TMs beat their farthest dated target by 4+ weeks. Consider stretching subsequent targets forward.`
       : "No lifts ahead of plan by more than 4 weeks yet.",
+  };
+}
+
+// ---- overperformer (A1) ----
+
+/**
+ * A1 (2026-08-17). The off-cycle overperformer TM-bump proposal.
+ *
+ * Persona-strength gap surfaced in the 2026-08-17 audit: 30 green days + 4
+ * "felt strong" notes produced ZERO day_adjustments because the engine was
+ * one-directional (soften-only via `proposedLoadMultiplier`). This rule adds
+ * the missing "raise" path.
+ *
+ * Distinct from `evaluateCycleEnd` — that fires at the tail of a 5/3/1 cycle
+ * against AMRAP performance. This fires OFF-cycle, based purely on green-state
+ * streak + easy-signal notes. Both are cited to the same progression
+ * literature (Rhea 2003 meta on strength dose-response).
+ *
+ * Confirm-first: the rule proposes; the user Accepts via TMBumpProposal.
+ */
+
+export type TMBumpProposal = {
+  kind: "tm_bump";
+  lifts: {
+    exerciseId: string;
+    currentTM: number;
+    newTM: number;
+    delta: number;
+  }[];
+  triggers: string[];
+  reason: string;
+};
+
+// Programs whose progression does NOT run on training-max bumps. The rule
+// silently no-ops for these — aerobic / skill / rehab progression happens
+// through different surfaces (retest, tier-advance, phase gates).
+const TM_BUMP_INELIGIBLE_PROGRAMS = new Set<string>([
+  "engine-builder",
+  "handstand-walk",
+  "overhead-mobility",
+  "rowing-2k-test-prep",
+  "concurrent-strength-maintenance",
+]);
+
+// Phases where a bump is wrong regardless of streak — reintro caps loads at
+// 80% TM by design, and any "hip" phase is rehab-adjacent.
+function isReintroOrRehabPhase(phaseId: string | undefined): boolean {
+  if (!phaseId) return false;
+  const p = phaseId.toLowerCase();
+  return p.includes("reintro") || p.includes("rehab") || p.includes("hip");
+}
+
+// Squat pattern lifts get a smaller bump (heavier absolute load). Pull /
+// press / deadlift patterns get the larger step. Matches evaluateCycleEnd's
+// isSquat heuristic exactly.
+function bumpFor(exerciseId: string): number {
+  return exerciseId.includes("squat") ? 2.5 : 5;
+}
+
+export function evaluateOverperformer(
+  program: Program,
+  store: Store,
+  todayISO: string,
+): TMBumpProposal | null {
+  // Guard: only for strength-progression programs.
+  if (program.slug && TM_BUMP_INELIGIBLE_PROGRAMS.has(program.slug)) return null;
+  const tms = store.training_maxes ?? {};
+  if (Object.keys(tms).length === 0) return null;
+
+  // Guard: not in a reintro / rehab phase.
+  const phase = activePhase(program, todayISO);
+  if (isReintroOrRehabPhase(phase?.id)) return null;
+
+  // Look at the last 7 days of logs.
+  const today = new Date(todayISO + "T00:00:00");
+  const cutoff = new Date(today.getTime() - 6 * 864e5);
+  const cutoffISO = iso(cutoff);
+  const recent = Object.values(store.logs)
+    .filter((d) => d.date >= cutoffISO && d.date <= todayISO)
+    .sort((a, b) => a.date.localeCompare(b.date));
+  if (recent.length < 3) return null;
+
+  // Green-streak check — the last 3 logged days with derived_state must be
+  // all green. Days without derived_state break the streak (we can't tell).
+  const stated = recent.filter((d) => d.derived_state);
+  if (stated.length < 3) return null;
+  const last3 = stated.slice(-3);
+  if (!last3.every((d) => d.derived_state === "green")) return null;
+
+  // Easy-signal check — at least one recent day carries a "felt strong" /
+  // "felt easy" / "grooved" cue. daySignals already folds day.notes +
+  // exercise notes + set notes into `.easy`.
+  const easyDays = recent.filter((d) => daySignals(d).easy);
+  if (easyDays.length === 0) return null;
+
+  // Which lifts to bump? Ones the user actually trained in the last 7 days
+  // with logged working sets AND has a TM for.
+  const trainedTMLifts = new Set<string>();
+  for (const d of recent) {
+    for (const [key, entry] of Object.entries(d.exercises)) {
+      if (!entry || !entry.done) continue;
+      const exId = key.split(":")[1];
+      if (!tms[exId]) continue;
+      const worked =
+        (entry.sets && entry.sets.some((s) => s.weight_kg && s.reps)) ||
+        (entry.weight_kg != null && entry.reps != null);
+      if (worked) trainedTMLifts.add(exId);
+    }
+  }
+  if (trainedTMLifts.size === 0) return null;
+
+  // Cap the bump surface to the two heaviest-loaded lifts. Bumping every TM
+  // on the same day is high-commitment and reads as pushy.
+  const ranked = Array.from(trainedTMLifts)
+    .map((id) => ({ id, tm: tms[id] }))
+    .sort((a, b) => b.tm - a.tm)
+    .slice(0, 2);
+
+  const lifts = ranked.map(({ id, tm }) => {
+    const delta = bumpFor(id);
+    return { exerciseId: id, currentTM: tm, newTM: round(tm + delta), delta };
+  });
+
+  const triggers = [
+    "3 straight green days",
+    easyDays.length > 1 ? `${easyDays.length} "felt strong" notes` : "'felt strong' in a recent note",
+  ];
+
+  const liftNames = lifts.map((l) => l.exerciseId).join(", ");
+  const reason =
+    `${triggers[0]} and ${triggers[1]}. The engine reads that as headroom — ` +
+    `nudging ${liftNames} up ${lifts.map((l) => `+${l.delta} kg`).join(" / ")}. ` +
+    `Small step; if it feels heavy next session, you can Ignore the next one and reset.`;
+
+  return {
+    kind: "tm_bump",
+    lifts,
+    triggers,
+    reason,
   };
 }
 

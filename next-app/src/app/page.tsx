@@ -13,6 +13,7 @@ import { SignalsStrip } from "@/components/workout/SignalsStrip";
 import { RunSlotCard } from "@/components/workout/RunSlotCard";
 import { MissedSessionPrompt } from "@/components/workout/MissedSessionPrompt";
 import { TierAdvanceProposal } from "@/components/workout/TierAdvanceProposal";
+import { TMBumpProposal } from "@/components/workout/TMBumpProposal";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
 import { useStore } from "@/lib/useStore";
 import { today as todayISO } from "@/lib/utils";
@@ -170,6 +171,8 @@ export default function TodayPage() {
       <SignalsStrip program={primary} date={activeDate} />
 
       <TierAdvanceProposal program={primary} />
+
+      <TMBumpProposal program={primary} date={activeDate} />
 
       <RetestReminder program={primary} profile={userProfile} activeDate={activeDate} />
 
