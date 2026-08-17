@@ -1650,5 +1650,32 @@
       "title": "How Engine Builder works",
       "body_md": "Three sessions a week — one Zone 1-2 steady, one 4×4 interval, one skill / mobility. The other four days are yours. If you push hard elsewhere, log it in the morning check and the engine softens the next session. Progress is measured against the Zone-2 anchor pace, not RPE."
     }
-  ]
+  ],
+  "signal_completeness": {
+    "currently_reads": [
+      {
+        "label": "Session duration + modality",
+        "detail": "row / bike / ski / run"
+      },
+      {
+        "label": "Per-set / per-interval RPE when you log it"
+      },
+      {
+        "label": "Free-text notes for fatigue and external-load keywords"
+      }
+    ],
+    "would_additionally_use": [
+      {
+        "label": "Heart rate at Zone-2 anchor",
+        "why_it_matters": "Zone-2 pacing depends on cardiac drift over time — the same effort should hold the same HR. Without HR the engine can't see improvement week-to-week.",
+        "user_action_free": "Log avg + peak HR after each Z1/Z2 session.",
+        "user_action_paid": "Connect Garmin / Whoop / Apple Watch — HR auto-logs."
+      },
+      {
+        "label": "Weekly retest at the Zone-2 anchor",
+        "why_it_matters": "Without a fixed anchor test, drift can't be measured across weeks. Retest = the ground truth the engine uses.",
+        "user_action_free": "Do the weekly Zone-2 retest on its scheduled day."
+      }
+    ]
+  }
 }

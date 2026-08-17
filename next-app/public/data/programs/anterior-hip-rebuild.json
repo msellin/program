@@ -1212,5 +1212,27 @@
       "title": "This is not medical advice",
       "body_md": "Terav is a training app that helps you sharpen one focus at a time. If a symptom is new, worsening, or wakes you at night, work with a clinician. Terav sits alongside real care — it does not replace it."
     }
-  ]
+  ],
+  "signal_completeness": {
+    "currently_reads": [
+      {
+        "label": "Training-max math on squat / pull / press",
+        "detail": "every logged set contributes to the 5/3/1 wave"
+      },
+      {
+        "label": "Week-3 AMRAP over/under vs. expected reps"
+      },
+      {
+        "label": "Morning-check symptom scores across low-back, groin, gait"
+      },
+      {
+        "label": "Per-set RPE and cross-set drift",
+        "detail": "opt-in — engine reads when logged"
+      },
+      {
+        "label": "Free-text notes for pain, external load, fatigue keywords"
+      }
+    ],
+    "would_additionally_use": []
+  }
 }

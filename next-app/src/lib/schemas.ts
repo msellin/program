@@ -327,6 +327,37 @@ export const onboardingStepSchema = z.discriminatedUnion("kind", [
 export const onboardingStepsSchema = z.array(onboardingStepSchema);
 
 /**
+ * F1 Path 1 (2026-08-17): signal-completeness surface.
+ *
+ * Each program declares what the engine currently reads from the user's log,
+ * and what it would additionally use if the user were willing to log or
+ * connect more. Rendered on Progress as a non-graded transparency card —
+ * NOT an A/B/C/D grade (research showed letter grades read as failing;
+ * see dev/audits/product-concerns/A-trackability-transparency.md).
+ *
+ * Consent-first: shipping this makes engine limits visible so users can
+ * co-build adaptiveness rather than trust a black box.
+ */
+export const signalCompletenessSchema = z.object({
+  currently_reads: z.array(
+    z.object({
+      label: z.string(),
+      detail: z.string().optional(),
+    }),
+  ),
+  would_additionally_use: z
+    .array(
+      z.object({
+        label: z.string(),
+        why_it_matters: z.string(),
+        user_action_free: z.string(),
+        user_action_paid: z.string().optional(),
+      }),
+    )
+    .optional(),
+});
+
+/**
  * Program-level intake + generator + goal metadata. All optional — Margus's
  * legacy program was authored before this was a formalised contract, so it
  * validates without these fields. New programs authored for the catalog SHOULD
@@ -455,6 +486,11 @@ export const programSchema = z.object({
    * When absent, `<OnboardingRunner>` shows the shared fallback splash.
    */
   onboarding_steps: onboardingStepsSchema.optional(),
+  /**
+   * F1 Path 1: signal-completeness surface. When absent, the transparency
+   * card doesn't render for this program.
+   */
+  signal_completeness: signalCompletenessSchema.optional(),
   /**
    * v2: declare how the plan generator should build weekly sessions from this
    * program. `correlated_tier` = Foundation/Progression/Push scaled template
@@ -1108,6 +1144,7 @@ export type PlanTier = z.infer<typeof planTierSchema>;
 export type ProgramIntake = z.infer<typeof programIntakeSchema>;
 export type ProgramGoal = z.infer<typeof programGoalSchema>;
 export type EvidenceBase = z.infer<typeof evidenceBaseSchema>;
+export type SignalCompleteness = z.infer<typeof signalCompletenessSchema>;
 export type OnboardingStep = z.infer<typeof onboardingStepSchema>;
 
 // A5 (Phase 3): discriminated Proposal union. Lives outside the Zod store

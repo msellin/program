@@ -863,5 +863,30 @@
       "title": "What Terav will and won't do here",
       "body_md": "Overhead Mobility is a supplement, not a shoulder rehab. If you have a diagnosed labrum, cuff, or biceps injury, work with a physio first. Terav sharpens a range you already have — it does not restore range you've lost to pathology."
     }
-  ]
+  ],
+  "signal_completeness": {
+    "currently_reads": [
+      {
+        "label": "Self-reported ROM in degrees on retest days"
+      },
+      {
+        "label": "Per-drill completion flag"
+      },
+      {
+        "label": "Free-text notes for pinch, shoulder pain, discomfort keywords"
+      }
+    ],
+    "would_additionally_use": [
+      {
+        "label": "Wall-touch reach measurement in cm",
+        "why_it_matters": "A cm number is more precise than a subjective ROM estimate. Progression discipline needs precision the engine can trend on.",
+        "user_action_free": "Log wall-touch reach in cm each retest week."
+      },
+      {
+        "label": "Weekly retest on schedule",
+        "why_it_matters": "Skipping retests means the engine can't detect drift — you might be losing range and not know it.",
+        "user_action_free": "Do the weekly ROM retest on the day the plan schedules it."
+      }
+    ]
+  }
 }

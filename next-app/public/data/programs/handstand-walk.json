@@ -1804,5 +1804,30 @@
       ],
       "gdpr_note": "Terav stores this in the EU. Export or delete from Profile any time."
     }
-  ]
+  ],
+  "signal_completeness": {
+    "currently_reads": [
+      {
+        "label": "Self-reported drill scores per capability domain"
+      },
+      {
+        "label": "Per-drill completion + tier progression flags"
+      },
+      {
+        "label": "Free-text notes on wrist pain, shoulder fatigue, balance keywords"
+      }
+    ],
+    "would_additionally_use": [
+      {
+        "label": "Per-drill quality tag",
+        "why_it_matters": "A drill logged as 'done' could be clean or shaky — the engine treats both the same. A quality tag lets the engine trust progression rather than just count reps.",
+        "user_action_free": "Tag each drill session as clean / shaky / assisted after finishing."
+      },
+      {
+        "label": "Weekly retest on schedule",
+        "why_it_matters": "Skill drift is invisible without a fixed retest. Skipping retest weeks means the engine can't tell if you're advancing or regressing.",
+        "user_action_free": "Do the weekly retest of the tier gate on the day the plan schedules it."
+      }
+    ]
+  }
 }

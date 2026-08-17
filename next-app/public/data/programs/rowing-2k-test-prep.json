@@ -913,5 +913,34 @@
       "body_md": "Sleep, work, stress — anything around training. When life-load is high, Terav proposes softer targets rather than pushing splits.",
       "write_on_complete": true
     }
-  ]
+  ],
+  "signal_completeness": {
+    "currently_reads": [
+      {
+        "label": "Per-interval split times and total-piece splits"
+      },
+      {
+        "label": "Taper compliance vs. authored schedule"
+      },
+      {
+        "label": "Per-set RPE when you log it"
+      },
+      {
+        "label": "Free-text notes for fatigue keywords"
+      }
+    ],
+    "would_additionally_use": [
+      {
+        "label": "Heart rate per interval",
+        "why_it_matters": "Split trend without HR is ambiguous — a slower split at lower HR is progress, a slower split at same HR is fatigue. The engine can't tell without HR.",
+        "user_action_free": "Log avg + peak HR after each row.",
+        "user_action_paid": "Connect Concept2 / Garmin / Whoop."
+      },
+      {
+        "label": "Stroke rate per interval",
+        "why_it_matters": "Split gains from cheating stroke rate (higher spm) look the same as gains from efficiency (same spm, faster split). Different meanings.",
+        "user_action_free": "Log stroke rate per interval when the monitor shows it."
+      }
+    ]
+  }
 }

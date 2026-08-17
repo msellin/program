@@ -8,6 +8,7 @@ import { evaluateCycleEnd, detectPauseResume, assessWaypoints } from "@/lib/engi
 import { HipProgressTile } from "@/components/HipProgressTile";
 import { WeeklyNarrativeTile } from "@/components/WeeklyNarrativeTile";
 import { RetestMetricsPanel } from "@/components/progress/RetestMetricsPanel";
+import { SignalCompletenessCard } from "@/components/progress/SignalCompletenessCard";
 import { InfoSheet } from "@/components/InfoSheet";
 import { today } from "@/lib/utils";
 import { cn } from "@/lib/utils";
@@ -242,6 +243,7 @@ function ProgressBody({
                     : "Program-agnostic indicators — retest metrics, weekly narrative."}
           </p>
           <WeeklyNarrativeTile program={_program} />
+          <SignalCompletenessCard program={_program} />
           <RetestMetricsPanel program={_program} store={store} />
           {activeSlug === "anterior-hip-rebuild" ? (
             (() => {

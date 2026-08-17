@@ -976,5 +976,27 @@
       "title": "What this program does NOT do",
       "body_md": "Concurrent Strength Maintenance holds your squat / press / deadlift while an aerobic block runs. There are no PR days here. Trying to add PRs against a hard aerobic week is where the interference cost shows up."
     }
-  ]
+  ],
+  "signal_completeness": {
+    "currently_reads": [
+      {
+        "label": "Training-max stability on the three lifts",
+        "detail": "target = hold; engine sees hold as success"
+      },
+      {
+        "label": "Interference-window flags between strength and aerobic sessions"
+      },
+      {
+        "label": "Per-set RPE and note keywords for load calibration"
+      }
+    ],
+    "would_additionally_use": [
+      {
+        "label": "Heart rate on aerobic sessions",
+        "why_it_matters": "Zone-2 target pace anchors on HR, not RPE. Right now the engine reads pace and notes but can't verify you're actually in zone.",
+        "user_action_free": "Log avg + peak HR after each aerobic session.",
+        "user_action_paid": "Connect Garmin / Whoop / Apple Watch — HR auto-logs."
+      }
+    ]
+  }
 }
