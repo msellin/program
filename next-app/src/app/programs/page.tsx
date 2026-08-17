@@ -64,9 +64,18 @@ export default function ProgramCatalogPage() {
     ([, a], [, b]) => a.order - b.order,
   );
 
+  // Only show category chips that actually have at least one non-personal
+  // program. Founder observed 2026-08-17 that "HYROX prep" and
+  // "Left/right & mobility" chips existed but were empty — a promise-then-
+  // deliver-nothing pattern. Hidden until they have at least one program.
+  const publicPrograms = manifest.programs.filter((p) => !p.personal);
+  const populatedCategoryIds = new Set<string>(publicPrograms.map((p) => p.category));
+
   const filterOptions: Array<{ id: FilterCat; label: string }> = [
     { id: "all", label: "All" },
-    ...sortedCategories.map(([id, meta]) => ({ id: id as FilterCat, label: meta.label })),
+    ...sortedCategories
+      .filter(([id]) => populatedCategoryIds.has(id))
+      .map(([id, meta]) => ({ id: id as FilterCat, label: meta.label })),
   ];
 
   return (
