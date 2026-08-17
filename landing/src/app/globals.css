@@ -127,3 +127,17 @@ summary:active,
     scroll-behavior: auto !important;
   }
 }
+
+/* Windows Forced Colors mode — WCAG SC 1.4.1. The H1_b gradient uses
+   `text-transparent bg-clip-text` which becomes invisible when the OS
+   forces a system color palette (screen reader / high-contrast users).
+   Restore the gradient fill to a solid CanvasText so the promise line
+   still reads. */
+@media (forced-colors: active) {
+  .bg-clip-text {
+    background: none !important;
+    -webkit-background-clip: initial !important;
+    background-clip: initial !important;
+    color: CanvasText !important;
+  }
+}

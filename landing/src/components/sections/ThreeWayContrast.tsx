@@ -113,10 +113,13 @@ export function ThreeWayContrast({ dict }: { dict: LandingDict }) {
         <table className="w-full text-left text-sm">
           <thead>
             <tr className="text-[11px] uppercase tracking-widest text-[var(--color-muted)]">
-              <th className="w-[28%] py-4 pr-4 font-normal"></th>
-              <th className="w-[24%] py-4 pr-4 font-normal">{t.col_template}</th>
-              <th className="w-[24%] py-4 pr-4 font-normal">{t.col_trainer}</th>
-              <th className="w-[24%] py-4 pr-4 font-normal text-[var(--color-bronze-hi)]">
+              <th scope="col" className="w-[28%] py-4 pr-4 font-normal"></th>
+              <th scope="col" className="w-[24%] py-4 pr-4 font-normal">{t.col_template}</th>
+              <th scope="col" className="w-[24%] py-4 pr-4 font-normal">{t.col_trainer}</th>
+              <th
+                scope="col"
+                className="w-[24%] py-4 pr-4 font-normal text-[var(--color-bronze-hi)]"
+              >
                 {t.col_terav}
               </th>
             </tr>
@@ -124,9 +127,12 @@ export function ThreeWayContrast({ dict }: { dict: LandingDict }) {
           <tbody className="divide-y divide-white/[0.06]">
             {rows.map((row) => (
               <tr key={row.label} className="text-white/70">
-                <td className="py-4 pr-4 text-[13px] uppercase tracking-wider text-[var(--color-muted)]">
+                <th
+                  scope="row"
+                  className="py-4 pr-4 text-[13px] uppercase tracking-wider text-[var(--color-muted)] font-normal text-left"
+                >
                   {row.label}
-                </td>
+                </th>
                 <td className="py-4 pr-4">{row.template}</td>
                 <td className="py-4 pr-4">{row.trainer}</td>
                 <td className="py-4 pr-4 font-medium text-white">{row.us}</td>

@@ -47,7 +47,23 @@ export function useFocusTrap(
     document.addEventListener("keydown", onKey);
     return () => {
       document.removeEventListener("keydown", onKey);
-      previouslyFocused.current?.focus?.();
+      // A3 fix (2026-08-17): the element that was focused when the modal
+      // opened may have unmounted (e.g. a ProposalCard button whose parent
+      // proposal disappeared on Accept). Focus-on-detached-node falls through
+      // to <body>, losing SR position. Verify still-connected, else fall
+      // back to route-level landmarks.
+      const prev = previouslyFocused.current;
+      const stillConnected =
+        prev && typeof prev.focus === "function" && prev.isConnected !== false;
+      if (stillConnected) {
+        prev.focus();
+      } else if (typeof document !== "undefined") {
+        const fallback =
+          document.querySelector<HTMLElement>("main h1") ||
+          document.querySelector<HTMLElement>("main a[href]") ||
+          document.querySelector<HTMLElement>("main");
+        fallback?.focus?.();
+      }
     };
   }, [active, onEscape, ref]);
 }

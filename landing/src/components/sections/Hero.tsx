@@ -56,20 +56,21 @@ export function Hero({ dict }: { dict: LandingDict }) {
             <span className="mono-caps text-white/70">{t.beta_badge}</span>
           </div>
 
-          <h1 className="text-balance text-5xl font-bold leading-[1.08] tracking-tight text-white md:text-6xl md:leading-[1.02]">
-            {t.h1_a}
-            <br className="hidden sm:inline" />{" "}
-            <span className="relative inline-block">
-              <span className="bg-gradient-to-r from-[var(--color-bronze-hi)] via-[var(--color-bronze)] to-[var(--color-teal)] bg-clip-text text-transparent">
-                {t.h1_b}
+          <h1 className="text-5xl font-bold leading-[1.08] tracking-tight text-white md:text-6xl md:leading-[1.02]">
+            <span className="block">
+              {t.h1_a}
+              <br className="hidden sm:inline" />{" "}
+              <span className="relative inline-block">
+                <span className="bg-gradient-to-r from-[var(--color-bronze-hi)] via-[var(--color-bronze)] to-[var(--color-teal)] bg-clip-text text-transparent">
+                  {t.h1_b}
+                </span>
+                <ChiselStroke />
               </span>
-              <ChiselStroke />
+            </span>
+            <span className="mt-3 block text-2xl font-medium leading-tight tracking-tight text-white/85 sm:text-3xl">
+              {t.h1_c}
             </span>
           </h1>
-
-          <p className="mt-3 text-2xl font-medium leading-tight tracking-tight text-white/85 sm:text-3xl">
-            {t.h1_c}
-          </p>
 
           <p className="mt-6 max-w-xl text-base leading-relaxed text-white/70 sm:text-lg">
             {t.sub}

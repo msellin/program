@@ -97,20 +97,20 @@ export function ProposalCard({ proposal, date }: { proposal: Proposal; date: str
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
-          <p className={`font-mono text-[10px] uppercase tracking-widest ${tone.eyebrow} flex items-center gap-1.5`}>
+          <h3
+            id={`proposal-${proposal.id}`}
+            className={`font-mono text-[10px] uppercase tracking-widest ${tone.eyebrow} flex items-center gap-1.5 font-normal`}
+          >
             {proposal.kind === "tm_bump" || proposal.kind === "tier_advance" ? (
-              <ArrowUp size={12} className={tone.eyebrow} />
+              <ArrowUp size={12} className={tone.eyebrow} aria-hidden="true" />
             ) : null}
-            {eyebrow}
-          </p>
-          <h3 id={`proposal-${proposal.id}`} className="sr-only">
             {eyebrow}
           </h3>
           <p className="text-[13px] text-ink mt-1 leading-snug">
             <span className="text-muted">Because:</span> {proposal.reason}
           </p>
           {proposal.kind === "tm_bump" ? (
-            <ul className="text-[12px] font-mono text-muted mt-1 space-y-0.5">
+            <ul className="text-[12px] font-mono text-ink mt-1 space-y-0.5">
               {proposal.lifts.map((l) => (
                 <li key={l.exerciseId}>
                   {l.exerciseId} · {l.currentTM} → {l.newTM} kg (+{l.delta})
@@ -131,7 +131,7 @@ export function ProposalCard({ proposal, date }: { proposal: Proposal; date: str
             </div>
           ) : null}
           {proposal.kind === "readiness_after_layoff" ? (
-            <ul className="text-[12px] font-mono text-muted mt-1 space-y-0.5">
+            <ul className="text-[12px] font-mono text-ink mt-1 space-y-0.5">
               {proposal.evidence.map((e) => (
                 <li key={e.date + e.exerciseId}>
                   {e.date} · {e.exerciseId} · {e.weightKg} kg × {e.reps}
