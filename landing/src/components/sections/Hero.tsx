@@ -91,6 +91,10 @@ export function Hero({ dict }: { dict: LandingDict }) {
               {t.browse_link}
             </a>
           </div>
+          {/* C3 · CTA friction disclosure (post-audit backlog) */}
+          <p className="mt-3 text-[12px] text-white/50">
+            Email + password. No card, no signup wall. Beta is free.
+          </p>
 
           <a
             href="#how-it-works"

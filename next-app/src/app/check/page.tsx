@@ -154,7 +154,7 @@ export default function CheckPage() {
           onChange={(v) => setValues({ ...values, morning_stiffness_min: v })}
         />
         <SliderRow
-          label="Life load (0=fresh, 10=wrecked)"
+          label="Life load (0=fresh, 10=cooked)"
           value={values.life_load ?? 0}
           min={0}
           max={10}

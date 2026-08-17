@@ -208,15 +208,32 @@ export function ProgramPreviewClient({ slug }: Props) {
         ) : null}
         <div className="flex flex-wrap gap-3 pt-1 text-[12px] font-mono text-muted">
           <span>{entry.duration_weeks} weeks</span>
+          {entry.load_hint ? (
+            <>
+              <span aria-hidden="true">·</span>
+              <span>{entry.load_hint}</span>
+            </>
+          ) : null}
           {entry.difficulty !== "multi-tier" ? (
             <>
-              <span>·</span>
+              <span aria-hidden="true">·</span>
               <span>{entry.difficulty}</span>
+            </>
+          ) : null}
+          {entry.positioning === "side_track" ? (
+            <>
+              <span aria-hidden="true">·</span>
+              <span
+                className="text-slate"
+                title="This program layers on top of any main track — safe to run alongside your existing week."
+              >
+                layers on any main
+              </span>
             </>
           ) : null}
           {entry.prerequisites?.length ? (
             <>
-              <span>·</span>
+              <span aria-hidden="true">·</span>
               <span className="text-amber" title="Recommended background — not enforced by the app; self-assess honestly.">
                 Recommended background
               </span>

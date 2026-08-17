@@ -75,7 +75,7 @@ const groups: Group[] = [
   },
   {
     domain: "Concurrent training",
-    eyebrow: "23 primary sources",
+    eyebrow: "26 primary sources",
     summary:
       "How strength and aerobic work coexist without interference — session order, modality, dose, protein floor. What we ban PR-chasing during an aerobic block.",
     citations: [
@@ -102,6 +102,9 @@ const groups: Group[] = [
       { cite: "Meyer J et al. 2017, Workplace Health Saf 65:612-618", claim: "CrossFit systematic review: VO2max, body comp, strength all improve concurrently in ~10 wk protocols" },
       { cite: "Feito Y et al. 2018, Sports 6:76", claim: "16 weeks HIFT: strength AND VO2max improved concurrently" },
       { cite: "Brandt K et al. 2025, Front Physiol 16:1519240", claim: "First HYROX physiological profiling: VO2max is strongest performance predictor" },
+      { cite: "Halson SL 2014, Sports Med 44(Suppl 2):S139-147", claim: "Training-load monitoring as fatigue-management input — cited by the day-adjustment soften proposal" },
+      { cite: "Rhea MR et al. 2003, MSSE 35(3):456-464", claim: "Meta-analysis: dose response for strength development — cited by the TM-bump and tier-advance proposals" },
+      { cite: "American College of Sports Medicine 2002, MSSE 34(2):364-380", claim: "ACSM position stand — progression models in resistance training; cited by the readiness-after-layoff proposal" },
     ],
   },
   {
@@ -176,7 +179,7 @@ export default function EvidencePage() {
 
           <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6">
             <Stat n="28" label="Aerobic physiology" />
-            <Stat n="23" label="Concurrent training" />
+            <Stat n="26" label="Concurrent training" />
             <Stat n="37" label="Motor learning" />
           </div>
         </section>

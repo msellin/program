@@ -187,6 +187,14 @@ function ProgramCard({
   category: string;
 }) {
   const cat = CATEGORY_META[category] ?? CATEGORY_META.other;
+  // A1 density brief 2026-08-17 · dev/design-briefs/2026-08-17-programs-picker-density.md
+  // Compact card: name + status chips + one-line pitch (line-clamp-2) + one
+  // metadata row. Removed from card (moved to preview):
+  //   levels[] chain, `adapts` italic bronze sentence, `difficulty`,
+  //   `positioning: side_track` note, `requires prereq` marker,
+  //   personal italic warning paragraph.
+  // Kept chips: PROVISIONAL, personal (defensive — public catalog filters
+  // personal:true out but keep the visual language stable if we ever mix).
   return (
     <Link
       href={`/programs/${p.slug}`}
@@ -204,7 +212,7 @@ function ProgramCard({
             {p.status === "PROVISIONAL" ? (
               <span
                 className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber/20 text-amber"
-                title="Beta — evidence and prescription are drafted but not yet clinically reviewed. Use with judgement."
+                title="Beta — evidence and prescription are drafted, not yet clinically reviewed. Use with judgement."
               >
                 provisional
               </span>
@@ -212,60 +220,29 @@ function ProgramCard({
             {p.personal ? (
               <span
                 className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-slate/20 text-slate"
-                title="Authored for one specific user's clinical context. Not a general-purpose evidence-backed program."
+                title="Authored for one specific user's clinical context. Not general-purpose."
               >
                 personal
               </span>
             ) : null}
           </div>
-          {p.personal ? (
-            <p className="text-[12px] text-slate mt-1 leading-snug italic">
-              Authored for one specific user&apos;s clinical context. Not general-purpose.
-              Only start if your situation genuinely resembles the author&apos;s.
-            </p>
-          ) : null}
-          <p className="text-[13px] text-muted mt-1 leading-snug">{p.short_description}</p>
-          {p.levels?.length ? (
-            <div className="mt-2 flex items-center gap-1 text-[11px] font-mono">
-              {p.levels.map((lvl, i) => (
-                <span key={lvl} className="flex items-center gap-1">
-                  <span className="text-slate">{lvl}</span>
-                  {i < (p.levels?.length ?? 0) - 1 ? (
-                    <span className="text-muted/60">→</span>
-                  ) : null}
-                </span>
-              ))}
-            </div>
-          ) : null}
-          {p.adapts ? (
-            <p className="mt-1.5 text-[11px] text-bronze/85 italic leading-snug">
-              {p.adapts}
-            </p>
-          ) : null}
-          <div className="mt-2 flex items-center gap-3 text-[11px] font-mono text-muted">
+          <p
+            className="text-[13px] text-muted mt-1 leading-snug"
+            style={{
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+            }}
+          >
+            {p.short_description}
+          </p>
+          <div className="mt-2 flex items-center gap-2 text-[11px] font-mono text-muted">
             <span>{p.duration_weeks} wk</span>
-            {p.difficulty !== "multi-tier" ? (
-              <>
-                <span>·</span>
-                <span>{p.difficulty}</span>
-              </>
-            ) : null}
             {p.load_hint ? (
               <>
-                <span>·</span>
+                <span aria-hidden="true">·</span>
                 <span>{p.load_hint}</span>
-              </>
-            ) : null}
-            {p.positioning === "side_track" ? (
-              <>
-                <span>·</span>
-                <span className="text-slate">layers on any main</span>
-              </>
-            ) : null}
-            {p.prerequisites?.length ? (
-              <>
-                <span>·</span>
-                <span className="text-amber">requires prereq</span>
               </>
             ) : null}
           </div>

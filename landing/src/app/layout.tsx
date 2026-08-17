@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Terav — Pick your focus. Sharpen it every session.",
     description:
-      "Focused-improvement training that sharpens one capability at a time — engine, skill, lift, or joint — against your log. 88 cited studies.",
+      "Focused-improvement training that sharpens one capability at a time — engine, skill, lift, or joint — against your log. 91 cited studies.",
     type: "website",
     locale: "en_US",
   },
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Terav — Pick your focus. Sharpen it every session.",
     description:
-      "Focused-improvement training that sharpens one capability at a time — runs alongside your existing week. 88 cited studies.",
+      "Focused-improvement training that sharpens one capability at a time — runs alongside your existing week. 91 cited studies.",
   },
   icons: {
     apple: "/apple-touch-icon.png",

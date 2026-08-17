@@ -40,25 +40,25 @@ export function ProposalCard({ proposal, date }: { proposal: Proposal; date: str
           proposal.citationId,
         );
         announce(
-          `Load adjustment applied: ${Math.round((1 - proposal.multiplier) * 100)}% lighter today.`,
+          `Plan sharpened. Load ${Math.round((1 - proposal.multiplier) * 100)}% lighter today.`,
         );
         break;
       }
       case "readiness_after_layoff": {
         advancePhase(proposal.programSlug, proposal.daysToShift);
         dismissProposal(date, "reintro-graduation");
-        announce(`Advanced to ${proposal.targetPhaseName}.`);
+        announce(`Plan sharpened. Advanced to ${proposal.targetPhaseName}.`);
         break;
       }
       case "tier_advance": {
         promoteTier(proposal.programSlug, proposal.tierId, "retest");
-        announce(`Advanced to ${proposal.tierLabel}.`);
+        announce(`Plan sharpened. Advanced to ${proposal.tierLabel}.`);
         break;
       }
       case "tm_bump": {
         for (const l of proposal.lifts) setTM(l.exerciseId, l.newTM);
         const summary = proposal.lifts.map((l) => `${l.exerciseId} +${l.delta} kg`).join(", ");
-        announce(`Training max bumped: ${summary}.`);
+        announce(`Plan sharpened. Training max bumped: ${summary}.`);
         break;
       }
     }

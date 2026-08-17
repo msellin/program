@@ -281,8 +281,9 @@ export default function RoadmapPage() {
             Roadmap.
           </h1>
           <p className="mt-4 max-w-xl text-base leading-relaxed text-[var(--color-muted)] sm:text-lg">
-            What&rsquo;s shipped, what&rsquo;s in build, what&rsquo;s next.
-            Programs highlighted in bronze; product development mixed in.
+            Every program is one focus arc — an engine, a skill, a lift, a stubborn joint.
+            Here&rsquo;s what&rsquo;s shipped, what&rsquo;s in build, what&rsquo;s next.
+            Programs in bronze; product development mixed in.
           </p>
 
           <div className="mt-12 space-y-10">
