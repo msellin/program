@@ -91,6 +91,71 @@ Each agent's job: read the whitepaper for that domain (`dev/whitepapers/`) + the
 
 **Blocked-by:** founder decision on graduation model + copy rewrite for the `/programs` page legend.
 
+## Q6 · Fear of falling / bail-out drills as pre-requisite to handstand walk
+
+**Surfaced by:** founder, 2026-08-18. Personal lived experience + friend
+report the same day.
+
+**Verbatim founder quote:**
+> "one thing i had myself when started to learn handstand walk and what one of
+> my friends told me today..is that she is afraid...to fall. and so was I...and
+> i took one lesson from coach where 1.5 hours i just learned on how to fall or
+> how to either oll or wolfbike or get out of the position when started to
+> fall...to lose the fear."
+
+**Observation:** the Handstand Walk intake asks about wrist pain, shoulder
+pain, self-reported wall/freestand seconds, walk distance. It never asks
+"can you exit an over-tipped handstand safely?" — arguably the highest-signal
+question of the set. For self-taught users the *fear* of falling gates
+progress more than physical capacity does.
+
+**Literature (short list):**
+- Adkin, Frank et al. (2000, 2002) — postural threat alters muscle activation
+  and co-contraction *before* the fall event.
+- Carpenter, Frank et al. (2001) — anxiety shifts strategy from ankle to hip
+  control; degrades balance.
+- Hardy catastrophe model (1996) — anxiety above threshold causes performance
+  *collapse*, not linear degradation.
+- Bandura self-efficacy — mastery experiences on *bail-outs* reduce threat
+  perception on the primary skill (walking). You don't reduce fear by
+  walking more.
+- Gymnastics + circus pedagogy (USA Gymnastics manuals, NICA syllabi, Emmet
+  Louis, Yuval Ayalon) — cartwheel exit, pirouette, koala roll (tuck
+  forward roll), wolfbike are pre-requisite to freestanding, not optional.
+- Wulf external focus (2007, 2013) — external cues ("reach for the far wall")
+  reduce anxiety and improve acquisition vs. internal cues ("don't fall").
+
+**Proposed 4-layer plan (in order of cost):**
+
+1. **Intake question** (cheap, this sprint if unblocked):
+   > "If your handstand tips past vertical, what happens?"
+   > — never inverted / would fall onto back or head / can step or twist out
+   > but haven't drilled it / can cartwheel or pirouette out reliably
+   Answers below "reliably" gate the walking phase — engine will not schedule
+   walking attempts until Phase 0 completes.
+
+2. **Phase 0 "Exits before line" block** (medium): Week 1 authored content =
+   wall cartwheel exit → quarter-turn pirouette from wall → tuck forward roll
+   from crow → deliberate mat falls with breath control. Retest:
+   `bail_out_confidence: high` OR video-log evidence.
+
+3. **`bail_out_confidence` log field** (medium): add to
+   `program.json.daily_log_schema`. When it drops, engine softens the day
+   and holds walking progression — same mechanic as amber-day on pain, but
+   for fear.
+
+4. **Video demos of each exit** (later): text + pictogram can point but not
+   replace tactile learning. Belongs in F-brief video library queue.
+
+**Priority:** MEDIUM — real barrier to Handstand Walk delivery, but requires
+authored content (Phase 0) that changes tier eligibility for real users. Needs
+founder validation before shipping. **PARKED until Path A citation fixes
+complete.**
+
+**Cross-references:** `next-app/public/data/programs/handstand-walk.json`
+(intake + phases), `dev/whitepapers/04_handstand_walk.md` (add
+literature block), F-brief video library queue for Layer 4.
+
 ## How to add more Qs
 
 Just append a new `## Q{N} · {short title}` section below. Each new question should have: route, observation, verbatim quote if useful, question for agent, cross-references, priority.

@@ -1632,7 +1632,7 @@
     {
       "kind": "scale_anchor",
       "title": "The 0-10 scale",
-      "body_md": "You'll rate how ready you feel most mornings and how heavy the day around training feels. Simple scales, no jargon.",
+      "body_md": "You'll rate how ready you feel most mornings and how heavy the day around training feels — simple scales, no jargon. Here's how the numbers read:",
       "anchors": {
         "low": "Fresh, ready to work",
         "mid": "Gritty but functional",

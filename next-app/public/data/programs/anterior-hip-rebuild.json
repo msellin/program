@@ -1188,7 +1188,7 @@
     {
       "kind": "scale_anchor",
       "title": "The 0-10 scale",
-      "body_md": "You'll be asked to score symptoms and life stress on a 0-10 scale most mornings. It's not medical — it's just how you feel that morning.",
+      "body_md": "You'll score symptoms and life stress on a 0-10 scale most mornings — not medical, just how you feel that morning. Here's how the numbers read:",
       "anchors": {
         "low": "Nothing noticeable",
         "mid": "Mild but real",

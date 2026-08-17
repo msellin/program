@@ -64,6 +64,42 @@ export function IntakeClient({ slug }: Props) {
       .catch((e) => setError(e instanceof Error ? e.message : String(e)));
   }, [slug]);
 
+  // Draft persistence: intake was pure useState, so refresh or a redeploy
+  // wiped the founder mid-test. Persist per-slug in localStorage and hydrate
+  // on mount. Cleared in `commit()` after tier is chosen and answers are
+  // committed to the user_profile store.
+  const draftKey = `terav.intake.draft.${slug}`;
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => {
+    try {
+      const raw = typeof window !== "undefined" ? window.localStorage.getItem(draftKey) : null;
+      if (raw) {
+        const parsed = JSON.parse(raw) as {
+          answers?: Record<string, string>;
+          testResults?: Record<string, number>;
+          consents?: Record<string, boolean>;
+        };
+        if (parsed.answers && typeof parsed.answers === "object") setAnswers(parsed.answers);
+        if (parsed.testResults && typeof parsed.testResults === "object") setTestResults(parsed.testResults);
+        if (parsed.consents && typeof parsed.consents === "object") setConsents(parsed.consents);
+      }
+    } catch {
+      // Corrupt draft — ignore; user will re-enter.
+    }
+    setHydrated(true);
+  }, [draftKey]);
+  useEffect(() => {
+    if (!hydrated) return;
+    try {
+      window.localStorage.setItem(
+        draftKey,
+        JSON.stringify({ answers, testResults, consents }),
+      );
+    } catch {
+      // Storage full / disabled — silently skip, in-memory state still works.
+    }
+  }, [hydrated, draftKey, answers, testResults, consents]);
+
   const intake = program?.intake;
   const questions = intake?.questions ?? [];
   const physicalTests = intake?.physical_tests ?? [];
@@ -261,6 +297,14 @@ export function IntakeClient({ slug }: Props) {
         capability_profile: userProfileForTrace?.capability_profile ?? null,
       },
     });
+
+    // Draft is now in the store — clear the localStorage snapshot so a
+    // future intake session starts fresh.
+    try {
+      window.localStorage.removeItem(draftKey);
+    } catch {
+      // ignore
+    }
 
     router.push("/");
   };

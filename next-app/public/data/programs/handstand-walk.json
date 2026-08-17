@@ -1779,7 +1779,7 @@
     {
       "kind": "scale_anchor",
       "title": "The 0-10 scale",
-      "body_md": "Wrist and shoulder readiness matter more here than global fatigue. Rate what you notice this morning, not what you fear.",
+      "body_md": "You'll rate wrist and shoulder readiness most mornings — those matter more here than global fatigue. The numbers read like this:",
       "anchors": {
         "low": "Wrists / shoulders quiet",
         "mid": "Some pump / stiffness",

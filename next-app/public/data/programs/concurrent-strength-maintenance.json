@@ -958,7 +958,7 @@
     {
       "kind": "scale_anchor",
       "title": "The 0-10 scale",
-      "body_md": "Ready-to-train check plus a stress check most mornings. Not medical — how you feel today.",
+      "body_md": "You'll rate readiness-to-train and life stress most mornings — not medical, just how you feel today. Here's how the numbers read:",
       "anchors": {
         "low": "Sharp, quick, ready",
         "mid": "OK, some drag",
