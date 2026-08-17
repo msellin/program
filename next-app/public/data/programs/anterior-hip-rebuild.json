@@ -2,10 +2,10 @@
   "schema_version": "1.2.0",
   "generated": "2026-08-06",
   "status": "ACTIVE",
-  "status_note": "Refreshed 2026-08-06 after all open-questions answers landed. Mechanical model confirmed (inflammatory features absent, disc golf gone, groin/back/buttock quiet). User is NOT detrained \u2014 power clean triple at 100 kg two days pre-generation. Program shifted to 4 leg sessions/week with a 5/3/1 FSL scaffold and a Sept 12 local comp as mid-cycle demo point.",
+  "status_note": "Refreshed 2026-08-06 after all open-questions answers landed. Mechanical model confirmed (inflammatory features absent, disc golf gone, groin/back/buttock quiet). User is NOT detrained — power clean triple at 100 kg two days pre-generation. Program shifted to 4 leg sessions/week with a 5/3/1 FSL scaffold and a Sept 12 local comp as mid-cycle demo point.",
   "goals": {
     "generated": "2026-08-06",
-    "primary_intent": "Ongoing lower-body strength progression, competitive for CrossFit and Hyrox where legs are the main driver. Not a fixed finish line \u2014 the plan continues past every waypoint. Numeric targets are milestones, not endpoints.",
+    "primary_intent": "Ongoing lower-body strength progression, competitive for CrossFit and Hyrox where legs are the main driver. Not a fixed finish line — the plan continues past every waypoint. Numeric targets are milestones, not endpoints.",
     "waypoints": [
       {
         "id": "birthday_2027",
@@ -28,7 +28,7 @@
       }
     ],
     "muscle_memory_expectation": {
-      "note": "User was at 150-153 kg squat last year. Returning trained lifter means TM ramp in cycles 1-3 will be faster than the standard +5 kg/cycle \u2014 expect +7.5 to +10 kg/cycle until pre-injury capacity is regained (~cycle 3-4). After that, standard +5 kg/cycle.",
+      "note": "User was at 150-153 kg squat last year. Returning trained lifter means TM ramp in cycles 1-3 will be faster than the standard +5 kg/cycle — expect +7.5 to +10 kg/cycle until pre-injury capacity is regained (~cycle 3-4). After that, standard +5 kg/cycle.",
       "trajectory_estimate_kg": {
         "2026-09-27_cycle_1_end": {
           "tm_squat": 120,
@@ -46,7 +46,7 @@
         "2026-12-20_cycle_4_end": {
           "tm_squat": 145,
           "tm_pull": 170,
-          "note": "1RM test \u2014 expect squat 160 kg, pull 190 kg"
+          "note": "1RM test — expect squat 160 kg, pull 190 kg"
         },
         "2027-02-14_mid_hatch": {
           "tm_squat": 155,
@@ -60,17 +60,17 @@
         "2027-04-24_birthday": {
           "tm_squat": 165,
           "tm_pull": 188,
-          "note": "Attempt window \u2014 both PRs plausible if muscle memory returns cleanly"
+          "note": "Attempt window — both PRs plausible if muscle memory returns cleanly"
         }
       }
     },
     "stretch_ambition": {
       "back_squat_kg_this_year": 190,
       "deadlift_kg_this_year": 210,
-      "note": "Where the projected trajectory lands if cycles 1-4 all run green and Hatch/peak execute cleanly. 180/200 was the previous floor target \u2014 moved up here based on user's actual training history (150 kg squat last year)."
+      "note": "Where the projected trajectory lands if cycles 1-4 all run green and Hatch/peak execute cleanly. 180/200 was the previous floor target — moved up here based on user's actual training history (150 kg squat last year)."
     },
     "crossfit_hyrox_readiness": {
-      "note": "Strength gains feed CrossFit and Hyrox performance directly. Class squats and heavy conditioning workouts benefit from raw leg strength \u2014 not a separate track, but a compound benefit.",
+      "note": "Strength gains feed CrossFit and Hyrox performance directly. Class squats and heavy conditioning workouts benefit from raw leg strength — not a separate track, but a compound benefit.",
       "watchlist": [
         "Front squat capacity for cleans and OHS",
         "Sled/prowler power for Hyrox stations",
@@ -80,7 +80,7 @@
     "current_estimated": {
       "back_squat_kg_est": 130,
       "deadlift_kg_est": 150,
-      "recent_proxy": "Power clean 100 kg \u00d7 3 on 2026-08-04, no symptoms. Implies present squat 1RM likely 130-150 range, present deadlift 150-180 range. Confirm in evaluation week.",
+      "recent_proxy": "Power clean 100 kg × 3 on 2026-08-04, no symptoms. Implies present squat 1RM likely 130-150 range, present deadlift 150-180 range. Confirm in evaluation week.",
       "note": "User has not squatted heavy in ~6 months but is fully training-adapted from 5-7x/week CrossFit."
     },
     "history": {
@@ -90,18 +90,18 @@
       "training_years_crossfit": 10
     },
     "progression_targets": {
-      "note": "Trajectory milestones anchored to the April 24 2027 birthday waypoint. TM = training max, \u2248 90% of 5RM. These are what the plan needs to hit to be on-track for AT LEAST ONE of the birthday goals. If both trend on target, the birthday attempt becomes a double-PR opportunity.",
+      "note": "Trajectory milestones anchored to the April 24 2027 birthday waypoint. TM = training max, ≈ 90% of 5RM. These are what the plan needs to hit to be on-track for AT LEAST ONE of the birthday goals. If both trend on target, the birthday attempt becomes a double-PR opportunity.",
       "target_date": "2027-04-24",
       "target_condition": "at_least_one_of",
-      "auto_adjust_policy": "Beating a milestone by \u22651 cycle \u2192 offer to accelerate remaining milestones OR bring the birthday attempt forward. Missing a milestone \u2192 slip subsequent ones back by one cycle and keep the birthday date fixed. Plan continues past 2027-04-24 regardless of outcome.",
-      "trajectory_note": "Back squat starts at TM 110, needs ~165 for a 180 kg 1RM. Block pull starts at TM 130, needs ~180 for 200 kg. Deadlift is the more likely birthday PR \u2014 trajectory below reflects that.",
+      "auto_adjust_policy": "Beating a milestone by ≥1 cycle → offer to accelerate remaining milestones OR bring the birthday attempt forward. Missing a milestone → slip subsequent ones back by one cycle and keep the birthday date fixed. Plan continues past 2027-04-24 regardless of outcome.",
+      "trajectory_note": "Back squat starts at TM 110, needs ~165 for a 180 kg 1RM. Block pull starts at TM 130, needs ~180 for 200 kg. Deadlift is the more likely birthday PR — trajectory below reflects that.",
       "milestones": [
         {
           "date": "2026-09-27",
           "phase": "phase_2_cycle_1",
           "lift": "back_squat_highbar",
           "target_tm_kg": 120,
-          "note": "Cycle 1 end. Muscle memory return \u2014 +10 kg from 110 start."
+          "note": "Cycle 1 end. Muscle memory return — +10 kg from 110 start."
         },
         {
           "date": "2026-09-27",
@@ -166,14 +166,14 @@
           "phase": "phase_6_peak_test",
           "lift": "back_squat_highbar",
           "target_tm_kg": 165,
-          "note": "One week pre-birthday. TM 165 \u2192 180 kg 1RM plausible, 190 stretch."
+          "note": "One week pre-birthday. TM 165 → 180 kg 1RM plausible, 190 stretch."
         },
         {
           "date": "2027-04-17",
           "phase": "phase_6_peak_test",
           "lift": "block_pull_midshin",
           "target_tm_kg": 188,
-          "note": "One week pre-birthday. TM 188 \u2192 205+ kg pull plausible, 220 stretch."
+          "note": "One week pre-birthday. TM 188 → 205+ kg pull plausible, 220 stretch."
         },
         {
           "date": "2027-04-24",
@@ -198,9 +198,9 @@
     "non_negotiables": [
       "Left-right hip strength gap closes as loads increase. Every training week contains meaningful unilateral loading.",
       "No lumbar extension + rotation + axial load stacking. Ever.",
-      "Low-bar back squat rack is off the menu \u2014 right shoulder posterior instability. High-bar or front rack only.",
+      "Low-bar back squat rack is off the menu — right shoulder posterior instability. High-bar or front rack only.",
       "Conventional deadlift from the floor is phase-gated behind ~4 weeks of symptom-free block pulls.",
-      "Volume ramps at \u226410% per week to protect the L5 pseudoarthrosis and right SI subchondral bone.",
+      "Volume ramps at ≤10% per week to protect the L5 pseudoarthrosis and right SI subchondral bone.",
       "One full rest day per week. Legs get 4 sessions/week, not 5."
     ]
   },
@@ -214,7 +214,7 @@
         "2.5": 2
       },
       "max_loaded_kg": 55,
-      "notes": "Enough for technique work, unilateral, RDLs, front squat up to 55 kg. NOT enough for heavy back squat or heavy deadlift \u2014 heavy days are at the box."
+      "notes": "Enough for technique work, unilateral, RDLs, front squat up to 55 kg. NOT enough for heavy back squat or heavy deadlift — heavy days are at the box."
     },
     "crossfit_box": {
       "confirmed_present": [
@@ -240,13 +240,13 @@
   "principles": [
     {
       "id": "scaffold",
-      "rule": "5/3/1 with FSL 5\u00d75 is the scaffold",
-      "detail": "TM-based percentages, submaximal top sets ramping to a week-3 AMRAP. First Set Last 5\u00d75 is the volume work \u2014 higher intensity than BBB, faster gains for an experienced lifter."
+      "rule": "5/3/1 with FSL 5×5 is the scaffold",
+      "detail": "TM-based percentages, submaximal top sets ramping to a week-3 AMRAP. First Set Last 5×5 is the volume work — higher intensity than BBB, faster gains for an experienced lifter."
     },
     {
       "id": "range",
       "rule": "Mid-range before end-range",
-      "detail": "Provocative positions are deep flexion + adduction + IR, and lumbar extension + rotation. Squat depth is 'no knees caving, no butt wink' \u2014 full ROM only when you own the pattern."
+      "detail": "Provocative positions are deep flexion + adduction + IR, and lumbar extension + rotation. Squat depth is 'no knees caving, no butt wink' — full ROM only when you own the pattern."
     },
     {
       "id": "frequency",
@@ -270,7 +270,7 @@
     }
   ],
   "training_maxes": {
-    "note": "TM = the number percentages calculate from. 5/3/1 convention: TM \u2248 90% of a solid 5RM. User has not tested \u2014 evaluation week sets the real values. Starting estimates below are informed guesses to have numbers before the eval.",
+    "note": "TM = the number percentages calculate from. 5/3/1 convention: TM ≈ 90% of a solid 5RM. User has not tested — evaluation week sets the real values. Starting estimates below are informed guesses to have numbers before the eval.",
     "evaluation_week": {
       "when": "Phase 1 week 2 (2026-08-17 to 2026-08-23)",
       "protocol": "Ramp in fives to a heavy-but-clean 5RM. Stop when bar speed slows or form breaks. Squat one day (Tue), pull another day (Fri). Spotter for squats.",
@@ -278,7 +278,7 @@
         "true_5rm_back_squat_highbar",
         "true_5rm_block_pull_midshin"
       ],
-      "tm_formula": "TM = 5RM \u00d7 0.90"
+      "tm_formula": "TM = 5RM × 0.90"
     },
     "starting_values_kg": {
       "back_squat_highbar": 110,
@@ -286,7 +286,7 @@
       "block_pull_midshin": 130,
       "deadlift_conventional": null
     },
-    "starting_values_note": "Estimates based on 10 years CrossFit training + 100 kg power clean triple 2 days ago. If evaluation-week 5RMs land within \u00b110 kg of these, use those numbers. Front squat TM ratchets from actual front squat performance in the variant sessions, not tested separately in week 2.",
+    "starting_values_note": "Estimates based on 10 years CrossFit training + 100 kg power clean triple 2 days ago. If evaluation-week 5RMs land within ±10 kg of these, use those numbers. Front squat TM ratchets from actual front squat performance in the variant sessions, not tested separately in week 2.",
     "progression_rule": "Cycle end all-green: TM +5 kg squat variants, +7.5 kg pull variants. Any amber week: hold TM. Any red week: TM -10%.",
     "reset_rule_5_3_1": "If the top set of week 3 fails to hit the required reps (1+ at 95% TM), reduce TM by 10% for the next cycle."
   },
@@ -309,10 +309,10 @@
       "rationale": "User hasn't squatted heavy in 6 months. This is ramp + eval to set real TMs before Phase 2's first real 5/3/1 waves.",
       "goal": "Rebuild the pattern under progressive load. Establish real TMs from a 5RM test in the last week of the phase.",
       "week_by_week": {
-        "week_0_aug_6_9": "2 barbell sessions (Fri + Sat, or as schedule permits): high-bar squat ramping empty bar \u2192 60 kg \u00d7 5, block pull ramping empty bar \u2192 80 kg \u00d7 5. Home block daily.",
-        "week_1_aug_10_16": "4 barbell sessions: Mon high-bar squat 4\u00d75 to 70-80 kg (RPE 6-7); Wed block pull 4\u00d75 to 90-100 kg (RPE 6-7); Thu front squat 3\u00d75 to 60-70 kg + Bulgarian split squat; Sat unilateral + carries + sled.",
-        "week_2_aug_17_23": "Same as week 1 (repeated). Extra week of moderate load before the eval \u2014 protective when there are any hip / groin flags.",
-        "week_3_aug_24_29_EVAL": "Tue: 5RM high-bar back squat (spotter). Wed: light recovery 3\u00d75 @ 60%. Fri: 5RM block pull. Sat: light recovery 3\u00d75 @ 60%. Mon + Thu = rest. Sun = home block."
+        "week_0_aug_6_9": "2 barbell sessions (Fri + Sat, or as schedule permits): high-bar squat ramping empty bar → 60 kg × 5, block pull ramping empty bar → 80 kg × 5. Home block daily.",
+        "week_1_aug_10_16": "4 barbell sessions: Mon high-bar squat 4×5 to 70-80 kg (RPE 6-7); Wed block pull 4×5 to 90-100 kg (RPE 6-7); Thu front squat 3×5 to 60-70 kg + Bulgarian split squat; Sat unilateral + carries + sled.",
+        "week_2_aug_17_23": "Same as week 1 (repeated). Extra week of moderate load before the eval — protective when there are any hip / groin flags.",
+        "week_3_aug_24_29_EVAL": "Tue: 5RM high-bar back squat (spotter). Wed: light recovery 3×5 @ 60%. Fri: 5RM block pull. Sat: light recovery 3×5 @ 60%. Mon + Thu = rest. Sun = home block."
       },
       "weekly_overrides": [
         {
@@ -333,7 +333,7 @@
     },
     {
       "id": "phase_2_cycle_1",
-      "name": "Cycle 1 \u2014 first real 5/3/1 FSL (Sept 12 comp mid-cycle)",
+      "name": "Cycle 1 — first real 5/3/1 FSL (Sept 12 comp mid-cycle)",
       "starts": "2026-08-30",
       "ends": "2026-09-27",
       "duration_weeks": 4,
@@ -345,11 +345,11 @@
         "block_squat_volume",
         "block_daily_skill"
       ],
-      "template": "5/3/1 with First Set Last 5\u00d75",
-      "template_note": "Main-lift top sets ramp 65/75/85 \u2192 70/80/90 \u2192 75/85/95% TM. Every top set is an AMRAP. FSL 5\u00d75 = 5 sets of 5 at the first working weight of the day.",
+      "template": "5/3/1 with First Set Last 5×5",
+      "template_note": "Main-lift top sets ramp 65/75/85 → 70/80/90 → 75/85/95% TM. Every top set is an AMRAP. FSL 5×5 = 5 sets of 5 at the first working weight of the day.",
       "cycle_structure": {
         "week_1_aug_30_sep_5": "5/5/5 top set. 65/75/85% TM.",
-        "week_2_sep_6_12_COMP_WEEK": "3/3/3 top set. 70/80/90% TM. Schedule heavy squat and pull Mon+Wed. Thu light. Comp Sat 2026-09-12 \u2014 expect to feel notably stronger than in years.",
+        "week_2_sep_6_12_COMP_WEEK": "3/3/3 top set. 70/80/90% TM. Schedule heavy squat and pull Mon+Wed. Thu light. Comp Sat 2026-09-12 — expect to feel notably stronger than in years.",
         "week_3_sep_13_19": "5/3/1 top set. 75/85/95% TM. AMRAP at 95% is the first real strength-jump moment.",
         "week_4_sep_20_27_DELOAD": "40/50/60% TM 5 reps each. Recovery week. Cycle end review."
       },
@@ -369,7 +369,7 @@
         "block_squat_volume",
         "block_daily_skill"
       ],
-      "template": "5/3/1 FSL 5\u00d75",
+      "template": "5/3/1 FSL 5×5",
       "goal": "TM incremented if cycle 1 was green. Second measurable top-set PR at week 3.",
       "runs_cycle_end_eval": true
     },
@@ -387,7 +387,7 @@
         "block_squat_volume",
         "block_daily_skill"
       ],
-      "template": "5/3/1 FSL 5\u00d75; then peaking within cycle 4 for 1RM test",
+      "template": "5/3/1 FSL 5×5; then peaking within cycle 4 for 1RM test",
       "reintroduction_gate": {
         "conventional_deadlift": "During cycle 3 or 4, if block pull at 150 kg has been symptom-free (green) for 4 consecutive weeks, swap in conventional deadlift for the top set only on Wed. Otherwise stay on block pulls."
       },
@@ -409,11 +409,11 @@
       ],
       "template": "Hatch Squat Program (Gayle Hatch)",
       "template_note": "Two dedicated squat days per week for 12 weeks (day A: back squat heavy + front squat lighter; day B: reversed). One pull session per week (block pull with FSL). Fourth session is optional unilateral/accessories.",
-      "note_holiday_gap": "Dec 21 \u2013 Jan 4 is a light/holiday period. Optional 2 sessions/week at 60% TM to keep the groove."
+      "note_holiday_gap": "Dec 21 – Jan 4 is a light/holiday period. Optional 2 sessions/week at 60% TM to keep the groove."
     },
     {
       "id": "phase_6_peak_test",
-      "name": "Peak \u2014 birthday waypoint",
+      "name": "Peak — birthday waypoint",
       "starts": "2027-03-29",
       "ends": "2027-04-24",
       "duration_weeks": 4,
@@ -425,12 +425,12 @@
         "block_peak_singles",
         "block_daily_skill"
       ],
-      "template": "3-week peaking block (5s \u2192 3s \u2192 1s) + 1RM attempt window",
-      "test_window": "2027-04-20 to 2027-04-24 \u2014 birthday. Attempt 180 kg squat AND/OR 200 kg deadlift (with stretch: 190 / 210+). Hitting one is the win. Plan continues after."
+      "template": "3-week peaking block (5s → 3s → 1s) + 1RM attempt window",
+      "test_window": "2027-04-20 to 2027-04-24 — birthday. Attempt 180 kg squat AND/OR 200 kg deadlift (with stretch: 190 / 210+). Hitting one is the win. Plan continues after."
     },
     {
       "id": "phase_7_continue",
-      "name": "Post-birthday \u2014 ongoing progression",
+      "name": "Post-birthday — ongoing progression",
       "starts": "2027-04-25",
       "ends": null,
       "duration_weeks": null,
@@ -442,7 +442,7 @@
         "block_squat_volume",
         "block_daily_skill"
       ],
-      "template": "Adaptive \u2014 engine generates next cycle structure based on birthday outcome and updated TMs",
+      "template": "Adaptive — engine generates next cycle structure based on birthday outcome and updated TMs",
       "note": "Strength progression does not end at the birthday waypoint. On 2027-04-25 the engine generates the next waypoint (typically +10-15 kg on the achieved lifts, similar duration ahead) and resumes 5/3/1 FSL."
     }
   ],
@@ -459,8 +459,8 @@
       "action": "Cap today's suggestion at 90% of prescription. Banner on Today. Do not increment TM this cycle."
     },
     "on_pause_resume": {
-      "trigger": "Gap in logging \u226514 days",
-      "action": "Automatically insert a calibration mini-cycle on return: week 1 reintro (60-70% previous TM), week 2 eval (5RM test, reset TM = 5RM \u00d7 0.90), then resume main progression. Announce clearly: 'You've been away 3 weeks \u2014 here's your calibration.'"
+      "trigger": "Gap in logging ≥14 days",
+      "action": "Automatically insert a calibration mini-cycle on return: week 1 reintro (60-70% previous TM), week 2 eval (5RM test, reset TM = 5RM × 0.90), then resume main progression. Announce clearly: 'You've been away 3 weeks — here's your calibration.'"
     },
     "waypoint_hit": {
       "trigger": "1RM attempt on waypoint date meets or exceeds any waypoint condition",
@@ -542,32 +542,32 @@
       "frequency_per_week": 4,
       "duration_min": 45,
       "phase_gated": "phase_1_rebuild_evaluate",
-      "note": "Empty bar \u2192 moderate load. Two squat days, one pull day, one variant/unilateral day. RPE cap of 7. No failure, no top sets.",
+      "note": "Empty bar → moderate load. Two squat days, one pull day, one variant/unilateral day. RPE cap of 7. No failure, no top sets.",
       "items": [
         {
           "exercise_id": "back_squat_highbar",
           "order": "A1",
           "role": "pattern",
-          "scheme": "3-4 \u00d7 5 ramping empty bar to a moderate 5 (RPE 6-7)"
+          "scheme": "3-4 × 5 ramping empty bar to a moderate 5 (RPE 6-7)"
         },
         {
           "exercise_id": "block_pull_midshin",
           "order": "A2",
           "role": "pattern",
-          "scheme": "3-4 \u00d7 5 ramping empty bar to a moderate 5 (RPE 6-7)",
+          "scheme": "3-4 × 5 ramping empty bar to a moderate 5 (RPE 6-7)",
           "note": "On the dedicated pull day only"
         },
         {
           "exercise_id": "bulgarian_split_squat_db",
           "order": "B1",
           "role": "unilateral",
-          "scheme": "3\u00d76 per side"
+          "scheme": "3×6 per side"
         },
         {
           "exercise_id": "single_leg_rdl",
           "order": "B2",
           "role": "unilateral",
-          "scheme": "2\u00d76 per side"
+          "scheme": "2×6 per side"
         },
         {
           "exercise_id": "dead_bug",
@@ -584,7 +584,7 @@
       "frequency_per_week": 1,
       "duration_min": 60,
       "phase_gated": "phase_1_rebuild_evaluate",
-      "note": "Ramp in fives to a heavy-but-clean 5RM. Spotter required. Stop at first grinder. Set TM = 5RM \u00d7 0.90 immediately after.",
+      "note": "Ramp in fives to a heavy-but-clean 5RM. Spotter required. Stop at first grinder. Set TM = 5RM × 0.90 immediately after.",
       "items": [
         {
           "exercise_id": "back_squat_highbar",
@@ -592,7 +592,7 @@
           "scheme": "Warm up in fives, ramp to a heavy-but-clean 5RM (RPE 8.5-9). Stop at first grinder."
         }
       ],
-      "tm_calculation": "TM = 5RM \u00d7 0.90. Set values in the app's Training Maxes tab immediately after this session."
+      "tm_calculation": "TM = 5RM × 0.90. Set values in the app's Training Maxes tab immediately after this session."
     },
     {
       "id": "block_eval_pull",
@@ -602,7 +602,7 @@
       "frequency_per_week": 1,
       "duration_min": 60,
       "phase_gated": "phase_1_rebuild_evaluate",
-      "note": "Ramp in fives to a heavy-but-clean 5RM block pull (mid-shin). Stop at first grinder. Set TM = 5RM \u00d7 0.90 immediately after.",
+      "note": "Ramp in fives to a heavy-but-clean 5RM block pull (mid-shin). Stop at first grinder. Set TM = 5RM × 0.90 immediately after.",
       "items": [
         {
           "exercise_id": "block_pull_midshin",
@@ -610,7 +610,7 @@
           "scheme": "Warm up in fives, ramp to a heavy-but-clean 5RM (RPE 8.5-9). Stop at first grinder."
         }
       ],
-      "tm_calculation": "TM = 5RM \u00d7 0.90. Set values in the app's Training Maxes tab immediately after this session."
+      "tm_calculation": "TM = 5RM × 0.90. Set values in the app's Training Maxes tab immediately after this session."
     },
     {
       "id": "block_reintro_light",
@@ -620,23 +620,23 @@
       "frequency_per_week": 2,
       "duration_min": 40,
       "phase_gated": "phase_1_rebuild_evaluate",
-      "note": "3\u00d75 at 60% of expected work weight. This is a recovery session between the two 5RM evaluations \u2014 not a training stimulus. Move well, log RPE, get out.",
+      "note": "3×5 at 60% of expected work weight. This is a recovery session between the two 5RM evaluations — not a training stimulus. Move well, log RPE, get out.",
       "items": [
         {
           "exercise_id": "back_squat_highbar",
           "role": "recovery",
-          "scheme": "3\u00d75 @ ~60% expected TM. Same weight all sets. RPE cap 6."
+          "scheme": "3×5 @ ~60% expected TM. Same weight all sets. RPE cap 6."
         }
       ]
     },
     {
       "id": "block_squat_heavy",
-      "name": "Mon \u2014 heavy squat day",
+      "name": "Mon — heavy squat day",
       "category": "strength",
       "location": "crossfit_box",
       "frequency_per_week": 1,
       "duration_min": 60,
-      "note": "Main squat day. High-bar back squat, 5/3/1 top set followed by FSL 5\u00d75 at the first working weight.",
+      "note": "Main squat day. High-bar back squat, 5/3/1 top set followed by FSL 5×5 at the first working weight.",
       "items": [
         {
           "exercise_id": "back_squat_highbar",
@@ -648,13 +648,13 @@
           "exercise_id": "back_squat_highbar",
           "order": "A2",
           "role": "volume",
-          "scheme": "FSL 5\u00d75 at first-set working weight"
+          "scheme": "FSL 5×5 at first-set working weight"
         },
         {
           "exercise_id": "bulgarian_split_squat_db",
           "order": "B1",
           "role": "unilateral",
-          "scheme": "3\u00d78 per side, extra set left"
+          "scheme": "3×8 per side, extra set left"
         },
         {
           "exercise_id": "dead_bug",
@@ -670,7 +670,7 @@
     },
     {
       "id": "block_pull_heavy",
-      "name": "Wed \u2014 heavy pull day",
+      "name": "Wed — heavy pull day",
       "category": "strength",
       "location": "crossfit_box",
       "frequency_per_week": 1,
@@ -687,19 +687,19 @@
           "exercise_id": "block_pull_midshin",
           "order": "A2",
           "role": "volume",
-          "scheme": "FSL 5\u00d75"
+          "scheme": "FSL 5×5"
         },
         {
           "exercise_id": "hip_thrust_barbell",
           "order": "B1",
           "role": "glute_max",
-          "scheme": "4\u00d78"
+          "scheme": "4×8"
         },
         {
           "exercise_id": "single_leg_rdl",
           "order": "B2",
           "role": "unilateral",
-          "scheme": "3\u00d78 per side, extra set left"
+          "scheme": "3×8 per side, extra set left"
         },
         {
           "exercise_id": "hollow_hold",
@@ -710,7 +710,7 @@
     },
     {
       "id": "block_squat_variant",
-      "name": "Thu \u2014 front squat + unilateral",
+      "name": "Thu — front squat + unilateral",
       "category": "strength",
       "location": "crossfit_box",
       "frequency_per_week": 1,
@@ -721,25 +721,25 @@
           "exercise_id": "front_squat",
           "order": "A1",
           "role": "main",
-          "scheme": "5\u00d75 at 65-75% front squat TM. Progress load when all sets clean."
+          "scheme": "5×5 at 65-75% front squat TM. Progress load when all sets clean."
         },
         {
           "exercise_id": "bulgarian_split_squat_db",
           "order": "B1",
           "role": "unilateral_heavy",
-          "scheme": "4\u00d76 per side, heavier than Mon"
+          "scheme": "4×6 per side, heavier than Mon"
         },
         {
           "exercise_id": "nordic_curl",
           "order": "B2",
           "role": "posterior_chain",
-          "scheme": "3\u00d75 eccentric"
+          "scheme": "3×5 eccentric"
         },
         {
           "exercise_id": "sled_push",
           "order": "C1",
           "role": "conditioning_strength",
-          "scheme": "6 \u00d7 20 m heavy"
+          "scheme": "6 × 20 m heavy"
         }
       ],
       "substitutions": {
@@ -751,36 +751,36 @@
     },
     {
       "id": "block_squat_volume",
-      "name": "Sat \u2014 moderate volume + carries",
+      "name": "Sat — moderate volume + carries",
       "category": "strength",
       "location": "crossfit_box",
       "frequency_per_week": 1,
       "duration_min": 45,
-      "note": "Fourth leg session. Higher volume at moderate load \u2014 5\u00d75 at 60-70% back squat TM. Followed by unilateral and loaded carries. This is where fractionated volume goes to work.",
+      "note": "Fourth leg session. Higher volume at moderate load — 5×5 at 60-70% back squat TM. Followed by unilateral and loaded carries. This is where fractionated volume goes to work.",
       "items": [
         {
           "exercise_id": "back_squat_highbar",
           "order": "A1",
           "role": "moderate_volume",
-          "scheme": "5\u00d75 at 60-70% TM, all sets same weight, tempo 3-0-1-0"
+          "scheme": "5×5 at 60-70% TM, all sets same weight, tempo 3-0-1-0"
         },
         {
           "exercise_id": "single_leg_rdl",
           "order": "B1",
           "role": "unilateral_pull",
-          "scheme": "4\u00d76 per side, extra set left"
+          "scheme": "4×6 per side, extra set left"
         },
         {
           "exercise_id": "suitcase_carry",
           "order": "C1",
           "role": "trunk_anti_rotation",
-          "scheme": "4 \u00d7 20 m per side"
+          "scheme": "4 × 20 m per side"
         },
         {
           "exercise_id": "farmer_carry",
           "order": "C2",
           "role": "trunk",
-          "scheme": "3 \u00d7 40 m"
+          "scheme": "3 × 40 m"
         }
       ]
     },
@@ -865,7 +865,7 @@
     },
     {
       "id": "block_hatch_a",
-      "name": "Hatch day A \u2014 back squat heavy, front squat light",
+      "name": "Hatch day A — back squat heavy, front squat light",
       "category": "strength",
       "location": "crossfit_box",
       "frequency_per_week": 1,
@@ -898,7 +898,7 @@
     },
     {
       "id": "block_hatch_b",
-      "name": "Hatch day B \u2014 front squat heavy, back squat light",
+      "name": "Hatch day B — front squat heavy, back squat light",
       "category": "strength",
       "location": "crossfit_box",
       "frequency_per_week": 1,
@@ -945,55 +945,55 @@
         "week_1": [
           {
             "day": "Mon",
-            "scheme": "4\u00d79 @ 70% TM"
+            "scheme": "4×9 @ 70% TM"
           },
           {
             "day": "Wed",
-            "scheme": "5\u00d77 @ 75% TM"
+            "scheme": "5×7 @ 75% TM"
           },
           {
             "day": "Fri",
-            "scheme": "7\u00d75 @ 80% TM"
+            "scheme": "7×5 @ 80% TM"
           },
           {
             "day": "Sat",
-            "scheme": "10\u00d73 @ 85% TM"
+            "scheme": "10×3 @ 85% TM"
           }
         ],
         "week_2": [
           {
             "day": "Mon",
-            "scheme": "4\u00d79 @ 72.5% TM"
+            "scheme": "4×9 @ 72.5% TM"
           },
           {
             "day": "Wed",
-            "scheme": "5\u00d77 @ 77.5% TM"
+            "scheme": "5×7 @ 77.5% TM"
           },
           {
             "day": "Fri",
-            "scheme": "7\u00d75 @ 82.5% TM"
+            "scheme": "7×5 @ 82.5% TM"
           },
           {
             "day": "Sat",
-            "scheme": "10\u00d73 @ 87.5% TM"
+            "scheme": "10×3 @ 87.5% TM"
           }
         ],
         "week_3": [
           {
             "day": "Mon",
-            "scheme": "4\u00d79 @ 75% TM"
+            "scheme": "4×9 @ 75% TM"
           },
           {
             "day": "Wed",
-            "scheme": "5\u00d77 @ 80% TM"
+            "scheme": "5×7 @ 80% TM"
           },
           {
             "day": "Fri",
-            "scheme": "7\u00d75 @ 85% TM"
+            "scheme": "7×5 @ 85% TM"
           },
           {
             "day": "Sat",
-            "scheme": "10\u00d73 @ 90% TM"
+            "scheme": "10×3 @ 90% TM"
           }
         ],
         "week_4_test": "Deload Mon-Wed, 1RM test attempt Fri or Sat"
@@ -1007,15 +1007,15 @@
         }
       ],
       "cautions": [
-        "Skip pull heavy day during this block \u2014 one block pull moderate session/week only.",
+        "Skip pull heavy day during this block — one block pull moderate session/week only.",
         "Do not stack CrossFit conditioning with legs during this block. Upper-only class work or rest.",
-        "First amber week \u2192 drop out immediately, go back to 5/3/1 FSL.",
+        "First amber week → drop out immediately, go back to 5/3/1 FSL.",
         "Requires TM known to be accurate. Do not run on estimated TM."
       ]
     },
     {
       "id": "block_peak_singles",
-      "name": "Phase 6 peaking \u2014 heavy singles",
+      "name": "Phase 6 peaking — heavy singles",
       "category": "strength",
       "location": "crossfit_box",
       "frequency_per_week": 1,
@@ -1059,7 +1059,7 @@
       {
         "day": "Thu",
         "session": "block_squat_variant",
-        "conditioning": "None. This is the second squat day of the week \u2014 respect the load."
+        "conditioning": "None. This is the second squat day of the week — respect the load."
       },
       {
         "day": "Fri",
@@ -1079,9 +1079,9 @@
     ],
     "principles": [
       "48h between the two heavy squat days (Mon block_squat_heavy and Thu block_squat_variant).",
-      "24h between Wed pull heavy and Thu squat variant is fine \u2014 pull loads are lower until deadlift graduates.",
+      "24h between Wed pull heavy and Thu squat variant is fine — pull loads are lower until deadlift graduates.",
       "Sunday is a full rest day. No barbell, no skill squat, no CrossFit. Home block optional and easy.",
-      "If a CrossFit class contains heavy squats or deadlifts on a Tue/Fri, drop the day's home block and skip the class squats \u2014 do class conditioning only."
+      "If a CrossFit class contains heavy squats or deadlifts on a Tue/Fri, drop the day's home block and skip the class squats — do class conditioning only."
     ]
   },
   "progression_rules": {
@@ -1124,7 +1124,7 @@
         "escalate_if_repeated": true
       }
     ],
-    "cycle_end_rule": "At the end of every 4-week 5/3/1 cycle: if all 4 weeks green \u2192 TM +5 kg squat / +7.5 kg pull. Any amber week \u2192 hold TM. Any red week \u2192 TM -10%.",
+    "cycle_end_rule": "At the end of every 4-week 5/3/1 cycle: if all 4 weeks green → TM +5 kg squat / +7.5 kg pull. Any amber week → hold TM. Any red week → TM -10%.",
     "escalation": "Night pain, a clear step-change in symptoms, or three amber weeks in a row means see the orthopaedist. Do not simply keep resetting the TM."
   },
   "daily_log_schema": {
@@ -1160,28 +1160,57 @@
   "immediate_actions": [
     {
       "priority": 1,
-      "action": "Start phase 1 today \u2014 Aug 6",
+      "action": "Start phase 1 today — Aug 6",
       "reason": "Week 0 gets 2 barbell sessions in before Monday. Don't wait for the calendar."
     },
     {
       "priority": 2,
       "action": "Book the physiotherapy appointment",
-      "reason": "Two prior referrals went unused. Load ramps are safer with a physio watching form and tissue response \u2014 especially with the right shoulder still symptomatic."
+      "reason": "Two prior referrals went unused. Load ramps are safer with a physio watching form and tissue response — especially with the right shoulder still symptomatic."
     },
     {
       "priority": 3,
-      "action": "Evaluation week (Aug 17-23) \u2014 5RM tests on high-bar squat and block pull. Enter results in the app's Training Maxes tab.",
+      "action": "Evaluation week (Aug 17-23) — 5RM tests on high-bar squat and block pull. Enter results in the app's Training Maxes tab.",
       "reason": "Everything after week 2 keys off these numbers. Best to have a training partner or spotter for the squat test."
     },
     {
       "priority": 4,
       "action": "If shoulder pain (currently 3-4/10) creeps up as squat loads increase, escalate to clinician",
-      "reason": "The right shoulder is the only symptomatic region right now. Heavy squats compress the rack \u2014 high-bar rack position over a labrally compromised shoulder is a watch item."
+      "reason": "The right shoulder is the only symptomatic region right now. Heavy squats compress the rack — high-bar rack position over a labrally compromised shoulder is a watch item."
     },
     {
       "priority": 5,
       "action": "Repeat imaging conversation with orthopaedist BEFORE phase 6 peak",
       "reason": "Current MRIs are 4+ years old. Before attempting 180 kg squat / 200 kg deadlift, a repeat lumbar and hip MRI is a reasonable ask."
+    }
+  ],
+  "onboarding_steps": [
+    {
+      "kind": "scale_anchor",
+      "title": "The 0-10 scale",
+      "body_md": "You'll be asked to score symptoms and life stress on a 0-10 scale most mornings. It's not medical — it's just how you feel that morning.",
+      "anchors": {
+        "low": "Nothing noticeable",
+        "mid": "Mild but real",
+        "high": "Sharp / sleep-disrupting"
+      }
+    },
+    {
+      "kind": "symptom_primer",
+      "title": "What Terav will ask each morning",
+      "body_md": "For this program the morning check tracks a small set of hip-adjacent signals. You fill it in on the /check screen — nothing is captured here.",
+      "fields": [
+        "Low back (0-10)",
+        "Left groin / hip anterior (0-10)",
+        "Clicking or catching in the hip",
+        "Sleep hours"
+      ],
+      "gdpr_note": "Symptom data is Article 9 in the EU. You can export or delete it any time from Profile."
+    },
+    {
+      "kind": "custom_copy",
+      "title": "This is not medical advice",
+      "body_md": "Terav is a training app that helps you sharpen one focus at a time. If a symptom is new, worsening, or wakes you at night, work with a clinician. Terav sits alongside real care — it does not replace it."
     }
   ]
 }

@@ -1627,5 +1627,28 @@
       "aggregation": "median_of_window",
       "window_days": 7
     }
+  ],
+  "onboarding_steps": [
+    {
+      "kind": "scale_anchor",
+      "title": "The 0-10 scale",
+      "body_md": "You'll rate how ready you feel most mornings and how heavy the day around training feels. Simple scales, no jargon.",
+      "anchors": {
+        "low": "Fresh, ready to work",
+        "mid": "Gritty but functional",
+        "high": "Cooked / running on fumes"
+      }
+    },
+    {
+      "kind": "life_load",
+      "title": "Life load, today",
+      "body_md": "Sleep, work, stress, illness — anything that shows up before you get to the session. Terav uses this to propose a lighter target when it's high. Nothing else.",
+      "write_on_complete": true
+    },
+    {
+      "kind": "custom_copy",
+      "title": "How Engine Builder works",
+      "body_md": "Three sessions a week — one Zone 1-2 steady, one 4×4 interval, one skill / mobility. The other four days are yours. If you push hard elsewhere, log it in the morning check and the engine softens the next session. Progress is measured against the Zone-2 anchor pace, not RPE."
+    }
   ]
 }

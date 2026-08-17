@@ -272,6 +272,61 @@ export const planTierSchema = z.object({
 });
 
 /**
+ * B3 (Phase 4): declarative onboarding step primitives.
+ *
+ * Each program JSON declares an `onboarding_steps` array against a closed
+ * union of five kinds. The `<OnboardingRunner>` component renders them.
+ * See dev/design-briefs/2026-08-17-b3-program-agnostic-onboarding.md.
+ *
+ * Consent-first: NO step writes symptom (Article 9 medical) data. The old
+ * hip-flow's silent `setDaySymptoms` write is removed — symptom capture
+ * happens on `/check` where consent language already lives.
+ */
+export const onboardingStepSchema = z.discriminatedUnion("kind", [
+  z.object({
+    kind: z.literal("scale_anchor"),
+    title: z.string(),
+    body_md: z.string(),
+    anchors: z.object({
+      low: z.string(),
+      mid: z.string(),
+      high: z.string(),
+    }),
+  }),
+  z.object({
+    kind: z.literal("life_load"),
+    title: z.string(),
+    body_md: z.string(),
+    // The Life-load step captures a self-reported 0-10 stress signal —
+    // NOT medical data. Persisted via setDaySymptoms.life_load only.
+    write_on_complete: z.boolean().default(true),
+  }),
+  z.object({
+    kind: z.literal("symptom_primer"),
+    title: z.string(),
+    body_md: z.string(),
+    // Fields shown as an information list — the user is being TOLD what
+    // they'll be asked on /check each morning, not asked here.
+    fields: z.array(z.string()).min(1),
+    gdpr_note: z.string().optional(),
+  }),
+  z.object({
+    kind: z.literal("scan_anchor"),
+    title: z.string(),
+    body_md: z.string(),
+    cta_href: z.string().optional(),
+    cta_label: z.string().optional(),
+  }),
+  z.object({
+    kind: z.literal("custom_copy"),
+    title: z.string(),
+    body_md: z.string(),
+  }),
+]);
+
+export const onboardingStepsSchema = z.array(onboardingStepSchema);
+
+/**
  * Program-level intake + generator + goal metadata. All optional — Margus's
  * legacy program was authored before this was a formalised contract, so it
  * validates without these fields. New programs authored for the catalog SHOULD
@@ -395,6 +450,11 @@ export const programSchema = z.object({
   plan_tiers: z.array(planTierSchema).optional(),
   program_goal: programGoalSchema.optional(),
   evidence_base: evidenceBaseSchema.optional(),
+  /**
+   * B3 (Phase 4): declarative per-program onboarding.
+   * When absent, `<OnboardingRunner>` shows the shared fallback splash.
+   */
+  onboarding_steps: onboardingStepsSchema.optional(),
   /**
    * v2: declare how the plan generator should build weekly sessions from this
    * program. `correlated_tier` = Foundation/Progression/Push scaled template
@@ -1020,6 +1080,7 @@ export type PlanTier = z.infer<typeof planTierSchema>;
 export type ProgramIntake = z.infer<typeof programIntakeSchema>;
 export type ProgramGoal = z.infer<typeof programGoalSchema>;
 export type EvidenceBase = z.infer<typeof evidenceBaseSchema>;
+export type OnboardingStep = z.infer<typeof onboardingStepSchema>;
 export type DrillLevel = z.infer<typeof drillLevelSchema>;
 export type DrillPrerequisite = z.infer<typeof drillPrerequisiteSchema>;
 export type DrillRetestMetric = z.infer<typeof drillRetestMetricSchema>;

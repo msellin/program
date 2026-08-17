@@ -4,7 +4,6 @@ import { BottomNav } from "@/components/nav/BottomNav";
 import { StoreHydrator } from "@/components/StoreHydrator";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 import { RestTimerHost } from "@/components/workout/RestTimerHost";
-import { Onboarding } from "@/components/Onboarding";
 import { AuthGate } from "@/components/AuthGate";
 import { AppShell } from "@/components/AppShell";
 import "./globals.css";

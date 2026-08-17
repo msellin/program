@@ -953,5 +953,28 @@
       "aggregation": "trend_slope",
       "window_days": 28
     }
+  ],
+  "onboarding_steps": [
+    {
+      "kind": "scale_anchor",
+      "title": "The 0-10 scale",
+      "body_md": "Ready-to-train check plus a stress check most mornings. Not medical — how you feel today.",
+      "anchors": {
+        "low": "Sharp, quick, ready",
+        "mid": "OK, some drag",
+        "high": "Legs / bar feel heavy at bar-hang"
+      }
+    },
+    {
+      "kind": "life_load",
+      "title": "Life load, today",
+      "body_md": "How heavy is the day around your training right now? Sleep, work, stress, travel. The engine reads this and proposes lighter loads when it's genuinely high.",
+      "write_on_complete": true
+    },
+    {
+      "kind": "custom_copy",
+      "title": "What this program does NOT do",
+      "body_md": "Concurrent Strength Maintenance holds your squat / press / deadlift while an aerobic block runs. There are no PR days here. Trying to add PRs against a hard aerobic week is where the interference cost shows up."
+    }
   ]
 }

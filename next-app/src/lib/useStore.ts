@@ -370,7 +370,12 @@ export const useStore = create<StoreState>((set, get) => ({
     commit(empty);
     // Also clear per-device UI flags so a wipe truly resets the app.
     try {
-      localStorage.removeItem("program.onboarding.done");
+      // B3: per-program onboarding keys. Clear every one so a fresh
+      // program pick after wipe re-plays its onboarding once.
+      for (let i = localStorage.length - 1; i >= 0; i--) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith("program.onboarding.done")) localStorage.removeItem(k);
+      }
       localStorage.removeItem("program.firstrun.dismissed");
       localStorage.removeItem("program.log.v2.seeded");
       localStorage.removeItem("program.coach.history.v1");
@@ -903,8 +908,11 @@ export const useStore = create<StoreState>((set, get) => ({
     const empty: Store = { ...initial, updated_at: Date.now() };
     saveStore(empty);
     try {
-      // Per-device UI flags — clearing so the new user gets first-run treatment.
-      localStorage.removeItem("program.onboarding.done");
+      // B3: per-program onboarding keys.
+      for (let i = localStorage.length - 1; i >= 0; i--) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith("program.onboarding.done")) localStorage.removeItem(k);
+      }
       localStorage.removeItem("program.firstrun.dismissed");
       localStorage.removeItem("program.log.v2.seeded");
       localStorage.removeItem("program.coach.history.v1");

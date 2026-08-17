@@ -888,5 +888,30 @@
       "das_2019",
       "kilding_2012"
     ]
-  }
+  },
+  "onboarding_steps": [
+    {
+      "kind": "scale_anchor",
+      "title": "The 0-10 scale",
+      "body_md": "Two things matter for a 2K test: recovery from prior work, and life stress. Rate both, most mornings.",
+      "anchors": {
+        "low": "Fresh legs, sharp head",
+        "mid": "Legs a bit heavy",
+        "high": "Cooked — pull is a grind"
+      }
+    },
+    {
+      "kind": "scan_anchor",
+      "title": "Your test date",
+      "body_md": "This program peaks toward the date you set on intake. The taper week reduces volume ~45% while intensity holds — that's where the ~3% uplift comes from. Don't add extra sessions in that week.",
+      "cta_href": "/intake",
+      "cta_label": "Set the test date"
+    },
+    {
+      "kind": "life_load",
+      "title": "Life load, today",
+      "body_md": "Sleep, work, stress — anything around training. When life-load is high, Terav proposes softer targets rather than pushing splits.",
+      "write_on_complete": true
+    }
+  ]
 }

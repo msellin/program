@@ -1774,5 +1774,35 @@
       "aggregation": "best_of_last_n",
       "window_days": 21
     }
+  ],
+  "onboarding_steps": [
+    {
+      "kind": "scale_anchor",
+      "title": "The 0-10 scale",
+      "body_md": "Wrist and shoulder readiness matter more here than global fatigue. Rate what you notice this morning, not what you fear.",
+      "anchors": {
+        "low": "Wrists / shoulders quiet",
+        "mid": "Some pump / stiffness",
+        "high": "Wrist pain on load — pause"
+      }
+    },
+    {
+      "kind": "scan_anchor",
+      "title": "The freestand test",
+      "body_md": "Handstand Walk starts from a 20-second freestand baseline. If you can't yet, the plan drops you into the wall progression tier automatically — same skill, earlier level.",
+      "cta_href": "/intake",
+      "cta_label": "Run the intake"
+    },
+    {
+      "kind": "symptom_primer",
+      "title": "What Terav will ask each morning",
+      "body_md": "For skill work the morning check is short. Nothing captured here — you fill it in on the /check screen.",
+      "fields": [
+        "Wrist stiffness or pain (0-10)",
+        "Shoulder / trap tension (0-10)",
+        "Sleep hours"
+      ],
+      "gdpr_note": "Terav stores this in the EU. Export or delete from Profile any time."
+    }
   ]
 }

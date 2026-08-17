@@ -7,7 +7,7 @@ import { Stethoscope, Layers } from "lucide-react";
 import { BottomNav } from "@/components/nav/BottomNav";
 import { StoreHydrator } from "@/components/StoreHydrator";
 import { RestTimerHost } from "@/components/workout/RestTimerHost";
-import { Onboarding } from "@/components/Onboarding";
+import { OnboardingRunner } from "@/components/onboarding/OnboardingRunner";
 import { IntroGallery } from "@/components/IntroGallery";
 import { useStore } from "@/lib/useStore";
 import { today as todayISO } from "@/lib/utils";
@@ -107,7 +107,7 @@ function AuthGatedShell({
           is meaningless on catalog / program preview / progress pages, and
           firing it when a user arrives from the landing on /programs was
           the whole reason we shipped the /programs public preview. */}
-      {isTodayRoute ? <Onboarding /> : null}
+      {isTodayRoute ? <OnboardingRunner /> : null}
       <IntroGallery />
       {/* Top nav — in-flow, scrolls with content. Whoop / Strava / Runna
           convention: only the bottom tab bar is fixed; the top chrome
