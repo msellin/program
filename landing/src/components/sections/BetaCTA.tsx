@@ -17,17 +17,17 @@ export function BetaCTA({ dict }: { dict: LandingDict }) {
         {t.body}
       </p>
 
-      <div className="mt-10 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+      <div className="mt-10 flex flex-col items-stretch gap-3 sm:flex-row sm:justify-center">
         <a
           href={`${APP_URL}/sign-up`}
-          className="group inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[var(--color-bronze-hi)] to-[var(--color-bronze-lo)] px-7 py-4 text-base font-semibold text-black shadow-[0_10px_40px_-10px_rgba(208,154,104,0.6)] transition hover:brightness-110"
+          className="group inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-[var(--color-bronze-hi)] to-[var(--color-bronze-lo)] px-7 py-4 text-base font-semibold text-black shadow-[0_10px_40px_-10px_rgba(208,154,104,0.6)] transition hover:brightness-110 sm:w-auto"
         >
           <span>{t.cta_primary}</span>
           <span className="ml-2 transition-transform group-hover:translate-x-0.5">→</span>
         </a>
         <a
           href="mailto:hello@terav.fit?subject=Terav%20beta"
-          className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/[0.03] px-7 py-4 text-base font-medium text-white/85 backdrop-blur transition hover:border-white/40 hover:bg-white/[0.06]"
+          className="inline-flex w-full items-center justify-center rounded-full border border-white/15 bg-white/[0.03] px-7 py-4 text-base font-medium text-white/85 backdrop-blur transition hover:border-white/40 hover:bg-white/[0.06] sm:w-auto"
         >
           {t.cta_secondary}
         </a>
