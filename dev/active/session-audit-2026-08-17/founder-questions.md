@@ -30,6 +30,21 @@ Verbatim founder quote:
 
 **Priority:** medium. Doesn't block beta but does confuse first-time preview viewers on multi-tier programs.
 
+## Q4 · Intake questionnaire visual craft — feels like reading a book
+
+**Surfaced by:** founder, 2026-08-17, viewing `/programs/handstand-walk/intake`.
+
+**Founder observation (verbatim):**
+> "Questions look OK, but the UI looks like reading a book without any pics. Bit dull. Maybe my subjective opinion but something I would like some UI/UX agents to review."
+
+**Route:** `next-app/src/app/programs/[slug]/intake/page.tsx`
+
+**Screenshots referenced:** `~/Desktop/Screenshot 2026-08-18 at 00.00.{08,14,20}.png` — full-scroll view of Handstand Walk intake (screening + skill self-report + About you + consent + submit).
+
+**Action:** product-design-lead dispatched 2026-08-17 to produce a design call. Brief will land at `dev/design-briefs/2026-08-17-intake-visual-craft.md` covering answer-chip hierarchy, section anchoring, progress motivation, rationale-paragraph disclosure, and whether CSS-only geometric illustrations are worth adding.
+
+**Priority:** medium. Intake is the highest-stakes conversion moment in the funnel — every fresh user hits it. Worth polishing before wider beta but not blocking.
+
 ## Q3 · PROVISIONAL status — what does it mean, when does it graduate?
 
 **Surfaced by:** founder, 2026-08-17. Every catalog program shows the `PROVISIONAL` chip. The legend reads *"beta, evidence and prescription drafted but not clinically reviewed."*
