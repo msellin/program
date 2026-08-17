@@ -17,23 +17,23 @@ const mono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://terav.fit"),
   title: {
-    default: "Terav — Adaptive strength & rehab, sharpened every session",
+    default: "Terav — Pick one thing you want stronger. Sharpen it every session.",
     template: "%s · Terav",
   },
   description:
-    "Adaptive strength, cardio, and skill programs. Every session sharpens against your log, your morning check, and 100+ cited studies.",
+    "A focused-improvement training tool. An engine, a skill, a lift, a stubborn joint — Terav writes that focus arc; the rest of your week is still yours. Every change cites a study.",
   openGraph: {
-    title: "Terav — The training plan with an edge",
+    title: "Terav — Pick your focus. Sharpen it every session.",
     description:
-      "Coach-grade programming that sharpens against your training data every session. 100+ cited studies.",
+      "Focused-improvement training that sharpens one capability at a time — engine, skill, lift, or joint — against your log. 88 cited studies.",
     type: "website",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Terav — Sharpen the plan. Every session.",
+    title: "Terav — Pick your focus. Sharpen it every session.",
     description:
-      "Adaptive strength, aerobic and rehab programming that sharpens every session against your training data.",
+      "Focused-improvement training that sharpens one capability at a time — runs alongside your existing week. 88 cited studies.",
   },
 };
 

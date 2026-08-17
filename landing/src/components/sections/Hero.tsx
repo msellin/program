@@ -67,6 +67,10 @@ export function Hero({ dict }: { dict: LandingDict }) {
             </span>
           </h1>
 
+          <p className="mt-3 text-2xl font-medium leading-tight tracking-tight text-white/85 sm:text-3xl">
+            {t.h1_c}
+          </p>
+
           <p className="mt-6 max-w-xl text-base leading-relaxed text-white/70 sm:text-lg">
             {t.sub}
           </p>

@@ -10,6 +10,7 @@ export type LandingDict = {
     beta_badge: string;
     h1_a: string;
     h1_b: string;
+    h1_c: string;
     sub: string;
     cta_primary: string;
     cta_secondary: string;
@@ -28,6 +29,10 @@ export type LandingDict = {
     col_template: string;
     col_trainer: string;
     col_terav: string;
+    row_scope_label: string;
+    row_scope_template: string;
+    row_scope_trainer: string;
+    row_scope_terav: string;
     row_what_label: string;
     row_what_template: string;
     row_what_trainer: string;

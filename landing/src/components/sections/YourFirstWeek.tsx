@@ -48,7 +48,7 @@ export function YourFirstWeek() {
           This is Engine Builder, Week&nbsp;1.
         </h2>
         <p className="mt-4 max-w-xl text-base leading-relaxed text-[var(--color-muted)] sm:text-lg">
-          Three sessions. Each with the exact prescription and the study it&apos;s built on. No mystery, no filler.
+          Three sessions a week. The other four days are yours — keep your box, your coach, your own runs. Terav writes the focus arc. No mystery, no filler.
         </p>
       </div>
 

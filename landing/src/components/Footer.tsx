@@ -11,8 +11,8 @@ export function Footer() {
           <div className="max-w-sm">
             <Wordmark />
             <p className="mt-4 text-sm leading-relaxed text-[var(--color-muted)]">
-              Adaptive training that reads your log every session. Every change
-              cites a study. You approve every one.
+              A focused-improvement training tool. Pick one capability — engine, skill, lift, joint —
+              and Terav sharpens it against your log. Every change cites a study. You approve every one.
             </p>
             <p className="mt-4 text-xs text-[var(--color-muted)]">
               Built by lifters who got tired of template plans.

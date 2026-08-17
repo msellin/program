@@ -18,6 +18,15 @@ export function ThreeWayContrast({ dict }: { dict: LandingDict }) {
 
   const rows = [
     {
+      // Scope row FIRST — answers the "what container is this" question the
+      // reader didn't know they had. Kills the "Terav = smarter version of
+      // your whole plan" misread before any other row loads.
+      label: t.row_scope_label,
+      template: t.row_scope_template,
+      trainer: t.row_scope_trainer,
+      us: t.row_scope_terav,
+    },
+    {
       label: t.row_what_label,
       template: t.row_what_template,
       trainer: t.row_what_trainer,
