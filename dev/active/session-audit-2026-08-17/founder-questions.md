@@ -30,6 +30,36 @@ Verbatim founder quote:
 
 **Priority:** medium. Doesn't block beta but does confuse first-time preview viewers on multi-tier programs.
 
+## Q3 · PROVISIONAL status — what does it mean, when does it graduate?
+
+**Surfaced by:** founder, 2026-08-17. Every catalog program shows the `PROVISIONAL` chip. The legend reads *"beta, evidence and prescription drafted but not clinically reviewed."*
+
+**Two problems:**
+1. "Clinically reviewed" is the wrong bar. Terav's positioning is explicitly *not a clinical device* — landing origin body says work with a clinician if you have a medical issue. Waiting for clinician sign-off is a category error.
+2. There's no defined graduation path. Every program stays PROVISIONAL forever unless we invent a target state.
+
+**Proposed governance model (founder to confirm):**
+
+| Status | Meaning | Cost per program |
+|---|---|---|
+| **Referenced** (default) | All citations verified against source papers; simulator harness produces expected outcome curves across archetypes | ~2h founder review |
+| **Reviewed** | A domain-specialist agent audited: cited studies match claims, drill sequencing matches literature, phase gates evidence-backed, retest metrics defensible | ~1h agent per domain per program |
+| **Verified** | ≥5 beta users completed the arc with subjective success | Real elapsed time |
+
+**Retire the phrase "clinically reviewed" from copy.**
+
+**Specialist agents for the middle bar (Reviewed):**
+- **Motor-learning specialist** — audits skill programs (Handstand Walk, First Pull-Up, Muscle-Up, HSPU, other gymnastics)
+- **Aerobic-physiology specialist** — audits engine programs (Engine Builder Block 1 + 2, Rowing 2K)
+- **Concurrent-training specialist** — audits CSM
+- **Rehab / hip-flexor specialist** — audits anterior-hip-rebuild (personal-only but worth flagging any citation drift)
+
+Each agent's job: read the whitepaper for that domain (`dev/whitepapers/`) + the program JSON + cite each claim; flag any citation that doesn't say what the program claims. Deliverable: per-program review doc: pass / conditional-pass / fail-with-fixes.
+
+**Priority:** medium. Not blocking beta, but the "PROVISIONAL forever" state undermines the honesty positioning long-term. Should decide the graduation policy before shipping the next 3 in-build programs.
+
+**Blocked-by:** founder decision on graduation model + copy rewrite for the `/programs` page legend.
+
 ## How to add more Qs
 
 Just append a new `## Q{N} · {short title}` section below. Each new question should have: route, observation, verbatim quote if useful, question for agent, cross-references, priority.
