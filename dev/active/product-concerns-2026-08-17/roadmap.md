@@ -229,6 +229,23 @@ Ideas surfaced during founder conversation that deserve prior-art research befor
 
 *Deliverable: `dev/audits/product-concerns/F-video-demo-library.md` — hosting patterns, cost estimates, WCAG requirements, build vs. license recommendation.*
 
+### G · Personal experiment — video analysis capability sanity-check
+
+**Surfaced by:** founder, 2026-08-17. Even though Concern C killed AI video form analysis as a paid pillar (Coach's Eye / Hudl Technique / OnForm precedents), the founder is curious what current-generation vision models actually SEE in a training video. Cheap, personal, no build required.
+
+**Founder-side experiment (~30 min):**
+- Shoot a random 15-30 second movement video (squat, handstand, snatch, whatever's convenient)
+- Upload to Gemini Pro or Claude (founder has both) — pick one initially
+- Prompt: "grade the technique of this movement. What's good? What would you flag? What would you have me change?"
+- Also try: "measure the joint angle at the bottom of the squat" or similar quantitative ask
+- Note: (a) what the model got right, (b) what it hallucinated, (c) whether it could measure anything numeric
+
+**Deliverable (~15 min after):** a scratch note at `dev/active/product-concerns-2026-08-17/G-video-vision-experiment.md` with the founder's observations. No agent needed — this is a personal sanity-check, not a research brief.
+
+**Why worth doing anyway (given Concern C rejection):**
+- If current vision models can NOT reliably measure joint angles: reinforces Concern C's kill-decision
+- If current vision models CAN reliably measure: doesn't change the paid-pillar rejection (Coach's Eye had good tech and still failed commercially), but might inform E-brief's approach — could a passive video assist self-report accuracy without being the pitch?
+
 ### Later additions
 
 - Wearable ingest deep-dive (Garmin FIT vs. Whoop OAuth vs. Oura API — F4 pillar) — has spec at `dev/active/saas-launch/future-features.md`, could use a stronger competitive analysis before starting
