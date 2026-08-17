@@ -14,18 +14,20 @@ import { getDict } from "@/i18n";
 export default function HomePage() {
   const dict = getDict("en");
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[var(--color-ground)] text-white">
+    <div className="relative min-h-dvh overflow-hidden bg-[var(--color-ground)] text-white">
       <Ambient />
       <div className="relative">
         <Nav />
-        <Hero dict={dict} />
-        <ThreeWayContrast dict={dict} />
-        <EvidenceClaim dict={dict} />
-        <YourFirstWeek />
-        <Programs dict={dict} />
-        <WontDo dict={dict} />
-        <OriginStory dict={dict} />
-        <BetaCTA dict={dict} />
+        <main id="main">
+          <Hero dict={dict} />
+          <ThreeWayContrast dict={dict} />
+          <EvidenceClaim dict={dict} />
+          <YourFirstWeek />
+          <Programs dict={dict} />
+          <WontDo dict={dict} />
+          <OriginStory dict={dict} />
+          <BetaCTA dict={dict} />
+        </main>
         <Footer />
       </div>
     </div>

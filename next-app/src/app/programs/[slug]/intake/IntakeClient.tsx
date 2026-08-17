@@ -279,7 +279,7 @@ export function IntakeClient({ slug }: Props) {
         </p>
         <Link
           href={`/programs/${slug}`}
-          className="inline-block font-mono text-[11.5px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground"
+          className="inline-block font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground"
         >
           Back to {manifestEntry?.name ?? slug}
         </Link>
@@ -334,7 +334,7 @@ export function IntakeClient({ slug }: Props) {
           <h1 className="text-2xl font-semibold tracking-tight text-strong">
             Your starting tier
           </h1>
-          <p className="text-[13.5px] text-muted">
+          <p className="text-sm text-muted">
             {manifestEntry?.name ?? slug.replace(/-/g, " ")}
           </p>
         </header>
@@ -399,7 +399,7 @@ export function IntakeClient({ slug }: Props) {
                       {selected ? <Check size={11} className="text-ground" strokeWidth={3} /> : null}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-[13.5px] font-semibold text-strong">{t.label}</p>
+                      <p className="text-sm font-semibold text-strong">{t.label}</p>
                       {t.typical_outcome ? (
                         <p className="text-[12px] text-muted mt-0.5">{t.typical_outcome}</p>
                       ) : null}
@@ -436,7 +436,7 @@ export function IntakeClient({ slug }: Props) {
         <h1 className="text-2xl font-semibold tracking-tight text-strong">
           Intake — {manifestEntry?.name ?? slug.replace(/-/g, " ")}
         </h1>
-        <p className="text-[13.5px] text-muted leading-relaxed">
+        <p className="text-sm text-muted leading-relaxed">
           Short questions so the program starts at the right level. Everything is stored locally
           on your account — not shared with anyone.
         </p>
@@ -573,7 +573,7 @@ function QuestionGroup({
       <ul className="space-y-4">
         {questions.map((q) => (
           <li key={q.id} className="space-y-2">
-            <p className="text-[13.5px] font-medium text-strong">
+            <p className="text-sm font-medium text-strong">
               {q.label}
               {q.required ? <span className="text-red ml-1">*</span> : null}
             </p>
@@ -586,7 +586,7 @@ function QuestionGroup({
                     type="button"
                     onClick={() => setAnswer(q.id, opt.value)}
                     className={cn(
-                      "text-[12.5px] px-3 py-2 rounded border min-h-[40px]",
+                      "text-[13px] px-3 py-2 rounded border min-h-[40px]",
                       answers[q.id] === opt.value
                         ? "border-bronze bg-bronze/15 text-strong"
                         : "border-line bg-surface text-strong hover:border-slate/40",
@@ -605,7 +605,7 @@ function QuestionGroup({
                     type="button"
                     onClick={() => setAnswer(q.id, v)}
                     className={cn(
-                      "text-[12.5px] px-4 py-2 rounded border min-h-[40px]",
+                      "text-[13px] px-4 py-2 rounded border min-h-[40px]",
                       answers[q.id] === v
                         ? "border-bronze bg-bronze/15 text-strong"
                         : "border-line bg-surface text-strong hover:border-slate/40",
@@ -626,7 +626,7 @@ function QuestionGroup({
                 value={answers[q.id] ?? ""}
                 onChange={(e) => setAnswer(q.id, e.target.value)}
                 placeholder={q.unit}
-                className="w-full text-[13.5px] px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+                className="w-full text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
               />
             ) : null}
             {q.type === "text" ? (
@@ -638,14 +638,14 @@ function QuestionGroup({
                   value={answers[q.id] ?? ""}
                   onChange={(e) => setAnswer(q.id, e.target.value)}
                   min={new Date().toISOString().slice(0, 10)}
-                  className="w-full text-[13.5px] px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+                  className="w-full text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
                 />
               ) : (
                 <input
                   type="text"
                   value={answers[q.id] ?? ""}
                   onChange={(e) => setAnswer(q.id, e.target.value)}
-                  className="w-full text-[13.5px] px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+                  className="w-full text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
                 />
               )
             ) : null}
@@ -672,12 +672,12 @@ function PhysicalTestsGroup({
         <span className="text-[14px] font-semibold text-strong flex-1">
           Physical tests (optional — more precise)
         </span>
-        <span className="font-mono text-[10.5px] uppercase tracking-wider text-muted">
+        <span className="font-mono text-[10px] uppercase tracking-wider text-muted">
           {tests.length} tests
         </span>
       </summary>
       <div className="mt-3 space-y-3">
-        <p className="text-[12.5px] text-muted">
+        <p className="text-[13px] text-muted">
           Doing these is not required. If you do, they override the self-report answers when
           picking your tier. Skip and we use your self-report as a proxy.
         </p>
@@ -686,7 +686,7 @@ function PhysicalTestsGroup({
             <li key={t.id} className="space-y-1">
               <p className="text-[13px] font-medium text-strong">{t.label}</p>
               {t.instructions ? (
-                <p className="text-[11.5px] text-muted">{t.instructions}</p>
+                <p className="text-[11px] text-muted">{t.instructions}</p>
               ) : null}
               <div className="flex items-center gap-2">
                 <input
@@ -699,9 +699,9 @@ function PhysicalTestsGroup({
                     const n = Number(e.target.value);
                     if (isFinite(n)) setResult(t.id, n);
                   }}
-                  className="flex-1 text-[13.5px] px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+                  className="flex-1 text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
                 />
-                <span className="text-[11.5px] text-muted font-mono w-14 text-right">{t.unit}</span>
+                <span className="text-[11px] text-muted font-mono w-14 text-right">{t.unit}</span>
               </div>
             </li>
           ))}

@@ -74,7 +74,7 @@ export default function WeekPage() {
         </p>
         <Link
           href="/programs"
-          className="inline-block font-mono text-[11.5px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground"
+          className="inline-block font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground"
         >
           Pick your program →
         </Link>
@@ -182,7 +182,7 @@ export default function WeekPage() {
       )}
 
       {atFutureEdge ? (
-        <p className="text-[12.5px] text-muted italic">
+        <p className="text-[13px] text-muted italic">
           Looking further ahead than {FUTURE_WEEKS} weeks isn&apos;t useful — the plan will have
           adapted by then. See milestones on Progress for the year-long shape.
         </p>
@@ -204,7 +204,13 @@ export default function WeekPage() {
             const doneCount = dayLog
               ? Object.values(dayLog.exercises).filter((e) => e.done).length
               : 0;
+            const totalPrescribed = dayLog
+              ? Object.keys(dayLog.exercises).length
+              : 0;
+            const complianceRatio =
+              totalPrescribed > 0 ? doneCount / totalPrescribed : 0;
             const dayPhase = activePhaseFor(program, dateISO, userProfile);
+            const isPast = dateISO < todayISO();
 
             // Per-day phase-correct block list — iterated over every active
             // program. Blocks get tagged with their source program so the row
@@ -236,7 +242,17 @@ export default function WeekPage() {
 
             // Pick a single status the leading dot represents. Priority order picks
             // the most action-relevant state; the rest goes into the subline text.
-            const status: "today" | "skipped" | "moved" | "logged" | "rest" | "planned" =
+            // TrainingPeaks-style compliance colouring: partial completion gets
+            // its own shade, missed-past-day gets muted red.
+            const status:
+              | "today"
+              | "skipped"
+              | "moved"
+              | "logged-full"
+              | "logged-partial"
+              | "missed"
+              | "rest"
+              | "planned" =
               isToday
                 ? "today"
                 : skip
@@ -244,15 +260,21 @@ export default function WeekPage() {
                   : override
                     ? "moved"
                     : doneCount > 0
-                      ? "logged"
+                      ? complianceRatio >= 1
+                        ? "logged-full"
+                        : "logged-partial"
                       : isRest
                         ? "rest"
-                        : "planned";
+                        : isPast && !isRest && totalPrescribed === 0 && displayBlocks.length > 0
+                          ? "missed"
+                          : "planned";
             const dotColor = {
               today: "bg-bronze",
               skipped: "bg-amber",
               moved: "bg-slate",
-              logged: "bg-green",
+              "logged-full": "bg-green",
+              "logged-partial": "bg-green/50",
+              missed: "bg-red/60",
               rest: "bg-line",
               planned: "bg-muted/60",
             }[status];
@@ -284,7 +306,7 @@ export default function WeekPage() {
                       ) : null}
                       {contributingProgramCount > 1 ? (
                         <span className="text-[10px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber/20 text-amber font-normal">
-                          {contributingProgramCount}× progs
+                          {contributingProgramCount} programs
                         </span>
                       ) : null}
                     </div>

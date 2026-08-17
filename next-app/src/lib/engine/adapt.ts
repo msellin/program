@@ -152,6 +152,8 @@ export function evaluateCycleEnd(
     let reason = "";
 
     const perf = amrapPerformances.find((a) => a.lift === lift);
+    const rpeStat = averageTopSetRPE(cycleDays, lift);
+
     if (perf && perf.over >= 6) {
       const inferred = inferTMFromSet(perf.weight, perf.reps, null, currentTM);
       if (inferred) {
@@ -162,8 +164,27 @@ export function evaluateCycleEnd(
       newTM = currentTM + (isSquat(lift) ? 7.5 : 10);
       reason = `Strong AMRAP (${perf.reps} vs 1+). Bumping.`;
     } else if (worstState === "green") {
-      newTM = currentTM + (isSquat(lift) ? 5 : 7.5);
-      reason = "Green cycle. Standard +5 (squat) / +7.5 (pull).";
+      // RPE-aware green-cycle adjustment. RPE-averaged over top sets across
+      // the cycle tells us whether the current TM is at ceiling (RPE ≥ 9 —
+      // hold) or has room (RPE ≤ 7 — bigger bump). Silently uses the default
+      // path when RPE isn't logged (opt-in only).
+      if (rpeStat && rpeStat.count >= 2 && rpeStat.avg >= 9) {
+        // Hold — the user is already grinding at RPE 9+, adding weight will
+        // just erase the AMRAP quality next cycle. Same rule powerlifting
+        // coaches use: bar speed / RPE trumps calendar-based bumps.
+        reason = `Green cycle, but avg top-set RPE ${rpeStat.avg.toFixed(1)} (${rpeStat.count} sessions). Hold TM — no headroom.`;
+      } else if (rpeStat && rpeStat.count >= 2 && rpeStat.avg <= 7) {
+        // Extra headroom — RPE ≤ 7 across the cycle means the user has real
+        // margin. Bump by 1.5× the standard step.
+        const bump = isSquat(lift) ? 7.5 : 10;
+        newTM = currentTM + bump;
+        reason = `Green cycle, avg top-set RPE ${rpeStat.avg.toFixed(1)} (${rpeStat.count} sessions). Bigger bump — headroom detected.`;
+      } else {
+        newTM = currentTM + (isSquat(lift) ? 5 : 7.5);
+        reason = rpeStat
+          ? `Green cycle, avg top-set RPE ${rpeStat.avg.toFixed(1)}. Standard +5 (squat) / +7.5 (pull).`
+          : "Green cycle. Standard +5 (squat) / +7.5 (pull).";
+      }
     } else if (worstState === "amber") {
       reason = "Amber week detected. Hold TM, repeat cycle.";
     } else {
@@ -317,6 +338,36 @@ function activePhase(program: Program, todayISO: string) {
       (p) => todayISO >= p.starts && (p.ends == null || todayISO <= p.ends),
     ) ?? program.phases[program.phases.length - 1]
   );
+}
+
+/**
+ * Average top-set RPE for a given lift across a set of cycle days.
+ * Only counts sessions where the top set has a numeric RPE (0-10 range).
+ * Returns { avg, count } or null if fewer than 1 session has RPE data.
+ *
+ * The engine treats this as an opt-in signal — users who don't log RPE
+ * preserve the existing (RPE-agnostic) TM adjustment behavior exactly.
+ */
+export function averageTopSetRPE(
+  cycleDays: DayLog[],
+  liftId: string,
+): { avg: number; count: number } | null {
+  let sum = 0;
+  let count = 0;
+  for (const d of cycleDays) {
+    for (const [key, entry] of Object.entries(d.exercises)) {
+      const exId = key.split(":")[1];
+      if (exId !== liftId) continue;
+      if (!entry.done) continue;
+      const top = pickHeaviest(entry);
+      if (!top || top.rpe == null) continue;
+      if (top.rpe < 0 || top.rpe > 10) continue;
+      sum += top.rpe;
+      count += 1;
+    }
+  }
+  if (count < 1) return null;
+  return { avg: sum / count, count };
 }
 
 function pickHeaviest(

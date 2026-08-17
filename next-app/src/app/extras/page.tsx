@@ -37,7 +37,7 @@ export default function ExtrasPage() {
         </p>
         <a
           href="/programs"
-          className="inline-block font-mono text-[11.5px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground"
+          className="inline-block font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground"
         >
           Pick a program →
         </a>
@@ -100,10 +100,10 @@ export default function ExtrasPage() {
           .filter(Boolean);
         if (rendered.length === 0) {
           return (
-            <div className="rounded border border-line-soft bg-surface p-4 text-[13.5px] text-muted">
+            <div className="rounded border border-line-soft bg-surface p-4 text-sm text-muted">
               <p>
                 This program has no extras — every prescribed session lives on Today.
-                You can still use the RunSlotCard on Today to log cross-modal work
+                You can still use the session-log card on Today to log cross-modal work
                 (cardio, class attendance, walks) if you want it in your history.
               </p>
             </div>

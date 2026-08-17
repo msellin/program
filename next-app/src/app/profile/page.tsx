@@ -14,6 +14,7 @@ import { useStore } from "@/lib/useStore";
 import { createClient } from "@/lib/supabase/client";
 import { useIsSuperAdmin } from "@/lib/super-admin";
 import { loadProgramManifest } from "@/lib/data-loader";
+import { ConfirmSheet } from "@/components/ConfirmSheet";
 import type { ProgramManifest } from "@/lib/schemas";
 
 /**
@@ -57,13 +58,29 @@ export default function ProfilePage() {
   }, []);
 
   const logs = store.logs ?? {};
+  // 7-day compliance summary — replaces lifetime vanity stats (sessions /
+  // weeks active / checks). A rolling 7-day window tells you whether THIS
+  // WEEK is on plan; lifetime numbers just grow monotonically and don't drive
+  // any behavior. TrainingPeaks / Whoop compliance-ring convention.
+  const rollingWindow = (() => {
+    const days: { iso: string; day: (typeof logs)[string] | undefined; isPast: boolean }[] = [];
+    const now = new Date();
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(now);
+      d.setDate(now.getDate() - i);
+      const iso = d.toISOString().slice(0, 10);
+      days.push({ iso, day: logs[iso], isPast: i > 0 });
+    }
+    return days;
+  })();
+  const daysSessionsDone = rollingWindow.filter(
+    ({ day }) => day && Object.values(day.exercises ?? {}).some((e) => e.done),
+  ).length;
+  const daysChecksLogged = rollingWindow.filter(({ day }) => day?.symptoms != null).length;
+  // Legacy — for the "since" line only (kept small).
   const daysWithAnyLog = Object.entries(logs).filter(
     ([, day]) => Object.values(day.exercises ?? {}).some((e) => e.done) || day.symptoms != null,
   );
-  const sessionsLogged = daysWithAnyLog.filter(([, day]) =>
-    Object.values(day.exercises ?? {}).some((e) => e.done),
-  ).length;
-  const morningChecksLogged = Object.values(logs).filter((d) => d.symptoms != null).length;
   const activeWeeks = (() => {
     if (!daysWithAnyLog.length) return 0;
     const weeks = new Set<string>();
@@ -90,10 +107,10 @@ export default function ProfilePage() {
     .map((slug) => manifest?.programs.find((p) => p.slug === slug))
     .filter((p): p is NonNullable<typeof p> => !!p);
   const removeActiveProgram = useStore((s) => s.removeActiveProgram);
+  const [signOutOpen, setSignOutOpen] = useState(false);
+  const [removeOpen, setRemoveOpen] = useState<null | (typeof activePrograms)[number]>(null);
 
-  const signOut = async () => {
-    const ok = confirm("Sign out? Your data stays synced — you can sign back in any time.");
-    if (!ok) return;
+  const doSignOut = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
     if (typeof window !== "undefined") window.location.href = "/sign-in";
@@ -101,9 +118,10 @@ export default function ProfilePage() {
 
   return (
     <div className="space-y-5 pt-4 pb-6">
+      <h1 className="sr-only">Profile</h1>
       <div className="flex items-baseline justify-between gap-3">
         <div className="flex items-baseline gap-2 min-w-0">
-          <p className="text-[13.5px] text-muted truncate">
+          <p className="text-sm text-muted truncate">
             {email ?? (
               <span className="inline-block w-48 h-4 bg-line-soft rounded animate-pulse" aria-label="Loading email" />
             )}
@@ -118,16 +136,42 @@ export default function ProfilePage() {
           ) : null}
         </div>
         {memberSince ? (
-          <p className="font-mono text-[10.5px] uppercase tracking-wider text-muted flex-shrink-0">
+          <p className="font-mono text-[10px] uppercase tracking-wider text-muted flex-shrink-0">
             since {memberSince}
           </p>
         ) : null}
       </div>
 
-      <div className="rounded border border-line-soft bg-surface p-3 grid grid-cols-3 gap-2">
-        <Stat value={sessionsLogged} label="sessions" />
-        <Stat value={activeWeeks} label={activeWeeks === 1 ? "week active" : "weeks active"} />
-        <Stat value={morningChecksLogged} label={morningChecksLogged === 1 ? "check" : "checks"} />
+      <div className="rounded border border-line-soft bg-surface p-3 space-y-3">
+        <div className="flex items-baseline justify-between">
+          <p className="font-mono text-[10px] uppercase tracking-wider text-muted">This week</p>
+          <p className="font-mono text-[10px] uppercase tracking-wider text-muted">
+            {activeWeeks} {activeWeeks === 1 ? "wk" : "wks"} logged total
+          </p>
+        </div>
+        <ComplianceRow label="Sessions" value={daysSessionsDone} target={7} accent="bronze" />
+        <ComplianceRow label="Morning checks" value={daysChecksLogged} target={7} accent="green" />
+        <div className="flex gap-0.5 pt-1">
+          {rollingWindow.map(({ iso, day }) => {
+            const done = day && Object.values(day.exercises ?? {}).some((e) => e.done);
+            const check = day?.symptoms != null;
+            const cls = done && check
+              ? "bg-green"
+              : done
+                ? "bg-bronze"
+                : check
+                  ? "bg-green/40"
+                  : "bg-line";
+            return (
+              <span
+                key={iso}
+                title={iso}
+                className={`flex-1 h-1.5 rounded-full ${cls}`}
+                aria-label={`${iso}: ${done ? "session done" : "no session"}, ${check ? "check saved" : "no check"}`}
+              />
+            );
+          })}
+        </div>
       </div>
 
       {/* Active plan(s) — no section title, the list IS the section */}
@@ -151,7 +195,7 @@ export default function ProfilePage() {
                         </span>
                       ) : null}
                     </p>
-                    <p className="text-[11.5px] text-muted mt-0.5">
+                    <p className="text-[11px] text-muted mt-0.5">
                       {p.duration_weeks} weeks · {p.difficulty}
                     </p>
                   </div>
@@ -161,11 +205,7 @@ export default function ProfilePage() {
                   <button
                     type="button"
                     aria-label={`Remove ${p.name}`}
-                    onClick={() => {
-                      if (confirm(`Remove ${p.name} from your active programs? Your log history stays.`)) {
-                        removeActiveProgram(p.slug);
-                      }
-                    }}
+                    onClick={() => setRemoveOpen(p)}
                     className="text-muted hover:text-red w-9 h-9 flex items-center justify-center rounded flex-shrink-0"
                   >
                     <X size={14} />
@@ -178,7 +218,7 @@ export default function ProfilePage() {
       ) : (
         <Link
           href="/programs"
-          className="inline-block font-mono text-[11.5px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground min-h-[44px]"
+          className="inline-block font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground min-h-[44px]"
         >
           Pick a program →
         </Link>
@@ -189,7 +229,7 @@ export default function ProfilePage() {
           href="/coach"
           className="flex items-center justify-between gap-3 px-3 py-3 hover:bg-line-soft/50 min-h-[48px]"
         >
-          <span className="flex items-center gap-3 text-[13.5px]">
+          <span className="flex items-center gap-3 text-sm">
             <MessageSquare size={16} className="text-muted" />
             Ask coach
           </span>
@@ -199,7 +239,7 @@ export default function ProfilePage() {
           href="/guide"
           className="flex items-center justify-between gap-3 px-3 py-3 hover:bg-line-soft/50 min-h-[48px]"
         >
-          <span className="flex items-center gap-3 text-[13.5px]">
+          <span className="flex items-center gap-3 text-sm">
             <BookOpen size={16} className="text-muted" />
             How this app works
           </span>
@@ -209,7 +249,7 @@ export default function ProfilePage() {
           href="/data"
           className="flex items-center justify-between gap-3 px-3 py-3 hover:bg-line-soft/50 min-h-[48px]"
         >
-          <span className="flex items-center gap-3 text-[13.5px]">
+          <span className="flex items-center gap-3 text-sm">
             <Database size={16} className="text-muted" />
             Manage data
           </span>
@@ -228,13 +268,65 @@ export default function ProfilePage() {
       <section className="pt-4">
         <button
           type="button"
-          onClick={signOut}
+          onClick={() => setSignOutOpen(true)}
           className="w-full inline-flex items-center justify-center gap-2 font-mono text-[12px] uppercase tracking-wider px-4 py-3 rounded border border-red/40 text-red hover:bg-red/10 min-h-[48px]"
         >
           <LogOut size={14} />
           Sign out
         </button>
       </section>
+
+      <ConfirmSheet
+        open={signOutOpen}
+        title="Sign out?"
+        body="Your data stays synced — you can sign back in any time."
+        confirmLabel="Sign out"
+        onConfirm={() => {
+          setSignOutOpen(false);
+          void doSignOut();
+        }}
+        onCancel={() => setSignOutOpen(false)}
+      />
+      <ConfirmSheet
+        open={!!removeOpen}
+        title={removeOpen ? `Remove ${removeOpen.name}?` : ""}
+        body="Your log history stays. You can pick a new program any time from Programs."
+        confirmLabel="Remove"
+        danger
+        onConfirm={() => {
+          if (removeOpen) removeActiveProgram(removeOpen.slug);
+          setRemoveOpen(null);
+        }}
+        onCancel={() => setRemoveOpen(null)}
+      />
+    </div>
+  );
+}
+
+function ComplianceRow({
+  label,
+  value,
+  target,
+  accent,
+}: {
+  label: string;
+  value: number;
+  target: number;
+  accent: "bronze" | "green";
+}) {
+  const pct = Math.min(100, Math.round((value / target) * 100));
+  const fillClass = accent === "bronze" ? "bg-bronze" : "bg-green";
+  return (
+    <div className="space-y-1">
+      <div className="flex items-baseline justify-between text-[12px]">
+        <span className="text-ink">{label}</span>
+        <span className="font-mono text-muted">
+          <span className="text-strong">{value}</span> / {target}
+        </span>
+      </div>
+      <div className="h-1.5 rounded-full bg-line-soft overflow-hidden">
+        <div className={`h-full ${fillClass}`} style={{ width: `${pct}%` }} />
+      </div>
     </div>
   );
 }
@@ -243,7 +335,7 @@ function Stat({ value, label }: { value: number; label: string }) {
   return (
     <div className="text-center">
       <p className="text-[20px] font-semibold text-strong tabular-nums leading-none">{value}</p>
-      <p className="text-[10.5px] uppercase tracking-wider text-muted mt-1">{label}</p>
+      <p className="text-[10px] uppercase tracking-wider text-muted mt-1">{label}</p>
     </div>
   );
 }

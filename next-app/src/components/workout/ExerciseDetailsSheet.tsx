@@ -57,7 +57,7 @@ export function ExerciseDetailsSheet({
               {exercise.name}
             </h3>
             {(dose || scheme) ? (
-              <p className="text-[12.5px] text-muted mt-0.5 truncate">
+              <p className="text-[13px] text-muted mt-0.5 truncate">
                 {[dose, scheme].filter(Boolean).join(" · ")}
               </p>
             ) : null}
@@ -72,7 +72,7 @@ export function ExerciseDetailsSheet({
           </button>
         </header>
 
-        <div className="p-4 space-y-4 text-[13.5px]">
+        <div className="p-4 space-y-4 text-sm">
           {(exercise.warning || exercise.avoid) ? (
             <section>
               <p className="text-[12px] text-red mb-1">Warning</p>
@@ -122,7 +122,7 @@ export function ExerciseDetailsSheet({
                   <span
                     key={f}
                     className={cn(
-                      "font-mono text-[10.5px] uppercase tracking-wider px-1.5 py-0.5 rounded",
+                      "font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded",
                       f.startsWith("monitor") || f.startsWith("historical_provocateur")
                         ? "bg-amber/20 text-amber"
                         : "bg-line-soft text-muted",

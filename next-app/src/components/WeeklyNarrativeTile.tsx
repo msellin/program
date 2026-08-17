@@ -70,7 +70,7 @@ export function WeeklyNarrativeTile({ program }: { program: Program }) {
           Nothing logged this week yet. Come back Sunday for a summary.
         </p>
       ) : (
-        <ul className="space-y-1.5 text-[13.5px]">
+        <ul className="space-y-1.5 text-sm">
           <SummaryLine
             label="Sessions"
             value={`${summary.sessions.completed} / ${summary.sessions.scheduled}`}
@@ -170,8 +170,8 @@ function SummaryLine({
   }[tone];
   return (
     <li className="flex items-baseline justify-between gap-3">
-      <span className="text-muted text-[12.5px]">{label}</span>
-      <span className={cn("font-mono text-[12.5px] text-right", toneClass)}>{value}</span>
+      <span className="text-muted text-[13px]">{label}</span>
+      <span className={cn("font-mono text-[13px] text-right", toneClass)}>{value}</span>
     </li>
   );
 }

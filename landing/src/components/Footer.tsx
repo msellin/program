@@ -10,11 +10,11 @@ export function Footer() {
         <div className="flex flex-col justify-between gap-8 sm:flex-row">
           <div className="max-w-sm">
             <Wordmark />
-            <p className="mt-4 text-sm leading-relaxed text-white/60">
+            <p className="mt-4 text-sm leading-relaxed text-[var(--color-muted)]">
               Adaptive training that reads your log every session. Every change
               cites a study. You approve every one.
             </p>
-            <p className="mt-4 text-xs text-white/60">
+            <p className="mt-4 text-xs text-[var(--color-muted)]">
               Built by lifters who got tired of template plans.
             </p>
           </div>
@@ -24,14 +24,14 @@ export function Footer() {
               <div className="mono-caps mb-3">Product</div>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <Link href="/evidence" className="text-white/70 transition hover:text-white">
+                  <Link href="/evidence" className="inline-flex min-h-[44px] items-center text-white/70 transition hover:text-white">
                     Evidence
                   </Link>
                 </li>
                 <li>
                   <a
                     href={`${APP_URL}/sign-in`}
-                    className="text-white/70 transition hover:text-white"
+                    className="inline-flex min-h-[44px] items-center text-white/70 transition hover:text-white"
                   >
                     Sign in
                   </a>
@@ -39,7 +39,7 @@ export function Footer() {
                 <li>
                   <a
                     href="mailto:hello@terav.fit?subject=Terav%20beta"
-                    className="text-white/70 transition hover:text-white"
+                    className="inline-flex min-h-[44px] items-center text-white/70 transition hover:text-white"
                   >
                     Contact
                   </a>
@@ -50,17 +50,17 @@ export function Footer() {
               <div className="mono-caps mb-3">Legal</div>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <Link href="/privacy" className="text-white/70 transition hover:text-white">
+                  <Link href="/privacy" className="inline-flex min-h-[44px] items-center text-white/70 transition hover:text-white">
                     Privacy
                   </Link>
                 </li>
                 <li>
-                  <Link href="/terms" className="text-white/70 transition hover:text-white">
+                  <Link href="/terms" className="inline-flex min-h-[44px] items-center text-white/70 transition hover:text-white">
                     Terms
                   </Link>
                 </li>
                 <li>
-                  <Link href="/disclaimer" className="text-white/70 transition hover:text-white">
+                  <Link href="/disclaimer" className="inline-flex min-h-[44px] items-center text-white/70 transition hover:text-white">
                     Medical disclaimer
                   </Link>
                 </li>
@@ -71,10 +71,6 @@ export function Footer() {
 
         <div className="flex flex-col items-start justify-between gap-2 border-t border-white/[0.05] pt-6 text-xs text-white/40 sm:flex-row sm:items-center">
           <div>© {year} Terav. Training log. Not medical advice.</div>
-          <div className="flex items-center gap-2">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--color-bronze)]" />
-            <span>Free during beta</span>
-          </div>
         </div>
       </div>
     </footer>

@@ -146,7 +146,7 @@ export function IntroGallery() {
         className="w-full sm:max-w-md bg-surface border border-line rounded-lg p-5 space-y-4"
       >
         <div className="flex items-start justify-between gap-3">
-          <p className="font-mono text-[10.5px] uppercase tracking-widest text-bronze">
+          <p className="font-mono text-[10px] uppercase tracking-widest text-bronze">
             {slide.eyebrow}
           </p>
           <button
@@ -161,7 +161,7 @@ export function IntroGallery() {
 
         <h2 className="text-lg font-semibold text-strong leading-tight">{slide.title}</h2>
 
-        <div className="text-[13.5px] text-ink leading-relaxed space-y-2.5 min-h-[9rem]">
+        <div className="text-sm text-ink leading-relaxed space-y-2.5 min-h-[9rem]">
           {slide.body}
         </div>
 
@@ -184,7 +184,7 @@ export function IntroGallery() {
             <button
               type="button"
               onClick={() => setIdx((i) => Math.max(0, i - 1))}
-              className="flex items-center gap-1 font-mono text-[11.5px] uppercase tracking-wider px-3 py-2 rounded border border-line text-muted hover:bg-line-soft min-h-[40px]"
+              className="flex items-center gap-1 font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-muted hover:bg-line-soft min-h-[40px]"
             >
               <ChevronLeft size={13} />
               Back

@@ -1,4 +1,5 @@
 import { TodayMockup } from "../mockups/TodayMockup";
+import { TodayMockupMobile } from "../mockups/TodayMockupMobile";
 import type { LandingDict } from "@/i18n/dictionaries/types";
 import { APP_URL } from "@/config";
 
@@ -48,16 +49,14 @@ export function Hero({ dict }: { dict: LandingDict }) {
   const t = dict.hero;
   return (
     <section className="relative mx-auto max-w-6xl px-5 pt-8 pb-16 sm:px-6 sm:pt-16 sm:pb-24">
-      <div className="grid gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:items-center lg:gap-16">
-        <div>
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.02] px-3 py-1.5">
-            <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-bronze)]" />
-            <span className="font-mono text-[10.5px] uppercase tracking-wider text-white/70">
-              {t.beta_badge}
-            </span>
+      <div className="grid gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-16">
+        {/* Copy — mobile order 1, desktop top-left. */}
+        <div className="lg:col-start-1 lg:row-start-1">
+          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-[var(--color-ground-2)] px-3 py-1.5">
+            <span className="mono-caps text-white/70">{t.beta_badge}</span>
           </div>
 
-          <h1 className="text-5xl font-black leading-[1.08] tracking-tight text-white sm:text-6xl md:text-7xl">
+          <h1 className="text-balance text-5xl font-bold leading-[1.08] tracking-tight text-white md:text-6xl md:leading-[1.02]">
             {t.h1_a}
             <br className="hidden sm:inline" />{" "}
             <span className="relative inline-block">
@@ -90,20 +89,30 @@ export function Hero({ dict }: { dict: LandingDict }) {
 
           <a
             href="#how-it-works"
-            className="mt-4 inline-flex items-center gap-1 text-[13px] text-white/60 underline decoration-white/20 underline-offset-4 hover:text-white hover:decoration-white/50"
+            className="mt-2 inline-flex min-h-[44px] items-center gap-1 text-[13px] text-[var(--color-muted)] underline decoration-white/20 underline-offset-4 hover:text-white hover:decoration-white/50"
           >
             {t.cta_secondary}
           </a>
+        </div>
 
-          <div className="mt-10 grid max-w-md grid-cols-3 gap-4 border-t border-white/[0.06] pt-6 sm:gap-6">
-            <Stat value={t.stat_programs_value} label={t.stat_programs_label} />
-            <Stat value={t.stat_studies_value} label={t.stat_studies_label} />
-            <Stat value={t.stat_adapts_value} label={t.stat_adapts_label} />
+        {/* Mockup — mobile order 2 (between copy and stats, so it lands
+            above the iPhone 15 Pro fold). Desktop right column, full height.
+            Mobile uses a condensed 3-surface variant (signals + program +
+            note/Accept); full 5-surface mockup returns at md+. */}
+        <div className="relative lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:self-center">
+          <div className="md:hidden">
+            <TodayMockupMobile />
+          </div>
+          <div className="hidden md:block">
+            <TodayMockup />
           </div>
         </div>
 
-        <div className="relative mt-4 lg:mt-0">
-          <TodayMockup />
+        {/* Stats — mobile order 3, desktop bottom-left. */}
+        <div className="grid max-w-md grid-cols-3 gap-4 border-t border-white/[0.06] pt-6 sm:gap-6 lg:col-start-1 lg:row-start-2">
+          <Stat value={t.stat_programs_value} label={t.stat_programs_label} />
+          <Stat value={t.stat_studies_value} label={t.stat_studies_label} />
+          <Stat value={t.stat_adapts_value} label={t.stat_adapts_label} />
         </div>
       </div>
     </section>
@@ -115,9 +124,7 @@ function Stat({ value, label }: { value: string; label: string }) {
     <div>
       <div className="mb-1 h-px w-8 bg-white/30" />
       <div className="font-mono text-lg text-white sm:text-xl">{value}</div>
-      <div className="mt-0.5 text-[11px] uppercase tracking-wider text-white/60">
-        {label}
-      </div>
+      <div className="mono-caps mt-0.5">{label}</div>
     </div>
   );
 }

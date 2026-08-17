@@ -4,6 +4,14 @@
  * Terav landing — warm dark palette derived from the parent app.
  * Bronze primary + slate teal secondary. Slightly punchier saturation for
  * marketing surface vs the app itself. Deeper ground.
+ *
+ * Accent-economy rule (Refactoring UI):
+ *   bronze  — brand + primary CTA + identity gradient.
+ *   teal    — product signal + identity gradient companion only.
+ *   amber   — warning / refusal (never decorative).
+ *   green   — success / available (never decorative).
+ *   red     — destructive (never decorative).
+ * Do NOT use amber, green, or red as category tones or as sibling accents.
  */
 @theme {
   /* Canvas + surfaces — unified with the app's ground color (#0e0f12) per
@@ -57,13 +65,32 @@ html {
 body {
   background: var(--color-ground);
   color: var(--color-ink);
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 /* Focus rings — bronze */
 *:focus-visible {
   outline: 2px solid var(--color-bronze);
   outline-offset: 2px;
+}
+
+/* Touch feedback — every interactive element gets an in-app-quality tap
+   response. Prevents iOS Safari's default grey highlight and 300ms delay. */
+a,
+button,
+summary,
+[role="button"],
+[role="tab"] {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+a:active,
+button:active,
+summary:active,
+[role="button"]:active,
+[role="tab"]:active {
+  transform: scale(0.98);
+  transition: transform 60ms ease-out;
 }
 
 /* Small quiet mono label (matches parent app convention) */
@@ -77,22 +104,6 @@ body {
   text-transform: uppercase;
 }
 
-/* Reveal-in animation for scroll sections */
-@keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.fade-up {
-  animation: fade-up 0.6s ease-out both;
-}
-
 /* Subtle drift for the ambient gradient blobs */
 @keyframes drift {
   0%, 100% { transform: translate3d(0, 0, 0); }
@@ -101,4 +112,18 @@ body {
 
 .blob-drift {
   animation: drift 22s ease-in-out infinite;
+}
+
+/* Motion sensitivity — WCAG SC 2.3.3. Every landing animation (chisel-stroke
+   hero reveal, ambient blob drift, hover slides, active scale) is decorative;
+   users who set the OS preference get none of them. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

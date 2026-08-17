@@ -41,6 +41,11 @@ export const viewport: Viewport = {
   themeColor: "#0E0F12",
   width: "device-width",
   initialScale: 1,
+  // Do NOT lock pinch-zoom (was: maximumScale: 1, userScalable: false).
+  // Locking blocks WCAG 1.4.4 Resize Text — low-vision users need to enlarge
+  // 13-14px body text. The chrome-scales-with-content complaint is better
+  // solved by shrinking the fixed nav proportions or letting it stay locked
+  // via CSS zoom on a wrapper, not by disabling zoom for every user.
   viewportFit: "cover",
 };
 

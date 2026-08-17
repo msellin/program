@@ -34,13 +34,13 @@ export function IntakeMockup() {
             Freestanding handstands and bail landings load the distal radius and
             vertebrae — common fracture sites in osteoporosis.
           </p>
-          <div className="mt-2 text-[10.5px] text-white/60">
+          <div className="mt-2 text-[10.5px] text-[var(--color-muted)]">
             Not clinical advice. See your specialist first.
           </div>
         </div>
 
         <div className="flex items-center justify-between pt-1">
-          <button className="text-xs text-white/60">Change answer</button>
+          <button className="text-xs text-[var(--color-muted)]">Change answer</button>
           <button
             disabled
             className="rounded-full bg-white/[0.06] px-4 py-2 text-xs font-semibold text-white/40"

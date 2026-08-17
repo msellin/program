@@ -43,6 +43,28 @@ export function YourPlanCard({ program }: { program: Program }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug, tierId, JSON.stringify(intakeAnswers ?? {}), JSON.stringify(capabilityProfile ?? {})]);
 
+  // Auto-dismiss after 3 views. The reveal-card is meant to answer "did the
+  // intake actually shape my plan?" — after the third viewing it's clutter.
+  // Persisted per-slug in localStorage so re-picking a program starts fresh.
+  const VIEW_CAP = 3;
+  useEffect(() => {
+    if (!slug || !copy || revealSeen || dismissedLocal || typeof window === "undefined") return;
+    const key = `program.your-plan-card.views.${slug}`;
+    const prior = Number(window.localStorage.getItem(key) ?? "0");
+    const next = prior + 1;
+    try {
+      window.localStorage.setItem(key, String(next));
+    } catch {
+      /* ignore */
+    }
+    if (next >= VIEW_CAP) {
+      setDismissedLocal(true);
+      dismissReveal(slug);
+    }
+    // Only run once per (slug, copy) mount cycle.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slug, copy, revealSeen]);
+
   if (!slug || !copy || revealSeen || dismissedLocal) return null;
 
   const dismiss = () => {
@@ -67,7 +89,7 @@ export function YourPlanCard({ program }: { program: Program }) {
         <Sparkles size={16} className="mt-0.5 text-bronze flex-shrink-0" aria-hidden />
         <div className="min-w-0 flex-1 space-y-2">
           <div>
-            <p className="font-mono text-[10.5px] uppercase tracking-widest text-bronze">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-bronze">
               Your plan
             </p>
             <h2 className="mt-1 text-[15px] font-semibold text-strong leading-snug">
@@ -77,7 +99,7 @@ export function YourPlanCard({ program }: { program: Program }) {
           <p className="text-[13px] text-ink leading-relaxed">{copy.schedule_line}</p>
           <p className="text-[13px] text-muted leading-relaxed">{copy.tier_line}</p>
           {copy.phase_lines.length ? (
-            <ul className="mt-1 space-y-0.5 text-[12.5px] text-muted">
+            <ul className="mt-1 space-y-0.5 text-[13px] text-muted">
               {copy.phase_lines.map((line, i) => (
                 <li key={i} className="pl-3 -indent-3 truncate">
                   <span className="text-bronze">·</span>{" "}

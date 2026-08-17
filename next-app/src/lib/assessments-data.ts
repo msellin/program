@@ -21,6 +21,15 @@ export type AssessmentQuestion = {
   paired?: "left_right";
   /** Video / demo search string, for a "learn what this looks like" link. */
   video_search?: string;
+  /**
+   * Direct video URL — if provided, embeds inline (YouTube iframe) instead of
+   * routing through the search modal. Preferred over `video_search` when a
+   * specific known-good demo exists.
+   *
+   * Accepts a YouTube URL in any format — `youtube.com/watch?v=ID`,
+   * `youtu.be/ID`, or `youtube.com/embed/ID`. Extraction happens at render.
+   */
+  video_url?: string;
   /** Direction of "better". `lower` means 0 is healthy; `equal` means 0 is a symmetric baseline. */
   better: "lower";
   scale: { min: 0; max: 10; low_label: string; high_label: string };
@@ -72,6 +81,7 @@ export const HIP_FLEXOR_PACK: AssessmentPack = {
         "You are testing for an anterior-hip pinch, not muscle stretch. 0 means the leg moves freely with no pinch. 10 means a sharp catch in the front of the hip that stops the movement. Log both sides — asymmetry is the interesting signal here.",
       paired: "left_right",
       video_search: "FADIR test hip impingement",
+      video_url: "https://youtu.be/xyJUIhsL4lg",
       better: "lower",
       scale: { min: 0, max: 10, low_label: "clean", high_label: "sharp pinch" },
     },
@@ -84,6 +94,7 @@ export const HIP_FLEXOR_PACK: AssessmentPack = {
         "You are looking for a hip-flexor / groin signal, not quad tiredness. 0 means the leg holds effortlessly. 10 means a sharp groin pain that makes you drop the leg. This test was documented as positive on both sides in your past evaluations — worth watching.",
       paired: "left_right",
       video_search: "resisted straight leg raise hip flexor test",
+      video_url: "https://youtu.be/x8jQm3rRKCo",
       better: "lower",
       scale: { min: 0, max: 10, low_label: "strong", high_label: "sharp / drops" },
     },
@@ -95,6 +106,7 @@ export const HIP_FLEXOR_PACK: AssessmentPack = {
       interpret:
         "This is the specific movement that documented the click. 0 means no click at all. 5 means a click, no pain. 10 means the click is loud or catches / gives way.",
       video_search: "hanging leg raise hip click",
+      video_url: "https://youtu.be/Pr1ieGZ5atk",
       better: "lower",
       scale: { min: 0, max: 10, low_label: "silent", high_label: "clicks & catches" },
     },
@@ -107,6 +119,7 @@ export const HIP_FLEXOR_PACK: AssessmentPack = {
         "You want a clean stretch in the front of the back thigh. 0 means exactly that. 10 means an anterior hip pinch — pain in the wrong spot, higher up in the hip crease. Log both sides.",
       paired: "left_right",
       video_search: "half kneeling hip flexor stretch technique",
+      video_url: "https://youtu.be/F55tzqJggAY",
       better: "lower",
       scale: { min: 0, max: 10, low_label: "clean stretch", high_label: "pinchy" },
     },

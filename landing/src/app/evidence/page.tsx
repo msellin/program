@@ -24,7 +24,7 @@ type Group = {
 const groups: Group[] = [
   {
     domain: "Aerobic physiology",
-    eyebrow: "25+ primary sources",
+    eyebrow: "28 primary sources",
     summary:
       "The base for Engine Builder. What actually adapts in the first 8 weeks of aerobic work, at what dose, and which metric to track.",
     citations: [
@@ -60,7 +60,7 @@ const groups: Group[] = [
   },
   {
     domain: "Concurrent training",
-    eyebrow: "35+ primary sources",
+    eyebrow: "23 primary sources",
     summary:
       "How strength and aerobic work coexist without interference — session order, modality, dose, protein floor. What we ban PR-chasing during an aerobic block.",
     citations: [
@@ -91,7 +91,7 @@ const groups: Group[] = [
   },
   {
     domain: "Motor learning + skill acquisition",
-    eyebrow: "40+ primary sources",
+    eyebrow: "37 primary sources",
     summary:
       "The base for skill programs — handstand, HSPU, muscle-up. Multi-dimensional generation, external-focus cues, contextual interference, spacing.",
     citations: [
@@ -160,9 +160,9 @@ export default function EvidencePage() {
           </p>
 
           <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6">
-            <Stat n="25+" label="Aerobic physiology" />
-            <Stat n="35+" label="Concurrent training" />
-            <Stat n="40+" label="Motor learning" />
+            <Stat n="28" label="Aerobic physiology" />
+            <Stat n="23" label="Concurrent training" />
+            <Stat n="37" label="Motor learning" />
           </div>
         </section>
 
@@ -175,7 +175,7 @@ export default function EvidencePage() {
 
           <div className="mt-20 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6 sm:p-8">
             <div className="mono-caps mb-3">Sources we explicitly flag as anecdotal</div>
-            <p className="text-sm leading-relaxed text-white/60">
+            <p className="text-sm leading-relaxed text-[var(--color-muted)]">
               We reference (but do not cite as evidence) certain coach
               literature that is not peer-reviewed: Alex Viada&rsquo;s{" "}
               <em>The Hybrid Athlete</em>; Fergus Crawley and Nick Bare&rsquo;s
@@ -189,7 +189,7 @@ export default function EvidencePage() {
             </p>
           </div>
 
-          <div className="mt-8 text-xs leading-relaxed text-white/60">
+          <div className="mt-8 text-xs leading-relaxed text-[var(--color-muted)]">
             Full source reports are versioned in the codebase at{" "}
             <code className="rounded bg-white/[0.05] px-1.5 py-0.5 font-mono text-[11px]">
               dev/whitepapers/
@@ -212,7 +212,7 @@ function GroupBlock({ group }: { group: Group }) {
         <h2 className="text-2xl font-bold text-white sm:text-3xl">
           {group.domain}
         </h2>
-        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/60">
+        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[var(--color-muted)]">
           {group.summary}
         </p>
       </div>
@@ -237,7 +237,7 @@ function Stat({ n, label }: { n: string; label: string }) {
   return (
     <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4">
       <div className="font-mono text-2xl text-[var(--color-bronze-hi)]">{n}</div>
-      <div className="mt-1 text-xs text-white/60">{label}</div>
+      <div className="mt-1 text-xs text-[var(--color-muted)]">{label}</div>
     </div>
   );
 }

@@ -116,6 +116,56 @@ function blockIdsFromWeeklyTemplate(
   const dow = new Date(dateISO + "T12:00:00").getDay();
   const dayShort = DAY_SHORT_NAMES[dow];
 
+  // User-added events (races, competitions, travel). Events supersede
+  // everything below — a race day = no session, no matter what the program
+  // scheduled. pre_deload_days extends the rest window BEFORE the event;
+  // rest_days_after extends it AFTER. Applies to strength blocks only —
+  // rehab / home blocks (`block_a_home`) survive the event window so daily
+  // consistency doesn't break.
+  if (profile?.events?.length) {
+    const nowMs = new Date(dateISO + "T00:00:00").getTime();
+    for (const ev of profile.events) {
+      const evMs = new Date(ev.date + "T00:00:00").getTime();
+      if (!Number.isFinite(evMs)) continue;
+      const daysToEvent = Math.floor((evMs - nowMs) / 864e5);
+      const preDeload = ev.pre_deload_days ?? 0;
+      const restAfter = ev.rest_days_after ?? 0;
+      const withinWindow =
+        daysToEvent === 0 ||
+        (daysToEvent > 0 && daysToEvent <= preDeload) ||
+        (daysToEvent < 0 && -daysToEvent <= restAfter);
+      if (withinWindow) {
+        return []; // strength scheduled today is displaced by the event window
+      }
+    }
+  }
+
+  // Per-week overrides — a phase can declare `weekly_overrides` for specific
+  // date ranges (e.g. eval week: Tue 5RM squat + Fri 5RM pull; taper week:
+  // light Mon+Wed + rest Thu/Fri). Overrides supersede the default template
+  // for days present in the override's `days` map; unnamed days fall through
+  // to the default. Empty string = explicit rest (no session).
+  if (phase) {
+    const overrides = (phase as unknown as {
+      weekly_overrides?: Array<{
+        starts: string;
+        ends: string;
+        days: Partial<Record<(typeof DAY_SHORT_NAMES)[number], string>>;
+      }>;
+    }).weekly_overrides;
+    if (overrides?.length) {
+      const match = overrides.find(
+        (o) => dateISO >= o.starts && dateISO <= o.ends,
+      );
+      if (match) {
+        const session = match.days[dayShort];
+        if (session !== undefined) {
+          return extractBlockIds(session, program);
+        }
+      }
+    }
+  }
+
   // Shape A: weekly_template.week[] — one layout, every week. Push-tier users
   // get `push_tier_override` when present (Rowing 2K's Push adds a Sunday Z2).
   if (Array.isArray(wt.week)) {

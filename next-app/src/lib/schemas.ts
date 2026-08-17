@@ -170,6 +170,33 @@ export const phaseSchema = z.object({
    * phase_2/3/4 should have this = true.
    */
   runs_cycle_end_eval: z.boolean().optional(),
+  /**
+   * Per-week schedule overrides that supersede the default
+   * `weekly_template.week` for a specific date range. Use when a phase has
+   * specific weeks with different content than the default — e.g. eval week
+   * (5RM tests replace the usual heavy sessions), taper week (light + rest
+   * days replace the usual pattern), race / peak weeks, etc.
+   *
+   * Semantics:
+   *  - Each override maps `days: { Mon: "block_id_a block_id_b", ... }`.
+   *  - Days present in the map use the override's session string.
+   *  - Days NOT in the map fall through to the default `weekly_template.week`.
+   *  - Empty string ("") = explicit rest day, overriding the default block.
+   *  - Multiple overrides can exist per phase; the first matching window wins.
+   */
+  weekly_overrides: z
+    .array(
+      z.object({
+        starts: z.string(),
+        ends: z.string(),
+        note: z.string().optional(),
+        days: z.record(
+          z.enum(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]),
+          z.string(),
+        ),
+      }),
+    )
+    .optional(),
 });
 
 export const milestoneSchema = z.object({
@@ -845,6 +872,26 @@ export const storeSchema = z.object({
             last_measured_at: z.string(),
             measured_value: z.number().optional(),
             measured_unit: z.string().optional(),
+          }),
+        )
+        .optional(),
+      /**
+       * User-added events (races, competitions, travel, weddings, etc.) that
+       * the plan should schedule around. Each event's `date` becomes a
+       * forced rest day. Optional `pre_deload_days` + `rest_days_after`
+       * extend the rest window either side. Kept simple on purpose.
+       */
+      events: z
+        .array(
+          z.object({
+            id: z.string(),
+            date: z.string(),
+            name: z.string(),
+            kind: z.enum(["race", "competition", "travel", "other"]).optional(),
+            pre_deload_days: z.number().min(0).max(14).optional(),
+            rest_days_after: z.number().min(0).max(14).optional(),
+            note: z.string().optional(),
+            added_at: z.number().optional(),
           }),
         )
         .optional(),

@@ -4,8 +4,8 @@ import { APP_URL } from "@/config";
 export function BetaCTA({ dict }: { dict: LandingDict }) {
   const t = dict.beta;
   return (
-    <section className="relative mx-auto max-w-4xl px-5 py-16 text-center sm:px-6 sm:py-24">
-      <h2 className="text-3xl font-black leading-[1.08] tracking-tight text-white sm:text-5xl md:text-6xl">
+    <section className="relative mx-auto max-w-3xl px-5 py-16 text-center sm:px-6 sm:py-24">
+      <h2 className="text-balance text-[32px] font-bold leading-[1.08] tracking-tight text-white sm:text-5xl md:text-6xl md:leading-[1.02]">
         {t.h2_a}
         <br />
         <span className="bg-gradient-to-r from-[var(--color-bronze-hi)] via-[var(--color-bronze)] to-[var(--color-teal)] bg-clip-text text-transparent">
@@ -13,7 +13,7 @@ export function BetaCTA({ dict }: { dict: LandingDict }) {
         </span>
       </h2>
 
-      <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-white/60">
+      <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-[var(--color-muted)]">
         {t.body}
       </p>
 

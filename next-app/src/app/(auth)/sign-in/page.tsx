@@ -70,7 +70,7 @@ function SignInInner() {
       </div>
       <header className="space-y-1">
         <h1 className="text-2xl font-semibold tracking-tight text-strong">Sign in</h1>
-        <p className="text-[13.5px] text-muted">Continue your training.</p>
+        <p className="text-sm text-muted">Continue your training.</p>
       </header>
 
       <form onSubmit={submit} className="space-y-3" noValidate>
@@ -82,7 +82,7 @@ function SignInInner() {
             autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="block w-full text-[14px] px-3 py-2.5 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze/40 focus:border-bronze"
+            className="block w-full text-[14px] px-3 py-2.5 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
           />
         </label>
         <label className="block text-[13px]">
@@ -93,7 +93,7 @@ function SignInInner() {
             autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="block w-full text-[14px] px-3 py-2.5 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze/40 focus:border-bronze"
+            className="block w-full text-[14px] px-3 py-2.5 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
           />
         </label>
         {error ? (
@@ -102,14 +102,14 @@ function SignInInner() {
         <button
           type="submit"
           disabled={submitting}
-          className="w-full font-mono text-[12.5px] uppercase tracking-wider py-3 rounded bg-bronze text-ground hover:bg-bronze/90 disabled:opacity-50 min-h-[44px]"
+          className="w-full font-mono text-[13px] uppercase tracking-wider py-3 rounded bg-bronze text-ground hover:bg-bronze/90 disabled:opacity-50 min-h-[44px]"
         >
           {submitting ? "Signing in…" : "Sign in"}
         </button>
       </form>
 
       {resetSent ? (
-        <p className="text-[12.5px] text-green border-l-4 border-green pl-2">
+        <p className="text-[13px] text-green border-l-4 border-green pl-2">
           Password reset email sent to <strong>{email}</strong>. Check inbox (and spam).
           The link opens a reset form.
         </p>
@@ -118,7 +118,7 @@ function SignInInner() {
           type="button"
           onClick={sendPasswordReset}
           disabled={resetting}
-          className="text-[12.5px] text-muted underline decoration-muted/40 underline-offset-4 hover:text-ink hover:decoration-ink/60 disabled:opacity-50"
+          className="text-[13px] text-muted underline decoration-muted/40 underline-offset-4 hover:text-ink hover:decoration-ink/60 disabled:opacity-50"
         >
           {resetting ? "Sending…" : "Forgot password?"}
         </button>
@@ -131,7 +131,7 @@ function SignInInner() {
         </Link>
       </p>
 
-      <footer className="pt-6 border-t border-line-soft text-[11.5px] text-muted space-x-3">
+      <footer className="pt-6 border-t border-line-soft text-[11px] text-muted space-x-3">
         <Link href="/legal/privacy" className="hover:text-ink">Privacy</Link>
         <Link href="/legal/terms" className="hover:text-ink">Terms</Link>
         <Link href="/legal/disclaimer" className="hover:text-ink">Medical disclaimer</Link>

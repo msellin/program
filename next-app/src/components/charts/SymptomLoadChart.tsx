@@ -81,9 +81,23 @@ export function SymptomLoadChart({ days }: { days: DayLog[] }) {
   const bronze = "#C89666";
   const green = "#5FB37A";
 
+  // Summarise for screen-reader users — Recharts SVG has no accessible name.
+  const lastSquat = [...rows].reverse().find((r) => r.squat_top != null)?.squat_top;
+  const lastPull = [...rows].reverse().find((r) => r.pull_top != null)?.pull_top;
+  const peakOfPeak = rows.reduce<number>((acc, r) => Math.max(acc, r.peak_symptom ?? 0), 0);
+  const summary = [
+    `Symptom vs load, last ${rows.length} days.`,
+    peakOfPeak > 0 ? `Peak symptom ${peakOfPeak} out of 10.` : "No symptoms logged.",
+    lastSquat != null ? `Most recent squat top set ${lastSquat} kg.` : null,
+    lastPull != null ? `Most recent pull top set ${lastPull} kg.` : null,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <div className="h-[300px] w-full">
-      <ResponsiveContainer width="100%" height="100%">
+    <div>
+      <div role="img" aria-label={summary} className="h-[300px] w-full">
+        <ResponsiveContainer width="100%" height="100%">
         <ComposedChart data={rows} margin={{ top: 8, right: 16, bottom: 8, left: 0 }}>
           <CartesianGrid stroke={grid} strokeDasharray="3 3" />
           <XAxis
@@ -141,6 +155,32 @@ export function SymptomLoadChart({ days }: { days: DayLog[] }) {
           />
         </ComposedChart>
       </ResponsiveContainer>
+      </div>
+      <details className="mt-2 text-[12px] text-muted">
+        <summary className="cursor-pointer select-none hover:text-ink">Show data as table</summary>
+        <div className="mt-2 overflow-x-auto">
+          <table className="w-full text-left border-collapse font-mono text-[11px]">
+            <thead>
+              <tr className="border-b border-line-soft text-muted">
+                <th scope="col" className="py-1 pr-3 font-normal">Date</th>
+                <th scope="col" className="py-1 pr-3 font-normal">Peak symptom</th>
+                <th scope="col" className="py-1 pr-3 font-normal">Squat kg</th>
+                <th scope="col" className="py-1 font-normal">Pull kg</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r) => (
+                <tr key={r.date} className="border-b border-line-soft/50">
+                  <td className="py-0.5 pr-3">{r.date}</td>
+                  <td className="py-0.5 pr-3">{r.peak_symptom ?? "—"}</td>
+                  <td className="py-0.5 pr-3">{r.squat_top ?? "—"}</td>
+                  <td className="py-0.5">{r.pull_top ?? "—"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </details>
     </div>
   );
 }

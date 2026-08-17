@@ -180,7 +180,7 @@ function WeekSheet({
         <p className="text-[13px] text-muted">
           Every strength day in the week of <strong className="text-strong">{weekLabel}</strong> gets marked skipped and its session moves forward by seven days.
         </p>
-        <div className="rounded border border-line-soft bg-surface-2/40 p-3 text-[12.5px] leading-snug space-y-1.5">
+        <div className="rounded border border-line-soft bg-surface-2/40 p-3 text-[13px] leading-snug space-y-1.5">
           <p><span className="text-ink font-semibold">Zero sessions lost.</span> Every strength day this week reappears next week.</p>
           <p><span className="text-ink font-semibold">Phase runs 1 week longer.</span> If your phase was 4 weeks, it&apos;s now 5.</p>
           <p><span className="text-ink font-semibold">Rest / accessory days unchanged.</span> Only strength blocks shift.</p>
@@ -203,7 +203,7 @@ function WeekSheet({
             value={reason}
             onChange={(e) => setReason(e.target.value)}
             placeholder="travelling, sick, deload…"
-            className="w-full px-2 py-2 min-h-[44px] border border-line rounded bg-surface text-sm focus:outline-none focus:ring-2 focus:ring-bronze/40 focus:border-bronze"
+            className="w-full px-2 py-2 min-h-[44px] border border-line rounded bg-surface text-sm focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
           />
         </div>
         <div className="flex gap-2 pt-1">
@@ -354,12 +354,12 @@ function SkipSheet({
               <span className={`w-4 h-4 rounded-full border flex-shrink-0 flex items-center justify-center ${!shift ? "border-bronze bg-bronze" : "border-line"}`}>
                 {!shift ? <span className="w-1.5 h-1.5 rounded-full bg-ground" /> : null}
               </span>
-              <p className="font-semibold text-[13.5px] text-strong">Skip only</p>
+              <p className="font-semibold text-sm text-strong">Skip only</p>
             </div>
             <p className="text-[12px] text-muted pl-6 leading-snug">
               This session is lost. Rest of the week runs as scheduled.
               <br />
-              <span className="text-ink">Cost:</span> −1 session this week. Progression order breaks if you&apos;re on a wave (5/3/1 etc.).
+              <span className="text-ink">Cost:</span> −1 session this week. If your program has an ordered progression (e.g. 5/3/1 waves), the sequence breaks.
             </p>
           </button>
 
@@ -376,12 +376,12 @@ function SkipSheet({
               <span className={`w-4 h-4 rounded-full border flex-shrink-0 flex items-center justify-center ${shift ? "border-bronze bg-bronze" : "border-line"}`}>
                 {shift ? <span className="w-1.5 h-1.5 rounded-full bg-ground" /> : null}
               </span>
-              <p className="font-semibold text-[13.5px] text-strong">Skip &amp; shift the week</p>
+              <p className="font-semibold text-sm text-strong">Skip &amp; shift the week</p>
             </div>
             <p className="text-[12px] text-muted pl-6 leading-snug">
               This session takes over the next scheduled strength day. Everything cascades one slot forward.
               <br />
-              <span className="text-ink">Cost:</span> −1 session (the last one of the week drops). Progression order preserved — recommended for wave-based programs.
+              <span className="text-ink">Cost:</span> −1 session (the last one of the week drops). Progression order preserved — recommended for programs with ordered waves.
             </p>
           </button>
         </div>
@@ -394,7 +394,7 @@ function SkipSheet({
             value={reason}
             onChange={(e) => setReason(e.target.value)}
             placeholder="travelling, hip flared, tired…"
-            className="w-full px-2 py-2 min-h-[44px] border border-line rounded bg-surface text-sm focus:outline-none focus:ring-2 focus:ring-bronze/40 focus:border-bronze"
+            className="w-full px-2 py-2 min-h-[44px] border border-line rounded bg-surface text-sm focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
           />
         </div>
 
@@ -411,7 +411,7 @@ function SkipSheet({
             onClick={() => onSkip(reason || undefined, shift)}
             className="flex-1 bg-bronze text-ground rounded py-2 min-h-[44px] text-sm font-semibold hover:bg-bronze-hover"
           >
-            Confirm
+            Skip session
           </button>
         </div>
       </div>
@@ -456,9 +456,13 @@ function MoveSheet({
           </button>
         </div>
         <p className="text-[13px] text-muted">
-          Session moves to the chosen date. Today is marked skipped-because-moved. Progression trajectory
-          continues from wherever the last completed session landed.
+          Session moves to the chosen date. Today is marked skipped-because-moved.
         </p>
+        <div className="rounded border border-line-soft bg-surface-2/40 p-3 text-[13px] leading-snug space-y-1.5">
+          <p><span className="text-ink font-semibold">Zero sessions lost.</span> This one just changes date.</p>
+          <p><span className="text-ink font-semibold">Watch for collisions.</span> If the target date already has a session, both stack — check the calendar first.</p>
+          <p><span className="text-ink font-semibold">Progression trajectory intact.</span> The wave continues from where the last completed session landed.</p>
+        </div>
         <div>
           <label className="mono-caps block mb-1">Move to</label>
           <input
@@ -478,7 +482,7 @@ function MoveSheet({
             onClick={() => onConfirm(date)}
             className="flex-1 bg-bronze text-ground rounded py-2 text-sm font-semibold hover:bg-bronze-hover"
           >
-            Move
+            Move session
           </button>
         </div>
       </div>

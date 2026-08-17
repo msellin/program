@@ -208,7 +208,7 @@ test("Adding a second program shows the amber multi-program banner on Today", as
       version: 2,
       logs: {},
       training_maxes: {},
-      cycle: null,
+      cycle: { phase_id: null, cycle_number: 1, week_in_cycle: 1 },
       updated_at: now,
       scheduled_overrides: {},
       skipped: {},
@@ -220,7 +220,7 @@ test("Adding a second program shows the amber multi-program banner on Today", as
         tier: "beta_forever",
       },
     };
-    localStorage.setItem("program.store.v2", JSON.stringify(store));
+    localStorage.setItem("program.log.v2", JSON.stringify(store));
   });
 
   // Now visit Handstand Walk preview → should offer "Add alongside" and "Replace instead"

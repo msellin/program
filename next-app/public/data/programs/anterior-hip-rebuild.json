@@ -293,25 +293,43 @@
   "phases": [
     {
       "id": "phase_1_rebuild_evaluate",
-      "name": "Rebuild + evaluate (race prep sub-goal)",
+      "name": "Rebuild + evaluate",
       "starts": "2026-08-06",
       "ends": "2026-08-29",
       "duration_weeks": 3.5,
       "blocks": [
         "block_a_home",
         "block_reintro",
-        "block_evaluate",
+        "block_eval_squat",
+        "block_eval_pull",
+        "block_reintro_light",
         "block_daily_skill",
         "block_runs"
       ],
-      "rationale": "User hasn't squatted heavy in 6 months. This is not a passive phase \u2014 it's ramp + eval + race maintenance. Race Sat 2026-08-29.",
-      "goal": "Rebuild the pattern under progressive load. Establish real TMs from a week-2 5RM test. Reach the start line healthy Aug 29.",
+      "rationale": "User hasn't squatted heavy in 6 months. This is ramp + eval to set real TMs before Phase 2's first real 5/3/1 waves.",
+      "goal": "Rebuild the pattern under progressive load. Establish real TMs from a 5RM test in the last week of the phase.",
       "week_by_week": {
         "week_0_aug_6_9": "2 barbell sessions (Fri + Sat, or as schedule permits): high-bar squat ramping empty bar \u2192 60 kg \u00d7 5, block pull ramping empty bar \u2192 80 kg \u00d7 5. Home block daily.",
         "week_1_aug_10_16": "4 barbell sessions: Mon high-bar squat 4\u00d75 to 70-80 kg (RPE 6-7); Wed block pull 4\u00d75 to 90-100 kg (RPE 6-7); Thu front squat 3\u00d75 to 60-70 kg + Bulgarian split squat; Sat unilateral + carries + sled.",
-        "week_2_aug_17_23_EVAL": "Tue: 5RM high-bar back squat (spotter). Fri: 5RM block pull. Wed and Sat lighter \u2014 3\u00d75 at 60% of expected work weight.",
-        "week_3_aug_24_29_race_week": "Mon: light high-bar squat 3\u00d75 at 50%. Wed: light block pull 3\u00d75 at 50%. Thu-Fri: rest, mobility, food. Sat: RACE."
-      }
+        "week_2_aug_17_23": "Same as week 1 (repeated). Extra week of moderate load before the eval \u2014 protective when there are any hip / groin flags.",
+        "week_3_aug_24_29_EVAL": "Tue: 5RM high-bar back squat (spotter). Wed: light recovery 3\u00d75 @ 60%. Fri: 5RM block pull. Sat: light recovery 3\u00d75 @ 60%. Mon + Thu = rest. Sun = home block."
+      },
+      "weekly_overrides": [
+        {
+          "starts": "2026-08-24",
+          "ends": "2026-08-29",
+          "note": "Eval week. Tue + Fri are the 5RM anchor sessions that set real TMs for Phase 2. Wed = light recovery between the two evals. Sat = race day (rest). Mon + Thu = rest before evals.",
+          "days": {
+            "Mon": "",
+            "Tue": "block_eval_squat",
+            "Wed": "block_reintro_light",
+            "Thu": "",
+            "Fri": "block_eval_pull",
+            "Sat": "",
+            "Sun": "block_a_home"
+          }
+        }
+      ]
     },
     {
       "id": "phase_2_cycle_1",
@@ -518,7 +536,7 @@
     },
     {
       "id": "block_reintro",
-      "name": "Barbell reintro session (Phase 1 weeks 0-1)",
+      "name": "Barbell reintro session",
       "category": "strength",
       "location": "crossfit_box",
       "frequency_per_week": 4,
@@ -559,29 +577,57 @@
       ]
     },
     {
-      "id": "block_evaluate",
-      "name": "5RM evaluation (Phase 1 week 2)",
+      "id": "block_eval_squat",
+      "name": "5RM back squat evaluation",
       "category": "strength",
       "location": "crossfit_box",
-      "frequency_per_week": 2,
+      "frequency_per_week": 1,
       "duration_min": 60,
       "phase_gated": "phase_1_rebuild_evaluate",
-      "note": "Two eval sessions this week only. Purpose: set real TMs. Spotter for squats.",
+      "note": "Ramp in fives to a heavy-but-clean 5RM. Spotter required. Stop at first grinder. Set TM = 5RM \u00d7 0.90 immediately after.",
       "items": [
         {
           "exercise_id": "back_squat_highbar",
-          "order": "TUE",
-          "role": "eval",
-          "scheme": "Warm up in fives, ramp to a heavy-but-clean 5RM (RPE 8.5-9). Stop at first grinder."
-        },
-        {
-          "exercise_id": "block_pull_midshin",
-          "order": "FRI",
           "role": "eval",
           "scheme": "Warm up in fives, ramp to a heavy-but-clean 5RM (RPE 8.5-9). Stop at first grinder."
         }
       ],
-      "tm_calculation": "TM = 5RM \u00d7 0.90. Set values in the app's Training Maxes tab immediately after each session."
+      "tm_calculation": "TM = 5RM \u00d7 0.90. Set values in the app's Training Maxes tab immediately after this session."
+    },
+    {
+      "id": "block_eval_pull",
+      "name": "5RM block pull evaluation",
+      "category": "strength",
+      "location": "crossfit_box",
+      "frequency_per_week": 1,
+      "duration_min": 60,
+      "phase_gated": "phase_1_rebuild_evaluate",
+      "note": "Ramp in fives to a heavy-but-clean 5RM block pull (mid-shin). Stop at first grinder. Set TM = 5RM \u00d7 0.90 immediately after.",
+      "items": [
+        {
+          "exercise_id": "block_pull_midshin",
+          "role": "eval",
+          "scheme": "Warm up in fives, ramp to a heavy-but-clean 5RM (RPE 8.5-9). Stop at first grinder."
+        }
+      ],
+      "tm_calculation": "TM = 5RM \u00d7 0.90. Set values in the app's Training Maxes tab immediately after this session."
+    },
+    {
+      "id": "block_reintro_light",
+      "name": "Light recovery lift (around eval)",
+      "category": "strength",
+      "location": "crossfit_box",
+      "frequency_per_week": 2,
+      "duration_min": 40,
+      "phase_gated": "phase_1_rebuild_evaluate",
+      "note": "3\u00d75 at 60% of expected work weight. This is a recovery session between the two 5RM evaluations \u2014 not a training stimulus. Move well, log RPE, get out.",
+      "items": [
+        {
+          "exercise_id": "back_squat_highbar",
+          "role": "recovery",
+          "scheme": "3\u00d75 @ ~60% expected TM. Same weight all sets. RPE cap 6."
+        }
+      ]
     },
     {
       "id": "block_squat_heavy",

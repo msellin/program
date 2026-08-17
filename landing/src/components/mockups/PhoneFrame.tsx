@@ -14,14 +14,14 @@ export function PhoneFrame({
   label?: string;
 }) {
   return (
-    <div className="relative mx-auto w-full max-w-[340px] select-none">
+    <div className="relative mx-auto w-full max-w-[340px] select-none" aria-hidden="true">
       {label ? (
         <div className="mono-caps mb-3 text-center">{label}</div>
       ) : null}
       <div className="relative rounded-[44px] border border-white/10 bg-gradient-to-b from-white/[0.04] to-transparent p-2 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]">
         <div className="relative overflow-hidden rounded-[36px] border border-white/[0.08] bg-[#0e0f12]">
           {/* Status bar */}
-          <div className="flex items-center justify-between px-6 py-2.5 text-[10px] font-medium text-white/60">
+          <div className="flex items-center justify-between px-6 py-2.5 text-[10px] font-medium text-[var(--color-muted)]">
             <span>9:41</span>
             <div className="flex items-center gap-1">
               {/* Neutral dot — was bronze, but the app's Stethoscope button is

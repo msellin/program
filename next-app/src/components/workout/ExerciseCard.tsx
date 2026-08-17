@@ -10,7 +10,7 @@ import {
   AlertTriangle,
   MessageSquare,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, hapticTap } from "@/lib/utils";
 import { useStore, useDayExercise, entrySets } from "@/lib/useStore";
 import { suggestForExercise, inferTMFromSet, type Suggestion } from "@/lib/engine/suggest";
 import { lastSessionSetsFor } from "@/lib/engine/history";
@@ -103,6 +103,7 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
 
   return (
     <article
+      data-exercise-card
       className={cn(
         "bg-surface border border-line rounded-md overflow-hidden",
         hasLaterality ? "grid grid-cols-[28px_1fr]" : "block",
@@ -140,7 +141,17 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
               onChange={(e) => {
                 const next = e.target.checked;
                 markDone(blockId, exercise.id, next, activeDate);
-                if (next) setManuallyExpanded(false);
+                if (next) {
+                  setManuallyExpanded(false);
+                  hapticTap("light");
+                  const row = e.currentTarget.closest("[data-exercise-card]") as HTMLElement | null;
+                  if (row) {
+                    row.classList.remove("mark-done-flash");
+                    // Force reflow to restart the animation if repeatedly toggled.
+                    void row.offsetWidth;
+                    row.classList.add("mark-done-flash");
+                  }
+                }
               }}
               className="w-5 h-5 accent-bronze cursor-pointer"
             />
@@ -165,7 +176,7 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
                 <p className="font-mono text-[12px] text-slate mt-0.5 truncate">{previewText}</p>
               ) : null}
               {typeof (item as { note?: string }).note === "string" && (item as { note: string }).note.trim() ? (
-                <p className="text-[12.5px] text-muted italic mt-1 leading-snug">
+                <p className="text-[13px] text-muted italic mt-1 leading-snug">
                   <span className="font-mono text-[10px] uppercase tracking-wider not-italic text-bronze mr-1.5">
                     cue
                   </span>
@@ -186,7 +197,7 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
                 type="button"
                 onClick={() => setVideoOpen(true)}
                 aria-label="Watch demo"
-                className="w-9 h-9 flex items-center justify-center text-muted hover:text-ink hover:bg-line-soft rounded"
+                className="w-11 h-11 flex items-center justify-center text-muted hover:text-ink hover:bg-line-soft rounded"
               >
                 <Play size={15} strokeWidth={1.75} />
               </button>
@@ -196,7 +207,7 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
               onClick={() => setDetailsOpen(true)}
               aria-label={hasWarning ? "Warning + details" : "Details"}
               className={cn(
-                "w-9 h-9 flex items-center justify-center rounded hover:bg-line-soft",
+                "w-11 h-11 flex items-center justify-center rounded hover:bg-line-soft",
                 hasWarning ? "text-amber" : "text-muted hover:text-ink",
               )}
             >
@@ -295,7 +306,7 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
               <div>
                 <label
                   htmlFor={`notes-${blockId}-${exercise.id}`}
-                  className="block text-[11.5px] text-muted mb-1"
+                  className="block text-[11px] text-muted mb-1"
                 >
                   Notes
                 </label>
@@ -305,7 +316,7 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
                   placeholder="How did it feel? Anything to flag?"
                   value={notes}
                   onChange={(e) => setNotes(blockId, exercise.id, e.target.value, activeDate)}
-                  className="block w-full max-w-full text-[13.5px] px-2 py-1.5 border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate resize-y min-h-[44px] break-words [overflow-wrap:anywhere] whitespace-pre-wrap"
+                  className="block w-full max-w-full text-sm px-2 py-1.5 border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate resize-y min-h-[44px] break-words [overflow-wrap:anywhere] whitespace-pre-wrap"
                 />
                 <NoteSignalHint text={notes} />
               </div>

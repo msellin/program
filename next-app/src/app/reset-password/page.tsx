@@ -64,7 +64,7 @@ export default function ResetPasswordPage() {
       </div>
       <header className="space-y-1">
         <h1 className="text-2xl font-semibold tracking-tight text-strong">Set a new password</h1>
-        <p className="text-[13.5px] text-muted">
+        <p className="text-sm text-muted">
           {ready
             ? "Pick a new one. You'll be signed in on this device once you save."
             : "Waiting for the reset link to validate — hold on."}
@@ -84,7 +84,7 @@ export default function ResetPasswordPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             disabled={!ready}
-            className="block w-full text-[14px] px-3 py-2.5 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze/40 focus:border-bronze disabled:opacity-50"
+            className="block w-full text-[14px] px-3 py-2.5 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze disabled:opacity-50"
           />
         </label>
         <label className="block text-[13px]">
@@ -96,7 +96,7 @@ export default function ResetPasswordPage() {
             value={confirm}
             onChange={(e) => setConfirm(e.target.value)}
             disabled={!ready}
-            className="block w-full text-[14px] px-3 py-2.5 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze/40 focus:border-bronze disabled:opacity-50"
+            className="block w-full text-[14px] px-3 py-2.5 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze disabled:opacity-50"
           />
         </label>
         {error ? (
@@ -105,7 +105,7 @@ export default function ResetPasswordPage() {
         <button
           type="submit"
           disabled={submitting || !ready}
-          className="w-full font-mono text-[12.5px] uppercase tracking-wider py-3 rounded bg-bronze text-ground hover:bg-bronze/90 disabled:opacity-50 min-h-[44px]"
+          className="w-full font-mono text-[13px] uppercase tracking-wider py-3 rounded bg-bronze text-ground hover:bg-bronze/90 disabled:opacity-50 min-h-[44px]"
         >
           {submitting ? "Saving…" : "Save new password"}
         </button>

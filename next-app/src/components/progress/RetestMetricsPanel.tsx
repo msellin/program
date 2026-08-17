@@ -49,7 +49,7 @@ export function RetestMetricsPanel({
     <section className="space-y-3">
       <div className="flex items-baseline justify-between gap-3">
         <h2 className="text-[15px] font-semibold text-strong">Retest metrics</h2>
-        <span className="text-[11.5px] text-muted">
+        <span className="text-[11px] text-muted">
           {userTier ? `Tier target: ${userTier}` : "Program targets"}
         </span>
       </div>
@@ -63,7 +63,7 @@ export function RetestMetricsPanel({
           />
         ))}
       </ul>
-      <p className="text-[11.5px] text-muted italic">
+      <p className="text-[11px] text-muted italic">
         Current = latest logged value. Baseline = first. Delta measured in the
         metric&apos;s direction (lower is better for times, higher for kg).
       </p>
@@ -106,7 +106,7 @@ function RetestCard({
   return (
     <li className="rounded border border-line-soft bg-surface p-3">
       <div className="flex items-baseline justify-between gap-2 flex-wrap">
-        <p className="font-semibold text-[13.5px] text-strong flex items-center gap-1.5">
+        <p className="font-semibold text-sm text-strong flex items-center gap-1.5">
           {m.display_name}
           {due && canRetest ? (
             <span className="font-mono text-[9.5px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-bronze/20 text-bronze">
@@ -115,30 +115,30 @@ function RetestCard({
           ) : null}
         </p>
         {m.at_week ? (
-          <span className="font-mono text-[10.5px] text-muted uppercase tracking-wider">
+          <span className="font-mono text-[10px] text-muted uppercase tracking-wider">
             check at week {m.at_week}
           </span>
         ) : null}
       </div>
 
       {!m.supported ? (
-        <p className="mt-1 text-[12.5px] text-muted italic">
+        <p className="mt-1 text-[13px] text-muted italic">
           {m.note ?? "Not yet trackable in the app."}
         </p>
       ) : (
-        <div className="mt-2 grid grid-cols-3 gap-2 text-[12.5px]">
+        <div className="mt-2 grid grid-cols-3 gap-2 text-[13px]">
           <div>
-            <p className="text-muted text-[10.5px] uppercase tracking-wider">Baseline</p>
+            <p className="text-muted text-[10px] uppercase tracking-wider">Baseline</p>
             <p className="font-mono text-ink">{formatMetric(m.baseline, m.unit)}</p>
           </div>
           <div>
-            <p className="text-muted text-[10.5px] uppercase tracking-wider">Current</p>
+            <p className="text-muted text-[10px] uppercase tracking-wider">Current</p>
             <p className="font-mono text-strong font-semibold">
               {formatMetric(m.current, m.unit)}
             </p>
           </div>
           <div>
-            <p className="text-muted text-[10.5px] uppercase tracking-wider">Δ</p>
+            <p className="text-muted text-[10px] uppercase tracking-wider">Δ</p>
             <p className={`font-mono ${deltaColor}`}>
               {delta
                 ? `${delta.value >= 0 ? "+" : ""}${formatDelta(delta.value, m.unit)}`
@@ -149,7 +149,7 @@ function RetestCard({
       )}
 
       {m.supported && (m.target != null || m.stretch != null) ? (
-        <p className="mt-2 text-[11.5px] text-muted">
+        <p className="mt-2 text-[11px] text-muted">
           Target {formatMetric(m.target, m.unit)}
           {m.stretch != null ? ` · stretch ${formatMetric(m.stretch, m.unit)}` : ""}
         </p>
@@ -170,11 +170,11 @@ function RetestCard({
                     setValue(e.target.value);
                     setError(null);
                   }}
-                  className="mt-1 w-full px-2 py-2 min-h-[40px] border border-line rounded bg-surface text-sm focus:outline-none focus:ring-2 focus:ring-bronze/40 focus:border-bronze font-mono"
+                  className="mt-1 w-full px-2 py-2 min-h-[40px] border border-line rounded bg-surface text-sm focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze font-mono"
                   autoFocus
                 />
               </label>
-              {error ? <p className="text-[11.5px] text-red">{error}</p> : null}
+              {error ? <p className="text-[11px] text-red">{error}</p> : null}
               <div className="flex gap-2">
                 <button
                   type="button"

@@ -67,7 +67,7 @@ export default function SignUpPage() {
     return (
       <div className="max-w-sm mx-auto pt-8 space-y-4">
         <h1 className="text-2xl font-semibold text-strong">Check your email</h1>
-        <p className="text-[13.5px] text-ink">
+        <p className="text-sm text-ink">
           We sent a confirmation link to <strong>{email}</strong>. Tap it, then sign in.
         </p>
         <p className="text-[12px] text-muted">
@@ -75,7 +75,7 @@ export default function SignUpPage() {
         </p>
         <Link
           href="/sign-in"
-          className="inline-block font-mono text-[11.5px] uppercase tracking-wider px-3 py-2 rounded border border-line hover:bg-line-soft"
+          className="inline-block font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line hover:bg-line-soft"
         >
           Back to sign in
         </Link>
@@ -101,7 +101,7 @@ export default function SignUpPage() {
             autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="block w-full text-[14px] px-3 py-2.5 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze/40 focus:border-bronze"
+            className="block w-full text-[14px] px-3 py-2.5 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
           />
         </label>
         <label className="block text-[13px]">
@@ -115,11 +115,11 @@ export default function SignUpPage() {
             minLength={8}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="block w-full text-[14px] px-3 py-2.5 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze/40 focus:border-bronze"
+            className="block w-full text-[14px] px-3 py-2.5 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
           />
         </label>
 
-        <label className="flex items-start gap-2 text-[12.5px] pt-1">
+        <label className="flex items-start gap-2 text-[13px] pt-1">
           <input
             type="checkbox"
             checked={acceptTerms}
@@ -139,7 +139,7 @@ export default function SignUpPage() {
           </span>
         </label>
 
-        <label className="flex items-start gap-2 text-[12.5px]">
+        <label className="flex items-start gap-2 text-[13px]">
           <input
             type="checkbox"
             checked={consentSymptom}
@@ -162,7 +162,7 @@ export default function SignUpPage() {
         <button
           type="submit"
           disabled={submitting}
-          className="w-full font-mono text-[12.5px] uppercase tracking-wider py-3 rounded bg-bronze text-ground hover:bg-bronze/90 disabled:opacity-50 min-h-[44px]"
+          className="w-full font-mono text-[13px] uppercase tracking-wider py-3 rounded bg-bronze text-ground hover:bg-bronze/90 disabled:opacity-50 min-h-[44px]"
         >
           {submitting ? "Creating account…" : "Create account"}
         </button>

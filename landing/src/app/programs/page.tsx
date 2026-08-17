@@ -20,7 +20,7 @@ export default function ProgramsIndexPage() {
         <div className="mx-auto max-w-6xl px-5 pt-8 pb-16 sm:px-6 sm:pt-12">
           <Link
             href="/"
-            className="mono-caps mb-6 inline-block text-white/60 hover:text-white/80"
+            className="mono-caps mb-6 inline-block text-[var(--color-muted)] hover:text-white/80"
           >
             ← Terav
           </Link>
@@ -42,7 +42,7 @@ export default function ProgramsIndexPage() {
             ))}
           </div>
 
-          <p className="mt-10 text-sm text-white/60">
+          <p className="mt-10 text-sm text-[var(--color-muted)]">
             More programs land as they&apos;re authored. Two are already in flight — see the{" "}
             <Link
               href="/roadmap"
@@ -100,7 +100,7 @@ function ProgramCard({ p }: { p: LandingProgram }) {
         </ul>
 
         <div className="mt-6 flex items-center justify-between border-t border-white/[0.06] pt-4">
-          <span className="text-[11.5px] text-white/60 uppercase tracking-wider font-mono">
+          <span className="text-[11.5px] text-[var(--color-muted)] uppercase tracking-wider font-mono">
             {p.evidence.length} cited studies
           </span>
           <span className="text-[13px] font-medium text-white/80 transition group-hover:text-white">

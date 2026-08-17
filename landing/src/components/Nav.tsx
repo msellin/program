@@ -8,16 +8,16 @@ export function Nav() {
       <Link href="/" className="transition hover:opacity-80">
         <Wordmark />
       </Link>
-      <div className="flex items-center gap-4 text-sm text-white/60 sm:gap-6">
+      <div className="flex items-center gap-4 text-sm text-[var(--color-muted)] sm:gap-6">
         <Link
           href="/evidence"
-          className="hidden text-white/60 transition hover:text-white sm:inline"
+          className="hidden min-h-[44px] items-center text-[var(--color-muted)] transition hover:text-white sm:inline-flex"
         >
           Evidence
         </Link>
         <a
           href={`${APP_URL}/sign-in`}
-          className="rounded-full border border-white/15 bg-white/[0.03] px-4 py-1.5 text-white/90 backdrop-blur transition hover:border-white/40 hover:bg-white/[0.06] hover:text-white"
+          className="inline-flex min-h-[44px] items-center rounded-full border border-white/15 bg-white/[0.03] px-4 py-2 text-white/90 backdrop-blur transition hover:border-white/40 hover:bg-white/[0.06] hover:text-white"
         >
           Sign in
         </a>

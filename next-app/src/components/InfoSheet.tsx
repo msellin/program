@@ -49,7 +49,7 @@ export function InfoSheet({
             ×
           </button>
         </header>
-        <div className="p-4 text-[13.5px] leading-relaxed space-y-3">{children}</div>
+        <div className="p-4 text-sm leading-relaxed space-y-3">{children}</div>
       </div>
     </div>
   );

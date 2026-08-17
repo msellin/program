@@ -143,17 +143,20 @@ export async function runSimulationV2(
   });
   await page.evaluate(
     ({ slug, tier, tms, uid }) => {
-      const raw = localStorage.getItem("program.store.v2");
+      const raw = localStorage.getItem("program.log.v2");
       const store = raw ? JSON.parse(raw) : {
         version: 2,
         logs: {},
         training_maxes: {},
-        cycle: null,
+        cycle: { phase_id: null, cycle_number: 1, week_in_cycle: 1 },
         updated_at: Date.now(),
         scheduled_overrides: {},
         skipped: {},
         dismissed_proposals: {},
       };
+      if (store.cycle == null) {
+        store.cycle = { phase_id: null, cycle_number: 1, week_in_cycle: 1 };
+      }
       store.user_profile = {
         ...(store.user_profile ?? {}),
         uid: uid ?? store.user_profile?.uid,
@@ -170,7 +173,7 @@ export async function runSimulationV2(
       }
       store.training_maxes = { ...store.training_maxes, ...tms };
       store.updated_at = Date.now();
-      localStorage.setItem("program.store.v2", JSON.stringify(store));
+      localStorage.setItem("program.log.v2", JSON.stringify(store));
       localStorage.setItem("program.onboarding.done", "1");
     },
     { slug: programSlug, tier: tier ?? null, tms: INITIAL_TMS, uid: sessionUid },
@@ -197,10 +200,43 @@ export async function runSimulationV2(
     const jitter = archetype.rpeJitter;
 
     await page.evaluate(
-      ({ dateISO, decision, blockIds, symptoms, derivedState, note, tms, factor, baseRpe, jitter, itemsByBlock }) => {
-        const raw = localStorage.getItem("program.store.v2");
-        if (!raw) return;
-        const store = JSON.parse(raw);
+      ({ dateISO, decision, blockIds, symptoms, derivedState, note, tms, factor, baseRpe, jitter, itemsByBlock, slug, uid, tier }) => {
+        // Read local, or start from a valid baseline if StoreHydrator wiped
+        // us during the initial page.goto (see: reset-on-fresh-mount bug).
+        const raw = localStorage.getItem("program.log.v2");
+        const store = raw
+          ? JSON.parse(raw)
+          : {
+              version: 2,
+              logs: {},
+              training_maxes: {},
+              cycle: { phase_id: null, cycle_number: 1, week_in_cycle: 1 },
+              updated_at: Date.now(),
+              scheduled_overrides: {},
+              skipped: {},
+              dismissed_proposals: {},
+            };
+        // Re-stamp user_profile/tms/program every day — the reset can wipe
+        // user_profile.active_program_id even when logs survive.
+        store.user_profile = {
+          ...(store.user_profile ?? {}),
+          uid: uid ?? store.user_profile?.uid,
+          active_program_id: slug,
+          active_program_ids: [slug],
+          active_program_started_at:
+            store.user_profile?.active_program_started_at ?? new Date().toISOString(),
+          tier: "beta_forever",
+        };
+        if (tier) {
+          store.user_profile.program_states = {
+            ...(store.user_profile.program_states ?? {}),
+            [slug]: { ...(store.user_profile.program_states?.[slug] ?? {}), tier },
+          };
+        }
+        store.training_maxes = { ...tms, ...store.training_maxes };
+        if (store.cycle == null) {
+          store.cycle = { phase_id: null, cycle_number: 1, week_in_cycle: 1 };
+        }
 
         // Always write morning check + symptoms.
         store.logs = store.logs ?? {};
@@ -249,7 +285,7 @@ export async function runSimulationV2(
         }
 
         store.updated_at = Date.now();
-        localStorage.setItem("program.store.v2", JSON.stringify(store));
+        localStorage.setItem("program.log.v2", JSON.stringify(store));
       },
       {
         dateISO,
@@ -265,6 +301,9 @@ export async function runSimulationV2(
         itemsByBlock: Object.fromEntries(
           blockIds.map((bid) => [bid, itemsForBlock(program, bid)]),
         ),
+        slug: programSlug,
+        uid: sessionUid,
+        tier: tier ?? null,
       },
     );
 
@@ -281,7 +320,7 @@ export async function runSimulationV2(
       if (accept) {
         await page.evaluate(
           ({ cycleAvgFactor, dateISO }) => {
-            const raw = localStorage.getItem("program.store.v2");
+            const raw = localStorage.getItem("program.log.v2");
             if (!raw) return;
             const store = JSON.parse(raw);
             const tms = store.training_maxes ?? {};
@@ -309,7 +348,7 @@ export async function runSimulationV2(
               store.tm_history = store.tm_history ?? [];
               store.tm_history.push({ date: dateISO, snapshot: { ...tms }, source: "sim:cycle_end_accept" });
               store.updated_at = Date.now();
-              localStorage.setItem("program.store.v2", JSON.stringify(store));
+              localStorage.setItem("program.log.v2", JSON.stringify(store));
             }
           },
           { cycleAvgFactor, dateISO },
@@ -326,7 +365,7 @@ export async function runSimulationV2(
     }
   }
 
-  const finalStoreRaw = await page.evaluate(() => localStorage.getItem("program.store.v2"));
+  const finalStoreRaw = await page.evaluate(() => localStorage.getItem("program.log.v2"));
   return {
     archetypeId: archetype.id,
     programSlug,

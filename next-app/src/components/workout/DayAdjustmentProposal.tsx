@@ -3,7 +3,8 @@
 import { useMemo } from "react";
 import { useStore } from "@/lib/useStore";
 import { daySignals, proposedLoadMultiplier } from "@/lib/engine/note-signals";
-import { iso } from "@/lib/utils";
+import { iso, hapticTap } from "@/lib/utils";
+import { announce } from "@/lib/announce";
 
 /**
  * PROPOSAL — not auto-apply.
@@ -51,7 +52,7 @@ export function DayAdjustmentProposal({ date }: { date: string }) {
           <p className="font-mono text-[10px] uppercase tracking-widest text-slate mb-1">
             Not feeling 100% · ×{accepted.load_multiplier.toFixed(2)} applied
           </p>
-          <p className="text-[13.5px] text-ink">{accepted.reason}</p>
+          <p className="text-sm text-ink">{accepted.reason}</p>
           <p className="text-[12px] text-muted mt-1">
             Applies only to today&apos;s barbell suggestions. Rehab &amp; mobility work is unchanged.
           </p>
@@ -82,6 +83,7 @@ export function DayAdjustmentProposal({ date }: { date: string }) {
   return (
     <section
       aria-label="Not feeling 100% proposal"
+      data-day-proposal
       className="border border-amber/40 bg-amber/10 rounded-md p-3 space-y-2"
     >
       <p className="font-mono text-[10px] uppercase tracking-widest text-amber">
@@ -106,15 +108,24 @@ export function DayAdjustmentProposal({ date }: { date: string }) {
       <div className="flex flex-wrap gap-2 pt-1">
         <button
           type="button"
-          onClick={() => acceptDayAdjustment(date, proposal.multiplier, proposal.reason, "notes")}
-          className="font-mono text-[11.5px] uppercase tracking-wider px-3 py-2 rounded bg-amber text-ground hover:bg-amber/90"
+          onClick={(e) => {
+            hapticTap("medium");
+            (e.currentTarget.closest("[data-day-proposal]") as HTMLElement | null)?.classList.add(
+              "pulse-accept",
+            );
+            acceptDayAdjustment(date, proposal.multiplier, proposal.reason, "notes");
+            announce(
+              `Load adjustment applied: ${Math.round((1 - proposal.multiplier) * 100)}% lighter today.`,
+            );
+          }}
+          className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-amber text-ground hover:bg-amber/90"
         >
-          Apply ×{proposal.multiplier.toFixed(2)}
+          Apply {Math.round((1 - proposal.multiplier) * 100)}% lighter today
         </button>
         <button
           type="button"
           onClick={() => dismissProposal(date, proposalId)}
-          className="font-mono text-[11.5px] uppercase tracking-wider px-3 py-2 rounded border border-line hover:bg-line-soft"
+          className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line hover:bg-line-soft"
         >
           Not today
         </button>

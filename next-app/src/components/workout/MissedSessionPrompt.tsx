@@ -81,7 +81,7 @@ export function MissedSessionPrompt({
     <div className="rounded border border-amber/40 border-l-4 border-l-amber bg-amber/10 p-3 space-y-2">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
-          <p className="font-semibold text-strong text-[13.5px]">
+          <p className="font-semibold text-strong text-sm">
             Yesterday was a strength day — nothing logged.
           </p>
           <p className="text-[12px] text-muted mt-0.5 leading-snug">
@@ -108,16 +108,16 @@ export function MissedSessionPrompt({
               dismiss();
               onLogYesterday();
             }}
-            className="font-mono text-[11.5px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover min-h-[36px]"
+            className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover min-h-[36px]"
           >
-            Yes — log it now
+            Log yesterday now
           </button>
           <button
             type="button"
             onClick={() => setStage("skipChoice")}
-            className="font-mono text-[11.5px] uppercase tracking-wider px-3 py-2 rounded border border-line text-ink hover:bg-line-soft min-h-[36px]"
+            className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-ink hover:bg-line-soft min-h-[36px]"
           >
-            No — mark skipped
+            Mark yesterday skipped
           </button>
         </div>
       ) : (
@@ -131,7 +131,7 @@ export function MissedSessionPrompt({
             className="w-full text-left rounded border border-line hover:border-slate/40 bg-surface p-3 space-y-1"
           >
             <p className="font-semibold text-[13px] text-strong">Skip only</p>
-            <p className="text-[11.5px] text-muted leading-snug">
+            <p className="text-[11px] text-muted leading-snug">
               This session is lost. Rest of the week runs as scheduled. Progression order breaks if you&apos;re on a wave.
             </p>
           </button>
@@ -144,14 +144,14 @@ export function MissedSessionPrompt({
             className="w-full text-left rounded border border-bronze/50 bg-bronze/[0.06] p-3 space-y-1"
           >
             <p className="font-semibold text-[13px] text-strong">Skip &amp; shift the week</p>
-            <p className="text-[11.5px] text-muted leading-snug">
+            <p className="text-[11px] text-muted leading-snug">
               This session takes over the next scheduled strength day. Last day of the week drops. Recommended for wave-based programs.
             </p>
           </button>
           <button
             type="button"
             onClick={() => setStage("prompt")}
-            className="text-[11.5px] text-muted underline decoration-muted/40 hover:text-ink"
+            className="text-[11px] text-muted underline decoration-muted/40 hover:text-ink"
           >
             ← Back
           </button>

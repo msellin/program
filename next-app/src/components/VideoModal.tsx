@@ -78,7 +78,7 @@ export function VideoModal({
                     href={videoUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1 text-[12.5px] text-slate hover:text-ink"
+                    className="inline-flex items-center gap-1 text-[13px] text-slate hover:text-ink"
                   >
                     <ExternalLink size={12} />
                     Open on YouTube
@@ -88,10 +88,10 @@ export function VideoModal({
             </>
           ) : searchHref ? (
             <div className="p-5 text-center space-y-3">
-              <p className="text-[13.5px] text-ink">
+              <p className="text-sm text-ink">
                 No embedded demo yet for this exercise.
               </p>
-              <p className="text-[12.5px] text-muted">
+              <p className="text-[13px] text-muted">
                 Search YouTube for &quot;<span className="text-ink">{searchQuery}</span>&quot; —
                 opens in a new tab.
               </p>

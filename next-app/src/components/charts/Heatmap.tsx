@@ -23,7 +23,11 @@ type Cell = {
   isToday: boolean;
 };
 
-const WEEKS = 12;
+// 8 weeks × ~32px cell = ~285px wide at 393px mobile, comfortably fitting
+// the container. Was 12 weeks × ~26px which fell below Apple's 44px touch
+// target minimum when cells become `<button onDayClick>`. See app-mobile-ux
+// audit D3.
+const WEEKS = 8;
 const DAYS = WEEKS * 7;
 
 const STRENGTH_LIFTS = new Set([
@@ -88,7 +92,7 @@ function buildCells(store: Store): Cell[] {
   return cells;
 }
 
-export function Heatmap({ store }: { store: Store }) {
+export function Heatmap({ store, onDayClick }: { store: Store; onDayClick?: (date: string) => void }) {
   const cells = useMemo(() => buildCells(store), [store]);
   // Turn linear cells into a grid: rows = DOW (Mon..Sun), columns = week index
   const rows: Cell[][] = Array.from({ length: 7 }, () => []);
@@ -132,10 +136,29 @@ export function Heatmap({ store }: { store: Store }) {
             className="grid grid-flow-col gap-0.5"
             style={{
               gridTemplateRows: "repeat(7, 1fr)",
-              gridAutoColumns: "minmax(14px, 1fr)",
+              gridAutoColumns: "minmax(32px, 1fr)",
             }}
           >
-            {cells.map((c) => (
+            {cells.map((c) =>
+              onDayClick ? (
+                <button
+                  key={c.date}
+                  type="button"
+                  onClick={() => onDayClick(c.date)}
+                  aria-label={cellAria(c)}
+                  title={cellAria(c)}
+                  className={cn(
+                    "aspect-square rounded-[2px] transition-colors cursor-pointer hover:ring-1 hover:ring-slate/60",
+                    c.state === "green" && "bg-green",
+                    c.state === "amber" && "bg-amber",
+                    c.state === "red" && "bg-red",
+                    c.state === "accessory" && "bg-bronze/50",
+                    c.state === "skip" && "bg-line-soft border border-dashed border-line",
+                    c.state === "none" && "bg-line-soft",
+                    c.isToday && "ring-1 ring-bronze",
+                  )}
+                />
+              ) : (
               <span
                 key={c.date}
                 role="gridcell"
@@ -152,7 +175,8 @@ export function Heatmap({ store }: { store: Store }) {
                   c.isToday && "ring-1 ring-bronze",
                 )}
               />
-            ))}
+              ),
+            )}
           </div>
         </div>
       </div>

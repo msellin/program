@@ -2,6 +2,18 @@
 
 Ideas we've explicitly deferred. Not blocking current work. Captured here so nothing gets lost between context windows.
 
+## Landing — "Talk to founder" contact line
+
+**When surfaced:** 2026-08-16 landing review.
+
+**What:** small line under the beta CTA on `landing/src/components/sections/BetaCTA.tsx`: *"Questions? Email sellinmargus@gmail.com"*. No calendar, no form.
+
+**Why:** pre-beta, solo founder — 1:1 access is cheapest, highest-trust signal in health/rehab. Also produces qualitative feedback the tracker won't capture.
+
+**Precondition:** only add when Margus can commit to ~48h reply time. Dead link hurts more than none.
+
+**Email to use:** `sellinmargus@gmail.com` (not the dolmit address).
+
 ## Video upload + AI form analysis
 
 **When surfaced:** during the Engine Builder / skill-programs conversation, 2026-08-11. Explicitly future.

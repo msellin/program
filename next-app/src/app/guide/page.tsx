@@ -59,7 +59,7 @@ export default function GuidePage() {
           Deliberately submaximal — that headroom is what lets you progress without stalling. If TM
           is 110 kg, top set week 1 is 85% × 110 = 93.5 kg for 5+ reps.
         </Term>
-        <Term term="1RM">Your one-rep max. Only tested at cycle 4 end (Dec) and phase 6 (birthday).</Term>
+        <Term term="1RM">Your one-rep max. Only tested at the end of a full 4-cycle block and at program-defined peak points.</Term>
         <Term term="5RM">
           Heaviest weight you can move for 5 clean reps. Used in evaluation week to set the initial TM.
           Formula: TM = 5RM × 0.90.
@@ -109,7 +109,7 @@ export default function GuidePage() {
         </Row>
         <Row label="History">Activity heatmap, symptom trend, strength progression, and an expandable day log with set-level detail.</Row>
         <Row label="Profile">Signed-in identity, active plan(s), and a compact menu.</Row>
-        <p className="text-[12.5px] text-muted italic pt-2">
+        <p className="text-[13px] text-muted italic pt-2">
           These are the bottom-nav tabs. The rest live behind the ⋮ menu in the top right:
         </p>
         <Row label="Programs">The catalog. Browse, preview, start a program.</Row>
@@ -147,7 +147,7 @@ export default function GuidePage() {
           <li>Morning stiffness over 30 min that responds to movement not rest (screen for inflammatory pattern)</li>
           <li>Any injury with a clear mechanism you don&apos;t bounce back from in 72 h</li>
         </ul>
-        <p className="text-[12.5px] text-muted italic pt-2">
+        <p className="text-[13px] text-muted italic pt-2">
           Programs that already carry a specific clinical context (e.g. the anterior-hip
           case study) apply extra program-specific red flags on top of this general list.
         </p>

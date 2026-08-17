@@ -17,7 +17,7 @@ export function TodayMockup() {
             <span className="text-white/85">2 updates from yesterday</span>
             <span className="ml-auto text-white/40">tap</span>
           </div>
-          <div className="mt-2 text-[11px] text-white/60 leading-snug">
+          <div className="mt-2 text-[11px] text-[var(--color-muted)] leading-snug">
             Left hip stiffness noted 2× · load ×0.90 proposed
           </div>
         </div>
@@ -26,7 +26,7 @@ export function TodayMockup() {
         <div>
           <div className="mono-caps">Engine Builder · Week 3 of 8</div>
           <div className="mt-1 font-semibold text-white">Aerobic base · Norwegian 4×4</div>
-          <div className="mt-0.5 text-xs text-white/60">
+          <div className="mt-0.5 text-xs text-[var(--color-muted)]">
             HR 90-95% · row or ski-erg · fuelled
           </div>
         </div>
@@ -36,7 +36,7 @@ export function TodayMockup() {
           <div className="flex items-start justify-between">
             <div>
               <div className="text-sm font-semibold text-white">4 × 4 min interval</div>
-              <div className="mt-0.5 text-[11px] text-white/60">3 min active rest</div>
+              <div className="mt-0.5 text-[11px] text-[var(--color-muted)]">3 min active rest</div>
             </div>
             <span className="rounded-full border border-[var(--color-bronze)]/40 bg-[var(--color-bronze)]/[0.08] px-2 py-0.5 text-[10px] font-medium text-[var(--color-bronze-hi)]">
               Interval
@@ -66,7 +66,7 @@ export function TodayMockup() {
                 <span className="rounded-md bg-[var(--color-bronze)]/20 px-2 py-1 text-[9.5px] font-semibold text-[var(--color-bronze-hi)]">
                   Accept
                 </span>
-                <span className="rounded-md border border-white/10 px-2 py-1 text-[9.5px] text-white/60">
+                <span className="rounded-md border border-white/10 px-2 py-1 text-[9.5px] text-[var(--color-muted)]">
                   Skip
                 </span>
               </div>

@@ -15,7 +15,6 @@ import { cn } from "@/lib/utils";
 import dynamic from "next/dynamic";
 import type { Program, Exercise, Milestone } from "@/lib/schemas";
 
-type TabId = "lifts" | "hip" | "insights";
 
 // Lazy — Recharts is ~112 KB gz, no reason to prefetch to Today
 const SymptomLoadChart = dynamic(
@@ -87,7 +86,7 @@ export default function ProgressPage() {
         </p>
         <a
           href="/programs"
-          className="inline-block font-mono text-[11.5px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground"
+          className="inline-block font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground"
         >
           Start a program →
         </a>
@@ -158,41 +157,20 @@ function ProgressBody({
   // an empty state for them. Strength / concurrent land on Lifts. Skill
   // programs also land on Insights.
   const activeSlugForDefault = store.user_profile?.active_program_id;
-  const defaultTab: TabId =
-    activeSlugForDefault === "engine-builder" ||
-    activeSlugForDefault === "rowing-2k-test-prep" ||
-    activeSlugForDefault === "handstand-walk" ||
-    activeSlugForDefault === "overhead-mobility"
-      ? "insights"
-      : "lifts";
-  const [tab, setTab] = useState<TabId>(defaultTab);
-  const [tmInfoOpen, setTmInfoOpen] = useState(false);
-  const [milestonesInfoOpen, setMilestonesInfoOpen] = useState(false);
   const [insightsInfoOpen, setInsightsInfoOpen] = useState(false);
 
-  // Hip tab is anterior-hip-specific — the HipProgressTile reads
-  // hip_assessment_v1 responses and shows the monthly hip check score. Aerobic
-  // and skill programs have no strength surface at all — Lifts renders an empty
-  // state that reads like a placeholder. Hide it for those.
+  // Progress used to be a 3-tab surface (Lifts / Hip / Insights). The tab-swap
+  // hid the strongest content (retest metrics + weekly narrative) behind an
+  // extra tap, and the Lifts tab rendered a placeholder for aerobic/skill
+  // users. Flattened to single scroll — Insights first (most important),
+  // then Lifts if the program has strength content, then Hip if hip.
   const activeSlug = activeSlugForDefault;
-  const showHipTab = activeSlug === "anterior-hip-rebuild";
+  const showHipSection = activeSlug === "anterior-hip-rebuild";
   const hideLifts =
     activeSlug === "engine-builder" ||
     activeSlug === "rowing-2k-test-prep" ||
     activeSlug === "handstand-walk" ||
     activeSlug === "overhead-mobility";
-  const tabs: Array<{ id: TabId; label: string }> = showHipTab
-    ? [
-        { id: "lifts", label: "Lifts" },
-        { id: "hip", label: "Hip" },
-        { id: "insights", label: "Insights" },
-      ]
-    : hideLifts
-    ? [{ id: "insights", label: "Insights" }]
-    : [
-        { id: "lifts", label: "Lifts" },
-        { id: "insights", label: "Insights" },
-      ];
 
   return (
     <div className="space-y-5 pt-4">
@@ -206,157 +184,54 @@ function ProgressBody({
         </a>
       </header>
 
-      <nav
-        aria-label="Progress sections"
-        role="tablist"
-        className="flex items-center gap-1 border-b border-line-soft -mx-1 px-1 overflow-x-auto"
-      >
-        {tabs.map((t) => (
-          <button
-            key={t.id}
-            role="tab"
-            aria-selected={tab === t.id}
-            onClick={() => setTab(t.id)}
-            className={cn(
-              "min-h-[44px] px-3 py-2 text-[14px] border-b-2 -mb-px transition-colors",
-              tab === t.id
-                ? "border-bronze text-strong font-semibold"
-                : "border-transparent text-muted hover:text-ink",
-            )}
-          >
-            {t.label}
-          </button>
-        ))}
-      </nav>
+      {/* Progress used to be a 3-tab surface — flattened to single scroll.
+          Order: engine banners (surface adaptive proposals up-front) →
+          Insights (strongest content) → Lifts if applicable → Hip if hip. */}
 
-      {tab === "lifts" ? (
-        <div className="space-y-6">
-          {/* Adaptive engine banners */}
-          {pauseSignal.recommendation === "calibration" ? (
-            <EngineBanner
-              tone="amber"
-              title={`Welcome back — you've been away ${pauseSignal.gapDays} days`}
-              body={pauseSignal.reasoning}
-            />
-          ) : null}
-          {cycleEval && cycleEval.recommendation.length ? (
-            <EngineBanner
-              tone={cycleEval.worstState === "red" ? "red" : cycleEval.worstState === "amber" ? "amber" : "green"}
-              title={`Cycle end — ${cycleEval.reasoning}`}
-              body={
-                <ul className="mt-2 space-y-1">
-                  {cycleEval.recommendation.map((r) => (
-                    <li key={r.lift} className="font-mono text-[12px]">
-                      <span>{r.lift}: </span>
-                      <span className={r.delta >= 0 ? "text-green" : "text-red"}>
-                        {r.currentTM} → {r.newTM} kg ({r.delta >= 0 ? "+" : ""}
-                        {r.delta})
-                      </span>
-                      <span className="text-muted italic ml-1">— {r.reason}</span>
-                    </li>
-                  ))}
-                </ul>
-              }
-              action={{
-                label: "Apply all",
-                onClick: () => cycleEval.recommendation.forEach((r) => setTM(r.lift, r.newTM)),
-              }}
-            />
-          ) : null}
-          {waypointStatus.recommendation === "accelerate" ? (
-            <EngineBanner
-              tone="green"
-              title={`You're ahead of the plan — ${waypointStatus.beatenEarly.length} milestone${waypointStatus.beatenEarly.length > 1 ? "s" : ""} beaten early`}
-              body={waypointStatus.reasoning}
-            />
-          ) : null}
-
-          {/* TM editor */}
-          <section className="space-y-3">
-            <div className="flex items-baseline justify-between gap-2">
-              <h2 className="text-[15px] font-semibold text-strong">Training maxes</h2>
-              {(tmMeta.note || evalWeek) ? (
-                <button
-                  type="button"
-                  onClick={() => setTmInfoOpen(true)}
-                  aria-label="About training maxes"
-                  className="text-muted hover:text-ink w-9 h-9 -my-1 flex items-center justify-center rounded"
-                >
-                  <Info size={16} strokeWidth={1.75} />
-                </button>
-              ) : null}
-            </div>
-            <div className="rounded border border-line bg-surface divide-y divide-line-soft">
-              {(() => {
-                const lifts = primaryLiftsForProgram(_program, store.training_maxes);
-                const visible = lifts.filter((id) => byId[id]);
-                if (visible.length === 0) {
-                  return (
-                    <div className="px-3 py-4 space-y-2">
-                      <p className="text-[13.5px] text-strong">
-                        No training maxes yet.
-                      </p>
-                      <p className="text-[12.5px] text-muted italic">
-                        Enter a training max to see progress against milestones — it appears here as soon as it&apos;s set.
-                      </p>
-                    </div>
-                  );
-                }
-                return visible.map((id) => {
-                  const ex = byId[id]!;
-                  const val = store.training_maxes[id] ?? "";
-                  return (
-                    <div key={id} className="grid grid-cols-[1fr_90px_40px] items-center gap-3 px-3 py-3">
-                      <p className="font-medium text-sm">{ex.name}</p>
-                      <DebouncedTMInput id={id} initialValue={val} onCommit={setTM} />
-                      <span className="font-mono text-[11px] text-muted">kg</span>
-                    </div>
-                  );
-                });
-              })()}
-            </div>
-            {tmMeta.progression_rule ? (
-              <p className="text-[12px] text-muted italic">{tmMeta.progression_rule as string}</p>
-            ) : null}
-          </section>
-
-          {/* Milestones */}
-          {targets?.milestones ? (
-            <section className="space-y-3">
-              <div className="flex items-baseline justify-between gap-3">
-                <div className="flex items-baseline gap-2">
-                  <h2 className="text-[15px] font-semibold text-strong">Milestones</h2>
-                  {targets.note ? (
-                    <button
-                      type="button"
-                      onClick={() => setMilestonesInfoOpen(true)}
-                      aria-label="About milestones"
-                      className="text-muted hover:text-ink w-9 h-9 -my-1 flex items-center justify-center rounded"
-                    >
-                      <Info size={16} strokeWidth={1.75} />
-                    </button>
-                  ) : null}
-                </div>
-                {targets.target_date ? (
-                  <span className="font-mono text-[11px] text-muted">→ {targets.target_date}</span>
-                ) : null}
-              </div>
-              <MilestoneTable
-                milestones={targets.milestones}
-                tms={store.training_maxes}
-                byId={byId}
-                stretched={stretchTargets}
-              />
-            </section>
-          ) : null}
-        </div>
+      {/* Engine banners — pause / cycle-end / accelerate. Always visible when
+          they fire, regardless of program shape. */}
+      {pauseSignal.recommendation === "calibration" ? (
+        <EngineBanner
+          tone="amber"
+          title={`Welcome back — you've been away ${pauseSignal.gapDays} days`}
+          body={pauseSignal.reasoning}
+        />
+      ) : null}
+      {cycleEval && cycleEval.recommendation.length ? (
+        <EngineBanner
+          tone={cycleEval.worstState === "red" ? "red" : cycleEval.worstState === "amber" ? "amber" : "green"}
+          title={`Cycle end — ${cycleEval.reasoning}`}
+          body={
+            <ul className="mt-2 space-y-1">
+              {cycleEval.recommendation.map((r) => (
+                <li key={r.lift} className="font-mono text-[12px]">
+                  <span>{r.lift}: </span>
+                  <span className={r.delta >= 0 ? "text-green" : "text-red"}>
+                    {r.currentTM} → {r.newTM} kg ({r.delta >= 0 ? "+" : ""}
+                    {r.delta})
+                  </span>
+                  <span className="text-muted italic ml-1">— {r.reason}</span>
+                </li>
+              ))}
+            </ul>
+          }
+          action={{
+            label: "Apply all TM changes",
+            onClick: () => cycleEval.recommendation.forEach((r) => setTM(r.lift, r.newTM)),
+          }}
+        />
+      ) : null}
+      {waypointStatus.recommendation === "accelerate" ? (
+        <EngineBanner
+          tone="green"
+          title={`You're ahead of the plan — ${waypointStatus.beatenEarly.length} milestone${waypointStatus.beatenEarly.length > 1 ? "s" : ""} beaten early`}
+          body={waypointStatus.reasoning}
+        />
       ) : null}
 
-      {tab === "hip" ? <HipProgressTile /> : null}
-
-      {tab === "insights" ? (
-        <div className="space-y-5">
-          <p className="text-[12.5px] text-muted italic -mb-2">
+      {/* SECTION 1 — Insights (retest metrics + weekly narrative + charts). */}
+      <div className="space-y-5">
+          <p className="text-[13px] text-muted italic -mb-2">
             {activeSlug === "concurrent-strength-maintenance"
               ? "Concurrent training indicators — HR trend, weekly minutes, strength retention, retest deltas."
               : activeSlug === "engine-builder"
@@ -412,25 +287,77 @@ function ProgressBody({
             })()
           ) : null}
         </div>
+
+      {/* SECTION 2 — Lifts (TM editor + milestones). Rendered only for programs
+          with strength content; aerobic + skill programs skip this entirely. */}
+      {!hideLifts ? (
+        <div className="space-y-6 pt-6 border-t border-line-soft">
+          <section className="space-y-3">
+            <div className="flex items-baseline justify-between gap-2">
+              <h2 className="text-[15px] font-semibold text-strong">Training maxes</h2>
+            </div>
+            <div className="rounded border border-line bg-surface divide-y divide-line-soft">
+              {(() => {
+                const lifts = primaryLiftsForProgram(_program, store.training_maxes);
+                const visible = lifts.filter((id) => byId[id]);
+                if (visible.length === 0) {
+                  return (
+                    <div className="px-3 py-4 space-y-2">
+                      <p className="text-sm text-strong">
+                        No training maxes yet.
+                      </p>
+                      <p className="text-[13px] text-muted italic">
+                        Enter a training max to see progress against milestones — it appears here as soon as it&apos;s set.
+                      </p>
+                    </div>
+                  );
+                }
+                return visible.map((id) => {
+                  const ex = byId[id]!;
+                  const val = store.training_maxes[id] ?? "";
+                  return (
+                    <div key={id} className="grid grid-cols-[1fr_90px_40px] items-center gap-3 px-3 py-3">
+                      <p className="font-medium text-sm">{ex.name}</p>
+                      <DebouncedTMInput id={id} initialValue={val} onCommit={setTM} />
+                      <span className="font-mono text-[11px] text-muted">kg</span>
+                    </div>
+                  );
+                });
+              })()}
+            </div>
+            {tmMeta.progression_rule ? (
+              <p className="text-[12px] text-muted italic">{tmMeta.progression_rule as string}</p>
+            ) : null}
+          </section>
+
+          {targets?.milestones ? (
+            <section className="space-y-3">
+              <div className="flex items-baseline justify-between gap-3">
+                <div className="flex items-baseline gap-2">
+                  <h2 className="text-[15px] font-semibold text-strong">Milestones</h2>
+                </div>
+                {targets.target_date ? (
+                  <span className="font-mono text-[11px] text-muted">→ {targets.target_date}</span>
+                ) : null}
+              </div>
+              <MilestoneTable
+                milestones={targets.milestones}
+                tms={store.training_maxes}
+                byId={byId}
+                stretched={stretchTargets}
+              />
+            </section>
+          ) : null}
+        </div>
       ) : null}
 
-      {tmInfoOpen ? (
-        <InfoSheet title="Training maxes" onClose={() => setTmInfoOpen(false)}>
-          {tmMeta.note ? <p>{tmMeta.note as string}</p> : null}
-          {evalWeek ? (
-            <div>
-              <p className="font-semibold text-strong">Evaluation week</p>
-              <p className="text-muted mt-1">{evalWeek.protocol}</p>
-              <p className="text-muted italic mt-1">{evalWeek.tm_formula}</p>
-            </div>
-          ) : null}
-        </InfoSheet>
+      {/* SECTION 3 — Hip (anterior-hip only). */}
+      {showHipSection ? (
+        <div className="pt-6 border-t border-line-soft">
+          <HipProgressTile />
+        </div>
       ) : null}
-      {milestonesInfoOpen && targets?.note ? (
-        <InfoSheet title="Milestones" onClose={() => setMilestonesInfoOpen(false)}>
-          <p>{targets.note}</p>
-        </InfoSheet>
-      ) : null}
+
       {insightsInfoOpen ? (
         <InfoSheet title="Symptom vs load" onClose={() => setInsightsInfoOpen(false)}>
           <p>
@@ -531,11 +458,11 @@ function MilestoneLiftGroup({
         <div className="flex-1 min-w-0">
           <div className="flex items-baseline justify-between gap-2">
             <p className="font-medium text-sm text-strong truncate">{ex?.name ?? lift}</p>
-            <span className="font-mono text-[10.5px] text-muted flex-shrink-0">
+            <span className="font-mono text-[10px] text-muted flex-shrink-0">
               {totalBeaten}/{sorted.length}
             </span>
           </div>
-          <p className="text-[11.5px] text-muted mt-0.5">
+          <p className="text-[11px] text-muted mt-0.5">
             {currentTM != null ? `TM ${currentTM} kg` : "TM —"}
             {next ? (
               <>
@@ -581,7 +508,7 @@ function MilestoneLiftGroup({
                 className="px-3 py-2.5 pl-10 flex flex-wrap items-baseline justify-between gap-3"
               >
                 <div className="min-w-0">
-                  <p className="text-[11.5px] text-muted">
+                  <p className="text-[11px] text-muted">
                     {m.date} · {m.phase.replace(/^phase_/, "").replace(/_/g, " ")}
                   </p>
                   <p className="text-sm mt-0.5">
@@ -698,7 +625,7 @@ function MilestoneProgressBar({
           });
         })()}
       </div>
-      <p className="text-[10.5px] text-muted font-mono">
+      <p className="text-[10px] text-muted font-mono">
         Roadmap {overallPct}%
         {finalPct != null ? (
           <>
@@ -758,7 +685,7 @@ function DebouncedTMInput({
         const n = Number(local);
         if (isFinite(n) && n > 0 && n <= 500) onCommit(id, n);
       }}
-      className="w-full font-mono text-sm px-2 py-1.5 border border-line rounded bg-surface text-right focus:outline-none focus:ring-2 focus:ring-bronze/40 focus:border-bronze min-h-[44px]"
+      className="w-full font-mono text-sm px-2 py-1.5 border border-line rounded bg-surface text-right focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze min-h-[44px]"
     />
   );
 }

@@ -6,6 +6,7 @@ import { ChevronLeft } from "lucide-react";
 import { useStore } from "@/lib/useStore";
 import { storeSchema } from "@/lib/schemas";
 import { today } from "@/lib/utils";
+import { ConfirmSheet } from "@/components/ConfirmSheet";
 import type { Store } from "@/lib/schemas";
 
 export default function DataPage() {
@@ -14,6 +15,12 @@ export default function DataPage() {
   const replace = useStore((s) => s.replaceStore);
   const wipe = useStore((s) => s.wipe);
   const [copyLabel, setCopyLabel] = useState("Copy to clipboard");
+  const [confirmWipe, setConfirmWipe] = useState(false);
+  const [pendingImport, setPendingImport] = useState<{
+    data: Store;
+    source: "file" | "paste";
+    onDone?: () => void;
+  } | null>(null);
   const shareSupported =
     typeof navigator !== "undefined" && typeof navigator.share === "function";
 
@@ -86,23 +93,7 @@ export default function DataPage() {
           );
           return;
         }
-        const ok = confirm(
-          `Replace current log with imported file?\nCurrent: ${nLogs} days.\nImported: ${Object.keys(result.data.logs).length} days.\nTraining maxes: ${Object.keys(result.data.training_maxes).length}.`,
-        );
-        if (!ok) return;
-        try {
-          replace(result.data);
-          alert("Import complete.");
-        } catch (writeErr) {
-          const msg = writeErr instanceof Error ? writeErr.message : String(writeErr);
-          if (/quota/i.test(msg)) {
-            alert(
-              "Import failed — localStorage quota exceeded. Your current log was NOT replaced. Wipe first, then re-import.",
-            );
-          } else {
-            alert("Import failed on save: " + msg);
-          }
-        }
+        setPendingImport({ data: result.data, source: "file" });
       } catch (err) {
         alert("Import failed: " + (err instanceof Error ? err.message : String(err)));
       }
@@ -140,7 +131,7 @@ export default function DataPage() {
               onClick={shareLog}
               className="px-3 py-2 border border-line rounded bg-surface hover:bg-line-soft text-sm"
             >
-              Share
+              Share log
             </button>
           ) : null}
           <button
@@ -171,21 +162,19 @@ export default function DataPage() {
           </label>
           <button
             type="button"
-            onClick={() => {
-              if (
-                confirm(
-                  "Wipe the local log completely? This clears exercises, symptoms, TMs, and stretch targets. Cannot be undone (export first).",
-                )
-              ) {
-                wipe();
-              }
-            }}
+            onClick={() => setConfirmWipe(true)}
             className="px-3 py-2 border border-red text-red rounded bg-surface hover:bg-red hover:text-surface transition-colors text-sm ml-auto"
           >
             Wipe local log
           </button>
         </div>
-        <PasteImport onImported={() => setCopyLabel("Copy to clipboard")} currentLogCount={nLogs} onReplace={replace} />
+        <PasteImport
+          onImported={() => setCopyLabel("Copy to clipboard")}
+          currentLogCount={nLogs}
+          onRequestConfirm={(data, onDone) =>
+            setPendingImport({ data, source: "paste", onDone })
+          }
+        />
         <p className="text-[12px] text-muted leading-relaxed">
           <strong>On mobile:</strong> tap <em>Share</em> → AirDrop / Messages / Files to save a
           backup.<br />
@@ -193,6 +182,50 @@ export default function DataPage() {
         </p>
       </section>
 
+      <ConfirmSheet
+        open={confirmWipe}
+        title="Wipe the local log?"
+        body="Clears exercises, symptoms, TMs, and stretch targets. Cannot be undone — export first if you want a backup."
+        confirmLabel="Wipe"
+        danger
+        onConfirm={() => {
+          setConfirmWipe(false);
+          wipe();
+        }}
+        onCancel={() => setConfirmWipe(false)}
+      />
+
+      <ConfirmSheet
+        open={pendingImport != null}
+        title={pendingImport?.source === "paste" ? "Replace log with pasted data?" : "Replace log with imported file?"}
+        body={
+          pendingImport
+            ? `Current: ${nLogs} days. Incoming: ${Object.keys(pendingImport.data.logs).length} days. Training maxes: ${Object.keys(pendingImport.data.training_maxes).length}.`
+            : ""
+        }
+        confirmLabel="Replace"
+        danger
+        onConfirm={() => {
+          if (!pendingImport) return;
+          const { data, source, onDone } = pendingImport;
+          setPendingImport(null);
+          try {
+            replace(data);
+            if (source === "file") alert("Import complete.");
+            onDone?.();
+          } catch (writeErr) {
+            const msg = writeErr instanceof Error ? writeErr.message : String(writeErr);
+            if (/quota/i.test(msg)) {
+              alert(
+                "Import failed — localStorage quota exceeded. Your current log was NOT replaced. Wipe first, then re-import.",
+              );
+            } else {
+              alert("Import failed on save: " + msg);
+            }
+          }
+        }}
+        onCancel={() => setPendingImport(null)}
+      />
     </div>
   );
 }
@@ -200,11 +233,11 @@ export default function DataPage() {
 function PasteImport({
   onImported,
   currentLogCount,
-  onReplace,
+  onRequestConfirm,
 }: {
   onImported: () => void;
   currentLogCount: number;
-  onReplace: (next: Store) => void;
+  onRequestConfirm: (data: Store, onDone: () => void) => void;
 }) {
   const [text, setText] = useState("");
   const [msg, setMsg] = useState<string | null>(null);
@@ -224,19 +257,11 @@ function PasteImport({
         );
         return;
       }
-      const ok = confirm(
-        `Replace current log with pasted data?\nCurrent: ${currentLogCount} days.\nIncoming: ${Object.keys(result.data.logs).length} days.\nTraining maxes: ${Object.keys(result.data.training_maxes).length}.`,
-      );
-      if (!ok) return;
-      try {
-        onReplace(result.data);
+      onRequestConfirm(result.data, () => {
         setText("");
         setMsg(`Imported ${Object.keys(result.data.logs).length} days.`);
         onImported();
-      } catch (writeErr) {
-        const m = writeErr instanceof Error ? writeErr.message : String(writeErr);
-        setMsg(/quota/i.test(m) ? "localStorage quota exceeded. Nothing changed." : "Save failed: " + m);
-      }
+      });
     } catch (e) {
       setMsg("Not valid JSON: " + (e instanceof Error ? e.message : String(e)));
     }
@@ -260,7 +285,7 @@ function PasteImport({
         onChange={(e) => setText(e.target.value)}
         rows={3}
         placeholder="Paste your program.log.v2 JSON here…"
-        className="w-full font-mono text-[12px] px-2 py-2 border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze/40 focus:border-bronze min-h-[64px] resize-vertical"
+        className="w-full font-mono text-[12px] px-2 py-2 border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze min-h-[64px] resize-vertical"
       />
       {msg ? (
         <p className={/imported|success/i.test(msg) ? "text-[12px] text-green" : "text-[12px] text-red"}>{msg}</p>

@@ -13,6 +13,7 @@ import { SignalsStrip } from "@/components/workout/SignalsStrip";
 import { RunSlotCard } from "@/components/workout/RunSlotCard";
 import { MissedSessionPrompt } from "@/components/workout/MissedSessionPrompt";
 import { TierAdvanceProposal } from "@/components/workout/TierAdvanceProposal";
+import { ConfirmSheet } from "@/components/ConfirmSheet";
 import { useStore } from "@/lib/useStore";
 import { today as todayISO } from "@/lib/utils";
 import {
@@ -121,30 +122,13 @@ export default function TodayPage() {
   const allBlocks = groups.flatMap((g) => g.blocks);
   const groupsWithBlocks = groups.filter((g) => g.blocks.length > 0);
   const multipleProgramsToday = groupsWithBlocks.length >= 2;
-  const isToday = activeDate === todayISO();
 
   return (
     <div className="space-y-5">
-      <header className="pt-4 flex items-baseline justify-between gap-3">
-        <div className="min-w-0">
-          <h1 className="text-3xl font-semibold tracking-tight text-strong truncate">
-            {isToday ? "Today" : "Session"}
-          </h1>
-          {phase ? (
-            <p className="text-[13px] text-muted mt-0.5">
-              {humanPhaseName(phase.name)}
-              {phaseProgress(phase, activeDate) ? (
-                <span className="ml-1.5 text-[12.5px] text-slate">
-                  · {phaseProgress(phase, activeDate)}
-                </span>
-              ) : null}
-            </p>
-          ) : null}
-        </div>
-        {/* Stethoscope + ⋮ overflow now live in the global AppShell chrome so
-            they're available regardless of Today's active-program state (F-002).
-            No inline copy needed here. */}
-      </header>
+      {/* Big top slab is gone. Screen-title H1 was showing the same word ("Today")
+          the bottom-nav tab already highlights. Phase context now rides under
+          the DateNav as a single compact line. Reclaims ~120px of fold. */}
+      <h1 className="sr-only">Today</h1>
 
       <YourPlanCard program={primary} />
 
@@ -172,6 +156,15 @@ export default function TodayPage() {
 
       <DateNav date={activeDate} onChange={setActiveDate} />
 
+      {phase ? (
+        <p className="-mt-3 text-[13px] text-muted leading-tight">
+          <span className="text-strong">{humanPhaseName(phase.name)}</span>
+          {phaseProgress(phase, activeDate) ? (
+            <span className="text-slate"> · {phaseProgress(phase, activeDate)}</span>
+          ) : null}
+        </p>
+      ) : null}
+
       <HeroStateCard date={activeDate} />
 
       <SignalsStrip program={primary} date={activeDate} />
@@ -184,7 +177,7 @@ export default function TodayPage() {
           isn't read as an error. Read the phase's is_taper flag which we set
           for test-prep programs (currently just rowing-2k-test-prep). */}
       {phase && (phase as unknown as { is_taper?: boolean }).is_taper ? (
-        <div className="rounded border border-slate/40 bg-slate/10 border-l-4 border-l-slate px-3 py-2 text-[12.5px]">
+        <div className="rounded border border-slate/40 bg-slate/10 border-l-4 border-l-slate px-3 py-2 text-[13px]">
           <p className="font-semibold text-slate">Taper week.</p>
           <p className="text-muted mt-0.5">
             Volume drops ~45%, intensity holds. This is where the ~3% peak uplift comes from — resist the urge to add sessions.
@@ -216,7 +209,7 @@ export default function TodayPage() {
           const strengthToday = allBlocks.some((b) => (b.category ?? "strength") === "strength");
           if (!(hardYesterday && strengthToday)) return null;
           return (
-            <div className="rounded border border-amber/40 bg-amber/10 border-l-4 border-l-amber px-3 py-2 text-[12.5px]">
+            <div className="rounded border border-amber/40 bg-amber/10 border-l-4 border-l-amber px-3 py-2 text-[13px]">
               <p className="font-semibold text-amber">Interference window.</p>
               <p className="text-muted mt-0.5">
                 Yesterday had a hard aerobic session. The concurrent-training
@@ -232,7 +225,7 @@ export default function TodayPage() {
           shoulder pain stops the session. Surface it on Today so it's not just
           buried in intake. */}
       {primary.slug === "handstand-walk" ? (
-        <div className="rounded border border-amber/40 bg-amber/10 border-l-4 border-l-amber px-3 py-2 text-[12.5px]">
+        <div className="rounded border border-amber/40 bg-amber/10 border-l-4 border-l-amber px-3 py-2 text-[13px]">
           <p className="font-semibold text-amber">Shoulder pain stops the session.</p>
           <p className="text-muted mt-0.5">
             Any sharp shoulder pain during handstand work — end the block, log it on
@@ -252,7 +245,7 @@ export default function TodayPage() {
           const week = Math.floor(daysIn / 7) + 1;
           const mode = week <= 2 ? "blocked practice — drills in the composed order" : "random practice — order shuffled by the seed";
           return (
-            <p className="text-[11.5px] text-muted font-mono">
+            <p className="text-[11px] text-muted font-mono">
               Week {week} · {mode}. <span className="text-muted/70">Shea &amp; Morgan 1979.</span>
             </p>
           );
@@ -260,7 +253,7 @@ export default function TodayPage() {
       ) : null}
 
       {multipleProgramsToday ? (
-        <div className="rounded border border-amber/40 bg-amber/10 px-3 py-2.5 text-[12.5px]">
+        <div className="rounded border border-amber/40 bg-amber/10 px-3 py-2.5 text-[13px]">
           <p className="text-amber-strong">
             <span className="font-semibold">Two programs scheduled today.</span>{" "}
             If it&apos;s too much, snooze one from{" "}
@@ -367,7 +360,7 @@ function NoActiveProgram() {
       </header>
       <Link
         href="/programs"
-        className="inline-block font-mono text-[11.5px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground"
+        className="inline-block font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground"
       >
         Browse programs →
       </Link>
@@ -438,7 +431,7 @@ function RowingPersonalisedTargets({
   }
   if (!targets.length) return null;
   return (
-    <div className="rounded border border-bronze/30 bg-bronze/5 px-3 py-2 text-[12.5px]">
+    <div className="rounded border border-bronze/30 bg-bronze/5 px-3 py-2 text-[13px]">
       <p className="mono-caps mb-1 text-bronze">Your target</p>
       {targets.map((t) => (
         <p key={t.label} className="text-ink">
@@ -446,7 +439,7 @@ function RowingPersonalisedTargets({
           <span className="font-mono font-semibold">{t.pace}</span>
         </p>
       ))}
-      <p className="mt-1 text-[10.5px] text-muted italic">
+      <p className="mt-1 text-[10px] text-muted italic">
         Derived from your intake&apos;s current 2K. Update on Progress to refine.
       </p>
     </div>
@@ -473,6 +466,7 @@ function LogSessionShortcut({ date }: { date: string }) {
 function GraduationCard({ program }: { program: Program }) {
   const store = useStore((s) => s.store);
   const removeActiveProgram = useStore((s) => s.removeActiveProgram);
+  const [confirmEnd, setConfirmEnd] = useState(false);
   const userTier = program.slug
     ? store.user_profile?.program_states?.[program.slug]?.tier
     : undefined;
@@ -500,14 +494,14 @@ function GraduationCard({ program }: { program: Program }) {
           <p className="font-mono text-[10px] uppercase tracking-widest text-bronze">You finished</p>
           <h2 className="text-lg font-semibold text-strong mt-1">{programName}</h2>
           {weeksIn ? (
-            <p className="text-[12.5px] text-muted mt-0.5">
+            <p className="text-[13px] text-muted mt-0.5">
               {weeksIn} weeks logged. Nice.
             </p>
           ) : null}
         </div>
         {displayable.length ? (
           <div className="rounded border border-line-soft bg-surface p-3 space-y-2">
-            <p className="font-mono text-[10.5px] uppercase tracking-wider text-muted">Where you landed</p>
+            <p className="font-mono text-[10px] uppercase tracking-wider text-muted">Where you landed</p>
             <ul className="space-y-1.5">
               {displayable.map((m) => {
                 const delta = deltaFromBaseline(m);
@@ -529,40 +523,44 @@ function GraduationCard({ program }: { program: Program }) {
             </ul>
           </div>
         ) : (
-          <p className="text-[12.5px] text-muted italic">
+          <p className="text-[13px] text-muted italic">
             No retest metrics recorded — head to Progress to log your final numbers.
           </p>
         )}
         <div className="flex flex-wrap gap-2 pt-1">
           <Link
             href="/progress"
-            className="font-mono text-[11.5px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover min-h-[36px]"
+            className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover min-h-[36px]"
           >
             Retest — log your numbers
           </Link>
           <Link
             href="/programs"
-            className="font-mono text-[11.5px] uppercase tracking-wider px-3 py-2 rounded border border-slate/60 text-slate hover:bg-slate/10 min-h-[36px]"
+            className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-slate/60 text-slate hover:bg-slate/10 min-h-[36px]"
           >
             Pick your next program →
           </Link>
         </div>
         <button
           type="button"
-          onClick={() => {
-            if (
-              confirm(
-                `End "${programName}"? Your log history stays. You'll return to the catalog to pick another.`,
-              )
-            ) {
-              if (program.slug) removeActiveProgram(program.slug);
-            }
-          }}
+          onClick={() => setConfirmEnd(true)}
           className="text-[12px] text-muted underline decoration-muted/40 hover:text-red hover:decoration-red pt-1"
         >
           End this program
         </button>
       </div>
+      <ConfirmSheet
+        open={confirmEnd}
+        title={`End "${programName}"?`}
+        body="Your log history stays. You'll return to the catalog to pick another."
+        confirmLabel="End program"
+        danger
+        onConfirm={() => {
+          setConfirmEnd(false);
+          if (program.slug) removeActiveProgram(program.slug);
+        }}
+        onCancel={() => setConfirmEnd(false)}
+      />
     </div>
   );
 }
@@ -616,7 +614,7 @@ function RestDayCard({
       <div className="rounded border border-bronze/30 border-l-4 border-l-bronze bg-bronze/10 p-4 text-sm">
         <p className="font-semibold text-strong">Race day.</p>
         <p className="mt-1 text-muted">
-          Tallinna Ülemiste Järve Jooks (13.7 km). No strength today. Reach the start line healthy.
+          Race day. No strength today. Reach the start line healthy.
         </p>
       </div>
     );
@@ -677,7 +675,7 @@ function RetestReminder({
   const dueThisWeek = cadences.some((c) => weeksIn > 0 && weeksIn % c === 0);
   if (!dueThisWeek) return null;
   return (
-    <div className="rounded border border-bronze/30 border-l-4 border-l-bronze bg-bronze/10 px-3 py-2 text-[12.5px]">
+    <div className="rounded border border-bronze/30 border-l-4 border-l-bronze bg-bronze/10 px-3 py-2 text-[13px]">
       <p className="font-semibold text-bronze">Retest window this week.</p>
       <p className="text-muted mt-0.5">
         You&apos;re {weeksIn} weeks in. Progress → Insights shows your current retest metrics against baseline and target.

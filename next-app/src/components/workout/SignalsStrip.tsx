@@ -11,6 +11,7 @@ import { isDue } from "@/lib/engine/assessment-engine";
 import { activePhaseFor } from "@/lib/engine/schedule";
 import { blocksForDate } from "@/lib/engine/plan-generator";
 import { HIP_FLEXOR_PACK } from "@/lib/assessments-data";
+import { evaluateCycleEnd, detectPauseResume } from "@/lib/engine/adapt";
 import { DayAdjustmentProposal } from "./DayAdjustmentProposal";
 import { ReadinessProposal } from "./ReadinessProposal";
 import { AssessmentDueBanner } from "../AssessmentDueBanner";
@@ -41,11 +42,10 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
   const signals = useMemo(() => {
     const list: Array<{ id: string; tone: "red" | "amber" | "slate"; label: string }> = [];
 
-    // Red-state morning check.
+    // Read today's derived state — used below for the overdue-check gate,
+    // even though the "Red" pill itself is now suppressed (surfaced by
+    // HeroStateCard's compact strip with an inline Escalate → link).
     const derived = store.logs[date]?.derived_state ?? null;
-    if (derived === "red") {
-      list.push({ id: "red-state", tone: "red", label: "Red-state morning check" });
-    }
 
     // Scheduled override / moved-in session.
     if (store.scheduled_overrides?.[date]) {
@@ -92,6 +92,25 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
         const label = dueStatus.lastDate ? "Monthly hip check due" : "First hip check";
         list.push({ id: "hip-check-due", tone: "slate", label });
       }
+    }
+
+    // Cycle-end proposal — signal only, action lives on Progress. Fires when
+    // the adaptive engine has TM changes to propose. Users on Today shouldn't
+    // wonder if they missed something; Progress owns the "Apply all" flow.
+    const cycleEval = evaluateCycleEnd(program, store, date);
+    if (cycleEval && cycleEval.recommendation.length) {
+      list.push({
+        id: "cycle-end",
+        tone: cycleEval.worstState === "red" ? "red" : cycleEval.worstState === "amber" ? "amber" : "slate",
+        label: `Cycle end — ${cycleEval.recommendation.length} TM change${cycleEval.recommendation.length === 1 ? "" : "s"} proposed`,
+      });
+    }
+
+    // Pause-detected proposal — 14+ day gap → the engine wants to soften on
+    // return. Same pattern: signal on Today, action on Progress.
+    const pause = detectPauseResume(store, date);
+    if (pause && pause.gapDays >= 14) {
+      list.push({ id: "pause", tone: "amber", label: `Back after ${pause.gapDays} days — soften plan?` });
     }
 
     // Morning check overdue: today has no derived_state AND the plan wants a strength
@@ -191,23 +210,8 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
 
       {expanded ? (
         <div className="space-y-3">
-          {/* Red-state — needs its full explanation and escalation link. */}
-          {signals.some((s) => s.id === "red-state") ? (
-            <div className="rounded border border-red/40 border-l-4 border-l-red bg-red/10 p-3 text-sm">
-              <p className="font-semibold text-strong">Red-state morning check</p>
-              <p className="text-[13px] text-muted mt-1">
-                {Object.keys(store.training_maxes).length > 0
-                  ? "The plan reduces load by 10% today, but skipping is a valid — often better — call. The Skip button below marks the day without breaking your trajectory. TM stays where it is."
-                  : "Skipping is a valid — often better — call. The Skip button below marks the day without breaking your trajectory."}
-              </p>
-              <Link
-                href="/guide/#red-flags"
-                className="inline-block mt-2 text-[13px] text-red border-b border-red hover:opacity-80"
-              >
-                When to escalate to a clinician →
-              </Link>
-            </div>
-          ) : null}
+          {/* Red-state expansion body deleted — HeroStateCard now owns this
+              signal (compact strip with an inline Escalate → link). */}
 
           {/* Override / moved-in. */}
           {signals.some((s) => s.id === "override") ? (
@@ -233,6 +237,38 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
                 className="inline-block mt-2 text-[13px] text-amber border-b border-amber hover:opacity-80"
               >
                 Log check now →
+              </Link>
+            </div>
+          ) : null}
+
+          {/* Cycle-end proposal — signal chip on Today, action on Progress. */}
+          {signals.some((s) => s.id === "cycle-end") ? (
+            <div className="rounded border border-slate/40 border-l-4 border-l-slate bg-slate/10 p-3 text-sm">
+              <p className="font-semibold text-strong">Cycle-end evaluation ready</p>
+              <p className="text-[13px] text-muted mt-1">
+                The engine has TM changes to propose based on the last cycle&apos;s AMRAP + symptom pattern. Review and Apply on Progress; nothing changes until you tap Apply.
+              </p>
+              <Link
+                href="/progress/"
+                className="inline-block mt-2 text-[13px] text-slate border-b border-slate hover:opacity-80"
+              >
+                Review on Progress →
+              </Link>
+            </div>
+          ) : null}
+
+          {/* Pause / soften proposal — same pattern. */}
+          {signals.some((s) => s.id === "pause") ? (
+            <div className="rounded border border-amber/40 border-l-4 border-l-amber bg-amber/10 p-3 text-sm">
+              <p className="font-semibold text-strong">Back after a break</p>
+              <p className="text-[13px] text-muted mt-1">
+                14+ days without a logged strength session. The engine can soften your first week back to protect against a compressed-return spike.
+              </p>
+              <Link
+                href="/progress/"
+                className="inline-block mt-2 text-[13px] text-amber border-b border-amber hover:opacity-80"
+              >
+                Review on Progress →
               </Link>
             </div>
           ) : null}

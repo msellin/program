@@ -259,13 +259,13 @@ export default function RoadmapPage() {
       <div className="relative">
         <Nav />
         <section className="mx-auto max-w-4xl px-5 pt-8 pb-16 sm:px-6 sm:pt-12">
-          <Link href="/" className="mono-caps mb-6 inline-block text-white/60 hover:text-white/80">
+          <Link href="/" className="mono-caps mb-6 inline-block text-[var(--color-muted)] hover:text-white/80">
             ← Terav
           </Link>
           <h1 className="text-4xl font-black leading-[1.05] tracking-tight text-white sm:text-5xl md:text-6xl">
             Roadmap.
           </h1>
-          <p className="mt-4 max-w-xl text-base leading-relaxed text-white/60 sm:text-lg">
+          <p className="mt-4 max-w-xl text-base leading-relaxed text-[var(--color-muted)] sm:text-lg">
             What&rsquo;s shipped, what&rsquo;s in build, what&rsquo;s next.
             Programs highlighted in bronze; product development mixed in.
           </p>
@@ -291,9 +291,9 @@ export default function RoadmapPage() {
                       }`}
                     />
                     <h2 className="text-xl font-bold text-white sm:text-2xl">{meta.title}</h2>
-                    <span className="mono-caps text-white/60">{groupItems.length}</span>
+                    <span className="mono-caps text-[var(--color-muted)]">{groupItems.length}</span>
                   </div>
-                  <p className="mb-4 text-[13px] text-white/60">{meta.note}</p>
+                  <p className="mb-4 text-[13px] text-[var(--color-muted)]">{meta.note}</p>
                   <ul className="divide-y divide-white/[0.06] rounded-2xl border border-white/[0.06] bg-white/[0.02]">
                     {groupItems.map((item) => {
                       const kindMeta = KIND_META[item.kind];
@@ -309,7 +309,7 @@ export default function RoadmapPage() {
                               {kindMeta.label}
                             </span>
                           </div>
-                          <p className="mt-1 text-[13px] leading-relaxed text-white/60">
+                          <p className="mt-1 text-[13px] leading-relaxed text-[var(--color-muted)]">
                             {item.detail}
                           </p>
                           {item.evidence ? (

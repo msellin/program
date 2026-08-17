@@ -39,7 +39,7 @@ export function AssessmentDueBanner({ date }: { date: string }) {
       <div className="pt-1">
         <Link
           href="/check/hip"
-          className="inline-block font-mono text-[11.5px] uppercase tracking-wider px-3 py-2 rounded bg-slate text-surface hover:bg-slate/90"
+          className="inline-block font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-slate text-surface hover:bg-slate/90"
         >
           Start check →
         </Link>

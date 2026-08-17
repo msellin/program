@@ -17,8 +17,8 @@
   --color-muted: #8a8f9a;
 
   /* Lines */
-  --color-line: #2a2e37;
-  --color-line-soft: #20232a;
+  --color-line: #3a3f4a;
+  --color-line-soft: #24272f;
 
   /* Semantic states */
   --color-green: #5fb37a;
@@ -48,6 +48,13 @@ body {
   font-variant-numeric: tabular-nums;
   -webkit-font-smoothing: antialiased;
   color-scheme: dark;
+  /* Kill iOS tap-highlight — replace with proper :active states below. */
+  -webkit-tap-highlight-color: transparent;
+  /* Prevent iOS Safari from auto-scaling text on rotation. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* Prevent overscroll bounce showing white gap at top on iOS PWAs. */
+  overscroll-behavior-y: none;
 }
 html {
   font-feature-settings: "ss01", "cv11", "tnum";
@@ -105,14 +112,52 @@ select:focus {
   border-color: var(--color-bronze);
 }
 
-/* Card lift interaction (per design research §4 — 120ms Linear-style) */
-@keyframes card-in {
-  from { opacity: 0; transform: translateY(4px); }
+/* Native-feel: primary interactive elements get a real press state. Touch has
+   no hover, and without a press feedback the app reads "webpage." Applied to
+   buttons + anchors that carry semantic action (nav, CTA, log). */
+button:not(:disabled):active,
+a[href]:not([data-nopress]):active {
+  transform: scale(0.98);
+  transition: transform 60ms ease-out;
+}
+
+/* Route transition — 150ms fade on route mount. Applied to <main> so tab
+   swaps feel like app screen changes, not page loads. */
+@keyframes route-in {
+  from { opacity: 0; transform: translateY(2px); }
   to { opacity: 1; transform: translateY(0); }
 }
+main { animation: route-in 150ms ease-out; }
 
 /* PR bronze tag animation */
 @keyframes tag-in {
   from { opacity: 0; transform: scale(0.9); }
   to { opacity: 1; transform: scale(1); }
+}
+
+/* Confirm-first Accept feedback — brief green pulse when a proposal is
+   accepted. Attach `.pulse-accept` on click, remove after 500ms. */
+@keyframes pulse-accept {
+  0%   { background-color: rgba(95, 179, 122, 0.20); }
+  100% { background-color: transparent; }
+}
+.pulse-accept { animation: pulse-accept 500ms ease-out; }
+
+/* Exercise mark-done — a quick color washover on the row + a subtle scale. */
+@keyframes mark-done {
+  0%   { background-color: rgba(200, 150, 102, 0.14); transform: scale(1); }
+  40%  { background-color: rgba(200, 150, 102, 0.14); transform: scale(1.015); }
+  100% { background-color: transparent; transform: scale(1); }
+}
+.mark-done-flash { animation: mark-done 450ms ease-out; }
+
+/* WCAG 2.3.3 — respect user's reduced-motion preference. Keep opacity fades
+   (they don't cause motion sickness) but disable transforms, scale, and
+   auto-firing keyframes. */
+@media (prefers-reduced-motion: reduce) {
+  main { animation: none; }
+  .pulse-accept { animation: none; }
+  .mark-done-flash { animation: none; }
+  /* Any residual transition on interactive presses — kill the scale. */
+  button:active, [role="button"]:active { transform: none; }
 }

@@ -6,6 +6,28 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
+ * Fire a short haptic tap on Android + iOS (via the browser vibration API,
+ * which iOS now supports since 17.4). Silently no-ops on unsupported devices.
+ * Use on confirm-first Accept moments, mark-done checkboxes, save actions —
+ * NOT on every button. Overuse is exactly what makes an app feel cheap.
+ *
+ * Three intensities modeled loosely on iOS UIImpactFeedbackGenerator:
+ * `light` = 8ms  (typical confirm)
+ * `medium` = 15ms (bigger decision)
+ * `error`  = [20, 40, 20]ms (dismiss / warning)
+ */
+export function hapticTap(kind: "light" | "medium" | "error" = "light"): void {
+  if (typeof navigator === "undefined" || !navigator.vibrate) return;
+  try {
+    if (kind === "light") navigator.vibrate(8);
+    else if (kind === "medium") navigator.vibrate(15);
+    else navigator.vibrate([20, 40, 20]);
+  } catch {
+    /* ignore */
+  }
+}
+
+/**
  * ISO date (YYYY-MM-DD) in the LOCAL timezone.
  * We deliberately don't use `toISOString()` because it converts to UTC — in any
  * timezone east of UTC that flips the calendar date at local midnight, causing

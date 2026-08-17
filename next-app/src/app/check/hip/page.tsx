@@ -48,13 +48,13 @@ export default function HipCheckPage() {
         <div className="flex gap-2">
           <Link
             href="/progress"
-            className="font-mono text-[11.5px] uppercase tracking-wider px-3 py-2 rounded border border-line hover:bg-line-soft"
+            className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line hover:bg-line-soft"
           >
             View progress
           </Link>
           <Link
             href="/"
-            className="font-mono text-[11.5px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground"
+            className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground"
           >
             Back to today
           </Link>
@@ -110,7 +110,7 @@ export default function HipCheckPage() {
           <button
             type="button"
             onClick={() => setStepIdx(stepIdx - 1)}
-            className="font-mono text-[11.5px] uppercase tracking-wider inline-flex items-center gap-1 px-3 py-2 rounded border border-line hover:bg-line-soft"
+            className="font-mono text-[11px] uppercase tracking-wider inline-flex items-center gap-1 px-3 py-2 rounded border border-line hover:bg-line-soft"
           >
             <ChevronLeft size={14} />
             Back
@@ -120,7 +120,7 @@ export default function HipCheckPage() {
               type="button"
               onClick={() => setStepIdx(stepIdx + 1)}
               disabled={current ? scores[current.key] == null : false}
-              className="font-mono text-[11.5px] uppercase tracking-wider inline-flex items-center gap-1 px-3 py-2 rounded bg-bronze text-ground disabled:opacity-40 disabled:cursor-not-allowed"
+              className="font-mono text-[11px] uppercase tracking-wider inline-flex items-center gap-1 px-3 py-2 rounded bg-bronze text-ground disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {stepIdx === totalSteps - 1 ? "Review" : "Next"}
               <ChevronRight size={14} />
@@ -197,7 +197,7 @@ function QuestionPanel({
         <h2 className="text-[17px] font-semibold text-strong leading-snug">{q.label}</h2>
       </div>
 
-      <div className="rounded border border-line-soft bg-surface p-3 text-[13.5px] leading-relaxed space-y-2">
+      <div className="rounded border border-line-soft bg-surface p-3 text-sm leading-relaxed space-y-2">
         <div>
           <p className="mono-caps text-muted mb-1">How to do it</p>
           <p>{q.method}</p>
@@ -206,11 +206,24 @@ function QuestionPanel({
           <p className="mono-caps text-muted mb-1">What the score means</p>
           <p>{q.interpret}</p>
         </div>
-        {q.video_search ? (
+        {q.video_url ? (
+          <div className="mt-2">
+            <p className="mono-caps text-muted mb-1">Demo</p>
+            <div className="aspect-video w-full rounded overflow-hidden bg-black">
+              <iframe
+                src={youTubeEmbed(q.video_url)}
+                title={`${q.label} — demo`}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-full"
+              />
+            </div>
+          </div>
+        ) : q.video_search ? (
           <button
             type="button"
             onClick={() => setVideoOpen(true)}
-            className="inline-block text-[12.5px] text-slate border-b border-slate"
+            className="inline-block text-[13px] text-slate border-b border-slate"
           >
             Watch a demo →
           </button>
@@ -228,6 +241,25 @@ function QuestionPanel({
       ) : null}
     </div>
   );
+}
+
+/**
+ * Extract a YouTube video ID from any common URL format and return the embed
+ * URL. Accepts youtube.com/watch?v=…, youtu.be/…, or /embed/…. Returns the
+ * original url if it can't parse — the iframe will still render "video not
+ * found" rather than throwing.
+ */
+function youTubeEmbed(url: string): string {
+  try {
+    const u = new URL(url);
+    if (u.hostname === "youtu.be") return `https://www.youtube.com/embed/${u.pathname.slice(1)}`;
+    const v = u.searchParams.get("v");
+    if (v) return `https://www.youtube.com/embed/${v}`;
+    if (u.pathname.startsWith("/embed/")) return url;
+    return url;
+  } catch {
+    return url;
+  }
 }
 
 function ScoreSlider({
@@ -335,12 +367,12 @@ function ReviewPanel({
           placeholder="Anything unusual? Skipped a test? Note it here."
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
-          className="block w-full max-w-full text-[13.5px] px-2 py-1.5 border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate resize-y min-h-[44px] break-words [overflow-wrap:anywhere] whitespace-pre-wrap"
+          className="block w-full max-w-full text-sm px-2 py-1.5 border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate resize-y min-h-[44px] break-words [overflow-wrap:anywhere] whitespace-pre-wrap"
         />
       </div>
 
       {anyMissing ? (
-        <p className="text-[12.5px] text-amber">
+        <p className="text-[13px] text-amber">
           {missingKeys.length} unanswered item{missingKeys.length === 1 ? "" : "s"} — tap them
           above to fill in, or submit anyway if you skipped intentionally.
         </p>

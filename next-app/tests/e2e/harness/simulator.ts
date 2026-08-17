@@ -95,12 +95,12 @@ export async function runSimulation(
   //    the app hydrates cleanly.
   await page.evaluate(
     ({ slug, tier }) => {
-      const raw = localStorage.getItem("program.store.v2");
+      const raw = localStorage.getItem("program.log.v2");
       const store = raw ? JSON.parse(raw) : {
         version: 2,
         logs: {},
         training_maxes: {},
-        cycle: null,
+        cycle: { phase_id: null, cycle_number: 1, week_in_cycle: 1 },
         updated_at: Date.now(),
         scheduled_overrides: {},
         skipped: {},
@@ -120,7 +120,7 @@ export async function runSimulation(
         };
       }
       store.updated_at = Date.now();
-      localStorage.setItem("program.store.v2", JSON.stringify(store));
+      localStorage.setItem("program.log.v2", JSON.stringify(store));
       localStorage.setItem("program.onboarding.done", "1");
     },
     { slug: programSlug, tier: tier ?? null },
@@ -134,7 +134,7 @@ export async function runSimulation(
   // Screenshot day 0
   if (snapshotDays.includes(0)) {
     await page.screenshot({ path: `${screenshotDir}/day-0.png`, fullPage: true });
-    const store = await page.evaluate(() => localStorage.getItem("program.store.v2"));
+    const store = await page.evaluate(() => localStorage.getItem("program.log.v2"));
     snapshots.push({ day: 0, screenshot: `${screenshotDir}/day-0.png`, store });
   }
 
@@ -147,7 +147,7 @@ export async function runSimulation(
       // Write a synthetic day-log directly into the store.
       await page.evaluate(
         ({ dateISO, symptoms, note, weightFactor, rpe, reps }) => {
-          const raw = localStorage.getItem("program.store.v2");
+          const raw = localStorage.getItem("program.log.v2");
           if (!raw) return;
           const store = JSON.parse(raw);
           if (!store.logs[dateISO]) {
@@ -171,7 +171,7 @@ export async function runSimulation(
             };
           }
           store.updated_at = Date.now();
-          localStorage.setItem("program.store.v2", JSON.stringify(store));
+          localStorage.setItem("program.log.v2", JSON.stringify(store));
         },
         {
           dateISO: target.toISOString().slice(0, 10),
@@ -186,13 +186,13 @@ export async function runSimulation(
       // Mark the date skipped.
       await page.evaluate(
         ({ dateISO }) => {
-          const raw = localStorage.getItem("program.store.v2");
+          const raw = localStorage.getItem("program.log.v2");
           if (!raw) return;
           const store = JSON.parse(raw);
           store.skipped = store.skipped ?? {};
           store.skipped[dateISO] = { blocks: [], reason: "sim: archetype skipped this day" };
           store.updated_at = Date.now();
-          localStorage.setItem("program.store.v2", JSON.stringify(store));
+          localStorage.setItem("program.log.v2", JSON.stringify(store));
         },
         { dateISO: target.toISOString().slice(0, 10) },
       );
@@ -206,12 +206,12 @@ export async function runSimulation(
       await page.goto("/");
       await page.waitForLoadState("networkidle");
       await page.screenshot({ path: `${screenshotDir}/day-${day}.png`, fullPage: true });
-      const store = await page.evaluate(() => localStorage.getItem("program.store.v2"));
+      const store = await page.evaluate(() => localStorage.getItem("program.log.v2"));
       snapshots.push({ day, screenshot: `${screenshotDir}/day-${day}.png`, store });
     }
   }
 
-  const finalStoreRaw = await page.evaluate(() => localStorage.getItem("program.store.v2"));
+  const finalStoreRaw = await page.evaluate(() => localStorage.getItem("program.log.v2"));
   return {
     archetypeId: archetype.id,
     programSlug,

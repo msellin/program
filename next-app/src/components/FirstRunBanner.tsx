@@ -43,7 +43,7 @@ export function FirstRunBanner() {
           <X size={16} />
         </button>
       </div>
-      <ul className="text-[12.5px] text-muted space-y-1 leading-relaxed">
+      <ul className="text-[13px] text-muted space-y-1 leading-relaxed">
         <li><span className="text-ink">Today</span> — the session you&apos;re prescribed right now.</li>
         <li><span className="text-ink">Week</span> — the 7-day rhythm.</li>
         <li><span className="text-ink">Progress</span> — training maxes, retests, trends.</li>

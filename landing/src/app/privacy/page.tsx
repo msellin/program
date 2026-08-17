@@ -65,7 +65,7 @@ export default function PrivacyPage() {
         announced in-app before they take effect.
       </p>
 
-      <p className="mt-10 text-xs text-white/60">
+      <p className="mt-10 text-xs text-[var(--color-muted)]">
         Contact:{" "}
         <a href="mailto:hello@terav.fit" className="underline decoration-white/20 underline-offset-4">
           hello@terav.fit

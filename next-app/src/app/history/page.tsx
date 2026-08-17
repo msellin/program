@@ -37,10 +37,18 @@ export default function HistoryPage() {
   const hydrated = useStore((s) => s.hydrated);
   const store = useStore((s) => s.store);
   const [byId, setById] = useState<Record<string, Exercise>>({});
+  const [openDate, setOpenDate] = useState<string | null>(null);
 
   useEffect(() => {
     void loadExercises().then((x) => setById(x.byId));
   }, []);
+
+  // When heatmap cell clicked, scroll the matching LogRow into view.
+  useEffect(() => {
+    if (!openDate) return;
+    const el = document.getElementById(`day-${openDate}`);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, [openDate]);
 
   if (!hydrated) return <div className="mt-8 text-sm text-muted">Loading…</div>;
 
@@ -72,7 +80,7 @@ export default function HistoryPage() {
       <section className="space-y-3">
         <h2 className="font-mono text-[13px] uppercase tracking-widest">Activity heatmap</h2>
         <div className="rounded border border-line bg-surface p-3">
-          <Heatmap store={store} />
+          <Heatmap store={store} onDayClick={setOpenDate} />
         </div>
       </section>
 
@@ -133,9 +141,20 @@ export default function HistoryPage() {
           {days
             .slice()
             .reverse()
+            .filter((d) => {
+              // Suppress zero-activity days from the list — they clutter the
+              // scroll with rows saying "0 done" while the heatmap above already
+              // shows empty cells. Keep any day with an exercise done, a
+              // symptom logged, a run, or notes.
+              const anyExDone = Object.values(d.exercises ?? {}).some((e) => e.done);
+              const anyRun = (d.runs?.length ?? 0) > 0;
+              const anyNote = !!d.notes?.trim();
+              const anySymptom = d.symptoms != null;
+              return anyExDone || anyRun || anyNote || anySymptom;
+            })
             .slice(0, 30)
             .map((d) => (
-              <LogRow key={d.date} day={d} byId={byId} />
+              <LogRow key={d.date} day={d} byId={byId} forceOpen={openDate === d.date} />
             ))}
         </div>
       </section>
@@ -254,8 +273,22 @@ function LiftSpark({
   );
 }
 
-function LogRow({ day, byId }: { day: DayLog; byId: Record<string, Exercise> }) {
+function LogRow({
+  day,
+  byId,
+  forceOpen,
+}: {
+  day: DayLog;
+  byId: Record<string, Exercise>;
+  forceOpen?: boolean;
+}) {
   const [open, setOpen] = useState(false);
+  // When the heatmap requests this row (via `forceOpen`), auto-open it. User
+  // can still collapse afterward — we track userToggled to avoid overriding.
+  const [userToggled, setUserToggled] = useState(false);
+  useEffect(() => {
+    if (forceOpen && !userToggled) setOpen(true);
+  }, [forceOpen, userToggled]);
   const doneEntries = Object.entries(day.exercises).filter(([, e]) => e.done);
   const doneCount = doneEntries.length;
   const notesCount = doneEntries.filter(([, e]) => !!(e.notes && e.notes.trim())).length;
@@ -266,10 +299,13 @@ function LogRow({ day, byId }: { day: DayLog; byId: Record<string, Exercise> }) 
     month: "short",
   });
   return (
-    <div>
+    <div id={`day-${day.date}`}>
       <button
         type="button"
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => {
+          setUserToggled(true);
+          setOpen((v) => !v);
+        }}
         aria-expanded={open}
         className="w-full px-3 py-2.5 flex items-center justify-between gap-3 font-mono text-[12px] text-left hover:bg-line-soft/40 min-h-[44px]"
       >
@@ -348,7 +384,7 @@ function ExerciseRow({
         <p className="mono-caps text-[10px]">{validSets.length} set{validSets.length === 1 ? "" : "s"}</p>
       </div>
       {validSets.length ? (
-        <ul className="mt-1 space-y-0.5 font-mono text-[11.5px] text-muted">
+        <ul className="mt-1 space-y-0.5 font-mono text-[11px] text-muted">
           {validSets.map((s, i) => (
             <li key={i} className="flex gap-2 items-center">
               <span className="w-5 text-center">#{i + 1}</span>
@@ -364,7 +400,7 @@ function ExerciseRow({
         </ul>
       ) : null}
       {entry.notes ? (
-        <p className="mt-1 text-[11.5px] italic text-muted">{entry.notes}</p>
+        <p className="mt-1 text-[11px] italic text-muted">{entry.notes}</p>
       ) : null}
     </div>
   );
@@ -380,7 +416,7 @@ function SymptomsSummary({ symptoms }: { symptoms: NonNullable<DayLog["symptoms"
   if (symptoms.gait_change) items.push("gait change");
   if (symptoms.click_present) items.push(symptoms.click_painful ? "painful click" : "click (painless)");
   return (
-    <p className="text-[11.5px] text-muted">
+    <p className="text-[11px] text-muted">
       <span className="mono-caps mr-1">Check:</span>
       {items.length ? items.join(" · ") : "all zero"}
     </p>

@@ -173,7 +173,7 @@ export default function CheckPage() {
             value={values.outside_training ?? ""}
             onChange={(e) => setValues({ ...values, outside_training: e.target.value })}
             placeholder="e.g. 90 min padel, long hike, poor sleep"
-            className="block w-full max-w-full text-[13.5px] px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate break-words [overflow-wrap:anywhere]"
+            className="block w-full max-w-full text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate break-words [overflow-wrap:anywhere]"
           />
           <p className="text-[12px] text-muted mt-1">
             The engine treats keywords here (padel, hike, tired…) as external load and factors it

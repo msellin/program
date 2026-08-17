@@ -106,6 +106,18 @@ export async function ensureTestUser(
 }
 
 /**
+ * Delete then recreate a test user so each persona run starts with a fresh
+ * auth uid and no residual state rows. Returns the new uid.
+ */
+export async function resetTestUser(
+  email: string,
+  password: string,
+): Promise<{ email: string; password: string; uid: string }> {
+  await teardownTestUser(email);
+  return ensureTestUser(email, password);
+}
+
+/**
  * Wipe a test user's auth account. Refuses if the email doesn't match the
  * test-prefix guard or the uid is on the never-touch list.
  */

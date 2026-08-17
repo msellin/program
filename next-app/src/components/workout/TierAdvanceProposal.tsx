@@ -3,6 +3,8 @@
 import { X, ArrowUp } from "lucide-react";
 import { useStore } from "@/lib/useStore";
 import { nextEligibleTier, isProposalDismissed } from "@/lib/engine/tier-promotion";
+import { hapticTap } from "@/lib/utils";
+import { announce } from "@/lib/announce";
 import type { Program } from "@/lib/schemas";
 
 /**
@@ -24,15 +26,15 @@ export function TierAdvanceProposal({ program }: { program: Program | null | und
   const tierLabel = tierMeta?.label ?? eligible.tier_id;
 
   return (
-    <div className="rounded border border-green/50 border-l-4 border-l-green bg-green/10 p-3 space-y-2">
+    <div data-tier-proposal className="rounded border border-green/50 border-l-4 border-l-green bg-green/10 p-3 space-y-2">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
-          <p className="font-semibold text-strong text-[13.5px] flex items-center gap-1.5">
-            <ArrowUp size={14} className="text-green" />
-            Ready for the next tier?
+          <p className="font-mono text-[10px] uppercase tracking-widest text-green flex items-center gap-1.5">
+            <ArrowUp size={12} className="text-green" />
+            Signal · tier gate cleared
           </p>
           <p className="text-[12px] text-muted mt-1 leading-snug">
-            Your latest retest clears <span className="text-strong">{tierLabel}</span>&apos;s threshold. Advancing swaps your weekly focus to the next tier&apos;s drills; wrist prep + recovery blocks stay.
+            Your latest retest clears <span className="text-strong">{tierLabel}</span>&apos;s threshold. Advancing swaps your weekly focus to the next tier&apos;s drills. Prep + recovery blocks stay.
           </p>
           {eligible.rationale ? (
             <p className="font-mono text-[11px] text-muted/80 mt-1 truncate">
@@ -59,17 +61,16 @@ export function TierAdvanceProposal({ program }: { program: Program | null | und
       <div className="flex flex-wrap gap-2 pt-1">
         <button
           type="button"
-          onClick={() => {
+          onClick={(e) => {
             if (!program.slug) return;
-            if (
-              confirm(
-                `Advance to ${tierLabel}? Your plan will retune to this tier's drills tomorrow.`,
-              )
-            ) {
-              promoteTier(program.slug, eligible.tier_id, "retest");
-            }
+            hapticTap("medium");
+            (e.currentTarget.closest("[data-tier-proposal]") as HTMLElement | null)?.classList.add(
+              "pulse-accept",
+            );
+            promoteTier(program.slug, eligible.tier_id, "retest");
+            announce(`Advanced to ${tierLabel}.`);
           }}
-          className="font-mono text-[11.5px] uppercase tracking-wider px-3 py-2 rounded bg-green text-ground hover:bg-green-hover min-h-[36px]"
+          className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover min-h-[36px]"
         >
           Advance to {tierLabel}
         </button>
@@ -83,7 +84,7 @@ export function TierAdvanceProposal({ program }: { program: Program | null | und
               );
             }
           }}
-          className="font-mono text-[11.5px] uppercase tracking-wider px-3 py-2 rounded border border-line text-ink hover:bg-line-soft min-h-[36px]"
+          className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-ink hover:bg-line-soft min-h-[36px]"
         >
           Not yet
         </button>

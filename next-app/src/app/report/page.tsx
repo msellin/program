@@ -91,7 +91,7 @@ export default function ReportPage() {
         </p>
         <a
           href="/programs"
-          className="inline-block font-mono text-[11.5px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground"
+          className="inline-block font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground"
         >
           Start a program →
         </a>
@@ -150,7 +150,7 @@ export default function ReportPage() {
           <button
             type="button"
             onClick={() => window.print()}
-            className="inline-flex items-center gap-1.5 font-mono text-[11.5px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground"
+            className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground"
           >
             <Printer size={14} />
             Print / save PDF
@@ -164,7 +164,7 @@ export default function ReportPage() {
               onClick={() => setPreset(p)}
               aria-pressed={preset === p}
               className={
-                "min-h-[36px] px-3 py-1.5 rounded font-mono text-[11.5px] uppercase tracking-wider " +
+                "min-h-[36px] px-3 py-1.5 rounded font-mono text-[11px] uppercase tracking-wider " +
                 (preset === p
                   ? "bg-slate text-surface"
                   : "bg-line-soft text-muted hover:text-ink")
@@ -184,7 +184,7 @@ export default function ReportPage() {
         <p className="text-[13px] text-muted">
           <strong className="text-ink">Generated:</strong> {generatedPretty}
         </p>
-        <p className="text-[12.5px] text-muted italic pt-1">
+        <p className="text-[13px] text-muted italic pt-1">
           {isHipProgram
             ? "This is a self-tracked training log, not a diagnosis. Symptom scores are the user's own 0–10 ratings from a daily morning check. Load values are logged workout data."
             : "This is a self-tracked training log, not medical advice. Values below are the user's own logged sessions, morning checks, and derived retest deltas."}
@@ -321,7 +321,7 @@ export default function ReportPage() {
                       key={w.weekStart}
                       className="flex items-baseline gap-3 font-mono"
                     >
-                      <span className="text-muted text-[11.5px] w-28 flex-shrink-0">
+                      <span className="text-muted text-[11px] w-28 flex-shrink-0">
                         wk of {w.weekStart}
                       </span>
                       <span className="text-ink flex-1">
@@ -400,7 +400,7 @@ export default function ReportPage() {
                       <p className="mono-caps mb-1 text-bronze">
                         {key.replace(/_/g, " ")} · {rows.length}
                       </p>
-                      <ul className="space-y-0.5 text-[12.5px]">
+                      <ul className="space-y-0.5 text-[13px]">
                         {rows.map(({ date, run: r }, i) => (
                           <li
                             key={`${date}:${i}`}
@@ -483,7 +483,7 @@ export default function ReportPage() {
                             <div className="min-w-0 flex-1">
                               <dt className="text-ink">{label}</dt>
                               {detail ? (
-                                <dt className="text-[10.5px] text-muted italic leading-tight mt-0.5">
+                                <dt className="text-[10px] text-muted italic leading-tight mt-0.5">
                                   {detail}
                                 </dt>
                               ) : null}
@@ -500,7 +500,7 @@ export default function ReportPage() {
                           <div className="min-w-0 flex-1">
                             <dt className="text-ink">{label}</dt>
                             {detail ? (
-                              <dt className="text-[10.5px] text-muted italic leading-tight mt-0.5">
+                              <dt className="text-[10px] text-muted italic leading-tight mt-0.5">
                                 {detail}
                               </dt>
                             ) : null}
@@ -579,10 +579,10 @@ export default function ReportPage() {
           <ul className="text-[13px] space-y-1.5">
             {report.provocateurIncidents.map((i, idx) => (
               <li key={idx} className="flex items-baseline gap-2 flex-wrap">
-                <span className="font-mono text-[11.5px] text-muted w-24 flex-shrink-0">
+                <span className="font-mono text-[11px] text-muted w-24 flex-shrink-0">
                   {i.date}
                 </span>
-                <span className="font-mono text-[10.5px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-line-soft text-muted flex-shrink-0">
+                <span className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-line-soft text-muted flex-shrink-0">
                   {i.context === "check" ? "Morning check" : "Note"}
                 </span>
                 <span className="flex-1 min-w-0">
@@ -615,13 +615,13 @@ export default function ReportPage() {
           <div className="space-y-3">
             {report.loadProgression.map((l) => (
               <div key={l.exerciseId}>
-                <p className="font-semibold text-[13.5px] text-strong">
+                <p className="font-semibold text-sm text-strong">
                   {byId[l.exerciseId]?.name ?? l.exerciseId}
-                  <span className="ml-2 text-[11.5px] font-normal text-muted font-mono">
+                  <span className="ml-2 text-[11px] font-normal text-muted font-mono">
                     TM {store.training_maxes[l.exerciseId] ?? "—"} kg
                   </span>
                 </p>
-                <ul className="mt-1 grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-0.5 text-[12.5px] font-mono">
+                <ul className="mt-1 grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-0.5 text-[13px] font-mono">
                   {l.entries.map((e) => (
                     <li key={e.date} className="text-muted">
                       <span className="text-[11px] mr-1">{e.date}</span>
@@ -655,10 +655,10 @@ export default function ReportPage() {
                 className="sm:flex sm:items-baseline sm:gap-3"
               >
                 <div className="flex items-baseline justify-between sm:contents">
-                  <span className="font-mono text-[11.5px] text-muted sm:w-24 sm:flex-shrink-0">
+                  <span className="font-mono text-[11px] text-muted sm:w-24 sm:flex-shrink-0">
                     Week of {w.weekStart}
                   </span>
-                  <span className="font-mono text-[11.5px] text-muted sm:order-3">
+                  <span className="font-mono text-[11px] text-muted sm:order-3">
                     {w.done} / 7
                   </span>
                 </div>
@@ -741,7 +741,7 @@ export default function ReportPage() {
         </ReportSection>
       ) : null}
 
-      <footer className="text-[11.5px] text-muted italic pt-4 border-t border-line-soft">
+      <footer className="text-[11px] text-muted italic pt-4 border-t border-line-soft">
         Generated by a self-tracking app. Not medical advice. Clinical decisions remain with the
         user&apos;s orthopaedist and physiatrist.
       </footer>
@@ -803,7 +803,7 @@ function ReportSection({
     <section className="space-y-2">
       <div>
         <h2 className="text-[15px] font-semibold text-strong">{title}</h2>
-        {subtitle ? <p className="text-[12.5px] text-muted mt-0.5">{subtitle}</p> : null}
+        {subtitle ? <p className="text-[13px] text-muted mt-0.5">{subtitle}</p> : null}
       </div>
       {children}
     </section>

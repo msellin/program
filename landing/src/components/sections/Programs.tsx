@@ -30,7 +30,7 @@ function programsFor(dict: LandingDict): Program[] {
       name: "Concurrent-Strength Maintenance",
       duration: "8 weeks",
       category: t.domain_concurrent,
-      tone: "amber",
+      tone: "bronze",
       status: "AVAILABLE",
       body: t.csm_pitch,
       evidence: "Schumann 2022 · Robineau 2016",
@@ -106,7 +106,7 @@ export function Programs({ dict }: { dict: LandingDict }) {
         ))}
       </div>
 
-      <p className="mt-6 px-5 text-[13px] text-white/60 sm:px-6">
+      <p className="mt-6 px-5 text-[13px] text-[var(--color-muted)] sm:px-6">
         <a
           href={"/roadmap"}
           className="underline decoration-white/20 underline-offset-4 hover:text-white hover:decoration-white/50"
@@ -132,14 +132,14 @@ function ProgramCard({ p }: { p: Program }) {
       ? "border-[var(--color-green)]/40 bg-[var(--color-green)]/[0.08] text-[var(--color-green)]"
       : p.status === "PERSONAL"
       ? "border-[var(--color-amber)]/40 bg-[var(--color-amber)]/[0.08] text-[var(--color-amber)]"
-      : "border-white/15 bg-white/[0.03] text-white/60";
+      : "border-white/15 bg-white/[0.03] text-[var(--color-muted)]";
 
   const href = `/programs/${p.slug}`;
 
   return (
     <a
       href={href}
-      className="group relative block overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6 backdrop-blur transition hover:border-white/20 hover:bg-white/[0.04]"
+      className="group relative block overflow-hidden rounded-2xl border border-white/[0.08] bg-[var(--color-ground-2)] p-6 backdrop-blur transition hover:border-white/20 hover:bg-white/[0.04]"
     >
       <div className="mb-5 flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -153,18 +153,18 @@ function ProgramCard({ p }: { p: Program }) {
         ) : null}
       </div>
 
-      <h3 className="mb-1 text-xl font-bold text-white">{p.name}</h3>
-      <div className="mb-3 text-xs text-white/60">{p.duration}</div>
-      <p className="text-sm leading-relaxed text-white/60">{p.body}</p>
+      <h3 className="mb-1 text-xl font-bold text-white sm:text-2xl">{p.name}</h3>
+      <div className="mb-3 text-xs text-[var(--color-muted)]">{p.duration}</div>
+      <p className="text-sm leading-relaxed text-[var(--color-muted)]">{p.body}</p>
 
       {p.evidence ? (
         <div className="mt-5 border-t border-white/[0.06] pt-3">
           <div className="mono-caps mb-1">Cites</div>
-          <div className="text-[11px] leading-relaxed text-white/60">{p.evidence}</div>
+          <div className="text-[11px] leading-relaxed text-[var(--color-muted)]">{p.evidence}</div>
         </div>
       ) : null}
 
-      <div className="mt-4 text-[12px] text-white/60 transition group-hover:text-white">
+      <div className="mt-4 text-[12px] text-[var(--color-muted)] transition group-hover:text-white">
         Preview →
       </div>
     </a>

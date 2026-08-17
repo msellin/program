@@ -9,6 +9,7 @@ import {
   type ChatMessage,
 } from "@/lib/coach-client";
 import { cn } from "@/lib/utils";
+import { ConfirmSheet } from "@/components/ConfirmSheet";
 
 const HISTORY_KEY = "program.coach.history.v1";
 
@@ -150,10 +151,10 @@ const EXAMPLE_BY_PROGRAM: Record<string, CoachExample> = {
 };
 
 const DEFAULT_STARTERS = [
-  "Which program in the catalog would fit me?",
-  "How do the adaptive engine's proposals work?",
-  "What does the app do with my logged sessions?",
-  "Explain what makes this different from a template plan.",
+  "Which program fits me best right now?",
+  "How does the app decide what I lift today?",
+  "What signals do my logged sessions send back to the plan?",
+  "How is this different from a template plan?",
 ];
 
 export default function CoachPage() {
@@ -164,6 +165,7 @@ export default function CoachPage() {
   const [streaming, setStreaming] = useState(false);
   const [pending, setPending] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [confirmClear, setConfirmClear] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
   const configured = coachConfigured();
@@ -229,7 +231,10 @@ export default function CoachPage() {
   };
 
   const clearHistory = () => {
-    if (!confirm("Clear the entire coach conversation? Cannot be undone.")) return;
+    setConfirmClear(true);
+  };
+  const doClearHistory = () => {
+    setConfirmClear(false);
     setMessages([]);
     try {
       localStorage.removeItem(HISTORY_KEY);
@@ -241,7 +246,7 @@ export default function CoachPage() {
   if (!hydrated) return <div className="pt-8 text-sm text-muted">Loading…</div>;
 
   return (
-    <div className="pt-4 pb-4 flex flex-col" style={{ minHeight: "calc(100vh - 180px)" }}>
+    <div className="pt-4 pb-4 flex flex-col" style={{ minHeight: "calc(100dvh - 180px)" }}>
       <header className="flex items-baseline justify-between gap-3 mb-3">
         <div>
           <h1 className="text-3xl font-semibold tracking-tight text-strong">Coach</h1>
@@ -278,7 +283,7 @@ export default function CoachPage() {
           <div
             ref={scrollRef}
             className="flex-1 overflow-y-auto space-y-3 rounded border border-line bg-surface p-3 mb-3"
-            style={{ maxHeight: "calc(100vh - 320px)", minHeight: 240 }}
+            style={{ maxHeight: "calc(100dvh - 320px)", minHeight: 240 }}
           >
             {messages.length === 0 && !pending ? (
               <Empty onPick={send} activeSlug={store.user_profile?.active_program_id ?? null} />
@@ -312,7 +317,7 @@ export default function CoachPage() {
               }}
               placeholder="Ask about your plan, form, symptoms…  ⌘⏎ to send"
               rows={2}
-              className="flex-1 text-sm px-3 py-2 min-h-[48px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze/40 focus:border-bronze resize-none font-sans"
+              className="flex-1 text-sm px-3 py-2 min-h-[48px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze resize-none font-sans"
             />
             {streaming ? (
               <button
@@ -340,6 +345,15 @@ export default function CoachPage() {
           </p>
         </>
       )}
+      <ConfirmSheet
+        open={confirmClear}
+        title="Clear the coach conversation?"
+        body="This deletes every message in this session. Cannot be undone."
+        confirmLabel="Clear"
+        danger
+        onConfirm={doClearHistory}
+        onCancel={() => setConfirmClear(false)}
+      />
     </div>
   );
 }
@@ -397,63 +411,21 @@ function NotConfigured() {
   const example =
     EXAMPLE_BY_PROGRAM[activeSlug ?? ""] ?? EXAMPLE_BY_PROGRAM.default;
   return (
-    <div className="space-y-5">
-      <div className="rounded border border-line bg-surface p-5 space-y-4">
+    <div className="space-y-4">
+      <div className="rounded border border-line bg-surface p-5 space-y-3">
         <div className="mono-caps text-bronze">Coming soon</div>
         <h2 className="text-xl font-semibold text-strong">
           A coach that reads your whole log every time you ask.
         </h2>
-        <p className="text-[13.5px] text-ink leading-relaxed">
-          Ask a plain-English question — {example.questions.map((q, i) => (
-            <span key={i}>
-              &ldquo;{q}&rdquo;{i < example.questions.length - 1 ? ", " : ""}
-            </span>
-          ))} — and the coach answers using every session you&apos;ve logged,
-          your training data, morning checks, and the research the program is
-          built on.
+        <p className="text-sm text-ink leading-relaxed">
+          Plain-English questions like &ldquo;{example.questions[0]}&rdquo; — answered
+          against every session you&apos;ve logged and the research your program is built on.
         </p>
       </div>
 
-      <div className="rounded border border-line-soft bg-surface p-4 space-y-3">
-        <p className="font-semibold text-[13.5px] text-strong">What it&apos;ll do</p>
-        <ul className="text-[13px] text-ink space-y-2">
-          <li>
-            <span className="text-bronze font-mono text-[11px] uppercase tracking-wider mr-2">
-              Weekly review
-            </span>
-            {example.weeklyReview}
-          </li>
-          <li>
-            <span className="text-bronze font-mono text-[11px] uppercase tracking-wider mr-2">
-              Session-day check
-            </span>
-            {example.sessionDay}
-          </li>
-          <li>
-            <span className="text-bronze font-mono text-[11px] uppercase tracking-wider mr-2">
-              Explain the plan
-            </span>
-            {example.explain}
-          </li>
-          <li>
-            <span className="text-bronze font-mono text-[11px] uppercase tracking-wider mr-2">
-              Signals triage
-            </span>
-            Reads your logged signals — morning checks where they apply,
-            session notes, load history — and flags patterns worth taking to
-            your clinician. Never a diagnosis, always a conversation-starter.
-          </li>
-        </ul>
-      </div>
-
-      <div className="rounded border border-line-soft bg-surface p-4 space-y-2">
-        <p className="font-semibold text-[13.5px] text-strong">Meanwhile</p>
-        <p className="text-[13px] text-muted leading-relaxed">
-          Everything the coach will read is already tracked. Log sessions on
-          Today, save morning checks, and back-fill any past days on Week —
-          the coach will land with your full history intact.
-        </p>
-      </div>
+      <p className="text-[13px] text-muted italic">
+        Meanwhile: keep logging on Today. When the coach lands, your history is what it reads.
+      </p>
     </div>
   );
 }

@@ -44,7 +44,7 @@ export function HipProgressTile() {
         {dueStatus.due ? (
           <Link
             href="/check/hip"
-            className="font-mono text-[10.5px] uppercase tracking-widest px-2 py-1 rounded bg-slate text-surface"
+            className="font-mono text-[10px] uppercase tracking-widest px-2 py-1 rounded bg-slate text-surface"
           >
             Check due →
           </Link>
@@ -140,7 +140,7 @@ function MiniSpark({ points, max }: { points: number[]; max: number }) {
   if (points.length === 0) {
     return (
       <div className="mt-2 h-8 rounded bg-line-soft/40 flex items-center justify-center">
-        <span className="text-[10.5px] text-muted italic">No data yet</span>
+        <span className="text-[10px] text-muted italic">No data yet</span>
       </div>
     );
   }

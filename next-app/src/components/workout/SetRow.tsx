@@ -70,7 +70,7 @@ export function SetRow({ index, set, prev, prescribed, isPR, restSeconds, onChan
           const v = raw === "" ? null : clamp(Number(raw), 0, 500);
           onChange({ weight_kg: v });
         }}
-        className="w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze/40 focus:border-bronze placeholder:text-line"
+        className="w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze placeholder:text-line"
       />
       <input
         type="number"
@@ -92,7 +92,7 @@ export function SetRow({ index, set, prev, prescribed, isPR, restSeconds, onChan
           const v = raw === "" ? null : clampInt(Number(raw), 0, 50);
           onChange({ reps: v });
         }}
-        className="w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze/40 focus:border-bronze placeholder:text-line"
+        className="w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze placeholder:text-line"
       />
       <input
         type="number"
@@ -108,7 +108,7 @@ export function SetRow({ index, set, prev, prescribed, isPR, restSeconds, onChan
           const v = raw === "" ? null : clamp(Number(raw), 0, 10);
           onChange({ rpe: v });
         }}
-        className="w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze/40 focus:border-bronze"
+        className="w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
       />
       <button
         type="button"
@@ -140,9 +140,9 @@ export function SetRow({ index, set, prev, prescribed, isPR, restSeconds, onChan
       {isPR ? (
         <output
           aria-label={`Personal record: ${set.weight_kg} kilograms for ${set.reps} reps`}
-          className="col-span-7 flex items-center justify-end gap-1 mt-1 mono-caps text-bronze motion-safe:animate-[tag-in_260ms_cubic-bezier(0.16,1,0.3,1)]"
+          className="col-span-7 flex items-center justify-end gap-1 mt-1 mono-caps text-green motion-safe:animate-[tag-in_260ms_cubic-bezier(0.16,1,0.3,1)]"
         >
-          <span aria-hidden className="inline-block w-1.5 h-1.5 rounded-full bg-bronze" />
+          <span aria-hidden className="inline-block w-1.5 h-1.5 rounded-full bg-green" />
           <span aria-hidden>PR · {set.weight_kg} × {set.reps}</span>
         </output>
       ) : filled ? (
@@ -157,7 +157,7 @@ export function SetRow({ index, set, prev, prescribed, isPR, restSeconds, onChan
             placeholder="anything specific to this set — click, side asymmetry, form cue…"
             value={set.notes ?? ""}
             onChange={(e) => onChange({ notes: e.target.value })}
-            className="block w-full max-w-full text-[13px] px-2 py-1.5 border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze/40 focus:border-bronze resize-y min-h-[44px] break-words [overflow-wrap:anywhere] whitespace-pre-wrap"
+            className="block w-full max-w-full text-[13px] px-2 py-1.5 border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze resize-y min-h-[44px] break-words [overflow-wrap:anywhere] whitespace-pre-wrap"
           />
         </div>
       ) : null}

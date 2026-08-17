@@ -12,30 +12,38 @@ import {
   FileText,
   Layers,
   Sparkles,
+  CalendarDays,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useIsSuperAdmin } from "@/lib/super-admin";
 
 const LINKS = [
-  { href: "/programs/", label: "Programs", Icon: Layers },
-  { href: "/check/", label: "Check", Icon: Stethoscope },
-  { href: "/extras/", label: "Extras", Icon: ListPlus },
-  { href: "/coach/", label: "Coach", Icon: Sparkles },
-  { href: "/report/", label: "Report", Icon: FileText },
-  { href: "/data/", label: "Data", Icon: Database },
-  { href: "/guide/", label: "Guide", Icon: BookOpen },
+  // Programs promoted out of this menu into a top-level nav slot — a
+  // multi-program app hides the program catalog at its peril. Check is also
+  // its own nav slot (stethoscope). Order preserved for the remaining items.
+  { href: "/extras/", label: "Extras", Icon: ListPlus, superAdminOnly: false },
+  { href: "/events/", label: "Events", Icon: CalendarDays, superAdminOnly: true },
+  // Coach hidden from nav until it ships — the "Coming soon" placeholder
+  // broke the landing's Accept/Ignore promise. Restore when the chat surface
+  // + confirm-first proposal loop is live.
+  { href: "/coach/", label: "Coach", Icon: Sparkles, superAdminOnly: true },
+  { href: "/report/", label: "Report", Icon: FileText, superAdminOnly: false },
+  { href: "/data/", label: "Data", Icon: Database, superAdminOnly: false },
+  { href: "/guide/", label: "Guide", Icon: BookOpen, superAdminOnly: false },
 ];
 
 /**
  * Overflow menu for secondary destinations. Single (⋯) icon; tap → menu.
  *
- * Was: a 4-icon strip stapled to every Today header, competing with the
- * StreakChip for attention. That was ~28% of the header row on a 390px
- * viewport. Now a single icon, everything else 1 tap away.
+ * Was: a 4-icon strip stapled to every Today header. ~28% of the header
+ * row on a 390px viewport. Now a single icon, everything else 1 tap away.
  */
 export function HeaderQuickLinks() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const isSuperAdmin = useIsSuperAdmin();
+  const visibleLinks = LINKS.filter((l) => !l.superAdminOnly || isSuperAdmin);
 
   // Close on outside click / Escape.
   useEffect(() => {
@@ -72,7 +80,7 @@ export function HeaderQuickLinks() {
           aria-label="More destinations"
           className="absolute right-0 mt-1 z-40 rounded border border-line bg-surface shadow-lg min-w-[180px] py-1"
         >
-          {LINKS.map(({ href, label, Icon }) => {
+          {visibleLinks.map(({ href, label, Icon }) => {
             const active = pathname === href || pathname === href.replace(/\/$/, "");
             return (
               <Link

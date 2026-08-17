@@ -239,7 +239,7 @@ export function RunSlotCard({ date }: { date: string }) {
         <Footprints size={16} className="text-slate flex-shrink-0" aria-hidden />
         <div className="flex-1 min-w-0">
           <p className="text-[14px] font-semibold text-strong">{slot.title}</p>
-          <p className="text-[12.5px] text-muted mt-0.5">{slot.detail}</p>
+          <p className="text-[13px] text-muted mt-0.5">{slot.detail}</p>
         </div>
         <button
           type="button"
@@ -282,7 +282,7 @@ export function RunSlotCard({ date }: { date: string }) {
                   .filter(Boolean)
                   .join(" · ")}
                 {r.source === "gpx" ? (
-                  <span className="ml-2 text-[10.5px] uppercase tracking-wider bg-slate/30 text-slate px-1 py-0.5 rounded">
+                  <span className="ml-2 text-[10px] uppercase tracking-wider bg-slate/30 text-slate px-1 py-0.5 rounded">
                     gpx
                   </span>
                 ) : null}
@@ -314,7 +314,7 @@ export function RunSlotCard({ date }: { date: string }) {
                 onClick={() => setActivity(a)}
                 aria-pressed={activity === a}
                 className={cn(
-                  "px-2.5 py-1.5 min-h-[36px] rounded-full font-mono text-[11.5px]",
+                  "px-2.5 py-1.5 min-h-[36px] rounded-full font-mono text-[11px]",
                   activity === a
                     ? "bg-slate text-surface"
                     : "bg-line-soft text-muted hover:text-ink",
@@ -495,7 +495,7 @@ export function RunSlotCard({ date }: { date: string }) {
                 </label>
               </div>
               {twoKTime && parseTimeToSeconds(twoKTime) ? (
-                <p className="text-[11.5px] text-muted font-mono">
+                <p className="text-[11px] text-muted font-mono">
                   ≈ {Math.round(parseTimeToSeconds(twoKTime)! / 4)}s per 500m split
                 </p>
               ) : null}
@@ -518,7 +518,7 @@ export function RunSlotCard({ date }: { date: string }) {
           {intensity === "hard" &&
           (activeProgramSlug === "concurrent-strength-maintenance" ||
             activeProgramSlug === "engine-builder") ? (
-            <div className="rounded border border-amber/40 bg-amber/10 border-l-4 border-l-amber px-3 py-2 text-[11.5px]">
+            <div className="rounded border border-amber/40 bg-amber/10 border-l-4 border-l-amber px-3 py-2 text-[11px]">
               <p className="font-semibold text-amber">Heads up — interference window.</p>
               <p className="text-muted mt-0.5">
                 Hard cardio wants ≥6h between it and any heavy lift. If you have
@@ -531,14 +531,14 @@ export function RunSlotCard({ date }: { date: string }) {
             <button
               type="button"
               onClick={submit}
-              className="font-mono text-[11.5px] uppercase tracking-wider px-3 py-2 rounded bg-slate text-surface"
+              className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-slate text-surface"
             >
               Save session
             </button>
             <button
               type="button"
               onClick={reset}
-              className="font-mono text-[11.5px] uppercase tracking-wider px-3 py-2 rounded border border-line text-muted"
+              className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-muted"
             >
               Cancel
             </button>
@@ -575,7 +575,7 @@ export function RunSlotCard({ date }: { date: string }) {
       />
 
       {importError ? (
-        <p className="text-[12.5px] text-red">Couldn&apos;t import: {importError}</p>
+        <p className="text-[13px] text-red">Couldn&apos;t import: {importError}</p>
       ) : null}
 
       {primerOpen ? (
@@ -669,7 +669,7 @@ function PrimerContent({
   })();
   return (
     <>
-      <p className="text-[12.5px] text-muted">
+      <p className="text-[13px] text-muted">
         {activity === "crossfit_class"
           ? "The box's own warm-up replaces this."
           : "Session-specific primer + cool-down. Skip the ones that don't apply."}
@@ -689,7 +689,7 @@ function PrimerContent({
             <li key={line}>{line}</li>
           ))}
         </ul>
-        <p className="text-[12.5px] text-red mt-2">
+        <p className="text-[13px] text-red mt-2">
           No aggressive static stretching straight after — tissue is warm and stretches too far.
         </p>
       </div>

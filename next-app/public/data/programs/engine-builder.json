@@ -1162,7 +1162,7 @@
       "Fat oxidation rate at Fatmax (~63% VO2max in trained men, range 45-75%; Achten & Jeukendrup 2003). Z1 volume drives \u03b2-HAD and CPT1 upregulation \u2014 the enzymatic machinery for fat oxidation."
     ],
     "session_rationale": {
-      "block_z1_steady": "The single largest driver of mitochondrial + capillary adaptation across a 6-month arc. Konopka 2014: 12 weeks of 3-4\u00d7/week cycling at 60-80% HRR produced PGC-1\u03b1 +55-62%, CS +65-102%, \u03b2-HAD +397-435%. Andersen & Henriksson 1977: 40 min/day \u00d7 4/wk \u00d7 8 wk at 80% VO2max drove capillary density +20% and VO2max +16%. San-Mill\u00e1n's lactate-clamp methodology (via Peter Attia podcasts) identifies Zone 2 as the intensity that recruits Type I fibres preferentially \u2014 the largest mitochondrial signal per unit of fatigue. Confidently the base-load session of the program.",
+      "block_z1_steady": "The single largest driver of mitochondrial + capillary adaptation across a 6-month arc. Konopka 2014: 12 weeks of 3-4\u00d7/week cycling at 60-80% HRR produced PGC-1\u03b1 +55-62%, CS +65-102%, \u03b2-HAD +397-435%. Andersen & Henriksson 1977: 40 min/day \u00d7 4/wk \u00d7 8 wk at 80% VO2max drove capillary density +20% and VO2max +16%. San-Mill\u00e1n & Brooks 2018 identify Zone 2 as the intensity that recruits Type I fibres preferentially via the lactate-clamp methodology \u2014 the largest mitochondrial signal per unit of fatigue. Confidently the base-load session of the program.",
       "block_sustained_tempo": "Sub-threshold sustained work drives MCT1 upregulation (Pilegaard 2000) and shifts the crossover point toward higher intensities (Brooks & Mercier 1994). Jack Daniels' T-pace (~83-88% VDOT). Fills the missing middle: harder than Z1, easier than 4\u00d74. The bridge session in weeks 3-5.",
       "block_threshold_cruise": "Longer intervals at ~85-90% HRmax. R\u00f8nnestad & Hansen 2020 comparison: long intervals produce comparable VO2max gains to short intervals in cyclists; superior for peak-power development is disputed. Threshold cruise builds LT2 sustainable output \u2014 the pace/power that keeps improving after VO2max plateaus (Joyner & Coyle 2008).",
       "block_norwegian_4x4": "Helgerud 2007 (n=40): 4\u00d74 min at 90-95% HRmax produced VO2max +7.2% and stroke volume +10% over 8 weeks \u2014 the only session type in that four-arm study that moved SV meaningfully. Wisl\u00f8ff 2007 (post-MI HF patients, 12 weeks): VO2peak +46%, LV ejection fraction +35% with the same 4\u00d74 protocol. Time-at-VO2max is the specific driver of cardiac stroke-volume adaptation.",
@@ -1276,32 +1276,6 @@
         "source": "Sports Medicine 30(6):385-394",
         "url": "https://pubmed.ncbi.nlm.nih.gov/11132122/",
         "used_for": "Interference model \u2014 informs the same-day sequencing rule (strength first if both must share a day) and the 6+ h separation guideline."
-      },
-      {
-        "id": "san_millan_attia",
-        "authors": "San Mill\u00e1n I, via Attia P",
-        "year": 2022,
-        "title": "Zone 2 training methodology and lactate curve interpretation (podcast series)",
-        "source": "The Peter Attia Drive podcast, episodes 201 and 261",
-        "url": "https://peterattiamd.com/inigosanmillan/",
-        "used_for": "Practical Zone-2 pace/HR guidance \u2014 the 'nose-breathing / conversation-in-full-sentences' cue and the emphasis on Z2 volume as the primary adaptation driver."
-      },
-      {
-        "id": "daniels_vdot",
-        "authors": "Daniels J",
-        "year": 2013,
-        "title": "Daniels' Running Formula (3rd ed.) \u2014 VDOT tables and pace zones",
-        "source": "Human Kinetics",
-        "used_for": "Pace-zone percentages for tempo and threshold work (83-88% VDOT sustained, 88-92% VDOT threshold)."
-      },
-      {
-        "id": "attia_zone_2",
-        "authors": "Attia P",
-        "year": 2023,
-        "title": "The Peter Attia guide to Zone 2 training",
-        "source": "peterattiamd.com",
-        "url": "https://peterattiamd.com/guide-to-zone-2-training/",
-        "used_for": "Framing Zone 2 as a longevity pillar and practical prescription (minutes per week, HR guidance) \u2014 used in the block_z1_steady rationale."
       },
       {
         "id": "little_2010",

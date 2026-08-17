@@ -3,9 +3,15 @@
 import { useMemo } from "react";
 import { useStore } from "@/lib/useStore";
 import { assessReintroReadiness } from "@/lib/engine/readiness";
+import { today as todayISO, hapticTap } from "@/lib/utils";
+import { announce } from "@/lib/announce";
 import type { Program } from "@/lib/schemas";
 
 const PROPOSAL_ID = "reintro-graduation";
+
+// Which phase to advance to when the reintro readiness signal fires. Hip
+// program's phase_2 is the 5/3/1 Cycle 1 phase — the natural next.
+const NEXT_PHASE_ID = "phase_2_cycle_1";
 
 /**
  * Informational banner: shows only when the athlete has two qualifying sessions
@@ -25,6 +31,7 @@ export function ReadinessProposal({
 }) {
   const store = useStore((s) => s.store);
   const dismissProposal = useStore((s) => s.dismissProposal);
+  const advancePhase = useStore((s) => s.advancePhase);
 
   const dismissedFor = store.dismissed_proposals?.[date] ?? [];
 
@@ -36,9 +43,14 @@ export function ReadinessProposal({
   if (!result.ready) return null;
   if (dismissedFor.includes(PROPOSAL_ID)) return null;
 
+  const nextPhase = program.phases.find((p) => p.id === NEXT_PHASE_ID);
+  const canAdvance = !!nextPhase?.starts && !!program.slug;
+  const targetName = nextPhase?.name?.replace(/\s*\([^)]*\)\s*$/, "") ?? "next phase";
+
   return (
     <section
       aria-label="Reintro graduation signal"
+      data-readiness-proposal
       className="border border-green/40 bg-green/10 rounded-md p-3 space-y-2"
     >
       <p className="font-mono text-[10px] uppercase tracking-widest text-green">
@@ -49,7 +61,7 @@ export function ReadinessProposal({
         you&apos;re done with Phase 1. Advancing to Cycle 1 is a call to make deliberately —
         not something the app will do behind your back.
       </p>
-      <ul className="text-[12.5px] font-mono text-muted space-y-0.5">
+      <ul className="text-[13px] font-mono text-muted space-y-0.5">
         {result.evidence.map((e) => (
           <li key={e.date + e.exerciseId}>
             {e.date} · {e.exerciseId} · {e.weightKg} kg × {e.reps}
@@ -58,16 +70,38 @@ export function ReadinessProposal({
         ))}
       </ul>
       <p className="text-[12px] text-muted">
-        When you&apos;re ready, either wait for Phase 2&apos;s natural start or talk to the coach.
-        Hip-flexor / rehab work stays on regardless.
+        Advance now and {targetName} starts today. Hip-flexor / rehab work stays on regardless.
+        You can also sit tight and let Phase 2 begin on its scheduled date.
       </p>
       <div className="flex flex-wrap gap-2 pt-1">
+        {canAdvance ? (
+          <button
+            type="button"
+            onClick={(e) => {
+              const originalStart = nextPhase!.starts;
+              const orig = new Date(originalStart + "T00:00:00").getTime();
+              const now = new Date(todayISO() + "T00:00:00").getTime();
+              if (!Number.isFinite(orig) || !Number.isFinite(now)) return;
+              const daysToShift = Math.round((now - orig) / 864e5);
+              hapticTap("medium");
+              (e.currentTarget.closest("[data-readiness-proposal]") as HTMLElement | null)?.classList.add(
+                "pulse-accept",
+              );
+              advancePhase(program.slug!, daysToShift);
+              dismissProposal(date, PROPOSAL_ID);
+              announce(`Advanced to ${targetName}.`);
+            }}
+            className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover"
+          >
+            Advance to {targetName}
+          </button>
+        ) : null}
         <button
           type="button"
           onClick={() => dismissProposal(date, PROPOSAL_ID)}
-          className="font-mono text-[11.5px] uppercase tracking-wider px-3 py-2 rounded border border-line hover:bg-line-soft"
+          className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line hover:bg-line-soft"
         >
-          Got it
+          Not yet
         </button>
       </div>
     </section>

@@ -63,8 +63,19 @@ export function Onboarding() {
   // misleading. Gate to users who explicitly picked anterior-hip-rebuild.
   const activeSlug = useStore((s) => s.store.user_profile?.active_program_id);
   const isHipProgram = activeSlug === "anterior-hip-rebuild";
+  // Robust check: skip the modal if today's symptoms already exist in the
+  // store. Survives iOS Safari ITP clearing localStorage (7-day inactivity
+  // rule) + browser resets + cross-device use, because the store syncs via KV.
+  const todaySymptomsLogged = useStore(
+    (s) => s.store.logs[todayISO()]?.symptoms != null,
+  );
   const active =
-    hydrated && !dismissed && !everSeen && isAuthed && isHipProgram;
+    hydrated &&
+    !dismissed &&
+    !everSeen &&
+    !todaySymptomsLogged &&
+    isAuthed &&
+    isHipProgram;
   useFocusTrap(panelRef, dismiss, active);
 
   const finish = (a: Answers) => {
@@ -85,7 +96,15 @@ export function Onboarding() {
     dismiss();
   };
 
-  if (!hydrated || dismissed || everSeen || !isAuthed || !isHipProgram) return null;
+  if (
+    !hydrated ||
+    dismissed ||
+    everSeen ||
+    todaySymptomsLogged ||
+    !isAuthed ||
+    !isHipProgram
+  )
+    return null;
 
   const steps = [
     {
@@ -190,7 +209,7 @@ export function Onboarding() {
           <button
             type="button"
             onClick={dismiss}
-            className="px-4 py-3 min-h-[44px] border border-line text-strong rounded font-mono text-[11.5px] uppercase tracking-wider hover:bg-line-soft"
+            className="px-4 py-3 min-h-[44px] border border-line text-strong rounded font-mono text-[11px] uppercase tracking-wider hover:bg-line-soft"
           >
             Skip setup
           </button>

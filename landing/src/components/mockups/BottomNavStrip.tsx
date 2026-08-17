@@ -64,7 +64,7 @@ export function BottomNavStrip({ active }: { active: Tab }) {
             <div
               key={t}
               className={`flex flex-1 flex-col items-center gap-0.5 py-2 text-[9px] font-medium uppercase tracking-wide ${
-                isActive ? "text-white" : "text-white/60"
+                isActive ? "text-white" : "text-[var(--color-muted)]"
               }`}
             >
               <span className="h-5 w-5">{ICONS[t]}</span>

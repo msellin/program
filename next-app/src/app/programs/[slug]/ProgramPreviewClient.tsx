@@ -8,6 +8,7 @@ import { loadProgram, loadProgramManifest } from "@/lib/data-loader";
 import { useStore } from "@/lib/useStore";
 import { useIsSuperAdmin } from "@/lib/super-admin";
 import { cn } from "@/lib/utils";
+import { ConfirmSheet } from "@/components/ConfirmSheet";
 import type { Program, ProgramManifestEntry } from "@/lib/schemas";
 
 type Props = {
@@ -32,6 +33,7 @@ export function ProgramPreviewClient({ slug }: Props) {
   const [entry, setEntry] = useState<ProgramManifestEntry | null>(null);
   const [program, setProgram] = useState<Program | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [confirmEnd, setConfirmEnd] = useState(false);
   const activeProgramId = useStore((s) => s.store.user_profile?.active_program_id);
   const activeProgramIds = useStore((s) => s.store.user_profile?.active_program_ids);
   const savedTier = useStore((s) => s.store.user_profile?.program_states?.[slug]?.tier);
@@ -172,9 +174,9 @@ export function ProgramPreviewClient({ slug }: Props) {
             </span>
           ) : null}
         </div>
-        <p className="text-[13.5px] text-muted">{entry.short_description}</p>
+        <p className="text-sm text-muted">{entry.short_description}</p>
         {entry.personal ? (
-          <p className="text-[12.5px] text-muted italic border-l-2 border-slate/40 pl-3 mt-2">
+          <p className="text-[13px] text-muted italic border-l-2 border-slate/40 pl-3 mt-2">
             Authored for one specific clinical context. Not marketed as an evidence-backed
             catalog program — the &ldquo;why&rdquo; lives in the author&apos;s clinical notes,
             not in a public references list. Use only if your situation resembles the author&apos;s.
@@ -198,7 +200,7 @@ export function ProgramPreviewClient({ slug }: Props) {
         ) : null}
         {entry.adapts ? (
           <div className="rounded border border-bronze/30 border-l-4 border-l-bronze bg-bronze/[0.06] px-3 py-2 mt-2">
-            <p className="text-[12.5px] text-strong leading-snug">
+            <p className="text-[13px] text-strong leading-snug">
               <span className="font-semibold text-bronze">Adapts to you.</span>{" "}
               {entry.adapts} Every session sharpens further from your logs.
             </p>
@@ -225,18 +227,18 @@ export function ProgramPreviewClient({ slug }: Props) {
 
       <section className="space-y-2">
         <h2 className="text-[14px] font-semibold text-strong">Who this is for</h2>
-        <p className="text-[13.5px] leading-relaxed text-ink">{entry.who_this_is_for}</p>
+        <p className="text-sm leading-relaxed text-ink">{entry.who_this_is_for}</p>
       </section>
 
       <section className="space-y-2">
         <h2 className="text-[14px] font-semibold text-strong">What you&apos;ll achieve</h2>
-        <p className="text-[13.5px] leading-relaxed text-ink">{entry.what_youll_achieve}</p>
+        <p className="text-sm leading-relaxed text-ink">{entry.what_youll_achieve}</p>
       </section>
 
       {entry.retest ? (
         <section className="space-y-2">
           <h2 className="text-[14px] font-semibold text-strong">Retest</h2>
-          <p className="text-[13.5px] leading-relaxed text-ink">{entry.retest}</p>
+          <p className="text-sm leading-relaxed text-ink">{entry.retest}</p>
         </section>
       ) : null}
 
@@ -248,7 +250,7 @@ export function ProgramPreviewClient({ slug }: Props) {
               <li key={i}>{prereq}</li>
             ))}
           </ul>
-          <p className="text-[11.5px] text-muted italic mt-1">
+          <p className="text-[11px] text-muted italic mt-1">
             Not enforced — you can still start if you assess honestly that you&apos;re close enough. The plan will hold you to the paces / loads it prescribes.
           </p>
         </section>
@@ -282,32 +284,21 @@ export function ProgramPreviewClient({ slug }: Props) {
       <div className="pt-2">
         {isActive ? (
           <div className="rounded border border-green/30 bg-green/10 p-3 space-y-2">
-            <p className="text-[13.5px] text-strong font-semibold flex items-center gap-1.5">
+            <p className="text-sm text-strong font-semibold flex items-center gap-1.5">
               <Check size={14} />
               This is your current program
             </p>
             <div className="flex flex-wrap gap-2 pt-1">
               <Link
                 href="/"
-                className="inline-flex items-center gap-1.5 font-mono text-[11.5px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground"
+                className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground"
               >
                 Go to Today
               </Link>
               <button
                 type="button"
-                onClick={() => {
-                  if (
-                    confirm(
-                      "End this program? Your log history stays. You'll return to the catalog to pick another.",
-                    )
-                  ) {
-                    // Clear active_program_id + active_program_ids so the app
-                    // returns to the "pick a program" empty state cleanly.
-                    const s = useStore.getState();
-                    s.removeActiveProgram(slug);
-                  }
-                }}
-                className="inline-flex items-center gap-1.5 font-mono text-[11.5px] uppercase tracking-wider px-3 py-2 rounded border border-red/40 text-red hover:bg-red/10"
+                onClick={() => setConfirmEnd(true)}
+                className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-red/40 text-red hover:bg-red/10"
               >
                 End program
               </button>
@@ -316,7 +307,7 @@ export function ProgramPreviewClient({ slug }: Props) {
         ) : (
           <div className="space-y-3">
             {hasOtherActive ? (
-              <p className="text-[12.5px] text-amber italic">
+              <p className="text-[13px] text-amber italic">
                 You already have an active program. Starting this one will replace it —
                 your logged history stays, but only one main program at a time during beta.
               </p>
@@ -353,7 +344,7 @@ export function ProgramPreviewClient({ slug }: Props) {
                             {selected ? <Check size={11} className="text-ground" strokeWidth={3} /> : null}
                           </div>
                           <div className="min-w-0 flex-1">
-                            <p className="text-[13.5px] font-semibold text-strong">{t.label}</p>
+                            <p className="text-sm font-semibold text-strong">{t.label}</p>
                             {t.typical_outcome ? (
                               <p className="text-[12px] text-muted mt-0.5">{t.typical_outcome}</p>
                             ) : null}
@@ -438,14 +429,14 @@ export function ProgramPreviewClient({ slug }: Props) {
         </summary>
         <div className="mt-3 space-y-3 text-[13px]">
           {isMultiDim ? (
-            <p className="text-[12.5px] text-muted italic">
+            <p className="text-[13px] text-muted italic">
               This program is multi-tier — the list below shows every phase and block
               across all levels. You&apos;ll only see the ones your tier uses, and drills
               are picked per session from your capability profile.
             </p>
           ) : null}
           <div>
-            <p className="text-[11.5px] text-muted uppercase tracking-wider mb-1">Phases</p>
+            <p className="text-[11px] text-muted uppercase tracking-wider mb-1">Phases</p>
             <ul className="space-y-1">
               {program.phases.map((ph) => {
                 const tierTag = extractTierTag(ph.name);
@@ -457,7 +448,7 @@ export function ProgramPreviewClient({ slug }: Props) {
                           {tierTag}
                         </span>
                       ) : null}
-                      <span className="font-mono text-[11.5px] text-muted">
+                      <span className="font-mono text-[11px] text-muted">
                         {ph.starts}
                         {ph.ends ? ` → ${ph.ends}` : ""}
                       </span>
@@ -472,7 +463,7 @@ export function ProgramPreviewClient({ slug }: Props) {
             </ul>
           </div>
           <div>
-            <p className="text-[11.5px] text-muted uppercase tracking-wider mb-1">Blocks</p>
+            <p className="text-[11px] text-muted uppercase tracking-wider mb-1">Blocks</p>
             <ul className="text-muted list-disc pl-5">
               {program.blocks.map((b) => (
                 <li key={b.id}>{b.name}</li>
@@ -481,6 +472,19 @@ export function ProgramPreviewClient({ slug }: Props) {
           </div>
         </div>
       </details>
+      <ConfirmSheet
+        open={confirmEnd}
+        title="End this program?"
+        body="Your log history stays. You'll return to the catalog to pick another."
+        confirmLabel="End program"
+        danger
+        onConfirm={() => {
+          setConfirmEnd(false);
+          const s = useStore.getState();
+          s.removeActiveProgram(slug);
+        }}
+        onCancel={() => setConfirmEnd(false)}
+      />
     </div>
   );
 }
@@ -526,12 +530,12 @@ function PersonalAcknowledgementModal({
         <h2 id="personal-gate-title" className="text-[16px] font-semibold text-strong">
           {programName} — proceed with care
         </h2>
-        <p className="mt-3 text-[13.5px] text-ink leading-relaxed">
+        <p className="mt-3 text-sm text-ink leading-relaxed">
           This program was authored against one specific individual&apos;s clinical
           context: imaging findings, provocative-position screening, and history.
           It respects those constraints and would apply them to your training too.
         </p>
-        <p className="mt-2 text-[13.5px] text-ink leading-relaxed">
+        <p className="mt-2 text-sm text-ink leading-relaxed">
           If your situation is <em>different</em> — different injury, different
           history, no clinical review — this plan will apply the wrong
           restrictions and progression. That&apos;s not safe.
@@ -552,7 +556,7 @@ function PersonalAcknowledgementModal({
           <button
             type="button"
             onClick={onCancel}
-            className="font-mono text-[11.5px] uppercase tracking-wider px-3 py-2 rounded border border-line text-muted hover:bg-line-soft min-h-[40px]"
+            className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-muted hover:bg-line-soft min-h-[40px]"
           >
             Not for me
           </button>
@@ -560,7 +564,7 @@ function PersonalAcknowledgementModal({
             type="button"
             onClick={onConfirm}
             disabled={!ack}
-            className="font-mono text-[11.5px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground disabled:opacity-40 disabled:cursor-not-allowed min-h-[40px]"
+            className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground disabled:opacity-40 disabled:cursor-not-allowed min-h-[40px]"
           >
             Continue
           </button>

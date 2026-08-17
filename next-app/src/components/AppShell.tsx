@@ -3,12 +3,14 @@
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
-import { Stethoscope } from "lucide-react";
+import { Stethoscope, Layers } from "lucide-react";
 import { BottomNav } from "@/components/nav/BottomNav";
 import { StoreHydrator } from "@/components/StoreHydrator";
 import { RestTimerHost } from "@/components/workout/RestTimerHost";
 import { Onboarding } from "@/components/Onboarding";
 import { IntroGallery } from "@/components/IntroGallery";
+import { useStore } from "@/lib/useStore";
+import { today as todayISO } from "@/lib/utils";
 import { HeaderQuickLinks } from "@/components/nav/HeaderQuickLinks";
 import { createClient } from "@/lib/supabase/client";
 
@@ -107,25 +109,80 @@ function AuthGatedShell({
           the whole reason we shipped the /programs public preview. */}
       {isTodayRoute ? <Onboarding /> : null}
       <IntroGallery />
-      {/* Global top-right utility strip — Stethoscope + ⋮ overflow. */}
-      <div className="fixed top-3 right-3 z-30 flex items-center gap-1">
-        <Link
-          href="/check/"
-          aria-label="Morning check"
-          className="w-11 h-11 flex items-center justify-center rounded text-muted hover:text-ink hover:bg-line-soft"
-        >
-          <Stethoscope size={18} strokeWidth={1.75} />
-        </Link>
-        <HeaderQuickLinks />
-      </div>
+      {/* Top nav — in-flow, scrolls with content. Whoop / Strava / Runna
+          convention: only the bottom tab bar is fixed; the top chrome
+          (brand + utilities) appears on load and scrolls away so content
+          dominates. Reclaims 48px of scroll real estate + eliminates the
+          "two fixed bars compound weirdly on pinch-zoom" issue. */}
+      <header
+        className="max-w-[760px] mx-auto w-full"
+        style={{ paddingTop: "env(safe-area-inset-top)" }}
+      >
+        <div className="flex items-center justify-between px-4 pt-3 pb-2 sm:px-6">
+          <Link
+            href="/"
+            aria-label="Terav — Today"
+            className="flex items-center gap-2 font-mono text-[13px] uppercase tracking-[0.22em] text-bronze hover:text-ink"
+          >
+            TERAV
+            <ReadinessDot />
+          </Link>
+          <div className="flex items-center gap-0.5">
+            <Link
+              href="/programs/"
+              aria-label="Programs"
+              className="w-11 h-11 flex items-center justify-center rounded text-muted hover:text-ink hover:bg-line-soft"
+            >
+              <Layers size={18} strokeWidth={1.75} />
+            </Link>
+            <Link
+              href="/check/"
+              aria-label="Morning check"
+              className="w-11 h-11 flex items-center justify-center rounded text-muted hover:text-ink hover:bg-line-soft"
+            >
+              <Stethoscope size={18} strokeWidth={1.75} />
+            </Link>
+            <HeaderQuickLinks />
+          </div>
+        </div>
+      </header>
       <main
-        className="max-w-[760px] mx-auto w-full px-4 sm:px-6 flex-1 py-6"
-        style={{ paddingBottom: "calc(64px + env(safe-area-inset-bottom) + 1rem)" }}
+        className="max-w-[760px] mx-auto w-full px-4 sm:px-6 flex-1"
+        style={{
+          paddingBottom: "calc(64px + env(safe-area-inset-bottom) + 1rem)",
+        }}
       >
         {children}
       </main>
+      {/* Screen-reader announcer. Used by lib/announce.ts to surface proposal
+          acceptance, PR fires, etc. to SR users. Must exist at load time —
+          NVDA/JAWS skip late-injected aria-live containers. */}
+      <div id="app-status" aria-live="polite" aria-atomic="true" className="sr-only" />
       <RestTimerHost />
       <BottomNav />
     </>
+  );
+}
+
+/**
+ * Colored dot next to the TERAV wordmark reflecting today's derived symptom
+ * state (green / amber / red). Whoop / Ultrahuman convention — persistent
+ * readiness at-a-glance without a whole panel. Hidden if no check saved.
+ */
+function ReadinessDot() {
+  const derived = useStore((s) => s.store.logs[todayISO()]?.derived_state);
+  if (!derived) return null;
+  const bg =
+    derived === "green"
+      ? "bg-green"
+      : derived === "amber"
+        ? "bg-amber"
+        : "bg-red";
+  return (
+    <span
+      aria-label={`Today: ${derived}`}
+      title={`Today's state: ${derived}`}
+      className={`h-2 w-2 rounded-full ${bg}`}
+    />
   );
 }

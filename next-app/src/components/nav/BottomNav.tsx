@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -22,10 +23,20 @@ const TABS = [
 
 export function BottomNav() {
   const pathname = usePathname();
+  const keyboardOpen = useKeyboardOpen();
+  // Hide while the iOS on-screen keyboard is up so the fixed nav doesn't
+  // cover the input field the user is typing in (e.g. Notes on /check,
+  // Coach textarea, log-form numerics). No effect on desktop or Android's
+  // resize-viewport model.
+  if (keyboardOpen) return null;
   return (
     <nav
       aria-label="Primary"
-      className="fixed left-0 right-0 bottom-0 z-40 border-t border-line bg-surface pb-[env(safe-area-inset-bottom)]"
+      className="fixed left-0 right-0 bottom-0 z-40 border-t border-line bg-surface-2 pb-[env(safe-area-inset-bottom)]"
+      style={{
+        paddingLeft: "env(safe-area-inset-left)",
+        paddingRight: "env(safe-area-inset-right)",
+      }}
     >
       <ul className="mx-auto flex max-w-[760px] items-stretch">
         {TABS.map(({ href, label, Icon }) => {
@@ -39,7 +50,7 @@ export function BottomNav() {
                 aria-current={active ? "page" : undefined}
                 title={label}
                 className={cn(
-                  "flex flex-col items-center justify-center gap-0.5 py-2 px-0.5 text-[9px] font-medium tracking-wide uppercase min-h-[52px]",
+                  "flex flex-col items-center justify-center gap-0.5 py-2 px-0.5 text-[10px] font-medium tracking-[0.08em] uppercase min-h-[52px]",
                   active ? "text-ink" : "text-muted hover:text-ink",
                 )}
               >
@@ -57,4 +68,28 @@ export function BottomNav() {
       </ul>
     </nav>
   );
+}
+
+/**
+ * Detects iOS soft-keyboard presence via visualViewport height delta.
+ * When the keyboard rises, iOS Safari shrinks the visual viewport but the
+ * layout viewport (window.innerHeight) stays the same — a delta > ~100px
+ * is a reliable "keyboard up" signal. Android already resizes the whole
+ * viewport so this returns false there.
+ */
+function useKeyboardOpen(): boolean {
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.visualViewport) return;
+    const vv = window.visualViewport;
+    const check = () => {
+      // Threshold 100px — accounts for the URL bar shrinking on scroll (~50-60px)
+      // without false-triggering. Real keyboards are 250-400px tall.
+      setOpen(window.innerHeight - vv.height > 100);
+    };
+    vv.addEventListener("resize", check);
+    check();
+    return () => vv.removeEventListener("resize", check);
+  }, []);
+  return open;
 }

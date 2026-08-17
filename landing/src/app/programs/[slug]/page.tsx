@@ -44,7 +44,7 @@ export default async function ProgramDetailPage({
         <article className="mx-auto max-w-3xl px-5 pt-8 pb-16 sm:px-6 sm:pt-12">
           <Link
             href="/programs"
-            className="mono-caps mb-6 inline-block text-white/60 hover:text-white/80"
+            className="mono-caps mb-6 inline-block text-[var(--color-muted)] hover:text-white/80"
           >
             ← All programs
           </Link>
@@ -54,9 +54,9 @@ export default async function ProgramDetailPage({
               <span className={`inline-block h-1.5 w-1.5 rounded-full ${accent(p)}`} />
               <span className="mono-caps">{p.domainLabel}</span>
               <span className="text-white/25">·</span>
-              <span className="mono-caps text-white/60">{p.duration}</span>
+              <span className="mono-caps text-[var(--color-muted)]">{p.duration}</span>
               <span className="text-white/25">·</span>
-              <span className="mono-caps text-white/60">{p.difficulty}</span>
+              <span className="mono-caps text-[var(--color-muted)]">{p.difficulty}</span>
             </div>
             <h1 className="text-4xl font-black leading-[1.05] tracking-tight text-white sm:text-5xl md:text-6xl">
               {p.name}
@@ -99,7 +99,7 @@ export default async function ProgramDetailPage({
                 </div>
               ))}
             </div>
-            <p className="mt-3 text-[12.5px] italic text-white/60">
+            <p className="mt-3 text-[12.5px] italic text-[var(--color-muted)]">
               Ranges are honest, not guarantees. Response varies — HERITAGE non-response
               distributions apply to any structured training program.
             </p>
@@ -190,7 +190,7 @@ function Section({
 }) {
   return (
     <section className="mt-10">
-      <h2 className="mb-4 mono-caps text-white/60">{title}</h2>
+      <h2 className="mb-4 mono-caps text-[var(--color-muted)]">{title}</h2>
       {children}
     </section>
   );

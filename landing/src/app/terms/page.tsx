@@ -63,7 +63,7 @@ export default function TermsPage() {
         terms.
       </p>
 
-      <p className="mt-10 text-xs text-white/60">
+      <p className="mt-10 text-xs text-[var(--color-muted)]">
         Last updated {new Date().getFullYear()}.
       </p>
     </LegalLayout>

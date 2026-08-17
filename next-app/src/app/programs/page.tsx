@@ -73,11 +73,11 @@ export default function ProgramCatalogPage() {
     <div className="space-y-5 pt-4">
       <header className="space-y-1">
         <h1 className="text-2xl font-semibold tracking-tight text-strong">Programs</h1>
-        <p className="text-[13.5px] text-muted">
+        <p className="text-sm text-muted">
           Each program targets one weakness. Length varies by program. Personalised to your
           baseline, adaptive to how you respond.
         </p>
-        <p className="text-[11.5px] text-muted pt-1">
+        <p className="text-[11px] text-muted pt-1">
           <span className="font-mono uppercase text-amber">provisional</span> = beta, evidence and prescription drafted but not clinically reviewed.
         </p>
       </header>
@@ -93,7 +93,7 @@ export default function ProgramCatalogPage() {
             onClick={() => setFilter(f.id)}
             aria-pressed={filter === f.id}
             className={cn(
-              "min-h-[36px] px-3 py-1.5 rounded-full font-mono text-[11.5px]",
+              "min-h-[36px] px-3 py-1.5 rounded-full font-mono text-[11px]",
               filter === f.id
                 ? "bg-slate text-surface"
                 : "bg-line-soft text-muted hover:text-ink",
@@ -105,7 +105,7 @@ export default function ProgramCatalogPage() {
       </nav>
 
       {Array.from(grouped.entries()).length === 0 ? (
-        <p className="text-[13.5px] text-muted italic">
+        <p className="text-sm text-muted italic">
           Nothing in this category yet. Try another, or check back — the catalog is growing.
         </p>
       ) : (
@@ -120,12 +120,12 @@ export default function ProgramCatalogPage() {
                   <h2 className="text-[15px] font-semibold text-strong">
                     {manifest.categories[category]?.label ?? category}
                   </h2>
-                  <span className="text-[11.5px] font-mono text-muted">
+                  <span className="text-[11px] font-mono text-muted">
                     · {programs.length}
                   </span>
                 </div>
                 {manifest.categories[category]?.description ? (
-                  <p className="text-[12.5px] text-muted -mt-1">
+                  <p className="text-[13px] text-muted -mt-1">
                     {manifest.categories[category].description}
                   </p>
                 ) : null}
@@ -145,7 +145,7 @@ export default function ProgramCatalogPage() {
           })
       )}
 
-      <footer className="pt-6 border-t border-line-soft text-[12.5px] text-muted italic">
+      <footer className="pt-6 border-t border-line-soft text-[13px] text-muted italic">
         More programs land as they&apos;re authored.
       </footer>
     </div>
@@ -160,8 +160,8 @@ export default function ProgramCatalogPage() {
 const CATEGORY_META: Record<string, { icon: string; iconClass: string; borderClass: string }> = {
   rehab: { icon: "◆", iconClass: "text-slate", borderClass: "border-l-slate" },
   strength: { icon: "▮", iconClass: "text-bronze", borderClass: "border-l-bronze" },
-  skill: { icon: "△", iconClass: "text-teal", borderClass: "border-l-teal" },
-  gymnastics: { icon: "△", iconClass: "text-teal", borderClass: "border-l-teal" },
+  skill: { icon: "△", iconClass: "text-slate", borderClass: "border-l-slate" },
+  gymnastics: { icon: "△", iconClass: "text-slate", borderClass: "border-l-slate" },
   endurance: { icon: "○", iconClass: "text-green", borderClass: "border-l-green" },
   hyrox: { icon: "☰", iconClass: "text-amber", borderClass: "border-l-amber" },
   mobility: { icon: "◇", iconClass: "text-slate", borderClass: "border-l-slate" },
@@ -186,7 +186,7 @@ function ProgramCard({
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
           <div className="flex items-baseline gap-2 flex-wrap">
-            <h3 className="text-[14.5px] font-semibold text-strong">{p.name}</h3>
+            <h3 className="text-sm font-semibold text-strong">{p.name}</h3>
             {isActive ? (
               <span className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-bronze text-ground">
                 active
@@ -229,11 +229,11 @@ function ProgramCard({
             </div>
           ) : null}
           {p.adapts ? (
-            <p className="mt-1.5 text-[11.5px] text-bronze/85 italic leading-snug">
+            <p className="mt-1.5 text-[11px] text-bronze/85 italic leading-snug">
               {p.adapts}
             </p>
           ) : null}
-          <div className="mt-2 flex items-center gap-3 text-[11.5px] font-mono text-muted">
+          <div className="mt-2 flex items-center gap-3 text-[11px] font-mono text-muted">
             <span>{p.duration_weeks} wk</span>
             {p.difficulty !== "multi-tier" ? (
               <>
