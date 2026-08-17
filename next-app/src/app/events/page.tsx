@@ -9,6 +9,13 @@ import { useIsSuperAdmin } from "@/lib/super-admin";
 
 type UserEvent = NonNullable<NonNullable<Store["user_profile"]>["events"]>[number];
 
+// Stable empty-array reference for the zustand selector. Without this, the
+// `?? []` fallback allocates a new [] on every selector call, zustand's
+// referential-equality check sees "state changed" every render, and we get
+// React error #185 (Maximum update depth exceeded). Founder hit this on
+// /events/ 2026-08-17.
+const EMPTY_EVENTS: UserEvent[] = [];
+
 type Kind = "race" | "competition" | "travel" | "other";
 
 const KIND_LABELS: Record<Kind, string> = {
@@ -29,7 +36,7 @@ const KIND_LABELS: Record<Kind, string> = {
  */
 export default function EventsPage() {
   const hydrated = useStore((s) => s.hydrated);
-  const events = useStore((s) => s.store.user_profile?.events ?? []);
+  const events = useStore((s) => s.store.user_profile?.events ?? EMPTY_EVENTS);
   const addEvent = useStore((s) => s.addEvent);
   const removeEvent = useStore((s) => s.removeEvent);
   const isSuperAdmin = useIsSuperAdmin();
