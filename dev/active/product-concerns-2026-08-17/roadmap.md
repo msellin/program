@@ -160,6 +160,14 @@ Ship in this order to avoid the double-polish problem:
 
 ---
 
+## Auth polish queued separately (not the F/P track)
+
+Signup + sign-in currently support only email + password. Adds queued:
+
+- **Resend confirmation email** — shipped 2026-08-17 (`sign-up/page.tsx` "Check your email" screen + `sign-in/page.tsx` "Email not confirmed" detected state). Founder observed one beta user (`margussellin112@hot.ee`) sitting in unconfirmed state; without a resend button they'd hit the "email already registered" trap on retry.
+- **Google sign-in** — queued. Requires Supabase Auth → Providers → Google enabled + Google Cloud Console OAuth client + callback URL `https://app.terav.fit/auth/callback` (route currently doesn't exist; needs creation). Founder cost: ~10 min (Google Cloud + Supabase dashboard). Code cost: ~1h (add `<SignInWithGoogle />` button on both auth pages, add `/auth/callback` route for the OAuth code-exchange). Total: ~half a day of shared work.
+- **Apple sign-in** — deferred until Google ships and signals demand. Requires Apple Developer team ($99/yr) + Sign-in-with-Apple entitlement. Higher setup cost, iOS-first buyer segment though.
+
 ## What NOT to do (rejected explicitly)
 
 - ~~Sharpness A/B/C/D letter grades~~ — Concern A says grade data not users

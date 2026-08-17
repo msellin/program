@@ -21,6 +21,28 @@ export default function SignUpPage() {
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
+  const [resending, setResending] = useState(false);
+  const [resent, setResent] = useState(false);
+
+  const resendConfirmation = async () => {
+    setError(null);
+    setResending(true);
+    const supabase = createClient();
+    const { error: err } = await supabase.auth.resend({
+      type: "signup",
+      email,
+      options: {
+        emailRedirectTo:
+          typeof window !== "undefined" ? `${window.location.origin}/sign-in` : undefined,
+      },
+    });
+    setResending(false);
+    if (err) {
+      setError(err.message);
+      return;
+    }
+    setResent(true);
+  };
 
   const submit = async (e: FormEvent) => {
     e.preventDefault();
@@ -71,14 +93,28 @@ export default function SignUpPage() {
           We sent a confirmation link to <strong>{email}</strong>. Tap it, then sign in.
         </p>
         <p className="text-[12px] text-muted">
-          Nothing arrived after a couple of minutes? Check the spam folder, or use a different email.
+          Nothing arrived after a couple of minutes? Check the spam folder, or resend below.
         </p>
-        <Link
-          href="/sign-in"
-          className="inline-block font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line hover:bg-line-soft"
-        >
-          Back to sign in
-        </Link>
+        {error ? <p className="text-[13px] text-red">{error}</p> : null}
+        {resent ? (
+          <p className="text-[13px] text-green">Sent again — check your inbox.</p>
+        ) : null}
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={resendConfirmation}
+            disabled={resending || resent}
+            className="inline-flex items-center gap-1.5 min-h-[44px] font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            {resending ? "Sending…" : resent ? "Sent" : "Resend confirmation"}
+          </button>
+          <Link
+            href="/sign-in"
+            className="inline-flex items-center min-h-[44px] font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line hover:bg-line-soft"
+          >
+            Back to sign in
+          </Link>
+        </div>
       </div>
     );
   }

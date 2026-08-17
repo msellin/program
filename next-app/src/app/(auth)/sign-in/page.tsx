@@ -20,25 +20,61 @@ function SignInInner() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [needsConfirmation, setNeedsConfirmation] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [resetSent, setResetSent] = useState(false);
   const [resetting, setResetting] = useState(false);
+  const [resending, setResending] = useState(false);
+  const [confirmationResent, setConfirmationResent] = useState(false);
 
   const submit = async (e: FormEvent) => {
     e.preventDefault();
     setError(null);
+    setNeedsConfirmation(false);
+    setConfirmationResent(false);
     setSubmitting(true);
     const supabase = createClient();
     const { error: err } = await supabase.auth.signInWithPassword({ email, password });
     setSubmitting(false);
     if (err) {
-      setError(err.message);
+      // Detect the "not confirmed" case and swap to a friendlier prompt +
+      // resend button. Supabase returns "Email not confirmed" for this;
+      // guard against future wording drift with a loose match.
+      if (/not.*confirmed|email.*confirm/i.test(err.message)) {
+        setNeedsConfirmation(true);
+      } else {
+        setError(err.message);
+      }
       return;
     }
     // Bounce back to the deep link the user was trying to reach — guard
     // against open-redirect by only accepting relative paths.
     const safeNext = nextPath.startsWith("/") && !nextPath.startsWith("//") ? nextPath : "/";
     router.push(safeNext);
+  };
+
+  const resendConfirmation = async () => {
+    setError(null);
+    if (!email) {
+      setError("Enter your email above first, then tap resend.");
+      return;
+    }
+    setResending(true);
+    const supabase = createClient();
+    const { error: err } = await supabase.auth.resend({
+      type: "signup",
+      email,
+      options: {
+        emailRedirectTo:
+          typeof window !== "undefined" ? `${window.location.origin}/sign-in` : undefined,
+      },
+    });
+    setResending(false);
+    if (err) {
+      setError(err.message);
+      return;
+    }
+    setConfirmationResent(true);
   };
 
   const sendPasswordReset = async () => {
@@ -98,6 +134,27 @@ function SignInInner() {
         </label>
         {error ? (
           <p className="text-[13px] text-red border-l-4 border-red pl-2">{error}</p>
+        ) : null}
+        {needsConfirmation ? (
+          <div className="text-[13px] border-l-4 border-amber pl-2 space-y-2">
+            <p className="text-ink">
+              Your email hasn&apos;t been confirmed yet. Check the inbox for{" "}
+              <strong>{email}</strong> (also the spam folder) — the link takes ~1 minute
+              to arrive.
+            </p>
+            {confirmationResent ? (
+              <p className="text-green">Confirmation email sent again — check your inbox.</p>
+            ) : (
+              <button
+                type="button"
+                onClick={resendConfirmation}
+                disabled={resending}
+                className="inline-flex items-center min-h-[44px] font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover disabled:opacity-50"
+              >
+                {resending ? "Sending…" : "Resend confirmation email"}
+              </button>
+            )}
+          </div>
         ) : null}
         <button
           type="submit"
