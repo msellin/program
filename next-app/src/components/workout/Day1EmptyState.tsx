@@ -25,11 +25,11 @@ export function Day1EmptyState() {
         Setup · one minute
       </p>
       <h2 id="day1-title" className="text-lg font-semibold text-strong leading-snug">
-        Start with a morning check.
+        One focus, sharpened every session.
       </h2>
       <p className="text-[13px] text-muted leading-relaxed">
-        One minute of tapping calibrates today&apos;s load. After that, the engine has
-        something to work with — nothing before it means anything to sharpen.
+        Starts with a morning check — one minute of tapping calibrates today&apos;s load.
+        Terav writes the focus arc; the rest of your week is still yours.
       </p>
       <Link
         href="/check/"

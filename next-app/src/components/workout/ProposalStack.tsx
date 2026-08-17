@@ -18,11 +18,19 @@ import type { Program } from "@/lib/schemas";
  */
 export function ProposalStack({ program, date }: { program: Program | null | undefined; date: string }) {
   const store = useStore((s) => s.store);
+  // CLS mitigation (P0 B4 fix, 2026-08-17): the store hydrates locally
+  // synchronously but the remote KV blob lands ~200-500ms later. Rendering
+  // proposals before the remote sync lands causes content below to shift
+  // when the first real proposal mounts. Gate on `updated_at > 0` — either
+  // the user has local data (any real store has updated_at) or sync landed.
+  // On a fresh signup, updated_at stays 0 briefly; that's fine — no shift,
+  // Day1EmptyState owns the fold anyway.
+  const syncStable = (store.updated_at ?? 0) > 0;
 
   const proposals = useMemo(() => {
-    if (!program) return [];
+    if (!program || !syncStable) return [];
     return selectProposals(store, program, date);
-  }, [store, program, date]);
+  }, [store, program, date, syncStable]);
 
   if (proposals.length === 0) return null;
 

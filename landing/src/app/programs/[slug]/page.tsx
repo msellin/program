@@ -21,9 +21,24 @@ export async function generateMetadata({
   const { slug } = await params;
   const p = findProgram(slug);
   if (!p) return { title: "Program not found" };
+  const title = `${p.name} — ${p.tagline}`;
+  const description = p.arcSummary;
+  const url = `https://terav.fit/programs/${p.slug}`;
   return {
-    title: `${p.name} — ${p.tagline}`,
-    description: p.arcSummary,
+    title,
+    description,
+    openGraph: {
+      title: `${title} · Terav`,
+      description,
+      type: "article",
+      url,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${title} · Terav`,
+      description,
+    },
+    alternates: { canonical: url },
   };
 }
 

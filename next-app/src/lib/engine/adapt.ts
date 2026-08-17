@@ -461,11 +461,10 @@ export function evaluateOverperformer(
     easyDays.length > 1 ? `${easyDays.length} "felt strong" notes` : "'felt strong' in a recent note",
   ];
 
-  const liftNames = lifts.map((l) => l.exerciseId).join(", ");
-  const reason =
-    `${triggers[0]} and ${triggers[1]}. The engine reads that as headroom — ` +
-    `nudging ${liftNames} up ${lifts.map((l) => `+${l.delta} kg`).join(" / ")}. ` +
-    `Small step; if it feels heavy next session, you can Ignore the next one and reset.`;
+  // Reason is intentionally short — the delta list beneath (rendered by
+  // ProposalCard) shows the exact numbers, and the Ignore button on the
+  // same card provides the reversibility affordance.
+  const reason = `${triggers[0]} plus ${triggers[1]}. The engine reads that as headroom.`;
 
   return {
     kind: "tm_bump",

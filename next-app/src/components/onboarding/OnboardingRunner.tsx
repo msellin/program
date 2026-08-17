@@ -67,12 +67,6 @@ export function OnboardingRunner() {
       /* ignore */
     }
     setDismissed(true);
-    // Bug fix 2026-08-17: nudge IntroGallery to re-check its gate now that
-    // onboarding is done. Storage events fire cross-tab only; same-tab
-    // consumers listen to a custom `terav:onboarding-done` event.
-    if (typeof window !== "undefined") {
-      window.dispatchEvent(new CustomEvent("terav:onboarding-done"));
-    }
   };
 
   const active = hydrated && isAuthed && !dismissed && program != null;

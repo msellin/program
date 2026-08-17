@@ -213,7 +213,7 @@ function toneFor(p: Proposal): Tone {
 function eyebrowFor(p: Proposal): string {
   switch (p.kind) {
     case "day_adjustment_soften":
-      return "Not feeling 100%? · needs your ok";
+      return "Signal · fatigue / pain flagged";
     case "readiness_after_layoff":
       return "Signal · you look ready to leave reintro";
     case "tier_advance":

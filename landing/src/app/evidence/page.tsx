@@ -3,10 +3,25 @@ import { Ambient } from "@/components/Ambient";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 
+const EVIDENCE_TITLE = "Evidence — the primary sources Terav builds on";
+const EVIDENCE_DESC =
+  "The peer-reviewed studies behind Terav's engine. Grouped by domain: aerobic physiology, concurrent training, motor learning.";
+
 export const metadata: Metadata = {
-  title: "Evidence — the primary sources Terav builds on",
-  description:
-    "The peer-reviewed studies behind Terav&rsquo;s engine. Grouped by domain: aerobic physiology, concurrent training, motor learning.",
+  title: EVIDENCE_TITLE,
+  description: EVIDENCE_DESC,
+  openGraph: {
+    title: `${EVIDENCE_TITLE} · Terav`,
+    description: EVIDENCE_DESC,
+    type: "article",
+    url: "https://terav.fit/evidence",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${EVIDENCE_TITLE} · Terav`,
+    description: EVIDENCE_DESC,
+  },
+  alternates: { canonical: "https://terav.fit/evidence" },
 };
 
 type Citation = {

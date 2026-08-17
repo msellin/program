@@ -72,10 +72,10 @@ export default function ProgramCatalogPage() {
   return (
     <div className="space-y-5 pt-4">
       <header className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight text-strong">Programs</h1>
+        <h1 className="text-2xl font-semibold tracking-tight text-strong">Pick your focus.</h1>
         <p className="text-sm text-muted">
-          Each program targets one weakness. Length varies by program. Personalised to your
-          baseline, adaptive to how you respond.
+          Each program is one focus arc — an engine, a skill, a lift, a stubborn joint.
+          The rest of your week stays yours. Personalised to your baseline, adaptive to how you respond.
         </p>
         <p className="text-[11px] text-muted pt-1">
           <span className="font-mono uppercase text-amber">provisional</span> = beta, evidence and prescription drafted but not clinically reviewed.

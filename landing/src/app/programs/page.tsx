@@ -5,10 +5,25 @@ import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { PUBLIC_PROGRAMS, type LandingProgram } from "@/lib/programs-catalog";
 
+const PROGRAMS_TITLE = "Programs — pick your focus";
+const PROGRAMS_DESC =
+  "Each Terav program is one focus arc — an engine, a skill, a lift, a stubborn joint. Authored against real evidence with honest outcome ranges.";
+
 export const metadata: Metadata = {
-  title: "Programs — pick your fight",
-  description:
-    "Every Terav program is authored against real evidence and honest outcome ranges. Browse before you sign up.",
+  title: PROGRAMS_TITLE,
+  description: PROGRAMS_DESC,
+  openGraph: {
+    title: `${PROGRAMS_TITLE} · Terav`,
+    description: PROGRAMS_DESC,
+    type: "article",
+    url: "https://terav.fit/programs",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${PROGRAMS_TITLE} · Terav`,
+    description: PROGRAMS_DESC,
+  },
+  alternates: { canonical: "https://terav.fit/programs" },
 };
 
 export default function ProgramsIndexPage() {

@@ -4,10 +4,25 @@ import { Ambient } from "@/components/Ambient";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 
+const ROADMAP_TITLE = "Roadmap — Terav";
+const ROADMAP_DESC =
+  "What Terav has shipped, what's in build, and what's next. Programs highlighted; product development mixed in.";
+
 export const metadata: Metadata = {
-  title: "Roadmap — Terav",
-  description:
-    "What Terav has shipped, what's in build, and what's next. Programs highlighted; product development mixed in.",
+  title: ROADMAP_TITLE,
+  description: ROADMAP_DESC,
+  openGraph: {
+    title: ROADMAP_TITLE,
+    description: ROADMAP_DESC,
+    type: "article",
+    url: "https://terav.fit/roadmap",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: ROADMAP_TITLE,
+    description: ROADMAP_DESC,
+  },
+  alternates: { canonical: "https://terav.fit/roadmap" },
 };
 
 type Status = "shipped" | "in_build" | "planned" | "deferred";

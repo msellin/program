@@ -367,7 +367,7 @@ export function ProgramPreviewClient({ slug }: Props) {
                     className="inline-flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-wider px-4 py-3 rounded bg-bronze text-ground hover:bg-bronze/90 disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     <Play size={14} />
-                    {starting ? "Starting…" : requiresTierPick && !effectiveTier ? "Pick a tier" : "Replace current program"}
+                    {starting ? "Starting…" : requiresTierPick && !effectiveTier ? "Pick a tier" : "Make this my focus (replace current)"}
                   </button>
                   {isSuperAdmin ? (
                     <button
@@ -398,7 +398,7 @@ export function ProgramPreviewClient({ slug }: Props) {
                   className="inline-flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-wider px-4 py-3 rounded bg-bronze text-ground hover:bg-bronze/90 disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   <Play size={14} />
-                  {starting ? "Starting…" : requiresTierPick && !effectiveTier ? "Pick a tier to start" : "Start this program"}
+                  {starting ? "Starting…" : requiresTierPick && !effectiveTier ? "Pick a tier to start" : "Make this my focus"}
                 </button>
               )}
             </div>
