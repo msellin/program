@@ -89,7 +89,9 @@ export function DayAdjustmentProposal({ date }: { date: string }) {
       <p className="font-mono text-[10px] uppercase tracking-widest text-amber">
         Not feeling 100%? · needs your ok
       </p>
-      <p className="text-[14px] text-ink leading-snug">{proposal.reason}</p>
+      <p className="text-[14px] text-ink leading-snug">
+        <span className="text-muted">Because:</span> {proposal.reason}
+      </p>
       {signals.matches.length > 0 && (
         <div className="flex flex-wrap gap-1.5">
           {signals.matches.map((m) => (

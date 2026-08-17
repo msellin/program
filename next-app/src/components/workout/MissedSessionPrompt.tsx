@@ -85,9 +85,10 @@ export function MissedSessionPrompt({
             Yesterday was a strength day — nothing logged.
           </p>
           <p className="text-[12px] text-muted mt-0.5 leading-snug">
+            <span className="text-muted">Because:</span>{" "}
             {stage === "prompt"
-              ? "Log what you did so history stays honest, or mark it skipped so the week's progression can respond correctly."
-              : "Pick how the week responds. Both options mark yesterday skipped."}
+              ? "yesterday's scheduled strength session had no log — history stays honest either way, and the week's progression responds to your call."
+              : "you picked how the week responds. Both options mark yesterday skipped."}
           </p>
         </div>
         <button

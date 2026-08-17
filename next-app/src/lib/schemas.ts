@@ -361,6 +361,14 @@ export const evidenceBaseSchema = z.object({
       used_for: z.string(),
     }),
   ),
+  /**
+   * Phase 1 (A2): canonical citation-library IDs used by this program.
+   * Populated by `dev/scripts/migrate-citations.ts`. Resolves against
+   * `public/data/citations.json`. Kept alongside `references[]` for one
+   * release cycle; drop `references[]` in a follow-up once every consumer
+   * reads via the canonical loader.
+   */
+  reference_ids: z.array(z.string()).optional(),
 });
 
 export const programSchema = z.object({
@@ -688,6 +696,19 @@ export const storeSchema = z.object({
         reason: z.string().optional(),
         source: z.enum(["notes", "manual"]).optional(),
         accepted_at: z.number().optional(),
+        /**
+         * Phase 1 (A2): immutable citation snapshot recorded at Accept time.
+         * Survives later edits to `citations.json`. Absent for log-cited
+         * proposals (no underlying study — reason is derived from the log).
+         */
+        citation_snapshot: z
+          .object({
+            id: z.string(),
+            display_short: z.string(),
+            display_line: z.string(),
+            snapshotted_at: z.number(),
+          })
+          .optional(),
       }),
     )
     .optional(),

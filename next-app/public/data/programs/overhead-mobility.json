@@ -2,14 +2,14 @@
   "schema_version": "1.0",
   "generated": "2026-08-13",
   "status": "PROVISIONAL",
-  "status_note": "First-authored 10-week overhead-mobility arc \u2014 the shoulder / thoracic / scap coordination needed to snatch, OHS, and press without impingement. Evidence base drawn from whitepaper 04_handstand_walk.md and motor-learning literature (whitepaper 03), plus 4 shoulder-specific citations that need pre-launch URL verification.",
+  "status_note": "First-authored 10-week overhead-mobility arc — the shoulder / thoracic / scap coordination needed to snatch, OHS, and press without impingement. Evidence base drawn from whitepaper 04_handstand_walk.md and motor-learning literature (whitepaper 03), plus 4 shoulder-specific citations that need pre-launch URL verification.",
   "generation_strategy": "correlated_tier",
   "positioning": "main_track",
   "goals": {
-    "primary": "Add ROM-under-load overhead \u2014 shoulder flexion, thoracic extension, scap upward rotation",
+    "primary": "Add ROM-under-load overhead — shoulder flexion, thoracic extension, scap upward rotation",
     "secondary": "Reduce anterior-shoulder irritation risk during heavy overhead work (snatch, OHS, press)",
     "explicit_non_goals": [
-      "Building a snatch PR \u2014 mobility opens the door; technique + strength walks through it",
+      "Building a snatch PR — mobility opens the door; technique + strength walks through it",
       "Yoga-style flexibility (splits, extreme end-range)",
       "Replacing a physio evaluation for actual shoulder pathology"
     ]
@@ -23,48 +23,48 @@
     {
       "id": "external_focus_cues",
       "rule": "Every drill card ships a Wulf-compliant external-focus cue.",
-      "detail": "Wulf 1998, 2013 \u2014 external focus outperforms internal for skill retention. `reach for the ceiling` beats `contract your lats`."
+      "detail": "Wulf 1998, 2013 — external focus outperforms internal for skill retention. `reach for the ceiling` beats `contract your lats`."
     },
     {
       "id": "scap_first_shoulder_second",
       "rule": "Scap upward-rotation drills come before shoulder-flexion drills in every session.",
-      "detail": "Ludewig & Reynolds 2009 \u2014 scap dyskinesis (upper-trap dominance) is the most common single kinematic cause of shoulder impingement in athletes. Fix the sequence, not just the range."
+      "detail": "Ludewig & Reynolds 2009 — scap dyskinesis (upper-trap dominance) is the most common single kinematic cause of shoulder impingement in athletes. Fix the sequence, not just the range."
     },
     {
       "id": "no_ballistic_end_range",
       "rule": "No bouncing / rebound stretches at end-range shoulder flexion.",
-      "detail": "Reinold 2007 \u2014 active rotator-cuff engagement should precede end-range positioning. Ballistic end-range invites impingement."
+      "detail": "Reinold 2007 — active rotator-cuff engagement should precede end-range positioning. Ballistic end-range invites impingement."
     },
     {
       "id": "daily_short_over_long",
-      "rule": "Daily 10-15 min > 2\u00d7 per week \u00d7 45 min.",
-      "detail": "Karni 1998, Walker 2003 consolidation \u2014 motor patterns consolidate with sleep between sessions. Short daily > long infrequent for mobility acquisition."
+      "rule": "Daily 10-15 min > 2× per week × 45 min.",
+      "detail": "Karni 1998, Walker 2003 consolidation — motor patterns consolidate with sleep between sessions. Short daily > long infrequent for mobility acquisition."
     }
   ],
   "plan_tiers": [
     {
       "id": "foundation",
-      "label": "Foundation \u2014 Wall-arm-raise fails / can't reach vertical",
+      "label": "Foundation — Wall-arm-raise fails / can't reach vertical",
       "condition": "shoulder_flexion_supine_deg < 160",
-      "typical_outcome": "By week 10: supine shoulder flexion 165-175\u00b0, empty-bar OHS to parallel without heel lift, first snatch-grip Sotts press.",
+      "typical_outcome": "By week 10: supine shoulder flexion 165-175°, empty-bar OHS to parallel without heel lift, first snatch-grip Sotts press.",
       "outcome_confidence": "realistic",
       "full_goal_weeks_estimate": 10,
       "starting_phase_id": "phase_1_kinematic_base"
     },
     {
       "id": "progression",
-      "label": "Progression \u2014 Vertical passive, loaded overhead is stiff",
+      "label": "Progression — Vertical passive, loaded overhead is stiff",
       "condition": "shoulder_flexion_supine_deg >= 165 && shoulder_flexion_supine_deg < 180",
-      "typical_outcome": "By week 10: 180\u00b0 passive + loaded OHS at 50% BW to parallel, snatch-grip Sotts at bar weight for reps.",
+      "typical_outcome": "By week 10: 180° passive + loaded OHS at 50% BW to parallel, snatch-grip Sotts at bar weight for reps.",
       "outcome_confidence": "realistic",
       "full_goal_weeks_estimate": 10,
       "starting_phase_id": "phase_1_kinematic_base"
     },
     {
       "id": "push",
-      "label": "Push \u2014 Vertical loaded, chasing efficiency + endurance",
+      "label": "Push — Vertical loaded, chasing efficiency + endurance",
       "condition": "shoulder_flexion_loaded_deg >= 175",
-      "typical_outcome": "Overhead endurance (Turkish get-up hold \u2265 30s each side at 24kg), snatch balance to 60% snatch 1RM without sequencing errors.",
+      "typical_outcome": "Overhead endurance (Turkish get-up hold ≥ 30s each side at 24kg), snatch balance to 60% snatch 1RM without sequencing errors.",
       "outcome_confidence": "fair",
       "full_goal_weeks_estimate": 10,
       "starting_phase_id": "phase_1_kinematic_base"
@@ -167,7 +167,7 @@
       },
       {
         "id": "shoulder_flexion_baseline",
-        "label": "Lie flat, arms overhead \u2014 how close can you get elbows to the floor?",
+        "label": "Lie flat, arms overhead — how close can you get elbows to the floor?",
         "type": "select",
         "required": true,
         "options": [
@@ -331,7 +331,7 @@
   "phases": [
     {
       "id": "phase_1_kinematic_base",
-      "name": "Kinematic base \u00b7 Weeks 1\u20133",
+      "name": "Kinematic base · Weeks 1–3",
       "starts": "2026-08-13",
       "ends": "2026-09-02",
       "duration_weeks": 3,
@@ -342,11 +342,11 @@
         "block_daily_reset"
       ],
       "goal": "Build passive ROM + scap sequencing before we add load.",
-      "rationale": "Ludewig 2000/2009 \u2014 impingement is scap dyskinesis + upward-rotation lag, not raw shoulder joint tightness. Base = fix the sequence."
+      "rationale": "Ludewig 2000/2009 — impingement is scap dyskinesis + upward-rotation lag, not raw shoulder joint tightness. Base = fix the sequence."
     },
     {
       "id": "phase_2_active_loaded",
-      "name": "Active + light-loaded \u00b7 Weeks 4\u20137",
+      "name": "Active + light-loaded · Weeks 4–7",
       "starts": "2026-09-03",
       "ends": "2026-09-30",
       "duration_weeks": 4,
@@ -358,11 +358,11 @@
         "block_daily_reset"
       ],
       "goal": "Add active ROM + light loaded overhead. Sotts press, TGU, empty bar OHS.",
-      "rationale": "Reinold 2007 \u2014 rotator-cuff activation precedes end-range loading. Adding load builds the pattern under stress without impingement."
+      "rationale": "Reinold 2007 — rotator-cuff activation precedes end-range loading. Adding load builds the pattern under stress without impingement."
     },
     {
       "id": "phase_3_load_and_retest",
-      "name": "Load + retest \u00b7 Weeks 8\u201310",
+      "name": "Load + retest · Weeks 8–10",
       "starts": "2026-10-01",
       "ends": "2026-10-21",
       "duration_weeks": 3,
@@ -373,15 +373,15 @@
         "block_daily_reset"
       ],
       "goal": "Consolidate loaded ROM. Retest at week 10.",
-      "rationale": "Karni 1998, Walker 2003 \u2014 consolidation with daily short sessions. Retest via shoulder-flexion goniometer + empty-bar OHS depth."
+      "rationale": "Karni 1998, Walker 2003 — consolidation with daily short sessions. Retest via shoulder-flexion goniometer + empty-bar OHS depth."
     }
   ],
   "blocks": [
     {
       "id": "block_thoracic_prep",
-      "name": "Thoracic prep \u00b7 daily",
+      "name": "Thoracic prep · daily",
       "category": "accessory",
-      "frequency": "5\u00d7/wk",
+      "frequency": "5×/wk",
       "duration_min": [
         5,
         10
@@ -392,7 +392,7 @@
       "id": "block_scap_activation",
       "name": "Scap activation",
       "category": "accessory",
-      "frequency": "3\u00d7/wk",
+      "frequency": "3×/wk",
       "duration_min": 8,
       "note": "Band pull-apart variants, prone Y/T/W. Wake up lower trap + serratus so upward rotation happens before elevation."
     },
@@ -400,7 +400,7 @@
       "id": "block_passive_flexion",
       "name": "Passive shoulder flexion",
       "category": "accessory",
-      "frequency": "5\u00d7/wk",
+      "frequency": "5×/wk",
       "duration_min": 8,
       "note": "PVC pass-throughs, supine Sotts hold with light weight, wall-facing arm raises. Rib cage stays down."
     },
@@ -408,7 +408,7 @@
       "id": "block_active_flexion",
       "name": "Active shoulder flexion",
       "category": "accessory",
-      "frequency": "3\u00d7/wk",
+      "frequency": "3×/wk",
       "duration_min": 10,
       "note": "Wall walks (from Handstand Walk drill library), face-away wall slides, half-kneeling reach. Active rotator-cuff engagement required."
     },
@@ -416,23 +416,23 @@
       "id": "block_loaded_overhead",
       "name": "Loaded overhead",
       "category": "accessory",
-      "frequency": "2\u00d7/wk",
+      "frequency": "2×/wk",
       "duration_min": 15,
-      "note": "Snatch-grip Sotts press \u00b7 KB bottoms-up press \u00b7 Turkish get-up. Load stays sub-maximal; ROM is the metric, not the number."
+      "note": "Snatch-grip Sotts press · KB bottoms-up press · Turkish get-up. Load stays sub-maximal; ROM is the metric, not the number."
     },
     {
       "id": "block_overhead_endurance",
       "name": "Overhead endurance",
       "category": "accessory",
-      "frequency": "1\u00d7/wk",
+      "frequency": "1×/wk",
       "duration_min": 12,
       "note": "TGU hold (30s each side, working up), overhead KB carry, snatch balance."
     },
     {
       "id": "block_daily_reset",
-      "name": "Daily reset \u00b7 pre-bed",
+      "name": "Daily reset · pre-bed",
       "category": "accessory",
-      "frequency": "7\u00d7/wk",
+      "frequency": "7×/wk",
       "duration_min": 5,
       "note": "3 min of thoracic + shoulder pass-throughs at bedtime. Grease the pattern; sleep does the consolidation (Walker 2003)."
     }
@@ -472,7 +472,7 @@
     "principles": [
       "Daily 10-15 min. Consolidation lives with sleep between sessions.",
       "Scap-activation before loaded overhead, always.",
-      "Sharp pain in the last 30\u00b0 of flexion = stop that drill for the session."
+      "Sharp pain in the last 30° of flexion = stop that drill for the session."
     ]
   },
   "retest_metrics": [
@@ -588,11 +588,11 @@
   },
   "immediate_actions": [
     {
-      "action": "Measure supine shoulder flexion \u2014 record baseline",
+      "action": "Measure supine shoulder flexion — record baseline",
       "timing": "day_1"
     },
     {
-      "action": "Wall-slide test video (optional) \u2014 watch for scap dyskinesis pattern",
+      "action": "Wall-slide test video (optional) — watch for scap dyskinesis pattern",
       "timing": "day_1"
     }
   ],
@@ -615,14 +615,14 @@
       },
       "push": {
         "shoulder_flexion_deg_gain": "+5-10",
-        "confidence": "fair \u2014 structural ROM begins to dominate near 190\u00b0"
+        "confidence": "fair — structural ROM begins to dominate near 190°"
       }
     },
     "session_rationale": {
-      "why_scap_first": "Ludewig & Cook 2000, Ludewig & Reynolds 2009 \u2014 scap upward-rotation timing is the dominant driver of subacromial space. Fix sequence before adding load.",
-      "why_daily_short": "Karni 1998, Walker 2003 consolidation \u2014 motor patterns require inter-session sleep for stabilisation. 10 min daily > 45 min biweekly.",
-      "why_load_early": "Reinold 2007 \u2014 rotator-cuff activation is greater under light load than at bodyweight. Light load in Phase 2 accelerates the pattern.",
-      "why_external_focus_cues": "Wulf 1998, 2013 \u2014 external-focus cues (reach the ceiling) outperform internal (contract your lats) for motor retention."
+      "why_scap_first": "Ludewig & Cook 2000, Ludewig & Reynolds 2009 — scap upward-rotation timing is the dominant driver of subacromial space. Fix sequence before adding load.",
+      "why_daily_short": "Karni 1998, Walker 2003 consolidation — motor patterns require inter-session sleep for stabilisation. 10 min daily > 45 min biweekly.",
+      "why_load_early": "Reinold 2007 — rotator-cuff activation is greater under light load than at bodyweight. Light load in Phase 2 accelerates the pattern.",
+      "why_external_focus_cues": "Wulf 1998, 2013 — external-focus cues (reach the ceiling) outperform internal (contract your lats) for motor retention."
     },
     "engineering_choices_flagged": [
       {
@@ -647,21 +647,21 @@
       },
       {
         "choice": "Supine flexion goniometer as primary retest",
-        "rationale": "Kim 2013 documented supine flexion reliability; whether supine translates to loaded overhead is engineering inference \u2014 hence retest_metrics includes both supine AND OHS depth.",
+        "rationale": "Kim 2013 documented supine flexion reliability; whether supine translates to loaded overhead is engineering inference — hence retest_metrics includes both supine AND OHS depth.",
         "flag": "engineering"
       }
     ],
     "contraindications": [
-      "Diagnosed rotator-cuff tear (partial or full) \u2014 needs physio pathway",
-      "Recent shoulder dislocation / subluxation \u2014 capsule stability first",
-      "Cervical radicular symptoms into the arm \u2014 needs workup",
-      "Adhesive capsulitis (frozen shoulder) \u2014 separate rehab protocol",
-      "Active AC-joint irritation \u2014 end-range flexion can amplify"
+      "Diagnosed rotator-cuff tear (partial or full) — needs physio pathway",
+      "Recent shoulder dislocation / subluxation — capsule stability first",
+      "Cervical radicular symptoms into the arm — needs workup",
+      "Adhesive capsulitis (frozen shoulder) — separate rehab protocol",
+      "Active AC-joint irritation — end-range flexion can amplify"
     ],
     "adaptive_engine_hooks": [
-      "day_adjustment on symptom 'shoulder pain during flexion' \u2192 drop loaded_overhead this session; scap + thoracic only",
-      "amber week (\u22653 amber shoulder symptom days) \u2192 skip loaded_overhead for a full week",
-      "phase_end evaluator: retest goniometer + OHS depth \u2192 tier promotion if targets hit"
+      "day_adjustment on symptom 'shoulder pain during flexion' → drop loaded_overhead this session; scap + thoracic only",
+      "amber week (≥3 amber shoulder symptom days) → skip loaded_overhead for a full week",
+      "phase_end evaluator: retest goniometer + OHS depth → tier promotion if targets hit"
     ],
     "references": [
       {
@@ -670,7 +670,7 @@
         "year": 2000,
         "title": "Alterations in shoulder kinematics and associated muscle activity in people with symptoms of shoulder impingement",
         "source": "Phys Ther 80(3):276-291",
-        "used_for": "Scap dyskinesis \u2192 impingement pathway; foundational rationale for scap-first sequencing"
+        "used_for": "Scap dyskinesis → impingement pathway; foundational rationale for scap-first sequencing"
       },
       {
         "id": "ludewig_reynolds_2009",
@@ -694,11 +694,11 @@
         "year": 2021,
         "title": "Straight-arm press to handstand: shoulder joint moment analysis",
         "source": "PLOS One 16(7):e0253951",
-        "used_for": "3\u00d7BW shoulder moment reference \u2014 informs no-heavy-load-early rule"
+        "used_for": "3×BW shoulder moment reference — informs no-heavy-load-early rule"
       },
       {
         "id": "wulf_1998",
-        "authors": "Wulf G, H\u00f6\u00df M, Prinz W",
+        "authors": "Wulf G, Höß M, Prinz W",
         "year": 1998,
         "title": "Instructions for motor learning: differential effects of internal versus external focus of attention",
         "source": "J Motor Behav 30(2):169-179",
@@ -710,7 +710,7 @@
         "year": 2013,
         "title": "Attentional focus and motor learning: a review of 15 years",
         "source": "Int Rev Sport Exerc Psychol 6(1):77-104",
-        "used_for": "External-focus cue meta \u2014 cited on every drill card"
+        "used_for": "External-focus cue meta — cited on every drill card"
       },
       {
         "id": "karni_1998",
@@ -726,7 +726,7 @@
         "year": 2003,
         "title": "Sleep-dependent motor memory plasticity in the human brain",
         "source": "Neuroscience 133(4):911-917",
-        "used_for": "Sleep-dependent consolidation of motor patterns \u2014 daily-short rationale"
+        "used_for": "Sleep-dependent consolidation of motor patterns — daily-short rationale"
       },
       {
         "id": "chiviacowsky_wulf_2002",
@@ -750,7 +750,7 @@
         "year": 1979,
         "title": "Contextual interference effects on the acquisition, retention, and transfer of a motor skill",
         "source": "J Exp Psychol: HumanLearn 5(2):179-187",
-        "used_for": "Contextual interference in motor learning \u2014 blocked-first, random after"
+        "used_for": "Contextual interference in motor learning — blocked-first, random after"
       },
       {
         "id": "kibler_2013",
@@ -768,7 +768,7 @@
         "year": 2013,
         "title": "Reliability of shoulder ROM measurement in supine position",
         "source": "J Phys Ther Sci 25(11):1435-1438",
-        "used_for": "Supine flexion goniometer reliability \u2014 the retest_metric anchor",
+        "used_for": "Supine flexion goniometer reliability — the retest_metric anchor",
         "url": "https://pubmed.ncbi.nlm.nih.gov/?term=Kim+shoulder+ROM+supine+position+reliability+2013",
         "verification_status": "verified"
       },
@@ -778,7 +778,7 @@
         "year": 2009,
         "title": "Shoulder muscle activity and function in common shoulder rehabilitation exercises",
         "source": "Sports Med 39(8):663-685",
-        "used_for": "EMG-guided drill selection \u2014 informs scap-activation block content"
+        "used_for": "EMG-guided drill selection — informs scap-activation block content"
       },
       {
         "id": "bullock_2019",
@@ -786,7 +786,7 @@
         "year": 2019,
         "title": "Shoulder range of motion and baseball throwing performance",
         "source": "J Athl Train 54(6):679-687",
-        "used_for": "Thoracic mobility \u2192 shoulder function; informs thoracic-prep block",
+        "used_for": "Thoracic mobility → shoulder function; informs thoracic-prep block",
         "url": "https://pubmed.ncbi.nlm.nih.gov/?term=Bullock+shoulder+range+of+motion+baseball+throwing+2019",
         "verification_status": "verified"
       },
@@ -796,7 +796,7 @@
         "year": 2010,
         "title": "A randomized controlled single-blinded comparison of stretching versus stretching and joint mobilization for posterior shoulder tightness",
         "source": "Sports Health 2(2):94-100",
-        "used_for": "Sleeper stretch effectiveness for posterior capsule tightness \u2014 engineering choice reference",
+        "used_for": "Sleeper stretch effectiveness for posterior capsule tightness — engineering choice reference",
         "url": "https://pubmed.ncbi.nlm.nih.gov/?term=Manske+stretching+joint+mobilization+posterior+shoulder+tightness",
         "verification_status": "verified"
       },
@@ -814,7 +814,7 @@
         "year": 2000,
         "title": "Injury prevention in women's gymnastics",
         "source": "Sports Med 30(5):359-373",
-        "used_for": "Skill-readiness assessment framework \u2014 informs prerequisite gating"
+        "used_for": "Skill-readiness assessment framework — informs prerequisite gating"
       },
       {
         "id": "salmoni_schmidt_walter_1984",
@@ -824,6 +824,27 @@
         "source": "Psychol Bull 95(3):355-386",
         "used_for": "Guidance hypothesis; feedback frequency in mobility drill acquisition"
       }
+    ],
+    "reference_ids": [
+      "ludewig_cook_2000",
+      "ludewig_reynolds_2009",
+      "reinold_2007",
+      "sadowski_2021",
+      "wulf_1998",
+      "wulf_2013",
+      "karni_1998",
+      "walker_2003",
+      "chiviacowsky_wulf_2002",
+      "wulf_shea_2002",
+      "shea_morgan_1979",
+      "kibler_2013",
+      "kim_2013",
+      "escamilla_2009",
+      "bullock_2019",
+      "manske_2010",
+      "difiori_2006",
+      "sands_2000",
+      "salmoni_schmidt_walter_1984"
     ]
   }
 }

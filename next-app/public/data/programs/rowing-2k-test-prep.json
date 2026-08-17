@@ -2,14 +2,14 @@
   "schema_version": "1.0",
   "generated": "2026-08-13",
   "status": "PROVISIONAL",
-  "status_note": "First-authored 6-week race-prep block for the Concept2 2K row test. Evidence base fully sourced from whitepaper 01_aerobic_physiology.md \u2014 28 primary citations, with 3 rowing-specific studies flagged for pre-launch URL verification.",
+  "status_note": "First-authored 6-week race-prep block for the Concept2 2K row test. Evidence base fully sourced from whitepaper 01_aerobic_physiology.md — 28 primary citations, with 3 rowing-specific studies flagged for pre-launch URL verification.",
   "generation_strategy": "correlated_tier",
   "positioning": "main_track",
   "goals": {
     "primary": "PR the 2K row test",
     "secondary": "Sharpen threshold and race pace without ruining recovery",
     "explicit_non_goals": [
-      "Building the aerobic base \u2014 see Engine Builder for that",
+      "Building the aerobic base — see Engine Builder for that",
       "Chasing 5k / 10k times",
       "Substituting for CrossFit or lifting"
     ]
@@ -18,7 +18,7 @@
     {
       "id": "polarised_race_prep",
       "rule": "80% volume at Z1/Z2, 20% at threshold or race pace.",
-      "detail": "Seiler 2010 polarised distribution. Race prep still respects the distribution \u2014 the 20% just concentrates in threshold + race pace rather than VO2max intervals."
+      "detail": "Seiler 2010 polarised distribution. Race prep still respects the distribution — the 20% just concentrates in threshold + race pace rather than VO2max intervals."
     },
     {
       "id": "test_at_race_pace",
@@ -28,12 +28,12 @@
     {
       "id": "threshold_dominant_middle",
       "rule": "Weeks 3-4: threshold sessions replace one Z2 session per week.",
-      "detail": "Joyner & Coyle 2008 \u2014 post-VO2max ceiling, threshold IS the primary metric. Threshold shifts up by 3-6% in trained rowers over 4 weeks (Astorino 2013)."
+      "detail": "Joyner & Coyle 2008 — post-VO2max ceiling, threshold IS the primary metric. Threshold shifts up by 3-6% in trained rowers over 4 weeks (Astorino 2013)."
     },
     {
       "id": "taper_last_week",
       "rule": "Last week: volume down 40-50%, intensity held.",
-      "detail": "Mujika & Padilla 2000 (I+II): reducing volume 40-60% while holding intensity produces the classic taper effect \u2014 ~3% performance uplift on race day."
+      "detail": "Mujika & Padilla 2000 (I+II): reducing volume 40-60% while holding intensity produces the classic taper effect — ~3% performance uplift on race day."
     },
     {
       "id": "no_pr_chasing_off_test",
@@ -44,7 +44,7 @@
   "plan_tiers": [
     {
       "id": "foundation",
-      "label": "Foundation \u2014 2K > 9:00",
+      "label": "Foundation — 2K > 9:00",
       "condition": "current_2k_seconds >= 540",
       "typical_outcome": "By week 6: 2K time down 15-30 seconds. Threshold pace shifted 3-6%. Submax HR down 5-10 bpm at threshold.",
       "outcome_confidence": "realistic",
@@ -53,7 +53,7 @@
     },
     {
       "id": "progression",
-      "label": "Progression \u2014 2K 8:00\u20139:00",
+      "label": "Progression — 2K 8:00–9:00",
       "condition": "current_2k_seconds >= 480 && current_2k_seconds < 540",
       "typical_outcome": "2K down 8-15 seconds. Threshold power +5-8%. Split consistency across all four 500s.",
       "outcome_confidence": "realistic",
@@ -62,9 +62,9 @@
     },
     {
       "id": "push",
-      "label": "Push \u2014 2K < 8:00",
+      "label": "Push — 2K < 8:00",
       "condition": "current_2k_seconds < 480",
-      "typical_outcome": "2K down 3-8 seconds. HERITAGE-style non-response distribution begins to dominate \u2014 genetic ceiling in view.",
+      "typical_outcome": "2K down 3-8 seconds. HERITAGE-style non-response distribution begins to dominate — genetic ceiling in view.",
       "outcome_confidence": "stretch",
       "full_goal_weeks_estimate": 6,
       "starting_phase_id": "phase_1_base_check"
@@ -294,7 +294,7 @@
   "phases": [
     {
       "id": "phase_1_base_check",
-      "name": "Base check \u00b7 Weeks 1\u20132",
+      "name": "Base check · Weeks 1–2",
       "starts": "2026-08-13",
       "ends": "2026-08-26",
       "duration_weeks": 2,
@@ -305,11 +305,11 @@
         "block_easy_recovery"
       ],
       "goal": "Establish current 2K + submax HR baseline. Sharpen technique before overloading.",
-      "rationale": "Fast baseline is the honest starting point \u2014 no adaptive engine can help if it doesn't know where you started."
+      "rationale": "Fast baseline is the honest starting point — no adaptive engine can help if it doesn't know where you started."
     },
     {
       "id": "phase_2_threshold_build",
-      "name": "Threshold build \u00b7 Weeks 3\u20134",
+      "name": "Threshold build · Weeks 3–4",
       "starts": "2026-08-27",
       "ends": "2026-09-09",
       "duration_weeks": 2,
@@ -319,11 +319,11 @@
         "block_race_pace_row"
       ],
       "goal": "Push threshold pace up 3-6%. Add one race-pace session per week.",
-      "rationale": "Joyner & Coyle 2008 \u2014 threshold rises predictably at trained-athlete level with focused work; VO2max plateaus much earlier."
+      "rationale": "Joyner & Coyle 2008 — threshold rises predictably at trained-athlete level with focused work; VO2max plateaus much earlier."
     },
     {
       "id": "phase_3_taper_test",
-      "name": "Taper + test \u00b7 Weeks 5\u20136",
+      "name": "Taper + test · Weeks 5–6",
       "starts": "2026-09-10",
       "ends": "2026-09-23",
       "duration_weeks": 2,
@@ -334,21 +334,21 @@
         "block_easy_recovery"
       ],
       "goal": "Volume down 40-50%, intensity held. Test at week 6.",
-      "rationale": "Mujika & Padilla 2000 \u2014 the ~3% performance uplift is bought by the taper, not by more work.",
+      "rationale": "Mujika & Padilla 2000 — the ~3% performance uplift is bought by the taper, not by more work.",
       "is_taper": true,
       "duration_multiplier": 0.55,
       "block_replacements_final_week": {
         "block_race_pace_row": "block_easy_recovery"
       },
-      "block_final_week_replacements_note": "In the last 7 days before the test, race-pace is replaced with easy recovery \u2014 the nervous system needs to be fresh, not primed with more race-pace exposure."
+      "block_final_week_replacements_note": "In the last 7 days before the test, race-pace is replaced with easy recovery — the nervous system needs to be fresh, not primed with more race-pace exposure."
     }
   ],
   "blocks": [
     {
       "id": "block_z2_row",
-      "name": "Zone 2 \u00b7 Row",
+      "name": "Zone 2 · Row",
       "category": "run",
-      "frequency": "2\u00d7/wk",
+      "frequency": "2×/wk",
       "duration_min": [
         40,
         60
@@ -357,33 +357,33 @@
     },
     {
       "id": "block_technique",
-      "name": "Technique \u00b7 Row",
+      "name": "Technique · Row",
       "category": "run",
-      "frequency": "1\u00d7/wk",
+      "frequency": "1×/wk",
       "duration_min": 30,
-      "note": "Slow-slide drills, feet-out, arms-only, sit-back \u2192 sequence rebuild. Cite: pace independent \u2014 quality only."
+      "note": "Slow-slide drills, feet-out, arms-only, sit-back → sequence rebuild. Cite: pace independent — quality only."
     },
     {
       "id": "block_threshold_row",
-      "name": "Threshold \u00b7 Row",
+      "name": "Threshold · Row",
       "category": "run",
-      "frequency": "1\u00d7/wk",
+      "frequency": "1×/wk",
       "duration_min": 40,
-      "note": "4\u00d78 min @ ~5-10 sec/500m over 2K pace, 2 min rest. HR 82-88% max."
+      "note": "4×8 min @ ~5-10 sec/500m over 2K pace, 2 min rest. HR 82-88% max."
     },
     {
       "id": "block_race_pace_row",
-      "name": "Race pace \u00b7 Row",
+      "name": "Race pace · Row",
       "category": "run",
-      "frequency": "1\u00d7/wk",
+      "frequency": "1×/wk",
       "duration_min": 35,
-      "note": "6\u00d7500m @ 2K pace, 3-4 min rest. Or 4\u00d7750m @ 2K pace + 3 sec/500m."
+      "note": "6×500m @ 2K pace, 3-4 min rest. Or 4×750m @ 2K pace + 3 sec/500m."
     },
     {
       "id": "block_open_2k",
       "name": "Open 2K test",
       "category": "run",
-      "frequency": "1\u00d7/wk (base weeks + test week)",
+      "frequency": "1×/wk (base weeks + test week)",
       "duration_min": 25,
       "note": "Full 2K. Warm-up + all-out effort + cool-down. Record split, HR, RPE. This IS the retest metric."
     },
@@ -391,7 +391,7 @@
       "id": "block_easy_recovery",
       "name": "Easy recovery",
       "category": "run",
-      "frequency": "1\u00d7/wk (taper week)",
+      "frequency": "1×/wk (taper week)",
       "duration_min": 20,
       "note": "20 min light rowing / bike / walk. Grease the groove, nothing more."
     }
@@ -546,7 +546,7 @@
   },
   "immediate_actions": [
     {
-      "action": "Baseline 2K in week 1 \u2014 commit to a full-effort test",
+      "action": "Baseline 2K in week 1 — commit to a full-effort test",
       "timing": "day_1"
     },
     {
@@ -574,13 +574,13 @@
       },
       "push": {
         "row_2k_seconds": "-3 to -8",
-        "confidence": "stretch \u2014 HERITAGE non-response distribution begins to dominate"
+        "confidence": "stretch — HERITAGE non-response distribution begins to dominate"
       }
     },
     "session_rationale": {
-      "why_polarised": "Seiler 2010 \u2014 polarised 80/20 distribution outperforms threshold-dominant in trained endurance athletes over 12 weeks. Race prep respects the distribution but concentrates the 20% in threshold + race-pace work rather than VO2max.",
-      "why_threshold": "Joyner & Coyle 2008 \u2014 post-VO2max ceiling, running / cycling / rowing threshold IS the primary trainable metric. Astorino 2013 documented ~3-6% threshold pace shift in 4-8 wk in trained rowers.",
-      "why_race_pace_specificity": "Proteau 1992 specificity + Henry 1968 \u2014 the coordination of the row stroke at 2K pace is task-specific. Only 2K-pace work develops it.",
+      "why_polarised": "Seiler 2010 — polarised 80/20 distribution outperforms threshold-dominant in trained endurance athletes over 12 weeks. Race prep respects the distribution but concentrates the 20% in threshold + race-pace work rather than VO2max.",
+      "why_threshold": "Joyner & Coyle 2008 — post-VO2max ceiling, running / cycling / rowing threshold IS the primary trainable metric. Astorino 2013 documented ~3-6% threshold pace shift in 4-8 wk in trained rowers.",
+      "why_race_pace_specificity": "Proteau 1992 specificity + Henry 1968 — the coordination of the row stroke at 2K pace is task-specific. Only 2K-pace work develops it.",
       "why_taper": "Mujika & Padilla 2000 (I+II): reducing volume 40-60% while holding intensity produces a ~3% performance uplift on race day, mostly via neuromuscular / hematological restoration."
     },
     "engineering_choices_flagged": [
@@ -590,7 +590,7 @@
         "flag": "engineering"
       },
       {
-        "choice": "1\u00d7 threshold + 1\u00d7 race pace per week",
+        "choice": "1× threshold + 1× race pace per week",
         "rationale": "No RCT specifies this exact split for rowing. Extrapolated from cycling threshold-training literature.",
         "flag": "engineering"
       },
@@ -606,30 +606,30 @@
       },
       {
         "choice": "Astorino 2013 threshold-shift range applied to rowing",
-        "rationale": "The 3-6% threshold shift is documented in cycling / running populations. Applied to rowing here as engineering inference \u2014 no RCT specifically for rowing threshold-shift at this dose. Would need direct citation from rowing literature to remove this flag.",
+        "rationale": "The 3-6% threshold shift is documented in cycling / running populations. Applied to rowing here as engineering inference — no RCT specifically for rowing threshold-shift at this dose. Would need direct citation from rowing literature to remove this flag.",
         "flag": "engineering"
       }
     ],
     "contraindications": [
-      "Unmanaged hypertension \u2014 2K test pushes HR to max",
-      "History of exertional syncope \u2014 requires cardiac clearance",
-      "Recent chest pain / shortness of breath \u2014 workup first",
-      "Flaring low back \u2014 rowing loads the lumbar spine",
-      "First-trimester pregnancy \u2014 HR-based zones unreliable"
+      "Unmanaged hypertension — 2K test pushes HR to max",
+      "History of exertional syncope — requires cardiac clearance",
+      "Recent chest pain / shortness of breath — workup first",
+      "Flaring low back — rowing loads the lumbar spine",
+      "First-trimester pregnancy — HR-based zones unreliable"
     ],
     "adaptive_engine_hooks": [
-      "day_adjustment on notes-signal 'legs dead / low back stiff' \u2192 race-pace session becomes threshold session next occurrence",
-      "amber week (\u22653 amber symptom days) \u2192 drop one hard session, add one Z2",
-      "trend_slope on retest_metric.threshold_pace_500m \u2192 phase_end evaluator promotes / holds tier"
+      "day_adjustment on notes-signal 'legs dead / low back stiff' → race-pace session becomes threshold session next occurrence",
+      "amber week (≥3 amber symptom days) → drop one hard session, add one Z2",
+      "trend_slope on retest_metric.threshold_pace_500m → phase_end evaluator promotes / holds tier"
     ],
     "references": [
       {
         "id": "helgerud_2007",
-        "authors": "Helgerud J, H\u00f8ydal K, Wang E, et al.",
+        "authors": "Helgerud J, Høydal K, Wang E, et al.",
         "year": 2007,
         "title": "Aerobic high-intensity intervals improve VO2max more than moderate training",
         "source": "MSSE 39(4):665-671",
-        "used_for": "The 4\u00d74 protocol; VO2max response reference"
+        "used_for": "The 4×4 protocol; VO2max response reference"
       },
       {
         "id": "seiler_2010",
@@ -649,7 +649,7 @@
       },
       {
         "id": "san_millan_brooks_2018",
-        "authors": "San-Mill\u00e1n I, Brooks GA",
+        "authors": "San-Millán I, Brooks GA",
         "year": 2018,
         "title": "Assessment of metabolic flexibility by means of measuring blood lactate",
         "source": "Sports Med 48:467-479",
@@ -661,7 +661,7 @@
         "year": 2000,
         "title": "Detraining: loss of training-induced physiological and performance adaptations. Part I",
         "source": "Sports Med 30(2):79-87",
-        "used_for": "Detraining timeline \u2014 informs taper design"
+        "used_for": "Detraining timeline — informs taper design"
       },
       {
         "id": "mujika_padilla_2000_b",
@@ -669,7 +669,7 @@
         "year": 2000,
         "title": "Detraining: loss of training-induced physiological and performance adaptations. Part II",
         "source": "Sports Med 30(3):145-154",
-        "used_for": "Taper effect \u2014 ~3% performance uplift from volume down 40-60%"
+        "used_for": "Taper effect — ~3% performance uplift from volume down 40-60%"
       },
       {
         "id": "wilson_2012",
@@ -677,7 +677,7 @@
         "year": 2012,
         "title": "Concurrent training: a meta-analysis examining interference of aerobic and resistance exercises",
         "source": "J Strength Cond Res 26(8):2293-2307",
-        "used_for": "Modality-interference rationale \u2014 rowing near-zero interference with strength"
+        "used_for": "Modality-interference rationale — rowing near-zero interference with strength"
       },
       {
         "id": "eddens_2018",
@@ -757,7 +757,7 @@
         "year": 2009,
         "title": "Lactate threshold concepts: how valid are they?",
         "source": "Sports Med 39(6):469-490",
-        "used_for": "Threshold definitions \u2014 informs retest_metric.source_ref"
+        "used_for": "Threshold definitions — informs retest_metric.source_ref"
       },
       {
         "id": "bishop_2008",
@@ -769,7 +769,7 @@
       },
       {
         "id": "wisloff_2007",
-        "authors": "Wisl\u00f8ff U, St\u00f8ylen A, Loennechen JP, et al.",
+        "authors": "Wisløff U, Støylen A, Loennechen JP, et al.",
         "year": 2007,
         "title": "Superior cardiovascular effect of aerobic interval training vs moderate continuous training in heart failure patients",
         "source": "Circulation 115(24):3086-3094",
@@ -777,11 +777,11 @@
       },
       {
         "id": "proteau_1992",
-        "authors": "Proteau L, Marteniuk RG, L\u00e9vesque L",
+        "authors": "Proteau L, Marteniuk RG, Lévesque L",
         "year": 1992,
         "title": "A sensorimotor basis for motor learning",
         "source": "QJEP 44A:557-575",
-        "used_for": "Specificity of practice \u2014 race-pace work rationale"
+        "used_for": "Specificity of practice — race-pace work rationale"
       },
       {
         "id": "henry_1968",
@@ -797,7 +797,7 @@
         "year": 1999,
         "title": "Familial aggregation of VO2max response to exercise training: HERITAGE Family Study",
         "source": "J Appl Physiol 87(3):1003-1008",
-        "used_for": "Individual response variance \u2014 informs Push tier honest ranges"
+        "used_for": "Individual response variance — informs Push tier honest ranges"
       },
       {
         "id": "ross_2015",
@@ -805,7 +805,7 @@
         "year": 2015,
         "title": "Separate effects of intensity and amount of exercise on interindividual cardiorespiratory fitness response",
         "source": "Mayo Clin Proc 90(11):1506-1514",
-        "used_for": "Non-response drops at higher intensity \u2014 race-prep intensity distribution rationale"
+        "used_for": "Non-response drops at higher intensity — race-prep intensity distribution rationale"
       },
       {
         "id": "hagerman_1994",
@@ -843,7 +843,7 @@
         "year": 2019,
         "title": "Physiological demands of rowing sport",
         "source": "J Phys Ed Sports Manage 6(1):5-11",
-        "used_for": "Rowing metabolic profile \u2014 informs Z2 dose",
+        "used_for": "Rowing metabolic profile — informs Z2 dose",
         "url": "https://scholar.google.com/scholar?q=Das+Kumar+physiological+demands+rowing+sport+2019",
         "verification_status": "verified"
       },
@@ -857,6 +857,36 @@
         "url": "https://pubmed.ncbi.nlm.nih.gov/?term=Kilding+Winter+maximal+lactate+steady+state+trained+runners+2012",
         "verification_status": "verified"
       }
+    ],
+    "reference_ids": [
+      "helgerud_2007",
+      "seiler_2010",
+      "joyner_coyle_2008",
+      "san_millan_brooks_2018",
+      "mujika_padilla_2000_a",
+      "mujika_padilla_2000_b",
+      "wilson_2012",
+      "eddens_2018",
+      "coyle_1984",
+      "astorino_2013",
+      "billat_2001",
+      "buchheit_laursen_2013_a",
+      "buchheit_laursen_2013_b",
+      "midgley_2007",
+      "laursen_jenkins_2002",
+      "billat_2000",
+      "faude_2009",
+      "bishop_2008",
+      "wisloff_2007",
+      "proteau_1992",
+      "henry_1968",
+      "bouchard_1999_heritage",
+      "ross_2015",
+      "hagerman_1994",
+      "steinacker_1993",
+      "mikulic_2011",
+      "das_2019",
+      "kilding_2012"
     ]
   }
 }

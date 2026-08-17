@@ -5,6 +5,8 @@ import { useStore } from "@/lib/useStore";
 import { assessReintroReadiness } from "@/lib/engine/readiness";
 import { today as todayISO, hapticTap } from "@/lib/utils";
 import { announce } from "@/lib/announce";
+import { citationIdForKind } from "@/lib/engine/proposal-citations";
+import { CitationRef } from "@/components/citations/CitationRef";
 import type { Program } from "@/lib/schemas";
 
 const PROPOSAL_ID = "reintro-graduation";
@@ -73,6 +75,10 @@ export function ReadinessProposal({
         Advance now and {targetName} starts today. Hip-flexor / rehab work stays on regardless.
         You can also sit tight and let Phase 2 begin on its scheduled date.
       </p>
+      {(() => {
+        const citationId = citationIdForKind("readiness_after_layoff");
+        return citationId ? <CitationRef id={citationId} /> : null;
+      })()}
       <div className="flex flex-wrap gap-2 pt-1">
         {canAdvance ? (
           <button

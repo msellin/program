@@ -5,6 +5,7 @@ import { loadStore, saveStore, ensureDay, ensureExercise, seedFromRepoLogIfEmpty
 import { pushRemoteDebounced } from "./sync";
 import type { Store, DayLog, ExerciseLog, SetLog, Program, RunLog } from "./schemas";
 import { today, iso } from "./utils";
+import { snapshotCitation } from "./engine/citations";
 
 /** Save to localStorage AND fire a debounced remote push. */
 function commit(s: Store): Store {
@@ -55,6 +56,7 @@ type StoreState = {
     load_multiplier: number,
     reason: string,
     source?: "notes" | "manual",
+    citationId?: string | null,
   ) => void;
   /** Remove an accepted adjustment, returning suggestions to their default multiplier. */
   clearDayAdjustment: (date: string) => void;
@@ -550,14 +552,16 @@ export const useStore = create<StoreState>((set, get) => ({
     set({ store: s });
   },
 
-  acceptDayAdjustment: (date, load_multiplier, reason, source = "notes") => {
+  acceptDayAdjustment: (date, load_multiplier, reason, source = "notes", citationId = null) => {
     const s = { ...get().store };
     s.day_adjustments = { ...(s.day_adjustments ?? {}) };
+    const snapshot = citationId ? snapshotCitation(citationId) : null;
     s.day_adjustments[date] = {
       load_multiplier,
       reason,
       source,
       accepted_at: Date.now(),
+      ...(snapshot ? { citation_snapshot: snapshot } : {}),
     };
     commit(s);
     set({ store: s });

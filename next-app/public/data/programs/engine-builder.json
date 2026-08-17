@@ -5,11 +5,11 @@
   "status_note": "Block 1 of a 3-block engine transformation arc. Block 2 (volume expansion, 8-12 weeks) and Block 3 (polarised, 12-16 weeks) ship as separate program.json files. Block 1 covers weeks 1-8: build a base you can actually train on top of. Dates in phases[] are template anchors starting from a canonical Mon 2026-01-05; the generator remaps them to the user's real start date on activation.",
   "goals": {
     "generated": "2026-08-10",
-    "primary_intent": "Build a durable aerobic engine. Block 1 is the base \u2014 Z1/Z2 volume with a single hard weekly stimulus once the base is laid. This is the foundation the next two blocks build on.",
+    "primary_intent": "Build a durable aerobic engine. Block 1 is the base — Z1/Z2 volume with a single hard weekly stimulus once the base is laid. This is the foundation the next two blocks build on.",
     "arc": {
-      "block_1_base": "8 weeks \u2014 this program. Aerobic base, first exposure to threshold and VO2max work in weeks 4-7, retest week 8.",
-      "block_2_volume": "8-12 weeks \u2014 where the majority of VO2max gains land. Two hard sessions per week, higher Z1/Z2 volume, longer intervals.",
-      "block_3_polarise": "12-16 weeks \u2014 advanced. 80/20 polarised model, race-specific work, taper and test.",
+      "block_1_base": "8 weeks — this program. Aerobic base, first exposure to threshold and VO2max work in weeks 4-7, retest week 8.",
+      "block_2_volume": "8-12 weeks — where the majority of VO2max gains land. Two hard sessions per week, higher Z1/Z2 volume, longer intervals.",
+      "block_3_polarise": "12-16 weeks — advanced. 80/20 polarised model, race-specific work, taper and test.",
       "total_arc_weeks_estimate": [
         28,
         36
@@ -32,7 +32,7 @@
       "note": "Expected ranges for a beginner-to-intermediate user completing weeks 1-8 as prescribed. Advanced users at the top of the aerobic ladder will see smaller gains in Block 1 and larger ones in Block 3."
     },
     "modality_policy": {
-      "weeks_1_to_4": "Low-impact only \u2014 row, bike, or ski-erg. No running. Reason: capillary and mitochondrial adaptation lags connective-tissue tolerance by weeks. Running in weeks 1-4 raises injury risk without accelerating aerobic gains.",
+      "weeks_1_to_4": "Low-impact only — row, bike, or ski-erg. No running. Reason: capillary and mitochondrial adaptation lags connective-tissue tolerance by weeks. Running in weeks 1-4 raises injury risk without accelerating aerobic gains.",
       "weeks_5_to_8": "If the user's declared goal modality (from intake) is running, running is introduced in week 5, one session at a time, replacing a Z1 session first. Otherwise stay on the declared low-impact modality throughout.",
       "cross_modal": "Users who declared row/bike/ski-erg as their goal can substitute a Z1 session on a different modality if their preferred machine is unavailable. Hard sessions stay on the declared modality."
     },
@@ -47,8 +47,8 @@
       ],
       "rationale": "Hickson (1980) showed strength gains are attenuated by concurrent endurance training in proportion to endurance volume. Wilson & Loenneke (2012) meta-analysis: interference is largest when endurance sessions are hard and frequent. Docherty & Sporer (2000) modelled the interference as competition for the same recovery substrate. Practical translation: an 8-week base block is not the block to chase a squat PR. Hold what you have, come back to it in Block 2 or later.",
       "acceptable_lifts": [
-        "Squat variants at \u22647 RPE, 3-4 sets",
-        "Deadlift variants at \u22647 RPE",
+        "Squat variants at ≤7 RPE, 3-4 sets",
+        "Deadlift variants at ≤7 RPE",
         "Upper-body pressing / pulling at moderate load",
         "Loaded carries",
         "Unilateral work"
@@ -65,7 +65,7 @@
     {
       "id": "polarised",
       "rule": "Most volume easy, small amount hard, almost nothing in between",
-      "detail": "Seiler's polarised model (2010) is the backbone. In Block 1 you don't have enough volume yet to fully polarise \u2014 but the shape starts here. As blocks 2 and 3 add volume the 80/20 ratio locks in."
+      "detail": "Seiler's polarised model (2010) is the backbone. In Block 1 you don't have enough volume yet to fully polarise — but the shape starts here. As blocks 2 and 3 add volume the 80/20 ratio locks in."
     },
     {
       "id": "z1_first",
@@ -186,7 +186,7 @@
         "label": "Any joint or tendon issues that flare with cardio? Describe briefly.",
         "type": "text",
         "required": false,
-        "help": "Knees, Achilles, hips, lower back. Free text \u2014 the plan doesn't gate on this field, but it's shown to you before hard sessions as a reminder to self-monitor."
+        "help": "Knees, Achilles, hips, lower back. Free text — the plan doesn't gate on this field, but it's shown to you before hard sessions as a reminder to self-monitor."
       },
       {
         "id": "joint_issue_severity",
@@ -208,7 +208,7 @@
           },
           {
             "value": "limits_all_cardio",
-            "label": "Limits all cardio \u2014 see a clinician before starting"
+            "label": "Limits all cardio — see a clinician before starting"
           }
         ]
       },
@@ -221,7 +221,7 @@
         "min": 0,
         "max": 6,
         "step": 1,
-        "help": "Read the concurrent-strength policy on the program page \u2014 2-3 maintenance-only sessions is the recommendation."
+        "help": "Read the concurrent-strength policy on the program page — 2-3 maintenance-only sessions is the recommendation."
       },
       {
         "id": "resting_hr_known",
@@ -232,7 +232,7 @@
       },
       {
         "id": "max_hr_estimate",
-        "label": "Estimated max HR (bpm). If unknown, leave blank \u2014 we'll use 208 \u2212 0.7 \u00d7 age.",
+        "label": "Estimated max HR (bpm). If unknown, leave blank — we'll use 208 − 0.7 × age.",
         "type": "number",
         "required": false,
         "unit": "bpm",
@@ -307,7 +307,7 @@
     "physical_tests": [
       {
         "id": "resting_hr_morning",
-        "label": "Resting heart rate \u2014 morning average",
+        "label": "Resting heart rate — morning average",
         "instructions": "For 3 mornings in the intake week, before getting out of bed and before caffeine, measure HR for 60 seconds (or use a wearable's overnight low). Record the average of the 3 readings. This is the single most sensitive early indicator of aerobic adaptation.",
         "unit": "bpm",
         "min": 30,
@@ -316,14 +316,14 @@
       {
         "id": "submax_hr_5min",
         "label": "5-minute submax HR at chosen easy pace",
-        "instructions": "On your goal modality (row/bike/ski/run), warm up 5 min, then hold a comfortable, sustainable, conversational pace for exactly 5 minutes. Record HR at the end of the 5 minutes. This same pace will be used at retest \u2014 write it down (watts, split, or pace).",
+        "instructions": "On your goal modality (row/bike/ski/run), warm up 5 min, then hold a comfortable, sustainable, conversational pace for exactly 5 minutes. Record HR at the end of the 5 minutes. This same pace will be used at retest — write it down (watts, split, or pace).",
         "unit": "bpm",
         "min": 60,
         "max": 200
       },
       {
         "id": "row_500m_tt",
-        "label": "500m row time trial \u2014 optional",
+        "label": "500m row time trial — optional",
         "instructions": "Only if you have access to a rower. Warm up 10 min. Row 500m as fast as you can sustain. Record time in seconds. Skip if goal modality is not rowing and you don't want the second data point.",
         "unit": "seconds",
         "min": 60,
@@ -332,7 +332,7 @@
       },
       {
         "id": "run_1km_tt",
-        "label": "1km run time trial \u2014 optional",
+        "label": "1km run time trial — optional",
         "instructions": "Only if goal modality is running AND joints allow it. Warm up 10 min including 2 x 30s pickups. Run 1km hard on a flat track or GPS-measured route. Record time in seconds. Skip if goal modality is not running.",
         "unit": "seconds",
         "min": 150,
@@ -390,15 +390,21 @@
           "true"
         ],
         "block_title": "Stay on low-impact modality",
-        "block_body": "A flaring joint or tendon condition means don't add the running variant of intervals in week 5. Consider the cycling/rowing/erg version \u2014 or wait until the flare is resolved."
+        "block_body": "A flaring joint or tendon condition means don't add the running variant of intervals in week 5. Consider the cycling/rowing/erg version — or wait until the flare is resolved."
       }
     ]
   },
   "schedule_constraints": {
     "available_days_min": 3,
     "available_days_max": 5,
-    "session_length_min_range": [30, 90],
-    "session_count_per_week_range": [3, 5],
+    "session_length_min_range": [
+      30,
+      90
+    ],
+    "session_count_per_week_range": [
+      3,
+      5
+    ],
     "hard_day_separation_h": 48
   },
   "plan_tiers": [
@@ -406,7 +412,7 @@
       "id": "foundation",
       "label": "Foundation",
       "condition": "cardio_hours_per_week < 1 || !can_sustain_20min_easy || recent_z1_max_minutes < 25",
-      "typical_outcome": "By week 8: comfortable holding 60 minutes of Z1 continuously. Resting HR drop of 3-8 bpm. Submax HR at your intake pace 3-6 bpm lower. VO2max improvement modest in Block 1 (~3-6%) \u2014 the transformation lands in Blocks 2 and 3 once the base is in.",
+      "typical_outcome": "By week 8: comfortable holding 60 minutes of Z1 continuously. Resting HR drop of 3-8 bpm. Submax HR at your intake pace 3-6 bpm lower. VO2max improvement modest in Block 1 (~3-6%) — the transformation lands in Blocks 2 and 3 once the base is in.",
       "outcome_confidence": "realistic",
       "full_goal_weeks_estimate": 36,
       "starting_phase_id": "phase_1_week_1",
@@ -446,7 +452,7 @@
   ],
   "program_goal": {
     "metric": "engine_composite_score",
-    "target_value": 1.0,
+    "target_value": 1,
     "stretch_value": 1.5,
     "display_name": "Engine composite (Block 1)",
     "unit": "z-score composite",
@@ -455,7 +461,7 @@
   "phases": [
     {
       "id": "phase_1_week_1",
-      "name": "Week 1 \u2014 pure Z1 introduction",
+      "name": "Week 1 — pure Z1 introduction",
       "starts": "2026-01-05",
       "ends": "2026-01-11",
       "duration_weeks": 1,
@@ -471,7 +477,7 @@
     },
     {
       "id": "phase_2_week_2",
-      "name": "Week 2 \u2014 Z1 volume up",
+      "name": "Week 2 — Z1 volume up",
       "starts": "2026-01-12",
       "ends": "2026-01-18",
       "duration_weeks": 1,
@@ -479,11 +485,11 @@
         "block_z1_steady"
       ],
       "goal": "Three Z1 sessions, 40-45 minutes each. Push tier: introduces first Norwegian 4x4 in place of one Z1.",
-      "template_note": "Foundation tier: 2 Z1 sessions, 40-45 min each \u2014 hold volume rather than adding a third."
+      "template_note": "Foundation tier: 2 Z1 sessions, 40-45 min each — hold volume rather than adding a third."
     },
     {
       "id": "phase_3_week_3",
-      "name": "Week 3 \u2014 first sustained tempo",
+      "name": "Week 3 — first sustained tempo",
       "starts": "2026-01-19",
       "ends": "2026-01-25",
       "duration_weeks": 1,
@@ -492,11 +498,11 @@
         "block_sustained_tempo"
       ],
       "goal": "Two Z1 (50-55 min) + one 20-minute sustained tempo. First taste of sub-threshold work.",
-      "template_note": "Foundation: skip the tempo \u2014 third Z1 session at 40 min instead."
+      "template_note": "Foundation: skip the tempo — third Z1 session at 40 min instead."
     },
     {
       "id": "phase_4_week_4",
-      "name": "Week 4 \u2014 first Norwegian 4x4",
+      "name": "Week 4 — first Norwegian 4x4",
       "starts": "2026-01-26",
       "ends": "2026-02-01",
       "duration_weeks": 1,
@@ -508,12 +514,12 @@
       "template_note": "Foundation tier: replace the 4x4 with a second sustained tempo (25 min). First 4x4 lands in week 5.",
       "notes": [
         "The 4x4 costs more recovery than any other session in Block 1. Do not stack it with a hard strength session in the same 24 h window.",
-        "If HR won't climb to 90% max on set 1, you're too tired \u2014 reschedule and do Z1 instead."
+        "If HR won't climb to 90% max on set 1, you're too tired — reschedule and do Z1 instead."
       ]
     },
     {
       "id": "phase_5_week_5",
-      "name": "Week 5 \u2014 threshold enters + run-modality unlock",
+      "name": "Week 5 — threshold enters + run-modality unlock",
       "starts": "2026-02-02",
       "ends": "2026-02-08",
       "duration_weeks": 1,
@@ -521,12 +527,12 @@
         "block_z1_steady",
         "block_threshold_cruise"
       ],
-      "goal": "One long Z1 (75 min) + one 3\u00d78 threshold + one 45-min Z1. If goal modality is running, running is introduced now \u2014 one Z1 session becomes a Z1 easy run.",
-      "template_note": "Push tier: threshold set becomes 3\u00d710 minutes. Foundation: first 4x4 lands this week (delayed one week), no threshold this block."
+      "goal": "One long Z1 (75 min) + one 3×8 threshold + one 45-min Z1. If goal modality is running, running is introduced now — one Z1 session becomes a Z1 easy run.",
+      "template_note": "Push tier: threshold set becomes 3×10 minutes. Foundation: first 4x4 lands this week (delayed one week), no threshold this block."
     },
     {
       "id": "phase_6_week_6",
-      "name": "Week 6 \u2014 volume peaks, first 4-session week",
+      "name": "Week 6 — volume peaks, first 4-session week",
       "starts": "2026-02-09",
       "ends": "2026-02-15",
       "duration_weeks": 1,
@@ -536,11 +542,11 @@
         "block_easy_recovery"
       ],
       "goal": "Long Z1 (60) + moderate Z1 (45) + Norwegian 4x4 + easy recovery (30). This is the highest-volume week of Block 1.",
-      "template_note": "Push tier: adds a second hard session \u2014 swap the recovery for a sustained tempo (30 min). Foundation: 3 sessions total, drop the recovery."
+      "template_note": "Push tier: adds a second hard session — swap the recovery for a sustained tempo (30 min). Foundation: 3 sessions total, drop the recovery."
     },
     {
       "id": "phase_7_week_7",
-      "name": "Week 7 \u2014 combined stimulus",
+      "name": "Week 7 — combined stimulus",
       "starts": "2026-02-16",
       "ends": "2026-02-22",
       "duration_weeks": 1,
@@ -550,11 +556,11 @@
         "block_norwegian_4x4"
       ],
       "goal": "Long Z1 (75) + sustained tempo (30) + Norwegian 4x4 + Z1 (40). Peak stimulus before deload.",
-      "template_note": "Foundation: threshold cruise instead of the 4x4 (3\u00d78). Push tier as written; already at high load."
+      "template_note": "Foundation: threshold cruise instead of the 4x4 (3×8). Push tier as written; already at high load."
     },
     {
       "id": "phase_8_week_8",
-      "name": "Week 8 \u2014 deload and retest",
+      "name": "Week 8 — deload and retest",
       "starts": "2026-02-23",
       "ends": "2026-03-01",
       "duration_weeks": 1,
@@ -581,7 +587,7 @@
         40,
         90
       ],
-      "note": "Modality chosen at intake. Weeks 1-4 low-impact only (row/bike/ski). Running unlocks in week 5 for run-goal users. Session length varies by week and tier \u2014 see phase week_by_week / weekly_template.",
+      "note": "Modality chosen at intake. Weeks 1-4 low-impact only (row/bike/ski). Running unlocks in week 5 for run-goal users. Session length varies by week and tier — see phase week_by_week / weekly_template.",
       "items": [
         {
           "exercise_id": "aerobic_z1_steady",
@@ -593,14 +599,14 @@
     },
     {
       "id": "block_sustained_tempo",
-      "name": "Sustained tempo \u2014 sub-threshold cruise",
+      "name": "Sustained tempo — sub-threshold cruise",
       "category": "run",
       "location": "anywhere",
       "duration_min": [
         40,
         55
       ],
-      "note": "10-12 min warm up including 2 x 30s pickups \u2192 hold sub-threshold pace for the target block \u2192 5 min cool down. Sub-threshold = comfortably hard but sustainable, 83-88% VDOT / 88-94% FTP / 82-87% HRmax.",
+      "note": "10-12 min warm up including 2 x 30s pickups → hold sub-threshold pace for the target block → 5 min cool down. Sub-threshold = comfortably hard but sustainable, 83-88% VDOT / 88-94% FTP / 82-87% HRmax.",
       "items": [
         {
           "exercise_id": "aerobic_sustained_tempo",
@@ -619,7 +625,7 @@
         50,
         65
       ],
-      "note": "12-15 min warm up including 3 x 30s pickups \u2192 interval set \u2192 5-8 min cool down. Intervals at lactate-threshold pace (85-90% HRmax).",
+      "note": "12-15 min warm up including 3 x 30s pickups → interval set → 5-8 min cool down. Intervals at lactate-threshold pace (85-90% HRmax).",
       "items": [
         {
           "exercise_id": "aerobic_threshold_cruise",
@@ -638,13 +644,13 @@
         45,
         55
       ],
-      "note": "12-15 min warm up including 3 x 30s pickups \u2192 4 x [4 min @ 90-95% HRmax / 3 min active recovery] \u2192 8-10 min cool down. The single hardest session in Block 1.",
+      "note": "12-15 min warm up including 3 x 30s pickups → 4 x [4 min @ 90-95% HRmax / 3 min active recovery] → 8-10 min cool down. The single hardest session in Block 1.",
       "items": [
         {
           "exercise_id": "aerobic_norwegian_4x4",
           "order": "A1",
           "role": "main",
-          "scheme": "4 sets \u00d7 4 min at 90-95% HRmax, 3 min active recovery between. Non-negotiable: full recovery day either side."
+          "scheme": "4 sets × 4 min at 90-95% HRmax, 3 min active recovery between. Non-negotiable: full recovery day either side."
         }
       ],
       "substitutions": {
@@ -684,7 +690,7 @@
           "exercise_id": "aerobic_retest",
           "order": "A1",
           "role": "test",
-          "scheme": "See exercise instructions. Space time-trials by 15+ min of easy spin. Do not stack 500m row and 1km run in the same session unless goal is a combined engine \u2014 pick one."
+          "scheme": "See exercise instructions. Space time-trials by 15+ min of easy spin. Do not stack 500m row and 1km run in the same session unless goal is a combined engine — pick one."
         }
       ]
     }
@@ -782,7 +788,7 @@
         "type": "optional_hard_session",
         "block": "block_sustained_tempo",
         "duration_min": 25,
-        "placement": "Wed or Fri, \u22656h from primary hard session, \u226548h from adjacent days"
+        "placement": "Wed or Fri, ≥6h from primary hard session, ≥48h from adjacent days"
       }
     },
     "week_4": {
@@ -845,7 +851,7 @@
         "type": "optional_hard_session",
         "block": "block_sustained_tempo",
         "duration_min": 25,
-        "placement": "Wed or Fri, \u22656h from primary hard session, \u226548h from adjacent days"
+        "placement": "Wed or Fri, ≥6h from primary hard session, ≥48h from adjacent days"
       }
     },
     "week_5": {
@@ -904,7 +910,7 @@
         "type": "optional_hard_session",
         "block": "block_sustained_tempo",
         "duration_min": 25,
-        "placement": "Wed or Fri, \u22656h from primary hard session, \u226548h from adjacent days"
+        "placement": "Wed or Fri, ≥6h from primary hard session, ≥48h from adjacent days"
       }
     },
     "week_6": {
@@ -955,7 +961,7 @@
         "type": "optional_hard_session",
         "block": "block_sustained_tempo",
         "duration_min": 25,
-        "placement": "Wed or Fri, \u22656h from primary hard session, \u226548h from adjacent days"
+        "placement": "Wed or Fri, ≥6h from primary hard session, ≥48h from adjacent days"
       }
     },
     "week_7": {
@@ -1060,13 +1066,13 @@
       "Never place hard sessions on consecutive days.",
       "48+ h between Norwegian 4x4 and any other hard session in the same week.",
       "24+ h between a hard cardio session and any concurrent strength session; 6+ h if they must share a day.",
-      "If life forces you to skip a session, drop the last Z1 of the week \u2014 never the hard session. The hard stimulus is what moves the needle.",
+      "If life forces you to skip a session, drop the last Z1 of the week — never the hard session. The hard stimulus is what moves the needle.",
       "If you skip the hard session, do not double up next week. Move on."
     ]
   },
   "progression_rules": {
     "assessment_timing": "next_morning",
-    "assessment_note": "Judge by next-morning HR variability and subjective recovery. Don't decide mid-session that you're 'not feeling it' \u2014 finish easy and reassess tomorrow.",
+    "assessment_note": "Judge by next-morning HR variability and subjective recovery. Don't decide mid-session that you're 'not feeling it' — finish easy and reassess tomorrow.",
     "states": [
       {
         "id": "green",
@@ -1080,7 +1086,7 @@
       },
       {
         "id": "amber",
-        "label": "Hold \u2014 swap a Z1 for scheduled hard session or shorten by 20%",
+        "label": "Hold — swap a Z1 for scheduled hard session or shorten by 20%",
         "conditions": {
           "morning_rhr_5_to_10_above_baseline": true,
           "or": "life load 7+ or sleep < 6h two nights running"
@@ -1101,8 +1107,8 @@
         "escalate_if_repeated": true
       }
     ],
-    "week_end_rule": "If the week's hard session was hit at intended intensity and finished feeling like you had one more interval in the tank \u2192 proceed. If the hard session degraded across sets or HR wouldn't climb \u2192 hold at current volume next week; do not skip the deload/retest.",
-    "escalation": "Two red days in the same week \u2192 skip the hard session that week. Three red days in a row, or any red day with unexplained resting HR elevation > 15 bpm, means take a full week off and consult a clinician if it persists."
+    "week_end_rule": "If the week's hard session was hit at intended intensity and finished feeling like you had one more interval in the tank → proceed. If the hard session degraded across sets or HR wouldn't climb → hold at current volume next week; do not skip the deload/retest.",
+    "escalation": "Two red days in the same week → skip the hard session that week. Three red days in a row, or any red day with unexplained resting HR elevation > 15 bpm, means take a full week off and consult a clinician if it persists."
   },
   "daily_log_schema": {
     "date": "ISO date",
@@ -1147,30 +1153,30 @@
     },
     {
       "priority": 4,
-      "action": "Set an appointment with yourself for Thursday of week 8 \u2014 the retest day. Put it in the calendar now.",
+      "action": "Set an appointment with yourself for Thursday of week 8 — the retest day. Put it in the calendar now.",
       "reason": "Retest gets skipped when it's the last thing on a busy week. Book it like a meeting."
     }
   ],
   "evidence_base": {
     "physiological_targets": [
-      "Mitochondrial biogenesis via PGC-1\u03b1 signalling \u2014 detectable at 5-10 training sessions, functional adaptation by 2-4 weeks, near-maximal for the given stimulus by 6-8 weeks (Little 2010, Perry 2010, Konopka 2014, Bishop 2019). Konopka 2014 measured \u03b2-HAD +397-435%, CS +65-102%, PGC-1\u03b1 +55-62% in 12 weeks in older adults \u2014 no age blunting of relative response.",
-      "Capillary-to-fibre ratio +10-20% in 8 weeks; capillary density (per unit area) responds most reliably to endurance/continuous work (+13\u00b13%), less to sprint-interval training (Andersen & Henriksson 1977; Cocks 2013; 2025 mito+cap meta-regression PMC11787188).",
-      "Left-ventricular stroke volume +5-10% in 8 weeks \u2014 REQUIRES interval intensity \u226590% HRmax. Z1 alone does not move SV meaningfully (Helgerud 2007: only the 4\u00d74 and 15/15 groups showed SV gains, LSD and threshold groups did not). Cardiac remodelling is eccentric with endurance training (Baggish & Wood 2011).",
-      "Lactate clearance via MCT1 upregulation \u2014 training raises sarcolemmal MCT1 in oxidative tissue more reliably than MCT4. Endurance-trained subjects have higher MCT1 vs untrained (Pilegaard 2000; Brooks 2018 lactate shuttle theory). This is the specific adaptation that shortens between-interval recovery in metcons.",
-      "Resting HR \u22125 to \u221210 bpm in 8 weeks (12+ weeks: \u221210 to \u221215 bpm typical). Reflects parasympathetic tone + expanded stroke volume (multiple; Konopka 2014 as anchor).",
-      "Submax HR at fixed pace/power \u22128 to \u221215 bpm in 8 weeks. This moves FIRST and is the most motivating early metric \u2014 a training-effect signal visible before VO2max plateaus.",
-      "Fat oxidation rate at Fatmax (~63% VO2max in trained men, range 45-75%; Achten & Jeukendrup 2003). Z1 volume drives \u03b2-HAD and CPT1 upregulation \u2014 the enzymatic machinery for fat oxidation."
+      "Mitochondrial biogenesis via PGC-1α signalling — detectable at 5-10 training sessions, functional adaptation by 2-4 weeks, near-maximal for the given stimulus by 6-8 weeks (Little 2010, Perry 2010, Konopka 2014, Bishop 2019). Konopka 2014 measured β-HAD +397-435%, CS +65-102%, PGC-1α +55-62% in 12 weeks in older adults — no age blunting of relative response.",
+      "Capillary-to-fibre ratio +10-20% in 8 weeks; capillary density (per unit area) responds most reliably to endurance/continuous work (+13±3%), less to sprint-interval training (Andersen & Henriksson 1977; Cocks 2013; 2025 mito+cap meta-regression PMC11787188).",
+      "Left-ventricular stroke volume +5-10% in 8 weeks — REQUIRES interval intensity ≥90% HRmax. Z1 alone does not move SV meaningfully (Helgerud 2007: only the 4×4 and 15/15 groups showed SV gains, LSD and threshold groups did not). Cardiac remodelling is eccentric with endurance training (Baggish & Wood 2011).",
+      "Lactate clearance via MCT1 upregulation — training raises sarcolemmal MCT1 in oxidative tissue more reliably than MCT4. Endurance-trained subjects have higher MCT1 vs untrained (Pilegaard 2000; Brooks 2018 lactate shuttle theory). This is the specific adaptation that shortens between-interval recovery in metcons.",
+      "Resting HR −5 to −10 bpm in 8 weeks (12+ weeks: −10 to −15 bpm typical). Reflects parasympathetic tone + expanded stroke volume (multiple; Konopka 2014 as anchor).",
+      "Submax HR at fixed pace/power −8 to −15 bpm in 8 weeks. This moves FIRST and is the most motivating early metric — a training-effect signal visible before VO2max plateaus.",
+      "Fat oxidation rate at Fatmax (~63% VO2max in trained men, range 45-75%; Achten & Jeukendrup 2003). Z1 volume drives β-HAD and CPT1 upregulation — the enzymatic machinery for fat oxidation."
     ],
     "session_rationale": {
-      "block_z1_steady": "The single largest driver of mitochondrial + capillary adaptation across a 6-month arc. Konopka 2014: 12 weeks of 3-4\u00d7/week cycling at 60-80% HRR produced PGC-1\u03b1 +55-62%, CS +65-102%, \u03b2-HAD +397-435%. Andersen & Henriksson 1977: 40 min/day \u00d7 4/wk \u00d7 8 wk at 80% VO2max drove capillary density +20% and VO2max +16%. San-Mill\u00e1n & Brooks 2018 identify Zone 2 as the intensity that recruits Type I fibres preferentially via the lactate-clamp methodology \u2014 the largest mitochondrial signal per unit of fatigue. Confidently the base-load session of the program.",
-      "block_sustained_tempo": "Sub-threshold sustained work drives MCT1 upregulation (Pilegaard 2000) and shifts the crossover point toward higher intensities (Brooks & Mercier 1994). Jack Daniels' T-pace (~83-88% VDOT). Fills the missing middle: harder than Z1, easier than 4\u00d74. The bridge session in weeks 3-5.",
-      "block_threshold_cruise": "Longer intervals at ~85-90% HRmax. R\u00f8nnestad & Hansen 2020 comparison: long intervals produce comparable VO2max gains to short intervals in cyclists; superior for peak-power development is disputed. Threshold cruise builds LT2 sustainable output \u2014 the pace/power that keeps improving after VO2max plateaus (Joyner & Coyle 2008).",
-      "block_norwegian_4x4": "Helgerud 2007 (n=40): 4\u00d74 min at 90-95% HRmax produced VO2max +7.2% and stroke volume +10% over 8 weeks \u2014 the only session type in that four-arm study that moved SV meaningfully. Wisl\u00f8ff 2007 (post-MI HF patients, 12 weeks): VO2peak +46%, LV ejection fraction +35% with the same 4\u00d74 protocol. Time-at-VO2max is the specific driver of cardiac stroke-volume adaptation.",
-      "block_easy_recovery": "Blood flow at Z1 (60-70% HRmax) accelerates lactate clearance and glycogen replenishment vs complete rest \u2014 active recovery. No adaptive stimulus intended. Appears in the peak-volume week where systemic fatigue rises and Wilson & Loenneke 2012 concurrent-training data indicate strength interference amplifies.",
+      "block_z1_steady": "The single largest driver of mitochondrial + capillary adaptation across a 6-month arc. Konopka 2014: 12 weeks of 3-4×/week cycling at 60-80% HRR produced PGC-1α +55-62%, CS +65-102%, β-HAD +397-435%. Andersen & Henriksson 1977: 40 min/day × 4/wk × 8 wk at 80% VO2max drove capillary density +20% and VO2max +16%. San-Millán & Brooks 2018 identify Zone 2 as the intensity that recruits Type I fibres preferentially via the lactate-clamp methodology — the largest mitochondrial signal per unit of fatigue. Confidently the base-load session of the program.",
+      "block_sustained_tempo": "Sub-threshold sustained work drives MCT1 upregulation (Pilegaard 2000) and shifts the crossover point toward higher intensities (Brooks & Mercier 1994). Jack Daniels' T-pace (~83-88% VDOT). Fills the missing middle: harder than Z1, easier than 4×4. The bridge session in weeks 3-5.",
+      "block_threshold_cruise": "Longer intervals at ~85-90% HRmax. Rønnestad & Hansen 2020 comparison: long intervals produce comparable VO2max gains to short intervals in cyclists; superior for peak-power development is disputed. Threshold cruise builds LT2 sustainable output — the pace/power that keeps improving after VO2max plateaus (Joyner & Coyle 2008).",
+      "block_norwegian_4x4": "Helgerud 2007 (n=40): 4×4 min at 90-95% HRmax produced VO2max +7.2% and stroke volume +10% over 8 weeks — the only session type in that four-arm study that moved SV meaningfully. Wisløff 2007 (post-MI HF patients, 12 weeks): VO2peak +46%, LV ejection fraction +35% with the same 4×4 protocol. Time-at-VO2max is the specific driver of cardiac stroke-volume adaptation.",
+      "block_easy_recovery": "Blood flow at Z1 (60-70% HRmax) accelerates lactate clearance and glycogen replenishment vs complete rest — active recovery. No adaptive stimulus intended. Appears in the peak-volume week where systemic fatigue rises and Wilson & Loenneke 2012 concurrent-training data indicate strength interference amplifies.",
       "block_retest": "Same protocol at intake and retest so the delta is trustworthy. Rest HR + submax HR at fixed pace are the two most sensitive early indicators of aerobic adaptation (both move faster than VO2max) and are equipment-independent. 500m row TT + 1km run TT add modality-specific measurements when equipment is available."
     },
-    "progression_rationale": "Weeks 1-2 are pure Z1 because mitochondrial signalling protein bursts precede functional enzyme upregulation by 5-10 sessions (Perry 2010, Little 2010) \u2014 hard intervals on a missing base generate fatigue signals without adaptation payoff. First tempo lands week 3 as an MCT1 stimulus. First Norwegian 4\u00d74 lands week 4 for Progression/Push tiers \u2014 Foundation delays hard work to week 5 because Ross 2015 showed non-response at low intensity converts to response at 75%, but pushing under-conditioned users straight into 4\u00d74 amplifies dropout risk. Volume peaks weeks 6-7 with an added easy Z1 recovery session \u2014 Fyfe 2016 showed endurance VOLUME (not intensity) drives concurrent-training interference, so the peak-volume weeks are precisely where the strength cap tightens (RPE \u2264 6, no PR chasing). Week 8 deloads to a single easy Z1, retests midweek, and finishes easy \u2014 mirroring taper practice; Baar 2014's 3h AMPK-recovery window plus Robineau 2016's demonstrated 6h separation advantage inform the same-day sequencing rule (lift first if forced; 6+ h separation preferred; alternate days ideal).",
-    "outcome_evidence": "Effect-size expectations synthesised across primary sources for a strength-trained user new to aerobic work. VO2max: Foundation tier +5-8%, Progression +8-12%, Push +2-5% (Push has less headroom). Anchor: Helgerud 2007 measured +7.2% at 3\u00d7/wk 4\u00d74 in moderately trained subjects. Mitochondrial oxidative enzymes +40-100% (Konopka 2014, Perry 2010). Capillary-to-fibre ratio +10-20% (Andersen 1977, Cocks 2013). Stroke volume +5-10% if intervals present (Helgerud 2007). Resting HR \u22125 to \u221210 bpm by week 8 (visible from week 2-4). Submax HR at fixed pace \u22128 to \u221215 bpm (the fastest-moving, most motivating early metric). 500m row TT: 3-8s improvement, mostly from pacing + stroke efficiency, not raw physiology. 2km row or 1km run TT: 5-12% improvement \u2014 physiology + running/rowing economy. Individual variation is real: HERITAGE (Bouchard 1999) showed heritability of VO2max training response = 47% and ~10\u00d7 range in individual gains under identical prescription. Ross 2015 showed ~18% of subjects were 'non-responders' at 50% intensity \u2014 this drops to 0% at 75% intensity. Non-response is usually under-dosing, not genotype. Block 2 (volume expansion) and Block 3 (polarised specialisation) capture the majority of VO2max-available gains \u2014 Block 1 is the base that lets them work.",
+    "progression_rationale": "Weeks 1-2 are pure Z1 because mitochondrial signalling protein bursts precede functional enzyme upregulation by 5-10 sessions (Perry 2010, Little 2010) — hard intervals on a missing base generate fatigue signals without adaptation payoff. First tempo lands week 3 as an MCT1 stimulus. First Norwegian 4×4 lands week 4 for Progression/Push tiers — Foundation delays hard work to week 5 because Ross 2015 showed non-response at low intensity converts to response at 75%, but pushing under-conditioned users straight into 4×4 amplifies dropout risk. Volume peaks weeks 6-7 with an added easy Z1 recovery session — Fyfe 2016 showed endurance VOLUME (not intensity) drives concurrent-training interference, so the peak-volume weeks are precisely where the strength cap tightens (RPE ≤ 6, no PR chasing). Week 8 deloads to a single easy Z1, retests midweek, and finishes easy — mirroring taper practice; Baar 2014's 3h AMPK-recovery window plus Robineau 2016's demonstrated 6h separation advantage inform the same-day sequencing rule (lift first if forced; 6+ h separation preferred; alternate days ideal).",
+    "outcome_evidence": "Effect-size expectations synthesised across primary sources for a strength-trained user new to aerobic work. VO2max: Foundation tier +5-8%, Progression +8-12%, Push +2-5% (Push has less headroom). Anchor: Helgerud 2007 measured +7.2% at 3×/wk 4×4 in moderately trained subjects. Mitochondrial oxidative enzymes +40-100% (Konopka 2014, Perry 2010). Capillary-to-fibre ratio +10-20% (Andersen 1977, Cocks 2013). Stroke volume +5-10% if intervals present (Helgerud 2007). Resting HR −5 to −10 bpm by week 8 (visible from week 2-4). Submax HR at fixed pace −8 to −15 bpm (the fastest-moving, most motivating early metric). 500m row TT: 3-8s improvement, mostly from pacing + stroke efficiency, not raw physiology. 2km row or 1km run TT: 5-12% improvement — physiology + running/rowing economy. Individual variation is real: HERITAGE (Bouchard 1999) showed heritability of VO2max training response = 47% and ~10× range in individual gains under identical prescription. Ross 2015 showed ~18% of subjects were 'non-responders' at 50% intensity — this drops to 0% at 75% intensity. Non-response is usually under-dosing, not genotype. Block 2 (volume expansion) and Block 3 (polarised specialisation) capture the majority of VO2max-available gains — Block 1 is the base that lets them work.",
     "outcome_by_tier": {
       "foundation": {
         "vo2max_pct": "+3-6%",
@@ -1193,26 +1199,26 @@
         "session_1_z2_duration_target": "60-75 min by week 8",
         "confidence": "stretch"
       },
-      "dose_calibration_note": "Block 1 (8 weeks) delivers 1 primary hard session per week in weeks 3-6, escalating to 2 hard sessions in week 7. This is a starter dose \u2014 Helgerud's +7.2% VO2max protocol used 3 hard sessions/wk \u00d7 8wk. Users targeting the upper end of the projected range should stack the optional second hard session (marked as such in Weeks 3-6 layout) with \u22656h from the primary. Full Blocks 2 and 3 (not shipped yet) are what complete the polarised arc."
+      "dose_calibration_note": "Block 1 (8 weeks) delivers 1 primary hard session per week in weeks 3-6, escalating to 2 hard sessions in week 7. This is a starter dose — Helgerud's +7.2% VO2max protocol used 3 hard sessions/wk × 8wk. Users targeting the upper end of the projected range should stack the optional second hard session (marked as such in Weeks 3-6 layout) with ≥6h from the primary. Full Blocks 2 and 3 (not shipped yet) are what complete the polarised arc."
     },
     "contraindications": [
-      "Unmanaged hypertension (BP > 160/100 at rest) \u2014 see a clinician before starting the Norwegian 4x4 sessions. Z1 work is generally safe but check.",
-      "First-trimester pregnancy \u2014 HR-based zones are unreliable during pregnancy; work with a specialist.",
-      "Any joint or tendon condition that flares under load (Achilles, patellar tendinopathy, hip labral tear on the run variant) \u2014 stay on low-impact modality; do not switch to running in week 5.",
-      "Post-COVID convalescence with persistent resting HR elevation or exercise intolerance \u2014 do not begin intervals until baseline HR normalises.",
-      "History of exertional syncope or unexplained cardiac symptoms \u2014 full clearance first."
+      "Unmanaged hypertension (BP > 160/100 at rest) — see a clinician before starting the Norwegian 4x4 sessions. Z1 work is generally safe but check.",
+      "First-trimester pregnancy — HR-based zones are unreliable during pregnancy; work with a specialist.",
+      "Any joint or tendon condition that flares under load (Achilles, patellar tendinopathy, hip labral tear on the run variant) — stay on low-impact modality; do not switch to running in week 5.",
+      "Post-COVID convalescence with persistent resting HR elevation or exercise intolerance — do not begin intervals until baseline HR normalises.",
+      "History of exertional syncope or unexplained cardiac symptoms — full clearance first."
     ],
-    "adaptive_engine_hooks": "Morning resting HR is the primary daily signal \u2014 >10 bpm above baseline gates the day's hard session to Z1 automatically (proposal, user Accepts). Two red days in a week gates the following hard session to a threshold cruise (lower cost than 4x4). Life-load score of 7+ mid-week combined with a missed session prompts a Z1 substitution on the hard day rather than a make-up. If the block's Norwegian 4x4 HR fails to reach 90% HRmax on set 1 twice in a row, engine proposes a threshold cruise substitute the following week and flags a review. If a hard aerobic session lands within 6 hours of a lifting session, engine proposes moving one or the other \u2014 Robineau 2016 dose-response showed 6+ h separation preserves both adaptations, 0h separation halves the strength gain. All adjustments respect the confirm-first rule \u2014 engine proposes, user Accepts, nothing mutates silently.",
+    "adaptive_engine_hooks": "Morning resting HR is the primary daily signal — >10 bpm above baseline gates the day's hard session to Z1 automatically (proposal, user Accepts). Two red days in a week gates the following hard session to a threshold cruise (lower cost than 4x4). Life-load score of 7+ mid-week combined with a missed session prompts a Z1 substitution on the hard day rather than a make-up. If the block's Norwegian 4x4 HR fails to reach 90% HRmax on set 1 twice in a row, engine proposes a threshold cruise substitute the following week and flags a review. If a hard aerobic session lands within 6 hours of a lifting session, engine proposes moving one or the other — Robineau 2016 dose-response showed 6+ h separation preserves both adaptations, 0h separation halves the strength gain. All adjustments respect the confirm-first rule — engine proposes, user Accepts, nothing mutates silently.",
     "engineering_choices_flagged": [
-      "Session length (45 vs 60 vs 75 min for Z1 steady) \u2014 no strong evidence at this granularity; picked to fit real-world weekly hours",
-      "Retest cadence at week 8 \u2014 engineering choice; matches the block boundary",
-      "Number of intervals per interval session (3 vs 4 vs 5) \u2014 coaching consensus, not directly RCT-tested",
-      "Recovery ratio for 4\u00d74 (3 min at 60% HRmax) \u2014 Helgerud 2007 protocol, but exact ratio is not empirically optimised",
-      "Warm-up duration (10 min) \u2014 engineering choice",
-      "The specific HRmax formula (211 \u2212 0.64 \u00d7 age from HUNT / Nes 2013) \u2014 has ~11 bpm SEE; personalised max derived from observed workout HRs when available"
+      "Session length (45 vs 60 vs 75 min for Z1 steady) — no strong evidence at this granularity; picked to fit real-world weekly hours",
+      "Retest cadence at week 8 — engineering choice; matches the block boundary",
+      "Number of intervals per interval session (3 vs 4 vs 5) — coaching consensus, not directly RCT-tested",
+      "Recovery ratio for 4×4 (3 min at 60% HRmax) — Helgerud 2007 protocol, but exact ratio is not empirically optimised",
+      "Warm-up duration (10 min) — engineering choice",
+      "The specific HRmax formula (211 − 0.64 × age from HUNT / Nes 2013) — has ~11 bpm SEE; personalised max derived from observed workout HRs when available"
     ],
-    "hr_zone_methodology": "Default: HRmax from HUNT formula (211 \u2212 0.64 \u00d7 age) per Nes 2013 \u2014 has 10.8 bpm standard error but no sex/BMI/fitness interaction. Zone floors set as %HRR (Karvonen 1957) rather than %HRmax because %HRR accounts for resting HR, which is itself the trained-fitness signal. Preferred: observed HRmax from a hard interval session, stored per-user, updated as fitness changes. Optional (chest-strap owners): DFA a1 = 0.75 as VT1 anchor per Rogers 2021 \u2014 validated in elite and recreational populations, non-invasive proxy for the aerobic threshold.",
-    "concurrent_strength_prescription": "During the 8-week block, keep barbell strength at RPE \u2264 7 maintenance: 2-3 sessions/week, same lifts, same volume, no PR chasing. Schumann 2022 meta-analysis of 43 studies: maximal strength SMD = -0.06 (not significant), hypertrophy SMD = -0.01 (not significant), BUT explosive strength SMD = -0.28 (significant, meaningful). Chasing explosive PRs during aerobic emphasis is the specific loss zone. If same day is unavoidable, lift first (Eddens 2018 meta: +6.91% lower-body strength gain vs endurance-first). Minimum 6 h separation (Robineau 2016). Protein floor 1.6 g/kg/day (Morton 2018 meta). Fuel resistance sessions fully (Impey 2018 'Fuel for the Work Required').",
+    "hr_zone_methodology": "Default: HRmax from HUNT formula (211 − 0.64 × age) per Nes 2013 — has 10.8 bpm standard error but no sex/BMI/fitness interaction. Zone floors set as %HRR (Karvonen 1957) rather than %HRmax because %HRR accounts for resting HR, which is itself the trained-fitness signal. Preferred: observed HRmax from a hard interval session, stored per-user, updated as fitness changes. Optional (chest-strap owners): DFA a1 = 0.75 as VT1 anchor per Rogers 2021 — validated in elite and recreational populations, non-invasive proxy for the aerobic threshold.",
+    "concurrent_strength_prescription": "During the 8-week block, keep barbell strength at RPE ≤ 7 maintenance: 2-3 sessions/week, same lifts, same volume, no PR chasing. Schumann 2022 meta-analysis of 43 studies: maximal strength SMD = -0.06 (not significant), hypertrophy SMD = -0.01 (not significant), BUT explosive strength SMD = -0.28 (significant, meaningful). Chasing explosive PRs during aerobic emphasis is the specific loss zone. If same day is unavoidable, lift first (Eddens 2018 meta: +6.91% lower-body strength gain vs endurance-first). Minimum 6 h separation (Robineau 2016). Protein floor 1.6 g/kg/day (Morton 2018 meta). Fuel resistance sessions fully (Impey 2018 'Fuel for the Work Required').",
     "references": [
       {
         "id": "seiler_2010",
@@ -1221,20 +1227,20 @@
         "title": "What is best practice for training intensity and duration distribution in endurance athletes?",
         "source": "International Journal of Sports Physiology and Performance 5(3):276-291",
         "url": "https://umh1617.umh.es/files/2016/05/02-IJSPP_2010_Seiler_0009.pdf",
-        "used_for": "Polarised training model \u2014 the 80/20 easy/hard distribution that anchors the full 3-block arc."
+        "used_for": "Polarised training model — the 80/20 easy/hard distribution that anchors the full 3-block arc."
       },
       {
         "id": "stoggl_sperlich_2014",
-        "authors": "St\u00f6ggl T, Sperlich B",
+        "authors": "Stöggl T, Sperlich B",
         "year": 2014,
         "title": "Polarized training has greater impact on key endurance variables than threshold, high intensity, or high volume training",
         "source": "Frontiers in Physiology 5:33",
         "url": "https://www.frontiersin.org/articles/10.3389/fphys.2014.00033/full",
-        "used_for": "Comparative evidence that polarised distribution outperforms threshold-heavy blocks \u2014 informs the choice to keep only one hard session per week in Block 1."
+        "used_for": "Comparative evidence that polarised distribution outperforms threshold-heavy blocks — informs the choice to keep only one hard session per week in Block 1."
       },
       {
         "id": "helgerud_2007",
-        "authors": "Helgerud J, H\u00f8ydal K, Wang E, et al.",
+        "authors": "Helgerud J, Høydal K, Wang E, et al.",
         "year": 2007,
         "title": "Aerobic high-intensity intervals improve VO2max more than moderate training",
         "source": "Medicine and Science in Sports and Exercise 39(4):665-671",
@@ -1243,12 +1249,12 @@
       },
       {
         "id": "ronnestad_hansen_2020",
-        "authors": "R\u00f8nnestad BR, Hansen J, et al.",
+        "authors": "Rønnestad BR, Hansen J, et al.",
         "year": 2020,
         "title": "Short intervals induce superior training adaptations compared with long intervals in cyclists",
         "source": "Journal of Science and Medicine in Sport / European Journal of Applied Physiology",
         "url": "https://pubmed.ncbi.nlm.nih.gov/31977120/",
-        "used_for": "Comparison of short vs long intervals \u2014 informs the choice of both 4x4 (short-ish, high intensity) and threshold cruise 3\u00d78-10 (long, moderate) in the same block."
+        "used_for": "Comparison of short vs long intervals — informs the choice of both 4x4 (short-ish, high intensity) and threshold cruise 3×8-10 (long, moderate) in the same block."
       },
       {
         "id": "hickson_1980",
@@ -1257,7 +1263,7 @@
         "title": "Interference of strength development by simultaneously training for strength and endurance",
         "source": "European Journal of Applied Physiology 45(2-3):255-263",
         "url": "https://pubmed.ncbi.nlm.nih.gov/7193134/",
-        "used_for": "The concurrent-training interference effect \u2014 foundation for the strength maintenance-only recommendation."
+        "used_for": "The concurrent-training interference effect — foundation for the strength maintenance-only recommendation."
       },
       {
         "id": "wilson_loenneke_2012",
@@ -1266,7 +1272,7 @@
         "title": "Concurrent training: a meta-analysis examining interference of aerobic and resistance exercises",
         "source": "Journal of Strength and Conditioning Research 26(8):2293-2307",
         "url": "https://pubmed.ncbi.nlm.nih.gov/22002517/",
-        "used_for": "Meta-analytic evidence that interference is proportional to endurance volume and intensity \u2014 informs the RPE cap and session-count cap on concurrent strength."
+        "used_for": "Meta-analytic evidence that interference is proportional to endurance volume and intensity — informs the RPE cap and session-count cap on concurrent strength."
       },
       {
         "id": "docherty_sporer_2000",
@@ -1275,7 +1281,7 @@
         "title": "A proposed model for examining the interference phenomenon between concurrent aerobic and strength training",
         "source": "Sports Medicine 30(6):385-394",
         "url": "https://pubmed.ncbi.nlm.nih.gov/11132122/",
-        "used_for": "Interference model \u2014 informs the same-day sequencing rule (strength first if both must share a day) and the 6+ h separation guideline."
+        "used_for": "Interference model — informs the same-day sequencing rule (strength first if both must share a day) and the 6+ h separation guideline."
       },
       {
         "id": "little_2010",
@@ -1284,7 +1290,7 @@
         "title": "A practical model of low-volume high-intensity interval training induces mitochondrial biogenesis in human skeletal muscle",
         "source": "Journal of Physiology 588(6):1011-1022",
         "url": "https://pubmed.ncbi.nlm.nih.gov/20100740/",
-        "used_for": "Mitochondrial biogenesis signal detectable within 2 weeks of HIIT \u2014 cited in physiological_targets and progression_rationale for why weeks 1-2 focus on Z1 accumulation."
+        "used_for": "Mitochondrial biogenesis signal detectable within 2 weeks of HIIT — cited in physiological_targets and progression_rationale for why weeks 1-2 focus on Z1 accumulation."
       },
       {
         "id": "perry_2010",
@@ -1293,7 +1299,7 @@
         "title": "Repeated transient mRNA bursts precede increases in transcriptional and mitochondrial proteins during training in human skeletal muscle",
         "source": "Applied Physiology, Nutrition, and Metabolism 35(6):837-844",
         "url": "https://pubmed.ncbi.nlm.nih.gov/20555380/",
-        "used_for": "mRNA-precedes-protein pattern \u2014 informs the choice to accumulate volume before adding interval intensity."
+        "used_for": "mRNA-precedes-protein pattern — informs the choice to accumulate volume before adding interval intensity."
       },
       {
         "id": "konopka_2014",
@@ -1302,7 +1308,7 @@
         "title": "Markers of human skeletal muscle mitochondrial biogenesis and quality control: effects of age and aerobic exercise training",
         "source": "Journal of Gerontology A 69(4):371-378",
         "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3968823/",
-        "used_for": "Effect sizes for oxidative enzyme changes (\u03b2-HAD +397-435%, CS +65-102%, PGC-1\u03b1 +55-62% in 12 weeks) \u2014 cited in physiological_targets and block_z1_steady rationale. Also: no age blunting of relative response."
+        "used_for": "Effect sizes for oxidative enzyme changes (β-HAD +397-435%, CS +65-102%, PGC-1α +55-62% in 12 weeks) — cited in physiological_targets and block_z1_steady rationale. Also: no age blunting of relative response."
       },
       {
         "id": "bishop_2019",
@@ -1320,7 +1326,7 @@
         "title": "Capillary supply of the quadriceps femoris muscle of man: adaptive response to exercise",
         "source": "Journal of Physiology 270(3):677-690",
         "url": "https://pubmed.ncbi.nlm.nih.gov/198532/",
-        "used_for": "Foundational study showing +20% capillary density after 8 weeks of 40 min/day, 4\u00d7/wk continuous work. Cited in physiological_targets."
+        "used_for": "Foundational study showing +20% capillary density after 8 weeks of 40 min/day, 4×/wk continuous work. Cited in physiological_targets."
       },
       {
         "id": "cocks_2013",
@@ -1333,12 +1339,12 @@
       },
       {
         "id": "wisloff_2007",
-        "authors": "Wisl\u00f8ff U, St\u00f8ylen A, Loennechen JP, et al.",
+        "authors": "Wisløff U, Støylen A, Loennechen JP, et al.",
         "year": 2007,
         "title": "Superior cardiovascular effect of aerobic interval training versus moderate continuous training in heart failure patients: a randomized study",
         "source": "Circulation 115(24):3086-3094",
         "url": "https://pubmed.ncbi.nlm.nih.gov/17548726/",
-        "used_for": "12-week 4\u00d74-min interval trial showed VO2peak +46% and LV ejection fraction +35% in HF patients. Reinforces Helgerud 2007's finding that intervals \u2014 not continuous training \u2014 drive cardiac remodelling."
+        "used_for": "12-week 4×4-min interval trial showed VO2peak +46% and LV ejection fraction +35% in HF patients. Reinforces Helgerud 2007's finding that intervals — not continuous training — drive cardiac remodelling."
       },
       {
         "id": "baggish_wood_2011",
@@ -1347,7 +1353,7 @@
         "title": "Athlete's heart and cardiovascular care of the athlete: scientific and clinical update",
         "source": "Circulation 123(23):2723-2735",
         "url": "https://www.ahajournals.org/doi/10.1161/CIRCULATIONAHA.110.981571",
-        "used_for": "Eccentric vs concentric LV remodelling review \u2014 endurance training drives eccentric hypertrophy, strength/isometric drives concentric. Cited in physiological_targets."
+        "used_for": "Eccentric vs concentric LV remodelling review — endurance training drives eccentric hypertrophy, strength/isometric drives concentric. Cited in physiological_targets."
       },
       {
         "id": "brooks_2018",
@@ -1356,7 +1362,7 @@
         "title": "The science and translation of lactate shuttle theory",
         "source": "Cell Metabolism 27(4):757-785",
         "url": "https://www.sciencedirect.com/science/article/pii/S1550413118301864",
-        "used_for": "Modern lactate shuttle theory synthesis \u2014 lactate is fuel + signalling molecule, not waste. Cited in physiological_targets and block_sustained_tempo rationale."
+        "used_for": "Modern lactate shuttle theory synthesis — lactate is fuel + signalling molecule, not waste. Cited in physiological_targets and block_sustained_tempo rationale."
       },
       {
         "id": "pilegaard_2000",
@@ -1369,7 +1375,7 @@
       },
       {
         "id": "san_millan_brooks_2018",
-        "authors": "San-Mill\u00e1n I, Brooks GA",
+        "authors": "San-Millán I, Brooks GA",
         "year": 2018,
         "title": "Assessment of metabolic flexibility by means of measuring blood lactate, fat and carbohydrate oxidation responses",
         "source": "Sports Medicine 48(2):467-479",
@@ -1392,7 +1398,7 @@
         "title": "Familial aggregation of VO2max response to exercise training: results from the HERITAGE Family Study",
         "source": "Journal of Applied Physiology 87(3):1003-1008",
         "url": "https://pubmed.ncbi.nlm.nih.gov/10484570/",
-        "used_for": "Heritability of training response = 47%; ~10\u00d7 range in individual gains. Cited in outcome_evidence's individual-variation caveat."
+        "used_for": "Heritability of training response = 47%; ~10× range in individual gains. Cited in outcome_evidence's individual-variation caveat."
       },
       {
         "id": "ross_2015",
@@ -1401,7 +1407,7 @@
         "title": "Precision exercise medicine: understanding exercise response variability",
         "source": "Mayo Clinic Proceedings 90(11):1506-1514",
         "url": "https://pubmed.ncbi.nlm.nih.gov/26586576/",
-        "used_for": "Non-response at 50% intensity drops to 0% at 75%. Informs the tier progression logic \u2014 under-dosing is often the cause of apparent non-response."
+        "used_for": "Non-response at 50% intensity drops to 0% at 75%. Informs the tier progression logic — under-dosing is often the cause of apparent non-response."
       },
       {
         "id": "tanaka_2001",
@@ -1410,16 +1416,16 @@
         "title": "Age-predicted maximal heart rate revisited",
         "source": "Journal of the American College of Cardiology 37(1):153-156",
         "url": "https://www.jacc.org/doi/abs/10.1016/s0735-1097(00)01054-8",
-        "used_for": "HRmax = 208 \u2212 0.7 \u00d7 age, meta-analysis of 351 studies. Referenced in hr_zone_methodology alongside HUNT."
+        "used_for": "HRmax = 208 − 0.7 × age, meta-analysis of 351 studies. Referenced in hr_zone_methodology alongside HUNT."
       },
       {
         "id": "nes_2013_hunt",
-        "authors": "Nes BM, Janszky I, Wisl\u00f8ff U, St\u00f8ylen A, Karlsen T",
+        "authors": "Nes BM, Janszky I, Wisløff U, Støylen A, Karlsen T",
         "year": 2013,
         "title": "Age-predicted maximal heart rate in healthy subjects: the HUNT Fitness Study",
         "source": "Scandinavian Journal of Medicine & Science in Sports 23(6):697-704",
         "url": "https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1600-0838.2012.01445.x",
-        "used_for": "HUNT formula HRmax = 211 \u2212 0.64 \u00d7 age (SEE 10.8 bpm). Cited in hr_zone_methodology as the default."
+        "used_for": "HUNT formula HRmax = 211 − 0.64 × age (SEE 10.8 bpm). Cited in hr_zone_methodology as the default."
       },
       {
         "id": "rogers_2021_dfa",
@@ -1437,7 +1443,7 @@
         "title": "Time course of loss of adaptations after stopping prolonged intense endurance training",
         "source": "Journal of Applied Physiology 57(6):1857-1864",
         "url": "https://pubmed.ncbi.nlm.nih.gov/6511559/",
-        "used_for": "Detraining timecourse: VO2max \u22127% at 12 days, \u221216% at 12 weeks. Informs the post-block maintenance dose."
+        "used_for": "Detraining timecourse: VO2max −7% at 12 days, −16% at 12 weeks. Informs the post-block maintenance dose."
       },
       {
         "id": "mujika_padilla_2000",
@@ -1464,16 +1470,16 @@
         "title": "Endurance training intensity does not mediate interference to maximal lower-body strength gain during short-term concurrent training",
         "source": "Frontiers in Physiology 7:487",
         "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5093324/",
-        "used_for": "Endurance VOLUME (not intensity) drives interference \u2014 HIIT and MICT produce the same strength decrement at matched work. Cited in progression_rationale for why peak-volume weeks tighten the strength cap."
+        "used_for": "Endurance VOLUME (not intensity) drives interference — HIIT and MICT produce the same strength decrement at matched work. Cited in progression_rationale for why peak-volume weeks tighten the strength cap."
       },
       {
         "id": "schumann_2022",
-        "authors": "Schumann M, Feuerbacher JF, S\u00fcnkeler M, et al.",
+        "authors": "Schumann M, Feuerbacher JF, Sünkeler M, et al.",
         "year": 2022,
         "title": "Compatibility of concurrent aerobic and strength training for skeletal muscle size and function: an updated systematic review and meta-analysis",
         "source": "Sports Medicine 52:601-612",
         "url": "https://link.springer.com/article/10.1007/s40279-021-01587-7",
-        "used_for": "Updated concurrent-training meta: max strength SMD \u22120.06 (n.s.), hypertrophy SMD \u22120.01 (n.s.), EXPLOSIVE strength SMD \u22120.28 (significant). Anchors the 'no PR chasing' rule specifically for explosive lifts."
+        "used_for": "Updated concurrent-training meta: max strength SMD −0.06 (n.s.), hypertrophy SMD −0.01 (n.s.), EXPLOSIVE strength SMD −0.28 (significant). Anchors the 'no PR chasing' rule specifically for explosive lifts."
       },
       {
         "id": "robineau_2016",
@@ -1509,7 +1515,7 @@
         "title": "Fuel for the work required: a theoretical framework for carbohydrate periodization and the glycogen threshold hypothesis",
         "source": "Sports Medicine 48:1031-1048",
         "url": "https://link.springer.com/article/10.1007/s40279-018-0867-7",
-        "used_for": "Carbohydrate periodisation \u2014 fuel resistance and hard interval sessions fully; easy Z2 can be lower-carb. Cited in concurrent_strength_prescription."
+        "used_for": "Carbohydrate periodisation — fuel resistance and hard interval sessions fully; easy Z2 can be lower-carb. Cited in concurrent_strength_prescription."
       },
       {
         "id": "brandt_2025_hyrox",
@@ -1529,6 +1535,43 @@
         "url": "https://www.dovepress.com/do-physiological-measures-predict-selected-crossfitreg-benchmark-perfo-peer-reviewed-fulltext-article-OAJSM",
         "used_for": "CrossFit Total predicts Fran/Grace performance most strongly, but VO2max still contributes. Anchors the 'aerobic base protects your CrossFit performance' claim."
       }
+    ],
+    "reference_ids": [
+      "seiler_2010",
+      "stoggl_sperlich_2014",
+      "helgerud_2007",
+      "ronnestad_hansen_2020",
+      "hickson_1980",
+      "wilson_loenneke_2012",
+      "docherty_sporer_2000",
+      "little_2010",
+      "perry_2010",
+      "konopka_2014",
+      "bishop_2019",
+      "andersen_henriksson_1977",
+      "cocks_2013",
+      "wisloff_2007",
+      "baggish_wood_2011",
+      "brooks_2018",
+      "pilegaard_2000",
+      "san_millan_brooks_2018",
+      "achten_jeukendrup_2003",
+      "bouchard_1999_heritage",
+      "ross_2015",
+      "tanaka_2001",
+      "nes_2013_hunt",
+      "rogers_2021_dfa",
+      "coyle_1984",
+      "mujika_padilla_2000",
+      "fyfe_2014",
+      "fyfe_2016",
+      "schumann_2022",
+      "robineau_2016",
+      "eddens_2018",
+      "morton_2018",
+      "impey_2018",
+      "brandt_2025_hyrox",
+      "butcher_2015_crossfit"
     ]
   },
   "retest_metrics": [

@@ -5,6 +5,8 @@ import { useStore } from "@/lib/useStore";
 import { nextEligibleTier, isProposalDismissed } from "@/lib/engine/tier-promotion";
 import { hapticTap } from "@/lib/utils";
 import { announce } from "@/lib/announce";
+import { citationIdForKind } from "@/lib/engine/proposal-citations";
+import { CitationRef } from "@/components/citations/CitationRef";
 import type { Program } from "@/lib/schemas";
 
 /**
@@ -41,6 +43,14 @@ export function TierAdvanceProposal({ program }: { program: Program | null | und
               {eligible.rationale}
             </p>
           ) : null}
+          {(() => {
+            const citationId = citationIdForKind("tier_advance");
+            return citationId ? (
+              <div className="mt-1">
+                <CitationRef id={citationId} />
+              </div>
+            ) : null;
+          })()}
         </div>
         <button
           type="button"
