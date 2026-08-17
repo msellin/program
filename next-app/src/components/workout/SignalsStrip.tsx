@@ -5,15 +5,11 @@ import { AlertTriangle, Info, ChevronDown, ChevronUp } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/lib/useStore";
-import { daySignals, proposedLoadMultiplier } from "@/lib/engine/note-signals";
-import { assessReintroReadiness } from "@/lib/engine/readiness";
 import { isDue } from "@/lib/engine/assessment-engine";
 import { activePhaseFor } from "@/lib/engine/schedule";
 import { blocksForDate } from "@/lib/engine/plan-generator";
 import { HIP_FLEXOR_PACK } from "@/lib/assessments-data";
 import { evaluateCycleEnd, detectPauseResume } from "@/lib/engine/adapt";
-import { DayAdjustmentProposal } from "./DayAdjustmentProposal";
-import { ReadinessProposal } from "./ReadinessProposal";
 import { AssessmentDueBanner } from "../AssessmentDueBanner";
 import { iso } from "@/lib/utils";
 import type { Program } from "@/lib/schemas";
@@ -52,40 +48,17 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
       list.push({ id: "override", tone: "slate", label: "Rescheduled session" });
     }
 
-    // Day-adjustment proposal (or already-accepted adjustment). Fires for any
-    // program — the underlying multiplier only affects TM_EXERCISES so an
-    // aerobic-only day silently no-ops it while the user still gets the useful
-    // "we noticed yesterday's load" copy.
+    // A5 (Phase 3): day-adjustment PROPOSAL now lives in ProposalStack.
+    // We only show the ACCEPTED-adjustment confirmation strip here (passive
+    // info) so the user can still see "×0.90 applied today" at a glance.
     const accepted = store.day_adjustments?.[date];
     if (accepted) {
       list.push({ id: "day-adj-active", tone: "slate", label: `Not feeling 100% · ×${accepted.load_multiplier.toFixed(2)} applied` });
-    } else {
-      let sig = daySignals(store.logs[date]);
-      if (!(sig.fatigue === "high" || sig.pain)) {
-        const t = new Date(date + "T00:00:00");
-        for (let back = 1; back <= 2 && sig.matches.length === 0; back++) {
-          const d = new Date(t);
-          d.setDate(t.getDate() - back);
-          sig = daySignals(store.logs[iso(d)]);
-        }
-      }
-      const proposal = proposedLoadMultiplier(sig);
-      const proposalId = proposal ? `load-${proposal.multiplier}` : null;
-      const dismissed = store.dismissed_proposals?.[date] ?? [];
-      if (proposal && proposalId && !dismissed.includes(proposalId)) {
-        list.push({ id: "day-adj-proposal", tone: "amber", label: "Not feeling 100%?" });
-      }
     }
 
-    // Reintro readiness + monthly hip check — anterior-hip only. Both check
-    // hip-specific signals (reintro phase, HIP_FLEXOR_PACK cadence) that make
-    // no sense for other programs.
+    // Anterior-hip: monthly hip check assessment cadence stays as a signal
+    // strip chip. Reintro-graduation readiness moved to ProposalStack.
     if (program.slug === "anterior-hip-rebuild") {
-      const readiness = assessReintroReadiness(store, program, date);
-      const dismissedFor = store.dismissed_proposals?.[date] ?? [];
-      if (readiness.ready && !dismissedFor.includes("reintro-graduation")) {
-        list.push({ id: "readiness", tone: "slate", label: "Ready to leave reintro" });
-      }
       const dueStatus = isDue(store, HIP_FLEXOR_PACK.id, date);
       if (dueStatus.due) {
         // "Monthly" is misleading on day 1 when the pack has never been done.
@@ -273,9 +246,7 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
             </div>
           ) : null}
 
-          {/* Delegated components — each already renders null when inactive. */}
-          <DayAdjustmentProposal date={date} />
-          <ReadinessProposal program={program} date={date} />
+          {/* Delegated components — each renders null when inactive. */}
           <AssessmentDueBanner date={date} />
         </div>
       ) : null}

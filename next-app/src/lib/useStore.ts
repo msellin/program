@@ -3,7 +3,7 @@
 import { create } from "zustand";
 import { loadStore, saveStore, ensureDay, ensureExercise, seedFromRepoLogIfEmpty } from "./storage";
 import { pushRemoteDebounced } from "./sync";
-import type { Store, DayLog, ExerciseLog, SetLog, Program, RunLog } from "./schemas";
+import type { Store, DayLog, ExerciseLog, SetLog, Program, RunLog, Proposal } from "./schemas";
 import { today, iso } from "./utils";
 import { snapshotCitation } from "./engine/citations";
 
@@ -62,6 +62,18 @@ type StoreState = {
   clearDayAdjustment: (date: string) => void;
   /** Remember that the user dismissed a specific proposal on a given date. */
   dismissProposal: (date: string, proposalId: string) => void;
+  /**
+   * A5 (Phase 3): append a proposal outcome to the audit log. Called by
+   * `<ProposalCard>` for BOTH Accept and Ignore. The concrete state
+   * mutation (setTM / acceptDayAdjustment / promoteTier / advancePhase /
+   * dismissProposal) still happens through its dedicated action; this only
+   * writes the history entry.
+   */
+  recordProposalOutcome: (
+    proposal: Proposal,
+    outcome: "accepted" | "ignored",
+    date: string,
+  ) => void;
   /** Append a self-scored assessment entry to the given pack. */
   recordAssessment: (
     packId: string,
@@ -588,6 +600,23 @@ export const useStore = create<StoreState>((set, get) => ({
     list.add(proposalId);
     dismissed[date] = Array.from(list);
     s.dismissed_proposals = dismissed;
+    commit(s);
+    set({ store: s });
+  },
+
+  recordProposalOutcome: (proposal, outcome, date) => {
+    const s = { ...get().store };
+    const history = [...(s.proposal_history ?? [])];
+    const snapshot = proposal.citationId ? snapshotCitation(proposal.citationId) : null;
+    history.push({
+      id: proposal.id,
+      kind: proposal.kind,
+      outcome,
+      at: Date.now(),
+      date,
+      ...(snapshot ? { citation_snapshot: snapshot } : {}),
+    });
+    s.proposal_history = history;
     commit(s);
     set({ store: s });
   },
