@@ -21,9 +21,10 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Terav — sharpen the plan",
+  metadataBase: new URL("https://app.terav.fit"),
+  title: "Terav — Pick your focus. Sharpen it every session.",
   description:
-    "Adaptive training that learns from every session. Aerobic, concurrent, and skill programs, cited to the study.",
+    "A focused-improvement training tool. Pick one capability — an engine, a skill, a lift, a stubborn joint — and Terav sharpens it against your log. The rest of your week is still yours. Every change cites a study.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
