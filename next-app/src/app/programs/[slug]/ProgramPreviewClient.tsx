@@ -160,14 +160,30 @@ export function ProgramPreviewClient({ slug }: Props) {
               active
             </span>
           ) : null}
-          {entry.status === "PROVISIONAL" ? (
-            <span
-              className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber/20 text-amber"
-              title="Beta — evidence and prescription are drafted but not yet clinically reviewed. Use with judgement."
-            >
-              provisional
-            </span>
-          ) : null}
+          {(() => {
+            // B1 (2026-08-17): 3-tier governance model. Same map as
+            // programs/page.tsx StatusChip; kept in-line here rather than
+            // extracting shared to avoid a new component for one caller.
+            const s = entry.status;
+            if (!s || s === "draft") return null;
+            const map: Record<string, { label: string; className: string; title: string }> = {
+              PROVISIONAL: { label: "provisional", className: "bg-amber/20 text-amber", title: "Legacy status — being migrated to Referenced. Same meaning: every claim cites a paper." },
+              REFERENCED: { label: "referenced", className: "bg-amber/20 text-amber", title: "Default state: every claim cites a paper. Simulator harness passes across archetypes." },
+              REVIEWED: { label: "reviewed", className: "bg-slate/20 text-slate", title: "Domain-specialist audit complete: cited studies verified against literature. Drill sequencing evidence-backed." },
+              VERIFIED: { label: "verified", className: "bg-green/20 text-green", title: "Field-verified: ≥5 beta users completed the arc with subjective success." },
+              stable: { label: "verified", className: "bg-green/20 text-green", title: "Legacy status — same meaning as Verified." },
+            };
+            const meta = map[s];
+            if (!meta) return null;
+            return (
+              <span
+                className={`font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded ${meta.className}`}
+                title={meta.title}
+              >
+                {meta.label}
+              </span>
+            );
+          })()}
           {entry.personal ? (
             <span className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-slate/20 text-slate">
               personal

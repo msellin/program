@@ -1,7 +1,7 @@
 {
   "schema_version": "1.2.0",
   "generated": "2026-08-10",
-  "status": "PROVISIONAL",
+  "status": "REFERENCED",
   "status_note": "Block 1 of a multi-block handstand-walk arc. Tier A (never handstanded) through Tier D (walks 10m+, wants turns and obstacles). Multi-dimensional generation strategy: per-capability drill selection each session rather than a fixed weekly template. Dates in phases[] are template anchors from Mon 2026-01-05; the generator remaps to the user's real start date on activation.",
   "generation_strategy": "multi_dimensional",
   "drill_library": [

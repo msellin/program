@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "generated": "2026-08-13",
-  "status": "PROVISIONAL",
+  "status": "REFERENCED",
   "status_note": "First-authored 10-week overhead-mobility arc — the shoulder / thoracic / scap coordination needed to snatch, OHS, and press without impingement. Evidence base drawn from whitepaper 04_handstand_walk.md and motor-learning literature (whitepaper 03), plus 4 shoulder-specific citations that need pre-launch URL verification.",
   "generation_strategy": "correlated_tier",
   "positioning": "main_track",

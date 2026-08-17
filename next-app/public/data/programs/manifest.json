@@ -11,7 +11,7 @@
       "difficulty": "intermediate",
       "prerequisites": [],
       "short_description": "For lifters with a history of anterior-hip / groin irritation who want to rebuild squat and deadlift base without provoking symptoms.",
-      "who_this_is_for": "You've had episodes of hip flexor / groin pain that flared under squatting or Metcons. You want to keep training seriously \u2014 not stop. This program is your barbell arc built around what your hip can actually take.",
+      "who_this_is_for": "You've had episodes of hip flexor / groin pain that flared under squatting or Metcons. You want to keep training seriously — not stop. This program is your barbell arc built around what your hip can actually take.",
       "what_youll_achieve": "A 12-month strength arc with structured re-introduction, three progressive 5/3/1 cycles, a Hatch specialisation block, and a peak test. Provocative positions are respected throughout. Ends with a specialist-ready report of your symptom + load history.",
       "retest": "Cycle-end 5-rep max on primary lifts (squat, block pull) with symptom review. Every 4 weeks.",
       "tags": [
@@ -21,7 +21,7 @@
         "bertolotti-friendly",
         "531"
       ],
-      "status": "PROVISIONAL",
+      "status": "REFERENCED",
       "featured": false,
       "personal": true,
       "positioning": "main_track",
@@ -30,16 +30,16 @@
     {
       "id": "engine-builder",
       "slug": "engine-builder",
-      "name": "Engine Builder \u2014 Block 1: Base",
+      "name": "Engine Builder — Block 1: Base",
       "category": "endurance",
       "weakness_target": "aerobic_base",
       "duration_weeks": 8,
       "difficulty": "beginner",
       "prerequisites": [],
       "short_description": "Block 1 of a 3-block, ~6-month engine transformation. Eight weeks of Zone 1/2 base with a single weekly hard session added in week 4. Row, bike, ski-erg, or run.",
-      "who_this_is_for": "You've got okay strength but your engine is the thing holding you back \u2014 a metcon at 15 minutes falls apart, a 5k feels harder than it should, HR runs away at moderate pace. You want a plan that actually builds the base rather than chasing intervals from day one.",
-      "what_youll_achieve": "Block 1 of a 6-month engine transformation. In these 8 weeks: 5-8% VO2max improvement, a measurable resting HR drop (5-10 bpm typical), and \u2014 most importantly \u2014 the aerobic base that lets Block 2 (volume) and Block 3 (polarised) actually work. Modality is your choice at intake: row, bike, ski-erg, or run. Weeks 1-4 are low-impact regardless; running introduces at week 5 if that's your goal.",
-      "retest": "Week 8 midweek. Repeat everything you measured at intake: resting HR (3-morning average), 5-minute submax HR at your intake pace, plus 500m row TT and/or 1km run TT if applicable. Rest HR and submax HR are always measurable \u2014 they're the honest answer to 'did the block work'.",
+      "who_this_is_for": "You've got okay strength but your engine is the thing holding you back — a metcon at 15 minutes falls apart, a 5k feels harder than it should, HR runs away at moderate pace. You want a plan that actually builds the base rather than chasing intervals from day one.",
+      "what_youll_achieve": "Block 1 of a 6-month engine transformation. In these 8 weeks: 5-8% VO2max improvement, a measurable resting HR drop (5-10 bpm typical), and — most importantly — the aerobic base that lets Block 2 (volume) and Block 3 (polarised) actually work. Modality is your choice at intake: row, bike, ski-erg, or run. Weeks 1-4 are low-impact regardless; running introduces at week 5 if that's your goal.",
+      "retest": "Week 8 midweek. Repeat everything you measured at intake: resting HR (3-morning average), 5-minute submax HR at your intake pace, plus 500m row TT and/or 1km run TT if applicable. Rest HR and submax HR are always measurable — they're the honest answer to 'did the block work'.",
       "tags": [
         "endurance",
         "zone-2",
@@ -48,7 +48,7 @@
         "concurrent-training",
         "block-1"
       ],
-      "status": "PROVISIONAL",
+      "status": "REFERENCED",
       "featured": true,
       "positioning": "main_track",
       "load_hint": "~3-4 hr/week"
@@ -61,7 +61,12 @@
       "weakness_target": "handstand_walk",
       "duration_weeks": 8,
       "difficulty": "multi-tier",
-      "levels": ["Foundation", "Wall", "Freestand", "Advanced"],
+      "levels": [
+        "Foundation",
+        "Wall",
+        "Freestand",
+        "Advanced"
+      ],
       "adapts": "Intake picks your tier; drills and phase pace adapt to your capability.",
       "prerequisites": [],
       "short_description": "Multi-tiered handstand walk program from wall-supported beginner to advanced turns and obstacles. Personalised sessions target your specific weak capabilities.",
@@ -74,7 +79,7 @@
         "handstand",
         "multi_dimensional"
       ],
-      "status": "PROVISIONAL",
+      "status": "REFERENCED",
       "featured": false,
       "positioning": "main_track",
       "load_hint": "~1.5-2 hr/week (5 sessions/wk, 4 on Foundation, 15-18 min each)"
@@ -102,7 +107,7 @@
         "hybrid",
         "531-adjacent"
       ],
-      "status": "PROVISIONAL",
+      "status": "REFERENCED",
       "featured": false,
       "positioning": "main_track",
       "load_hint": "~4-5 hr/week"
@@ -116,9 +121,9 @@
       "duration_weeks": 6,
       "difficulty": "intermediate",
       "prerequisites": [
-        "An existing Z2 aerobic base \u2014 either you've been rowing / cycling / running easy for 4+ weeks recently, or you've completed the Engine Builder program."
+        "An existing Z2 aerobic base — either you've been rowing / cycling / running easy for 4+ weeks recently, or you've completed the Engine Builder program."
       ],
-      "short_description": "For rowers chasing the 2K PR. Six weeks, cited, tapered \u2014 no more than that.",
+      "short_description": "For rowers chasing the 2K PR. Six weeks, cited, tapered — no more than that.",
       "who_this_is_for": "You've built a Z2 base (or you've completed Engine Builder). Now you want to PR the 2K.",
       "what_youll_achieve": "2K down 3-30 seconds by tier. Threshold pace shifted 3-6%. Race-day taper baked in.",
       "retest": "2K test every 2 weeks. Full test at week 6.",
@@ -129,7 +134,7 @@
         "threshold",
         "concept2"
       ],
-      "status": "PROVISIONAL",
+      "status": "REFERENCED",
       "featured": false,
       "positioning": "main_track",
       "load_hint": "~4 hr/week"
@@ -142,12 +147,16 @@
       "weakness_target": "shoulder_thoracic_scap_range_under_load",
       "duration_weeks": 10,
       "difficulty": "multi-tier",
-      "levels": ["Foundation", "Progression", "Push"],
+      "levels": [
+        "Foundation",
+        "Progression",
+        "Push"
+      ],
       "adapts": "Intake picks your tier; drill selection and progression pace adapt to your ROM.",
       "prerequisites": [],
       "short_description": "Shoulder + thoracic + scap sequence for stronger snatch, OHS, and press. Kinematic base before load.",
-      "who_this_is_for": "You want to snatch, OHS, or press without impingement \u2014 but your arms don't reach vertical loaded. Or they do, but only barely.",
-      "what_youll_achieve": "By week 10: loaded shoulder flexion at 180\u00b0, empty-bar OHS to parallel or better, first snatch-grip Sotts press. Retest via goniometer + OHS depth.",
+      "who_this_is_for": "You want to snatch, OHS, or press without impingement — but your arms don't reach vertical loaded. Or they do, but only barely.",
+      "what_youll_achieve": "By week 10: loaded shoulder flexion at 180°, empty-bar OHS to parallel or better, first snatch-grip Sotts press. Retest via goniometer + OHS depth.",
       "retest": "Supine shoulder flexion + OHS depth ratio at phase-end (weeks 3, 7, 10).",
       "tags": [
         "shoulder",
@@ -158,7 +167,7 @@
         "mobility",
         "kinematics"
       ],
-      "status": "PROVISIONAL",
+      "status": "REFERENCED",
       "featured": false,
       "positioning": "main_track",
       "load_hint": "~90 min/week (daily 10-15 min)"
@@ -172,7 +181,7 @@
     },
     "skill": {
       "label": "Gymnastics & skill",
-      "description": "Unlock a specific movement \u2014 pull-up, HSPU, muscle-up, handstand walk.",
+      "description": "Unlock a specific movement — pull-up, HSPU, muscle-up, handstand walk.",
       "order": 3
     },
     "endurance": {

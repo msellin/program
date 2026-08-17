@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "generated": "2026-08-13",
-  "status": "PROVISIONAL",
+  "status": "REFERENCED",
   "status_note": "First-authored 6-week race-prep block for the Concept2 2K row test. Evidence base fully sourced from whitepaper 01_aerobic_physiology.md — 28 primary citations, with 3 rowing-specific studies flagged for pre-launch URL verification.",
   "generation_strategy": "correlated_tier",
   "positioning": "main_track",

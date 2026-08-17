@@ -1092,7 +1092,20 @@ export const programManifestEntrySchema = z.object({
   what_youll_achieve: z.string(),
   retest: z.string().optional(),
   tags: z.array(z.string()).optional(),
-  status: z.enum(["draft", "PROVISIONAL", "stable"]).optional(),
+  // Governance model (B1, 2026-08-17):
+  //   draft       — authored but not shipped to catalog
+  //   REFERENCED  — default shipped state; every claim cites a paper,
+  //                 simulator harness passes across archetypes. Retires
+  //                 PROVISIONAL (which incorrectly implied "waiting for
+  //                 clinician sign-off" — wrong bar per Terav's positioning).
+  //   REVIEWED    — a domain-specialist agent audited the program
+  //                 against its whitepaper; cited studies match claims,
+  //                 drill sequencing evidence-backed
+  //   VERIFIED    — ≥5 beta users completed the arc with subjective success
+  //   stable      — legacy alias for VERIFIED; kept for schema back-compat
+  status: z
+    .enum(["draft", "PROVISIONAL", "REFERENCED", "REVIEWED", "VERIFIED", "stable"])
+    .optional(),
   featured: z.boolean().optional(),
   /**
    * When true, this program is authored for one specific user's clinical context

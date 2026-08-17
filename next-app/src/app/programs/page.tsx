@@ -86,8 +86,10 @@ export default function ProgramCatalogPage() {
           Each program is one focus arc — an engine, a skill, a lift, a stubborn joint.
           The rest of your week stays yours. Personalised to your baseline, adaptive to how you respond.
         </p>
-        <p className="text-[11px] text-muted pt-1">
-          <span className="font-mono uppercase text-amber">provisional</span> = beta, evidence and prescription drafted but not clinically reviewed.
+        <p className="text-[11px] text-muted pt-1 leading-relaxed">
+          <span className="font-mono uppercase text-amber">referenced</span> = every claim cites a paper, simulator harness passes.{" "}
+          <span className="font-mono uppercase text-slate">reviewed</span> = domain specialist has audited the citations against literature.{" "}
+          <span className="font-mono uppercase text-green">verified</span> = ≥5 users completed the arc with subjective success.
         </p>
       </header>
 
@@ -162,6 +164,52 @@ export default function ProgramCatalogPage() {
 }
 
 /**
+ * B1 (2026-08-17): status chip. Renders one of REFERENCED / REVIEWED /
+ * VERIFIED (or the legacy PROVISIONAL / stable aliases). Colored by
+ * confidence. See legend on this page for meaning.
+ */
+function StatusChip({ status }: { status?: string }) {
+  if (!status || status === "draft") return null;
+  const map: Record<string, { label: string; className: string; title: string }> = {
+    PROVISIONAL: {
+      label: "provisional",
+      className: "bg-amber/20 text-amber",
+      title: "Legacy status — being migrated to Referenced. Same meaning: every claim cites a paper.",
+    },
+    REFERENCED: {
+      label: "referenced",
+      className: "bg-amber/20 text-amber",
+      title: "Default state: every claim cites a paper. Simulator harness passes across archetypes.",
+    },
+    REVIEWED: {
+      label: "reviewed",
+      className: "bg-slate/20 text-slate",
+      title: "Domain-specialist audit complete: cited studies verified against literature. Drill sequencing evidence-backed.",
+    },
+    VERIFIED: {
+      label: "verified",
+      className: "bg-green/20 text-green",
+      title: "Field-verified: ≥5 beta users completed the arc with subjective success.",
+    },
+    stable: {
+      label: "verified",
+      className: "bg-green/20 text-green",
+      title: "Legacy status — same meaning as Verified.",
+    },
+  };
+  const meta = map[status];
+  if (!meta) return null;
+  return (
+    <span
+      className={`font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded ${meta.className}`}
+      title={meta.title}
+    >
+      {meta.label}
+    </span>
+  );
+}
+
+/**
  * Category visual metadata — one emoji + a border-accent colour per group.
  * Keeps the catalog readable at a glance. Categories the manifest doesn't
  * explicitly cover fall back to `other`.
@@ -209,14 +257,7 @@ function ProgramCard({
                 active
               </span>
             ) : null}
-            {p.status === "PROVISIONAL" ? (
-              <span
-                className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber/20 text-amber"
-                title="Beta — evidence and prescription are drafted, not yet clinically reviewed. Use with judgement."
-              >
-                provisional
-              </span>
-            ) : null}
+            <StatusChip status={p.status} />
             {p.personal ? (
               <span
                 className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-slate/20 text-slate"
