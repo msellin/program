@@ -112,9 +112,21 @@ export function IntroGallery() {
   useEffect(() => {
     if (!hydrated || !activeSlug || typeof window === "undefined") return;
     const key = `program.intro-gallery.seen.${activeSlug}`;
-    const already = window.localStorage.getItem(key);
-    if (already === "1") return;
-    setOpen(true);
+    // Bug fix 2026-08-17: OnboardingRunner (B3) and IntroGallery both fire on
+    // fresh signup and both use `fixed inset-0 z-50`, so they stack — the
+    // later-rendered IntroGallery paints on top and swallows every click meant
+    // for OnboardingRunner's Skip / Next buttons. Wait for onboarding to be
+    // dismissed before opening the gallery. Re-check on the custom
+    // `terav:onboarding-done` event OnboardingRunner fires at dismiss time.
+    const check = () => {
+      if (window.localStorage.getItem(key) === "1") return;
+      const onboardingDone =
+        window.localStorage.getItem(`program.onboarding.done.${activeSlug}`) === "1";
+      if (onboardingDone) setOpen(true);
+    };
+    check();
+    window.addEventListener("terav:onboarding-done", check);
+    return () => window.removeEventListener("terav:onboarding-done", check);
   }, [hydrated, activeSlug]);
 
   const close = () => {
