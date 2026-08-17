@@ -204,7 +204,7 @@
       },
       {
         "id": "hypertension_unmanaged",
-        "label": "Unmanaged high blood pressure?",
+        "label": "Do you have high blood pressure that isn't under control? (Over 160/100 at rest, or diagnosed but not on medication — uncontrolled hypertension.)",
         "type": "select",
         "required": true,
         "options": [

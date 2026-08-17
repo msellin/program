@@ -281,7 +281,7 @@
       },
       {
         "id": "osteoporosis_dx",
-        "label": "Do you have an osteoporosis or low-BMD diagnosis?",
+        "label": "Have you been diagnosed with low bone density (osteoporosis or low BMD)?",
         "type": "select",
         "required": true,
         "options": [
@@ -302,7 +302,7 @@
       },
       {
         "id": "hypertension_uncontrolled",
-        "label": "Do you have uncontrolled hypertension (BP > 160/100 at rest or unmedicated)?",
+        "label": "Do you have high blood pressure that isn't under control? (Over 160/100 at rest, or diagnosed but not on medication — uncontrolled hypertension.)",
         "type": "select",
         "required": true,
         "options": [
