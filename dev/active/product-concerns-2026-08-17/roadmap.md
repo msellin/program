@@ -174,6 +174,17 @@ Signup + sign-in currently support only email + password. Adds queued:
 - ~~Video form analysis as paid pillar~~ — Concern C evidence-based rejection
 - ~~Re-paywalling any currently-free feature~~ — Strava/Whoop churn warning
 - ~~Marketing coach chat as a paid pillar~~ — dilutes the "engine-not-content" positioning
+- ~~Cross-user note aggregation at beta scale~~ — Concern D rejection: Strava 2018 / Flo 2021 / 23andMe 2023 precedents; free-text resists safe anonymization; noise-dominated at N < 1000. **Deferred**, not killed — narrow path documented at `dev/audits/product-concerns/D-cross-user-note-learning.md` for future.
+
+## D-brief follow-up: what F2 actually looks like post-D
+
+The D-brief argues cross-user is a **different product**, not a superset of F2 per-user. Concrete change to F2 roadmap:
+
+- **F2 Phase A + B + C stay** — all per-user, no cross-user aggregation needed
+- **F2 Phase D (LLM fallback for novel phrasing) reshaped** — becomes: monthly founder-side batch review using the founder's Claude Team seat, per-user (or founder-only aggregate for pattern discovery), NOT a user-facing LLM in prod
+- **Cross-user D-path** — deferred until N > 1000 active weekly note-writers AND we've introduced structured toggles as the primary aggregation substrate
+
+**Architecture implication:** you still need Supabase Postgres for F2 Phase A/B/C per-user time-window queries. Cross-user analytics warehouse not needed for years. See `dev/active/product-concerns-2026-08-17/architecture.md` (to be filed if founder approves).
 
 ---
 
