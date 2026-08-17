@@ -121,6 +121,8 @@ export async function runSimulation(
       }
       store.updated_at = Date.now();
       localStorage.setItem("program.log.v2", JSON.stringify(store));
+      // B3: per-program onboarding key + legacy fallback for one release cycle.
+      localStorage.setItem(`program.onboarding.done.${slug}`, "1");
       localStorage.setItem("program.onboarding.done", "1");
     },
     { slug: programSlug, tier: tier ?? null },

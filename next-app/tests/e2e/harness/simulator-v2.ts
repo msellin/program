@@ -174,6 +174,12 @@ export async function runSimulationV2(
       store.training_maxes = { ...store.training_maxes, ...tms };
       store.updated_at = Date.now();
       localStorage.setItem("program.log.v2", JSON.stringify(store));
+      // B3: per-program onboarding key. Simulator bypasses the modal for
+      // the active program so runSimulationV2 can walk the UI without a
+      // blocking overlay.
+      localStorage.setItem(`program.onboarding.done.${slug}`, "1");
+      // Legacy key — harmless to keep during transition; can drop after
+      // one green matrix run confirms every persona seed uses the new key.
       localStorage.setItem("program.onboarding.done", "1");
     },
     { slug: programSlug, tier: tier ?? null, tms: INITIAL_TMS, uid: sessionUid },
