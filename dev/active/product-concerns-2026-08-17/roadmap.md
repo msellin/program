@@ -164,28 +164,60 @@ Ship in this order to avoid the double-polish problem:
 
 Ideas surfaced during founder conversation that deserve prior-art research before any implementation call. Each entry frames the question + the specific agent brief. Not on the F track.
 
-### E · Diagnostic intake for mobility + skill measurement (not just mobility programs)
+### E · Diagnostic intake — bilateral self-report screen with demo videos
 
-**Surfaced by:** founder + friend, 2026-08-17. Prompted by GoWOD's model (~500K users, ~$10-15/mo, mobility-only) which does a structured 15-25 movement screen at intake, quantifies weakness dimensions, prescribes program targeting the gap.
+**Surfaced by:** founder + friend, 2026-08-17. Prompted by GoWOD's actual model (~500K users, ~$10-15/mo, mobility-focused).
+
+**Corrected mechanism (founder clarification, 2026-08-17):** GoWOD does NOT watch or analyze user video. The pattern is:
+1. Video demo shows the user how to perform the movement (e.g. seated forward fold, wall shoulder rotation, forward reach with one leg lead)
+2. User performs it, both sides separately
+3. User answers a 0-10 slider: "how well / how far did you get?"
+4. L / R asymmetry captured cleanly
+5. Results feed a weakness map that recommends program(s) to close the gap
+
+**Zero AI. Zero video analysis. Zero measurement equipment.** Just structured self-report with visual guidance + bilateral capture. Trivial technically.
+
+**What we already have:**
+- `intake.physical_tests` block on every program JSON (`schemas.ts:physicalTestSchema`)
+- Each test: `id`, `label`, `instructions` (text), `unit` (degrees/seconds/reps/kg/m/bpm), `min`, `max`
+- Handstand-walk has 5 tests (wrist ext, shoulder flexion, wall hold, cold press, etc.), overhead-mobility more, engine-builder some
+- Our existing pattern captures numeric measurement in program-specific units — NOT self-report sliders, NOT bilateral
+
+**What E would ADD to what we have:**
+- `demo_video_url` or `demo_image_url` on physicalTestSchema (Concern F resolves the hosting question)
+- Optional `bilateral: true` flag → capture L + R separately, engine sees asymmetry
+- Optional `self_report_scale: "0-10"` → alternative to numeric unit measurement
+- Optional "general movement screen" that runs across all programs at signup, not per-program
+- Cross-program synthesis: results feed program picker recommendations ("your left ankle is 3, right ankle is 7 — Overhead Mobility would help; or run engine-builder with the caveat that squat depth may limit you")
+
+**Terav-specific scope discipline:**
+- GoWOD is mobility-only. Terav is NOT. Keep the screen SHORT (10-15 movements max) and cross-cutting (some mobility, some balance, some symmetry) so it serves all program types.
+- Bilateral asymmetry is the highest-signal component (a program that ignores your L-R gap will keep failing you).
+- Every movement in the screen must map onto AT LEAST one Terav program's weakness dimension, or it doesn't earn a slot.
 
 **Question for a future research agent:**
 
-*"Terav's positioning is focused-improvement across strength/aerobic/skill/mobility/concurrent — NOT a mobility app. But a diagnostic-intake pattern (measure baseline before we start, retest at cadence) would improve every skill/mobility program's trackability grade from C to B, and probably help the strength/aerobic programs too (ROM affects overhead, ankle affects squat depth, etc.).*
+*"For a focused-improvement app that runs alongside your other training (Terav), what's the right diagnostic-intake movement battery? Constraint: 10-15 movements max, no video analysis, bilateral where relevant, self-report + demo video only, must map to Terav's existing programs (engine-builder, concurrent-strength-maintenance, overhead-mobility, handstand-walk, rowing-2k-test-prep, first-strict-pull-up, muscle-up)."*
 
-*The question: what's the right shape of a diagnostic intake for Terav — not GoWOD's specifically-mobility 25-movement battery, but the RIGHT battery for a focused-improvement tool that runs alongside your training?*
-
-*Research targets:*
-- *Functional Movement Screen (FMS) — 7 tests, $ certification industry, published sensitivity/specificity*
+*Research targets — start with published batteries + Terav's own whitepapers:*
+- *Functional Movement Screen (FMS) — 7 tests, industry standard, published sensitivity/specificity*
 - *Selective Functional Movement Assessment (SFMA) — clinical version, 10+ tests*
-- *Beighton hypermobility scale — 9 measurements, sub-second per measurement*
-- *Y-Balance Test, single-leg squat, Thomas test — sport-adjacent*
-- *GoWOD's public materials — what movements do they screen, how do they validate*
-- *Kneesovertoesguy's ATG assessment battery — published free*
+- *Beighton hypermobility scale — 9 measurements*
+- *Y-Balance Test — single-leg reach in 3 directions, sensitive asymmetry detector*
+- *Thomas test, ankle dorsiflexion knee-to-wall, sit-and-reach — sport-adjacent*
+- *GoWOD's public materials — what movements do they use, how do they validate*
+- *Kneesovertoesguy ATG assessment battery — published free*
 - *NBA / NFL / NCAA combine mobility screens — public methodology*
+- ***Terav's own whitepapers*** *at `dev/whitepapers/*.md` — motor learning + handstand-walk sections already reference specific test batteries. Cross-check what we've already documented.*
+- ***Terav's own program JSONs*** *— existing physical_tests may already list the right movements per program; a general screen might just be their union*
 
-*Deliverable: `dev/audits/product-concerns/E-diagnostic-intake-battery.md` with 3-5 candidate movement batteries + trade-offs (accuracy vs. time cost vs. measurement equipment vs. cross-program relevance), and a recommended MVP shape (Shape 1 free / Shape 2 paid video-assisted from earlier chat).*
+*Deliverable: `dev/audits/product-concerns/E-diagnostic-intake-battery.md` with:*
+1. *3-5 candidate 10-15 movement batteries + trade-offs*
+2. *Recommended MVP battery, with each movement mapped to which Terav program(s) it informs*
+3. *Data-shape extensions to physicalTestSchema needed to support GoWOD-style bilateral + slider + demo-video*
+4. *Cross-reference to Concern F (video demo library) — if we ship the demos, this becomes cheap*
 
-**Do NOT build without the E-brief.** Scope discipline: GoWOD-shaped feature could easily eat the roadmap if we mistake it for a mobility-track feature instead of an intake-tier upgrade.
+**Do NOT build without the E-brief.** Scope discipline: GoWOD-shaped feature could easily eat the roadmap if we mistake it for a mobility-track feature instead of an intake-tier upgrade. Terav's diagnostic intake serves ALL programs; must stay short.
 
 ### F · Video demo library for exercises (free tier)
 
