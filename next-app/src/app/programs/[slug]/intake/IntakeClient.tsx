@@ -45,6 +45,7 @@ export function IntakeClient({ slug }: Props) {
   const [reviewing, setReviewing] = useState(false);
   const [overrideTier, setOverrideTier] = useState<string | null>(null);
   const [committing, setCommitting] = useState(false);
+  const [attemptedContinue, setAttemptedContinue] = useState(false);
 
   const activeProgramId = useStore((s) => s.store.user_profile?.active_program_id);
   const activeProgramIds = useStore((s) => s.store.user_profile?.active_program_ids);
@@ -97,17 +98,25 @@ export function IntakeClient({ slug }: Props) {
     return null;
   }, [answers, intake?.safety_gates, program?.schedule_constraints, program?.goals]);
 
+  // consent_symptom_data is authored as a required question but rendered as
+  // a consent checkbox (see CONSENT_IDS below). Its "answer" lives in
+  // `consents`, not `answers` — so excluding it from the required-question
+  // count is what stops the "stuck at 10/11" bug.
+  const RENDERED_CONSENT_QUESTION_IDS = new Set(["consent_symptom_data"]);
   const requiredQuestions = useMemo(
-    () => questions.filter((q) => q.required),
+    () => questions.filter((q) => q.required && !RENDERED_CONSENT_QUESTION_IDS.has(q.id)),
     [questions],
   );
-  const requiredAnsweredCount = useMemo(() => {
-    return requiredQuestions.filter((q) => {
+  const unansweredRequiredIds = useMemo(() => {
+    const ids = new Set<string>();
+    for (const q of requiredQuestions) {
       const v = answers[q.id];
-      return v != null && v !== "";
-    }).length;
+      if (v == null || v === "") ids.add(q.id);
+    }
+    return ids;
   }, [requiredQuestions, answers]);
-  const requiredQuestionsAnswered = requiredAnsweredCount === requiredQuestions.length;
+  const requiredAnsweredCount = requiredQuestions.length - unansweredRequiredIds.size;
+  const requiredQuestionsAnswered = unansweredRequiredIds.size === 0;
 
   const requiredConsentsGiven = useMemo(() => {
     return consentItems.every((c) => (c.required ? consents[c.id] === true : true));
@@ -459,6 +468,8 @@ export function IntakeClient({ slug }: Props) {
           questions={screening}
           answers={answers}
           setAnswer={(qid, v) => setAnswers((a) => ({ ...a, [qid]: v }))}
+          unansweredIds={unansweredRequiredIds}
+          showMissing={attemptedContinue}
         />
       ) : null}
 
@@ -469,6 +480,8 @@ export function IntakeClient({ slug }: Props) {
           questions={skill}
           answers={answers}
           setAnswer={(qid, v) => setAnswers((a) => ({ ...a, [qid]: v }))}
+          unansweredIds={unansweredRequiredIds}
+          showMissing={attemptedContinue}
         />
       ) : null}
 
@@ -479,6 +492,8 @@ export function IntakeClient({ slug }: Props) {
           questions={about}
           answers={answers}
           setAnswer={(qid, v) => setAnswers((a) => ({ ...a, [qid]: v }))}
+          unansweredIds={unansweredRequiredIds}
+          showMissing={attemptedContinue}
         />
       ) : null}
 
@@ -534,14 +549,32 @@ export function IntakeClient({ slug }: Props) {
         </div>
         <button
           type="button"
-          onClick={() => setReviewing(true)}
-          disabled={!canProceed}
-          className="w-full inline-flex items-center justify-center gap-1.5 font-mono text-[12px] uppercase tracking-wider px-4 py-3 rounded bg-bronze text-ground hover:bg-bronze/90 disabled:opacity-40 disabled:cursor-not-allowed"
+          onClick={() => {
+            if (canProceed) {
+              setReviewing(true);
+              return;
+            }
+            // Not ready — surface the missing questions and scroll to the first
+            // one so the user isn't stuck staring at a disabled button.
+            setAttemptedContinue(true);
+            const firstMissing = requiredQuestions.find((q) => unansweredRequiredIds.has(q.id));
+            if (firstMissing) {
+              requestAnimationFrame(() => {
+                const el = document.getElementById(`q-${firstMissing.id}`);
+                if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+              });
+            }
+          }}
+          aria-disabled={!canProceed}
+          className={cn(
+            "w-full inline-flex items-center justify-center gap-1.5 font-mono text-[12px] uppercase tracking-wider px-4 py-3 rounded bg-bronze text-ground hover:bg-bronze/90",
+            !canProceed && "opacity-60",
+          )}
         >
           {blocker
             ? "Can't continue — see message above"
             : !requiredQuestionsAnswered
-              ? `Answer ${requiredQuestions.length - requiredAnsweredCount} more to continue`
+              ? `Answer ${unansweredRequiredIds.size} more to continue`
               : !requiredConsentsGiven
                 ? "Tick the consent items to continue"
                 : "See recommended tier →"}
@@ -557,12 +590,16 @@ function QuestionGroup({
   questions,
   answers,
   setAnswer,
+  unansweredIds,
+  showMissing,
 }: {
   title: string;
   hint: string;
   questions: IntakeQuestion[];
   answers: Record<string, string>;
   setAnswer: (qid: string, v: string) => void;
+  unansweredIds: Set<string>;
+  showMissing: boolean;
 }) {
   return (
     <section className="rounded border border-line bg-surface p-4 space-y-3">
@@ -571,11 +608,25 @@ function QuestionGroup({
         <p className="text-[12px] text-muted mt-0.5">{hint}</p>
       </header>
       <ul className="space-y-4">
-        {questions.map((q) => (
-          <li key={q.id} className="space-y-2">
+        {questions.map((q) => {
+          const missing = showMissing && unansweredIds.has(q.id);
+          return (
+          <li
+            key={q.id}
+            id={`q-${q.id}`}
+            className={cn(
+              "space-y-2 scroll-mt-24",
+              missing && "-mx-2 px-2 py-2 rounded border-l-2 border-red bg-red/5",
+            )}
+          >
             <p className="text-sm font-medium text-strong">
               {q.label}
               {q.required ? <span className="text-red ml-1">*</span> : null}
+              {missing ? (
+                <span className="ml-2 font-mono text-[10px] uppercase tracking-wider text-red">
+                  answer needed
+                </span>
+              ) : null}
             </p>
             {q.help ? <p className="text-[12px] text-muted">{q.help}</p> : null}
             {q.type === "select" && q.options ? (
@@ -650,7 +701,8 @@ function QuestionGroup({
               )
             ) : null}
           </li>
-        ))}
+          );
+        })}
       </ul>
     </section>
   );

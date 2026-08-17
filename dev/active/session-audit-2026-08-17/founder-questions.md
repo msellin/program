@@ -30,6 +30,22 @@ Verbatim founder quote:
 
 **Priority:** medium. Doesn't block beta but does confuse first-time preview viewers on multi-tier programs.
 
+## Q5 · Video demos for physical test movements — beyond pictograms
+
+**Surfaced by:** founder, 2026-08-17, viewing Physical tests block on Handstand Walk intake.
+
+**Founder observation:** the physical test descriptions ("Kneel with palms flat, fingertips pointing toward knees. Slowly rock weight forward…") would benefit from actual video demos, not just text.
+
+**Q4 brief's recommendation:** CSS-only 56×40 pictogram tiles per movement question. That ships in the 6-8h intake polish. Real videos are a separate feature scope.
+
+**Real-video roadmap (when we go beyond pictograms):**
+1. Dispatch the F-brief research (`dev/audits/product-concerns/F-video-demo-library.md`) to answer: build vs. embed vs. license, hosting costs, WCAG captions, storage overhead
+2. Once F-brief lands, extend `intakeQuestionSchema.option` and `physicalTestSchema` with an optional `demo_video_url` field (same shape both places)
+3. Author videos per program (~1-2 days per program if founder shoots on iPhone)
+4. Ship behind a feature flag; test with beta before default-on
+
+**Priority:** medium. Pictograms are the beta-appropriate first step (6-8h). Real videos are a beta-plus feature (~3-4 days once F-brief lands and hosting decided).
+
 ## Q4 · Intake questionnaire visual craft — feels like reading a book
 
 **Surfaced by:** founder, 2026-08-17, viewing `/programs/handstand-walk/intake`.
