@@ -35,12 +35,47 @@ import { evaluateOverperformer } from "@/lib/engine/adapt";
 import { citationIdForKind } from "@/lib/engine/proposal-citations";
 import { iso, today as todayISO } from "@/lib/utils";
 
+/**
+ * Bug #1 fix (flow-review 2026-08-17): the ONLY signal that a life-load slider
+ * value the user just tapped in onboarding is not enough evidence to propose
+ * a soften. A first-time user who picks 7 on the LifeLoadStep and lands on
+ * Today should NOT see "Apply 10% lighter today?" as their first-ever engine
+ * message.
+ *
+ * Real signals need at least one of:
+ *   - a logged exercise or run today
+ *   - a non-empty note today
+ *   - a symptom field other than life_load today
+ *   - ANY signal-producing state on the two prior days
+ *
+ * A bare `life_load` on an otherwise empty day is baseline calibration, not
+ * evidence. The proposal reappears the moment any of the above kicks in.
+ */
+function todayHasOnlyLifeLoadSeed(store: Store, date: string): boolean {
+  const day = store.logs[date];
+  if (!day) return false;
+  const sym = day.symptoms;
+  if (!sym || sym.life_load == null) return false;
+  const otherSymptomField = (Object.keys(sym) as Array<keyof typeof sym>).some(
+    (k) => k !== "life_load" && sym[k] != null && sym[k] !== 0 && sym[k] !== false,
+  );
+  if (otherSymptomField) return false;
+  if ((day.notes ?? "").trim().length > 0) return false;
+  if ((day.runs ?? []).length > 0) return false;
+  const hasExerciseWork = Object.values(day.exercises ?? {}).some(
+    (ex) => ex.done || (ex.sets && ex.sets.length > 0) || (ex.notes ?? "").trim().length > 0,
+  );
+  if (hasExerciseWork) return false;
+  return true;
+}
+
 function selectDayAdjustment(store: Store, date: string): DayAdjustmentProposalPayload | null {
   // Already accepted? Not a proposal any more.
   if (store.day_adjustments?.[date]) return null;
 
   // Look at today + the 2 prior days for a signal.
   let sig = daySignals(store.logs[date]);
+  const todayIsLifeLoadOnly = todayHasOnlyLifeLoadSeed(store, date);
   if (!(sig.fatigue === "high" || sig.pain)) {
     const t = new Date(date + "T00:00:00");
     for (let back = 1; back <= 2 && sig.matches.length === 0; back++) {
@@ -51,6 +86,13 @@ function selectDayAdjustment(store: Store, date: string): DayAdjustmentProposalP
   }
   const proposal = proposedLoadMultiplier(sig);
   if (!proposal) return null;
+
+  // Bug #1 fix: if the ONLY thing today has is a life-load value AND no prior
+  // signal contributed, we're looking at an onboarding-fresh user. Suppress.
+  if (todayIsLifeLoadOnly) {
+    const priorSignalPresent = sig.matches.length > 0 && sig !== daySignals(store.logs[date]);
+    if (!priorSignalPresent) return null;
+  }
 
   const id = `day-adj:load-${proposal.multiplier}`;
   const dismissed = store.dismissed_proposals?.[date] ?? [];

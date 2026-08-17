@@ -13,6 +13,7 @@ import { SignalsStrip } from "@/components/workout/SignalsStrip";
 import { RunSlotCard } from "@/components/workout/RunSlotCard";
 import { MissedSessionPrompt } from "@/components/workout/MissedSessionPrompt";
 import { ProposalStack } from "@/components/workout/ProposalStack";
+import { Day1EmptyState } from "@/components/workout/Day1EmptyState";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
 import { useStore } from "@/lib/useStore";
 import { today as todayISO } from "@/lib/utils";
@@ -164,6 +165,19 @@ export default function TodayPage() {
           ) : null}
         </p>
       ) : null}
+
+      {(() => {
+        // Day-1 empty-state gate (Bug #3 fix from 2026-08-17 flow-review).
+        // Fresh user with no morning check today AND no history anywhere —
+        // one CTA card owns the "start here" attention. Existing HeroStateCard
+        // full-tile still renders below for non-day-1 no-check cases; this
+        // just short-circuits the day-1 fresh case.
+        const noCheckToday = !logs[activeDate]?.symptoms;
+        if (!hasHistory && noCheckToday && activeDate === todayISO()) {
+          return <Day1EmptyState />;
+        }
+        return null;
+      })()}
 
       <ProposalStack program={primary} date={activeDate} />
 

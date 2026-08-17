@@ -361,17 +361,6 @@ export type TMBumpProposal = {
   reason: string;
 };
 
-// Programs whose progression does NOT run on training-max bumps. The rule
-// silently no-ops for these — aerobic / skill / rehab progression happens
-// through different surfaces (retest, tier-advance, phase gates).
-const TM_BUMP_INELIGIBLE_PROGRAMS = new Set<string>([
-  "engine-builder",
-  "handstand-walk",
-  "overhead-mobility",
-  "rowing-2k-test-prep",
-  "concurrent-strength-maintenance",
-]);
-
 // Phases where a bump is wrong regardless of streak — reintro caps loads at
 // 80% TM by design, and any "hip" phase is rehab-adjacent.
 function isReintroOrRehabPhase(phaseId: string | undefined): boolean {
@@ -387,13 +376,29 @@ function bumpFor(exerciseId: string): number {
   return exerciseId.includes("squat") ? 2.5 : 5;
 }
 
+/**
+ * Does this program declare a strength-progression surface? Checked by shape
+ * (program JSON has `training_maxes.starting_values_kg`) rather than by
+ * slug-blacklist. Any future strength arc that declares TMs gets A1 without
+ * a code change; aerobic / skill / mobility / test-prep programs stay out.
+ *
+ * Fixed post-flow-review 2026-08-17. The prior slug blacklist left A1
+ * eligible on exactly ONE catalog program (anterior-hip-rebuild), which is
+ * `personal: true` and hidden from the catalog — meaning A1 fired for zero
+ * beta users. Concurrent Strength Maintenance was collateral damage.
+ */
+function hasStrengthProgression(program: Program): boolean {
+  const tms = program.training_maxes as Record<string, unknown> | undefined;
+  return Boolean(tms && tms.starting_values_kg);
+}
+
 export function evaluateOverperformer(
   program: Program,
   store: Store,
   todayISO: string,
 ): TMBumpProposal | null {
-  // Guard: only for strength-progression programs.
-  if (program.slug && TM_BUMP_INELIGIBLE_PROGRAMS.has(program.slug)) return null;
+  // Guard: program must declare a strength-progression surface.
+  if (!hasStrengthProgression(program)) return null;
   const tms = store.training_maxes ?? {};
   if (Object.keys(tms).length === 0) return null;
 

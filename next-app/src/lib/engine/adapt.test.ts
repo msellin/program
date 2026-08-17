@@ -343,10 +343,16 @@ describe("evaluateCycleEnd — RPE integration", () => {
 
 describe("evaluateOverperformer", () => {
   const evalDay = "2026-08-17";
+  // Post-flow-review 2026-08-17: A1 gates on program.training_maxes.
+  // starting_values_kg (shape check) rather than a slug blacklist. Tests
+  // must declare a strength-progression shape for the eligibility gate to pass.
   const trainingProgram: Program = {
     ...makeProgram("2026-08-03", "2026-08-30"),
     slug: "custom-strength",
-  };
+    training_maxes: {
+      starting_values_kg: { back_squat_highbar: 100, deadlift_conventional: 140 },
+    },
+  } as unknown as Program;
 
   function overStore(
     args: {
@@ -413,7 +419,7 @@ describe("evaluateOverperformer", () => {
     expect(out).toBeNull();
   });
 
-  it("does not fire on ineligible programs (engine-builder)", () => {
+  it("does not fire on programs without strength progression (no training_maxes)", () => {
     const s = overStore({
       days: [
         { date: "2026-08-15", state: "green", notes: "felt strong" },
@@ -421,7 +427,12 @@ describe("evaluateOverperformer", () => {
         { date: "2026-08-17", state: "green" },
       ],
     });
-    const aerobic: Program = { ...trainingProgram, slug: "engine-builder" };
+    // Shape check post-flow-review: no training_maxes.starting_values_kg → ineligible.
+    const aerobic: Program = {
+      ...trainingProgram,
+      slug: "engine-builder",
+      training_maxes: undefined,
+    } as unknown as Program;
     const out = evaluateOverperformer(aerobic, s, evalDay);
     expect(out).toBeNull();
   });
