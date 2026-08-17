@@ -90,12 +90,17 @@ export function OnboardingRunner() {
   // OnboardingRunner is the "app is unusable until dismissed" modal on fresh
   // signup and must always win the z-race — prevents the IntroGallery-ate-
   // OnboardingRunner-clicks class of bug from recurring.
+  //
+  // M9 fix (2026-08-17): items-start + overflow-y-auto on mobile so the iOS
+  // soft keyboard doesn't push modal content off-screen. Desktop still
+  // vertically centers via sm:items-center. Padding-top adjusted so content
+  // sits closer to the top on small screens.
   return (
     <div
       role="dialog"
       aria-modal="true"
       aria-labelledby="onboarding-title"
-      className="fixed inset-0 z-[60] bg-ground/95 backdrop-blur-sm flex items-center justify-center p-4"
+      className="fixed inset-0 z-[60] bg-ground/95 backdrop-blur-sm flex items-start justify-center overflow-y-auto p-4 pt-12 sm:items-center sm:pt-4"
     >
       <div ref={panelRef} className="w-full max-w-md space-y-6">
         <div className="text-center space-y-1">

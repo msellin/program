@@ -128,7 +128,10 @@ function Stat({ value, label }: { value: string; label: string }) {
   return (
     <div>
       <div className="mb-1 h-px w-8 bg-white/30" />
-      <div className="font-mono text-lg text-white sm:text-xl">{value}</div>
+      {/* M4 fix (2026-08-17): text-base + leading-tight prevents wrap at
+          393px where "5 programs" / "Your focus" broke to 2 lines,
+          competing visually with the H1 above. */}
+      <div className="font-mono text-base leading-tight text-white sm:text-xl">{value}</div>
       <div className="mono-caps mt-0.5">{label}</div>
     </div>
   );

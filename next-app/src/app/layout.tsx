@@ -59,7 +59,11 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${sans.variable} ${mono.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-ground text-ink font-sans pb-[calc(64px+env(safe-area-inset-bottom))]">
+      {/* M6 fix (2026-08-17): body padding removed. AppShell.tsx main
+          already sets paddingBottom for the fixed bottom nav
+          (calc(64px + env(safe-area-inset-bottom) + 1rem)) — double
+          padding was leaving a visible dead zone on iOS. */}
+      <body className="min-h-full flex flex-col bg-ground text-ink font-sans">
         <ServiceWorkerRegister />
         <AuthGate>
           <AppShell>{children}</AppShell>

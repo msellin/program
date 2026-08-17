@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUp, X } from "lucide-react";
+import { ArrowUp } from "lucide-react";
 import { useStore } from "@/lib/useStore";
 import { hapticTap, today as todayISO } from "@/lib/utils";
 import { announce } from "@/lib/announce";
@@ -146,14 +146,9 @@ export function ProposalCard({ proposal, date }: { proposal: Proposal; date: str
             </div>
           ) : null}
         </div>
-        <button
-          type="button"
-          onClick={onIgnore}
-          aria-label="Ignore proposal"
-          className="text-muted hover:text-ink w-9 h-9 -m-2 flex items-center justify-center flex-shrink-0"
-        >
-          <X size={16} />
-        </button>
+        {/* M7 fix (2026-08-17): X-icon dismiss removed. The Ignore button
+            below is the semantic verb (matches the landing promise), and
+            two same-action affordances confused reviewers. */}
       </div>
       <div className="flex flex-wrap gap-2 pt-1">
         <button

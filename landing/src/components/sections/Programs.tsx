@@ -88,15 +88,10 @@ export function Programs({ dict }: { dict: LandingDict }) {
             </div>
           ))}
         </div>
-        <div className="mt-2 flex justify-center gap-1.5">
-          {programs.map((p) => (
-            <span
-              key={p.slug}
-              className="h-1 w-1 rounded-full bg-white/25"
-              aria-hidden
-            />
-          ))}
-        </div>
+        {/* M2 fix (2026-08-17): removed decorative dots. All identical
+            bg-white/25 pips with no active-state binding promise position
+            feedback the code doesn't deliver — noise per Tapworthy. Peek
+            (basis-[82vw] snap-center) is the affordance. */}
       </div>
 
       {/* Desktop: grid unchanged */}
