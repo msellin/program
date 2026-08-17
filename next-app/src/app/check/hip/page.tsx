@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight, Check } from "lucide-react";
 import { HIP_FLEXOR_PACK, scoreKeysFor, type AssessmentQuestion } from "@/lib/assessments-data";
 import { useStore } from "@/lib/useStore";
+import { EngineReadsNotesHint } from "@/components/workout/EngineReadsNotesHint";
 import { today as todayISO } from "@/lib/utils";
 import { VideoModal } from "@/components/VideoModal";
 
@@ -369,6 +370,7 @@ function ReviewPanel({
           onChange={(e) => setNotes(e.target.value)}
           className="block w-full max-w-full text-sm px-2 py-1.5 border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate resize-y min-h-[44px] break-words [overflow-wrap:anywhere] whitespace-pre-wrap"
         />
+        <EngineReadsNotesHint variant="check" />
       </div>
 
       {anyMissing ? (

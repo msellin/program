@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { Info, X, Plus, Footprints, Upload } from "lucide-react";
 import { useStore } from "@/lib/useStore";
 import { InfoSheet } from "@/components/InfoSheet";
+import { EngineReadsNotesHint } from "./EngineReadsNotesHint";
 import { parseGpx } from "@/lib/gpx";
 import { cn } from "@/lib/utils";
 import type { RunLog } from "@/lib/schemas";
@@ -509,6 +510,7 @@ export function RunSlotCard({ date }: { date: string }) {
             placeholder="Optional note — WOD name, felt like…"
             className="block w-full text-[13px] px-2 py-1.5 border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate resize-y min-h-[44px] break-words [overflow-wrap:anywhere] whitespace-pre-wrap"
           />
+          <EngineReadsNotesHint variant="run" />
 
           {/* Pre-flight interference warning — fires BEFORE the user logs a
               hard cardio session near a scheduled lift. Concurrent programs

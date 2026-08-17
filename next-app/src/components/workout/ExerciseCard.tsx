@@ -18,6 +18,7 @@ import { isSetPR } from "@/lib/pr";
 import { SetRow } from "./SetRow";
 import { SuggestionBox } from "./SuggestionBox";
 import { NoteSignalHint } from "./NoteSignalHint";
+import { EngineReadsNotesHint } from "./EngineReadsNotesHint";
 import { ExerciseDetailsSheet } from "./ExerciseDetailsSheet";
 import { VideoModal } from "@/components/VideoModal";
 import type { Exercise, Program, Block } from "@/lib/schemas";
@@ -318,6 +319,7 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
                   onChange={(e) => setNotes(blockId, exercise.id, e.target.value, activeDate)}
                   className="block w-full max-w-full text-sm px-2 py-1.5 border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate resize-y min-h-[44px] break-words [overflow-wrap:anywhere] whitespace-pre-wrap"
                 />
+                <EngineReadsNotesHint variant="session" />
                 <NoteSignalHint text={notes} />
               </div>
             ) : (

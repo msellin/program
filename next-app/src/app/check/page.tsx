@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useStore } from "@/lib/useStore";
 import { today as todayISO } from "@/lib/utils";
 import type { Symptoms } from "@/lib/schemas";
+import { EngineReadsNotesHint } from "@/components/workout/EngineReadsNotesHint";
 
 // Hip-program regions — laterality + specific joints.
 const HIP_REGIONS: { key: keyof Symptoms; label: string; lat?: "L" | "R" }[] = [
@@ -175,10 +176,7 @@ export default function CheckPage() {
             placeholder="e.g. 90 min padel, long hike, poor sleep"
             className="block w-full max-w-full text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate break-words [overflow-wrap:anywhere]"
           />
-          <p className="text-[12px] text-muted mt-1">
-            The engine treats keywords here (padel, hike, tired…) as external load and factors it
-            into today&apos;s proposals.
-          </p>
+          <EngineReadsNotesHint variant="check" />
         </div>
       </div>
 
