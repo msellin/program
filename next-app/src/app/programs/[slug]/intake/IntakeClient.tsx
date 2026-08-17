@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ChevronLeft, ShieldAlert, Info, Check } from "lucide-react";
+import { ChevronLeft, ShieldAlert, Check } from "lucide-react";
 import { loadProgram, loadProgramManifest } from "@/lib/data-loader";
 import { useStore } from "@/lib/useStore";
 import { cn } from "@/lib/utils";
@@ -16,6 +16,48 @@ import type {
 } from "@/lib/schemas";
 
 type Props = { slug: string };
+
+// Calibration questions get a CSS-only pictogram tile in the left column of
+// their row (see PictogramTile). Keyed by question id. Cheap to extend when
+// Overhead Mobility / Rowing 2K land — one-line per program.
+const PICTOGRAM_BY_QID: Record<string, "wall" | "freestand" | "walk"> = {
+  wall_hold_seconds_selfreport: "wall",
+  freestand_hold_seconds_selfreport: "freestand",
+  walk_distance_selfreport: "walk",
+};
+
+type SectionTone = "gate" | "calibration" | "engine" | "optional" | "required";
+
+const SECTION_TONE_META: Record<
+  SectionTone,
+  { badge: string; badgeClass: string; monogramClass: string }
+> = {
+  gate: {
+    badge: "gate",
+    badgeClass: "text-red",
+    monogramClass: "bg-red/10 text-red border-red/30",
+  },
+  calibration: {
+    badge: "calibration",
+    badgeClass: "text-bronze",
+    monogramClass: "bg-bronze/10 text-bronze border-bronze/30",
+  },
+  engine: {
+    badge: "engine",
+    badgeClass: "text-slate",
+    monogramClass: "bg-slate/10 text-slate border-slate/30",
+  },
+  optional: {
+    badge: "optional",
+    badgeClass: "text-muted",
+    monogramClass: "bg-line-soft/60 text-muted border-line",
+  },
+  required: {
+    badge: "required",
+    badgeClass: "text-amber",
+    monogramClass: "bg-amber/10 text-amber border-amber/30",
+  },
+};
 
 /**
  * Intake wizard for multi-dim programs.
@@ -495,6 +537,11 @@ export function IntakeClient({ slug }: Props) {
         </p>
       </header>
 
+      <StickyTopProgress
+        answered={requiredAnsweredCount}
+        total={requiredQuestions.length}
+      />
+
       {blocker ? (
         <div className="rounded border border-red/40 bg-red/10 p-4 space-y-2">
           <p className="font-semibold text-red flex items-center gap-2">
@@ -506,7 +553,9 @@ export function IntakeClient({ slug }: Props) {
       ) : null}
 
       {screening.length ? (
-        <QuestionGroup
+        <SectionCard
+          step="01"
+          tone="gate"
           title="Screening"
           hint="Safety gates — a few no-questions before we start."
           questions={screening}
@@ -514,11 +563,14 @@ export function IntakeClient({ slug }: Props) {
           setAnswer={(qid, v) => setAnswers((a) => ({ ...a, [qid]: v }))}
           unansweredIds={unansweredRequiredIds}
           showMissing={attemptedContinue}
+          safetyGates={intake?.safety_gates ?? []}
         />
       ) : null}
 
       {skill.length ? (
-        <QuestionGroup
+        <SectionCard
+          step="02"
+          tone="calibration"
           title="Where you are now"
           hint="Skill-level self report. Best guess is fine — you'll re-test on Day 3."
           questions={skill}
@@ -526,11 +578,14 @@ export function IntakeClient({ slug }: Props) {
           setAnswer={(qid, v) => setAnswers((a) => ({ ...a, [qid]: v }))}
           unansweredIds={unansweredRequiredIds}
           showMissing={attemptedContinue}
+          safetyGates={intake?.safety_gates ?? []}
         />
       ) : null}
 
       {about.length ? (
-        <QuestionGroup
+        <SectionCard
+          step="03"
+          tone="engine"
           title="About you"
           hint="Context for the adaptive engine."
           questions={about}
@@ -538,6 +593,7 @@ export function IntakeClient({ slug }: Props) {
           setAnswer={(qid, v) => setAnswers((a) => ({ ...a, [qid]: v }))}
           unansweredIds={unansweredRequiredIds}
           showMissing={attemptedContinue}
+          safetyGates={intake?.safety_gates ?? []}
         />
       ) : null}
 
@@ -551,9 +607,16 @@ export function IntakeClient({ slug }: Props) {
 
       {consentItems.length ? (
         <section className="rounded border border-line bg-surface p-4 space-y-3">
-          <header className="flex items-baseline justify-between">
-            <h2 className="text-[14px] font-semibold text-strong">Consent</h2>
-            <span className="text-[11px] font-mono text-muted uppercase tracking-wider">required</span>
+          <header className="flex items-center gap-3">
+            <SectionMonogram step="05" tone="required" />
+            <div className="flex-1">
+              <div className="flex items-baseline justify-between gap-2">
+                <h2 className="text-[14px] font-semibold text-strong">Consent</h2>
+                <span className={cn("text-[10px] font-mono uppercase tracking-widest", SECTION_TONE_META.required.badgeClass)}>
+                  required
+                </span>
+              </div>
+            </div>
           </header>
           <ul className="space-y-3">
             {consentItems.map((c) => (
@@ -574,23 +637,6 @@ export function IntakeClient({ slug }: Props) {
       ) : null}
 
       <div className="sticky bottom-2 pt-2">
-        {/* Progress indicator — reduces the "how much more?" anxiety persona A
-            flagged. Shows required-only count so optional physical tests don't
-            block the finish line perception. */}
-        <div className="flex items-center gap-2">
-          <div className="h-1.5 flex-1 rounded-full bg-line-soft overflow-hidden">
-            <div
-              className="h-full rounded-full bg-bronze transition-[width]"
-              style={{
-                width: `${requiredQuestions.length ? Math.round((requiredAnsweredCount / requiredQuestions.length) * 100) : 100}%`,
-              }}
-              aria-hidden
-            />
-          </div>
-          <span className="font-mono text-[11px] text-muted flex-shrink-0 min-w-[42px] text-right">
-            {requiredAnsweredCount} / {requiredQuestions.length}
-          </span>
-        </div>
         <button
           type="button"
           onClick={() => {
@@ -628,7 +674,130 @@ export function IntakeClient({ slug }: Props) {
   );
 }
 
-function QuestionGroup({
+/**
+ * Quiet-form primitives — see dev/design-briefs/2026-08-17-intake-visual-craft.md.
+ * SectionMonogram is the 40×40 numeric tile; StickyTopProgress is the rail
+ * under the header; PictogramTile draws a CSS-only glyph for the three
+ * calibration questions; CalibrationHintDisclosure reveals the option→tier
+ * mapping using each option's existing `hint` field.
+ */
+function SectionMonogram({ step, tone }: { step: string; tone: SectionTone }) {
+  const meta = SECTION_TONE_META[tone];
+  return (
+    <div
+      className={cn(
+        "w-10 h-10 rounded-md border flex items-center justify-center flex-shrink-0",
+        meta.monogramClass,
+      )}
+      aria-hidden
+    >
+      <span className="font-mono text-[13px] tracking-wider">{step}</span>
+    </div>
+  );
+}
+
+function StickyTopProgress({ answered, total }: { answered: number; total: number }) {
+  if (total === 0) return null;
+  const pct = Math.round((answered / total) * 100);
+  const currentQuestion = Math.min(answered + 1, total);
+  return (
+    <div
+      className="sticky top-0 z-30 -mx-4 px-4 py-2 bg-ground/95 backdrop-blur-sm border-b border-line-soft"
+      role="progressbar"
+      aria-valuenow={answered}
+      aria-valuemin={0}
+      aria-valuemax={total}
+    >
+      <div className="flex items-center gap-3">
+        <div className="h-[3px] flex-1 rounded-full bg-line-soft overflow-hidden">
+          <div
+            className="h-full rounded-full bg-bronze transition-[width] motion-reduce:transition-none"
+            style={{ width: `${pct}%` }}
+            aria-hidden
+          />
+        </div>
+        <span className="font-mono text-[10px] text-muted uppercase tracking-widest whitespace-nowrap">
+          Question {currentQuestion} of {total}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function PictogramTile({ kind }: { kind: "wall" | "freestand" | "walk" }) {
+  return (
+    <div
+      className="w-14 h-14 rounded-md border border-line bg-line-soft/30 flex-shrink-0 flex items-center justify-center"
+      aria-hidden
+    >
+      {kind === "wall" ? (
+        // A wall + a stick figure inverted against it.
+        <div className="relative w-8 h-10">
+          <span className="absolute right-0 top-0 bottom-0 w-[2px] bg-bronze/60 rounded-full" />
+          <span className="absolute right-[6px] top-[3px] w-[6px] h-[6px] rounded-full bg-bronze/80" />
+          <span className="absolute right-[3px] top-[9px] w-[10px] h-[2px] bg-bronze/60 rounded-full" />
+          <span className="absolute right-[7px] top-[10px] w-[2px] h-[24px] bg-bronze/80 rounded-full" />
+        </div>
+      ) : kind === "freestand" ? (
+        // An inverted T — no wall.
+        <div className="relative w-8 h-10">
+          <span className="absolute left-1/2 -translate-x-1/2 top-[3px] w-[6px] h-[6px] rounded-full bg-bronze/80" />
+          <span className="absolute left-1/2 -translate-x-1/2 top-[9px] w-[2px] h-[24px] bg-bronze/80 rounded-full" />
+          <span className="absolute left-1/2 -translate-x-1/2 top-[33px] w-[16px] h-[2px] bg-bronze/60 rounded-full" />
+        </div>
+      ) : (
+        // Inverted T + a subtle right-pointing chevron for motion.
+        <div className="relative w-10 h-10">
+          <span className="absolute left-[6px] top-[3px] w-[6px] h-[6px] rounded-full bg-bronze/80" />
+          <span className="absolute left-[8px] top-[9px] w-[2px] h-[24px] bg-bronze/80 rounded-full" />
+          <span className="absolute left-[2px] top-[33px] w-[16px] h-[2px] bg-bronze/60 rounded-full" />
+          <span
+            className="absolute right-[6px] top-[16px] w-0 h-0"
+            style={{
+              borderTop: "5px solid transparent",
+              borderBottom: "5px solid transparent",
+              borderLeft: "6px solid rgba(200, 150, 102, 0.6)",
+            }}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+
+function CalibrationHintDisclosure({ options }: { options: NonNullable<IntakeQuestion["options"]> }) {
+  const withHints = options.filter((o) => o.hint);
+  if (withHints.length === 0) return null;
+  return (
+    <details className="text-[12px]">
+      <summary className="cursor-pointer text-muted hover:text-ink inline-flex items-center gap-1">
+        Why the tiers?
+      </summary>
+      <ul className="mt-2 space-y-1">
+        {withHints.map((o) => (
+          <li key={o.value} className="flex items-baseline gap-2">
+            <span className="text-strong min-w-[100px]">{o.label ?? o.value.replace(/_/g, " ")}</span>
+            <span className="font-mono text-[10px] text-muted uppercase tracking-widest">
+              {o.hint}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </details>
+  );
+}
+
+function isGateUnsafe(
+  gates: NonNullable<Program["intake"]>["safety_gates"],
+  qid: string,
+  value: string,
+): boolean {
+  return (gates ?? []).some((g) => g.question_id === qid && g.unsafe_values.includes(value));
+}
+
+function SectionCard({
+  step,
+  tone,
   title,
   hint,
   questions,
@@ -636,7 +805,10 @@ function QuestionGroup({
   setAnswer,
   unansweredIds,
   showMissing,
+  safetyGates,
 }: {
+  step: string;
+  tone: SectionTone;
   title: string;
   hint: string;
   questions: IntakeQuestion[];
@@ -644,71 +816,103 @@ function QuestionGroup({
   setAnswer: (qid: string, v: string) => void;
   unansweredIds: Set<string>;
   showMissing: boolean;
+  safetyGates: NonNullable<Program["intake"]>["safety_gates"];
 }) {
+  const meta = SECTION_TONE_META[tone];
   return (
-    <section className="rounded border border-line bg-surface p-4 space-y-3">
-      <header>
-        <h2 className="text-[14px] font-semibold text-strong">{title}</h2>
-        <p className="text-[12px] text-muted mt-0.5">{hint}</p>
+    <section className="rounded border border-line bg-surface p-4 space-y-4">
+      <header className="flex items-center gap-3">
+        <SectionMonogram step={step} tone={tone} />
+        <div className="flex-1 min-w-0">
+          <div className="flex items-baseline justify-between gap-2">
+            <h2 className="text-[14px] font-semibold text-strong">{title}</h2>
+            <span className={cn("text-[10px] font-mono uppercase tracking-widest", meta.badgeClass)}>
+              {meta.badge}
+            </span>
+          </div>
+          <p className="text-[12px] text-muted mt-0.5">{hint}</p>
+        </div>
       </header>
       <ul className="space-y-4">
         {questions.map((q) => {
           const missing = showMissing && unansweredIds.has(q.id);
+          const pictogram = PICTOGRAM_BY_QID[q.id];
+          const currentValue = answers[q.id];
           return (
           <li
             key={q.id}
             id={`q-${q.id}`}
             className={cn(
-              "space-y-2 scroll-mt-24",
+              "scroll-mt-24",
               missing && "-mx-2 px-2 py-2 rounded border-l-2 border-red bg-red/5",
             )}
           >
-            <p className="text-sm font-medium text-strong">
-              {q.label}
-              {q.required ? <span className="text-red ml-1">*</span> : null}
-              {missing ? (
-                <span className="ml-2 font-mono text-[10px] uppercase tracking-wider text-red">
-                  answer needed
-                </span>
-              ) : null}
-            </p>
-            {q.help ? <p className="text-[12px] text-muted">{q.help}</p> : null}
+            <div className={cn("flex gap-3", pictogram ? "items-start" : "flex-col")}>
+              {pictogram ? <PictogramTile kind={pictogram} /> : null}
+              <div className={cn("flex-1 min-w-0 space-y-2", pictogram && "pt-0.5")}>
+                <p className="text-sm font-medium text-strong">
+                  {q.label}
+                  {q.required ? <span className="text-red ml-1">*</span> : null}
+                  {missing ? (
+                    <span className="ml-2 font-mono text-[10px] uppercase tracking-wider text-red">
+                      answer needed
+                    </span>
+                  ) : null}
+                </p>
+                {q.help ? <p className="text-[12px] text-muted">{q.help}</p> : null}
             {q.type === "select" && q.options ? (
+              <>
               <div className="flex flex-wrap gap-1.5">
-                {q.options.map((opt) => (
+                {q.options.map((opt) => {
+                  const picked = currentValue === opt.value;
+                  const unsafePicked = picked && isGateUnsafe(safetyGates, q.id, opt.value);
+                  return (
                   <button
                     key={opt.value}
                     type="button"
                     onClick={() => setAnswer(q.id, opt.value)}
                     className={cn(
-                      "text-[13px] px-3 py-2 rounded border min-h-[40px]",
-                      answers[q.id] === opt.value
-                        ? "border-bronze bg-bronze/15 text-strong"
-                        : "border-line bg-surface text-strong hover:border-slate/40",
+                      "text-[13px] px-3 py-2 rounded border min-h-[44px]",
+                      unsafePicked
+                        ? "border-red/50 bg-red/10 text-red"
+                        : picked
+                          ? "border-bronze bg-bronze/15 text-strong"
+                          : "border-line bg-surface text-strong hover:border-slate/40",
                     )}
                   >
                     {opt.label ?? opt.value.replace(/_/g, " ")}
                   </button>
-                ))}
+                  );
+                })}
               </div>
+              {tone === "calibration" ? (
+                <CalibrationHintDisclosure options={q.options} />
+              ) : null}
+              </>
             ) : null}
             {q.type === "boolean" ? (
               <div className="flex gap-2">
-                {["true", "false"].map((v) => (
+                {["true", "false"].map((v) => {
+                  const picked = currentValue === v;
+                  const unsafePicked = picked && isGateUnsafe(safetyGates, q.id, v);
+                  return (
                   <button
                     key={v}
                     type="button"
                     onClick={() => setAnswer(q.id, v)}
                     className={cn(
-                      "text-[13px] px-4 py-2 rounded border min-h-[40px]",
-                      answers[q.id] === v
-                        ? "border-bronze bg-bronze/15 text-strong"
-                        : "border-line bg-surface text-strong hover:border-slate/40",
+                      "text-[13px] px-4 py-2 rounded border min-h-[44px]",
+                      unsafePicked
+                        ? "border-red/50 bg-red/10 text-red"
+                        : picked
+                          ? "border-bronze bg-bronze/15 text-strong"
+                          : "border-line bg-surface text-strong hover:border-slate/40",
                     )}
                   >
                     {v === "true" ? "Yes" : "No"}
                   </button>
-                ))}
+                  );
+                })}
               </div>
             ) : null}
             {q.type === "number" ? (
@@ -744,6 +948,8 @@ function QuestionGroup({
                 />
               )
             ) : null}
+              </div>
+            </div>
           </li>
           );
         })}
@@ -763,14 +969,21 @@ function PhysicalTestsGroup({
 }) {
   return (
     <details className="rounded border border-line bg-surface p-4">
-      <summary className="cursor-pointer flex items-center gap-2">
-        <Info size={15} className="text-slate flex-shrink-0" />
-        <span className="text-[14px] font-semibold text-strong flex-1">
-          Physical tests (optional — more precise)
-        </span>
-        <span className="font-mono text-[10px] uppercase tracking-wider text-muted">
-          {tests.length} tests
-        </span>
+      <summary className="cursor-pointer flex items-center gap-3">
+        <SectionMonogram step="04" tone="optional" />
+        <div className="flex-1 min-w-0">
+          <div className="flex items-baseline justify-between gap-2">
+            <span className="text-[14px] font-semibold text-strong">
+              Physical tests
+            </span>
+            <span className={cn("text-[10px] font-mono uppercase tracking-widest", SECTION_TONE_META.optional.badgeClass)}>
+              optional · {tests.length}
+            </span>
+          </div>
+          <p className="text-[12px] text-muted mt-0.5">
+            More precise than self-report. Skip and we use the answers above.
+          </p>
+        </div>
       </summary>
       <div className="mt-3 space-y-3">
         <p className="text-[13px] text-muted">
