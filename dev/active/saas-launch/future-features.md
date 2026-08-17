@@ -106,6 +106,44 @@ Currently `block_a_home` (Margus's hip flexor rehab) is baked into his program J
 
 **Sales angle:** *"you can change what you're training for; your rehab work travels with you."* — genuinely differentiating vs every other app (they'd make you re-add rehab exercises each time).
 
+## FIT file ingestion (Garmin manual export path)
+
+**When surfaced:** 2026-08-17 side-note from founder. Explicitly future — not MVP phase.
+
+**Why now, why deferred:** Garmin's Connect Developer Program is closed to new applicants with no reopen date, so **manual FIT upload is the primary sync path, not a fallback**. Deferred out of MVP because the Engine Builder beta doesn't require external ingest to be honest; but must land ahead of public beta so wearable-owning athletes aren't locked out.
+
+**Deliverable when we build it:** task spec at `docs/tasks/fit-ingestion.md` (repo doesn't have `docs/tasks/` yet — either create or land under `dev/active/fit-ingestion/`), plus a migration and parser skeleton. Do NOT start writing code before the founder approves the plan.
+
+**Pre-work (explore before proposing):**
+- Current stack, where activity data lives, existing Supabase schema
+- How auth and file handling work today
+- What already touches session / lap / set concepts in `next-app/src/lib/schemas.ts`
+
+**Design points to cover in the spec:**
+
+1. **Upload path.** User exports .fit from Garmin Connect and uploads. Handle multi-file and .zip bulk exports. Store the raw file (object storage, EU region) — never discard it, we reparse as the model evolves. Dedupe on file hash plus session start timestamp.
+
+2. **Parsing.** Use the official `garmin-fit-sdk` for Python. Extract at minimum:
+   - `session`: sport, sub_sport, start_time, total_timer_time, total_distance, avg/max HR, training load, TE if present
+   - `lap` and `split` messages
+   - `record`: timestamp, HR, cadence, power, speed, altitude, plus running dynamics where present
+   - `set`: reps, weight, category, duration, timestamp — **this is the critical one for strength sessions, do not skip it**
+   - `hrv` messages for RR intervals
+   - developer fields — surface them rather than dropping silently
+   - Unknown or new message types must not crash the parse. Log and continue.
+
+3. **Schema.** Normalized tables for session / lap / set, with per-record timeseries stored efficiently rather than one row per second per field. Recommend an approach and justify it against our query patterns — the adaptation engine reads recent sessions per user, not full history scans.
+
+4. **Interface boundary.** Define an `ActivityIngestSource` abstraction so a future Garmin Activity API webhook writes through the same normalization code.
+
+5. **Failure modes.** Corrupt files, truncated files, files from unsupported devices, activities that already exist, timezone handling, activities with no GPS at all (**indoor lifting is the common case for us**).
+
+6. **GDPR.** This is Article 9 data. Note retention, deletion cascade from the raw file through derived tables, and what the consent copy must say.
+
+**Instructions to the future agent:** Flag anything you are unsure about instead of guessing — especially schema decisions. Founder wants to review those before implementation.
+
+**Precondition:** Object storage in EU region provisioned (Supabase EU or R2 EU-jurisdiction bucket). Legal / GDPR consent copy drafted and approved.
+
 ## Other deferred ideas (add as they surface)
 
 - **Wearable ingest** — Whoop, Garmin, Apple HealthKit, Oura HRV → next-session load modulation
