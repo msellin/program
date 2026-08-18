@@ -29,6 +29,10 @@ export function BottomNav() {
   // Coach textarea, log-form numerics). No effect on desktop or Android's
   // resize-viewport model.
   if (keyboardOpen) return null;
+  // Hide during focused single-purpose flows — intake owns its own
+  // Back/Next footer and the user should not wander mid-questionnaire.
+  // "Back to program" at the top gives them the escape hatch.
+  if (pathname && /^\/programs\/[^/]+\/intake\/?$/.test(pathname)) return null;
   return (
     <nav
       aria-label="Primary"

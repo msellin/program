@@ -757,14 +757,14 @@ function WizardQuestionScreen({
   const pictogram = PICTOGRAM_BY_QID[q.id];
   const currentValue = answers[q.id];
   return (
-    <section className="rounded border border-line bg-surface p-5 space-y-4">
+    <section className="space-y-5 py-2">
       {pictogram ? (
         <div className="flex justify-center pt-2 pb-1">
           <PictogramTile kind={pictogram} large />
         </div>
       ) : null}
 
-      <h2 className="text-[17px] font-semibold text-strong leading-snug">
+      <h2 className="text-[18px] sm:text-[20px] font-semibold text-strong leading-snug">
         {q.label}
         {q.required ? <span className="text-red ml-1">*</span> : null}
       </h2>
@@ -889,8 +889,8 @@ function WizardPhysicalTestsScreen({
   setResult: (id: string, n: number) => void;
 }) {
   return (
-    <section className="rounded border border-line bg-surface p-5 space-y-4">
-      <h2 className="text-[17px] font-semibold text-strong">
+    <section className="space-y-5 py-2">
+      <h2 className="text-[18px] sm:text-[20px] font-semibold text-strong">
         Physical tests
         <span className={cn("ml-2 text-[11px] font-mono uppercase tracking-widest align-middle", SECTION_TONE_META.optional.badgeClass)}>
           optional
@@ -940,8 +940,8 @@ function WizardConsentScreen({
   setConsent: (id: string, v: boolean) => void;
 }) {
   return (
-    <section className="rounded border border-line bg-surface p-5 space-y-4">
-      <h2 className="text-[17px] font-semibold text-strong">
+    <section className="space-y-5 py-2">
+      <h2 className="text-[18px] sm:text-[20px] font-semibold text-strong">
         Consent
         <span className={cn("ml-2 text-[11px] font-mono uppercase tracking-widest align-middle", SECTION_TONE_META.required.badgeClass)}>
           required
