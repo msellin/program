@@ -55,8 +55,15 @@ function ensureProgramStateEntry(
   startedAt: string,
 ): NonNullable<Store["user_profile"]>["program_states"] {
   const map = { ...(existing ?? {}) };
-  if (!map[slug]) {
+  const current = map[slug];
+  if (!current) {
     map[slug] = { started_at: startedAt };
+  } else if (!current.started_at) {
+    // Partial entry (e.g. persona harness wrote tier only, missed
+    // started_at) → fill started_at without touching other fields.
+    // Delta audit 2026-08-19 caught this: overhead-mobility persona had
+    // tier but no started_at, breaking phase-shift computation.
+    map[slug] = { ...current, started_at: startedAt };
   }
   return map;
 }

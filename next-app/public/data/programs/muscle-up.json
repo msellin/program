@@ -441,7 +441,7 @@
       "starts": "2026-01-05",
       "ends": "2026-03-01",
       "duration_weeks": 8,
-      "for_tier_ids": ["tier_a"],
+      "for_tier_ids": ["tier_a_prep"],
       "blocks": [
         "block_shoulder_prep",
         "block_ring_dip_ladder",
@@ -462,7 +462,7 @@
       "starts": "2026-01-05",
       "ends": "2026-03-01",
       "duration_weeks": 8,
-      "for_tier_ids": ["tier_b"],
+      "for_tier_ids": ["tier_b_transition"],
       "blocks": [
         "block_shoulder_prep",
         "block_false_grip_pullup",
@@ -484,7 +484,7 @@
       "starts": "2026-01-05",
       "ends": "2026-03-01",
       "duration_weeks": 8,
-      "for_tier_ids": ["tier_c"],
+      "for_tier_ids": ["tier_c_first_rep"],
       "blocks": [
         "block_shoulder_prep",
         "block_pullup_sets_submax",

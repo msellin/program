@@ -105,7 +105,15 @@ export function BlockHistorySection() {
         {perProgram.map((g) => (
           <div key={g.slug} className="p-3 space-y-2">
             <p className="text-[13px] font-semibold text-strong">
-              {g.program?.program_goal?.display_name ?? g.slug.replace(/-/g, " ")}
+              {/* Slug title-case matches manifest names for every current
+                  program; `program_goal.display_name` is often the target
+                  metric (e.g. "Loaded overhead shoulder flexion") and reads
+                  as a bug. Same anti-pattern the reveal-copy fix addressed
+                  at only its own call site. Delta audit 2026-08-19. */}
+              {g.slug
+                .split("-")
+                .map((w) => (w.length ? w[0].toUpperCase() + w.slice(1) : w))
+                .join(" ")}
             </p>
             <ul className="space-y-1.5">
               {g.blocks
