@@ -3,18 +3,21 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
-  Database,
+  Download,
   BookOpen,
   LogOut,
   ChevronRight,
   X,
   MessageSquare,
+  Trash2,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useStore } from "@/lib/useStore";
 import { createClient } from "@/lib/supabase/client";
 import { useIsSuperAdmin } from "@/lib/super-admin";
 import { loadProgramManifest } from "@/lib/data-loader";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
+import { today } from "@/lib/utils";
 import type { ProgramManifest } from "@/lib/schemas";
 
 /**
@@ -33,10 +36,64 @@ import type { ProgramManifest } from "@/lib/schemas";
  */
 export default function ProfilePage() {
   const store = useStore((s) => s.store);
+  const wipe = useStore((s) => s.wipe);
   const isSuperAdmin = useIsSuperAdmin();
+  const router = useRouter();
   const [email, setEmail] = useState<string | null>(null);
   const [memberSince, setMemberSince] = useState<string | null>(null);
   const [manifest, setManifest] = useState<ProgramManifest | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+
+  const exportMyData = () => {
+    const blob = new Blob([JSON.stringify(store, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `terav-data-${today()}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  };
+
+  const deleteAccount = async () => {
+    setConfirmDelete(false);
+    setDeleting(true);
+    setDeleteError(null);
+    try {
+      const supabase = createClient();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (!session?.access_token) {
+        setDeleteError("Not signed in. Sign in first, then try again.");
+        setDeleting(false);
+        return;
+      }
+      const res = await fetch("/api/delete-account", {
+        method: "DELETE",
+        headers: { authorization: `Bearer ${session.access_token}` },
+      });
+      if (!res.ok) {
+        const text = await res.text().catch(() => "");
+        setDeleteError(
+          `Delete failed (${res.status}). ${text || "Try again in a moment."}`,
+        );
+        setDeleting(false);
+        return;
+      }
+      wipe();
+      await supabase.auth.signOut();
+      router.replace("/sign-in");
+    } catch (e) {
+      setDeleteError(e instanceof Error ? e.message : String(e));
+      setDeleting(false);
+    }
+  };
 
   useEffect(() => {
     const supabase = createClient();
@@ -245,16 +302,19 @@ export default function ProfilePage() {
           </span>
           <ChevronRight size={16} className="text-muted flex-shrink-0" />
         </Link>
-        <Link
-          href="/data"
-          className="flex items-center justify-between gap-3 px-3 py-3 hover:bg-line-soft/50 min-h-[48px]"
+        <button
+          type="button"
+          onClick={exportMyData}
+          className="w-full flex items-center justify-between gap-3 px-3 py-3 hover:bg-line-soft/50 min-h-[48px] text-left"
         >
           <span className="flex items-center gap-3 text-sm">
-            <Database size={16} className="text-muted" />
-            Manage data
+            <Download size={16} className="text-muted" />
+            Export my data
           </span>
-          <ChevronRight size={16} className="text-muted flex-shrink-0" />
-        </Link>
+          <span className="text-[11px] font-mono text-muted uppercase tracking-widest">
+            JSON
+          </span>
+        </button>
       </nav>
 
       {/* Legal links */}
@@ -263,6 +323,35 @@ export default function ProfilePage() {
         <Link href="/legal/terms" className="hover:text-ink">Terms</Link>
         <Link href="/legal/disclaimer" className="hover:text-ink">Medical disclaimer</Link>
       </nav>
+
+      {/* Delete-account cascade (GDPR right-to-erasure).
+          Deletes the Supabase auth user; user_states + user_state_snapshots
+          cascade automatically via ON DELETE CASCADE. Local storage wiped
+          on the client after the server confirms. */}
+      <section className="rounded border border-red/40 bg-red/5 p-4 space-y-3">
+        <div>
+          <h2 className="text-[14px] font-semibold text-strong">Delete my account</h2>
+          <p className="text-[12px] text-muted mt-1 leading-relaxed">
+            Permanently removes your account, training log, morning checks,
+            and every synced entry. Cannot be recovered.
+          </p>
+        </div>
+        {deleteError ? (
+          <p className="text-[12px] text-red border-l-4 border-red pl-2">{deleteError}</p>
+        ) : null}
+        <button
+          type="button"
+          onClick={() => {
+            setDeleteError(null);
+            setConfirmDelete(true);
+          }}
+          disabled={deleting}
+          className="w-full inline-flex items-center justify-center gap-2 font-mono text-[12px] uppercase tracking-wider px-4 py-3 rounded border border-red/40 text-red hover:bg-red/10 min-h-[48px] disabled:opacity-50"
+        >
+          <Trash2 size={14} />
+          {deleting ? "Deleting…" : "Delete my account permanently"}
+        </button>
+      </section>
 
       {/* Beta features — block-object rebuild rollout gate.
           See dev/active/block-object-rebuild-2026-08-18.md §6.
@@ -305,6 +394,15 @@ export default function ProfilePage() {
           setRemoveOpen(null);
         }}
         onCancel={() => setRemoveOpen(null)}
+      />
+      <ConfirmSheet
+        open={confirmDelete}
+        title="Delete your account permanently?"
+        body="This deletes your account, all logs, training maxes, morning checks, and every synced entry on our server. You cannot recover any of it after this action."
+        confirmLabel="Delete forever"
+        danger
+        onConfirm={() => void deleteAccount()}
+        onCancel={() => setConfirmDelete(false)}
       />
     </div>
   );
