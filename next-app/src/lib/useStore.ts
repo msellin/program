@@ -1,17 +1,23 @@
 "use client";
 
 import { create } from "zustand";
-import { loadStore, saveStore, ensureDay, ensureExercise, seedFromRepoLogIfEmpty } from "./storage";
-import { pushRemoteDebounced } from "./sync";
+import { ensureDay, ensureExercise, seedFromRepoLogIfEmpty } from "./storage";
+import { getAdapter } from "./persistence/adapter";
 import type { Store, DayLog, ExerciseLog, SetLog, Program, RunLog, Proposal } from "./schemas";
 import { today, iso } from "./utils";
 import { snapshotCitation } from "./engine/citations";
 
-/** Save to localStorage AND fire a debounced remote push. */
+/**
+ * Save to persistence AND fire a debounced remote push.
+ * Routes through the persistence adapter (Phase A of block-object rebuild)
+ * so a future Postgres migration is a single-file swap. See
+ * dev/active/block-object-rebuild-2026-08-18.md §4.
+ */
 function commit(s: Store): Store {
   s.updated_at = Date.now();
-  saveStore(s);
-  pushRemoteDebounced(s);
+  const adapter = getAdapter();
+  adapter.saveLocal(s);
+  adapter.pushRemoteDebounced(s);
   return s;
 }
 
@@ -272,7 +278,8 @@ export const useStore = create<StoreState>((set, get) => ({
   hydrated: false,
 
   hydrate: () => {
-    const loaded = loadStore();
+    const adapter = getAdapter();
+    const loaded = adapter.loadLocal();
     set({ store: loaded, hydrated: true });
     // Seed-from-repo-log path DISABLED in multi-user mode. Historically it
     // bootstrapped Margus's own account from /data/log.json when the store
@@ -290,20 +297,18 @@ export const useStore = create<StoreState>((set, get) => ({
     // a wipe race or a stale session-binding reset) can trick pullRemote into
     // returning `keep_local` — leaving the user staring at "pick a program"
     // even though their real state is safe in KV.
-    void import("./sync").then(({ pullRemote }) => {
-      const s = get().store;
-      const localIsEmpty =
-        Object.keys(s.logs ?? {}).length === 0 &&
-        Object.keys(s.training_maxes ?? {}).length === 0 &&
-        Object.keys(s.assessments ?? {}).length === 0 &&
-        !s.user_profile?.active_program_id;
-      const cmpStore = localIsEmpty ? { ...s, updated_at: 0 } : s;
-      return pullRemote(cmpStore).then((res) => {
-        if (res.kind === "use_remote") {
-          saveStore(res.store);
-          set({ store: res.store });
-        }
-      });
+    const s = get().store;
+    const localIsEmpty =
+      Object.keys(s.logs ?? {}).length === 0 &&
+      Object.keys(s.training_maxes ?? {}).length === 0 &&
+      Object.keys(s.assessments ?? {}).length === 0 &&
+      !s.user_profile?.active_program_id;
+    const cmpStore = localIsEmpty ? { ...s, updated_at: 0 } : s;
+    void adapter.pullRemote(cmpStore).then((res) => {
+      if (res.kind === "use_remote") {
+        adapter.saveLocal(res.store);
+        set({ store: res.store });
+      }
     });
   },
 
@@ -982,7 +987,7 @@ export const useStore = create<StoreState>((set, get) => ({
     // clobber either the previous user's or the new user's server data during
     // a session transition.
     const empty: Store = { ...initial, updated_at: Date.now() };
-    saveStore(empty);
+    getAdapter().saveLocal(empty);
     try {
       // B3: per-program onboarding keys.
       for (let i = localStorage.length - 1; i >= 0; i--) {
