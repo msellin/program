@@ -207,15 +207,19 @@ export default function WeekPage() {
         </div>
       ) : null}
 
-      {!wt?.week ? (
-        <p className="text-sm text-muted">No weekly template.</p>
-      ) : (
-        <div className="rounded border border-line bg-surface divide-y divide-line-soft">
+      {/* Bug fix 2026-08-18 · founder reported empty Week view on Handstand
+          Walk. Cause: the prior top-level bail on `!wt?.week` skipped
+          rendering for any program whose weekly_template uses tier-specific
+          reference weeks (multi_dimensional strategy — HSW, First Pull-Up)
+          or per-week overrides (engine-builder's week_1 / week_2 shape).
+          The per-day loop below already handles missing `templateEntry`
+          gracefully — no bail needed. */}
+      <div className="rounded border border-line bg-surface divide-y divide-line-soft">
           {DAY_NAMES.map((dayName, i) => {
             const dateForDay = new Date(viewedMon);
             dateForDay.setDate(viewedMon.getDate() + i);
             const dateISO = iso(dateForDay);
-            const templateEntry = wt.week?.[i];
+            const templateEntry = wt?.week?.[i];
             // Legacy day-state readers. Block-object mode overrides these
             // via `blocksTodayByProgram` below, but `skip` / `override` are
             // still consulted for the reason string + line-through styling
@@ -401,7 +405,6 @@ export default function WeekPage() {
             );
           })}
         </div>
-      )}
 
       {wt?.principles?.length ? <RulesAccordion principles={wt.principles} /> : null}
     </div>
