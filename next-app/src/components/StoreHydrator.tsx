@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 import { useStore } from "@/lib/useStore";
 import { createClient } from "@/lib/supabase/client";
-import { setSyncAuthed } from "@/lib/sync";
 import { loadProgram } from "@/lib/data-loader";
 import { getAdapter } from "@/lib/persistence/adapter";
 import { migrateLegacyToBlocks, needsBlockMigration } from "@/lib/migrations/legacy-to-blocks";
@@ -54,8 +53,6 @@ export function StoreHydrator() {
       const sessionUid = data.session?.user?.id ?? null;
       const sessionEmail = data.session?.user?.email ?? null;
       if (!mounted) return;
-      setSyncAuthed(!!sessionUid);
-
       // Read stored UID from localStorage, NOT from React state — memory is
       // still the empty `initial` store on first mount. See storedUidFromLocal
       // comment above.
@@ -85,7 +82,6 @@ export function StoreHydrator() {
 
     const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === "SIGNED_OUT") {
-        setSyncAuthed(false);
         // Do NOT wipe local on SIGNED_OUT. Supabase fires transient SIGNED_OUT
         // events during token refresh (esp. right after a page reload). The
         // former wipe here was the root cause of "test user loses program on
@@ -96,7 +92,6 @@ export function StoreHydrator() {
         return;
       }
       if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED" || event === "USER_UPDATED") {
-        setSyncAuthed(!!session?.user?.id);
         // Same as syncToSession — read from localStorage, not React state.
         const storedUid = storedUidFromLocal();
         const sessionUid = session?.user?.id ?? null;

@@ -3,9 +3,8 @@ name = "program-v2"
 compatibility_date = "2026-01-15"
 pages_build_output_dir = "./out"
 
-# KV namespace holding the user's synced app state (single JSON blob per user).
-# Created via `wrangler kv namespace create program-store` (+ --preview).
-[[kv_namespaces]]
-binding = "STORE"
-id = "76a7068ea10b4128a7339dcbd2183793"
-preview_id = "e31b1f1032694e7cba22b97edc63b1cc"
+# KV binding removed 2026-08-18 · Phase 2F of the KV → Postgres migration.
+# User state now lives in Supabase Postgres; see src/lib/persistence/
+# postgres-adapter.ts. The `STORE` KV namespace itself is kept in Cloudflare
+# for a rollback window and can be deleted once we're confident (~2 weeks
+# after this ships).

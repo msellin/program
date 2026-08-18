@@ -1,30 +1,19 @@
 /**
- * Persistence adapter — Phase A of the block-object rebuild.
- * See dev/active/block-object-rebuild-2026-08-18.md §4.
- *
- * Purpose: interpose a thin interface between the Zustand store and the
- * concrete storage layer, so a future migration from Cloudflare KV to
- * Postgres (or any other backing store) is a re-implementation of ONE file,
- * not a rewrite of the domain model.
- *
- * Today the only implementation is `KVAdapter`, which delegates to the
- * existing `lib/storage.ts` (local) and `lib/sync.ts` (remote) functions.
- * Behavior is byte-identical to pre-adapter code.
- *
- * When we eventually add Postgres (see block-object-rebuild §10), a
- * `PostgresAdapter` implements this same interface, gains a `writeBlock`
- * hot-path method, and the `getAdapter()` factory returns it based on a
- * future feature flag.
- *
- * DO NOT reach past the adapter into `storage.ts` or `sync.ts` directly
- * from new code. If you find yourself wanting to, add the operation to the
- * interface first.
+ * Persistence adapter — thin interface between Zustand and the concrete
+ * storage layer. Post 2026-08-18 KV → Postgres migration, only
+ * PostgresAdapter implements this. Kept as an interface so a future
+ * backing-store swap (e.g. self-hosted Postgres, Neon) doesn't touch
+ * useStore.ts or anywhere else.
  */
 
 import type { Store } from "../schemas";
-import type { PullResult } from "../sync";
-import { KVAdapter } from "./kv-adapter";
 import { PostgresAdapter } from "./postgres-adapter";
+
+export type PullResult =
+  | { kind: "empty" }
+  | { kind: "keep_local"; remoteUpdatedAt: number }
+  | { kind: "use_remote"; store: Store }
+  | { kind: "error"; message: string };
 
 export interface PersistenceAdapter {
   /**
@@ -64,28 +53,15 @@ let cachedAdapter: PersistenceAdapter | null = null;
 
 /**
  * Returns the currently-configured persistence adapter. Post 2026-08-18
- * refactor: always PostgresAdapter. PostgresAdapter internally falls
- * back to KV via `/api/state` if Postgres has no row yet AND KV does,
- * write-throughs to Postgres on the fallback, and never surfaces the
- * migration to the user.
- *
- * KVAdapter stays in the tree as vestigial — importable for the fallback
- * path via `sync.ts` — but is no longer selectable. Retired entirely in
- * Phase 2F when we remove the `/api/state` Pages Function.
- *
- * Cached so repeated calls return the same instance — matters because the
- * adapter owns state (in-memory debounce timer).
+ * Phase 2F: always PostgresAdapter. Cached so repeated calls return the
+ * same instance — matters because the adapter owns state (in-memory
+ * debounce timer).
  */
 export function getAdapter(): PersistenceAdapter {
   if (cachedAdapter) return cachedAdapter;
   cachedAdapter = new PostgresAdapter();
   return cachedAdapter;
 }
-
-// KVAdapter kept in the tree for the Postgres-adapter's KV fallback code
-// path (via sync.ts). Referenced here so tree-shaking doesn't strip it
-// mid-migration. Remove in Phase 2F.
-void KVAdapter;
 
 /**
  * Test helper — swap the cached adapter for a fake in unit tests. Reset

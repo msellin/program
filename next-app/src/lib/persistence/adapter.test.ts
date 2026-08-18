@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import type { Store } from "../schemas";
-import type { PullResult } from "../sync";
-import type { PersistenceAdapter } from "./adapter";
+import type { PersistenceAdapter, PullResult } from "./adapter";
 import { getAdapter, _setAdapterForTests, _resetAdapterForTests } from "./adapter";
 
 /**
@@ -47,8 +46,7 @@ describe("PersistenceAdapter", () => {
 
   it("getAdapter returns a stable singleton across calls", () => {
     // Two consecutive calls must return the same instance so per-adapter
-    // state (KVAdapter's in-flight debounce timer, future Postgres pool)
-    // doesn't leak.
+    // state (PostgresAdapter's in-flight debounce timer) doesn't leak.
     const first = getAdapter();
     const second = getAdapter();
     expect(first).toBe(second);
@@ -68,7 +66,7 @@ describe("PersistenceAdapter", () => {
     _resetAdapterForTests();
     const next = getAdapter();
     expect(next).not.toBe(fake);
-    // And still returns something usable (the real KV adapter).
+    // And still returns something usable (the real Postgres adapter).
     expect(next).toBeDefined();
   });
 
@@ -86,7 +84,7 @@ describe("PersistenceAdapter", () => {
   });
 });
 
-describe("KVAdapter (default via getAdapter)", () => {
+describe("PostgresAdapter (default via getAdapter)", () => {
   beforeEach(() => {
     _resetAdapterForTests();
   });

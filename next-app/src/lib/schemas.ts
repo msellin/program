@@ -905,14 +905,6 @@ const featureFlagsSchema = z.object({
    * blocks become the sole write target.
    */
   block_object_writes: z.boolean().optional(),
-  /**
-   * @deprecated 2026-08-18 · vestigial. Was the KV → Postgres per-user
-   * opt-in flag; removed when we made Postgres default for everyone with
-   * automatic KV fallback + write-through in PostgresAdapter. Kept in
-   * the schema for one release so existing KV blobs with the field set
-   * still parse cleanly; safe to remove once KV is retired (Phase 2F).
-   */
-  postgres_store: z.boolean().optional(),
 });
 
 export const storeSchema = z.object({
