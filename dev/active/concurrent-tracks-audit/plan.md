@@ -1,6 +1,23 @@
 # Concurrent-tracks Today-view audit
 
-**Status:** planned. Not started. Surfaced 2026-08-17 from founder screenshots of a superadmin-added secondary program.
+**Status update 2026-08-18:** `persona-concurrent` definition landed in
+`next-app/tests/e2e/harness/personas.ts`, along with a new
+`Persona.additionalProgramSlugs` field. Primary + secondary programs
+declared (anterior-hip-rebuild + engine-builder) so the scope below is
+half-satisfied. Remaining work:
+1. Extend `simulator-v2.ts` to activate multiple programs (call
+   `addSecondaryProgram` for each additionalProgramSlugs entry; per-day
+   scheduling logic to route logs to the right program based on which
+   scheduled work that day).
+2. Run the harness against `persona-concurrent` to produce artifacts.
+3. Dispatch the 3 specialist agents (mobile-ux, visual-craft, copy-clarity)
+   against the artifacts.
+4. Product-design-lead follow-up brief.
+
+Estimated remaining: ~3-4h. Runnable when the E2E harness has a Supabase-auth
+setup or when the founder confirms the flow to run it manually.
+
+**Original brief follows.** Surfaced 2026-08-17 from founder screenshots of a superadmin-added secondary program.
 
 ## Why this matters
 
