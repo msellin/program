@@ -9,7 +9,7 @@ import { today as todayISO, iso, cn } from "@/lib/utils";
 import { activePhaseFor } from "@/lib/engine/schedule";
 import { blocksForDate } from "@/lib/engine/plan-generator";
 import { getBlocksForDate, isBlockObjectOn } from "@/lib/engine/block-selectors";
-import type { Program, ScheduledBlock, Store } from "@/lib/schemas";
+import type { DayLog, Program, RunLog, ScheduledBlock, Store } from "@/lib/schemas";
 
 const DAY_NAMES = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as const;
 
@@ -425,6 +425,39 @@ export default function WeekPage() {
                 {templateEntry?.conditioning && !skip && !override ? (
                   <p className="text-[12px] text-muted italic mt-1">{templateEntry.conditioning}</p>
                 ) : null}
+                {/* Founder request 2026-08-18 — Week view should show what
+                    actually happened, not just what was scheduled. Compact
+                    lines for logged runs / classes + a per-lift roll-up
+                    when top sets were recorded. Both draw from `dayLog`,
+                    which is authoritative for actual work. */}
+                {dayLog?.runs?.length ? (
+                  <ul className="mt-1 space-y-0.5">
+                    {dayLog.runs.map((r, idx) => (
+                      <li
+                        key={idx}
+                        className="text-[12px] font-mono text-green flex items-baseline gap-1.5"
+                      >
+                        <span aria-hidden>✓</span>
+                        <span>
+                          {prettyRun(r)}
+                          {r.note ? (
+                            <span className="text-muted italic font-sans"> · {r.note}</span>
+                          ) : null}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+                {(() => {
+                  const topLift = topLoggedLift(dayLog);
+                  if (!topLift) return null;
+                  return (
+                    <p className="mt-1 text-[12px] font-mono text-green flex items-baseline gap-1.5">
+                      <span aria-hidden>✓</span>
+                      <span>{topLift}</span>
+                    </p>
+                  );
+                })()}
                 </div>
               </div>
             );
@@ -517,4 +550,57 @@ function humanPhaseName(name: string): string {
   return name
     .replace(/\s*\((?:Phase|weeks?|week|sub-goal|dev|internal)\b[^)]*\)\s*$/i, "")
     .trim();
+}
+
+/**
+ * Compact single-line summary of a logged run/class for the Week view.
+ * e.g. "5.2 km run · easy" or "45 min CrossFit class" or "row 2K · 7:35".
+ * Matches the info-density budget of the surrounding session names.
+ */
+function prettyRun(r: RunLog): string {
+  const activity =
+    r.activity_type === "crossfit_class"
+      ? "CrossFit class"
+      : r.activity_type === "ski_erg"
+        ? "ski erg"
+        : (r.activity_type ?? "run");
+  const parts: string[] = [];
+  if (r.session_type === "2k_test") parts.push(`${activity} · 2K test`);
+  else if (r.distance_km != null && r.distance_km > 0) {
+    parts.push(`${r.distance_km} km ${activity}`);
+  } else if (r.minutes != null && r.minutes > 0) {
+    parts.push(`${Math.round(r.minutes)} min ${activity}`);
+  } else {
+    parts.push(activity);
+  }
+  if (r.total_seconds != null && r.session_type === "2k_test") {
+    parts.push(
+      `${Math.floor(r.total_seconds / 60)}:${String(r.total_seconds % 60).padStart(2, "0")}`,
+    );
+  } else if (r.intensity) {
+    parts.push(r.intensity);
+  }
+  return parts.join(" · ");
+}
+
+/**
+ * Roll up the day's logged exercises into one "heaviest working set"
+ * headline. Nothing if the user logged no sets. Founder request: Week
+ * view should show what actually got done, not just what was scheduled.
+ */
+function topLoggedLift(day: DayLog | undefined): string | null {
+  if (!day) return null;
+  let best: { name: string; weight: number; reps: number } | null = null;
+  for (const [key, entry] of Object.entries(day.exercises)) {
+    const sets = entry.sets ?? [];
+    for (const s of sets) {
+      if (s.weight_kg == null || s.weight_kg <= 0 || s.reps == null || s.reps <= 0) continue;
+      if (!best || s.weight_kg > best.weight) {
+        const exId = key.split(":")[1] ?? key;
+        best = { name: exId.replace(/_/g, " "), weight: s.weight_kg, reps: s.reps };
+      }
+    }
+  }
+  if (!best) return null;
+  return `${best.name} · ${best.weight} kg × ${best.reps}`;
 }

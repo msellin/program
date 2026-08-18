@@ -492,23 +492,11 @@ export const useStore = create<StoreState>((set, get) => ({
   },
 
   skipDay: (date, reason) => {
-    const s = { ...get().store };
-    const prior = s.skipped?.[date];
-    // If this date was previously marked as skipped-because-moved, clean up
-    // the orphaned override on the destination date so it doesn't show a stale
-    // "moved-in" badge for a session the user no longer intends to do.
-    if (prior?.moved_to && s.scheduled_overrides?.[prior.moved_to]) {
-      const dest = s.scheduled_overrides[prior.moved_to];
-      if (dest.reason === `moved from ${date}`) {
-        s.scheduled_overrides = { ...s.scheduled_overrides };
-        delete s.scheduled_overrides[prior.moved_to];
-      }
-    }
-    const skipped = { ...(s.skipped ?? {}) };
-    skipped[date] = { reason };
-    s.skipped = skipped;
-    commit(s);
-    set({ store: s });
+    // Phase 3 full (2026-08-18) — routes through block-object state.
+    // Legacy `skipped` map stops being the source of truth; callers that
+    // read it still work via the block-object → legacy dual-consult in
+    // readers, but new writes only touch `scheduled_blocks`.
+    get().skipWholeDay(date, reason);
   },
 
   skipAndShiftWeek: (date, program, reason) => {
