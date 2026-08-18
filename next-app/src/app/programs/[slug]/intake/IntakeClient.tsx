@@ -453,7 +453,8 @@ export function IntakeClient({ slug }: Props) {
 
   if (reviewing) {
     return (
-      <div className="space-y-5 pt-4 pb-8">
+      <div className="mx-auto max-w-2xl space-y-5 pt-4 pb-8">
+        {/* components.md#layout (wizard body constraint) */}
         <button
           type="button"
           onClick={() => setReviewing(false)}
@@ -630,7 +631,8 @@ export function IntakeClient({ slug }: Props) {
   const showGateBlockInline = blocker != null;
 
   return (
-    <div className="space-y-5 pt-4 pb-32">
+    <div className="mx-auto max-w-2xl space-y-5 pt-4 pb-32">
+      {/* components.md#layout (wizard body constraint) — body + WizardFooter both max-w-2xl */}
       <Link href={backHref} className="inline-flex items-center gap-1 text-[13px] text-slate hover:text-ink">
         <ChevronLeft size={14} />
         Back to program
@@ -758,50 +760,119 @@ function WizardQuestionScreen({
   const currentValue = answers[q.id];
   return (
     <section className="space-y-5 py-2">
-      {pictogram ? (
-        <div className="flex justify-center pt-2 pb-1">
-          <PictogramTile kind={pictogram} large />
-        </div>
-      ) : null}
-
-      <h2 className="text-[18px] sm:text-[20px] font-semibold text-strong leading-snug">
-        {q.label}
-        {q.required ? <span className="text-red ml-1">*</span> : null}
-      </h2>
+      {/* components.md#pictograms — inline-left 40×40. Hero 96×96 rejected
+          by 2026-08-18 audit (reads as image placeholder). */}
+      <div className="flex items-start gap-3">
+        {pictogram ? <PictogramTile kind={pictogram} /> : null}
+        <h2 className="text-[18px] sm:text-[20px] font-semibold text-strong leading-snug flex-1">
+          {q.label}
+          {q.required ? <span className="text-red ml-1">*</span> : null}
+        </h2>
+      </div>
 
       {q.help ? (
         <p className="text-[13px] text-muted leading-relaxed">{q.help}</p>
       ) : null}
 
       {q.type === "select" && q.options ? (
-        <>
-          <div className="flex flex-wrap gap-2 pt-1">
-            {q.options.map((opt) => {
-              const picked = currentValue === opt.value;
-              const unsafePicked = picked && isGateUnsafe(safetyGates, q.id, opt.value);
-              return (
-                <button
-                  key={opt.value}
-                  type="button"
-                  onClick={() => setAnswer(q.id, opt.value)}
-                  className={cn(
-                    "text-[14px] px-4 py-3 rounded border min-h-[48px]",
-                    unsafePicked
-                      ? "border-red/50 bg-red/10 text-red"
-                      : picked
-                        ? "border-bronze bg-bronze/15 text-strong"
-                        : "border-line bg-surface text-strong hover:border-slate/40",
-                  )}
-                >
-                  {opt.label ?? opt.value.replace(/_/g, " ")}
-                </button>
-              );
-            })}
-          </div>
-          {step.tone === "calibration" ? (
-            <CalibrationHintDisclosure options={q.options} />
-          ) : null}
-        </>
+        (() => {
+          // components.md#buttons#chip-vs-option-row (decision tree, 2026-08-18):
+          //   longest label ≤ 8 chars → chip strip (numeric, Yes/No/Unsure, age band)
+          //   longest label >  8 chars → option row (word-labelled choices)
+          const longest = q.options.reduce(
+            (m, o) => Math.max(m, (o.label ?? o.value).length),
+            0,
+          );
+          const useOptionRows = longest > 8;
+          if (useOptionRows) {
+            // components.md#buttons#7 (option row) — canonical implementation.
+            // Calibration tone: opt.hint renders as the row's secondary line,
+            // so users see the tier mapping inline instead of buried in a
+            // disclosure.
+            return (
+              <ul className="space-y-1.5 pt-1">
+                {q.options.map((opt) => {
+                  const picked = currentValue === opt.value;
+                  const unsafePicked = picked && isGateUnsafe(safetyGates, q.id, opt.value);
+                  const showHint = step.tone === "calibration" && opt.hint;
+                  return (
+                    <li key={opt.value}>
+                      <button
+                        type="button"
+                        onClick={() => setAnswer(q.id, opt.value)}
+                        className={cn(
+                          "w-full text-left rounded border px-3 py-2 flex items-start gap-2 min-h-[52px]",
+                          unsafePicked
+                            ? "border-red/50 bg-red/10"
+                            : picked
+                              ? "border-bronze bg-bronze/10"
+                              : "border-line hover:border-slate/40 bg-surface",
+                        )}
+                      >
+                        <div
+                          className={cn(
+                            "mt-0.5 w-4 h-4 rounded-full border flex-shrink-0 flex items-center justify-center",
+                            unsafePicked
+                              ? "border-red bg-red"
+                              : picked
+                                ? "border-bronze bg-bronze"
+                                : "border-line",
+                          )}
+                          aria-hidden
+                        >
+                          {picked ? (
+                            <Check size={11} className="text-ground" strokeWidth={3} />
+                          ) : null}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p
+                            className={cn(
+                              "text-sm font-semibold",
+                              unsafePicked ? "text-red" : "text-strong",
+                            )}
+                          >
+                            {opt.label ?? opt.value.replace(/_/g, " ")}
+                          </p>
+                          {showHint ? (
+                            <p className="text-[11px] font-mono text-muted uppercase tracking-widest mt-0.5">
+                              {opt.hint}
+                            </p>
+                          ) : null}
+                        </div>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            );
+          }
+          // Short-label case → chip strip (components.md#buttons#6).
+          return (
+            <div className="flex flex-wrap gap-2 pt-1">
+              {q.options.map((opt) => {
+                const picked = currentValue === opt.value;
+                const unsafePicked = picked && isGateUnsafe(safetyGates, q.id, opt.value);
+                return (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    onClick={() => setAnswer(q.id, opt.value)}
+                    className={cn(
+                      "text-[14px] px-4 py-3 rounded border min-h-[48px]",
+                      unsafePicked
+                        ? "border-red/50 bg-red/10 text-red"
+                        : picked
+                          ? "border-bronze bg-bronze/15 text-strong"
+                          : "border-line bg-surface text-strong hover:border-slate/40",
+                    )}
+                  >
+                    {opt.label ?? opt.value.replace(/_/g, " ")}
+                  </button>
+                );
+              })}
+            </div>
+          );
+        })()
       ) : null}
 
       {q.type === "boolean" ? (
@@ -994,7 +1065,11 @@ function WizardFooter({
       ? "Answer this to continue."
       : "";
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-line-soft bg-ground/95 backdrop-blur-sm">
+    <div
+      className="fixed bottom-0 left-0 right-0 z-40 border-t border-line-soft bg-ground/95 backdrop-blur-sm"
+      style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+    >
+      {/* tokens.md#spacing (safe-area) + components.md#layout (wizard body constraint) */}
       <div className="mx-auto max-w-2xl px-4 py-3 flex items-center gap-3">
         <button
           type="button"
@@ -1079,27 +1154,6 @@ function PictogramTile({ kind, large }: { kind: "wall" | "freestand" | "walk"; l
   );
 }
 
-function CalibrationHintDisclosure({ options }: { options: NonNullable<IntakeQuestion["options"]> }) {
-  const withHints = options.filter((o) => o.hint);
-  if (withHints.length === 0) return null;
-  return (
-    <details className="text-[12px]">
-      <summary className="cursor-pointer text-muted hover:text-ink inline-flex items-center gap-1">
-        Why the tiers?
-      </summary>
-      <ul className="mt-2 space-y-1">
-        {withHints.map((o) => (
-          <li key={o.value} className="flex items-baseline gap-2">
-            <span className="text-strong min-w-[100px]">{o.label ?? o.value.replace(/_/g, " ")}</span>
-            <span className="font-mono text-[10px] text-muted uppercase tracking-widest">
-              {o.hint}
-            </span>
-          </li>
-        ))}
-      </ul>
-    </details>
-  );
-}
 
 function isGateUnsafe(
   gates: NonNullable<Program["intake"]>["safety_gates"],
