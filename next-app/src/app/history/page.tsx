@@ -35,11 +35,26 @@ const ALL_LIFTS = [
   "clean_and_jerk",
 ];
 
+/**
+ * History-view scale defaults (#66, 2026-08-18):
+ *
+ * The page has to survive at 50 days (early user) and 500+ days (Margus's
+ * own 4-year rehab record). Past ~180 days the mini-bar sparklines pack
+ * denser than 2 CSS px per bar on iPhone SE — the visual signal collapses
+ * to noise. So we default LiftSpark and SymptomSpark to the last 180 days
+ * with a "See full history" toggle. Log list stays paginated (30 per page)
+ * so a 500-day user doesn't render 500 accordion rows on first paint.
+ */
+const DEFAULT_SPARK_WINDOW_DAYS = 180;
+const LOG_PAGE_SIZE = 30;
+
 export default function HistoryPage() {
   const hydrated = useStore((s) => s.hydrated);
   const store = useStore((s) => s.store);
   const [byId, setById] = useState<Record<string, Exercise>>({});
   const [openDate, setOpenDate] = useState<string | null>(null);
+  const [logPage, setLogPage] = useState(1);
+  const [fullSparkHistory, setFullSparkHistory] = useState(false);
 
   useEffect(() => {
     void loadExercises().then((x) => setById(x.byId));
@@ -58,6 +73,11 @@ export default function HistoryPage() {
     a.date.localeCompare(b.date),
   );
   const recent = days.slice(-30);
+  // Scale defaults — see comment above. Sparklines cap to last 180 days by
+  // default; the toggle opens the full history when the user asks for it.
+  const sparkWindow = fullSparkHistory
+    ? days
+    : days.slice(-DEFAULT_SPARK_WINDOW_DAYS);
 
   if (!days.length) {
     return (
@@ -122,45 +142,96 @@ export default function HistoryPage() {
           }),
         );
         if (!activeLifts.length) return null;
+        const canExpand = days.length > DEFAULT_SPARK_WINDOW_DAYS;
         return (
           <section className="space-y-3">
-            <h2 className="font-mono text-[13px] uppercase tracking-widest">
-              Top-set weight — main lifts
-            </h2>
+            <div className="flex items-baseline justify-between gap-3">
+              <h2 className="font-mono text-[13px] uppercase tracking-widest">
+                Top-set weight — main lifts
+              </h2>
+              {canExpand ? (
+                <button
+                  type="button"
+                  onClick={() => setFullSparkHistory((v) => !v)}
+                  className="font-mono text-[10px] uppercase tracking-wider text-slate hover:text-ink"
+                >
+                  {fullSparkHistory
+                    ? `Show last ${DEFAULT_SPARK_WINDOW_DAYS} days`
+                    : `Show all ${days.length} days`}
+                </button>
+              ) : null}
+            </div>
             <div className="rounded border border-line bg-surface p-3 space-y-3">
               {activeLifts.map((id) => (
-                <LiftSpark key={id} lift={id} name={byId[id]?.name ?? id} logs={days} />
+                <LiftSpark
+                  key={id}
+                  lift={id}
+                  name={byId[id]?.name ?? id}
+                  logs={sparkWindow}
+                />
               ))}
             </div>
           </section>
         );
       })()}
 
-      <section className="space-y-3">
-        <h2 className="font-mono text-[13px] uppercase tracking-widest">
-          Log — {days.length} days
-        </h2>
-        <div className="rounded border border-line bg-surface divide-y divide-line-soft">
-          {days
-            .slice()
-            .reverse()
-            .filter((d) => {
-              // Suppress zero-activity days from the list — they clutter the
-              // scroll with rows saying "0 done" while the heatmap above already
-              // shows empty cells. Keep any day with an exercise done, a
-              // symptom logged, a run, or notes.
-              const anyExDone = Object.values(d.exercises ?? {}).some((e) => e.done);
-              const anyRun = (d.runs?.length ?? 0) > 0;
-              const anyNote = !!d.notes?.trim();
-              const anySymptom = d.symptoms != null;
-              return anyExDone || anyRun || anyNote || anySymptom;
-            })
-            .slice(0, 30)
-            .map((d) => (
-              <LogRow key={d.date} day={d} byId={byId} forceOpen={openDate === d.date} />
-            ))}
-        </div>
-      </section>
+      {(() => {
+        // Pagination for the log list — #66 scale defaults. At 500 days a
+        // fresh render allocated 500 accordion rows even though only 30
+        // were visible pre-scroll; the button lets the user extend by
+        // LOG_PAGE_SIZE per tap.
+        const nonEmpty = days
+          .slice()
+          .reverse()
+          .filter((d) => {
+            const anyExDone = Object.values(d.exercises ?? {}).some((e) => e.done);
+            const anyRun = (d.runs?.length ?? 0) > 0;
+            const anyNote = !!d.notes?.trim();
+            const anySymptom = d.symptoms != null;
+            return anyExDone || anyRun || anyNote || anySymptom;
+          });
+        // If the user clicked into a specific day from the heatmap and that
+        // day is outside the current page, extend the page to include it —
+        // so the scroll-into-view actually lands.
+        const rendered = nonEmpty.slice(0, logPage * LOG_PAGE_SIZE);
+        const idxOfOpen = openDate ? nonEmpty.findIndex((d) => d.date === openDate) : -1;
+        if (idxOfOpen >= rendered.length && idxOfOpen !== -1) {
+          const needed = Math.ceil((idxOfOpen + 1) / LOG_PAGE_SIZE);
+          if (needed > logPage) {
+            // Defer to next tick so we don't setState mid-render
+            queueMicrotask(() => setLogPage(needed));
+          }
+        }
+        const hasMore = rendered.length < nonEmpty.length;
+        return (
+          <section className="space-y-3">
+            <h2 className="font-mono text-[13px] uppercase tracking-widest">
+              Log — {nonEmpty.length} active day{nonEmpty.length === 1 ? "" : "s"}
+              {" · showing "}
+              {rendered.length}
+            </h2>
+            <div className="rounded border border-line bg-surface divide-y divide-line-soft">
+              {rendered.map((d) => (
+                <LogRow
+                  key={d.date}
+                  day={d}
+                  byId={byId}
+                  forceOpen={openDate === d.date}
+                />
+              ))}
+            </div>
+            {hasMore ? (
+              <button
+                type="button"
+                onClick={() => setLogPage((p) => p + 1)}
+                className="w-full mt-1 py-3 min-h-[44px] rounded border border-line text-ink hover:bg-line-soft font-mono text-[11px] uppercase tracking-wider"
+              >
+                Load {Math.min(LOG_PAGE_SIZE, nonEmpty.length - rendered.length)} more
+              </button>
+            ) : null}
+          </section>
+        );
+      })()}
     </div>
   );
 }
