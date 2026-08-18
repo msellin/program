@@ -109,15 +109,23 @@ export function buildRevealCopy(
 }
 
 /**
- * Program display name from goal.display_name if present, else the slug.
- * Intentionally does NOT read from the manifest (that'd require an async
- * caller); accepts what the program JSON already ships.
+ * Program display name. Prefers a title-cased slug because the slug matches
+ * the manifest name for every current program (`overhead-mobility` →
+ * "Overhead Mobility" = manifest name, whereas `program_goal.display_name`
+ * is often the target *metric* like "Loaded overhead shoulder flexion").
+ * Falls back to program_goal.display_name only when the slug is missing.
+ * Comprehensive audit 2026-08-18 P1-4.
  */
 function deriveProgramName(program: Program): string {
+  const slug = (program as unknown as { slug?: string }).slug;
+  if (slug) {
+    return slug
+      .split("-")
+      .map((w) => (w.length ? w[0].toUpperCase() + w.slice(1) : w))
+      .join(" ");
+  }
   const goal = program.program_goal;
   if (goal?.display_name) return goal.display_name.replace(/\s+/g, " ").trim();
-  const slug = (program as unknown as { slug?: string }).slug;
-  if (slug) return slug.replace(/-/g, " ");
   return "Terav";
 }
 

@@ -41,8 +41,26 @@ export default function ReportPage() {
   // more welcoming.
   const initialStore = useStore.getState().store;
   const initialLogCount = Object.keys(initialStore.logs ?? {}).length;
+  // Prefer a program-scoped default: if there's an active program, pick the
+  // narrowest preset that covers the program's elapsed weeks. Otherwise use
+  // the log-count heuristic. Comprehensive audit 2026-08-18 P1-8 — 6-week
+  // programs on the "all" (3y) preset showed mostly-empty axes.
+  const initialProgramStart = initialStore.user_profile?.active_program_started_at;
+  const programElapsedDays = initialProgramStart
+    ? Math.max(0, Math.floor((Date.now() - new Date(initialProgramStart).getTime()) / 864e5))
+    : null;
+  const programScopedDefault: RangePreset | null =
+    programElapsedDays == null
+      ? null
+      : programElapsedDays <= 28
+        ? "4w"
+        : programElapsedDays <= 84
+          ? "12w"
+          : programElapsedDays <= 182
+            ? "26w"
+            : "all";
   const [preset, setPreset] = useState<RangePreset>(
-    initialLogCount >= 28 ? "12w" : "all",
+    programScopedDefault ?? (initialLogCount >= 28 ? "12w" : "all"),
   );
   const [error, setError] = useState<string | null>(null);
   const store = useStore((s) => s.store);
@@ -207,17 +225,18 @@ export default function ReportPage() {
             label="Morning check"
             value={[
               report.overview.stateDistribution.green
-                ? `${report.overview.stateDistribution.green}g`
+                ? `${report.overview.stateDistribution.green} green`
                 : null,
               report.overview.stateDistribution.amber
-                ? `${report.overview.stateDistribution.amber}a`
+                ? `${report.overview.stateDistribution.amber} amber`
                 : null,
               report.overview.stateDistribution.red
-                ? `${report.overview.stateDistribution.red}r`
+                ? `${report.overview.stateDistribution.red} red`
                 : null,
-              report.overview.stateDistribution.unchecked
-                ? `${report.overview.stateDistribution.unchecked}?`
-                : null,
+              // Skip the "unchecked" line on the shareable report — a fresh
+              // account with a 6-week program showed "1047 unchecked" against
+              // a default 3-year range, which read as a printf bug on
+              // shareable surfaces. Comprehensive audit 2026-08-18 P1-9.
             ]
               .filter(Boolean)
               .join(" · ") || "—"}

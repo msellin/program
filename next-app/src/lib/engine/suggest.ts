@@ -85,6 +85,19 @@ const VOLUME_BLOCKS = new Set(["block_squat_volume"]);
 // Blocks whose scheme is a moderate variant day (65-75% TM).
 const VARIANT_BLOCKS = new Set(["block_squat_variant"]);
 
+// Concurrent Strength Maintenance uses fixed-percentage maintenance
+// prescriptions rather than 5/3/1 cycles. Before this map, CSM strength
+// days fell through to the autoreg-from-last-set path at 55% TM cold-
+// start — silently voiding the JSON-authored "5×5 @ 75% TM" scheme.
+// Comprehensive audit 2026-08-18 P0-5. Encoded per-block-per-pattern
+// because Heavy uses different %s for squat vs pull. If CSM adds more
+// strength blocks, extend here.
+const MAINTENANCE_BLOCK_PCTS: Record<string, (exId: string) => number> = {
+  block_strength_heavy: (exId) =>
+    exId.includes("pull") || exId.includes("dl") || exId.includes("deadlift") ? 0.78 : 0.75,
+  block_strength_moderate: () => 0.65,
+};
+
 export function suggestForExercise(
   exId: string,
   blockId: string,
@@ -139,6 +152,25 @@ export function suggestForExercise(
   const adjNote = adjMod !== 1
     ? ` User-confirmed adjustment: ×${adjMod.toFixed(2)} (${store.day_adjustments?.[todayISO]?.reason ?? "manual"}).`
     : "";
+
+  // CSM maintenance strength days — fixed percentage, no cycle ramp.
+  const maintPctFn = MAINTENANCE_BLOCK_PCTS[blockId];
+  if (maintPctFn) {
+    const pct = maintPctFn(exId);
+    const kg = round(tm * pct * combinedMod);
+    // Pull patterns run 5×3, everything else 5×5. Matches the JSON schemes
+    // "5×5 @ 75% TM" for squat and "5×3 @ 78% TM" for pull at
+    // concurrent-strength-maintenance.json:287-297.
+    const isPull = exId.includes("pull") || exId.includes("dl") || exId.includes("deadlift");
+    const repsStr = isPull ? "3" : "5";
+    const repsNum = isPull ? 3 : 5;
+    return {
+      top_set: { kg, reps: repsStr },
+      fsl: { kg, sets: 5, reps: repsNum },
+      state: todayState,
+      reasoning: `Maintenance day: 5×${repsStr} @ ${Math.round(pct * 100)}% TM, RPE cap 7.${stateNote}${adjNote}`,
+    };
+  }
 
   // Sat moderate volume — 65% TM × 5 for 5 sets. No top-set / FSL structure.
   if (VOLUME_BLOCKS.has(blockId)) {

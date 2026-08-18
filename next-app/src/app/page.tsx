@@ -302,7 +302,12 @@ export default function TodayPage() {
           shuffle in weeks 3+ as a bug. */}
       {primary.generation_strategy === "multi_dimensional" && userProfile?.active_program_started_at ? (
         (() => {
-          const started = new Date(userProfile.active_program_started_at + "T00:00:00");
+          // `active_program_started_at` is a full ISO string ending in Z.
+          // Concatenating "T00:00:00" without stripping first produced
+          // `Invalid Date` → "Week NaN" on Today for every multi_dim program.
+          // Match schedule.ts:251 + plan-generator.ts:228 with the same guard.
+          // Comprehensive audit 2026-08-18.
+          const started = new Date(userProfile.active_program_started_at.slice(0, 10) + "T00:00:00");
           const today = new Date(activeDate + "T00:00:00");
           const daysIn = Math.max(0, Math.floor((today.getTime() - started.getTime()) / 864e5));
           const week = Math.floor(daysIn / 7) + 1;

@@ -99,7 +99,7 @@
       "short_description": "For lifters adding cardio without losing the squat. Explosive-strength cost bounded, cited, PR-banned.",
       "who_this_is_for": "You have a documented strength floor you'd rather not lose. You want aerobic capacity. Traditional 5/3/1 fights with running; this program bounds the cost against Schumann 2022's SMD data.",
       "what_youll_achieve": "Submax HR down 8-15 bpm at fixed pace, back squat / block pull / front squat maintained within 2.5 kg of pre-block TM, RPE ceiling 7 throughout (Schumann 2022 explosive-strength discipline).",
-      "retest": "Cycle-end 5RM confirm + submax HR at row pace-5. Every 4 weeks.",
+      "retest": "Cycle-end 5RM confirm + submax HR at row pace-5. At week 8 (end of block).",
       "tags": [
         "strength",
         "aerobic",
@@ -143,7 +143,7 @@
       "id": "overhead-mobility",
       "slug": "overhead-mobility",
       "name": "Overhead Mobility",
-      "category": "skill",
+      "category": "asymmetry",
       "weakness_target": "shoulder_thoracic_scap_range_under_load",
       "duration_weeks": 10,
       "difficulty": "multi-tier",

@@ -238,12 +238,19 @@ export type PauseResumeSignal = {
  */
 export function detectPauseResume(store: Store, todayISO: string): PauseResumeSignal {
   const dates = Object.keys(store.logs).sort().reverse();
+  // Count a day as "training activity" ONLY if the user completed an
+  // exercise or logged a run. Morning-check symptom entries do NOT count.
+  // Prior behavior treated `symptoms != null` as activity — a user who
+  // logged the morning check religiously but skipped a week of lifts would
+  // then see "Welcome back — 18 days away → 60-70% previous TM" on
+  // return, which is the opposite of what they want. Comprehensive audit
+  // 2026-08-18.
   const lastWithActivity = dates.find((d) => {
     const day = store.logs[d];
-    return (
-      d !== todayISO &&
-      (Object.values(day.exercises).some((e) => e.done) || day.symptoms != null)
-    );
+    if (d === todayISO) return false;
+    if (Object.values(day.exercises).some((e) => e.done)) return true;
+    if (day.runs && day.runs.length > 0) return true;
+    return false;
   });
   if (!lastWithActivity) {
     return {

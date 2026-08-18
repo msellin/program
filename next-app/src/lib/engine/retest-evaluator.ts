@@ -244,6 +244,12 @@ export function formatMetric(value: number | null, unit: string): string {
   if (unit === "seconds") {
     const abs = Math.abs(Math.round(value));
     const sign = value < 0 ? "−" : "";
+    // Value-magnitude heuristic: rowing pace / 2K times land at 90+ seconds
+    // and read as mm:ss ("7:52"). Skill / mobility holds (TGU, wall hold,
+    // freestand) land under 90s and read as "45s" — mm:ss format ("0:45")
+    // was a print-fallback bug on those cards. Comprehensive audit
+    // 2026-08-18 P1-6.
+    if (abs < 90) return `${sign}${abs}s`;
     return `${sign}${Math.floor(abs / 60)}:${String(abs % 60).padStart(2, "0")}`;
   }
   if (unit === "bpm" || unit === "kg" || unit === "watts") {

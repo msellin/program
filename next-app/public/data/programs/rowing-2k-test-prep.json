@@ -976,7 +976,7 @@
       "note": "HERITAGE VO2max variance extrapolated to 2K rowing performance. Anaerobic-heavy 2K response tracks aerobic VO2max response with a task-specificity multiplier — trained 2K coordination lifts even non-responders slightly."
     },
     "requires_baselines": 2,
-    "primary_signal_metric_id": "threshold_pace_500m",
+    "primary_signal_metric_id": "threshold_pace_500m_seconds",
     "secondary_signal_metric_ids": [
       "submax_hr_at_threshold"
     ],
@@ -998,7 +998,7 @@
   },
   "retest_metrics_mid_block": [
     {
-      "metric_id": "threshold_pace_500m",
+      "metric_id": "threshold_pace_500m_seconds",
       "at_week": 3,
       "cadence_weeks": 3,
       "trigger": "user_initiated",
