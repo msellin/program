@@ -316,8 +316,9 @@ function eyebrowFor(p: Proposal): string {
     case "tm_bump":
       return "Signal · headroom detected";
     case "non_responder_recommendation":
+      // Copy audit 2026-08-18 — dropped "HERITAGE" internal codename.
       return p.verdict === "true_non_response"
-        ? "Signal · HERITAGE non-responder pattern"
+        ? "Signal · not responding to current dose"
         : "Signal · under-dosing pattern";
     case "retest_due":
       return p.cadenceKind === "mid_block"
@@ -339,7 +340,8 @@ function acceptVerbFor(p: Proposal): string {
     case "non_responder_recommendation":
       // Accept just acknowledges — the arc change itself is a user
       // decision on the /programs page, not something the engine auto-does.
-      return "Got it";
+      // Copy audit 2026-08-18 — "Got it" broke the imperative-verb family.
+      return "Acknowledge";
     case "retest_due":
       return "Log reading";
   }

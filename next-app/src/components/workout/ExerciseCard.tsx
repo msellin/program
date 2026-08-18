@@ -213,7 +213,7 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
               )}
             >
               {hasWarning ? (
-                <AlertTriangle size={15} strokeWidth={1.9} />
+                <AlertTriangle size={15} strokeWidth={1.75} />
               ) : (
                 <Info size={15} strokeWidth={1.75} />
               )}

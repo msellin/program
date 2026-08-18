@@ -1,6 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { classify } from "@/lib/engine/non-responder-classifier";
+import { InfoSheet } from "@/components/InfoSheet";
 import type { Program, Store } from "@/lib/schemas";
 import type {
   ClassificationVerdict,
@@ -31,6 +33,7 @@ export function HeritageClusterChip({
   program: Program;
   store: Store;
 }) {
+  const [open, setOpen] = useState(false);
   const classifier = (
     program as unknown as {
       non_responder_classifier?: Program["non_responder_classifier"];
@@ -45,25 +48,57 @@ export function HeritageClusterChip({
   const label = labelFor(result.composite_verdict);
   if (!label) return null;
 
+  // Mobile-UX audit 2026-08-18 (P1) — chip was `<span title="…">` so touch
+  // users had no way to reveal the composite_copy explanation. Wrap in a
+  // real button opening an InfoSheet. The visual size stays tiny (10px
+  // pill) but tap target expands invisibly via `p-2 -m-2` inset trick to
+  // meet the 44px min without altering the header rhythm.
   return (
-    <span
-      className={`inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest ${label.tone}`}
-      title={result.composite_copy || undefined}
-    >
-      <span aria-hidden className="w-1.5 h-1.5 rounded-full bg-current" />
-      {label.text}
-    </span>
+    <>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        aria-label={`${label.text}. Tap to see why.`}
+        className={`inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest ${label.tone} hover:brightness-110`}
+      >
+        <span aria-hidden className="w-1.5 h-1.5 rounded-full bg-current" />
+        {label.text}
+      </button>
+      {open ? (
+        <InfoSheet title={`${label.text} — engine read`} onClose={() => setOpen(false)}>
+          <p>{result.composite_copy || "No explanation available."}</p>
+          {result.per_metric.length > 0 ? (
+            <ul className="mt-3 space-y-1 font-mono text-[12px]">
+              {result.per_metric.map((m) => (
+                <li key={m.metric_id}>
+                  <span className="text-muted">{m.metric_id} ({m.role}):</span>{" "}
+                  <span className="text-ink">{m.verdict.replace(/_/g, " ")}</span>
+                  {m.delta_at_mid_block != null ? (
+                    <> · Δ {m.delta_at_mid_block.toFixed(2)}</>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </InfoSheet>
+      ) : null}
+    </>
   );
 }
 
 function labelFor(v: ClassificationVerdict): { text: string; tone: string } | null {
+  // Copy audit 2026-08-18 — dropped the "Cluster A/B/C" research-protocol
+  // vocabulary from the chip; colour + label carry the state. The full
+  // Cluster taxonomy stays in `title` (composite_copy).
+  // Visual-craft audit 2026-08-18 — Cluster C bumped to /25 alpha so the
+  // strongest signal reads as the strongest visual.
   switch (v) {
     case "responding":
-      return { text: "Cluster A · responding", tone: "bg-green/15 text-green" };
+      return { text: "Responding", tone: "bg-green/15 text-green" };
     case "under_dosing":
-      return { text: "Cluster B · under-dosing", tone: "bg-amber/15 text-amber" };
+      return { text: "Under-dosing", tone: "bg-amber/15 text-amber" };
     case "true_non_response":
-      return { text: "Cluster C · non-responder", tone: "bg-red/15 text-red" };
+      return { text: "Not responding", tone: "bg-red/25 text-red" };
     default:
       return null;
   }

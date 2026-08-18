@@ -60,6 +60,14 @@ export function RetestLoggingSheet({
       role="dialog"
       aria-modal="true"
       aria-labelledby="retest-log-title"
+      // Mobile-UX audit 2026-08-18 (P0) — sheet card was parking primary
+      // button under the iPhone home indicator + iOS soft keyboard could
+      // push it below the fold. Two fixes:
+      //   1. Reserve safe-area-inset-bottom on the outer container so the
+      //      card itself is never under the home indicator.
+      //   2. Scrollable overlay `overflow-y-auto` with items-end on mobile
+      //      keeps the keyboard's push-up behavior graceful.
+      style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       className="fixed inset-0 z-[70] bg-ground/95 backdrop-blur-sm flex items-end sm:items-center justify-center overflow-y-auto p-4"
     >
       <div className="w-full max-w-md rounded border border-line bg-surface p-4 space-y-4">
@@ -71,8 +79,7 @@ export function RetestLoggingSheet({
             Log {proposal.metricDisplayName}
           </h2>
           <p className="text-[12px] text-muted mt-1">
-            Recorded {observedAt}. Idempotent — resubmitting today overwrites, not
-            duplicates.
+            Recorded {observedAt}. Re-submitting today updates this entry — it won&apos;t duplicate.
           </p>
         </div>
 

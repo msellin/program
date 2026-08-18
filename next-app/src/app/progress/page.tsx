@@ -405,8 +405,11 @@ function MilestoneLiftGroup({
               prior 4-fact soup. Line 1: current TM (read-only). Line 2: one
               comparator only — next milestone with days-until + delta.
               "Final target by date" moved into the expanded state so the
-              collapsed row stays scannable. Founder rule: bars over prose. */}
-          <p className="text-[11px] text-muted mt-0.5">
+              collapsed row stays scannable. Founder rule: bars over prose.
+              Visual-craft audit 2026-08-18 — line 2 promoted from 11px muted
+              to 12px ink (it's the primary comparator, not a caption) and
+              mt-0.5 → mt-1 so the two lines read as structured hierarchy. */}
+          <p className="text-[12px] text-ink mt-1">
             {currentTM != null ? `TM ${currentTM} kg` : "TM —"}
             {next ? (
               <>
@@ -467,7 +470,11 @@ function MilestoneLiftGroup({
                         missed
                       </span>
                     ) : days <= 14 ? (
-                      <span className="ml-1 px-1.5 py-0.5 rounded bg-amber text-surface text-[10px] font-mono uppercase tracking-wider">
+                      // Visual-craft audit 2026-08-18 — was `bg-amber` full-fill
+                      // which competed with `beaten` for loudest pill and
+                      // stacked amber alerts on Progress. Only `beaten` keeps
+                      // full-fill; every warning treatment goes to /20 alpha.
+                      <span className="ml-1 px-1.5 py-0.5 rounded bg-amber/20 text-amber text-[10px] font-mono uppercase tracking-wider">
                         soon
                       </span>
                     ) : null}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useState } from "react";
+import { ChevronDown } from "lucide-react";
 import { getCitationById, loadCitations, type Citation } from "@/lib/engine/citations";
 
 /**
@@ -46,9 +47,11 @@ export function CitationRef({ id }: { id: string }) {
           <span className="text-muted">Source:</span>{" "}
           <span className="text-strong">{citation.display_short}</span>
         </span>
-        <span aria-hidden="true" className={expanded ? "rotate-180 transition-transform" : "transition-transform"}>
-          ▾
-        </span>
+        <ChevronDown
+          size={12}
+          aria-hidden="true"
+          className={expanded ? "rotate-180 transition-transform" : "transition-transform"}
+        />
       </button>
       {expanded ? (
         <div

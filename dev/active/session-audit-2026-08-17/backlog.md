@@ -42,7 +42,7 @@ Grouped by theme, ordered within by impact. Check items off as you ship them.
 
 **~3h total. Non-blocking but each is a real fail.**
 
-- [ ] **A1 · `sr-only <h3>` in ProposalCard duplicates visible eyebrow** (S) — Screen reader reads the section title twice. Delete the `sr-only` header; use the eyebrow as `aria-labelledby` target. → `app-accessibility #1` · `ProposalCard.tsx`
+- [x] **A1 · `sr-only <h3>` in ProposalCard duplicates visible eyebrow** (S) — **DONE 2026-08-18** ProposalCard.tsx:139 uses the visible eyebrow `<h3 id="proposal-{id}">` as the `aria-labelledby` target directly. No sr-only header; screen readers read the section title once.
 
 - [ ] **A2 · Muted body text on tinted proposal backgrounds** (S) — `text-muted` (~55% ground) on `bg-amber/10` / `bg-green/10` / `bg-slate/10` may drop below WCAG 4.5:1. Test contrast; bump to `text-ink` if failing. → `app-accessibility #2`
 
@@ -52,9 +52,9 @@ Grouped by theme, ordered within by impact. Check items off as you ship them.
 
 - [ ] **A5 · `<h2 id="day1-title">` orphaned without route `<h1>` above it** (S) — Day1EmptyState is the only heading on Today when it fires; page has no `<h1>Today</h1>` visible sibling. Either promote Day1EmptyState heading to `<h1>` when it's the only content, or ensure `sr-only <h1>` exists. → `app-accessibility #5`
 
-- [ ] **A6 · H1_b `text-transparent` invisible in Windows Forced Colors mode** (S) — Gradient clip on H1_b breaks under `forced-colors: active`. Add `@media (forced-colors: active)` block in `globals.css`. → `landing-accessibility #1`
+- [x] **A6 · H1_b `text-transparent` invisible in Windows Forced Colors mode** (S) — **DONE 2026-08-17** `@media (forced-colors: active)` block in landing/globals.css:136.
 
-- [ ] **A7 · ThreeWayContrast desktop `<table>` missing `scope="col"` / `scope="row"`** (S) — With the new Scope row leading, screen readers can't associate cell → header on desktop. Add `scope` attrs. → `landing-accessibility #3` · `ThreeWayContrast.tsx:106-113`
+- [x] **A7 · ThreeWayContrast desktop `<table>` missing `scope="col"` / `scope="row"`** (S) — **DONE 2026-08-17** scope="col" + scope="row" applied throughout ThreeWayContrast.tsx.
 
 - [ ] **A8 · H1_c is a `<p>`, not sibling to `<h1>`** (S) — Splits the hero utterance for NVDA/JAWS. Fold H1_c into the `<h1>` as a block-styled span. → `landing-accessibility #2`
 
@@ -66,15 +66,15 @@ Grouped by theme, ordered within by impact. Check items off as you ship them.
 
 - [x] **M1 · Sub-pages use `min-h-screen` not `min-h-dvh`** (S) — **DONE** min-h-dvh applied across evidence/roadmap/programs/programs-slug/LegalLayout.
 
-- [ ] **M2 · Programs snap carousel dots are decorative** (S) — Five identical `bg-white/25` dots below the 5-card carousel with no active-state binding. Delete the dots (peek alone is affordance) OR wire `IntersectionObserver` on snap children. → `landing-mobile-ux #3` · `Programs.tsx:91-99`
+- [x] **M2 · Programs snap carousel dots are decorative** (S) — **DONE 2026-08-17** decorative dots deleted (Programs.tsx:91-94 fix comment). Peek is the affordance.
 
 - [ ] **M3 · Interactive cards are hover-only** (M) — 83 `hover:border` / `hover:bg` classes without `focus-visible:` / `active:` twins. Mobile visitors see no tap affordance. Add a `.card-interactive` utility in `globals.css`. → `landing-mobile-ux #4`
 
-- [ ] **M4 · Hero stat row wraps at 393px** (S) — "5 programs" wraps to two lines at `font-mono text-lg`. Change to `text-base sm:text-xl leading-tight`. → `landing-mobile-ux #5` · `Hero.tsx:116-133`
+- [x] **M4 · Hero stat row wraps at 393px** (S) — **DONE 2026-08-17** `text-base leading-tight sm:text-xl` applied.
 
 - [ ] **M5 · Modal-stacking fragility is systemic** (S to patch, M to fix right) — The z-index issue we just patched (OnboardingRunner vs IntroGallery) can recur with `RestTimerHost`, `ConfirmSheet`. Introduce a modal-registry pattern OR normalize to a `z-modal-{n}` scale in globals. → `app-mobile-ux #1`
 
-- [ ] **M6 · body + `<main>` compound bottom padding** (S) — Both apply `pb-[calc(64px+env(safe-area-inset-bottom))]`. Double-padding on iOS. Remove from one. → `app-mobile-ux #2`
+- [x] **M6 · body + `<main>` compound bottom padding** (S) — **DONE 2026-08-17** body padding removed (layout.tsx:66); AppShell main owns the pad-for-bottom-nav calc.
 
 - [x] **M7 · ProposalCard has two dismiss affordances** (S) — **DONE 2026-08-17** X-icon dismiss removed; Ignore button is the semantic verb (matches the landing promise).
 
@@ -94,15 +94,15 @@ Grouped by theme, ordered within by impact. Check items off as you ship them.
 
 - [ ] **V3 · H1_c at 24px competes with sub for hierarchy weight** (S) — H1_c is `text-2xl` (24px), sub is `text-lg` (18px). H1_c should either grow (become primary emphasis line) or shrink (subordinate to H1). → `landing-visual-craft #3`
 
-- [ ] **V4 · `text-balance` on H1 fights hardcoded `<br>`** (S) — Remove `text-balance` from the H1; rely on the manual `<br className="hidden sm:inline">` for the intended sm+ break. → `landing-visual-craft #4` · `Hero.tsx:59`
+- [x] **V4 · `text-balance` on H1 fights hardcoded `<br>`** (S) — **DONE** `text-balance` no longer on the Hero H1.
 
 - [ ] **V5 · Slate token does three jobs in app** (M) — Slate is used for passive info + engine-cited proposals + opportunistic proposals. Ambiguous. Split into `slate-info` and `slate-cta` OR pick one job for slate. → `app-visual-craft #1`
 
-- [ ] **V6 · CitationRef unicode `▾` vs lucide inconsistency** (S) — Every other expand affordance uses `<ChevronDown from lucide-react />`. CitationRef uses the unicode `▾` glyph. Switch to lucide. → `app-visual-craft #2` · `CitationRef.tsx`
+- [x] **V6 · CitationRef unicode `▾` vs lucide inconsistency** (S) — **DONE 2026-08-18** switched to lucide ChevronDown with rotate-180 on expand.
 
-- [ ] **V7 · `strokeWidth={1.9}` outlier in ExerciseCard** (S) — Every other lucide icon in the app uses `strokeWidth={1.75}` (default). Change to `1.75`. → `app-visual-craft #3` · `ExerciseCard.tsx`
+- [x] **V7 · `strokeWidth={1.9}` outlier in ExerciseCard** (S) — **DONE 2026-08-18** AlertTriangle strokeWidth aligned to 1.75.
 
-- [ ] **V8 · ProposalStack tight stacking** (S) — `space-y-2` between stacked proposals feels crowded when two proposals fire simultaneously. Bump to `space-y-3`. → `app-visual-craft`
+- [x] **V8 · ProposalStack tight stacking** (S) — **DONE 2026-08-18** `space-y-3` applied.
 
 - [ ] **V9 · Primary-CTA convention collision** (S) — Bronze mono-caps buttons (`Apply lighter`) AND bronze sentence-case buttons (`Open morning check`) coexist. Pick one convention. → `app-visual-craft`
 
@@ -112,7 +112,7 @@ Grouped by theme, ordered within by impact. Check items off as you ship them.
 
 **~2h total.**
 
-- [ ] **C1 · Landing hero verb "sharpen" doesn't survive to app** (S) — App metadata title fixed; but `Day1EmptyState.tsx:32` says `"nothing before it means anything to sharpen"` (verb without object). Rewrite: `"One focus, sharpened every session — starts with today's check."` → `app-copy-clarity #4` · `Day1EmptyState.tsx:30`
+- [x] **C1 · Landing hero verb "sharpen" doesn't survive to app** (S) — **DONE** Day1EmptyState.tsx:28 reads "One focus, sharpened every session." with grounded subtitle. The verb-without-object phrasing is gone.
 
 - [ ] **C2 · `life_load` label conflicts with `scale_anchor` anchor words** (S) — Check page label says `"Life load (0=fresh, 10=wrecked)"`. Engine-builder onboarding says `"Cooked / running on fumes"`. Rowing says `"Cooked — pull is a grind"`. Four synonyms for one scale. Unify to `"Cooked"` at high anchor across all `scale_anchor.anchors.high` and the `/check` label. → `app-copy-clarity #5` · 6 JSONs + `check/page.tsx:156`
 
@@ -128,7 +128,7 @@ Grouped by theme, ordered within by impact. Check items off as you ship them.
 
 **~1h total. Mostly good post-Phase-1-6.**
 
-- [ ] **MO1 · `animate-card-in` referenced in ProposalCard code but not defined** (S) — Class doesn't exist in the tree. Add a 120ms opacity+translateY keyframe with `prefers-reduced-motion` guard, OR remove the class name. → `app-motion-perf #1`
+- [x] **MO1 · `animate-card-in` referenced in ProposalCard code but not defined** (S) — **DONE** class no longer referenced anywhere in the tree.
 
 - [ ] **MO2 · Service-worker cache-key after domain migration** (S) — Users who visited `program-v2.pages.dev` may have the old SW cached, causing stale assets at `app.terav.fit`. Bump SW version to force re-fetch. → `app-motion-perf`
 

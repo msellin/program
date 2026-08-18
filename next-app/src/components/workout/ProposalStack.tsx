@@ -35,7 +35,7 @@ export function ProposalStack({ program, date }: { program: Program | null | und
   if (proposals.length === 0) return null;
 
   return (
-    <section aria-label="Engine proposals" className="space-y-2">
+    <section aria-label="Engine proposals" className="space-y-3">
       {proposals.map((p) => (
         <ProposalCard key={p.id} proposal={p} date={date} />
       ))}
