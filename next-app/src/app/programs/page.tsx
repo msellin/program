@@ -86,7 +86,11 @@ export default function ProgramCatalogPage() {
           Each program is one focus arc — an engine, a skill, a lift, a stubborn joint.
           The rest of your week stays yours. Personalised to your baseline, adaptive to how you respond.
         </p>
-        <p className="text-[11px] text-muted pt-1 leading-relaxed">
+        {/* Visual-craft audit 2026-08-18 — legend defines the trust
+            affordance for the catalog. 11px muted was invisible on
+            iPhone SE. Promoted to 12px ink; mono-caps colored terms
+            keep their brightness. */}
+        <p className="text-[12px] text-ink pt-1 leading-relaxed">
           <span className="font-mono uppercase text-amber">referenced</span> = every claim cites a paper, simulator harness passes.{" "}
           <span className="font-mono uppercase text-slate">reviewed</span> = domain specialist has audited the citations against literature.{" "}
           <span className="font-mono uppercase text-green">verified</span> = ≥5 users completed the arc with subjective success.

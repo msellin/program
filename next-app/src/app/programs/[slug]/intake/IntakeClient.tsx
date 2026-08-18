@@ -1311,7 +1311,11 @@ function WizardConsentScreen({
       <ul className="space-y-3">
         {(items ?? []).map((c) => (
           <li key={c.id}>
-            <label className="flex items-start gap-3 cursor-pointer">
+            {/* Visual-craft audit 2026-08-18 — consent rows were the smallest
+                tap targets in the wizard (~32-40px depending on label wrap).
+                Everything else in the wizard is 52-56px. Add min-h-[52px] +
+                p-2 to bring parity. */}
+            <label className="flex items-start gap-3 cursor-pointer min-h-[52px] p-2 -mx-2 rounded hover:bg-line-soft/40">
               <input
                 type="checkbox"
                 checked={consents[c.id] === true}
