@@ -329,6 +329,35 @@
         "help": "If yes, wrist-load drills are prohibited until cleared. The plan will offer hollow-body and shoulder-endurance drills only, with a note to clear with a clinician."
       },
       {
+        "id": "bail_out_readiness",
+        "label": "If your handstand tips past vertical, what happens?",
+        "type": "select",
+        "required": true,
+        "help": "Fear of falling gates handstand progress more than physical capacity for most self-taught users. Answer honestly — Phase 0 teaches this if you need it.",
+        "options": [
+          {
+            "value": "never_inverted",
+            "label": "I've never been inverted",
+            "hint": "Phase 0 required"
+          },
+          {
+            "value": "would_fall",
+            "label": "I'd fall onto my back or head",
+            "hint": "Phase 0 required"
+          },
+          {
+            "value": "can_step_out",
+            "label": "I can step or twist out but haven't drilled it",
+            "hint": "Phase 0 recommended"
+          },
+          {
+            "value": "can_exit_reliably",
+            "label": "I can cartwheel or pirouette out reliably",
+            "hint": "Skip Phase 0"
+          }
+        ]
+      },
+      {
         "id": "consent_symptom_data",
         "label": "I understand this program is a training template and not medical advice. I'll stop and see a clinician if wrist or shoulder pain persists after a session or if any bail results in a fall injury.",
         "type": "boolean",
@@ -524,10 +553,42 @@
   },
   "phases": [
     {
+      "id": "phase_0_bail_out_prep",
+      "name": "Week 0 — Exits before line",
+      "starts": "2026-01-05",
+      "ends": "2026-01-11",
+      "duration_weeks": 1,
+      "goal": "Learn to fall on purpose before you learn to hold vertical. Fear-of-falling gates handstand progress more than physical capacity for most self-taught users.",
+      "gates_on": {
+        "intake_answer": {
+          "bail_out_readiness": [
+            "never_inverted",
+            "would_fall",
+            "can_step_out"
+          ]
+        }
+      },
+      "rationale": "Fear-of-falling literature: Adkin & Frank 2000/2002 (postural threat alters muscle activation before the fall); Carpenter 2001 (anxiety degrades balance strategy); Hardy 1996 catastrophe model (anxiety above threshold causes performance collapse, not linear degradation); Bandura (mastery experiences on bail-outs reduce threat perception on the primary skill — you don't reduce fear by walking more). Gymnastics/circus pedagogy (USA Gymnastics, NICA, Emmet Louis, Yuval Ayalon) treats cartwheel exit / pirouette / tuck forward roll as pre-requisite to freestanding, not optional. Phase 0 is deliberately short — one week of exit drills, not a rehab arc.",
+      "blocks": [
+        "block_bail_wall_cartwheel_exit",
+        "block_bail_quarter_pirouette",
+        "block_bail_tuck_forward_roll",
+        "block_bail_mat_falls"
+      ],
+      "retest_gate": {
+        "criteria_any": [
+          "self_report: bail_out_confidence >= 6 for 2 consecutive days",
+          "coach_or_video_evidence: successful pirouette exit or cartwheel exit demonstrated"
+        ],
+        "on_success": "Advance to phase_1_foundation_prep. bail_out_confidence remains a daily log field the engine consults.",
+        "on_fail": "Repeat Phase 0 for another week. If fear persists >2 weeks, the intake nudges the user to work with a coach for 1-2 sessions — this is the pattern that reliably breaks the fear cycle (see rationale)."
+      }
+    },
+    {
       "id": "phase_1_foundation_prep",
       "name": "Weeks 1-2 — Wrist prep + Kinoshita position ladder (blocked practice)",
-      "starts": "2026-01-05",
-      "ends": "2026-01-18",
+      "starts": "2026-01-12",
+      "ends": "2026-01-25",
       "duration_weeks": 2,
       "blocks": [
         "block_wrist_prep",
@@ -544,8 +605,8 @@
     {
       "id": "phase_2_wall_to_free",
       "name": "Weeks 1-4 — Wall handstand established + first freestand attempts",
-      "starts": "2026-01-05",
-      "ends": "2026-02-01",
+      "starts": "2026-01-12",
+      "ends": "2026-02-08",
       "duration_weeks": 4,
       "blocks": [
         "block_wrist_prep",
@@ -563,8 +624,8 @@
     {
       "id": "phase_3_first_steps",
       "name": "Weeks 1-4 — Single steps + short shuttles",
-      "starts": "2026-01-05",
-      "ends": "2026-02-01",
+      "starts": "2026-01-12",
+      "ends": "2026-02-08",
       "duration_weeks": 4,
       "blocks": [
         "block_wrist_prep",
@@ -582,8 +643,8 @@
     {
       "id": "phase_4_variability",
       "name": "Weeks 1-8 — Variability, turns, obstacles",
-      "starts": "2026-01-05",
-      "ends": "2026-03-01",
+      "starts": "2026-01-12",
+      "ends": "2026-03-08",
       "duration_weeks": 8,
       "blocks": [
         "block_wrist_prep",
@@ -601,8 +662,8 @@
     {
       "id": "phase_all_weeks_3_8",
       "name": "Weeks 3-8 — Interleaved practice for all tiers (post-acquisition)",
-      "starts": "2026-01-19",
-      "ends": "2026-03-01",
+      "starts": "2026-01-26",
+      "ends": "2026-03-08",
       "duration_weeks": 6,
       "blocks": [
         "block_wrist_prep",
@@ -1007,6 +1068,70 @@
       ],
       "capability_slot": "shoulder_overhead_endurance",
       "slot_drill_count": 2
+    },
+    {
+      "id": "block_bail_wall_cartwheel_exit",
+      "name": "Wall cartwheel exit",
+      "category": "skill",
+      "duration_min": 8,
+      "frequency": "3× this week",
+      "items": [
+        {
+          "exercise_id": "wall_cartwheel_exit",
+          "sets": 5,
+          "reps_per_set": 2
+        }
+      ],
+      "note": "The single most-used bail-out for over-tipping. Start from a controlled wall handstand, drop one arm, rotate hips, land on that side's leg. Fail forward, not backward.",
+      "rationale": "Standard gymnastics/circus exit taught pre-freestanding. Once the pattern is automatic, over-tipping stops feeling terrifying because the body knows the exit."
+    },
+    {
+      "id": "block_bail_quarter_pirouette",
+      "name": "Quarter-turn pirouette from wall",
+      "category": "skill",
+      "duration_min": 8,
+      "frequency": "3× this week",
+      "items": [
+        {
+          "exercise_id": "quarter_pirouette_exit",
+          "sets": 5,
+          "reps_per_set": 2
+        }
+      ],
+      "note": "From wall handstand, twist upper body 90° and step down to feet. Practices the escape route to the SIDE when a straight-back cartwheel isn't available.",
+      "rationale": "Wulf 2013 external focus: cue is 'point your chest at the wall' — external target reduces anxiety. Wraps hip rotation into a bail pattern the user can use even when tired."
+    },
+    {
+      "id": "block_bail_tuck_forward_roll",
+      "name": "Tuck forward roll from crow",
+      "category": "skill",
+      "duration_min": 8,
+      "frequency": "3× this week",
+      "items": [
+        {
+          "exercise_id": "tuck_forward_roll_from_crow",
+          "sets": 4,
+          "reps_per_set": 3
+        }
+      ],
+      "note": "From a crow pose, tuck chin, roll forward onto upper back, come up to sitting. Teaches the FORWARD escape route — the one people usually don't have.",
+      "rationale": "Provides a redundant escape (in addition to cartwheel + pirouette). Users with only-cartwheel-out often panic when the tip goes forward instead of sideways. Roll trains the forward option."
+    },
+    {
+      "id": "block_bail_mat_falls",
+      "name": "Deliberate mat falls with breath control",
+      "category": "skill",
+      "duration_min": 6,
+      "frequency": "3× this week",
+      "items": [
+        {
+          "exercise_id": "deliberate_mat_falls",
+          "sets": 6,
+          "reps_per_set": 1
+        }
+      ],
+      "note": "From wall handstand, LET GO ON PURPOSE. Land on mat (crash mat if available, thick yoga mat OK). Exhale on impact. Do this cold — the body needs to prove to itself that a controlled fall is a survivable non-event.",
+      "rationale": "Bandura self-efficacy: mastery experiences on the feared thing (the fall itself) reduce threat perception. The exhale cue borrows from paratrooper training — passive-exhale-on-impact is the anti-freeze response."
     }
   ],
   "weekly_template": {
@@ -1282,7 +1407,14 @@
     },
     "derived_state": "green|amber|red",
     "notes": "string",
-    "derived_state_rule": "red if wrist_symptom_score > 6 OR shoulder_symptom_score > 3 OR new_acute_injury; amber if wrist_symptom_score 4-6 OR life_load >= 7; else green"
+    "derived_state_rule": "red if wrist_symptom_score > 6 OR shoulder_symptom_score > 3 OR new_acute_injury; amber if wrist_symptom_score 4-6 OR life_load >= 7; else green If bail_out_confidence <= 3, the day defers walking attempts to wall-supported holds regardless of symptom score.",
+    "bail_out_confidence": {
+      "type": "int",
+      "range": "0-10",
+      "label": "Bail-out confidence today",
+      "hint": "How confident are you that you can exit an over-tipped handstand safely if it goes wrong right now? 0 = 'terrified', 10 = 'certain'. Low scores gate the engine off walking attempts today.",
+      "optional": true
+    }
   },
   "immediate_actions": [
     {
@@ -1835,5 +1967,21 @@
         "user_action_free": "Do the weekly retest of the tier gate on the day the plan schedules it."
       }
     ]
-  }
+  },
+  "phase_gates": [
+    {
+      "phase_id": "phase_0_bail_out_prep",
+      "gate_type": "intake_answer",
+      "question_id": "bail_out_readiness",
+      "run_if_value_in": [
+        "never_inverted",
+        "would_fall",
+        "can_step_out"
+      ],
+      "skip_if_value_in": [
+        "can_exit_reliably"
+      ],
+      "note": "Users who can already exit reliably skip Phase 0 entirely. Everyone else runs the week."
+    }
+  ]
 }

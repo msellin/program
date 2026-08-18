@@ -149,8 +149,21 @@ progress more than physical capacity does.
 
 **Priority:** MEDIUM — real barrier to Handstand Walk delivery, but requires
 authored content (Phase 0) that changes tier eligibility for real users. Needs
-founder validation before shipping. **PARKED until Path A citation fixes
-complete.**
+founder validation before shipping.
+
+**Status update 2026-08-18** — layers 1-3 shipped. See
+`git log --oneline | grep "Q6"` for the commit. Layer 4 (video demos)
+deferred to the F-brief video library queue.
+
+- L1 · Intake question `bail_out_readiness` added with 4 options, gates Phase 0
+- L2 · Phase 0 `phase_0_bail_out_prep` added with 4 blocks + 4 exercises
+  (wall cartwheel exit, quarter pirouette, tuck forward roll, deliberate mat
+  falls). Existing phases shifted 7 days.
+- L3 · `bail_out_confidence` (0-10) added to `daily_log_schema`; the
+  `derived_state_rule` now defers walking attempts when the score ≤ 3.
+
+Founder validates + iterates on the drill prescriptions before we tell
+beta users about Handstand Walk more broadly.
 
 **Cross-references:** `next-app/public/data/programs/handstand-walk.json`
 (intake + phases), `dev/whitepapers/04_handstand_walk.md` (add

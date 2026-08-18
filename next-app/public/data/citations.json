@@ -1061,6 +1061,45 @@
       "source": "Psychonomic Bulletin & Review 9:185-211",
       "display_short": "Wulf et al. 2002",
       "display_line": "Wulf et al. (2002), Psychonomic Bulletin & Review 9"
+    },
+    {
+      "id": "adkin_frank_2000",
+      "authors": "Adkin AL, Frank JS, Carpenter MG, Peysar GW",
+      "year": 2000,
+      "title": "Postural control is scaled to level of postural threat",
+      "source": "Gait & Posture 12(2):87-93",
+      "display_short": "Adkin et al. 2000",
+      "display_line": "Adkin et al. (2000), Gait & Posture 12(2)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10998604/"
+    },
+    {
+      "id": "carpenter_frank_2001",
+      "authors": "Carpenter MG, Frank JS, Silcher CP, Peysar GW",
+      "year": 2001,
+      "title": "The influence of postural threat on the control of upright stance",
+      "source": "Experimental Brain Research 138(2):210-218",
+      "display_short": "Carpenter et al. 2001",
+      "display_line": "Carpenter et al. (2001), Exp Brain Res 138(2)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11417462/"
+    },
+    {
+      "id": "hardy_1996_catastrophe",
+      "authors": "Hardy L",
+      "year": 1996,
+      "title": "A test of the catastrophe models of anxiety and sports performance against multidimensional anxiety theory",
+      "source": "Anxiety, Stress, & Coping 9(1):69-86",
+      "display_short": "Hardy 1996",
+      "display_line": "Hardy (1996), Anxiety Stress Coping 9(1)"
+    },
+    {
+      "id": "bandura_1997_self_efficacy",
+      "authors": "Bandura A",
+      "year": 1997,
+      "title": "Self-Efficacy: The Exercise of Control",
+      "source": "W. H. Freeman (book)",
+      "display_short": "Bandura 1997",
+      "display_line": "Bandura (1997), Self-Efficacy",
+      "review_note": "Book, not paper. Referenced for the mastery-experiences → threat-perception reduction mechanism used in Phase 0 bail-out drill design."
     }
   ]
 }
