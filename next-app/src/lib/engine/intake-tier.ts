@@ -16,12 +16,15 @@ import type { Program } from "../schemas";
  * (last-defined wins — programs list tiers in ascending order).
  */
 
-// Deliberately narrow: we control the JSON, we control the syntax. Supported:
-// numbers, identifiers, comparison ops (>=, <=, >, <, ==, !=), logical ops
-// (&&, ||), parens. No function calls, no property access, no strings.
-// Anything that doesn't tokenize cleanly returns false (safer than throwing).
+// Supported: numbers, single-quoted strings, identifiers, comparison ops
+// (>=, <=, >, <, ==, !=), logical ops (&&, ||), unary `!`, parens.
+// String literals support ==/!= for enum comparisons like
+// `muscle_up_experience == 'never'`. Added 2026-08-18 after Vector A audit
+// found muscle-up + engine-builder-block-2 shipping string-quoted tier
+// conditions that were silently unreachable.
 type Token =
   | { type: "num"; value: number }
+  | { type: "str"; value: string }
   | { type: "ident"; value: string }
   | { type: "op"; value: string }
   | { type: "lparen" }
@@ -72,6 +75,17 @@ function tokenize(expr: string): Token[] | null {
       i++;
       continue;
     }
+    if (c === "'" || c === "\"") {
+      // Single- or double-quoted string literal. No escape sequences; enum
+      // values are simple identifiers like 'never', 'yes_recent'.
+      const quote = c;
+      let j = i + 1;
+      while (j < expr.length && expr[j] !== quote) j++;
+      if (j >= expr.length) return null; // unterminated string
+      out.push({ type: "str", value: expr.slice(i + 1, j) });
+      i = j + 1;
+      continue;
+    }
     if (/[0-9]/.test(c)) {
       let j = i;
       while (j < expr.length && /[0-9.]/.test(expr[j])) j++;
@@ -94,8 +108,9 @@ function tokenize(expr: string): Token[] | null {
 }
 
 // Recursive-descent parser: expr := or; or := and (|| and)*; and := cmp (&& cmp)*;
-// cmp := term (op term)?; term := num | ident | (expr)
-function evalTokens(tokens: Token[], vars: Record<string, number>): boolean {
+// cmp := term (op term)?; term := num | str | ident | (expr)
+type VarValue = number | string;
+function evalTokens(tokens: Token[], vars: Record<string, VarValue>): boolean {
   let pos = 0;
   const peek = () => tokens[pos];
   const eat = (matcher: (t: Token) => boolean) => {
@@ -107,7 +122,7 @@ function evalTokens(tokens: Token[], vars: Record<string, number>): boolean {
     return null;
   };
 
-  function parseTerm(): number | boolean {
+  function parseTerm(): number | boolean | string {
     const t = peek();
     if (!t) return 0;
     if (t.type === "lparen") {
@@ -117,6 +132,10 @@ function evalTokens(tokens: Token[], vars: Record<string, number>): boolean {
       return v;
     }
     if (t.type === "num") {
+      pos++;
+      return t.value;
+    }
+    if (t.type === "str") {
       pos++;
       return t.value;
     }
@@ -159,6 +178,16 @@ function evalTokens(tokens: Token[], vars: Record<string, number>): boolean {
     ) {
       pos++;
       const right = parseTerm();
+      // String equality: compare directly. Enum tier conditions like
+      // `muscle_up_experience == 'never'` land here.
+      if (typeof left === "string" || typeof right === "string") {
+        const ls = typeof left === "boolean" ? (left ? "true" : "false") : String(left);
+        const rs = typeof right === "boolean" ? (right ? "true" : "false") : String(right);
+        if (t.value === "==") return ls === rs;
+        if (t.value === "!=") return ls !== rs;
+        // Ordering ops on strings are not meaningful — treat as false.
+        return false;
+      }
       const l = typeof left === "boolean" ? (left ? 1 : 0) : left;
       const r = typeof right === "boolean" ? (right ? 1 : 0) : right;
       switch (t.value) {
@@ -176,8 +205,10 @@ function evalTokens(tokens: Token[], vars: Record<string, number>): boolean {
           return l !== r;
       }
     }
-    // No comparison: coerce term to boolean (truthy number)
-    return typeof left === "boolean" ? left : left !== 0;
+    // No comparison: coerce term to boolean (truthy number / non-empty string)
+    if (typeof left === "boolean") return left;
+    if (typeof left === "string") return left.length > 0;
+    return left !== 0;
   }
 
   function parseAnd(): boolean {
@@ -205,7 +236,7 @@ function evalTokens(tokens: Token[], vars: Record<string, number>): boolean {
 
 export function evaluateCondition(
   condition: string,
-  vars: Record<string, number>,
+  vars: Record<string, VarValue>,
 ): boolean {
   const tokens = tokenize(condition);
   if (!tokens) return false;
@@ -299,7 +330,7 @@ export type InferredTier = {
   tier_id: string;
   tier_label: string;
   rationale: string;
-  vars: Record<string, number>;
+  vars: Record<string, VarValue>;
 };
 
 export function inferTier(
@@ -319,7 +350,9 @@ export function inferTier(
   //   2. Numeric answer parsed directly (for `type: number` questions)
   //   3. Boolean answer coerced to 1/0 (for `type: boolean` questions)
   //   4. Per-program self-report proxy map (for `type: select` enum answers)
-  const vars: Record<string, number> = { ...physicalTestResults };
+  //   5. Raw string answer (for `type: select` enums compared to a string
+  //      literal in a tier condition, e.g. `muscle_up_experience == 'never'`)
+  const vars: Record<string, VarValue> = { ...physicalTestResults };
   for (const [qid, ans] of Object.entries(answers)) {
     // 4-then-2 self-report proxy path first — it targets a *different* variable
     // (the physical_test_var) so it doesn't collide with 2/3.
@@ -373,6 +406,16 @@ export function inferTier(
     if (vars[qid] == null) {
       const direct = selfMap[qid]?.[ans];
       if (typeof direct === "number") vars[qid] = direct;
+    }
+
+    // Fallback: raw string answer. Unblocks tier conditions that compare
+    // against a string literal directly, e.g.
+    // `muscle_up_experience == 'never'`. Without this the enum answer
+    // stayed unset and the tier silently defaulted. Added 2026-08-18 after
+    // Vector A audit found two programs (muscle-up, engine-builder-block-2)
+    // shipping unreachable tiers because of this.
+    if (vars[qid] == null && ans != null && ans !== "") {
+      vars[qid] = String(ans);
     }
   }
 

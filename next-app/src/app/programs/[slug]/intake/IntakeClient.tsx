@@ -1510,10 +1510,14 @@ function isGateUnsafe(
 // and isGateUnsafe as reused primitives.
 
 
-function formatVars(vars: Record<string, number>): string {
+function formatVars(vars: Record<string, number | string>): string {
   const parts = Object.entries(vars)
-    .filter(([, v]) => v > 0)
+    .filter(([, v]) => (typeof v === "number" ? v > 0 : v !== ""))
     .slice(0, 4)
-    .map(([k, v]) => `${k.replace(/_/g, " ")} ≈ ${v}`);
+    .map(([k, v]) =>
+      typeof v === "number"
+        ? `${k.replace(/_/g, " ")} ≈ ${v}`
+        : `${k.replace(/_/g, " ")} = ${String(v).replace(/_/g, " ")}`,
+    );
   return parts.length ? parts.join(", ") : "your self-report";
 }
