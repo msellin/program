@@ -1,5 +1,21 @@
 # Block-object rebuild — plan (2026-08-18)
 
+**Status 2026-08-18 (end of Sitting 3):** Phase A (persistence adapter), Phase B
+(schema + materializer), Phase C (Today view flip), Phase D (Week + SessionActions
+flip), Phase E (Heatmap + History + Progress), Phase F (Coach + Report + legacy
+removal) — all shipped. Feature flag `block_object` defaulted ON via
+StoreHydrator; migration from legacy → blocks runs on first mount for existing
+users. Multi-track skip/move works via block identity. Legacy `scheduled_overrides`
++ `skipped` fields retained one release for KV backward-compat; will be removed
+in a follow-up.
+
+The bulk of what follows is historical planning. Kept for reference on decisions
+locked at Phase 0 and for the migration pattern in §10 (which the future Postgres
+adapter will follow).
+
+---
+
+
 Rebuild the day-plan model from *"per-date derived plan with overrides"* to
 *"first-class scheduled_block objects with identity"*. Solves multi-track
 skip/move + Today-view duplication (see

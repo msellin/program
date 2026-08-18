@@ -1,6 +1,6 @@
 # Post-audit P0 tasks (session close)
 
-**Status:** all mechanical + safe-scope items closed 2026-08-17. Five items deferred — each is a real design decision or feature build, not a fix. See "Deferred with reason" at bottom.
+**Status:** mechanical + safe-scope items closed 2026-08-17. Second-pass reconciliation 2026-08-18: A2, A5, B3 SHIPPED as part of the Sitting-1/2/3 rewrites (Proposal citations wired via HERITAGE work, SignalsStrip collapsed → ProposalStack promotes cards to first-class, OnboardingRunner is program-agnostic reading `onboarding_steps[]`). Three items still deferred: A1 overperformer engine rule (real ~2-4h build), F2 CLS on MissedSessionPrompt (self-marked "not P0 in practice"), G3 simulator matrix re-verify (needs Playwright + Supabase auth run — founder-side).
 
 
 
@@ -387,14 +387,14 @@ Substantive feature/design work — not appropriate for a mechanical sweep. Each
 ### A1 · Overperformer engine bump
 New engine rule: N consecutive green days + "felt strong" note keyword → propose TM +2.5 kg via a new proposal component. Needs data-shape design for keyword detection in `notes.ts` + adapt rule in `adapt.ts` + a new proposal card. **~2-4h focused session.**
 
-### A2 · Study citations on proposals
-Requires adding a `sourceCitation` field to the proposal shape, mapping proposal types → underlying studies (e.g. Return-after-layoff → Coyle 1984 detraining), and rendering `Because: {reason}. Source: {short cite}` under each proposal. Needs a data-mapping design pass.
+### A2 · Study citations on proposals — ✅ DONE 2026-08-18
+`proposal.citationId` field on `ProposalBase` type + `CitationRef` component renders under each proposal card (ProposalCard.tsx:219-223). Kind → citation lookup in `proposal-citations.ts`. Every proposal kind now cites a real study; HERITAGE cascade adds Bouchard 1999 + Hecksteden 2015 to the pool.
 
-### A5 · Accept/Ignore visibility at rest
-The SignalsStrip shows "Back after 17 days — soften plan?" as a collapsed banner; the underlying DayAdjustmentProposal with Accept + Ignore only shows when signals warrant a load reduction. Expanding by default (or promoting proposal cards above the strip) is a UX-flow decision. Talk through options first.
+### A5 · Accept/Ignore visibility at rest — ✅ DONE 2026-08-18
+SignalsStrip collapsed banner refactored: DayAdjustmentProposal + ReadinessProposal moved to first-class ProposalStack (Today, above session content). Accept + Ignore render inline on every proposal card (ProposalCard.tsx:230-244). SignalsStrip now shows only informational chips (rescheduled, hip-check-due, morning-check overdue).
 
-### B3 · Program-agnostic onboarding
-Current `Onboarding.tsx` fires only for `anterior-hip-rebuild`. A general 2-step (0-10 scale explanation + Life-load definition) for other programs is a NEW modal — needs design review before adding to fresh-signup flow.
+### B3 · Program-agnostic onboarding — ✅ DONE 2026-08-18
+OnboardingRunner reads `program.onboarding_steps[]` and renders each primitive (`scale_anchor`, `life_load`, `symptom_primer`, `scan_anchor`, `custom_copy`, `FallbackStep`). Per-program dismissal via `program.onboarding.done.<slug>`. Auto-dismissed on intake completion (bug #69 fix).
 
 ### F2 · CLS on MissedSessionPrompt
 Component returns `null` before hydration then pops in ~120px. Fix requires either reserving `min-height` on the parent slot (may leave visible dead space when prompt doesn't fire) or animating `max-height` on the child (adds complexity). Not a P0 CLS problem in practice — flagged for a proper CLS pass later.

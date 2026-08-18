@@ -2,6 +2,16 @@
 
 Consolidated from 10 specialist audits at `dev/audits/session-2026-08-17/`. All findings ranked by beta-blast-radius. Fix cost: S = ≤1h, M = 1-4h, L = ≥4h.
 
+**Reconciliation pass 2026-08-18:** After three sittings of engine + UX work, tick these off — status verified against current codebase:
+- B1 STALE (IntroGallery deleted; onboarding consolidated into OnboardingRunner)
+- B2, B3, B6, B7 DONE (all four commits landed 2026-08-17 / 2026-08-18)
+- M1 DONE (min-h-dvh sweep applied to landing sub-pages)
+- M7 DONE (X-icon dismiss removed from ProposalCard, Ignore button is the semantic verb)
+- A3 IntroGallery references STALE (component removed)
+- A5 partial (Progress rebuild folded standalone card into WeeklyNarrativeTile)
+
+Real open work count: from 44 unchecked → ~27 that are still real. B4 CLS, B5 empty-state copy, A1 sr-only h3 refactor, A2 contrast test, A6-A8 landing accessibility, M2-M6 mobile, and all P3-P5 items remain.
+
 **None of these are ship-blockers.** Consensus verdict across all 10 audits was **go-with-caveats**. The list below is what would move the beta from "works" to "super smooth."
 
 Grouped by theme, ordered within by impact. Check items off as you ship them.
@@ -12,19 +22,19 @@ Grouped by theme, ordered within by impact. Check items off as you ship them.
 
 **~4h total. If you fix nothing else from this list, fix these seven.**
 
-- [ ] **B1 · Two first-run modals fire in sequence** (M) — OnboardingRunner (2-4 program steps) then IntroGallery (5 slides, ~500 words). Slide 3 ("Proposes, never imposes") duplicates FallbackStep. Slide 4 duplicates nav labels the user is about to see. Fix: collapse IntroGallery into 2 slides OR delete it and let OnboardingRunner primitives cover intent. → `app-copy-clarity #1` · `IntroGallery.tsx:14-97`
+- [x] **B1 · Two first-run modals fire in sequence** (M) — ~~OnboardingRunner (2-4 program steps) then IntroGallery~~ **STALE 2026-08-18** IntroGallery deleted; onboarding consolidated into OnboardingRunner (which auto-dismisses on intake completion per #69 fix).
 
-- [ ] **B2 · `day_adjustment_soften` eyebrow reads timid** (S) — `"Not feeling 100%? · needs your ok"` is a hedging question. Every other eyebrow is an engine-voice statement (`"Signal · headroom detected"`). Rewrite to `"Signal · fatigue / pain flagged"`. → `app-copy-clarity #2` · `ProposalCard.tsx:216`
+- [x] **B2 · `day_adjustment_soften` eyebrow reads timid** (S) — **DONE** ProposalCard.tsx now reads `"Signal · fatigue / pain flagged"` (verified proposal-citations map).
 
-- [ ] **B3 · `day_adjustment_soften` has `citationId: null`** (S/M) — Landing claims "every change cites a study" but the safety-critical proposal type doesn't cite. Two paths: (a) add a Halson 2014 or Kellmann 2018 cite to `proposal-citations.ts`; (b) soften landing copy to "every change explains itself — a log signal or a cited study." → `app-landing-alignment #3` · `proposal-citations.ts:22`
+- [x] **B3 · `day_adjustment_soften` has `citationId: null`** — **DONE** proposal-citations.ts:26 → `day_adjustment_soften: "halson_2014"`. Halson 2014 wired as the training-load monitoring anchor.
 
-- [ ] **B4 · CLS at first paint on Today** (S) — ProposalStack + Day1EmptyState mount post-hydration (~200-500ms), causing visible content shift. Reserve `min-height` on the ProposalStack container or gate on hydration completion. → `app-motion-perf` · `page.tsx:168-181`
+- [ ] **B4 · CLS at first paint on Today** (S) — ProposalStack + Day1EmptyState mount post-hydration (~200-500ms), causing visible content shift. **PARTIAL** ProposalStack now gates on `updated_at > 0` (see ProposalStack.tsx:28), reduces first-paint shift. Full `min-height` reserve still open.
 
-- [ ] **B5 · "Rest of your week is still yours" appears in-app in exactly 1 place** (S) — Only engine-builder onboarding step 3 says it. Add one line to `Day1EmptyState.tsx:30` — that ships the promise to every fresh user regardless of program. → `app-landing-alignment #2`
+- [x] **B5 · "Rest of your week is still yours" appears in-app in exactly 1 place** (S) — **DONE** Day1EmptyState.tsx:32 now carries the line ("Terav writes the focus arc; the rest of your week is still yours.").
 
-- [ ] **B6 · Programs page frames as "browse catalog" not "pick your focus"** (S) — H1 says "Programs"; CTA says "Start this program." Rewrite H1 to "Pick your focus," sub to "Each program is one focus arc — an engine, a skill, a lift, a stubborn joint. The rest of your week stays yours." CTA to "Make this my focus." → `app-landing-alignment #4` · `programs/page.tsx:75-77`, `ProgramPreviewClient.tsx:401`
+- [x] **B6 · Programs page frames as "browse catalog" not "pick your focus"** (S) — **DONE** verified: 7 refs to "Pick your focus" across programs page + EmptyStateCard + landing.
 
-- [ ] **B7 · `tm_bump` reason is 45 words** (S) — Ends with "Small step; if it feels heavy next session, you can Ignore the next one and reset." That's reassurance the Ignore button already provides. Cut. → `app-copy-clarity #3` · `adapt.ts:465-468`
+- [x] **B7 · `tm_bump` reason is 45 words** (S) — **DONE** adapt.ts shortened; "Small step; if it feels heavy…" removed.
 
 ---
 
@@ -38,7 +48,7 @@ Grouped by theme, ordered within by impact. Check items off as you ship them.
 
 - [ ] **A3 · `useFocusTrap` restores focus to stale button** (M) — When OnboardingRunner dismisses, focus tries to return to `previouslyFocused.current` which may have unmounted. Falls through to `<body>`. Add fallback: focus `<h1>` or first `<a>` in `<main>`. Bug #5 from Phase 6, still open. → `app-accessibility #3` · `useFocusTrap.ts:50`
 
-- [ ] **A4 · IntroGallery lacks focus trap + `aria-labelledby`** (S) — Full-screen modal with no keyboard trap. Add `useFocusTrap` and `role="dialog" aria-modal="true" aria-labelledby="gallery-title"`. → `app-accessibility #4` · `IntroGallery.tsx:137`
+- [x] **A4 · IntroGallery lacks focus trap + `aria-labelledby`** (S) — **STALE 2026-08-18** IntroGallery deleted, no dialog to fix.
 
 - [ ] **A5 · `<h2 id="day1-title">` orphaned without route `<h1>` above it** (S) — Day1EmptyState is the only heading on Today when it fires; page has no `<h1>Today</h1>` visible sibling. Either promote Day1EmptyState heading to `<h1>` when it's the only content, or ensure `sr-only <h1>` exists. → `app-accessibility #5`
 
@@ -54,7 +64,7 @@ Grouped by theme, ordered within by impact. Check items off as you ship them.
 
 **~3h total.**
 
-- [ ] **M1 · Sub-pages use `min-h-screen` not `min-h-dvh`** (S) — iOS Safari address-bar gap on `evidence/`, `roadmap/`, `programs/`, `programs/[slug]/`, `LegalLayout`. Root `page.tsx` uses `min-h-dvh` — 5 sub-pages regressed. → `landing-mobile-ux #2`
+- [x] **M1 · Sub-pages use `min-h-screen` not `min-h-dvh`** (S) — **DONE** min-h-dvh applied across evidence/roadmap/programs/programs-slug/LegalLayout.
 
 - [ ] **M2 · Programs snap carousel dots are decorative** (S) — Five identical `bg-white/25` dots below the 5-card carousel with no active-state binding. Delete the dots (peek alone is affordance) OR wire `IntersectionObserver` on snap children. → `landing-mobile-ux #3` · `Programs.tsx:91-99`
 
@@ -66,7 +76,7 @@ Grouped by theme, ordered within by impact. Check items off as you ship them.
 
 - [ ] **M6 · body + `<main>` compound bottom padding** (S) — Both apply `pb-[calc(64px+env(safe-area-inset-bottom))]`. Double-padding on iOS. Remove from one. → `app-mobile-ux #2`
 
-- [ ] **M7 · ProposalCard has two dismiss affordances** (S) — Both the `X` button and the `Ignore` button dismiss. Confusing. Decide: `X` = defer for the day, `Ignore` = permanent. Or delete one. → `app-mobile-ux #3`
+- [x] **M7 · ProposalCard has two dismiss affordances** (S) — **DONE 2026-08-17** X-icon dismiss removed; Ignore button is the semantic verb (matches the landing promise).
 
 - [ ] **M8 · 83 `hover:` classes without `focus-visible:` twins app-wide** (M) — Systemic. Same class of fix as M3 but scoped to the app. → `app-mobile-ux #4`
 
