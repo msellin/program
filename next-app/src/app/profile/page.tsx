@@ -26,8 +26,8 @@ import type { ProgramManifest } from "@/lib/schemas";
  * Structure follows the IA audit (2026-08-11):
  *   - Identity card (email, tier)
  *   - My plan → deep link to current program + catalog
- *   - My constraints → contraindications editor (moved from /data)
- *   - Data & privacy → import / export / wipe (link to /data)
+ *   - My constraints → contraindications editor
+ *   - Data & privacy → inline JSON export + account delete
  *   - Coach (beta) — placeholder until AI wired
  *   - Help → guide
  *   - Sign out (destructive at bottom, 2 taps to reach)
