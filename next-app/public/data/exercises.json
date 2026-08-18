@@ -2735,6 +2735,1567 @@
         "wulf_2013"
       ],
       "video_search": "turkish get up overhead hold"
+    },
+    {
+      "id": "aerobic_short_intervals",
+      "name": "Short intervals (30-60s hard / equal easy)",
+      "category": "run",
+      "targets": [
+        "general"
+      ],
+      "setup": "Modality (run/row/bike/ski) declared at intake. Warm up 10-15 min easy. Session block: 8-12 reps of 30-60s at RPE 8-9 (best 3-8 min effort pace), equal-duration easy jog/spin between. Cool down 10 min easy.",
+      "cues": [
+        "Aim for the SAME split each rep, not faster on the first ones",
+        "First 5 seconds felt too easy? Bump pace; last 10 seconds burning? Correct pace."
+      ],
+      "notes": "R\u00f8nnestad 2020 VO2max meta \u2014 short intervals (30-60s hard / equal easy) match or beat 4x4s on VO2max delta in trained athletes with less RPE burden. Session picks up when Norwegian 4x4s stall or the athlete requests a change of stimulus.",
+      "default_dose": {
+        "sets": 10,
+        "duration_s": 45
+      },
+      "rest_between_s": 45,
+      "evidence_refs": [
+        "ronnestad_2020",
+        "billat_2001"
+      ],
+      "video_search": "short intervals 30 seconds hard easy VO2max training"
+    },
+    {
+      "id": "aerobic_threshold_test",
+      "name": "20-minute time trial (threshold confirmation)",
+      "category": "run",
+      "targets": [
+        "general"
+      ],
+      "setup": "Fresh legs (24h recovery). Modality-specific. Full warm-up 15-20 min including 4-5 short strides. 20 minutes at highest sustainable steady effort. Record average pace + HR + subjective RPE. Repeat every 4 weeks.",
+      "cues": [
+        "Even split \u2014 negative-split the last 5 min if you have gas",
+        "If mile 3 feels easy, you started too conservatively. If mile 1 feels 9/10, back off"
+      ],
+      "notes": "MacIntosh 2001 / Coggan protocol \u2014 20-min TT \u00d7 0.95 approximates FTP. Cheaper + more repeatable than a lab lactate step-test. Use for the taper-week retest at end of Block 2.",
+      "default_dose": {
+        "sets": 1,
+        "duration_s": 1200
+      },
+      "rest_between_s": 0,
+      "evidence_refs": [
+        "coggan_allen_2010",
+        "macintosh_2001"
+      ],
+      "video_search": "20 minute time trial FTP test protocol"
+    },
+    {
+      "id": "pu_dead_hang",
+      "name": "Dead hang (passive)",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Hang from a pull-up bar, arms straight, shoulders relaxed, feet off the floor. Grip shoulder-width, thumbs around the bar. Hold to failure or the prescribed time.",
+      "capability_domains": [
+        "pu_dead_hang_grip"
+      ],
+      "level": 1,
+      "prerequisites": [],
+      "cues_external_focus": [
+        "Let the ceiling stretch you longer",
+        "Feel the bar melt into your hand shape"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "default_dose": {
+        "sets": 3,
+        "duration_s": 20
+      },
+      "rest_between_s": 60,
+      "evidence_refs": [
+        "beattie_2014",
+        "vigouroux_2007"
+      ],
+      "video_search": "dead hang pull up bar tutorial"
+    },
+    {
+      "id": "pu_active_hang",
+      "name": "Active hang (scap-engaged)",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "From a dead hang, actively depress the shoulders \u2014 pull the shoulder blades DOWN and INTO the ribcage. Elbows stay straight. Hold. Return to dead hang between reps.",
+      "capability_domains": [
+        "pu_dead_hang_grip",
+        "pu_scap_control"
+      ],
+      "level": 1,
+      "prerequisites": [],
+      "cues_external_focus": [
+        "Push the bar toward the ceiling with the tops of your shoulders"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "default_dose": {
+        "sets": 3,
+        "duration_s": 10
+      },
+      "rest_between_s": 60,
+      "evidence_refs": [
+        "youdas_2010",
+        "reinold_2007"
+      ],
+      "video_search": "active hang scapular pull up progression"
+    },
+    {
+      "id": "pu_scap_pull",
+      "name": "Scapular pull-up",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "From an active hang, pull the shoulder blades down and back to raise the body 5-8 cm. Elbows STAY STRAIGHT. Slow lower. Only the scap moves.",
+      "capability_domains": [
+        "pu_scap_control"
+      ],
+      "level": 2,
+      "prerequisites": [
+        {
+          "capability_domain": "pu_dead_hang_grip",
+          "minimum_level": 1,
+          "rationale": "load_tolerance",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Push the bar down toward the floor with straight arms"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "default_dose": {
+        "sets": 3,
+        "reps": 8
+      },
+      "rest_between_s": 60,
+      "evidence_refs": [
+        "youdas_2010",
+        "ludewig_2009"
+      ],
+      "video_search": "scapular pull up tutorial"
+    },
+    {
+      "id": "pu_scap_retraction_hold",
+      "name": "Scap retraction hold at top",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Perform a scap pull-up and hold at the top of the scap range for 3-5 seconds per rep. Straight arms throughout.",
+      "capability_domains": [
+        "pu_scap_control"
+      ],
+      "level": 2,
+      "prerequisites": [
+        {
+          "capability_domain": "pu_scap_control",
+          "minimum_level": 1,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Pin your shoulder blades into your back pockets"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "default_dose": {
+        "sets": 3,
+        "reps": 5,
+        "duration_s": 5
+      },
+      "rest_between_s": 60,
+      "evidence_refs": [
+        "ludewig_2009",
+        "reinold_2007"
+      ],
+      "video_search": "scapular retraction hold pull up bar"
+    },
+    {
+      "id": "pu_ring_row_incline",
+      "name": "Ring row (incline, easy)",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Rings at chest height. Grip and hang under, feet on floor, body diagonal (torso 60-75\u00b0 from vertical). Row chest to rings. Steeper = easier.",
+      "capability_domains": [
+        "pu_row_strength"
+      ],
+      "level": 1,
+      "prerequisites": [],
+      "cues_external_focus": [
+        "Pull the rings toward the sides of your ribs"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "default_dose": {
+        "sets": 3,
+        "reps": 10
+      },
+      "rest_between_s": 60,
+      "evidence_refs": [
+        "youdas_2010",
+        "sinnett_2019"
+      ],
+      "video_search": "ring row incline beginner"
+    },
+    {
+      "id": "pu_ring_row_horizontal",
+      "name": "Ring row (horizontal)",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Rings shoulder-height. Body horizontal, heels on floor. Row chest to rings. Slow tempo, 2-1-2.",
+      "capability_domains": [
+        "pu_row_strength"
+      ],
+      "level": 2,
+      "prerequisites": [
+        {
+          "capability_domain": "pu_row_strength",
+          "minimum_level": 1,
+          "rationale": "load_tolerance",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Drive the rings past your ribs to the ceiling behind you"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "default_dose": {
+        "sets": 3,
+        "reps": 8
+      },
+      "rest_between_s": 60,
+      "evidence_refs": [
+        "youdas_2010",
+        "sinnett_2019"
+      ],
+      "video_search": "horizontal ring row bodyweight"
+    },
+    {
+      "id": "pu_ring_row_feet_elevated",
+      "name": "Ring row (feet elevated)",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Rings shoulder-height, feet on a box so body is fully horizontal or head-down. Row chest to rings.",
+      "capability_domains": [
+        "pu_row_strength"
+      ],
+      "level": 3,
+      "prerequisites": [
+        {
+          "capability_domain": "pu_row_strength",
+          "minimum_level": 2,
+          "rationale": "load_tolerance",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Punch the rings back through the wall behind you"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "default_dose": {
+        "sets": 3,
+        "reps": 6
+      },
+      "rest_between_s": 75,
+      "evidence_refs": [
+        "sinnett_2019",
+        "youdas_2010"
+      ],
+      "video_search": "ring row feet elevated"
+    },
+    {
+      "id": "pu_dumbbell_row",
+      "name": "Single-arm dumbbell row",
+      "category": "strength",
+      "targets": [
+        "general"
+      ],
+      "setup": "One knee + hand on a bench, other foot planted. Row the DB from full extension to just below the ribcage, elbow close, torso stable. Slow eccentric.",
+      "capability_domains": [
+        "pu_row_strength"
+      ],
+      "level": 2,
+      "prerequisites": [],
+      "cues_external_focus": [
+        "Drive the dumbbell toward the ceiling above your hip pocket"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "default_dose": {
+        "sets": 3,
+        "reps": 8
+      },
+      "rest_between_s": 75,
+      "evidence_refs": [
+        "sinnett_2019",
+        "youdas_2010"
+      ],
+      "video_search": "single arm dumbbell row bench"
+    },
+    {
+      "id": "pu_lat_pulldown",
+      "name": "Lat pulldown (wide neutral grip)",
+      "category": "strength",
+      "targets": [
+        "general"
+      ],
+      "setup": "Cable stack, wide neutral or overhand grip. Sit tall, torso slight lean back. Pull the bar to upper chest, elbows down and back. Slow return to full extension.",
+      "capability_domains": [
+        "pu_row_strength",
+        "pu_full_pullup_volume"
+      ],
+      "level": 2,
+      "prerequisites": [],
+      "cues_external_focus": [
+        "Pull the bar toward the top of your chest with the elbows pointing at the floor behind you"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "default_dose": {
+        "sets": 3,
+        "reps": 10
+      },
+      "rest_between_s": 75,
+      "evidence_refs": [
+        "youdas_2010",
+        "sinnett_2019"
+      ],
+      "video_search": "wide grip lat pulldown technique"
+    },
+    {
+      "id": "pu_negative_pullup_5s",
+      "name": "Negative pull-up (5s eccentric)",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Jump or step to a chin-over-bar position. Lower over 5 seconds to a full dead hang. Step off. Rest, repeat.",
+      "capability_domains": [
+        "pu_negative_control"
+      ],
+      "level": 3,
+      "prerequisites": [
+        {
+          "capability_domain": "pu_dead_hang_grip",
+          "minimum_level": 2,
+          "rationale": "load_tolerance",
+          "source": "coaching_consensus"
+        },
+        {
+          "capability_domain": "pu_scap_control",
+          "minimum_level": 2,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Lower yourself like the ceiling has a rope on your waist releasing slowly"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "default_dose": {
+        "sets": 3,
+        "reps": 5,
+        "duration_s": 5
+      },
+      "rest_between_s": 90,
+      "evidence_refs": [
+        "roig_2009",
+        "dickie_2017"
+      ],
+      "video_search": "negative pull up eccentric"
+    },
+    {
+      "id": "pu_negative_pullup_10s",
+      "name": "Negative pull-up (10s eccentric)",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Jump or step to a chin-over-bar position. Lower over 10 seconds to a full dead hang, actively fighting the descent throughout.",
+      "capability_domains": [
+        "pu_negative_control"
+      ],
+      "level": 4,
+      "prerequisites": [
+        {
+          "capability_domain": "pu_negative_control",
+          "minimum_level": 3,
+          "rationale": "load_tolerance",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Pretend the floor is 10 seconds away and you have to land soft"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "default_dose": {
+        "sets": 3,
+        "reps": 3,
+        "duration_s": 10
+      },
+      "rest_between_s": 120,
+      "evidence_refs": [
+        "roig_2009",
+        "dickie_2017"
+      ],
+      "video_search": "10 second negative pull up eccentric"
+    },
+    {
+      "id": "pu_isometric_top_hold",
+      "name": "Isometric hold at top (chin over bar)",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Jump or step to chin-over-bar. Hold with elbows fully flexed, chest tall. Keep the hollow-body shape. Drop when form breaks.",
+      "capability_domains": [
+        "pu_negative_control"
+      ],
+      "level": 3,
+      "prerequisites": [
+        {
+          "capability_domain": "pu_scap_control",
+          "minimum_level": 2,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Keep your chin punching the sky above the bar"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "default_dose": {
+        "sets": 3,
+        "duration_s": 8
+      },
+      "rest_between_s": 90,
+      "evidence_refs": [
+        "roig_2009",
+        "sinnett_2019"
+      ],
+      "video_search": "isometric hold chin over bar"
+    },
+    {
+      "id": "pu_isometric_mid_hold",
+      "name": "Isometric hold at mid-range (90\u00b0 elbow)",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Step/jump to a 90\u00b0 elbow position and hold. Hardest range for most people. Hollow-body throughout.",
+      "capability_domains": [
+        "pu_negative_control"
+      ],
+      "level": 4,
+      "prerequisites": [
+        {
+          "capability_domain": "pu_negative_control",
+          "minimum_level": 3,
+          "rationale": "load_tolerance",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Pretend two ropes attach to your elbows and pull the elbows down to your ribs"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "default_dose": {
+        "sets": 3,
+        "duration_s": 5
+      },
+      "rest_between_s": 120,
+      "evidence_refs": [
+        "roig_2009"
+      ],
+      "video_search": "isometric hold mid range pull up"
+    },
+    {
+      "id": "pu_isometric_chin_over_bar",
+      "name": "Chin-over-bar hold (top-range only)",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "As pu_isometric_top_hold but explicit about hollow shape + slight chin-tuck. Used at end of pull-up sessions as burnout finisher.",
+      "capability_domains": [
+        "pu_negative_control",
+        "pu_full_pullup_volume"
+      ],
+      "level": 3,
+      "prerequisites": [
+        {
+          "capability_domain": "pu_scap_control",
+          "minimum_level": 2,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Keep the crown of your head pushing at the ceiling"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "default_dose": {
+        "sets": 2,
+        "duration_s": 10
+      },
+      "rest_between_s": 90,
+      "evidence_refs": [
+        "sinnett_2019"
+      ],
+      "video_search": "chin over bar hold"
+    },
+    {
+      "id": "pu_arch_hold",
+      "name": "Arch hold (superman)",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Lie face down, arms straight overhead, legs together. Lift arms + legs + chest off the floor. Hold. Focus: from the mid-back, not the low back.",
+      "capability_domains": [
+        "pu_hollow_active_shape"
+      ],
+      "level": 1,
+      "prerequisites": [],
+      "cues_external_focus": [
+        "Reach your fingertips and toes toward opposite walls"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "default_dose": {
+        "sets": 3,
+        "duration_s": 20
+      },
+      "rest_between_s": 30,
+      "evidence_refs": [
+        "youdas_2010"
+      ],
+      "video_search": "arch hold gymnastics"
+    },
+    {
+      "id": "pu_hollow_body_hold",
+      "name": "Hollow body hold",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Lie supine, arms overhead. Low back pressed HARD into the floor. Head, shoulders, legs off the floor. Rock like a banana.",
+      "capability_domains": [
+        "pu_hollow_active_shape"
+      ],
+      "level": 1,
+      "prerequisites": [],
+      "cues_external_focus": [
+        "Squeeze the floor with your low back like you're trying to leave an imprint"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "default_dose": {
+        "sets": 3,
+        "duration_s": 30
+      },
+      "rest_between_s": 30,
+      "evidence_refs": [
+        "youdas_2010"
+      ],
+      "video_search": "hollow body hold gymnastics"
+    },
+    {
+      "id": "pu_hollow_body_pullover",
+      "name": "Hollow body dumbbell pullover",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Hollow-body hold on the floor holding a light DB with straight arms overhead. Lower the DB slowly past the head to the floor without losing the hollow. Return.",
+      "capability_domains": [
+        "pu_hollow_active_shape",
+        "pu_scap_control"
+      ],
+      "level": 2,
+      "prerequisites": [
+        {
+          "capability_domain": "pu_hollow_active_shape",
+          "minimum_level": 1,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Keep the low back glued to the floor while the DB touches the wall behind you"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "default_dose": {
+        "sets": 3,
+        "reps": 10
+      },
+      "rest_between_s": 60,
+      "evidence_refs": [
+        "youdas_2010",
+        "sinnett_2019"
+      ],
+      "video_search": "hollow body pullover"
+    },
+    {
+      "id": "pu_band_pullup_heavy",
+      "name": "Band-assisted pull-up (heavy band)",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Heavy resistance band looped over bar, one foot in band. Full pull-up from dead hang to chin over bar. Slow eccentric.",
+      "capability_domains": [
+        "pu_full_pullup_volume"
+      ],
+      "level": 2,
+      "prerequisites": [
+        {
+          "capability_domain": "pu_dead_hang_grip",
+          "minimum_level": 2,
+          "rationale": "load_tolerance",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Pull your chin toward the top corner of the ceiling"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "default_dose": {
+        "sets": 3,
+        "reps": 6
+      },
+      "rest_between_s": 90,
+      "evidence_refs": [
+        "sinnett_2019",
+        "youdas_2010"
+      ],
+      "video_search": "band assisted pull up heavy band"
+    },
+    {
+      "id": "pu_band_pullup_light",
+      "name": "Band-assisted pull-up (light band)",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Light resistance band. Full pull-up from dead hang to chin over bar. Slow eccentric. Aim for full ROM.",
+      "capability_domains": [
+        "pu_full_pullup_volume"
+      ],
+      "level": 3,
+      "prerequisites": [
+        {
+          "capability_domain": "pu_full_pullup_volume",
+          "minimum_level": 2,
+          "rationale": "load_tolerance",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Punch your chest at the bar"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "default_dose": {
+        "sets": 3,
+        "reps": 4
+      },
+      "rest_between_s": 120,
+      "evidence_refs": [
+        "sinnett_2019"
+      ],
+      "video_search": "band assisted pull up light band"
+    },
+    {
+      "id": "pu_first_strict_attempt",
+      "name": "First strict pull-up attempt",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Full dead hang. Pull to chin over bar with no band, no kip, no swing. Full ROM. Slow eccentric. If you get it, log it. If not, drop off and rest.",
+      "capability_domains": [
+        "pu_full_pullup_volume"
+      ],
+      "level": 4,
+      "prerequisites": [
+        {
+          "capability_domain": "pu_full_pullup_volume",
+          "minimum_level": 3,
+          "rationale": "load_tolerance",
+          "source": "coaching_consensus"
+        },
+        {
+          "capability_domain": "pu_scap_control",
+          "minimum_level": 2,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Pull your chin toward the ceiling stripe above the bar"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KR",
+      "default_dose": {
+        "sets": 3,
+        "reps": 1
+      },
+      "rest_between_s": 180,
+      "evidence_refs": [
+        "sinnett_2019"
+      ],
+      "video_search": "first strict pull up attempt technique"
+    },
+    {
+      "id": "pu_partial_rom_pullup",
+      "name": "Partial-ROM pull-up (top half)",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Start at 90\u00b0 elbow (or wherever you get stuck). Pull only from there to chin over bar. Slow eccentric back to the start position.",
+      "capability_domains": [
+        "pu_full_pullup_volume",
+        "pu_negative_control"
+      ],
+      "level": 3,
+      "prerequisites": [
+        {
+          "capability_domain": "pu_negative_control",
+          "minimum_level": 3,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Punch the ceiling with your chest"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "default_dose": {
+        "sets": 3,
+        "reps": 3
+      },
+      "rest_between_s": 90,
+      "evidence_refs": [
+        "roig_2009",
+        "sinnett_2019"
+      ],
+      "video_search": "partial rom pull up top range"
+    },
+    {
+      "id": "pu_slow_tempo_pullup",
+      "name": "Slow tempo pull-up (3-1-3)",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Full pull-up with 3s eccentric, 1s pause at bottom, 3s concentric. Chin over bar every rep. Assist with a light band if needed.",
+      "capability_domains": [
+        "pu_full_pullup_volume",
+        "pu_negative_control"
+      ],
+      "level": 4,
+      "prerequisites": [
+        {
+          "capability_domain": "pu_full_pullup_volume",
+          "minimum_level": 4,
+          "rationale": "load_tolerance",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Move like the bar is soft and you don't want to break it"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "default_dose": {
+        "sets": 3,
+        "reps": 3
+      },
+      "rest_between_s": 150,
+      "evidence_refs": [
+        "roig_2009",
+        "sinnett_2019"
+      ],
+      "video_search": "slow tempo pull up 3-1-3"
+    },
+    {
+      "id": "pu_grease_the_groove_singles",
+      "name": "Grease-the-groove single pull-ups",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Set a pull-up bar in a doorway or path you pass through 4-8 times/day. Do ONE strict pull-up every time you pass \u2014 never to failure, always with clean form.",
+      "capability_domains": [
+        "pu_full_pullup_volume"
+      ],
+      "level": 4,
+      "prerequisites": [
+        {
+          "capability_domain": "pu_full_pullup_volume",
+          "minimum_level": 4,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Punch the ceiling with your chest, land soft"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "default_dose": {
+        "sets": 8,
+        "reps": 1
+      },
+      "rest_between_s": 3600,
+      "evidence_refs": [
+        "sinnett_2019"
+      ],
+      "video_search": "grease the groove pull ups Pavel"
+    },
+    {
+      "id": "pu_farmers_carry",
+      "name": "Farmer's carry (grip endurance)",
+      "category": "strength",
+      "targets": [
+        "general"
+      ],
+      "setup": "Two heavy DBs or KBs. Walk 20-40 metres, upright posture. Grip crushes the handle. Two trips per set.",
+      "capability_domains": [
+        "pu_dead_hang_grip"
+      ],
+      "level": 1,
+      "prerequisites": [],
+      "cues_external_focus": [
+        "Crush the handle like you're squeezing juice out"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "default_dose": {
+        "sets": 3,
+        "duration_s": 40
+      },
+      "rest_between_s": 90,
+      "evidence_refs": [
+        "vigouroux_2007",
+        "beattie_2014"
+      ],
+      "video_search": "farmers walk grip endurance"
+    },
+    {
+      "id": "pu_shoulder_prep_band",
+      "name": "Band shoulder prep (I-Y-T + face pull)",
+      "category": "mobility",
+      "targets": [
+        "general"
+      ],
+      "setup": "Light band anchored chest height. 10 reps each: face pull, external rotation @ 90\u00b0, band pull-apart, Y raise. Warms rotator cuff before pulling volume.",
+      "capability_domains": [
+        "pu_scap_control"
+      ],
+      "level": 1,
+      "prerequisites": [],
+      "cues_external_focus": [
+        "Pull the band away from itself like it's a rubber balloon"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "default_dose": {
+        "sets": 2,
+        "reps": 10
+      },
+      "rest_between_s": 15,
+      "evidence_refs": [
+        "reinold_2007",
+        "ludewig_2009"
+      ],
+      "video_search": "band shoulder prep face pull external rotation"
+    },
+    {
+      "id": "pu_video_review",
+      "name": "Self-record + review one working set",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Record one full working set from the side. Watch it back. Note ONE thing you'd change for the next set. Log the note.",
+      "capability_domains": [
+        "pu_full_pullup_volume"
+      ],
+      "level": 1,
+      "prerequisites": [],
+      "cues_external_focus": [
+        "Watch the video like you're coaching a friend"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "default_dose": {
+        "sets": 1,
+        "reps": 1
+      },
+      "rest_between_s": 0,
+      "evidence_refs": [
+        "chiviacowsky_wulf_2002"
+      ],
+      "video_search": "how to record and review your workout"
+    },
+    {
+      "id": "mu_false_grip_hang",
+      "name": "False-grip hang on rings",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Rings just above head height. Grip so the wrist is COCKED OVER the ring \u2014 palm faces you, heel of hand on top of ring. Hang from full extension. This is the muscle-up entry grip.",
+      "capability_domains": [
+        "mu_false_grip"
+      ],
+      "level": 1,
+      "prerequisites": [],
+      "cues_external_focus": [
+        "Bend your wrist over the ring like it's a bar you're climbing"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "default_dose": {
+        "sets": 3,
+        "duration_s": 15
+      },
+      "rest_between_s": 90,
+      "evidence_refs": [
+        "vidal_rovira_2024"
+      ],
+      "video_search": "false grip hang rings tutorial"
+    },
+    {
+      "id": "mu_false_grip_ring_row",
+      "name": "False-grip ring row",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Rings chest-height. False grip. Body horizontal. Row chest to rings while maintaining the false grip.",
+      "capability_domains": [
+        "mu_false_grip",
+        "pu_row_strength"
+      ],
+      "level": 2,
+      "prerequisites": [
+        {
+          "capability_domain": "mu_false_grip",
+          "minimum_level": 1,
+          "rationale": "load_tolerance",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Keep the wrists cocked as you pull the rings past your ribs"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "default_dose": {
+        "sets": 3,
+        "reps": 6
+      },
+      "rest_between_s": 90,
+      "evidence_refs": [
+        "vidal_rovira_2024",
+        "sinnett_2019"
+      ],
+      "video_search": "false grip ring row muscle up prep"
+    },
+    {
+      "id": "mu_false_grip_pullup",
+      "name": "False-grip pull-up on rings",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Rings overhead. False grip from dead hang. Pull chin over rings while maintaining the wrist-over grip.",
+      "capability_domains": [
+        "mu_false_grip"
+      ],
+      "level": 3,
+      "prerequisites": [
+        {
+          "capability_domain": "mu_false_grip",
+          "minimum_level": 2,
+          "rationale": "load_tolerance",
+          "source": "coaching_consensus"
+        },
+        {
+          "capability_domain": "pu_full_pullup_volume",
+          "minimum_level": 3,
+          "rationale": "load_tolerance",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Pull the rings to your armpits like you're climbing over a wall"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "default_dose": {
+        "sets": 3,
+        "reps": 3
+      },
+      "rest_between_s": 120,
+      "evidence_refs": [
+        "vidal_rovira_2024"
+      ],
+      "video_search": "false grip pull up rings muscle up progression"
+    },
+    {
+      "id": "mu_ring_dip_support_hold",
+      "name": "Ring support hold",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Rings shoulder-height. Support at the top with straight arms, rings turned slightly out (RTO). Hold with control \u2014 no wobble.",
+      "capability_domains": [
+        "mu_ring_dip_strength"
+      ],
+      "level": 1,
+      "prerequisites": [],
+      "cues_external_focus": [
+        "Push the rings down and out like you're breaking a stick between them"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "default_dose": {
+        "sets": 3,
+        "duration_s": 20
+      },
+      "rest_between_s": 60,
+      "evidence_refs": [
+        "reinold_2007",
+        "roig_2009"
+      ],
+      "video_search": "ring support hold RTO"
+    },
+    {
+      "id": "mu_ring_dip_negative",
+      "name": "Ring dip negative",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Support hold at the top of the rings. Lower under control over 3-5 seconds to 90\u00b0 elbow or full depth. Step off and reset each rep.",
+      "capability_domains": [
+        "mu_ring_dip_strength"
+      ],
+      "level": 2,
+      "prerequisites": [
+        {
+          "capability_domain": "mu_ring_dip_strength",
+          "minimum_level": 1,
+          "rationale": "load_tolerance",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Lower yourself like the rings will melt if you drop"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "default_dose": {
+        "sets": 3,
+        "reps": 5,
+        "duration_s": 3
+      },
+      "rest_between_s": 90,
+      "evidence_refs": [
+        "roig_2009",
+        "reinold_2007"
+      ],
+      "video_search": "ring dip negative eccentric"
+    },
+    {
+      "id": "mu_ring_dip_full",
+      "name": "Ring dip (full ROM)",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Support at top of rings. Lower to full elbow flex (upper arm past parallel), press back to lockout. RTO at top. Strict, no leg swing.",
+      "capability_domains": [
+        "mu_ring_dip_strength"
+      ],
+      "level": 3,
+      "prerequisites": [
+        {
+          "capability_domain": "mu_ring_dip_strength",
+          "minimum_level": 2,
+          "rationale": "load_tolerance",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Push the rings toward the floor to stand back up"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "default_dose": {
+        "sets": 3,
+        "reps": 5
+      },
+      "rest_between_s": 120,
+      "evidence_refs": [
+        "reinold_2007",
+        "sinnett_2019"
+      ],
+      "video_search": "ring dip full range strict"
+    },
+    {
+      "id": "mu_ring_dip_deep",
+      "name": "Deep ring dip (below parallel)",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "As mu_ring_dip_full but drop the elbow well below parallel \u2014 armpits at ring height. Slower on the descent.",
+      "capability_domains": [
+        "mu_ring_dip_strength"
+      ],
+      "level": 4,
+      "prerequisites": [
+        {
+          "capability_domain": "mu_ring_dip_strength",
+          "minimum_level": 3,
+          "rationale": "load_tolerance",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Lower until your armpits meet the rings, then press the rings back down toward your hips"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "default_dose": {
+        "sets": 3,
+        "reps": 3
+      },
+      "rest_between_s": 150,
+      "evidence_refs": [
+        "reinold_2007"
+      ],
+      "video_search": "deep ring dip full depth"
+    },
+    {
+      "id": "mu_rto_dip",
+      "name": "RTO (rings-turned-out) dip",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Rings turned out at the top of every rep. Common in gymnastics; adds significant shoulder + wrist demand. Slow tempo.",
+      "capability_domains": [
+        "mu_ring_dip_strength"
+      ],
+      "level": 4,
+      "prerequisites": [
+        {
+          "capability_domain": "mu_ring_dip_strength",
+          "minimum_level": 3,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Point your thumbs at the wall behind you at the top of each rep"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "default_dose": {
+        "sets": 3,
+        "reps": 4
+      },
+      "rest_between_s": 120,
+      "evidence_refs": [
+        "reinold_2007"
+      ],
+      "video_search": "RTO ring dip rings turned out"
+    },
+    {
+      "id": "mu_ring_support_lockout",
+      "name": "Ring support lockout (elbows straight, RTO)",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Support at top of rings, elbows fully locked, rings turned out ~45\u00b0. Hold with zero wobble. This is the muscle-up finish position.",
+      "capability_domains": [
+        "mu_ring_dip_strength"
+      ],
+      "level": 2,
+      "prerequisites": [
+        {
+          "capability_domain": "mu_ring_dip_strength",
+          "minimum_level": 1,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Push the rings down toward the hips and out toward the walls"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "default_dose": {
+        "sets": 3,
+        "duration_s": 15
+      },
+      "rest_between_s": 60,
+      "evidence_refs": [
+        "reinold_2007"
+      ],
+      "video_search": "ring support lockout RTO"
+    },
+    {
+      "id": "mu_transition_seated_band",
+      "name": "Seated banded muscle-up (transition drill)",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Sit on a bench in front of low rings. Rings at head height. Band lightly assists. Pull chest to rings, immediately dive forward, press to support. Move through the transition slowly.",
+      "capability_domains": [
+        "mu_transition_mechanics"
+      ],
+      "level": 1,
+      "prerequisites": [],
+      "cues_external_focus": [
+        "Dive your chest OVER the rings to the wall in front of you"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "default_dose": {
+        "sets": 3,
+        "reps": 5
+      },
+      "rest_between_s": 90,
+      "evidence_refs": [
+        "vidal_rovira_2024"
+      ],
+      "video_search": "seated band muscle up transition drill"
+    },
+    {
+      "id": "mu_transition_negative_low",
+      "name": "Low-ring transition negative",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Rings at chest height. Jump to support at top. Lower slowly through the transition to a false-grip chin-over position. Step off.",
+      "capability_domains": [
+        "mu_transition_mechanics"
+      ],
+      "level": 2,
+      "prerequisites": [
+        {
+          "capability_domain": "mu_false_grip",
+          "minimum_level": 2,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Reverse the dive \u2014 send your chest back over the rings slowly"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "default_dose": {
+        "sets": 3,
+        "reps": 3,
+        "duration_s": 4
+      },
+      "rest_between_s": 120,
+      "evidence_refs": [
+        "vidal_rovira_2024",
+        "roig_2009"
+      ],
+      "video_search": "low ring transition negative muscle up"
+    },
+    {
+      "id": "mu_transition_negative_high",
+      "name": "High-ring transition negative",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Rings overhead. Jump to support (or full muscle-up if you have one). Lower slowly through the transition to a chin-over false-grip pull-up top. Drop.",
+      "capability_domains": [
+        "mu_transition_mechanics"
+      ],
+      "level": 3,
+      "prerequisites": [
+        {
+          "capability_domain": "mu_transition_mechanics",
+          "minimum_level": 2,
+          "rationale": "load_tolerance",
+          "source": "coaching_consensus"
+        },
+        {
+          "capability_domain": "mu_false_grip",
+          "minimum_level": 3,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Lower yourself back through the same arc you'd have gone up"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "default_dose": {
+        "sets": 3,
+        "reps": 2,
+        "duration_s": 5
+      },
+      "rest_between_s": 180,
+      "evidence_refs": [
+        "vidal_rovira_2024",
+        "roig_2009"
+      ],
+      "video_search": "high ring transition negative muscle up"
+    },
+    {
+      "id": "mu_jump_muscle_up",
+      "name": "Jump-assisted muscle-up",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Rings just above head. From a small jump, drive through the transition and press to support. NOT a kip \u2014 just a jump to get past the sticking point.",
+      "capability_domains": [
+        "mu_transition_mechanics"
+      ],
+      "level": 3,
+      "prerequisites": [
+        {
+          "capability_domain": "mu_transition_mechanics",
+          "minimum_level": 2,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Jump straight up and dive your chest at the wall in front"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KR",
+      "default_dose": {
+        "sets": 4,
+        "reps": 3
+      },
+      "rest_between_s": 120,
+      "evidence_refs": [
+        "vidal_rovira_2024"
+      ],
+      "video_search": "jump assisted muscle up"
+    },
+    {
+      "id": "mu_low_ring_muscle_up",
+      "name": "Low-ring muscle-up (feet on floor)",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Rings at chest height. Sit or squat under. Full muscle-up with the feet helping through the transition only. Slow and controlled.",
+      "capability_domains": [
+        "mu_transition_mechanics"
+      ],
+      "level": 3,
+      "prerequisites": [
+        {
+          "capability_domain": "mu_transition_mechanics",
+          "minimum_level": 2,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Send your chest over the rings first, then press down"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KR",
+      "default_dose": {
+        "sets": 3,
+        "reps": 3
+      },
+      "rest_between_s": 120,
+      "evidence_refs": [
+        "vidal_rovira_2024"
+      ],
+      "video_search": "low ring muscle up transition drill"
+    },
+    {
+      "id": "mu_first_strict_ring_mu_attempt",
+      "name": "First strict ring muscle-up attempt",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Full false-grip hang. Explosive pull to chest-over-rings, transition, press to lockout. No kip, no swing. If you get one, log it. Rest full.",
+      "capability_domains": [
+        "mu_transition_mechanics"
+      ],
+      "level": 4,
+      "prerequisites": [
+        {
+          "capability_domain": "mu_transition_mechanics",
+          "minimum_level": 3,
+          "rationale": "load_tolerance",
+          "source": "coaching_consensus"
+        },
+        {
+          "capability_domain": "mu_false_grip",
+          "minimum_level": 3,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        },
+        {
+          "capability_domain": "mu_ring_dip_strength",
+          "minimum_level": 3,
+          "rationale": "load_tolerance",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Pull the rings to your armpits, then dive over them"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KR",
+      "default_dose": {
+        "sets": 3,
+        "reps": 1
+      },
+      "rest_between_s": 300,
+      "evidence_refs": [
+        "vidal_rovira_2024",
+        "sinnett_2019"
+      ],
+      "video_search": "first strict ring muscle up attempt"
+    },
+    {
+      "id": "mu_straight_arm_pulldown_band",
+      "name": "Straight-arm pulldown (band)",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Light band anchored overhead. Elbows LOCKED straight. Pull the band down in an arc from head-height to hip.",
+      "capability_domains": [
+        "mu_transition_mechanics",
+        "pu_scap_control"
+      ],
+      "level": 2,
+      "prerequisites": [],
+      "cues_external_focus": [
+        "Sweep the band down like you're closing a big pair of scissors"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "default_dose": {
+        "sets": 3,
+        "reps": 10
+      },
+      "rest_between_s": 60,
+      "evidence_refs": [
+        "youdas_2010",
+        "sinnett_2019"
+      ],
+      "video_search": "band straight arm pulldown"
+    },
+    {
+      "id": "mu_straight_arm_pulldown_cable",
+      "name": "Straight-arm pulldown (cable)",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Cable stack high. Rope or straight bar. Elbows locked, pull arc from head-height to hip level. Slow return.",
+      "capability_domains": [
+        "mu_transition_mechanics"
+      ],
+      "level": 3,
+      "prerequisites": [
+        {
+          "capability_domain": "mu_transition_mechanics",
+          "minimum_level": 2,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Push the rope down and back at your hip pocket"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "default_dose": {
+        "sets": 3,
+        "reps": 8
+      },
+      "rest_between_s": 75,
+      "evidence_refs": [
+        "youdas_2010",
+        "sinnett_2019"
+      ],
+      "video_search": "cable straight arm pulldown"
+    },
+    {
+      "id": "mu_video_review",
+      "name": "Self-record + review muscle-up attempts",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Record every attempt from the side. Watch it back. Identify the sticking point (pull, transition, or dip). Log the note.",
+      "capability_domains": [
+        "mu_transition_mechanics"
+      ],
+      "level": 1,
+      "prerequisites": [],
+      "cues_external_focus": [
+        "Watch the video like you're coaching a friend"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "default_dose": {
+        "sets": 1,
+        "reps": 1
+      },
+      "rest_between_s": 0,
+      "evidence_refs": [
+        "chiviacowsky_wulf_2002"
+      ],
+      "video_search": "how to record muscle up attempt"
     }
   ],
   "class_modifications": [

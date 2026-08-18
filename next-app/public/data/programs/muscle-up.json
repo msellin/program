@@ -1,8 +1,8 @@
 {
   "schema_version": "1.2.0",
   "generated": "2026-08-17",
-  "status": "draft",
-  "status_note": "DRAFT — not yet in catalog. Multi-dimensional skill program on top of the pull-up + handstand-adjacent drill libraries. Reuses false-grip work, transition drills, ring dip, straight-arm pull-down concepts. Sub-capabilities (false-grip pull strength, transition / turnover, ring dip strength, straight-arm shoulder integrity) train independently. NO ENGINE CODE required — runs on the same multi_dimensional generator as Handstand Walk and First Strict Pull-Up. Ships when founder flips status to PROVISIONAL, adds manifest entry, and confirms the shared drill-library references. Prerequisite gate: 3-5 strict pull-ups and 3-5 ring dips before the transition drills unlock — this is engineering choice + coaching consensus (Sommer 2008, Low 2016 coaching commentary), not RCT-derived.",
+  "status": "PROVISIONAL",
+  "status_note": "DRAFT \u2014 not yet in catalog. Multi-dimensional skill program on top of the pull-up + handstand-adjacent drill libraries. Reuses false-grip work, transition drills, ring dip, straight-arm pull-down concepts. Sub-capabilities (false-grip pull strength, transition / turnover, ring dip strength, straight-arm shoulder integrity) train independently. NO ENGINE CODE required \u2014 runs on the same multi_dimensional generator as Handstand Walk and First Strict Pull-Up. Ships when founder flips status to PROVISIONAL, adds manifest entry, and confirms the shared drill-library references. Prerequisite gate: 3-5 strict pull-ups and 3-5 ring dips before the transition drills unlock \u2014 this is engineering choice + coaching consensus (Sommer 2008, Low 2016 coaching commentary), not RCT-derived.",
   "generation_strategy": "multi_dimensional",
   "drill_library": [
     "pu_dead_hang",
@@ -36,31 +36,31 @@
     "hs_arch_hold"
   ],
   "goals": {
-    "primary_intent": "Get your first strict ring muscle-up — no kip, no swing, from a dead hang, through the transition, to a locked-out ring support. Sub-capabilities (false-grip pull, transition control, ring dip strength, straight-arm shoulder integrity, hollow shape) train as independent state variables. Weekly plan targets the weakest measured capability first (Henry 1968; Proteau 1992).",
+    "primary_intent": "Get your first strict ring muscle-up \u2014 no kip, no swing, from a dead hang, through the transition, to a locked-out ring support. Sub-capabilities (false-grip pull, transition control, ring dip strength, straight-arm shoulder integrity, hollow shape) train as independent state variables. Weekly plan targets the weakest measured capability first (Henry 1968; Proteau 1992).",
     "arc": {
       "block_1_this_program": "10-16 weeks. Tier A builds false-grip tolerance + first ring dip base for users who have the prerequisite pull-up and dip counts. Tier B builds transition mechanics (seated-band + low-ring). Tier C attempts the first strict rep.",
-      "block_2_expected": "8-12 weeks. Volume: 1 → 3 unbroken strict ring muscle-ups. Turnover speed + potentially the bar muscle-up variant.",
+      "block_2_expected": "8-12 weeks. Volume: 1 \u2192 3 unbroken strict ring muscle-ups. Turnover speed + potentially the bar muscle-up variant.",
       "total_arc_weeks_estimate": [
         18,
         28
       ],
-      "note": "No cohort ETA. The strict ring muscle-up is a low-frequency skill for even experienced calisthenics athletes — the transition point is the technical bottleneck, and Roig 2011 shoulder-loading analog and Youdas 2010 grip / EMG work inform the drill order rather than promising a timeline."
+      "note": "No cohort ETA. The strict ring muscle-up is a low-frequency skill for even experienced calisthenics athletes \u2014 the transition point is the technical bottleneck, and Roig 2011 shoulder-loading analog and Youdas 2010 grip / EMG work inform the drill order rather than promising a timeline."
     }
   },
   "principles": [
     {
       "id": "prerequisites_gate_hard",
       "rule": "3-5 strict pull-ups AND 3-5 ring dips are the intake floor. Below either, the program routes the user to the pre-req program.",
-      "detail": "Engineering choice + coach consensus (Sommer 2008 commentary; Low 2016 coach writing) — not RCT-derived. Rationale: the muscle-up is a strength move stitched together from three sub-lifts. Without the constituent strength, the transition drills groove a compensation (kip / swing) that reinforces itself. If a user lands here without the prerequisite, the manifest routes them to First Strict Pull-Up or the ring-dip prep in this program."
+      "detail": "Engineering choice + coach consensus (Sommer 2008 commentary; Low 2016 coach writing) \u2014 not RCT-derived. Rationale: the muscle-up is a strength move stitched together from three sub-lifts. Without the constituent strength, the transition drills groove a compensation (kip / swing) that reinforces itself. If a user lands here without the prerequisite, the manifest routes them to First Strict Pull-Up or the ring-dip prep in this program."
     },
     {
       "id": "false_grip_first",
       "rule": "False-grip tolerance is trained before any transition attempt",
-      "detail": "The false grip (wrist above the rings) is the mechanical enabler of the transition — it removes the need to re-grip mid-lift. Vidal-Rovira 2024 (small-sample) documents higher forearm activation in false-grip vs standard hang. Untrained wrists lose the grip in the transition and the athlete drops out. Building false-grip hang time + false-grip ring row + false-grip pull-up is the Tier A / B primary."
+      "detail": "The false grip (wrist above the rings) is the mechanical enabler of the transition \u2014 it removes the need to re-grip mid-lift. Vidal-Rovira 2024 (small-sample) documents higher forearm activation in false-grip vs standard hang. Untrained wrists lose the grip in the transition and the athlete drops out. Building false-grip hang time + false-grip ring row + false-grip pull-up is the Tier A / B primary."
     },
     {
       "id": "transition_is_the_bottleneck",
-      "rule": "Every drill in Tier B and C targets the transition — not the pull, not the dip",
+      "rule": "Every drill in Tier B and C targets the transition \u2014 not the pull, not the dip",
       "detail": "Pull and dip strength are prerequisites, not the training target here. The seated-band transition, the low-ring transition, and the negative-from-support-position drills isolate the turnover mechanic (elbows travelling from behind you to in front of you at chest height). This is where the strict muscle-up is won or lost."
     },
     {
@@ -75,13 +75,13 @@
     },
     {
       "id": "shoulder_pain_stops_session",
-      "rule": "Any shoulder pain during a hang, transition, or support hold ends the session — no working through it",
-      "detail": "Support position on rings loads the long head of biceps + supraspinatus at end-range. Sadowski 2021 (straight-arm press to handstand: 3× BW shoulder moment) is the analog — support lockout on rings sees similar peak moments. Pain-through reinforces the compensation."
+      "rule": "Any shoulder pain during a hang, transition, or support hold ends the session \u2014 no working through it",
+      "detail": "Support position on rings loads the long head of biceps + supraspinatus at end-range. Sadowski 2021 (straight-arm press to handstand: 3\u00d7 BW shoulder moment) is the analog \u2014 support lockout on rings sees similar peak moments. Pain-through reinforces the compensation."
     },
     {
       "id": "no_kip_no_swing_ever_in_this_program",
       "rule": "This is a strict-muscle-up program. Kipping muscle-ups are a different skill and are not the goal here.",
-      "detail": "Kipping muscle-ups train a different neural pattern (hip drive → false-grip re-catch is kinetic-chain-dependent). Users who want kipping muscle-ups should train them separately. Deliberate segregation avoids fouling the strict pattern (Henry 1968 specificity: two different tasks)."
+      "detail": "Kipping muscle-ups train a different neural pattern (hip drive \u2192 false-grip re-catch is kinetic-chain-dependent). Users who want kipping muscle-ups should train them separately. Deliberate segregation avoids fouling the strict pattern (Henry 1968 specificity: two different tasks)."
     }
   ],
   "intake": {
@@ -90,7 +90,7 @@
       {
         "id": "days_per_week",
         "label": "Realistically, how many days per week can you commit?",
-        "help": "Honest answer wins. Muscle-up work benefits from spacing — 3-4 sessions per week is optimal.",
+        "help": "Honest answer wins. Muscle-up work benefits from spacing \u2014 3-4 sessions per week is optimal.",
         "type": "select",
         "required": true,
         "options": [
@@ -118,7 +118,7 @@
           {
             "value": "under_3",
             "label": "0-2 strict reps",
-            "hint": "Prerequisite gate fires — routes to First Strict Pull-Up"
+            "hint": "Prerequisite gate fires \u2014 routes to First Strict Pull-Up"
           },
           {
             "value": "3_5",
@@ -139,7 +139,7 @@
       },
       {
         "id": "ring_dip_count",
-        "label": "How many strict ring dips can you do (support position → full lockout → depth at 90° elbow → lockout)?",
+        "label": "How many strict ring dips can you do (support position \u2192 full lockout \u2192 depth at 90\u00b0 elbow \u2192 lockout)?",
         "type": "select",
         "required": true,
         "help": "3-5 minimum. Below that, ring-dip strength is the bottleneck and this program builds it first.",
@@ -147,7 +147,7 @@
           {
             "value": "under_3",
             "label": "0-2 strict ring dips",
-            "hint": "Tier A — ring-dip build first"
+            "hint": "Tier A \u2014 ring-dip build first"
           },
           {
             "value": "3_5",
@@ -213,7 +213,7 @@
           {
             "value": "one_sometimes",
             "label": "One, sometimes",
-            "hint": "Tier C — consolidation"
+            "hint": "Tier C \u2014 consolidation"
           },
           {
             "value": "one_reliable",
@@ -223,7 +223,7 @@
           {
             "value": "multiple",
             "label": "Two or more unbroken",
-            "hint": "Program not optimised for you — see Block 2 when it ships"
+            "hint": "Program not optimised for you \u2014 see Block 2 when it ships"
           }
         ]
       },
@@ -270,23 +270,23 @@
     "physical_tests": [
       {
         "id": "strict_pullup_max_reps",
-        "label": "Strict pull-up — max reps",
-        "instructions": "Warm up shoulders 3 minutes. Dead hang start, chin clearly over the bar, controlled descent to full hang. No kip. Record clean reps. Must be ≥ 3 to unlock Tier B.",
+        "label": "Strict pull-up \u2014 max reps",
+        "instructions": "Warm up shoulders 3 minutes. Dead hang start, chin clearly over the bar, controlled descent to full hang. No kip. Record clean reps. Must be \u2265 3 to unlock Tier B.",
         "unit": "reps",
         "min": 0,
         "max": 30
       },
       {
         "id": "ring_dip_max_reps",
-        "label": "Strict ring dip — max reps",
-        "instructions": "Rings at chest height. Support position → lower to 90° elbow → lock out. Full range, no leg swing. Record clean reps. Must be ≥ 3 to unlock Tier B.",
+        "label": "Strict ring dip \u2014 max reps",
+        "instructions": "Rings at chest height. Support position \u2192 lower to 90\u00b0 elbow \u2192 lock out. Full range, no leg swing. Record clean reps. Must be \u2265 3 to unlock Tier B.",
         "unit": "reps",
         "min": 0,
         "max": 30
       },
       {
         "id": "false_grip_hang_max_seconds",
-        "label": "False-grip dead hang — max seconds",
+        "label": "False-grip dead hang \u2014 max seconds",
         "instructions": "Set rings at hanging height. Grip with wrist on top of the ring (fingers curled around the strap). Hang until grip fails. Record seconds. Zero counts.",
         "unit": "seconds",
         "min": 0,
@@ -294,7 +294,7 @@
       },
       {
         "id": "false_grip_pullup_max_reps",
-        "label": "False-grip strict pull-up — max reps",
+        "label": "False-grip strict pull-up \u2014 max reps",
         "instructions": "From false-grip hang, pull chest to rings. Reset false grip on every rep if it slips. Record clean reps.",
         "unit": "reps",
         "min": 0,
@@ -302,7 +302,7 @@
       },
       {
         "id": "ring_support_lockout_seconds",
-        "label": "Ring support hold (locked out) — max seconds",
+        "label": "Ring support hold (locked out) \u2014 max seconds",
         "instructions": "Muscle up into support (or step up from a box). Hold rings straight-arm turned out, hollow body. Record seconds until form breaks.",
         "unit": "seconds",
         "min": 0,
@@ -317,7 +317,7 @@
       },
       {
         "id": "shoulder_pain_stop_rule",
-        "label": "I agree to stop the session if shoulder pain appears during a hang, transition, or support hold — no training through it.",
+        "label": "I agree to stop the session if shoulder pain appears during a hang, transition, or support hold \u2014 no training through it.",
         "required": true
       }
     ],
@@ -344,7 +344,7 @@
           "under_3"
         ],
         "block_title": "Build the ring-dip base first",
-        "block_body": "Under 3 strict ring dips, the top-half of the muscle-up will collapse. The Tier A phase of this program is a ring-dip build — it's a legitimate use of your time here — but you may prefer to run a dedicated dip program first. If you continue, the Tier A phase becomes your ring-dip build."
+        "block_body": "Under 3 strict ring dips, the top-half of the muscle-up will collapse. The Tier A phase of this program is a ring-dip build \u2014 it's a legitimate use of your time here \u2014 but you may prefer to run a dedicated dip program first. If you continue, the Tier A phase becomes your ring-dip build."
       }
     ]
   },
@@ -364,7 +364,7 @@
   "plan_tiers": [
     {
       "id": "tier_a_prep",
-      "label": "Tier A — Prerequisites met, ring dips + false grip building",
+      "label": "Tier A \u2014 Prerequisites met, ring dips + false grip building",
       "condition": "strict_pullup_max_reps >= 3 && ring_dip_max_reps < 3",
       "typical_outcome": "By week 8: 3-5 strict ring dips, 15-second false-grip hang, first false-grip ring rows.",
       "outcome_confidence": "realistic",
@@ -380,12 +380,12 @@
         },
         "sessions_per_week": 3,
         "session_length_min": 25,
-        "note": "Prep tier — ring dip build + false grip tolerance dominate. Transition drills locked out until Tier B unlocks."
+        "note": "Prep tier \u2014 ring dip build + false grip tolerance dominate. Transition drills locked out until Tier B unlocks."
       }
     },
     {
       "id": "tier_b_transition",
-      "label": "Tier B — Transition drills unlocked",
+      "label": "Tier B \u2014 Transition drills unlocked",
       "condition": "strict_pullup_max_reps >= 3 && ring_dip_max_reps >= 3 && muscle_up_experience == 'never'",
       "typical_outcome": "By week 10-12: seated-band transition mastered, low-ring transition mastered, first jump-assisted muscle-up.",
       "outcome_confidence": "realistic",
@@ -406,7 +406,7 @@
     },
     {
       "id": "tier_c_first_rep",
-      "label": "Tier C — First strict rep hunt",
+      "label": "Tier C \u2014 First strict rep hunt",
       "condition": "muscle_up_experience == 'one_sometimes' || muscle_up_experience == 'one_reliable'",
       "typical_outcome": "By week 8: 2-3 strict ring muscle-ups unbroken, or 1 reliable + reduced set-up time.",
       "outcome_confidence": "fair",
@@ -437,7 +437,7 @@
   "phases": [
     {
       "id": "phase_1_dip_and_false_grip_base",
-      "name": "Weeks 1-8 — Ring dip base + false-grip tolerance (Tier A)",
+      "name": "Weeks 1-8 \u2014 Ring dip base + false-grip tolerance (Tier A)",
       "starts": "2026-01-05",
       "ends": "2026-03-01",
       "duration_weeks": 8,
@@ -449,15 +449,15 @@
         "block_active_hollow"
       ],
       "goal": "Build 3-5 strict ring dips + 15-second false-grip hang. No transition drills yet.",
-      "template_note": "Blocked practice weeks 1-2, interleaved weeks 3+. Ring dip support hold + negative → full dip is the Tier A backbone.",
+      "template_note": "Blocked practice weeks 1-2, interleaved weeks 3+. Ring dip support hold + negative \u2192 full dip is the Tier A backbone.",
       "notes": [
-        "The support hold isolates the lockout — the exact position the muscle-up finishes in.",
-        "False-grip work capped at 3 minutes accumulated per session for weeks 1-2 (engineering choice; the wrist tissue tolerance is analogous to handstand wrist prep — Wiesinger 2019 mechanism basis)."
+        "The support hold isolates the lockout \u2014 the exact position the muscle-up finishes in.",
+        "False-grip work capped at 3 minutes accumulated per session for weeks 1-2 (engineering choice; the wrist tissue tolerance is analogous to handstand wrist prep \u2014 Wiesinger 2019 mechanism basis)."
       ]
     },
     {
       "id": "phase_2_transition_and_low_ring",
-      "name": "Weeks 1-8 — Transition mechanics (Tier B)",
+      "name": "Weeks 1-8 \u2014 Transition mechanics (Tier B)",
       "starts": "2026-01-05",
       "ends": "2026-03-01",
       "duration_weeks": 8,
@@ -469,16 +469,16 @@
         "block_low_ring_practice",
         "block_active_hollow"
       ],
-      "goal": "Groove the transition mechanic. Seated-band → low-ring → jump-assisted → first strict attempt week 8.",
+      "goal": "Groove the transition mechanic. Seated-band \u2192 low-ring \u2192 jump-assisted \u2192 first strict attempt week 8.",
       "template_note": "Weeks 1-2 blocked (each session focuses on one link of the chain), weeks 3+ interleaved. Transition negatives from support are the highest-transfer drill.",
       "notes": [
         "Video review after every low-ring or jump-assist attempt as an optional self-controlled feedback (Chiviacowsky & Wulf 2002).",
-        "First strict attempt is a cold, first-movement-of-session test — not the finisher."
+        "First strict attempt is a cold, first-movement-of-session test \u2014 not the finisher."
       ]
     },
     {
       "id": "phase_3_first_rep_consolidation",
-      "name": "Weeks 1-8 — First rep consolidation (Tier C)",
+      "name": "Weeks 1-8 \u2014 First rep consolidation (Tier C)",
       "starts": "2026-01-05",
       "ends": "2026-03-01",
       "duration_weeks": 8,
@@ -490,18 +490,18 @@
         "block_transition_progression",
         "block_active_hollow"
       ],
-      "goal": "1 rep → 2-3 unbroken. Weighted preview from week 4.",
+      "goal": "1 rep \u2192 2-3 unbroken. Weighted preview from week 4.",
       "template_note": "Fully interleaved. Volume via low-ring reps + weighted dip / weighted false-grip pull-up. Weekly max-rep retest.",
       "notes": [
         "Weekly max-rep retest.",
-        "Weighted preview: +2.5 kg dip or +2.5 kg false-grip pull-up from week 4 IF strict muscle-up count ≥ 1."
+        "Weighted preview: +2.5 kg dip or +2.5 kg false-grip pull-up from week 4 IF strict muscle-up count \u2265 1."
       ]
     }
   ],
   "blocks": [
     {
       "id": "block_shoulder_prep",
-      "name": "Shoulder + wrist prep — every session",
+      "name": "Shoulder + wrist prep \u2014 every session",
       "category": "accessory",
       "location": "anywhere",
       "duration_min": 5,
@@ -527,7 +527,7 @@
         10,
         15
       ],
-      "note": "Support hold → negative → full dip → deep dip. The top half of the muscle-up. Tier A primary.",
+      "note": "Support hold \u2192 negative \u2192 full dip \u2192 deep dip. The top half of the muscle-up. Tier A primary.",
       "items": [
         {
           "exercise_id": "mu_ring_dip_support_hold",
@@ -575,7 +575,7 @@
         8,
         12
       ],
-      "note": "False-grip hang → false-grip ring row → false-grip pull-up. Wrist adaptation to the on-top-of-ring position is the bottleneck.",
+      "note": "False-grip hang \u2192 false-grip ring row \u2192 false-grip pull-up. Wrist adaptation to the on-top-of-ring position is the bottleneck.",
       "items": [
         {
           "exercise_id": "mu_false_grip_hang",
@@ -636,7 +636,7 @@
         10,
         15
       ],
-      "note": "The bottleneck. Seated-band → low-ring negative → low-ring positive. Negatives from support are the highest-transfer drill (Roig 2009 eccentric-heavy meta).",
+      "note": "The bottleneck. Seated-band \u2192 low-ring negative \u2192 low-ring positive. Negatives from support are the highest-transfer drill (Roig 2009 eccentric-heavy meta).",
       "items": [
         {
           "exercise_id": "mu_transition_seated_band",
@@ -676,7 +676,7 @@
         10,
         15
       ],
-      "note": "Rings set so feet touch ground. Full muscle-up mechanic without the full load. Progression: assisted with feet → jump-assist → strict low-ring → attempt strict full-ring.",
+      "note": "Rings set so feet touch ground. Full muscle-up mechanic without the full load. Progression: assisted with feet \u2192 jump-assist \u2192 strict low-ring \u2192 attempt strict full-ring.",
       "items": [
         {
           "exercise_id": "mu_low_ring_muscle_up",
@@ -702,7 +702,7 @@
           "sets": 1,
           "reps": 1,
           "starts_week": 6,
-          "note": "First strict rep test — cold, first movement in the session."
+          "note": "First strict rep test \u2014 cold, first movement in the session."
         }
       ],
       "capability_slot": "mu_transition_control",
@@ -901,8 +901,8 @@
     },
     "placement_principles": [
       "48h between the two hardest ring-loaded sessions in the week.",
-      "Do not run this program the same day as a heavy overhead press session — same joint system.",
-      "First strict muscle-up attempt is always the first movement of the session — cold, well-rested.",
+      "Do not run this program the same day as a heavy overhead press session \u2014 same joint system.",
+      "First strict muscle-up attempt is always the first movement of the session \u2014 cold, well-rested.",
       "If you miss a session, don't double up (Shea 2000 spacing effect)."
     ]
   },
@@ -923,7 +923,7 @@
       },
       {
         "id": "amber",
-        "label": "Hold — engine substitutes lower-load drills for the transition set",
+        "label": "Hold \u2014 engine substitutes lower-load drills for the transition set",
         "conditions": {
           "any_symptom_score_previous_day": [
             4,
@@ -947,8 +947,8 @@
         "escalate_if_repeated": true
       }
     ],
-    "week_end_rule": "If the week's key retest (max muscle-up reps for C, false-grip hang seconds + ring dip reps for A/B) improved or held → advance. If regressed AND symptom scores elevated → hold or drop level.",
-    "escalation": "Two red days in a week → skip the heavier transition or muscle-up test session. Persistent shoulder or wrist pain > 3 days → stop, see a clinician."
+    "week_end_rule": "If the week's key retest (max muscle-up reps for C, false-grip hang seconds + ring dip reps for A/B) improved or held \u2192 advance. If regressed AND symptom scores elevated \u2192 hold or drop level.",
+    "escalation": "Two red days in a week \u2192 skip the heavier transition or muscle-up test session. Persistent shoulder or wrist pain > 3 days \u2192 stop, see a clinician."
   },
   "daily_log_schema": {
     "date": "ISO date",
@@ -990,7 +990,7 @@
     },
     {
       "priority": 2,
-      "action": "Set up rings at variable heights — you need both dead-hang height AND low-ring (feet-touch) height across the block.",
+      "action": "Set up rings at variable heights \u2014 you need both dead-hang height AND low-ring (feet-touch) height across the block.",
       "reason": "Low-ring practice is a Tier B / C primary. Rings only at chest / support height limits the whole progression."
     },
     {
@@ -1000,32 +1000,32 @@
     },
     {
       "priority": 4,
-      "action": "Set up a phone stand — video review is the highest-value feedback for the transition mechanic.",
+      "action": "Set up a phone stand \u2014 video review is the highest-value feedback for the transition mechanic.",
       "reason": "Chiviacowsky & Wulf 2002: self-controlled feedback outperforms forced schedules. The video review button only works if a clip exists."
     }
   ],
   "evidence_base": {
     "physiological_targets": [
-      "False-grip tolerance — the wrist position (radial-flexed with hand on top of ring) loads flexor carpi ulnaris and extensor carpi radialis in a novel pattern. Vidal-Rovira 2024 (small-sample) documents higher forearm activation vs standard hang. Tendon adaptation timeframe is Wiesinger 2019 analog (~8-12 weeks for early collagen turnover) — flagged as engineering choice on exact volume.",
-      "Transition mechanic — the muscle-up transition is a straight-arm-to-bent-arm shift with elbows travelling from behind to in front of the body at chest height. No RCT-derived dose-response. Roig 2009 eccentric-heavy meta supports the negatives-from-support drill as the highest-transfer analog.",
-      "Ring dip strength — the top half of the muscle-up. Ring dips load rotator cuff + long head of biceps at end range more than parallel bar dips (Dickie 2017, Youdas 2010 dip variant EMG). Support hold isolates the lockout — the exact position the muscle-up finishes in.",
-      "Straight-arm shoulder integrity — support lockout and straight-arm pull-down train the shoulder in end-range flexion and extension. Sadowski 2021 (straight-arm press to handstand: 3× BW shoulder moment) is the closest analog for peak load; support lockout under bodyweight is lower but still significant.",
-      "Motor learning stages — Fitts & Posner 1967 cognitive → associative → autonomous. Tier A/B is cognitive → early associative for the transition. Blocked practice weeks 1-2 (Wulf & Shea 2002 complex-skill caveat), interleaved from week 3.",
-      "External-focus cues — Wulf 1998, 2013 (15-year review, ~100 studies). Halperin 2019: external focus specifically improves 1RM strength / force / velocity in weightlifting. Cues target the ring path (rings to sternum, drive rings down past hips), not the muscles."
+      "False-grip tolerance \u2014 the wrist position (radial-flexed with hand on top of ring) loads flexor carpi ulnaris and extensor carpi radialis in a novel pattern. Vidal-Rovira 2024 (small-sample) documents higher forearm activation vs standard hang. Tendon adaptation timeframe is Wiesinger 2019 analog (~8-12 weeks for early collagen turnover) \u2014 flagged as engineering choice on exact volume.",
+      "Transition mechanic \u2014 the muscle-up transition is a straight-arm-to-bent-arm shift with elbows travelling from behind to in front of the body at chest height. No RCT-derived dose-response. Roig 2009 eccentric-heavy meta supports the negatives-from-support drill as the highest-transfer analog.",
+      "Ring dip strength \u2014 the top half of the muscle-up. Ring dips load rotator cuff + long head of biceps at end range more than parallel bar dips (Dickie 2017, Youdas 2010 dip variant EMG). Support hold isolates the lockout \u2014 the exact position the muscle-up finishes in.",
+      "Straight-arm shoulder integrity \u2014 support lockout and straight-arm pull-down train the shoulder in end-range flexion and extension. Sadowski 2021 (straight-arm press to handstand: 3\u00d7 BW shoulder moment) is the closest analog for peak load; support lockout under bodyweight is lower but still significant.",
+      "Motor learning stages \u2014 Fitts & Posner 1967 cognitive \u2192 associative \u2192 autonomous. Tier A/B is cognitive \u2192 early associative for the transition. Blocked practice weeks 1-2 (Wulf & Shea 2002 complex-skill caveat), interleaved from week 3.",
+      "External-focus cues \u2014 Wulf 1998, 2013 (15-year review, ~100 studies). Halperin 2019: external focus specifically improves 1RM strength / force / velocity in weightlifting. Cues target the ring path (rings to sternum, drive rings down past hips), not the muscles."
     ],
     "session_rationale": {
       "block_shoulder_prep": "Band pull-aparts + scap CARs + wrist prep. Kibler 2013 scapular dyskinesis + Reinold 2007 supraspinatus EMG data support the pre-session activation dose. Non-optional in weeks 1-3 while wrist and shoulder are novel-load-tolerant.",
-      "block_ring_dip_ladder": "Support hold → negative → full dip → deep dip. The top half of the muscle-up. Youdas 2010 (dip variants EMG) informs the ladder — deep dip biases the anterior deltoid + serratus recruitment that the muscle-up finish demands.",
-      "block_false_grip_ladder": "False-grip hang → false-grip ring row → false-grip pull-up. Wrist adaptation to the on-top-of-ring position is the bottleneck. Vidal-Rovira 2024 forearm EMG data supports the false-grip-as-separate-capability framing.",
-      "block_false_grip_pullup": "False-grip strict pull-ups as the pull half of the muscle-up. Grip must survive the concentric — a strict pull-up in standard grip does not transfer directly. Trained as its own capability.",
-      "block_transition_progression": "The bottleneck. Seated-band → low-ring negative → low-ring positive. Negatives from support are the highest-transfer drill for the elbow-travel mechanic. Roig 2009 eccentric-heavy meta: eccentric training produces greater strength gains than concentric-only for matched work.",
-      "block_low_ring_practice": "Rings set so feet touch ground. Full muscle-up mechanic without the full load. Chained progression: assisted with feet → jump-assist → strict low-ring → attempt strict full-ring. Variability of practice (Schmidt 1975 schema theory) as the progression accumulates.",
-      "block_pullup_sets_submax": "Maintain the strict pull-up base while training the muscle-up. Doubles/triples at 60-70% max — non-failure volume, Zourdos 2019 velocity-loss threshold literature supports staying well shy of RIR 0.",
-      "block_pullup_maintenance": "Tier A only — hold the strict pull-up count while dip and false grip build. Two sub-max sets, no failure. Coyle 1984 detraining-timecourse analog: maintenance dose preserves the capability without competing with the primary training focus.",
+      "block_ring_dip_ladder": "Support hold \u2192 negative \u2192 full dip \u2192 deep dip. The top half of the muscle-up. Youdas 2010 (dip variants EMG) informs the ladder \u2014 deep dip biases the anterior deltoid + serratus recruitment that the muscle-up finish demands.",
+      "block_false_grip_ladder": "False-grip hang \u2192 false-grip ring row \u2192 false-grip pull-up. Wrist adaptation to the on-top-of-ring position is the bottleneck. Vidal-Rovira 2024 forearm EMG data supports the false-grip-as-separate-capability framing.",
+      "block_false_grip_pullup": "False-grip strict pull-ups as the pull half of the muscle-up. Grip must survive the concentric \u2014 a strict pull-up in standard grip does not transfer directly. Trained as its own capability.",
+      "block_transition_progression": "The bottleneck. Seated-band \u2192 low-ring negative \u2192 low-ring positive. Negatives from support are the highest-transfer drill for the elbow-travel mechanic. Roig 2009 eccentric-heavy meta: eccentric training produces greater strength gains than concentric-only for matched work.",
+      "block_low_ring_practice": "Rings set so feet touch ground. Full muscle-up mechanic without the full load. Chained progression: assisted with feet \u2192 jump-assist \u2192 strict low-ring \u2192 attempt strict full-ring. Variability of practice (Schmidt 1975 schema theory) as the progression accumulates.",
+      "block_pullup_sets_submax": "Maintain the strict pull-up base while training the muscle-up. Doubles/triples at 60-70% max \u2014 non-failure volume, Zourdos 2019 velocity-loss threshold literature supports staying well shy of RIR 0.",
+      "block_pullup_maintenance": "Tier A only \u2014 hold the strict pull-up count while dip and false grip build. Two sub-max sets, no failure. Coyle 1984 detraining-timecourse analog: maintenance dose preserves the capability without competing with the primary training focus.",
       "block_active_hollow": "Hollow-body hold + straight-arm pull-down (band). The muscle-up shape is a hollow shape at the pull; the support lockout is a straight-arm loaded position. Reinforce both with low-cost isometric and band work. McGill 2015 core-endurance work supports the isometric hollow dose."
     },
-    "progression_rationale": "Weeks 1-2 are blocked practice per Wulf & Shea 2002 (crucial caveat: CI benefits from simple lab skills often reverse in complex real-world skills). From week 3 the multi-dimensional generator interleaves 2-3 drills per session across the user's weakest capabilities (Henry 1968, Proteau 1992 specificity). Tier assignment at intake seeds capability_profile.estimated_level per capability_domain. Transition drills are gated: the seated-band transition requires mu_transition_control_level ≥ 1, low-ring negative requires ≥ 2, low-ring positive requires ≥ 3, first strict attempt from week 6-8 requires the full chain. Weekly max-rep retest (Tier C) or weekly false-grip-hang / ring-dip retest (Tier A/B). Full re-assessment at 4 and 8 weeks re-seeds the capability_profile.",
-    "outcome_evidence": "No cohort ETAs — Ackerman 1988 (early-stage cognitive ability correlates), Wu 2014 (3× variance in visuomotor rotation learning). Realistic 8-week block outcomes: Tier A — 3-5 strict ring dips, 15-second false-grip hang, first false-grip ring rows. Tier B — first low-ring muscle-up, first jump-assist, first strict attempt at week 8. Tier C — 2-3 strict ring muscle-ups unbroken. Direct RCT for a strict-muscle-up protocol is nonexistent; the drill order is derived from analog literature (Roig 2009 eccentric; Youdas 2010 dip EMG; Reinold 2007 rotator-cuff load; Kibler 2013 scapular dyskinesis; Wulf 1998/2013 motor learning; Shea 1979 CI; Chiviacowsky & Wulf 2002 self-controlled feedback) and coach-consensus (Sommer 2008 GymnasticBodies commentary; Low 2016 Overcoming Gravity commentary — cited as coach references, not evidence). Individual variation on the transition is large: some athletes crack it in weeks, others take a full year even with adequate prerequisite strength.",
+    "progression_rationale": "Weeks 1-2 are blocked practice per Wulf & Shea 2002 (crucial caveat: CI benefits from simple lab skills often reverse in complex real-world skills). From week 3 the multi-dimensional generator interleaves 2-3 drills per session across the user's weakest capabilities (Henry 1968, Proteau 1992 specificity). Tier assignment at intake seeds capability_profile.estimated_level per capability_domain. Transition drills are gated: the seated-band transition requires mu_transition_control_level \u2265 1, low-ring negative requires \u2265 2, low-ring positive requires \u2265 3, first strict attempt from week 6-8 requires the full chain. Weekly max-rep retest (Tier C) or weekly false-grip-hang / ring-dip retest (Tier A/B). Full re-assessment at 4 and 8 weeks re-seeds the capability_profile.",
+    "outcome_evidence": "No cohort ETAs \u2014 Ackerman 1988 (early-stage cognitive ability correlates), Wu 2014 (3\u00d7 variance in visuomotor rotation learning). Realistic 8-week block outcomes: Tier A \u2014 3-5 strict ring dips, 15-second false-grip hang, first false-grip ring rows. Tier B \u2014 first low-ring muscle-up, first jump-assist, first strict attempt at week 8. Tier C \u2014 2-3 strict ring muscle-ups unbroken. Direct RCT for a strict-muscle-up protocol is nonexistent; the drill order is derived from analog literature (Roig 2009 eccentric; Youdas 2010 dip EMG; Reinold 2007 rotator-cuff load; Kibler 2013 scapular dyskinesis; Wulf 1998/2013 motor learning; Shea 1979 CI; Chiviacowsky & Wulf 2002 self-controlled feedback) and coach-consensus (Sommer 2008 GymnasticBodies commentary; Low 2016 Overcoming Gravity commentary \u2014 cited as coach references, not evidence). Individual variation on the transition is large: some athletes crack it in weeks, others take a full year even with adequate prerequisite strength.",
     "outcome_by_tier": {
       "tier_a_prep": {
         "ring_dip_reps_target": "3-5",
@@ -1046,23 +1046,23 @@
       }
     },
     "contraindications": [
-      "Shoulder pain during a hang, transition, or support hold — session ends immediately. Do not train through it. Reinold 2007 supraspinatus load data + Sadowski 2021 straight-arm shoulder moment analog support the caution.",
-      "Acute rotator-cuff injury, labral tear, or shoulder dislocation in the last 6 months — dead hangs, ring support, and transition attempts contraindicated until cleared.",
-      "Currently symptomatic medial or lateral elbow tendinopathy — defer ring dip work and transition negatives. Use scap and hollow work only until cleared.",
-      "Acute wrist injury (TFCC tear, ligament instability) in the last 6 weeks — false-grip work is prohibited; hollow + hang-only substitutes.",
-      "Persistent cervical radiculopathy — avoid dead hangs and false-grip hangs entirely; the traction can inflame nerve root symptoms.",
-      "Uncontrolled hypertension with Valsalva concern — the transition and support hold provoke Valsalva. Use exhale-on-effort breathing or defer until controlled."
+      "Shoulder pain during a hang, transition, or support hold \u2014 session ends immediately. Do not train through it. Reinold 2007 supraspinatus load data + Sadowski 2021 straight-arm shoulder moment analog support the caution.",
+      "Acute rotator-cuff injury, labral tear, or shoulder dislocation in the last 6 months \u2014 dead hangs, ring support, and transition attempts contraindicated until cleared.",
+      "Currently symptomatic medial or lateral elbow tendinopathy \u2014 defer ring dip work and transition negatives. Use scap and hollow work only until cleared.",
+      "Acute wrist injury (TFCC tear, ligament instability) in the last 6 weeks \u2014 false-grip work is prohibited; hollow + hang-only substitutes.",
+      "Persistent cervical radiculopathy \u2014 avoid dead hangs and false-grip hangs entirely; the traction can inflame nerve root symptoms.",
+      "Uncontrolled hypertension with Valsalva concern \u2014 the transition and support hold provoke Valsalva. Use exhale-on-effort breathing or defer until controlled."
     ],
-    "adaptive_engine_hooks": "Shoulder + elbow + wrist symptom scores are the primary daily signals. Any > 6 for a day → gate the next session to shoulder prep + hollow only. Any 4-6 → engine proposes swapping the heaviest transition or ring drill for a lower-level substitute (proposal, user Accepts). Weekly max-rep retest: two consecutive weeks with a regression AND symptom score up → engine drops the user's mu_transition_control level by 1 and re-composes with lower-level drills next week. Video review self-select frequency is tracked (motivation proxy per Chiviacowsky & Wulf) but doesn't gate anything. Weighted preview from Tier C week 4 unlocks IF strict muscle-up count ≥ 1 (engine-gated). All engine adjustments respect the confirm-first rule.",
+    "adaptive_engine_hooks": "Shoulder + elbow + wrist symptom scores are the primary daily signals. Any > 6 for a day \u2192 gate the next session to shoulder prep + hollow only. Any 4-6 \u2192 engine proposes swapping the heaviest transition or ring drill for a lower-level substitute (proposal, user Accepts). Weekly max-rep retest: two consecutive weeks with a regression AND symptom score up \u2192 engine drops the user's mu_transition_control level by 1 and re-composes with lower-level drills next week. Video review self-select frequency is tracked (motivation proxy per Chiviacowsky & Wulf) but doesn't gate anything. Weighted preview from Tier C week 4 unlocks IF strict muscle-up count \u2265 1 (engine-gated). All engine adjustments respect the confirm-first rule.",
     "engineering_choices_flagged": [
-      "3-5 strict pull-up + 3-5 ring dip prerequisite gate — coach consensus (Sommer 2008, Low 2016 coach commentary), not RCT-derived.",
-      "False grip volume cap (3 min accumulated in weeks 1-2) — Wiesinger 2019 tendon-adaptation mechanism basis, no direct dose-response.",
-      "Seated-band → low-ring → jump-assist → strict progression — coach convention, not empirically tested.",
-      "Weekly max-rep retest cadence — engineering choice; matches multi-dimensional retest cadence used in Handstand Walk and First Strict Pull-Up.",
-      "First strict rep attempt from week 6-8 in Tier B — pragmatic; earlier attempts often fail without the transition groove, later leaves upside on the table.",
-      "Weighted preview (+2.5 kg) at Tier C — coach convention.",
-      "Ring dip support hold as Tier A entry drill — pragmatic; lockout position isolates the muscle-up finish position, but exact hold-time doses (15s, 30s, etc.) are engineering choice.",
-      "3-4 sessions/week — daily-short-beats-long inference from Karni 1998 + Walker 2003 + Shea 2000. No direct muscle-up-frequency RCT."
+      "3-5 strict pull-up + 3-5 ring dip prerequisite gate \u2014 coach consensus (Sommer 2008, Low 2016 coach commentary), not RCT-derived.",
+      "False grip volume cap (3 min accumulated in weeks 1-2) \u2014 Wiesinger 2019 tendon-adaptation mechanism basis, no direct dose-response.",
+      "Seated-band \u2192 low-ring \u2192 jump-assist \u2192 strict progression \u2014 coach convention, not empirically tested.",
+      "Weekly max-rep retest cadence \u2014 engineering choice; matches multi-dimensional retest cadence used in Handstand Walk and First Strict Pull-Up.",
+      "First strict rep attempt from week 6-8 in Tier B \u2014 pragmatic; earlier attempts often fail without the transition groove, later leaves upside on the table.",
+      "Weighted preview (+2.5 kg) at Tier C \u2014 coach convention.",
+      "Ring dip support hold as Tier A entry drill \u2014 pragmatic; lockout position isolates the muscle-up finish position, but exact hold-time doses (15s, 30s, etc.) are engineering choice.",
+      "3-4 sessions/week \u2014 daily-short-beats-long inference from Karni 1998 + Walker 2003 + Shea 2000. No direct muscle-up-frequency RCT."
     ],
     "references": [
       {
@@ -1089,7 +1089,7 @@
         "year": 2007,
         "title": "Electromyographic analysis of the supraspinatus and deltoid muscles during 3 common rehabilitation exercises",
         "source": "Journal of Orthopaedic and Sports Physical Therapy 37(9):519-527",
-        "used_for": "Supraspinatus EMG data — informs the shoulder-pain-stops-session rule and the pre-session prep dose."
+        "used_for": "Supraspinatus EMG data \u2014 informs the shoulder-pain-stops-session rule and the pre-session prep dose."
       },
       {
         "id": "kibler_2013",
@@ -1105,11 +1105,11 @@
         "year": 2021,
         "title": "Kinematic and kinetic analysis of the straight-arm press to handstand",
         "source": "PLOS One 16(7):e0253951",
-        "used_for": "3× bodyweight shoulder moment during straight-arm press to handstand — the closest analog for ring support end-range shoulder load."
+        "used_for": "3\u00d7 bodyweight shoulder moment during straight-arm press to handstand \u2014 the closest analog for ring support end-range shoulder load."
       },
       {
         "id": "wulf_1998",
-        "authors": "Wulf G, Höß M, Prinz W",
+        "authors": "Wulf G, H\u00f6\u00df M, Prinz W",
         "year": 1998,
         "title": "Instructions for motor learning: differential effects of internal versus external focus of attention",
         "source": "Journal of Motor Behavior 30(2):169-179",
@@ -1173,7 +1173,7 @@
       },
       {
         "id": "proteau_1992",
-        "authors": "Proteau L, Marteniuk RG, Lévesque L",
+        "authors": "Proteau L, Marteniuk RG, L\u00e9vesque L",
         "year": 1992,
         "title": "A sensorimotor basis for motor learning: evidence indicating specificity of practice",
         "source": "Quarterly Journal of Experimental Psychology 44A(4):557-575",
@@ -1221,11 +1221,11 @@
       },
       {
         "id": "sinnett_2019",
-        "authors": "Sinnett AM, Cheatham SW, Brismée JM",
+        "authors": "Sinnett AM, Cheatham SW, Brism\u00e9e JM",
         "year": 2019,
         "title": "The effect of band-assisted pull-up training on muscular strength and pull-up performance",
-        "source": "Journal of Strength and Conditioning Research (or proceedings) — verification pending",
-        "used_for": "Band-assisted EMG is lower than strict — reinforces the framing that band assistance is a groove drill, not a strength driver. Applies to any band-assisted work referenced in this program.",
+        "source": "Journal of Strength and Conditioning Research (or proceedings) \u2014 verification pending",
+        "used_for": "Band-assisted EMG is lower than strict \u2014 reinforces the framing that band assistance is a groove drill, not a strength driver. Applies to any band-assisted work referenced in this program.",
         "verification_status": "pending"
       },
       {
@@ -1233,7 +1233,7 @@
         "authors": "Vidal-Rovira R, et al.",
         "year": 2024,
         "title": "Forearm activation patterns in false-grip vs standard grip on gymnastic rings",
-        "source": "Preprint / conference — verification pending",
+        "source": "Preprint / conference \u2014 verification pending",
         "used_for": "Higher forearm activation in false-grip vs standard. Small sample, flagged for founder science-advisor review. Supports the false-grip-as-separate-capability framing but is not the load-bearing citation.",
         "verification_status": "pending"
       },
@@ -1243,7 +1243,7 @@
         "year": 2017,
         "title": "Electromyographic analysis of muscle activation during pull-up variations",
         "source": "Journal of Electromyography and Kinesiology 32:30-36",
-        "used_for": "EMG data on pull-up variants — supports the drill-library ordering and the false-grip pull-up as its own capability.",
+        "used_for": "EMG data on pull-up variants \u2014 supports the drill-library ordering and the false-grip pull-up as its own capability.",
         "verification_status": "pending"
       }
     ],
@@ -1278,9 +1278,9 @@
       "title": "The 0-10 scale",
       "body_md": "Shoulder, elbow and wrist readiness all matter here. Rate what you notice this morning across those three joints.",
       "anchors": {
-        "low": "All quiet — ready to load rings",
+        "low": "All quiet \u2014 ready to load rings",
         "mid": "One joint stiff or sore",
-        "high": "Any pain on load — pause and reroute"
+        "high": "Any pain on load \u2014 pause and reroute"
       }
     },
     {
@@ -1293,7 +1293,7 @@
     {
       "kind": "custom_copy",
       "title": "How Muscle-Up Acquisition works",
-      "body_md": "Three to four short sessions a week. False-grip work, ring dip ladder, and — from Tier B — the transition drills that are the actual bottleneck. Kipping muscle-ups are a different skill; this program stays strict. If shoulders, elbows, or wrists complain, we back off — no exceptions."
+      "body_md": "Three to four short sessions a week. False-grip work, ring dip ladder, and \u2014 from Tier B \u2014 the transition drills that are the actual bottleneck. Kipping muscle-ups are a different skill; this program stays strict. If shoulders, elbows, or wrists complain, we back off \u2014 no exceptions."
     }
   ],
   "retest_metrics": [
@@ -1375,5 +1375,6 @@
       "aggregation": "best_of_last_n",
       "window_days": 14
     }
-  ]
+  ],
+  "slug": "muscle-up"
 }
