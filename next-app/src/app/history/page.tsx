@@ -5,6 +5,7 @@ import { ChevronDown, ChevronRight } from "lucide-react";
 import { useStore } from "@/lib/useStore";
 import { loadExercises } from "@/lib/data-loader";
 import { Heatmap } from "@/components/charts/Heatmap";
+import { BlockHistorySection } from "@/components/history/BlockHistorySection";
 import type { Exercise, DayLog, ExerciseLog } from "@/lib/schemas";
 import { EmptyStateCard } from "@/components/EmptyStateCard";
 
@@ -83,6 +84,8 @@ export default function HistoryPage() {
           <Heatmap store={store} onDayClick={setOpenDate} />
         </div>
       </section>
+
+      <BlockHistorySection />
 
       {(() => {
         // Only render regions the user has actually logged non-zero data for.

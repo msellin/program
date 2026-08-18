@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import type { Store, DayLog } from "@/lib/schemas";
 import { cn, iso } from "@/lib/utils";
+import { isBlockObjectOn } from "@/lib/engine/block-selectors";
 
 /**
  * GitHub-contribution-style calendar heatmap. Each cell = 1 day.
@@ -42,6 +43,7 @@ const STRENGTH_LIFTS = new Set([
 
 function buildCells(store: Store): Cell[] {
   const now = new Date();
+  const blockObjectOn = isBlockObjectOn(store);
   // Anchor the LAST column of the grid to the CURRENT week (Mon..Sun).
   // Otherwise a Wednesday viewer never sees today's cell.
   const jsDow = now.getDay();
@@ -60,7 +62,17 @@ function buildCells(store: Store): Cell[] {
     d.setDate(start.getDate() + i);
     const dateISO = iso(d);
     const log = store.logs[dateISO];
-    const skipped = store.skipped?.[dateISO];
+    // Phase E · when block-object is on, derive skip signal from block
+    // state as well as legacy `skipped[date]`. Once Phase F removes the
+    // legacy map, this becomes the sole source.
+    const legacySkipped = store.skipped?.[dateISO];
+    const blockObjectSkipped = blockObjectOn
+      ? Object.values(store.scheduled_blocks ?? {}).some(
+          (b) =>
+            b.actual_date === dateISO && (b.state === "skipped" || b.state === "moved"),
+        )
+      : false;
+    const skipped = legacySkipped || blockObjectSkipped;
 
     let state: Cell["state"] = "none";
     let strengthLogged = false;
