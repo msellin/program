@@ -44,7 +44,14 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
     const derived = store.logs[date]?.derived_state ?? null;
 
     // Scheduled override / moved-in session.
-    if (store.scheduled_overrides?.[date]) {
+    // Phase F · read from both legacy `scheduled_overrides` AND block-object
+    // state so the "Rescheduled session" chip shows regardless of which
+    // surface wrote the move.
+    const legacyOverride = store.scheduled_overrides?.[date];
+    const blockObjectMovedIn = Object.values(store.scheduled_blocks ?? {}).some(
+      (b) => b.actual_date === date && b.state === "moved" && b.planned_date !== date,
+    );
+    if (legacyOverride || blockObjectMovedIn) {
       list.push({ id: "override", tone: "slate", label: "Rescheduled session" });
     }
 
@@ -191,7 +198,19 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
             <div className="rounded border border-line-soft border-l-4 border-l-slate bg-surface p-3 text-sm">
               <p className="font-semibold text-strong">Rescheduled session</p>
               <p className="text-[13px] text-muted mt-0.5">
-                {store.scheduled_overrides?.[date]?.reason ?? "Moved from another day"}
+                {(() => {
+                  // Phase F · prefer the block-object move_history's most-recent
+                  // reason when available, fall back to legacy overrides.
+                  const movedInBlock = Object.values(store.scheduled_blocks ?? {}).find(
+                    (b) => b.actual_date === date && b.state === "moved" && b.planned_date !== date,
+                  );
+                  const blockReason = movedInBlock?.move_history?.[movedInBlock.move_history.length - 1]?.reason;
+                  return (
+                    blockReason ??
+                    store.scheduled_overrides?.[date]?.reason ??
+                    "Moved from another day"
+                  );
+                })()}
               </p>
             </div>
           ) : null}

@@ -4,6 +4,9 @@ import { useEffect } from "react";
 import { useStore } from "@/lib/useStore";
 import { createClient } from "@/lib/supabase/client";
 import { setSyncAuthed } from "@/lib/sync";
+import { loadProgram } from "@/lib/data-loader";
+import { migrateLegacyToBlocks, needsBlockMigration } from "@/lib/migrations/legacy-to-blocks";
+import type { Program } from "@/lib/schemas";
 
 const KEY = "program.log.v2";
 
@@ -90,6 +93,50 @@ export function StoreHydrator() {
 
   // Reference `hydrated` so the effect re-runs on hydrate completion (no-op otherwise).
   void hydrated;
+
+  // Phase F · block-object rebuild — default the flag ON for accounts that
+  // never explicitly toggled it, then run the one-shot legacy → blocks
+  // migration. This is what "Phase F ships public" means: the flag is
+  // effectively on for everyone unless they opted out on Profile.
+  // Explicit `false` (user turned it off) is respected — we never flip it
+  // back on silently.
+  useEffect(() => {
+    if (!hydrated) return;
+    const state = useStore.getState();
+    const flags = state.store.feature_flags;
+    if (!flags || flags.block_object === undefined) {
+      state.setFeatureFlag("block_object", true);
+    }
+  }, [hydrated]);
+
+  // Companion effect — once the flag is on, ensure the migration has run.
+  // Loads active-program JSONs, invokes the idempotent migrator, replaces
+  // the store. Short-circuits after the first successful run per user.
+  useEffect(() => {
+    if (!hydrated) return;
+    const state = useStore.getState();
+    if (state.store.feature_flags?.block_object !== true) return;
+    if (!needsBlockMigration(state.store)) return;
+
+    const profile = state.store.user_profile;
+    const slugs = new Set<string>();
+    if (profile?.active_program_id) slugs.add(profile.active_program_id);
+    for (const s of profile?.active_program_ids ?? []) slugs.add(s);
+    if (slugs.size === 0) return;
+
+    void Promise.all(Array.from(slugs).map((slug) => loadProgram(slug)))
+      .then((programs) => {
+        const bySlug: Record<string, Program> = {};
+        for (const p of programs) if (p.slug) bySlug[p.slug] = p;
+        const current = useStore.getState().store;
+        if (!needsBlockMigration(current)) return;
+        const migrated = migrateLegacyToBlocks(current, bySlug, new Date().toISOString().slice(0, 10));
+        useStore.getState().replaceStore(migrated);
+      })
+      .catch(() => {
+        // Silent — migration is idempotent, next mount will retry.
+      });
+  }, [hydrated]);
 
   return null;
 }

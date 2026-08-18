@@ -1,4 +1,5 @@
 import type { Store } from "./schemas";
+import { isBlockObjectOn } from "./engine/block-selectors";
 
 export type ChatMessage = { role: "user" | "assistant"; content: string };
 
@@ -17,6 +18,12 @@ export function coachConfigured(): boolean {
 /**
  * Build the volatile per-request state slice sent to the Worker.
  * Trim logs to the last 30 days so system prompt stays sane.
+ *
+ * Phase F · block-object rebuild — when `block_object` is on, `skipped`
+ * is synthesized from `scheduled_blocks` so the Worker LLM sees the same
+ * canonical shape regardless of surface. Also emits a `blocks_summary`
+ * with per-program recent activity so the coach can reference specific
+ * program adherence without loading the whole `scheduled_blocks` map.
  */
 export function extractState(store: Store) {
   const dates = Object.keys(store.logs).sort();
@@ -24,6 +31,47 @@ export function extractState(store: Store) {
   const recent_logs: Record<string, unknown> = {};
   for (const d of recent) recent_logs[d] = store.logs[d];
   const lastWithSymptoms = [...recent].reverse().find((d) => store.logs[d]?.symptoms);
+
+  // Merged `skipped` shape: legacy + synthesized-from-blocks.
+  const blockObjectOn = isBlockObjectOn(store);
+  const skipped: Record<string, { reason?: string; moved_to?: string }> = {
+    ...(store.skipped ?? {}),
+  };
+  if (blockObjectOn) {
+    for (const b of Object.values(store.scheduled_blocks ?? {})) {
+      if (b.state === "skipped") {
+        skipped[b.actual_date] = { reason: b.notes };
+      } else if (b.state === "moved") {
+        skipped[b.planned_date] = {
+          reason: "moved",
+          moved_to: b.actual_date,
+        };
+      }
+    }
+  }
+
+  // Per-program recent-activity summary (last 30 days).
+  const blocks_summary: Record<
+    string,
+    { done: number; planned: number; skipped: number; moved: number }
+  > = {};
+  if (blockObjectOn) {
+    const cutoff = recent[0] ?? "";
+    for (const b of Object.values(store.scheduled_blocks ?? {})) {
+      if (b.actual_date < cutoff) continue;
+      const p = (blocks_summary[b.program_slug] ??= {
+        done: 0,
+        planned: 0,
+        skipped: 0,
+        moved: 0,
+      });
+      if (b.state === "done") p.done++;
+      else if (b.state === "skipped") p.skipped++;
+      else if (b.state === "moved") p.moved++;
+      else p.planned++;
+    }
+  }
+
   return {
     training_maxes: store.training_maxes,
     recent_logs,
@@ -31,7 +79,8 @@ export function extractState(store: Store) {
     current_phase: store.cycle?.phase_id ?? null,
     cycle_week: store.cycle?.week_in_cycle ?? null,
     stretch_targets: store.stretch_targets ?? {},
-    skipped: store.skipped ?? {},
+    skipped,
+    blocks_summary,
   };
 }
 

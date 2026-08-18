@@ -837,12 +837,24 @@ export const storeSchema = z.object({
   stretch_targets: z.record(z.string(), z.number()).optional(),
   /** Unix millis of the most-recent local write. Used for last-write-wins sync. */
   updated_at: z.number().optional(),
+  /**
+   * @deprecated Phase F (2026-08-18) — superseded by `scheduled_blocks`.
+   * Kept in the schema for one release cycle so existing KV blobs still
+   * parse. Read paths dual-consult until a future release removes the
+   * field entirely. Do NOT write here from new code paths.
+   */
   scheduled_overrides: z
     .record(
       z.string(),
       z.object({ blocks: z.array(z.string()), reason: z.string().optional() }),
     )
     .optional(),
+  /**
+   * @deprecated Phase F (2026-08-18) — superseded by `scheduled_blocks`
+   * with per-block state ("skipped" / "moved"). Kept for one release
+   * cycle so existing KV blobs still parse. Do NOT write here from new
+   * code paths.
+   */
   skipped: z
     .record(
       z.string(),

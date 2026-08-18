@@ -330,12 +330,15 @@ function BetaFeatureToggles() {
           className="mt-1 flex-shrink-0 w-5 h-5"
         />
         <span className="text-[13px] text-strong leading-relaxed">
-          <span className="font-semibold">Block-object Today view</span>
+          <span className="font-semibold">Block-object plan model</span>
+          <span className="ml-2 font-mono text-[10px] uppercase tracking-widest text-green">
+            default on
+          </span>
           <span className="block text-[12px] text-muted mt-0.5">
-            Per-program Skip / Move menus. Multi-track day header when 2+
-            programs are active. Fixes the Today-view duplication bug when
-            a session is moved between days. Runs a one-time migration on
-            first flip.
+            Per-program Skip / Move menus on Today. Dot-per-program on Week.
+            Adherence card on Progress. Recent-blocks list on History. Fixes
+            the Today-view duplication bug when a session is moved between
+            days. Uncheck to revert to the legacy day-level model.
           </span>
         </span>
       </label>
