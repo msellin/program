@@ -11,6 +11,7 @@
     "e2e:personas": "playwright test -c tests/e2e/playwright.config.ts personas.spec.ts"
   },
   "dependencies": {
+    "@sentry/nextjs": "^10.70.0",
     "@serwist/next": "^9.5.12",
     "@supabase/ssr": "^0.12.4",
     "@supabase/supabase-js": "^2.109.0",

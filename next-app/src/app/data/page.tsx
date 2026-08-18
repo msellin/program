@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import { useStore } from "@/lib/useStore";
 import { storeSchema } from "@/lib/schemas";
 import { today } from "@/lib/utils";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
+import { createClient } from "@/lib/supabase/client";
 import type { Store } from "@/lib/schemas";
 
 export default function DataPage() {
@@ -14,8 +16,12 @@ export default function DataPage() {
   const hydrated = useStore((s) => s.hydrated);
   const replace = useStore((s) => s.replaceStore);
   const wipe = useStore((s) => s.wipe);
+  const router = useRouter();
   const [copyLabel, setCopyLabel] = useState("Copy to clipboard");
   const [confirmWipe, setConfirmWipe] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
   const [pendingImport, setPendingImport] = useState<{
     data: Store;
     source: "file" | "paste";
@@ -193,6 +199,80 @@ export default function DataPage() {
           wipe();
         }}
         onCancel={() => setConfirmWipe(false)}
+      />
+
+      {/* Delete-account cascade — GDPR right-to-erasure. Deletes the Supabase
+          auth user; user_states + user_state_snapshots cascade via
+          ON DELETE CASCADE. Local storage wiped on the client. */}
+      <section className="mt-8 rounded border border-red/40 bg-red/5 p-4 space-y-3">
+        <div>
+          <h2 className="text-[15px] font-semibold text-strong">Delete my account</h2>
+          <p className="text-[12px] text-muted mt-1 leading-relaxed">
+            Permanently removes your account, your training log, morning
+            checks, and all synced data on our server. Cannot be recovered.
+            Export a backup first if you want a copy.
+          </p>
+        </div>
+        {deleteError ? (
+          <p className="text-[12px] text-red border-l-4 border-red pl-2">{deleteError}</p>
+        ) : null}
+        <button
+          type="button"
+          onClick={() => {
+            setDeleteError(null);
+            setConfirmDelete(true);
+          }}
+          disabled={deleting}
+          className="w-full sm:w-auto px-4 py-2 min-h-[44px] border border-red text-red rounded bg-surface hover:bg-red hover:text-surface transition-colors text-sm disabled:opacity-50"
+        >
+          {deleting ? "Deleting…" : "Delete my account permanently"}
+        </button>
+      </section>
+
+      <ConfirmSheet
+        open={confirmDelete}
+        title="Delete your account permanently?"
+        body="This deletes your account, all logs, training maxes, morning checks, and every synced entry on our server. You cannot recover any of it after this action. Are you sure?"
+        confirmLabel="Delete forever"
+        danger
+        onConfirm={async () => {
+          setConfirmDelete(false);
+          setDeleting(true);
+          setDeleteError(null);
+          try {
+            const supabase = createClient();
+            const {
+              data: { session },
+            } = await supabase.auth.getSession();
+            if (!session?.access_token) {
+              setDeleteError("Not signed in. Sign in first, then try again.");
+              setDeleting(false);
+              return;
+            }
+            const res = await fetch("/api/delete-account", {
+              method: "DELETE",
+              headers: {
+                authorization: `Bearer ${session.access_token}`,
+              },
+            });
+            if (!res.ok) {
+              const text = await res.text().catch(() => "");
+              setDeleteError(
+                `Delete failed (${res.status}). ${text || "Try again in a moment."}`,
+              );
+              setDeleting(false);
+              return;
+            }
+            // Clear local + sign out + bounce to landing.
+            wipe();
+            await supabase.auth.signOut();
+            router.replace("/sign-in");
+          } catch (e) {
+            setDeleteError(e instanceof Error ? e.message : String(e));
+            setDeleting(false);
+          }
+        }}
+        onCancel={() => setConfirmDelete(false)}
       />
 
       <ConfirmSheet
