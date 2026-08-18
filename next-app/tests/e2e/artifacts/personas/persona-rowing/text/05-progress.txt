@@ -1,0 +1,70 @@
+TERAV
+Progress
+EXPORT REPORT
+
+Race-prep indicators — 2K trend, pace targets, taper compliance.
+
+Week of 17 Aug
+
+This week so far
+
+Nothing logged this week yet. Come back Sunday for a summary.
+
+HOW THE ENGINE READS YOU
+Per-track adherence
+LAST 28 DAYS
+
+rowing 2k test prep
+
+0/5 done · 0%
+
+· 4 UPCOMING · 1 SKIPPED
+
+Moved sessions don't count as misses — they're rescheduled work.
+
+Retest metrics
+Program targets
+
+2K row time
+
+CHECK AT WEEK 6
+
+BASELINE
+
+—
+
+CURRENT
+
+—
+
+Δ
+
+—
+
+Target −0:15 · stretch −0:30
+
+Threshold pace / 500m
+
+CHECK AT WEEK 6
+
+BASELINE
+
+—
+
+CURRENT
+
+—
+
+Δ
+
+—
+
+Target −0:03 · stretch −0:06
+
+Current = latest logged value. Baseline = first. Delta measured in the metric's direction (lower is better for times, higher for kg).
+
+TODAY
+WEEK
+PROGRESS
+HISTORY
+PROFILE

@@ -72,25 +72,34 @@ for (const persona of PERSONAS) {
       localStorage.setItem("program.firstrun.dismissed", "1");
     }, persona.programSlug);
 
-    // Push the simulated state to the server-side KV so tour navigations
-    // survive StoreHydrator's session-mismatch reset. Without this, every
-    // page.goto during the tour remounts StoreHydrator, in-memory Zustand is
-    // empty, so `sessionUid !== storedUid` fires and wipes localStorage —
-    // and pullRemote then fetches an empty server state. With this PUT, the
-    // reset still wipes local but the async pullRemote refills it from KV.
-    const kvPushed = await page.evaluate(async () => {
+    // Push the simulated state directly to Supabase Postgres so tour
+    // navigations survive StoreHydrator's session-mismatch reset. Without
+    // this, every page.goto during the tour remounts StoreHydrator,
+    // in-memory Zustand is empty, so `sessionUid !== storedUid` fires and
+    // wipes localStorage — and pullRemote then fetches an empty server
+    // state. Previously we PUT to /api/state (a KV shim); that endpoint
+    // was retired in commit 8c3ffc9 when we migrated to Postgres — the
+    // route is gone and the PUT returned 405, silently voiding every
+    // persona's tour artifacts. Now we upsert to `user_states` via the
+    // Supabase REST API directly, matching what PostgresAdapter.writeLive
+    // does at src/lib/persistence/postgres-adapter.ts:66. Fixed 2026-08-18.
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseAnon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (!supabaseUrl || !supabaseAnon) {
+      throw new Error("Missing SUPABASE URL / anon key in env — persona harness cannot push state");
+    }
+    const dbPushed = await page.evaluate(async (args) => {
       const raw = localStorage.getItem("program.log.v2");
       if (!raw) return { ok: false, reason: "no localStorage store" };
-      // Supabase SSR client stores session in cookies (base64-encoded JSON) under
-      // `sb-<project-ref>-auth-token`. Multi-part cookies use `.0`, `.1` suffixes.
+      // Supabase SSR client stores session in cookies (base64-encoded JSON)
+      // under `sb-<project-ref>-auth-token`. Multi-part cookies use `.0`, `.1`.
       const cookies = document.cookie.split("; ");
       const authParts = cookies
         .filter((c) => /^sb-[^=]+-auth-token(\.\d+)?=/.test(c))
-        .sort() // .0, .1, .2 order
+        .sort()
         .map((c) => decodeURIComponent(c.split("=")[1] ?? ""));
       if (authParts.length === 0) return { ok: false, reason: "no supabase auth cookie" };
       let joined = authParts.join("");
-      // The SSR cookie value is base64-encoded JSON, prefixed with "base64-".
       if (joined.startsWith("base64-")) {
         try {
           joined = atob(joined.slice("base64-".length));
@@ -99,22 +108,46 @@ for (const persona of PERSONAS) {
         }
       }
       let token: string | null = null;
+      let userId: string | null = null;
       try {
-        const parsed = JSON.parse(joined) as { access_token?: string };
+        const parsed = JSON.parse(joined) as {
+          access_token?: string;
+          user?: { id?: string };
+        };
         token = parsed.access_token ?? null;
+        userId = parsed.user?.id ?? null;
       } catch (e) {
         return { ok: false, reason: `parse failed: ${(e as Error).message}` };
       }
-      if (!token) return { ok: false, reason: "no access_token in cookie payload" };
-      const res = await fetch("/api/state", {
-        method: "PUT",
-        headers: { authorization: `Bearer ${token}`, "content-type": "application/json" },
-        body: raw,
+      if (!token) return { ok: false, reason: "no access_token" };
+      if (!userId) return { ok: false, reason: "no user id in cookie payload" };
+      let store: unknown;
+      try {
+        store = JSON.parse(raw);
+      } catch (e) {
+        return { ok: false, reason: `local store parse: ${(e as Error).message}` };
+      }
+      const storeObj = store as { updated_at?: number };
+      const body = {
+        user_id: userId,
+        store,
+        updated_at: storeObj.updated_at ?? Date.now(),
+      };
+      const res = await fetch(`${args.supabaseUrl}/rest/v1/user_states`, {
+        method: "POST",
+        headers: {
+          apikey: args.supabaseAnon,
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Prefer: "resolution=merge-duplicates",
+        },
+        body: JSON.stringify(body),
       });
-      return { ok: res.ok, status: res.status };
-    });
-    if (!kvPushed.ok) {
-      console.warn(`[${persona.id}] KV push before tour failed:`, kvPushed);
+      const text = res.ok ? "" : await res.text().catch(() => "");
+      return { ok: res.ok, status: res.status, body: text.slice(0, 200) };
+    }, { supabaseUrl, supabaseAnon });
+    if (!dbPushed.ok) {
+      console.warn(`[${persona.id}] Postgres push before tour failed:`, dbPushed);
     }
 
     // Walk every user-facing route at mobile + desktop.

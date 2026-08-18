@@ -1,0 +1,26 @@
+{
+  "id": "persona-rowing",
+  "displayName": "Rowing 2K race prep",
+  "archetypeId": "consistent-average",
+  "programSlug": "rowing-2k-test-prep",
+  "days": 45,
+  "focus": "Race-anchored arc, taper-terminated. 45 days lands the user mid-block through the taper week. Audit target: taper-week block replacements (block_race_pace_row → block_easy_recovery), 2K retest UX, mid-block threshold pace retest, run/erg log affordance.",
+  "simulatedAt": "2026-08-18T20:09:55.944Z",
+  "simSummary": {
+    "logs_count": 45,
+    "skipped_count": 5,
+    "day_adjustments_count": 0,
+    "dismissed_proposals_count": 0,
+    "training_maxes": {
+      "back_squat_highbar": 110,
+      "block_pull_midshin": 140,
+      "front_squat": 85,
+      "deadlift_conventional": 150,
+      "trap_bar_dl_floor": 145
+    }
+  },
+  "tourSummary": {
+    "routes": 14,
+    "errored": 0
+  }
+}

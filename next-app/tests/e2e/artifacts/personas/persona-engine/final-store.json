@@ -1,0 +1,597 @@
+{
+  "version": 2,
+  "logs": {
+    "2026-07-02": {
+      "date": "2026-07-02",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-07-03": {
+      "date": "2026-07-03",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-07-04": {
+      "date": "2026-07-04",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-07-05": {
+      "date": "2026-07-05",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-07-06": {
+      "date": "2026-07-06",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 2,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-07-07": {
+      "date": "2026-07-07",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-07-08": {
+      "date": "2026-07-08",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-07-09": {
+      "date": "2026-07-09",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-07-10": {
+      "date": "2026-07-10",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-07-11": {
+      "date": "2026-07-11",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-07-12": {
+      "date": "2026-07-12",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-07-13": {
+      "date": "2026-07-13",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-07-14": {
+      "date": "2026-07-14",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-07-15": {
+      "date": "2026-07-15",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 2,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-07-16": {
+      "date": "2026-07-16",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-07-17": {
+      "date": "2026-07-17",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-07-18": {
+      "date": "2026-07-18",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 2,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-07-19": {
+      "date": "2026-07-19",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-07-20": {
+      "date": "2026-07-20",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-07-21": {
+      "date": "2026-07-21",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-07-22": {
+      "date": "2026-07-22",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-07-23": {
+      "date": "2026-07-23",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 2,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-07-24": {
+      "date": "2026-07-24",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-07-25": {
+      "date": "2026-07-25",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-07-26": {
+      "date": "2026-07-26",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 2,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-07-27": {
+      "date": "2026-07-27",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 2,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-07-28": {
+      "date": "2026-07-28",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-07-29": {
+      "date": "2026-07-29",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 2,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-07-30": {
+      "date": "2026-07-30",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-07-31": {
+      "date": "2026-07-31",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 2,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-08-01": {
+      "date": "2026-08-01",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-08-02": {
+      "date": "2026-08-02",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-08-03": {
+      "date": "2026-08-03",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-08-04": {
+      "date": "2026-08-04",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-08-05": {
+      "date": "2026-08-05",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-08-06": {
+      "date": "2026-08-06",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-08-07": {
+      "date": "2026-08-07",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 2,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-08-08": {
+      "date": "2026-08-08",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-08-09": {
+      "date": "2026-08-09",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-08-10": {
+      "date": "2026-08-10",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 2,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-08-11": {
+      "date": "2026-08-11",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-08-12": {
+      "date": "2026-08-12",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-08-13": {
+      "date": "2026-08-13",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-08-14": {
+      "date": "2026-08-14",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-08-15": {
+      "date": "2026-08-15",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-08-16": {
+      "date": "2026-08-16",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-08-17": {
+      "date": "2026-08-17",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-08-18": {
+      "date": "2026-08-18",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-08-19": {
+      "date": "2026-08-19",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-08-20": {
+      "date": "2026-08-20",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-08-21": {
+      "date": "2026-08-21",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-08-22": {
+      "date": "2026-08-22",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-08-23": {
+      "date": "2026-08-23",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-08-24": {
+      "date": "2026-08-24",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-08-25": {
+      "date": "2026-08-25",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-08-26": {
+      "date": "2026-08-26",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-08-27": {
+      "date": "2026-08-27",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-08-28": {
+      "date": "2026-08-28",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-08-29": {
+      "date": "2026-08-29",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    },
+    "2026-08-30": {
+      "date": "2026-08-30",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 4
+      },
+      "derived_state": "green"
+    }
+  },
+  "training_maxes": {
+    "back_squat_highbar": 110,
+    "block_pull_midshin": 140,
+    "front_squat": 85,
+    "deadlift_conventional": 150,
+    "trap_bar_dl_floor": 145
+  },
+  "cycle": {
+    "phase_id": null,
+    "cycle_number": 1,
+    "week_in_cycle": 1
+  },
+  "updated_at": 1787990400000,
+  "feature_flags": {
+    "block_object": true
+  },
+  "user_profile": {
+    "uid": "5003ecf8-d407-4f53-9180-9ff35c056c36",
+    "email": "e2e-persona-engine@example.test",
+    "active_program_id": "engine-builder",
+    "active_program_ids": [
+      "engine-builder"
+    ],
+    "active_program_started_at": "2026-07-01T08:00:01.447Z",
+    "tier": "beta_forever"
+  },
+  "skipped": {
+    "2026-07-23": {
+      "blocks": [],
+      "reason": "sim: archetype skipped"
+    },
+    "2026-07-29": {
+      "blocks": [],
+      "reason": "sim: archetype skipped"
+    },
+    "2026-07-31": {
+      "blocks": [],
+      "reason": "sim: archetype skipped"
+    },
+    "2026-08-10": {
+      "blocks": [],
+      "reason": "sim: archetype skipped"
+    },
+    "2026-08-13": {
+      "blocks": [],
+      "reason": "sim: archetype skipped"
+    },
+    "2026-08-16": {
+      "blocks": [],
+      "reason": "sim: archetype skipped"
+    }
+  }
+}

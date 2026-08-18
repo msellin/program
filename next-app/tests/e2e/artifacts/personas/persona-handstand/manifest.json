@@ -1,0 +1,158 @@
+{
+  "personaId": "persona-handstand",
+  "capturedAt": "2026-08-18T20:07:59.532Z",
+  "viewports": [
+    {
+      "name": "mobile",
+      "width": 393,
+      "height": 852
+    },
+    {
+      "name": "desktop",
+      "width": 1280,
+      "height": 800
+    }
+  ],
+  "routes": [
+    {
+      "route": "/",
+      "slug": "01-today",
+      "status": "ok",
+      "loadMs": 1803,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/week",
+      "slug": "02-week",
+      "status": "ok",
+      "loadMs": 1764,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/coach",
+      "slug": "03-coach",
+      "status": "ok",
+      "loadMs": 1939,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/history",
+      "slug": "04-history",
+      "status": "ok",
+      "loadMs": 1876,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/progress",
+      "slug": "05-progress",
+      "status": "ok",
+      "loadMs": 1741,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/programs",
+      "slug": "06-programs",
+      "status": "ok",
+      "loadMs": 2193,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/programs/handstand-walk",
+      "slug": "07-programs-active",
+      "status": "ok",
+      "loadMs": 1761,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/profile",
+      "slug": "08-profile",
+      "status": "ok",
+      "loadMs": 2343,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/report",
+      "slug": "10-report",
+      "status": "ok",
+      "loadMs": 1775,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/guide",
+      "slug": "11-guide",
+      "status": "ok",
+      "loadMs": 1893,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/extras",
+      "slug": "12-extras",
+      "status": "ok",
+      "loadMs": 2071,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/check",
+      "slug": "13-check",
+      "status": "ok",
+      "loadMs": 1864,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/check/hip",
+      "slug": "14-check-hip",
+      "status": "ok",
+      "loadMs": 2016,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/events",
+      "slug": "15-events",
+      "status": "ok",
+      "loadMs": 1881,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    }
+  ]
+}

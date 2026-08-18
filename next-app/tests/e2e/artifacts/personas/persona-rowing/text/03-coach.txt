@@ -1,0 +1,17 @@
+TERAV
+Coach
+
+Reads your full history + clinical context each turn.
+
+Coming soon
+A coach that reads your whole log every time you ask.
+
+Plain-English questions like “how's my 2K trend against my target?” — answered against every session you've logged and the research your program is built on.
+
+Meanwhile: keep logging on Today. When the coach lands, your history is what it reads.
+
+TODAY
+WEEK
+PROGRESS
+HISTORY
+PROFILE

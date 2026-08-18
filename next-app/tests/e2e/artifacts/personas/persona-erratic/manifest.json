@@ -1,0 +1,158 @@
+{
+  "personaId": "persona-erratic",
+  "capturedAt": "2026-08-18T20:04:53.539Z",
+  "viewports": [
+    {
+      "name": "mobile",
+      "width": 393,
+      "height": 852
+    },
+    {
+      "name": "desktop",
+      "width": 1280,
+      "height": 800
+    }
+  ],
+  "routes": [
+    {
+      "route": "/",
+      "slug": "01-today",
+      "status": "ok",
+      "loadMs": 1858,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/week",
+      "slug": "02-week",
+      "status": "ok",
+      "loadMs": 1792,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/coach",
+      "slug": "03-coach",
+      "status": "ok",
+      "loadMs": 2003,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/history",
+      "slug": "04-history",
+      "status": "ok",
+      "loadMs": 1900,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/progress",
+      "slug": "05-progress",
+      "status": "ok",
+      "loadMs": 1902,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/programs",
+      "slug": "06-programs",
+      "status": "ok",
+      "loadMs": 2195,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/programs/concurrent-strength-maintenance",
+      "slug": "07-programs-active",
+      "status": "ok",
+      "loadMs": 1893,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/profile",
+      "slug": "08-profile",
+      "status": "ok",
+      "loadMs": 2172,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/report",
+      "slug": "10-report",
+      "status": "ok",
+      "loadMs": 1906,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/guide",
+      "slug": "11-guide",
+      "status": "ok",
+      "loadMs": 2068,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/extras",
+      "slug": "12-extras",
+      "status": "ok",
+      "loadMs": 1754,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/check",
+      "slug": "13-check",
+      "status": "ok",
+      "loadMs": 2140,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/check/hip",
+      "slug": "14-check-hip",
+      "status": "ok",
+      "loadMs": 1898,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/events",
+      "slug": "15-events",
+      "status": "ok",
+      "loadMs": 1812,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    }
+  ]
+}

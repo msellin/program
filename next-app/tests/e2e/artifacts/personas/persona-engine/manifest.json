@@ -1,0 +1,158 @@
+{
+  "personaId": "persona-engine",
+  "capturedAt": "2026-08-18T20:07:00.331Z",
+  "viewports": [
+    {
+      "name": "mobile",
+      "width": 393,
+      "height": 852
+    },
+    {
+      "name": "desktop",
+      "width": 1280,
+      "height": 800
+    }
+  ],
+  "routes": [
+    {
+      "route": "/",
+      "slug": "01-today",
+      "status": "ok",
+      "loadMs": 1809,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/week",
+      "slug": "02-week",
+      "status": "ok",
+      "loadMs": 1963,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/coach",
+      "slug": "03-coach",
+      "status": "ok",
+      "loadMs": 1778,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/history",
+      "slug": "04-history",
+      "status": "ok",
+      "loadMs": 1749,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/progress",
+      "slug": "05-progress",
+      "status": "ok",
+      "loadMs": 1913,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/programs",
+      "slug": "06-programs",
+      "status": "ok",
+      "loadMs": 2252,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/programs/engine-builder",
+      "slug": "07-programs-active",
+      "status": "ok",
+      "loadMs": 1868,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/profile",
+      "slug": "08-profile",
+      "status": "ok",
+      "loadMs": 2114,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/report",
+      "slug": "10-report",
+      "status": "ok",
+      "loadMs": 1743,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/guide",
+      "slug": "11-guide",
+      "status": "ok",
+      "loadMs": 1902,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/extras",
+      "slug": "12-extras",
+      "status": "ok",
+      "loadMs": 1811,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/check",
+      "slug": "13-check",
+      "status": "ok",
+      "loadMs": 1913,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/check/hip",
+      "slug": "14-check-hip",
+      "status": "ok",
+      "loadMs": 1897,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/events",
+      "slug": "15-events",
+      "status": "ok",
+      "loadMs": 1936,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    }
+  ]
+}

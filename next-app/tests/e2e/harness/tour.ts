@@ -29,7 +29,7 @@ export function buildRoutes(activeProgramSlug: string): TourRoute[] {
       desc: "Active program detail",
     },
     { slug: "08-profile", path: "/profile", desc: "Profile" },
-    { slug: "09-data", path: "/data", desc: "Data / export" },
+    // /data was removed 2026-08-18 — GDPR export + delete inlined on /profile.
     { slug: "10-report", path: "/report", desc: "Report" },
     { slug: "11-guide", path: "/guide", desc: "Guide" },
     { slug: "12-extras", path: "/extras", desc: "Extras" },
