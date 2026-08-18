@@ -104,7 +104,9 @@ export const blockItemSchema = z.object({
 export const blockSchema = z.object({
   id: z.string(),
   name: z.string(),
-  category: z.enum(["strength", "accessory", "run"]).optional(),
+  category: z
+    .enum(["strength", "accessory", "run", "skill", "endurance", "rehab", "mobility"])
+    .optional(),
   /**
    * v2 multi-dim: the capability domain this block primarily targets. When
    * set AND the program is `multi_dimensional` AND the plan generator is
