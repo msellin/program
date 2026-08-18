@@ -128,7 +128,7 @@ export default function ProfilePage() {
           </p>
           {isSuperAdmin ? (
             <span
-              className="font-mono text-[9.5px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-slate/20 text-slate flex-shrink-0"
+              className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-slate/20 text-slate flex-shrink-0"
               title="Super admin — multi-plan enrollment unlocked."
             >
               admin
@@ -190,7 +190,7 @@ export default function ProfilePage() {
                     <p className="text-[14px] font-semibold text-strong truncate flex items-center gap-1.5">
                       {p.name}
                       {isPrimary && activePrograms.length > 1 ? (
-                        <span className="font-mono text-[9.5px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-bronze/20 text-bronze">
+                        <span className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-bronze/20 text-bronze">
                           primary
                         </span>
                       ) : null}

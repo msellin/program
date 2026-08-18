@@ -85,7 +85,7 @@ export function PerProgramAdherenceCard() {
   return (
     <section className="rounded border border-line bg-surface p-4 space-y-3">
       <header className="flex items-baseline justify-between gap-2">
-        <h2 className="text-[14px] font-semibold text-strong">Per-track adherence</h2>
+        <h2 className="text-[15px] font-semibold text-strong">Per-track adherence</h2>
         <span className="text-[10px] font-mono uppercase tracking-widest text-muted">
           last {WINDOW_DAYS} days
         </span>
@@ -101,10 +101,14 @@ export function PerProgramAdherenceCard() {
                 {r.done}/{r.total - r.moved} done · {r.adherencePct}%
               </span>
             </div>
+            {/* Audit 2026-08-18 (visual-craft) — was 4 segments at h-1.5
+                which muddied amber-next-to-slate. Moved isn't a miss (already
+                excluded from adherencePct denominator); render only 3
+                segments here and keep the moved count in the label row. */}
             <div
-              className="flex h-1.5 rounded-full bg-line-soft overflow-hidden"
+              className="flex h-2 rounded-full bg-line-soft overflow-hidden"
               role="img"
-              aria-label={`${r.adherencePct}% adherence — ${r.done} done, ${r.planned} upcoming, ${r.skipped} skipped, ${r.moved} moved`}
+              aria-label={`${r.adherencePct}% adherence — ${r.done} done, ${r.planned} upcoming, ${r.skipped} skipped, ${r.moved} moved (moved shown in caption, not bar)`}
             >
               <span
                 className="bg-green"
@@ -112,18 +116,13 @@ export function PerProgramAdherenceCard() {
                 aria-hidden
               />
               <span
-                className="bg-muted/60"
+                className="bg-muted"
                 style={{ width: r.total > 0 ? `${(r.planned / r.total) * 100}%` : "0%" }}
                 aria-hidden
               />
               <span
                 className="bg-amber"
                 style={{ width: r.total > 0 ? `${(r.skipped / r.total) * 100}%` : "0%" }}
-                aria-hidden
-              />
-              <span
-                className="bg-slate"
-                style={{ width: r.total > 0 ? `${(r.moved / r.total) * 100}%` : "0%" }}
                 aria-hidden
               />
             </div>

@@ -1394,6 +1394,10 @@ export type ReadinessProposalPayload = ProposalBase & {
     pctTM: number;
     reintroCap: number;
   }>;
+  // Audit 2026-08-18 (#67) — transparency on which sessions the rule
+  // picked and how many were skipped in between for not hitting the
+  // threshold. See engine/readiness.ts.
+  nonQualifyingSessionsSkipped: number;
 };
 
 export type DayAdjustmentProposalPayload = ProposalBase & {

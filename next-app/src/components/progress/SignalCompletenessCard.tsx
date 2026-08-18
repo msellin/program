@@ -77,7 +77,7 @@ export function SignalCompletenessCard({ program }: { program: Program }) {
 
           {hasGaps ? (
             <div className="space-y-2">
-              <p className="font-mono text-[10px] uppercase tracking-widest text-bronze flex items-center gap-1.5">
+              <p className="font-mono text-[10px] uppercase tracking-widest text-slate flex items-center gap-1.5">
                 <Plus size={12} aria-hidden="true" />
                 Would additionally use
               </p>
@@ -93,7 +93,7 @@ export function SignalCompletenessCard({ program }: { program: Program }) {
                       {w.user_action_free}
                     </p>
                     {w.user_action_paid ? (
-                      <p className="text-[12px] text-bronze leading-snug">
+                      <p className="text-[12px] text-slate leading-snug">
                         <span className="text-muted">Or auto: </span>
                         {w.user_action_paid}
                       </p>

@@ -24,7 +24,21 @@ const TM_EXERCISES = [
 ] as const;
 
 export type ReadinessResult =
-  | { ready: true; evidence: ReadinessEvidence[] }
+  | {
+      ready: true;
+      evidence: ReadinessEvidence[];
+      /**
+       * Transparency payload — added 2026-08-18 per founder observation
+       * that the proposal card showed 2 dates without saying whether more
+       * qualifying sessions existed or how many were skipped for
+       * intensity/RPE reasons. Card renders these so the rule is
+       * legible: "2 most recent qualifying · N non-qualifying skipped
+       * in between."
+       */
+      qualifyingSessionsWalked: number;
+      nonQualifyingSessionsSkipped: number;
+      windowStartDate: string;
+    }
   | { ready: false; reason?: string };
 
 export type ReadinessEvidence = {
@@ -61,6 +75,7 @@ export function assessReintroReadiness(
   const dates = Object.keys(store.logs).filter((d) => d <= todayISO).sort().reverse();
   const found: ReadinessEvidence[] = [];
   const sessionsSeen = new Set<string>();
+  let nonQualifyingSkipped = 0;
 
   for (const d of dates) {
     if (found.length >= 2) break;
@@ -70,11 +85,14 @@ export function assessReintroReadiness(
     if (day.derived_state === "red" || day.derived_state === "amber") {
       return { ready: false, reason: `red/amber day on ${d}` };
     }
+    let dayHadStrengthWork = false;
+    let dayQualified = false;
     for (const [key, entry] of Object.entries(day.exercises)) {
       const exId = key.split(":")[1];
       if (!TM_EXERCISES.includes(exId as (typeof TM_EXERCISES)[number])) continue;
       const tm = store.training_maxes[exId];
       if (!tm) continue;
+      dayHadStrengthWork = true;
       const cap = tm * 0.8;
       const rec = entry as ExerciseLog;
       const sets = rec.sets ?? [];
@@ -86,6 +104,7 @@ export function assessReintroReadiness(
       if (qualifying && qualifying.weight_kg != null && qualifying.reps != null) {
         if (sessionsSeen.has(d)) continue;
         sessionsSeen.add(d);
+        dayQualified = true;
         found.push({
           date: d,
           exerciseId: exId,
@@ -98,9 +117,21 @@ export function assessReintroReadiness(
         break; // one qualifying exercise per day is enough
       }
     }
+    // Track strength-work days that DIDN'T qualify — audit 2026-08-18
+    // transparency for the ProposalCard.
+    if (dayHadStrengthWork && !dayQualified) nonQualifyingSkipped++;
   }
 
-  if (found.length >= 2) return { ready: true, evidence: found };
+  if (found.length >= 2) {
+    const windowStartDate = found[found.length - 1]?.date ?? todayISO;
+    return {
+      ready: true,
+      evidence: found,
+      qualifyingSessionsWalked: found.length,
+      nonQualifyingSessionsSkipped: nonQualifyingSkipped,
+      windowStartDate,
+    };
+  }
   return { ready: false, reason: `only ${found.length}/2 qualifying sessions` };
 }
 

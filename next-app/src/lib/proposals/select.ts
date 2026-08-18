@@ -143,6 +143,7 @@ function selectReadiness(
     targetPhaseName: nextPhase.name?.replace(/\s*\([^)]*\)\s*$/, "") ?? "next phase",
     daysToShift,
     evidence: result.evidence,
+    nonQualifyingSessionsSkipped: result.nonQualifyingSessionsSkipped,
   };
 }
 

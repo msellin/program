@@ -704,26 +704,28 @@ export function IntakeClient({ slug }: Props) {
           visualViewport correctly and closes the flow visually. */}
       <div className="flex-1 space-y-5 pb-4">
       {/* Audit 2026-08-18 (a11y P1) — this Cancel link exits the wizard
-          entirely and is distinct from the footer's per-step Back button. */}
-      <Link href={backHref} className="inline-flex items-center gap-1 text-[13px] text-muted hover:text-ink">
-        <ChevronLeft size={14} />
-        Cancel intake
-      </Link>
+          entirely and is distinct from the footer's per-step Back button.
+          Founder screenshot 2026-08-18: the large "Intake — {name}" H1 +
+          "Short questions so the program starts at the right level..."
+          paragraph repeated on every one of 17 steps (~80px vertical
+          boilerplate per screen). Killed both — the program name moves
+          into the progress rail as an additional segment (rail carries
+          {program} · {section} · Step N of M), so users still see the
+          context on every step without the wall of restated purpose. */}
+      <div className="flex items-center justify-between gap-2">
+        <Link href={backHref} className="inline-flex items-center gap-1 text-[13px] text-muted hover:text-ink">
+          <ChevronLeft size={14} />
+          Cancel intake
+        </Link>
+      </div>
 
-      <header className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight text-strong">
-          Intake — {manifestEntry?.name ?? slug.replace(/-/g, " ")}
-        </h1>
-        <p className="text-sm text-muted leading-relaxed">
-          Short questions so the program starts at the right level. Everything stays
-          on your account — not shared with anyone.
-        </p>
-      </header>
+      <h1 className="sr-only">Intake — {manifestEntry?.name ?? slug.replace(/-/g, " ")}</h1>
 
       <WizardProgress
         currentIndex={clampedStepIndex}
         total={steps.length}
         sectionLabel={currentStep?.sectionLabel}
+        programName={manifestEntry?.name ?? slug.replace(/-/g, " ")}
       />
       {/* Section label used to live on a separate row below the rail — merged
           into the rail per 2026-08-18 P1 polish. */}
@@ -794,10 +796,12 @@ function WizardProgress({
   currentIndex,
   total,
   sectionLabel,
+  programName,
 }: {
   currentIndex: number;
   total: number;
   sectionLabel?: string;
+  programName?: string;
 }) {
   if (total === 0) return null;
   const pct = Math.round(((currentIndex + 1) / total) * 100);
@@ -809,6 +813,13 @@ function WizardProgress({
       aria-valuemin={1}
       aria-valuemax={total}
     >
+      {/* Founder screenshot 2026-08-18 — program name lives in the rail
+          instead of a repeating H1/description block above each step. */}
+      {programName ? (
+        <p className="font-mono text-[10px] uppercase tracking-widest text-muted mb-1 truncate">
+          Intake · <span className="text-strong">{programName}</span>
+        </p>
+      ) : null}
       <div className="flex items-center gap-3">
         <div className="h-[3px] flex-1 rounded-full bg-line-soft overflow-hidden">
           <div
@@ -818,8 +829,7 @@ function WizardProgress({
           />
         </div>
         {/* Audit 2026-08-18 (P1) — section label merged into the rail so
-            the section identity + step counter share one row. Section text
-            wraps under the counter on very narrow viewports. */}
+            the section identity + step counter share one row. */}
         <span className="font-mono text-[10px] text-muted uppercase tracking-widest whitespace-nowrap">
           {sectionLabel ? <span className="mr-1 text-strong">{sectionLabel}</span> : null}
           <span>
@@ -1322,11 +1332,18 @@ function WizardFooter({
           {primaryLabel}
         </button>
       </div>
-      {!nextReady ? (
-        <p className="mx-auto max-w-2xl pb-3 -mt-1 text-center text-[11px] text-muted italic">
-          {secondaryTitle}
-        </p>
-      ) : null}
+      {/* Founder screenshot 2026-08-18 — caption used to render only when
+          !nextReady, so answering a question shrank the footer by ~24px
+          and the Back/Next buttons jumped up. Always reserve the slot;
+          swap text vs. an invisible spacer so height is constant. */}
+      <p
+        className="mx-auto max-w-2xl pb-3 -mt-1 text-center text-[11px] italic"
+        aria-hidden={nextReady}
+      >
+        <span className={nextReady ? "invisible text-muted" : "text-muted"}>
+          {nextReady ? " " : secondaryTitle || " "}
+        </span>
+      </p>
     </div>
   );
 }

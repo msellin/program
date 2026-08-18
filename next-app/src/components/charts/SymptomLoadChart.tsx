@@ -194,7 +194,11 @@ function CustomTooltip(props: { active?: boolean; payload?: Array<{ payload: Row
       <p className="font-mono text-muted mb-1">{row.date}</p>
       {row.squat_top != null ? (
         <p>
-          <span className="text-lat-left">■</span> Squat: {row.squat_top} kg
+          {/* Audit 2026-08-18 (visual-craft) — was `text-lat-left` (#4a8894
+              left-hip color) while the chart line is bronze. Legend/line
+              mismatch. Use inline style so recharts + tokens stay
+              synchronized. */}
+          <span style={{ color: "#C89666" }}>■</span> Squat: {row.squat_top} kg
         </p>
       ) : null}
       {row.pull_top != null ? (

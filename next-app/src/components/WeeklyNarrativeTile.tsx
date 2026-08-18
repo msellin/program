@@ -38,7 +38,7 @@ export function WeeklyNarrativeTile({ program }: { program: Program }) {
     <section className="rounded border border-line bg-surface p-3 space-y-3">
       <header className="flex items-center justify-between gap-2">
         <div className="flex-1 min-w-0">
-          <h3 className="text-[14px] font-semibold text-strong">{summary.label}</h3>
+          <h3 className="text-[15px] font-semibold text-strong">{summary.label}</h3>
           <p className="text-[12px] text-muted">
             {isCurrentWeek ? "This week so far" : "Completed week"}
           </p>

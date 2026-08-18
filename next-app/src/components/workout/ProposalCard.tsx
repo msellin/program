@@ -131,14 +131,27 @@ export function ProposalCard({ proposal, date }: { proposal: Proposal; date: str
             </div>
           ) : null}
           {proposal.kind === "readiness_after_layoff" ? (
-            <ul className="text-[12px] font-mono text-ink mt-1 space-y-0.5">
-              {proposal.evidence.map((e) => (
-                <li key={e.date + e.exerciseId}>
-                  {e.date} · {e.exerciseId} · {e.weightKg} kg × {e.reps}
-                  {e.rpe != null ? ` @ RPE ${e.rpe}` : ""} · {e.pctTM}% TM
-                </li>
-              ))}
-            </ul>
+            <>
+              <ul className="text-[12px] font-mono text-ink mt-1 space-y-0.5">
+                {proposal.evidence.map((e) => (
+                  <li key={e.date + e.exerciseId}>
+                    {e.date} · {e.exerciseId} · {e.weightKg} kg × {e.reps}
+                    {e.rpe != null ? ` @ RPE ${e.rpe}` : ""} · {e.pctTM}% TM
+                  </li>
+                ))}
+              </ul>
+              {/* Audit 2026-08-18 (#67 · founder Q1) — was ambiguous which
+                  two sessions the engine picked. Now says explicitly
+                  "2 most recent qualifying" + counts any non-qualifying
+                  strength sessions skipped in between so the rule reads
+                  honestly. */}
+              <p className="text-[11px] text-muted italic mt-1">
+                2 most recent qualifying sessions
+                {proposal.nonQualifyingSessionsSkipped > 0
+                  ? ` · ${proposal.nonQualifyingSessionsSkipped} lower-intensity session${proposal.nonQualifyingSessionsSkipped === 1 ? "" : "s"} in between didn't hit the threshold`
+                  : ""}
+              </p>
+            </>
           ) : null}
           {proposal.citationId ? (
             <div className="mt-1">
