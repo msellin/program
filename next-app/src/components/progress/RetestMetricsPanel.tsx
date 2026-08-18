@@ -161,9 +161,7 @@ function RetestCard({
           <div>
             <p className="text-muted text-[10px] uppercase tracking-wider">Δ</p>
             <p className={`font-mono ${deltaColor}`}>
-              {delta
-                ? `${delta.value >= 0 ? "+" : ""}${formatDelta(delta.value, m.unit)}`
-                : "—"}
+              {delta ? formatDelta(delta.value, m.unit) : "—"}
             </p>
           </div>
         </div>
@@ -238,10 +236,10 @@ function RetestCard({
 }
 
 function formatDelta(value: number, unit: string): string {
+  const sign = value < 0 ? "−" : value > 0 ? "+" : "";
   if (unit === "seconds") {
     const abs = Math.abs(Math.round(value));
-    const sign = value < 0 ? "−" : "+";
     return `${sign}${Math.floor(abs / 60) ? Math.floor(abs / 60) + ":" + String(abs % 60).padStart(2, "0") : abs + "s"}`;
   }
-  return `${value.toFixed(1)} ${unit}`;
+  return `${sign}${Math.abs(value).toFixed(1)} ${unit}`;
 }

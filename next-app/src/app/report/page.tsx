@@ -39,33 +39,39 @@ export default function ReportPage() {
   // open on "Last 12w" and see empty sections everywhere. Once the user has
   // 4+ weeks of logs the 12w default becomes useful; before that, "all" is
   // more welcoming.
-  const initialStore = useStore.getState().store;
-  const initialLogCount = Object.keys(initialStore.logs ?? {}).length;
-  // Prefer a program-scoped default: if there's an active program, pick the
-  // narrowest preset that covers the program's elapsed weeks. Otherwise use
-  // the log-count heuristic. Comprehensive audit 2026-08-18 P1-8 — 6-week
-  // programs on the "all" (3y) preset showed mostly-empty axes.
-  const initialProgramStart = initialStore.user_profile?.active_program_started_at;
-  const programElapsedDays = initialProgramStart
-    ? Math.max(0, Math.floor((Date.now() - new Date(initialProgramStart).getTime()) / 864e5))
-    : null;
-  const programScopedDefault: RangePreset | null =
-    programElapsedDays == null
-      ? null
-      : programElapsedDays <= 28
-        ? "4w"
-        : programElapsedDays <= 84
-          ? "12w"
-          : programElapsedDays <= 182
-            ? "26w"
-            : "all";
-  const [preset, setPreset] = useState<RangePreset>(
-    programScopedDefault ?? (initialLogCount >= 28 ? "12w" : "all"),
-  );
+  const [preset, setPreset] = useState<RangePreset>("12w");
+  const [presetChosenByUser, setPresetChosenByUser] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const store = useStore((s) => s.store);
   const hydrated = useStore((s) => s.hydrated);
   const primarySlug = useStore((s) => s.store.user_profile?.active_program_id);
+
+  // Delta audit 2026-08-19 P1-3 regression — the prior default-preset
+  // heuristic ran on `useStore.getState().store` at component mount, which
+  // fires BEFORE `hydrated` is true, so the store's `logs` and
+  // `active_program_started_at` were empty and every user landed on "all"
+  // (3Y range). Now recompute the default when hydration completes, but
+  // only if the user hasn't manually overridden it yet.
+  useEffect(() => {
+    if (!hydrated || presetChosenByUser) return;
+    const logCount = Object.keys(store.logs ?? {}).length;
+    const programStart = store.user_profile?.active_program_started_at;
+    const elapsedDays = programStart
+      ? Math.max(0, Math.floor((Date.now() - new Date(programStart).getTime()) / 864e5))
+      : null;
+    const scoped: RangePreset | null =
+      elapsedDays == null
+        ? null
+        : elapsedDays <= 28
+          ? "4w"
+          : elapsedDays <= 84
+            ? "12w"
+            : elapsedDays <= 182
+              ? "26w"
+              : "all";
+    setPreset(scoped ?? (logCount >= 28 ? "12w" : "all"));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hydrated]);
 
   useEffect(() => {
     if (!primarySlug) return;
@@ -173,7 +179,10 @@ export default function ReportPage() {
             <button
               key={p}
               type="button"
-              onClick={() => setPreset(p)}
+              onClick={() => {
+                setPreset(p);
+                setPresetChosenByUser(true);
+              }}
               aria-pressed={preset === p}
               className={
                 "min-h-[36px] px-3 py-1.5 rounded font-mono text-[11px] uppercase tracking-wider " +
