@@ -39,9 +39,6 @@ export function ScaleAnchorStep({ step }: { step: ScaleAnchorStepPayload }) {
           <p className="text-[13px] text-strong mt-0.5">{step.anchors.high}</p>
         </li>
       </ul>
-      <p className="text-[11px] text-muted italic">
-        You'll see this when you log a session — nothing to pick right now.
-      </p>
     </div>
   );
 }

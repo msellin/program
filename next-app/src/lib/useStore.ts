@@ -175,6 +175,22 @@ type StoreState = {
     },
   ) => void;
   /**
+   * Write / merge an in-progress intake draft for a program. Persisted via
+   * the standard KV push, so the user can leave the intake mid-way and
+   * resume from another device / origin. Cleared by `clearIntakeDraft`
+   * after a successful commit.
+   */
+  setIntakeDraft: (
+    slug: string,
+    patch: {
+      answers?: Record<string, string>;
+      test_results?: Record<string, number>;
+      consents?: Record<string, boolean>;
+      step_index?: number;
+    },
+  ) => void;
+  clearIntakeDraft: (slug: string) => void;
+  /**
    * Clear local state without pushing to the remote KV. Used when auth state
    * changes on the same browser — the previous user's data should not touch
    * the new user's KV blob. Hydrate will fetch fresh from KV afterwards.
@@ -849,6 +865,37 @@ export const useStore = create<StoreState>((set, get) => ({
     const states = { ...(profile.program_states ?? {}) };
     states[slug] = { ...(states[slug] ?? {}), tier };
     profile.program_states = states;
+    s.user_profile = profile;
+    commit(s);
+    set({ store: s });
+  },
+
+  setIntakeDraft: (slug, patch) => {
+    const s = { ...get().store };
+    const profile = { ...(s.user_profile ?? {}) };
+    const drafts = { ...(profile.intake_drafts ?? {}) };
+    const prior = drafts[slug] ?? {};
+    drafts[slug] = {
+      ...prior,
+      ...(patch.answers != null ? { answers: patch.answers } : {}),
+      ...(patch.test_results != null ? { test_results: patch.test_results } : {}),
+      ...(patch.consents != null ? { consents: patch.consents } : {}),
+      ...(patch.step_index != null ? { step_index: patch.step_index } : {}),
+      updated_at: new Date().toISOString(),
+    };
+    profile.intake_drafts = drafts;
+    s.user_profile = profile;
+    commit(s);
+    set({ store: s });
+  },
+
+  clearIntakeDraft: (slug) => {
+    const s = { ...get().store };
+    const profile = { ...(s.user_profile ?? {}) };
+    if (!profile.intake_drafts?.[slug]) return;
+    const drafts = { ...profile.intake_drafts };
+    delete drafts[slug];
+    profile.intake_drafts = drafts;
     s.user_profile = profile;
     commit(s);
     set({ store: s });

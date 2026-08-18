@@ -998,6 +998,28 @@ export const storeSchema = z.object({
         )
         .optional(),
       consent_symptom_data_at: z.number().optional(),
+      /**
+       * In-progress intake drafts, keyed by program slug. Persists answers,
+       * physical-test results, consent checkbox state, and the wizard's
+       * current step so the user can leave and come back without losing
+       * work. Cleared on successful commit of that program's intake.
+       *
+       * Store-based (rather than localStorage-only) so it survives origin
+       * mismatches (preview URL ↔ prod), incognito, cache clears, and
+       * device switches through KV sync.
+       */
+      intake_drafts: z
+        .record(
+          z.string(),
+          z.object({
+            answers: z.record(z.string(), z.string()).optional(),
+            test_results: z.record(z.string(), z.number()).optional(),
+            consents: z.record(z.string(), z.boolean()).optional(),
+            step_index: z.number().int().min(0).optional(),
+            updated_at: z.string().optional(),
+          }),
+        )
+        .optional(),
       tier: z.enum(["free", "trial", "paid", "beta_forever"]).optional(),
       trial_ends_at: z.string().optional(),
       /**

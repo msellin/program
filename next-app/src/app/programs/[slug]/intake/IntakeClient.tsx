@@ -106,55 +106,78 @@ export function IntakeClient({ slug }: Props) {
       .catch((e) => setError(e instanceof Error ? e.message : String(e)));
   }, [slug]);
 
-  // Draft persistence: intake was pure useState, so refresh or a redeploy
-  // wiped the founder mid-test. Persist per-slug in localStorage and hydrate
-  // on mount. Cleared in `commit()` after tier is chosen and answers are
-  // committed to the user_profile store.
+  // Draft persistence: intake state was pure useState, so refresh, redeploy,
+  // or navigating away wiped everything. v2 (2026-08-18) moves the draft
+  // into the Zustand store → KV sync so it survives origin mismatches
+  // (preview URL vs. app.terav.fit), cache clears, device switches, and
+  // incognito close-and-reopen. Cleared in `commit()` after the tier is
+  // committed. Also keeps a localStorage fallback for anonymous / cache-only
+  // paths.
   //
   // Hydration order (first non-empty wins):
-  //   1. localStorage draft (in-progress session)
-  //   2. user_profile.program_states[slug].intake_answers (previously
-  //      committed — user returning to edit)
+  //   1. user_profile.intake_drafts[slug]  ← store-backed, KV-synced
+  //   2. localStorage draft                ← legacy fallback
+  //   3. user_profile.program_states[slug].intake_answers  ← returning-user edit
   const draftKey = `terav.intake.draft.${slug}`;
+  const storedDraft = useStore(
+    (s) => s.store.user_profile?.intake_drafts?.[slug],
+  );
   const committedAnswers = useStore(
     (s) => s.store.user_profile?.program_states?.[slug]?.intake_answers,
   );
+  const setIntakeDraft = useStore((s) => s.setIntakeDraft);
+  const clearIntakeDraft = useStore((s) => s.clearIntakeDraft);
+  const [stepIndex, setStepIndex] = useState(0);
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => {
     try {
-      const raw = typeof window !== "undefined" ? window.localStorage.getItem(draftKey) : null;
-      if (raw) {
-        const parsed = JSON.parse(raw) as {
-          answers?: Record<string, string>;
-          testResults?: Record<string, number>;
-          consents?: Record<string, boolean>;
-        };
-        if (parsed.answers && typeof parsed.answers === "object") setAnswers(parsed.answers);
-        if (parsed.testResults && typeof parsed.testResults === "object") setTestResults(parsed.testResults);
-        if (parsed.consents && typeof parsed.consents === "object") setConsents(parsed.consents);
-      } else if (committedAnswers && Object.keys(committedAnswers).length > 0) {
-        // No draft in localStorage but the user has committed answers from a
-        // prior session — re-hydrate so they can adjust rather than re-enter.
-        setAnswers({ ...committedAnswers });
+      if (storedDraft) {
+        if (storedDraft.answers) setAnswers({ ...storedDraft.answers });
+        if (storedDraft.test_results) setTestResults({ ...storedDraft.test_results });
+        if (storedDraft.consents) setConsents({ ...storedDraft.consents });
+        if (typeof storedDraft.step_index === "number") setStepIndex(storedDraft.step_index);
+      } else {
+        const raw = typeof window !== "undefined" ? window.localStorage.getItem(draftKey) : null;
+        if (raw) {
+          const parsed = JSON.parse(raw) as {
+            answers?: Record<string, string>;
+            testResults?: Record<string, number>;
+            consents?: Record<string, boolean>;
+            stepIndex?: number;
+          };
+          if (parsed.answers) setAnswers(parsed.answers);
+          if (parsed.testResults) setTestResults(parsed.testResults);
+          if (parsed.consents) setConsents(parsed.consents);
+          if (typeof parsed.stepIndex === "number") setStepIndex(parsed.stepIndex);
+        } else if (committedAnswers && Object.keys(committedAnswers).length > 0) {
+          setAnswers({ ...committedAnswers });
+        }
       }
     } catch {
       // Corrupt draft — ignore; user will re-enter.
     }
     setHydrated(true);
-    // committedAnswers intentionally read once at mount; skipping deps rule.
+    // Hydrate once per slug; state on remount is snapshot at mount. If the
+    // KV push races, that's fine — we re-hydrate on next mount.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [draftKey]);
+  }, [draftKey, slug]);
   useEffect(() => {
     if (!hydrated) return;
     try {
       window.localStorage.setItem(
         draftKey,
-        JSON.stringify({ answers, testResults, consents }),
+        JSON.stringify({ answers, testResults, consents, stepIndex }),
       );
     } catch {
-      // Storage full / disabled — silently skip, in-memory state still works.
+      // Storage full / disabled — store-based path still writes.
     }
-  }, [hydrated, draftKey, answers, testResults, consents]);
+    setIntakeDraft(slug, {
+      answers,
+      test_results: testResults,
+      consents,
+      step_index: stepIndex,
+    });
+  }, [hydrated, draftKey, slug, answers, testResults, consents, stepIndex, setIntakeDraft]);
 
   const intake = program?.intake;
   const questions = intake?.questions ?? [];
@@ -354,8 +377,9 @@ export function IntakeClient({ slug }: Props) {
       },
     });
 
-    // Draft is now in the store — clear the localStorage snapshot so a
-    // future intake session starts fresh.
+    // Draft committed — clear both the store-backed draft AND the
+    // localStorage fallback so a future intake session starts fresh.
+    clearIntakeDraft(slug);
     try {
       window.localStorage.removeItem(draftKey);
     } catch {
@@ -534,8 +558,79 @@ export function IntakeClient({ slug }: Props) {
     );
   }
 
+  // Build the wizard's flat step list. Each step renders as one screen with
+  // Back / Next / Finish at the bottom. Sections stay named so the user knows
+  // which arc they're in ("Screening", "Where you are now", "About you",
+  // "Physical tests", "Consent"). See dev/design-briefs/2026-08-17-intake-visual-craft.md
+  // — this supersedes the quiet-form structure in that brief per founder
+  // redirect 2026-08-18.
+  type WizardStep =
+    | {
+        kind: "question";
+        section: "screening" | "skill" | "about";
+        tone: SectionTone;
+        sectionLabel: string;
+        q: IntakeQuestion;
+      }
+    | { kind: "physical_tests"; sectionLabel: string }
+    | { kind: "consent"; sectionLabel: string };
+
+  const steps: WizardStep[] = [
+    ...screening.map<WizardStep>((q) => ({
+      kind: "question",
+      section: "screening",
+      tone: "gate",
+      sectionLabel: "Screening",
+      q,
+    })),
+    ...skill.map<WizardStep>((q) => ({
+      kind: "question",
+      section: "skill",
+      tone: "calibration",
+      sectionLabel: "Where you are now",
+      q,
+    })),
+    ...about.map<WizardStep>((q) => ({
+      kind: "question",
+      section: "about",
+      tone: "engine",
+      sectionLabel: "About you",
+      q,
+    })),
+    ...(physicalTests.length
+      ? [{ kind: "physical_tests" as const, sectionLabel: "Physical tests" }]
+      : []),
+    ...(consentItems.length
+      ? [{ kind: "consent" as const, sectionLabel: "Consent" }]
+      : []),
+  ];
+
+  const clampedStepIndex = Math.min(Math.max(0, stepIndex), Math.max(0, steps.length - 1));
+  const currentStep = steps[clampedStepIndex];
+  const isLastStep = clampedStepIndex >= steps.length - 1;
+
+  // Is this specific step ready to advance? Question steps require the
+  // question be answered if required. Consent step requires all required
+  // checkboxes ticked. Physical tests step is always advanceable (optional).
+  const stepReady = (() => {
+    if (!currentStep) return false;
+    if (blocker) return false;
+    if (currentStep.kind === "question") {
+      const q = currentStep.q;
+      if (!q.required) return true;
+      const v = answers[q.id];
+      return v != null && v !== "";
+    }
+    if (currentStep.kind === "consent") return requiredConsentsGiven;
+    return true;
+  })();
+
+  // If the answer they just gave trips a safety gate, show the block copy
+  // in-context. The blocker useMemo already computes this.
+  const showGateBlockInline = blocker != null;
+
   return (
-    <div className="space-y-5 pt-4 pb-8">
+    <div className="space-y-5 pt-4 pb-32">
       <Link href={backHref} className="inline-flex items-center gap-1 text-[13px] text-slate hover:text-ink">
         <ChevronLeft size={14} />
         Back to program
@@ -546,180 +641,80 @@ export function IntakeClient({ slug }: Props) {
           Intake — {manifestEntry?.name ?? slug.replace(/-/g, " ")}
         </h1>
         <p className="text-sm text-muted leading-relaxed">
-          Short questions so the program starts at the right level. Everything is stored locally
+          Short questions so the program starts at the right level. Everything stays
           on your account — not shared with anyone.
         </p>
       </header>
 
-      <StickyTopProgress
-        answered={requiredAnsweredCount}
-        total={requiredQuestions.length}
-      />
+      <WizardProgress currentIndex={clampedStepIndex} total={steps.length} />
 
-      {blocker ? (
-        <div className="rounded border border-red/40 bg-red/10 p-4 space-y-2">
-          <p className="font-semibold text-red flex items-center gap-2">
-            <ShieldAlert size={16} />
-            {blocker.title}
+      {currentStep ? (
+        <div className="mt-2">
+          <p className="text-[11px] font-mono uppercase tracking-widest text-muted">
+            {currentStep.sectionLabel}
           </p>
-          <p className="text-[13px] text-strong">{blocker.body}</p>
         </div>
       ) : null}
 
-      {screening.length ? (
-        <SectionCard
-          step="01"
-          tone="gate"
-          title="Screening"
-          hint="Safety gates — a few no-questions before we start."
-          questions={screening}
-          answers={answers}
-          setAnswer={(qid, v) => setAnswers((a) => ({ ...a, [qid]: v }))}
-          unansweredIds={unansweredRequiredIds}
-          showMissing={attemptedContinue}
-          safetyGates={intake?.safety_gates ?? []}
-        />
-      ) : null}
+      <div className="min-h-[280px]">
+        {currentStep?.kind === "question" ? (
+          <WizardQuestionScreen
+            step={currentStep}
+            answers={answers}
+            setAnswer={(qid, v) => setAnswers((a) => ({ ...a, [qid]: v }))}
+            safetyGates={intake?.safety_gates ?? []}
+            showGateBlock={showGateBlockInline}
+            blocker={blocker}
+          />
+        ) : null}
 
-      {skill.length ? (
-        <SectionCard
-          step="02"
-          tone="calibration"
-          title="Where you are now"
-          hint="Skill-level self report. Best guess is fine — you'll re-test on Day 3."
-          questions={skill}
-          answers={answers}
-          setAnswer={(qid, v) => setAnswers((a) => ({ ...a, [qid]: v }))}
-          unansweredIds={unansweredRequiredIds}
-          showMissing={attemptedContinue}
-          safetyGates={intake?.safety_gates ?? []}
-        />
-      ) : null}
+        {currentStep?.kind === "physical_tests" ? (
+          <WizardPhysicalTestsScreen
+            tests={physicalTests}
+            results={testResults}
+            setResult={(id, n) => setTestResults((r) => ({ ...r, [id]: n }))}
+          />
+        ) : null}
 
-      {about.length ? (
-        <SectionCard
-          step="03"
-          tone="engine"
-          title="About you"
-          hint="Context for the adaptive engine."
-          questions={about}
-          answers={answers}
-          setAnswer={(qid, v) => setAnswers((a) => ({ ...a, [qid]: v }))}
-          unansweredIds={unansweredRequiredIds}
-          showMissing={attemptedContinue}
-          safetyGates={intake?.safety_gates ?? []}
-        />
-      ) : null}
-
-      {physicalTests.length ? (
-        <PhysicalTestsGroup
-          tests={physicalTests}
-          results={testResults}
-          setResult={(id, n) => setTestResults((r) => ({ ...r, [id]: n }))}
-        />
-      ) : null}
-
-      {consentItems.length ? (
-        <section className="rounded border border-line bg-surface p-4 space-y-3">
-          <header className="flex items-center gap-3">
-            <SectionMonogram step="05" tone="required" />
-            <div className="flex-1">
-              <div className="flex items-baseline justify-between gap-2">
-                <h2 className="text-[14px] font-semibold text-strong">Consent</h2>
-                <span className={cn("text-[10px] font-mono uppercase tracking-widest", SECTION_TONE_META.required.badgeClass)}>
-                  required
-                </span>
-              </div>
-            </div>
-          </header>
-          <ul className="space-y-3">
-            {consentItems.map((c) => (
-              <li key={c.id}>
-                <label className="flex items-start gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={consents[c.id] === true}
-                    onChange={(e) => setConsents((cs) => ({ ...cs, [c.id]: e.target.checked }))}
-                    className="mt-0.5 flex-shrink-0"
-                  />
-                  <span className="text-[13px] text-strong leading-relaxed">{c.label}</span>
-                </label>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
-
-      <div className="sticky bottom-2 pt-2">
-        <button
-          type="button"
-          onClick={() => {
-            if (canProceed) {
-              setReviewing(true);
-              return;
-            }
-            // Not ready — surface the missing questions and scroll to the first
-            // one so the user isn't stuck staring at a disabled button.
-            setAttemptedContinue(true);
-            const firstMissing = requiredQuestions.find((q) => unansweredRequiredIds.has(q.id));
-            if (firstMissing) {
-              requestAnimationFrame(() => {
-                const el = document.getElementById(`q-${firstMissing.id}`);
-                if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
-              });
-            }
-          }}
-          aria-disabled={!canProceed}
-          className={cn(
-            "w-full inline-flex items-center justify-center gap-1.5 font-mono text-[12px] uppercase tracking-wider px-4 py-3 rounded bg-bronze text-ground hover:bg-bronze/90",
-            !canProceed && "opacity-60",
-          )}
-        >
-          {blocker
-            ? "Can't continue — see message above"
-            : !requiredQuestionsAnswered
-              ? `Answer ${unansweredRequiredIds.size} more to continue`
-              : !requiredConsentsGiven
-                ? "Tick the consent items to continue"
-                : "See recommended tier →"}
-        </button>
+        {currentStep?.kind === "consent" ? (
+          <WizardConsentScreen
+            items={consentItems}
+            consents={consents}
+            setConsent={(id, v) => setConsents((cs) => ({ ...cs, [id]: v }))}
+          />
+        ) : null}
       </div>
+
+      <WizardFooter
+        stepIndex={clampedStepIndex}
+        total={steps.length}
+        canGoBack={clampedStepIndex > 0}
+        onBack={() => setStepIndex((n) => Math.max(0, n - 1))}
+        onNext={() => setStepIndex((n) => Math.min(steps.length - 1, n + 1))}
+        onFinish={() => setReviewing(true)}
+        nextReady={stepReady}
+        isLast={isLastStep}
+        blocker={blocker}
+      />
     </div>
   );
 }
 
 /**
- * Quiet-form primitives — see dev/design-briefs/2026-08-17-intake-visual-craft.md.
- * SectionMonogram is the 40×40 numeric tile; StickyTopProgress is the rail
- * under the header; PictogramTile draws a CSS-only glyph for the three
- * calibration questions; CalibrationHintDisclosure reveals the option→tier
- * mapping using each option's existing `hint` field.
+ * Wizard sub-components — see dev/design-briefs/2026-08-17-intake-visual-craft.md
+ * and the 2026-08-18 founder redirect for the wizard structure that
+ * supersedes the quiet-form.
  */
-function SectionMonogram({ step, tone }: { step: string; tone: SectionTone }) {
-  const meta = SECTION_TONE_META[tone];
-  return (
-    <div
-      className={cn(
-        "w-10 h-10 rounded-md border flex items-center justify-center flex-shrink-0",
-        meta.monogramClass,
-      )}
-      aria-hidden
-    >
-      <span className="font-mono text-[13px] tracking-wider">{step}</span>
-    </div>
-  );
-}
 
-function StickyTopProgress({ answered, total }: { answered: number; total: number }) {
+function WizardProgress({ currentIndex, total }: { currentIndex: number; total: number }) {
   if (total === 0) return null;
-  const pct = Math.round((answered / total) * 100);
-  const currentQuestion = Math.min(answered + 1, total);
+  const pct = Math.round(((currentIndex + 1) / total) * 100);
   return (
     <div
       className="sticky top-0 z-30 -mx-4 px-4 py-2 bg-ground/95 backdrop-blur-sm border-b border-line-soft"
       role="progressbar"
-      aria-valuenow={answered}
-      aria-valuemin={0}
+      aria-valuenow={currentIndex + 1}
+      aria-valuemin={1}
       aria-valuemax={total}
     >
       <div className="flex items-center gap-3">
@@ -731,50 +726,355 @@ function StickyTopProgress({ answered, total }: { answered: number; total: numbe
           />
         </div>
         <span className="font-mono text-[10px] text-muted uppercase tracking-widest whitespace-nowrap">
-          Question {currentQuestion} of {total}
+          Step {currentIndex + 1} of {total}
         </span>
       </div>
     </div>
   );
 }
 
-function PictogramTile({ kind }: { kind: "wall" | "freestand" | "walk" }) {
+function WizardQuestionScreen({
+  step,
+  answers,
+  setAnswer,
+  safetyGates,
+  showGateBlock,
+  blocker,
+}: {
+  step: Extract<
+    | { kind: "question"; section: "screening" | "skill" | "about"; tone: SectionTone; sectionLabel: string; q: IntakeQuestion }
+    | { kind: "physical_tests"; sectionLabel: string }
+    | { kind: "consent"; sectionLabel: string },
+    { kind: "question" }
+  >;
+  answers: Record<string, string>;
+  setAnswer: (qid: string, v: string) => void;
+  safetyGates: NonNullable<Program["intake"]>["safety_gates"];
+  showGateBlock: boolean;
+  blocker: { title: string; body: string } | null;
+}) {
+  const q = step.q;
+  const pictogram = PICTOGRAM_BY_QID[q.id];
+  const currentValue = answers[q.id];
+  return (
+    <section className="rounded border border-line bg-surface p-5 space-y-4">
+      {pictogram ? (
+        <div className="flex justify-center pt-2 pb-1">
+          <PictogramTile kind={pictogram} large />
+        </div>
+      ) : null}
+
+      <h2 className="text-[17px] font-semibold text-strong leading-snug">
+        {q.label}
+        {q.required ? <span className="text-red ml-1">*</span> : null}
+      </h2>
+
+      {q.help ? (
+        <p className="text-[13px] text-muted leading-relaxed">{q.help}</p>
+      ) : null}
+
+      {q.type === "select" && q.options ? (
+        <>
+          <div className="flex flex-wrap gap-2 pt-1">
+            {q.options.map((opt) => {
+              const picked = currentValue === opt.value;
+              const unsafePicked = picked && isGateUnsafe(safetyGates, q.id, opt.value);
+              return (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => setAnswer(q.id, opt.value)}
+                  className={cn(
+                    "text-[14px] px-4 py-3 rounded border min-h-[48px]",
+                    unsafePicked
+                      ? "border-red/50 bg-red/10 text-red"
+                      : picked
+                        ? "border-bronze bg-bronze/15 text-strong"
+                        : "border-line bg-surface text-strong hover:border-slate/40",
+                  )}
+                >
+                  {opt.label ?? opt.value.replace(/_/g, " ")}
+                </button>
+              );
+            })}
+          </div>
+          {step.tone === "calibration" ? (
+            <CalibrationHintDisclosure options={q.options} />
+          ) : null}
+        </>
+      ) : null}
+
+      {q.type === "boolean" ? (
+        <div className="flex gap-2 pt-1">
+          {["true", "false"].map((v) => {
+            const picked = currentValue === v;
+            const unsafePicked = picked && isGateUnsafe(safetyGates, q.id, v);
+            return (
+              <button
+                key={v}
+                type="button"
+                onClick={() => setAnswer(q.id, v)}
+                className={cn(
+                  "text-[14px] px-5 py-3 rounded border min-h-[48px]",
+                  unsafePicked
+                    ? "border-red/50 bg-red/10 text-red"
+                    : picked
+                      ? "border-bronze bg-bronze/15 text-strong"
+                      : "border-line bg-surface text-strong hover:border-slate/40",
+                )}
+              >
+                {v === "true" ? "Yes" : "No"}
+              </button>
+            );
+          })}
+        </div>
+      ) : null}
+
+      {q.type === "number" ? (
+        <input
+          type="number"
+          inputMode="decimal"
+          min={q.min}
+          max={q.max}
+          step={q.step}
+          value={currentValue ?? ""}
+          onChange={(e) => setAnswer(q.id, e.target.value)}
+          placeholder={q.unit}
+          className="w-full text-[15px] px-3 py-3 min-h-[48px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+        />
+      ) : null}
+
+      {q.type === "text" ? (
+        q.id.endsWith("_date") ? (
+          <input
+            type="date"
+            value={currentValue ?? ""}
+            onChange={(e) => setAnswer(q.id, e.target.value)}
+            min={new Date().toISOString().slice(0, 10)}
+            className="w-full text-[15px] px-3 py-3 min-h-[48px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+          />
+        ) : (
+          <input
+            type="text"
+            value={currentValue ?? ""}
+            onChange={(e) => setAnswer(q.id, e.target.value)}
+            className="w-full text-[15px] px-3 py-3 min-h-[48px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+          />
+        )
+      ) : null}
+
+      {showGateBlock && blocker ? (
+        <div className="mt-3 rounded border border-red/40 bg-red/10 p-4 space-y-2">
+          <p className="font-semibold text-red flex items-center gap-2">
+            <ShieldAlert size={16} />
+            {blocker.title}
+          </p>
+          <p className="text-[13px] text-strong">{blocker.body}</p>
+          <p className="text-[12px] text-muted italic">
+            Change your answer above to continue.
+          </p>
+        </div>
+      ) : null}
+    </section>
+  );
+}
+
+function WizardPhysicalTestsScreen({
+  tests,
+  results,
+  setResult,
+}: {
+  tests: PhysicalTest[];
+  results: Record<string, number>;
+  setResult: (id: string, n: number) => void;
+}) {
+  return (
+    <section className="rounded border border-line bg-surface p-5 space-y-4">
+      <h2 className="text-[17px] font-semibold text-strong">
+        Physical tests
+        <span className={cn("ml-2 text-[11px] font-mono uppercase tracking-widest align-middle", SECTION_TONE_META.optional.badgeClass)}>
+          optional
+        </span>
+      </h2>
+      <p className="text-[13px] text-muted leading-relaxed">
+        Doing these is not required. If you do, they override your self-report answers when
+        picking your tier. Skip and we use your self-report as a proxy. You can revisit them
+        later on the Retest surface.
+      </p>
+      <ul className="space-y-4">
+        {tests.map((t) => (
+          <li key={t.id} className="space-y-2">
+            <p className="text-[14px] font-medium text-strong">{t.label}</p>
+            {t.instructions ? (
+              <p className="text-[12px] text-muted">{t.instructions}</p>
+            ) : null}
+            <div className="flex items-center gap-2">
+              <input
+                type="number"
+                inputMode="decimal"
+                min={t.min}
+                max={t.max}
+                value={results[t.id] ?? ""}
+                onChange={(e) => {
+                  const n = Number(e.target.value);
+                  if (isFinite(n)) setResult(t.id, n);
+                }}
+                className="flex-1 text-[15px] px-3 py-3 min-h-[48px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+              />
+              <span className="text-[12px] text-muted font-mono w-16 text-right">{t.unit}</span>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+function WizardConsentScreen({
+  items,
+  consents,
+  setConsent,
+}: {
+  items: NonNullable<Program["intake"]>["consent"];
+  consents: Record<string, boolean>;
+  setConsent: (id: string, v: boolean) => void;
+}) {
+  return (
+    <section className="rounded border border-line bg-surface p-5 space-y-4">
+      <h2 className="text-[17px] font-semibold text-strong">
+        Consent
+        <span className={cn("ml-2 text-[11px] font-mono uppercase tracking-widest align-middle", SECTION_TONE_META.required.badgeClass)}>
+          required
+        </span>
+      </h2>
+      <ul className="space-y-3">
+        {(items ?? []).map((c) => (
+          <li key={c.id}>
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={consents[c.id] === true}
+                onChange={(e) => setConsent(c.id, e.target.checked)}
+                className="mt-1 flex-shrink-0 w-5 h-5"
+              />
+              <span className="text-[14px] text-strong leading-relaxed">{c.label}</span>
+            </label>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+function WizardFooter({
+  stepIndex,
+  total,
+  canGoBack,
+  onBack,
+  onNext,
+  onFinish,
+  nextReady,
+  isLast,
+  blocker,
+}: {
+  stepIndex: number;
+  total: number;
+  canGoBack: boolean;
+  onBack: () => void;
+  onNext: () => void;
+  onFinish: () => void;
+  nextReady: boolean;
+  isLast: boolean;
+  blocker: { title: string; body: string } | null;
+}) {
+  const primaryLabel = isLast ? "Finish" : "Next →";
+  const secondaryTitle = blocker
+    ? "Answer above tripped a safety gate — change it to continue."
+    : !nextReady
+      ? "Answer this to continue."
+      : "";
+  return (
+    <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-line-soft bg-ground/95 backdrop-blur-sm">
+      <div className="mx-auto max-w-2xl px-4 py-3 flex items-center gap-3">
+        <button
+          type="button"
+          onClick={onBack}
+          disabled={!canGoBack}
+          className={cn(
+            "font-mono text-[12px] uppercase tracking-wider px-4 py-3 rounded border border-line text-strong min-w-[88px]",
+            !canGoBack && "opacity-30 cursor-not-allowed",
+          )}
+        >
+          ← Back
+        </button>
+        <span className="flex-1 text-center font-mono text-[10px] text-muted uppercase tracking-widest">
+          {stepIndex + 1} / {total}
+        </span>
+        <button
+          type="button"
+          onClick={isLast ? onFinish : onNext}
+          disabled={!nextReady}
+          title={secondaryTitle}
+          className={cn(
+            "font-mono text-[12px] uppercase tracking-wider px-5 py-3 rounded bg-bronze text-ground min-w-[100px]",
+            !nextReady && "opacity-40 cursor-not-allowed",
+          )}
+        >
+          {primaryLabel}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Wizard primitives — see dev/design-briefs/2026-08-17-intake-visual-craft.md
+ * for the earlier quiet-form iteration; the founder redirect 2026-08-18
+ * moved intake to wizard mode. PictogramTile + CalibrationHintDisclosure
+ * + isGateUnsafe survived the redirect. SectionMonogram and StickyTopProgress
+ * were the quiet-form section header + progress-under-header; the wizard
+ * uses WizardProgress / WizardFooter instead. `large: true` renders the
+ * pictogram at the wizard's screen-center size.
+ */
+function PictogramTile({ kind, large }: { kind: "wall" | "freestand" | "walk"; large?: boolean }) {
   return (
     <div
-      className="w-14 h-14 rounded-md border border-line bg-line-soft/30 flex-shrink-0 flex items-center justify-center"
+      className={cn(
+        "rounded-md border border-line bg-line-soft/30 flex-shrink-0 flex items-center justify-center",
+        large ? "w-24 h-24" : "w-14 h-14",
+      )}
       aria-hidden
     >
-      {kind === "wall" ? (
-        // A wall + a stick figure inverted against it.
-        <div className="relative w-8 h-10">
-          <span className="absolute right-0 top-0 bottom-0 w-[2px] bg-bronze/60 rounded-full" />
-          <span className="absolute right-[6px] top-[3px] w-[6px] h-[6px] rounded-full bg-bronze/80" />
-          <span className="absolute right-[3px] top-[9px] w-[10px] h-[2px] bg-bronze/60 rounded-full" />
-          <span className="absolute right-[7px] top-[10px] w-[2px] h-[24px] bg-bronze/80 rounded-full" />
-        </div>
-      ) : kind === "freestand" ? (
-        // An inverted T — no wall.
-        <div className="relative w-8 h-10">
-          <span className="absolute left-1/2 -translate-x-1/2 top-[3px] w-[6px] h-[6px] rounded-full bg-bronze/80" />
-          <span className="absolute left-1/2 -translate-x-1/2 top-[9px] w-[2px] h-[24px] bg-bronze/80 rounded-full" />
-          <span className="absolute left-1/2 -translate-x-1/2 top-[33px] w-[16px] h-[2px] bg-bronze/60 rounded-full" />
-        </div>
-      ) : (
-        // Inverted T + a subtle right-pointing chevron for motion.
-        <div className="relative w-10 h-10">
-          <span className="absolute left-[6px] top-[3px] w-[6px] h-[6px] rounded-full bg-bronze/80" />
-          <span className="absolute left-[8px] top-[9px] w-[2px] h-[24px] bg-bronze/80 rounded-full" />
-          <span className="absolute left-[2px] top-[33px] w-[16px] h-[2px] bg-bronze/60 rounded-full" />
-          <span
-            className="absolute right-[6px] top-[16px] w-0 h-0"
-            style={{
-              borderTop: "5px solid transparent",
-              borderBottom: "5px solid transparent",
-              borderLeft: "6px solid rgba(200, 150, 102, 0.6)",
-            }}
-          />
-        </div>
-      )}
+      <div style={{ transform: large ? "scale(2)" : "scale(1)", transformOrigin: "center" }}>
+        {kind === "wall" ? (
+          <div className="relative w-8 h-10">
+            <span className="absolute right-0 top-0 bottom-0 w-[2px] bg-bronze/60 rounded-full" />
+            <span className="absolute right-[6px] top-[3px] w-[6px] h-[6px] rounded-full bg-bronze/80" />
+            <span className="absolute right-[3px] top-[9px] w-[10px] h-[2px] bg-bronze/60 rounded-full" />
+            <span className="absolute right-[7px] top-[10px] w-[2px] h-[24px] bg-bronze/80 rounded-full" />
+          </div>
+        ) : kind === "freestand" ? (
+          <div className="relative w-8 h-10">
+            <span className="absolute left-1/2 -translate-x-1/2 top-[3px] w-[6px] h-[6px] rounded-full bg-bronze/80" />
+            <span className="absolute left-1/2 -translate-x-1/2 top-[9px] w-[2px] h-[24px] bg-bronze/80 rounded-full" />
+            <span className="absolute left-1/2 -translate-x-1/2 top-[33px] w-[16px] h-[2px] bg-bronze/60 rounded-full" />
+          </div>
+        ) : (
+          <div className="relative w-10 h-10">
+            <span className="absolute left-[6px] top-[3px] w-[6px] h-[6px] rounded-full bg-bronze/80" />
+            <span className="absolute left-[8px] top-[9px] w-[2px] h-[24px] bg-bronze/80 rounded-full" />
+            <span className="absolute left-[2px] top-[33px] w-[16px] h-[2px] bg-bronze/60 rounded-full" />
+            <span
+              className="absolute right-[6px] top-[16px] w-0 h-0"
+              style={{
+                borderTop: "5px solid transparent",
+                borderBottom: "5px solid transparent",
+                borderLeft: "6px solid rgba(200, 150, 102, 0.6)",
+              }}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -809,230 +1109,11 @@ function isGateUnsafe(
   return (gates ?? []).some((g) => g.question_id === qid && g.unsafe_values.includes(value));
 }
 
-function SectionCard({
-  step,
-  tone,
-  title,
-  hint,
-  questions,
-  answers,
-  setAnswer,
-  unansweredIds,
-  showMissing,
-  safetyGates,
-}: {
-  step: string;
-  tone: SectionTone;
-  title: string;
-  hint: string;
-  questions: IntakeQuestion[];
-  answers: Record<string, string>;
-  setAnswer: (qid: string, v: string) => void;
-  unansweredIds: Set<string>;
-  showMissing: boolean;
-  safetyGates: NonNullable<Program["intake"]>["safety_gates"];
-}) {
-  const meta = SECTION_TONE_META[tone];
-  return (
-    <section className="rounded border border-line bg-surface p-4 space-y-4">
-      <header className="flex items-center gap-3">
-        <SectionMonogram step={step} tone={tone} />
-        <div className="flex-1 min-w-0">
-          <div className="flex items-baseline justify-between gap-2">
-            <h2 className="text-[14px] font-semibold text-strong">{title}</h2>
-            <span className={cn("text-[10px] font-mono uppercase tracking-widest", meta.badgeClass)}>
-              {meta.badge}
-            </span>
-          </div>
-          <p className="text-[12px] text-muted mt-0.5">{hint}</p>
-        </div>
-      </header>
-      <ul className="space-y-4">
-        {questions.map((q) => {
-          const missing = showMissing && unansweredIds.has(q.id);
-          const pictogram = PICTOGRAM_BY_QID[q.id];
-          const currentValue = answers[q.id];
-          return (
-          <li
-            key={q.id}
-            id={`q-${q.id}`}
-            className={cn(
-              "scroll-mt-24",
-              missing && "-mx-2 px-2 py-2 rounded border-l-2 border-red bg-red/5",
-            )}
-          >
-            <div className={cn("flex gap-3", pictogram ? "items-start" : "flex-col")}>
-              {pictogram ? <PictogramTile kind={pictogram} /> : null}
-              <div className={cn("flex-1 min-w-0 space-y-2", pictogram && "pt-0.5")}>
-                <p className="text-sm font-medium text-strong">
-                  {q.label}
-                  {q.required ? <span className="text-red ml-1">*</span> : null}
-                  {missing ? (
-                    <span className="ml-2 font-mono text-[10px] uppercase tracking-wider text-red">
-                      answer needed
-                    </span>
-                  ) : null}
-                </p>
-                {q.help ? <p className="text-[12px] text-muted">{q.help}</p> : null}
-            {q.type === "select" && q.options ? (
-              <>
-              <div className="flex flex-wrap gap-1.5">
-                {q.options.map((opt) => {
-                  const picked = currentValue === opt.value;
-                  const unsafePicked = picked && isGateUnsafe(safetyGates, q.id, opt.value);
-                  return (
-                  <button
-                    key={opt.value}
-                    type="button"
-                    onClick={() => setAnswer(q.id, opt.value)}
-                    className={cn(
-                      "text-[13px] px-3 py-2 rounded border min-h-[44px]",
-                      unsafePicked
-                        ? "border-red/50 bg-red/10 text-red"
-                        : picked
-                          ? "border-bronze bg-bronze/15 text-strong"
-                          : "border-line bg-surface text-strong hover:border-slate/40",
-                    )}
-                  >
-                    {opt.label ?? opt.value.replace(/_/g, " ")}
-                  </button>
-                  );
-                })}
-              </div>
-              {tone === "calibration" ? (
-                <CalibrationHintDisclosure options={q.options} />
-              ) : null}
-              </>
-            ) : null}
-            {q.type === "boolean" ? (
-              <div className="flex gap-2">
-                {["true", "false"].map((v) => {
-                  const picked = currentValue === v;
-                  const unsafePicked = picked && isGateUnsafe(safetyGates, q.id, v);
-                  return (
-                  <button
-                    key={v}
-                    type="button"
-                    onClick={() => setAnswer(q.id, v)}
-                    className={cn(
-                      "text-[13px] px-4 py-2 rounded border min-h-[44px]",
-                      unsafePicked
-                        ? "border-red/50 bg-red/10 text-red"
-                        : picked
-                          ? "border-bronze bg-bronze/15 text-strong"
-                          : "border-line bg-surface text-strong hover:border-slate/40",
-                    )}
-                  >
-                    {v === "true" ? "Yes" : "No"}
-                  </button>
-                  );
-                })}
-              </div>
-            ) : null}
-            {q.type === "number" ? (
-              <input
-                type="number"
-                inputMode="decimal"
-                min={q.min}
-                max={q.max}
-                step={q.step}
-                value={answers[q.id] ?? ""}
-                onChange={(e) => setAnswer(q.id, e.target.value)}
-                placeholder={q.unit}
-                className="w-full text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
-              />
-            ) : null}
-            {q.type === "text" ? (
-              // Question ids ending in "_date" render as a proper date input so
-              // downstream phase-shift math never has to parse free-form strings.
-              q.id.endsWith("_date") ? (
-                <input
-                  type="date"
-                  value={answers[q.id] ?? ""}
-                  onChange={(e) => setAnswer(q.id, e.target.value)}
-                  min={new Date().toISOString().slice(0, 10)}
-                  className="w-full text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
-                />
-              ) : (
-                <input
-                  type="text"
-                  value={answers[q.id] ?? ""}
-                  onChange={(e) => setAnswer(q.id, e.target.value)}
-                  className="w-full text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
-                />
-              )
-            ) : null}
-              </div>
-            </div>
-          </li>
-          );
-        })}
-      </ul>
-    </section>
-  );
-}
+// SectionCard + PhysicalTestsGroup were the quiet-form primitives; the
+// wizard replaces them with WizardQuestionScreen / WizardPhysicalTestsScreen
+// / WizardConsentScreen. Keeping only PictogramTile, CalibrationHintDisclosure,
+// and isGateUnsafe as reused primitives.
 
-function PhysicalTestsGroup({
-  tests,
-  results,
-  setResult,
-}: {
-  tests: PhysicalTest[];
-  results: Record<string, number>;
-  setResult: (id: string, v: number) => void;
-}) {
-  return (
-    <details className="rounded border border-line bg-surface p-4">
-      <summary className="cursor-pointer flex items-center gap-3">
-        <SectionMonogram step="04" tone="optional" />
-        <div className="flex-1 min-w-0">
-          <div className="flex items-baseline justify-between gap-2">
-            <span className="text-[14px] font-semibold text-strong">
-              Physical tests
-            </span>
-            <span className={cn("text-[10px] font-mono uppercase tracking-widest", SECTION_TONE_META.optional.badgeClass)}>
-              optional · {tests.length}
-            </span>
-          </div>
-          <p className="text-[12px] text-muted mt-0.5">
-            More precise than self-report. Skip and we use the answers above.
-          </p>
-        </div>
-      </summary>
-      <div className="mt-3 space-y-3">
-        <p className="text-[13px] text-muted">
-          Doing these is not required. If you do, they override the self-report answers when
-          picking your tier. Skip and we use your self-report as a proxy.
-        </p>
-        <ul className="space-y-3">
-          {tests.map((t) => (
-            <li key={t.id} className="space-y-1">
-              <p className="text-[13px] font-medium text-strong">{t.label}</p>
-              {t.instructions ? (
-                <p className="text-[11px] text-muted">{t.instructions}</p>
-              ) : null}
-              <div className="flex items-center gap-2">
-                <input
-                  type="number"
-                  inputMode="decimal"
-                  min={t.min}
-                  max={t.max}
-                  value={results[t.id] ?? ""}
-                  onChange={(e) => {
-                    const n = Number(e.target.value);
-                    if (isFinite(n)) setResult(t.id, n);
-                  }}
-                  className="flex-1 text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
-                />
-                <span className="text-[11px] text-muted font-mono w-14 text-right">{t.unit}</span>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </details>
-  );
-}
 
 function formatVars(vars: Record<string, number>): string {
   const parts = Object.entries(vars)
