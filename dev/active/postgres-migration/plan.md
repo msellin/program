@@ -68,12 +68,27 @@ create policy "own snap delete" on public.user_state_snapshots
 
 ## Phases
 
-- **2A · Design + SQL migration file** (~2h) — this doc + `supabase/migrations/*.sql` for you to run in Supabase SQL Editor.
+- **2A · Schema + SQL migration file** (~2h) — this doc + `supabase/migrations/*.sql`. Auto-applied by the GitHub Actions workflow at `.github/workflows/supabase-migrations.yml` on every push to main that touches migrations. Idempotent via Supabase CLI's `schema_migrations` tracking table.
 - **2B · PostgresAdapter class** (~2h) — `next-app/src/lib/persistence/postgres-adapter.ts` implementing `PersistenceAdapter`.
 - **2C · Feature flag + dual mode** (~1h) — `user_profile.storage_backend` + adapter factory picks based on flag.
 - **2D · Backfill script** (~2h) — Node script using service_role key to iterate existing users and copy KV → Postgres. Deferred until 2A/2B/2C are validated.
 - **2E · Cutover** (~2h) — flip flag default to `postgres` for new signups; existing users migrate on next login.
 - **2F · KV retirement** (~1h + wait period) — after 2 weeks clean, remove KV writes + Pages Function + `KVAdapter`.
+
+## Migration application
+
+Any `.sql` file added to `supabase/migrations/` is applied to the production
+Supabase Postgres automatically on push to main via the
+`supabase-migrations.yml` GitHub Action. The action is also runnable manually
+from the Actions tab (`workflow_dispatch`) as a break-glass path.
+
+**Never edit a migration file after it's landed on main.** Add a new file with
+a later timestamp instead. Supabase CLI tracks by filename; edits to a
+already-applied file are silently ignored.
+
+**Filename convention:** `YYYYMMDDHHMMSS_description.sql` (14-digit UTC
+timestamp) — sorted lexicographically by CLI, and stays unique across
+concurrent authors.
 
 ## Rollback
 

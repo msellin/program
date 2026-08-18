@@ -1,0 +1,31 @@
+# Supabase CLI project config. Used by `supabase db push`, `supabase link`,
+# and the GitHub Actions migration workflow.
+#
+# Project ref is not stored here (it's per-environment via `supabase link`
+# and the CI secret SUPABASE_PROJECT_ID). Local dev with `supabase start`
+# would use the `[db]` section below.
+
+project_id = "terav"
+
+[db]
+port = 54322
+shadow_port = 54320
+major_version = 15
+
+[api]
+enabled = false
+
+[studio]
+enabled = false
+
+[auth]
+enabled = false
+
+[storage]
+enabled = false
+
+[edge_runtime]
+enabled = false
+
+[analytics]
+enabled = false
