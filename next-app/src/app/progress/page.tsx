@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Info } from "lucide-react";
 import { loadProgram, loadExercises } from "@/lib/data-loader";
 import { useStore } from "@/lib/useStore";
@@ -10,10 +10,10 @@ import { WeeklyNarrativeTile } from "@/components/WeeklyNarrativeTile";
 import { RetestMetricsPanel } from "@/components/progress/RetestMetricsPanel";
 import { SignalCompletenessCard } from "@/components/progress/SignalCompletenessCard";
 import { PerProgramAdherenceCard } from "@/components/progress/PerProgramAdherenceCard";
+import { HeritageClusterChip } from "@/components/progress/HeritageClusterChip";
 import { EmptyStateCard } from "@/components/EmptyStateCard";
 import { InfoSheet } from "@/components/InfoSheet";
 import { today } from "@/lib/utils";
-import { cn } from "@/lib/utils";
 import dynamic from "next/dynamic";
 import type { Program, Exercise, Milestone } from "@/lib/schemas";
 
@@ -23,35 +23,6 @@ const SymptomLoadChart = dynamic(
   () => import("@/components/charts/SymptomLoadChart").then((m) => ({ default: m.SymptomLoadChart })),
   { ssr: false, loading: () => <div className="h-[300px] text-[12px] text-muted italic">Loading chart…</div> },
 );
-
-const HIP_PRIMARY_LIFTS = [
-  "back_squat_highbar",
-  "front_squat",
-  "block_pull_midshin",
-  "deadlift_conventional",
-];
-
-/**
- * Which lifts render in the Lifts editor for this program.
- * Priority:
- *   1. Any existing training_maxes keys on the user's store (these already
- *      matter to them — never hide a lift the user has entered)
- *   2. Program's declared starting_values_kg exercise IDs (if present)
- *   3. Hip program's canonical four (legacy fallback)
- */
-function primaryLiftsForProgram(
-  program: Program,
-  storeTMs: Record<string, number>,
-): string[] {
-  const userLifts = Object.keys(storeTMs);
-  const startingValues =
-    ((program.training_maxes as { starting_values_kg?: Record<string, number> } | undefined)
-      ?.starting_values_kg) ?? {};
-  const authored = Object.keys(startingValues);
-  const merged = new Set<string>([...userLifts, ...authored]);
-  if (merged.size > 0) return Array.from(merged);
-  return HIP_PRIMARY_LIFTS;
-}
 
 export default function ProgressPage() {
   const [program, setProgram] = useState<Program | null>(null);
@@ -237,9 +208,12 @@ function ProgressBody({
                     ? "Skill progression indicators — retest metrics + tier gates."
                     : "Program-agnostic indicators — retest metrics, weekly narrative."}
           </p>
-          <WeeklyNarrativeTile program={_program} />
+          <WeeklyNarrativeTile
+            program={_program}
+            headerChip={<HeritageClusterChip program={_program} store={store} />}
+            expandableSlot={<SignalCompletenessCard program={_program} inline />}
+          />
           <PerProgramAdherenceCard />
-          <SignalCompletenessCard program={_program} />
           <RetestMetricsPanel program={_program} store={store} />
           {activeSlug === "anterior-hip-rebuild" ? (
             (() => {
@@ -284,66 +258,35 @@ function ProgressBody({
           ) : null}
         </div>
 
-      {/* SECTION 2 — Lifts (TM editor + milestones). Rendered only for programs
-          with strength content; aerobic + skill programs skip this entirely. */}
-      {!hideLifts ? (
+      {/* SECTION 2 — Milestones. Rendered only for programs with strength
+          content; aerobic + skill programs skip this entirely.
+
+          Progress rebuild 2026-08-18 — the standalone Training Maxes editor
+          is gone. Engine owns TMs: cycle-end banner writes them, Coach chat
+          proposes manual overrides that land as banners. Milestone rows
+          render the current TM read-only as a comparator line so the
+          trajectory is still legible without a competing write path. */}
+      {!hideLifts && targets?.milestones ? (
         <div className="space-y-6 pt-6 border-t border-line-soft">
           <section className="space-y-3">
-            <div className="flex items-baseline justify-between gap-2">
-              <h2 className="text-[15px] font-semibold text-strong">Training maxes</h2>
+            <div className="flex items-baseline justify-between gap-3">
+              <div className="flex items-baseline gap-2">
+                <h2 className="text-[15px] font-semibold text-strong">Milestones</h2>
+              </div>
+              {targets.target_date ? (
+                <span className="font-mono text-[11px] text-muted">→ {targets.target_date}</span>
+              ) : null}
             </div>
-            <div className="rounded border border-line bg-surface divide-y divide-line-soft">
-              {(() => {
-                const lifts = primaryLiftsForProgram(_program, store.training_maxes);
-                const visible = lifts.filter((id) => byId[id]);
-                if (visible.length === 0) {
-                  return (
-                    <div className="px-3 py-4 space-y-2">
-                      <p className="text-sm text-strong">
-                        No training maxes yet.
-                      </p>
-                      <p className="text-[13px] text-muted italic">
-                        Enter a training max to see progress against milestones — it appears here as soon as it&apos;s set.
-                      </p>
-                    </div>
-                  );
-                }
-                return visible.map((id) => {
-                  const ex = byId[id]!;
-                  const val = store.training_maxes[id] ?? "";
-                  return (
-                    <div key={id} className="grid grid-cols-[1fr_90px_40px] items-center gap-3 px-3 py-3">
-                      <p className="font-medium text-sm">{ex.name}</p>
-                      <DebouncedTMInput id={id} initialValue={val} onCommit={setTM} />
-                      <span className="font-mono text-[11px] text-muted">kg</span>
-                    </div>
-                  );
-                });
-              })()}
-            </div>
+            <MilestoneTable
+              milestones={targets.milestones}
+              tms={store.training_maxes}
+              byId={byId}
+              stretched={stretchTargets}
+            />
             {tmMeta.progression_rule ? (
               <p className="text-[12px] text-muted italic">{tmMeta.progression_rule as string}</p>
             ) : null}
           </section>
-
-          {targets?.milestones ? (
-            <section className="space-y-3">
-              <div className="flex items-baseline justify-between gap-3">
-                <div className="flex items-baseline gap-2">
-                  <h2 className="text-[15px] font-semibold text-strong">Milestones</h2>
-                </div>
-                {targets.target_date ? (
-                  <span className="font-mono text-[11px] text-muted">→ {targets.target_date}</span>
-                ) : null}
-              </div>
-              <MilestoneTable
-                milestones={targets.milestones}
-                tms={store.training_maxes}
-                byId={byId}
-                stretched={stretchTargets}
-              />
-            </section>
-          ) : null}
         </div>
       ) : null}
 
@@ -458,6 +401,11 @@ function MilestoneLiftGroup({
               {totalBeaten}/{sorted.length}
             </span>
           </div>
+          {/* Progress rebuild 2026-08-18 — 2-line header instead of the
+              prior 4-fact soup. Line 1: current TM (read-only). Line 2: one
+              comparator only — next milestone with days-until + delta.
+              "Final target by date" moved into the expanded state so the
+              collapsed row stays scannable. Founder rule: bars over prose. */}
           <p className="text-[11px] text-muted mt-0.5">
             {currentTM != null ? `TM ${currentTM} kg` : "TM —"}
             {next ? (
@@ -474,12 +422,6 @@ function MilestoneLiftGroup({
             ) : (
               <> · all cleared 🎉</>
             )}
-            {final && final !== next ? (
-              <>
-                {" · final "}
-                {effectiveOf(final)} kg by {final.date}
-              </>
-            ) : null}
           </p>
           <MilestoneProgressBar
             sorted={sorted}
@@ -492,6 +434,13 @@ function MilestoneLiftGroup({
       </button>
       {open ? (
         <ul className="divide-y divide-line-soft bg-line-soft/20">
+          {/* Progress rebuild 2026-08-18 — surface final-target line in the
+              expanded state (was in the collapsed header before). */}
+          {final && final !== next ? (
+            <li className="px-3 py-2 pl-10 text-[11px] text-muted italic">
+              Final target {effectiveOf(final)} kg by {final.date}
+            </li>
+          ) : null}
           {sorted.map((m) => {
             const effective = effectiveOf(m);
             const mDate = new Date(m.date + "T12:00:00");
@@ -634,57 +583,11 @@ function MilestoneProgressBar({
   );
 }
 
-function DebouncedTMInput({
-  id,
-  initialValue,
-  onCommit,
-}: {
-  id: string;
-  initialValue: number | "";
-  onCommit: (id: string, kg: number | null) => void;
-}) {
-  const [local, setLocal] = useState<string>(String(initialValue));
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  // Sync down if the store value changes externally (e.g. Apply All button)
-  useEffect(() => {
-    setLocal(String(initialValue));
-  }, [initialValue]);
-
-  return (
-    <input
-      type="number"
-      inputMode="decimal"
-      step={0.5}
-      min={0}
-      max={500}
-      value={local}
-      placeholder="—"
-      aria-label={`Training max for ${id}`}
-      onChange={(e) => {
-        const raw = e.target.value;
-        setLocal(raw);
-        if (timer.current) clearTimeout(timer.current);
-        timer.current = setTimeout(() => {
-          if (raw === "") return onCommit(id, null);
-          const n = Number(raw);
-          if (isFinite(n) && n > 0 && n <= 500) onCommit(id, n);
-        }, 300);
-      }}
-      onBlur={() => {
-        // Flush any pending write immediately on blur
-        if (timer.current) {
-          clearTimeout(timer.current);
-          timer.current = null;
-        }
-        if (local === "") return onCommit(id, null);
-        const n = Number(local);
-        if (isFinite(n) && n > 0 && n <= 500) onCommit(id, n);
-      }}
-      className="w-full font-mono text-sm px-2 py-1.5 border border-line rounded bg-surface text-right focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze min-h-[44px]"
-    />
-  );
-}
+// Progress rebuild 2026-08-18 — DebouncedTMInput deleted. Engine owns TMs;
+// cycle-end banner is the write path; Coach chat is the manual-override
+// escape hatch. Removing the inline editor closes a confirm-first hole
+// (typing 115 into the input silently vs. tapping the banner's Apply-115
+// button meant the same edit had two mutually-invisible paths).
 
 function EngineBanner({
   tone,

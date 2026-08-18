@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useMemo, useState, type ReactNode } from "react";
+import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp } from "lucide-react";
 import { useStore } from "@/lib/useStore";
 import { computeWeekSummary, weekDates } from "@/lib/engine/weekly-narrative";
 import { today as todayISO, iso, cn } from "@/lib/utils";
@@ -15,9 +15,28 @@ import type { Program } from "@/lib/schemas";
  * note without the coach: sessions, states, top lift, PRs, endurance, rehab,
  * fatigue signals.
  */
-export function WeeklyNarrativeTile({ program }: { program: Program }) {
+export function WeeklyNarrativeTile({
+  program,
+  headerChip,
+  expandableSlot,
+}: {
+  program: Program;
+  /**
+   * Progress rebuild 2026-08-18 — an inline chip rendered right of the
+   * week label. HERITAGE cluster (Phase 3 of #63) uses this slot;
+   * anything categorical + non-directional can render here.
+   */
+  headerChip?: ReactNode;
+  /**
+   * Progress rebuild 2026-08-18 — an expandable disclosure at the
+   * bottom of the tile. Progress folds the standalone "How the engine
+   * reads you" card into this slot to halve the visible cards.
+   */
+  expandableSlot?: ReactNode;
+}) {
   const store = useStore((s) => s.store);
   const [offset, setOffset] = useState(0);
+  const [expanded, setExpanded] = useState(false);
 
   const anchorDate = useMemo(() => {
     const t = new Date(todayISO() + "T00:00:00");
@@ -38,7 +57,10 @@ export function WeeklyNarrativeTile({ program }: { program: Program }) {
     <section className="rounded border border-line bg-surface p-3 space-y-3">
       <header className="flex items-center justify-between gap-2">
         <div className="flex-1 min-w-0">
-          <h3 className="text-[15px] font-semibold text-strong">{summary.label}</h3>
+          <div className="flex items-center gap-2 flex-wrap">
+            <h3 className="text-[15px] font-semibold text-strong">{summary.label}</h3>
+            {headerChip}
+          </div>
           <p className="text-[12px] text-muted">
             {isCurrentWeek ? "This week so far" : "Completed week"}
           </p>
@@ -150,6 +172,24 @@ export function WeeklyNarrativeTile({ program }: { program: Program }) {
           ) : null}
         </ul>
       )}
+      {expandableSlot ? (
+        <div className="border-t border-line-soft pt-2">
+          <button
+            type="button"
+            onClick={() => setExpanded((v) => !v)}
+            aria-expanded={expanded}
+            className="w-full flex items-center justify-between gap-2 py-1 text-left"
+          >
+            <span className="font-mono text-[10px] uppercase tracking-widest text-muted">
+              How the engine reads you
+            </span>
+            <span aria-hidden className="text-muted">
+              {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+            </span>
+          </button>
+          {expanded ? <div className="pt-2">{expandableSlot}</div> : null}
+        </div>
+      ) : null}
     </section>
   );
 }

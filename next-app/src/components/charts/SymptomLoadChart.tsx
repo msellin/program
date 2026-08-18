@@ -156,31 +156,10 @@ export function SymptomLoadChart({ days }: { days: DayLog[] }) {
         </ComposedChart>
       </ResponsiveContainer>
       </div>
-      <details className="mt-2 text-[12px] text-muted">
-        <summary className="cursor-pointer select-none hover:text-ink">Show data as table</summary>
-        <div className="mt-2 overflow-x-auto">
-          <table className="w-full text-left border-collapse font-mono text-[11px]">
-            <thead>
-              <tr className="border-b border-line-soft text-muted">
-                <th scope="col" className="py-1 pr-3 font-normal">Date</th>
-                <th scope="col" className="py-1 pr-3 font-normal">Peak symptom</th>
-                <th scope="col" className="py-1 pr-3 font-normal">Squat kg</th>
-                <th scope="col" className="py-1 font-normal">Pull kg</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((r) => (
-                <tr key={r.date} className="border-b border-line-soft/50">
-                  <td className="py-0.5 pr-3">{r.date}</td>
-                  <td className="py-0.5 pr-3">{r.peak_symptom ?? "—"}</td>
-                  <td className="py-0.5 pr-3">{r.squat_top ?? "—"}</td>
-                  <td className="py-0.5">{r.pull_top ?? "—"}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </details>
+      {/* Progress rebuild 2026-08-18 — data-as-table expander deleted per
+          design brief. Duplicate data at a lower fidelity than the chart;
+          a11y covered by the chart's `aria-label` summary above. Users who
+          need precise numbers use Export report. */}
     </div>
   );
 }

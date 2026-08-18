@@ -7,17 +7,19 @@ import {
   isDue,
   packScoreSeries,
   rehabAdherence,
-  symptomTrend,
 } from "@/lib/engine/assessment-engine";
 import { today } from "@/lib/utils";
 
 /**
  * Progress tile focused on the hip-flexor sub-track.
  *
- * Three data views:
+ * Post-rebuild (2026-08-18): two data views instead of three. The 90d
+ * symptom trend column was dropped — the top-level SymptomLoadChart
+ * renders the same signal at higher fidelity (single home for the
+ * chart, per the density-brief decision).
+ *
  *   1. Monthly hip-check overall score (from the self-scored pack)
- *   2. Morning-check symptom trend (groin_left + buttock_left)
- *   3. Rehab adherence — % of days in the last 30 that block_a_home was touched
+ *   2. Rehab adherence — % of days in the last 30 that block_a_home was touched
  *
  * Zero medical claims. Every visualisation is a straight readout of what the
  * user logged. If nothing has been logged yet, tile prompts the user to start.
@@ -29,8 +31,6 @@ export function HipProgressTile() {
 
   const dueStatus = isDue(store, pack.id, todayISO);
   const scoreSeries = packScoreSeries(store, pack);
-  const groinTrend = symptomTrend(store, "groin_left", 90, todayISO);
-  const buttockTrend = symptomTrend(store, "buttock_left", 90, todayISO);
   const adherence = rehabAdherence(store, "block_a_home", 30, todayISO);
 
   const latest = scoreSeries[scoreSeries.length - 1];
@@ -60,7 +60,7 @@ export function HipProgressTile() {
         symptoms, and daily rehab consistency. No claims about diagnosis.
       </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {/* Monthly self-check score */}
         <div className="rounded border border-line bg-surface p-3">
           <p className="mono-caps text-muted">Monthly check (lower = better)</p>
@@ -90,21 +90,6 @@ export function HipProgressTile() {
               {scoreSeries.length} entr{scoreSeries.length === 1 ? "y" : "ies"} · latest {latest?.date}
             </p>
           ) : null}
-        </div>
-
-        {/* Morning symptom trend */}
-        <div className="rounded border border-line bg-surface p-3">
-          <p className="mono-caps text-muted">Symptom trend · 90d</p>
-          {groinTrend.length + buttockTrend.length === 0 ? (
-            <p className="mt-1 text-[13px] text-muted">
-              Nothing logged. Do the morning check on Today to start the line.
-            </p>
-          ) : (
-            <div className="mt-1 space-y-2">
-              <TrendRow label="Groin (L)" points={groinTrend.map((p) => p.value)} />
-              <TrendRow label="Buttock (L)" points={buttockTrend.map((p) => p.value)} />
-            </div>
-          )}
         </div>
 
         {/* Rehab adherence */}
@@ -157,31 +142,3 @@ function MiniSpark({ points, max }: { points: number[]; max: number }) {
   );
 }
 
-function TrendRow({ label, points }: { label: string; points: number[] }) {
-  if (points.length === 0) {
-    return (
-      <div className="flex items-center gap-2">
-        <span className="font-mono text-[11px] text-muted w-20">{label}</span>
-        <span className="text-[11px] text-muted italic">no data</span>
-      </div>
-    );
-  }
-  const latest = points[points.length - 1];
-  return (
-    <div className="flex items-center gap-2">
-      <span className="font-mono text-[11px] text-muted w-20">{label}</span>
-      <div className="flex-1 h-6 flex items-end gap-0.5" aria-hidden>
-        {points.map((v, i) => (
-          <span
-            key={i}
-            className="flex-1 rounded-sm bg-slate/50"
-            style={{ height: `${Math.max(6, (v / 10) * 100)}%` }}
-          />
-        ))}
-      </div>
-      <span className="font-mono text-[12px] tabular-nums text-strong w-6 text-right">
-        {latest}
-      </span>
-    </div>
-  );
-}
