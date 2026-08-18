@@ -27,11 +27,13 @@ import type {
   ReadinessProposalPayload,
   TierAdvanceProposalPayload,
   TMBumpProposalPayload,
+  NonResponderProposalPayload,
 } from "@/lib/schemas";
 import { daySignals, proposedLoadMultiplier } from "@/lib/engine/note-signals";
 import { assessReintroReadiness } from "@/lib/engine/readiness";
 import { nextEligibleTier, isProposalDismissed } from "@/lib/engine/tier-promotion";
 import { evaluateOverperformer } from "@/lib/engine/adapt";
+import { classify } from "@/lib/engine/non-responder-classifier";
 import { citationIdForKind } from "@/lib/engine/proposal-citations";
 import { iso, today as todayISO } from "@/lib/utils";
 
@@ -170,6 +172,93 @@ function selectTierAdvance(store: Store, program: Program): TierAdvanceProposalP
   };
 }
 
+/**
+ * HERITAGE Phase 4 (2026-08-18 · #63) — non-responder recommendation.
+ * Fires when the classifier says the user is either under-dosing or in
+ * true HERITAGE non-response for their active program's primary signal
+ * metric. Uses the confirm-first mechanic: Accept marks the recommendation
+ * acknowledged; Ignore dismisses for the standard 7-day window via
+ * dismissed_proposals[date].
+ */
+function selectNonResponder(
+  store: Store,
+  program: Program,
+  date: string,
+): NonResponderProposalPayload | null {
+  const classifier = (
+    program as unknown as {
+      non_responder_classifier?: Program["non_responder_classifier"];
+    }
+  ).non_responder_classifier;
+  if (!classifier || !program.slug) return null;
+
+  const readings = store.retest_readings ?? [];
+  if (readings.length < classifier.requires_baselines) return null;
+
+  // Resolve per-metric targets from program.retest_metrics against the user's
+  // tier (if any). Rules like `progress_ratio_at_mid_block < 0.1` need
+  // `target` in the context; without it the classifier can't distinguish
+  // responding from non-response.
+  const slug = program.slug;
+  const userTier = slug
+    ? store.user_profile?.program_states?.[slug]?.tier
+    : undefined;
+  const retestMetrics =
+    ((program as unknown as { retest_metrics?: Array<Record<string, unknown>> })
+      .retest_metrics) ?? [];
+  const targets: Record<string, number> = {};
+  for (const m of retestMetrics) {
+    const metricId = String(m.metric_id ?? "");
+    if (!metricId) continue;
+    const rows = (m.targets as Array<Record<string, unknown>> | undefined) ?? [];
+    const found = userTier ? rows.find((r) => r.tier_id === userTier) : undefined;
+    const row = found ?? rows[0];
+    if (row && typeof row.target === "number") targets[metricId] = row.target;
+  }
+
+  const result = classify(program, store, { baselines: readings, targets });
+  if (
+    result.composite_verdict !== "true_non_response" &&
+    result.composite_verdict !== "under_dosing"
+  ) {
+    return null;
+  }
+
+  const dismissKey = `non-responder:${result.composite_verdict}`;
+  const dismissed = store.dismissed_proposals?.[date] ?? [];
+  if (dismissed.includes(dismissKey)) return null;
+
+  // Pull the recommendation_key from whichever metric flagged. Prefer primary
+  // (which drives the composite in combineVerdicts), fall back to first
+  // per-metric that has one.
+  const recommendationKey =
+    result.per_metric.find((p) => p.recommendation_key && p.role === "primary")
+      ?.recommendation_key ??
+    result.per_metric.find((p) => p.recommendation_key)?.recommendation_key ??
+    "review_arc";
+
+  return {
+    kind: "non_responder_recommendation",
+    id: `non-responder:${result.composite_verdict}`,
+    // Priority sits between readiness (60) and tier advance (40). It's not
+    // safety-urgent like a soften, but it's the kind of "consider a bigger
+    // change" the user should see before an incremental tier bump.
+    priority: 50,
+    reason: result.composite_copy,
+    citationId: result.variance_source_citation_id ?? null,
+    programSlug: program.slug,
+    verdict: result.composite_verdict,
+    compositeCopy: result.composite_copy,
+    perMetric: result.per_metric.map((m) => ({
+      metric_id: m.metric_id,
+      role: m.role,
+      delta_at_mid_block: m.delta_at_mid_block,
+      verdict: m.verdict,
+    })),
+    recommendationKey,
+  };
+}
+
 function selectTMBump(
   program: Program,
   store: Store,
@@ -201,6 +290,8 @@ export function selectProposals(store: Store, program: Program, date: string): P
   if (dayAdj) out.push(dayAdj);
   const readiness = selectReadiness(store, program, date);
   if (readiness) out.push(readiness);
+  const nonResponder = selectNonResponder(store, program, date);
+  if (nonResponder) out.push(nonResponder);
   const tier = selectTierAdvance(store, program);
   if (tier) out.push(tier);
   const tm = selectTMBump(program, store, date);

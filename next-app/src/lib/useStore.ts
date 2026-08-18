@@ -257,6 +257,21 @@ type StoreState = {
     value: boolean,
   ) => void;
   /**
+   * HERITAGE Phase 5 (2026-08-18 · #63) — log a single retest reading.
+   * Two per metric unlock the classifier. Idempotent for same metric+date
+   * (replaces prior reading rather than duplicating).
+   */
+  logRetestReading: (reading: {
+    metric_id: string;
+    value: number;
+    observed_at: string;
+    program_slug?: string;
+    at_week?: number;
+    intensity_compliance_pct?: number;
+    session_compliance_pct?: number;
+    notes?: string;
+  }) => void;
+  /**
    * Clear local state without pushing to the remote KV. Used when auth state
    * changes on the same browser — the previous user's data should not touch
    * the new user's KV blob. Hydrate will fetch fresh from KV afterwards.
@@ -1203,6 +1218,18 @@ export const useStore = create<StoreState>((set, get) => ({
     profile.program_states = states;
     s.user_profile = profile;
     commitImmediate(s);
+    set({ store: s });
+  },
+
+  logRetestReading: (reading) => {
+    const s = { ...get().store };
+    const existing = s.retest_readings ?? [];
+    // Idempotent: replace the existing reading for same metric_id + observed_at.
+    const filtered = existing.filter(
+      (r) => !(r.metric_id === reading.metric_id && r.observed_at === reading.observed_at),
+    );
+    s.retest_readings = [...filtered, reading];
+    commit(s);
     set({ store: s });
   },
 

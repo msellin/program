@@ -61,6 +61,16 @@ export function ProposalCard({ proposal, date }: { proposal: Proposal; date: str
         announce(`Plan sharpened. Training max bumped: ${summary}.`);
         break;
       }
+      case "non_responder_recommendation": {
+        // HERITAGE Phase 4 — Accept = acknowledge the recommendation.
+        // We DON'T auto-switch the program here; the actual arc/track
+        // change is a manual decision the user makes from
+        // /programs. Accepting marks the recommendation seen and stops
+        // the card re-appearing indefinitely.
+        dismissProposal(date, proposal.id.replace(/^[^:]*:/, "non-responder:"));
+        announce("Recommendation acknowledged.");
+        break;
+      }
     }
 
     recordProposalOutcome(proposal, "accepted", date);
@@ -79,6 +89,9 @@ export function ProposalCard({ proposal, date }: { proposal: Proposal; date: str
         break;
       case "tm_bump":
         for (const l of proposal.lifts) dismissProposal(date, `tm-bump:${l.exerciseId}`);
+        break;
+      case "non_responder_recommendation":
+        dismissProposal(date, `non-responder:${proposal.verdict}`);
         break;
     }
     recordProposalOutcome(proposal, "ignored", date);
@@ -129,6 +142,19 @@ export function ProposalCard({ proposal, date }: { proposal: Proposal; date: str
                 </span>
               ))}
             </div>
+          ) : null}
+          {proposal.kind === "non_responder_recommendation" ? (
+            <ul className="text-[12px] font-mono text-ink mt-1 space-y-0.5">
+              {proposal.perMetric.map((m) => (
+                <li key={m.metric_id}>
+                  {m.metric_id} ({m.role})
+                  {m.delta_at_mid_block != null
+                    ? ` · Δ ${m.delta_at_mid_block.toFixed(2)} at mid-block`
+                    : ""}
+                  <span className="text-muted"> · {m.verdict.replace(/_/g, " ")}</span>
+                </li>
+              ))}
+            </ul>
           ) : null}
           {proposal.kind === "readiness_after_layoff" ? (
             <>
@@ -207,6 +233,23 @@ function toneFor(p: Proposal): Tone {
         bg: "bg-green/10",
         eyebrow: "text-green",
       };
+    case "non_responder_recommendation":
+      // Cluster C (non-responder) reads as red; Cluster B (under-dosing) as
+      // amber. Both are "consider a bigger change" but only one is a strong
+      // signal to stop grinding.
+      return p.verdict === "true_non_response"
+        ? {
+            border: "border-red/40",
+            borderLeft: "border-l-4 border-l-red",
+            bg: "bg-red/10",
+            eyebrow: "text-red",
+          }
+        : {
+            border: "border-amber/40",
+            borderLeft: "border-l-4 border-l-amber",
+            bg: "bg-amber/10",
+            eyebrow: "text-amber",
+          };
     case "tier_advance":
     case "tm_bump":
       return {
@@ -228,6 +271,10 @@ function eyebrowFor(p: Proposal): string {
       return "Signal · tier gate cleared";
     case "tm_bump":
       return "Signal · headroom detected";
+    case "non_responder_recommendation":
+      return p.verdict === "true_non_response"
+        ? "Signal · HERITAGE non-responder pattern"
+        : "Signal · under-dosing pattern";
   }
 }
 
@@ -241,6 +288,10 @@ function acceptVerbFor(p: Proposal): string {
       return `Advance to ${p.tierLabel}`;
     case "tm_bump":
       return "Apply bump";
+    case "non_responder_recommendation":
+      // Accept just acknowledges — the arc change itself is a user
+      // decision on the /programs page, not something the engine auto-does.
+      return "Got it";
   }
 }
 

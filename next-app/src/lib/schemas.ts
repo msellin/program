@@ -896,6 +896,28 @@ export const storeSchema = z.object({
     week_in_cycle: z.number(),
   }),
   stretch_targets: z.record(z.string(), z.number()).optional(),
+  /**
+   * HERITAGE Phase 5 (2026-08-18 · #63) — retest readings the classifier
+   * consumes. Each entry is a single logged reading of one metric on one
+   * date, plus optional compliance context. Two readings per metric are
+   * required before the classifier speaks (Hecksteden 2015 · ≥2
+   * baselines). Populated by the Log retest-reading proposal + entry
+   * point; read by `classify()` in non-responder-classifier.ts.
+   */
+  retest_readings: z
+    .array(
+      z.object({
+        metric_id: z.string(),
+        value: z.number(),
+        observed_at: z.string(), // yyyy-mm-dd
+        program_slug: z.string().optional(),
+        at_week: z.number().int().optional(),
+        intensity_compliance_pct: z.number().optional(),
+        session_compliance_pct: z.number().optional(),
+        notes: z.string().optional(),
+      }),
+    )
+    .optional(),
   /** Unix millis of the most-recent local write. Used for last-write-wins sync. */
   updated_at: z.number().optional(),
   /**
@@ -1422,11 +1444,35 @@ export type TMBumpProposalPayload = ProposalBase & {
   triggers: string[];
 };
 
+/**
+ * HERITAGE Phase 4 (2026-08-18) — non-responder classification proposal.
+ * Fires when the non_responder_classifier composite verdict is
+ * `true_non_response` for the active program. Delivers the program-authored
+ * `recommendation_key` copy so the user can weigh a program swap or arc
+ * change against staying the course. Confirm-first, like every proposal:
+ * engine proposes, user Accepts (marks the recommendation acknowledged) or
+ * Ignores (dismisses for 7 days).
+ */
+export type NonResponderProposalPayload = ProposalBase & {
+  kind: "non_responder_recommendation";
+  programSlug: string;
+  verdict: "under_dosing" | "true_non_response";
+  compositeCopy: string;
+  perMetric: Array<{
+    metric_id: string;
+    role: "primary" | "secondary";
+    delta_at_mid_block?: number;
+    verdict: string;
+  }>;
+  recommendationKey: string;
+};
+
 export type Proposal =
   | ReadinessProposalPayload
   | DayAdjustmentProposalPayload
   | TierAdvanceProposalPayload
-  | TMBumpProposalPayload;
+  | TMBumpProposalPayload
+  | NonResponderProposalPayload;
 export type DrillLevel = z.infer<typeof drillLevelSchema>;
 export type DrillPrerequisite = z.infer<typeof drillPrerequisiteSchema>;
 export type DrillRetestMetric = z.infer<typeof drillRetestMetricSchema>;
