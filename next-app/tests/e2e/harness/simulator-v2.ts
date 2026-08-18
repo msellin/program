@@ -56,11 +56,34 @@ async function loadProgramClientSide(page: Page, slug: string): Promise<ProgramS
  * For simulator purposes, we approximate: pick the strength blocks from the
  * phase's block list and rotate Mon/Wed/Fri.
  */
+/**
+ * Shift a persona's calendar date back to the equivalent authored-JSON
+ * date. Personas run July 1 → today; program JSONs are authored with
+ * fixed 2026-01-XX phase windows. Without this shift, `program.phases.find`
+ * returns undefined for every day of the sim → no blocks written →
+ * empty artifacts. Mirrors the shifted-phases logic in schedule.ts.
+ */
+function toAuthoredDate(program: ProgramShape, personaDateISO: string): string {
+  const authoredStart = program.phases[0]?.starts;
+  if (!authoredStart) return personaDateISO;
+  const personaSimStart = (program as unknown as { __simStartDate?: string }).__simStartDate;
+  if (!personaSimStart) return personaDateISO;
+  const shift = Math.round(
+    (new Date(personaSimStart + "T00:00:00").getTime() -
+      new Date(authoredStart + "T00:00:00").getTime()) /
+      864e5,
+  );
+  const d = new Date(personaDateISO + "T00:00:00");
+  d.setDate(d.getDate() - shift);
+  return d.toISOString().slice(0, 10);
+}
+
 function pickBlocksForDate(
   program: ProgramShape,
   dateISO: string,
 ): string[] {
-  const phase = program.phases.find((p) => dateISO >= p.starts && (!p.ends || dateISO <= p.ends));
+  const authored = toAuthoredDate(program, dateISO);
+  const phase = program.phases.find((p) => authored >= p.starts && (!p.ends || authored <= p.ends));
   if (!phase) return [];
   const dow = new Date(dateISO + "T12:00:00Z").getUTCDay();
   // Only train Mon (1) / Wed (3) / Fri (5) — 3-day upper-body-esque split for sim.
@@ -87,7 +110,8 @@ function pickAerobicBlocksForDate(
   program: ProgramShape,
   dateISO: string,
 ): string[] {
-  const phase = program.phases.find((p) => dateISO >= p.starts && (!p.ends || dateISO <= p.ends));
+  const authored = toAuthoredDate(program, dateISO);
+  const phase = program.phases.find((p) => authored >= p.starts && (!p.ends || authored <= p.ends));
   if (!phase) return [];
   const dow = new Date(dateISO + "T12:00:00Z").getUTCDay();
   // Aerobic cadence: Tue (2) / Thu (4) / Sat (6) — three sessions/week
@@ -146,6 +170,11 @@ export async function runSimulationV2(
 
   await page.clock.install({ time: new Date(startDate + "T08:00:00Z") });
   const program = await loadProgramClientSide(page, programSlug);
+  // Stamp the sim's start date on the program object so pickBlocksForDate /
+  // pickAerobicBlocksForDate can compute the authored-date shift. Without
+  // this the sim's July 1 dates never match programs' authored 2026-01-XX
+  // phase windows, so blocks are never picked → empty artifacts.
+  (program as unknown as { __simStartDate: string }).__simStartDate = startDate;
 
   // Seed store with tier + initial TMs + uid so StoreHydrator.syncToSession
   // sees storedUid === sessionUid and doesn't fire resetForNewSession — which
