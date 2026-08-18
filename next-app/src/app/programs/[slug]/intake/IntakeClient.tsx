@@ -415,6 +415,19 @@ export function IntakeClient({ slug }: Props) {
       // ignore
     }
 
+    // Bug fix 2026-08-18 (#69) — auto-dismiss the OnboardingRunner for this
+    // program. Without this, the user lands on Today after intake and
+    // immediately sees a "How Terav reads you" modal that includes a
+    // "Run the intake" CTA — a step they just finished. Two onboarding
+    // flows, one product. The intake is the primary flow; OnboardingRunner
+    // is legacy for programs without an intake. Dismiss it here so the
+    // post-intake landing is Today, not Today + stale modal.
+    try {
+      window.localStorage.setItem(`program.onboarding.done.${slug}`, "1");
+    } catch {
+      // ignore
+    }
+
     router.push("/");
   };
 

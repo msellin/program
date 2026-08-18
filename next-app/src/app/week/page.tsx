@@ -122,6 +122,12 @@ export default function WeekPage() {
         </a>
       </header>
 
+      {/* Bug fix 2026-08-18 (#71) — the forward arrow used to shift left when
+          the "Now" affordance appeared on offset !== 0. Founder principle:
+          containers must not shift. Now the "Now" button occupies a
+          permanently-reserved slot (invisible on offset === 0). The row width
+          stays constant across all offsets, so arrows and range label never
+          move. */}
       <div className="flex items-center gap-2 rounded border border-line bg-surface p-1">
         <button
           type="button"
@@ -153,16 +159,22 @@ export default function WeekPage() {
         >
           ›
         </button>
-        {offset !== 0 ? (
-          <button
-            type="button"
-            onClick={() => setOffset(0)}
-            aria-label="Jump to this week"
-            className="w-11 h-11 flex items-center justify-center rounded hover:bg-surface-2 text-bronze font-mono text-[11px]"
-          >
-            Now
-          </button>
-        ) : null}
+        <button
+          type="button"
+          onClick={() => setOffset(0)}
+          disabled={offset === 0}
+          aria-label={offset === 0 ? "Currently on this week" : "Jump to this week"}
+          aria-hidden={offset === 0}
+          tabIndex={offset === 0 ? -1 : 0}
+          className={cn(
+            "w-11 h-11 flex items-center justify-center rounded font-mono text-[11px]",
+            offset === 0
+              ? "invisible pointer-events-none"
+              : "hover:bg-surface-2 text-bronze",
+          )}
+        >
+          Now
+        </button>
       </div>
 
       {weekPhase ? (

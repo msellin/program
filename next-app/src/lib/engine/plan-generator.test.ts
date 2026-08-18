@@ -39,7 +39,10 @@ describe("blocksForDate — correlated_tier (legacy)", () => {
 
 describe("blocksForDate — multi_dimensional (handstand-walk)", () => {
   const program = loadProgram("handstand-walk");
-  const mondayISO = "2026-01-05"; // Monday
+  // 2026-01-19 is a Monday inside phase_1_foundation_prep (Wrist prep +
+  // Kinoshita). Chosen so the phase-aware substitution keeps the tier A
+  // layout as-authored (kinoshita is in phase_1.blocks).
+  const phase1MondayISO = "2026-01-19";
 
   function profileWith(tier: string): Store["user_profile"] {
     return {
@@ -52,7 +55,7 @@ describe("blocksForDate — multi_dimensional (handstand-walk)", () => {
 
   it("returns Tier A Monday layout blocks when tier_a_foundation is picked", () => {
     const profile = profileWith("tier_a_foundation");
-    const out = blocksForDate(program, profile, undefined, mondayISO);
+    const out = blocksForDate(program, profile, undefined, phase1MondayISO);
     const ids = out.map((b) => b.id);
     // From reference_week_tier_a Mon entry: primary_block + wrap[]
     expect(ids).toContain("block_skill_A_kinoshita");
@@ -60,22 +63,46 @@ describe("blocksForDate — multi_dimensional (handstand-walk)", () => {
     expect(ids).toContain("block_recovery");
   });
 
-  it("returns Tier D Monday layout blocks when tier_d_advanced is picked", () => {
+  it("substitutes primary_block from the active phase (Tier D user during phase_1 gets prep blocks, not tier-D variability)", () => {
+    // Bug #70 fix: phase-aware substitution. Tier D's reference week says
+    // Mon primary = block_skill_A_variability. But during phase_1
+    // (Weeks 1-2 — Wrist prep + Kinoshita), variability isn't authorised —
+    // phase_1.blocks = [wrist_prep, kinoshita, recovery]. Substitution
+    // picks Kinoshita (same skill_A category) so the day still fires with
+    // a phase-appropriate session.
     const profile = profileWith("tier_d_advanced");
-    const out = blocksForDate(program, profile, undefined, mondayISO);
+    const out = blocksForDate(program, profile, undefined, phase1MondayISO);
     const ids = out.map((b) => b.id);
-    // From reference_week_tier_d Mon entry
-    expect(ids).toContain("block_skill_A_variability");
+    expect(ids).toContain("block_skill_A_kinoshita");
     expect(ids).toContain("block_wrist_prep");
     expect(ids).toContain("block_recovery");
-    // Should NOT contain a Tier A-specific primary
-    expect(ids).not.toContain("block_skill_A_kinoshita");
+    // Tier-D-specific block was substituted OUT — phase_1 doesn't run it.
+    expect(ids).not.toContain("block_skill_A_variability");
+  });
+
+  it("phase_0 gates every tier to bail-out blocks (fear-of-falling prep)", () => {
+    // Bug #70 fix: during phase_0_bail_out_prep, the tier's reference week
+    // is filtered against phase_0.blocks (bail-only). All 4 tiers see a
+    // bail block on their skill_A day — phase_0's whole purpose.
+    const phase0MondayISO = "2026-01-05"; // inside phase_0
+    for (const tier of [
+      "tier_a_foundation",
+      "tier_b_wall_to_free",
+      "tier_c_freestand_walker",
+      "tier_d_advanced",
+    ]) {
+      const out = blocksForDate(program, profileWith(tier), undefined, phase0MondayISO);
+      const ids = out.map((b) => b.id);
+      expect(ids.length).toBeGreaterThan(0);
+      // At least one bail block must appear.
+      expect(ids.some((id) => id.startsWith("block_bail_"))).toBe(true);
+    }
   });
 
   it("returns [] for a rest day (no layout entry in the tier's week)", () => {
-    // Tier A's layout is Mon/Wed/Fri/Sun → Tue (2026-01-06) is a rest day.
+    // Tier A's layout is Mon/Wed/Fri/Sun → Tue (2026-01-20) is a rest day.
     const profile = profileWith("tier_a_foundation");
-    const restDayISO = "2026-01-06"; // Tuesday
+    const restDayISO = "2026-01-20"; // Tuesday in phase_1
     const out = blocksForDate(program, profile, undefined, restDayISO);
     expect(out).toEqual([]);
   });

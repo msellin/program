@@ -1,5 +1,5 @@
 import type { Block, Exercise, Phase, Program, Store } from "../schemas";
-import { strengthBlocksForDate } from "./schedule";
+import { activePhaseFor, strengthBlocksForDate } from "./schedule";
 
 type Levels = Partial<Record<string, 1 | 2 | 3 | 4 | 5>>;
 type DrillsById = Record<string, Exercise>;
@@ -107,7 +107,53 @@ function multiDimensionalBlocksForDate(
   if (entry.primary_block) ids.push(entry.primary_block);
   if (entry.wrap) ids.push(...entry.wrap);
 
-  const blocks = program.blocks.filter((b) => ids.includes(b.id));
+  // 2026-08-18 fix (#70) — phase-aware substitution for multi-dimensional
+  // programs. Previously the tier's reference_week_tier_X layout was used
+  // verbatim regardless of active phase, so the Week view description read
+  // "Phase 1 — Wrist prep + Kinoshita" while the days rendered wall_hold /
+  // freestand blocks from the generic tier layout. Two data sources, one
+  // truth. Now: if a phase covers this date AND declares its own blocks
+  // list, we filter the layout's ids against phase.blocks. For the primary
+  // block, if it's missing from the phase, we substitute the first
+  // phase.block matching the same skill category (`block_skill_A_` /
+  // `block_skill_B_`) so the day still fires with a phase-appropriate
+  // session. Wraps just filter — a wrap that isn't in the phase drops.
+  const phase = activePhaseFor(program, dateISO, profile);
+  const phaseBlockSet = phase?.blocks?.length ? new Set(phase.blocks) : null;
+  let effectiveIds = ids;
+  if (phaseBlockSet) {
+    const substituted: string[] = [];
+    // Primary first (if any)
+    if (entry.primary_block) {
+      if (phaseBlockSet.has(entry.primary_block)) {
+        substituted.push(entry.primary_block);
+      } else {
+        const category = skillCategoryOf(entry.primary_block);
+        const swap = category
+          ? phase!.blocks!.find((id) => skillCategoryOf(id) === category)
+          : undefined;
+        // If no same-category swap, pick the first non-wrap block in the
+        // phase — the layout wants A skill session here; give the user the
+        // phase's headline skill block rather than a wrist-prep-only day.
+        const fallback = phase!.blocks!.find(
+          (id) => id.startsWith("block_skill") || id.startsWith("block_bail"),
+        );
+        if (swap) substituted.push(swap);
+        else if (fallback) substituted.push(fallback);
+      }
+    }
+    // Wraps: keep only phase-listed ones
+    if (entry.wrap) {
+      for (const w of entry.wrap) if (phaseBlockSet.has(w)) substituted.push(w);
+    }
+    effectiveIds = substituted;
+  }
+
+  // Preserve the substituted order (primary first, then wrap) — the
+  // authored layout order matters for Today's session flow.
+  const blocks = effectiveIds
+    .map((id) => program.blocks.find((b) => b.id === id))
+    .filter((b): b is Block => !!b);
   if (!drillsById) return blocks;
   const levels = deriveLevelsFromProfile(profile, program, tierId);
   const weekNumber = weekNumberFromProgramStart(profile, dateISO);
@@ -125,6 +171,20 @@ function multiDimensionalBlocksForDate(
     }
     return filterBlockItemsByPrerequisites(b, drillsById, levels);
   });
+}
+
+/**
+ * Extract the skill category from a block id — e.g., `block_skill_A_kinoshita`
+ * → `A`, `block_skill_B_walk_attempts` → `B`, `block_bail_mat_falls` → `bail`.
+ * Returns null for wrap / non-skill blocks. Used by phase-aware substitution
+ * so if a phase drops the tier layout's primary skill block, we substitute
+ * with a block of the same A/B alternation slot from the phase's block list.
+ */
+function skillCategoryOf(blockId: string): string | null {
+  const m = /^block_skill_([AB])_/.exec(blockId);
+  if (m) return m[1];
+  if (blockId.startsWith("block_bail_")) return "bail";
+  return null;
 }
 
 /**
