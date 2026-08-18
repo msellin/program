@@ -145,7 +145,14 @@ export function ProposalCard({ proposal, date }: { proposal: Proposal; date: str
             id={`proposal-${proposal.id}`}
             className={`font-mono text-[10px] uppercase tracking-widest ${tone.eyebrow} flex items-center gap-1.5 font-normal`}
           >
-            {proposal.kind === "tm_bump" || proposal.kind === "tier_advance" ? (
+            {proposal.kind === "tm_bump" ||
+            proposal.kind === "tier_advance" ||
+            (proposal.kind === "non_responder_recommendation" &&
+              proposal.verdict === "under_dosing") ? (
+              // Visual-craft audit 2026-08-18 — under_dosing means "more",
+              // same directional semantic as tm_bump + tier_advance. The
+              // ArrowUp differentiates it from the amber-tone soften
+              // proposal which is directionally "less".
               <ArrowUp size={12} className={tone.eyebrow} aria-hidden="true" />
             ) : null}
             {eyebrow}

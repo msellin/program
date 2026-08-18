@@ -90,7 +90,7 @@ Grouped by theme, ordered within by impact. Check items off as you ship them.
 
 - [ ] **V1 · Chisel underline detaches from H1_b when line wraps** (S) — At 375px H1_b wraps to 2 lines; the `ChiselStroke` SVG stays anchored to the last line. Either constrain H1_b to one line via `whitespace-nowrap` on the span, or move the chisel into H1_b's flow. → `landing-visual-craft #1` · `Hero.tsx:62-68`
 
-- [ ] **V2 · Scope row breaks row-height parity in mobile 2-col grid** (S) — "Your focus arc. The rest is still yours." is 41 chars, wraps to 3 lines while What/When rows are 2. Tighten to `"A focus arc. Rest stays yours."` (30 chars, 2 lines). → `landing-visual-craft #2` · `en.ts:30`
+- [x] **V2 · Scope row breaks row-height parity in mobile 2-col grid** (S) — **DONE 2026-08-18** landing/en.ts:30 tightened to "A focus arc. Rest stays yours." (30 chars).
 
 - [ ] **V3 · H1_c at 24px competes with sub for hierarchy weight** (S) — H1_c is `text-2xl` (24px), sub is `text-lg` (18px). H1_c should either grow (become primary emphasis line) or shrink (subordinate to H1). → `landing-visual-craft #3`
 
@@ -114,7 +114,7 @@ Grouped by theme, ordered within by impact. Check items off as you ship them.
 
 - [x] **C1 · Landing hero verb "sharpen" doesn't survive to app** (S) — **DONE** Day1EmptyState.tsx:28 reads "One focus, sharpened every session." with grounded subtitle. The verb-without-object phrasing is gone.
 
-- [ ] **C2 · `life_load` label conflicts with `scale_anchor` anchor words** (S) — Check page label says `"Life load (0=fresh, 10=wrecked)"`. Engine-builder onboarding says `"Cooked / running on fumes"`. Rowing says `"Cooked — pull is a grind"`. Four synonyms for one scale. Unify to `"Cooked"` at high anchor across all `scale_anchor.anchors.high` and the `/check` label. → `app-copy-clarity #5` · 6 JSONs + `check/page.tsx:156`
+- [x] **C2 · `life_load` label conflicts with `scale_anchor` anchor words** (S) — **DONE** check/page.tsx:157 uses "cooked" (was "wrecked"), and all life_load scale_anchors (CSM, Engine Builder, Rowing 2K) high = "Cooked" (plus per-program subtitle where useful). Unified.
 
 - [ ] **C3 · `"Pick my focus"` CTA lacks friction disclosure** (S) — Users don't know what happens after tap. Add micro-copy under CTA: "no card, no signup wall — email + password, 30 sec." → `landing-conversion-strategist #2`
 

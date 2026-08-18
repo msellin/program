@@ -27,7 +27,7 @@ export const en: LandingDict = {
     row_scope_label: "Scope",
     row_scope_template: "Your whole week",
     row_scope_trainer: "Your whole week",
-    row_scope_terav: "Your focus arc. The rest is still yours.",
+    row_scope_terav: "A focus arc. Rest stays yours.",
     row_what_label: "What you get",
     row_what_template: "A session from a library",
     row_what_trainer: "A plan every two weeks",

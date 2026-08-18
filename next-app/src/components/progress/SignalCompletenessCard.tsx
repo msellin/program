@@ -42,7 +42,7 @@ export function SignalCompletenessCard({
   const body = (
     <div className="space-y-4">
       <div className="space-y-2">
-        <p className="font-mono text-[10px] uppercase tracking-widest text-slate flex items-center gap-1.5">
+        <p className="font-mono text-[10px] uppercase tracking-widest text-muted flex items-center gap-1.5">
           <Eye size={12} aria-hidden="true" />
           The engine sees
         </p>
@@ -58,7 +58,7 @@ export function SignalCompletenessCard({
 
       {hasGaps ? (
         <div className="space-y-2">
-          <p className="font-mono text-[10px] uppercase tracking-widest text-slate flex items-center gap-1.5">
+          <p className="font-mono text-[10px] uppercase tracking-widest text-muted flex items-center gap-1.5">
             <Plus size={12} aria-hidden="true" />
             Would additionally use
           </p>
