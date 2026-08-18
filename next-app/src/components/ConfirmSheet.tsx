@@ -50,7 +50,15 @@ export function ConfirmSheet({
       if (e.key === "Escape") onCancel();
     };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    // iOS Safari body-scroll lock. Without this the underlying page
+    // rubber-bands behind the sheet and the modal loses its "modal" feel.
+    // Mobile-UX audit 2026-08-18.
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
   }, [open, onCancel]);
 
   if (!open) return null;
@@ -69,14 +77,16 @@ export function ConfirmSheet({
         className="w-full sm:max-w-md bg-surface-2 border border-line rounded-lg p-4 space-y-3"
       >
         <div className="flex items-start justify-between gap-3">
-          <p id="cs-title" className="font-semibold text-strong">
+          {/* Reserve space so the wrap-line-2 title can't slip under the
+              close-X's tap rect on SE 375. Mobile-UX audit 2026-08-18. */}
+          <p id="cs-title" className="font-semibold text-strong pr-11">
             {title}
           </p>
           <button
             type="button"
             onClick={onCancel}
             aria-label={cancelLabel}
-            className="text-muted hover:text-ink w-11 h-11 -m-2 flex items-center justify-center"
+            className="text-muted hover:text-ink w-11 h-11 flex items-center justify-center flex-shrink-0"
           >
             <X size={18} />
           </button>

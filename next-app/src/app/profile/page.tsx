@@ -19,18 +19,16 @@ import { today } from "@/lib/utils";
 import type { ProgramManifest } from "@/lib/schemas";
 
 /**
- * Profile — the user's home for identity, personal config, and account controls.
+ * Profile — switchboard (not dashboard) for identity, active programs, and
+ * account controls. Post product-design-lead + visual-craft + copy + mobile-UX
+ * reconcile 2026-08-18.
  *
- * Structure follows the IA audit (2026-08-11):
- *   - Identity card (email, tier)
- *   - My plan → deep link to current program + catalog
- *   - My constraints → contraindications editor
- *   - Data & privacy → inline JSON export + account delete
- *   - Coach (beta) — placeholder until AI wired
- *   - Help → guide
- *   - Sign out (destructive at bottom, 2 taps to reach)
- *
- * Mobile-first: single column, stacked sections, ≥44px tap targets.
+ * Structure:
+ *   - Identity row (email, staff badge, joined date)
+ *   - Active programs list (tap → deep link to program page; remove happens there)
+ *   - "More" nav (Guide, Coach when configured)
+ *   - Sign out (Fitts-separated)
+ *   - Footer: legal + GDPR utilities (Export, Delete) — deliberately quiet
  */
 export default function ProfilePage() {
   const store = useStore((s) => s.store);
@@ -133,7 +131,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="space-y-5 pt-4 pb-6">
+    <div className="space-y-5 pt-4 pb-10">
       <h1 className="sr-only">Profile</h1>
       <div className="flex items-baseline justify-between gap-3">
         <div className="flex items-baseline gap-2 min-w-0">
@@ -145,49 +143,42 @@ export default function ProfilePage() {
           {isSuperAdmin ? (
             <span
               className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-slate/20 text-slate flex-shrink-0"
-              title="Super admin — multi-plan enrollment unlocked."
+              title="Staff account — you can enrol in multiple programs at once."
             >
-              admin
+              staff
             </span>
           ) : null}
         </div>
         {memberSince ? (
           <p className="font-mono text-[10px] uppercase tracking-wider text-muted flex-shrink-0">
-            since {memberSince}
+            joined {memberSince}
           </p>
         ) : null}
       </div>
 
-      {/* Compliance card removed 2026-08-18 (product-design-lead review):
-          duplicated Today's signal, drove no Profile action. Rolling-7 dot
-          strip belongs above Progress if it lives anywhere. Profile is
-          switchboard, not dashboard. */}
-
       {/* Active plan(s). No inline × — removal happens on the program page
-          itself (deep-linked below). Founder note 2026-08-18: the × in the
-          list was too easy to hit; the ConfirmSheet caught it but the panic
-          of "did I just lose my program" was the wrong feel. */}
+          (see product-design-lead brief). Row is chevron → deep link. */}
       {activePrograms.length ? (
-        <ul className="rounded border border-line-soft divide-y divide-line-soft">
+        <ul className="rounded border border-line-soft bg-surface divide-y divide-line-soft">
           {activePrograms.map((p, i) => {
             const isPrimary = i === 0 && p.slug === activeProgramId;
             return (
               <li key={p.slug}>
                 <Link
                   href={`/programs/${p.slug}`}
-                  className="flex items-center gap-2 min-h-[48px] px-3"
+                  className="flex items-center justify-between gap-3 px-3 py-3 min-h-[48px] active:bg-line-soft/50"
                 >
                   <div className="min-w-0 flex-1">
-                    <p className="text-[14px] font-semibold text-strong truncate flex items-center gap-1.5">
+                    <p className="text-sm font-semibold text-strong truncate">
                       {p.name}
+                    </p>
+                    <p className="text-[11px] text-muted mt-0.5 flex items-center gap-1.5">
+                      <span>{p.duration_weeks} weeks · {p.difficulty}</span>
                       {isPrimary && activePrograms.length > 1 ? (
                         <span className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-bronze/20 text-bronze">
-                          primary
+                          today&rsquo;s
                         </span>
                       ) : null}
-                    </p>
-                    <p className="text-[11px] text-muted mt-0.5">
-                      {p.duration_weeks} weeks · {p.difficulty}
                     </p>
                   </div>
                   <ChevronRight size={16} className="text-muted flex-shrink-0" />
@@ -199,17 +190,17 @@ export default function ProfilePage() {
       ) : (
         <Link
           href="/programs"
-          className="inline-block font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground min-h-[44px]"
+          className="inline-flex items-center min-h-[44px] py-3 font-mono text-[11px] uppercase tracking-wider text-bronze hover:text-bronze-hover"
         >
-          Pick a program →
+          Pick your focus →
         </Link>
       )}
 
-      <nav aria-label="More" className="rounded border border-line-soft divide-y divide-line-soft">
+      <nav aria-label="More" className="rounded border border-line-soft bg-surface divide-y divide-line-soft">
         {coachConfigured() ? (
           <Link
             href="/coach"
-            className="flex items-center justify-between gap-3 px-3 py-3 hover:bg-line-soft/50 min-h-[48px]"
+            className="flex items-center justify-between gap-3 px-3 py-3 min-h-[48px] active:bg-line-soft/50"
           >
             <span className="flex items-center gap-3 text-sm">
               <MessageSquare size={16} className="text-muted" />
@@ -220,44 +211,66 @@ export default function ProfilePage() {
         ) : null}
         <Link
           href="/guide"
-          className="flex items-center justify-between gap-3 px-3 py-3 hover:bg-line-soft/50 min-h-[48px]"
+          className="flex items-center justify-between gap-3 px-3 py-3 min-h-[48px] active:bg-line-soft/50"
         >
           <span className="flex items-center gap-3 text-sm">
             <BookOpen size={16} className="text-muted" />
-            How this app works
+            Guide
           </span>
           <ChevronRight size={16} className="text-muted flex-shrink-0" />
         </Link>
       </nav>
 
-      {/* Sign out — small, at the bottom */}
+      {/* Sign out — Fitts-separated from the "More" card. `pt-4` on top of
+          the outer `space-y-5` gap yields ~36 px between blocks so the
+          destructive-adjacent button isn't in the same rhythm-unit as
+          the nav rows above. */}
       <section className="pt-4">
         <button
           type="button"
           onClick={() => setSignOutOpen(true)}
-          className="w-full inline-flex items-center justify-center gap-2 font-mono text-[12px] uppercase tracking-wider px-4 py-3 rounded border border-line text-ink hover:bg-line-soft min-h-[48px]"
+          className="w-full inline-flex items-center justify-center gap-2 font-mono text-[12px] uppercase tracking-wider px-4 py-3 rounded border border-line text-ink active:bg-line-soft min-h-[48px]"
         >
-          <LogOut size={14} />
+          <LogOut size={16} />
           Sign out
         </button>
       </section>
 
-      {/* Footer: legal + GDPR utility links. Deliberately low-key —
-          reachable (legally required) but not shouting. Export-data and
-          delete-account both fire a ConfirmSheet before doing anything. */}
+      {/* Footer: legal + GDPR utility links. Deliberately quiet — reachable
+          (legally required) but not shouting. Both Export and Delete fire a
+          ConfirmSheet. All footer links padded to 44 px hit area even though
+          the visual weight is small — mobile-UX audit P0 fix. */}
       <footer className="pt-6 space-y-3 border-t border-line-soft">
-        <nav aria-label="Legal" className="flex flex-wrap gap-x-4 gap-y-1 text-[12px] text-muted">
-          <Link href="/legal/privacy" className="hover:text-ink">Privacy</Link>
-          <Link href="/legal/terms" className="hover:text-ink">Terms</Link>
-          <Link href="/legal/disclaimer" className="hover:text-ink">Medical disclaimer</Link>
+        <nav
+          aria-label="Legal"
+          className="flex flex-wrap gap-x-5 gap-y-1 text-[11px]"
+        >
+          <Link
+            href="/legal/privacy"
+            className="inline-flex items-center min-h-[44px] py-2 text-muted hover:text-ink"
+          >
+            Privacy
+          </Link>
+          <Link
+            href="/legal/terms"
+            className="inline-flex items-center min-h-[44px] py-2 text-muted hover:text-ink"
+          >
+            Terms
+          </Link>
+          <Link
+            href="/legal/disclaimer"
+            className="inline-flex items-center min-h-[44px] py-2 text-muted hover:text-ink"
+          >
+            Medical disclaimer
+          </Link>
         </nav>
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[12px]">
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-[11px]">
           <button
             type="button"
             onClick={exportMyData}
-            className="text-muted hover:text-ink underline underline-offset-2 decoration-line"
+            className="inline-flex items-center min-h-[44px] py-2 text-muted hover:text-ink underline underline-offset-2 decoration-muted/50 hover:decoration-ink/60"
           >
-            Export my data (JSON)
+            Export my data
           </button>
           <button
             type="button"
@@ -266,7 +279,7 @@ export default function ProfilePage() {
               setConfirmDelete(true);
             }}
             disabled={deleting}
-            className="text-muted hover:text-ink underline underline-offset-2 decoration-line disabled:opacity-50"
+            className="inline-flex items-center min-h-[44px] py-2 text-muted hover:text-ink underline underline-offset-2 decoration-muted/50 hover:decoration-ink/60 disabled:opacity-50"
           >
             {deleting ? "Deleting…" : "Delete my account"}
           </button>
@@ -279,7 +292,7 @@ export default function ProfilePage() {
       <ConfirmSheet
         open={signOutOpen}
         title="Sign out?"
-        body="Your data stays synced — you can sign back in any time."
+        body="Your data is synced. Sign in from any device to pick back up."
         confirmLabel="Sign out"
         onConfirm={() => {
           setSignOutOpen(false);
@@ -290,7 +303,7 @@ export default function ProfilePage() {
       <ConfirmSheet
         open={confirmDelete}
         title="Delete your account permanently?"
-        body="This deletes your account, all logs, training maxes, morning checks, and every synced entry on our server. You cannot recover any of it after this action."
+        body="Everything goes — logs, training maxes, morning checks, server copies. This cannot be undone."
         confirmLabel="Delete forever"
         danger
         onConfirm={() => void deleteAccount()}
@@ -299,5 +312,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-
-
