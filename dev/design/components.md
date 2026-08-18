@@ -415,6 +415,34 @@ Reference implementation: `PictogramTile` in `IntakeClient.tsx`.
 
 ---
 
+## Block state → color mapping (canonical)
+
+**Rule from 2026-08-18 audit** — every surface that renders a scheduled
+block's state must use the exact same color per state. This keeps Today's
+per-program menu, Week's dot cluster, History's chip, and Progress's
+adherence bar visually synchronous.
+
+| State | Color token | When |
+|---|---|---|
+| `planned` | `bg-muted/60` | Default upcoming state |
+| `done` | `bg-green` (or `bg-green/20 text-green` for chips) | Completed session |
+| `skipped` | `bg-amber` (chip: `bg-amber/20 text-amber`) | User explicitly skipped |
+| `moved` | `bg-slate` (chip: `bg-slate/20 text-slate`) | Rescheduled to another day |
+| `amber_downshifted` (chip: "eased") | `bg-amber/60` (chip: `bg-amber/20 text-amber`) | Engine-softened |
+| Today (planned) | `bg-bronze` overrides `bg-muted/60` | Current day only |
+
+**Terminology map** — user-facing chip labels:
+- `done` → "done"
+- `skipped` → "skipped"
+- `moved` → "moved"
+- `amber_downshifted` → "eased" (never "downshifted" in a user-facing chip)
+
+Reference implementations:
+- `PerProgramAdherenceCard` stacked ratio bar
+- `Week` dot-per-program cluster + `perProgramDayStates` helper
+- `BlockHistorySection` `stateChip()` helper
+- `PerProgramActions` amber/slate banner border-l
+
 ## Component adoption rules (for future contributors)
 
 - Pull class strings straight from this doc. Copy-paste is fine.

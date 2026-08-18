@@ -335,23 +335,36 @@ export default function WeekPage() {
                 )}
               >
                 {perProgramDots ? (
-                  <span
-                    aria-hidden
-                    className="mt-2 flex items-center gap-0.5 flex-shrink-0"
-                  >
-                    {perProgramDots.dots.slice(0, 4).map((d, idx) => (
-                      <span
-                        key={idx}
-                        className={cn("w-2 h-2 rounded-full", d.className)}
-                        title={`${d.programName}: ${d.state}`}
-                      />
-                    ))}
-                    {perProgramDots.dots.length > 4 ? (
-                      <span className="text-[9px] font-mono text-muted ml-0.5">
-                        +{perProgramDots.dots.length - 4}
-                      </span>
-                    ) : null}
-                  </span>
+                  <>
+                    <span
+                      aria-hidden
+                      className="mt-2 flex items-center gap-0.5 flex-shrink-0"
+                    >
+                      {perProgramDots.dots.slice(0, 4).map((d, idx) => (
+                        <span
+                          key={idx}
+                          className={cn("w-2 h-2 rounded-full", d.className)}
+                          title={`${d.programName}: ${d.state}`}
+                        />
+                      ))}
+                      {/* Audit 2026-08-18 (visual-craft) — "+N" bumped
+                          from text-[9px] to text-[10px] to respect the
+                          tokens.md typography floor. */}
+                      {perProgramDots.dots.length > 4 ? (
+                        <span className="text-[10px] font-mono text-muted ml-0.5">
+                          +{perProgramDots.dots.length - 4}
+                        </span>
+                      ) : null}
+                    </span>
+                    {/* Audit 2026-08-18 (a11y P1) — SR-only summary so
+                        screen-reader users get the per-track state
+                        information the dots convey visually. */}
+                    <span className="sr-only">
+                      {perProgramDots.dots
+                        .map((d) => `${d.programName}: ${d.state}`)
+                        .join("; ")}
+                    </span>
+                  </>
                 ) : (
                   <span
                     aria-hidden

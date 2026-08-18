@@ -112,7 +112,7 @@ export function PerProgramAdherenceCard() {
                 aria-hidden
               />
               <span
-                className="bg-muted/50"
+                className="bg-muted/60"
                 style={{ width: r.total > 0 ? `${(r.planned / r.total) * 100}%` : "0%" }}
                 aria-hidden
               />

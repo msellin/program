@@ -6,6 +6,7 @@ import { getAdapter } from "./persistence/adapter";
 import type { Store, DayLog, ExerciseLog, SetLog, Program, RunLog, Proposal } from "./schemas";
 import { today, iso } from "./utils";
 import { snapshotCitation } from "./engine/citations";
+import { announce } from "./announce";
 
 /**
  * Save to persistence AND fire a debounced remote push.
@@ -938,6 +939,8 @@ export const useStore = create<StoreState>((set, get) => ({
     s.scheduled_blocks = blocks;
     commit(s);
     set({ store: s });
+    // Audit 2026-08-18 (a11y P0-3) — announce so SR users know the action landed.
+    announce(`Skipped ${prior.program_slug.replace(/-/g, " ")}`);
   },
 
   moveBlock: (blockInstanceId, newDate, reason) => {
@@ -960,6 +963,7 @@ export const useStore = create<StoreState>((set, get) => ({
     s.scheduled_blocks = blocks;
     commit(s);
     set({ store: s });
+    announce(`Moved ${prior.program_slug.replace(/-/g, " ")} to ${newDate}`);
   },
 
   restoreBlock: (blockInstanceId) => {
@@ -977,6 +981,7 @@ export const useStore = create<StoreState>((set, get) => ({
     s.scheduled_blocks = blocks;
     commit(s);
     set({ store: s });
+    announce(`Restored ${prior.program_slug.replace(/-/g, " ")}`);
   },
 
   completeBlock: (blockInstanceId, logEntryId) => {
@@ -993,6 +998,7 @@ export const useStore = create<StoreState>((set, get) => ({
     s.scheduled_blocks = blocks;
     commit(s);
     set({ store: s });
+    announce(`Marked ${prior.program_slug.replace(/-/g, " ")} done`);
   },
 
   applyBlockProposal: (blockInstanceId, proposal) => {
@@ -1021,25 +1027,26 @@ export const useStore = create<StoreState>((set, get) => ({
   skipWholeDay: (dateISO, reason) => {
     const s = { ...get().store };
     const blocks = { ...(s.scheduled_blocks ?? {}) };
-    let changed = false;
+    let changed = 0;
     for (const id in blocks) {
       const b = blocks[id];
       if (b.actual_date === dateISO && b.state === "planned") {
         blocks[id] = { ...b, state: "skipped", notes: reason ?? b.notes };
-        changed = true;
+        changed++;
       }
     }
-    if (!changed) return;
+    if (changed === 0) return;
     s.scheduled_blocks = blocks;
     commit(s);
     set({ store: s });
+    announce(`Skipped ${changed} session${changed === 1 ? "" : "s"} on ${dateISO}`);
   },
 
   moveWholeDay: (fromDate, toDate, reason) => {
     const s = { ...get().store };
     const blocks = { ...(s.scheduled_blocks ?? {}) };
     const stamp = new Date().toISOString();
-    let changed = false;
+    let changed = 0;
     for (const id in blocks) {
       const b = blocks[id];
       if (b.actual_date === fromDate && b.state === "planned") {
@@ -1052,13 +1059,14 @@ export const useStore = create<StoreState>((set, get) => ({
             { from: fromDate, to: toDate, at: stamp, reason },
           ],
         };
-        changed = true;
+        changed++;
       }
     }
-    if (!changed) return;
+    if (changed === 0) return;
     s.scheduled_blocks = blocks;
     commit(s);
     set({ store: s });
+    announce(`Moved ${changed} session${changed === 1 ? "" : "s"} to ${toDate}`);
   },
 
   setFeatureFlag: (key, value) => {

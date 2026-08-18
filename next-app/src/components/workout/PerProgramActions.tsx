@@ -185,13 +185,16 @@ function ConfirmSheet({
         <p className="text-[13px] text-muted">{body}</p>
         {askReason ? (
           <div>
-            <label className="mono-caps block mb-1">Reason (optional)</label>
+            <label className="mono-caps block mb-1" htmlFor="ppa-skip-reason">
+              Reason (optional)
+            </label>
             <input
+              id="ppa-skip-reason"
               type="text"
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               placeholder="e.g. travelling, tired"
-              className="w-full px-2 py-1.5 border border-line rounded bg-surface text-sm"
+              className="w-full px-3 py-3 min-h-[44px] border border-line rounded bg-surface text-[15px]"
             />
           </div>
         ) : null}
@@ -259,13 +262,16 @@ function MoveSheet({
           today are unaffected.
         </p>
         <div>
-          <label className="mono-caps block mb-1">Move to</label>
+          <label className="mono-caps block mb-1" htmlFor="ppa-move-date">
+            Move to
+          </label>
           <input
+            id="ppa-move-date"
             type="date"
             value={date}
             min={iso(new Date())}
             onChange={(e) => setDate(e.target.value)}
-            className="w-full px-2 py-1.5 border border-line rounded bg-surface text-sm"
+            className="w-full px-3 py-3 min-h-[44px] border border-line rounded bg-surface text-[15px]"
           />
         </div>
         <div className="flex gap-2 pt-1">

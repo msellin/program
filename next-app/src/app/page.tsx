@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { loadProgram, loadExercises } from "@/lib/data-loader";
 import { ExerciseCard } from "@/components/workout/ExerciseCard";
@@ -376,10 +376,12 @@ export default function TodayPage() {
           {groups.map((g, gi) =>
             g.blocks.length === 0 ? null : (
               <div key={g.program.schema_version + ":" + gi} className="space-y-5">
+                {/* Audit 2026-08-18 (a11y P1) — h2 for landmark jumping.
+                    Visual styling unchanged. */}
                 {groupsWithBlocks.length > 1 ? (
-                  <p className="font-mono text-[11px] uppercase tracking-widest text-muted -mb-2">
+                  <h2 className="font-mono text-[11px] uppercase tracking-widest text-muted -mb-2 font-normal">
                     {programDisplayName(g.program, activeSlugs[gi])}
-                  </p>
+                  </h2>
                 ) : null}
                 {g.blocks.map((b) => {
                   // Apply the primary program's phase.duration_multiplier when
@@ -442,11 +444,21 @@ function programDisplayName(program: Program, slug: string): string {
 function DayHeaderShortcut({ date, programCount }: { date: string; programCount: number }) {
   const skipWholeDay = useStore((s) => s.skipWholeDay);
   const [confirming, setConfirming] = useState(false);
+  const confirmRef = useRef<HTMLButtonElement>(null);
   const humanDate = new Date(date + "T12:00:00").toLocaleDateString("en-GB", {
     weekday: "long",
     day: "numeric",
     month: "short",
   });
+  // Audit 2026-08-18 (a11y + mobile-UX + visual-craft) — was 40px (Apple 44
+  // fail); confirm-swap jumped ~50px (Cancel + Confirm pair widened the
+  // container in `justify-between`); focus was lost on swap. Fix: bump
+  // every button to min-h-[44px]; wrap the swap area in a stable-width
+  // container so Confirm lands under the original Skip position; autofocus
+  // Confirm after swap.
+  useEffect(() => {
+    if (confirming) confirmRef.current?.focus();
+  }, [confirming]);
   return (
     <div className="rounded border border-line-soft border-l-4 border-l-slate bg-surface p-3 flex items-center justify-between gap-3">
       <div className="text-sm">
@@ -455,35 +467,38 @@ function DayHeaderShortcut({ date, programCount }: { date: string; programCount:
           {programCount} tracks scheduled today. Skip or move each independently below.
         </p>
       </div>
-      {!confirming ? (
-        <button
-          type="button"
-          onClick={() => setConfirming(true)}
-          className="text-[12px] mono-caps border border-line rounded px-3 py-2 min-h-[40px] hover:bg-line-soft"
-        >
-          Skip whole day
-        </button>
-      ) : (
-        <div className="flex items-center gap-2">
+      <div className="min-w-[176px] flex justify-end items-center gap-2">
+        {!confirming ? (
           <button
             type="button"
-            onClick={() => setConfirming(false)}
-            className="text-[12px] mono-caps text-muted hover:text-ink"
+            onClick={() => setConfirming(true)}
+            className="text-[12px] mono-caps border border-line rounded px-3 py-2 min-h-[44px] hover:bg-line-soft"
           >
-            Cancel
+            Skip whole day
           </button>
-          <button
-            type="button"
-            onClick={() => {
-              skipWholeDay(date);
-              setConfirming(false);
-            }}
-            className="text-[12px] mono-caps rounded bg-bronze text-ground px-3 py-2 min-h-[40px] hover:bg-bronze-hover"
-          >
-            Confirm skip
-          </button>
-        </div>
-      )}
+        ) : (
+          <>
+            <button
+              type="button"
+              onClick={() => setConfirming(false)}
+              className="text-[12px] mono-caps text-muted hover:text-ink px-3 py-2 min-h-[44px]"
+            >
+              Cancel
+            </button>
+            <button
+              ref={confirmRef}
+              type="button"
+              onClick={() => {
+                skipWholeDay(date);
+                setConfirming(false);
+              }}
+              className="text-[12px] mono-caps rounded bg-bronze text-ground px-3 py-2 min-h-[44px] hover:bg-bronze-hover"
+            >
+              Confirm skip
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
 }

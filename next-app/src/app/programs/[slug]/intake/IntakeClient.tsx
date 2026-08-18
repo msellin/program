@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ChevronLeft, ShieldAlert, Check } from "lucide-react";
@@ -8,6 +8,7 @@ import { loadProgram, loadProgramManifest } from "@/lib/data-loader";
 import { useStore } from "@/lib/useStore";
 import { cn } from "@/lib/utils";
 import { inferTier } from "@/lib/engine/intake-tier";
+import { announce } from "@/lib/announce";
 import type {
   Program,
   IntakeQuestion,
@@ -129,6 +130,11 @@ export function IntakeClient({ slug }: Props) {
   const clearIntakeDraft = useStore((s) => s.clearIntakeDraft);
   const [stepIndex, setStepIndex] = useState(0);
   const [hydrated, setHydrated] = useState(false);
+  // Audit 2026-08-18 (a11y) — focus + announce on wizard step change.
+  // Ref anchors the step body; the useEffect below moves focus to the
+  // step's h2 and fires an aria-live announcement so SR users know a
+  // new question is loaded.
+  const stepBodyRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     try {
       if (storedDraft) {
@@ -610,6 +616,29 @@ export function IntakeClient({ slug }: Props) {
   const currentStep = steps[clampedStepIndex];
   const isLastStep = clampedStepIndex >= steps.length - 1;
 
+  // Audit 2026-08-18 (a11y P0-1) — on step change, move focus to the step
+  // body's heading and fire an aria-live announcement. Without this,
+  // Enter-on-Next keeps focus on the disabled Next button and SR users
+  // never learn that a new question loaded.
+  useEffect(() => {
+    if (!currentStep || !hydrated) return;
+    const el = stepBodyRef.current;
+    if (!el) return;
+    const heading = el.querySelector<HTMLElement>("h2");
+    if (heading) {
+      heading.setAttribute("tabindex", "-1");
+      heading.focus({ preventScroll: false });
+    }
+    const label =
+      currentStep.kind === "question"
+        ? `${currentStep.sectionLabel} — ${currentStep.q.label}`
+        : currentStep.kind === "physical_tests"
+          ? `${currentStep.sectionLabel} — optional`
+          : `${currentStep.sectionLabel} — required`;
+    announce(`Step ${clampedStepIndex + 1} of ${steps.length}. ${label}`);
+    // Intentionally do not include heading in deps — it re-runs on step change.
+  }, [clampedStepIndex, currentStep, hydrated, steps.length]);
+
   // Is this specific step ready to advance? Question steps require the
   // question be answered if required. Consent step requires all required
   // checkboxes ticked. Physical tests step is always advanceable (optional).
@@ -631,8 +660,13 @@ export function IntakeClient({ slug }: Props) {
   const showGateBlockInline = blocker != null;
 
   return (
-    <div className="mx-auto max-w-2xl space-y-5 pt-4 pb-32">
-      {/* components.md#layout (wizard body constraint) — body + WizardFooter both max-w-2xl */}
+    <div className="mx-auto max-w-2xl flex flex-col min-h-[100dvh] pt-4">
+      {/* Audit 2026-08-18 (mobile-UX P0-2 + a11y P0-1) — sticky footer inside
+          a flex column riding min-h-[100dvh]. Previously `fixed bottom-0`
+          got covered by the iOS keyboard on text-input steps AND floated
+          over empty space on desktop with a short body. Sticky rides the
+          visualViewport correctly and closes the flow visually. */}
+      <div className="flex-1 space-y-5 pb-4">
       <Link href={backHref} className="inline-flex items-center gap-1 text-[13px] text-slate hover:text-ink">
         <ChevronLeft size={14} />
         Back to program
@@ -658,7 +692,7 @@ export function IntakeClient({ slug }: Props) {
         </div>
       ) : null}
 
-      <div className="min-h-[280px]">
+      <div ref={stepBodyRef} className="min-h-[280px]" aria-live="polite">
         {currentStep?.kind === "question" ? (
           <WizardQuestionScreen
             step={currentStep}
@@ -685,6 +719,7 @@ export function IntakeClient({ slug }: Props) {
             setConsent={(id, v) => setConsents((cs) => ({ ...cs, [id]: v }))}
           />
         ) : null}
+      </div>
       </div>
 
       <WizardFooter
@@ -764,7 +799,10 @@ function WizardQuestionScreen({
           by 2026-08-18 audit (reads as image placeholder). */}
       <div className="flex items-start gap-3">
         {pictogram ? <PictogramTile kind={pictogram} /> : null}
-        <h2 className="text-[18px] sm:text-[20px] font-semibold text-strong leading-snug flex-1">
+        <h2
+          id={`q-heading-${q.id}`}
+          className="text-[18px] sm:text-[20px] font-semibold text-strong leading-snug flex-1"
+        >
           {q.label}
           {q.required ? <span className="text-red ml-1">*</span> : null}
         </h2>
@@ -784,14 +822,39 @@ function WizardQuestionScreen({
             0,
           );
           const useOptionRows = longest > 8;
+          // Audit 2026-08-18 (a11y P0-2) — radiogroup semantics + arrow-key
+          // nav + roving tabindex. Currently-selected (or first, if none) is
+          // the only tab stop.
+          const focusedIdx = Math.max(
+            0,
+            q.options.findIndex((o) => o.value === currentValue),
+          );
+          const onOptionKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+            const opts = q.options!;
+            const navKeys = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"];
+            if (!navKeys.includes(e.key)) return;
+            e.preventDefault();
+            const cur = Math.max(0, opts.findIndex((o) => o.value === currentValue));
+            let nextIdx: number;
+            if (e.key === "Home") nextIdx = 0;
+            else if (e.key === "End") nextIdx = opts.length - 1;
+            else if (e.key === "ArrowRight" || e.key === "ArrowDown")
+              nextIdx = (cur + 1) % opts.length;
+            else nextIdx = (cur - 1 + opts.length) % opts.length;
+            setAnswer(q.id, opts[nextIdx].value);
+          };
           if (useOptionRows) {
             // components.md#buttons#7 (option row) — canonical implementation.
             // Calibration tone: opt.hint renders as the row's secondary line,
             // so users see the tier mapping inline instead of buried in a
             // disclosure.
             return (
-              <ul className="space-y-1.5 pt-1">
-                {q.options.map((opt) => {
+              <ul
+                role="radiogroup"
+                aria-labelledby={`q-heading-${q.id}`}
+                className="space-y-1.5 pt-1"
+              >
+                {q.options.map((opt, idx) => {
                   const picked = currentValue === opt.value;
                   const unsafePicked = picked && isGateUnsafe(safetyGates, q.id, opt.value);
                   const showHint = step.tone === "calibration" && opt.hint;
@@ -799,6 +862,10 @@ function WizardQuestionScreen({
                     <li key={opt.value}>
                       <button
                         type="button"
+                        role="radio"
+                        aria-checked={picked}
+                        tabIndex={idx === focusedIdx ? 0 : -1}
+                        onKeyDown={onOptionKeyDown}
                         onClick={() => setAnswer(q.id, opt.value)}
                         className={cn(
                           "w-full text-left rounded border px-3 py-2 flex items-start gap-2 min-h-[52px]",
@@ -848,14 +915,22 @@ function WizardQuestionScreen({
           }
           // Short-label case → chip strip (components.md#buttons#6).
           return (
-            <div className="flex flex-wrap gap-2 pt-1">
-              {q.options.map((opt) => {
+            <div
+              role="radiogroup"
+              aria-labelledby={`q-heading-${q.id}`}
+              className="flex flex-wrap gap-2 pt-1"
+            >
+              {q.options.map((opt, idx) => {
                 const picked = currentValue === opt.value;
                 const unsafePicked = picked && isGateUnsafe(safetyGates, q.id, opt.value);
                 return (
                   <button
                     key={opt.value}
                     type="button"
+                    role="radio"
+                    aria-checked={picked}
+                    tabIndex={idx === focusedIdx ? 0 : -1}
+                    onKeyDown={onOptionKeyDown}
                     onClick={() => setAnswer(q.id, opt.value)}
                     className={cn(
                       "text-[14px] px-4 py-3 rounded border min-h-[48px]",
@@ -876,29 +951,56 @@ function WizardQuestionScreen({
       ) : null}
 
       {q.type === "boolean" ? (
-        <div className="flex gap-2 pt-1">
-          {["true", "false"].map((v) => {
-            const picked = currentValue === v;
-            const unsafePicked = picked && isGateUnsafe(safetyGates, q.id, v);
-            return (
-              <button
-                key={v}
-                type="button"
-                onClick={() => setAnswer(q.id, v)}
-                className={cn(
-                  "text-[14px] px-5 py-3 rounded border min-h-[48px]",
-                  unsafePicked
-                    ? "border-red/50 bg-red/10 text-red"
-                    : picked
-                      ? "border-bronze bg-bronze/15 text-strong"
-                      : "border-line bg-surface text-strong hover:border-slate/40",
-                )}
-              >
-                {v === "true" ? "Yes" : "No"}
-              </button>
-            );
-          })}
-        </div>
+        (() => {
+          const bools = ["true", "false"];
+          const boolFocusedIdx = Math.max(0, bools.indexOf(currentValue ?? ""));
+          const onBoolKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+            const nav = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"];
+            if (!nav.includes(e.key)) return;
+            e.preventDefault();
+            const cur = Math.max(0, bools.indexOf(currentValue ?? ""));
+            let nextIdx: number;
+            if (e.key === "Home") nextIdx = 0;
+            else if (e.key === "End") nextIdx = bools.length - 1;
+            else if (e.key === "ArrowRight" || e.key === "ArrowDown")
+              nextIdx = (cur + 1) % bools.length;
+            else nextIdx = (cur - 1 + bools.length) % bools.length;
+            setAnswer(q.id, bools[nextIdx]);
+          };
+          return (
+            <div
+              role="radiogroup"
+              aria-labelledby={`q-heading-${q.id}`}
+              className="flex gap-2 pt-1"
+            >
+              {bools.map((v, idx) => {
+                const picked = currentValue === v;
+                const unsafePicked = picked && isGateUnsafe(safetyGates, q.id, v);
+                return (
+                  <button
+                    key={v}
+                    type="button"
+                    role="radio"
+                    aria-checked={picked}
+                    tabIndex={idx === boolFocusedIdx ? 0 : -1}
+                    onKeyDown={onBoolKeyDown}
+                    onClick={() => setAnswer(q.id, v)}
+                    className={cn(
+                      "text-[14px] px-5 py-3 rounded border min-h-[48px]",
+                      unsafePicked
+                        ? "border-red/50 bg-red/10 text-red"
+                        : picked
+                          ? "border-bronze bg-bronze/15 text-strong"
+                          : "border-line bg-surface text-strong hover:border-slate/40",
+                    )}
+                  >
+                    {v === "true" ? "Yes" : "No"}
+                  </button>
+                );
+              })}
+            </div>
+          );
+        })()
       ) : null}
 
       {q.type === "number" ? (
@@ -911,6 +1013,7 @@ function WizardQuestionScreen({
           value={currentValue ?? ""}
           onChange={(e) => setAnswer(q.id, e.target.value)}
           placeholder={q.unit}
+          aria-labelledby={`q-heading-${q.id}`}
           className="w-full text-[15px] px-3 py-3 min-h-[48px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
         />
       ) : null}
@@ -922,6 +1025,7 @@ function WizardQuestionScreen({
             value={currentValue ?? ""}
             onChange={(e) => setAnswer(q.id, e.target.value)}
             min={new Date().toISOString().slice(0, 10)}
+            aria-labelledby={`q-heading-${q.id}`}
             className="w-full text-[15px] px-3 py-3 min-h-[48px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
           />
         ) : (
@@ -929,20 +1033,22 @@ function WizardQuestionScreen({
             type="text"
             value={currentValue ?? ""}
             onChange={(e) => setAnswer(q.id, e.target.value)}
+            aria-labelledby={`q-heading-${q.id}`}
             className="w-full text-[15px] px-3 py-3 min-h-[48px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
           />
         )
       ) : null}
 
       {showGateBlock && blocker ? (
-        <div className="mt-3 rounded border border-red/40 bg-red/10 p-4 space-y-2">
+        <div className="mt-3 rounded border border-red/40 bg-red/10 p-4 space-y-2" role="alert">
           <p className="font-semibold text-red flex items-center gap-2">
             <ShieldAlert size={16} />
             {blocker.title}
           </p>
           <p className="text-[13px] text-strong">{blocker.body}</p>
           <p className="text-[12px] text-muted italic">
-            Change your answer above to continue.
+            If your answer is right, this program isn&apos;t the right fit today
+            — talk to a clinician first.
           </p>
         </div>
       ) : null}
@@ -1058,31 +1164,38 @@ function WizardFooter({
   isLast: boolean;
   blocker: { title: string; body: string } | null;
 }) {
-  const primaryLabel = isLast ? "Finish" : "Next →";
+  // Audit 2026-08-18 (copy) — "Finish" commits nothing (lands on review
+  // screen). Rewrite to "Review." Dropped ← / → arrow characters from
+  // Back/Next — screen-reader noise, no clarity add.
+  const primaryLabel = isLast ? "Review" : "Next";
   const secondaryTitle = blocker
     ? "Answer above tripped a safety gate — change it to continue."
     : !nextReady
       ? "Answer this to continue."
       : "";
+  // Audit 2026-08-18 (mobile-UX P0-2) — sticky, not fixed. Rides
+  // visualViewport correctly under iOS keyboard.
   return (
     <div
-      className="fixed bottom-0 left-0 right-0 z-40 border-t border-line-soft bg-ground/95 backdrop-blur-sm"
+      className="sticky bottom-0 -mx-4 px-4 border-t border-line-soft bg-ground/95 backdrop-blur-sm"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
-      {/* tokens.md#spacing (safe-area) + components.md#layout (wizard body constraint) */}
-      <div className="mx-auto max-w-2xl px-4 py-3 flex items-center gap-3">
+      <div className="mx-auto max-w-2xl py-3 flex items-center gap-3">
         <button
           type="button"
           onClick={onBack}
           disabled={!canGoBack}
           className={cn(
-            "font-mono text-[12px] uppercase tracking-wider px-4 py-3 rounded border border-line text-strong min-w-[88px]",
+            "font-mono text-[12px] uppercase tracking-wider px-4 py-3 rounded border border-line text-strong min-w-[88px] min-h-[44px]",
             !canGoBack && "opacity-30 cursor-not-allowed",
           )}
         >
-          ← Back
+          Back
         </button>
-        <span className="flex-1 text-center font-mono text-[10px] text-muted uppercase tracking-widest">
+        <span
+          className="flex-1 text-center font-mono text-[10px] text-muted uppercase tracking-widest"
+          aria-hidden
+        >
           {stepIndex + 1} / {total}
         </span>
         <button
@@ -1091,13 +1204,18 @@ function WizardFooter({
           disabled={!nextReady}
           title={secondaryTitle}
           className={cn(
-            "font-mono text-[12px] uppercase tracking-wider px-5 py-3 rounded bg-bronze text-ground min-w-[100px]",
+            "font-mono text-[12px] uppercase tracking-wider px-5 py-3 rounded bg-bronze text-ground min-w-[100px] min-h-[44px]",
             !nextReady && "opacity-40 cursor-not-allowed",
           )}
         >
           {primaryLabel}
         </button>
       </div>
+      {!nextReady ? (
+        <p className="mx-auto max-w-2xl pb-3 -mt-1 text-center text-[11px] text-muted italic">
+          {secondaryTitle}
+        </p>
+      ) : null}
     </div>
   );
 }
