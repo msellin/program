@@ -254,6 +254,27 @@ export const physicalTestSchema = z.object({
   max: z.number().optional(),
   video_url: z.string().optional(),
   video_search: z.string().optional(),
+  /**
+   * Audit 2026-08-18 (#68) — non-clinician users struggle to estimate
+   * "shoulder flexion in degrees, standing". Adding `ranges` lets a
+   * program author declare discrete-choice buckets (each with a human
+   * label + representative numeric value) so the intake renders as an
+   * option-row list instead of a raw number input. The chosen bucket's
+   * `value` gets written to test_results as the numeric surrogate,
+   * preserving downstream tier-inference math.
+   *
+   * When `ranges` is present, the intake renders the list. When absent,
+   * it falls back to the numeric input.
+   */
+  ranges: z
+    .array(
+      z.object({
+        label: z.string(),
+        description: z.string().optional(),
+        value: z.number(),
+      }),
+    )
+    .optional(),
 });
 
 /**

@@ -1160,6 +1160,13 @@ function WizardPhysicalTestScreen({
 }) {
   const t = step.test;
   const inputId = `phys-test-${t.id}`;
+  const currentValue = results[t.id];
+  // Audit 2026-08-18 (#68) — the intake used to force every user to
+  // estimate degrees / seconds by hand ("Overhead shoulder flexion,
+  // 90-190 deg"). Non-clinicians bailed. When a program author supplies
+  // `ranges`, we render discrete choices instead; the raw numeric input
+  // stays as a fallback for tests without ranges (e.g. wall-hold seconds).
+  const useRanges = Array.isArray(t.ranges) && t.ranges.length > 0;
   return (
     <section className="space-y-5 py-2">
       <h2
@@ -1171,25 +1178,96 @@ function WizardPhysicalTestScreen({
       {t.instructions ? (
         <p className="text-[13px] text-muted leading-relaxed">{t.instructions}</p>
       ) : null}
-      <div className="flex items-center gap-2">
-        <label className="sr-only" htmlFor={inputId}>
-          {t.label} ({t.unit})
-        </label>
-        <input
-          id={inputId}
-          type="number"
-          inputMode="decimal"
-          min={t.min}
-          max={t.max}
-          value={results[t.id] ?? ""}
-          onChange={(e) => {
-            const n = Number(e.target.value);
-            if (isFinite(n)) setResult(t.id, n);
-          }}
-          className="flex-1 text-[15px] px-3 py-3 min-h-[48px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
-        />
-        <span className="text-[12px] text-muted font-mono w-16 text-right">{t.unit}</span>
-      </div>
+      {t.video_url ? (
+        <a
+          href={t.video_url}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center gap-1.5 text-[12px] font-mono uppercase tracking-wider text-slate hover:text-ink underline underline-offset-4"
+        >
+          Watch demo ↗
+        </a>
+      ) : t.video_search ? (
+        <a
+          href={`https://www.google.com/search?q=${encodeURIComponent(t.video_search)}&tbm=vid`}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center gap-1.5 text-[12px] font-mono uppercase tracking-wider text-slate hover:text-ink underline underline-offset-4"
+        >
+          Look up a demo ↗
+        </a>
+      ) : null}
+
+      {useRanges ? (
+        <div
+          role="radiogroup"
+          aria-labelledby={`q-heading-${t.id}`}
+          className="space-y-1.5"
+        >
+          {t.ranges!.map((r) => {
+            const checked = currentValue === r.value;
+            return (
+              <label
+                key={`${r.label}-${r.value}`}
+                className={cn(
+                  "flex items-start gap-3 rounded border p-3 cursor-pointer min-h-[56px] transition-colors",
+                  checked
+                    ? "border-bronze bg-bronze/5"
+                    : "border-line hover:border-slate/40 hover:bg-line-soft/40",
+                )}
+              >
+                <input
+                  type="radio"
+                  name={`phys-test-${t.id}`}
+                  value={r.value}
+                  checked={checked}
+                  onChange={() => setResult(t.id, r.value)}
+                  className="mt-1 flex-shrink-0 w-4 h-4"
+                />
+                <span className="min-w-0 flex-1">
+                  <span
+                    className={cn(
+                      "block text-[14px] leading-snug",
+                      checked ? "text-strong font-medium" : "text-ink",
+                    )}
+                  >
+                    {r.label}
+                  </span>
+                  {r.description ? (
+                    <span className="block mt-0.5 text-[12px] text-muted leading-snug">
+                      {r.description}
+                    </span>
+                  ) : null}
+                </span>
+              </label>
+            );
+          })}
+          <p className="text-[11px] text-muted italic pt-1">
+            Pick the option that best matches what you can do today. Rough is fine — the
+            engine adjusts as you log real sessions.
+          </p>
+        </div>
+      ) : (
+        <div className="flex items-center gap-2">
+          <label className="sr-only" htmlFor={inputId}>
+            {t.label} ({t.unit})
+          </label>
+          <input
+            id={inputId}
+            type="number"
+            inputMode="decimal"
+            min={t.min}
+            max={t.max}
+            value={currentValue ?? ""}
+            onChange={(e) => {
+              const n = Number(e.target.value);
+              if (isFinite(n)) setResult(t.id, n);
+            }}
+            className="flex-1 text-[15px] px-3 py-3 min-h-[48px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+          />
+          <span className="text-[12px] text-muted font-mono w-16 text-right">{t.unit}</span>
+        </div>
+      )}
       {step.indexInSection === 0 ? (
         <>
           <p className="text-[12px] text-muted italic">

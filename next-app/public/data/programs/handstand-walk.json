@@ -41,19 +41,19 @@
     "primary_intent": "Build handstand-walk capability from the position you are actually in. Sub-capabilities (static hold, dynamic walk, turns, obstacles, wrist tolerance, shoulder endurance) train as independent state variables. Weekly plan targets your weakest measured capability first (Henry 1968; Proteau 1992).",
     "arc": {
       "block_1_this_program": "8 weeks. Tier A builds wall-supported handstand hold + first freestand attempts. Tier B builds first freestanding hold + first walk step. Tier C builds 3-5 continuous steps. Tier D adds turns / obstacles / precision.",
-      "block_2_expected": "8 weeks. Volume + skill breadth. Tier A → tier B graduation targeted. Tier D adds combined turns-in-walk.",
+      "block_2_expected": "8 weeks. Volume + skill breadth. Tier A \u2192 tier B graduation targeted. Tier D adds combined turns-in-walk.",
       "block_3_expected": "8-12 weeks. Consolidation and modality specificity (competition path or CrossFit metcon walk under fatigue).",
       "total_arc_weeks_estimate": [
         24,
         36
       ],
-      "note": "No cohort ETA — Ackerman 1988 and Wu 2014 both show 3-10× individual variance in psychomotor learning. The block gives you a personal delta, not a promise."
+      "note": "No cohort ETA \u2014 Ackerman 1988 and Wu 2014 both show 3-10\u00d7 individual variance in psychomotor learning. The block gives you a personal delta, not a promise."
     }
   },
   "principles": [
     {
       "id": "sub_skill_independence",
-      "rule": "Static hold, dynamic walk, turns, obstacles are separate state variables — trained independently, not chained",
+      "rule": "Static hold, dynamic walk, turns, obstacles are separate state variables \u2014 trained independently, not chained",
       "detail": "Henry 1968 specificity + Newell 1985 constraints-led framework. A user who wall-holds 60s but can't take a step needs different drills from one who walks 8m but can't turn. The plan generator picks per-capability weakness each week."
     },
     {
@@ -64,7 +64,7 @@
     {
       "id": "self_controlled_feedback",
       "rule": "Video review is a button, not a schedule (Chiviacowsky & Wulf 2002, 2005)",
-      "detail": "Self-selected feedback outperforms forced schedules. The video review 'drill' surfaces after every skill set as optional — user taps if they want it, nothing shows automatically."
+      "detail": "Self-selected feedback outperforms forced schedules. The video review 'drill' surfaces after every skill set as optional \u2014 user taps if they want it, nothing shows automatically."
     },
     {
       "id": "ci_gated_by_phase",
@@ -74,17 +74,17 @@
     {
       "id": "daily_short",
       "rule": "Daily short skill sessions beat infrequent long ones for handstand",
-      "detail": "Karni 1998 + Walker 2003 consolidation + Shea 2000 spacing. Skill demands frequent light exposure. 10-15 min of active handstand time × 4-6 days/week."
+      "detail": "Karni 1998 + Walker 2003 consolidation + Shea 2000 spacing. Skill demands frequent light exposure. 10-15 min of active handstand time \u00d7 4-6 days/week."
     },
     {
       "id": "shoulder_pain_stops_session",
-      "rule": "Any shoulder pain during a handstand attempt ends the session — no working through it",
-      "detail": "Sci Reports 2026 pain-associated technique data: shoulder pain during handstand walk is coupled to axial-torsional work and shorter effective arm length — training through it reinforces the compensation. Stop, review the video review recording if made, restart next day."
+      "rule": "Any shoulder pain during a handstand attempt ends the session \u2014 no working through it",
+      "detail": "Sci Reports 2026 pain-associated technique data: shoulder pain during handstand walk is coupled to axial-torsional work and shorter effective arm length \u2014 training through it reinforces the compensation. Stop, review the video review recording if made, restart next day."
     },
     {
       "id": "wrist_volume_capped",
-      "rule": "Weeks 1-2: wrist load ≤20-30 minutes/week. From week 3: increase ≤10%/week",
-      "detail": "Wiesinger 2019 tendon-adaptation timeframe. Explicitly an engineering choice: no direct wrist-load dose-response study exists. Vidal-Torija 2025 (n=321 adult practitioners): chronic wrist pain in 56.7%, no volume-hours association — risk is technique-driven, but the cap is a defensible upper bound."
+      "rule": "Weeks 1-2: wrist load \u226420-30 minutes/week. From week 3: increase \u226410%/week",
+      "detail": "Wiesinger 2019 tendon-adaptation timeframe. Explicitly an engineering choice: no direct wrist-load dose-response study exists. Vidal-Torija 2025 (n=321 adult practitioners): chronic wrist pain in 56.7%, no volume-hours association \u2014 risk is technique-driven, but the cap is a defensible upper bound."
     }
   ],
   "intake": {
@@ -243,7 +243,7 @@
           },
           {
             "value": "yes",
-            "label": "Yes — persistent or limiting"
+            "label": "Yes \u2014 persistent or limiting"
           }
         ]
       },
@@ -271,7 +271,7 @@
           {
             "value": "46_60",
             "label": "46-60",
-            "hint": "Barlow 2020: wrist WB tolerance drops from age 45 — extra ramp built in"
+            "hint": "Barlow 2020: wrist WB tolerance drops from age 45 \u2014 extra ramp built in"
           },
           {
             "value": "60_plus",
@@ -295,14 +295,14 @@
           },
           {
             "value": "yes",
-            "label": "Yes — diagnosed"
+            "label": "Yes \u2014 diagnosed"
           }
         ],
         "help": "If yes, freestanding and any bail-risk attempts are contraindicated in this program. DiFiori 2006 catalogued distal radius as a common fracture site under this mechanism."
       },
       {
         "id": "hypertension_uncontrolled",
-        "label": "Do you have high blood pressure that isn't under control? (Over 160/100 at rest, or diagnosed but not on medication — uncontrolled hypertension.)",
+        "label": "Do you have high blood pressure that isn't under control? (Over 160/100 at rest, or diagnosed but not on medication \u2014 uncontrolled hypertension.)",
         "type": "select",
         "required": true,
         "options": [
@@ -319,7 +319,7 @@
             "label": "Yes"
           }
         ],
-        "help": "If yes, all inversions are deferred until BP is controlled — yoga-inversion literature documents transient systolic increases that stack with Valsalva during a kick-up."
+        "help": "If yes, all inversions are deferred until BP is controlled \u2014 yoga-inversion literature documents transient systolic increases that stack with Valsalva during a kick-up."
       },
       {
         "id": "acute_wrist_injury",
@@ -333,7 +333,7 @@
         "label": "If your handstand tips past vertical, what happens?",
         "type": "select",
         "required": true,
-        "help": "Fear of falling gates handstand progress more than physical capacity for most self-taught users. Answer honestly — Phase 0 teaches this if you need it.",
+        "help": "Fear of falling gates handstand progress more than physical capacity for most self-taught users. Answer honestly \u2014 Phase 0 teaches this if you need it.",
         "options": [
           {
             "value": "never_inverted",
@@ -368,10 +368,33 @@
       {
         "id": "wrist_ext_passive_deg",
         "label": "Passive wrist extension (degrees, painless)",
-        "instructions": "Kneel with palms flat, fingertips pointing toward knees. Slowly rock weight forward until you feel a firm stretch — NOT pain. Estimate the wrist-extension angle. Target for Tier B+ is 70 degrees; Wiesinger 2019 mechanism basis for tendon load tolerance.",
+        "instructions": "Kneel with palms flat, fingertips pointing toward knees. Slowly rock weight forward until you feel a firm stretch \u2014 NOT pain. Estimate the wrist-extension angle. Target for Tier B+ is 70 degrees; Wiesinger 2019 mechanism basis for tendon load tolerance.",
         "unit": "degrees",
         "min": 0,
-        "max": 110
+        "max": 110,
+        "video_search": "wrist extension mobility test tabletop",
+        "ranges": [
+          {
+            "label": "Under 45\u00b0 \u2014 barely bend back",
+            "description": "Fingertips lift off the floor when you rock forward, or you feel sharp discomfort early.",
+            "value": 40
+          },
+          {
+            "label": "About 60\u00b0 \u2014 some bend, no pain",
+            "description": "You can rock forward but the stretch stops you well before your wrist reaches vertical.",
+            "value": 60
+          },
+          {
+            "label": "About 75\u00b0 \u2014 reaches near vertical, mild stretch",
+            "description": "Wrist can pass through vertical with a firm but tolerable stretch.",
+            "value": 75
+          },
+          {
+            "label": "90\u00b0+ \u2014 comfortable past vertical",
+            "description": "You can rock past vertical without discomfort. Tier B+ range.",
+            "value": 95
+          }
+        ]
       },
       {
         "id": "shoulder_flexion_overhead_deg",
@@ -379,7 +402,30 @@
         "instructions": "Stand with your back to a wall, feet 15cm out. Keep low back flat. Raise both arms overhead as far as they go with elbows straight and thumbs pointing behind you. Target for Tier B+ is 170 degrees (engineering choice, mirroring weightlifting overhead pass-through cutoff).",
         "unit": "degrees",
         "min": 90,
-        "max": 190
+        "max": 190,
+        "video_search": "shoulder flexion mobility test wall standing",
+        "ranges": [
+          {
+            "label": "Arms stop short \u2014 can't reach vertical",
+            "description": "Arms stop 30\u00b0 or more short of overhead when back stays flat on the wall.",
+            "value": 130
+          },
+          {
+            "label": "Reaches vertical with effort",
+            "description": "Arms brush the wall directly overhead but ribs pop or elbows bend to get there.",
+            "value": 160
+          },
+          {
+            "label": "Reaches vertical, elbows straight, ribs stay down",
+            "description": "Arms rest on the wall overhead with the low back still flat. Tier B+ range.",
+            "value": 175
+          },
+          {
+            "label": "Passes behind vertical \u2014 hyper-mobile end range",
+            "description": "Arms sit slightly past the wall behind vertical without effort.",
+            "value": 185
+          }
+        ]
       },
       {
         "id": "wall_hold_max_seconds",
@@ -414,7 +460,7 @@
       },
       {
         "id": "shoulder_pain_stop_rule",
-        "label": "I agree to stop the session if shoulder pain appears during any handstand attempt — no training through it (Sci Reports 2026 pain-associated technique data).",
+        "label": "I agree to stop the session if shoulder pain appears during any handstand attempt \u2014 no training through it (Sci Reports 2026 pain-associated technique data).",
         "required": true
       }
     ],
@@ -425,7 +471,7 @@
           "yes"
         ],
         "block_title": "See your clinician first",
-        "block_body": "Freestanding handstands and bail landings load the distal radius and vertebrae — common fracture sites in osteoporosis. This program isn't safe to start without medical clearance."
+        "block_body": "Freestanding handstands and bail landings load the distal radius and vertebrae \u2014 common fracture sites in osteoporosis. This program isn't safe to start without medical clearance."
       },
       {
         "question_id": "hypertension_uncontrolled",
@@ -448,7 +494,7 @@
   "plan_tiers": [
     {
       "id": "tier_a_foundation",
-      "label": "Tier A — Foundation (no handstand yet)",
+      "label": "Tier A \u2014 Foundation (no handstand yet)",
       "condition": "wall_hold_max_seconds < 15 && freestand_hold_max_seconds < 5",
       "typical_outcome": "By week 8: stable Kinoshita position 3 hold, first assisted wall handstand hold of 10-20 seconds, and 2-3 wall walks in a session without wrist symptoms.",
       "outcome_confidence": "realistic",
@@ -472,7 +518,7 @@
     },
     {
       "id": "tier_b_wall_handstand",
-      "label": "Tier B — Wall handstand established",
+      "label": "Tier B \u2014 Wall handstand established",
       "condition": "wall_hold_max_seconds >= 15 && freestand_hold_max_seconds < 5",
       "typical_outcome": "By week 8: first 5-15 second freestand hold, first walk attempts on the wall, wall handstand hold up to 45-60 seconds.",
       "outcome_confidence": "realistic",
@@ -496,7 +542,7 @@
     },
     {
       "id": "tier_c_freestand",
-      "label": "Tier C — Freestanding, learning to walk",
+      "label": "Tier C \u2014 Freestanding, learning to walk",
       "condition": "freestand_hold_max_seconds >= 5 && walk_distance_max_metres < 10",
       "typical_outcome": "By week 8: 3-5 continuous handstand walk steps, freestand hold pushed to 15-25 seconds, first short shuttles chained.",
       "outcome_confidence": "realistic",
@@ -520,7 +566,7 @@
     },
     {
       "id": "tier_d_advanced",
-      "label": "Tier D — Advanced (walks 10m+, wants turns / obstacles)",
+      "label": "Tier D \u2014 Advanced (walks 10m+, wants turns / obstacles)",
       "condition": "walk_distance_max_metres >= 10",
       "typical_outcome": "By week 8: first clean 180 pirouette OR first traverse over a 5kg plate OR consistent narrow-lane precision path. Continuous walk distance extended by 20-40%.",
       "outcome_confidence": "fair",
@@ -554,7 +600,7 @@
   "phases": [
     {
       "id": "phase_0_bail_out_prep",
-      "name": "Week 0 — Exits before line",
+      "name": "Week 0 \u2014 Exits before line",
       "starts": "2026-01-05",
       "ends": "2026-01-11",
       "duration_weeks": 1,
@@ -568,7 +614,7 @@
           ]
         }
       },
-      "rationale": "Fear-of-falling literature: Adkin & Frank 2000/2002 (postural threat alters muscle activation before the fall); Carpenter 2001 (anxiety degrades balance strategy); Hardy 1996 catastrophe model (anxiety above threshold causes performance collapse, not linear degradation); Bandura (mastery experiences on bail-outs reduce threat perception on the primary skill — you don't reduce fear by walking more). Gymnastics/circus pedagogy (USA Gymnastics, NICA, Emmet Louis, Yuval Ayalon) treats cartwheel exit / pirouette / tuck forward roll as pre-requisite to freestanding, not optional. Phase 0 is deliberately short — one week of exit drills, not a rehab arc.",
+      "rationale": "Fear-of-falling literature: Adkin & Frank 2000/2002 (postural threat alters muscle activation before the fall); Carpenter 2001 (anxiety degrades balance strategy); Hardy 1996 catastrophe model (anxiety above threshold causes performance collapse, not linear degradation); Bandura (mastery experiences on bail-outs reduce threat perception on the primary skill \u2014 you don't reduce fear by walking more). Gymnastics/circus pedagogy (USA Gymnastics, NICA, Emmet Louis, Yuval Ayalon) treats cartwheel exit / pirouette / tuck forward roll as pre-requisite to freestanding, not optional. Phase 0 is deliberately short \u2014 one week of exit drills, not a rehab arc.",
       "blocks": [
         "block_bail_wall_cartwheel_exit",
         "block_bail_quarter_pirouette",
@@ -581,12 +627,12 @@
           "coach_or_video_evidence: successful pirouette exit or cartwheel exit demonstrated"
         ],
         "on_success": "Advance to phase_1_foundation_prep. bail_out_confidence remains a daily log field the engine consults.",
-        "on_fail": "Repeat Phase 0 for another week. If fear persists >2 weeks, the intake nudges the user to work with a coach for 1-2 sessions — this is the pattern that reliably breaks the fear cycle (see rationale)."
+        "on_fail": "Repeat Phase 0 for another week. If fear persists >2 weeks, the intake nudges the user to work with a coach for 1-2 sessions \u2014 this is the pattern that reliably breaks the fear cycle (see rationale)."
       }
     },
     {
       "id": "phase_1_foundation_prep",
-      "name": "Weeks 1-2 — Wrist prep + Kinoshita position ladder (blocked practice)",
+      "name": "Weeks 1-2 \u2014 Wrist prep + Kinoshita position ladder (blocked practice)",
       "starts": "2026-01-12",
       "ends": "2026-01-25",
       "duration_weeks": 2,
@@ -598,13 +644,13 @@
       "goal": "Build wrist load tolerance base + first exposure to the Kinoshita position 1 and 2 holds. No wall handstand attempts yet for Tier A.",
       "template_note": "Blocked practice (Shea & Morgan 1979, Wulf & Shea 2002): one drill focus per session. Reduces cognitive load in acquisition.",
       "notes": [
-        "Wrist prep is not optional — 3-5 min every session (Wiesinger 2019 tendon-adaptation window).",
-        "Weekly wrist volume cap: ≤30 min total in this phase. Engine tracks and warns if exceeded."
+        "Wrist prep is not optional \u2014 3-5 min every session (Wiesinger 2019 tendon-adaptation window).",
+        "Weekly wrist volume cap: \u226430 min total in this phase. Engine tracks and warns if exceeded."
       ]
     },
     {
       "id": "phase_2_wall_to_free",
-      "name": "Weeks 1-4 — Wall handstand established + first freestand attempts",
+      "name": "Weeks 1-4 \u2014 Wall handstand established + first freestand attempts",
       "starts": "2026-01-12",
       "ends": "2026-02-08",
       "duration_weeks": 4,
@@ -617,13 +663,13 @@
       "goal": "Consolidate the wall handstand shape, add balance-search (belly-to-wall), begin freestand kick-up attempts from week 3.",
       "template_note": "Week 1-2 blocked, week 3+ interleaves wall hold + freestand attempt in the same session.",
       "notes": [
-        "Video review button available after every freestand attempt — self-selected (Chiviacowsky & Wulf 2002).",
+        "Video review button available after every freestand attempt \u2014 self-selected (Chiviacowsky & Wulf 2002).",
         "Wall hold KPI: seconds, tracked weekly."
       ]
     },
     {
       "id": "phase_3_first_steps",
-      "name": "Weeks 1-4 — Single steps + short shuttles",
+      "name": "Weeks 1-4 \u2014 Single steps + short shuttles",
       "starts": "2026-01-12",
       "ends": "2026-02-08",
       "duration_weeks": 4,
@@ -642,7 +688,7 @@
     },
     {
       "id": "phase_4_variability",
-      "name": "Weeks 1-8 — Variability, turns, obstacles",
+      "name": "Weeks 1-8 \u2014 Variability, turns, obstacles",
       "starts": "2026-01-12",
       "ends": "2026-03-08",
       "duration_weeks": 8,
@@ -653,7 +699,7 @@
         "block_recovery"
       ],
       "goal": "Add turns and obstacles. Week 1-2 wall pirouette + plate walkover attempts. Week 3+ first freestanding pirouette attempts.",
-      "template_note": "Fully interleaved (random CI) from week 1 — Tier D users past the cognitive stage. Multi-drill sessions.",
+      "template_note": "Fully interleaved (random CI) from week 1 \u2014 Tier D users past the cognitive stage. Multi-drill sessions.",
       "notes": [
         "Advanced tier: user self-selects turns vs obstacle emphasis by which capability_domain is weakest.",
         "Weekly walk-distance retest (KPI); 4-week full retest."
@@ -661,7 +707,7 @@
     },
     {
       "id": "phase_all_weeks_3_8",
-      "name": "Weeks 3-8 — Interleaved practice for all tiers (post-acquisition)",
+      "name": "Weeks 3-8 \u2014 Interleaved practice for all tiers (post-acquisition)",
       "starts": "2026-01-26",
       "ends": "2026-03-08",
       "duration_weeks": 6,
@@ -688,11 +734,11 @@
   "blocks": [
     {
       "id": "block_wrist_prep",
-      "name": "Wrist prep — every session",
+      "name": "Wrist prep \u2014 every session",
       "category": "accessory",
       "location": "anywhere",
       "duration_min": 5,
-      "note": "3-5 min of wrist prep + finger raises before any load-bearing drill. Weekly wrist volume cap: 20-30 min weeks 1-2, +≤10%/week thereafter (Wiesinger 2019 mechanism basis; engineering choice on exact numbers).",
+      "note": "3-5 min of wrist prep + finger raises before any load-bearing drill. Weekly wrist volume cap: 20-30 min weeks 1-2, +\u226410%/week thereafter (Wiesinger 2019 mechanism basis; engineering choice on exact numbers).",
       "items": [
         {
           "exercise_id": "hs_wrist_ext_prep",
@@ -723,7 +769,7 @@
     },
     {
       "id": "block_skill_A_kinoshita",
-      "name": "Skill session A — Kinoshita position ladder (Tier A blocked practice)",
+      "name": "Skill session A \u2014 Kinoshita position ladder (Tier A blocked practice)",
       "category": "accessory",
       "location": "gym",
       "duration_min": [
@@ -761,7 +807,7 @@
     },
     {
       "id": "block_skill_A_wall_hold",
-      "name": "Skill session A — wall handstand hold + shrugs (Tier A/B)",
+      "name": "Skill session A \u2014 wall handstand hold + shrugs (Tier A/B)",
       "category": "accessory",
       "location": "gym",
       "duration_min": [
@@ -807,7 +853,7 @@
     },
     {
       "id": "block_skill_B_freestand_search",
-      "name": "Skill session B — kick-up + freestand attempts (Tier B)",
+      "name": "Skill session B \u2014 kick-up + freestand attempts (Tier B)",
       "category": "accessory",
       "location": "gym",
       "duration_min": [
@@ -852,7 +898,7 @@
     },
     {
       "id": "block_skill_A_freestand_hold",
-      "name": "Skill session A — freestand hold (Tier C)",
+      "name": "Skill session A \u2014 freestand hold (Tier C)",
       "category": "accessory",
       "location": "gym",
       "duration_min": [
@@ -895,7 +941,7 @@
     },
     {
       "id": "block_skill_B_walk_attempts",
-      "name": "Skill session B — single-step walks + shuttles (Tier C)",
+      "name": "Skill session B \u2014 single-step walks + shuttles (Tier C)",
       "category": "accessory",
       "location": "gym",
       "duration_min": [
@@ -940,7 +986,7 @@
     },
     {
       "id": "block_skill_A_variability",
-      "name": "Skill session A — variability walks (Tier D)",
+      "name": "Skill session A \u2014 variability walks (Tier D)",
       "category": "accessory",
       "location": "gym",
       "duration_min": [
@@ -983,14 +1029,14 @@
     },
     {
       "id": "block_skill_B_obstacles_or_turns",
-      "name": "Skill session B — obstacles or turns (Tier D, weakest-first)",
+      "name": "Skill session B \u2014 obstacles or turns (Tier D, weakest-first)",
       "category": "accessory",
       "location": "gym",
       "duration_min": [
         15,
         18
       ],
-      "note": "Generator picks obstacles OR turns based on which capability_domain the user is weakest in. Both progressive: wall pirouette → free pirouette; plate walkover → cones → precision.",
+      "note": "Generator picks obstacles OR turns based on which capability_domain the user is weakest in. Both progressive: wall pirouette \u2192 free pirouette; plate walkover \u2192 cones \u2192 precision.",
       "items": [
         {
           "exercise_id": "hs_half_pirouette_wall",
@@ -1074,7 +1120,7 @@
       "name": "Wall cartwheel exit",
       "category": "skill",
       "duration_min": 8,
-      "frequency": "3× this week",
+      "frequency": "3\u00d7 this week",
       "items": [
         {
           "exercise_id": "wall_cartwheel_exit",
@@ -1090,7 +1136,7 @@
       "name": "Quarter-turn pirouette from wall",
       "category": "skill",
       "duration_min": 8,
-      "frequency": "3× this week",
+      "frequency": "3\u00d7 this week",
       "items": [
         {
           "exercise_id": "quarter_pirouette_exit",
@@ -1098,15 +1144,15 @@
           "reps_per_set": 2
         }
       ],
-      "note": "From wall handstand, twist upper body 90° and step down to feet. Practices the escape route to the SIDE when a straight-back cartwheel isn't available.",
-      "rationale": "Wulf 2013 external focus: cue is 'point your chest at the wall' — external target reduces anxiety. Wraps hip rotation into a bail pattern the user can use even when tired."
+      "note": "From wall handstand, twist upper body 90\u00b0 and step down to feet. Practices the escape route to the SIDE when a straight-back cartwheel isn't available.",
+      "rationale": "Wulf 2013 external focus: cue is 'point your chest at the wall' \u2014 external target reduces anxiety. Wraps hip rotation into a bail pattern the user can use even when tired."
     },
     {
       "id": "block_bail_tuck_forward_roll",
       "name": "Tuck forward roll from crow",
       "category": "skill",
       "duration_min": 8,
-      "frequency": "3× this week",
+      "frequency": "3\u00d7 this week",
       "items": [
         {
           "exercise_id": "tuck_forward_roll_from_crow",
@@ -1114,7 +1160,7 @@
           "reps_per_set": 3
         }
       ],
-      "note": "From a crow pose, tuck chin, roll forward onto upper back, come up to sitting. Teaches the FORWARD escape route — the one people usually don't have.",
+      "note": "From a crow pose, tuck chin, roll forward onto upper back, come up to sitting. Teaches the FORWARD escape route \u2014 the one people usually don't have.",
       "rationale": "Provides a redundant escape (in addition to cartwheel + pirouette). Users with only-cartwheel-out often panic when the tip goes forward instead of sideways. Roll trains the forward option."
     },
     {
@@ -1122,7 +1168,7 @@
       "name": "Deliberate mat falls with breath control",
       "category": "skill",
       "duration_min": 6,
-      "frequency": "3× this week",
+      "frequency": "3\u00d7 this week",
       "items": [
         {
           "exercise_id": "deliberate_mat_falls",
@@ -1130,12 +1176,12 @@
           "reps_per_set": 1
         }
       ],
-      "note": "From wall handstand, LET GO ON PURPOSE. Land on mat (crash mat if available, thick yoga mat OK). Exhale on impact. Do this cold — the body needs to prove to itself that a controlled fall is a survivable non-event.",
-      "rationale": "Bandura self-efficacy: mastery experiences on the feared thing (the fall itself) reduce threat perception. The exhale cue borrows from paratrooper training — passive-exhale-on-impact is the anti-freeze response."
+      "note": "From wall handstand, LET GO ON PURPOSE. Land on mat (crash mat if available, thick yoga mat OK). Exhale on impact. Do this cold \u2014 the body needs to prove to itself that a controlled fall is a survivable non-event.",
+      "rationale": "Bandura self-efficacy: mastery experiences on the feared thing (the fall itself) reduce threat perception. The exhale cue borrows from paratrooper training \u2014 passive-exhale-on-impact is the anti-freeze response."
     }
   ],
   "weekly_template": {
-    "note": "Multi-dimensional generation: the generator picks 2-3 drills per session at composition time based on the user's capability_profile. This template is a slot layout only — it declares WHEN sessions happen and their type, not which drills. The multi_dimensional branch of plan-generator.ts fills the drills per session.",
+    "note": "Multi-dimensional generation: the generator picks 2-3 drills per session at composition time based on the user's capability_profile. This template is a slot layout only \u2014 it declares WHEN sessions happen and their type, not which drills. The multi_dimensional branch of plan-generator.ts fills the drills per session.",
     "reference_week_tier_a": {
       "sessions": 4,
       "layout": [
@@ -1328,10 +1374,10 @@
       ]
     },
     "placement_principles": [
-      "Consecutive skill sessions OK — daily short beats infrequent long for skill (Karni 1998, Walker 2003).",
+      "Consecutive skill sessions OK \u2014 daily short beats infrequent long for skill (Karni 1998, Walker 2003).",
       "Wrist prep before every session. Recovery flush after every session. Non-negotiable in weeks 1-3.",
       "48h clear between any hard shoulder-loaded session (kick-up practice) and heavy pressing / pulling elsewhere in your training.",
-      "If you miss a session, don't double up — spacing benefit is lost by cramming (Shea 2000).",
+      "If you miss a session, don't double up \u2014 spacing benefit is lost by cramming (Shea 2000).",
       "Robertson 2004 consolidation window: 4-6h post-practice is vulnerable to similar-task interference. Don't do a handstand session immediately after a heavy overhead press session."
     ]
   },
@@ -1341,7 +1387,7 @@
     "states": [
       {
         "id": "green",
-        "label": "Proceed as written — engine picks weakest capability, generator composes session",
+        "label": "Proceed as written \u2014 engine picks weakest capability, generator composes session",
         "conditions": {
           "wrist_symptom_score_previous_day_max": 3,
           "no_new_shoulder_pain": true,
@@ -1351,7 +1397,7 @@
       },
       {
         "id": "amber",
-        "label": "Hold — engine reduces the wrist-load drills, keeps the shoulder-endurance drills",
+        "label": "Hold \u2014 engine reduces the wrist-load drills, keeps the shoulder-endurance drills",
         "conditions": {
           "wrist_symptom_score_previous_day": [
             4,
@@ -1375,8 +1421,8 @@
         "escalate_if_repeated": true
       }
     ],
-    "week_end_rule": "If the week's freestand-hold retest improved OR wrist symptom score trended down → advance capability_profile.estimated_level where applicable. If freestand hold regressed AND wrist symptom score elevated → hold the level; engine picks lower-level drills next week.",
-    "escalation": "Two red days in a week → skip the higher-load skill session (kick-up or walk attempts) that week, replace with Kinoshita position 1 and hollow-body only. Persistent shoulder pain > 3 days → stop, see a clinician. Sci Reports 2026: pain-associated technique reinforces itself with continued exposure."
+    "week_end_rule": "If the week's freestand-hold retest improved OR wrist symptom score trended down \u2192 advance capability_profile.estimated_level where applicable. If freestand hold regressed AND wrist symptom score elevated \u2192 hold the level; engine picks lower-level drills next week.",
+    "escalation": "Two red days in a week \u2192 skip the higher-load skill session (kick-up or walk attempts) that week, replace with Kinoshita position 1 and hollow-body only. Persistent shoulder pain > 3 days \u2192 stop, see a clinician. Sci Reports 2026: pain-associated technique reinforces itself with continued exposure."
   },
   "daily_log_schema": {
     "date": "ISO date",
@@ -1424,7 +1470,7 @@
     },
     {
       "priority": 2,
-      "action": "Set up a phone stand or ask a partner to occasionally record you — video review is a KPI and a feedback tool.",
+      "action": "Set up a phone stand or ask a partner to occasionally record you \u2014 video review is a KPI and a feedback tool.",
       "reason": "Chiviacowsky & Wulf 2002: self-controlled feedback outperforms forced schedules. The video review button only works if a clip exists."
     },
     {
@@ -1434,33 +1480,33 @@
     },
     {
       "priority": 4,
-      "action": "Establish a soft-landing zone — mat, grass, or floor with a clear kick-out lane.",
+      "action": "Establish a soft-landing zone \u2014 mat, grass, or floor with a clear kick-out lane.",
       "reason": "Freestand attempts have a bail probability. DiFiori 2006 catalogued the fracture sites; a soft floor and a clear bail path mitigate the mechanism."
     }
   ],
   "evidence_base": {
     "physiological_targets": [
-      "Wrist load tolerance — tendon adaptation timeframe roughly 8-12 weeks for early collagen turnover (Wiesinger 2019 — used as mechanism basis; no direct dose-response for handstand wrist load, flagged as engineering choice). Vidal-Torija 2025 (n=321 adult practitioners): 56.7% report chronic wrist pain but NO association with weekly training hours — technique-driven, not volume-driven. Barlow 2020: adult wrist WB tolerance declines from age 45.",
-      "Shoulder overhead endurance — sustained flexion at ≥170° draws on serratus anterior, upper/lower trapezius endurance (Ludewig & Cook 2000 shoulder-impingement kinematics; Ludewig & Reynolds 2009). Sadowski 2021: a straight-arm press to handstand produces ~3× BW shoulder moment — do NOT program straight-arm press early.",
-      "Balance strategy — the handstand hold is wrist-torque-dominated (Kerwin & Trewartha 2001; Blenkinsop 2017). Elite vs novice differ mainly in medial-lateral CoP control + stiffening strategy (Sobera 2019; Baker 2025 systematic review). Novices show a wider CoP excursion; training reduces variability with time.",
-      "Progressive position ladder — Kinoshita 2022 EMG-validated the 4-position progression: 90° incline → 135° incline → elbow / straddle-L stand → full wall handstand. Each step approximately doubles the overhead time-under-tension.",
-      "Motor consolidation — Karni 1998 (fast/slow learning phases, M1 remapping over ~3 weeks); Walker 2003 (dissociable consolidation stages); Robertson 2004 (4-6h post-practice interference window). Daily short skill exposure builds a stronger trace than infrequent long sessions.",
-      "Feedback — Chiviacowsky & Wulf 2002, 2005: self-controlled feedback beats forced schedules. Potdevin 2018 (n=18 children, 8-week gymnastics): video KP after ~5 reps improved skill AND self-assessment. Rohleder & Vogt 2018: combined tactile-verbal + visual feedback outperforms either alone.",
-      "External focus — Wulf 1998, 2013 (15-year review, ~100 studies): external focus reliably outperforms internal focus across balance and complex motor skills. McNevin 2003: farther external targets amplify the effect. Wulf & Lewthwaite 2016 OPTIMAL theory: external focus + enhanced expectancies + autonomy compound."
+      "Wrist load tolerance \u2014 tendon adaptation timeframe roughly 8-12 weeks for early collagen turnover (Wiesinger 2019 \u2014 used as mechanism basis; no direct dose-response for handstand wrist load, flagged as engineering choice). Vidal-Torija 2025 (n=321 adult practitioners): 56.7% report chronic wrist pain but NO association with weekly training hours \u2014 technique-driven, not volume-driven. Barlow 2020: adult wrist WB tolerance declines from age 45.",
+      "Shoulder overhead endurance \u2014 sustained flexion at \u2265170\u00b0 draws on serratus anterior, upper/lower trapezius endurance (Ludewig & Cook 2000 shoulder-impingement kinematics; Ludewig & Reynolds 2009). Sadowski 2021: a straight-arm press to handstand produces ~3\u00d7 BW shoulder moment \u2014 do NOT program straight-arm press early.",
+      "Balance strategy \u2014 the handstand hold is wrist-torque-dominated (Kerwin & Trewartha 2001; Blenkinsop 2017). Elite vs novice differ mainly in medial-lateral CoP control + stiffening strategy (Sobera 2019; Baker 2025 systematic review). Novices show a wider CoP excursion; training reduces variability with time.",
+      "Progressive position ladder \u2014 Kinoshita 2022 EMG-validated the 4-position progression: 90\u00b0 incline \u2192 135\u00b0 incline \u2192 elbow / straddle-L stand \u2192 full wall handstand. Each step approximately doubles the overhead time-under-tension.",
+      "Motor consolidation \u2014 Karni 1998 (fast/slow learning phases, M1 remapping over ~3 weeks); Walker 2003 (dissociable consolidation stages); Robertson 2004 (4-6h post-practice interference window). Daily short skill exposure builds a stronger trace than infrequent long sessions.",
+      "Feedback \u2014 Chiviacowsky & Wulf 2002, 2005: self-controlled feedback beats forced schedules. Potdevin 2018 (n=18 children, 8-week gymnastics): video KP after ~5 reps improved skill AND self-assessment. Rohleder & Vogt 2018: combined tactile-verbal + visual feedback outperforms either alone.",
+      "External focus \u2014 Wulf 1998, 2013 (15-year review, ~100 studies): external focus reliably outperforms internal focus across balance and complex motor skills. McNevin 2003: farther external targets amplify the effect. Wulf & Lewthwaite 2016 OPTIMAL theory: external focus + enhanced expectancies + autonomy compound."
     ],
     "session_rationale": {
-      "block_wrist_prep": "Wrist tissue adaptation lags most other adaptations by weeks (Wiesinger 2019). 3-5 min of graded wrist prep before every session builds accumulated exposure without spiking a single session. Vidal-Torija 2025 shows chronic pain is technique-driven, not volume-driven — but the volume cap is a defensible upper bound while good technique is being built. Weekly cap 20-30 min in weeks 1-2 is an engineering choice (no direct dose-response study).",
-      "block_skill_A_kinoshita": "Kinoshita 2022 progressive position ladder: 90° incline hold recruits the shoulder overhead endurance system without asking for full balance. EMG-validated. Ideal Tier A entry point — the shape of a handstand loaded through the same tissues, with no bail risk. Sadowski 2021 explains why straight-arm press to handstand is NOT a Tier A drill: 3× BW shoulder moment is too much, too early.",
+      "block_wrist_prep": "Wrist tissue adaptation lags most other adaptations by weeks (Wiesinger 2019). 3-5 min of graded wrist prep before every session builds accumulated exposure without spiking a single session. Vidal-Torija 2025 shows chronic pain is technique-driven, not volume-driven \u2014 but the volume cap is a defensible upper bound while good technique is being built. Weekly cap 20-30 min in weeks 1-2 is an engineering choice (no direct dose-response study).",
+      "block_skill_A_kinoshita": "Kinoshita 2022 progressive position ladder: 90\u00b0 incline hold recruits the shoulder overhead endurance system without asking for full balance. EMG-validated. Ideal Tier A entry point \u2014 the shape of a handstand loaded through the same tissues, with no bail risk. Sadowski 2021 explains why straight-arm press to handstand is NOT a Tier A drill: 3\u00d7 BW shoulder moment is too much, too early.",
       "block_skill_A_wall_hold": "Chest-to-wall hold builds the plumb-line shape under load (Kerwin & Trewartha 2001 wrist-strategy characterisation). Wall shrugs isolate the serratus / trap endurance that a handstand demands over time (Ludewig & Cook 2000). Belly-to-wall added when static hold is level 2: introduces active wrist strategy that a chest-to-wall hold hides.",
-      "block_skill_B_freestand_search": "Kick-up practice + freestand attempts + optional tuck freestand for reduced moment of inertia. Video review button is self-controlled (Chiviacowsky & Wulf 2002) — user taps if they want feedback, no auto-show. Potdevin 2018 pattern: KP after ~5 reps, not every rep.",
-      "block_skill_A_freestand_hold": "Freestand hold is the primary KPI at Tier C — trackable weekly, sensitive early indicator. Sobera 2019: elite-novice CoP-variability differences mean the freestand hold time is a valid capability marker across the skill acquisition arc.",
-      "block_skill_B_walk_attempts": "Single-step attempts + 2-3-step shuttles. Ferrari 2021 walking-initiation biomechanics: the CoP shift precedes the step. Short shuttles beat one long attempt — Shea & Morgan 1979 CI + spacing effect + Shea 2000 spaced practice.",
-      "block_skill_A_variability": "Line + markers + precision-lane walks train variability of practice (Schmidt 1975 schema theory; Wulf & Shea 2002 constant→variable progression). Tier D users are past the cognitive stage; variable practice benefits are largest here.",
-      "block_skill_B_obstacles_or_turns": "Weakest-capability priority (Henry 1968; Proteau 1992). Generator picks turns vs obstacles based on which capability_domain has the lower estimated_level. Progressive gate: wall pirouette level 4 → free half-pirouette; free half → full pirouette. Plate → cones → narrow lane.",
-      "block_recovery": "Down-dog + child's pose wrist decompression. Vidal-Torija 2025: chronic wrist pain is technique-driven — a decompression flush is not a fix for bad technique, but paired with the video-review button it drives the user to notice + correct."
+      "block_skill_B_freestand_search": "Kick-up practice + freestand attempts + optional tuck freestand for reduced moment of inertia. Video review button is self-controlled (Chiviacowsky & Wulf 2002) \u2014 user taps if they want feedback, no auto-show. Potdevin 2018 pattern: KP after ~5 reps, not every rep.",
+      "block_skill_A_freestand_hold": "Freestand hold is the primary KPI at Tier C \u2014 trackable weekly, sensitive early indicator. Sobera 2019: elite-novice CoP-variability differences mean the freestand hold time is a valid capability marker across the skill acquisition arc.",
+      "block_skill_B_walk_attempts": "Single-step attempts + 2-3-step shuttles. Ferrari 2021 walking-initiation biomechanics: the CoP shift precedes the step. Short shuttles beat one long attempt \u2014 Shea & Morgan 1979 CI + spacing effect + Shea 2000 spaced practice.",
+      "block_skill_A_variability": "Line + markers + precision-lane walks train variability of practice (Schmidt 1975 schema theory; Wulf & Shea 2002 constant\u2192variable progression). Tier D users are past the cognitive stage; variable practice benefits are largest here.",
+      "block_skill_B_obstacles_or_turns": "Weakest-capability priority (Henry 1968; Proteau 1992). Generator picks turns vs obstacles based on which capability_domain has the lower estimated_level. Progressive gate: wall pirouette level 4 \u2192 free half-pirouette; free half \u2192 full pirouette. Plate \u2192 cones \u2192 narrow lane.",
+      "block_recovery": "Down-dog + child's pose wrist decompression. Vidal-Torija 2025: chronic wrist pain is technique-driven \u2014 a decompression flush is not a fix for bad technique, but paired with the video-review button it drives the user to notice + correct."
     },
-    "progression_rationale": "Weeks 1-2 are blocked practice per Wulf & Shea 2002 — the crucial caveat that simple-lab CI benefits often reverse in complex real-world skills; reduce challenge in acquisition, add it in retention. From week 3 the multi-dimensional generator interleaves 2-3 drills per session across the user's weakest capabilities (Henry 1968, Proteau 1992 specificity). Tier assignment at intake seeds capability_profile.estimated_level per capability_domain; the generator picks drills whose level matches the user's current level per domain, filtered by prerequisites. Weekly freestand-hold retest is the cheapest KPI — a single number, sensitive to daily consolidation (Walker 2003). Full re-assessment at 4 and 8 weeks re-seeds the capability_profile. Wrist-load progression is capped: 20-30 min weeks 1-2, then ≤10%/week — explicitly an engineering choice, not evidence, but respects Wiesinger 2019 tendon-adaptation timeframe. Tier D users skip the blocked weeks (already past acquisition) and enter interleaved from week 1.",
-    "outcome_evidence": "No cohort ETAs — Ackerman 1988 (early-stage cognitive ability correlates), Wu 2014 (3× variance in visuomotor rotation learning, baseline motor variability predicts). Realistic 8-week Block 1 outcomes: Tier A — stable Kinoshita 3-4 hold, first assisted wall hold, no freestand yet. Tier B — first 5-15s freestand hold, first wall pirouettes. Tier C — 3-5 continuous walk steps, extended by short shuttles. Tier D — first pirouette OR obstacle traverse OR precision-path work; walk distance +20-40%. These match coach-consensus corroborated ranges. Voelcker-Rehage & Willimczik 2006: older adults learn slower but retention plateau is similar — the 46-60+ age bands may take an extra 2-4 weeks to reach the Tier's typical outcome but the endpoint is comparable. Macnamara 2014 meta on deliberate practice: sport variance explained is 18% — 82% is not deliberate practice. Do not sell 10,000 hours; the honest promise is 'consistent, targeted, spaced short sessions reliably move each sub-capability'.",
+    "progression_rationale": "Weeks 1-2 are blocked practice per Wulf & Shea 2002 \u2014 the crucial caveat that simple-lab CI benefits often reverse in complex real-world skills; reduce challenge in acquisition, add it in retention. From week 3 the multi-dimensional generator interleaves 2-3 drills per session across the user's weakest capabilities (Henry 1968, Proteau 1992 specificity). Tier assignment at intake seeds capability_profile.estimated_level per capability_domain; the generator picks drills whose level matches the user's current level per domain, filtered by prerequisites. Weekly freestand-hold retest is the cheapest KPI \u2014 a single number, sensitive to daily consolidation (Walker 2003). Full re-assessment at 4 and 8 weeks re-seeds the capability_profile. Wrist-load progression is capped: 20-30 min weeks 1-2, then \u226410%/week \u2014 explicitly an engineering choice, not evidence, but respects Wiesinger 2019 tendon-adaptation timeframe. Tier D users skip the blocked weeks (already past acquisition) and enter interleaved from week 1.",
+    "outcome_evidence": "No cohort ETAs \u2014 Ackerman 1988 (early-stage cognitive ability correlates), Wu 2014 (3\u00d7 variance in visuomotor rotation learning, baseline motor variability predicts). Realistic 8-week Block 1 outcomes: Tier A \u2014 stable Kinoshita 3-4 hold, first assisted wall hold, no freestand yet. Tier B \u2014 first 5-15s freestand hold, first wall pirouettes. Tier C \u2014 3-5 continuous walk steps, extended by short shuttles. Tier D \u2014 first pirouette OR obstacle traverse OR precision-path work; walk distance +20-40%. These match coach-consensus corroborated ranges. Voelcker-Rehage & Willimczik 2006: older adults learn slower but retention plateau is similar \u2014 the 46-60+ age bands may take an extra 2-4 weeks to reach the Tier's typical outcome but the endpoint is comparable. Macnamara 2014 meta on deliberate practice: sport variance explained is 18% \u2014 82% is not deliberate practice. Do not sell 10,000 hours; the honest promise is 'consistent, targeted, spaced short sessions reliably move each sub-capability'.",
     "outcome_by_tier": {
       "tier_a_foundation": {
         "wall_hold_seconds_target": "10-20",
@@ -1488,27 +1534,27 @@
       }
     },
     "contraindications": [
-      "Shoulder pain during a handstand attempt — session ends immediately. Do not train through it. Sci Reports 2026 (237 stance phases): pain-associated practitioners show shorter effective arm length + greater axial torsional work — continued exposure reinforces the compensation.",
-      "Osteoporosis diagnosis (or low-BMD DEXA) — freestanding and any bail-risk attempts contraindicated. DiFiori 2006 catalogued distal radius as a common fracture site under this mechanism; vertebral and hip fractures follow. Tier A wall walks + Kinoshita positions with a spotter and soft floor are permitted only after clinician clearance.",
-      "Uncontrolled hypertension (BP > 160/100 at rest or unmedicated) — defer all inversions until BP is controlled. Yoga-inversion literature documents transient systolic increases that stack with Valsalva during a kick-up attempt.",
-      "Acute wrist injury (sprain, TFCC tear, ligament instability) in the last 6 weeks — wrist-load drills prohibited until cleared by a clinician. Program will offer hollow-body and shoulder-endurance drills only during this window.",
-      "Persistent shoulder impingement or rotator-cuff pathology — sustained overhead position at ≥170° is not safe. Ludewig & Cook 2000, Reinold 2007: modified overhead loading and scapular retraining first, defer this program.",
-      "First-trimester pregnancy — HR and BP responses shift; inversion literature is unclear. Defer.",
-      "Recent concussion or vestibular disorder — inverted balance training exacerbates symptoms."
+      "Shoulder pain during a handstand attempt \u2014 session ends immediately. Do not train through it. Sci Reports 2026 (237 stance phases): pain-associated practitioners show shorter effective arm length + greater axial torsional work \u2014 continued exposure reinforces the compensation.",
+      "Osteoporosis diagnosis (or low-BMD DEXA) \u2014 freestanding and any bail-risk attempts contraindicated. DiFiori 2006 catalogued distal radius as a common fracture site under this mechanism; vertebral and hip fractures follow. Tier A wall walks + Kinoshita positions with a spotter and soft floor are permitted only after clinician clearance.",
+      "Uncontrolled hypertension (BP > 160/100 at rest or unmedicated) \u2014 defer all inversions until BP is controlled. Yoga-inversion literature documents transient systolic increases that stack with Valsalva during a kick-up attempt.",
+      "Acute wrist injury (sprain, TFCC tear, ligament instability) in the last 6 weeks \u2014 wrist-load drills prohibited until cleared by a clinician. Program will offer hollow-body and shoulder-endurance drills only during this window.",
+      "Persistent shoulder impingement or rotator-cuff pathology \u2014 sustained overhead position at \u2265170\u00b0 is not safe. Ludewig & Cook 2000, Reinold 2007: modified overhead loading and scapular retraining first, defer this program.",
+      "First-trimester pregnancy \u2014 HR and BP responses shift; inversion literature is unclear. Defer.",
+      "Recent concussion or vestibular disorder \u2014 inverted balance training exacerbates symptoms."
     ],
-    "adaptive_engine_hooks": "Wrist symptom score is the primary daily signal. Score > 6 for a day → gate the next session to recovery only (skip kick-up + walk attempts). Score 4-6 → engine proposes swapping wrist-load-heavy drills for wall-supported holds (proposal, user Accepts). Shoulder pain report → session immediately routes to non-inverted mobility + hollow body; multi-day persistence flags the user to see a clinician. Weekly freestand-hold retest: two consecutive weeks with a regression AND wrist symptom score up → engine drops the user's handstand_hold_static level by 1 and picks lower-level drills next week. Video review self-select frequency is tracked (motivation proxy per Chiviacowsky & Wulf) but doesn't gate anything. Tier D obstacles-vs-turns emphasis is auto-picked by which capability_domain is weakest at composition time. All engine adjustments respect the confirm-first rule — engine proposes, user Accepts, nothing mutates silently.",
+    "adaptive_engine_hooks": "Wrist symptom score is the primary daily signal. Score > 6 for a day \u2192 gate the next session to recovery only (skip kick-up + walk attempts). Score 4-6 \u2192 engine proposes swapping wrist-load-heavy drills for wall-supported holds (proposal, user Accepts). Shoulder pain report \u2192 session immediately routes to non-inverted mobility + hollow body; multi-day persistence flags the user to see a clinician. Weekly freestand-hold retest: two consecutive weeks with a regression AND wrist symptom score up \u2192 engine drops the user's handstand_hold_static level by 1 and picks lower-level drills next week. Video review self-select frequency is tracked (motivation proxy per Chiviacowsky & Wulf) but doesn't gate anything. Tier D obstacles-vs-turns emphasis is auto-picked by which capability_domain is weakest at composition time. All engine adjustments respect the confirm-first rule \u2014 engine proposes, user Accepts, nothing mutates silently.",
     "engineering_choices_flagged": [
-      "20-30 min/week wrist volume cap in weeks 1-2 — mechanism basis in Wiesinger 2019, no direct dose-response study for handstand wrist load. Defensible upper bound, not evidence.",
-      "≤10%/week wrist-volume increment after week 2 — mirrors Gabbett 2016 acute-to-chronic workload heuristic. Not directly tested for handstand.",
-      "170° shoulder flexion prerequisite for Tier B+ — analogous to weightlifting overhead pass-through cutoff, not empirically validated for handstand.",
-      "60s wall hold as a soft gate before freestand attempts — coach folklore, no RCT. Program uses freestand_hold_max_seconds directly from the physical test, not the wall hold, to seed the freestand-attempt drills.",
-      "15s freestand as pirouette gate — no evidence. Program uses handstand_turns_level explicitly, not seconds.",
-      "5-drill freestand set count, 30s attempt cap — spacing-derived, not directly tested.",
-      "4-6 sessions per week — daily-short-beats-long inference from Karni 1998 + Walker 2003 + Shea 2000. No direct handstand-frequency RCT.",
-      "10-18 min per session — engineering choice matching adult recreational-practitioner attention span. Not dose-response validated.",
-      "Blocked practice weeks 1-2 threshold — Wulf & Shea 2002 supports blocked in acquisition but doesn't specify the exact week to switch. Two-week floor is pragmatic.",
-      "Tier D self-selection of obstacles vs turns via weakest-capability rule — theoretically supported by Henry 1968 / Proteau 1992 but not directly RCT'd.",
-      "Weakest-capability-first drill selection across all tiers — the engine biases each session toward the user's lowest-scoring sub-skill (wrist load, hollow-shape, turns, obstacle nav, etc.). This is coaching-consensus, theoretically supported by specificity of adaptation but not RCT-validated at the sub-skill granularity we operate at."
+      "20-30 min/week wrist volume cap in weeks 1-2 \u2014 mechanism basis in Wiesinger 2019, no direct dose-response study for handstand wrist load. Defensible upper bound, not evidence.",
+      "\u226410%/week wrist-volume increment after week 2 \u2014 mirrors Gabbett 2016 acute-to-chronic workload heuristic. Not directly tested for handstand.",
+      "170\u00b0 shoulder flexion prerequisite for Tier B+ \u2014 analogous to weightlifting overhead pass-through cutoff, not empirically validated for handstand.",
+      "60s wall hold as a soft gate before freestand attempts \u2014 coach folklore, no RCT. Program uses freestand_hold_max_seconds directly from the physical test, not the wall hold, to seed the freestand-attempt drills.",
+      "15s freestand as pirouette gate \u2014 no evidence. Program uses handstand_turns_level explicitly, not seconds.",
+      "5-drill freestand set count, 30s attempt cap \u2014 spacing-derived, not directly tested.",
+      "4-6 sessions per week \u2014 daily-short-beats-long inference from Karni 1998 + Walker 2003 + Shea 2000. No direct handstand-frequency RCT.",
+      "10-18 min per session \u2014 engineering choice matching adult recreational-practitioner attention span. Not dose-response validated.",
+      "Blocked practice weeks 1-2 threshold \u2014 Wulf & Shea 2002 supports blocked in acquisition but doesn't specify the exact week to switch. Two-week floor is pragmatic.",
+      "Tier D self-selection of obstacles vs turns via weakest-capability rule \u2014 theoretically supported by Henry 1968 / Proteau 1992 but not directly RCT'd.",
+      "Weakest-capability-first drill selection across all tiers \u2014 the engine biases each session toward the user's lowest-scoring sub-skill (wrist load, hollow-shape, turns, obstacle nav, etc.). This is coaching-consensus, theoretically supported by specificity of adaptation but not RCT-validated at the sub-skill granularity we operate at."
     ],
     "references": [
       {
@@ -1517,7 +1563,7 @@
         "year": 2022,
         "title": "Progressive four-position handstand EMG activity",
         "source": "Isokinetics and Exercise Science 30:127-133",
-        "used_for": "The 4-position progression ladder (90° incline → 135° → elbow / straddle-L → full wall handstand). Validated by EMG activity of shoulder / core musculature. Underpins block_skill_A_kinoshita and the Tier A entry. Flagged for founder review: DOI missing.",
+        "used_for": "The 4-position progression ladder (90\u00b0 incline \u2192 135\u00b0 \u2192 elbow / straddle-L \u2192 full wall handstand). Validated by EMG activity of shoulder / core musculature. Underpins block_skill_A_kinoshita and the Tier A entry. Flagged for founder review: DOI missing.",
         "verification_status": "unverified"
       },
       {
@@ -1542,7 +1588,7 @@
         "year": 2019,
         "title": "Postural control strategies of handstand-trained subjects",
         "source": "Acta of Bioengineering and Biomechanics",
-        "used_for": "Elite vs novice difference — medial-lateral CoP control + stiffening strategy. Used in outcome_evidence and freestand hold rationale."
+        "used_for": "Elite vs novice difference \u2014 medial-lateral CoP control + stiffening strategy. Used in outcome_evidence and freestand hold rationale."
       },
       {
         "id": "baker_2025_review",
@@ -1550,7 +1596,7 @@
         "year": 2025,
         "title": "A systematic review of the biomechanics of the handstand",
         "source": "Frontiers in Sports and Active Living (PMC12745452), 21 studies 1988-2025",
-        "used_for": "Current best synthesis of handstand biomechanics — wrist strategy, elite-novice CoP differences, thin evidence base for prerequisite thresholds. Anchor citation for the whole evidence_base.",
+        "used_for": "Current best synthesis of handstand biomechanics \u2014 wrist strategy, elite-novice CoP differences, thin evidence base for prerequisite thresholds. Anchor citation for the whole evidence_base.",
         "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12745452/",
         "verification_status": "verified"
       },
@@ -1584,7 +1630,7 @@
         "year": 2021,
         "title": "Kinematic and kinetic analysis of the straight-arm press to handstand",
         "source": "PLOS One 16(7):e0253951",
-        "used_for": "Shoulder-moment analysis of the press to handstand. Directly informs the choice NOT to program straight-arm press early, and the Tier A entry at Kinoshita 90°. Attribution flagged for founder review (see citations.json review_note): DOI 10.1371/journal.pone.0253951 resolves to a Mizutori-authored parallel-bars paper. The heavy-shoulder-moment principle survives on general grounds; the specific 3× BW figure was a parallel-bars finding, not a floor finding — do not cite that number.",
+        "used_for": "Shoulder-moment analysis of the press to handstand. Directly informs the choice NOT to program straight-arm press early, and the Tier A entry at Kinoshita 90\u00b0. Attribution flagged for founder review (see citations.json review_note): DOI 10.1371/journal.pone.0253951 resolves to a Mizutori-authored parallel-bars paper. The heavy-shoulder-moment principle survives on general grounds; the specific 3\u00d7 BW figure was a parallel-bars finding, not a floor finding \u2014 do not cite that number.",
         "verification_status": "unverified"
       },
       {
@@ -1601,7 +1647,7 @@
         "year": 2025,
         "title": "Wrist symptoms in adult handstand practitioners: a cross-sectional survey",
         "source": "Frontiers (PMC12550924), n=321",
-        "used_for": "56.7% chronic wrist pain but NO association with weekly training hours, frequency, warm-up, or brace use. Reframes wrist risk as technique-driven, not volume-driven — but supports the volume cap as a conservative upper bound. Attribution flagged for founder review: PMC12550924 resolves to Martonovich et al. (same underlying data). The claim itself survives; the author byline may need to be swapped.",
+        "used_for": "56.7% chronic wrist pain but NO association with weekly training hours, frequency, warm-up, or brace use. Reframes wrist risk as technique-driven, not volume-driven \u2014 but supports the volume cap as a conservative upper bound. Attribution flagged for founder review: PMC12550924 resolves to Martonovich et al. (same underlying data). The claim itself survives; the author byline may need to be swapped.",
         "verification_status": "unverified"
       },
       {
@@ -1618,7 +1664,7 @@
         "year": 2019,
         "title": "Tendon adaptation to mechanical loading",
         "source": "German Journal of Sports Medicine",
-        "used_for": "Tendon adaptation timeframe (8-12 weeks for collagen turnover). Mechanism basis for the wrist volume cap. Note: no direct dose-response study for handstand wrist load — the exact 20-30 min cap is an engineering choice. Flagged for founder review: DOI missing.",
+        "used_for": "Tendon adaptation timeframe (8-12 weeks for collagen turnover). Mechanism basis for the wrist volume cap. Note: no direct dose-response study for handstand wrist load \u2014 the exact 20-30 min cap is an engineering choice. Flagged for founder review: DOI missing.",
         "verification_status": "unverified"
       },
       {
@@ -1627,7 +1673,7 @@
         "year": 2000,
         "title": "Alterations in shoulder kinematics and associated muscle activity in people with symptoms of shoulder impingement",
         "source": "Physical Therapy 80(3):276-291",
-        "used_for": "Serratus + trapezius endurance in sustained overhead flexion. Underpins the wall_supported_shrugs drill and the 170° prerequisite."
+        "used_for": "Serratus + trapezius endurance in sustained overhead flexion. Underpins the wall_supported_shrugs drill and the 170\u00b0 prerequisite."
       },
       {
         "id": "reinold_2007",
@@ -1651,7 +1697,7 @@
         "year": 2003,
         "title": "Dissociable stages of human memory consolidation and reconsolidation",
         "source": "Learning & Memory 10(4):275-284",
-        "used_for": "Sleep-dependent motor consolidation. Reinforces daily-short skill exposure over infrequent long sessions. Journal + byline corrected 2026-08-17 — canonical entry in citations.json is now Learning & Memory 10(4):275-284 (matches whitepaper 04)."
+        "used_for": "Sleep-dependent motor consolidation. Reinforces daily-short skill exposure over infrequent long sessions. Journal + byline corrected 2026-08-17 \u2014 canonical entry in citations.json is now Learning & Memory 10(4):275-284 (matches whitepaper 04)."
       },
       {
         "id": "shea_morgan_1979",
@@ -1667,7 +1713,7 @@
         "year": 2026,
         "title": "Handstand walking biomechanics and shoulder pain association",
         "source": "Scientific Reports (s41598-026-51612-w), 237 stance phases",
-        "used_for": "Pain-associated practitioners show shorter effective arm length + greater axial torsional work — technique-driven. Underpins the non-negotiable 'shoulder pain stops session' rule. Flagged for founder review: paper existence at claimed URL unconfirmed. The stop-session rule survives on general principle even if the specific '237 stance phases' figure is unverifiable.",
+        "used_for": "Pain-associated practitioners show shorter effective arm length + greater axial torsional work \u2014 technique-driven. Underpins the non-negotiable 'shoulder pain stops session' rule. Flagged for founder review: paper existence at claimed URL unconfirmed. The stop-session rule survives on general principle even if the specific '237 stance phases' figure is unverifiable.",
         "url": "https://www.nature.com/articles/s41598-026-51612-w",
         "verification_status": "unverified"
       },
@@ -1677,12 +1723,12 @@
         "year": 2021,
         "title": "Walking initiation biomechanics",
         "source": "Gait & Posture",
-        "used_for": "CoP shift precedes step. Informs the single_step_attempt drill design and the 'lean the shape toward the far wall' external-focus cue. Flagged for founder review: DOI/volume unresolved. Drill design does not require this specific citation — Yiou 2017 or canonical Winter walking-initiation work would substitute.",
+        "used_for": "CoP shift precedes step. Informs the single_step_attempt drill design and the 'lean the shape toward the far wall' external-focus cue. Flagged for founder review: DOI/volume unresolved. Drill design does not require this specific citation \u2014 Yiou 2017 or canonical Winter walking-initiation work would substitute.",
         "verification_status": "unverified"
       },
       {
         "id": "simunkova_2024",
-        "authors": "Šimůnková K, et al.",
+        "authors": "\u0160im\u016fnkov\u00e1 K, et al.",
         "year": 2024,
         "title": "Upper-quadrant Y-balance and CKCUEST vs handstand E-score",
         "source": "PLOS One 19(5):e0302922",
@@ -1690,7 +1736,7 @@
       },
       {
         "id": "wulf_1998",
-        "authors": "Wulf G, Höß M, Prinz W",
+        "authors": "Wulf G, H\u00f6\u00df M, Prinz W",
         "year": 1998,
         "title": "Instructions for motor learning: differential effects of internal versus external focus of attention",
         "source": "Journal of Motor Behavior 30:169-179",
@@ -1722,11 +1768,11 @@
       },
       {
         "id": "proteau_1992",
-        "authors": "Proteau L, Marteniuk RG, Lévesque L",
+        "authors": "Proteau L, Marteniuk RG, L\u00e9vesque L",
         "year": 1992,
         "title": "Learning is specific to the sensory conditions of practice",
         "source": "Quarterly Journal of Experimental Psychology 44A:557-575",
-        "used_for": "Specificity of practice — learning is bound to the sensory context. Underpins the choice to train wall hold + freestand + walk as separate state variables."
+        "used_for": "Specificity of practice \u2014 learning is bound to the sensory context. Underpins the choice to train wall hold + freestand + walk as separate state variables."
       },
       {
         "id": "newell_1985",
@@ -1758,7 +1804,7 @@
         "year": 1975,
         "title": "A schema theory of discrete motor skill learning",
         "source": "Psychological Review 82:225-260",
-        "used_for": "Schema theory — variability builds recall + recognition schemas. Underpins the variability-of-practice at Tier D (line, markers, precision lane)."
+        "used_for": "Schema theory \u2014 variability builds recall + recognition schemas. Underpins the variability-of-practice at Tier D (line, markers, precision lane)."
       },
       {
         "id": "sands_2000",
@@ -1782,7 +1828,7 @@
         "year": 2014,
         "title": "Temporal structure of motor variability is dynamically regulated and predicts motor learning ability",
         "source": "Nature Neuroscience 17:312-321",
-        "used_for": "3× variance in visuomotor rotation learning correlates with baseline motor variability. Reinforces individual-variance framing."
+        "used_for": "3\u00d7 variance in visuomotor rotation learning correlates with baseline motor variability. Reinforces individual-variance framing."
       }
     ],
     "reference_ids": [
@@ -1917,24 +1963,24 @@
     {
       "kind": "scale_anchor",
       "title": "The 0-10 scale",
-      "body_md": "You'll rate wrist and shoulder readiness most mornings — those matter more here than global fatigue. The numbers read like this:",
+      "body_md": "You'll rate wrist and shoulder readiness most mornings \u2014 those matter more here than global fatigue. The numbers read like this:",
       "anchors": {
         "low": "Wrists / shoulders quiet",
         "mid": "Some pump / stiffness",
-        "high": "Wrist pain on load — pause"
+        "high": "Wrist pain on load \u2014 pause"
       }
     },
     {
       "kind": "scan_anchor",
       "title": "The freestand test",
-      "body_md": "Handstand Walk starts from a 20-second freestand baseline. If you can't yet, the plan drops you into the wall progression tier automatically — same skill, earlier level.",
+      "body_md": "Handstand Walk starts from a 20-second freestand baseline. If you can't yet, the plan drops you into the wall progression tier automatically \u2014 same skill, earlier level.",
       "cta_href": "/intake",
       "cta_label": "Run the intake"
     },
     {
       "kind": "symptom_primer",
       "title": "What Terav will ask each morning",
-      "body_md": "For skill work the morning check is short. Nothing captured here — you fill it in on the /check screen.",
+      "body_md": "For skill work the morning check is short. Nothing captured here \u2014 you fill it in on the /check screen.",
       "fields": [
         "Wrist stiffness or pain (0-10)",
         "Shoulder / trap tension (0-10)",
@@ -1958,7 +2004,7 @@
     "would_additionally_use": [
       {
         "label": "Per-drill quality tag",
-        "why_it_matters": "A drill logged as 'done' could be clean or shaky — the engine treats both the same. A quality tag lets the engine trust progression rather than just count reps.",
+        "why_it_matters": "A drill logged as 'done' could be clean or shaky \u2014 the engine treats both the same. A quality tag lets the engine trust progression rather than just count reps.",
         "user_action_free": "Tag each drill session as clean / shaky / assisted after finishing."
       },
       {
@@ -1991,7 +2037,7 @@
       "year": 2017,
       "title": "Balance control during gait initiation: State-of-the-art and research perspectives",
       "source": "World J Orthop 8(11):815-828",
-      "used_for": "Walking initiation biomechanics — CoP shift precedes step. Informs the single_step_attempt drill design and the 'lean the shape toward the far wall' external-focus cue. Replaced ferrari_2021 (unlocatable) 2026-08-18 per founder-approved plan.",
+      "used_for": "Walking initiation biomechanics \u2014 CoP shift precedes step. Informs the single_step_attempt drill design and the 'lean the shape toward the far wall' external-focus cue. Replaced ferrari_2021 (unlocatable) 2026-08-18 per founder-approved plan.",
       "url": "https://pubmed.ncbi.nlm.nih.gov/29184756/",
       "verification_status": "verified"
     }
