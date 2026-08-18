@@ -136,8 +136,7 @@ export function Heatmap({ store, onDayClick }: { store: Store; onDayClick?: (dat
             <span
               key={r}
               aria-hidden
-              className="mono-caps h-4 leading-4 flex items-center pr-1"
-              style={{ fontSize: "9px" }}
+              className="mono-caps text-[10px] h-4 leading-4 flex items-center pr-1"
             >
               {r[0]}
             </span>

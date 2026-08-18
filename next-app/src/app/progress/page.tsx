@@ -53,7 +53,7 @@ export default function ProgressPage() {
   if (!primarySlug) {
     return (
       <EmptyStateCard
-        title="Pick your focus."
+        title="Trends land here after a few sessions."
         body="Training maxes, milestones, trends, and the signal-completeness card show up here once you pick a program."
         cta={{ href: "/programs/", label: "Browse programs" }}
       />
@@ -141,7 +141,7 @@ function ProgressBody({
   return (
     <div className="space-y-5 pt-4">
       <header className="flex items-baseline justify-between gap-3">
-        <h1 className="text-3xl font-semibold tracking-tight">Progress</h1>
+        <h1 className="text-2xl font-semibold tracking-tight text-strong">Progress</h1>
         <a
           href="/report"
           className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-muted hover:text-ink hover:bg-line-soft min-h-[36px] whitespace-nowrap"
@@ -462,7 +462,7 @@ function MilestoneLiftGroup({
                   <p className="text-sm mt-0.5">
                     TM target {effective} kg{" "}
                     {beaten ? (
-                      <span className="ml-1 px-1.5 py-0.5 rounded bg-green text-surface text-[10px] font-mono uppercase tracking-wider">
+                      <span className="ml-1 px-1.5 py-0.5 rounded bg-green/20 text-green text-[10px] font-mono uppercase tracking-wider">
                         beaten
                       </span>
                     ) : days < 0 ? (

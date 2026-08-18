@@ -101,7 +101,7 @@ export default function CheckPage() {
   return (
     <div className="space-y-6 pt-4">
       <header>
-        <h1 className="text-3xl font-semibold tracking-tight">Morning check</h1>
+        <h1 className="text-2xl font-semibold tracking-tight text-strong">Morning check</h1>
         <p className="mt-1 text-sm text-muted">Judged by how you feel the morning AFTER training, not during.</p>
       </header>
 
@@ -213,10 +213,11 @@ function SliderRow({
   onChange: (v: number) => void;
 }) {
   const ariaLabel = `${lat ? `${lat === "L" ? "Left" : "Right"} ` : ""}${label}${suffix ? " in " + suffix : ""}`;
+  const inputId = `sym-${label.replace(/\s+/g, "-").toLowerCase()}${lat ? `-${lat.toLowerCase()}` : ""}`;
   return (
     <div className="grid grid-cols-[1fr_50px] items-center gap-3 px-3 py-3">
       <div>
-        <label id={`sym-${label.replace(/\s+/g, "-").toLowerCase()}`} className="flex items-center gap-2 text-sm">
+        <label htmlFor={inputId} className="flex items-center gap-2 text-sm">
           {lat ? (
             <span
               className={`font-mono text-[9px] font-bold px-1 rounded text-surface ${lat === "L" ? "bg-lat-left" : "bg-lat-right"}`}
@@ -228,6 +229,7 @@ function SliderRow({
           {label}
         </label>
         <input
+          id={inputId}
           type="range"
           min={min}
           max={max}
@@ -275,10 +277,10 @@ function CheckBoxRow({
 function Verdict({ state }: { state: State }) {
   const label =
     state === "green"
-      ? "Progress the load next session"
+      ? "Green — good to push today"
       : state === "amber"
-        ? "Hold the load; repeat the week"
-        : "Back off two steps AND drop TM by 10% at cycle end";
+        ? "Amber — hold the load, repeat the week"
+        : "Red — back off two steps; the engine will trim the top set";
   const bg =
     state === "green"
       ? "bg-green/10 border-l-green"
@@ -287,11 +289,11 @@ function Verdict({ state }: { state: State }) {
         : "bg-red/10 border-l-red";
   return (
     <div className={`border-l-4 rounded-r px-3 py-3 text-sm ${bg}`}>
-      <p className="font-semibold uppercase text-[13px] tracking-wider">
-        {state} — {label}
+      <p className="font-semibold text-[13px]">
+        {label}
       </p>
       <p className="mt-1 text-[13px] text-muted">
-        Today&apos;s suggested weights on the Today tab are adjusted automatically for this state.
+        Today&apos;s suggested loads on the Today tab are already adjusted for this reading.
       </p>
     </div>
   );

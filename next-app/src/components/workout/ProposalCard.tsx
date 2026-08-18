@@ -315,22 +315,22 @@ function toneFor(p: Proposal): Tone {
 function eyebrowFor(p: Proposal): string {
   switch (p.kind) {
     case "day_adjustment_soften":
-      return "Signal · fatigue / pain flagged";
+      return "Fatigue or pain flagged today";
     case "readiness_after_layoff":
-      return "Signal · you look ready to leave reintro";
+      return "You look ready to leave reintro";
     case "tier_advance":
-      return "Signal · tier gate cleared";
+      return "Tier gate cleared";
     case "tm_bump":
-      return "Signal · headroom detected";
+      return "Room to push — headroom on your log";
     case "non_responder_recommendation":
       // Copy audit 2026-08-18 — dropped "HERITAGE" internal codename.
       return p.verdict === "true_non_response"
-        ? "Signal · not responding to current dose"
-        : "Signal · under-dosing pattern";
+        ? "Not responding to current dose"
+        : "Room to push — under-dosing pattern";
     case "retest_due":
       return p.cadenceKind === "mid_block"
-        ? "Signal · mid-block retest window open"
-        : "Signal · end-of-block retest window open";
+        ? "Mid-block retest window open"
+        : "End-of-block retest window open";
   }
 }
 

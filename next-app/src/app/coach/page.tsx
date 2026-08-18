@@ -249,7 +249,7 @@ export default function CoachPage() {
     <div className="pt-4 pb-4 flex flex-col" style={{ minHeight: "calc(100dvh - 180px)" }}>
       <header className="flex items-baseline justify-between gap-3 mb-3">
         <div>
-          <h1 className="text-3xl font-semibold tracking-tight text-strong">Coach</h1>
+          <h1 className="text-2xl font-semibold tracking-tight text-strong">Coach</h1>
           <p className="mt-1 text-sm text-muted">Reads your full history + clinical context each turn.</p>
         </div>
         {messages.length > 0 ? (
@@ -317,6 +317,7 @@ export default function CoachPage() {
               }}
               placeholder="Ask about your plan, form, symptoms…  ⌘⏎ to send"
               rows={2}
+              aria-label="Ask the coach a question"
               className="flex-1 text-sm px-3 py-2 min-h-[48px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze resize-none font-sans"
             />
             {streaming ? (

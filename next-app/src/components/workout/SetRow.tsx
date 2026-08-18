@@ -70,7 +70,7 @@ export function SetRow({ index, set, prev, prescribed, isPR, restSeconds, onChan
           const v = raw === "" ? null : clamp(Number(raw), 0, 500);
           onChange({ weight_kg: v });
         }}
-        className="w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze placeholder:text-line"
+        className="w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze placeholder:text-muted/70"
       />
       <input
         type="number"
@@ -92,7 +92,7 @@ export function SetRow({ index, set, prev, prescribed, isPR, restSeconds, onChan
           const v = raw === "" ? null : clampInt(Number(raw), 0, 50);
           onChange({ reps: v });
         }}
-        className="w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze placeholder:text-line"
+        className="w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze placeholder:text-muted/70"
       />
       <input
         type="number"

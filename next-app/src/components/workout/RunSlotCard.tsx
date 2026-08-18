@@ -578,7 +578,7 @@ export function RunSlotCard({ date }: { date: string }) {
           <button
             type="button"
             onClick={() => setOpen(true)}
-            className="inline-flex items-center gap-1.5 text-[13px] text-slate hover:text-ink"
+            className="inline-flex items-center gap-1.5 min-h-[44px] py-2 pr-2 text-[13px] text-slate hover:text-ink"
           >
             <Plus size={14} />
             Log session
@@ -586,7 +586,7 @@ export function RunSlotCard({ date }: { date: string }) {
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="inline-flex items-center gap-1.5 text-[13px] text-slate hover:text-ink"
+            className="inline-flex items-center gap-1.5 min-h-[44px] py-2 pr-2 text-[13px] text-slate hover:text-ink"
           >
             <Upload size={14} />
             Import GPX

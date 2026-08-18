@@ -190,7 +190,7 @@ export default function SignUpPage() {
             className="mt-0.5 w-4 h-4 accent-bronze flex-shrink-0"
           />
           <span>
-            I&apos;ve read and accept the{" "}
+            I accept the{" "}
             <Link href="/legal/terms" target="_blank" className="text-slate border-b border-slate">
               terms
             </Link>{" "}
@@ -198,7 +198,7 @@ export default function SignUpPage() {
             <Link href="/legal/disclaimer" target="_blank" className="text-slate border-b border-slate">
               medical disclaimer
             </Link>
-            . This app is a training log, not medical advice.
+            . Terav is a training log — not medical advice.
           </span>
         </label>
 
@@ -210,11 +210,11 @@ export default function SignUpPage() {
             className="mt-0.5 w-4 h-4 accent-bronze flex-shrink-0"
           />
           <span>
-            I consent to storing my training log and symptom scores. See{" "}
+            I consent to storing my training log and symptom scores. See the{" "}
             <Link href="/legal/privacy" target="_blank" className="text-slate border-b border-slate">
               privacy policy
-            </Link>{" "}
-            for what&apos;s kept and how to delete it.
+            </Link>
+            {" "}— you can export or delete everything from Profile.
           </span>
         </label>
 

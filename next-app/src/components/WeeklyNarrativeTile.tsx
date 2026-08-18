@@ -71,7 +71,7 @@ export function WeeklyNarrativeTile({
             onClick={() => setOffset(offset - 1)}
             disabled={atPastEdge}
             aria-label="Previous week"
-            className="w-9 h-9 flex items-center justify-center rounded hover:bg-line-soft text-muted hover:text-ink disabled:opacity-30 disabled:cursor-not-allowed"
+            className="w-11 h-11 flex items-center justify-center rounded hover:bg-line-soft text-muted hover:text-ink disabled:opacity-30 disabled:cursor-not-allowed"
           >
             <ChevronLeft size={16} />
           </button>
@@ -80,7 +80,7 @@ export function WeeklyNarrativeTile({
             onClick={() => setOffset(offset + 1)}
             disabled={atFutureEdge}
             aria-label="Next week"
-            className="w-9 h-9 flex items-center justify-center rounded hover:bg-line-soft text-muted hover:text-ink disabled:opacity-30 disabled:cursor-not-allowed"
+            className="w-11 h-11 flex items-center justify-center rounded hover:bg-line-soft text-muted hover:text-ink disabled:opacity-30 disabled:cursor-not-allowed"
           >
             <ChevronRight size={16} />
           </button>

@@ -92,7 +92,7 @@ export default function HistoryPage() {
   return (
     <div className="space-y-6 pt-4">
       <header>
-        <h1 className="text-3xl font-semibold tracking-tight">History</h1>
+        <h1 className="text-2xl font-semibold tracking-tight text-strong">History</h1>
         <p className="mt-1 text-sm text-muted">
           Symptom trends and strength progression over time.
         </p>

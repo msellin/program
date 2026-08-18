@@ -2,7 +2,7 @@ export default function GuidePage() {
   return (
     <div className="space-y-6 pt-4">
       <header>
-        <h1 className="text-3xl font-semibold tracking-tight">Guide</h1>
+        <h1 className="text-2xl font-semibold tracking-tight text-strong">Guide</h1>
         <p className="mt-1 text-sm text-muted">Everything the app assumes you know, in one place.</p>
       </header>
 

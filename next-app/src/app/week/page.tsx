@@ -74,7 +74,7 @@ export default function WeekPage() {
   if (!activeSlugs.length) {
     return (
       <EmptyStateCard
-        title="Pick your focus."
+        title="Your week starts once you pick a focus."
         body="The weekly rhythm shows up here once you pick a program — one session per row, colored by domain, with skipped-day cascade visible at a glance."
         cta={{ href: "/programs/", label: "Browse programs" }}
       />
@@ -109,7 +109,7 @@ export default function WeekPage() {
     <div className="space-y-6 pt-4">
       <header className="flex items-baseline justify-between gap-3">
         <div className="min-w-0">
-          <h1 className="text-3xl font-semibold tracking-tight truncate">Week</h1>
+          <h1 className="text-2xl font-semibold tracking-tight text-strong truncate">Week</h1>
           <p className="mt-1 text-[13px] text-muted">
             The 7-day rhythm, with your skips and moves applied.
           </p>

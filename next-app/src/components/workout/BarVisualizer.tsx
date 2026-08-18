@@ -74,7 +74,7 @@ function renderPlates(
           rx={1.5}
           fill={plateColour(p)}
           stroke="#2A2E37"
-          strokeWidth={0.5}
+          strokeWidth={1.5}
         />,
       );
       x += w + 1;
@@ -97,7 +97,7 @@ function renderPlates(
           rx={1.5}
           fill={plateColour(p)}
           stroke="#2A2E37"
-          strokeWidth={0.5}
+          strokeWidth={1.5}
         />,
       );
       x += w + 1;

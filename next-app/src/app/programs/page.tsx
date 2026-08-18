@@ -110,7 +110,7 @@ export default function ProgramCatalogPage() {
             className={cn(
               "min-h-[36px] px-3 py-1.5 rounded-full font-mono text-[11px]",
               filter === f.id
-                ? "bg-slate text-surface"
+                ? "bg-bronze text-ground"
                 : "bg-line-soft text-muted hover:text-ink",
             )}
           >

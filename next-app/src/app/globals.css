@@ -161,3 +161,16 @@ main { animation: route-in 150ms ease-out; }
   /* Any residual transition on interactive presses — kill the scale. */
   button:active, [role="button"]:active { transform: none; }
 }
+
+/* Kill iOS sticky-hover — coarse-pointer devices don't have hover, but iOS
+   Safari retains the last-tapped element's :hover state until another
+   element is tapped. That's the "web feel" tell across ~170 hover: sites
+   in the app. Reset hover-derived styles on touch devices. Audit 2026-08-18. */
+@media (hover: none) {
+  a:hover, button:hover, [role="button"]:hover {
+    background-color: revert;
+    color: revert;
+    border-color: revert;
+    text-decoration-color: revert;
+  }
+}

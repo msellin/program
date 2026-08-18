@@ -32,7 +32,7 @@ export default function ExtrasPage() {
   if (!primarySlug) {
     return (
       <EmptyStateCard
-        title="Pick your focus."
+        title="Accessory work lives here — once you have a focus."
         body="Accessory work, mobility drills, and around-session blocks show up here once you pick a program. Optional — the plan's core sessions live on Today."
         cta={{ href: "/programs/", label: "Browse programs" }}
       />
@@ -58,7 +58,7 @@ export default function ExtrasPage() {
   return (
     <div className="space-y-8 pt-4">
       <header>
-        <h1 className="text-3xl font-semibold tracking-tight">Extras</h1>
+        <h1 className="text-2xl font-semibold tracking-tight text-strong">Extras</h1>
         <p className="mt-1 text-sm text-muted">
           Accessory work, home rehab, around-runs. {isToday ? "Logging to today." : "Logging to the selected date."}
         </p>

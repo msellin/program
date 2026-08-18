@@ -96,7 +96,7 @@ function labelFor(v: ClassificationVerdict): { text: string; tone: string } | nu
     case "responding":
       return { text: "Responding", tone: "bg-green/15 text-green" };
     case "under_dosing":
-      return { text: "Under-dosing", tone: "bg-amber/15 text-amber" };
+      return { text: "Room to push", tone: "bg-amber/15 text-amber" };
     case "true_non_response":
       return { text: "Not responding", tone: "bg-red/25 text-red" };
     default:

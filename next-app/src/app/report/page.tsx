@@ -86,7 +86,7 @@ export default function ReportPage() {
   if (!primarySlug) {
     return (
       <EmptyStateCard
-        title="Pick your focus."
+        title="Your training summary generates here."
         body="A shareable training summary — for your coach or clinician — generates here once you pick a program and log a few sessions."
         cta={{ href: "/programs/", label: "Browse programs" }}
       />

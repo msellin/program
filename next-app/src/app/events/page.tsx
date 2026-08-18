@@ -91,7 +91,7 @@ export default function EventsPage() {
   return (
     <div className="space-y-6 pt-4 pb-6">
       <header>
-        <h1 className="text-3xl font-semibold tracking-tight">Events</h1>
+        <h1 className="text-2xl font-semibold tracking-tight text-strong">Events</h1>
         <p className="mt-1 text-sm text-muted">
           Races, competitions, travel — anything the plan should schedule around.
           Event dates become forced rest days. Optional deload window either side.
