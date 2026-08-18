@@ -15,6 +15,13 @@ export type Persona = {
    * both programs' blocks on days where both schedule work.
    */
   additionalProgramSlugs?: string[];
+  /**
+   * Tier id written to `program_states[slug].tier` so tier-aware phase
+   * selection (schedule.ts activePhaseFor) works. Defaults to the first
+   * tier of the target program when unset. Comprehensive audit
+   * 2026-08-18 P0-M: adaptation verification broke without this.
+   */
+  tier?: string;
   days: number;
   email: string;
   password: string;
@@ -90,6 +97,7 @@ export const PERSONAS: Persona[] = [
     displayName: "Engine-builder solo",
     archetypeId: "consistent-average",
     programSlug: "engine-builder",
+    tier: "foundation",
     days: 60,
     email: "e2e-persona-engine@example.test",
     password: DEFAULT_PASSWORD,
@@ -101,6 +109,7 @@ export const PERSONAS: Persona[] = [
     displayName: "Handstand walk beginner",
     archetypeId: "consistent-average",
     programSlug: "handstand-walk",
+    tier: "tier_a",
     days: 45,
     email: "e2e-persona-handstand@example.test",
     password: DEFAULT_PASSWORD,
@@ -112,6 +121,7 @@ export const PERSONAS: Persona[] = [
     displayName: "Overhead mobility user",
     archetypeId: "consistent-average",
     programSlug: "overhead-mobility",
+    tier: "foundation",
     days: 45,
     email: "e2e-persona-mobility@example.test",
     password: DEFAULT_PASSWORD,
@@ -123,6 +133,7 @@ export const PERSONAS: Persona[] = [
     displayName: "Rowing 2K race prep",
     archetypeId: "consistent-average",
     programSlug: "rowing-2k-test-prep",
+    tier: "foundation",
     days: 45,
     email: "e2e-persona-rowing@example.test",
     password: DEFAULT_PASSWORD,

@@ -76,6 +76,30 @@ function pickBlocksForDate(
   return [chosen.id];
 }
 
+/**
+ * Pick aerobic (category "run") blocks scheduled for this date. Distinct
+ * from `pickBlocksForDate` which only returns strength blocks. Aerobic
+ * programs (engine-builder, rowing-2k-test-prep) log via `runs[]` rather
+ * than `exercises`, so the schema layer + retest evaluators need the
+ * simulator to write both. Comprehensive audit 2026-08-18 P0-M.
+ */
+function pickAerobicBlocksForDate(
+  program: ProgramShape,
+  dateISO: string,
+): string[] {
+  const phase = program.phases.find((p) => dateISO >= p.starts && (!p.ends || dateISO <= p.ends));
+  if (!phase) return [];
+  const dow = new Date(dateISO + "T12:00:00Z").getUTCDay();
+  // Aerobic cadence: Tue (2) / Thu (4) / Sat (6) — three sessions/week
+  // avoiding strength days (Mon/Wed/Fri). Sunday off.
+  if (dow !== 2 && dow !== 4 && dow !== 6) return [];
+  const aerobicBlocks = program.blocks.filter(
+    (b) => phase.blocks.includes(b.id) && b.category === "run",
+  );
+  if (!aerobicBlocks.length) return [];
+  return [aerobicBlocks[dow % aerobicBlocks.length].id];
+}
+
 function itemsForBlock(program: ProgramShape, blockId: string): string[] {
   const block = program.blocks.find((b) => b.id === blockId);
   if (!block?.items) return [];
@@ -201,12 +225,58 @@ export async function runSimulationV2(
     const derivedState = computeDerivedState(symptoms as Record<string, number | undefined>);
 
     const blockIds = pickBlocksForDate(program, dateISO);
+    const aerobicBlockIds = pickAerobicBlocksForDate(program, dateISO);
     const factor = archetype.loadFactor(day);
     const baseRpe = archetype.rpeTarget;
     const jitter = archetype.rpeJitter;
 
+    // Synthesize a realistic aerobic run entry per scheduled aerobic block.
+    // avg_hr drifts down (day / 30) bpm to simulate real adaptation.
+    // Randomised ±3 bpm per session so retest trend lines have realistic
+    // noise. Comprehensive audit 2026-08-18 P0-M.
+    type SimRun = {
+      activity_type: string;
+      intensity: string;
+      session_type: string;
+      minutes: number;
+      avg_hr: number;
+      max_hr?: number;
+      avg_pace_500m_seconds?: number;
+      source: string;
+    };
+    const aerobicRunsForDay: SimRun[] = aerobicBlockIds.flatMap((bid): SimRun[] => {
+      const block = program.blocks.find((b) => b.id === bid);
+      if (!block) return [];
+      const name = (block as unknown as { name?: string }).name?.toLowerCase() ?? "";
+      const isRow = /row|erg/.test(name);
+      const isBike = /bike|cycle/.test(name);
+      const isThreshold = /4×4|4x4|threshold|interval|race/.test(name);
+      const activity = isRow ? "row" : isBike ? "cycle" : "run";
+      if (isThreshold) {
+        return [{
+          activity_type: activity,
+          intensity: "hard",
+          session_type: "threshold",
+          minutes: 32,
+          avg_hr: 165 + Math.round((Math.random() - 0.5) * 6),
+          max_hr: 178,
+          source: "manual",
+        }];
+      }
+      const avgHr = 140 - Math.floor(day / 30) + Math.round((Math.random() - 0.5) * 6);
+      return [{
+        activity_type: activity,
+        intensity: "easy",
+        session_type: "z2",
+        minutes: 45,
+        avg_hr: avgHr,
+        avg_pace_500m_seconds: isRow ? 125 + Math.round((Math.random() - 0.5) * 8) : undefined,
+        source: "manual",
+      }];
+    });
+
     await page.evaluate(
-      ({ dateISO, decision, blockIds, symptoms, derivedState, note, tms, factor, baseRpe, jitter, itemsByBlock, slug, uid, tier }) => {
+      ({ dateISO, decision, blockIds, aerobicRuns, symptoms, derivedState, note, tms, factor, baseRpe, jitter, itemsByBlock, slug, uid, tier }) => {
         // Read local, or start from a valid baseline if StoreHydrator wiped
         // us during the initial page.goto (see: reset-on-fresh-mount bug).
         const raw = localStorage.getItem("program.log.v2");
@@ -254,6 +324,15 @@ export async function runSimulationV2(
         }
         store.logs[dateISO].derived_state = derivedState;
 
+        // Write aerobic runs when the archetype logs today. Skipped days
+        // don't produce runs (matches the "skip" behavior for strength).
+        if (decision === "log" && aerobicRuns.length > 0) {
+          store.logs[dateISO].runs = [
+            ...(store.logs[dateISO].runs ?? []),
+            ...aerobicRuns,
+          ];
+        }
+
         // Skip → mark skipped, done.
         if (decision === "skip") {
           store.skipped = store.skipped ?? {};
@@ -297,6 +376,7 @@ export async function runSimulationV2(
         dateISO,
         decision,
         blockIds,
+        aerobicRuns: aerobicRunsForDay,
         symptoms: symptoms as Record<string, number>,
         derivedState,
         note: archetype.sessionNote(day, dow),
