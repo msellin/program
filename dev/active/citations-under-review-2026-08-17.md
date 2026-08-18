@@ -288,6 +288,66 @@ For the historical record — these were applied autonomously in the
   "unverified" (hagerman_1994, steinacker_1993, mikulic_2011, das_2019
   — plus bullock_2019 in overhead-mobility)
 
+## Status update 2026-08-18 · founder decisions applied
+
+Founder review + calls received. Executed autonomous items + all decisions
+except two that spawned their own plans.
+
+### Shipped 2026-08-18
+
+- **Q1 · Engine Builder Rønnestad 2020**: Rewrote `block_threshold_cruise`
+  session_rationale + used_for to honestly state SHORT intervals superior
+  to LONG for VO2max in trained cyclists. Threshold cruise no longer
+  claims VO2max — it trains LT2 sustainable output only.
+- **Q2 · Rowing 2K Proteau 1992**: Title + source corrected to the
+  specificity-of-practice paper (J Motor Behav 24(1):81-104). review_note
+  added.
+- **Q5 · Rowing 2K Das 2019**: Dropped from references + reference_ids.
+  Steinacker 1998 (MSSE 30(7):1158-1163) added as replacement.
+- **CSM C-1 · Berryman 2018**: Left in place (verifiable IJSPP 13(1):57-64
+  is real Berryman meta; program's use is a concurrent-training extrapolation
+  we now document as an engineering choice).
+- **CSM C-2 · Petré 2018**: Title/authors/source corrected in citations.json.
+- **CSM C-3 · Brandt 2025**: Title/authors/source/DOI corrected.
+- **HSW H-1/H-2 · Sadowski/Vidal-Torija**: Left ids as-is; citations.json
+  review_notes stand.
+- **HSW H-3 · Ferrari 2021**: Dropped from references + reference_ids.
+  Yiou et al. 2017 (World J Orthop 8(11):815-828) added as replacement.
+- **HSW H-4 · sci_reports_2026_handstand_shoulder**: Softened `used_for` to
+  drop the "237 stance phases" + "shorter effective arm length" specifics.
+  General "shoulder pain stops session" rule survives on principle.
+- **HSW H-5 · Walker 2003**: Confirmed Learning & Memory 10(4):275-284 in
+  earlier Path A commit.
+- **HSW H-6 · Kinoshita 2022 / Wiesinger 2019**: Already
+  verification_status: unverified from earlier Path A.
+- **R-1 · Bosquet 2007**: Added to citations.json + Rowing 2K references
+  + reference_ids. Taper principle text now credits Bosquet + Mujika
+  jointly.
+
+### Spawned their own plans (require multi-hour builds, not citation edits)
+
+- **Q3 · HERITAGE non-responder gate** — founder chose the harder path
+  ("add mid-block retest cadence") over the softer language-rewrite.
+  Plan filed at `dev/active/heritage-non-responder-gate-plan.md` (4-6h,
+  cross-cutting schema + engine + Today + Progress). Awaiting execution
+  approval.
+- **Q4 · Wire motor-learning into Overhead Mobility** — founder chose
+  to wire refs into drill design instead of dropping them. Plan filed
+  at `dev/active/wire-motor-learning-into-overhead-mobility-plan.md`
+  (8-12h, drill card mechanics + weekly template semantics + rating
+  input + demo button). Awaiting execution approval.
+
+### What remains under review
+
+Nothing. All 13 items have either shipped or spawned a follow-on plan.
+
+### Program status changes
+
+Programs stay at `REFERENCED` for now. Promotion to `REVIEWED` gated on
+Q3 + Q4 plans executing OR being explicitly deferred as follow-on
+work (in which case the programs get `REVIEWED_MINUS_HERITAGE` or
+similar).
+
 ## After founder review
 
 Once each item above has an answer, apply the fix and bump each

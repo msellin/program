@@ -1983,5 +1983,17 @@
       ],
       "note": "Users who can already exit reliably skip Phase 0 entirely. Everyone else runs the week."
     }
+  ],
+  "references": [
+    {
+      "id": "yiou_2017",
+      "authors": "Yiou E, Caderby T, Delafontaine A, Fourcade P, Honeine JL",
+      "year": 2017,
+      "title": "Balance control during gait initiation: State-of-the-art and research perspectives",
+      "source": "World J Orthop 8(11):815-828",
+      "used_for": "Walking initiation biomechanics — CoP shift precedes step. Informs the single_step_attempt drill design and the 'lean the shape toward the far wall' external-focus cue. Replaced ferrari_2021 (unlocatable) 2026-08-18 per founder-approved plan.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29184756/",
+      "verification_status": "verified"
+    }
   ]
 }

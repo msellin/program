@@ -181,12 +181,14 @@
     },
     {
       "id": "brandt_2025",
-      "authors": "Brandt K, Krieger K, Kerner J, et al.",
+      "authors": "Brandt N, Ebel K, Lebahn K, Schmidt A",
       "year": 2025,
-      "title": "First physiological profiling of HYROX athletes",
-      "source": "Front Physiol 16:1519240",
+      "title": "Acute physiological responses and performance determinants in Hyrox© – a new running-focused high intensity functional fitness trend",
+      "source": "Frontiers in Physiology (DOI 10.3389/fphys.2025.1519240)",
       "display_short": "Brandt et al. 2025",
-      "display_line": "Brandt et al. (2025), Front Physiol 16"
+      "display_line": "Brandt et al. (2025), Front Physiol",
+      "url": "https://doi.org/10.3389/fphys.2025.1519240",
+      "review_note": "Title/source corrected 2026-08-18."
     },
     {
       "id": "brandt_2025_hyrox",
@@ -714,12 +716,13 @@
     },
     {
       "id": "petre_2018",
-      "authors": "Petré H, Hemmingsson E, Rosdahl H, Psilander N",
+      "authors": "Petré H, Löfving P, Psilander N",
       "year": 2018,
-      "title": "Development of maximal dynamic strength during concurrent resistance and endurance training in untrained, moderately trained and trained individuals",
-      "source": "J Sports Sci Med 17(2):167-173",
+      "title": "The Effect of Two Different Concurrent Training Programs on Strength and Power Gains in Highly-Trained Individuals",
+      "source": "Journal of Sports Science and Medicine 17(2):167-173",
       "display_short": "Petré et al. 2018",
-      "display_line": "Petré et al. (2018), J Sports Sci Med 17(2)"
+      "display_line": "Petré et al. (2018), JSSM 17(2)",
+      "review_note": "Title/authors/source corrected 2026-08-18. Finding attributed to this citation in CSM (HIIT vs continuous produce same squat gains in highly-trained) is confirmed accurate."
     },
     {
       "id": "pilegaard_2000",
@@ -744,10 +747,11 @@
       "id": "proteau_1992",
       "authors": "Proteau L, Marteniuk RG, Lévesque L",
       "year": 1992,
-      "title": "Learning is specific to the sensory conditions of practice",
-      "source": "Quarterly Journal of Experimental Psychology 44A:557-575",
-      "display_short": "Proteau et al. 1992",
-      "display_line": "Proteau et al. (1992), Quarterly Journal of Experimental Psychology 44A"
+      "title": "Specificity of practice: the case of the goal-directed aiming task",
+      "source": "Journal of Motor Behavior 24(1):81-104",
+      "display_short": "Proteau 1992",
+      "display_line": "Proteau (1992), J Motor Behav 24(1)",
+      "review_note": "Title/source corrected 2026-08-18 per founder-approved plan: two Proteau 1992 papers exist; the one this program uses (race-pace = task-specific coordination) is the specificity-of-practice paper."
     },
     {
       "id": "reinold_2007",
@@ -1100,6 +1104,36 @@
       "display_short": "Bandura 1997",
       "display_line": "Bandura (1997), Self-Efficacy",
       "review_note": "Book, not paper. Referenced for the mastery-experiences → threat-perception reduction mechanism used in Phase 0 bail-out drill design."
+    },
+    {
+      "id": "bosquet_2007",
+      "authors": "Bosquet L, Montpetit J, Arvisais D, Mujika I",
+      "year": 2007,
+      "title": "Effects of tapering on performance: a meta-analysis",
+      "source": "Medicine & Science in Sports & Exercise 39(8):1358-1365",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17762369/",
+      "display_short": "Bosquet et al. 2007",
+      "display_line": "Bosquet et al. (2007), MSSE 39(8)"
+    },
+    {
+      "id": "steinacker_1998",
+      "authors": "Steinacker JM, Lormes W, Lehmann M, Altenburg D",
+      "year": 1998,
+      "title": "Training of rowers before world championships",
+      "source": "Medicine & Science in Sports & Exercise 30(7):1158-1163",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9662688/",
+      "display_short": "Steinacker et al. 1998",
+      "display_line": "Steinacker et al. (1998), MSSE 30(7)"
+    },
+    {
+      "id": "yiou_2017",
+      "authors": "Yiou E, Caderby T, Delafontaine A, Fourcade P, Honeine JL",
+      "year": 2017,
+      "title": "Balance control during gait initiation: State-of-the-art and research perspectives",
+      "source": "World Journal of Orthopedics 8(11):815-828",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29184756/",
+      "display_short": "Yiou et al. 2017",
+      "display_line": "Yiou et al. (2017), World J Orthop 8(11)"
     }
   ]
 }

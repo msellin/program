@@ -33,7 +33,7 @@
     {
       "id": "taper_last_week",
       "rule": "Last week: volume down 40-50%, intensity held.",
-      "detail": "Mujika & Padilla 2000 (I+II): reducing volume 40-60% while holding intensity produces the classic taper effect — ~3% performance uplift on race day."
+      "detail": "Bosquet 2007 meta-analysis + Mujika & Padilla 2000 (I+II): reducing volume 40-60% while holding intensity produces the classic taper effect — ~3% performance uplift on race day. Bosquet is the stronger single-source anchor for the effect size; Mujika/Padilla cover the physiological mechanism."
     },
     {
       "id": "no_pr_chasing_off_test",
@@ -947,5 +947,27 @@
         "user_action_free": "Log stroke rate per interval when the monitor shows it."
       }
     ]
-  }
+  },
+  "references": [
+    {
+      "id": "steinacker_1998",
+      "authors": "Steinacker JM, Lormes W, Lehmann M, Altenburg D",
+      "year": 1998,
+      "title": "Training of rowers before world championships",
+      "source": "Medicine & Science in Sports & Exercise 30(7):1158-1163",
+      "used_for": "Rowing-specific physiological profile in elite rowers preparing for world championships. Replaced das_2019 as a stronger anchor for the metabolic-profile claims (Path A · Q5).",
+      "verification_status": "unverified",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9662688/"
+    },
+    {
+      "id": "bosquet_2007",
+      "authors": "Bosquet L, Montpetit J, Arvisais D, Mujika I",
+      "year": 2007,
+      "title": "Effects of tapering on performance: a meta-analysis",
+      "source": "MSSE 39(8):1358-1365",
+      "used_for": "Meta-analysis anchor for the ~3% performance uplift claim on the taper. Stronger single-source anchor than Mujika & Padilla 2000 alone; both are now cited.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17762369/",
+      "verification_status": "verified"
+    }
+  ]
 }
