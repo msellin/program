@@ -140,6 +140,57 @@ export const PERSONAS: Persona[] = [
     focus:
       "Race-anchored arc, taper-terminated. 45 days lands the user mid-block through the taper week. Audit target: taper-week block replacements (block_race_pace_row → block_easy_recovery), 2K retest UX, mid-block threshold pace retest, run/erg log affordance.",
   },
+  // 2026-08-19 · archetype-variant personas for a full-arc audit sweep.
+  // Each pairs a program with an off-baseline archetype so adaptation
+  // paths (bump / hold / drop / advance) can be validated end-to-end.
+  {
+    id: "persona-engine-fast",
+    displayName: "Engine-builder overperformer",
+    archetypeId: "overperformer",
+    programSlug: "engine-builder",
+    tier: "progression",
+    days: 60,
+    email: "e2e-persona-engine-fast@example.test",
+    password: DEFAULT_PASSWORD,
+    focus:
+      "Aerobic overperformer. Every logged Z2 session at RPE 5-6, HR runs low, 'felt strong' notes. Does the engine propose faster progression? Does the Progression → Push tier promotion fire from mid-block retest?",
+  },
+  {
+    id: "persona-strength-slow",
+    displayName: "CSM underperformer",
+    archetypeId: "underperformer",
+    programSlug: "concurrent-strength-maintenance",
+    tier: "foundation",
+    days: 60,
+    email: "e2e-persona-strength-slow@example.test",
+    password: DEFAULT_PASSWORD,
+    focus:
+      "CSM underperformer. RPE creeps high, symptoms elevated. Does the engine hold TM instead of bumping? Does the amber-week drop-4×4 hook fire (P1-11 from tonight's audit — currently unimplemented, this persona will surface whether the copy shows up but no engine action)?",
+  },
+  {
+    id: "persona-handstand-fast",
+    displayName: "Handstand overperformer",
+    archetypeId: "overperformer",
+    programSlug: "handstand-walk",
+    tier: "tier_a",
+    days: 60,
+    email: "e2e-persona-handstand-fast@example.test",
+    password: DEFAULT_PASSWORD,
+    focus:
+      "Skill overperformer. Long wall holds early, freestand attempts push past drilled instructions. Does a tier-advance proposal (Tier A → Tier B) fire from retest readings? Does the multi-dim generator start blending Tier B blocks?",
+  },
+  {
+    id: "persona-rowing-erratic",
+    displayName: "Rowing erratic through taper",
+    archetypeId: "erratic",
+    programSlug: "rowing-2k-test-prep",
+    tier: "foundation",
+    days: 45,
+    email: "e2e-persona-rowing-erratic@example.test",
+    password: DEFAULT_PASSWORD,
+    focus:
+      "Race-anchored user with 40% skip rate. Does the taper still fire when session compliance is under 60%? Does the 2K retest render honestly with sparse baseline runs? Does the classifier flag 'under-dosing' vs 'true non-response'?",
+  },
 ];
 
 export function personaArchetype(persona: Persona) {
