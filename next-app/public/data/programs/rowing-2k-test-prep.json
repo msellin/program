@@ -982,12 +982,12 @@
     ],
     "patterns": {
       "under_dosing": {
-        "rule": "primary_signal_delta_at_mid_block < target * 0.4 AND session_compliance_pct < 80",
+        "rule": "progress_ratio_at_mid_block < 0.4 AND session_compliance_pct < 80",
         "recommendation_key": "add_race_pace_frequency",
         "copy": "Threshold pace looks flat AND you've missed 20%+ of prescribed sessions. Not a ceiling — you're under-training. The engine will propose swapping a Z2 session for a race-pace session next week."
       },
       "true_non_response": {
-        "rule": "primary_signal_delta_at_mid_block < target * 0.15 AND session_compliance_pct >= 80",
+        "rule": "progress_ratio_at_mid_block < 0.15 AND session_compliance_pct >= 80",
         "recommendation_key": "adjust_test_expectation",
         "copy": "You've hit prescribed sessions but threshold isn't moving. HERITAGE 10× variance in play. Options: (1) finish honestly, target −3 to −8 seconds on test day rather than −15; (2) extend one more 6-week block and try again; (3) accept the ceiling and move to Push-tier maintenance."
       },

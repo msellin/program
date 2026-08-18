@@ -1705,12 +1705,12 @@
     ],
     "patterns": {
       "under_dosing": {
-        "rule": "primary_signal_delta_at_mid_block < target * 0.4 AND intensity_compliance_pct < 80",
+        "rule": "progress_ratio_at_mid_block < 0.4 AND intensity_compliance_pct < 80",
         "recommendation_key": "increase_intensity_or_frequency",
         "copy": "Your mid-block submax HR looks flat AND your logged intensity is below 80% of prescribed. Not a genetic ceiling — you're under-dosed. The engine will propose a 4×4 slot in place of your next steady-state to lift the stimulus."
       },
       "true_non_response": {
-        "rule": "primary_signal_delta_at_mid_block < target * 0.15 AND intensity_compliance_pct >= 80 AND resting_hr_delta_at_mid_block < 0.1",
+        "rule": "progress_ratio_at_mid_block < 0.15 AND intensity_compliance_pct >= 80",
         "recommendation_key": "punt_to_next_arc_or_swap_program",
         "copy": "You've hit prescribed intensity but the aerobic signals aren't moving. HERITAGE 10× variance in play. Options: (1) finish this block honestly, expect small Push-tier gains; (2) swap to Rowing 2K where task-specific coordination compensates; (3) accept genetic ceiling and move to maintenance."
       },
