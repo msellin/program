@@ -754,6 +754,77 @@ export const dayLogSchema = z.object({
   runs: z.array(runLogSchema).optional(),
 });
 
+/**
+ * Block-object rebuild, Phase B — see
+ * dev/active/block-object-rebuild-2026-08-18.md §1.
+ *
+ * A ScheduledBlock is a first-class scheduled instance of one of a
+ * program's `blocks[]` template entries on a specific date, with its
+ * own identity, state, and audit trail. Enables per-track skip/move
+ * and unlocks per-block history / retest Δ / coach references.
+ */
+const scheduledBlockStateSchema = z.enum([
+  "planned",
+  "done",
+  "skipped",
+  "moved",
+  "amber_downshifted",
+]);
+
+const moveHistoryEntrySchema = z.object({
+  from: z.string(),
+  to: z.string(),
+  at: z.string(),
+  reason: z.string().optional(),
+});
+
+const blockEngineAdjustmentSchema = z.object({
+  proposal_id: z.string(),
+  applied_at: z.string(),
+  kind: z.enum([
+    "day_adjustment_soften",
+    "tm_bump",
+    "readiness_after_layoff",
+    "tier_advance",
+  ]),
+  payload: z.record(z.string(), z.unknown()),
+});
+
+const scheduledBlockSchema = z.object({
+  id: z.string(),
+  program_slug: z.string(),
+  block_template_id: z.string(),
+  planned_date: z.string(),
+  actual_date: z.string(),
+  state: scheduledBlockStateSchema,
+  move_history: z.array(moveHistoryEntrySchema).optional(),
+  completed_at: z.string().optional(),
+  log_entry_id: z.string().optional(),
+  notes: z.string().optional(),
+  engine_adjustments: z.array(blockEngineAdjustmentSchema).optional(),
+});
+
+const programMaterializationSchema = z.object({
+  materialized_through: z.string(),
+  materialized_at: z.string(),
+  materialization_seed: z.string(),
+});
+
+const featureFlagsSchema = z.object({
+  /**
+   * Off by default. On → block-object readers become authoritative for
+   * enabled surfaces (Today first, then Week, etc.). Legacy readers
+   * still function so partial rollout is safe.
+   */
+  block_object: z.boolean().optional(),
+  /**
+   * Off by default. On (once `block_object` is on and stable) → legacy
+   * `skipped` / `scheduled_overrides` fields stop being written to,
+   * blocks become the sole write target.
+   */
+  block_object_writes: z.boolean().optional(),
+});
+
 export const storeSchema = z.object({
   version: z.literal(2),
   logs: z.record(z.string(), dayLogSchema),
@@ -778,6 +849,41 @@ export const storeSchema = z.object({
       z.object({ reason: z.string().optional(), moved_to: z.string().optional() }),
     )
     .optional(),
+  /**
+   * Block-object rebuild, Phase B (2026-08-18) — see
+   * dev/active/block-object-rebuild-2026-08-18.md §1.
+   *
+   * Materialized scheduled blocks keyed by a stable id
+   * `<slug>:<planned_date>:<block_template_id>`. Written by the
+   * materializer on program start / weekly rollover; mutated by
+   * per-block Skip / Move / Complete actions.
+   *
+   * All fields optional at the store level — a store without this map
+   * behaves exactly like the pre-Phase-B world (legacy readers still
+   * work). Flip `feature_flags.block_object` to swap views to the new
+   * source of truth. Removed entirely in Phase F.
+   */
+  scheduled_blocks: z.record(z.string(), scheduledBlockSchema).optional(),
+  /**
+   * Per-program bookkeeping so the materializer knows how far into the
+   * future blocks have been generated. On rollover the materializer
+   * extends this window.
+   */
+  program_materialization: z
+    .record(z.string(), programMaterializationSchema)
+    .optional(),
+  /**
+   * Rollout flags. Phase A / B ship with everything OFF — behavior is
+   * identical to pre-Phase-B until the founder flips them. Phase C flips
+   * `block_object` per user account for staged validation.
+   */
+  feature_flags: featureFlagsSchema.optional(),
+  /**
+   * List of one-way migration ids that have already been applied to this
+   * user's store. Used by the legacy-to-blocks migrator to short-circuit
+   * on re-hydrate. Migration script writes an id here on completion.
+   */
+  migrations_applied: z.array(z.string()).optional(),
   /**
    * User-accepted per-day adjustments to the engine's recommendations.
    * Only set after an explicit Accept in the UI — nothing writes here silently.
@@ -1254,3 +1360,9 @@ export type Store = z.infer<typeof storeSchema>;
 export type SetLog = z.infer<typeof setLogSchema>;
 export type AssessmentEntry = z.infer<typeof assessmentEntrySchema>;
 export type RunLog = z.infer<typeof runLogSchema>;
+export type ScheduledBlock = z.infer<typeof scheduledBlockSchema>;
+export type ScheduledBlockState = z.infer<typeof scheduledBlockStateSchema>;
+export type MoveHistoryEntry = z.infer<typeof moveHistoryEntrySchema>;
+export type BlockEngineAdjustment = z.infer<typeof blockEngineAdjustmentSchema>;
+export type ProgramMaterialization = z.infer<typeof programMaterializationSchema>;
+export type FeatureFlags = z.infer<typeof featureFlagsSchema>;

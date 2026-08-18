@@ -197,6 +197,48 @@ type StoreState = {
   ) => void;
   clearIntakeDraft: (slug: string) => void;
   /**
+   * Block-object rebuild · Phase B (2026-08-18) — see
+   * dev/active/block-object-rebuild-2026-08-18.md §3.
+   *
+   * All block actions write to `store.scheduled_blocks[<id>]` and
+   * commit through the persistence adapter. Legacy skipDay / moveSession
+   * / clearSkip stay until Phase F so views can be flipped one at a
+   * time behind the block_object feature flag.
+   */
+  skipBlock: (blockInstanceId: string, reason?: string) => void;
+  moveBlock: (blockInstanceId: string, newDate: string, reason?: string) => void;
+  restoreBlock: (blockInstanceId: string) => void;
+  completeBlock: (blockInstanceId: string, logEntryId?: string) => void;
+  applyBlockProposal: (
+    blockInstanceId: string,
+    proposal: {
+      proposal_id: string;
+      kind:
+        | "day_adjustment_soften"
+        | "tm_bump"
+        | "readiness_after_layoff"
+        | "tier_advance";
+      payload: Record<string, unknown>;
+    },
+  ) => void;
+  /**
+   * Convenience — skip every planned block on the date (multi-track).
+   * Whole-day skip in one call.
+   */
+  skipWholeDay: (dateISO: string, reason?: string) => void;
+  /**
+   * Convenience — move every planned block on `fromDate` to `toDate`.
+   */
+  moveWholeDay: (fromDate: string, toDate: string, reason?: string) => void;
+  /**
+   * Feature-flag write path. Founder flips block_object on their own
+   * account first, tests, then rolls out.
+   */
+  setFeatureFlag: (
+    key: "block_object" | "block_object_writes",
+    value: boolean,
+  ) => void;
+  /**
    * Clear local state without pushing to the remote KV. Used when auth state
    * changes on the same browser — the previous user's data should not touch
    * the new user's KV blob. Hydrate will fetch fresh from KV afterwards.
@@ -871,6 +913,158 @@ export const useStore = create<StoreState>((set, get) => ({
     states[slug] = { ...(states[slug] ?? {}), tier };
     profile.program_states = states;
     s.user_profile = profile;
+    commit(s);
+    set({ store: s });
+  },
+
+  // -----------------------------------------------------------------
+  // Block-object rebuild · Phase B — action implementations.
+  // dev/active/block-object-rebuild-2026-08-18.md §3.
+  //
+  // Each action produces a fresh `scheduled_blocks[id]` write and
+  // commits through the persistence adapter. No cross-record cascades.
+  // -----------------------------------------------------------------
+
+  skipBlock: (blockInstanceId, reason) => {
+    const s = { ...get().store };
+    const blocks = { ...(s.scheduled_blocks ?? {}) };
+    const prior = blocks[blockInstanceId];
+    if (!prior) return;
+    blocks[blockInstanceId] = {
+      ...prior,
+      state: "skipped",
+      notes: reason ?? prior.notes,
+    };
+    s.scheduled_blocks = blocks;
+    commit(s);
+    set({ store: s });
+  },
+
+  moveBlock: (blockInstanceId, newDate, reason) => {
+    const s = { ...get().store };
+    const blocks = { ...(s.scheduled_blocks ?? {}) };
+    const prior = blocks[blockInstanceId];
+    if (!prior) return;
+    const historyEntry = {
+      from: prior.actual_date,
+      to: newDate,
+      at: new Date().toISOString(),
+      reason,
+    };
+    blocks[blockInstanceId] = {
+      ...prior,
+      state: "moved",
+      actual_date: newDate,
+      move_history: [...(prior.move_history ?? []), historyEntry],
+    };
+    s.scheduled_blocks = blocks;
+    commit(s);
+    set({ store: s });
+  },
+
+  restoreBlock: (blockInstanceId) => {
+    const s = { ...get().store };
+    const blocks = { ...(s.scheduled_blocks ?? {}) };
+    const prior = blocks[blockInstanceId];
+    if (!prior) return;
+    blocks[blockInstanceId] = {
+      ...prior,
+      state: "planned",
+      actual_date: prior.planned_date,
+      completed_at: undefined,
+      log_entry_id: undefined,
+    };
+    s.scheduled_blocks = blocks;
+    commit(s);
+    set({ store: s });
+  },
+
+  completeBlock: (blockInstanceId, logEntryId) => {
+    const s = { ...get().store };
+    const blocks = { ...(s.scheduled_blocks ?? {}) };
+    const prior = blocks[blockInstanceId];
+    if (!prior) return;
+    blocks[blockInstanceId] = {
+      ...prior,
+      state: "done",
+      completed_at: new Date().toISOString(),
+      ...(logEntryId ? { log_entry_id: logEntryId } : {}),
+    };
+    s.scheduled_blocks = blocks;
+    commit(s);
+    set({ store: s });
+  },
+
+  applyBlockProposal: (blockInstanceId, proposal) => {
+    const s = { ...get().store };
+    const blocks = { ...(s.scheduled_blocks ?? {}) };
+    const prior = blocks[blockInstanceId];
+    if (!prior) return;
+    blocks[blockInstanceId] = {
+      ...prior,
+      state: prior.state === "planned" ? "amber_downshifted" : prior.state,
+      engine_adjustments: [
+        ...(prior.engine_adjustments ?? []),
+        {
+          proposal_id: proposal.proposal_id,
+          applied_at: new Date().toISOString(),
+          kind: proposal.kind,
+          payload: proposal.payload,
+        },
+      ],
+    };
+    s.scheduled_blocks = blocks;
+    commit(s);
+    set({ store: s });
+  },
+
+  skipWholeDay: (dateISO, reason) => {
+    const s = { ...get().store };
+    const blocks = { ...(s.scheduled_blocks ?? {}) };
+    let changed = false;
+    for (const id in blocks) {
+      const b = blocks[id];
+      if (b.actual_date === dateISO && b.state === "planned") {
+        blocks[id] = { ...b, state: "skipped", notes: reason ?? b.notes };
+        changed = true;
+      }
+    }
+    if (!changed) return;
+    s.scheduled_blocks = blocks;
+    commit(s);
+    set({ store: s });
+  },
+
+  moveWholeDay: (fromDate, toDate, reason) => {
+    const s = { ...get().store };
+    const blocks = { ...(s.scheduled_blocks ?? {}) };
+    const stamp = new Date().toISOString();
+    let changed = false;
+    for (const id in blocks) {
+      const b = blocks[id];
+      if (b.actual_date === fromDate && b.state === "planned") {
+        blocks[id] = {
+          ...b,
+          state: "moved",
+          actual_date: toDate,
+          move_history: [
+            ...(b.move_history ?? []),
+            { from: fromDate, to: toDate, at: stamp, reason },
+          ],
+        };
+        changed = true;
+      }
+    }
+    if (!changed) return;
+    s.scheduled_blocks = blocks;
+    commit(s);
+    set({ store: s });
+  },
+
+  setFeatureFlag: (key, value) => {
+    const s = { ...get().store };
+    const flags = { ...(s.feature_flags ?? {}), [key]: value };
+    s.feature_flags = flags;
     commit(s);
     set({ store: s });
   },
