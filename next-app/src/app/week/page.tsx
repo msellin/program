@@ -8,7 +8,8 @@ import { useStore } from "@/lib/useStore";
 import { today as todayISO, iso, cn } from "@/lib/utils";
 import { activePhaseFor } from "@/lib/engine/schedule";
 import { blocksForDate } from "@/lib/engine/plan-generator";
-import type { Program } from "@/lib/schemas";
+import { getBlocksForDate, isBlockObjectOn } from "@/lib/engine/block-selectors";
+import type { Program, ScheduledBlock, Store } from "@/lib/schemas";
 
 const DAY_NAMES = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as const;
 
@@ -42,6 +43,10 @@ export default function WeekPage() {
   const userProfile = useStore((s) => s.store.user_profile);
   const primarySlug = useStore((s) => s.store.user_profile?.active_program_id);
   const activeProgramIds = useStore((s) => s.store.user_profile?.active_program_ids);
+  // Phase D · block-object rebuild — flag gate + block-object read.
+  // See dev/active/block-object-rebuild-2026-08-18.md §5.
+  const blockObjectOn = useStore((s) => isBlockObjectOn(s.store));
+  const scheduledBlocksMap = useStore((s) => s.store.scheduled_blocks);
 
   const activeSlugs: string[] = activeProgramIds && activeProgramIds.length
     ? primarySlug
@@ -182,6 +187,26 @@ export default function WeekPage() {
         </p>
       ) : null}
 
+      {/* Phase D · block-object legend — appears only when the flag is on
+          and 2+ programs are active so the multi-dot per day reads
+          without hover. See §0.3 of the plan. */}
+      {blockObjectOn && activeSlugs.length >= 2 ? (
+        <div className="flex items-center gap-3 flex-wrap font-mono text-[10px] text-muted uppercase tracking-widest">
+          <span className="inline-flex items-center gap-1">
+            <span className="w-2 h-2 rounded-full bg-muted/60" aria-hidden /> planned
+          </span>
+          <span className="inline-flex items-center gap-1">
+            <span className="w-2 h-2 rounded-full bg-green" aria-hidden /> done
+          </span>
+          <span className="inline-flex items-center gap-1">
+            <span className="w-2 h-2 rounded-full bg-amber" aria-hidden /> skipped
+          </span>
+          <span className="inline-flex items-center gap-1">
+            <span className="w-2 h-2 rounded-full bg-slate" aria-hidden /> moved
+          </span>
+        </div>
+      ) : null}
+
       {!wt?.week ? (
         <p className="text-sm text-muted">No weekly template.</p>
       ) : (
@@ -191,8 +216,23 @@ export default function WeekPage() {
             dateForDay.setDate(viewedMon.getDate() + i);
             const dateISO = iso(dateForDay);
             const templateEntry = wt.week?.[i];
+            // Legacy day-state readers. Block-object mode overrides these
+            // via `blocksTodayByProgram` below, but `skip` / `override` are
+            // still consulted for the reason string + line-through styling
+            // until Phase F removes the legacy fields.
             const skip = skipped?.[dateISO];
             const override = overrides?.[dateISO];
+            // Phase D · block-object per-program read for this day.
+            const blocksTodayByProgram: Record<string, ScheduledBlock[]> = {};
+            if (blockObjectOn) {
+              const blocksForThisDay = getBlocksForDate(
+                { scheduled_blocks: scheduledBlocksMap } as Store,
+                dateISO,
+              );
+              for (const b of blocksForThisDay) {
+                (blocksTodayByProgram[b.program_slug] ??= []).push(b);
+              }
+            }
             const isToday = dateISO === todayISO();
             const dayLog = logs?.[dateISO];
             const doneCount = dayLog
@@ -273,6 +313,14 @@ export default function WeekPage() {
               planned: "bg-muted/60",
             }[status];
 
+            // Phase D · when block-object is on, render one dot per program
+            // colored by that program's dominant state on the date. Capped at
+            // 4 dots then collapses to "+N" per §0.3 of the plan. Otherwise
+            // fall back to the legacy single-status dot.
+            const perProgramDots = blockObjectOn
+              ? perProgramDayStates(blocksTodayByProgram, activeSlugs, isToday)
+              : null;
+
             return (
               <div
                 key={dayName + i}
@@ -282,10 +330,30 @@ export default function WeekPage() {
                   skip && "opacity-70",
                 )}
               >
-                <span
-                  aria-hidden
-                  className={cn("mt-2 w-2 h-2 rounded-full flex-shrink-0", dotColor)}
-                />
+                {perProgramDots ? (
+                  <span
+                    aria-hidden
+                    className="mt-2 flex items-center gap-0.5 flex-shrink-0"
+                  >
+                    {perProgramDots.dots.slice(0, 4).map((d, idx) => (
+                      <span
+                        key={idx}
+                        className={cn("w-2 h-2 rounded-full", d.className)}
+                        title={`${d.programName}: ${d.state}`}
+                      />
+                    ))}
+                    {perProgramDots.dots.length > 4 ? (
+                      <span className="text-[9px] font-mono text-muted ml-0.5">
+                        +{perProgramDots.dots.length - 4}
+                      </span>
+                    ) : null}
+                  </span>
+                ) : (
+                  <span
+                    aria-hidden
+                    className={cn("mt-2 w-2 h-2 rounded-full flex-shrink-0", dotColor)}
+                  />
+                )}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-baseline justify-between gap-3">
                     <div className="font-semibold flex items-baseline gap-2 flex-wrap">
@@ -362,6 +430,59 @@ function RulesAccordion({ principles }: { principles: string[] }) {
       ) : null}
     </section>
   );
+}
+
+/**
+ * Phase D · block-object per-program day-state resolver.
+ *
+ * For each active program on a given date, compute a "dominant state"
+ * from that program's scheduled blocks. Multiple blocks per program per
+ * day is possible (e.g. strength + accessory) — we pick the loudest
+ * signal: skipped > moved > done > amber_downshifted > planned. Returns
+ * an ordered array matching activeSlugs so dots stay stable across
+ * renders. Programs with no blocks that day are omitted.
+ *
+ * Dot color mapping matches the legend rendered at the top of the week
+ * (see `tokens.md#colors` semantic states + `bronze` for today).
+ */
+type DayDot = {
+  programSlug: string;
+  programName: string;
+  state: string;
+  className: string;
+};
+
+function perProgramDayStates(
+  blocksByProgram: Record<string, ScheduledBlock[]>,
+  activeSlugs: string[],
+  isToday: boolean,
+): { dots: DayDot[] } {
+  const dots: DayDot[] = [];
+  for (const slug of activeSlugs) {
+    const blocks = blocksByProgram[slug];
+    if (!blocks?.length) continue;
+    const states = new Set(blocks.map((b) => b.state));
+    // Precedence: skipped > moved > done > amber > planned.
+    let state: string = "planned";
+    if (states.has("skipped")) state = "skipped";
+    else if (states.has("moved")) state = "moved";
+    else if (states.has("done")) state = "done";
+    else if (states.has("amber_downshifted")) state = "amber_downshifted";
+    let className: string;
+    if (isToday && state === "planned") className = "bg-bronze";
+    else if (state === "skipped") className = "bg-amber";
+    else if (state === "moved") className = "bg-slate";
+    else if (state === "done") className = "bg-green";
+    else if (state === "amber_downshifted") className = "bg-amber/60";
+    else className = "bg-muted/60";
+    dots.push({
+      programSlug: slug,
+      programName: slug.replace(/-/g, " "),
+      state,
+      className,
+    });
+  }
+  return { dots };
 }
 
 function humanPhaseName(name: string): string {

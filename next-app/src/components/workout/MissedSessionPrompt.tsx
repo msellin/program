@@ -5,6 +5,7 @@ import { X } from "lucide-react";
 import { useStore } from "@/lib/useStore";
 import { blocksForDate } from "@/lib/engine/plan-generator";
 import { activePhaseFor } from "@/lib/engine/schedule";
+import { getBlocksForDate, isBlockObjectOn } from "@/lib/engine/block-selectors";
 import type { Program } from "@/lib/schemas";
 
 type Stage = "prompt" | "skipChoice";
@@ -33,6 +34,8 @@ export function MissedSessionPrompt({
   const hydrated = useStore((s) => s.hydrated);
   const skipDay = useStore((s) => s.skipDay);
   const skipAndShiftWeek = useStore((s) => s.skipAndShiftWeek);
+  const skipWholeDay = useStore((s) => s.skipWholeDay);
+  const blockObjectOn = isBlockObjectOn(store);
   const [dismissed, setDismissed] = useState(true);
   const [stage, setStage] = useState<Stage>("prompt");
 
@@ -65,8 +68,17 @@ export function MissedSessionPrompt({
     ? Object.values(yLog.exercises ?? {}).some((e) => e.done)
     : false;
   const anyRunLogged = (yLog?.runs?.length ?? 0) > 0;
-  const alreadySkipped = !!store.skipped?.[yesterdayISO];
-  if (anyExerciseDone || anyRunLogged || alreadySkipped) return null;
+  // Phase D · consider both legacy skipped map AND block-object state so
+  // the prompt hides once the user has skipped/moved yesterday through
+  // EITHER surface.
+  const legacySkipped = !!store.skipped?.[yesterdayISO];
+  const blockObjectSkipped = blockObjectOn
+    ? getBlocksForDate(store, yesterdayISO, {
+        slug: program.slug,
+        states: ["skipped", "moved"],
+      }).length > 0
+    : false;
+  if (anyExerciseDone || anyRunLogged || legacySkipped || blockObjectSkipped) return null;
 
   const dismiss = () => {
     try {
@@ -126,7 +138,11 @@ export function MissedSessionPrompt({
           <button
             type="button"
             onClick={() => {
-              skipDay(yesterdayISO, "not completed");
+              if (blockObjectOn) {
+                skipWholeDay(yesterdayISO, "not completed");
+              } else {
+                skipDay(yesterdayISO, "not completed");
+              }
               dismiss();
             }}
             className="w-full text-left rounded border border-line hover:border-slate/40 bg-surface p-3 space-y-1"
