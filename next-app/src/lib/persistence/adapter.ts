@@ -25,7 +25,6 @@ import type { Store } from "../schemas";
 import type { PullResult } from "../sync";
 import { KVAdapter } from "./kv-adapter";
 import { PostgresAdapter } from "./postgres-adapter";
-import { loadStore } from "../storage";
 
 export interface PersistenceAdapter {
   /**
@@ -64,41 +63,29 @@ export interface PersistenceAdapter {
 let cachedAdapter: PersistenceAdapter | null = null;
 
 /**
- * Returns the currently-configured persistence adapter. Picks based on
- * `feature_flags.postgres_store` (Phase 2 of the KV → Postgres migration):
- *   - flag true → PostgresAdapter (direct Supabase Postgres)
- *   - flag false / unset → KVAdapter (existing Pages Function + KV)
+ * Returns the currently-configured persistence adapter. Post 2026-08-18
+ * refactor: always PostgresAdapter. PostgresAdapter internally falls
+ * back to KV via `/api/state` if Postgres has no row yet AND KV does,
+ * write-throughs to Postgres on the fallback, and never surfaces the
+ * migration to the user.
  *
- * The flag is read from localStorage-loaded state, so this stays synchronous.
- * If the flag flips at runtime, callers should invoke `_resetAdapterForTests`
- * (renamed from tests-only; still safe in prod for a flag flip) to force
- * re-instantiation on the next call.
+ * KVAdapter stays in the tree as vestigial — importable for the fallback
+ * path via `sync.ts` — but is no longer selectable. Retired entirely in
+ * Phase 2F when we remove the `/api/state` Pages Function.
  *
- * Cached so repeated calls return the same instance — matters when the
- * adapter itself owns state (in-memory debounce timer on both KV and
- * Postgres adapters).
+ * Cached so repeated calls return the same instance — matters because the
+ * adapter owns state (in-memory debounce timer).
  */
 export function getAdapter(): PersistenceAdapter {
   if (cachedAdapter) return cachedAdapter;
-  const usePostgres = shouldUsePostgres();
-  cachedAdapter = usePostgres ? new PostgresAdapter() : new KVAdapter();
+  cachedAdapter = new PostgresAdapter();
   return cachedAdapter;
 }
 
-/**
- * Read the flag from localStorage. Falls back to `false` if storage is
- * unavailable (SSR, disabled cookies) — safest default is the existing KV
- * path.
- */
-function shouldUsePostgres(): boolean {
-  try {
-    if (typeof window === "undefined") return false;
-    const store = loadStore();
-    return store.feature_flags?.postgres_store === true;
-  } catch {
-    return false;
-  }
-}
+// KVAdapter kept in the tree for the Postgres-adapter's KV fallback code
+// path (via sync.ts). Referenced here so tree-shaking doesn't strip it
+// mid-migration. Remove in Phase 2F.
+void KVAdapter;
 
 /**
  * Test helper — swap the cached adapter for a fake in unit tests. Reset

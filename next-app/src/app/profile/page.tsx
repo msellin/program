@@ -312,7 +312,6 @@ export default function ProfilePage() {
 
 function BetaFeatureToggles() {
   const blockObject = useStore((s) => s.store.feature_flags?.block_object === true);
-  const postgresStore = useStore((s) => s.store.feature_flags?.postgres_store === true);
   const setFeatureFlag = useStore((s) => s.setFeatureFlag);
   return (
     <section className="rounded border border-line-soft bg-surface p-4 space-y-3">
@@ -338,33 +337,6 @@ function BetaFeatureToggles() {
             Each track&apos;s session gets its own Skip / Move menu, so you can
             skip one while keeping another. Uncheck to revert to the old
             whole-day Skip.
-          </span>
-        </span>
-      </label>
-      <label className="flex items-start gap-3 cursor-pointer">
-        <input
-          type="checkbox"
-          checked={postgresStore}
-          onChange={(e) => {
-            setFeatureFlag("postgres_store", e.target.checked);
-            // Reload so the adapter factory picks up the new flag on next
-            // getAdapter() call. Simplest safe-fail — cached instance in
-            // memory gets replaced by a fresh mount.
-            if (typeof window !== "undefined") window.location.reload();
-          }}
-          className="mt-1 flex-shrink-0 w-5 h-5"
-        />
-        <span className="text-[13px] text-strong leading-relaxed">
-          <span className="font-semibold">Postgres storage</span>
-          <span className="ml-2 font-mono text-[10px] uppercase tracking-widest text-amber">
-            experimental
-          </span>
-          <span className="block text-[12px] text-muted mt-0.5">
-            Store your training data in Supabase Postgres (with row-level
-            security) instead of Cloudflare KV. Direct client access, no
-            Pages Function hop. Flipping this reloads the page so the new
-            adapter takes over. If you see any issues, uncheck to fall back
-            to KV — your data on KV is intact until we retire it.
           </span>
         </span>
       </label>

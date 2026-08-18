@@ -1,0 +1,67 @@
+name: Backfill KV → Postgres
+
+# Bulk-migrate every Supabase auth user's KV blob into
+# public.user_states + public.user_state_snapshots. Idempotent — safe to
+# re-run. Uses the same script that ships at
+# dev/scripts/backfill-kv-to-postgres.ts.
+#
+# Manual trigger only (workflow_dispatch). Never on push.
+#
+# Required GitHub secrets (in addition to the migration workflow's):
+#   SUPABASE_URL             — https://<project-ref>.supabase.co
+#   SUPABASE_SERVICE_ROLE_KEY — service_role JWT (bypasses RLS)
+#   KV_ACCOUNT_ID            — Cloudflare account ID
+#   KV_NAMESPACE_ID          — Cloudflare KV namespace ID for the STORE binding
+#   CF_API_TOKEN             — Cloudflare API token with "Workers KV Storage: Read" perm
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'dry-run or commit?'
+        required: true
+        default: 'dry-run'
+        type: choice
+        options:
+          - dry-run
+          - commit
+      single_user_email:
+        description: 'Optional: single-user backfill (email)'
+        required: false
+        default: ''
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install tsx
+        run: npm install --no-save tsx@4 @supabase/supabase-js@2
+
+      - name: Run backfill
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          KV_ACCOUNT_ID: ${{ secrets.KV_ACCOUNT_ID }}
+          KV_NAMESPACE_ID: ${{ secrets.KV_NAMESPACE_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          MODE: ${{ inputs.mode }}
+          SINGLE_USER: ${{ inputs.single_user_email }}
+        run: |
+          ARGS=""
+          if [ "$MODE" = "commit" ]; then
+            ARGS="$ARGS --commit"
+          fi
+          if [ -n "$SINGLE_USER" ]; then
+            ARGS="$ARGS --user $SINGLE_USER"
+          fi
+          npx tsx dev/scripts/backfill-kv-to-postgres.ts $ARGS

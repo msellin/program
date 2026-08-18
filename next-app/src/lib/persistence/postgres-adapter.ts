@@ -1,14 +1,21 @@
 /**
- * Postgres adapter — Phase 2B of the KV → Postgres migration.
+ * Postgres adapter — Phases 2B-2E of the KV → Postgres migration.
  * See dev/active/postgres-migration/plan.md.
  *
  * Reads/writes directly against Supabase Postgres via `@supabase/supabase-js`.
  * No Pages Function hop — the client sends its authenticated request straight
  * to Supabase and RLS (auth.uid() = user_id) enforces isolation.
  *
- * localStorage caching stays identical to the KV path — this adapter only
- * changes the remote layer. Same debounced-push semantics (2s window), same
- * pushRemoteImmediate for hot writes, same PullResult shape.
+ * **Auto-migration:** if Postgres has no row for the current user yet AND
+ * legacy KV has one, `pullRemote` transparently fetches from KV via
+ * `/api/state`, returns it as `use_remote`, AND write-throughs to Postgres
+ * so subsequent reads hit the fast path. This is the seamless migration
+ * story: no user-facing toggle, no dedicated backfill run — every existing
+ * user's data lands in Postgres the moment they open the app after this
+ * refactor.
+ *
+ * localStorage caching stays identical. Same debounced-push semantics (2s
+ * window), same pushRemoteImmediate for hot writes, same PullResult shape.
  *
  * 14-day snapshot retention mirrors KV: on every push we upsert today's
  * snapshot and prune anything older than 14 days for this user.
@@ -17,7 +24,7 @@
 import { createClient } from "@/lib/supabase/client";
 import { loadStore, saveStore } from "../storage";
 import { storeSchema, type Store } from "../schemas";
-import type { PullResult } from "../sync";
+import { pullRemote as kvPullRemote, type PullResult } from "../sync";
 import type { PersistenceAdapter } from "./adapter";
 
 const DEBOUNCE_MS = 2000;
@@ -142,12 +149,23 @@ export class PostgresAdapter implements PersistenceAdapter {
       const userId = await currentUserId();
       if (!userId) return { kind: "error", message: "Not signed in" };
       const live = await fetchLive(userId);
-      if (!live) return { kind: "empty" };
-      const localUpdatedAt = local.updated_at ?? 0;
-      if (localUpdatedAt >= live.updated_at) {
-        return { kind: "keep_local", remoteUpdatedAt: live.updated_at };
+      if (live) {
+        const localUpdatedAt = local.updated_at ?? 0;
+        if (localUpdatedAt >= live.updated_at) {
+          return { kind: "keep_local", remoteUpdatedAt: live.updated_at };
+        }
+        return { kind: "use_remote", store: live.store };
       }
-      return { kind: "use_remote", store: live.store };
+      // Postgres empty. Try legacy KV via the Pages Function. If KV has a
+      // blob, we adopt it AND write it through to Postgres so subsequent
+      // reads skip the KV hop. Belt-and-braces auto-migration for every
+      // existing user without a dedicated backfill run.
+      const kvResult = await kvPullRemote(local);
+      if (kvResult.kind === "use_remote") {
+        // Fire-and-forget — if the write-through fails, next read retries.
+        void writeLive(userId, kvResult.store).catch(() => {});
+      }
+      return kvResult;
     } catch (e) {
       return {
         kind: "error",
