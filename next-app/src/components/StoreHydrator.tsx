@@ -5,10 +5,27 @@ import { useStore } from "@/lib/useStore";
 import { createClient } from "@/lib/supabase/client";
 import { setSyncAuthed } from "@/lib/sync";
 import { loadProgram } from "@/lib/data-loader";
+import { getAdapter } from "@/lib/persistence/adapter";
 import { migrateLegacyToBlocks, needsBlockMigration } from "@/lib/migrations/legacy-to-blocks";
 import type { Program } from "@/lib/schemas";
 
 const KEY = "program.log.v2";
+
+/**
+ * Read the UID stamped on the persisted store WITHOUT touching React state.
+ * The bug this exists to solve: on first mount, React's `store` is still the
+ * empty `initial` template. Reading `store.user_profile?.uid` off it returns
+ * null, so any active Supabase session appears to be a "different user" and
+ * triggers a reset — which then wipes the localStorage row we haven't loaded
+ * yet. Reading directly from the adapter closes that race.
+ */
+function storedUidFromLocal(): string | null {
+  try {
+    return getAdapter().loadLocal().user_profile?.uid ?? null;
+  } catch {
+    return null;
+  }
+}
 
 /**
  * Binds local Zustand state to the current Supabase session.
@@ -39,17 +56,27 @@ export function StoreHydrator() {
       if (!mounted) return;
       setSyncAuthed(!!sessionUid);
 
-      const state = useStore.getState();
-      const storedUid = state.store.user_profile?.uid ?? null;
+      // Read stored UID from localStorage, NOT from React state — memory is
+      // still the empty `initial` store on first mount. See storedUidFromLocal
+      // comment above.
+      const storedUid = storedUidFromLocal();
 
-      if (sessionUid && sessionUid !== storedUid) {
-        // Different user (or a stored-null with an active session) — reset local,
-        // stamp the new identity, then hydrate fresh from KV.
+      if (sessionUid && storedUid && sessionUid !== storedUid) {
+        // Actually a different user on this device — wipe local so we don't
+        // leak the previous user's training data.
         resetForNewSession();
         setSessionIdentity(sessionUid, sessionEmail);
         hydrate();
-      } else if (!state.hydrated) {
-        // Same user, first mount — normal hydrate.
+      } else if (sessionUid && !storedUid) {
+        // First time this browser sees a signed-in session for the current
+        // localStorage row (either fresh new user, or existing user whose
+        // localStorage was cleared). Stamp the identity and hydrate; do NOT
+        // wipe — the empty local either has nothing to lose or already got
+        // wiped by whatever cleared it.
+        setSessionIdentity(sessionUid, sessionEmail);
+        hydrate();
+      } else if (!useStore.getState().hydrated) {
+        // Same user or guest — normal hydrate.
         hydrate();
       }
     };
@@ -59,17 +86,25 @@ export function StoreHydrator() {
     const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === "SIGNED_OUT") {
         setSyncAuthed(false);
-        resetForNewSession();
-        // Don't hydrate — user is guest, AuthGate will bounce to /sign-in.
+        // Do NOT wipe local on SIGNED_OUT. Supabase fires transient SIGNED_OUT
+        // events during token refresh (esp. right after a page reload). The
+        // former wipe here was the root cause of "test user loses program on
+        // refresh": memory-uninitialized StoreHydrator + transient SIGNED_OUT
+        // combined to clear localStorage before pullRemote could restore it.
+        // A real different-user sign-in is still caught by the
+        // `sessionUid !== storedUid` branch below on the subsequent SIGNED_IN.
         return;
       }
       if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED" || event === "USER_UPDATED") {
         setSyncAuthed(!!session?.user?.id);
-        const state = useStore.getState();
-        const storedUid = state.store.user_profile?.uid ?? null;
+        // Same as syncToSession — read from localStorage, not React state.
+        const storedUid = storedUidFromLocal();
         const sessionUid = session?.user?.id ?? null;
-        if (sessionUid && sessionUid !== storedUid) {
+        if (sessionUid && storedUid && sessionUid !== storedUid) {
           resetForNewSession();
+          setSessionIdentity(sessionUid, session?.user?.email ?? null);
+          hydrate();
+        } else if (sessionUid && !storedUid) {
           setSessionIdentity(sessionUid, session?.user?.email ?? null);
           hydrate();
         }

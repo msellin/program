@@ -22,6 +22,23 @@ function commit(s: Store): Store {
   return s;
 }
 
+/**
+ * Same as `commit` but fires an immediate (non-debounced) KV push. Use for
+ * rare, high-value state changes where losing the write to a race — a refresh
+ * or deploy inside the 2s debounce window — is unacceptable. Program pick,
+ * intake completion, phase advance all qualify. Regular log entries stay on
+ * the debounced path to preserve coalescing.
+ */
+function commitImmediate(s: Store): Store {
+  s.updated_at = Date.now();
+  const adapter = getAdapter();
+  adapter.saveLocal(s);
+  // Fire-and-forget — caller doesn't await. Errors are handled by the
+  // sync layer's retry-and-surface machinery.
+  void adapter.pushRemoteImmediate(s);
+  return s;
+}
+
 const DOW_TO_TEMPLATE_IDX = [6, 0, 1, 2, 3, 4, 5] as const;
 
 type StoreState = {
@@ -797,7 +814,10 @@ export const useStore = create<StoreState>((set, get) => ({
       profile.active_program_ids = Array.from(ids);
     }
     s.user_profile = profile;
-    commit(s);
+    // Immediate push — losing a program-pick to a refresh inside the 2s
+    // debounce window was the founder-reported "loses program on refresh"
+    // pattern. Commit + KV land in the same beat.
+    commitImmediate(s);
     set({ store: s });
   },
 
@@ -821,7 +841,7 @@ export const useStore = create<StoreState>((set, get) => ({
       profile.active_program_ids = [slug];
       profile.active_program_started_at = iso(new Date());
       s.user_profile = profile;
-      commit(s);
+      commitImmediate(s);
       set({ store: s });
       return;
     }
@@ -836,7 +856,7 @@ export const useStore = create<StoreState>((set, get) => ({
       profile.active_program_started_at = iso(new Date());
     }
     s.user_profile = profile;
-    commit(s);
+    commitImmediate(s);
     set({ store: s });
   },
 
@@ -852,7 +872,7 @@ export const useStore = create<StoreState>((set, get) => ({
       profile.active_program_started_at = iso(new Date());
     }
     s.user_profile = profile;
-    commit(s);
+    commitImmediate(s);
     set({ store: s });
   },
 
@@ -871,7 +891,7 @@ export const useStore = create<StoreState>((set, get) => ({
       }
     }
     s.user_profile = profile;
-    commit(s);
+    commitImmediate(s);
     set({ store: s });
   },
 
@@ -1104,7 +1124,9 @@ export const useStore = create<StoreState>((set, get) => ({
     delete drafts[slug];
     profile.intake_drafts = drafts;
     s.user_profile = profile;
-    commit(s);
+    // Fires once at intake commit — worth the immediate push so the "done"
+    // state lands in KV before any refresh drops the debounce.
+    commitImmediate(s);
     set({ store: s });
   },
 
@@ -1152,7 +1174,7 @@ export const useStore = create<StoreState>((set, get) => ({
     };
     profile.program_states = states;
     s.user_profile = profile;
-    commit(s);
+    commitImmediate(s);
     set({ store: s });
   },
 
@@ -1180,7 +1202,7 @@ export const useStore = create<StoreState>((set, get) => ({
     };
     profile.program_states = states;
     s.user_profile = profile;
-    commit(s);
+    commitImmediate(s);
     set({ store: s });
   },
 
