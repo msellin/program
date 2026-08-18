@@ -26,7 +26,10 @@ import {
 } from "@/lib/engine/schedule";
 import { evaluateRetestMetrics, formatMetric, deltaFromBaseline } from "@/lib/engine/retest-evaluator";
 import { blocksForDate } from "@/lib/engine/plan-generator";
-import type { Program, Block, Exercise, Phase, Store } from "@/lib/schemas";
+import { getBlocksForDate, isBlockObjectOn } from "@/lib/engine/block-selectors";
+import { migrateLegacyToBlocks, needsBlockMigration } from "@/lib/migrations/legacy-to-blocks";
+import { PerProgramActions } from "@/components/workout/PerProgramActions";
+import type { Program, Block, Exercise, Phase, Store, ScheduledBlock } from "@/lib/schemas";
 
 export default function TodayPage() {
   const [programs, setPrograms] = useState<Program[]>([]);
@@ -40,6 +43,11 @@ export default function TodayPage() {
   const activeProgramIds = useStore((s) => s.store.user_profile?.active_program_ids);
   const userProfile = useStore((s) => s.store.user_profile);
   const logs = useStore((s) => s.store.logs);
+  // Phase C · block-object rebuild — flag gate + block-object read.
+  // See dev/active/block-object-rebuild-2026-08-18.md §5-§7.
+  const blockObjectOn = useStore((s) => isBlockObjectOn(s.store));
+  const scheduledBlocksMap = useStore((s) => s.store.scheduled_blocks);
+  const replaceStore = useStore((s) => s.replaceStore);
   const hasHistory = useStore(
     (s) => Object.keys(s.store.logs).length > 0 || Object.keys(s.store.training_maxes).length > 0,
   );
@@ -77,6 +85,22 @@ export default function TodayPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeSlugsKey]);
 
+  // Phase C · run legacy → block-object migration on first render after the
+  // flag is enabled. Idempotent — short-circuits once
+  // `migrations_applied.includes("blocks_v1")`. See §7 of the plan.
+  useEffect(() => {
+    if (!blockObjectOn || !programs.length || !hydrated) return;
+    const store = useStore.getState().store;
+    if (!needsBlockMigration(store)) return;
+    const programsBySlug: Record<string, Program> = {};
+    for (const p of programs) {
+      if (p.slug) programsBySlug[p.slug] = p;
+    }
+    const migrated = migrateLegacyToBlocks(store, programsBySlug, todayISO());
+    replaceStore(migrated);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [blockObjectOn, programs.length, hydrated]);
+
   // Legacy accounts: if there's real history but no explicit program pick,
   // route to the catalog instead of silently stamping anterior-hip. Multi-track
   // users would otherwise be forced into the hip case study every time their
@@ -111,7 +135,31 @@ export default function TodayPage() {
   // Compose per-program block groups. Each group carries its own program pointer
   // so BlockSection can resolve `program.blocks` correctly and TM proposals stay
   // scoped. Overrides apply to primary only.
+  //
+  // Two code paths behind `blockObjectOn`:
+  //   OFF (default) — legacy on-read derivation. blocksForDate() walks program
+  //     phases + weekly_template each render.
+  //   ON — read materialized `scheduled_blocks`, keyed by actual_date. Fixes
+  //     the Today-view duplication bug (moved blocks appear ONLY on their
+  //     destination date). Enables per-program Skip/Move.
   const groups = programs.map((p, i) => {
+    if (blockObjectOn && p.slug) {
+      // Block-object path. `getBlocksForDate` filters by actual_date, so a
+      // block moved out of today is invisible here — that's the whole point.
+      const scheduledForToday = getBlocksForDate(
+        { scheduled_blocks: scheduledBlocksMap } as Store,
+        activeDate,
+        {
+          slug: p.slug,
+          states: ["planned", "amber_downshifted", "moved", "done"],
+        },
+      );
+      const composed = scheduledForToday
+        .map((sb) => p.blocks.find((b) => b.id === sb.block_template_id))
+        .filter((b): b is Block => Boolean(b));
+      return { program: p, blocks: composed, scheduled: scheduledForToday };
+    }
+    // Legacy path.
     const overrideBlocks = i === 0 && override
       ? p.blocks.filter((b) => override.blocks.includes(b.id) && (b.category ?? "strength") === "strength")
       : null;
@@ -119,7 +167,7 @@ export default function TodayPage() {
     const composed = overrideBlocks && overrideBlocks.length
       ? overrideBlocks
       : blocksForDate(p, userProfile, phaseForProg, activeDate, byId);
-    return { program: p, blocks: composed };
+    return { program: p, blocks: composed, scheduled: [] as ScheduledBlock[] };
   });
   const allBlocks = groups.flatMap((g) => g.blocks);
   const groupsWithBlocks = groups.filter((g) => g.blocks.length > 0);
@@ -319,6 +367,12 @@ export default function TodayPage() {
         </>
       ) : (
         <div className="space-y-6">
+          {/* Phase C · Day-header shortcut — only when block-object is on AND
+              2+ programs have blocks today. Single-program stays visually
+              identical to the legacy path. See §0.2 of the plan. */}
+          {blockObjectOn && multipleProgramsToday ? (
+            <DayHeaderShortcut date={activeDate} programCount={groupsWithBlocks.length} />
+          ) : null}
           {groups.map((g, gi) =>
             g.blocks.length === 0 ? null : (
               <div key={g.program.schema_version + ":" + gi} className="space-y-5">
@@ -348,11 +402,26 @@ export default function TodayPage() {
                     />
                   );
                 })}
+                {/* Phase C · Per-program Skip / Move menu, ONLY when
+                    block-object is on. Legacy path still uses the one
+                    SessionActions at the bottom (below). */}
+                {blockObjectOn && g.program.slug ? (
+                  <PerProgramActions
+                    programSlug={g.program.slug}
+                    programName={programDisplayName(g.program, activeSlugs[gi])}
+                    date={activeDate}
+                    scheduledBlocks={g.scheduled}
+                  />
+                ) : null}
               </div>
             ),
           )}
           <div id="log-session"><RunSlotCard date={activeDate} /></div>
-          <SessionActions blockIds={allBlocks.map((b) => b.id)} date={activeDate} program={primary} />
+          {/* Legacy whole-day actions. Block-object mode drives skip/move
+              per program via <PerProgramActions> above. */}
+          {!blockObjectOn ? (
+            <SessionActions blockIds={allBlocks.map((b) => b.id)} date={activeDate} program={primary} />
+          ) : null}
         </div>
       )}
     </div>
@@ -361,6 +430,62 @@ export default function TodayPage() {
 
 function programDisplayName(program: Program, slug: string): string {
   return program.program_goal?.display_name ?? slug.replace(/-/g, " ");
+}
+
+/**
+ * Phase C — day-level header that appears ONLY when 2+ programs are
+ * scheduled on the same date. Carries a compact "Skip whole day"
+ * shortcut so the founder doesn't have to hit Skip on every card
+ * individually. See §0.2 of the plan. Single-program state omits this
+ * entirely — no chrome tax.
+ */
+function DayHeaderShortcut({ date, programCount }: { date: string; programCount: number }) {
+  const skipWholeDay = useStore((s) => s.skipWholeDay);
+  const [confirming, setConfirming] = useState(false);
+  const humanDate = new Date(date + "T12:00:00").toLocaleDateString("en-GB", {
+    weekday: "long",
+    day: "numeric",
+    month: "short",
+  });
+  return (
+    <div className="rounded border border-line-soft border-l-4 border-l-slate bg-surface p-3 flex items-center justify-between gap-3">
+      <div className="text-sm">
+        <p className="font-semibold text-strong">{humanDate}</p>
+        <p className="text-muted text-[13px] mt-0.5">
+          {programCount} programs scheduled today. Skip or move each independently below.
+        </p>
+      </div>
+      {!confirming ? (
+        <button
+          type="button"
+          onClick={() => setConfirming(true)}
+          className="text-[12px] mono-caps border border-line rounded px-3 py-2 min-h-[40px] hover:bg-line-soft"
+        >
+          Skip whole day
+        </button>
+      ) : (
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setConfirming(false)}
+            className="text-[12px] mono-caps text-muted hover:text-ink"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              skipWholeDay(date);
+              setConfirming(false);
+            }}
+            className="text-[12px] mono-caps rounded bg-bronze text-ground px-3 py-2 min-h-[40px] hover:bg-bronze-hover"
+          >
+            Confirm skip
+          </button>
+        </div>
+      )}
+    </div>
+  );
 }
 
 function NoActiveProgram() {

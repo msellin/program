@@ -264,6 +264,13 @@ export default function ProfilePage() {
         <Link href="/legal/disclaimer" className="hover:text-ink">Medical disclaimer</Link>
       </nav>
 
+      {/* Beta features — block-object rebuild rollout gate.
+          See dev/active/block-object-rebuild-2026-08-18.md §6.
+          Founder flips this on their own account to validate Today view
+          per-program cards + Skip/Move + fixed duplication bug. Off by
+          default; legacy behavior when off. */}
+      <BetaFeatureToggles />
+
       {/* Sign out — destructive, at the bottom */}
       <section className="pt-4">
         <button
@@ -300,6 +307,39 @@ export default function ProfilePage() {
         onCancel={() => setRemoveOpen(null)}
       />
     </div>
+  );
+}
+
+function BetaFeatureToggles() {
+  const blockObject = useStore((s) => s.store.feature_flags?.block_object === true);
+  const setFeatureFlag = useStore((s) => s.setFeatureFlag);
+  return (
+    <section className="rounded border border-line-soft bg-surface p-4 space-y-3">
+      <header>
+        <h2 className="text-[14px] font-semibold text-strong">Beta features</h2>
+        <p className="text-[12px] text-muted mt-0.5">
+          Flip on-your-own-risk features for early validation. Turn off to revert
+          to stable behavior.
+        </p>
+      </header>
+      <label className="flex items-start gap-3 cursor-pointer">
+        <input
+          type="checkbox"
+          checked={blockObject}
+          onChange={(e) => setFeatureFlag("block_object", e.target.checked)}
+          className="mt-1 flex-shrink-0 w-5 h-5"
+        />
+        <span className="text-[13px] text-strong leading-relaxed">
+          <span className="font-semibold">Block-object Today view</span>
+          <span className="block text-[12px] text-muted mt-0.5">
+            Per-program Skip / Move menus. Multi-track day header when 2+
+            programs are active. Fixes the Today-view duplication bug when
+            a session is moved between days. Runs a one-time migration on
+            first flip.
+          </span>
+        </span>
+      </label>
+    </section>
   );
 }
 
