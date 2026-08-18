@@ -24,6 +24,8 @@
 import type { Store } from "../schemas";
 import type { PullResult } from "../sync";
 import { KVAdapter } from "./kv-adapter";
+import { PostgresAdapter } from "./postgres-adapter";
+import { loadStore } from "../storage";
 
 export interface PersistenceAdapter {
   /**
@@ -62,18 +64,40 @@ export interface PersistenceAdapter {
 let cachedAdapter: PersistenceAdapter | null = null;
 
 /**
- * Returns the currently-configured persistence adapter. Today: KVAdapter,
- * always. In a future phase, may inspect a runtime flag to return a
- * PostgresAdapter instead.
+ * Returns the currently-configured persistence adapter. Picks based on
+ * `feature_flags.postgres_store` (Phase 2 of the KV → Postgres migration):
+ *   - flag true → PostgresAdapter (direct Supabase Postgres)
+ *   - flag false / unset → KVAdapter (existing Pages Function + KV)
+ *
+ * The flag is read from localStorage-loaded state, so this stays synchronous.
+ * If the flag flips at runtime, callers should invoke `_resetAdapterForTests`
+ * (renamed from tests-only; still safe in prod for a flag flip) to force
+ * re-instantiation on the next call.
  *
  * Cached so repeated calls return the same instance — matters when the
- * adapter itself owns state (e.g. an in-memory debounce timer, which the
- * current KV adapter does).
+ * adapter itself owns state (in-memory debounce timer on both KV and
+ * Postgres adapters).
  */
 export function getAdapter(): PersistenceAdapter {
   if (cachedAdapter) return cachedAdapter;
-  cachedAdapter = new KVAdapter();
+  const usePostgres = shouldUsePostgres();
+  cachedAdapter = usePostgres ? new PostgresAdapter() : new KVAdapter();
   return cachedAdapter;
+}
+
+/**
+ * Read the flag from localStorage. Falls back to `false` if storage is
+ * unavailable (SSR, disabled cookies) — safest default is the existing KV
+ * path.
+ */
+function shouldUsePostgres(): boolean {
+  try {
+    if (typeof window === "undefined") return false;
+    const store = loadStore();
+    return store.feature_flags?.postgres_store === true;
+  } catch {
+    return false;
+  }
 }
 
 /**

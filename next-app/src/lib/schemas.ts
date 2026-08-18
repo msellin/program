@@ -905,6 +905,15 @@ const featureFlagsSchema = z.object({
    * blocks become the sole write target.
    */
   block_object_writes: z.boolean().optional(),
+  /**
+   * Phase 2 · KV → Postgres migration (2026-08-18).
+   * Off by default → `KVAdapter` (existing Pages Function + KV binding).
+   * On → `PostgresAdapter` (direct Supabase Postgres via `@supabase/supabase-js`).
+   * Rollout: founder account first, then default-on for new signups, then
+   * existing users migrate on their next login (dual-read with KV fallback).
+   * KV retired 2+ weeks after clean dual-mode with no rollbacks.
+   */
+  postgres_store: z.boolean().optional(),
 });
 
 export const storeSchema = z.object({

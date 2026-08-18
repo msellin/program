@@ -253,7 +253,7 @@ type StoreState = {
    * account first, tests, then rolls out.
    */
   setFeatureFlag: (
-    key: "block_object" | "block_object_writes",
+    key: "block_object" | "block_object_writes" | "postgres_store",
     value: boolean,
   ) => void;
   /**
