@@ -187,7 +187,7 @@ export function WeeklyNarrativeTile({
               {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
             </span>
           </button>
-          {expanded ? <div className="pt-2">{expandableSlot}</div> : null}
+          {expanded ? <div className="pt-3">{expandableSlot}</div> : null}
         </div>
       ) : null}
     </section>
