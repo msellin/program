@@ -1584,7 +1584,7 @@
       "unit": "bpm",
       "direction": "lower_is_better",
       "source": "run_field",
-      "source_ref": "runs[].avg_hr where intensity == 'easy' and pace_500m == 120",
+      "source_ref": "runs[].avg_hr where intensity == 'easy'",
       "cadence_weeks": 4,
       "trigger": "phase_end",
       "targets": [
@@ -1616,7 +1616,7 @@
       "unit": "bpm",
       "direction": "lower_is_better",
       "source": "physical_test",
-      "source_ref": "morning_resting_hr",
+      "source_ref": "resting_hr_morning",
       "cadence_weeks": 2,
       "trigger": "user_initiated",
       "targets": [

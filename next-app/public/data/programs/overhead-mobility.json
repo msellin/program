@@ -63,7 +63,7 @@
     {
       "id": "push",
       "label": "Push \u2014 Vertical loaded, chasing efficiency + endurance",
-      "condition": "shoulder_flexion_loaded_deg >= 175",
+      "condition": "shoulder_flexion_supine_deg >= 180 && tgu_hold_max_seconds >= 30",
       "typical_outcome": "Overhead endurance (Turkish get-up hold \u2265 30s each side at 24kg), snatch balance to 60% snatch 1RM without sequencing errors.",
       "outcome_confidence": "fair",
       "full_goal_weeks_estimate": 10,

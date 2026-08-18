@@ -471,7 +471,7 @@
       "unit": "seconds",
       "direction": "lower_is_better",
       "source": "log_field",
-      "source_ref": "runs[].total_seconds where modality == 'row' and session_type == '2k_test'",
+      "source_ref": "runs[].total_seconds where activity_type == 'row'",
       "cadence_weeks": 2,
       "trigger": "phase_end",
       "targets": [
@@ -503,7 +503,7 @@
       "unit": "seconds",
       "direction": "lower_is_better",
       "source": "run_field",
-      "source_ref": "runs[].avg_pace_500m_seconds where session_type == 'threshold'",
+      "source_ref": "runs[].avg_pace_500m_seconds where activity_type == 'row'",
       "cadence_weeks": 2,
       "trigger": "phase_end",
       "targets": [
