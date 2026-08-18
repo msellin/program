@@ -91,6 +91,13 @@ function RetestCard({
   const [value, setValue] = useState("");
   const [error, setError] = useState<string | null>(null);
   const recordCapabilityMeasurement = useStore((s) => s.recordCapabilityMeasurement);
+  // HERITAGE Phase 5 (2026-08-18 · #73) — dual-write so a reading logged
+  // through the Progress panel ALSO lands in retest_readings for the
+  // classifier. capability_profile drives tier-eligibility; retest_readings
+  // drives Cluster A/B/C. Both are true, and both should be updated by the
+  // same user action.
+  const logRetestReading = useStore((s) => s.logRetestReading);
+  const activeSlug = useStore((s) => s.store.user_profile?.active_program_id);
 
   const submit = () => {
     const num = Number(value);
@@ -99,6 +106,12 @@ function RetestCard({
       return;
     }
     recordCapabilityMeasurement(m.metric_id, num, m.unit);
+    logRetestReading({
+      metric_id: m.metric_id,
+      value: num,
+      observed_at: todayISO(),
+      program_slug: activeSlug,
+    });
     setValue("");
     setRetestOpen(false);
   };
