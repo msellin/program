@@ -131,7 +131,12 @@ export function RunSlotCard({ date }: { date: string }) {
     const wattsNum = watts ? Number(watts) : null;
     const avgHrNum = avgHr ? Number(avgHr) : null;
     const maxHrNum = maxHr ? Number(maxHr) : null;
-    if (d == null && m == null && twoK == null && !importedMeta) {
+    const hasNote = note.trim().length > 0;
+    // Save requires SOMETHING — distance, duration, 2K time, imported file,
+    // OR a written note. Before the note check the form silently reset on
+    // notes-only entries (e.g., "stretching class, felt loose"), giving
+    // the illusion of "saved". Now a note alone qualifies.
+    if (d == null && m == null && twoK == null && !importedMeta && !hasNote) {
       reset();
       return;
     }
@@ -341,52 +346,74 @@ export function RunSlotCard({ date }: { date: string }) {
             </div>
           ) : null}
 
-          <div className="grid grid-cols-2 gap-2">
-            <label className="text-[12px] text-muted">
-              Distance (km)
-              <input
-                type="number"
-                inputMode="decimal"
-                step={0.1}
-                min={0}
-                max={500}
-                value={distance}
-                onChange={(e) => setDistance(e.target.value)}
-                placeholder="e.g. 5"
-                className="mt-0.5 block w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
-              />
-            </label>
-            <div className="text-[12px] text-muted">
-              Duration
-              <div className="mt-0.5 flex gap-1 items-center">
-                <input
-                  type="number"
-                  inputMode="numeric"
-                  step={1}
-                  min={0}
-                  max={600}
-                  value={minutes}
-                  onChange={(e) => setMinutes(e.target.value)}
-                  placeholder="min"
-                  aria-label="Minutes"
-                  className="block w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
-                />
-                <span className="font-mono text-muted">:</span>
-                <input
-                  type="number"
-                  inputMode="numeric"
-                  step={1}
-                  min={0}
-                  max={59}
-                  value={seconds}
-                  onChange={(e) => setSeconds(e.target.value)}
-                  placeholder="sec"
-                  aria-label="Seconds"
-                  className="block w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
-                />
+          {/* Distance + Duration.
+              - Distance hidden for crossfit_class, other, row, ski_erg
+                (classes have no distance; ergs use the bottom-block Total
+                time instead). For those the Duration input takes the full
+                row width.
+              - Duration always visible — every session has a length. */}
+          {(() => {
+            const showDistance =
+              activity !== "crossfit_class" &&
+              activity !== "other" &&
+              activity !== "row" &&
+              activity !== "ski_erg";
+            return (
+              <div className={showDistance ? "grid grid-cols-2 gap-2" : ""}>
+                {showDistance ? (
+                  <label className="text-[12px] text-muted">
+                    Distance (km)
+                    <input
+                      type="number"
+                      inputMode="decimal"
+                      step={0.1}
+                      min={0}
+                      max={500}
+                      value={distance}
+                      onChange={(e) => setDistance(e.target.value)}
+                      placeholder="e.g. 5"
+                      className="mt-0.5 block w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+                    />
+                  </label>
+                ) : null}
+                {/* Duration hidden for row/ski_erg — they use the bottom
+                    block Total time instead. Cycle keeps the top duration
+                    because distance + duration is the natural bike pair. */}
+                {activity !== "row" && activity !== "ski_erg" ? (
+                  <div className="text-[12px] text-muted">
+                    Duration
+                    <div className="mt-0.5 flex gap-1 items-center">
+                      <input
+                        type="number"
+                        inputMode="numeric"
+                        step={1}
+                        min={0}
+                        max={600}
+                        value={minutes}
+                        onChange={(e) => setMinutes(e.target.value)}
+                        placeholder="min"
+                        aria-label="Minutes"
+                        className="block w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+                      />
+                      <span className="font-mono text-muted">:</span>
+                      <input
+                        type="number"
+                        inputMode="numeric"
+                        step={1}
+                        min={0}
+                        max={59}
+                        value={seconds}
+                        onChange={(e) => setSeconds(e.target.value)}
+                        placeholder="sec"
+                        aria-label="Seconds"
+                        className="block w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+                      />
+                    </div>
+                  </div>
+                ) : null}
               </div>
-            </div>
-          </div>
+            );
+          })()}
 
           {/* HR — only render for cardio-relevant activities and only when a
               GPX wasn't imported (GPX auto-fills these values). Manual entry
