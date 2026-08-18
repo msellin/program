@@ -1692,5 +1692,40 @@
         "user_action_free": "Do the weekly Zone-2 retest on its scheduled day."
       }
     ]
-  }
+  },
+  "non_responder_classifier": {
+    "variance_source": {
+      "citation_id": "bouchard_1999_heritage",
+      "note": "HERITAGE Family Study documented 47% heritability of VO2max training response and ~10× individual variance in gains under identical prescription. Ross 2015 clarified most 'non-response' at Foundation-tier intensities is actually under-dosing."
+    },
+    "requires_baselines": 2,
+    "primary_signal_metric_id": "submax_hr_bpm",
+    "secondary_signal_metric_ids": [
+      "resting_hr_bpm"
+    ],
+    "patterns": {
+      "under_dosing": {
+        "rule": "primary_signal_delta_at_mid_block < target * 0.4 AND intensity_compliance_pct < 80",
+        "recommendation_key": "increase_intensity_or_frequency",
+        "copy": "Your mid-block submax HR looks flat AND your logged intensity is below 80% of prescribed. Not a genetic ceiling — you're under-dosed. The engine will propose a 4×4 slot in place of your next steady-state to lift the stimulus."
+      },
+      "true_non_response": {
+        "rule": "primary_signal_delta_at_mid_block < target * 0.15 AND intensity_compliance_pct >= 80 AND resting_hr_delta_at_mid_block < 0.1",
+        "recommendation_key": "punt_to_next_arc_or_swap_program",
+        "copy": "You've hit prescribed intensity but the aerobic signals aren't moving. HERITAGE 10× variance in play. Options: (1) finish this block honestly, expect small Push-tier gains; (2) swap to Rowing 2K where task-specific coordination compensates; (3) accept genetic ceiling and move to maintenance."
+      },
+      "responding": {
+        "copy": "Submax HR is trending down as expected. Keep the current prescription — the Week-8 retest will confirm the direction."
+      }
+    }
+  },
+  "retest_metrics_mid_block": [
+    {
+      "metric_id": "submax_hr_bpm",
+      "at_week": 4,
+      "cadence_weeks": 4,
+      "trigger": "user_initiated",
+      "purpose": "First of two HERITAGE-baseline points. Compare against Week-1 baseline to classify response direction before the end-block retest."
+    }
+  ]
 }

@@ -969,5 +969,40 @@
       "url": "https://pubmed.ncbi.nlm.nih.gov/17762369/",
       "verification_status": "verified"
     }
+  ],
+  "non_responder_classifier": {
+    "variance_source": {
+      "citation_id": "bouchard_1999_heritage",
+      "note": "HERITAGE VO2max variance extrapolated to 2K rowing performance. Anaerobic-heavy 2K response tracks aerobic VO2max response with a task-specificity multiplier — trained 2K coordination lifts even non-responders slightly."
+    },
+    "requires_baselines": 2,
+    "primary_signal_metric_id": "threshold_pace_500m",
+    "secondary_signal_metric_ids": [
+      "submax_hr_at_threshold"
+    ],
+    "patterns": {
+      "under_dosing": {
+        "rule": "primary_signal_delta_at_mid_block < target * 0.4 AND session_compliance_pct < 80",
+        "recommendation_key": "add_race_pace_frequency",
+        "copy": "Threshold pace looks flat AND you've missed 20%+ of prescribed sessions. Not a ceiling — you're under-training. The engine will propose swapping a Z2 session for a race-pace session next week."
+      },
+      "true_non_response": {
+        "rule": "primary_signal_delta_at_mid_block < target * 0.15 AND session_compliance_pct >= 80",
+        "recommendation_key": "adjust_test_expectation",
+        "copy": "You've hit prescribed sessions but threshold isn't moving. HERITAGE 10× variance in play. Options: (1) finish honestly, target −3 to −8 seconds on test day rather than −15; (2) extend one more 6-week block and try again; (3) accept the ceiling and move to Push-tier maintenance."
+      },
+      "responding": {
+        "copy": "Threshold pace is trending faster as expected. Keep the current prescription — race-day taper will unlock the last 3-5%."
+      }
+    }
+  },
+  "retest_metrics_mid_block": [
+    {
+      "metric_id": "threshold_pace_500m",
+      "at_week": 3,
+      "cadence_weeks": 3,
+      "trigger": "user_initiated",
+      "purpose": "Half-way check between Week-1 base 2K test and end-block retest. Two baselines feed the classifier."
+    }
   ]
 }

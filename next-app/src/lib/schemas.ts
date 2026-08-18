@@ -514,6 +514,65 @@ export const programSchema = z.object({
    */
   drill_library: z.array(z.string()).optional(),
   /**
+   * HERITAGE non-responder classifier · 2026-08-18.
+   * See dev/active/heritage-non-responder-gate-plan.md.
+   *
+   * Program-agnostic infrastructure — each program declares its own
+   * variance literature + signal metrics + response patterns. Engine
+   * Builder + Rowing 2K populate this today (both invoke HERITAGE at
+   * Push tier). CSM / HSW / OVM can opt in later with their own
+   * variance sources (Schumann 2022 for strength SMD, Šimůnková 2024
+   * for skill acquisition, etc.).
+   *
+   * `patterns` are declarative rule expressions the classifier evaluates
+   * against per-metric baselines. Requires >= 2 baselines per Hecksteden
+   * 2015 — a single Week-N retest can't classify a non-responder honestly.
+   */
+  non_responder_classifier: z
+    .object({
+      variance_source: z.object({
+        citation_id: z.string(),
+        note: z.string().optional(),
+      }),
+      requires_baselines: z.number().int().min(2).default(2),
+      primary_signal_metric_id: z.string(),
+      secondary_signal_metric_ids: z.array(z.string()).optional(),
+      patterns: z.object({
+        under_dosing: z.object({
+          rule: z.string(),
+          recommendation_key: z.string(),
+          copy: z.string(),
+        }),
+        true_non_response: z.object({
+          rule: z.string(),
+          recommendation_key: z.string(),
+          copy: z.string(),
+        }),
+        responding: z.object({
+          rule: z.string().optional(),
+          copy: z.string(),
+        }),
+      }),
+    })
+    .optional(),
+  /**
+   * Mid-block retest metrics — parallel to `retest_metrics` (which fire
+   * at phase_end / waypoint). Mid-block cadence is what makes 2-baseline
+   * classification possible. Read by the non-responder classifier and
+   * surfaced on Today as a proposal card when the retest is due.
+   */
+  retest_metrics_mid_block: z
+    .array(
+      z.object({
+        metric_id: z.string(),
+        at_week: z.number().int().min(1),
+        cadence_weeks: z.number().int().optional(),
+        trigger: z.enum(["user_initiated", "auto"]).default("user_initiated"),
+        purpose: z.string(),
+      }),
+    )
+    .optional(),
+  /**
    * Phase B — Level 3 constraint layer. All fields optional to preserve
    * backward-compat; legacy programs work unchanged. When present, the
    * generator uses these to shape the user's plan against their intake
