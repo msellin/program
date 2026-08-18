@@ -384,8 +384,8 @@ Codemod: `text-[10.5px] → text-[10px]`, `text-[11.5px] → text-[11px]`, `text
 
 Substantive feature/design work — not appropriate for a mechanical sweep. Each needs its own session.
 
-### A1 · Overperformer engine bump
-New engine rule: N consecutive green days + "felt strong" note keyword → propose TM +2.5 kg via a new proposal component. Needs data-shape design for keyword detection in `notes.ts` + adapt rule in `adapt.ts` + a new proposal card. **~2-4h focused session.**
+### A1 · Overperformer engine bump — ✅ DONE
+Shipped in Sitting 1 era; missed in the deferred-list. `evaluateOverperformer` at `adapt.ts:395` checks 3 straight green days + `daySignals(d).easy` (keyword-detected from notes) + not-in-reintro-phase + has-strength-progression, then proposes a TM bump (+2.5 squat / +5 pull-press-DL patterns) capped at 2 heaviest lifts. Wired via `selectTMBump` in `proposals/select.ts`. Keyword regex at `note-signals.ts:35` covers `easy|light|grooved|snappy|smooth|effortless|too easy|felt good|felt great|felt strong` plus Estonian (`kerge|hea tunne|lihtne|sujus`).
 
 ### A2 · Study citations on proposals — ✅ DONE 2026-08-18
 `proposal.citationId` field on `ProposalBase` type + `CitationRef` component renders under each proposal card (ProposalCard.tsx:219-223). Kind → citation lookup in `proposal-citations.ts`. Every proposal kind now cites a real study; HERITAGE cascade adds Bouchard 1999 + Hecksteden 2015 to the pool.
