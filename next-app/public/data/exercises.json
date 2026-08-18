@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "generated": "2026-08-01",
-  "note": "Movement library. Stable across program revisions — program.json references these by id.",
+  "note": "Movement library. Stable across program revisions \u2014 program.json references these by id.",
   "categories": [
     "isometric",
     "activation",
@@ -66,7 +66,7 @@
       },
       "setup": "Supine, leg extended to roughly 30 degrees of hip flexion, hold against a band or partner resistance.",
       "cues": [
-        "Longer lever means more load — only progress here once the seated version is easy and symptom-free"
+        "Longer lever means more load \u2014 only progress here once the seated version is easy and symptom-free"
       ],
       "flags": [
         "approaches_provocative:resisted_slr"
@@ -90,7 +90,7 @@
       },
       "cues": [
         "Knee to roughly 90 degrees only",
-        "Controlled lowering — the lowering phase is where clicking was documented"
+        "Controlled lowering \u2014 the lowering phase is where clicking was documented"
       ],
       "flags": [
         "monitor:click"
@@ -102,7 +102,7 @@
     {
       "id": "adductor_iso_bent",
       "name": "Adductor isometric squeeze, knees bent",
-      "name_et": "Reie lähendajate isomeetriline pigistus",
+      "name_et": "Reie l\u00e4hendajate isomeetriline pigistus",
       "category": "isometric",
       "targets": [
         "adductor"
@@ -165,7 +165,7 @@
     {
       "id": "glute_bridge",
       "name": "Glute bridge",
-      "name_et": "Vaagnatõste",
+      "name_et": "Vaagnat\u00f5ste",
       "category": "activation",
       "targets": [
         "glute_max"
@@ -176,7 +176,7 @@
       },
       "cues": [
         "Ribs down",
-        "Do not arch the lower back to finish the rep — finish with the glute"
+        "Do not arch the lower back to finish the rep \u2014 finish with the glute"
       ],
       "progression": "glute_bridge_single",
       "video_search": "glute bridge form",
@@ -196,7 +196,7 @@
         "extra_set_side": "left"
       },
       "cues": [
-        "Left side first, one extra set on the left — documented left gluteus maximus deficit"
+        "Left side first, one extra set on the left \u2014 documented left gluteus maximus deficit"
       ],
       "progression": "hip_thrust_barbell",
       "regression": "glute_bridge",
@@ -220,7 +220,7 @@
         "Ribs down",
         "Finish with the glute, not the lower back"
       ],
-      "rationale": "Best heavy glute-max builder with essentially zero spinal shear and no lumbar extension moment. The anchor lift — progress it aggressively.",
+      "rationale": "Best heavy glute-max builder with essentially zero spinal shear and no lumbar extension moment. The anchor lift \u2014 progress it aggressively.",
       "regression": "glute_bridge_single",
       "video_search": "barbell hip thrust technique",
       "video_url": "https://www.youtube.com/watch?v=lBZZFJ6Z3Dg"
@@ -242,7 +242,7 @@
         "Lower back stays flat against the floor throughout",
         "If it lifts, shorten the range"
       ],
-      "rationale": "Anti-extension trunk work — the single most relevant home exercise for the Bertolotti segment.",
+      "rationale": "Anti-extension trunk work \u2014 the single most relevant home exercise for the Bertolotti segment.",
       "video_search": "dead bug exercise form",
       "video_url": "https://www.youtube.com/watch?v=GbSC02oU3To"
     },
@@ -279,7 +279,7 @@
       "cues": [
         "Dumbbells at your sides, or front-racked",
         "Front foot far enough forward that the shin stays fairly vertical",
-        "Knee tracks over the toe — knee caving inward is FADIR under load"
+        "Knee tracks over the toe \u2014 knee caving inward is FADIR under load"
       ],
       "flags": [
         "monitor:knee_valgus"
@@ -359,11 +359,11 @@
         "progression_model": "tm_based"
       },
       "cues": [
-        "Bar sits on the traps, not the rear delts — low-bar rack position is OFF the menu due to shoulder retroversion",
+        "Bar sits on the traps, not the rear delts \u2014 low-bar rack position is OFF the menu due to shoulder retroversion",
         "Upright torso, knees out, controlled descent",
         "If the grip aggravates the right shoulder, take a wider grip or use lifting straps around the bar"
       ],
-      "rationale": "Primary working squat variant. High-bar produces a more vertical torso than low-bar and a smaller lumbar extension moment — safer over a Bertolotti segment. It's also the version this user can rack given the posterior shoulder pathology.",
+      "rationale": "Primary working squat variant. High-bar produces a more vertical torso than low-bar and a smaller lumbar extension moment \u2014 safer over a Bertolotti segment. It's also the version this user can rack given the posterior shoulder pathology.",
       "flags": [
         "historical_provocateur",
         "shoulder_load:grip"
@@ -386,7 +386,7 @@
         "progression_model": "tm_based"
       },
       "cues": [
-        "SSB handles in front — no shoulder external rotation required to rack the bar",
+        "SSB handles in front \u2014 no shoulder external rotation required to rack the bar",
         "The camber pushes you forward, so brace hard and stay upright"
       ],
       "rationale": "The friendliest heavy squat variant for this shoulder. If the box has one, prefer SSB for the main squat slot until the shoulder is a solved problem.",
@@ -410,8 +410,8 @@
       },
       "cues": [
         "Dumbbells at your sides",
-        "Front shin close to vertical — knee-forward drive loads the labrum",
-        "Left side gets the extra set — documented left glute-max and left hip-flexor deficit"
+        "Front shin close to vertical \u2014 knee-forward drive loads the labrum",
+        "Left side gets the extra set \u2014 documented left glute-max and left hip-flexor deficit"
       ],
       "prerequisite": "split_squat_rfe",
       "flags": [
@@ -515,7 +515,7 @@
       "cues": [
         "Bodyweight or empty bar only",
         "Slow tempo, full depth without pain, focus on knees tracking over toes",
-        "This is technique work and joint nutrition, NOT stimulus — do not chase fatigue"
+        "This is technique work and joint nutrition, NOT stimulus \u2014 do not chase fatigue"
       ],
       "rationale": "Frequency practice. The research signal on daily squatting is that it produces better technique and consistency, not more hypertrophy. Treat it as skill practice.",
       "video_search": "air squat form",
@@ -558,7 +558,7 @@
         "Heavy weight in one hand only",
         "Stay tall, ribs down, do not lean toward the load"
       ],
-      "rationale": "Anti-lateral-flexion + anti-rotation loaded carry — direct fit for the left transitional segment.",
+      "rationale": "Anti-lateral-flexion + anti-rotation loaded carry \u2014 direct fit for the left transitional segment.",
       "video_search": "suitcase carry technique",
       "video_url": "https://www.youtube.com/watch?v=y-hn_Ha1-RE"
     },
@@ -662,7 +662,7 @@
         "Squeeze the glute of the kneeling leg",
         "Only lean until you feel a mild stretch"
       ],
-      "warning": "You should feel it in the front of the thigh, not deep in the groin or the front of the hip joint. Deep anterior hip pinching means you are loading the labrum — back off immediately.",
+      "warning": "You should feel it in the front of the thigh, not deep in the groin or the front of the hip joint. Deep anterior hip pinching means you are loading the labrum \u2014 back off immediately.",
       "video_search": "half kneeling hip flexor stretch posterior pelvic tilt",
       "video_url": "https://www.youtube.com/watch?v=HxlWP5BG2EU"
     },
@@ -715,7 +715,7 @@
         "per_side": true
       },
       "cues": [
-        "Small range — this is a primer, not a stretch"
+        "Small range \u2014 this is a primer, not a stretch"
       ],
       "video_search": "controlled leg swings warm up",
       "video_url": "https://www.youtube.com/watch?v=korxBhGzzJE"
@@ -774,7 +774,7 @@
       "cues": [
         "Nose-breathing pace, or 'you could hold a conversation in full sentences'",
         "Heart rate 60-70% max, RPE 3-4/10",
-        "Cadence steady, form clean — this is not a slog to grind out"
+        "Cadence steady, form clean \u2014 this is not a slog to grind out"
       ],
       "rationale": "Zone 1/2 steady-state builds mitochondrial density, capillary networks, and fat oxidation. It is the largest single driver of aerobic capacity across the whole 3-block arc. Boring and non-negotiable.",
       "notes": "If you finish and want to keep going, you were probably at the right effort. If you finish gassed, you went too hard.",
@@ -795,7 +795,7 @@
       "setup": "Warm up 10-12 min including 2 x 30s pickups. Then hold a comfortably hard, sustainable pace for the prescribed block. Cool down 5 min.",
       "cues": [
         "83-88% of VDOT pace / 88-94% of FTP / 82-87% HRmax",
-        "'Comfortably hard' — you could talk in short sentences, not full paragraphs",
+        "'Comfortably hard' \u2014 you could talk in short sentences, not full paragraphs",
         "If you can't finish the block at the same pace you started, back off next time"
       ],
       "rationale": "Sub-threshold sustained work drives mitochondrial biogenesis and lifts the lactate curve without generating the fatigue cost of true threshold intervals. Sits between Z2 and Norwegian 4x4 in the arc.",
@@ -819,7 +819,7 @@
       "cues": [
         "85-90% HRmax, RPE 7/10",
         "The pace you could hold for a hard hour",
-        "Even splits across sets — if set 3 is 10s slower than set 1, you started too hot"
+        "Even splits across sets \u2014 if set 3 is 10s slower than set 1, you started too hot"
       ],
       "rationale": "Longer sub-VO2max intervals raise lactate clearance capacity and central cardiac output without the recovery hit of 4x4. Complements the Norwegian block by widening the sub-threshold plateau.",
       "video_search": "threshold intervals training",
@@ -840,12 +840,12 @@
       },
       "setup": "Warm up 12-15 min including 3 x 30s pickups. 4 x 4 minutes at 90-95% HRmax with 3 minutes of active recovery (very easy) between. Cool down 8-10 min.",
       "cues": [
-        "First minute is a lie — pace should feel comfortable, then progressively hurt",
+        "First minute is a lie \u2014 pace should feel comfortable, then progressively hurt",
         "By interval 3-4, HR should sit in the top window from about minute 2 onwards",
         "Active recovery is easy pedal / stride / stroke, not a full stop"
       ],
       "rationale": "The single best-studied VO2max protocol (Helgerud 2007). Time-in-zone at 90-95% HRmax drives stroke volume adaptation faster than any other interval structure of comparable duration.",
-      "notes": "This session costs more recovery than any other in Block 1. Never place it within 48 h of another hard session. If HR won't come up on set 1, you're too tired — swap to Z1 and try again in 48 h.",
+      "notes": "This session costs more recovery than any other in Block 1. Never place it within 48 h of another hard session. If HR won't come up on set 1, you're too tired \u2014 swap to Z1 and try again in 48 h.",
       "video_search": "norwegian 4x4 vo2max intervals",
       "video_url": "https://www.youtube.com/watch?v=CQXjaLp15UI"
     },
@@ -866,7 +866,7 @@
         "HR under 65% max",
         "If it feels like a workout, back off"
       ],
-      "rationale": "Recovery sessions accelerate lactate clearance and glycogen replenishment vs total rest, without adding fatigue cost. Sits in the same category as the daily home block for legs — protective, not productive.",
+      "rationale": "Recovery sessions accelerate lactate clearance and glycogen replenishment vs total rest, without adding fatigue cost. Sits in the same category as the daily home block for legs \u2014 protective, not productive.",
       "video_search": "recovery ride how easy",
       "video_url": "https://www.youtube.com/watch?v=vHXY4vsK4gw"
     },
@@ -880,10 +880,10 @@
       "default": {
         "minutes": 30
       },
-      "setup": "Repeat whichever benchmarks you set at intake. In order: (1) resting HR — take before getting out of bed; (2) 5-min submax HR at the same easy pace you used at intake; (3) 500m row TT if you rowed at intake; (4) 1km run TT if you ran at intake. Space TTs by at least 15 min of easy spin.",
+      "setup": "Repeat whichever benchmarks you set at intake. In order: (1) resting HR \u2014 take before getting out of bed; (2) 5-min submax HR at the same easy pace you used at intake; (3) 500m row TT if you rowed at intake; (4) 1km run TT if you ran at intake. Space TTs by at least 15 min of easy spin.",
       "cues": [
         "Same modality, same equipment, same time of day if you can",
-        "Not every metric will apply — record what you can do",
+        "Not every metric will apply \u2014 record what you can do",
         "Rest HR + submax HR at fixed pace are always measurable and the most sensitive early indicators"
       ],
       "rationale": "Same protocol at start and end so the delta means something. Rest HR drop and submax HR drop at the same pace are the two cleanest indicators of aerobic adaptation in 8 weeks."
@@ -949,7 +949,7 @@
       ],
       "cues_external_focus": [
         "Push the floor away smoothly, like closing a heavy drawer",
-        "Land quietly on the backs of the hands — no slap"
+        "Land quietly on the backs of the hands \u2014 no slap"
       ],
       "cues_internal_focus": [],
       "feedback_type": "self_controlled",
@@ -977,7 +977,7 @@
       "targets": [
         "general"
       ],
-      "setup": "On all fours or in a plank, press hands flat then lift the fingers off the floor one at a time (thumb → pinky) and back. Keep palm pressure through the heel of the hand.",
+      "setup": "On all fours or in a plank, press hands flat then lift the fingers off the floor one at a time (thumb \u2192 pinky) and back. Keep palm pressure through the heel of the hand.",
       "capability_domains": [
         "wrist_load_tolerance"
       ],
@@ -1019,7 +1019,7 @@
       "level": 2,
       "prerequisites": [],
       "cues_external_focus": [
-        "Drum the wall like a piano — light, even, no thump",
+        "Drum the wall like a piano \u2014 light, even, no thump",
         "Hold your ribs stacked over your hips as if a book balanced on your chest"
       ],
       "cues_internal_focus": [],
@@ -1056,7 +1056,7 @@
       "prerequisites": [],
       "cues_external_focus": [
         "Press the small of your back into the floor like you're pinning a card there",
-        "Aim fingertips at one wall and toes at the opposite wall — long line"
+        "Aim fingertips at one wall and toes at the opposite wall \u2014 long line"
       ],
       "cues_internal_focus": [],
       "feedback_type": "KP",
@@ -1097,7 +1097,7 @@
         }
       ],
       "cues_external_focus": [
-        "Rock the whole shape like a rocking chair — no wobble in the middle",
+        "Rock the whole shape like a rocking chair \u2014 no wobble in the middle",
         "Keep the low back glued to the floor at the bottom of every rock"
       ],
       "cues_internal_focus": [],
@@ -1155,7 +1155,7 @@
     },
     {
       "id": "hs_incline_90_hold",
-      "name": "Kinoshita position 1 — 90 degree incline hold",
+      "name": "Kinoshita position 1 \u2014 90 degree incline hold",
       "category": "skill",
       "targets": [
         "general"
@@ -1201,7 +1201,7 @@
     },
     {
       "id": "hs_incline_135_hold",
-      "name": "Kinoshita position 2 — 135 degree incline hold",
+      "name": "Kinoshita position 2 \u2014 135 degree incline hold",
       "category": "skill",
       "targets": [
         "general"
@@ -1255,7 +1255,7 @@
     },
     {
       "id": "hs_elbow_stand_straddle_l",
-      "name": "Kinoshita position 3 — elbow stand / straddle L stand",
+      "name": "Kinoshita position 3 \u2014 elbow stand / straddle L stand",
       "category": "skill",
       "targets": [
         "general"
@@ -1283,7 +1283,7 @@
         }
       ],
       "cues_external_focus": [
-        "Push the floor down toward China — long arms, high shoulders",
+        "Push the floor down toward China \u2014 long arms, high shoulders",
         "Spread your feet toward opposite corners of the ceiling"
       ],
       "cues_internal_focus": [],
@@ -1352,7 +1352,7 @@
     },
     {
       "id": "hs_wall_hs_hold_chest",
-      "name": "Wall handstand hold — chest to wall",
+      "name": "Wall handstand hold \u2014 chest to wall",
       "category": "skill",
       "targets": [
         "general"
@@ -1388,7 +1388,7 @@
         }
       ],
       "cues_external_focus": [
-        "Push the floor away — imagine growing an inch taller against the wall",
+        "Push the floor away \u2014 imagine growing an inch taller against the wall",
         "Point the toes at the light fixture overhead, not at your own heels"
       ],
       "cues_internal_focus": [],
@@ -1412,12 +1412,12 @@
     },
     {
       "id": "hs_wall_hs_hold_belly",
-      "name": "Wall handstand hold — belly to wall (kick-up)",
+      "name": "Wall handstand hold \u2014 belly to wall (kick-up)",
       "category": "skill",
       "targets": [
         "general"
       ],
-      "setup": "Kick up to a handstand back-to-wall, heels lightly touching wall. Wrist strategy dominates balance here (Kerwin & Trewartha 2001) — press fingers or heels of palms to adjust.",
+      "setup": "Kick up to a handstand back-to-wall, heels lightly touching wall. Wrist strategy dominates balance here (Kerwin & Trewartha 2001) \u2014 press fingers or heels of palms to adjust.",
       "capability_domains": [
         "handstand_hold_static",
         "shoulder_overhead_endurance",
@@ -1434,7 +1434,7 @@
       ],
       "cues_external_focus": [
         "Press fingertips into the floor when you feel the toes drift away from the wall",
-        "Point toes to the ceiling — long line from wrists to heels"
+        "Point toes to the ceiling \u2014 long line from wrists to heels"
       ],
       "cues_internal_focus": [],
       "feedback_type": "self_controlled",
@@ -1526,7 +1526,7 @@
       ],
       "cues_external_focus": [
         "Shift over the loaded hand as slowly as pouring honey",
-        "Tap and place softly — no rush back to the floor"
+        "Tap and place softly \u2014 no rush back to the floor"
       ],
       "cues_internal_focus": [],
       "feedback_type": "self_controlled",
@@ -1643,7 +1643,7 @@
       "targets": [
         "general"
       ],
-      "setup": "Freestanding with knees tucked to chest. Reduces the moment of inertia so balance is easier — a bridging step for early freestanders.",
+      "setup": "Freestanding with knees tucked to chest. Reduces the moment of inertia so balance is easier \u2014 a bridging step for early freestanders.",
       "capability_domains": [
         "handstand_hold_static"
       ],
@@ -1864,7 +1864,7 @@
       "targets": [
         "general"
       ],
-      "setup": "Chest-to-wall handstand. Walk hands around 180 degrees to end back-to-wall (or vice versa). Slow, controlled — this is the turn pattern in half-scale.",
+      "setup": "Chest-to-wall handstand. Walk hands around 180 degrees to end back-to-wall (or vice versa). Slow, controlled \u2014 this is the turn pattern in half-scale.",
       "capability_domains": [
         "handstand_turns",
         "handstand_hold_static",
@@ -1880,7 +1880,7 @@
         }
       ],
       "cues_external_focus": [
-        "Walk your hands around the clock face slowly — one o'clock, two o'clock",
+        "Walk your hands around the clock face slowly \u2014 one o'clock, two o'clock",
         "Keep the crown of your head over the same tile the whole turn"
       ],
       "cues_internal_focus": [],
@@ -1909,7 +1909,7 @@
       "targets": [
         "general"
       ],
-      "setup": "From a freestanding handstand, turn 180 degrees on the hands and continue. Advanced skill — attempt with a spotter or over a soft mat.",
+      "setup": "From a freestanding handstand, turn 180 degrees on the hands and continue. Advanced skill \u2014 attempt with a spotter or over a soft mat.",
       "capability_domains": [
         "handstand_turns",
         "handstand_hold_static",
@@ -2110,7 +2110,7 @@
       ],
       "cues_external_focus": [
         "Track the two tape lines like train tracks running under you",
-        "Land each hand between the lines — quiet and precise"
+        "Land each hand between the lines \u2014 quiet and precise"
       ],
       "cues_internal_focus": [],
       "feedback_type": "self_controlled",
@@ -2220,7 +2220,7 @@
       "prerequisites": [],
       "cues_external_focus": [
         "Watch the shape against the vertical line of the wall in the clip",
-        "Pick one thing to change on the next attempt — no more"
+        "Pick one thing to change on the next attempt \u2014 no more"
       ],
       "cues_internal_focus": [],
       "feedback_type": "self_controlled",
@@ -2258,11 +2258,11 @@
       "setup": "Facing away from the wall in a chest-to-wall handstand. Have a soft crash pad or thick yoga mat under your hands and forward landing zone.",
       "cues": [
         "Rotate hips to one side, drop the same-side arm and let the same-side leg peel off the wall",
-        "Land on the same-side foot, then the other — like a slow cartwheel out",
-        "Point your foot at the far corner of the mat as you land — external target reduces panic (Wulf 2013)",
+        "Land on the same-side foot, then the other \u2014 like a slow cartwheel out",
+        "Point your foot at the far corner of the mat as you land \u2014 external target reduces panic (Wulf 2013)",
         "First few reps: do it deliberately from a controlled hold; don't wait for a real over-tip"
       ],
-      "safety": "Do NOT try to catch yourself on the wall as you come down — the wall is not where the escape route lives; you exit sideways.",
+      "safety": "Do NOT try to catch yourself on the wall as you come down \u2014 the wall is not where the escape route lives; you exit sideways.",
       "video_demo_url_placeholder": true
     },
     {
@@ -2281,11 +2281,11 @@
       "setup": "Chest-to-wall handstand. Both hands stay on the ground for the whole exit.",
       "cues": [
         "Twist upper body 90 degrees to one side",
-        "Follow with hips — pull one leg down toward that foot's landing spot",
+        "Follow with hips \u2014 pull one leg down toward that foot's landing spot",
         "Land on the closer foot first, then the other; hands leave the ground last",
         "External-focus cue: 'point your chest at the wall to your left/right'"
       ],
-      "safety": "If you feel any wrist twinge on the twist itself — stop. This is a shoulder + hip rotation, not a wrist rotation.",
+      "safety": "If you feel any wrist twinge on the twist itself \u2014 stop. This is a shoulder + hip rotation, not a wrist rotation.",
       "video_demo_url_placeholder": true
     },
     {
@@ -2300,14 +2300,14 @@
         "sets": 4,
         "reps_per_set": 3
       },
-      "setup": "Start in crow pose (bakasana) — knees on triceps, feet off ground, hands wide. Mat under head/back.",
+      "setup": "Start in crow pose (bakasana) \u2014 knees on triceps, feet off ground, hands wide. Mat under head/back.",
       "cues": [
-        "Tuck chin all the way to chest FIRST — this is the whole safety of the movement",
+        "Tuck chin all the way to chest FIRST \u2014 this is the whole safety of the movement",
         "Round the upper back, roll forward onto shoulders",
-        "Do NOT push off the ground with your hands as you roll — let the momentum do it",
+        "Do NOT push off the ground with your hands as you roll \u2014 let the momentum do it",
         "Come up to a seated position; stand up if the roll had enough momentum"
       ],
-      "safety": "This is a FORWARD escape route. If you feel any neck strain, stop — chin-to-chest tuck is doing most of the work; if that's not comfortable, the roll isn't ready. Regress to seated forward rolls until it is.",
+      "safety": "This is a FORWARD escape route. If you feel any neck strain, stop \u2014 chin-to-chest tuck is doing most of the work; if that's not comfortable, the roll isn't ready. Regress to seated forward rolls until it is.",
       "video_demo_url_placeholder": true
     },
     {
@@ -2326,14 +2326,415 @@
       "setup": "Chest-to-wall handstand over a crash mat (2-4 inch foam) or thick folded yoga mat (>= 1 inch). NOT a hard floor.",
       "cues": [
         "Get to a stable wall handstand",
-        "Choose your exit direction (side — one of the two you drilled above)",
-        "Let go — do NOT try to hold on. On your first few reps this will feel wrong; that's the point",
-        "EXHALE audibly on impact — 'ha' or 'ho' works. Passive breath = tight body = worse landing",
+        "Choose your exit direction (side \u2014 one of the two you drilled above)",
+        "Let go \u2014 do NOT try to hold on. On your first few reps this will feel wrong; that's the point",
+        "EXHALE audibly on impact \u2014 'ha' or 'ho' works. Passive breath = tight body = worse landing",
         "Six reps. If any of them feels bad, stop and switch back to cartwheel exits for a week"
       ],
-      "safety": "Never do this without a mat. Never do it exhausted. Never do it after any wrist or shoulder pain today. The whole point is to prove to your body that a controlled fall is a non-event — a bad rep undermines the whole exercise.",
-      "rationale": "Bandura self-efficacy: mastery experiences on the FEARED thing (not on a proxy) reduce threat perception on the primary skill. The exhale-on-impact cue borrows from parachutist training — passive-exhale is the anti-freeze response.",
+      "safety": "Never do this without a mat. Never do it exhausted. Never do it after any wrist or shoulder pain today. The whole point is to prove to your body that a controlled fall is a non-event \u2014 a bad rep undermines the whole exercise.",
+      "rationale": "Bandura self-efficacy: mastery experiences on the FEARED thing (not on a proxy) reduce threat perception on the primary skill. The exhale-on-impact cue borrows from parachutist training \u2014 passive-exhale is the anti-freeze response.",
       "video_demo_url_placeholder": true
+    },
+    {
+      "id": "om_foam_roller_thoracic_ext",
+      "name": "Foam roller thoracic extension",
+      "category": "mobility",
+      "targets": [
+        "general"
+      ],
+      "setup": "Lie supine with a foam roller under the mid-back at bra-line height. Hands behind head, elbows soft. Slowly extend the spine over the roller for 5 breaths, then shift 2cm up, repeat, until you reach the base of the neck.",
+      "capability_domains": [
+        "thoracic_extension_mobility"
+      ],
+      "level": 1,
+      "prerequisites": [],
+      "cues_external_focus": [
+        "Let the ceiling pull your chest up between the arms",
+        "Fingertips reach toward the wall behind your head"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "default_dose": {
+        "sets": 2,
+        "reps": 5,
+        "duration_s": 90
+      },
+      "rest_between_s": 20,
+      "evidence_refs": [
+        "ludewig_2009",
+        "wulf_shea_2002"
+      ],
+      "video_search": "foam roller thoracic extension mobility"
+    },
+    {
+      "id": "om_quadruped_thoracic_rotation",
+      "name": "Quadruped thread-the-needle rotation",
+      "category": "mobility",
+      "targets": [
+        "general"
+      ],
+      "setup": "On hands and knees, right hand behind head. Rotate right elbow toward the ceiling, then slowly reverse under the left arm. 6 slow reps each side.",
+      "capability_domains": [
+        "thoracic_extension_mobility",
+        "scap_upward_rotation"
+      ],
+      "level": 1,
+      "prerequisites": [],
+      "cues_external_focus": [
+        "Point your elbow at the corner where the ceiling meets the wall behind you"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "default_dose": {
+        "sets": 2,
+        "reps": 6
+      },
+      "rest_between_s": 15,
+      "evidence_refs": [
+        "ludewig_2000",
+        "porter_wu_partridge_2010"
+      ],
+      "video_search": "quadruped thread the needle thoracic rotation"
+    },
+    {
+      "id": "om_wall_slides",
+      "name": "Wall slides (scap upward rotation)",
+      "category": "mobility",
+      "targets": [
+        "general"
+      ],
+      "setup": "Stand with heels, hips, upper back, and back of hands touching a wall. Elbows at 90\u00b0. Slide arms up until you feel the wall press back, then return. Keep the low back flat.",
+      "capability_domains": [
+        "scap_upward_rotation",
+        "shoulder_flexion_active"
+      ],
+      "level": 1,
+      "prerequisites": [],
+      "cues_external_focus": [
+        "Paint a smooth vertical stripe up the wall with the back of your hands",
+        "Keep the wall pressing evenly along both forearms"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "default_dose": {
+        "sets": 3,
+        "reps": 10
+      },
+      "rest_between_s": 20,
+      "evidence_refs": [
+        "ludewig_2009",
+        "reinold_2007"
+      ],
+      "video_search": "wall slides shoulder mobility exercise"
+    },
+    {
+      "id": "om_prone_y_raise",
+      "name": "Prone Y raise",
+      "category": "mobility",
+      "targets": [
+        "general"
+      ],
+      "setup": "Lie face down, arms out overhead in a Y (30\u00b0 above horizontal), thumbs up. Raise both arms off the floor 2-3 inches, hold 2 seconds, lower slow.",
+      "capability_domains": [
+        "scap_upward_rotation"
+      ],
+      "level": 2,
+      "prerequisites": [],
+      "cues_external_focus": [
+        "Reach both thumbs toward the two upper corners of the room"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "default_dose": {
+        "sets": 2,
+        "reps": 10
+      },
+      "rest_between_s": 30,
+      "evidence_refs": [
+        "reinold_2007",
+        "wulf_shea_2002"
+      ],
+      "video_search": "prone Y raise shoulder exercise"
+    },
+    {
+      "id": "om_kb_arm_bar",
+      "name": "Kettlebell arm bar",
+      "category": "mobility",
+      "targets": [
+        "general"
+      ],
+      "setup": "Lie supine with a light KB pressed straight up. Roll onto the opposite hip while keeping the KB straight overhead. Hold 20-30 seconds each side.",
+      "capability_domains": [
+        "scap_upward_rotation",
+        "shoulder_flexion_loaded"
+      ],
+      "level": 3,
+      "prerequisites": [
+        {
+          "capability_domain": "shoulder_flexion_active",
+          "minimum_level": 2,
+          "rationale": "load_tolerance",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Punch the ceiling with the bottom of the kettlebell"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "default_dose": {
+        "sets": 2,
+        "duration_s": 30
+      },
+      "rest_between_s": 30,
+      "evidence_refs": [
+        "reinold_2007",
+        "marchant_2011"
+      ],
+      "video_search": "kettlebell arm bar mobility drill"
+    },
+    {
+      "id": "om_supine_dowel_pullover",
+      "name": "Supine dowel pullover stretch",
+      "category": "mobility",
+      "targets": [
+        "general"
+      ],
+      "setup": "Lie supine, knees bent, low back flat. Grip a dowel shoulder-width. Lower it slowly overhead as far as it goes without arching. Pause 3 breaths at end range. Return.",
+      "capability_domains": [
+        "shoulder_flexion_passive"
+      ],
+      "level": 1,
+      "prerequisites": [],
+      "cues_external_focus": [
+        "Let the dowel touch the floor behind your head"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "default_dose": {
+        "sets": 3,
+        "reps": 8
+      },
+      "rest_between_s": 20,
+      "evidence_refs": [
+        "ludewig_2009",
+        "porter_wu_partridge_2010"
+      ],
+      "video_search": "supine dowel pullover stretch shoulder"
+    },
+    {
+      "id": "om_passive_bar_hang",
+      "name": "Passive bar hang",
+      "category": "mobility",
+      "targets": [
+        "general"
+      ],
+      "setup": "Hang from a pull-up bar with a relaxed grip. Let the ribcage sink through the shoulders. If you can't support full BW, use a box for partial unloading.",
+      "capability_domains": [
+        "shoulder_flexion_passive"
+      ],
+      "level": 2,
+      "prerequisites": [
+        {
+          "capability_domain": "shoulder_flexion_passive",
+          "minimum_level": 1,
+          "rationale": "load_tolerance",
+          "source": "engineering"
+        }
+      ],
+      "cues_external_focus": [
+        "Let your ribs sink between your ears",
+        "Reach the ceiling with the bar in your hands"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "default_dose": {
+        "sets": 3,
+        "duration_s": 30
+      },
+      "rest_between_s": 60,
+      "evidence_refs": [
+        "kelly_starrett_2015",
+        "wulf_shea_2002"
+      ],
+      "video_search": "passive dead hang mobility"
+    },
+    {
+      "id": "om_half_kneeling_dowel_press",
+      "name": "Half-kneeling dowel press",
+      "category": "mobility",
+      "targets": [
+        "general"
+      ],
+      "setup": "Half-kneeling with the front foot flat, back knee under hip. Press a light dowel overhead with elbows locking straight and biceps by the ears. Return slow.",
+      "capability_domains": [
+        "shoulder_flexion_active"
+      ],
+      "level": 2,
+      "prerequisites": [],
+      "cues_external_focus": [
+        "Punch both hands at the ceiling directly overhead"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "default_dose": {
+        "sets": 3,
+        "reps": 10
+      },
+      "rest_between_s": 45,
+      "evidence_refs": [
+        "reinold_2007",
+        "marchant_2011"
+      ],
+      "video_search": "half kneeling overhead dowel press"
+    },
+    {
+      "id": "om_bottom_up_kb_press",
+      "name": "Bottoms-up kettlebell press",
+      "category": "mobility",
+      "targets": [
+        "general"
+      ],
+      "setup": "Half-kneeling, holding a light KB by the handle with the ball inverted. Press straight overhead without letting the KB tip. Slow lower.",
+      "capability_domains": [
+        "shoulder_flexion_active",
+        "scap_upward_rotation"
+      ],
+      "level": 3,
+      "prerequisites": [
+        {
+          "capability_domain": "shoulder_flexion_active",
+          "minimum_level": 2,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Aim the bell at the ceiling like it's balancing on a pin"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "default_dose": {
+        "sets": 3,
+        "reps": 6
+      },
+      "rest_between_s": 60,
+      "evidence_refs": [
+        "reinold_2007",
+        "porter_wu_partridge_2010"
+      ],
+      "video_search": "bottoms up kettlebell press exercise"
+    },
+    {
+      "id": "om_empty_bar_ohs",
+      "name": "Empty bar overhead squat",
+      "category": "mobility",
+      "targets": [
+        "general"
+      ],
+      "setup": "Snatch-grip overhead with empty bar. Squat to parallel keeping the bar over the ears. Slow tempo. Feet flat, knees track toes.",
+      "capability_domains": [
+        "shoulder_flexion_loaded",
+        "overhead_endurance"
+      ],
+      "level": 3,
+      "prerequisites": [
+        {
+          "capability_domain": "shoulder_flexion_active",
+          "minimum_level": 3,
+          "rationale": "load_tolerance",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Push the floor away with your feet to stand up",
+        "Aim the bar at the ceiling stripe above you"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "default_dose": {
+        "sets": 4,
+        "reps": 5
+      },
+      "rest_between_s": 90,
+      "evidence_refs": [
+        "marchant_2011",
+        "wulf_2013"
+      ],
+      "video_search": "empty bar overhead squat technique"
+    },
+    {
+      "id": "om_snatch_grip_sotts_press",
+      "name": "Snatch-grip Sotts press",
+      "category": "mobility",
+      "targets": [
+        "general"
+      ],
+      "setup": "Bottom of an overhead squat, snatch grip. Press an empty bar (or dowel to start) straight up from the back-rack. Slow tempo. Stay in the hole.",
+      "capability_domains": [
+        "shoulder_flexion_loaded"
+      ],
+      "level": 4,
+      "prerequisites": [
+        {
+          "capability_domain": "shoulder_flexion_loaded",
+          "minimum_level": 3,
+          "rationale": "coordination_prerequisite",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Drive the bar toward the ceiling stripe overhead",
+        "Push the floor down with your feet while the bar goes up"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "default_dose": {
+        "sets": 3,
+        "reps": 5
+      },
+      "rest_between_s": 90,
+      "evidence_refs": [
+        "marchant_2011",
+        "reinold_2007"
+      ],
+      "video_search": "snatch grip Sotts press olympic weightlifting"
+    },
+    {
+      "id": "om_tgu_hold",
+      "name": "Turkish get-up half-hold",
+      "category": "mobility",
+      "targets": [
+        "general"
+      ],
+      "setup": "Standing lunge with a light KB pressed overhead. Hold with the arm straight, wrist locked. Alternate legs each set.",
+      "capability_domains": [
+        "overhead_endurance"
+      ],
+      "level": 3,
+      "prerequisites": [
+        {
+          "capability_domain": "shoulder_flexion_loaded",
+          "minimum_level": 2,
+          "rationale": "load_tolerance",
+          "source": "coaching_consensus"
+        }
+      ],
+      "cues_external_focus": [
+        "Keep the KB punching the ceiling as you stand tall"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "self_controlled",
+      "default_dose": {
+        "sets": 3,
+        "duration_s": 30
+      },
+      "rest_between_s": 60,
+      "evidence_refs": [
+        "reinold_2007",
+        "wulf_2013"
+      ],
+      "video_search": "turkish get up overhead hold"
     }
   ],
   "class_modifications": [
@@ -2356,7 +2757,7 @@
     },
     {
       "avoid": "Kipping pull-ups, bar muscle-ups",
-      "reason": "Shoulder — SLAP plus posterior labrum plus spinoglenoid ganglion cyst.",
+      "reason": "Shoulder \u2014 SLAP plus posterior labrum plus spinoglenoid ganglion cyst.",
       "substitute": [
         "strict pull-up",
         "ring row"
@@ -2380,7 +2781,7 @@
     },
     {
       "modify": "Deep squat under fatigue",
-      "reason": "Knees caving equals flexion plus adduction plus internal rotation under load — the positive test position.",
+      "reason": "Knees caving equals flexion plus adduction plus internal rotation under load \u2014 the positive test position.",
       "action": "Cue knees out, reduce depth when form degrades"
     },
     {

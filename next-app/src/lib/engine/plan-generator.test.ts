@@ -262,6 +262,64 @@ describe("F-105 · prerequisite filtering", () => {
   });
 });
 
+describe("#64 · Overhead Mobility multi-dim wiring", () => {
+  const program = loadProgram("overhead-mobility");
+  const exs = JSON.parse(
+    fs.readFileSync(
+      path.resolve(__dirname, "../../../public/data/exercises.json"),
+      "utf8",
+    ),
+  ) as { exercises: Exercise[] };
+  const drillsById = Object.fromEntries(exs.exercises.map((e) => [e.id, e]));
+
+  // Program starts 2026-08-13 (phase 1). Monday inside phase 1:
+  const monISO = "2026-08-17";
+
+  function profileWith(tier: string): Store["user_profile"] {
+    return {
+      active_program_id: "overhead-mobility",
+      program_states: { "overhead-mobility": { tier } },
+    };
+  }
+
+  it("uses multi_dimensional strategy", () => {
+    expect(program.generation_strategy).toBe("multi_dimensional");
+  });
+
+  it("composes thoracic drills into block_thoracic_prep at Foundation tier", () => {
+    const blocks = blocksForDate(program, profileWith("foundation"), undefined, monISO, drillsById);
+    const thoracic = blocks.find((b) => b.id === "block_thoracic_prep");
+    expect(thoracic).toBeDefined();
+    expect(thoracic!.items).toBeDefined();
+    expect(thoracic!.items!.length).toBeGreaterThan(0);
+    // Every composed drill must target the thoracic slot
+    for (const it of thoracic!.items ?? []) {
+      if (!it.exercise_id) continue;
+      const d = drillsById[it.exercise_id];
+      expect(d.capability_domains).toContain("thoracic_extension_mobility");
+    }
+  });
+
+  it("attaches an external-focus cue as note on composed drills", () => {
+    const blocks = blocksForDate(program, profileWith("foundation"), undefined, monISO, drillsById);
+    const thoracic = blocks.find((b) => b.id === "block_thoracic_prep");
+    const withNote = (thoracic?.items ?? []).filter((it) => it.note);
+    expect(withNote.length).toBeGreaterThan(0);
+  });
+
+  it("Foundation-tier user gets level 1-2 drills (not the loaded overhead ones)", () => {
+    const blocks = blocksForDate(program, profileWith("foundation"), undefined, monISO, drillsById);
+    for (const b of blocks) {
+      for (const it of b.items ?? []) {
+        if (!it.exercise_id) continue;
+        const drill = drillsById[it.exercise_id];
+        // Foundation baseline level = 1; composeSlotDrills targets ±1
+        expect(drill.level).toBeLessThanOrEqual(2);
+      }
+    }
+  });
+});
+
 describe("F-105 M2 · composeSlotDrills", () => {
   const program = JSON.parse(
     fs.readFileSync(
