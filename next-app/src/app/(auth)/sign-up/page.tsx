@@ -3,6 +3,7 @@
 import { useState, FormEvent } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { GoogleAuthButton } from "@/components/auth/GoogleAuthButton";
 
 /**
  * Sign-up requires:
@@ -127,6 +128,32 @@ export default function SignUpPage() {
       <header className="space-y-1">
         <h1 className="text-2xl font-semibold tracking-tight text-strong">Sign up</h1>
       </header>
+
+      <GoogleAuthButton />
+
+      <p className="text-[11px] text-muted leading-relaxed -mt-1">
+        Continuing accepts the{" "}
+        <Link href="/legal/terms" target="_blank" className="text-slate border-b border-slate">
+          terms
+        </Link>
+        ,{" "}
+        <Link href="/legal/disclaimer" target="_blank" className="text-slate border-b border-slate">
+          medical disclaimer
+        </Link>
+        , and consent to store training + symptom data (
+        <Link href="/legal/privacy" target="_blank" className="text-slate border-b border-slate">
+          privacy
+        </Link>
+        ).
+      </p>
+
+      <div className="flex items-center gap-3 pt-1">
+        <span className="flex-1 h-px bg-line-soft" aria-hidden />
+        <span className="font-mono text-[10px] uppercase tracking-widest text-muted">
+          or with email
+        </span>
+        <span className="flex-1 h-px bg-line-soft" aria-hidden />
+      </div>
 
       <form onSubmit={submit} className="space-y-3" noValidate>
         <label className="block text-[13px]">

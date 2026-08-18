@@ -1,9 +1,10 @@
 "use client";
 
-import { Suspense, useState, FormEvent } from "react";
+import { Suspense, useEffect, useState, FormEvent } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { GoogleAuthButton } from "@/components/auth/GoogleAuthButton";
 
 export default function SignInPage() {
   return (
@@ -26,6 +27,21 @@ function SignInInner() {
   const [resetting, setResetting] = useState(false);
   const [resending, setResending] = useState(false);
   const [confirmationResent, setConfirmationResent] = useState(false);
+
+  // Google OAuth PKCE return — Supabase auto-exchanges `?code=` for a
+  // session on mount via `detectSessionInUrl`. When SIGNED_IN fires, honor
+  // any `next=` deep-link the user was heading for before the OAuth hop.
+  useEffect(() => {
+    const supabase = createClient();
+    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN" && session) {
+        const safeNext =
+          nextPath.startsWith("/") && !nextPath.startsWith("//") ? nextPath : "/";
+        router.push(safeNext);
+      }
+    });
+    return () => sub.subscription.unsubscribe();
+  }, [nextPath, router]);
 
   const submit = async (e: FormEvent) => {
     e.preventDefault();
@@ -108,6 +124,16 @@ function SignInInner() {
         <h1 className="text-2xl font-semibold tracking-tight text-strong">Sign in</h1>
         <p className="text-sm text-muted">Continue your training.</p>
       </header>
+
+      <GoogleAuthButton nextPath={nextPath} />
+
+      <div className="flex items-center gap-3">
+        <span className="flex-1 h-px bg-line-soft" aria-hidden />
+        <span className="font-mono text-[10px] uppercase tracking-widest text-muted">
+          or with email
+        </span>
+        <span className="flex-1 h-px bg-line-soft" aria-hidden />
+      </div>
 
       <form onSubmit={submit} className="space-y-3" noValidate>
         <label className="block text-[13px]">
