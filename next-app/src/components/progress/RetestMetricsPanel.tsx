@@ -138,6 +138,14 @@ function RetestCard({
         <p className="mt-1 text-[13px] text-muted italic">
           {m.note ?? "Not yet trackable in the app."}
         </p>
+      ) : m.baseline == null && m.current == null && canRetest ? (
+        // Empty-state prompt when no readings exist yet and the user can
+        // actually log them. Was rendering `— · — · —` in a silent grid;
+        // comprehensive audit 2026-08-18 P1-5 flagged that users don't
+        // realize physical-test metrics need their own log input.
+        <p className="mt-2 text-[13px] text-muted italic">
+          No readings yet. Log your baseline below so the delta has something to track against.
+        </p>
       ) : (
         <div className="mt-2 grid grid-cols-3 gap-2 text-[13px]">
           <div>
@@ -216,7 +224,11 @@ function RetestCard({
               className="inline-flex items-center gap-1.5 text-[12px] font-mono uppercase tracking-wider text-slate hover:text-ink"
             >
               <RefreshCw size={11} />
-              {due ? "Retest — log new reading" : "Log a new reading"}
+              {due
+                ? "Retest — log new reading"
+                : m.baseline == null
+                  ? "Log baseline"
+                  : "Log a new reading"}
             </button>
           )}
         </div>

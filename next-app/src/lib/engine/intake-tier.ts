@@ -376,6 +376,19 @@ export function inferTier(
       if (vars[testVar] == null && /never/i.test(ans)) {
         vars[testVar] = 630;
       }
+      // Fallback safety for free-text tier questions: if the user answered
+      // something non-empty that nothing else parsed, treat as the
+      // conservative Foundation-tier baseline rather than leaving testVar
+      // unset (which downstream defaults to 0 and matches "elite" gates
+      // like `current_2k_seconds < 480` = Push). Comprehensive audit
+      // 2026-08-18 P1-2. Uses program-specific defaults where declared.
+      if (vars[testVar] == null && ans != null && ans !== "") {
+        const conservativeDefaults: Record<string, Record<string, number>> = {
+          "rowing-2k-test-prep": { current_2k_seconds: 630 },
+        };
+        const def = conservativeDefaults[programSlug]?.[testVar];
+        if (typeof def === "number") vars[testVar] = def;
+      }
     }
 
     // Direct binding of the question id → number when the answer is numeric.
