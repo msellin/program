@@ -85,7 +85,7 @@ export function PerProgramAdherenceCard() {
   return (
     <section className="rounded border border-line bg-surface p-4 space-y-3">
       <header className="flex items-baseline justify-between gap-2">
-        <h2 className="text-[14px] font-semibold text-strong">Per-program adherence</h2>
+        <h2 className="text-[14px] font-semibold text-strong">Per-track adherence</h2>
         <span className="text-[10px] font-mono uppercase tracking-widest text-muted">
           last {WINDOW_DAYS} days
         </span>
@@ -104,7 +104,7 @@ export function PerProgramAdherenceCard() {
             <div
               className="flex h-1.5 rounded-full bg-line-soft overflow-hidden"
               role="img"
-              aria-label={`${r.adherencePct}% adherence — ${r.done} done, ${r.planned} planned, ${r.skipped} skipped, ${r.moved} moved`}
+              aria-label={`${r.adherencePct}% adherence — ${r.done} done, ${r.planned} upcoming, ${r.skipped} skipped, ${r.moved} moved`}
             >
               <span
                 className="bg-green"
@@ -137,7 +137,7 @@ export function PerProgramAdherenceCard() {
         ))}
       </ul>
       <p className="text-[11px] text-muted italic">
-        Moved blocks don't count as misses — they're rescheduled work.
+        Moved sessions don&apos;t count as misses — they&apos;re rescheduled work.
       </p>
     </section>
   );

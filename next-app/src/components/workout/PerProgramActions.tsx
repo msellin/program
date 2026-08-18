@@ -54,8 +54,12 @@ export function PerProgramActions({ programSlug, programName, date, scheduledBlo
   const everythingMoved = plannedIds.length === 0 && movedIds.length > 0 && skippedIds.length === 0;
 
   if (everythingSkipped || everythingMoved) {
+    // Audit 2026-08-18 (visual-craft) — border-l was `border-l-amber` for
+    // BOTH states. tokens.md accent economy: amber = warn/skipped, slate
+    // = moved/rescheduled. Split by state.
+    const borderTone = everythingSkipped ? "border-l-amber" : "border-l-slate";
     return (
-      <div className="rounded border border-line-soft border-l-4 border-l-amber bg-surface p-3 flex items-center justify-between gap-3">
+      <div className={`rounded border border-line-soft border-l-4 ${borderTone} bg-surface p-3 flex items-center justify-between gap-3`}>
         <div className="text-sm">
           <p className="font-semibold text-strong">
             {programName} — {everythingSkipped ? "skipped today" : "moved"}
@@ -107,7 +111,7 @@ export function PerProgramActions({ programSlug, programName, date, scheduledBlo
       {open === "skip" ? (
         <ConfirmSheet
           title={`Skip ${programName} today?`}
-          body="This program's session on this date is marked skipped. Other programs today are unaffected."
+          body="This track's session on this date is marked skipped. Other tracks today are unaffected."
           confirmLabel="Skip"
           onCancel={() => setOpen(null)}
           onConfirm={(reason) => {
@@ -251,7 +255,7 @@ function MoveSheet({
           </button>
         </div>
         <p className="text-[13px] text-muted">
-          This program's session on {fromDate} moves to the chosen date. Other programs
+          This track's session on {fromDate} moves to the chosen date. Other tracks
           today are unaffected.
         </p>
         <div>

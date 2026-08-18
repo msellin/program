@@ -318,7 +318,7 @@ export default function TodayPage() {
       {multipleProgramsToday ? (
         <div className="rounded border border-amber/40 bg-amber/10 px-3 py-2.5 text-[13px]">
           <p className="text-amber-strong">
-            <span className="font-semibold">Two programs scheduled today.</span>{" "}
+            <span className="font-semibold">Two tracks scheduled today.</span>{" "}
             If it&apos;s too much, snooze one from{" "}
             <Link href="/profile" className="underline">Profile</Link>.
           </p>
@@ -452,7 +452,7 @@ function DayHeaderShortcut({ date, programCount }: { date: string; programCount:
       <div className="text-sm">
         <p className="font-semibold text-strong">{humanDate}</p>
         <p className="text-muted text-[13px] mt-0.5">
-          {programCount} programs scheduled today. Skip or move each independently below.
+          {programCount} tracks scheduled today. Skip or move each independently below.
         </p>
       </div>
       {!confirming ? (

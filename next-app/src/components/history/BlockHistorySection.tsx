@@ -1,21 +1,27 @@
 "use client";
 
 /**
- * Block-object rebuild · Phase E — per-program recent block history.
+ * Block-object rebuild · Phase E — per-track recent block history.
  * See dev/active/block-object-rebuild-2026-08-18.md §5.
  *
- * Compact "last 14 days" view of block state changes per active program.
+ * Compact "last 14 days" view of block state changes per active track.
  * Only renders when `block_object` is on and there are actually blocks
  * to show. Additive to legacy History — doesn't remove anything.
  */
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useStore } from "@/lib/useStore";
 import { getBlocksForProgram, isBlockObjectOn } from "@/lib/engine/block-selectors";
-import type { ScheduledBlock, Store } from "@/lib/schemas";
+import { loadProgram } from "@/lib/data-loader";
+import type { Program, ScheduledBlock, Store } from "@/lib/schemas";
 
 const WINDOW_DAYS = 14;
 
+/**
+ * User-facing chip labels + color mapping.
+ * Audit 2026-08-18 (copy) — "downshifted" was engineer-speak in a chip.
+ * Rewrote to "eased." Color mapping stays canonical per tokens.md.
+ */
 function stateChip(state: ScheduledBlock["state"]): { label: string; className: string } {
   switch (state) {
     case "done":
@@ -25,7 +31,7 @@ function stateChip(state: ScheduledBlock["state"]): { label: string; className: 
     case "moved":
       return { label: "moved", className: "bg-slate/20 text-slate" };
     case "amber_downshifted":
-      return { label: "downshifted", className: "bg-amber/20 text-amber" };
+      return { label: "eased", className: "bg-amber/20 text-amber" };
     default:
       return { label: state, className: "bg-line-soft/60 text-muted" };
   }
@@ -42,6 +48,34 @@ export function BlockHistorySection() {
     return Array.from(set);
   }, [primary, secondaries]);
 
+  // Load the active programs so we can resolve block template ids to
+  // authored block names. Audit 2026-08-18 — Phase E shipped this section
+  // rendering raw ids ("block_z2_row") because it never loaded the program
+  // JSON. Programs cache is process-shared so re-loads are cheap.
+  const [programsBySlug, setProgramsBySlug] = useState<Record<string, Program>>({});
+  const slugsKey = slugs.join("|");
+  useEffect(() => {
+    if (slugs.length === 0) {
+      setProgramsBySlug({});
+      return;
+    }
+    let cancelled = false;
+    void Promise.all(slugs.map((s) => loadProgram(s).catch(() => null)))
+      .then((ps) => {
+        if (cancelled) return;
+        const map: Record<string, Program> = {};
+        for (let i = 0; i < slugs.length; i++) {
+          const p = ps[i];
+          if (p) map[slugs[i]] = p;
+        }
+        setProgramsBySlug(map);
+      });
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slugsKey]);
+
   if (!isBlockObjectOn(store) || slugs.length === 0) return null;
 
   const today = new Date();
@@ -53,6 +87,7 @@ export function BlockHistorySection() {
   const perProgram = slugs
     .map((slug) => ({
       slug,
+      program: programsBySlug[slug],
       blocks: getBlocksForProgram(store as Store, slug, start, end).filter(
         (b) => b.state !== "planned",
       ),
@@ -64,13 +99,13 @@ export function BlockHistorySection() {
   return (
     <section className="space-y-3">
       <h2 className="font-mono text-[13px] uppercase tracking-widest">
-        Recent blocks · last {WINDOW_DAYS} days
+        Recent sessions · last {WINDOW_DAYS} days
       </h2>
       <div className="rounded border border-line bg-surface divide-y divide-line-soft">
         {perProgram.map((g) => (
           <div key={g.slug} className="p-3 space-y-2">
             <p className="text-[13px] font-semibold text-strong">
-              {g.slug.replace(/-/g, " ")}
+              {g.program?.program_goal?.display_name ?? g.slug.replace(/-/g, " ")}
             </p>
             <ul className="space-y-1.5">
               {g.blocks
@@ -78,12 +113,18 @@ export function BlockHistorySection() {
                 .reverse()
                 .map((b) => {
                   const chip = stateChip(b.state);
+                  // Resolve template id → authored block name via the
+                  // loaded program. Falls back to the id if the program
+                  // JSON hasn't loaded yet or the id doesn't match.
+                  const blockName =
+                    g.program?.blocks.find((tb) => tb.id === b.block_template_id)?.name ??
+                    b.block_template_id;
                   return (
                     <li key={b.id} className="flex items-baseline gap-2 text-[12px]">
                       <span className="font-mono text-muted min-w-[80px]">
                         {b.actual_date}
                       </span>
-                      <span className="flex-1 text-strong">{b.block_template_id}</span>
+                      <span className="flex-1 text-strong">{blockName}</span>
                       <span
                         className={`font-mono text-[10px] uppercase tracking-widest px-1.5 py-0.5 rounded ${chip.className}`}
                       >

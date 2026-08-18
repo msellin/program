@@ -318,8 +318,7 @@ function BetaFeatureToggles() {
       <header>
         <h2 className="text-[14px] font-semibold text-strong">Beta features</h2>
         <p className="text-[12px] text-muted mt-0.5">
-          Flip on-your-own-risk features for early validation. Turn off to revert
-          to stable behavior.
+          Preview features that aren&apos;t final. You can turn them off anytime.
         </p>
       </header>
       <label className="flex items-start gap-3 cursor-pointer">
@@ -330,15 +329,14 @@ function BetaFeatureToggles() {
           className="mt-1 flex-shrink-0 w-5 h-5"
         />
         <span className="text-[13px] text-strong leading-relaxed">
-          <span className="font-semibold">Block-object plan model</span>
-          <span className="ml-2 font-mono text-[10px] uppercase tracking-widest text-green">
+          <span className="font-semibold">Per-track Skip and Move</span>
+          <span className="ml-2 font-mono text-[10px] uppercase tracking-widest text-muted">
             default on
           </span>
           <span className="block text-[12px] text-muted mt-0.5">
-            Per-program Skip / Move menus on Today. Dot-per-program on Week.
-            Adherence card on Progress. Recent-blocks list on History. Fixes
-            the Today-view duplication bug when a session is moved between
-            days. Uncheck to revert to the legacy day-level model.
+            Each track&apos;s session gets its own Skip / Move menu, so you can
+            skip one while keeping another. Uncheck to revert to the old
+            whole-day Skip.
           </span>
         </span>
       </label>

@@ -372,7 +372,7 @@ export default function WeekPage() {
                       ) : null}
                       {contributingProgramCount > 1 ? (
                         <span className="text-[10px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber/20 text-amber font-normal">
-                          {contributingProgramCount} programs
+                          {contributingProgramCount} tracks
                         </span>
                       ) : null}
                     </div>
