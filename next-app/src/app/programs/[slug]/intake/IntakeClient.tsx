@@ -579,7 +579,19 @@ export function IntakeClient({ slug }: Props) {
         sectionLabel: string;
         q: IntakeQuestion;
       }
-    | { kind: "physical_tests"; sectionLabel: string }
+    // Audit 2026-08-18 (#39) — split the "all 5 physical tests on one
+    // screen" cram-fest into per-test steps. Each test is its own
+    // wizard step; the first one carries a "Skip all physical tests"
+    // quick action so users who don't want to do them can jump to
+    // consent in one tap. Sub-index/count carried on the step so the
+    // section label reads "Physical tests · 2 of 5 · optional."
+    | {
+        kind: "physical_test";
+        sectionLabel: string;
+        test: PhysicalTest;
+        indexInSection: number; // 0-based
+        totalInSection: number;
+      }
     | { kind: "consent"; sectionLabel: string };
 
   const steps: WizardStep[] = [
@@ -604,15 +616,24 @@ export function IntakeClient({ slug }: Props) {
       sectionLabel: "About you",
       q,
     })),
-    ...(physicalTests.length
-      ? [{ kind: "physical_tests" as const, sectionLabel: "Physical tests" }]
-      : []),
+    ...physicalTests.map<WizardStep>((test, idx) => ({
+      kind: "physical_test",
+      sectionLabel: `Physical tests · ${idx + 1} of ${physicalTests.length} · optional`,
+      test,
+      indexInSection: idx,
+      totalInSection: physicalTests.length,
+    })),
     ...(consentItems.length
       ? [{ kind: "consent" as const, sectionLabel: "Consent" }]
       : []),
   ];
 
-  const clampedStepIndex = Math.min(Math.max(0, stepIndex), Math.max(0, steps.length - 1));
+  // Audit 2026-08-18 (P1) — if the stored stepIndex now points past the
+  // last step (schema grew or shrunk between sessions), reset to 0
+  // rather than dropping the user on whatever the new last step happens
+  // to be. Prevents "returning user lands on Consent" gotcha.
+  const clampedStepIndex =
+    stepIndex >= steps.length ? 0 : Math.max(0, stepIndex);
   const currentStep = steps[clampedStepIndex];
   const isLastStep = clampedStepIndex >= steps.length - 1;
 
@@ -632,8 +653,8 @@ export function IntakeClient({ slug }: Props) {
     const label =
       currentStep.kind === "question"
         ? `${currentStep.sectionLabel} — ${currentStep.q.label}`
-        : currentStep.kind === "physical_tests"
-          ? `${currentStep.sectionLabel} — optional`
+        : currentStep.kind === "physical_test"
+          ? `${currentStep.sectionLabel} — ${currentStep.test.label}`
           : `${currentStep.sectionLabel} — required`;
     announce(`Step ${clampedStepIndex + 1} of ${steps.length}. ${label}`);
     // Intentionally do not include heading in deps — it re-runs on step change.
@@ -667,9 +688,11 @@ export function IntakeClient({ slug }: Props) {
           over empty space on desktop with a short body. Sticky rides the
           visualViewport correctly and closes the flow visually. */}
       <div className="flex-1 space-y-5 pb-4">
-      <Link href={backHref} className="inline-flex items-center gap-1 text-[13px] text-slate hover:text-ink">
+      {/* Audit 2026-08-18 (a11y P1) — this Cancel link exits the wizard
+          entirely and is distinct from the footer's per-step Back button. */}
+      <Link href={backHref} className="inline-flex items-center gap-1 text-[13px] text-muted hover:text-ink">
         <ChevronLeft size={14} />
-        Back to program
+        Cancel intake
       </Link>
 
       <header className="space-y-1">
@@ -682,15 +705,13 @@ export function IntakeClient({ slug }: Props) {
         </p>
       </header>
 
-      <WizardProgress currentIndex={clampedStepIndex} total={steps.length} />
-
-      {currentStep ? (
-        <div className="mt-2">
-          <p className="text-[11px] font-mono uppercase tracking-widest text-muted">
-            {currentStep.sectionLabel}
-          </p>
-        </div>
-      ) : null}
+      <WizardProgress
+        currentIndex={clampedStepIndex}
+        total={steps.length}
+        sectionLabel={currentStep?.sectionLabel}
+      />
+      {/* Section label used to live on a separate row below the rail — merged
+          into the rail per 2026-08-18 P1 polish. */}
 
       <div ref={stepBodyRef} className="min-h-[280px]" aria-live="polite">
         {currentStep?.kind === "question" ? (
@@ -704,11 +725,20 @@ export function IntakeClient({ slug }: Props) {
           />
         ) : null}
 
-        {currentStep?.kind === "physical_tests" ? (
-          <WizardPhysicalTestsScreen
-            tests={physicalTests}
+        {currentStep?.kind === "physical_test" ? (
+          <WizardPhysicalTestScreen
+            step={currentStep}
             results={testResults}
             setResult={(id, n) => setTestResults((r) => ({ ...r, [id]: n }))}
+            onSkipAll={() => {
+              // Jump past every remaining physical_test step. Consent (or
+              // the end) is right after the last one.
+              const lastPhysIdx = steps
+                .map((s, i) => (s.kind === "physical_test" ? i : -1))
+                .filter((i) => i >= 0)
+                .pop();
+              if (lastPhysIdx != null) setStepIndex(lastPhysIdx + 1);
+            }}
           />
         ) : null}
 
@@ -717,6 +747,8 @@ export function IntakeClient({ slug }: Props) {
             items={consentItems}
             consents={consents}
             setConsent={(id, v) => setConsents((cs) => ({ ...cs, [id]: v }))}
+            answers={answers}
+            questions={questions}
           />
         ) : null}
       </div>
@@ -743,7 +775,15 @@ export function IntakeClient({ slug }: Props) {
  * supersedes the quiet-form.
  */
 
-function WizardProgress({ currentIndex, total }: { currentIndex: number; total: number }) {
+function WizardProgress({
+  currentIndex,
+  total,
+  sectionLabel,
+}: {
+  currentIndex: number;
+  total: number;
+  sectionLabel?: string;
+}) {
   if (total === 0) return null;
   const pct = Math.round(((currentIndex + 1) / total) * 100);
   return (
@@ -762,8 +802,14 @@ function WizardProgress({ currentIndex, total }: { currentIndex: number; total: 
             aria-hidden
           />
         </div>
+        {/* Audit 2026-08-18 (P1) — section label merged into the rail so
+            the section identity + step counter share one row. Section text
+            wraps under the counter on very narrow viewports. */}
         <span className="font-mono text-[10px] text-muted uppercase tracking-widest whitespace-nowrap">
-          Step {currentIndex + 1} of {total}
+          {sectionLabel ? <span className="mr-1 text-strong">{sectionLabel}</span> : null}
+          <span>
+            {sectionLabel ? "· " : ""}Step {currentIndex + 1} of {total}
+          </span>
         </span>
       </div>
     </div>
@@ -778,12 +824,13 @@ function WizardQuestionScreen({
   showGateBlock,
   blocker,
 }: {
-  step: Extract<
-    | { kind: "question"; section: "screening" | "skill" | "about"; tone: SectionTone; sectionLabel: string; q: IntakeQuestion }
-    | { kind: "physical_tests"; sectionLabel: string }
-    | { kind: "consent"; sectionLabel: string },
-    { kind: "question" }
-  >;
+  step: {
+    kind: "question";
+    section: "screening" | "skill" | "about";
+    tone: SectionTone;
+    sectionLabel: string;
+    q: IntakeQuestion;
+  };
   answers: Record<string, string>;
   setAnswer: (qid: string, v: string) => void;
   safetyGates: NonNullable<Program["intake"]>["safety_gates"];
@@ -1056,53 +1103,70 @@ function WizardQuestionScreen({
   );
 }
 
-function WizardPhysicalTestsScreen({
-  tests,
+function WizardPhysicalTestScreen({
+  step,
   results,
   setResult,
+  onSkipAll,
 }: {
-  tests: PhysicalTest[];
+  step: {
+    kind: "physical_test";
+    sectionLabel: string;
+    test: PhysicalTest;
+    indexInSection: number;
+    totalInSection: number;
+  };
   results: Record<string, number>;
   setResult: (id: string, n: number) => void;
+  onSkipAll: () => void;
 }) {
+  const t = step.test;
+  const inputId = `phys-test-${t.id}`;
   return (
     <section className="space-y-5 py-2">
-      <h2 className="text-[18px] sm:text-[20px] font-semibold text-strong">
-        Physical tests
-        <span className={cn("ml-2 text-[11px] font-mono uppercase tracking-widest align-middle", SECTION_TONE_META.optional.badgeClass)}>
-          optional
-        </span>
+      <h2
+        id={`q-heading-${t.id}`}
+        className="text-[18px] sm:text-[20px] font-semibold text-strong leading-snug"
+      >
+        {t.label}
       </h2>
-      <p className="text-[13px] text-muted leading-relaxed">
-        Doing these is not required. If you do, they override your self-report answers when
-        picking your tier. Skip and we use your self-report as a proxy. You can revisit them
-        later on the Retest surface.
-      </p>
-      <ul className="space-y-4">
-        {tests.map((t) => (
-          <li key={t.id} className="space-y-2">
-            <p className="text-[14px] font-medium text-strong">{t.label}</p>
-            {t.instructions ? (
-              <p className="text-[12px] text-muted">{t.instructions}</p>
-            ) : null}
-            <div className="flex items-center gap-2">
-              <input
-                type="number"
-                inputMode="decimal"
-                min={t.min}
-                max={t.max}
-                value={results[t.id] ?? ""}
-                onChange={(e) => {
-                  const n = Number(e.target.value);
-                  if (isFinite(n)) setResult(t.id, n);
-                }}
-                className="flex-1 text-[15px] px-3 py-3 min-h-[48px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
-              />
-              <span className="text-[12px] text-muted font-mono w-16 text-right">{t.unit}</span>
-            </div>
-          </li>
-        ))}
-      </ul>
+      {t.instructions ? (
+        <p className="text-[13px] text-muted leading-relaxed">{t.instructions}</p>
+      ) : null}
+      <div className="flex items-center gap-2">
+        <label className="sr-only" htmlFor={inputId}>
+          {t.label} ({t.unit})
+        </label>
+        <input
+          id={inputId}
+          type="number"
+          inputMode="decimal"
+          min={t.min}
+          max={t.max}
+          value={results[t.id] ?? ""}
+          onChange={(e) => {
+            const n = Number(e.target.value);
+            if (isFinite(n)) setResult(t.id, n);
+          }}
+          className="flex-1 text-[15px] px-3 py-3 min-h-[48px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+        />
+        <span className="text-[12px] text-muted font-mono w-16 text-right">{t.unit}</span>
+      </div>
+      {step.indexInSection === 0 ? (
+        <>
+          <p className="text-[12px] text-muted italic">
+            Physical tests are optional. Skip and we use your self-report as a proxy —
+            you can retake these later on Retest.
+          </p>
+          <button
+            type="button"
+            onClick={onSkipAll}
+            className="text-[11px] mono-caps text-muted hover:text-ink underline underline-offset-4"
+          >
+            Skip all physical tests →
+          </button>
+        </>
+      ) : null}
     </section>
   );
 }
@@ -1111,10 +1175,14 @@ function WizardConsentScreen({
   items,
   consents,
   setConsent,
+  answers,
+  questions,
 }: {
   items: NonNullable<Program["intake"]>["consent"];
   consents: Record<string, boolean>;
   setConsent: (id: string, v: boolean) => void;
+  answers: Record<string, string>;
+  questions: IntakeQuestion[];
 }) {
   return (
     <section className="space-y-5 py-2">
@@ -1139,6 +1207,34 @@ function WizardConsentScreen({
           </li>
         ))}
       </ul>
+
+      {/* Audit 2026-08-18 (P1) — review-my-answers collapsible so a user
+          on the consent step can verify what they answered without
+          walking Back through the whole flow. */}
+      <details className="rounded border border-line-soft bg-surface p-3">
+        <summary className="cursor-pointer text-[13px] text-muted hover:text-ink">
+          Review my answers
+        </summary>
+        <ul className="mt-3 space-y-2 text-[12px]">
+          {questions
+            .filter((q) => answers[q.id] != null && answers[q.id] !== "")
+            .map((q) => {
+              const raw = answers[q.id];
+              const opt = q.options?.find((o) => o.value === raw);
+              const displayValue =
+                opt?.label ??
+                (q.type === "boolean" ? (raw === "true" ? "Yes" : "No") : raw);
+              return (
+                <li key={q.id} className="flex items-start gap-2">
+                  <span className="text-muted flex-1 leading-snug">{q.label}</span>
+                  <span className="text-strong font-medium min-w-[40%] text-right">
+                    {displayValue}
+                  </span>
+                </li>
+              );
+            })}
+        </ul>
+      </details>
     </section>
   );
 }
