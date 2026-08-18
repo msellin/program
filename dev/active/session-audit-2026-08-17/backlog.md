@@ -46,11 +46,11 @@ Grouped by theme, ordered within by impact. Check items off as you ship them.
 
 - [ ] **A2 · Muted body text on tinted proposal backgrounds** (S) — `text-muted` (~55% ground) on `bg-amber/10` / `bg-green/10` / `bg-slate/10` may drop below WCAG 4.5:1. Test contrast; bump to `text-ink` if failing. → `app-accessibility #2`
 
-- [ ] **A3 · `useFocusTrap` restores focus to stale button** (M) — When OnboardingRunner dismisses, focus tries to return to `previouslyFocused.current` which may have unmounted. Falls through to `<body>`. Add fallback: focus `<h1>` or first `<a>` in `<main>`. Bug #5 from Phase 6, still open. → `app-accessibility #3` · `useFocusTrap.ts:50`
+- [x] **A3 · `useFocusTrap` restores focus to stale button** (M) — **DONE 2026-08-17** isConnected guard + fallback chain (main h1 → main a[href] → main) implemented at useFocusTrap.ts:55-66.
 
 - [x] **A4 · IntroGallery lacks focus trap + `aria-labelledby`** (S) — **STALE 2026-08-18** IntroGallery deleted, no dialog to fix.
 
-- [ ] **A5 · `<h2 id="day1-title">` orphaned without route `<h1>` above it** (S) — Day1EmptyState is the only heading on Today when it fires; page has no `<h1>Today</h1>` visible sibling. Either promote Day1EmptyState heading to `<h1>` when it's the only content, or ensure `sr-only <h1>` exists. → `app-accessibility #5`
+- [x] **A5 · `<h2 id="day1-title">` orphaned without route `<h1>` above it** (S) — **DONE** `<h1 className="sr-only">Today</h1>` sits above (page.tsx:181), Day1EmptyState h2 is now a valid child.
 
 - [x] **A6 · H1_b `text-transparent` invisible in Windows Forced Colors mode** (S) — **DONE 2026-08-17** `@media (forced-colors: active)` block in landing/globals.css:136.
 
