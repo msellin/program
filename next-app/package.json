@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build --webpack",
+    "deploy": "next build --webpack && wrangler pages deploy out --project-name=program-v2 --branch=main --commit-dirty=true",
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",

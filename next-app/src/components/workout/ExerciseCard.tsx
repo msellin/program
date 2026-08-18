@@ -83,7 +83,13 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
     (typeof item.sets === "number" ? item.sets : undefined) ??
     (typeof exercise.default?.sets === "number" ? (exercise.default.sets as number) : undefined) ??
     3;
-  const rowCount = Math.max(sets.length, defaultSets);
+  // 5/3/1 fix (2026-08-18): a top-set + FSL day needs 1 (top) + N (FSL) rows
+  // rendered — the FSL prescription is what the engine wants logged. Prior
+  // rowCount ignored FSL and defaulted to 3 or defaultSets, so users on
+  // squat/pull heavy days saw 4 FSL + 1 top = 5 rows (missing FSL 5) or
+  // even worse, 3 rows total. Founder-reported 2026-08-18.
+  const schemeRowCount = suggestion?.fsl ? suggestion.fsl.sets + 1 : defaultSets;
+  const rowCount = Math.max(sets.length, schemeRowCount);
 
   // Auto-expand once the user starts logging (any set has a value).
   // Collapse automatically once marked done, unless the user has explicitly re-expanded.
@@ -261,10 +267,15 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
                       set={setForRow}
                       prev={prevProp}
                       prescribed={
-                        i === rowCount - 1 && suggestion
-                          ? suggestion.top_set
-                          : suggestion?.fsl && i < rowCount - 1
-                            ? { kg: suggestion.fsl.kg, reps: String(suggestion.fsl.reps) }
+                        // 5/3/1 order fix (2026-08-18): top set is the AMRAP;
+                        // canonical Wendler order is top set first, then FSL.
+                        // Previously top set was rendered as the LAST row.
+                        suggestion?.fsl
+                          ? i === 0
+                            ? suggestion.top_set
+                            : { kg: suggestion.fsl.kg, reps: String(suggestion.fsl.reps) }
+                          : i === rowCount - 1 && suggestion
+                            ? suggestion.top_set
                             : null
                       }
                       isPR={pr}

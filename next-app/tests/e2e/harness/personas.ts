@@ -36,10 +36,16 @@ export const PERSONAS: Persona[] = [
       "Rehab pathway with gated progression, symptom-driven red/amber banner, physio-first messaging",
   },
   {
+    // Persona-strength must run on a program with a strength-progression
+    // surface — the overperformer TM-bump rule (adapt.ts:evaluateOverperformer)
+    // gates on `training_maxes.starting_values_kg`. Engine-builder is aerobic
+    // and has no TMs, so the previous wiring silently zeroed out this
+    // persona's overperformer coverage. Concurrent Strength Maintenance
+    // declares TMs and is the correct target. Fixed 2026-08-18.
     id: "persona-strength",
     displayName: "Strength overperformer",
     archetypeId: "overperformer",
-    programSlug: "engine-builder",
+    programSlug: "concurrent-strength-maintenance",
     days: 30,
     email: "e2e-persona-strength@example.test",
     password: DEFAULT_PASSWORD,
