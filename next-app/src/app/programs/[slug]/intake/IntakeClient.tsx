@@ -135,6 +135,10 @@ export function IntakeClient({ slug }: Props) {
   // step's h2 and fires an aria-live announcement so SR users know a
   // new question is loaded.
   const stepBodyRef = useRef<HTMLDivElement>(null);
+  // Populated during render from `currentStep`; read at effect time. Kept
+  // as a ref (not state) so re-populating on every render doesn't cause
+  // extra effect fires.
+  const stepAnnounceRef = useRef<{ label: string; step: number; total: number } | null>(null);
   useEffect(() => {
     try {
       if (storedDraft) {
@@ -251,6 +255,25 @@ export function IntakeClient({ slug }: Props) {
   }, [program, slug, answers, testResults]);
 
   const chosenTierId = overrideTier ?? inferred?.tier_id ?? null;
+
+  // Audit 2026-08-18 (a11y P0-1) — focus + announce on step change.
+  // Mounted here BEFORE the error/loading early returns so React's hooks
+  // count stays stable across renders. Uses stepAnnounceRef (populated
+  // during render) to get the step label; falls back gracefully when
+  // stepIndex is stable or the ref hasn't been populated yet.
+  useEffect(() => {
+    if (!hydrated) return;
+    const el = stepBodyRef.current;
+    if (el) {
+      const heading = el.querySelector<HTMLElement>("h2");
+      if (heading) {
+        heading.setAttribute("tabindex", "-1");
+        heading.focus({ preventScroll: false });
+      }
+    }
+    const info = stepAnnounceRef.current;
+    if (info) announce(`Step ${info.step} of ${info.total}. ${info.label}`);
+  }, [stepIndex, hydrated]);
 
   const commit = () => {
     if (!chosenTierId) return;
@@ -637,28 +660,20 @@ export function IntakeClient({ slug }: Props) {
   const currentStep = steps[clampedStepIndex];
   const isLastStep = clampedStepIndex >= steps.length - 1;
 
-  // Audit 2026-08-18 (a11y P0-1) — on step change, move focus to the step
-  // body's heading and fire an aria-live announcement. Without this,
-  // Enter-on-Next keeps focus on the disabled Next button and SR users
-  // never learn that a new question loaded.
-  useEffect(() => {
-    if (!currentStep || !hydrated) return;
-    const el = stepBodyRef.current;
-    if (!el) return;
-    const heading = el.querySelector<HTMLElement>("h2");
-    if (heading) {
-      heading.setAttribute("tabindex", "-1");
-      heading.focus({ preventScroll: false });
-    }
-    const label =
-      currentStep.kind === "question"
-        ? `${currentStep.sectionLabel} — ${currentStep.q.label}`
-        : currentStep.kind === "physical_test"
-          ? `${currentStep.sectionLabel} — ${currentStep.test.label}`
-          : `${currentStep.sectionLabel} — required`;
-    announce(`Step ${clampedStepIndex + 1} of ${steps.length}. ${label}`);
-    // Intentionally do not include heading in deps — it re-runs on step change.
-  }, [clampedStepIndex, currentStep, hydrated, steps.length]);
+  // Populate the announce ref (declared at the top of the component) with
+  // this render's step info so the effect above can read it.
+  stepAnnounceRef.current = currentStep
+    ? {
+        label:
+          currentStep.kind === "question"
+            ? `${currentStep.sectionLabel} — ${currentStep.q.label}`
+            : currentStep.kind === "physical_test"
+              ? `${currentStep.sectionLabel} — ${currentStep.test.label}`
+              : `${currentStep.sectionLabel} — required`,
+        step: clampedStepIndex + 1,
+        total: steps.length,
+      }
+    : null;
 
   // Is this specific step ready to advance? Question steps require the
   // question be answered if required. Consent step requires all required
