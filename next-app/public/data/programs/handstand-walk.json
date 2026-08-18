@@ -636,6 +636,7 @@
       "starts": "2026-01-12",
       "ends": "2026-01-25",
       "duration_weeks": 2,
+      "for_tier_ids": ["tier_a"],
       "blocks": [
         "block_wrist_prep",
         "block_skill_A_kinoshita",
@@ -654,6 +655,7 @@
       "starts": "2026-01-12",
       "ends": "2026-02-08",
       "duration_weeks": 4,
+      "for_tier_ids": ["tier_b"],
       "blocks": [
         "block_wrist_prep",
         "block_skill_A_wall_hold",
@@ -673,6 +675,7 @@
       "starts": "2026-01-12",
       "ends": "2026-02-08",
       "duration_weeks": 4,
+      "for_tier_ids": ["tier_c"],
       "blocks": [
         "block_wrist_prep",
         "block_skill_A_freestand_hold",
@@ -692,6 +695,7 @@
       "starts": "2026-01-12",
       "ends": "2026-03-08",
       "duration_weeks": 8,
+      "for_tier_ids": ["tier_d"],
       "blocks": [
         "block_wrist_prep",
         "block_skill_A_variability",

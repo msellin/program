@@ -446,6 +446,7 @@
       "starts": "2026-01-05",
       "ends": "2026-02-01",
       "duration_weeks": 4,
+      "for_tier_ids": ["tier_a"],
       "blocks": [
         "block_shoulder_prep",
         "block_hang_ladder",
@@ -465,6 +466,7 @@
       "starts": "2026-01-05",
       "ends": "2026-03-01",
       "duration_weeks": 8,
+      "for_tier_ids": ["tier_b"],
       "blocks": [
         "block_shoulder_prep",
         "block_hang_ladder",
@@ -486,6 +488,7 @@
       "starts": "2026-01-05",
       "ends": "2026-03-01",
       "duration_weeks": 8,
+      "for_tier_ids": ["tier_c"],
       "blocks": [
         "block_shoulder_prep",
         "block_pullup_sets_submax",
@@ -507,6 +510,7 @@
       "starts": "2026-01-05",
       "ends": "2026-03-01",
       "duration_weeks": 8,
+      "for_tier_ids": ["tier_d"],
       "blocks": [
         "block_shoulder_prep",
         "block_pullup_sets_submax",

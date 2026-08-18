@@ -151,6 +151,16 @@ export const phaseSchema = z.object({
   ends: z.string().nullable().optional(),
   duration_weeks: z.union([z.number(), z.tuple([z.number(), z.number()])]).nullable().optional(),
   blocks: z.array(z.string()),
+  /**
+   * Which tier(s) this phase applies to. When set, `activePhaseFor()`
+   * prefers phases whose `for_tier_ids` contains the user's tier over
+   * date-only matches. Multi-tier skill programs (handstand-walk,
+   * first-strict-pullup, muscle-up) author one phase per tier with
+   * identical `starts` dates; without this field, `activePhaseFor()` uses
+   * `.find()` and always returns the first (Tier A), so higher-tier users
+   * get Tier A drills. Comprehensive audit 2026-08-18 P0-6.
+   */
+  for_tier_ids: z.array(z.string()).optional(),
   rationale: z.string().optional(),
   goal: z.string().optional(),
   template: z.string().optional(),

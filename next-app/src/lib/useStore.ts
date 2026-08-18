@@ -41,6 +41,26 @@ function commitImmediate(s: Store): Store {
 
 const DOW_TO_TEMPLATE_IDX = [6, 0, 1, 2, 3, 4, 5] as const;
 
+/**
+ * Ensures a `program_states[slug]` entry exists so downstream consumers
+ * (retest windows, phase resolvers, YourPlanCard, tier-aware selection)
+ * can distinguish "no program picked" from "program picked but user
+ * bypassed intake". Idempotent — if the entry exists it's returned
+ * unchanged (preserves intake_answers, tier, baselines).
+ * Comprehensive audit 2026-08-18 P0-3.
+ */
+function ensureProgramStateEntry(
+  existing: NonNullable<Store["user_profile"]>["program_states"],
+  slug: string,
+  startedAt: string,
+): NonNullable<Store["user_profile"]>["program_states"] {
+  const map = { ...(existing ?? {}) };
+  if (!map[slug]) {
+    map[slug] = { started_at: startedAt };
+  }
+  return map;
+}
+
 type StoreState = {
   store: Store;
   hydrated: boolean;
@@ -815,6 +835,15 @@ export const useStore = create<StoreState>((set, get) => ({
       const ids = new Set(profile.active_program_ids ?? []);
       ids.add(slug);
       profile.active_program_ids = Array.from(ids);
+      // Ensure a program_states[slug] entry exists so downstream gates
+      // (retest windows, phase resolvers, YourPlanCard) can distinguish
+      // "no program picked" from "program picked but not through intake".
+      // Comprehensive audit 2026-08-18 P0-3.
+      profile.program_states = ensureProgramStateEntry(
+        profile.program_states,
+        slug,
+        profile.active_program_started_at,
+      );
     }
     s.user_profile = profile;
     // Immediate push — losing a program-pick to a refresh inside the 2s
@@ -843,6 +872,11 @@ export const useStore = create<StoreState>((set, get) => ({
       profile.active_program_id = slug;
       profile.active_program_ids = [slug];
       profile.active_program_started_at = iso(new Date());
+      profile.program_states = ensureProgramStateEntry(
+        profile.program_states,
+        slug,
+        profile.active_program_started_at,
+      );
       s.user_profile = profile;
       commitImmediate(s);
       set({ store: s });
@@ -858,6 +892,11 @@ export const useStore = create<StoreState>((set, get) => ({
       profile.active_program_id = slug;
       profile.active_program_started_at = iso(new Date());
     }
+    profile.program_states = ensureProgramStateEntry(
+      profile.program_states,
+      slug,
+      profile.active_program_started_at ?? iso(new Date()),
+    );
     s.user_profile = profile;
     commitImmediate(s);
     set({ store: s });
@@ -874,6 +913,11 @@ export const useStore = create<StoreState>((set, get) => ({
       profile.active_program_id = slug;
       profile.active_program_started_at = iso(new Date());
     }
+    profile.program_states = ensureProgramStateEntry(
+      profile.program_states,
+      slug,
+      profile.active_program_started_at ?? iso(new Date()),
+    );
     s.user_profile = profile;
     commitImmediate(s);
     set({ store: s });

@@ -43,12 +43,44 @@ function shiftIsoDate(iso: string, days: number): string {
 }
 
 /**
- * Apply the user's per-program phase_shift_days (set at intake for test-prep
- * programs). Returns a shifted-phases array or the original if no shift.
+ * Apply the user's per-program phase_shift_days (set at intake).
+ *
+ * Two paths:
+ *   1. Explicit shift written at intake commit (IntakeClient.tsx computes
+ *      it from target_test_date for race-prep programs, or from
+ *      phase[0].starts vs today for calendar-anchored programs).
+ *   2. Implicit fallback for users who set `active_program_id` without
+ *      going through intake commit (setActiveProgram, addSecondaryProgram,
+ *      persona harness). Compute shift = today - phase[0].starts using
+ *      the profile's `active_program_started_at`. Comprehensive audit
+ *      2026-08-18 P0-1 — handstand-walk.json's docstring claimed this
+ *      already happened; it didn't, so every multi-dim user who started
+ *      after 2026-03-08 landed on "YOU FINISHED" day 1.
+ *
+ * Hip program keeps its own started_at anchor logic and skips the
+ * implicit fallback.
  */
 function shiftedPhases(program: Program, profile?: Store["user_profile"]): Phase[] {
   const slug = program.slug;
-  const shift = slug ? profile?.program_states?.[slug]?.phase_shift_days : undefined;
+  const explicit = slug ? profile?.program_states?.[slug]?.phase_shift_days : undefined;
+
+  let shift = explicit;
+  if (shift == null && slug && slug !== HIP_SLUG) {
+    const startedAt =
+      profile?.program_states?.[slug]?.started_at ??
+      profile?.active_program_started_at;
+    const authoredStart = program.phases[0]?.starts;
+    if (startedAt && authoredStart && /^\d{4}-\d{2}-\d{2}$/.test(authoredStart)) {
+      const startedISO = startedAt.slice(0, 10);
+      const startedMs = new Date(startedISO + "T00:00:00").getTime();
+      const authoredMs = new Date(authoredStart + "T00:00:00").getTime();
+      if (Number.isFinite(startedMs) && Number.isFinite(authoredMs)) {
+        const implicit = Math.round((startedMs - authoredMs) / 864e5);
+        if (implicit !== 0) shift = implicit;
+      }
+    }
+  }
+
   if (!shift) return program.phases;
   return program.phases.map((p) => ({
     ...p,
@@ -80,13 +112,30 @@ export function activePhaseFor(
   profile?: Store["user_profile"],
 ): Phase | undefined {
   const phases = shiftedPhases(program, profile);
-  const found = phases.find(
+  const slug = program.slug;
+  const tier = slug ? profile?.program_states?.[slug]?.tier : undefined;
+
+  // Tier-aware phase selection. Multi-tier skill programs author one phase
+  // per tier at the same start date; without this preference,
+  // `phases.find()` returned the first (Tier A) for every user. When the
+  // user has a tier set, prefer phases whose `for_tier_ids` matches or
+  // that have no `for_tier_ids` (shared phases like phase_all_weeks_3_8).
+  // Comprehensive audit 2026-08-18 P0-6.
+  const matches = phases.filter(
     (p) => dateISO >= p.starts && (p.ends == null || dateISO <= p.ends),
   );
-  if (found) return found;
+  if (matches.length > 0) {
+    if (tier) {
+      const tierMatch = matches.find((p) => p.for_tier_ids?.includes(tier));
+      if (tierMatch) return tierMatch;
+      const untagged = matches.find((p) => !p.for_tier_ids);
+      if (untagged) return untagged;
+    }
+    return matches[0];
+  }
+
   const first = phases[0];
   if (first && dateISO < first.starts) return undefined;
-  const slug = program.slug;
   if (
     slug === HIP_SLUG &&
     dateISO >= HIP_HOLIDAY_GAP.start &&
