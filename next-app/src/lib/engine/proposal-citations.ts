@@ -16,7 +16,8 @@ export type ProposalKind =
   | "tier_advance"
   | "tm_bump"
   | "missed_session"
-  | "non_responder_recommendation";
+  | "non_responder_recommendation"
+  | "retest_due";
 
 // P0 B4 fix (2026-08-17): day_adjustment_soften was null, making the landing's
 // "every change cites a study" technically false for the safety-critical case
@@ -35,6 +36,7 @@ const CITATION_BY_KIND: Record<ProposalKind, string | null> = {
   tm_bump: "rhea_2003_meta",
   missed_session: null,
   non_responder_recommendation: "bouchard_1999_heritage",
+  retest_due: "hecksteden_2015",
 };
 
 export function citationIdForKind(kind: ProposalKind): string | null {

@@ -28,12 +28,14 @@ import type {
   TierAdvanceProposalPayload,
   TMBumpProposalPayload,
   NonResponderProposalPayload,
+  RetestDueProposalPayload,
 } from "@/lib/schemas";
 import { daySignals, proposedLoadMultiplier } from "@/lib/engine/note-signals";
 import { assessReintroReadiness } from "@/lib/engine/readiness";
 import { nextEligibleTier, isProposalDismissed } from "@/lib/engine/tier-promotion";
 import { evaluateOverperformer } from "@/lib/engine/adapt";
 import { classify } from "@/lib/engine/non-responder-classifier";
+import { weekNumberFromProgramStart } from "@/lib/engine/plan-generator";
 import { citationIdForKind } from "@/lib/engine/proposal-citations";
 import { iso, today as todayISO } from "@/lib/utils";
 
@@ -259,6 +261,122 @@ function selectNonResponder(
   };
 }
 
+/**
+ * HERITAGE Phase 5 (2026-08-18 · #73) — retest-due proposal.
+ * Fires ONE proposal at a time (the earliest at_week whose window is open
+ * and unlogged). Two sources:
+ *   1. program.retest_metrics_mid_block[] — the mid-block baseline
+ *      that unlocks the classifier.
+ *   2. program.retest_metrics[] — the end-of-block target check.
+ *
+ * Window: the proposal appears from the at_week start through the end of
+ * the following week (7-day grace), so an athlete who misses Monday can
+ * still log Sunday. If the user already has a reading for that metric
+ * within the past 7 days, we suppress — the reading is fresh enough.
+ */
+function selectRetestDue(
+  store: Store,
+  program: Program,
+  date: string,
+): RetestDueProposalPayload | null {
+  if (!program.slug) return null;
+  const profile = store.user_profile;
+  if (!profile?.active_program_started_at) return null;
+
+  const currentWeek = weekNumberFromProgramStart(profile, date);
+
+  type Row = { atWeek: number; metricId: string; kind: "mid_block" | "end_of_block" };
+  const rows: Row[] = [];
+
+  // Read from both cadence sources. Use `unknown` casts because the fields
+  // on the Program type are marked optional-and-loose (they arrive from JSON).
+  const midBlock =
+    ((program as unknown as { retest_metrics_mid_block?: Array<Record<string, unknown>> })
+      .retest_metrics_mid_block) ?? [];
+  for (const m of midBlock) {
+    const atWeek = typeof m.at_week === "number" ? m.at_week : null;
+    const metricId = typeof m.metric_id === "string" ? m.metric_id : null;
+    if (atWeek == null || metricId == null) continue;
+    rows.push({ atWeek, metricId, kind: "mid_block" });
+  }
+
+  const endOfBlock =
+    ((program as unknown as { retest_metrics?: Array<Record<string, unknown>> })
+      .retest_metrics) ?? [];
+  for (const m of endOfBlock) {
+    const metricId = typeof m.metric_id === "string" ? m.metric_id : null;
+    if (metricId == null) continue;
+    // Prefer explicit at_week; fall back to the first target row's at_week.
+    let atWeek: number | null =
+      typeof m.at_week === "number" ? m.at_week : null;
+    if (atWeek == null) {
+      const targets = (m.targets as Array<Record<string, unknown>> | undefined) ?? [];
+      const found = targets.find((t) => typeof t.at_week === "number");
+      atWeek = found ? (found.at_week as number) : null;
+    }
+    if (atWeek == null) continue;
+    rows.push({ atWeek, metricId, kind: "end_of_block" });
+  }
+
+  if (rows.length === 0) return null;
+
+  const readings = store.retest_readings ?? [];
+
+  // Pick the earliest at_week row whose (a) window is open and (b) hasn't
+  // been logged in the past 7 days. Sort ascending so the user sees the
+  // most-due first.
+  rows.sort((a, b) => a.atWeek - b.atWeek);
+
+  const nowMs = new Date(date + "T00:00:00").getTime();
+  for (const row of rows) {
+    // Window: [at_week, at_week + 1] inclusive. currentWeek starts at 1.
+    if (currentWeek < row.atWeek || currentWeek > row.atWeek + 1) continue;
+
+    // Suppress if a reading exists in the past 7 days for this metric.
+    const fresh = readings.some((r) => {
+      if (r.metric_id !== row.metricId) return false;
+      const t = new Date(r.observed_at + "T00:00:00").getTime();
+      if (!Number.isFinite(t)) return false;
+      return nowMs - t <= 7 * 864e5;
+    });
+    if (fresh) continue;
+
+    // Dismissed today? Skip.
+    const dismissed = store.dismissed_proposals?.[date] ?? [];
+    const dismissKey = `retest-due:${row.metricId}:${row.atWeek}`;
+    if (dismissed.includes(dismissKey)) continue;
+
+    // Resolve display name + unit from the end-of-block metrics list if
+    // possible (mid-block is often just a reference to the same metric).
+    const meta = endOfBlock.find((m) => m.metric_id === row.metricId);
+    const displayName =
+      (meta && typeof meta.display_name === "string" ? meta.display_name : row.metricId);
+    const unit = meta && typeof meta.unit === "string" ? meta.unit : "";
+
+    return {
+      kind: "retest_due",
+      id: `retest-due:${row.metricId}:${row.atWeek}`,
+      // Priority sits between non-responder (50) and tier-advance (40).
+      // Retest is preparatory: fresh data enables the sharper proposals
+      // above it.
+      priority: 45,
+      reason:
+        row.kind === "mid_block"
+          ? `Week ${row.atWeek} mid-block retest is due. Two baselines unlock the classifier — this is the first.`
+          : `Week ${row.atWeek} end-of-block retest is due. Log a reading to compare against baseline.`,
+      citationId: citationIdForKind("retest_due"),
+      programSlug: program.slug,
+      metricId: row.metricId,
+      metricDisplayName: displayName,
+      metricUnit: unit,
+      atWeek: row.atWeek,
+      currentWeek,
+      cadenceKind: row.kind,
+    };
+  }
+  return null;
+}
+
 function selectTMBump(
   program: Program,
   store: Store,
@@ -292,6 +410,8 @@ export function selectProposals(store: Store, program: Program, date: string): P
   if (readiness) out.push(readiness);
   const nonResponder = selectNonResponder(store, program, date);
   if (nonResponder) out.push(nonResponder);
+  const retest = selectRetestDue(store, program, date);
+  if (retest) out.push(retest);
   const tier = selectTierAdvance(store, program);
   if (tier) out.push(tier);
   const tm = selectTMBump(program, store, date);

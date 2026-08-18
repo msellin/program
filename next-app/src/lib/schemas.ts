@@ -1453,6 +1453,25 @@ export type TMBumpProposalPayload = ProposalBase & {
  * engine proposes, user Accepts (marks the recommendation acknowledged) or
  * Ignores (dismisses for 7 days).
  */
+/**
+ * HERITAGE Phase 5 (2026-08-18 · #73) — retest-due proposal.
+ * Fires on Today when the user is inside the calendar window for a
+ * retest_metrics_mid_block[].at_week or retest_metrics[].at_week gate
+ * and no reading has been logged for that metric in the past 7 days.
+ * Accept opens a logging sheet; Ignore dismisses for 3 days (so the user
+ * has time but isn't spammed).
+ */
+export type RetestDueProposalPayload = ProposalBase & {
+  kind: "retest_due";
+  programSlug: string;
+  metricId: string;
+  metricDisplayName: string;
+  metricUnit: string;
+  atWeek: number;
+  currentWeek: number;
+  cadenceKind: "mid_block" | "end_of_block";
+};
+
 export type NonResponderProposalPayload = ProposalBase & {
   kind: "non_responder_recommendation";
   programSlug: string;
@@ -1472,7 +1491,8 @@ export type Proposal =
   | DayAdjustmentProposalPayload
   | TierAdvanceProposalPayload
   | TMBumpProposalPayload
-  | NonResponderProposalPayload;
+  | NonResponderProposalPayload
+  | RetestDueProposalPayload;
 export type DrillLevel = z.infer<typeof drillLevelSchema>;
 export type DrillPrerequisite = z.infer<typeof drillPrerequisiteSchema>;
 export type DrillRetestMetric = z.infer<typeof drillRetestMetricSchema>;

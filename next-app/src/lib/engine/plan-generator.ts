@@ -213,7 +213,13 @@ function ciSeedKey(
  * `user_profile.active_program_started_at` (stamped by setActiveProgram) or
  * falls back to 0 if unavailable. Returns a 1-indexed week number.
  */
-function weekNumberFromProgramStart(
+/**
+ * Weeks since the user's active program started. 1-indexed.
+ * Exposed 2026-08-18 for HERITAGE Phase 5 (#73) — the retest scheduler
+ * needs to know which week the user is in to match at_week fields on
+ * retest_metrics_mid_block[] + retest_metrics[].
+ */
+export function weekNumberFromProgramStart(
   profile: Store["user_profile"] | undefined,
   dateISO: string,
 ): number {

@@ -1,10 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import { ArrowUp } from "lucide-react";
 import { useStore } from "@/lib/useStore";
 import { hapticTap, today as todayISO } from "@/lib/utils";
 import { announce } from "@/lib/announce";
 import { CitationRef } from "@/components/citations/CitationRef";
+import { RetestLoggingSheet } from "@/components/workout/RetestLoggingSheet";
 import type { Proposal } from "@/lib/schemas";
 
 /**
@@ -23,6 +25,11 @@ export function ProposalCard({ proposal, date }: { proposal: Proposal; date: str
   const advancePhase = useStore((s) => s.advancePhase);
   const dismissProposal = useStore((s) => s.dismissProposal);
   const recordProposalOutcome = useStore((s) => s.recordProposalOutcome);
+  // HERITAGE Phase 5 — the retest_due kind opens a logging sheet on Accept.
+  // We record the Accepted outcome only when the sheet reports success
+  // (submit path), not when the sheet opens — otherwise a cancelled sheet
+  // would leave a false-positive audit entry.
+  const [retestSheetOpen, setRetestSheetOpen] = useState(false);
 
   const onAccept = (e: React.MouseEvent<HTMLButtonElement>) => {
     hapticTap("medium");
@@ -71,6 +78,14 @@ export function ProposalCard({ proposal, date }: { proposal: Proposal; date: str
         announce("Recommendation acknowledged.");
         break;
       }
+      case "retest_due": {
+        // HERITAGE Phase 5 — Accept opens the logging sheet. Outcome and
+        // dismissal are recorded when the sheet submits; opening alone
+        // is not an "accepted" state, otherwise a cancel-out leaves a
+        // ghost audit entry.
+        setRetestSheetOpen(true);
+        return;
+      }
     }
 
     recordProposalOutcome(proposal, "accepted", date);
@@ -93,9 +108,25 @@ export function ProposalCard({ proposal, date }: { proposal: Proposal; date: str
       case "non_responder_recommendation":
         dismissProposal(date, `non-responder:${proposal.verdict}`);
         break;
+      case "retest_due":
+        // Suppress on today; the selector re-fires tomorrow while window
+        // is still open. If user consistently ignores, the window closes.
+        dismissProposal(date, `retest-due:${proposal.metricId}:${proposal.atWeek}`);
+        break;
     }
     recordProposalOutcome(proposal, "ignored", date);
     announce("Ignored.");
+  };
+
+  const onRetestSheetClose = (didSubmit: boolean) => {
+    setRetestSheetOpen(false);
+    if (proposal.kind !== "retest_due") return;
+    if (didSubmit) {
+      // Reading landed — dismiss for today so the same proposal doesn't
+      // re-fire before the freshness window ticks over tomorrow.
+      dismissProposal(date, `retest-due:${proposal.metricId}:${proposal.atWeek}`);
+      recordProposalOutcome(proposal, "accepted", date);
+    }
   };
 
   const tone = toneFor(proposal);
@@ -142,6 +173,12 @@ export function ProposalCard({ proposal, date }: { proposal: Proposal; date: str
                 </span>
               ))}
             </div>
+          ) : null}
+          {proposal.kind === "retest_due" ? (
+            <p className="text-[12px] font-mono text-ink mt-1">
+              Week {proposal.currentWeek} · logging {proposal.metricDisplayName}
+              {proposal.metricUnit ? ` (${proposal.metricUnit})` : ""}
+            </p>
           ) : null}
           {proposal.kind === "non_responder_recommendation" ? (
             <ul className="text-[12px] font-mono text-ink mt-1 space-y-0.5">
@@ -205,6 +242,12 @@ export function ProposalCard({ proposal, date }: { proposal: Proposal; date: str
           Ignore
         </button>
       </div>
+      {retestSheetOpen && proposal.kind === "retest_due" ? (
+        <RetestLoggingSheet
+          proposal={proposal}
+          onClose={() => onRetestSheetClose(true)}
+        />
+      ) : null}
     </section>
   );
 }
@@ -252,6 +295,7 @@ function toneFor(p: Proposal): Tone {
           };
     case "tier_advance":
     case "tm_bump":
+    case "retest_due":
       return {
         border: "border-slate/40",
         borderLeft: "border-l-4 border-l-slate",
@@ -275,6 +319,10 @@ function eyebrowFor(p: Proposal): string {
       return p.verdict === "true_non_response"
         ? "Signal · HERITAGE non-responder pattern"
         : "Signal · under-dosing pattern";
+    case "retest_due":
+      return p.cadenceKind === "mid_block"
+        ? "Signal · mid-block retest window open"
+        : "Signal · end-of-block retest window open";
   }
 }
 
@@ -292,6 +340,8 @@ function acceptVerbFor(p: Proposal): string {
       // Accept just acknowledges — the arc change itself is a user
       // decision on the /programs page, not something the engine auto-does.
       return "Got it";
+    case "retest_due":
+      return "Log reading";
   }
 }
 

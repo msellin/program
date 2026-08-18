@@ -143,6 +143,103 @@ describe("selectProposals — non_responder_recommendation", () => {
     }
   });
 
+  it("HERITAGE Phase 5 — fires a retest_due proposal when the mid-block window opens", () => {
+    // Program starts 2026-01-05 → Week 4 window opens 2026-01-26 (Mon).
+    const program = baseProgram({
+      retest_metrics_mid_block: [
+        {
+          metric_id: "submax_hr_bpm",
+          at_week: 4,
+          cadence_weeks: 4,
+          trigger: "user_initiated",
+          purpose: "HERITAGE first baseline",
+        },
+      ],
+      retest_metrics: [
+        {
+          metric_id: "submax_hr_bpm",
+          display_name: "Submax HR at 200W",
+          unit: "bpm",
+          direction: "lower_is_better",
+          source: "log",
+          source_ref: "runs.hr",
+          at_week: 8,
+          targets: [{ tier_id: "push", target: -12, at_week: 8 }],
+        },
+      ],
+    } as unknown as Partial<Program>);
+    const store = baseStore({
+      user_profile: {
+        uid: "test-uid",
+        active_program_id: "test-program",
+        active_program_started_at: "2026-01-05",
+        program_states: {
+          "test-program": { tier: "push" },
+        },
+      },
+    });
+    const dateInWeek4 = "2026-01-28"; // Wednesday of Week 4
+    const out = selectProposals(store, program, dateInWeek4);
+    const proposal = out.find((p) => p.kind === "retest_due");
+    expect(proposal).toBeDefined();
+    if (proposal?.kind === "retest_due") {
+      expect(proposal.metricId).toBe("submax_hr_bpm");
+      expect(proposal.atWeek).toBe(4);
+      expect(proposal.cadenceKind).toBe("mid_block");
+      expect(proposal.currentWeek).toBe(4);
+      expect(proposal.priority).toBe(45);
+    }
+  });
+
+  it("HERITAGE Phase 5 — suppresses retest_due when a fresh reading exists within 7 days", () => {
+    const program = baseProgram({
+      retest_metrics_mid_block: [
+        { metric_id: "submax_hr_bpm", at_week: 4, cadence_weeks: 4, trigger: "user_initiated", purpose: "" },
+      ],
+    } as unknown as Partial<Program>);
+    const store = baseStore({
+      user_profile: {
+        uid: "test-uid",
+        active_program_id: "test-program",
+        active_program_started_at: "2026-01-05",
+        program_states: {
+          "test-program": { tier: "push" },
+        },
+      },
+      retest_readings: [
+        // Yesterday — within the 7-day freshness window.
+        { metric_id: "submax_hr_bpm", value: 150, observed_at: "2026-01-27" },
+      ],
+    });
+    const dateInWeek4 = "2026-01-28";
+    const out = selectProposals(store, program, dateInWeek4);
+    expect(out.find((p) => p.kind === "retest_due")).toBeUndefined();
+  });
+
+  it("HERITAGE Phase 5 — retest_due is silent outside the [at_week, at_week+1] window", () => {
+    const program = baseProgram({
+      retest_metrics_mid_block: [
+        { metric_id: "submax_hr_bpm", at_week: 4, cadence_weeks: 4, trigger: "user_initiated", purpose: "" },
+      ],
+    } as unknown as Partial<Program>);
+    const store = baseStore({
+      user_profile: {
+        uid: "test-uid",
+        active_program_id: "test-program",
+        active_program_started_at: "2026-01-05",
+        program_states: {
+          "test-program": { tier: "push" },
+        },
+      },
+    });
+    // Week 2 (2026-01-19) — way too early
+    const early = selectProposals(store, program, "2026-01-19");
+    expect(early.find((p) => p.kind === "retest_due")).toBeUndefined();
+    // Week 7 (2026-02-16) — window closed (was open weeks 4 + 5)
+    const late = selectProposals(store, program, "2026-02-16");
+    expect(late.find((p) => p.kind === "retest_due")).toBeUndefined();
+  });
+
   it("respects dismissed_proposals so a rejected recommendation does not re-fire same day", () => {
     const program = baseProgram({
       non_responder_classifier: CLASSIFIER,
