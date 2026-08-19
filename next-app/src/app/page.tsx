@@ -180,10 +180,14 @@ export default function TodayPage() {
 
   return (
     <div className="space-y-5">
-      {/* Big top slab is gone. Screen-title H1 was showing the same word ("Today")
-          the bottom-nav tab already highlights. Phase context now rides under
-          the DateNav as a single compact line. Reclaims ~120px of fold. */}
-      <h1 className="sr-only">Today</h1>
+      {/* P1-4 — promoted from sr-only to visible for parity with Week /
+          Progress / History / Profile / Programs H1s. The word "Today"
+          duplicates the bottom-nav tab, but heading-hierarchy consistency
+          wins for SR + sighted-keyboard flow. Same 32 px treatment as
+          other top-level routes. */}
+      <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">
+        Today
+      </h1>
 
       {/* Suppress the reveal card once the user has any real log history —
           if they've been using the app, they know what plan they're on.

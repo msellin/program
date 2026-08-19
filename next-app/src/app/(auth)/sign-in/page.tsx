@@ -136,9 +136,10 @@ function SignInInner() {
       </div>
 
       <form onSubmit={submit} className="space-y-3" noValidate>
-        <label className="block text-[14px]">
+        <label htmlFor="signin-email" className="block text-[14px]">
           <span className="block text-muted mb-1">Email</span>
           <input
+            id="signin-email"
             type="email"
             required
             autoComplete="email"
@@ -147,9 +148,10 @@ function SignInInner() {
             className="block w-full text-[14px] px-3 py-2.5 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
           />
         </label>
-        <label className="block text-[14px]">
+        <label htmlFor="signin-password" className="block text-[14px]">
           <span className="block text-muted mb-1">Password</span>
           <input
+            id="signin-password"
             type="password"
             required
             autoComplete="current-password"

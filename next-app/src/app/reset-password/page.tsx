@@ -72,11 +72,12 @@ export default function ResetPasswordPage() {
       </header>
 
       <form onSubmit={submit} className="space-y-3" noValidate>
-        <label className="block text-[14px]">
+        <label htmlFor="reset-new-password" className="block text-[14px]">
           <span className="block text-muted mb-1">
             New password <span className="text-[11px] text-muted">(8+ characters)</span>
           </span>
           <input
+            id="reset-new-password"
             type="password"
             required
             autoComplete="new-password"
@@ -87,9 +88,10 @@ export default function ResetPasswordPage() {
             className="block w-full text-[14px] px-3 py-2.5 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze disabled:opacity-50"
           />
         </label>
-        <label className="block text-[14px]">
+        <label htmlFor="reset-confirm-password" className="block text-[14px]">
           <span className="block text-muted mb-1">Repeat new password</span>
           <input
+            id="reset-confirm-password"
             type="password"
             required
             minLength={8}

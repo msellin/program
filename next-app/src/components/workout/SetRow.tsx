@@ -50,6 +50,10 @@ export function SetRow({ index, set, prev, prescribed, isPR, restSeconds, onChan
           <span className="text-line">—</span>
         )}
       </div>
+      {/* P1-2 — placeholder doubles as the prescription hint, so it also
+          needs a screen-reader path. Bake the prescription (or last-time
+          value) into aria-label so SR users get the same target sighted
+          users read from the placeholder. */}
       <input
         type="number"
         inputMode="decimal"
@@ -63,14 +67,20 @@ export function SetRow({ index, set, prev, prescribed, isPR, restSeconds, onChan
               ? String(prev.weight_kg)
               : "kg"
         }
-        aria-label={`Set ${index + 1} weight`}
+        aria-label={
+          prescribed?.kg != null
+            ? `Set ${index + 1} weight, prescribed ${prescribed.kg} kg`
+            : prev?.weight_kg != null
+              ? `Set ${index + 1} weight, last time ${prev.weight_kg} kg`
+              : `Set ${index + 1} weight in kg`
+        }
         value={set.weight_kg ?? ""}
         onChange={(e) => {
           const raw = e.target.value;
           const v = raw === "" ? null : clamp(Number(raw), 0, 500);
           onChange({ weight_kg: v });
         }}
-        className="w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze placeholder:text-muted/70"
+        className="w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze placeholder:text-muted"
       />
       <input
         type="number"
@@ -85,14 +95,20 @@ export function SetRow({ index, set, prev, prescribed, isPR, restSeconds, onChan
               ? String(prev.reps)
               : "reps"
         }
-        aria-label={`Set ${index + 1} reps`}
+        aria-label={
+          prescribed?.reps != null
+            ? `Set ${index + 1} reps, prescribed ${prescribed.reps}`
+            : prev?.reps != null
+              ? `Set ${index + 1} reps, last time ${prev.reps}`
+              : `Set ${index + 1} reps`
+        }
         value={set.reps ?? ""}
         onChange={(e) => {
           const raw = e.target.value;
           const v = raw === "" ? null : clampInt(Number(raw), 0, 50);
           onChange({ reps: v });
         }}
-        className="w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze placeholder:text-muted/70"
+        className="w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze placeholder:text-muted"
       />
       <input
         type="number"

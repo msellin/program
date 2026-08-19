@@ -101,19 +101,25 @@ export default function EventsPage() {
       {/* Add form */}
       <section className="rounded border border-line-soft bg-surface p-4 space-y-3">
         <p className="font-semibold text-sm text-strong">Add an event</p>
+        {/* P1-5 — explicit label htmlFor / input id pairs. Implicit labels
+            (nesting input inside label) work in most SR/browser combos but
+            explicit is safer and matches Playwright/testing-library
+            convention. */}
         <div className="grid grid-cols-2 gap-3">
-          <label className="text-[14px] text-muted">
+          <label htmlFor="event-date" className="text-[14px] text-muted">
             Date
             <input
+              id="event-date"
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
               className="mt-1 w-full px-2 py-2 min-h-[44px] border border-line rounded bg-surface text-sm focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
             />
           </label>
-          <label className="text-[14px] text-muted">
+          <label htmlFor="event-kind" className="text-[14px] text-muted">
             Kind
             <select
+              id="event-kind"
               value={kind}
               onChange={(e) => setKind(e.target.value as Kind)}
               className="mt-1 w-full px-2 py-2 min-h-[44px] border border-line rounded bg-surface text-sm focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
@@ -124,9 +130,10 @@ export default function EventsPage() {
             </select>
           </label>
         </div>
-        <label className="block text-[14px] text-muted">
+        <label htmlFor="event-name" className="block text-[14px] text-muted">
           Name
           <input
+            id="event-name"
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -135,9 +142,10 @@ export default function EventsPage() {
           />
         </label>
         <div className="grid grid-cols-2 gap-3">
-          <label className="text-[14px] text-muted">
+          <label htmlFor="event-pre-deload" className="text-[14px] text-muted">
             Rest days before
             <input
+              id="event-pre-deload"
               type="number"
               min={0}
               max={14}
@@ -146,9 +154,10 @@ export default function EventsPage() {
               className="mt-1 w-full px-2 py-2 min-h-[44px] border border-line rounded bg-surface text-sm font-mono focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
             />
           </label>
-          <label className="text-[14px] text-muted">
+          <label htmlFor="event-rest-after" className="text-[14px] text-muted">
             Rest days after
             <input
+              id="event-rest-after"
               type="number"
               min={0}
               max={14}
@@ -158,9 +167,10 @@ export default function EventsPage() {
             />
           </label>
         </div>
-        <label className="block text-[14px] text-muted">
+        <label htmlFor="event-note" className="block text-[14px] text-muted">
           Note (optional)
           <input
+            id="event-note"
             type="text"
             value={note}
             onChange={(e) => setNote(e.target.value)}

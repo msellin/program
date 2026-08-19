@@ -10,17 +10,17 @@
 
 These are **IDEAS, not action items**. The engine + rehab-first positioning overrides "cleaner is better," so Margus picks what to ship. Batches ship in 6-12h chunks — don't try to close the whole list in one sitting, and respect the "no UI churn between audits" rule (each shipped batch should stand on its own before the next audit re-scans). Real bugs go first because they're broken code the audits happened to surface; everything else is prioritized by user-visible ROI. Sizing (S/M/L/XL) is per item.
 
-**Counts by bucket (post-Batch-17):**
+**Counts by bucket (post-Batch-18):**
 
 - **Bugs (fix regardless):** 1 item blocked (A4 harness), 3 shipped
 - **P0 (biggest ROI):** 0 open — all 4 shipped
-- **P1 (visible quality gap):** 36 items, ~20-25h (a11y 7 + mobile-ux 11 + motion-perf 8 + visual craft 6 + landing-alignment 4; copy batch of 19 shipped)
+- **P1 (visible quality gap):** 29 items, ~15-20h (mobile-ux 11 + motion-perf 8 + visual craft 6 + landing-alignment 4; a11y 7 shipped, copy batch 19 shipped)
 - **P2 (defensible polish):** 19 items, ~8-12h
 - **Features on-deck:** 9 items, ~30-50h
 - **Strategic (founder decision):** 4 items — decision, not build
 - **Rejected:** 11 items — do not ship
 
-Total open surface: **68 open ideas + 4 strategic + 11 rejected = 83 line items** (was 110 before Batch 17). Accessibility (P1-1 through P1-7) is still the natural next batch — 7 items, ~2-3h.
+Total open surface: **61 open ideas + 4 strategic + 11 rejected = 76 line items** (was 110 pre-Batch-17, 83 pre-Batch-18). Natural next batch: **mobile-UX P1-8 through P1-18** — 11 items, ~5-7h, or **motion+perf P1-19 through P1-26** — 8 items, ~3-4h.
 
 ---
 
@@ -59,15 +59,9 @@ Keep the convention terse — the four markers cover every state. Don't invent n
 
 ## Section C — P1 (ship this month)
 
-### Accessibility (5 items carried from 2026-08-18 — WCAG 2.2 AA)
+### Accessibility
 
-- [ ] **P1-1** Coach `<textarea>` has no accessible name — 4.1.2 / 3.3.2 P0 in the a11y sweep. Add `aria-label="Message coach"`. Source: `2026-08-18-accessibility-sweep.md` §3, `2026-08-17-app-audit-accessibility.md` §2.10. Files: `next-app/src/app/coach/page.tsx:309`. Size: S *(carried from 2026-08-17)*
-- [ ] **P1-2** SetRow placeholder `text-line` (1.66:1) doubles as the prescription hint — 1.4.3 + 1.3.3 fail. `placeholder:text-line` → `placeholder:text-muted` + add `aria-describedby` sr-only prescription. Source: `2026-08-18-accessibility-sweep.md` §2.1, `2026-08-17-app-audit-accessibility.md` §2.8. Files: `next-app/src/components/workout/SetRow.tsx:73,95`. Size: S *(carried from 2026-08-17)*
-- [ ] **P1-3** SliderRow visible `<label>` at `check/page.tsx:219` lacks `htmlFor` — mouse-tap on the word "Groin" doesn't focus the slider. 4.1.2. Add `htmlFor` or nest the input. Source: `2026-08-18-accessibility-sweep.md` §3, `2026-08-17-app-audit-accessibility.md` §6. Files: `next-app/src/app/check/page.tsx:219`. Size: S
-- [ ] **P1-4** Today (`page.tsx:181`) and Profile (`profile/page.tsx:178`) h1s should be visible for parity with Coach/Week/Progress/History/Check. 2.4.6. Promote `sr-only` → visible `text-3xl` (or the ramp head token). Source: `2026-08-18-accessibility-sweep.md` §2.2. Files: `next-app/src/app/page.tsx:181`, `next-app/src/app/profile/page.tsx:178`. Size: S
-- [ ] **P1-5** Events form (6 inputs), auth forms (sign-in / sign-up / reset-password — 6 inputs) — no `<label htmlFor>`. 4.1.2. Add. Source: `2026-08-18-accessibility-sweep.md` §3,6. Files: `next-app/src/app/events/page.tsx:111,119,134,146,157,168`, `next-app/src/app/(auth)/sign-in/page.tsx:147,158`, `(auth)/sign-up/page.tsx:167,181`, `reset-password/page.tsx:87,99`. Size: M
-- [ ] **P1-6** Heatmap row headers (`Heatmap.tsx:135-144`) are `<span aria-hidden>` while wrapper has `role="grid"` — no row-header context for SR. Replace with `role="rowheader"` or drop the grid role. 1.3.1. Source: `2026-08-18-accessibility-sweep.md` §3. Files: `next-app/src/components/charts/Heatmap.tsx:135-144`. Size: S
-- [ ] **P1-7** RestTimer `role="status" aria-live="polite"` wraps the per-second countdown — SR gets "1:30… 1:29…" 90×. Remove the outer live region; fire single `announce()` calls at start / 30s / 0. 4.1.3. Source: `2026-08-18-accessibility-sweep.md` §2.4. Files: `next-app/src/components/workout/RestTimer.tsx:60-64`. Size: S
+*(all 7 shipped in Batch 18 — see appendix)*
 
 ### Mobile UX (thumb reach + tap targets)
 
@@ -187,6 +181,18 @@ Deduplicated across visual-craft §16 + mobile-ux §10 + roadmap:
 ## Closed items appendix (shipped since 2026-08-17)
 
 Strikethrough preserves history; these items are OUT of the open list.
+
+**Batch 18 — accessibility (deployed https://8e41fcd2.program-v2.pages.dev, 2026-08-19):**
+
+7 items — the natural a11y batch (P1-1 through P1-7). Full lines preserved:
+
+- [x] **P1-1** — done 2026-08-19 Batch 18 — Coach `<textarea>` has no accessible name — 4.1.2 / 3.3.2 P0 in the a11y sweep. Add `aria-label="Message coach"`. Source: `2026-08-18-accessibility-sweep.md` §3, `2026-08-17-app-audit-accessibility.md` §2.10. Files: `next-app/src/app/coach/page.tsx:309`. Size: S *(carried from 2026-08-17)*
+- [x] **P1-2** — done 2026-08-19 Batch 18 — SetRow placeholder `text-line` (1.66:1) doubles as the prescription hint — 1.4.3 + 1.3.3 fail. `placeholder:text-line` → `placeholder:text-muted` + add `aria-describedby` sr-only prescription. Source: `2026-08-18-accessibility-sweep.md` §2.1, `2026-08-17-app-audit-accessibility.md` §2.8. Files: `next-app/src/components/workout/SetRow.tsx:73,95`. Size: S *(carried from 2026-08-17)*
+- [x] **P1-3** — done 2026-08-19 Batch 18 — SliderRow visible `<label>` at `check/page.tsx:219` lacks `htmlFor` — mouse-tap on the word "Groin" doesn't focus the slider. 4.1.2. Add `htmlFor` or nest the input. Source: `2026-08-18-accessibility-sweep.md` §3, `2026-08-17-app-audit-accessibility.md` §6. Files: `next-app/src/app/check/page.tsx:219`. Size: S
+- [x] **P1-4** — done 2026-08-19 Batch 18 — Today (`page.tsx:181`) and Profile (`profile/page.tsx:178`) h1s should be visible for parity with Coach/Week/Progress/History/Check. 2.4.6. Promote `sr-only` → visible `text-3xl` (or the ramp head token). Source: `2026-08-18-accessibility-sweep.md` §2.2. Files: `next-app/src/app/page.tsx:181`, `next-app/src/app/profile/page.tsx:178`. Size: S
+- [x] **P1-5** — done 2026-08-19 Batch 18 — Events form (6 inputs), auth forms (sign-in / sign-up / reset-password — 6 inputs) — no `<label htmlFor>`. 4.1.2. Add. Source: `2026-08-18-accessibility-sweep.md` §3,6. Files: `next-app/src/app/events/page.tsx:111,119,134,146,157,168`, `next-app/src/app/(auth)/sign-in/page.tsx:147,158`, `(auth)/sign-up/page.tsx:167,181`, `reset-password/page.tsx:87,99`. Size: M
+- [x] **P1-6** — done 2026-08-19 Batch 18 — Heatmap row headers (`Heatmap.tsx:135-144`) are `<span aria-hidden>` while wrapper has `role="grid"` — no row-header context for SR. Replace with `role="rowheader"` or drop the grid role. 1.3.1. Source: `2026-08-18-accessibility-sweep.md` §3. Files: `next-app/src/components/charts/Heatmap.tsx:135-144`. Size: S
+- [x] **P1-7** — done 2026-08-19 Batch 18 — RestTimer `role="status" aria-live="polite"` wraps the per-second countdown — SR gets "1:30… 1:29…" 90×. Remove the outer live region; fire single `announce()` calls at start / 30s / 0. 4.1.3. Source: `2026-08-18-accessibility-sweep.md` §2.4. Files: `next-app/src/components/workout/RestTimer.tsx:60-64`. Size: S
 
 **Batch 17 (deployed https://6a6ac147.program-v2.pages.dev, 2026-08-19):**
 

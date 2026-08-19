@@ -126,16 +126,20 @@ export function Heatmap({ store, onDayClick }: { store: Store; onDayClick?: (dat
           {totalStrengthDays} strength · {totalActiveDays} active total
         </p>
       </div>
+      {/* P1-6 — the DOM structure is column-first (grid-flow-col) so a
+          proper WAI-ARIA grid (which needs row-first rowheader/gridcell
+          descendants) doesn't fit. Simpler: treat the whole heatmap as
+          a labeled composite image. Row-day labels stay decorative for
+          SR; the summary counts above already convey the semantic. */}
       <div
-        role="grid"
-        aria-label={`Activity heatmap for the last ${WEEKS} weeks`}
+        role="img"
+        aria-label={`Activity heatmap for the last ${WEEKS} weeks: ${totalStrengthDays} strength days, ${totalActiveDays} active days total`}
         className="flex gap-2"
       >
-        <div className="flex flex-col gap-0.5">
+        <div className="flex flex-col gap-0.5" aria-hidden="true">
           {rowLabels.map((r) => (
             <span
               key={r}
-              aria-hidden
               className="mono-caps text-[10px] h-4 leading-4 flex items-center pr-1"
             >
               {r[0]}

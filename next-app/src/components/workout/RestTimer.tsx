@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Play, Pause, RotateCcw, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { announce } from "@/lib/announce";
 
 const PRESETS = [
   { label: "60s", seconds: 60 },
@@ -47,8 +48,31 @@ export function RestTimer({ autoStartSeconds, onClose }: Props) {
       if (typeof navigator !== "undefined" && "vibrate" in navigator) {
         navigator.vibrate?.([80, 60, 80]);
       }
+      announce("Rest complete.");
     }
   }, [elapsed, target, hit]);
+
+  // P1-7 — fire a single SR announce when 30 s remain instead of piping
+  // every-second countdown through role="status". Screen readers used
+  // to get "1:30… 1:29… 1:28…" spam because the outer wrapper had
+  // aria-live="polite".
+  const announced30sRef = useRef(false);
+  useEffect(() => {
+    if (announced30sRef.current) return;
+    const remainingNow = Math.max(0, target - elapsed);
+    if (remainingNow === 30) {
+      announce("30 seconds remaining.");
+      announced30sRef.current = true;
+    }
+  }, [elapsed, target]);
+
+  useEffect(() => {
+    // Reset the 30-s announce guard when a fresh timer starts.
+    if (running && elapsed === 0) {
+      announced30sRef.current = false;
+      announce(`Rest timer started, ${target} seconds.`);
+    }
+  }, [running, elapsed, target]);
 
   const remaining = Math.max(0, target - elapsed);
   const mins = Math.floor(remaining / 60);
@@ -57,11 +81,11 @@ export function RestTimer({ autoStartSeconds, onClose }: Props) {
   const pct = Math.min(1, elapsed / target);
 
   return (
-    <div
-      role="status"
-      aria-live="polite"
-      className="fixed left-3 right-3 bottom-[calc(60px+env(safe-area-inset-bottom))] z-40 mx-auto max-w-[760px]"
-    >
+    // P1-7 — role="status" + aria-live were on this wrapper AND the inner
+    // countdown label updated every second, so screen readers were told
+    // the remaining time 90+ times per timer. Live region removed; the
+    // announce() calls above fire at start / 30 s / complete instead.
+    <div className="fixed left-3 right-3 bottom-[calc(60px+env(safe-area-inset-bottom))] z-40 mx-auto max-w-[760px]">
       <div className="rounded-lg border border-line bg-surface shadow-xl overflow-hidden">
         {/* Progress bar */}
         <div className="h-1 bg-line-soft relative">
@@ -91,7 +115,7 @@ export function RestTimer({ autoStartSeconds, onClose }: Props) {
               "flex-1 text-center font-mono text-2xl font-semibold tabular-nums leading-none",
               hit ? "text-green" : "text-strong",
             )}
-            aria-label={`${remaining} seconds remaining`}
+            aria-hidden="true"
           >
             {fmt}
           </div>
