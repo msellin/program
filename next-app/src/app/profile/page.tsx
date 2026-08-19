@@ -123,6 +123,10 @@ export default function ProfilePage() {
     .map((slug) => manifest?.programs.find((p) => p.slug === slug))
     .filter((p): p is NonNullable<typeof p> => !!p);
   const [signOutOpen, setSignOutOpen] = useState(false);
+  const [removeOpen, setRemoveOpen] = useState<
+    (typeof activePrograms)[number] | null
+  >(null);
+  const removeActiveProgram = useStore((s) => s.removeActiveProgram);
 
   const doSignOut = async () => {
     const supabase = createClient();
@@ -166,6 +170,12 @@ export default function ProfilePage() {
             const hasIntake =
               !!state?.tier || !!state?.intake_answers || !!state?.baseline_capabilities;
             const graduated = !!state?.graduated_at;
+            // Non-primary rows in a multi-track setup get a "Remove"
+            // text-link. Deliberately quiet — the row itself is a
+            // deep-link to the program page (where the primary remove
+            // action lives). This surface only exists so multi-track
+            // users don't have to navigate two levels to drop an extra.
+            const canRemoveHere = activePrograms.length > 1 && !isPrimary;
             // Resolve tier label from plan_tiers using the stored tier id.
             const tierLabel = (() => {
               if (!state?.tier || !manifest) return null;
@@ -214,6 +224,15 @@ export default function ProfilePage() {
                   </div>
                   <ChevronRight size={16} className="text-muted flex-shrink-0" />
                 </Link>
+                {canRemoveHere ? (
+                  <button
+                    type="button"
+                    onClick={() => setRemoveOpen(p)}
+                    className="ml-auto mr-3 mb-2 -mt-1 text-[11px] text-muted hover:text-red underline decoration-line hover:decoration-red block"
+                  >
+                    Remove
+                  </button>
+                ) : null}
               </li>
             );
           })}
@@ -339,6 +358,18 @@ export default function ProfilePage() {
         danger
         onConfirm={() => void deleteAccount()}
         onCancel={() => setConfirmDelete(false)}
+      />
+      <ConfirmSheet
+        open={!!removeOpen}
+        title={removeOpen ? `Remove ${removeOpen.name}?` : ""}
+        body="Your log history stays. You can pick it up again any time from Programs."
+        confirmLabel="Remove"
+        danger
+        onConfirm={() => {
+          if (removeOpen) removeActiveProgram(removeOpen.slug);
+          setRemoveOpen(null);
+        }}
+        onCancel={() => setRemoveOpen(null)}
       />
     </div>
   );

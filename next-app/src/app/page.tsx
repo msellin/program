@@ -36,6 +36,10 @@ export default function TodayPage() {
   const [byId, setById] = useState<Record<string, Exercise>>({});
   const [error, setError] = useState<string | null>(null);
   const [activeDate, setActiveDate] = useState(() => todayISO());
+  const [programManifest, setProgramManifest] = useState<ProgramManifest | null>(null);
+  useEffect(() => {
+    void loadProgramManifest().then(setProgramManifest).catch(() => setProgramManifest(null));
+  }, []);
   const hydrated = useStore((s) => s.hydrated);
   const override = useStore((s) => s.store.scheduled_overrides?.[activeDate]);
 
@@ -341,19 +345,55 @@ export default function TodayPage() {
       ) : null}
 
       {multipleProgramsToday ? (
-        <div className="rounded border border-amber/40 bg-amber/10 px-3 py-2.5 text-[13px]">
-          <p className="text-amber-strong">
-            <span className="font-semibold">
-              {groupsWithBlocks.length} tracks scheduled today.
-            </span>{" "}
-            If it&apos;s too much, snooze one from{" "}
-            <Link href="/profile" className="underline">Profile</Link>.
-          </p>
-          <p className="text-muted mt-1">
-            Concurrent endurance + strength has known interference effects (Schumann 2022).
-            Aim for ≥6 hours between sessions if you do both.
-          </p>
-        </div>
+        (() => {
+          // Track-specific interference wording. Delta-3 flagged the
+          // hardcoded Schumann text fired for every pair including
+          // combinations where interference isn't the actual concern
+          // (skill + mobility, rehab + anything). Categories come from
+          // the manifest entry per program slug.
+          const activeCats = new Set<string>();
+          for (const g of groupsWithBlocks) {
+            const slug = g.program.slug;
+            if (!slug) continue;
+            const entry = programManifest?.programs.find((p) => p.slug === slug);
+            if (entry?.category) activeCats.add(entry.category);
+          }
+          const has = (c: string) => activeCats.has(c);
+          const hasStrengthAndAerobic =
+            (has("strength") || has("rehab")) && has("endurance");
+          const hasSkill = has("skill") || has("gymnastics");
+          const hasMobility = has("asymmetry") || has("mobility");
+          const hasRehab = has("rehab");
+          let interference: string;
+          if (hasStrengthAndAerobic) {
+            interference =
+              "Concurrent endurance + strength has known interference effects (Schumann 2022). Aim for ≥6 hours between sessions if you do both.";
+          } else if (hasSkill && (has("strength") || has("endurance"))) {
+            interference =
+              "Skill + strength/aerobic on the same day: put the skill work first — motor learning suffers when the CNS is already fatigued (Sadowski 2021 analog).";
+          } else if (hasRehab && has("endurance")) {
+            interference =
+              "Rehab + endurance: watch symptom score after cardio. Any groin / hip flare-up = tomorrow's rehab session is symptom-gated.";
+          } else if (hasMobility) {
+            interference =
+              "Mobility runs alongside the rest without interference. Optional to sequence — do mobility after strength/skill when time permits.";
+          } else {
+            interference =
+              "Multiple tracks today. If it's too much, snooze one from Profile.";
+          }
+          return (
+            <div className="rounded border border-amber/40 bg-amber/10 px-3 py-2.5 text-[13px]">
+              <p className="text-amber-strong">
+                <span className="font-semibold">
+                  {groupsWithBlocks.length} tracks scheduled today.
+                </span>{" "}
+                If it&apos;s too much, snooze one from{" "}
+                <Link href="/profile" className="underline">Profile</Link>.
+              </p>
+              <p className="text-muted mt-1">{interference}</p>
+            </div>
+          );
+        })()
       ) : null}
 
       {isPastProgramEnd(primary, activeDate, userProfile) && activeDate === todayISO() ? (

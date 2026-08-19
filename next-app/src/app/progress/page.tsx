@@ -234,6 +234,9 @@ function ProgressBody({
             expandableSlot={<SignalCompletenessCard program={_program} inline />}
           />
           <PerProgramAdherenceCard />
+          {activeProgramIds.length > 1 ? (
+            <CrossTrackWeekTile store={store} />
+          ) : null}
           <RetestMetricsPanel program={_program} store={store} />
           {activeSlug === "anterior-hip-rebuild" ? (
             (() => {
@@ -658,5 +661,90 @@ function ErrorBox({ msg }: { msg: string }) {
       <h2 className="mb-2 text-lg font-semibold">Couldn&apos;t load data</h2>
       <p className="text-sm text-muted">{msg}</p>
     </div>
+  );
+}
+
+/**
+ * Cross-track weekly-load summary for multi-program users. Rolls up
+ * this-week activity across every active track: strength sessions,
+ * aerobic sessions/minutes, skill/mobility count, morning-check
+ * completion. Delta-3 multi-track flagged the missing surface.
+ */
+function CrossTrackWeekTile({
+  store,
+}: {
+  store: import("@/lib/schemas").Store;
+}) {
+  const now = new Date();
+  // Start of the current calendar week (Mon).
+  const jsDow = now.getDay();
+  const daysBackToMon = (jsDow + 6) % 7;
+  const monMs = new Date(now).getTime() - daysBackToMon * 864e5;
+  const startISO = new Date(monMs).toISOString().slice(0, 10);
+  const endISO = now.toISOString().slice(0, 10);
+
+  let strengthSessions = 0;
+  let aerobicSessions = 0;
+  let aerobicMinutes = 0;
+  let checksLogged = 0;
+  let daysCounted = 0;
+  for (const [dateISO, day] of Object.entries(store.logs ?? {})) {
+    if (dateISO < startISO || dateISO > endISO) continue;
+    daysCounted++;
+    if (day.symptoms) checksLogged++;
+    const exDone = Object.values(day.exercises ?? {}).some((e) => e.done);
+    if (exDone) strengthSessions++;
+    for (const r of day.runs ?? []) {
+      aerobicSessions++;
+      aerobicMinutes += r.minutes ?? 0;
+    }
+  }
+  return (
+    <section className="rounded border border-line-soft bg-surface p-4 space-y-2">
+      <header className="flex items-baseline justify-between">
+        <h2 className="text-[15px] font-semibold text-strong">This week — all tracks</h2>
+        <span className="text-[10px] font-mono uppercase tracking-widest text-muted">
+          Mon → today
+        </span>
+      </header>
+      <ul className="grid grid-cols-2 gap-2 text-[13px]">
+        <li className="rounded bg-ground/40 p-2">
+          <p className="text-[10px] font-mono uppercase tracking-wider text-muted">
+            Strength
+          </p>
+          <p className="text-strong font-semibold mt-0.5">
+            {strengthSessions} <span className="text-[11px] text-muted font-normal">sessions</span>
+          </p>
+        </li>
+        <li className="rounded bg-ground/40 p-2">
+          <p className="text-[10px] font-mono uppercase tracking-wider text-muted">
+            Aerobic
+          </p>
+          <p className="text-strong font-semibold mt-0.5">
+            {aerobicSessions}{" "}
+            <span className="text-[11px] text-muted font-normal">
+              · {aerobicMinutes} min
+            </span>
+          </p>
+        </li>
+        <li className="rounded bg-ground/40 p-2">
+          <p className="text-[10px] font-mono uppercase tracking-wider text-muted">
+            Morning checks
+          </p>
+          <p className="text-strong font-semibold mt-0.5">
+            {checksLogged} / {daysCounted}
+          </p>
+        </li>
+        <li className="rounded bg-ground/40 p-2">
+          <p className="text-[10px] font-mono uppercase tracking-wider text-muted">
+            Days active
+          </p>
+          <p className="text-strong font-semibold mt-0.5">{daysCounted}</p>
+        </li>
+      </ul>
+      <p className="text-[11px] text-muted italic pt-1">
+        Rolled up across every active track. Per-track detail on the card above.
+      </p>
+    </section>
   );
 }
