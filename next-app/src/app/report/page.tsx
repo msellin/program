@@ -172,7 +172,7 @@ export default function ReportPage() {
           </Link>
         </div>
         <div className="flex items-baseline justify-between gap-3 flex-wrap">
-          <h1 className="text-2xl font-semibold tracking-tight text-strong">Training summary</h1>
+          <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">Training summary</h1>
           <button
             type="button"
             onClick={() => window.print()}

@@ -146,7 +146,7 @@ function ProgressBody({
   return (
     <div className="space-y-5 pt-4">
       <header className="flex items-baseline justify-between gap-3">
-        <h1 className="text-2xl font-semibold tracking-tight text-strong">Progress</h1>
+        <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">Progress</h1>
         <a
           href="/report"
           className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-muted hover:text-ink hover:bg-line-soft min-h-[36px] whitespace-nowrap"

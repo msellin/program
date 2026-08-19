@@ -120,19 +120,17 @@ export default function WeekPage() {
 
   return (
     <div className="space-y-6 pt-4">
-      <header className="flex items-baseline justify-between gap-3">
-        <div className="min-w-0">
-          <h1 className="text-2xl font-semibold tracking-tight text-strong truncate">Week</h1>
-          <p className="mt-1 text-[13px] text-muted">
-            The 7-day rhythm, with your skips and moves applied.
-          </p>
-        </div>
-        <a
-          href="/programs"
-          className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-muted hover:text-ink hover:bg-line-soft min-h-[36px] whitespace-nowrap"
-        >
-          Programs
-        </a>
+      {/* Design-lead brief 2026-08-19 §1.1: H1 promoted to 32 px semibold
+          + Programs pill dropped off the header row (redundant with the
+          bottom-nav Programs tab a step away). Subtitle gets mt-2
+          breathing room. */}
+      <header>
+        <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">
+          Week
+        </h1>
+        <p className="mt-2 text-[13px] text-muted">
+          The 7-day rhythm, with your skips and moves applied.
+        </p>
       </header>
 
       {/* Bug fix 2026-08-18 (#71) — the forward arrow used to shift left when
@@ -355,7 +353,7 @@ export default function WeekPage() {
               <div
                 key={dayName + i}
                 className={cn(
-                  "px-3 py-3 flex items-start gap-3",
+                  "px-4 py-4 flex items-start gap-3",
                   isToday && "bg-bronze/8",
                   skip && "opacity-70",
                 )}

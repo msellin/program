@@ -136,33 +136,56 @@ export default function ProfilePage() {
 
   return (
     <div className="space-y-5 pt-4 pb-10">
-      <h1 className="sr-only">Profile</h1>
-      <div className="flex items-baseline justify-between gap-3">
-        <div className="flex items-baseline gap-2 min-w-0">
-          <p className="text-sm text-muted truncate">
+      {/* Design-lead brief 2026-08-19 (gowod-visual-system) §1.1 + §4.2:
+          promoted from sr-only to visible 32 px semibold. Highest-impact-
+          per-minute edit in the brief — the Profile tab read "empty and
+          weird" partly because there was no page-title anchor. */}
+      <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">
+        Profile
+      </h1>
+
+      {/* Identity chip (brief §1.2 + §4.2). Replaces the baseline-flex row
+          that put email + staff + joined on one line. 76 px tall, 48 px
+          avatar with bronze-tint using the first letter of the email, name
+          at 16 px semibold, meta stacked on the right. Non-interactive for
+          now; becomes chevron+link once /account route ships. */}
+      <div className="rounded border border-line-soft bg-surface px-4 py-3 flex items-center gap-3">
+        <div className="w-12 h-12 rounded-full bg-bronze/20 flex items-center justify-center flex-shrink-0">
+          <span className="font-semibold text-lg text-bronze-hi">
+            {(email ?? "?").charAt(0).toUpperCase()}
+          </span>
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="text-[16px] font-semibold text-strong break-words">
             {email ?? (
               <span className="inline-block w-48 h-4 bg-line-soft rounded animate-pulse" aria-label="Loading email" />
             )}
           </p>
-          {isSuperAdmin ? (
-            <span
-              className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-slate/20 text-slate flex-shrink-0"
-              title="Staff account — you can enrol in multiple programs at once."
-            >
-              staff
-            </span>
-          ) : null}
-        </div>
-        {memberSince ? (
-          <p className="font-mono text-[10px] uppercase tracking-wider text-muted flex-shrink-0">
-            joined {memberSince}
+          <p className="text-[11px] text-muted mt-0.5 flex items-center gap-2 flex-wrap">
+            {memberSince ? (
+              <span className="font-mono uppercase tracking-wider">
+                joined {memberSince}
+              </span>
+            ) : null}
+            {isSuperAdmin ? (
+              <span
+                className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-slate/20 text-slate"
+                title="Staff account — you can enrol in multiple programs at once."
+              >
+                staff
+              </span>
+            ) : null}
           </p>
-        ) : null}
+        </div>
       </div>
 
       {/* Active plan(s). No inline × — removal happens on the program page
           (see product-design-lead brief). Row is chevron → deep link. */}
       {activePrograms.length ? (
+        <div>
+          <p className="font-mono text-[10px] uppercase tracking-widest text-muted mb-2">
+            Your programs
+          </p>
         <ul className="rounded border border-line-soft bg-surface divide-y divide-line-soft">
           {activePrograms.map((p, i) => {
             const isPrimary = i === 0 && p.slug === activeProgramId;
@@ -237,6 +260,7 @@ export default function ProfilePage() {
             );
           })}
         </ul>
+        </div>
       ) : (
         <Link
           href="/programs"
@@ -246,6 +270,10 @@ export default function ProfilePage() {
         </Link>
       )}
 
+      <div>
+        <p className="font-mono text-[10px] uppercase tracking-widest text-muted mb-2">
+          More
+        </p>
       <nav aria-label="More" className="rounded border border-line-soft bg-surface divide-y divide-line-soft">
         {coachConfigured() ? (
           <Link
@@ -270,56 +298,63 @@ export default function ProfilePage() {
           <ChevronRight size={16} className="text-muted flex-shrink-0" />
         </Link>
       </nav>
+      </div>
 
       {/* Footer: legal + GDPR utility links. Deliberately quiet — reachable
           (legally required) but not shouting. Both Export and Delete fire a
           ConfirmSheet. Founder request 2026-08-19 — Sign out moves BELOW
           the footer so it's the last thing on the screen (bottom-anchored
           rest position). */}
+      {/* Design-lead brief 2026-08-19 §4.2 — collapse footer. Delete moves
+          under a Danger-zone disclosure so the destructive action isn't
+          44 px away from same-styled Privacy link. Legal + Export
+          reduce to one line each, muted 11 px. */}
       <footer className="pt-6 space-y-3 border-t border-line-soft">
-        <nav
-          aria-label="Legal"
-          className="flex flex-wrap gap-x-5 gap-y-1 text-[11px]"
-        >
+        <nav aria-label="Legal" className="text-[11px] text-muted">
           <Link
             href="/legal/privacy"
-            className="inline-flex items-center min-h-[44px] py-2 text-muted hover:text-ink"
+            className="hover:text-ink"
           >
             Privacy
           </Link>
-          <Link
-            href="/legal/terms"
-            className="inline-flex items-center min-h-[44px] py-2 text-muted hover:text-ink"
-          >
+          <span className="mx-1.5" aria-hidden>·</span>
+          <Link href="/legal/terms" className="hover:text-ink">
             Terms
           </Link>
-          <Link
-            href="/legal/disclaimer"
-            className="inline-flex items-center min-h-[44px] py-2 text-muted hover:text-ink"
-          >
+          <span className="mx-1.5" aria-hidden>·</span>
+          <Link href="/legal/disclaimer" className="hover:text-ink">
             Medical disclaimer
           </Link>
         </nav>
-        <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-[11px]">
-          <button
-            type="button"
-            onClick={exportMyData}
-            className="inline-flex items-center min-h-[44px] py-2 text-muted hover:text-ink underline underline-offset-2 decoration-muted/50 hover:decoration-ink/60"
-          >
-            Export my data
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setDeleteError(null);
-              setConfirmDelete(true);
-            }}
-            disabled={deleting}
-            className="inline-flex items-center min-h-[44px] py-2 text-muted hover:text-ink underline underline-offset-2 decoration-muted/50 hover:decoration-ink/60 disabled:opacity-50"
-          >
-            {deleting ? "Deleting…" : "Delete my account"}
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={exportMyData}
+          className="inline-flex items-center min-h-[44px] py-2 text-[11px] text-muted hover:text-ink underline underline-offset-2 decoration-muted/50 hover:decoration-ink/60"
+        >
+          Export my data
+        </button>
+        <details className="text-[11px]">
+          <summary className="cursor-pointer inline-flex items-center min-h-[44px] py-2 text-muted hover:text-ink select-none">
+            Danger zone
+          </summary>
+          <div className="mt-1 pl-2 border-l border-red/30 py-2">
+            <button
+              type="button"
+              onClick={() => {
+                setDeleteError(null);
+                setConfirmDelete(true);
+              }}
+              disabled={deleting}
+              className="inline-flex items-center min-h-[44px] py-2 text-red/80 hover:text-red underline underline-offset-2 decoration-red/40 disabled:opacity-50"
+            >
+              {deleting ? "Deleting…" : "Delete my account"}
+            </button>
+            <p className="text-muted italic mt-1">
+              Wipes your account, logs, morning checks, everything synced.
+              Cannot be undone.
+            </p>
+          </div>
+        </details>
         {deleteError ? (
           <p className="text-[12px] text-red border-l-4 border-red pl-2">{deleteError}</p>
         ) : null}
