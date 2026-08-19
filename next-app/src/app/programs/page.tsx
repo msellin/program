@@ -138,11 +138,14 @@ export default function ProgramCatalogPage() {
         {/* F10 Batch 31 · honesty callout below the legend. Names the actual
             distribution so users can see the ladder isn't marketing — some
             programs will earn REVIEWED and some may never, depending on
-            specialist availability and user completion volume. */}
+            specialist availability and user completion volume.
+            S6 (2026-08-19) · one-line addendum for personal programs. They
+            sit outside this ladder — the "personal" badge is their signal. */}
         <p className="text-[12px] text-muted pt-1 leading-relaxed italic">
           Every program ships at least REFERENCED. Higher tiers unlock as
           specialists audit and as users complete arcs — that&apos;s the ladder,
-          not a marketing gradient.
+          not a marketing gradient. Personal programs (author&apos;s own
+          clinical context) sit outside this ladder — see the &ldquo;personal&rdquo; badge instead.
         </p>
       </header>
 
@@ -241,11 +244,16 @@ export default function ProgramCatalogPage() {
  * VERIFIED (or the legacy PROVISIONAL / stable aliases). Colored by
  * confidence. See legend on this page for meaning.
  */
-function StatusChip({ status }: { status?: string }) {
+function StatusChip({ status, personal }: { status?: string; personal?: boolean }) {
   // DRAFT / draft / PROVISIONAL programs are hidden from the catalog by the
   // publicOnly filter above; the chip returning null here is defensive belt-
   // and-suspenders in case a DRAFT program leaks through some other surface
   // (super-admin view, direct URL, /account list). No visible chip.
+  // S6 (2026-08-19): personal programs are outside the referenced/reviewed/
+  // verified ladder entirely — the "personal" badge is their own signal.
+  // Adding them to the ladder blurs the boundary the personal-italic warning
+  // is trying to draw.
+  if (personal) return null;
   if (!status || status === "draft" || status === "DRAFT" || status === "PROVISIONAL") return null;
   // P0-8 palette-collision fix 2026-08-19: status chips become neutral-
   // outlined pill + 6px colored dot. Category color still lives on the
@@ -334,7 +342,7 @@ function ProgramCard({
                 active
               </span>
             ) : null}
-            <StatusChip status={p.status} />
+            <StatusChip status={p.status} personal={p.personal} />
             {p.personal ? (
               <span
                 className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5"

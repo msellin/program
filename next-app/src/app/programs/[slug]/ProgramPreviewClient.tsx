@@ -192,6 +192,9 @@ export function ProgramPreviewClient({ slug }: Props) {
             // P0-8 palette-collision fix 2026-08-19: neutral-outlined pill
             // + 6px colored dot. Semantic tone lives on the dot, not the
             // whole chip.
+            // S6 (2026-08-19): personal programs are outside the ladder
+            // entirely — the "personal" chip below carries their signal.
+            if (entry.personal) return null;
             const s = entry.status;
             if (!s || s === "draft" || s === "DRAFT" || s === "PROVISIONAL") return null;
             const map: Record<string, { label: string; dotClass: string; title: string }> = {
@@ -223,8 +226,11 @@ export function ProgramPreviewClient({ slug }: Props) {
         {/* F10 Batch 31 · attribution row for REVIEWED programs. Names the
             reviewer + date + scope so the trust tier isn't a bare chip —
             it's an audit trail. review_evidence[] entries are audit files
-            in the repo; we don't link them (privacy) but we name them. */}
-        {(program.status === "REVIEWED" || program.status === "VERIFIED") &&
+            in the repo; we don't link them (privacy) but we name them.
+            S6 (2026-08-19) · suppress for personal programs — they sit
+            outside the ladder, so no attribution row either. */}
+        {!entry.personal &&
+        (program.status === "REVIEWED" || program.status === "VERIFIED") &&
         program.reviewed_by ? (
           <div className="rounded border border-slate/40 border-l-4 border-l-slate bg-surface p-3 text-[14px] mt-2 space-y-1">
             <p className="text-strong">
