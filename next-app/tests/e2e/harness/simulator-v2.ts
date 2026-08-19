@@ -194,8 +194,27 @@ export async function runSimulationV2(
     }
     return null;
   });
+  // Per-program capability baseline seeds. Mirrors what
+  // IntakeClient.commit() would have written for the physical_test values
+  // of skill / mobility programs. Enables retest cards to render real
+  // baseline/current/Δ instead of "— · — · —". Comprehensive audit
+  // 2026-08-18 P0-M residual (deferred from Batch 3b).
+  const CAPABILITY_SEEDS: Record<string, Record<string, number>> = {
+    "handstand-walk": {
+      wall_hold_max_seconds: 12,
+      freestand_hold_max_seconds: 2,
+      walk_distance_max_metres: 0,
+    },
+    "overhead-mobility": {
+      shoulder_flexion_supine_deg: 155,
+      ohs_hip_below_knee_cm: -3,
+      tgu_hold_max_seconds: 12,
+    },
+  };
+  const capabilitySeed = CAPABILITY_SEEDS[programSlug] ?? {};
+
   await page.evaluate(
-    ({ slug, tier, tms, uid }) => {
+    ({ slug, tier, tms, uid, capabilitySeed }) => {
       const raw = localStorage.getItem("program.log.v2");
       const store = raw ? JSON.parse(raw) : {
         version: 2,
@@ -218,11 +237,34 @@ export async function runSimulationV2(
         active_program_started_at: new Date().toISOString(),
         tier: "beta_forever",
       };
-      if (tier) {
+      if (tier || Object.keys(capabilitySeed).length > 0) {
+        const priorState = store.user_profile.program_states?.[slug] ?? {};
         store.user_profile.program_states = {
           ...(store.user_profile.program_states ?? {}),
-          [slug]: { ...(store.user_profile.program_states?.[slug] ?? {}), tier },
+          [slug]: {
+            ...priorState,
+            ...(tier ? { tier } : {}),
+            ...(Object.keys(capabilitySeed).length
+              ? { baseline_capabilities: { ...capabilitySeed } }
+              : {}),
+          },
         };
+      }
+      if (Object.keys(capabilitySeed).length > 0) {
+        // capability_profile mirrors baseline at t=0; the daily loop below
+        // bumps `measured_value` slowly to simulate real adaptation.
+        const nowIso = new Date().toISOString();
+        const caps = { ...(store.user_profile.capability_profile ?? {}) };
+        for (const [testId, value] of Object.entries(capabilitySeed)) {
+          caps[testId] = {
+            estimated_level: 1,
+            confidence: "physical_test",
+            measured_value: value,
+            unit: "",
+            last_measured_at: nowIso,
+          };
+        }
+        store.user_profile.capability_profile = caps;
       }
       store.training_maxes = { ...store.training_maxes, ...tms };
       store.updated_at = Date.now();
@@ -235,7 +277,7 @@ export async function runSimulationV2(
       // one green matrix run confirms every persona seed uses the new key.
       localStorage.setItem("program.onboarding.done", "1");
     },
-    { slug: programSlug, tier: tier ?? null, tms: INITIAL_TMS, uid: sessionUid },
+    { slug: programSlug, tier: tier ?? null, tms: INITIAL_TMS, uid: sessionUid, capabilitySeed },
   );
 
   await page.goto("/");
@@ -421,6 +463,48 @@ export async function runSimulationV2(
         tier: tier ?? null,
       },
     );
+
+    // Capability-profile drift for skill/mobility programs. Every ~7 days
+    // bump measured_value in the direction of the retest_metric's target.
+    // Comprehensive audit 2026-08-18 P0-M residual.
+    if (day % 7 === 0 && Object.keys(capabilitySeed).length > 0) {
+      const cycleAvgFactor = archetype.loadFactor(day);
+      await page.evaluate(
+        ({ dateISO, slug, cycleAvgFactor }) => {
+          const raw = localStorage.getItem("program.log.v2");
+          if (!raw) return;
+          const store = JSON.parse(raw);
+          const caps = store.user_profile?.capability_profile ?? {};
+          // Positive-improvement direction per known test. All skill/mobility
+          // metrics currently seeded improve as they get bigger except
+          // (a) OHS depth (bigger positive = deeper hip below knee), (b)
+          // wall_hold_max_seconds gets larger too. All monotonically up.
+          const bumpBy: Record<string, number> = {
+            wall_hold_max_seconds: 1.2,
+            freestand_hold_max_seconds: 0.4,
+            walk_distance_max_metres: 0.5,
+            shoulder_flexion_supine_deg: 1.0,
+            ohs_hip_below_knee_cm: 0.3,
+            tgu_hold_max_seconds: 1.5,
+          };
+          const nowIso = new Date().toISOString();
+          for (const testId of Object.keys(caps)) {
+            const delta = bumpBy[testId];
+            if (delta == null) continue;
+            const cap = caps[testId];
+            const scaled = delta * cycleAvgFactor;
+            cap.measured_value = Math.round((cap.measured_value + scaled) * 10) / 10;
+            cap.last_measured_at = nowIso;
+          }
+          store.user_profile.capability_profile = caps;
+          store.updated_at = Date.now();
+          localStorage.setItem("program.log.v2", JSON.stringify(store));
+          void slug;
+          void dateISO;
+        },
+        { dateISO, slug: programSlug, cycleAvgFactor },
+      );
+    }
 
     // Cycle-end acceptance simulation (v3): at every 28-day boundary from
     // program start, roll archetype.acceptProposal. If accepted, apply a TM

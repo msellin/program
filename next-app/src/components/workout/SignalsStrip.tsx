@@ -10,6 +10,7 @@ import { activePhaseFor } from "@/lib/engine/schedule";
 import { blocksForDate } from "@/lib/engine/plan-generator";
 import { HIP_FLEXOR_PACK } from "@/lib/assessments-data";
 import { evaluateCycleEnd, detectPauseResume } from "@/lib/engine/adapt";
+import { evaluateRetestMetrics } from "@/lib/engine/retest-evaluator";
 import { AssessmentDueBanner } from "../AssessmentDueBanner";
 import { iso } from "@/lib/utils";
 import type { Program } from "@/lib/schemas";
@@ -91,6 +92,48 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
     const pause = detectPauseResume(store, date);
     if (pause && pause.gapDays >= 14) {
       list.push({ id: "pause", tone: "amber", label: `Back after ${pause.gapDays} days — soften plan?` });
+    }
+
+    // Positive-adaptation surface for aerobic programs. Overperformer
+    // path was silent on Today per delta audit 2026-08-19 — no branch
+    // in note-signals for "you look ready to push". Reads retest
+    // metrics; if the primary trend is at least halfway to target in
+    // the metric's direction, surfaces a slate advisory ("Trending
+    // well — consider a tier-up"). Real Accept flow lives on Progress
+    // where the tier-advance proposal + retest card already are.
+    const slug = program.slug;
+    const userTier = slug
+      ? store.user_profile?.program_states?.[slug]?.tier
+      : undefined;
+    if (userTier) {
+      try {
+        const retestVals = evaluateRetestMetrics(program, store, userTier);
+        for (const m of retestVals) {
+          if (!m.supported || m.current == null || m.baseline == null || m.target == null) continue;
+          // Skip mid-block copies to avoid double-signaling on the same metric.
+          if (m.metric_id.endsWith("__mid_block")) continue;
+          const rawDelta = m.current - m.baseline;
+          const targetDelta = m.target;
+          if (!Number.isFinite(rawDelta) || !Number.isFinite(targetDelta)) continue;
+          // Improvement is direction-aware. For "lower_is_better", a
+          // negative rawDelta AND negative target is progress.
+          const goodDir = m.direction === "higher_is_better"
+            ? rawDelta > 0 && targetDelta > 0
+            : rawDelta < 0 && targetDelta < 0;
+          if (!goodDir) continue;
+          const ratio = Math.abs(rawDelta) / Math.abs(targetDelta);
+          if (ratio >= 0.5) {
+            list.push({
+              id: "positive-adaptation",
+              tone: "slate",
+              label: `Trending well on ${m.display_name.toLowerCase()} — consider a tier-up on Progress`,
+            });
+            break;
+          }
+        }
+      } catch {
+        /* non-fatal — retest evaluator errors don't break Today */
+      }
     }
 
     // CSM amber-week 4×4 drop signal. Program authors this hook at

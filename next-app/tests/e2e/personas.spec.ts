@@ -7,7 +7,16 @@ import { buildRoutes, DEFAULT_VIEWPORTS, runTour } from "./harness/tour";
 import { resetTestUser } from "./setup-test-user";
 
 const ARTIFACT_ROOT = "tests/e2e/artifacts/personas";
-const START_DATE = "2026-07-01";
+// Per-persona start date: today - persona.days, so the sim ends
+// exactly on today. Prior fixed "2026-07-01" ran the sim ending
+// 20-45 days before the tour capture, which starved
+// evaluateOverperformer's 7-day recency filter and hid every
+// overperformer / cycle-end proposal. Delta audit 2026-08-19.
+function computeStartDate(personaDays: number): string {
+  const t = new Date();
+  t.setDate(t.getDate() - personaDays);
+  return t.toISOString().slice(0, 10);
+}
 
 test.describe.configure({ mode: "serial" });
 
@@ -51,7 +60,7 @@ for (const persona of PERSONAS) {
       archetype: personaArchetype(persona),
       programSlug: persona.programSlug,
       tier: persona.tier,
-      startDate: START_DATE,
+      startDate: computeStartDate(persona.days),
       days: persona.days,
       snapshotDays: [],
       screenshotDir: path.join(outDir, "sim-snapshots"),
