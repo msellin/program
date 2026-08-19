@@ -119,7 +119,12 @@ Keep the convention terse — the four markers cover every state. Don't invent n
 
 From roadmap sync + product-concerns-2026-08-17 + design-lead brief `2026-08-19-founder-obs-design-lead.md`.
 
-- [~] **F8 · Batch 29 — IA restructure** — First push shipped 2026-08-19 (`c1bd940`). P1-78 kill ReadinessDot shipped 2026-08-19 (`a2bc820`). **DEFERRED to F8-second REAL:** Today → DashboardBlock dashboard (MorningCheck + Workout + Extras blocks), `/session/[slug]` route split, inline session UI removed from Today. Est 7-9h focused work — plan filed at `dev/active/F8-second-plan.md` with SessionModel hook extraction pattern + risks + preconditions. Do NOT attempt in a continue-thread.
+- [~] **F8 · IA restructure** — Multi-push state. Shipped:
+  - Header collapse + Settings v1 + Events kill + Extras/Report/Evidence relocated (`c1bd940`)
+  - ReadinessDot kill (`a2bc820`)
+  - **F8-second infrastructure** (`adea483` + `7e6885d`) — TodayView extracted as named export; `/session/[slug]` route statically generated for all 8 programs with `slugOverride` narrowing to single-program view; "Focus session →" affordance on Today's phase readout row; "← Back to Today" affordance + mode-legible header subtitle on /session/[slug].
+
+  **Still deferred:** Today → pure dashboard (MorningCheck + Workout summary + Extras blocks as sole content) + kill inline session UI. Both routes currently render nearly identical content; divergence needs its own focused pass with persona-harness regeneration. Plan doc at `dev/active/F8-second-plan.md`. Est ~5-7h remaining for the pure-dashboard restructure.
 - [~] **F9 · Batch 30 — DashboardBlock primitive** — First push shipped 2026-08-19 (`b68812f`). Primitive live at `src/components/DashboardBlock.tsx`. Applied to Programs catalog category sections (closes P1-75) + ExerciseCard fixes (closes P1-71 + P1-73). **DEFERRED to follow-up pushes:** Today dashboard use (needs F8 second push), session route use, program-preview restructure (P1-74 still open).
 - [~] **F10 · Batch 31 — Readiness ladder ship** — 5 of 6 REVIEWED promotions shipped 2026-08-19 (`38d7822`). Schema (reviewed_by, reviewed_at, status_history, review_evidence[]) added. DRAFT rename + catalog filter + attribution row on preview page + honesty callout on catalog all live. Promoted: engine-builder, overhead-mobility, handstand-walk, CSM, rowing-2k. **REMAINING:** anterior-hip-rebuild promotion blocked on **S6** decision (personal-program REVIEWED policy).
 
