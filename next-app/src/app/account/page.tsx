@@ -10,6 +10,7 @@ import { useIsSuperAdmin } from "@/lib/super-admin";
 import { loadProgramManifest } from "@/lib/data-loader";
 import { useAccountActions } from "@/lib/account/actions";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
+import { RotateCcw } from "lucide-react";
 import type { ProgramManifest } from "@/lib/schemas";
 
 /**
@@ -30,7 +31,9 @@ import type { ProgramManifest } from "@/lib/schemas";
 export default function AccountPage() {
   const store = useStore((s) => s.store);
   const setActiveProgram = useStore((s) => s.setActiveProgram);
+  const revertExtension = useStore((s) => s.revertExtension);
   const isSuperAdmin = useIsSuperAdmin();
+  const [pendingRevert, setPendingRevert] = useState<string | null>(null);
   const router = useRouter();
   const [email, setEmail] = useState<string | null>(null);
   const [memberSince, setMemberSince] = useState<string | null>(null);
@@ -68,6 +71,22 @@ export default function AccountPage() {
     if (!activeProgramId || !manifest) return null;
     return manifest.programs.find((p) => p.slug === activeProgramId)?.name ?? activeProgramId;
   })();
+
+  // F1 (Batch 25) — surface any program with an active +Nw extension so
+  // the user can undo it. Extensions are single-decision toggles: revert
+  // clears the field entirely (mirror of resumeProgram's shape).
+  const extendedPrograms = activeProgramIds
+    .map((slug) => {
+      const state = store.user_profile?.program_states?.[slug];
+      const weeks = state?.extension_weeks ?? 0;
+      if (weeks <= 0) return null;
+      const name = manifest?.programs.find((p) => p.slug === slug)?.name ?? slug;
+      return { slug, weeks, name };
+    })
+    .filter((e): e is { slug: string; weeks: number; name: string } => e != null);
+  const pendingRevertName = pendingRevert
+    ? extendedPrograms.find((e) => e.slug === pendingRevert)?.name ?? pendingRevert
+    : null;
 
   return (
     <div className="space-y-5 pt-4">
@@ -142,6 +161,43 @@ export default function AccountPage() {
         </div>
       ) : null}
 
+      {/* F1 (Batch 25) — extensions surface. Only renders when at least
+          one active program has an accepted extension. Each row lists
+          the program + weeks + a revert button that clears the field
+          via the store's revertExtension action. The design brief
+          §Cross-feature coherence chose /account (not Today) as the
+          undo home so the graduation card stays celebratory. */}
+      {extendedPrograms.length > 0 ? (
+        <div>
+          <p className="font-mono text-[10px] uppercase tracking-widest text-muted mb-2">
+            Extensions
+          </p>
+          <ul className="rounded border border-line-soft bg-surface divide-y divide-line-soft">
+            {extendedPrograms.map((e) => (
+              <li
+                key={e.slug}
+                className="flex items-center justify-between gap-3 px-4 py-3 min-h-[48px]"
+              >
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm text-strong truncate">{e.name}</p>
+                  <p className="text-[11px] text-muted mt-0.5">
+                    Extended +{e.weeks}w · retest window pushed
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setPendingRevert(e.slug)}
+                  className="inline-flex items-center gap-1.5 text-[11px] text-muted hover:text-ink underline decoration-line hover:decoration-ink"
+                >
+                  <RotateCcw size={12} aria-hidden />
+                  Undo
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+
       {/* Data & privacy — Export + Delete. Delete lives here exclusively;
           the prior Profile-footer Danger-zone disclosure is gone. */}
       <div>
@@ -206,6 +262,19 @@ export default function AccountPage() {
           </Link>
         </nav>
       </footer>
+
+      <ConfirmSheet
+        open={pendingRevert != null}
+        title={pendingRevertName ? `Undo the extension on ${pendingRevertName}?` : "Undo extension?"}
+        body="The retest window snaps back to the original end date. Your logs and phase progress stay intact."
+        confirmLabel="Undo"
+        cancelLabel="Keep it"
+        onCancel={() => setPendingRevert(null)}
+        onConfirm={() => {
+          if (pendingRevert) revertExtension(pendingRevert);
+          setPendingRevert(null);
+        }}
+      />
 
       <ConfirmSheet
         open={emailNotice}

@@ -6,7 +6,6 @@ import {
   BookOpen,
   LogOut,
   ChevronRight,
-  MessageSquare,
   Download,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -15,7 +14,6 @@ import { createClient } from "@/lib/supabase/client";
 import { useIsSuperAdmin } from "@/lib/super-admin";
 import { loadProgramManifest } from "@/lib/data-loader";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
-import { coachConfigured } from "@/lib/coach-client";
 import { useInstallPrompt } from "@/lib/useInstallPrompt";
 import type { ProgramManifest } from "@/lib/schemas";
 
@@ -27,7 +25,7 @@ import type { ProgramManifest } from "@/lib/schemas";
  * Structure:
  *   - Identity row (email, staff badge, joined date)
  *   - Active programs list (tap → deep link to program page; remove happens there)
- *   - "More" nav (Guide, Coach when configured)
+ *   - "More" nav (Guide, Evidence)
  *   - Sign out (Fitts-separated)
  *   - Footer: legal + GDPR utilities (Export, Delete) — deliberately quiet
  */
@@ -257,18 +255,10 @@ export default function ProfilePage() {
           More
         </p>
       <nav aria-label="More" className="rounded border border-line-soft bg-surface divide-y divide-line-soft">
-        {coachConfigured() ? (
-          <Link
-            href="/coach"
-            className="flex items-center justify-between gap-3 px-3 py-3 min-h-[48px] active:bg-line-soft/50"
-          >
-            <span className="flex items-center gap-3 text-sm">
-              <MessageSquare size={16} className="text-muted" />
-              Ask coach
-            </span>
-            <ChevronRight size={16} className="text-muted flex-shrink-0" />
-          </Link>
-        ) : null}
+        {/* S1 (Batch 25) — Coach shelved until N ≥ 50 users. AI-token
+            costs don't pencil at beta scale. Row removed from Profile,
+            /coach route + coach-client.ts deleted. R12 covers the
+            explicit "don't reopen without paid user base" call. */}
         <Link
           href="/guide"
           className="flex items-center justify-between gap-3 px-3 py-3 min-h-[48px] active:bg-line-soft/50"

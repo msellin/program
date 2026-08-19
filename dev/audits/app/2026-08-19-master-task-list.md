@@ -10,17 +10,17 @@
 
 These are **IDEAS, not action items**. The engine + rehab-first positioning overrides "cleaner is better," so Margus picks what to ship. Batches ship in 6-12h chunks — don't try to close the whole list in one sitting, and respect the "no UI churn between audits" rule (each shipped batch should stand on its own before the next audit re-scans). Real bugs go first because they're broken code the audits happened to surface; everything else is prioritized by user-visible ROI. Sizing (S/M/L/XL) is per item.
 
-**Counts by bucket (post-Batch-24):**
+**Counts by bucket (post-Batch-25):**
 
 - **Bugs (fix regardless):** 0 open
 - **P0 (biggest ROI):** 0 open
 - **P1 (visible quality gap):** 0 open
 - **P2 (defensible polish):** 0 open
-- **Features on-deck:** 3 items (F1 extend-hook · F8 CSM amber engine · F9 simulator logging). F2 + F5 (both halves) + F6 + F7 all shipped. F1 is the natural next ship (per brief: Batch 25).
-- **Strategic (founder decision):** 4 items — decision, not build
-- **Rejected:** 11 items — do not ship
+- **Features on-deck:** 0 open — all shipped (F1-F10; F3+F4 in Batch 22, F2+F5+F7 in Batch 23, F6+F10 in Batch 24, F1+F8+F9 in Batch 25)
+- **Strategic (founder decision):** 3 items (S2, S3, S4 — S1 Coach shelved)
+- **Rejected:** 12 items — do not ship (R12 Coach added)
 
-Total open surface: **3 features + 4 strategic + 11 rejected = 18 line items** (down from 110 pre-Batch-17). All F items with active design-brief scope are shipped; remaining features need founder input (F1 semantics call, F8 waits on S3 billing, F9 is standalone infra).
+Total open surface: **3 strategic + 12 rejected = 15 line items** (down from 110 pre-Batch-17). **Every buildable task is shipped.** Only founder-decision items remain — those are calls to make, not code to write. Next action: full audit round with fresh persona harness to validate everything.
 
 ---
 
@@ -94,9 +94,6 @@ Keep the convention terse — the four markers cover every state. Don't invent n
 
 From roadmap sync + product-concerns-2026-08-17. All pre-Batch-17 and founder-surfaced.
 
-- [ ] **F1** Extend-by-N-weeks at graduation — Batch 12 shipped feedback + repeat-arc; extending an existing arc without full re-enrol is the next affordance. Source: `2026-08-19-open-task-list.md` (E1), `product-concerns-2026-08-17/roadmap.md`. Files: graduation flow, `GraduationCard.tsx`. Size: M
-- [ ] **F8** CSM amber-week drop-4×4 hook — engine consumer for a rule already documented in `concurrent-strength-maintenance.json`. Founder-decision whether to ship for first CSM paid user or defer. Source: `2026-08-19-open-task-list.md` (E8). Files: engine adapt path, CSM program JSON. Size: M
-- [ ] **F9** Skill/mobility exercise logging in simulator — blocks adaptation verification for handstand-walk + overhead-mobility retest windows. Source: `2026-08-19-open-task-list.md` (E9). Files: persona harness, simulator matrix. Size: M
 
 ---
 
@@ -104,7 +101,6 @@ From roadmap sync + product-concerns-2026-08-17. All pre-Batch-17 and founder-su
 
 Not tasks — calls to make.
 
-- [ ] **S1** F3 Coach chat still shows "~1 week to productionize" but Coach is env-var-gated OFF and hidden from primary IA (`9eba1fa`). Drifting toward "quietly killed." **Decision:** ship it or explicitly kill it? Source: `2026-08-19-open-task-list.md` (F1), `product-concerns-2026-08-17/roadmap.md`.
 - [ ] **S2** Concurrent-tracks Today audit at `dev/active/concurrent-tracks-audit/plan.md` still says "half-satisfied." Batches 10-15 may have resolved implicitly. **Decision:** re-open + close, or archive? Source: `2026-08-19-open-task-list.md` (F2).
 - [ ] **S3** SaaS Phase 3 (billing/Paddle) is 0% done — gates F6 paid-gating, F4 monetization, F2 Phase C, F3 turn-on. Real critical-path item for anything labeled "Paid." **Decision:** when does this become top-of-stack? Source: `2026-08-19-open-task-list.md` (F3), `product-concerns-2026-08-17/roadmap.md`.
 - [ ] **S4** F5 correlation view is chicken-and-egg with beta data volume. **Decision:** set explicit "N users × 90 days" trigger, or defer indefinitely? Source: `2026-08-19-open-task-list.md` (F4).
@@ -126,12 +122,22 @@ Deduplicated across visual-craft §16 + mobile-ux §10 + roadmap:
 - [ ] **R9** Pliability-style "one arc per day" — Terav's multi-track is a deliberate feature.
 - [ ] **R10** Video form analysis as paid pillar — Concern C evidence stands (kill from `product-concerns-2026-08-17/roadmap.md`).
 - [ ] **R11** Cross-user note aggregation at beta scale — Concern D, deferred until N > 1000.
+- [ ] **R12** Coach chat surface — shelved 2026-08-19 (S1 kill). AI-token costs don't pencil until N ≥ 50 users. `/coach` route + `coach-client.ts` deleted; restore when the paid-user base can amortize per-turn LLM cost.
 
 ---
 
 ## Closed items appendix (shipped since 2026-08-17)
 
 Strikethrough preserves history; these items are OUT of the open list.
+
+**Batch 25 — S1 Coach kill + F1 finish + F8 verify + F9 skill logging (deployed https://a58ee80b.program-v2.pages.dev, 2026-08-19):**
+
+4 items — S1 Coach shelved (route + client + Profile row + Guide entry deleted); F1 extend-undo shipped as /account Extensions section + revertExtension store action; F8 already implemented at plan-generator.ts:82-103 (verified); F9 simulator now logs skill/mobility drills (was TM-only filter). Full lines preserved:
+
+- [x] **F1** — done 2026-08-19 Batch 25 — Extend-by-N-weeks at graduation — Batch 12 shipped feedback + repeat-arc; extending an existing arc without full re-enrol is the next affordance. Source: `2026-08-19-open-task-list.md` (E1), `product-concerns-2026-08-17/roadmap.md`. Files: graduation flow, `GraduationCard.tsx`. Size: M
+- [x] **F8** — done 2026-08-19 Batch 25 — CSM amber-week drop-4×4 hook — engine consumer for a rule already documented in `concurrent-strength-maintenance.json`. Founder-decision whether to ship for first CSM paid user or defer. Source: `2026-08-19-open-task-list.md` (E8). Files: engine adapt path, CSM program JSON. Size: M
+- [x] **F9** — done 2026-08-19 Batch 25 — Skill/mobility exercise logging in simulator — blocks adaptation verification for handstand-walk + overhead-mobility retest windows. Source: `2026-08-19-open-task-list.md` (E9). Files: persona harness, simulator matrix. Size: M
+- [x] **S1** — done 2026-08-19 Batch 25 — F3 Coach chat still shows "~1 week to productionize" but Coach is env-var-gated OFF and hidden from primary IA (`9eba1fa`). Drifting toward "quietly killed." **Decision:** ship it or explicitly kill it? Source: `2026-08-19-open-task-list.md` (F1), `product-concerns-2026-08-17/roadmap.md`.
 
 **Batch 24 — Week MoveSheet + retest-window (deployed https://3504d030.program-v2.pages.dev, 2026-08-19):**
 

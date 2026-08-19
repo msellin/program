@@ -239,6 +239,13 @@ type StoreState = {
    */
   resumeProgram: (slug: string) => void;
   /**
+   * F1 (Batch 25) — revert a previously-applied `extension_weeks` value
+   * on a program state. Deletes the field entirely (as opposed to
+   * decrementing) — the design brief treats extensions as a single
+   * decision the user can undo, not a stackable slider.
+   */
+  revertExtension: (slug: string) => void;
+  /**
    * Phase A: dismiss the "your plan is built" reveal card for a program. Sets
    * program_states[slug].reveal_seen = true. Card never re-appears for the
    * same program.
@@ -1089,6 +1096,21 @@ export const useStore = create<StoreState>((set, get) => ({
     if (!prior) return;
     const next = { ...prior };
     delete next.paused_at;
+    states[slug] = next;
+    profile.program_states = states;
+    s.user_profile = profile;
+    commitImmediate(s);
+    set({ store: s });
+  },
+
+  revertExtension: (slug) => {
+    const s = { ...get().store };
+    const profile = { ...(s.user_profile ?? {}) };
+    const states = { ...(profile.program_states ?? {}) };
+    const prior = states[slug];
+    if (!prior?.extension_weeks) return;
+    const next = { ...prior };
+    delete next.extension_weeks;
     states[slug] = next;
     profile.program_states = states;
     s.user_profile = profile;

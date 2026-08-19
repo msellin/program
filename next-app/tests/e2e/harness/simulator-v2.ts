@@ -127,9 +127,25 @@ function pickAerobicBlocksForDate(
 function itemsForBlock(program: ProgramShape, blockId: string): string[] {
   const block = program.blocks.find((b) => b.id === blockId);
   if (!block?.items) return [];
-  return block.items
-    .map((it) => it.exercise_id)
-    .filter((x): x is string => !!x && TM_EXERCISES.some((t) => t === x));
+  const ids = block.items.map((it) => it.exercise_id).filter((x): x is string => !!x);
+  // F9 (Batch 25) — for strength programs we log only TM lifts (the
+  // simulator's per-set / RPE / weight logic is TM-anchored). For
+  // skill/mobility programs we log EVERY drill in the block so the
+  // exercise-log heatmap + adherence math actually reflect the arc.
+  // Prior behavior returned [] for HSW / overhead-mobility blocks,
+  // which meant persona-handstand's persona-erratic peer had an
+  // empty history heatmap. Slug-gate the two catalog programs; falls
+  // back to TM_EXERCISES for everything else.
+  const skillMobilitySlugs = new Set([
+    "handstand-walk",
+    "overhead-mobility",
+    "first-strict-pullup",
+    "muscle-up",
+  ]);
+  if (skillMobilitySlugs.has(program.slug ?? "")) {
+    return ids;
+  }
+  return ids.filter((x) => TM_EXERCISES.some((t) => t === x));
 }
 
 /**

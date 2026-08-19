@@ -20,11 +20,9 @@ const LINKS = [
   // its own nav slot (stethoscope). Order preserved for the remaining items.
   { href: "/extras/", label: "Extras", Icon: ListPlus, superAdminOnly: false },
   { href: "/events/", label: "Events", Icon: CalendarDays, superAdminOnly: true },
-  // Coach removed from More dropdown 2026-08-17 per founder observation
-  // (test@terav.fit was seeing it and it's a "Coming soon" placeholder).
-  // Still reachable via Profile → Ask coach for super-admins, and via
-  // direct /coach URL for founder debugging. Restore when the chat surface
-  // + confirm-first proposal loop actually ships.
+  // Coach shelved 2026-08-19 (S1 kill call) until N ≥ 50 users can
+  // amortize AI-token costs. R12 covers the "don't reopen without paid
+  // user base" call. /coach route + coach-client.ts deleted.
   { href: "/report/", label: "Report", Icon: FileText, superAdminOnly: false },
   // Data removed from More dropdown 2026-08-17 per founder observation.
   // Still reachable via Profile → Manage data (the GDPR-required export/

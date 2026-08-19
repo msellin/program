@@ -115,12 +115,12 @@ export default function GuidePage() {
         <Row label="Programs">The catalog. Browse, preview, start a program.</Row>
         <Row label="Check">Morning symptom scoring. Save it and today&apos;s prescription auto-adjusts (amber −5%, red −10%).</Row>
         <Row label="Extras">Accessories, home rehab, cardio / conditioning blocks — no calendar pressure.</Row>
-        <Row label="Coach">
-          Coming soon. When live, an AI coach that reads your logs, TMs, milestones and
-          program evidence each turn. Ask about form, plan changes, symptom interpretation.
-        </Row>
         <Row label="Report">Specialist-facing summary. Print / save as PDF for a clinician or coach.</Row>
         <Row label="Data">Manage data — import, export, wipe local.</Row>
+        <Row label="Evidence">
+          The full bibliography behind every program, proposal, and progression rule
+          in the app. If a claim can&apos;t be traced back to something here, it&apos;s an engineering choice, not cited.
+        </Row>
         <Row label="Guide">This page.</Row>
       </Section>
 
