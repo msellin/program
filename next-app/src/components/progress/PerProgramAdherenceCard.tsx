@@ -42,48 +42,53 @@ function computeRows(store: Store, slugs: string[]): ProgramRow[] {
   const rows: ProgramRow[] = [];
   for (const slug of slugs) {
     const blocks = getBlocksForProgram(store, slug, startISO, endISO);
-    if (blocks.length > 0) {
-      let done = 0;
-      let planned = 0;
-      let skipped = 0;
-      let moved = 0;
-      for (const b of blocks) {
-        if (b.state === "done") done++;
-        else if (b.state === "skipped") skipped++;
-        else if (b.state === "moved") moved++;
-        else planned++;
-      }
-      const denom = blocks.length - moved;
-      rows.push({
-        slug,
-        done,
-        planned,
-        skipped,
-        moved,
-        total: blocks.length,
-        adherencePct: denom > 0 ? Math.round((done / denom) * 100) : 0,
-      });
-      continue;
-    }
-    // Fallback for programs / users where scheduled_blocks isn't populated
-    // yet — count log-based done sessions instead of showing "0/25 done"
-    // while the user has 17 real runs. Delta audit 2026-08-19 P1.
     let done = 0;
-    for (const [dateISO, day] of Object.entries(store.logs ?? {})) {
-      if (dateISO < startISO || dateISO > endISO) continue;
-      const anyExerciseDone = Object.values(day.exercises ?? {}).some((e) => e.done);
-      const anyRun = (day.runs ?? []).length > 0;
-      if (anyExerciseDone || anyRun) done++;
+    let planned = 0;
+    let skipped = 0;
+    let moved = 0;
+    for (const b of blocks) {
+      if (b.state === "done") done++;
+      else if (b.state === "skipped") skipped++;
+      else if (b.state === "moved") moved++;
+      else planned++;
     }
-    if (done === 0) continue;
+
+    // Log-augment: if scheduled_blocks are materialized but nothing is
+    // marked done yet (e.g. legacy-to-blocks materializer materialized
+    // the calendar but the sim / real user has been logging exercises +
+    // runs directly), count log-based done days. Engine delta-2 caught
+    // this: adherence showed "0/15 done · 0%" despite 22 runs because
+    // the fallback trigger was "blocks.length === 0" instead of "no
+    // block state === done".
+    if (done === 0) {
+      let logDone = 0;
+      for (const [dateISO, day] of Object.entries(store.logs ?? {})) {
+        if (dateISO < startISO || dateISO > endISO) continue;
+        const anyExerciseDone = Object.values(day.exercises ?? {}).some((e) => e.done);
+        const anyRun = (day.runs ?? []).length > 0;
+        if (anyExerciseDone || anyRun) logDone++;
+      }
+      done = logDone;
+      // Consume log-done days from `planned`. If sim log-days > planned
+      // blocks (legacy-materializer only wrote N weeks), let the total
+      // grow so the ratio stays honest.
+      if (planned > 0) {
+        planned = Math.max(0, planned - done);
+      }
+    }
+
+    if (blocks.length === 0 && done === 0) continue;
+
+    const total = Math.max(blocks.length, done + planned + skipped + moved);
+    const denom = total - moved;
     rows.push({
       slug,
       done,
-      planned: 0,
-      skipped: 0,
-      moved: 0,
-      total: done,
-      adherencePct: 100,
+      planned,
+      skipped,
+      moved,
+      total,
+      adherencePct: denom > 0 ? Math.round((done / denom) * 100) : 0,
     });
   }
   return rows;

@@ -262,12 +262,18 @@ export async function runSimulationV2(
           },
         };
       }
-      if (tier || Object.keys(capabilitySeed).length > 0) {
+      // Always seed the primary's program_states with started_at so the
+      // implicit phase-shift fallback + retest cadence work. Engine
+      // delta-2 caught: primary slug's entry had `{tier}` only, no
+      // started_at, so week-number math and retest windows started at
+      // whatever active_program_started_at fell back to.
+      {
         const priorState = store.user_profile.program_states?.[slug] ?? {};
         store.user_profile.program_states = {
           ...(store.user_profile.program_states ?? {}),
           [slug]: {
             ...priorState,
+            started_at: priorState.started_at ?? startedAtISO,
             ...(tier ? { tier } : {}),
             ...(Object.keys(capabilitySeed).length
               ? { baseline_capabilities: { ...capabilitySeed } }

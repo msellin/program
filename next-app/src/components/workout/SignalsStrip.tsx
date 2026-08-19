@@ -122,7 +122,12 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
             : rawDelta < 0 && targetDelta < 0;
           if (!goodDir) continue;
           const ratio = Math.abs(rawDelta) / Math.abs(targetDelta);
-          if (ratio >= 0.5) {
+          // Threshold at 25% of target progress — original 50% was too
+          // strict; a persona-engine-fast with real −2 bpm drift against
+          // a −8 bpm target scored 0.25 and stayed silent. Engine
+          // delta-2 caught this. Signal is advisory, not proposal;
+          // firing early is fine.
+          if (ratio >= 0.25) {
             list.push({
               id: "positive-adaptation",
               tone: "slate",
@@ -325,6 +330,41 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
               <Link
                 href="/progress/"
                 className="inline-block mt-2 text-[13px] text-amber border-b border-amber hover:opacity-80"
+              >
+                Review on Progress →
+              </Link>
+            </div>
+          ) : null}
+
+          {/* CSM amber-week 4×4 advisory. Signal-computed at
+              SignalsStrip.tsx:154; expanded body was missing a render
+              branch so the label never showed — phantom fix. CSM delta-2
+              (2026-08-19) caught. */}
+          {signals.some((s) => s.id === "csm-amber-week") ? (
+            <div className="rounded border border-amber/40 border-l-4 border-l-amber bg-amber/10 p-3 text-sm">
+              <p className="font-semibold text-strong">Amber week detected</p>
+              <p className="text-[13px] text-muted mt-1">
+                {signals.find((s) => s.id === "csm-amber-week")?.label ??
+                  "Multiple amber days this week — plan will drop 4×4 next week"}
+                .{" "}
+                Program authors: `concurrent-strength-maintenance.json:541` says
+                &quot;drop 4×4 for a week&quot;. Scheduled-block swap is coming
+                — until then, feel free to substitute an easy Z2 recovery on
+                Thu.
+              </p>
+            </div>
+          ) : null}
+
+          {/* Positive-adaptation advisory — mirror of the pause pattern. */}
+          {signals.some((s) => s.id === "positive-adaptation") ? (
+            <div className="rounded border border-slate/40 border-l-4 border-l-slate bg-slate/10 p-3 text-sm">
+              <p className="font-semibold text-strong">Trending well</p>
+              <p className="text-[13px] text-muted mt-1">
+                {signals.find((s) => s.id === "positive-adaptation")?.label}. Progress → Retest lets you log the reading + review the tier-advance proposal.
+              </p>
+              <Link
+                href="/progress/"
+                className="inline-block mt-2 text-[13px] text-slate border-b border-slate hover:opacity-80"
               >
                 Review on Progress →
               </Link>

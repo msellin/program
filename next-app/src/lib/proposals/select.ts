@@ -36,6 +36,7 @@ import { nextEligibleTier, isProposalDismissed } from "@/lib/engine/tier-promoti
 import { evaluateOverperformer } from "@/lib/engine/adapt";
 import { classify } from "@/lib/engine/non-responder-classifier";
 import { weekNumberFromProgramStart } from "@/lib/engine/plan-generator";
+import { isPastProgramEnd } from "@/lib/engine/schedule";
 import { citationIdForKind } from "@/lib/engine/proposal-citations";
 import { iso, today as todayISO } from "@/lib/utils";
 
@@ -283,6 +284,13 @@ function selectRetestDue(
   const profile = store.user_profile;
   if (!profile?.active_program_started_at) return null;
 
+  // Post-graduation, retest_due proposals stop firing — Batch 5 #1 gated
+  // the phase readout + retest banner + reveal card on isPastProgramEnd
+  // but missed this proposal path. Engine delta-2 caught the leak:
+  // "END-OF-BLOCK RETEST WINDOW OPEN" + "YOU FINISHED" rendered
+  // simultaneously on both graduated engine personas.
+  if (isPastProgramEnd(program, date, profile)) return null;
+
   const currentWeek = weekNumberFromProgramStart(profile, date);
 
   type Row = { atWeek: number; metricId: string; kind: "mid_block" | "end_of_block" };
@@ -416,6 +424,28 @@ export function selectProposals(store: Store, program: Program, date: string): P
   if (tier) out.push(tier);
   const tm = selectTMBump(program, store, date);
   if (tm) out.push(tm);
+
+  // Mutex: a "trim the top set" soften and a "bump the TM" push should
+  // never render on the same Today — they contradict. CSM delta-2 caught
+  // both firing on persona-strength ("Halson 2014 trim 5%" + "Rhea 2003
+  // add weight"). Priority is a proxy for confidence; the higher-priority
+  // signal wins. If both fire, drop the softer one. Confidence rank:
+  // non_responder (50) > tier_advance (40) > tm_bump (30) > day_adjust
+  // (20) > everything else. Only drop `day_adjustment_soften` (fatigue)
+  // when `tm_bump` (headroom) also fires — that's the direct contradiction.
+  const hasTmBump = out.some((p) => p.kind === "tm_bump");
+  const hasFatigueSoften = out.some(
+    (p) => p.kind === "day_adjustment_soften",
+  );
+  if (hasTmBump && hasFatigueSoften) {
+    // Keep the higher-confidence signal. TM-bump requires 3 consecutive
+    // green days + easy notes — a stronger signal than a single day's
+    // fatigue read. Drop the soften.
+    for (let i = out.length - 1; i >= 0; i--) {
+      if (out[i].kind === "day_adjustment_soften") out.splice(i, 1);
+    }
+  }
+
   // Highest priority first.
   out.sort((a, b) => b.priority - a.priority);
   return out;

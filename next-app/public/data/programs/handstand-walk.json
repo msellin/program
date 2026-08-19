@@ -773,7 +773,7 @@
     },
     {
       "id": "block_skill_A_kinoshita",
-      "name": "Skill session A \u2014 Kinoshita position ladder (Tier A blocked practice)",
+      "name": "Skill session A \u2014 Kinoshita position ladder",
       "category": "accessory",
       "location": "gym",
       "duration_min": [
@@ -1946,6 +1946,19 @@
       "cadence_weeks": 4,
       "trigger": "phase_end",
       "targets": [
+        {
+          "tier_id": "tier_a_foundation",
+          "target": 0,
+          "stretch": 0,
+          "at_week": 8,
+          "note": "Tier A doesn't attempt walk distance in Block 1 — target 0 means the metric is retested but no delta expected. Kept for consistency with the other tiers' cards."
+        },
+        {
+          "tier_id": "tier_b_wall_handstand",
+          "target": 0,
+          "stretch": 2,
+          "at_week": 8
+        },
         {
           "tier_id": "tier_c_freestand",
           "target": 5,

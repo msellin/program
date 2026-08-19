@@ -239,15 +239,21 @@ export default function TodayPage() {
         return null;
       })()}
 
-      <ProposalStack program={primary} date={activeDate} />
-
-      <HeroStateCard date={activeDate} />
-
-      <SignalsStrip program={primary} date={activeDate} />
-
+      {/* Post-graduation, ProposalStack + SignalsStrip + RetestReminder all
+          suppressed — the graduation experience is one card, not a menu of
+          proposals + signals mixed in with "you finished". CSM delta-2
+          2026-08-19 caught "You finished · 8 weeks logged" rendering
+          alongside "Not feeling 100% · ×0.95 applied" simultaneously. */}
       {!isPastProgramEnd(primary, activeDate, userProfile) ? (
-        <RetestReminder program={primary} profile={userProfile} activeDate={activeDate} />
-      ) : null}
+        <>
+          <ProposalStack program={primary} date={activeDate} />
+          <HeroStateCard date={activeDate} />
+          <SignalsStrip program={primary} date={activeDate} />
+          <RetestReminder program={primary} profile={userProfile} activeDate={activeDate} />
+        </>
+      ) : (
+        <HeroStateCard date={activeDate} />
+      )}
 
       {/* Taper phase — surface it prominently so the reduced session duration
           isn't read as an error. Read the phase's is_taper flag which we set
