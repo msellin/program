@@ -28,7 +28,7 @@ export function DateNav({ date, onChange }: Props) {
         type="button"
         onClick={() => shift(-1)}
         aria-label="Previous day"
-        className="w-11 h-11 flex items-center justify-center rounded hover:bg-surface-2 text-muted hover:text-ink"
+        className="w-11 h-11 flex items-center justify-center rounded text-muted hover:bg-surface-2 hover:text-ink focus:bg-surface-2 focus:text-ink active:bg-line-soft"
       >
         <ChevronLeft size={18} />
       </button>
@@ -42,7 +42,7 @@ export function DateNav({ date, onChange }: Props) {
         type="button"
         onClick={() => shift(1)}
         aria-label="Next day"
-        className="w-11 h-11 flex items-center justify-center rounded hover:bg-surface-2 text-muted hover:text-ink"
+        className="w-11 h-11 flex items-center justify-center rounded text-muted hover:bg-surface-2 hover:text-ink focus:bg-surface-2 focus:text-ink active:bg-line-soft"
       >
         <ChevronRight size={18} />
       </button>
