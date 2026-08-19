@@ -207,22 +207,22 @@ export function TodaySession({ slugOverride }: { slugOverride?: string } = {}) {
           ← Back to Today
         </Link>
       ) : null}
-      {/* P1-70 (2026-08-19) — H1 replaced with the active date so it carries
-          information instead of duplicating the bottom-nav "Today" label
-          (WCAG 2.4.6 preserved — visible H1 still there). Founder-observed
-          tab-switch jitter closes: same 32 px H1 + same space-y-6 pt-4
-          rhythm on every tab route (P1-80 rhythm stabilization). */}
+      {/* H1 revised 2026-08-20 · founder-caught date duplication.
+          P1-70 originally moved the date into the H1, but DateNav
+          below ALREADY shows "Wednesday 20 Aug · Today" — same info
+          twice. Instead: H1 carries the ROUTE SCOPE (Today / Focus
+          session), DateNav owns the date display. Matches how Week /
+          Progress / History label their scope while the DateNav-style
+          picker below carries the range. */}
       <header>
         <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">
-          {formatDateHeading(activeDate)}
+          {slugOverride ? "Focus session" : "Today"}
         </h1>
-        {activeDate === todayISO() ? (
+        {slugOverride && primary.slug ? (
           <p className="mt-2 text-[14px] text-muted">
-            {slugOverride ? `Focus session · ${primary.slug ?? ""}` : "Today"}
+            {programDisplayName(primary, primary.slug)}
           </p>
-        ) : (
-          <p className="mt-2 text-[14px] text-muted">{dateOffsetLabel(activeDate)}</p>
-        )}
+        ) : null}
       </header>
 
       {/* Suppress the reveal card once the user has any real log history —
