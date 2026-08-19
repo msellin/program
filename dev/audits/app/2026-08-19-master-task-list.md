@@ -2,7 +2,7 @@
 
 **Synth date:** 2026-08-19  ·  **Sources reconciled:** every 2026-08-17 / 08-18 / 08-19 audit + `dev/active/session-audit-2026-08-17/backlog.md` + `dev/active/post-audit-p0s/tasks.md` + `dev/active/product-concerns-2026-08-17/roadmap.md` + persona harness manifests.
 **Batch 16 filter applied:** items about Profile identity chip, footer collapse + Danger zone, Week padding + Programs pill off header, or 32px H1s were shipped and removed from the open list — see the closed-items appendix at the bottom.
-**Harness caveat:** persona artifacts at `next-app/tests/e2e/artifacts/personas/*/manifest.json` were generated ~24h before Batch 16 (mtime 2026-08-19 11:30). Every cross-reference to persona screenshots reflects pre-Batch-16 state until the harness reruns via `dev/scripts/run-app-audit.sh` (item A4).
+**Harness state:** persona artifacts refreshed 2026-08-19 15:02-15:12 (post-Batch-22, 15/15 personas passed against app.terav.fit). Cross-references reflect current UI.
 
 ---
 
@@ -10,9 +10,9 @@
 
 These are **IDEAS, not action items**. The engine + rehab-first positioning overrides "cleaner is better," so Margus picks what to ship. Batches ship in 6-12h chunks — don't try to close the whole list in one sitting, and respect the "no UI churn between audits" rule (each shipped batch should stand on its own before the next audit re-scans). Real bugs go first because they're broken code the audits happened to surface; everything else is prioritized by user-visible ROI. Sizing (S/M/L/XL) is per item.
 
-**Counts by bucket (post-Batch-22, brief delivered):**
+**Counts by bucket (post-Batch-22, brief delivered, harness fresh):**
 
-- **Bugs (fix regardless):** 1 blocked (A4 harness rerun — retrying now)
+- **Bugs (fix regardless):** 0 open — all closed (A4 harness rerun passed 15/15)
 - **P0 (biggest ROI):** 0 open — all 4 shipped
 - **P1 (visible quality gap):** 0 open — all 55 shipped
 - **P2 (defensible polish):** 0 open — all 19 shipped
@@ -20,7 +20,7 @@ These are **IDEAS, not action items**. The engine + rehab-first positioning over
 - **Strategic (founder decision):** 4 items — decision, not build
 - **Rejected:** 11 items — do not ship
 
-Total open surface: **7 features + 4 strategic + 1 blocked + 11 rejected = 23 line items**. Next batch (Batch 23) has a full design brief with mockups, file:line pointers, and interaction contracts — ready to implement.
+Total open surface: **7 features + 4 strategic + 11 rejected = 22 line items** (down from 110 pre-Batch-17). Next batch (Batch 23) has a full design brief with mockups, file:line pointers, and interaction contracts — ready to implement.
 
 ---
 
@@ -48,7 +48,6 @@ Keep the convention terse — the four markers cover every state. Don't invent n
 
 ## Section A — Real bugs (fix regardless)
 
-- [!] **A4** — blocked: Playwright harness times out on anterior-hip day-30 sim step 2026-08-19 (both app.terav.fit and 6a6ac147 preview serve identical bytes, real-browser sign-in works; rerun once flake is diagnosed) — Persona harness artifacts predate Batch 16 by ~24h. Re-run `dev/scripts/run-app-audit.sh` before the next audit round so cross-references reflect current UI. Source: `2026-08-19-open-task-list.md` (A4). Files: `dev/scripts/run-app-audit.sh`, `next-app/tests/e2e/artifacts/personas/`. Size: S
 
 ---
 
@@ -138,8 +137,9 @@ Deduplicated across visual-craft §16 + mobile-ux §10 + roadmap:
 
 Strikethrough preserves history; these items are OUT of the open list.
 
-**Design-lead brief (2026-08-19):**
+**Design-lead brief + harness rerun (2026-08-19):**
 - [x] **X1** — done 2026-08-19 — product-design-lead brief for F2 + F5 + F6 + F7 delivered at `dev/audits/app/2026-08-19-design-brief-features.md` (493 lines). First dispatch hit a usage-limit anomaly; retry after reset succeeded. Brief recommends **Batch 23** (F2 + F5 partial + F7 co-ship, 7-8h) then **Batch 24** (F6 MoveSheet + F5 retest-window, 10-12h) then **Batch 25** (F1 extend hook into `/account`).
+- [x] **A4** — done 2026-08-19 Batch 22 harness rerun — 15/15 personas passed against https://app.terav.fit; artifacts now reflect post-Batch-22 state.
 
 **Batch 22 — mechanical F items (deployed https://4ea779c6.program-v2.pages.dev, 2026-08-19):**
 
