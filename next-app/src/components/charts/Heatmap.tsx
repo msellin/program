@@ -22,6 +22,7 @@ type Cell = {
   strengthLogged: boolean;
   exerciseCount: number;
   isToday: boolean;
+  isFuture: boolean;
 };
 
 // P1-12 — 8 weeks × 44 px cell = 352 px + gaps at 393 mobile, cells
@@ -98,6 +99,7 @@ function buildCells(store: Store): Cell[] {
       strengthLogged,
       exerciseCount,
       isToday: dateISO === todayISO,
+      isFuture: dateISO > todayISO,
     });
   }
   return cells;
@@ -153,8 +155,11 @@ export function Heatmap({ store, onDayClick }: { store: Store; onDayClick?: (dat
               gridAutoColumns: "minmax(44px, 1fr)",
             }}
           >
+            {/* P2-3 — future cells render as disabled placeholders, not
+                clickable/hoverable. Prior state let users tap a future
+                date and land on an empty log page which was jarring. */}
             {cells.map((c) =>
-              onDayClick ? (
+              onDayClick && !c.isFuture ? (
                 <button
                   key={c.date}
                   type="button"
@@ -176,16 +181,17 @@ export function Heatmap({ store, onDayClick }: { store: Store; onDayClick?: (dat
               <span
                 key={c.date}
                 role="gridcell"
-                aria-label={cellAria(c)}
-                title={cellAria(c)}
+                aria-label={c.isFuture ? `${c.date}: not yet` : cellAria(c)}
+                title={c.isFuture ? `${c.date}: not yet` : cellAria(c)}
                 className={cn(
                   "aspect-square rounded-[2px] transition-colors",
-                  c.state === "green" && "bg-green",
-                  c.state === "amber" && "bg-amber",
-                  c.state === "red" && "bg-red",
-                  c.state === "accessory" && "bg-bronze/50",
-                  c.state === "skip" && "bg-line-soft border border-dashed border-line",
-                  c.state === "none" && "bg-line-soft",
+                  c.isFuture ? "bg-line-soft/40 opacity-50" : null,
+                  !c.isFuture && c.state === "green" && "bg-green",
+                  !c.isFuture && c.state === "amber" && "bg-amber",
+                  !c.isFuture && c.state === "red" && "bg-red",
+                  !c.isFuture && c.state === "accessory" && "bg-bronze/50",
+                  !c.isFuture && c.state === "skip" && "bg-line-soft border border-dashed border-line",
+                  !c.isFuture && c.state === "none" && "bg-line-soft",
                   c.isToday && "ring-1 ring-bronze",
                 )}
               />

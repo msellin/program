@@ -180,13 +180,22 @@ export default function CheckPage() {
         </div>
       </div>
 
-      <button
-        type="button"
-        onClick={save}
-        className="w-full bg-bronze text-ground rounded py-3 font-semibold text-[15px] hover:bg-bronze-hover active:bg-bronze-active transition-colors"
+      {/* P2-2 — sticky Save above BottomNav so users don't scroll to the
+          bottom of a long check to save. Prior behavior: Save sat at
+          document flow bottom, easy to miss on a 5-6 slider morning
+          check. */}
+      <div
+        className="sticky z-10 -mx-4 px-4 pt-2 pb-3 bg-ground/95 backdrop-blur-sm border-t border-line-soft"
+        style={{ bottom: "calc(60px + env(safe-area-inset-bottom))" }}
       >
-        Save check
-      </button>
+        <button
+          type="button"
+          onClick={save}
+          className="w-full bg-bronze text-ground rounded py-3 font-semibold text-[15px] hover:bg-bronze-hover active:bg-bronze-active transition-colors min-h-[44px]"
+        >
+          Save check
+        </button>
+      </div>
 
       {state ? <Verdict state={state} /> : null}
     </div>

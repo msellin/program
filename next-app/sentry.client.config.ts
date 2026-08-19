@@ -33,6 +33,10 @@ if (DSN) {
       // the Sentry free-tier transaction quota. Adjust when we're on a
       // paid plan.
       tracesSampleRate: 0.05,
+      // P2-5 — INP tracking is on by default in @sentry/nextjs 8+ (was
+      // once behind `enableInp: true` in v7). Keeping the note here so
+      // it isn't re-flagged. If we upgrade past v10 and the API changes,
+      // revisit.
       // Session replays: sample 10% of sessions, 100% of sessions with an
       // error. Cheap way to see reproducers without eating the free-tier
       // event budget.

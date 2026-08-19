@@ -237,7 +237,10 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
               <div className="rounded border border-line-soft overflow-hidden">
                 <div
                   className={cn(
-                    "grid gap-2 items-center px-3 py-1.5 bg-line-soft/50 text-[10px] font-mono uppercase tracking-wider text-muted",
+                    // P2-10 — was `px-3 py-1.5` which doubled the outer
+                    // `p-3` padding on the left. Outer owns horizontal;
+                    // header row owns its vertical only.
+                    "grid gap-2 items-center py-1.5 bg-line-soft/50 text-[10px] font-mono uppercase tracking-wider text-muted",
                     "grid-cols-[24px_minmax(60px,1fr)_minmax(70px,80px)_minmax(60px,70px)_50px_28px_28px]",
                   )}
                 >

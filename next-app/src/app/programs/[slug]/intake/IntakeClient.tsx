@@ -743,7 +743,11 @@ export function IntakeClient({ slug }: Props) {
       {/* Section label used to live on a separate row below the rail — merged
           into the rail per 2026-08-18 P1 polish. */}
 
-      <div ref={stepBodyRef} className="min-h-[280px]" aria-live="polite">
+      {/* P2-17 — aria-live was on the entire step body which re-announced
+          every DOM update inside the step (radio changes, blur events).
+          The step-counter + h2 already fire an SR announce on step
+          transition (see line ~135). No live region needed here. */}
+      <div ref={stepBodyRef} className="min-h-[280px]">
         {currentStep?.kind === "question" ? (
           <WizardQuestionScreen
             step={currentStep}
@@ -1279,7 +1283,7 @@ function WizardPhysicalTestScreen({
             onClick={onSkipAll}
             className="text-[11px] mono-caps text-muted hover:text-ink underline underline-offset-4"
           >
-            Skip all physical tests →
+            Skip physical tests →
           </button>
         </>
       ) : null}

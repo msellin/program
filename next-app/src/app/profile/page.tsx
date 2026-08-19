@@ -7,6 +7,7 @@ import {
   LogOut,
   ChevronRight,
   MessageSquare,
+  Download,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useStore } from "@/lib/useStore";
@@ -15,6 +16,7 @@ import { useIsSuperAdmin } from "@/lib/super-admin";
 import { loadProgramManifest } from "@/lib/data-loader";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
 import { coachConfigured } from "@/lib/coach-client";
+import { useInstallPrompt } from "@/lib/useInstallPrompt";
 import { today } from "@/lib/utils";
 import type { ProgramManifest } from "@/lib/schemas";
 
@@ -34,6 +36,11 @@ export default function ProfilePage() {
   const store = useStore((s) => s.store);
   const wipe = useStore((s) => s.wipe);
   const isSuperAdmin = useIsSuperAdmin();
+  // P2-8 — Add to Home Screen from Profile when Chrome/Edge fires
+  // beforeinstallprompt. iOS Safari never fires the event so the button
+  // stays hidden there; direct-URL "Add to Home Screen" from Share is
+  // documented in Guide.
+  const { canInstall, promptInstall } = useInstallPrompt();
   const router = useRouter();
   const [email, setEmail] = useState<string | null>(null);
   const [memberSince, setMemberSince] = useState<string | null>(null);
@@ -297,6 +304,19 @@ export default function ProfilePage() {
           </span>
           <ChevronRight size={16} className="text-muted flex-shrink-0" />
         </Link>
+        {canInstall ? (
+          <button
+            type="button"
+            onClick={() => void promptInstall()}
+            className="w-full flex items-center justify-between gap-3 px-3 py-3 min-h-[48px] active:bg-line-soft/50 text-left"
+          >
+            <span className="flex items-center gap-3 text-sm">
+              <Download size={16} className="text-muted" />
+              Add to home screen
+            </span>
+            <ChevronRight size={16} className="text-muted flex-shrink-0" />
+          </button>
+        ) : null}
       </nav>
       </div>
 

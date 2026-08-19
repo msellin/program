@@ -193,6 +193,16 @@ main { animation: route-in 150ms ease-out; }
    via keyboard. The global :focus-visible rules earlier already draw the
    bronze outline, so no per-class twins are needed for the top 20 sites. */
 
+/* P2-7 — below-fold sections on Today that don't affect the initial
+   layout. content-visibility: auto lets Chromium/Safari 18+ skip
+   rendering them until they scroll close, cutting first-paint work
+   without CLS as long as we hint an intrinsic size (~400 px is a
+   generous placeholder for a card list). */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 400px;
+}
+
 /* P1-23 — Sentry Feedback trigger widget sits at bottom-right and by
    default collides with the 60-px BottomNav on iPhone. Sentry's Feedback
    integration exposes CSS custom properties for positioning; override

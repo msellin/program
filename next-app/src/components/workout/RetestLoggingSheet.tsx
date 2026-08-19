@@ -138,7 +138,8 @@ export function RetestLoggingSheet({
           <button
             type="button"
             onClick={submit}
-            className="px-4 py-2 min-h-[44px] bg-bronze text-ground rounded font-mono text-[11px] uppercase tracking-wider hover:bg-bronze-hover"
+            disabled={value.trim() === ""}
+            className="px-4 py-2 min-h-[44px] bg-bronze text-ground rounded font-mono text-[11px] uppercase tracking-wider hover:bg-bronze-hover disabled:opacity-40 disabled:cursor-not-allowed"
           >
             Log reading
           </button>

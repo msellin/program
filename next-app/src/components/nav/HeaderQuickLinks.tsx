@@ -9,6 +9,7 @@ import {
   MoreVertical,
   FileText,
   CalendarDays,
+  Library,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useIsSuperAdmin } from "@/lib/super-admin";
@@ -30,6 +31,9 @@ const LINKS = [
   // wipe path). No need to double-surface it — user's already on Profile
   // when they think about their data.
   { href: "/guide/", label: "Guide", Icon: BookOpen, superAdminOnly: false },
+  // P1-54 — walled-garden version of the landing's evidence claim. Full
+  // bibliography, one screen, no marketing prose.
+  { href: "/evidence/", label: "Evidence", Icon: Library, superAdminOnly: false },
 ];
 
 /**

@@ -375,22 +375,22 @@
         "video_search": "wrist extension mobility test tabletop",
         "ranges": [
           {
-            "label": "Under 45\u00b0 \u2014 barely bend back",
+            "label": "Barely bends back \u2014 under 45\u00b0",
             "description": "Fingertips lift off the floor when you rock forward, or you feel sharp discomfort early.",
             "value": 40
           },
           {
-            "label": "About 60\u00b0 \u2014 some bend, no pain",
+            "label": "Some bend, no pain \u2014 about 60\u00b0",
             "description": "You can rock forward but the stretch stops you well before your wrist reaches vertical.",
             "value": 60
           },
           {
-            "label": "About 75\u00b0 \u2014 reaches near vertical, mild stretch",
+            "label": "Reaches near vertical, mild stretch \u2014 about 75\u00b0",
             "description": "Wrist can pass through vertical with a firm but tolerable stretch.",
             "value": 75
           },
           {
-            "label": "90\u00b0+ \u2014 comfortable past vertical",
+            "label": "Comfortable past vertical \u2014 90\u00b0+",
             "description": "You can rock past vertical without discomfort. Tier B+ range.",
             "value": 95
           }
@@ -421,8 +421,8 @@
             "value": 175
           },
           {
-            "label": "Passes behind vertical \u2014 hyper-mobile end range",
-            "description": "Arms sit slightly past the wall behind vertical without effort.",
+            "label": "Passes behind vertical without effort",
+            "description": "Arms sit slightly past the wall behind vertical.",
             "value": 185
           }
         ]

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import { X } from "lucide-react";
 import { useFocusTrap } from "@/lib/useFocusTrap";
 
 /**
@@ -44,9 +45,9 @@ export function InfoSheet({
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="text-muted hover:text-ink w-11 h-11 -my-2 flex items-center justify-center text-xl leading-none rounded"
+            className="text-muted hover:text-ink w-11 h-11 -my-2 flex items-center justify-center rounded"
           >
-            ×
+            <X size={18} />
           </button>
         </header>
         <div className="p-4 text-sm leading-relaxed space-y-3">{children}</div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import {
   ComposedChart,
   Line,
@@ -54,13 +55,19 @@ function peakSymptom(day: DayLog): number | null {
 }
 
 export function SymptomLoadChart({ days }: { days: DayLog[] }) {
-  const rows: Row[] = days.map((d) => ({
-    date: d.date,
-    short: d.date.slice(5), // MM-DD
-    peak_symptom: peakSymptom(d),
-    squat_top: heaviestFor(d, SQUAT_KEYS),
-    pull_top: heaviestFor(d, PULL_KEYS),
-  }));
+  // P2-6 — memoize derivation to avoid rebuilding on every Recharts
+  // re-render (tooltip hover triggers a lot).
+  const rows: Row[] = useMemo(
+    () =>
+      days.map((d) => ({
+        date: d.date,
+        short: d.date.slice(5), // MM-DD
+        peak_symptom: peakSymptom(d),
+        squat_top: heaviestFor(d, SQUAT_KEYS),
+        pull_top: heaviestFor(d, PULL_KEYS),
+      })),
+    [days],
+  );
 
   const anyStrength = rows.some((r) => r.squat_top != null || r.pull_top != null);
   const anySymptom = rows.some((r) => r.peak_symptom != null);
@@ -74,7 +81,9 @@ export function SymptomLoadChart({ days }: { days: DayLog[] }) {
   }
 
   // Dark-theme chart palette — WCAG AA on #16181C surface
-  const grid = "#2A2E37";
+  // P2-13 — was rogue #2A2E37; unified on the --color-line-soft token so
+  // chart grid pitch matches the app's line hierarchy.
+  const grid = "#24272f";
   const axisLine = "#3A3F4A";
   const axisTick = "#D6D9DE";
   const red = "#E5654B";
@@ -156,10 +165,39 @@ export function SymptomLoadChart({ days }: { days: DayLog[] }) {
         </ComposedChart>
       </ResponsiveContainer>
       </div>
-      {/* Progress rebuild 2026-08-18 — data-as-table expander deleted per
-          design brief. Duplicate data at a lower fidelity than the chart;
-          a11y covered by the chart's `aria-label` summary above. Users who
-          need precise numbers use Export report. */}
+      {/* P2-14 — restore data-table fallback under a <details> disclosure.
+          Sighted keyboard users can't hit tooltip trigger points; the
+          table gives them the same numbers with Tab + arrow keys. Screen
+          readers already have the chart's aria-label summary. */}
+      <details className="mt-3 text-[13px]">
+        <summary className="cursor-pointer inline-flex items-center min-h-[44px] py-2 text-muted hover:text-ink select-none">
+          Data table
+        </summary>
+        <div className="mt-1 overflow-x-auto">
+          <table className="w-full text-[12px] font-mono border-collapse">
+            <thead>
+              <tr className="text-left text-muted border-b border-line-soft">
+                <th className="py-1.5 pr-3 font-normal">Date</th>
+                <th className="py-1.5 pr-3 font-normal">Peak symptom</th>
+                <th className="py-1.5 pr-3 font-normal">Squat top (kg)</th>
+                <th className="py-1.5 pr-3 font-normal">Pull top (kg)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r) => (
+                <tr key={r.date} className="border-b border-line-soft/50">
+                  <td className="py-1 pr-3 text-ink">{r.date}</td>
+                  <td className="py-1 pr-3 text-ink">
+                    {r.peak_symptom ?? "—"}
+                  </td>
+                  <td className="py-1 pr-3 text-ink">{r.squat_top ?? "—"}</td>
+                  <td className="py-1 pr-3 text-ink">{r.pull_top ?? "—"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </details>
     </div>
   );
 }

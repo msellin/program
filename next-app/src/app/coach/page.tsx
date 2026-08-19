@@ -278,7 +278,15 @@ export default function CoachPage() {
           {messages.length > 0 ? (
             <div className="mt-4 space-y-3">
               <p className="mono-caps">Prior conversation ({messages.length} messages)</p>
-              <div className="rounded border border-line bg-surface p-3 space-y-3 max-h-[50vh] overflow-y-auto">
+              {/* P2-15 — role="log" so SRs recognize the transcript as a
+                  conversation feed. aria-atomic=false lets them read only
+                  the new entry when a message lands, not the whole list. */}
+              <div
+                role="log"
+                aria-live="polite"
+                aria-atomic="false"
+                className="rounded border border-line bg-surface p-3 space-y-3 max-h-[50vh] overflow-y-auto"
+              >
                 {messages.map((m, i) => (
                   <Bubble key={i} role={m.role} text={m.content} />
                 ))}

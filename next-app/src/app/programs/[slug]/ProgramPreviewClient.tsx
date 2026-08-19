@@ -289,6 +289,48 @@ export function ProgramPreviewClient({ slug }: Props) {
         </section>
       ) : null}
 
+      {/* P1-53 — surface a compact "Cites" strip so the landing promise
+          ("every change cites a study") is honored inside the app. Data
+          lives in program.goals.references; we render up to 4 authors +
+          years so the strip stays scannable, and the Guide has the full
+          bibliography. */}
+      {(() => {
+        const goals = program.goals as unknown as {
+          references?: Array<{ id: string; authors: string; year: number; title: string }>;
+        };
+        const refs = goals?.references ?? [];
+        if (!refs.length || entry.personal) return null;
+        const compact = refs.slice(0, 4);
+        return (
+          <section className="rounded border border-line-soft bg-surface p-3 text-[13px] space-y-1">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-muted">
+              Cites
+            </p>
+            <p className="text-ink leading-snug">
+              {compact.map((r, i) => {
+                const firstAuthor = r.authors.split(",")[0].split(" ")[0];
+                return (
+                  <span key={r.id}>
+                    <span title={r.title}>{firstAuthor} {r.year}</span>
+                    {i < compact.length - 1 ? <span className="text-muted"> · </span> : null}
+                  </span>
+                );
+              })}
+              {refs.length > compact.length ? (
+                <span className="text-muted"> · +{refs.length - compact.length} more</span>
+              ) : null}
+            </p>
+            <p className="text-[11px] text-muted">
+              Full bibliography lives in{" "}
+              <Link href="/guide" className="underline underline-offset-2 hover:text-ink">
+                Guide
+              </Link>
+              .
+            </p>
+          </section>
+        );
+      })()}
+
       {program.intake ? (
         (() => {
           const nQ = program.intake.questions.length;

@@ -10,17 +10,17 @@
 
 These are **IDEAS, not action items**. The engine + rehab-first positioning overrides "cleaner is better," so Margus picks what to ship. Batches ship in 6-12h chunks — don't try to close the whole list in one sitting, and respect the "no UI churn between audits" rule (each shipped batch should stand on its own before the next audit re-scans). Real bugs go first because they're broken code the audits happened to surface; everything else is prioritized by user-visible ROI. Sizing (S/M/L/XL) is per item.
 
-**Counts by bucket (post-Batch-20):**
+**Counts by bucket (post-Batch-21):**
 
-- **Bugs (fix regardless):** 1 item blocked (A4 harness), 3 shipped
+- **Bugs (fix regardless):** 1 blocked (A4 harness), 3 shipped
 - **P0 (biggest ROI):** 0 open — all 4 shipped
-- **P1 (visible quality gap):** 4 items open (landing-alignment); a11y 7 + mobile-UX 11 + motion-perf 8 + visual craft 6 + copy 19 shipped
-- **P2 (defensible polish):** 19 items, ~8-12h
+- **P1 (visible quality gap):** 0 open — all 55 shipped
+- **P2 (defensible polish):** 0 open — all 19 shipped
 - **Features on-deck:** 9 items, ~30-50h
 - **Strategic (founder decision):** 4 items — decision, not build
 - **Rejected:** 11 items — do not ship
 
-Total open surface: **36 open ideas + 4 strategic + 11 rejected = 51 line items** (was 110 pre-Batch-17, 83, 76, 65 as batches shipped). Natural next batch: **landing→app P1-52..55** — 4 items (S+M+M+L, mixed 3-6h), then **P2 batch** (19 items, ~8-12h).
+Total open surface: **9 features on-deck + 4 strategic + 1 blocked + 11 rejected = 25 line items** (was 110 pre-Batch-17, then 83, 76, 65, 51 as batches shipped). **All P0/P1/P2 closed.** Only Section E (features) and Section F (strategic decisions) remain to make progress on.
 
 ---
 
@@ -81,34 +81,13 @@ Keep the convention terse — the four markers cover every state. Don't invent n
 
 ### Landing→app promise gaps (still open from 2026-08-17)
 
-- [ ] **P1-52** Match "three domains" hero label to app's actual 5-category taxonomy (or vice-versa). Landing says "Aerobic / Concurrent / Skill"; app says 5 category chips. Source: `2026-08-17-app-audit-landing-alignment.md` §2 row 3, §6. Files: `landing/src/i18n/dictionaries/en.ts`, `next-app/public/data/programs/manifest.json`. Size: S
-- [ ] **P1-53** Surface each program's cited studies in the app program card (landing shows "Cites: Helgerud 2007 · Seiler 2010"; app doesn't). Data lives in program JSONs — rendering gap only. Source: `2026-08-17-app-audit-landing-alignment.md` §6, row 17. Files: `next-app/src/app/programs/[slug]/ProgramPreviewClient.tsx`, `programs/page.tsx`. Size: M
-- [ ] **P1-54** Wire an in-app Evidence link — Guide lists studies in prose; a dedicated `/evidence` inside the app honours landing's evidence claim inside the walled garden. Source: `2026-08-17-app-audit-landing-alignment.md` §6. Files: `next-app/src/app/evidence/page.tsx` (new). Size: M
-- [ ] **P1-55** Unify intake experience — hip program's 3-question modal is a different beast than the 17-step wizard. Either promote hip to wizard or the landing "under ten minutes" claim doesn't apply uniformly. Source: `2026-08-17-app-audit-landing-alignment.md` §6. Files: hip intake flow, `IntakeClient.tsx`. Size: L
+*(all 4 shipped in Batch 21 — see appendix)*
 
 ---
 
 ## Section D — P2 (defensible polish)
 
-- [ ] **P2-1** `overscroll-behavior-y: contain` on `<main>` to disable Safari pull-to-refresh on Today. Source: `2026-08-19-open-task-list.md` (D1). Files: `next-app/src/app/globals.css`. Size: S
-- [ ] **P2-2** Sticky Save-check button on `/check/` above the bottom nav. Source: `2026-08-19-open-task-list.md` (D2). Files: `next-app/src/app/check/page.tsx`. Size: S
-- [ ] **P2-3** Heatmap disabled-cell guard for future/empty dates. Source: `2026-08-19-open-task-list.md` (D3). Files: `next-app/src/components/charts/Heatmap.tsx`. Size: S
-- [ ] **P2-4** Report table mobile fallback confirmation. Source: `2026-08-19-open-task-list.md` (D4). Files: `next-app/src/app/report/page.tsx`. Size: S
-- [ ] **P2-5** `enableInp: true` on Sentry traces for free real-user INP signal. Source: `2026-08-19-open-task-list.md` (D5). Files: `next-app/src/sentry.client.config.ts`. Size: S
-- [ ] **P2-6** Memoise `rows` derivation in `SymptomLoadChart:57-63` — 3-line `useMemo`. Source: `2026-08-19-open-task-list.md` (D6). Files: `next-app/src/components/charts/SymptomLoadChart.tsx:57-63`. Size: S
-- [ ] **P2-7** `content-visibility: auto` on below-fold Today sections (RetestReminder, PerProgramActions, week-block). Source: `2026-08-19-open-task-list.md` (D7). Files: `next-app/src/app/page.tsx`. Size: S
-- [ ] **P2-8** `beforeinstallprompt` handler — capture, offer custom "Add to Home Screen" from Profile after 3+ Today visits. Do NOT auto-prompt. Source: `2026-08-19-open-task-list.md` (D8), `2026-08-18-motion-perf-sweep.md` §6. Files: `next-app/src/app/profile/page.tsx`, PWA glue. Size: M
-- [ ] **P2-9** Watch Week per-day cumulative expand shifts — add `content-visibility: auto` on off-screen day rows if CLS regresses. Source: `2026-08-19-open-task-list.md` (D9). Files: `next-app/src/app/week/page.tsx`. Size: S
-- [ ] **P2-10** `ExerciseCard` padding standardization — pick per-child `px-3` OR outer `p-3`, not both. Source: `2026-08-19-open-task-list.md` (D10). Files: `next-app/src/components/workout/ExerciseCard.tsx`. Size: S
-- [ ] **P2-11** Programs list row `px-3 py-3` → `px-4 py-3.5` (aligns to Week card rhythm post-Batch-16). Source: `2026-08-19-open-task-list.md` (D11). Files: `next-app/src/app/programs/page.tsx`. Size: S
-- [ ] **P2-12** Heatmap cell `rounded-[2px]` (GitHub-tier polish). Source: `2026-08-19-open-task-list.md` (D13). Files: `next-app/src/components/charts/Heatmap.tsx`. Size: S
-- [ ] **P2-13** `SymptomLoadChart` grid color `#2A2E37` → `--color-line-soft` (`#24272f`) — one rogue hex. Source: `2026-08-19-open-task-list.md` (D14). Files: `next-app/src/components/charts/SymptomLoadChart.tsx`. Size: S
-- [ ] **P2-14** SymptomLoadChart data-table expander — restore `<details><summary>Data table</summary>` fallback for sighted keyboard users. Source: `2026-08-18-accessibility-sweep.md` §5, §8. Files: `next-app/src/components/charts/SymptomLoadChart.tsx:159-162`. Size: S
-- [ ] **P2-15** Coach message list — add `role="log" aria-live="polite" aria-atomic="false"`. Source: `2026-08-18-accessibility-sweep.md` §3. Files: `next-app/src/app/coach/page.tsx:283`. Size: S
-- [ ] **P2-16** InfoSheet close glyph — swap ASCII `×` for lucide `<X size={18} />` to match ConfirmSheet. Source: `2026-08-18-accessibility-sweep.md` §2.3. Files: `next-app/src/components/InfoSheet.tsx:43-50`. Size: S
-- [ ] **P2-17** Intake `aria-live="polite"` on the whole step body — over-broad. Scope to the step-counter. Source: `2026-08-18-accessibility-sweep.md` §3. Files: `next-app/src/app/programs/[slug]/intake/IntakeClient.tsx:746`. Size: S
-- [ ] **P2-18** RetestLoggingSheet "Log reading" primary disable while `value === ""`. Source: `2026-08-18-accessibility-sweep.md` §6, §8. Files: `next-app/src/components/workout/RetestLoggingSheet.tsx:138-144`. Size: S
-- [ ] **P2-19** HSW physical-test range labels — swap word order so bodily description leads (`Barely bends back — under 45°`), applies to 4 wrist + 4 shoulder ranges. Also `Passes behind vertical without effort` (drop "hyper-mobile"). Skip button `Skip all physical tests →` → `Skip physical tests →`. Source: `2026-08-18-app-audit-copy-clarity.md` §5, §9 P2. Files: `next-app/public/data/programs/handstand-walk.json:376-427`, `IntakeClient.tsx:1246-1248,1282`. Size: S
+*(all 19 shipped in Batch 21 — see appendix)*
 
 ---
 
@@ -160,6 +139,34 @@ Deduplicated across visual-craft §16 + mobile-ux §10 + roadmap:
 ## Closed items appendix (shipped since 2026-08-17)
 
 Strikethrough preserves history; these items are OUT of the open list.
+
+**Batch 21 — landing→app + P2 polish (deployed https://286e37f1.program-v2.pages.dev, 2026-08-19):**
+
+23 items — remaining P1 landing-alignment (P1-52..55) + full P2 batch (P2-1..19). Full lines preserved:
+
+- [x] **P1-52** — done 2026-08-19 Batch 21 — Match "three domains" hero label to app's actual 5-category taxonomy (or vice-versa). Landing says "Aerobic / Concurrent / Skill"; app says 5 category chips. Source: `2026-08-17-app-audit-landing-alignment.md` §2 row 3, §6. Files: `landing/src/i18n/dictionaries/en.ts`, `next-app/public/data/programs/manifest.json`. Size: S
+- [x] **P1-53** — done 2026-08-19 Batch 21 — Surface each program's cited studies in the app program card (landing shows "Cites: Helgerud 2007 · Seiler 2010"; app doesn't). Data lives in program JSONs — rendering gap only. Source: `2026-08-17-app-audit-landing-alignment.md` §6, row 17. Files: `next-app/src/app/programs/[slug]/ProgramPreviewClient.tsx`, `programs/page.tsx`. Size: M
+- [x] **P1-54** — done 2026-08-19 Batch 21 — Wire an in-app Evidence link — Guide lists studies in prose; a dedicated `/evidence` inside the app honours landing's evidence claim inside the walled garden. Source: `2026-08-17-app-audit-landing-alignment.md` §6. Files: `next-app/src/app/evidence/page.tsx` (new). Size: M
+- [x] **P1-55** — done 2026-08-19 Batch 21 — Unify intake experience — hip program's 3-question modal is a different beast than the 17-step wizard. Either promote hip to wizard or the landing "under ten minutes" claim doesn't apply uniformly. Source: `2026-08-17-app-audit-landing-alignment.md` §6. Files: hip intake flow, `IntakeClient.tsx`. Size: L
+- [x] **P2-1** — done 2026-08-19 Batch 21 — `overscroll-behavior-y: contain` on `<main>` to disable Safari pull-to-refresh on Today. Source: `2026-08-19-open-task-list.md` (D1). Files: `next-app/src/app/globals.css`. Size: S
+- [x] **P2-2** — done 2026-08-19 Batch 21 — Sticky Save-check button on `/check/` above the bottom nav. Source: `2026-08-19-open-task-list.md` (D2). Files: `next-app/src/app/check/page.tsx`. Size: S
+- [x] **P2-3** — done 2026-08-19 Batch 21 — Heatmap disabled-cell guard for future/empty dates. Source: `2026-08-19-open-task-list.md` (D3). Files: `next-app/src/components/charts/Heatmap.tsx`. Size: S
+- [x] **P2-4** — done 2026-08-19 Batch 21 — Report table mobile fallback confirmation. Source: `2026-08-19-open-task-list.md` (D4). Files: `next-app/src/app/report/page.tsx`. Size: S
+- [x] **P2-5** — done 2026-08-19 Batch 21 — `enableInp: true` on Sentry traces for free real-user INP signal. Source: `2026-08-19-open-task-list.md` (D5). Files: `next-app/src/sentry.client.config.ts`. Size: S
+- [x] **P2-6** — done 2026-08-19 Batch 21 — Memoise `rows` derivation in `SymptomLoadChart:57-63` — 3-line `useMemo`. Source: `2026-08-19-open-task-list.md` (D6). Files: `next-app/src/components/charts/SymptomLoadChart.tsx:57-63`. Size: S
+- [x] **P2-7** — done 2026-08-19 Batch 21 — `content-visibility: auto` on below-fold Today sections (RetestReminder, PerProgramActions, week-block). Source: `2026-08-19-open-task-list.md` (D7). Files: `next-app/src/app/page.tsx`. Size: S
+- [x] **P2-8** — done 2026-08-19 Batch 21 — `beforeinstallprompt` handler — capture, offer custom "Add to Home Screen" from Profile after 3+ Today visits. Do NOT auto-prompt. Source: `2026-08-19-open-task-list.md` (D8), `2026-08-18-motion-perf-sweep.md` §6. Files: `next-app/src/app/profile/page.tsx`, PWA glue. Size: M
+- [x] **P2-9** — done 2026-08-19 Batch 21 — Watch Week per-day cumulative expand shifts — add `content-visibility: auto` on off-screen day rows if CLS regresses. Source: `2026-08-19-open-task-list.md` (D9). Files: `next-app/src/app/week/page.tsx`. Size: S
+- [x] **P2-10** — done 2026-08-19 Batch 21 — `ExerciseCard` padding standardization — pick per-child `px-3` OR outer `p-3`, not both. Source: `2026-08-19-open-task-list.md` (D10). Files: `next-app/src/components/workout/ExerciseCard.tsx`. Size: S
+- [x] **P2-11** — done 2026-08-19 Batch 21 — Programs list row `px-3 py-3` → `px-4 py-3.5` (aligns to Week card rhythm post-Batch-16). Source: `2026-08-19-open-task-list.md` (D11). Files: `next-app/src/app/programs/page.tsx`. Size: S
+- [x] **P2-12** — done 2026-08-19 Batch 21 — Heatmap cell `rounded-[2px]` (GitHub-tier polish). Source: `2026-08-19-open-task-list.md` (D13). Files: `next-app/src/components/charts/Heatmap.tsx`. Size: S
+- [x] **P2-13** — done 2026-08-19 Batch 21 — `SymptomLoadChart` grid color `#2A2E37` → `--color-line-soft` (`#24272f`) — one rogue hex. Source: `2026-08-19-open-task-list.md` (D14). Files: `next-app/src/components/charts/SymptomLoadChart.tsx`. Size: S
+- [x] **P2-14** — done 2026-08-19 Batch 21 — SymptomLoadChart data-table expander — restore `<details><summary>Data table</summary>` fallback for sighted keyboard users. Source: `2026-08-18-accessibility-sweep.md` §5, §8. Files: `next-app/src/components/charts/SymptomLoadChart.tsx:159-162`. Size: S
+- [x] **P2-15** — done 2026-08-19 Batch 21 — Coach message list — add `role="log" aria-live="polite" aria-atomic="false"`. Source: `2026-08-18-accessibility-sweep.md` §3. Files: `next-app/src/app/coach/page.tsx:283`. Size: S
+- [x] **P2-16** — done 2026-08-19 Batch 21 — InfoSheet close glyph — swap ASCII `×` for lucide `<X size={18} />` to match ConfirmSheet. Source: `2026-08-18-accessibility-sweep.md` §2.3. Files: `next-app/src/components/InfoSheet.tsx:43-50`. Size: S
+- [x] **P2-17** — done 2026-08-19 Batch 21 — Intake `aria-live="polite"` on the whole step body — over-broad. Scope to the step-counter. Source: `2026-08-18-accessibility-sweep.md` §3. Files: `next-app/src/app/programs/[slug]/intake/IntakeClient.tsx:746`. Size: S
+- [x] **P2-18** — done 2026-08-19 Batch 21 — RetestLoggingSheet "Log reading" primary disable while `value === ""`. Source: `2026-08-18-accessibility-sweep.md` §6, §8. Files: `next-app/src/components/workout/RetestLoggingSheet.tsx:138-144`. Size: S
+- [x] **P2-19** — done 2026-08-19 Batch 21 — HSW physical-test range labels — swap word order so bodily description leads (`Barely bends back — under 45°`), applies to 4 wrist + 4 shoulder ranges. Also `Passes behind vertical without effort` (drop "hyper-mobile"). Skip button `Skip all physical tests →` → `Skip physical tests →`. Source: `2026-08-18-app-audit-copy-clarity.md` §5, §9 P2. Files: `next-app/public/data/programs/handstand-walk.json:376-427`, `IntakeClient.tsx:1246-1248,1282`. Size: S
 
 **Batch 20 — motion+perf + visual craft (deployed https://f5ed595d.program-v2.pages.dev, 2026-08-19):**
 

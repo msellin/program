@@ -434,7 +434,7 @@ export default function TodayPage() {
               />
             );
           })()}
-          <div id="log-session"><RunSlotCard date={activeDate} /></div>
+          <div id="log-session" className="cv-auto"><RunSlotCard date={activeDate} /></div>
         </>
       ) : (
         <div className="space-y-6">
@@ -489,7 +489,7 @@ export default function TodayPage() {
               </div>
             ),
           )}
-          <div id="log-session"><RunSlotCard date={activeDate} /></div>
+          <div id="log-session" className="cv-auto"><RunSlotCard date={activeDate} /></div>
           {/* Legacy whole-day actions. Block-object mode drives skip/move
               per program via <PerProgramActions> above. */}
           {!blockObjectOn ? (

@@ -255,7 +255,7 @@ function ProgramCard({
   return (
     <Link
       href={`/programs/${p.slug}`}
-      className={`block rounded border border-line border-l-4 ${cat.borderClass} bg-surface p-3 hover:bg-line-soft/50 transition-colors`}
+      className={`block rounded border border-line border-l-4 ${cat.borderClass} bg-surface px-4 py-3.5 hover:bg-line-soft/50 transition-colors`}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
