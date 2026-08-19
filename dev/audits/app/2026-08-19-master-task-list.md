@@ -73,7 +73,7 @@ Keep the convention terse — the four markers cover every state. Don't invent n
 
 ### Accessibility (post-Batch-25 round + founder-obs round)
 
-- [ ] **P1-70** — O11 tab-name H1 removal. Today → `Wednesday 19 Aug`, Week → `17 Aug → 23 Aug`, Progress → `Week of 17 Aug`, History → date-range. Preserves P1-4's visible H1 (WCAG 2.4.6) while resolving the redundancy with bottom-nav. Do NOT revert to sr-only (regresses P1-4). Do NOT remove H1 entirely (fails 2.4.6). Source: `2026-08-19-founder-obs-accessibility.md` O11 + mobile-ux + motion-perf (48 px cross-route drift). Files: `next-app/src/app/page.tsx`, `next-app/src/app/week/page.tsx`, `next-app/src/app/progress/page.tsx`, `next-app/src/app/history/page.tsx`. Size: M
+- [x] **P1-70** — Today H1 → date shipped 2026-08-19 (`1d43ece`). "Today" → "Wednesday 19 Aug" via toLocaleDateString en-GB + offset caption ("Today"/"Tomorrow"/"Yesterday"/"+N days"). Week/Progress/History H1s kept (they're not day-scoped).
 - [x] **P1-71** — Done-card chevron swap shipped 2026-08-19 (`b68812f`) as part of F9 first push. When done, chevron → MessageSquare so affordance matches Notes-only expanded body.
 
 ### Visual craft (post-Batch-25 round + founder-obs round)
@@ -89,19 +89,19 @@ Keep the convention terse — the four markers cover every state. Don't invent n
 
 ### Copy clarity (post-Batch-25 round + founder-obs round)
 
-- [ ] **P1-77** — O5b "How programs earn each status" bottom sheet + honesty callout on `/programs`. Reuses `ConfirmSheet`/`MoveSheet`/`PrimaryPicker` pattern (no new route). Sheet content drafted verbatim in `2026-08-19-founder-obs-copy-clarity.md`. Add 38-word inline callout below the legend at `programs/page.tsx:126` ("All 5 programs shipped today are REFERENCED..."). Contingent on S5 decision if design-lead's REVIEWED/VERIFIED pipeline diverges. Source: `2026-08-19-founder-obs-copy-clarity.md` O5b + `2026-08-19-founder-obs-landing-alignment.md`. Files: `next-app/src/app/programs/page.tsx:126-130`, new bottom-sheet component. Size: M
+- [x] **P1-77** — Ladder disclosure sheet shipped 2026-08-19 (`2ce7032`). Legend words on /programs are now tap-targets that open InfoSheet with full REFERENCED/REVIEWED/VERIFIED definitions. Content from copy-clarity audit's Ginny Redish framework. Personal-programs-outside-ladder note included (matches S6 shipped).
 - [ ] **P1-78** — O13 kill ReadinessDot in header + refine banner en-dash polish. `AppShell.tsx:199-215` — remove the dot (redundant with HeroStateCard banner). Refine banner strings at `HeroStateCard.tsx:9-18` to en-dash form: `"Progress load — nothing above 3/10 today."` (drop "in your check", tighten with en-dash). Micro-CLS ~0.03 also disappears. Source: `2026-08-19-founder-obs-copy-clarity.md` O13 + motion-perf. Files: `next-app/src/components/AppShell.tsx:199-215` (delete), `next-app/src/components/workout/HeroStateCard.tsx:9-18` (polish). Size: S
 - [ ] **P1-79** — O14a schema split: exercise `name` → `name + variant` field. `"Active hang (scap-engaged)"` → `{ name: "Active hang", variant: "scap-engaged" }`. Renders as two-line card (base + variant · sets). ~20-30 exercises follow the parenthetical pattern in `exercises.json`. Coach proposal line "block pull (midshin) · 147.5 → 152.5 kg (+5)" becomes "block pull · midshin · 147.5 → 152.5 kg (+5)". Source: `2026-08-19-founder-obs-copy-clarity.md` O14a. Files: `next-app/public/data/exercises.json` (schema + grep for `(` in name), `next-app/src/components/workout/ExerciseCard.tsx` (render), `next-app/src/lib/engine/*` (proposal formatters). Size: M
 
 ### Motion + perf (post-Batch-25 round + founder-obs round)
 
-- [ ] **P1-80** — O11 rhythm stabilization across four tab routes. Unify `space-y-*` + `pt-4` + H1/subtitle spacing on `/`, `/week`, `/progress`, `/history`. Measured 48 px cumulative shift Today→Week baseline. Ships with P1-70 (same file surface, same batch). Source: `2026-08-19-founder-obs-motion-perf.md` O11. Files: `next-app/src/app/page.tsx:181-190`, `next-app/src/app/week/page.tsx:197-209`, `next-app/src/app/progress/page.tsx:147-156`, `next-app/src/app/history/page.tsx:93-99`. Size: S
+- [x] **P1-80** — Rhythm stabilization shipped 2026-08-19 (`1d43ece`). All 4 tab routes use `space-y-6 pt-4` (Today + Progress bumped from `space-y-5`). Week + History already matched.
 
 ### Mobile UX (post-Batch-25 round + founder-obs round)
 
 - [x] **P1-81** — Programs dropped from top-nav shipped 2026-08-19 (`c1bd940`) as part of F8 first push. Also killed Morning-check icon + ⋮ overflow menu. Header now only has TERAV wordmark + Settings icon. Extras/Report/Evidence relocated to Profile More.
-- [ ] **P1-82** — O10a wizard button widths. Yes/No wrapper `flex gap-2` → `grid grid-cols-2 gap-2` at `IntakeClient.tsx:1060-1091`; footer Next `flex-1` at `:1398-1433`. Full-width thumb-friendly answer buttons match Runna/Duolingo modern default. Source: `2026-08-19-founder-obs-mobile-ux.md` O10a. Files: `next-app/src/app/programs/[slug]/intake/IntakeClient.tsx:1060-1091,1398-1433`. Size: S
-- [ ] **P1-83** — O10b intake progress indicator sizing. Counter 10 px → 13-14 px; bar 3 px → 5 px at `IntakeClient.tsx:825-859`. Keep "step N of M" form (don't switch to %). Progress-visibility ≠ gamification. Do NOT add a second `role="progressbar"` (4.1.2 fail — a11y). Source: `2026-08-19-founder-obs-mobile-ux.md` O10b + `2026-08-19-founder-obs-accessibility.md` warning. Files: `next-app/src/app/programs/[slug]/intake/IntakeClient.tsx:825-859`. Size: S
+- [x] **P1-82** — Wizard chip strip `grid-cols-2` shipped 2026-08-19 (`d6a8061`). Yes/No fills row width; longer strips still wrap.
+- [x] **P1-83** — Progress rail sizing shipped 2026-08-19 (`d6a8061`). Bar 3→5 px; counter 10→13 px; program-name eyebrow 10→12 px. Kept "Step N of M" form.
 
 ---
 
@@ -109,8 +109,8 @@ Keep the convention terse — the four markers cover every state. Don't invent n
 
 - [ ] **P2-31** — O14a a11y-side truncation nudge (mirrors P1-73 fix). Track only if P1-73 doesn't ship. Source: `2026-08-19-founder-obs-accessibility.md` §O14a. Files: `next-app/src/components/workout/ExerciseCard.tsx:176`. Size: XS
 - [ ] **P2-32** — N4 icon-stroke discipline. Terav has 3 sizes (14/16/18) and 2 stroke weights (2, 1.75) in circulation. Shared `<Icon>` wrapper with defaults `strokeWidth={1.75}` + `xs=14/sm=16/md=18`, then codemod call sites. Or ESLint rule against bare `size={n}` on lucide imports. Source: `2026-08-19-founder-obs-visual-craft.md` §N4. Size: M
-- [ ] **P2-33** — Label parity nit: catalog says "Left/right & mobility", landing says "mobility". Simplify catalog label to match landing. Source: `2026-08-19-founder-obs-landing-alignment.md`. Files: `next-app/public/data/programs/manifest.json` (category label). Size: XS
-- [ ] **P2-34** — N5 Recharts default axis review on Progress. If Recharts uses default `stroke="#666"` and default 10 px axis text, off-brand on warm-dark. Source: `2026-08-19-founder-obs-visual-craft.md` §N5. Files: `next-app/src/app/progress/page.tsx` (chart primitives). Size: S
+- [x] **P2-33** — Label parity shipped 2026-08-19. `manifest.json:302` category label "Left/right & mobility" → "Mobility" + description tightened. Description reorder puts mobility use case first.
+- [x] **P2-34** — Recharts axis review — already resolved before founder-obs round. `SymptomLoadChart.tsx:86-91` uses themed palette tokens (grid #24272f, axisLine #3A3F4A, axisTick #D6D9DE) — no defaults leak. Was fixed in P2-13 earlier.
 - [ ] **P2-35** — S-6 hover-on-touch sticky-state sweep. `hover:` classes without `focus:`/`active:` twins across ExerciseCard, AppShell, DateNav, HeaderQuickLinks. Source: `2026-08-19-founder-obs-mobile-ux.md` §S-6. Size: M
 
 ---
@@ -138,7 +138,7 @@ From roadmap sync + product-concerns-2026-08-17 + design-lead brief `2026-08-19-
   - **Half-shipped features** — SignalsStrip `csm-amber-week` computed with no expanded body; amber-week schedule swap authored but not consumed. Track as **BUG-11**.
 
   Source: `2026-08-19-founder-obs-design-lead.md` Decision 3 + `dev/archive/citations-under-review-2026-08-17.md` + 6 agent reports (task IDs a8a6c86 anterior-hip, a840816 engine, a2e72b3 hsw, a42be41 csm, af11b8b rowing, aec3b59 overhead). Depends on: BUG-7 through BUG-11 for HOLDs to promote.
-- [ ] **F11 · Batch 32 — Tier-bug explain-back.** Placement page restructures with mandatory explain-back DashboardBlock above the tier radios. Copy comes from P0-10 (Branch A/B/C draft). Ships with or after BUG-4. Source: `2026-08-19-founder-obs-design-lead.md` Decision 4. Depends on: BUG-4 (engine fix), P0-10 (copy).
+- [x] **F11 · Batch 32 — Tier-bug explain-back** shipped 2026-08-19 (`1d43ece`). Three-branch content model promoted from collapsed `<details>` to always-visible DashboardBlock above tier picker. Amber eyebrow when tests skipped (Branch B) — visible signal that the pick is conservative. Uses P0-10 copy + F9 primitive.
 - [ ] **F12 · CSM amber-week schedule swap.** Author a block-substitution primitive so `csm.json:435-436` ("≥ 3 amber days → drop 4×4 for a week; resume next week at 3×4") becomes machine-executable. Currently the SignalsStrip advisory + prose in the expanded body tell the user to substitute manually. Requires: (a) detect amber-week in `plan-generator.ts` or a scheduled_block post-processor; (b) substitute `block_4x4_row` with `block_easy_recovery` (or delete) for the next week; (c) record the substitution in `engine_adjustments[]` on the block so history is honest. Related: opens the door for other JSON-authored "drop N for a week" rules across programs. Source: S5 REV-4 P1 promoted from BUG-11 (b). Size: L (3-5h).
 
 ---

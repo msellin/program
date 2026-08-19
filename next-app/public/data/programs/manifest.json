@@ -299,8 +299,8 @@
       "order": 5
     },
     "asymmetry": {
-      "label": "Left/right & mobility",
-      "description": "Close a strength or mobility gap between sides, or unlock a restricted position.",
+      "label": "Mobility",
+      "description": "Unlock a restricted position, or close a strength or mobility gap between sides.",
       "order": 6
     }
   }
