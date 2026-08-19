@@ -90,8 +90,8 @@ export default function ExtrasPage() {
             return (
               <section key={g.cat} className="space-y-4">
                 <header>
-                  <h2 className="font-mono text-[13px] uppercase tracking-widest">{g.title}</h2>
-                  <p className="mt-1 text-[13px] text-muted">{g.note}</p>
+                  <h2 className="font-mono text-[14px] uppercase tracking-widest">{g.title}</h2>
+                  <p className="mt-1 text-[14px] text-muted">{g.note}</p>
                 </header>
                 {withItems.map((b) => (
                   <BlockSection
@@ -162,7 +162,7 @@ function BlockSection({
       {open ? (
         <div className="space-y-2 pb-3">
           {block.note ? (
-            <p className="rounded border border-line-soft border-l-4 border-l-slate bg-surface px-3 py-2 text-[13px] text-muted">
+            <p className="rounded border border-line-soft border-l-4 border-l-slate bg-surface px-3 py-2 text-[14px] text-muted">
               {block.note}
             </p>
           ) : null}

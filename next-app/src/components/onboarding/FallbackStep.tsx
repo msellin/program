@@ -12,7 +12,7 @@ export function FallbackStep({ programName }: { programName: string }) {
       <h2 id="onboarding-title" className="text-2xl font-semibold text-strong tracking-tight">
         Welcome to Terav.
       </h2>
-      <p className="text-[13px] text-muted leading-relaxed">
+      <p className="text-[14px] text-muted leading-relaxed">
         You&apos;ve picked <span className="text-strong">{programName}</span>. Terav sharpens one
         focus at a time — sessions land on Today, you log what happens, and the engine proposes
         adjustments you Accept or Ignore. Nothing changes without your call.

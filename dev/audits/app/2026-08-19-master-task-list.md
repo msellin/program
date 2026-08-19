@@ -10,17 +10,17 @@
 
 These are **IDEAS, not action items**. The engine + rehab-first positioning overrides "cleaner is better," so Margus picks what to ship. Batches ship in 6-12h chunks — don't try to close the whole list in one sitting, and respect the "no UI churn between audits" rule (each shipped batch should stand on its own before the next audit re-scans). Real bugs go first because they're broken code the audits happened to surface; everything else is prioritized by user-visible ROI. Sizing (S/M/L/XL) is per item.
 
-**Counts by bucket:**
+**Counts by bucket (post-Batch-17):**
 
-- **Bugs (fix regardless):** 4 items, ~1.5h
-- **P0 (biggest ROI):** 4 items, ~8-12h
-- **P1 (visible quality gap):** 55 items, ~30-40h
+- **Bugs (fix regardless):** 1 item blocked (A4 harness), 3 shipped
+- **P0 (biggest ROI):** 0 open — all 4 shipped
+- **P1 (visible quality gap):** 36 items, ~20-25h (a11y 7 + mobile-ux 11 + motion-perf 8 + visual craft 6 + landing-alignment 4; copy batch of 19 shipped)
 - **P2 (defensible polish):** 19 items, ~8-12h
 - **Features on-deck:** 9 items, ~30-50h
 - **Strategic (founder decision):** 4 items — decision, not build
 - **Rejected:** 11 items — do not ship
 
-Total open surface: **95 open ideas + 4 strategic + 11 rejected = 110 line items**. If shipped as batches of 6-12h, that's ~10-12 more batches to complete the visible backlog before the F-track paid features (F4/F5) become top-of-stack. Accessibility (P1-1 through P1-7) is a natural batch on its own — five of seven items carried from 2026-08-17.
+Total open surface: **68 open ideas + 4 strategic + 11 rejected = 83 line items** (was 110 before Batch 17). Accessibility (P1-1 through P1-7) is still the natural next batch — 7 items, ~2-3h.
 
 ---
 
@@ -48,19 +48,12 @@ Keep the convention terse — the four markers cover every state. Don't invent n
 
 ## Section A — Real bugs (fix regardless)
 
-- [ ] **A1** `text-bronze-hi` on Profile avatar initial is an undefined token; renders as inherited `text-ink`. Define `--color-bronze-hi` (target `#e2b686`) in `globals.css` or delete the class. Source: `2026-08-19-open-task-list.md` (A1). Files: `next-app/src/app/profile/page.tsx:154`. Size: S
-- [ ] **A2** `text-amber-strong` on interference banner heading — same undefined-token bug. Target `#f0b854`, or drop the class. Source: `2026-08-19-open-task-list.md` (A2). Files: `next-app/src/app/page.tsx:386`. Size: S
-- [ ] **A3** `PerProgramAdherenceCard` tri-color bar leaks a purple segment (likely `--color-lat-right` reused outside laterality). Remove or document the semantic. Source: `2026-08-19-open-task-list.md` (A3). Files: `next-app/src/components/PerProgramAdherenceCard.tsx`. Size: S
-- [ ] **A4** Persona harness artifacts predate Batch 16 by ~24h. Re-run `dev/scripts/run-app-audit.sh` before the next audit round so cross-references reflect current UI. Source: `2026-08-19-open-task-list.md` (A4). Files: `dev/scripts/run-app-audit.sh`, `next-app/tests/e2e/artifacts/personas/`. Size: S
+- [!] **A4** — blocked: Playwright harness times out on anterior-hip day-30 sim step 2026-08-19 (both app.terav.fit and 6a6ac147 preview serve identical bytes, real-browser sign-in works; rerun once flake is diagnosed) — Persona harness artifacts predate Batch 16 by ~24h. Re-run `dev/scripts/run-app-audit.sh` before the next audit round so cross-references reflect current UI. Source: `2026-08-19-open-task-list.md` (A4). Files: `dev/scripts/run-app-audit.sh`, `next-app/tests/e2e/artifacts/personas/`. Size: S
 
 ---
 
 ## Section B — P0 (highest ROI)
 
-- [ ] **P0-1** Reposition coach-proposal Accept/Ignore out of the ouch zone (~y=420 on 393×852). Sticky bottom-of-viewport action row above the nav for the active proposal's Accept/Ignore — Terav's most differentiated surface must land in the thumb zone. Source: `2026-08-19-app-audit-mobile-ux.md` §2.1. Files: `next-app/src/components/workout/ProposalCard.tsx:236-251`. Size: M *(prev B1)*
-- [ ] **P0-2** Lazy-import Sentry Replay + Feedback — eager `import * as Sentry` at `sentry.client.config.ts:19` ships ~100 KB gz whether DSN is set or not. Wrap in `if (DSN) { const Sentry = await import(...) }`. Projected Today LCP delta on 4G cold: **-500-800 ms** (2.6s → 1.9-2.1s). Source: `2026-08-19-open-task-list.md` (B2), `2026-08-18-motion-perf-sweep.md` §5. Files: `next-app/src/sentry.client.config.ts:19,47,59`. Size: M *(carried from 2026-08-18)*
-- [ ] **P0-3** ProposalStack CLS reserve on Today. `ProposalStack.tsx:28` returns `null` before `syncStable`, pushes HeroStateCard down when mounted. Fix: `<div className="min-h-[120px]">` while `!syncStable` or a tinted skeleton. Projected CLS 0.08-0.15 → 0.00-0.02. Source: `2026-08-19-open-task-list.md` (B3), `2026-08-18-motion-perf-sweep.md` §3. Files: `next-app/src/components/workout/ProposalStack.tsx:28`. Size: S *(carried from 2026-08-18)*
-- [ ] **P0-4** Bump body copy `text-[13px]` → `text-[14px]` system-wide (176-212 hits in `src/`). Largest legibility gain remaining for a rehab app read at 6am. Also `text-[11px]` → `text-[12px]` on multi-line captions; kill `text-[9px]`. One `sed`-driven batch. Target ramp: 32/20/15/14/12/10. Source: `2026-08-19-open-task-list.md` (B4), `2026-08-18-app-audit-visual-craft.md` P0-2. Files: `src/**/*.tsx`. Size: M *(carried from 2026-08-18)*
 
 ---
 
@@ -112,25 +105,6 @@ Keep the convention terse — the four markers cover every state. Don't invent n
 
 ### Copy clarity (post-2026-08-18)
 
-- [ ] **P1-33** "HERITAGE" leaks into ProposalCard eyebrow — internal codename in a user-facing string. `Signal · HERITAGE non-responder pattern` → `Signal · not responding to current dose`. Source: `2026-08-18-app-audit-copy-clarity.md` §9 P0. Files: `next-app/src/components/workout/ProposalCard.tsx:320`. Size: S
-- [ ] **P1-34** Cluster A/B/C chip labels — clinical prefix, drop to `Responding` / `Under-dosing` / `Not responding`. Cluster nomenclature moves to tooltip. Source: `2026-08-18-app-audit-copy-clarity.md` §3. Files: `next-app/src/components/HeritageClusterChip.tsx:60-66`. Size: S
-- [ ] **P1-35** "Idempotent — resubmitting today overwrites, not duplicates" — engineering vocabulary. Rewrite: `Re-submitting today updates this entry — it won't duplicate.` Source: `2026-08-18-app-audit-copy-clarity.md` §4. Files: `next-app/src/components/workout/RetestLoggingSheet.tsx:73-76`. Size: S
-- [ ] **P1-36** `Got it` accept verb on `non_responder_recommendation` breaks the accept-verb family (Apply/Advance/Log). Rewrite: `Acknowledge` or `See options`. Source: `2026-08-18-app-audit-copy-clarity.md` §2. Files: `next-app/src/components/workout/ProposalCard.tsx:342`. Size: S
-- [ ] **P1-37** Citation IDs on `day_adjustment_soften` and `retest_due` proposals — engine paths don't populate `citationId` for these two kinds. Landing's "every change cites a study" claim still leaks unless engine wires them up. Source: `2026-08-18-app-audit-copy-clarity.md` §0, §9 (carryover from 2026-08-17). Files: engine adapt paths, `proposal-citations.ts`. Size: M
-- [ ] **P1-38** Empty-state CTA on Profile — `Pick a program →` → `Pick your focus →`. Matches landing's `beta.cta_primary`. Source: `2026-08-18-profile-copy-clarity.md` §1. Files: `next-app/src/app/profile/page.tsx:204`. Size: S
-- [ ] **P1-39** Delete-account body — 31-word comma-list. Rewrite: `Everything goes — logs, training maxes, morning checks, server copies. This cannot be undone.` (14 words). Source: `2026-08-18-profile-copy-clarity.md` §2. Files: `next-app/src/app/profile/page.tsx:293`. Size: S
-- [ ] **P1-40** Per-metric verdict debug-dump on `non_responder_recommendation` — humanize metric names, drop `role`, map underscore-verdicts to phrases (`true_non_response` → `not responding`). Source: `2026-08-18-app-audit-copy-clarity.md` §2, §9 P1. Files: `next-app/src/components/workout/ProposalCard.tsx:184-195`. Size: S
-- [ ] **P1-41** "compliance" in RetestLoggingSheet reads coach-speak. Label → `How closely did you hit the prescribed intensity? (optional)`. Placeholder → `e.g. 90 (you hit ~90% of the prescribed intensity). Blank = skip.` Source: `2026-08-18-app-audit-copy-clarity.md` §4, §9 P1. Files: `next-app/src/components/workout/RetestLoggingSheet.tsx:99-101,112`. Size: S
-- [ ] **P1-42** WeeklyNarrativeTile expanded disclosure — double-header collision. In `inline` mode, drop `SignalCompletenessCard`'s "The engine sees" eyebrow; rename "Would additionally use" → `To sharpen more, add:`. Source: `2026-08-18-app-audit-copy-clarity.md` §6. Files: `next-app/src/components/SignalCompletenessCard.tsx:45-47,61-63`. Size: S
-- [ ] **P1-43** Milestone header edge cases — no-TM state reads `TM —`; missed-milestone collides two parenthetical shapes; `🎉` emoji reads gamified. Rewrite: `No TM yet · next 140 kg in 40d`; `— missed Nd ago`; drop emoji. Source: `2026-08-18-app-audit-copy-clarity.md` §7. Files: `next-app/src/app/progress/page.tsx:409-425`. Size: S
-- [ ] **P1-44** `retest_due` sub-line — `logging {metric}` is present-participle gerund. Change to `log {metric}`. Source: `2026-08-18-app-audit-copy-clarity.md` §2. Files: `next-app/src/components/workout/ProposalCard.tsx:178-181`. Size: S
-- [ ] **P1-45** muscle-up short_description — drop the "reuses pull-up + handstand drill libraries" sentence (engineering-facing). Source: `2026-08-18-app-audit-copy-clarity.md` §8. Files: `next-app/public/data/programs/muscle-up.json`. Size: S
-- [ ] **P1-46** engine-builder-block-2 short_description — 47 words with 3 technical concepts. Trim to first ~20 words for the catalog card; keep detail on program-detail page. Source: `2026-08-18-app-audit-copy-clarity.md` §8. Files: `next-app/public/data/programs/engine-builder-block-2.json`. Size: S
-- [ ] **P1-47** `admin` badge label — internal word exposed. Change label to `staff`; tooltip drops "unlocked" gaming verb. Source: `2026-08-18-profile-copy-clarity.md` §3. Files: `next-app/src/app/profile/page.tsx:151`. Size: S
-- [ ] **P1-48** `primary` badge — database-column noun leaking into UI. Change to `driving today` (or short `today's`). Source: `2026-08-18-profile-copy-clarity.md` §4. Files: `next-app/src/app/profile/page.tsx:185`. Size: S
-- [ ] **P1-49** `since Aug 2025` — no verb, reads debug. Change to `joined Aug 2025`. Source: `2026-08-18-profile-copy-clarity.md` §5. Files: `next-app/src/app/profile/page.tsx:156`. Size: S
-- [ ] **P1-50** `How this app works` nav label — dev language. Change to `Guide` (matches route + H1). Source: `2026-08-18-profile-copy-clarity.md` §6. Files: `next-app/src/app/profile/page.tsx:227`. Size: S
-- [ ] **P1-51** Sign-out ConfirmSheet body — em-dash flourish reads over-warm. Rewrite: `Your data is synced. Sign in from any device to pick back up.` Source: `2026-08-18-profile-copy-clarity.md` §7. Files: `next-app/src/app/profile/page.tsx:282`. Size: S
 
 ### Landing→app promise gaps (still open from 2026-08-17)
 
@@ -214,7 +188,37 @@ Deduplicated across visual-craft §16 + mobile-ux §10 + roadmap:
 
 Strikethrough preserves history; these items are OUT of the open list.
 
-**Batch 16 (deployed https://4df8a948.program-v2.pages.dev):**
+**Batch 17 (deployed https://6a6ac147.program-v2.pages.dev, 2026-08-19):**
+
+26 items — A + P0 + full copy batch. Full lines preserved for audit history:
+
+- [x] **A1** — done 2026-08-19 Batch 17 — `text-bronze-hi` on Profile avatar initial is an undefined token; renders as inherited `text-ink`. Define `--color-bronze-hi` (target `#e2b686`) in `globals.css` or delete the class. Source: `2026-08-19-open-task-list.md` (A1). Files: `next-app/src/app/profile/page.tsx:154`. Size: S
+- [x] **A2** — done 2026-08-19 Batch 17 — `text-amber-strong` on interference banner heading — same undefined-token bug. Target `#f0b854`, or drop the class. Source: `2026-08-19-open-task-list.md` (A2). Files: `next-app/src/app/page.tsx:386`. Size: S
+- [x] **A3** — done 2026-08-19 Batch 17 — `PerProgramAdherenceCard` tri-color bar leaks a purple segment (likely `--color-lat-right` reused outside laterality). Remove or document the semantic. Source: `2026-08-19-open-task-list.md` (A3). Files: `next-app/src/components/PerProgramAdherenceCard.tsx`. Size: S
+- [x] **P0-1** — done 2026-08-19 Batch 17 — Reposition coach-proposal Accept/Ignore out of the ouch zone (~y=420 on 393×852). Sticky bottom-of-viewport action row above the nav for the active proposal's Accept/Ignore — Terav's most differentiated surface must land in the thumb zone. Source: `2026-08-19-app-audit-mobile-ux.md` §2.1. Files: `next-app/src/components/workout/ProposalCard.tsx:236-251`. Size: M *(prev B1)*
+- [x] **P0-2** — done 2026-08-19 Batch 17 — Lazy-import Sentry Replay + Feedback — eager `import * as Sentry` at `sentry.client.config.ts:19` ships ~100 KB gz whether DSN is set or not. Wrap in `if (DSN) { const Sentry = await import(...) }`. Projected Today LCP delta on 4G cold: **-500-800 ms** (2.6s → 1.9-2.1s). Source: `2026-08-19-open-task-list.md` (B2), `2026-08-18-motion-perf-sweep.md` §5. Files: `next-app/src/sentry.client.config.ts:19,47,59`. Size: M *(carried from 2026-08-18)*
+- [x] **P0-3** — done 2026-08-19 Batch 17 — ProposalStack CLS reserve on Today. `ProposalStack.tsx:28` returns `null` before `syncStable`, pushes HeroStateCard down when mounted. Fix: `<div className="min-h-[120px]">` while `!syncStable` or a tinted skeleton. Projected CLS 0.08-0.15 → 0.00-0.02. Source: `2026-08-19-open-task-list.md` (B3), `2026-08-18-motion-perf-sweep.md` §3. Files: `next-app/src/components/workout/ProposalStack.tsx:28`. Size: S *(carried from 2026-08-18)*
+- [x] **P0-4** — done 2026-08-19 Batch 17 — Bump body copy `text-[13px]` → `text-[14px]` system-wide (176-212 hits in `src/`). Largest legibility gain remaining for a rehab app read at 6am. Also `text-[11px]` → `text-[12px]` on multi-line captions; kill `text-[9px]`. One `sed`-driven batch. Target ramp: 32/20/15/14/12/10. Source: `2026-08-19-open-task-list.md` (B4), `2026-08-18-app-audit-visual-craft.md` P0-2. Files: `src/**/*.tsx`. Size: M *(carried from 2026-08-18)*
+- [x] **P1-33** — done 2026-08-19 Batch 17 — "HERITAGE" leaks into ProposalCard eyebrow — internal codename in a user-facing string. `Signal · HERITAGE non-responder pattern` → `Signal · not responding to current dose`. Source: `2026-08-18-app-audit-copy-clarity.md` §9 P0. Files: `next-app/src/components/workout/ProposalCard.tsx:320`. Size: S
+- [x] **P1-34** — done 2026-08-19 Batch 17 — Cluster A/B/C chip labels — clinical prefix, drop to `Responding` / `Under-dosing` / `Not responding`. Cluster nomenclature moves to tooltip. Source: `2026-08-18-app-audit-copy-clarity.md` §3. Files: `next-app/src/components/HeritageClusterChip.tsx:60-66`. Size: S
+- [x] **P1-35** — done 2026-08-19 Batch 17 — "Idempotent — resubmitting today overwrites, not duplicates" — engineering vocabulary. Rewrite: `Re-submitting today updates this entry — it won't duplicate.` Source: `2026-08-18-app-audit-copy-clarity.md` §4. Files: `next-app/src/components/workout/RetestLoggingSheet.tsx:73-76`. Size: S
+- [x] **P1-36** — done 2026-08-19 Batch 17 — `Got it` accept verb on `non_responder_recommendation` breaks the accept-verb family (Apply/Advance/Log). Rewrite: `Acknowledge` or `See options`. Source: `2026-08-18-app-audit-copy-clarity.md` §2. Files: `next-app/src/components/workout/ProposalCard.tsx:342`. Size: S
+- [x] **P1-37** — done 2026-08-19 Batch 17 — Citation IDs on `day_adjustment_soften` and `retest_due` proposals — engine paths don't populate `citationId` for these two kinds. Landing's "every change cites a study" claim still leaks unless engine wires them up. Source: `2026-08-18-app-audit-copy-clarity.md` §0, §9 (carryover from 2026-08-17). Files: engine adapt paths, `proposal-citations.ts`. Size: M
+- [x] **P1-38** — done 2026-08-19 Batch 17 — Empty-state CTA on Profile — `Pick a program →` → `Pick your focus →`. Matches landing's `beta.cta_primary`. Source: `2026-08-18-profile-copy-clarity.md` §1. Files: `next-app/src/app/profile/page.tsx:204`. Size: S
+- [x] **P1-39** — done 2026-08-19 Batch 17 — Delete-account body — 31-word comma-list. Rewrite: `Everything goes — logs, training maxes, morning checks, server copies. This cannot be undone.` (14 words). Source: `2026-08-18-profile-copy-clarity.md` §2. Files: `next-app/src/app/profile/page.tsx:293`. Size: S
+- [x] **P1-40** — done 2026-08-19 Batch 17 — Per-metric verdict debug-dump on `non_responder_recommendation` — humanize metric names, drop `role`, map underscore-verdicts to phrases (`true_non_response` → `not responding`). Source: `2026-08-18-app-audit-copy-clarity.md` §2, §9 P1. Files: `next-app/src/components/workout/ProposalCard.tsx:184-195`. Size: S
+- [x] **P1-41** — done 2026-08-19 Batch 17 — "compliance" in RetestLoggingSheet reads coach-speak. Label → `How closely did you hit the prescribed intensity? (optional)`. Placeholder → `e.g. 90 (you hit ~90% of the prescribed intensity). Blank = skip.` Source: `2026-08-18-app-audit-copy-clarity.md` §4, §9 P1. Files: `next-app/src/components/workout/RetestLoggingSheet.tsx:99-101,112`. Size: S
+- [x] **P1-42** — done 2026-08-19 Batch 17 — WeeklyNarrativeTile expanded disclosure — double-header collision. In `inline` mode, drop `SignalCompletenessCard`'s "The engine sees" eyebrow; rename "Would additionally use" → `To sharpen more, add:`. Source: `2026-08-18-app-audit-copy-clarity.md` §6. Files: `next-app/src/components/SignalCompletenessCard.tsx:45-47,61-63`. Size: S
+- [x] **P1-43** — done 2026-08-19 Batch 17 — Milestone header edge cases — no-TM state reads `TM —`; missed-milestone collides two parenthetical shapes; `🎉` emoji reads gamified. Rewrite: `No TM yet · next 140 kg in 40d`; `— missed Nd ago`; drop emoji. Source: `2026-08-18-app-audit-copy-clarity.md` §7. Files: `next-app/src/app/progress/page.tsx:409-425`. Size: S
+- [x] **P1-44** — done 2026-08-19 Batch 17 — `retest_due` sub-line — `logging {metric}` is present-participle gerund. Change to `log {metric}`. Source: `2026-08-18-app-audit-copy-clarity.md` §2. Files: `next-app/src/components/workout/ProposalCard.tsx:178-181`. Size: S
+- [x] **P1-45** — done 2026-08-19 Batch 17 — muscle-up short_description — drop the "reuses pull-up + handstand drill libraries" sentence (engineering-facing). Source: `2026-08-18-app-audit-copy-clarity.md` §8. Files: `next-app/public/data/programs/muscle-up.json`. Size: S
+- [x] **P1-46** — done 2026-08-19 Batch 17 — engine-builder-block-2 short_description — 47 words with 3 technical concepts. Trim to first ~20 words for the catalog card; keep detail on program-detail page. Source: `2026-08-18-app-audit-copy-clarity.md` §8. Files: `next-app/public/data/programs/engine-builder-block-2.json`. Size: S
+- [x] **P1-47** — done 2026-08-19 Batch 17 — `admin` badge label — internal word exposed. Change label to `staff`; tooltip drops "unlocked" gaming verb. Source: `2026-08-18-profile-copy-clarity.md` §3. Files: `next-app/src/app/profile/page.tsx:151`. Size: S
+- [x] **P1-48** — done 2026-08-19 Batch 17 — `primary` badge — database-column noun leaking into UI. Change to `driving today` (or short `today's`). Source: `2026-08-18-profile-copy-clarity.md` §4. Files: `next-app/src/app/profile/page.tsx:185`. Size: S
+- [x] **P1-49** — done 2026-08-19 Batch 17 — `since Aug 2025` — no verb, reads debug. Change to `joined Aug 2025`. Source: `2026-08-18-profile-copy-clarity.md` §5. Files: `next-app/src/app/profile/page.tsx:156`. Size: S
+- [x] **P1-50** — done 2026-08-19 Batch 17 — `How this app works` nav label — dev language. Change to `Guide` (matches route + H1). Source: `2026-08-18-profile-copy-clarity.md` §6. Files: `next-app/src/app/profile/page.tsx:227`. Size: S
+- [x] **P1-51** — done 2026-08-19 Batch 17 — Sign-out ConfirmSheet body — em-dash flourish reads over-warm. Rewrite: `Your data is synced. Sign in from any device to pick back up.` Source: `2026-08-18-profile-copy-clarity.md` §7. Files: `next-app/src/app/profile/page.tsx:282`. Size: S
+
 - ~~Profile identity chip on the top row~~
 - ~~Profile footer collapse with Danger-zone disclosure~~
 - ~~Week padding + Programs pill moved off header~~

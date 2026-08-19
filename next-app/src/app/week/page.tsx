@@ -128,7 +128,7 @@ export default function WeekPage() {
         <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">
           Week
         </h1>
-        <p className="mt-2 text-[13px] text-muted">
+        <p className="mt-2 text-[14px] text-muted">
           The 7-day rhythm, with your skips and moves applied.
         </p>
       </header>
@@ -189,14 +189,14 @@ export default function WeekPage() {
       </div>
 
       {weekPhase ? (
-        <div className="rounded border border-line-soft border-l-4 border-l-slate bg-surface px-3 py-2 text-[13px]">
+        <div className="rounded border border-line-soft border-l-4 border-l-slate bg-surface px-3 py-2 text-[14px]">
           <span className="font-semibold text-strong">
             {humanPhaseName(weekPhase.name)}
           </span>
           {weekPhase.goal ? <span className="text-muted"> · {weekPhase.goal}</span> : null}
         </div>
       ) : (
-        <div className="rounded border border-line-soft border-l-4 border-l-slate bg-surface px-3 py-2 text-[13px] text-muted">
+        <div className="rounded border border-line-soft border-l-4 border-l-slate bg-surface px-3 py-2 text-[14px] text-muted">
           {program.slug === "anterior-hip-rebuild"
             ? "No phase covers this week — either before the program starts or in the Phase 4→5 light window."
             : "No phase covers this week — you're looking at a date before the program starts or after its final phase."}
@@ -204,7 +204,7 @@ export default function WeekPage() {
       )}
 
       {atFutureEdge ? (
-        <p className="text-[13px] text-muted italic">
+        <p className="text-[14px] text-muted italic">
           Looking further ahead than {FUTURE_WEEKS} weeks isn&apos;t useful — the plan will have
           adapted by then. See milestones on Progress for the year-long shape.
         </p>
@@ -372,7 +372,7 @@ export default function WeekPage() {
                         />
                       ))}
                       {/* Audit 2026-08-18 (visual-craft) — "+N" bumped
-                          from text-[9px] to text-[10px] to respect the
+                          from text-[10px] to text-[10px] to respect the
                           tokens.md typography floor. */}
                       {perProgramDots.dots.length > 4 ? (
                         <span className="text-[10px] font-mono text-muted ml-0.5">
@@ -425,7 +425,7 @@ export default function WeekPage() {
                   </div>
                   <p
                     className={cn(
-                      "text-[13px] mt-1",
+                      "text-[14px] mt-1",
                       skip ? "line-through text-muted" : "text-muted",
                       !isExpanded && "line-clamp-1",
                     )}
@@ -497,7 +497,7 @@ function RulesAccordion({ principles }: { principles: string[] }) {
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="inline-flex items-center gap-1.5 text-[13px] text-slate hover:text-ink"
+        className="inline-flex items-center gap-1.5 text-[14px] text-slate hover:text-ink"
       >
         <span aria-hidden>{open ? "▾" : "▸"}</span>
         {open ? "Hide" : "Show"} rules of the week

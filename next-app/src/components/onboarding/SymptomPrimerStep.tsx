@@ -19,10 +19,10 @@ export function SymptomPrimerStep({ step }: { step: SymptomPrimerStepPayload }) 
       <h2 id="onboarding-title" className="text-2xl font-semibold text-strong tracking-tight text-center">
         {step.title}
       </h2>
-      <p className="text-[13px] text-muted whitespace-pre-line text-center">{step.body_md}</p>
+      <p className="text-[14px] text-muted whitespace-pre-line text-center">{step.body_md}</p>
       <ul className="space-y-1.5 text-left border border-line-soft rounded p-3 bg-surface">
         {step.fields.map((f) => (
-          <li key={f} className="text-[13px] text-ink flex items-start gap-2">
+          <li key={f} className="text-[14px] text-ink flex items-start gap-2">
             <span aria-hidden="true" className="text-slate mt-0.5">·</span>
             <span>{f}</span>
           </li>

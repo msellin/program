@@ -39,16 +39,21 @@ export function SignalCompletenessCard({
   const wouldUse = sc.would_additionally_use ?? [];
   const hasGaps = wouldUse.length > 0;
 
+  // P1-42 — the "engine sees" eyebrow duplicates the tile header when
+  // this card is embedded in `WeeklyNarrativeTile` (inline mode). Hide
+  // it in that case; the header context makes the eyebrow noise.
   const body = (
     <div className="space-y-4">
       <div className="space-y-2">
-        <p className="font-mono text-[10px] uppercase tracking-widest text-muted flex items-center gap-1.5">
-          <Eye size={12} aria-hidden="true" />
-          The engine sees
-        </p>
+        {inline ? null : (
+          <p className="font-mono text-[10px] uppercase tracking-widest text-muted flex items-center gap-1.5">
+            <Eye size={12} aria-hidden="true" />
+            The engine sees
+          </p>
+        )}
         <ul className="space-y-1.5 pl-1">
           {reads.map((r) => (
-            <li key={r.label} className="text-[13px] leading-snug">
+            <li key={r.label} className="text-[14px] leading-snug">
               <span className="text-ink">{r.label}</span>
               {r.detail ? <span className="text-muted"> — {r.detail}</span> : null}
             </li>
@@ -60,12 +65,12 @@ export function SignalCompletenessCard({
         <div className="space-y-2">
           <p className="font-mono text-[10px] uppercase tracking-widest text-muted flex items-center gap-1.5">
             <Plus size={12} aria-hidden="true" />
-            Would additionally use
+            To sharpen more, add:
           </p>
           <ul className="space-y-3 pl-1">
             {wouldUse.map((w) => (
               <li key={w.label} className="space-y-1">
-                <p className="text-[13px] font-semibold text-strong">{w.label}</p>
+                <p className="text-[14px] font-semibold text-strong">{w.label}</p>
                 <p className="text-[12px] text-muted leading-snug">
                   {w.why_it_matters}
                 </p>

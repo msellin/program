@@ -1,136 +1,31 @@
 "use client";
 
-import { useState } from "react";
 import { ArrowUp } from "lucide-react";
-import { useStore } from "@/lib/useStore";
-import { hapticTap, today as todayISO } from "@/lib/utils";
-import { announce } from "@/lib/announce";
 import { CitationRef } from "@/components/citations/CitationRef";
 import { RetestLoggingSheet } from "@/components/workout/RetestLoggingSheet";
+import { useProposalActions } from "@/lib/proposals/useProposalActions";
 import type { Proposal } from "@/lib/schemas";
 
 /**
- * A5 (Phase 3). One card per `Proposal` payload. Always renders Accept +
- * Ignore inline — the landing-verb promise stays honest.
- *
- * Kind-specific state mutation happens here (Accept branches on
- * `proposal.kind`), but the outcome audit trail flows through the single
- * `recordProposalOutcome` action.
+ * A5 (Phase 3). One card per `Proposal` payload. Renders the reason /
+ * evidence / citation. Accept + Ignore verbs render inline on non-top
+ * cards; the top proposal in a stack surfaces its verbs in a sticky
+ * bottom action bar (`ProposalStickyActionBar`) so the confirm-first
+ * ceremony lands in the thumb zone — see P0-1 in the master task list.
  */
-export function ProposalCard({ proposal, date }: { proposal: Proposal; date: string }) {
-  const setTM = useStore((s) => s.setTM);
-  const acceptDayAdjustment = useStore((s) => s.acceptDayAdjustment);
-  const promoteTier = useStore((s) => s.promoteTier);
-  const dismissTierProposal = useStore((s) => s.dismissTierProposal);
-  const advancePhase = useStore((s) => s.advancePhase);
-  const dismissProposal = useStore((s) => s.dismissProposal);
-  const recordProposalOutcome = useStore((s) => s.recordProposalOutcome);
-  // HERITAGE Phase 5 — the retest_due kind opens a logging sheet on Accept.
-  // We record the Accepted outcome only when the sheet reports success
-  // (submit path), not when the sheet opens — otherwise a cancelled sheet
-  // would leave a false-positive audit entry.
-  const [retestSheetOpen, setRetestSheetOpen] = useState(false);
-
-  const onAccept = (e: React.MouseEvent<HTMLButtonElement>) => {
-    hapticTap("medium");
-    (e.currentTarget.closest("[data-proposal-card]") as HTMLElement | null)?.classList.add(
-      "pulse-accept",
-    );
-
-    switch (proposal.kind) {
-      case "day_adjustment_soften": {
-        acceptDayAdjustment(
-          proposal.date,
-          proposal.multiplier,
-          proposal.reason,
-          "notes",
-          proposal.citationId,
-        );
-        announce(
-          `Plan sharpened. Load ${Math.round((1 - proposal.multiplier) * 100)}% lighter today.`,
-        );
-        break;
-      }
-      case "readiness_after_layoff": {
-        advancePhase(proposal.programSlug, proposal.daysToShift);
-        dismissProposal(date, "reintro-graduation");
-        announce(`Plan sharpened. Advanced to ${proposal.targetPhaseName}.`);
-        break;
-      }
-      case "tier_advance": {
-        promoteTier(proposal.programSlug, proposal.tierId, "retest");
-        announce(`Plan sharpened. Advanced to ${proposal.tierLabel}.`);
-        break;
-      }
-      case "tm_bump": {
-        for (const l of proposal.lifts) setTM(l.exerciseId, l.newTM);
-        const summary = proposal.lifts.map((l) => `${l.exerciseId} +${l.delta} kg`).join(", ");
-        announce(`Plan sharpened. Training max bumped: ${summary}.`);
-        break;
-      }
-      case "non_responder_recommendation": {
-        // HERITAGE Phase 4 — Accept = acknowledge the recommendation.
-        // We DON'T auto-switch the program here; the actual arc/track
-        // change is a manual decision the user makes from
-        // /programs. Accepting marks the recommendation seen and stops
-        // the card re-appearing indefinitely.
-        dismissProposal(date, proposal.id.replace(/^[^:]*:/, "non-responder:"));
-        announce("Recommendation acknowledged.");
-        break;
-      }
-      case "retest_due": {
-        // HERITAGE Phase 5 — Accept opens the logging sheet. Outcome and
-        // dismissal are recorded when the sheet submits; opening alone
-        // is not an "accepted" state, otherwise a cancel-out leaves a
-        // ghost audit entry.
-        setRetestSheetOpen(true);
-        return;
-      }
-    }
-
-    recordProposalOutcome(proposal, "accepted", date);
-  };
-
-  const onIgnore = () => {
-    switch (proposal.kind) {
-      case "day_adjustment_soften":
-        dismissProposal(date, `load-${proposal.multiplier}`);
-        break;
-      case "readiness_after_layoff":
-        dismissProposal(date, "reintro-graduation");
-        break;
-      case "tier_advance":
-        dismissTierProposal(proposal.programSlug, `${proposal.tierId}@${proposal.varsHash}`);
-        break;
-      case "tm_bump":
-        for (const l of proposal.lifts) dismissProposal(date, `tm-bump:${l.exerciseId}`);
-        break;
-      case "non_responder_recommendation":
-        dismissProposal(date, `non-responder:${proposal.verdict}`);
-        break;
-      case "retest_due":
-        // Suppress on today; the selector re-fires tomorrow while window
-        // is still open. If user consistently ignores, the window closes.
-        dismissProposal(date, `retest-due:${proposal.metricId}:${proposal.atWeek}`);
-        break;
-    }
-    recordProposalOutcome(proposal, "ignored", date);
-    announce("Ignored.");
-  };
-
-  const onRetestSheetClose = (didSubmit: boolean) => {
-    setRetestSheetOpen(false);
-    if (proposal.kind !== "retest_due") return;
-    if (didSubmit) {
-      // Reading landed — dismiss for today so the same proposal doesn't
-      // re-fire before the freshness window ticks over tomorrow.
-      dismissProposal(date, `retest-due:${proposal.metricId}:${proposal.atWeek}`);
-      recordProposalOutcome(proposal, "accepted", date);
-    }
-  };
+export function ProposalCard({
+  proposal,
+  date,
+  showInlineActions = true,
+}: {
+  proposal: Proposal;
+  date: string;
+  showInlineActions?: boolean;
+}) {
+  const { onAccept, onIgnore, acceptVerb, retestSheetOpen, closeRetestSheet } =
+    useProposalActions(proposal, date);
 
   const tone = toneFor(proposal);
-  const acceptVerb = acceptVerbFor(proposal);
   const eyebrow = eyebrowFor(proposal);
 
   return (
@@ -157,7 +52,7 @@ export function ProposalCard({ proposal, date }: { proposal: Proposal; date: str
             ) : null}
             {eyebrow}
           </h3>
-          <p className="text-[13px] text-ink mt-1 leading-snug">
+          <p className="text-[14px] text-ink mt-1 leading-snug">
             <span className="text-muted">Because:</span> {proposal.reason}
           </p>
           {proposal.kind === "tm_bump" ? (
@@ -183,7 +78,7 @@ export function ProposalCard({ proposal, date }: { proposal: Proposal; date: str
           ) : null}
           {proposal.kind === "retest_due" ? (
             <p className="text-[12px] font-mono text-ink mt-1">
-              Week {proposal.currentWeek} · logging {proposal.metricDisplayName}
+              Week {proposal.currentWeek} · log {proposal.metricDisplayName}
               {proposal.metricUnit ? ` (${proposal.metricUnit})` : ""}
             </p>
           ) : null}
@@ -191,11 +86,11 @@ export function ProposalCard({ proposal, date }: { proposal: Proposal; date: str
             <ul className="text-[12px] font-mono text-ink mt-1 space-y-0.5">
               {proposal.perMetric.map((m) => (
                 <li key={m.metric_id}>
-                  {m.metric_id} ({m.role})
+                  {humanizeMetricId(m.metric_id)}
                   {m.delta_at_mid_block != null
                     ? ` · Δ ${m.delta_at_mid_block.toFixed(2)} at mid-block`
                     : ""}
-                  <span className="text-muted"> · {m.verdict.replace(/_/g, " ")}</span>
+                  <span className="text-muted"> · {humanizeVerdict(m.verdict)}</span>
                 </li>
               ))}
             </ul>
@@ -233,26 +128,28 @@ export function ProposalCard({ proposal, date }: { proposal: Proposal; date: str
             below is the semantic verb (matches the landing promise), and
             two same-action affordances confused reviewers. */}
       </div>
-      <div className="flex flex-wrap gap-2 pt-1">
-        <button
-          type="button"
-          onClick={onAccept}
-          className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover min-h-[44px]"
-        >
-          {acceptVerb}
-        </button>
-        <button
-          type="button"
-          onClick={onIgnore}
-          className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-ink hover:bg-line-soft min-h-[44px]"
-        >
-          Ignore
-        </button>
-      </div>
+      {showInlineActions ? (
+        <div className="flex flex-wrap gap-2 pt-1">
+          <button
+            type="button"
+            onClick={(e) => onAccept(e.currentTarget)}
+            className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover min-h-[44px]"
+          >
+            {acceptVerb}
+          </button>
+          <button
+            type="button"
+            onClick={onIgnore}
+            className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-ink hover:bg-line-soft min-h-[44px]"
+          >
+            Ignore
+          </button>
+        </div>
+      ) : null}
       {retestSheetOpen && proposal.kind === "retest_due" ? (
         <RetestLoggingSheet
           proposal={proposal}
-          onClose={() => onRetestSheetClose(true)}
+          onClose={() => closeRetestSheet(true)}
         />
       ) : null}
     </section>
@@ -312,6 +209,34 @@ function toneFor(p: Proposal): Tone {
   }
 }
 
+// P1-40 — humanize the per-metric readout on non-responder proposals.
+// Metric IDs come from engine payloads (`submax_hr_bpm`, `resting_hr_bpm`,
+// `time_to_exhaustion_min`, ...). Underscore→space + acronym uppercase is
+// enough for beta; if a program authors a fully unreadable id, add it to
+// the DISPLAY_NAMES map below rather than baking that into the JSON.
+const DISPLAY_NAMES: Record<string, string> = {
+  submax_hr_bpm: "sub-max HR",
+  resting_hr_bpm: "resting HR",
+  hrv_rmssd_ms: "HRV (RMSSD)",
+};
+function humanizeMetricId(id: string): string {
+  return DISPLAY_NAMES[id] ?? id.replace(/_/g, " ");
+}
+function humanizeVerdict(v: string): string {
+  switch (v) {
+    case "true_non_response":
+      return "not responding";
+    case "under_dosing":
+      return "room to push";
+    case "responding":
+      return "responding";
+    case "insufficient_data":
+      return "not enough data yet";
+    default:
+      return v.replace(/_/g, " ");
+  }
+}
+
 function eyebrowFor(p: Proposal): string {
   switch (p.kind) {
     case "day_adjustment_soften":
@@ -334,26 +259,3 @@ function eyebrowFor(p: Proposal): string {
   }
 }
 
-function acceptVerbFor(p: Proposal): string {
-  switch (p.kind) {
-    case "day_adjustment_soften":
-      return `Apply ${Math.round((1 - p.multiplier) * 100)}% lighter`;
-    case "readiness_after_layoff":
-      return `Advance to ${p.targetPhaseName}`;
-    case "tier_advance":
-      return `Advance to ${p.tierLabel}`;
-    case "tm_bump":
-      return "Apply bump";
-    case "non_responder_recommendation":
-      // Accept just acknowledges — the arc change itself is a user
-      // decision on the /programs page, not something the engine auto-does.
-      // Copy audit 2026-08-18 — "Got it" broke the imperative-verb family.
-      return "Acknowledge";
-    case "retest_due":
-      return "Log reading";
-  }
-}
-
-// Silence unused-import warning during checkpoint refactors — todayISO stays
-// available for downstream date-comparison work.
-void todayISO;

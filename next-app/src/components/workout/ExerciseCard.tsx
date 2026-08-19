@@ -119,7 +119,7 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
     >
       {/* Laterality spine — only rendered when the exercise emphasises a side. */}
       {hasLaterality ? (
-        <aside className="bg-line-soft flex flex-col items-center justify-center gap-0.5 py-2 font-mono text-[9px] font-bold text-muted uppercase">
+        <aside className="bg-line-soft flex flex-col items-center justify-center gap-0.5 py-2 font-mono text-[10px] font-bold text-muted uppercase">
           {isLeftEmphasis ? (
             <>
               <span className="text-lat-left">L</span>
@@ -183,7 +183,7 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
                 <p className="font-mono text-[12px] text-slate mt-0.5 truncate">{previewText}</p>
               ) : null}
               {typeof (item as { note?: string }).note === "string" && (item as { note: string }).note.trim() ? (
-                <p className="text-[13px] text-muted italic mt-1 leading-snug">
+                <p className="text-[14px] text-muted italic mt-1 leading-snug">
                   <span className="font-mono text-[10px] uppercase tracking-wider not-italic text-bronze mr-1.5">
                     cue
                   </span>

@@ -157,7 +157,7 @@ export function SetRow({ index, set, prev, prescribed, isPR, restSeconds, onChan
             placeholder="anything specific to this set — click, side asymmetry, form cue…"
             value={set.notes ?? ""}
             onChange={(e) => onChange({ notes: e.target.value })}
-            className="block w-full max-w-full text-[13px] px-2 py-1.5 border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze resize-y min-h-[44px] break-words [overflow-wrap:anywhere] whitespace-pre-wrap"
+            className="block w-full max-w-full text-[14px] px-2 py-1.5 border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze resize-y min-h-[44px] break-words [overflow-wrap:anywhere] whitespace-pre-wrap"
           />
         </div>
       ) : null}

@@ -17,7 +17,7 @@ export function ScanAnchorStep({ step }: { step: ScanAnchorStepPayload }) {
       <h2 id="onboarding-title" className="text-2xl font-semibold text-strong tracking-tight">
         {step.title}
       </h2>
-      <p className="text-[13px] text-muted whitespace-pre-line">{step.body_md}</p>
+      <p className="text-[14px] text-muted whitespace-pre-line">{step.body_md}</p>
       {step.cta_href && step.cta_label ? (
         <Link
           href={step.cta_href}

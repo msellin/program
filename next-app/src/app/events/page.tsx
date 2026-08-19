@@ -102,7 +102,7 @@ export default function EventsPage() {
       <section className="rounded border border-line-soft bg-surface p-4 space-y-3">
         <p className="font-semibold text-sm text-strong">Add an event</p>
         <div className="grid grid-cols-2 gap-3">
-          <label className="text-[13px] text-muted">
+          <label className="text-[14px] text-muted">
             Date
             <input
               type="date"
@@ -111,7 +111,7 @@ export default function EventsPage() {
               className="mt-1 w-full px-2 py-2 min-h-[44px] border border-line rounded bg-surface text-sm focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
             />
           </label>
-          <label className="text-[13px] text-muted">
+          <label className="text-[14px] text-muted">
             Kind
             <select
               value={kind}
@@ -124,7 +124,7 @@ export default function EventsPage() {
             </select>
           </label>
         </div>
-        <label className="block text-[13px] text-muted">
+        <label className="block text-[14px] text-muted">
           Name
           <input
             type="text"
@@ -135,7 +135,7 @@ export default function EventsPage() {
           />
         </label>
         <div className="grid grid-cols-2 gap-3">
-          <label className="text-[13px] text-muted">
+          <label className="text-[14px] text-muted">
             Rest days before
             <input
               type="number"
@@ -146,7 +146,7 @@ export default function EventsPage() {
               className="mt-1 w-full px-2 py-2 min-h-[44px] border border-line rounded bg-surface text-sm font-mono focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
             />
           </label>
-          <label className="text-[13px] text-muted">
+          <label className="text-[14px] text-muted">
             Rest days after
             <input
               type="number"
@@ -158,7 +158,7 @@ export default function EventsPage() {
             />
           </label>
         </div>
-        <label className="block text-[13px] text-muted">
+        <label className="block text-[14px] text-muted">
           Note (optional)
           <input
             type="text"
@@ -182,7 +182,7 @@ export default function EventsPage() {
       {/* Upcoming */}
       {upcoming.length ? (
         <section className="space-y-2">
-          <h2 className="font-mono text-[13px] uppercase tracking-widest">Upcoming</h2>
+          <h2 className="font-mono text-[14px] uppercase tracking-widest">Upcoming</h2>
           <ul className="rounded border border-line-soft divide-y divide-line-soft">
             {upcoming.map((ev) => (
               <EventRow key={ev.id} event={ev} onRemove={() => setRemoveTarget(ev)} />
@@ -194,7 +194,7 @@ export default function EventsPage() {
       {/* Past */}
       {past.length ? (
         <section className="space-y-2">
-          <h2 className="font-mono text-[13px] uppercase tracking-widest text-muted">Past</h2>
+          <h2 className="font-mono text-[14px] uppercase tracking-widest text-muted">Past</h2>
           <ul className="rounded border border-line-soft divide-y divide-line-soft opacity-70">
             {past.slice(0, 10).map((ev) => (
               <EventRow key={ev.id} event={ev} onRemove={() => setRemoveTarget(ev)} />
@@ -204,7 +204,7 @@ export default function EventsPage() {
       ) : null}
 
       {!events.length ? (
-        <p className="text-[13px] text-muted italic">
+        <p className="text-[14px] text-muted italic">
           No events yet. Add a race or competition above — Today and Week will schedule around it.
         </p>
       ) : null}

@@ -118,7 +118,7 @@ function SignInInner() {
   return (
     <div className="max-w-sm mx-auto pt-8 space-y-5">
       <div className="flex items-center gap-1.5 mb-4">
-        <span className="font-mono text-[13px] uppercase tracking-[0.2em] text-bronze">Terav</span>
+        <span className="font-mono text-[14px] uppercase tracking-[0.2em] text-bronze">Terav</span>
       </div>
       <header className="space-y-1">
         <h1 className="text-2xl font-semibold tracking-tight text-strong">Sign in</h1>
@@ -136,7 +136,7 @@ function SignInInner() {
       </div>
 
       <form onSubmit={submit} className="space-y-3" noValidate>
-        <label className="block text-[13px]">
+        <label className="block text-[14px]">
           <span className="block text-muted mb-1">Email</span>
           <input
             type="email"
@@ -147,7 +147,7 @@ function SignInInner() {
             className="block w-full text-[14px] px-3 py-2.5 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
           />
         </label>
-        <label className="block text-[13px]">
+        <label className="block text-[14px]">
           <span className="block text-muted mb-1">Password</span>
           <input
             type="password"
@@ -159,10 +159,10 @@ function SignInInner() {
           />
         </label>
         {error ? (
-          <p className="text-[13px] text-red border-l-4 border-red pl-2">{error}</p>
+          <p className="text-[14px] text-red border-l-4 border-red pl-2">{error}</p>
         ) : null}
         {needsConfirmation ? (
-          <div className="text-[13px] border-l-4 border-amber pl-2 space-y-2">
+          <div className="text-[14px] border-l-4 border-amber pl-2 space-y-2">
             <p className="text-ink">
               Your email hasn&apos;t been confirmed yet. Check the inbox for{" "}
               <strong>{email}</strong> (also the spam folder) — the link takes ~1 minute
@@ -185,14 +185,14 @@ function SignInInner() {
         <button
           type="submit"
           disabled={submitting}
-          className="w-full font-mono text-[13px] uppercase tracking-wider py-3 rounded bg-bronze text-ground hover:bg-bronze/90 disabled:opacity-50 min-h-[44px]"
+          className="w-full font-mono text-[14px] uppercase tracking-wider py-3 rounded bg-bronze text-ground hover:bg-bronze/90 disabled:opacity-50 min-h-[44px]"
         >
           {submitting ? "Signing in…" : "Sign in"}
         </button>
       </form>
 
       {resetSent ? (
-        <p className="text-[13px] text-green border-l-4 border-green pl-2">
+        <p className="text-[14px] text-green border-l-4 border-green pl-2">
           Password reset email sent to <strong>{email}</strong>. Check inbox (and spam).
           The link opens a reset form.
         </p>
@@ -201,13 +201,13 @@ function SignInInner() {
           type="button"
           onClick={sendPasswordReset}
           disabled={resetting}
-          className="text-[13px] text-muted underline decoration-muted/40 underline-offset-4 hover:text-ink hover:decoration-ink/60 disabled:opacity-50"
+          className="text-[14px] text-muted underline decoration-muted/40 underline-offset-4 hover:text-ink hover:decoration-ink/60 disabled:opacity-50"
         >
           {resetting ? "Sending…" : "Forgot password?"}
         </button>
       )}
 
-      <p className="text-[13px] text-muted">
+      <p className="text-[14px] text-muted">
         No account?{" "}
         <Link href="/sign-up" className="text-slate border-b border-slate">
           Sign up

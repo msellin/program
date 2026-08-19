@@ -99,7 +99,7 @@ export default function HistoryPage() {
       </header>
 
       <section className="space-y-3">
-        <h2 className="font-mono text-[13px] uppercase tracking-widest">Activity heatmap</h2>
+        <h2 className="font-mono text-[14px] uppercase tracking-widest">Activity heatmap</h2>
         <div className="rounded border border-line bg-surface p-3">
           <Heatmap store={store} onDayClick={setOpenDate} />
         </div>
@@ -120,7 +120,7 @@ export default function HistoryPage() {
         if (!activeRegions.length) return null;
         return (
           <section className="space-y-3">
-            <h2 className="font-mono text-[13px] uppercase tracking-widest">
+            <h2 className="font-mono text-[14px] uppercase tracking-widest">
               Symptoms — last {recent.length}
             </h2>
             <div className="rounded border border-line bg-surface p-3 space-y-2">
@@ -146,7 +146,7 @@ export default function HistoryPage() {
         return (
           <section className="space-y-3">
             <div className="flex items-baseline justify-between gap-3">
-              <h2 className="font-mono text-[13px] uppercase tracking-widest">
+              <h2 className="font-mono text-[14px] uppercase tracking-widest">
                 Top-set weight — main lifts
               </h2>
               {canExpand ? (
@@ -205,7 +205,7 @@ export default function HistoryPage() {
         const hasMore = rendered.length < nonEmpty.length;
         return (
           <section className="space-y-3">
-            <h2 className="font-mono text-[13px] uppercase tracking-widest">
+            <h2 className="font-mono text-[14px] uppercase tracking-widest">
               Log — {nonEmpty.length} active day{nonEmpty.length === 1 ? "" : "s"}
               {" · showing "}
               {rendered.length}
@@ -248,7 +248,7 @@ function SymptomSpark({
       <div className="font-mono text-[11px] text-muted uppercase tracking-wider flex items-center gap-1.5">
         {region.lat ? (
           <span
-            className={`font-mono text-[9px] font-bold px-1 rounded text-surface ${region.lat === "L" ? "bg-lat-left" : "bg-lat-right"}`}
+            className={`font-mono text-[10px] font-bold px-1 rounded text-surface ${region.lat === "L" ? "bg-lat-left" : "bg-lat-right"}`}
           >
             {region.lat}
           </span>
@@ -454,7 +454,7 @@ function ExerciseRow({
   return (
     <div className="rounded border border-line-soft bg-surface-2/40 p-2">
       <div className="flex items-baseline justify-between gap-2">
-        <p className="text-[13px] font-medium">{ex?.name ?? exId}</p>
+        <p className="text-[14px] font-medium">{ex?.name ?? exId}</p>
         <p className="mono-caps text-[10px]">{validSets.length} set{validSets.length === 1 ? "" : "s"}</p>
       </div>
       {validSets.length ? (

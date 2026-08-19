@@ -217,7 +217,7 @@ function ProgressBody({
 
       {/* SECTION 1 — Insights (retest metrics + weekly narrative + charts). */}
       <div className="space-y-5">
-          <p className="text-[13px] text-muted italic -mb-2">
+          <p className="text-[14px] text-muted italic -mb-2">
             {activeSlug === "concurrent-strength-maintenance"
               ? "Concurrent training indicators — HR trend, weekly minutes, strength retention, retest deltas."
               : activeSlug === "engine-builder"
@@ -252,7 +252,7 @@ function ProgressBody({
                     <div className="flex items-baseline justify-between gap-2">
                       <h2 className="text-[15px] font-semibold text-strong">Symptom vs load</h2>
                     </div>
-                    <p className="text-[13px] text-muted italic px-1">
+                    <p className="text-[14px] text-muted italic px-1">
                       A trend line needs at least three logged days. Log a morning check
                       on Today and lift a session to start the picture.
                     </p>
@@ -432,12 +432,21 @@ function MilestoneLiftGroup({
               Visual-craft audit 2026-08-18 — line 2 promoted from 11px muted
               to 12px ink (it's the primary comparator, not a caption) and
               mt-0.5 → mt-1 so the two lines read as structured hierarchy. */}
+          {/* P1-43 — no-TM state read `TM —` (looks like a dash placeholder);
+              missed-milestone rendered as `(40d ago)` which collided with the
+              `(+2.5)` delta parenthetical; and the 🎉 emoji on "all cleared"
+              read gamified. Now: literal "No TM yet"; missed uses an explicit
+              " — missed Nd ago" phrase; emoji dropped. */}
           <p className="text-[12px] text-ink mt-1">
-            {currentTM != null ? `TM ${currentTM} kg` : "TM —"}
+            {currentTM != null ? `TM ${currentTM} kg` : "No TM yet"}
             {next ? (
               <>
                 {" · "}next {nextEff} kg
-                {nextDays != null && nextDays >= 0 ? ` in ${nextDays}d` : nextDays != null ? ` (${Math.abs(nextDays)}d ago)` : ""}
+                {nextDays != null && nextDays >= 0
+                  ? ` in ${nextDays}d`
+                  : nextDays != null
+                    ? ` — missed ${Math.abs(nextDays)}d ago`
+                    : ""}
                 {nextDelta != null ? (
                   <span className={nextDelta >= 0 ? "text-green ml-1" : "text-red ml-1"}>
                     ({nextDelta >= 0 ? "+" : ""}
@@ -446,7 +455,7 @@ function MilestoneLiftGroup({
                 ) : null}
               </>
             ) : (
-              <> · all cleared 🎉</>
+              <> · all cleared</>
             )}
           </p>
           <MilestoneProgressBar
@@ -639,7 +648,7 @@ function EngineBanner({
   return (
     <div className={`border-l-4 rounded-r px-3 py-3 ${toneClass}`}>
       <p className="font-semibold text-sm">{title}</p>
-      <div className="mt-1 text-[13px] text-muted">
+      <div className="mt-1 text-[14px] text-muted">
         {typeof body === "string" ? <p>{body}</p> : body}
       </div>
       {action ? (
@@ -707,7 +716,7 @@ function CrossTrackWeekTile({
           Mon → today
         </span>
       </header>
-      <ul className="grid grid-cols-2 gap-2 text-[13px]">
+      <ul className="grid grid-cols-2 gap-2 text-[14px]">
         <li className="rounded bg-ground/40 p-2">
           <p className="text-[10px] font-mono uppercase tracking-wider text-muted">
             Strength

@@ -35,7 +35,7 @@ export function AssessmentDueBanner({ date }: { date: string }) {
         Monthly check · due
       </p>
       <p className="font-semibold text-strong text-[15px]">{headline}</p>
-      <p className="text-[13px] text-ink leading-snug">{subheadline}</p>
+      <p className="text-[14px] text-ink leading-snug">{subheadline}</p>
       <div className="pt-1">
         <Link
           href="/check/hip"

@@ -145,7 +145,7 @@ export default function ProgramCatalogPage() {
                   </span>
                 </div>
                 {manifest.categories[category]?.description ? (
-                  <p className="text-[13px] text-muted -mt-1">
+                  <p className="text-[14px] text-muted -mt-1">
                     {manifest.categories[category].description}
                   </p>
                 ) : null}
@@ -165,7 +165,7 @@ export default function ProgramCatalogPage() {
           })
       )}
 
-      <footer className="pt-6 border-t border-line-soft text-[13px] text-muted italic">
+      <footer className="pt-6 border-t border-line-soft text-[14px] text-muted italic">
         More programs land as they&apos;re authored.
       </footer>
     </div>
@@ -277,7 +277,7 @@ function ProgramCard({
             ) : null}
           </div>
           <p
-            className="text-[13px] text-muted mt-1 leading-snug"
+            className="text-[14px] text-muted mt-1 leading-snug"
             style={{
               display: "-webkit-box",
               WebkitLineClamp: 2,

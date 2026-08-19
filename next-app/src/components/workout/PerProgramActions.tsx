@@ -65,7 +65,7 @@ export function PerProgramActions({ programSlug, programName, date, scheduledBlo
             {programName} — {everythingSkipped ? "skipped today" : "moved"}
           </p>
           {everythingMoved ? (
-            <p className="text-muted text-[13px] mt-0.5">
+            <p className="text-muted text-[14px] mt-0.5">
               Rescheduled to {scheduledBlocks.find((b) => movedIds.includes(b.id))?.actual_date ?? "another day"}.
             </p>
           ) : null}
@@ -182,7 +182,7 @@ function ConfirmSheet({
             <X size={18} />
           </button>
         </div>
-        <p className="text-[13px] text-muted">{body}</p>
+        <p className="text-[14px] text-muted">{body}</p>
         {askReason ? (
           <div>
             <label className="mono-caps block mb-1" htmlFor="ppa-skip-reason">
@@ -257,7 +257,7 @@ function MoveSheet({
             <X size={18} />
           </button>
         </div>
-        <p className="text-[13px] text-muted">
+        <p className="text-[14px] text-muted">
           This track's session on {fromDate} moves to the chosen date. Other tracks
           today are unaffected.
         </p>

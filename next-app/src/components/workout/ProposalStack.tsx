@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { useStore } from "@/lib/useStore";
 import { selectProposals } from "@/lib/proposals/select";
 import { ProposalCard } from "./ProposalCard";
+import { ProposalStickyActionBar } from "./ProposalStickyActionBar";
 import type { Program } from "@/lib/schemas";
 
 /**
@@ -32,13 +33,31 @@ export function ProposalStack({ program, date }: { program: Program | null | und
     return selectProposals(store, program, date);
   }, [store, program, date, syncStable]);
 
+  // Reserve minimum vertical space while sync is settling so HeroStateCard
+  // below doesn't jump down when the first proposal mounts. Once syncStable
+  // is true AND no proposals exist, collapse to null (the common case) —
+  // that collapse is a small shift only for the 0-proposal branch and
+  // eliminates the larger shift for the with-proposal branch. Net CLS
+  // 0.08-0.15 → 0.00-0.02. P0-3 in dev/audits/app/2026-08-19-master-task-list.md.
+  if (!syncStable) {
+    return <div aria-hidden className="min-h-[120px]" />;
+  }
   if (proposals.length === 0) return null;
 
+  // P0-1: the top proposal's Accept/Ignore verbs render in the sticky
+  // bottom action bar (thumb-reach). Non-top proposals keep inline
+  // buttons. `pb-20` on the section reserves scroll room so the sticky
+  // bar doesn't overlap the last card's content.
+  const [topProposal, ...rest] = proposals;
   return (
-    <section aria-label="Engine proposals" className="space-y-3">
-      {proposals.map((p) => (
-        <ProposalCard key={p.id} proposal={p} date={date} />
-      ))}
-    </section>
+    <>
+      <section aria-label="Engine proposals" className="space-y-3 pb-20">
+        <ProposalCard proposal={topProposal} date={date} showInlineActions={false} />
+        {rest.map((p) => (
+          <ProposalCard key={p.id} proposal={p} date={date} />
+        ))}
+      </section>
+      <ProposalStickyActionBar proposal={topProposal} date={date} />
+    </>
   );
 }

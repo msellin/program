@@ -21,22 +21,22 @@ export function ScaleAnchorStep({ step }: { step: ScaleAnchorStepPayload }) {
       <h2 id="onboarding-title" className="text-2xl font-semibold text-strong tracking-tight">
         {step.title}
       </h2>
-      <p className="text-[13px] text-muted whitespace-pre-line">{step.body_md}</p>
+      <p className="text-[14px] text-muted whitespace-pre-line">{step.body_md}</p>
       <p className="font-mono text-[10px] uppercase tracking-widest text-muted mt-1">
         How the scale reads
       </p>
       <ul className="grid grid-cols-3 gap-2 text-left">
         <li className="rounded bg-line-soft/40 p-3">
           <p className="font-mono text-[10px] uppercase tracking-widest text-slate">0-3</p>
-          <p className="text-[13px] text-strong mt-0.5">{step.anchors.low}</p>
+          <p className="text-[14px] text-strong mt-0.5">{step.anchors.low}</p>
         </li>
         <li className="rounded bg-line-soft/40 p-3">
           <p className="font-mono text-[10px] uppercase tracking-widest text-amber">4-6</p>
-          <p className="text-[13px] text-strong mt-0.5">{step.anchors.mid}</p>
+          <p className="text-[14px] text-strong mt-0.5">{step.anchors.mid}</p>
         </li>
         <li className="rounded bg-line-soft/40 p-3">
           <p className="font-mono text-[10px] uppercase tracking-widest text-red">7-10</p>
-          <p className="text-[13px] text-strong mt-0.5">{step.anchors.high}</p>
+          <p className="text-[14px] text-strong mt-0.5">{step.anchors.high}</p>
         </li>
       </ul>
     </div>

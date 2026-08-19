@@ -223,7 +223,7 @@ export default function TodayPage() {
           card — 4 contradictory clocks on rowing per delta audit
           2026-08-19. */}
       {phase && !isPastProgramEnd(primary, activeDate, userProfile) ? (
-        <p className="-mt-3 text-[13px] text-muted leading-tight">
+        <p className="-mt-3 text-[14px] text-muted leading-tight">
           <span className="text-strong">{humanPhaseName(phase.name)}</span>
           {phaseProgress(phase, activeDate) ? (
             <span className="text-slate"> · {phaseProgress(phase, activeDate)}</span>
@@ -264,7 +264,7 @@ export default function TodayPage() {
           isn't read as an error. Read the phase's is_taper flag which we set
           for test-prep programs (currently just rowing-2k-test-prep). */}
       {phase && (phase as unknown as { is_taper?: boolean }).is_taper ? (
-        <div className="rounded border border-slate/40 bg-slate/10 border-l-4 border-l-slate px-3 py-2 text-[13px]">
+        <div className="rounded border border-slate/40 bg-slate/10 border-l-4 border-l-slate px-3 py-2 text-[14px]">
           <p className="font-semibold text-slate">Taper week.</p>
           <p className="text-muted mt-0.5">
             Volume drops ~45%, intensity holds. This is where the ~3% peak uplift comes from — resist the urge to add sessions.
@@ -296,7 +296,7 @@ export default function TodayPage() {
           const strengthToday = allBlocks.some((b) => (b.category ?? "strength") === "strength");
           if (!(hardYesterday && strengthToday)) return null;
           return (
-            <div className="rounded border border-amber/40 bg-amber/10 border-l-4 border-l-amber px-3 py-2 text-[13px]">
+            <div className="rounded border border-amber/40 bg-amber/10 border-l-4 border-l-amber px-3 py-2 text-[14px]">
               <p className="font-semibold text-amber">Interference window.</p>
               <p className="text-muted mt-0.5">
                 Yesterday had a hard aerobic session. The concurrent-training
@@ -312,7 +312,7 @@ export default function TodayPage() {
           shoulder pain stops the session. Surface it on Today so it's not just
           buried in intake. */}
       {primary.slug === "handstand-walk" ? (
-        <div className="rounded border border-amber/40 bg-amber/10 border-l-4 border-l-amber px-3 py-2 text-[13px]">
+        <div className="rounded border border-amber/40 bg-amber/10 border-l-4 border-l-amber px-3 py-2 text-[14px]">
           <p className="font-semibold text-amber">Shoulder pain stops the session.</p>
           <p className="text-muted mt-0.5">
             Any sharp shoulder pain during handstand work — end the block, log it on
@@ -382,7 +382,7 @@ export default function TodayPage() {
               "Multiple tracks today. If it's too much, snooze one from Profile.";
           }
           return (
-            <div className="rounded border border-amber/40 bg-amber/10 px-3 py-2.5 text-[13px]">
+            <div className="rounded border border-amber/40 bg-amber/10 px-3 py-2.5 text-[14px]">
               <p className="text-amber-strong">
                 <span className="font-semibold">
                   {groupsWithBlocks.length} tracks scheduled today.
@@ -538,7 +538,7 @@ function DayHeaderShortcut({ date, programCount }: { date: string; programCount:
     <div className="rounded border border-line-soft border-l-4 border-l-slate bg-surface p-3 flex items-center justify-between gap-3">
       <div className="text-sm">
         <p className="font-semibold text-strong">{humanDate}</p>
-        <p className="text-muted text-[13px] mt-0.5">
+        <p className="text-muted text-[14px] mt-0.5">
           {programCount} tracks scheduled today. Skip or move each independently below.
         </p>
       </div>
@@ -653,7 +653,7 @@ function RowingPersonalisedTargets({
   }
   if (!targets.length) return null;
   return (
-    <div className="rounded border border-bronze/30 bg-bronze/5 px-3 py-2 text-[13px]">
+    <div className="rounded border border-bronze/30 bg-bronze/5 px-3 py-2 text-[14px]">
       <p className="mono-caps mb-1 text-bronze">Your target</p>
       {targets.map((t) => (
         <p key={t.label} className="text-ink">
@@ -769,7 +769,7 @@ function GraduationCard({ program }: { program: Program }) {
             <p className="font-mono text-[10px] uppercase tracking-widest text-bronze">You finished</p>
             <h2 className="text-lg font-semibold text-strong mt-1">{programName}</h2>
             {weeksIn ? (
-              <p className="text-[13px] text-muted mt-0.5">
+              <p className="text-[14px] text-muted mt-0.5">
                 {weeksIn} weeks logged. Nice.
               </p>
             ) : null}
@@ -795,7 +795,7 @@ function GraduationCard({ program }: { program: Program }) {
               {displayable.map((m) => {
                 const delta = deltaFromBaseline(m);
                 return (
-                  <li key={m.metric_id} className="flex items-baseline justify-between gap-2 text-[13px]">
+                  <li key={m.metric_id} className="flex items-baseline justify-between gap-2 text-[14px]">
                     <span className="text-ink truncate">{m.display_name}</span>
                     <span className="font-mono flex items-baseline gap-2 flex-shrink-0">
                       <span className="text-strong">{formatMetric(m.current, m.unit)}</span>
@@ -812,7 +812,7 @@ function GraduationCard({ program }: { program: Program }) {
             </ul>
           </div>
         ) : (
-          <p className="text-[13px] text-muted italic">
+          <p className="text-[14px] text-muted italic">
             No retest metrics recorded — head to Progress to log your final numbers.
           </p>
         )}
@@ -935,7 +935,7 @@ function GraduationFeedback({ slug }: { slug: string | null }) {
         value={note}
         onChange={(e) => setNote(e.target.value)}
         placeholder="Optional — what worked, what didn't, what surprised you"
-        className="w-full text-[13px] px-2 py-1.5 border border-line rounded bg-ground focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze resize-none"
+        className="w-full text-[14px] px-2 py-1.5 border border-line rounded bg-ground focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze resize-none"
       />
       <div className="flex gap-2">
         <button
@@ -1074,7 +1074,7 @@ function RetestReminder({
   const dueThisWeek = cadences.some((c) => weeksIn > 0 && weeksIn % c === 0);
   if (!dueThisWeek) return null;
   return (
-    <div className="rounded border border-bronze/30 border-l-4 border-l-bronze bg-bronze/10 px-3 py-2 text-[13px]">
+    <div className="rounded border border-bronze/30 border-l-4 border-l-bronze bg-bronze/10 px-3 py-2 text-[14px]">
       <p className="font-semibold text-bronze">Retest window this week.</p>
       <p className="text-muted mt-0.5">
         You&apos;re {weeksIn} weeks in. Progress → Insights shows your current retest metrics against baseline and target.
@@ -1112,13 +1112,13 @@ function BlockSection({
   return (
     <section className={`space-y-3 pl-3 border-l-4 ${categoryColor}`}>
       <header className="flex items-baseline justify-between gap-3">
-        <h2 className="font-mono text-[13px] font-semibold uppercase tracking-widest">
+        <h2 className="font-mono text-[14px] font-semibold uppercase tracking-widest">
           {humanBlockName(block.name)}
         </h2>
         <span className="font-mono text-[11px] text-muted">{meta}</span>
       </header>
       {block.note ? (
-        <p className="rounded border border-line-soft border-l-4 border-l-slate bg-surface px-3 py-2 text-[13px] text-muted">
+        <p className="rounded border border-line-soft border-l-4 border-l-slate bg-surface px-3 py-2 text-[14px] text-muted">
           {block.note}
         </p>
       ) : null}

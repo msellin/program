@@ -40,7 +40,7 @@ export function HipProgressTile() {
   return (
     <section className="space-y-3">
       <div className="flex items-baseline justify-between gap-3">
-        <h2 className="font-mono text-[13px] uppercase tracking-widest">Hip flexor &amp; balance</h2>
+        <h2 className="font-mono text-[14px] uppercase tracking-widest">Hip flexor &amp; balance</h2>
         {dueStatus.due ? (
           <Link
             href="/check/hip"
@@ -55,7 +55,7 @@ export function HipProgressTile() {
         )}
       </div>
 
-      <p className="text-[13px] text-muted">
+      <p className="text-[14px] text-muted">
         Trend for the sub-track from the clinical reports — subjective self-checks, morning
         symptoms, and daily rehab consistency. No claims about diagnosis.
       </p>
@@ -82,7 +82,7 @@ export function HipProgressTile() {
               ) : null}
             </div>
           ) : (
-            <p className="mt-1 text-[13px] text-muted">Not logged yet.</p>
+            <p className="mt-1 text-[14px] text-muted">Not logged yet.</p>
           )}
           <MiniSpark points={scoreSeries.map((p) => p.overall)} max={10} />
           {scoreSeries.length > 0 ? (

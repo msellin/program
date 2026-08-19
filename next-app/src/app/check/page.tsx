@@ -164,7 +164,7 @@ export default function CheckPage() {
         <div className="px-3 py-3">
           <label
             htmlFor="outside-training"
-            className="block text-[13px] mb-1"
+            className="block text-[14px] mb-1"
           >
             Outside training yesterday
           </label>
@@ -220,7 +220,7 @@ function SliderRow({
         <label htmlFor={inputId} className="flex items-center gap-2 text-sm">
           {lat ? (
             <span
-              className={`font-mono text-[9px] font-bold px-1 rounded text-surface ${lat === "L" ? "bg-lat-left" : "bg-lat-right"}`}
+              className={`font-mono text-[10px] font-bold px-1 rounded text-surface ${lat === "L" ? "bg-lat-left" : "bg-lat-right"}`}
               aria-hidden="true"
             >
               {lat}
@@ -289,10 +289,10 @@ function Verdict({ state }: { state: State }) {
         : "bg-red/10 border-l-red";
   return (
     <div className={`border-l-4 rounded-r px-3 py-3 text-sm ${bg}`}>
-      <p className="font-semibold text-[13px]">
+      <p className="font-semibold text-[14px]">
         {label}
       </p>
-      <p className="mt-1 text-[13px] text-muted">
+      <p className="mt-1 text-[14px] text-muted">
         Today&apos;s suggested loads on the Today tab are already adjusted for this reading.
       </p>
     </div>

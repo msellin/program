@@ -49,7 +49,7 @@ export function VideoModal({
         className="bg-surface border border-line rounded max-w-2xl w-full max-h-[90vh] overflow-auto"
       >
         <header className="flex items-center justify-between px-4 py-3 border-b border-line gap-3">
-          <h3 id={titleId} className="font-mono text-[13px] uppercase tracking-widest truncate">
+          <h3 id={titleId} className="font-mono text-[14px] uppercase tracking-widest truncate">
             {title}
           </h3>
           <button
@@ -78,7 +78,7 @@ export function VideoModal({
                     href={videoUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1 text-[13px] text-slate hover:text-ink"
+                    className="inline-flex items-center gap-1 text-[14px] text-slate hover:text-ink"
                   >
                     <ExternalLink size={12} />
                     Open on YouTube
@@ -91,7 +91,7 @@ export function VideoModal({
               <p className="text-sm text-ink">
                 No embedded demo yet for this exercise.
               </p>
-              <p className="text-[13px] text-muted">
+              <p className="text-[14px] text-muted">
                 Search YouTube for &quot;<span className="text-ink">{searchQuery}</span>&quot; —
                 opens in a new tab.
               </p>

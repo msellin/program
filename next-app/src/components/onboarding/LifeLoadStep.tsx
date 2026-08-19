@@ -32,7 +32,7 @@ export function LifeLoadStep({ step, onWritten }: { step: LifeLoadStepPayload; o
       <h2 id="onboarding-title" className="text-2xl font-semibold text-strong tracking-tight">
         {step.title}
       </h2>
-      <p className="text-[13px] text-muted whitespace-pre-line">{step.body_md}</p>
+      <p className="text-[14px] text-muted whitespace-pre-line">{step.body_md}</p>
       <div className="grid grid-cols-6 gap-1.5">
         {Array.from({ length: 11 }).map((_, n) => {
           const isActive = value === n;

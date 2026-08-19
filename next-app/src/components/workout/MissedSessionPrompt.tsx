@@ -147,7 +147,7 @@ export function MissedSessionPrompt({
             }}
             className="w-full text-left rounded border border-line hover:border-slate/40 bg-surface p-3 space-y-1"
           >
-            <p className="font-semibold text-[13px] text-strong">Skip only</p>
+            <p className="font-semibold text-[14px] text-strong">Skip only</p>
             <p className="text-[11px] text-muted leading-snug">
               This session is lost. Rest of the week runs as scheduled. Progression order breaks if you&apos;re on a wave.
             </p>
@@ -160,7 +160,7 @@ export function MissedSessionPrompt({
             }}
             className="w-full text-left rounded border border-bronze/50 bg-bronze/[0.06] p-3 space-y-1"
           >
-            <p className="font-semibold text-[13px] text-strong">Skip &amp; shift the week</p>
+            <p className="font-semibold text-[14px] text-strong">Skip &amp; shift the week</p>
             <p className="text-[11px] text-muted leading-snug">
               This session takes over the next scheduled strength day. Last day of the week drops. Recommended for wave-based programs.
             </p>

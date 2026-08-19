@@ -48,7 +48,7 @@ export function HeroStateCard({ date }: { date: string }) {
   if (isToday && state !== "none") {
     const escalate = state === "red";
     return (
-      <div className="flex items-center justify-between gap-2 text-[13px]">
+      <div className="flex items-center justify-between gap-2 text-[14px]">
         <Link href="/check/" className="flex items-center gap-2 hover:opacity-80">
           <span className={`w-1.5 h-1.5 rounded-full ${dotColour}`} />
           <span className={`font-mono uppercase tracking-wider ${textColour}`}>{copy.title}</span>
@@ -78,7 +78,7 @@ export function HeroStateCard({ date }: { date: string }) {
 
   const content = (
     <>
-      <div className="flex items-center gap-2 text-[13px] text-muted">
+      <div className="flex items-center gap-2 text-[14px] text-muted">
         <span className={`w-2 h-2 rounded-full ${dotColour}`} />
         <span>{isToday ? "Today" : formatShort(date)}</span>
       </div>

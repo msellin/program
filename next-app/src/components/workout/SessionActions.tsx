@@ -29,7 +29,7 @@ export function SessionActions({ blockIds, date, program }: Props) {
       <div className="rounded border border-line-soft border-l-4 border-l-amber bg-surface p-3 flex items-center justify-between gap-3">
         <div className="text-sm">
           <p className="font-semibold text-strong">Session skipped today</p>
-          <p className="text-muted text-[13px] mt-0.5">
+          <p className="text-muted text-[14px] mt-0.5">
             {skipped.moved_to
               ? `Moved to ${skipped.moved_to}`
               : (skipped.reason ?? "No reason logged")}
@@ -177,10 +177,10 @@ function WeekSheet({
             <X size={18} />
           </button>
         </div>
-        <p className="text-[13px] text-muted">
+        <p className="text-[14px] text-muted">
           Every strength day in the week of <strong className="text-strong">{weekLabel}</strong> gets marked skipped and its session moves forward by seven days.
         </p>
-        <div className="rounded border border-line-soft bg-surface-2/40 p-3 text-[13px] leading-snug space-y-1.5">
+        <div className="rounded border border-line-soft bg-surface-2/40 p-3 text-[14px] leading-snug space-y-1.5">
           <p><span className="text-ink font-semibold">Zero sessions lost.</span> Every strength day this week reappears next week.</p>
           <p><span className="text-ink font-semibold">Phase runs 1 week longer.</span> If your phase was 4 weeks, it&apos;s now 5.</p>
           <p><span className="text-ink font-semibold">Rest / accessory days unchanged.</span> Only strength blocks shift.</p>
@@ -266,7 +266,7 @@ function ConfirmSheet({
             <X size={18} />
           </button>
         </div>
-        <p className="text-[13px] text-muted">{body}</p>
+        <p className="text-[14px] text-muted">{body}</p>
         {askReason ? (
           <div>
             <label className="mono-caps block mb-1">Reason (optional)</label>
@@ -336,7 +336,7 @@ function SkipSheet({
             <X size={18} />
           </button>
         </div>
-        <p className="text-[13px] text-muted">
+        <p className="text-[14px] text-muted">
           Pick how the rest of your week responds. No TM change either way; your trajectory continues from your last completed session.
         </p>
 
@@ -455,10 +455,10 @@ function MoveSheet({
             <X size={18} />
           </button>
         </div>
-        <p className="text-[13px] text-muted">
+        <p className="text-[14px] text-muted">
           Session moves to the chosen date. Today is marked skipped-because-moved.
         </p>
-        <div className="rounded border border-line-soft bg-surface-2/40 p-3 text-[13px] leading-snug space-y-1.5">
+        <div className="rounded border border-line-soft bg-surface-2/40 p-3 text-[14px] leading-snug space-y-1.5">
           <p><span className="text-ink font-semibold">Zero sessions lost.</span> This one just changes date.</p>
           <p><span className="text-ink font-semibold">Watch for collisions.</span> If the target date already has a session, both stack — check the calendar first.</p>
           <p><span className="text-ink font-semibold">Progression trajectory intact.</span> The wave continues from where the last completed session landed.</p>

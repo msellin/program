@@ -57,7 +57,7 @@ export function AuthGate({ children }: { children: React.ReactNode }) {
   // Protected routes: show nothing while checking, redirect will fire.
   if (session.status === "loading") {
     return (
-      <div className="mt-16 text-center text-[13px] text-muted">Loading…</div>
+      <div className="mt-16 text-center text-[14px] text-muted">Loading…</div>
     );
   }
   if (session.status === "guest") {

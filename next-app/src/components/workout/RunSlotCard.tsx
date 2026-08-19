@@ -245,7 +245,7 @@ export function RunSlotCard({ date }: { date: string }) {
         <Footprints size={16} className="text-slate flex-shrink-0" aria-hidden />
         <div className="flex-1 min-w-0">
           <p className="text-[14px] font-semibold text-strong">{slot.title}</p>
-          <p className="text-[13px] text-muted mt-0.5">{slot.detail}</p>
+          <p className="text-[14px] text-muted mt-0.5">{slot.detail}</p>
         </div>
         <button
           type="button"
@@ -262,7 +262,7 @@ export function RunSlotCard({ date }: { date: string }) {
           {runs.map((r, i) => (
             <li
               key={i}
-              className="flex items-baseline justify-between gap-2 text-[13px] px-2 py-1.5 rounded bg-line-soft/50"
+              className="flex items-baseline justify-between gap-2 text-[14px] px-2 py-1.5 rounded bg-line-soft/50"
             >
               <div className="font-mono text-slate min-w-0">
                 <span className="text-strong">{prettyActivity(r.activity_type)}</span>
@@ -535,7 +535,7 @@ export function RunSlotCard({ date }: { date: string }) {
             value={note}
             onChange={(e) => setNote(e.target.value)}
             placeholder="Optional note — WOD name, felt like…"
-            className="block w-full text-[13px] px-2 py-1.5 border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate resize-y min-h-[44px] break-words [overflow-wrap:anywhere] whitespace-pre-wrap"
+            className="block w-full text-[14px] px-2 py-1.5 border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate resize-y min-h-[44px] break-words [overflow-wrap:anywhere] whitespace-pre-wrap"
           />
           <EngineReadsNotesHint variant="run" />
 
@@ -578,7 +578,7 @@ export function RunSlotCard({ date }: { date: string }) {
           <button
             type="button"
             onClick={() => setOpen(true)}
-            className="inline-flex items-center gap-1.5 min-h-[44px] py-2 pr-2 text-[13px] text-slate hover:text-ink"
+            className="inline-flex items-center gap-1.5 min-h-[44px] py-2 pr-2 text-[14px] text-slate hover:text-ink"
           >
             <Plus size={14} />
             Log session
@@ -586,7 +586,7 @@ export function RunSlotCard({ date }: { date: string }) {
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="inline-flex items-center gap-1.5 min-h-[44px] py-2 pr-2 text-[13px] text-slate hover:text-ink"
+            className="inline-flex items-center gap-1.5 min-h-[44px] py-2 pr-2 text-[14px] text-slate hover:text-ink"
           >
             <Upload size={14} />
             Import GPX
@@ -604,7 +604,7 @@ export function RunSlotCard({ date }: { date: string }) {
       />
 
       {importError ? (
-        <p className="text-[13px] text-red">Couldn&apos;t import: {importError}</p>
+        <p className="text-[14px] text-red">Couldn&apos;t import: {importError}</p>
       ) : null}
 
       {primerOpen ? (
@@ -698,7 +698,7 @@ function PrimerContent({
   })();
   return (
     <>
-      <p className="text-[13px] text-muted">
+      <p className="text-[14px] text-muted">
         {activity === "crossfit_class"
           ? "The box's own warm-up replaces this."
           : "Session-specific primer + cool-down. Skip the ones that don't apply."}
@@ -718,7 +718,7 @@ function PrimerContent({
             <li key={line}>{line}</li>
           ))}
         </ul>
-        <p className="text-[13px] text-red mt-2">
+        <p className="text-[14px] text-red mt-2">
           No aggressive static stretching straight after — tissue is warm and stretches too far.
         </p>
       </div>

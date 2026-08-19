@@ -23,7 +23,7 @@ export default function PrivacyPage() {
       </p>
 
       <h2 className="text-lg font-semibold text-strong pt-2">What we store, why, and for how long</h2>
-      <table className="w-full text-[13px] border-collapse">
+      <table className="w-full text-[14px] border-collapse">
         <thead>
           <tr className="text-left border-b border-line">
             <th className="py-1.5 pr-2 font-semibold">Data</th>
@@ -95,7 +95,7 @@ export default function PrivacyPage() {
         <li>Error reports (when enabled): <strong>Sentry</strong> (EU region, sentry.io).</li>
         <li>Payment data (when paid tier launches): handled entirely by <strong>Paddle</strong>. We never see card numbers.</li>
       </ul>
-      <p className="text-[13px] text-muted">
+      <p className="text-[14px] text-muted">
         These providers act as sub-processors under standard data-processing agreements. Sub-processor
         list is current as of the &quot;last updated&quot; date above; changes will be announced by email.
       </p>

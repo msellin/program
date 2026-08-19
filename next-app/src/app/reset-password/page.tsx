@@ -59,7 +59,7 @@ export default function ResetPasswordPage() {
   return (
     <div className="max-w-sm mx-auto pt-8 space-y-5">
       <div className="flex items-center gap-1.5 mb-4">
-        <span className="font-mono text-[13px] uppercase tracking-[0.2em] text-bronze">Terav</span>
+        <span className="font-mono text-[14px] uppercase tracking-[0.2em] text-bronze">Terav</span>
         <span className="text-[11px] text-muted mt-0.5">— sharp</span>
       </div>
       <header className="space-y-1">
@@ -72,7 +72,7 @@ export default function ResetPasswordPage() {
       </header>
 
       <form onSubmit={submit} className="space-y-3" noValidate>
-        <label className="block text-[13px]">
+        <label className="block text-[14px]">
           <span className="block text-muted mb-1">
             New password <span className="text-[11px] text-muted">(8+ characters)</span>
           </span>
@@ -87,7 +87,7 @@ export default function ResetPasswordPage() {
             className="block w-full text-[14px] px-3 py-2.5 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze disabled:opacity-50"
           />
         </label>
-        <label className="block text-[13px]">
+        <label className="block text-[14px]">
           <span className="block text-muted mb-1">Repeat new password</span>
           <input
             type="password"
@@ -100,18 +100,18 @@ export default function ResetPasswordPage() {
           />
         </label>
         {error ? (
-          <p className="text-[13px] text-red border-l-4 border-red pl-2">{error}</p>
+          <p className="text-[14px] text-red border-l-4 border-red pl-2">{error}</p>
         ) : null}
         <button
           type="submit"
           disabled={submitting || !ready}
-          className="w-full font-mono text-[13px] uppercase tracking-wider py-3 rounded bg-bronze text-ground hover:bg-bronze/90 disabled:opacity-50 min-h-[44px]"
+          className="w-full font-mono text-[14px] uppercase tracking-wider py-3 rounded bg-bronze text-ground hover:bg-bronze/90 disabled:opacity-50 min-h-[44px]"
         >
           {submitting ? "Saving…" : "Save new password"}
         </button>
       </form>
 
-      <p className="text-[13px] text-muted">
+      <p className="text-[14px] text-muted">
         Back to{" "}
         <Link href="/sign-in" className="text-slate border-b border-slate">
           sign in

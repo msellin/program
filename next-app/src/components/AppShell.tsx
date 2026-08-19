@@ -120,7 +120,7 @@ function AuthGatedShell({
           <Link
             href="/"
             aria-label="Terav — Today"
-            className="flex items-center gap-2 font-mono text-[13px] uppercase tracking-[0.22em] text-bronze hover:text-ink"
+            className="flex items-center gap-2 font-mono text-[14px] uppercase tracking-[0.22em] text-bronze hover:text-ink"
           >
             TERAV
             <ReadinessDot />

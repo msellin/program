@@ -71,7 +71,7 @@ export default function AdminKeywordsPage() {
       <header className="space-y-1">
         <p className="mono-caps">Admin</p>
         <h1 className="text-2xl font-semibold text-strong">Unmatched note tokens</h1>
-        <p className="text-[13px] text-muted max-w-lg">
+        <p className="text-[14px] text-muted max-w-lg">
           Tokens users typed in notes that <em>aren&apos;t</em> matched by the
           regex vocabulary in <code>note-signals.ts</code>. Sorted by frequency,
           filtered to ≥3 occurrences. Review + add promising tokens to the regex.
@@ -87,13 +87,13 @@ export default function AdminKeywordsPage() {
         >
           {loading ? "Loading…" : "Refresh"}
         </button>
-        <Link href="/" className="text-[13px] text-muted underline underline-offset-4">
+        <Link href="/" className="text-[14px] text-muted underline underline-offset-4">
           Back to Today
         </Link>
       </div>
 
       {error ? (
-        <div className="rounded border border-red bg-red/10 p-3 text-[13px] text-red">
+        <div className="rounded border border-red bg-red/10 p-3 text-[14px] text-red">
           {error}
           {error.includes("Not admin") ? (
             <p className="mt-2 text-muted">
@@ -126,12 +126,12 @@ export default function AdminKeywordsPage() {
           </div>
 
           {data.unmatched_tokens.length === 0 ? (
-            <p className="text-[13px] text-muted italic">
+            <p className="text-[14px] text-muted italic">
               No unmatched tokens above the threshold. Either your regex already
               covers everything users wrote, or there aren&apos;t enough logs yet.
             </p>
           ) : (
-            <table className="w-full text-[13px] border border-line rounded overflow-hidden">
+            <table className="w-full text-[14px] border border-line rounded overflow-hidden">
               <thead>
                 <tr className="bg-surface text-muted text-[11px] uppercase tracking-widest">
                   <th className="text-left px-3 py-2">Token</th>

@@ -23,12 +23,16 @@
   /* Semantic states */
   --color-green: #5fb37a;
   --color-amber: #e0a63a;
+  --color-amber-strong: #f0b854;
   --color-red: #e5654b;
 
   /* Accents — bronze primary, teal secondary. Slate bumped from #4a8894 (4.44:1)
-     to #79b8c4 (~7.5:1 on #16181c) after the a11y audit flagged 20+ violations. */
+     to #79b8c4 (~7.5:1 on #16181c) after the a11y audit flagged 20+ violations.
+     bronze-hi is the on-tint variant: used inside a bronze/20 bg where the base
+     bronze can't clear 4.5:1. */
   --color-bronze: #c89666;
   --color-bronze-hover: #d9a97c;
+  --color-bronze-hi: #e2b686;
   --color-bronze-active: #b3814f;
   --color-slate: #79b8c4;
 

@@ -104,7 +104,7 @@ export function RetestLoggingSheet({
 
         <label className="block space-y-1.5">
           <span className="text-[12px] text-muted">
-            Intensity compliance % (optional)
+            How closely did you hit the prescribed intensity? (optional)
           </span>
           <input
             type="number"
@@ -116,7 +116,7 @@ export function RetestLoggingSheet({
               setCompliance(e.target.value);
               setError(null);
             }}
-            placeholder="How closely did prescribed intensity hit? Blank = don't score."
+            placeholder="e.g. 90 (you hit ~90% of the prescribed intensity). Blank = skip."
             className="w-full font-mono text-sm px-3 py-2 border border-line rounded bg-ground text-ink placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze min-h-[44px]"
           />
         </label>

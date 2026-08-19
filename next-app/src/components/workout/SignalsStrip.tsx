@@ -268,7 +268,7 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
           {signals.some((s) => s.id === "override") ? (
             <div className="rounded border border-line-soft border-l-4 border-l-slate bg-surface p-3 text-sm">
               <p className="font-semibold text-strong">Rescheduled session</p>
-              <p className="text-[13px] text-muted mt-0.5">
+              <p className="text-[14px] text-muted mt-0.5">
                 {(() => {
                   // Phase F · prefer the block-object move_history's most-recent
                   // reason when available, fall back to legacy overrides.
@@ -290,14 +290,14 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
           {signals.some((s) => s.id === "check-overdue") ? (
             <div className="rounded border border-amber/40 border-l-4 border-l-amber bg-amber/10 p-3 text-sm">
               <p className="font-semibold text-strong">Morning check overdue</p>
-              <p className="text-[13px] text-muted mt-1">
+              <p className="text-[14px] text-muted mt-1">
                 Load adjustment, red-state gating, and the notes engine all key off the
                 morning check. A minute of tapping now makes the rest of the day&apos;s
                 recommendations mean something.
               </p>
               <Link
                 href="/check/"
-                className="inline-block mt-2 text-[13px] text-amber border-b border-amber hover:opacity-80"
+                className="inline-block mt-2 text-[14px] text-amber border-b border-amber hover:opacity-80"
               >
                 Log check now →
               </Link>
@@ -308,12 +308,12 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
           {signals.some((s) => s.id === "cycle-end") ? (
             <div className="rounded border border-slate/40 border-l-4 border-l-slate bg-slate/10 p-3 text-sm">
               <p className="font-semibold text-strong">Cycle-end evaluation ready</p>
-              <p className="text-[13px] text-muted mt-1">
+              <p className="text-[14px] text-muted mt-1">
                 The engine has TM changes to propose based on the last cycle&apos;s AMRAP + symptom pattern. Review and Apply on Progress; nothing changes until you tap Apply.
               </p>
               <Link
                 href="/progress/"
-                className="inline-block mt-2 text-[13px] text-slate border-b border-slate hover:opacity-80"
+                className="inline-block mt-2 text-[14px] text-slate border-b border-slate hover:opacity-80"
               >
                 Review on Progress →
               </Link>
@@ -324,12 +324,12 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
           {signals.some((s) => s.id === "pause") ? (
             <div className="rounded border border-amber/40 border-l-4 border-l-amber bg-amber/10 p-3 text-sm">
               <p className="font-semibold text-strong">Back after a break</p>
-              <p className="text-[13px] text-muted mt-1">
+              <p className="text-[14px] text-muted mt-1">
                 14+ days without a logged strength session. The engine can soften your first week back to protect against a compressed-return spike.
               </p>
               <Link
                 href="/progress/"
-                className="inline-block mt-2 text-[13px] text-amber border-b border-amber hover:opacity-80"
+                className="inline-block mt-2 text-[14px] text-amber border-b border-amber hover:opacity-80"
               >
                 Review on Progress →
               </Link>
@@ -343,7 +343,7 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
           {signals.some((s) => s.id === "csm-amber-week") ? (
             <div className="rounded border border-amber/40 border-l-4 border-l-amber bg-amber/10 p-3 text-sm">
               <p className="font-semibold text-strong">Amber week detected</p>
-              <p className="text-[13px] text-muted mt-1">
+              <p className="text-[14px] text-muted mt-1">
                 {signals.find((s) => s.id === "csm-amber-week")?.label ??
                   "Multiple amber days this week — plan will drop 4×4 next week"}
                 .{" "}
@@ -359,12 +359,12 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
           {signals.some((s) => s.id === "positive-adaptation") ? (
             <div className="rounded border border-slate/40 border-l-4 border-l-slate bg-slate/10 p-3 text-sm">
               <p className="font-semibold text-strong">Trending well</p>
-              <p className="text-[13px] text-muted mt-1">
+              <p className="text-[14px] text-muted mt-1">
                 {signals.find((s) => s.id === "positive-adaptation")?.label}. Progress → Retest lets you log the reading + review the tier-advance proposal.
               </p>
               <Link
                 href="/progress/"
-                className="inline-block mt-2 text-[13px] text-slate border-b border-slate hover:opacity-80"
+                className="inline-block mt-2 text-[14px] text-slate border-b border-slate hover:opacity-80"
               >
                 Review on Progress →
               </Link>

@@ -67,7 +67,7 @@ export function SymptomLoadChart({ days }: { days: DayLog[] }) {
 
   if (!anyStrength && !anySymptom) {
     return (
-      <div className="text-[13px] text-muted italic">
+      <div className="text-[14px] text-muted italic">
         No data yet — log a session or morning check first.
       </div>
     );

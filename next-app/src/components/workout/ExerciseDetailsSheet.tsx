@@ -57,7 +57,7 @@ export function ExerciseDetailsSheet({
               {exercise.name}
             </h3>
             {(dose || scheme) ? (
-              <p className="text-[13px] text-muted mt-0.5 truncate">
+              <p className="text-[14px] text-muted mt-0.5 truncate">
                 {[dose, scheme].filter(Boolean).join(" · ")}
               </p>
             ) : null}

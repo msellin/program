@@ -165,7 +165,7 @@ export default function ReportPage() {
         <div className="flex items-center gap-2">
           <Link
             href="/progress/"
-            className="inline-flex items-center gap-1 text-[13px] text-slate hover:text-ink"
+            className="inline-flex items-center gap-1 text-[14px] text-slate hover:text-ink"
           >
             <ChevronLeft size={14} />
             Progress
@@ -207,17 +207,17 @@ export default function ReportPage() {
 
       <section className="report-header space-y-1">
         <h1 className="hidden print:block text-xl font-semibold text-strong">Training summary</h1>
-        <p className="text-[13px] text-muted">
+        <p className="text-[14px] text-muted">
           <strong className="text-ink">Program:</strong>{" "}
           {program.slug
             ?.split("-")
             .map((w) => (w.length ? w[0].toUpperCase() + w.slice(1) : w))
             .join(" ") ?? program.slug}
         </p>
-        <p className="text-[13px] text-muted">
+        <p className="text-[14px] text-muted">
           <strong className="text-ink">Range:</strong> {startPretty} → {endPretty}
         </p>
-        <p className="text-[13px] text-muted">
+        <p className="text-[14px] text-muted">
           <strong className="text-ink">Generated:</strong> {generatedPretty}
         </p>
         {extraSlugs.length > 0 ? (
@@ -234,7 +234,7 @@ export default function ReportPage() {
             .
           </p>
         ) : null}
-        <p className="text-[13px] text-muted italic pt-1">
+        <p className="text-[14px] text-muted italic pt-1">
           {isHipProgram
             ? "This is a self-tracked training log, not a diagnosis. Symptom scores are the user's own 0–10 ratings from a daily morning check. Load values are logged workout data."
             : "This is a self-tracked training log, not medical advice. Values below are the user's own logged sessions, morning checks, and derived retest deltas."}
@@ -251,7 +251,7 @@ export default function ReportPage() {
 
       {/* Overview */}
       <ReportSection title="Overview">
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-[13px]">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-[14px]">
           <Stat label="Days in range" value={String(report.overview.daysInRange)} />
           <Stat label="Days logged" value={String(report.overview.daysWithAnyLog)} />
           <Stat
@@ -303,7 +303,7 @@ export default function ReportPage() {
             <SymptomLoadChart days={chartDays} />
           </div>
         ) : (
-          <p className="text-[13px] text-muted italic">
+          <p className="text-[14px] text-muted italic">
             No symptom or load data in this range.
           </p>
         )}
@@ -374,7 +374,7 @@ export default function ReportPage() {
                 a.weekStart.localeCompare(b.weekStart),
               );
               return (
-                <ul className="text-[13px] space-y-1.5">
+                <ul className="text-[14px] space-y-1.5">
                   {rows.map((w) => (
                     <li
                       key={w.weekStart}
@@ -459,7 +459,7 @@ export default function ReportPage() {
                       <p className="mono-caps mb-1 text-bronze">
                         {key.replace(/_/g, " ")} · {rows.length}
                       </p>
-                      <ul className="space-y-0.5 text-[13px]">
+                      <ul className="space-y-0.5 text-[14px]">
                         {rows.map(({ date, run: r }, i) => (
                           <li
                             key={`${date}:${i}`}
@@ -505,7 +505,7 @@ export default function ReportPage() {
         subtitle="Six-item self-scored check, cadence every 28 days. Lower = fewer symptoms. Individual scores below the overall."
       >
         {report.hipAssessments.length === 0 ? (
-          <p className="text-[13px] text-muted italic">No checks logged in this range.</p>
+          <p className="text-[14px] text-muted italic">No checks logged in this range.</p>
         ) : (
           <>
             {/* Mobile: card per check-in. The 7-column table below only fits on
@@ -575,7 +575,7 @@ export default function ReportPage() {
               ))}
             </ul>
             <div className="hidden sm:block overflow-x-auto">
-              <table className="w-full text-[13px] border-collapse">
+              <table className="w-full text-[14px] border-collapse">
                 <thead>
                   <tr className="text-left text-[11px] text-muted border-b border-line-soft">
                     <th className="py-1.5 pr-2">Date</th>
@@ -631,11 +631,11 @@ export default function ReportPage() {
         subtitle="Days where morning-check symptoms crossed a threshold or a note contained pain/click/flare keywords."
       >
         {report.provocateurIncidents.length === 0 ? (
-          <p className="text-[13px] text-muted italic">
+          <p className="text-[14px] text-muted italic">
             Nothing crossed threshold in this range.
           </p>
         ) : (
-          <ul className="text-[13px] space-y-1.5">
+          <ul className="text-[14px] space-y-1.5">
             {report.provocateurIncidents.map((i, idx) => (
               <li key={idx} className="flex items-baseline gap-2 flex-wrap">
                 <span className="font-mono text-[11px] text-muted w-24 flex-shrink-0">
@@ -669,7 +669,7 @@ export default function ReportPage() {
         subtitle="Heaviest logged top-set per lift, chronological."
       >
         {report.loadProgression.length === 0 ? (
-          <p className="text-[13px] text-muted italic">Nothing logged in this range.</p>
+          <p className="text-[14px] text-muted italic">Nothing logged in this range.</p>
         ) : (
           <div className="space-y-3">
             {report.loadProgression.map((l) => (
@@ -680,7 +680,7 @@ export default function ReportPage() {
                     TM {store.training_maxes[l.exerciseId] ?? "—"} kg
                   </span>
                 </p>
-                <ul className="mt-1 grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-0.5 text-[13px] font-mono">
+                <ul className="mt-1 grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-0.5 text-[14px] font-mono">
                   {l.entries.map((e) => (
                     <li key={e.date} className="text-muted">
                       <span className="text-[11px] mr-1">{e.date}</span>
@@ -705,9 +705,9 @@ export default function ReportPage() {
         subtitle="Days per week the home hip-flexor rehab block was touched."
       >
         {report.weeklyRehabAdherence.length === 0 ? (
-          <p className="text-[13px] text-muted italic">No range data.</p>
+          <p className="text-[14px] text-muted italic">No range data.</p>
         ) : (
-          <ul className="text-[13px] space-y-2 sm:space-y-1">
+          <ul className="text-[14px] space-y-2 sm:space-y-1">
             {report.weeklyRehabAdherence.map((w) => (
               <li
                 key={w.weekStart}
@@ -741,7 +741,7 @@ export default function ReportPage() {
           title="Personal contraindications"
           subtitle="Movements / positions the user has flagged as painful or off-limits."
         >
-          <ul className="list-disc pl-5 text-[13px] space-y-1">
+          <ul className="list-disc pl-5 text-[14px] space-y-1">
             {store.contraindications!.map((c) => (
               <li key={c.id}>
                 <span className="font-semibold">{c.label}</span>
@@ -763,10 +763,10 @@ export default function ReportPage() {
         >
           {clinical.provocative_positions?.length ? (
             <div className="mb-3">
-              <p className="font-semibold text-[13px] text-strong mb-1">
+              <p className="font-semibold text-[14px] text-strong mb-1">
                 Provocative positions avoided
               </p>
-              <ul className="list-disc pl-5 text-[13px] space-y-1">
+              <ul className="list-disc pl-5 text-[14px] space-y-1">
                 {clinical.provocative_positions.map((p) => (
                   <li key={p.id}>
                     <span className="font-semibold">{p.label}</span>
@@ -778,8 +778,8 @@ export default function ReportPage() {
           ) : null}
           {clinical.red_flags?.length ? (
             <div className="mb-3">
-              <p className="font-semibold text-[13px] text-strong mb-1">Red-flag rules</p>
-              <ul className="list-disc pl-5 text-[13px] space-y-1">
+              <p className="font-semibold text-[14px] text-strong mb-1">Red-flag rules</p>
+              <ul className="list-disc pl-5 text-[14px] space-y-1">
                 {clinical.red_flags.map((r) => (
                   <li key={r.id}>
                     <span className="font-semibold">{r.label}</span>
@@ -862,7 +862,7 @@ function ReportSection({
     <section className="space-y-2">
       <div>
         <h2 className="text-[15px] font-semibold text-strong">{title}</h2>
-        {subtitle ? <p className="text-[13px] text-muted mt-0.5">{subtitle}</p> : null}
+        {subtitle ? <p className="text-[14px] text-muted mt-0.5">{subtitle}</p> : null}
       </div>
       {children}
     </section>
@@ -923,7 +923,7 @@ function ArcSummarySection({
     <ReportSection title="Arc summary">
       <div className="space-y-3">
         <div className="flex items-baseline justify-between gap-2 flex-wrap">
-          <p className="text-[13px] text-muted">
+          <p className="text-[14px] text-muted">
             <strong className="text-ink">Status:</strong> graduated
           </p>
           {verdict ? (
@@ -951,7 +951,7 @@ function ArcSummarySection({
                 return (
                   <li
                     key={m.metric_id}
-                    className="flex items-baseline justify-between gap-2 text-[13px]"
+                    className="flex items-baseline justify-between gap-2 text-[14px]"
                   >
                     <span className="text-ink truncate">{m.display_name}</span>
                     <span className="font-mono flex items-baseline gap-2 flex-shrink-0">
@@ -982,7 +982,7 @@ function ArcSummarySection({
             </ul>
           </div>
         ) : (
-          <p className="text-[13px] text-muted italic">
+          <p className="text-[14px] text-muted italic">
             No retest metrics recorded — log final readings on Progress to
             complete this section.
           </p>
@@ -992,7 +992,7 @@ function ArcSummarySection({
             <p className="font-mono text-[10px] uppercase tracking-wider text-muted">
               User feedback
             </p>
-            <p className="text-[13px] text-ink">
+            <p className="text-[14px] text-ink">
               Rated {feedback.rating}/5
               {feedback.note ? ` — "${feedback.note}"` : ""}
             </p>

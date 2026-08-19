@@ -162,7 +162,7 @@ function IntroPanel({
   return (
     <div className="space-y-4">
       <p className="text-[14px] text-ink leading-relaxed">{pack.intro}</p>
-      <div className="rounded border border-amber/40 border-l-4 border-l-amber bg-amber/10 p-3 text-[13px]">
+      <div className="rounded border border-amber/40 border-l-4 border-l-amber bg-amber/10 p-3 text-[14px]">
         <p className="font-semibold text-strong mb-1">Ground rules</p>
         <p>{pack.safety}</p>
       </div>
@@ -224,7 +224,7 @@ function QuestionPanel({
           <button
             type="button"
             onClick={() => setVideoOpen(true)}
-            className="inline-block text-[13px] text-slate border-b border-slate"
+            className="inline-block text-[14px] text-slate border-b border-slate"
           >
             Watch a demo →
           </button>
@@ -291,7 +291,7 @@ function ScoreSlider({
               type="button"
               onClick={() => onValue(i)}
               className={
-                "h-11 rounded font-mono text-[13px] tabular-nums " +
+                "h-11 rounded font-mono text-[14px] tabular-nums " +
                 (selected
                   ? "bg-bronze text-ground"
                   : "bg-line-soft text-muted hover:bg-line hover:text-ink")
@@ -341,12 +341,12 @@ function ReviewPanel({
             >
               <p className="font-semibold text-strong text-[14px]">{q.label}</p>
               {q.paired === "left_right" ? (
-                <div className="flex gap-4 mt-1 font-mono text-[13px]">
+                <div className="flex gap-4 mt-1 font-mono text-[14px]">
                   <span>L: <strong>{scores[`${q.id}:left`] ?? "—"}</strong></span>
                   <span>R: <strong>{scores[`${q.id}:right`] ?? "—"}</strong></span>
                 </div>
               ) : (
-                <p className="mt-1 font-mono text-[13px]">
+                <p className="mt-1 font-mono text-[14px]">
                   Score: <strong>{scores[q.id] ?? "—"}</strong>
                 </p>
               )}
@@ -374,7 +374,7 @@ function ReviewPanel({
       </div>
 
       {anyMissing ? (
-        <p className="text-[13px] text-amber">
+        <p className="text-[14px] text-amber">
           {missingKeys.length} unanswered item{missingKeys.length === 1 ? "" : "s"} — tap them
           above to fill in, or submit anyway if you skipped intentionally.
         </p>

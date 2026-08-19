@@ -293,7 +293,7 @@ export default function CoachPage() {
             ))}
             {pending ? <Bubble role="assistant" text={pending} streaming /> : null}
             {error ? (
-              <div className="border-l-4 border-red bg-red/10 rounded-r px-3 py-2 text-[13px]">
+              <div className="border-l-4 border-red bg-red/10 rounded-r px-3 py-2 text-[14px]">
                 <strong>Coach error:</strong> {error}
               </div>
             ) : null}
@@ -363,7 +363,7 @@ function Empty({ onPick, activeSlug }: { onPick: (t: string) => void; activeSlug
   const prompts =
     (activeSlug && STARTER_PROMPTS_BY_PROGRAM[activeSlug]) || DEFAULT_STARTERS;
   return (
-    <div className="text-center text-muted text-[13px] space-y-4 py-6">
+    <div className="text-center text-muted text-[14px] space-y-4 py-6">
       <p>Ask anything about your program, form, or how the plan is progressing.</p>
       <div className="space-y-2 max-w-md mx-auto">
         {prompts.map((p) => (
@@ -371,7 +371,7 @@ function Empty({ onPick, activeSlug }: { onPick: (t: string) => void; activeSlug
             key={p}
             type="button"
             onClick={() => onPick(p)}
-            className="w-full text-left text-[13px] px-3 py-2 rounded border border-line bg-surface hover:bg-surface-2 hover:border-bronze transition-colors"
+            className="w-full text-left text-[14px] px-3 py-2 rounded border border-line bg-surface hover:bg-surface-2 hover:border-bronze transition-colors"
           >
             {p}
           </button>
@@ -424,7 +424,7 @@ function NotConfigured() {
         </p>
       </div>
 
-      <p className="text-[13px] text-muted italic">
+      <p className="text-[14px] text-muted italic">
         Meanwhile: keep logging on Today. When the coach lands, your history is what it reads.
       </p>
     </div>

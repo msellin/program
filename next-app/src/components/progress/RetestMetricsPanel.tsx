@@ -135,7 +135,7 @@ function RetestCard({
       </div>
 
       {!m.supported ? (
-        <p className="mt-1 text-[13px] text-muted italic">
+        <p className="mt-1 text-[14px] text-muted italic">
           {m.note ?? "Not yet trackable in the app."}
         </p>
       ) : m.baseline == null && m.current == null && canRetest ? (
@@ -143,11 +143,11 @@ function RetestCard({
         // actually log them. Was rendering `— · — · —` in a silent grid;
         // comprehensive audit 2026-08-18 P1-5 flagged that users don't
         // realize physical-test metrics need their own log input.
-        <p className="mt-2 text-[13px] text-muted italic">
+        <p className="mt-2 text-[14px] text-muted italic">
           No readings yet. Log your baseline below so the delta has something to track against.
         </p>
       ) : (
-        <div className="mt-2 grid grid-cols-3 gap-2 text-[13px]">
+        <div className="mt-2 grid grid-cols-3 gap-2 text-[14px]">
           <div>
             <p className="text-muted text-[10px] uppercase tracking-wider">Baseline</p>
             <p className="font-mono text-ink">{formatMetric(m.baseline, m.unit)}</p>

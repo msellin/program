@@ -88,7 +88,7 @@ export function WeeklyNarrativeTile({
       </header>
 
       {!summary.hasAnyActivity ? (
-        <p className="text-[13px] text-muted italic">
+        <p className="text-[14px] text-muted italic">
           Nothing logged this week yet. Come back Sunday for a summary.
         </p>
       ) : (
@@ -210,8 +210,8 @@ function SummaryLine({
   }[tone];
   return (
     <li className="flex items-baseline justify-between gap-3">
-      <span className="text-muted text-[13px]">{label}</span>
-      <span className={cn("font-mono text-[13px] text-right", toneClass)}>{value}</span>
+      <span className="text-muted text-[14px]">{label}</span>
+      <span className={cn("font-mono text-[14px] text-right", toneClass)}>{value}</span>
     </li>
   );
 }

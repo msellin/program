@@ -69,7 +69,7 @@ export function ProgramPreviewClient({ slug }: Props) {
         <p className="text-sm text-muted">{error}</p>
         <Link
           href="/programs"
-          className="mt-2 inline-block text-[13px] text-slate border-b border-slate"
+          className="mt-2 inline-block text-[14px] text-slate border-b border-slate"
         >
           Back to catalog
         </Link>
@@ -145,7 +145,7 @@ export function ProgramPreviewClient({ slug }: Props) {
       <div>
         <Link
           href="/programs"
-          className="inline-flex items-center gap-1 text-[13px] text-slate hover:text-ink"
+          className="inline-flex items-center gap-1 text-[14px] text-slate hover:text-ink"
         >
           <ChevronLeft size={14} />
           All programs
@@ -192,7 +192,7 @@ export function ProgramPreviewClient({ slug }: Props) {
         </div>
         <p className="text-sm text-muted">{entry.short_description}</p>
         {entry.personal ? (
-          <p className="text-[13px] text-muted italic border-l-2 border-slate/40 pl-3 mt-2">
+          <p className="text-[14px] text-muted italic border-l-2 border-slate/40 pl-3 mt-2">
             Authored for one specific clinical context. Not marketed as an evidence-backed
             catalog program — the &ldquo;why&rdquo; lives in the author&apos;s clinical notes,
             not in a public references list. Use only if your situation resembles the author&apos;s.
@@ -216,7 +216,7 @@ export function ProgramPreviewClient({ slug }: Props) {
         ) : null}
         {entry.adapts ? (
           <div className="rounded border border-bronze/30 border-l-4 border-l-bronze bg-bronze/[0.06] px-3 py-2 mt-2">
-            <p className="text-[13px] text-strong leading-snug">
+            <p className="text-[14px] text-strong leading-snug">
               <span className="font-semibold text-bronze">Adapts to you.</span>{" "}
               {entry.adapts} Every session sharpens further from your logs.
             </p>
@@ -276,7 +276,7 @@ export function ProgramPreviewClient({ slug }: Props) {
       ) : null}
 
       {entry.prerequisites?.length ? (
-        <section className="rounded border border-amber/40 bg-amber/10 p-3 text-[13px] space-y-1">
+        <section className="rounded border border-amber/40 bg-amber/10 p-3 text-[14px] space-y-1">
           <p className="font-semibold text-strong mb-1">Recommended background</p>
           <ul className="list-disc pl-5 space-y-1">
             {entry.prerequisites.map((prereq, i) => (
@@ -298,7 +298,7 @@ export function ProgramPreviewClient({ slug }: Props) {
           // take a couple of minutes, not days.
           const hasWindow = nT > 0 && (program.intake.duration_days ?? 0) > 0;
           return (
-            <section className="rounded border border-slate/30 bg-slate/10 p-3 text-[13px] space-y-1">
+            <section className="rounded border border-slate/30 bg-slate/10 p-3 text-[14px] space-y-1">
               <p className="font-semibold text-strong">
                 {hasWindow
                   ? `Baseline setup — a few minutes on the wizard + a ${program.intake.duration_days}-day measurement window`
@@ -340,7 +340,7 @@ export function ProgramPreviewClient({ slug }: Props) {
         ) : (
           <div className="space-y-3">
             {hasOtherActive ? (
-              <p className="text-[13px] text-amber italic">
+              <p className="text-[14px] text-amber italic">
                 You already have an active program. Starting this one will replace it —
                 your logged history stays, but only one main program at a time during beta.
               </p>
@@ -456,13 +456,13 @@ export function ProgramPreviewClient({ slug }: Props) {
 
       <details className="pt-4 border-t border-line-soft">
         <summary className={cn(
-          "cursor-pointer text-[13px] text-slate font-semibold",
+          "cursor-pointer text-[14px] text-slate font-semibold",
         )}>
           Program shape (peek inside)
         </summary>
-        <div className="mt-3 space-y-3 text-[13px]">
+        <div className="mt-3 space-y-3 text-[14px]">
           {isMultiDim ? (
-            <p className="text-[13px] text-muted italic">
+            <p className="text-[14px] text-muted italic">
               This program is multi-tier — the list below shows every phase and block
               across all levels. You&apos;ll only see the ones your tier uses, and drills
               are picked per session from your capability profile.
@@ -573,7 +573,7 @@ function PersonalAcknowledgementModal({
           history, no clinical review — this plan will apply the wrong
           restrictions and progression. That&apos;s not safe.
         </p>
-        <label className="mt-4 flex items-start gap-2 text-[13px] cursor-pointer">
+        <label className="mt-4 flex items-start gap-2 text-[14px] cursor-pointer">
           <input
             type="checkbox"
             checked={ack}

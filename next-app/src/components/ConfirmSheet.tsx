@@ -91,7 +91,7 @@ export function ConfirmSheet({
             <X size={18} />
           </button>
         </div>
-        <div className="text-[13px] text-muted leading-relaxed">{body}</div>
+        <div className="text-[14px] text-muted leading-relaxed">{body}</div>
         <div className="flex gap-2 pt-1">
           <button
             type="button"

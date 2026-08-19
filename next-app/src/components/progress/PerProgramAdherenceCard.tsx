@@ -128,7 +128,7 @@ export function PerProgramAdherenceCard() {
         {rows.map((r) => (
           <li key={r.slug} className="space-y-1.5">
             <div className="flex items-baseline justify-between gap-2">
-              <p className="text-[13px] text-strong font-medium">
+              <p className="text-[14px] text-strong font-medium">
                 {r.slug.replace(/-/g, " ")}
               </p>
               <span className="font-mono text-[11px] text-muted">

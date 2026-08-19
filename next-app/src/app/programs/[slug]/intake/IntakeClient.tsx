@@ -436,7 +436,7 @@ export function IntakeClient({ slug }: Props) {
       <div className="mt-8 rounded border border-red bg-surface p-4">
         <h2 className="mb-2 text-lg font-semibold">Couldn&apos;t load program</h2>
         <p className="text-sm text-muted">{error}</p>
-        <Link href="/programs" className="mt-2 inline-block text-[13px] text-slate border-b border-slate">
+        <Link href="/programs" className="mt-2 inline-block text-[14px] text-slate border-b border-slate">
           Back to catalog
         </Link>
       </div>
@@ -449,7 +449,7 @@ export function IntakeClient({ slug }: Props) {
     return (
       <div className="pt-8 space-y-3">
         <p className="text-[14px] text-strong">This program doesn&apos;t have an intake wizard.</p>
-        <p className="text-[13px] text-muted">
+        <p className="text-[14px] text-muted">
           Head back to the program page to start it directly.
         </p>
         <Link
@@ -500,7 +500,7 @@ export function IntakeClient({ slug }: Props) {
         <button
           type="button"
           onClick={() => setReviewing(false)}
-          className="inline-flex items-center gap-1 text-[13px] text-slate hover:text-ink"
+          className="inline-flex items-center gap-1 text-[14px] text-slate hover:text-ink"
         >
           <ChevronLeft size={14} />
           Back to answers
@@ -532,7 +532,7 @@ export function IntakeClient({ slug }: Props) {
                   {inferred.tier_label}
                 </p>
                 {typicalOutcome ? (
-                  <p className="text-[13px] text-ink leading-relaxed">
+                  <p className="text-[14px] text-ink leading-relaxed">
                     {typicalOutcome}
                   </p>
                 ) : null}
@@ -726,7 +726,7 @@ export function IntakeClient({ slug }: Props) {
           {program} · {section} · Step N of M), so users still see the
           context on every step without the wall of restated purpose. */}
       <div className="flex items-center justify-between gap-2">
-        <Link href={backHref} className="inline-flex items-center gap-1 text-[13px] text-muted hover:text-ink">
+        <Link href={backHref} className="inline-flex items-center gap-1 text-[14px] text-muted hover:text-ink">
           <ChevronLeft size={14} />
           Cancel intake
         </Link>
@@ -894,7 +894,7 @@ function WizardQuestionScreen({
       </div>
 
       {q.help ? (
-        <p className="text-[13px] text-muted leading-relaxed">{q.help}</p>
+        <p className="text-[14px] text-muted leading-relaxed">{q.help}</p>
       ) : null}
 
       {q.type === "select" && q.options ? (
@@ -1130,7 +1130,7 @@ function WizardQuestionScreen({
             <ShieldAlert size={16} />
             {blocker.title}
           </p>
-          <p className="text-[13px] text-strong">{blocker.body}</p>
+          <p className="text-[14px] text-strong">{blocker.body}</p>
           <p className="text-[12px] text-muted italic">
             If your answer is right, this program isn&apos;t the right fit today
             — talk to a clinician first.
@@ -1176,7 +1176,7 @@ function WizardPhysicalTestScreen({
         {t.label}
       </h2>
       {t.instructions ? (
-        <p className="text-[13px] text-muted leading-relaxed">{t.instructions}</p>
+        <p className="text-[14px] text-muted leading-relaxed">{t.instructions}</p>
       ) : null}
       {t.video_url ? (
         <a
@@ -1332,7 +1332,7 @@ function WizardConsentScreen({
           on the consent step can verify what they answered without
           walking Back through the whole flow. */}
       <details className="rounded border border-line-soft bg-surface p-3">
-        <summary className="cursor-pointer text-[13px] text-muted hover:text-ink">
+        <summary className="cursor-pointer text-[14px] text-muted hover:text-ink">
           Review my answers
         </summary>
         <ul className="mt-3 space-y-2 text-[12px]">

@@ -109,7 +109,7 @@ export default function GuidePage() {
         </Row>
         <Row label="History">Activity heatmap, symptom trend, strength progression, and an expandable day log with set-level detail.</Row>
         <Row label="Profile">Signed-in identity, active plan(s), and a compact menu.</Row>
-        <p className="text-[13px] text-muted italic pt-2">
+        <p className="text-[14px] text-muted italic pt-2">
           These are the bottom-nav tabs. The rest live behind the ⋮ menu in the top right:
         </p>
         <Row label="Programs">The catalog. Browse, preview, start a program.</Row>
@@ -147,7 +147,7 @@ export default function GuidePage() {
           <li>Morning stiffness over 30 min that responds to movement not rest (screen for inflammatory pattern)</li>
           <li>Any injury with a clear mechanism you don&apos;t bounce back from in 72 h</li>
         </ul>
-        <p className="text-[13px] text-muted italic pt-2">
+        <p className="text-[14px] text-muted italic pt-2">
           Programs that already carry a specific clinical context (e.g. the anterior-hip
           case study) apply extra program-specific red flags on top of this general list.
         </p>
@@ -159,7 +159,7 @@ export default function GuidePage() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="space-y-3">
-      <h2 className="font-mono text-[13px] uppercase tracking-widest">{title}</h2>
+      <h2 className="font-mono text-[14px] uppercase tracking-widest">{title}</h2>
       <div className="rounded border border-line bg-surface p-4 space-y-3 text-[14px] leading-relaxed">
         {children}
       </div>

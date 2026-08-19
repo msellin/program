@@ -98,13 +98,13 @@ export function BlockHistorySection() {
 
   return (
     <section className="space-y-3">
-      <h2 className="font-mono text-[13px] uppercase tracking-widest">
+      <h2 className="font-mono text-[14px] uppercase tracking-widest">
         Recent sessions · last {WINDOW_DAYS} days
       </h2>
       <div className="rounded border border-line bg-surface divide-y divide-line-soft">
         {perProgram.map((g) => (
           <div key={g.slug} className="p-3 space-y-2">
-            <p className="text-[13px] font-semibold text-strong">
+            <p className="text-[14px] font-semibold text-strong">
               {/* Slug title-case matches manifest names for every current
                   program; `program_goal.display_name` is often the target
                   metric (e.g. "Loaded overhead shoulder flexion") and reads

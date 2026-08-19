@@ -27,7 +27,7 @@ export function Day1EmptyState() {
       <h2 id="day1-title" className="text-lg font-semibold text-strong leading-snug">
         One focus, sharpened every session.
       </h2>
-      <p className="text-[13px] text-muted leading-relaxed">
+      <p className="text-[14px] text-muted leading-relaxed">
         Starts with a morning check — one minute of tapping calibrates today&apos;s load.
         Terav writes the focus arc; the rest of your week is still yours.
       </p>
