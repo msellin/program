@@ -536,12 +536,75 @@ export function IntakeClient({ slug }: Props) {
                     {typicalOutcome}
                   </p>
                 ) : null}
-                <details className="text-[12px] text-muted">
-                  <summary className="cursor-pointer hover:text-ink">
-                    How this was picked
-                  </summary>
-                  <p className="mt-1">Based on: {formatVars(inferred.vars)}</p>
-                </details>
+                {/* P0-10 · three-branch disclosure. Branch B (physical
+                    tests skipped → conservative default) is the founder's
+                    O10c case — the previous version dumped raw vars and
+                    couldn't explain the conservative-default logic. Now
+                    the copy names the signal weight explicitly and points
+                    at the override list below. */}
+                {(() => {
+                  const testsDeclared = physicalTests.length > 0;
+                  const testsSkipped =
+                    testsDeclared &&
+                    Object.values(testResults).filter(
+                      (v) => typeof v === "number" && v > 0,
+                    ).length === 0;
+                  const answersSummary = summarizeAnswers(
+                    inferred.vars,
+                    answers,
+                    physicalTests,
+                  );
+                  return (
+                    <details className="text-[12px] text-muted">
+                      <summary className="cursor-pointer hover:text-ink">
+                        How this was picked
+                      </summary>
+                      <div className="mt-2 space-y-2">
+                        {testsSkipped ? (
+                          <>
+                            <p className="leading-relaxed">
+                              <span className="text-strong">We used:</span>{" "}
+                              your intake answers ({answersSummary}).{" "}
+                              Physical tests: you skipped these.
+                            </p>
+                            <p className="leading-relaxed">
+                              Skipped tests default us conservative — we
+                              start you lower rather than higher, because
+                              starting too heavy risks injury and starting
+                              too easy costs one week you can skip past.
+                            </p>
+                            <p className="leading-relaxed">
+                              If the numbers above feel wrong, tap a
+                              different tier below — or run the physical
+                              tests from Profile → Programs to let the
+                              engine pick with full signal.
+                            </p>
+                          </>
+                        ) : testsDeclared ? (
+                          <>
+                            <p className="leading-relaxed">
+                              <span className="text-strong">We used:</span>{" "}
+                              your intake answers plus your physical test
+                              results ({answersSummary}).
+                            </p>
+                            <p className="leading-relaxed">
+                              Physical tests carry the most weight because
+                              they&apos;re measured numbers. Intake answers
+                              confirm the direction. Confident pick.
+                            </p>
+                          </>
+                        ) : (
+                          <p className="leading-relaxed">
+                            <span className="text-strong">We used:</span>{" "}
+                            your intake answers ({answersSummary}). This
+                            program doesn&apos;t require physical tests —
+                            self-report is the intended signal.
+                          </p>
+                        )}
+                      </div>
+                    </details>
+                  );
+                })()}
               </section>
             );
           })()
@@ -1523,5 +1586,33 @@ function formatVars(vars: Record<string, number | string>): string {
         ? `${k.replace(/_/g, " ")} ≈ ${v}`
         : `${k.replace(/_/g, " ")} = ${String(v).replace(/_/g, " ")}`,
     );
+  return parts.length ? parts.join(", ") : "your self-report";
+}
+
+/**
+ * P0-10 · humanize the tier-picker signals for the "How this was picked"
+ * disclosure. Prefers physical-test variables (measured numbers) over the
+ * raw intake vars — a test result like `strict_pullup_max_reps = 6` reads
+ * better than a proxy-derived enum value. Falls back to formatVars-style
+ * output for programs without physical tests.
+ */
+function summarizeAnswers(
+  vars: Record<string, number | string>,
+  _answers: Record<string, string>,
+  physicalTests: Array<{ id: string; unit?: string; label?: string }>,
+): string {
+  const testIds = new Set(physicalTests.map((t) => t.id));
+  const testParts: string[] = [];
+  const otherParts: string[] = [];
+  for (const [k, v] of Object.entries(vars)) {
+    if (typeof v !== "number" || v <= 0) continue;
+    const label = k.replace(/_/g, " ");
+    const unit = physicalTests.find((t) => t.id === k)?.unit;
+    const suffix = unit ? ` ${unit}` : "";
+    const rendered = `${label} ≈ ${v}${suffix}`;
+    if (testIds.has(k)) testParts.push(rendered);
+    else otherParts.push(rendered);
+  }
+  const parts = [...testParts, ...otherParts].slice(0, 3);
   return parts.length ? parts.join(", ") : "your self-report";
 }

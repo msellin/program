@@ -498,6 +498,31 @@ export const programSchema = z.object({
   schema_version: z.string(),
   generated: z.string(),
   status: z.string(),
+  /**
+   * F10 Batch 31 · promotion attribution fields. Mirror the manifest-entry
+   * schema so `program.reviewed_by` etc. are typed for consumers like
+   * ProgramPreviewClient. Optional — REFERENCED programs have no reviewer.
+   */
+  reviewed_by: z
+    .object({
+      name: z.string(),
+      role: z.string(),
+      date: z.string(),
+      scope: z.string().optional(),
+    })
+    .optional(),
+  reviewed_at: z.string().optional(),
+  status_history: z
+    .array(
+      z.object({
+        from: z.string(),
+        to: z.string(),
+        date: z.string(),
+        note: z.string().optional(),
+      }),
+    )
+    .optional(),
+  review_evidence: z.array(z.string()).optional(),
   goals: z.record(z.string(), z.unknown()).optional(),
   equipment_inventory: z.record(z.string(), z.unknown()).optional(),
   principles: z.array(z.record(z.string(), z.unknown())).optional(),
