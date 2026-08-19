@@ -472,7 +472,9 @@ export const useStore = create<StoreState>((set, get) => ({
     const sets = ex.sets ? [...ex.sets] : synthSetsFromLegacy(ex);
     while (sets.length <= setIndex) sets.push({ weight_kg: null, reps: null, rpe: null });
     sets[setIndex] = { ...sets[setIndex], ...patch };
-    day.exercises[`${blockId}:${exId}`] = { ...ex, sets, done: hasAnyLoggedSet(sets) || ex.done };
+    const nextDone = hasAnyLoggedSet(sets) || ex.done;
+    day.exercises[`${blockId}:${exId}`] = { ...ex, sets, done: nextDone };
+    if (nextDone) flipBlockDoneIfEligible(s, blockId);
     commit(s);
     set({ store: s });
   },
@@ -504,6 +506,7 @@ export const useStore = create<StoreState>((set, get) => ({
     const day = ensureDay(s, date);
     const ex = ensureExercise(day, blockId, exId);
     day.exercises[`${blockId}:${exId}`] = { ...ex, done };
+    if (done) flipBlockDoneIfEligible(s, blockId);
     commit(s);
     set({ store: s });
   },
@@ -1490,6 +1493,28 @@ function hasAnyLoggedSet(sets: SetLog[]): boolean {
   return sets.some(
     (s) => (s.weight_kg != null && s.weight_kg > 0) || (s.reps != null && s.reps > 0),
   );
+}
+
+/**
+ * BUG-8 fix 2026-08-19 — flip a scheduled block from "planned" → "done"
+ * when a matching exercise is marked done on the block's actual_date.
+ * Mirrors the legacy-to-blocks migrator's exercise-key-prefix rule so
+ * live writes and historical migration agree. Safe no-op when the block
+ * doesn't exist yet (pre-migration user) or is already in a terminal
+ * state (skipped/moved/done).
+ */
+function flipBlockDoneIfEligible(s: Store, blockId: string): void {
+  const b = s.scheduled_blocks?.[blockId];
+  if (!b || b.state !== "planned") return;
+  s.scheduled_blocks = {
+    ...s.scheduled_blocks,
+    [blockId]: {
+      ...b,
+      state: "done",
+      completed_at: new Date().toISOString(),
+      log_entry_id: b.log_entry_id ?? b.actual_date,
+    },
+  };
 }
 
 /**

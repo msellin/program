@@ -132,6 +132,13 @@ export function migrateLegacyToBlocks(
 
   // 4 — link log entries to blocks (log entry ids: `<date>` — legacy
   // logs are day-keyed, not block-keyed. We store the date as the link.)
+  // Also flip state to "done" when the log has evidence attributable to
+  // this block: (a) an exercise key prefixed with the block's instance
+  // id where done=true, OR (b) at least one run entry when the block's
+  // template id names a run-modality block. BUG-8 fix 2026-08-19 —
+  // PerProgramAdherenceCard was reporting 0/25 despite 23 logged sessions
+  // because blocks never flipped from "planned" to "done" without an
+  // explicit "Mark done" tap.
   const logs = next.logs;
   if (logs) {
     for (const [date, dayLog] of Object.entries(logs)) {
@@ -140,9 +147,26 @@ export function migrateLegacyToBlocks(
         const b = blocks[id];
         if (b.actual_date !== date) continue;
         if (b.log_entry_id) continue;
-        // Attach the day-log key as the log entry id. Coarse but concrete;
-        // a future migration can lift per-block sub-log entries out.
-        blocks[id] = { ...b, log_entry_id: date };
+        // Exercise-key prefix match: `${blockId}:${exId}` in day.exercises.
+        const hasMatchingExercise = Object.entries(dayLog.exercises ?? {}).some(
+          ([k, v]) => k.startsWith(`${b.id}:`) && v.done,
+        );
+        // Run-modality fallback: if this block template is a run/row block
+        // and the day has runs, count it done. Modality inferred from the
+        // block_template_id since we don't have program access here.
+        const isRunModalityBlock =
+          /(?:_row|_run|z2|threshold|race_pace|easy_recovery|engine|aerobic)/i.test(
+            b.block_template_id,
+          );
+        const hasRun = (dayLog.runs ?? []).length > 0;
+        const shouldFlipDone =
+          b.state === "planned" &&
+          (hasMatchingExercise || (isRunModalityBlock && hasRun));
+        blocks[id] = {
+          ...b,
+          log_entry_id: date,
+          state: shouldFlipDone ? "done" : b.state,
+        };
       }
     }
   }

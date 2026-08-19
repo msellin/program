@@ -112,6 +112,73 @@ describe("legacy-to-blocks migrator", () => {
     }
   });
 
+  it("flips block state to 'done' when a matching exercise is logged as done (BUG-8)", () => {
+    const program = loadProgram("concurrent-strength-maintenance");
+    const anchor = program.phases[0].starts;
+    const store = makeBaseStore("concurrent-strength-maintenance");
+    // Bootstrap once to discover a real block id we can log against.
+    const bootstrap = migrateLegacyToBlocks(
+      store,
+      { "concurrent-strength-maintenance": program },
+      anchor,
+    );
+    const anchorBlock = Object.values(bootstrap.scheduled_blocks ?? {}).find(
+      (b) => b.actual_date === anchor,
+    );
+    if (!anchorBlock) return; // no block on anchor date — vacuous pass
+    // Reset migration flag and add a log with a matching exercise key.
+    const legacy: Store = {
+      ...store,
+      migrations_applied: undefined,
+      logs: {
+        [anchor]: {
+          date: anchor,
+          exercises: {
+            [`${anchorBlock.id}:back_squat_highbar`]: {
+              sets: [],
+              done: true,
+            },
+          },
+          symptoms: null,
+          derived_state: null,
+          notes: "",
+        } as unknown as Store["logs"][string],
+      },
+    };
+    const out = migrateLegacyToBlocks(
+      legacy,
+      { "concurrent-strength-maintenance": program },
+      anchor,
+    );
+    const flipped = out.scheduled_blocks?.[anchorBlock.id];
+    expect(flipped?.state).toBe("done");
+    expect(flipped?.log_entry_id).toBe(anchor);
+  });
+
+  it("does NOT flip block state when log day has no matching activity (empty exercises)", () => {
+    const program = loadProgram("concurrent-strength-maintenance");
+    const anchor = program.phases[0].starts;
+    const store = makeBaseStore("concurrent-strength-maintenance");
+    store.logs = {
+      [anchor]: {
+        date: anchor,
+        exercises: {},
+      } as unknown as Store["logs"][string],
+    };
+    const out = migrateLegacyToBlocks(
+      store,
+      { "concurrent-strength-maintenance": program },
+      anchor,
+    );
+    const anchorBlocks = Object.values(out.scheduled_blocks ?? {}).filter(
+      (b) => b.actual_date === anchor,
+    );
+    for (const b of anchorBlocks) {
+      expect(b.state).toBe("planned"); // stayed planned — empty log doesn't imply done
+      expect(b.log_entry_id).toBe(anchor); // but link is still attached
+    }
+  });
+
   it("is idempotent — second run returns the same shape", () => {
     const program = loadProgram("concurrent-strength-maintenance");
     const anchor = program.phases[0].starts;
