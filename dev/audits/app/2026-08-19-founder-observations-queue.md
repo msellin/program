@@ -1088,3 +1088,122 @@ Programs in the top nav?** (Pliability, GOWOD, Runna, Whoop, Hevy.)
   "Pick your focus →" at ~line 285)
 
 **Assessment:** _pending audit-agent pass_
+
+---
+
+## Second walkthrough — post-ship observations (2026-08-20)
+
+Founder walked the app after all Batch 29–32 + F8-second + F9 + F10
+landed. Fresh observations captured after the visible changes were
+supposed to be live. These are ADDITIONAL to O1-O17.
+
+### O18 — Today H1 date duplicates DateNav label
+
+Founder-in-app 2026-08-20. After P1-70 shipped, Today rendered:
+- H1: "Wednesday 20 Aug" (32 px semibold)
+- Subtitle: "Today"
+- DateNav card: "Wednesday, 20 Aug · Today"
+
+Same info twice, 40 px apart.
+
+**Fix already shipped 2026-08-20 (`100760b`):** H1 reverted to "Today"
+(scope label) / "Focus session" (session mode). DateNav owns the
+date. Tradeoff: "Today" H1 duplicates bottom-nav tab, but that's a
+lesser evil than duplicating the date itself.
+
+**Files:** `next-app/src/components/session/TodaySession.tsx:210-226`
+
+**Assessment:** _shipped; verify against fresh persona artifacts._
+
+### O19 — Dashboard change subtler than expected
+
+Founder-in-app 2026-08-20. After F8-second dashboard split shipped,
+founder reported: "I don't really see a big dashboard change to be
+honest." Expected a more radical visual shift.
+
+Post-ship dashboard render: DashboardBlock summary card with title
+"N blocks · M exercises", block-name list (up to 5), and bronze
+"Open session →" CTA. Replaces the previous inline BlockSection +
+ExerciseCard cascade.
+
+**Founder's read:** the delta is REAL (from 5+ full exercise cards to
+1 summary card) but VISUALLY reads as "just a card." Not the
+Garmin-dashboard feel they were expecting.
+
+**Root cause candidates:**
+1. Cache — the deploy may not have landed for that user's session
+   (Cloudflare Pages Git integration wasn't wired at ship time; manual
+   deploy required)
+2. DashboardBlock chrome is deliberately neutral (P0-8 palette-fix)
+   → reads as understated
+3. Expectation gap — user expected color / motion / iconography that
+   Terav's Rejected-list explicitly disallows (R1 photography, R5
+   gamification, R8 autonomous score-hero)
+
+**Peer research needed:** what makes Garmin/Whoop dashboard "feel"
+different at the DashboardBlock level without violating R1/R5/R8?
+
+**Files:** `next-app/src/components/session/TodaySession.tsx:481-536`,
+`next-app/src/components/DashboardBlock.tsx`
+
+**Assessment:** _pending audit-agent pass — likely a design brief
+covering DashboardBlock v2 tokens + subtle data-viz + typography._
+
+### O20 — Extras should be a daily Today thing (Garmin-style)
+
+Founder-in-app 2026-08-20. Currently the `/extras` route
+(extra-exercises menu — mobility drills, accessories the user picks
+from beyond scheduled blocks) is linked FROM Profile → More. Founder
+wants it as a daily surface on Today, like Garmin's dashboard shows
+"Today's activities: workout + extras + recovery ideas."
+
+**Note:** RunSlotCard on Today already handles the "log an extra
+workout" logging affordance — that's a DIFFERENT thing. Founder is
+specifically talking about the extra-EXERCISES menu (the /extras
+route content).
+
+**Fix scope:** add a new DashboardBlock on Today (dashboard mode)
+that surfaces today's suggested extras + CTA to /extras. Position
+below the workout summary, above RunSlotCard.
+
+**Files to touch:**
+- `next-app/src/components/session/TodaySession.tsx` (new ExtrasBlock
+  render in dashboard mode)
+- Maybe extract shared logic from `/extras` page so Today can preview
+  N drills without navigating
+
+**Assessment:** _pending fix + audit-agent pass._
+
+### O21 — Overall visual system feels 1995, not 2026
+
+Founder-in-app 2026-08-20. "Visuals seem very 1995, not 2026." After
+all the shipped visual work (P0-8 palette collision fix, F9
+DashboardBlock primitive, program-preview reorder, etc.) the overall
+feel is still data-first / experience-second. Not Garmin/Whoop-modern.
+
+**Constraint tension:** Terav's rejected patterns (R1 no photography,
+R5 no gamification, R8 no autonomous score-hero) are exactly the
+levers modern fitness apps use for "engagement feel." Without those,
+we're left with:
+- Typography (currently understated)
+- Motion (currently zero beyond `prefers-reduced-motion` guards)
+- Data viz (Recharts sparingly)
+- Density + rhythm (currently neutral bordered cards)
+
+**Fix scope:** full visual-craft refresh with product-design-lead
+brief. Concrete moves candidates:
+- Subtle sparklines on Progress + Today (data viz as first-class,
+  not text-only)
+- Animated block-complete tick (0.4s ease with motion-reduce fallback)
+- Bump typography scale for hero elements (Today's H1 32→40 px)
+- Color-tinted DashboardBlock accents (bronze/slate/green stripes on
+  the LEFT — already done for catalog, extend to Today)
+- Nested-surface token `--color-surface-2` for compact cards inside
+  DashboardBlocks
+
+**Peer research needed:** Garmin dashboard, Whoop readiness ring,
+Runna today-view, Hevy workout card — cross-reference what a modern
+"2026" feel means and what's actually stealable given R1/R5/R8.
+
+**Assessment:** _pending full visual-craft + product-design-lead
+audit round._

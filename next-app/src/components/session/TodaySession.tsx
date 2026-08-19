@@ -532,6 +532,49 @@ export function TodaySession({ slugOverride }: { slugOverride?: string } = {}) {
               </DashboardBlock>
             );
           })}
+          {/* O20 (2026-08-20) · Extras (extra exercises) surfaced on Today
+              as a daily thing per founder's Garmin-dashboard ask. Counts
+              accessory + cardio-conditioning drills the primary program
+              offers; CTA lands users on the fuller /extras page. Renders
+              only when the primary program has extras defined. */}
+          {(() => {
+            const extraBlocks =
+              primary.blocks?.filter(
+                (b) => b.category === "accessory" || b.category === "run",
+              ) ?? [];
+            if (extraBlocks.length === 0) return null;
+            const drillCount = extraBlocks.reduce(
+              (n, b) => n + (b.items?.length ?? 0),
+              0,
+            );
+            return (
+              <DashboardBlock
+                eyebrow="Extras"
+                title={`${drillCount} drill${drillCount === 1 ? "" : "s"} available`}
+                lede="Accessory work, mobility, around-runs. Optional — logged to today."
+                primaryCta={{ label: "Open extras", href: "/extras" }}
+              >
+                <ul className="text-[13px] text-muted space-y-0.5">
+                  {extraBlocks.slice(0, 4).map((b) => (
+                    <li key={b.id} className="truncate">
+                      · {humanBlockName(b.name)}
+                      {b.items?.length ? (
+                        <span className="text-muted/60">
+                          {" "}
+                          ({b.items.length})
+                        </span>
+                      ) : null}
+                    </li>
+                  ))}
+                  {extraBlocks.length > 4 ? (
+                    <li className="text-muted/60">
+                      + {extraBlocks.length - 4} more
+                    </li>
+                  ) : null}
+                </ul>
+              </DashboardBlock>
+            );
+          })()}
           <div id="log-session" className="cv-auto"><RunSlotCard date={activeDate} /></div>
         </>
       ) : (
