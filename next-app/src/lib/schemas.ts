@@ -1220,6 +1220,20 @@ export const storeSchema = z.object({
              */
             graduated_at: z.string().optional(),
             /**
+             * User's own rating of the arc at graduation. 1-5 scale +
+             * optional freeform note. Written by GraduationCard's survey.
+             * Delta-3 2026-08-19: gives the user a place to say "this
+             * worked" or "this was miserable" so the arc ends with a
+             * voice, not a silence.
+             */
+            graduation_feedback: z
+              .object({
+                rating: z.number().int().min(1).max(5),
+                note: z.string().optional(),
+                submitted_at: z.string(),
+              })
+              .optional(),
+            /**
              * Phase A / generation_trace stub: the input snapshot at the moment
              * the user committed this program. Persists intake_answers + tier
              * + any capability_profile values that were used to shape the plan,

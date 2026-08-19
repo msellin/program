@@ -649,6 +649,7 @@ function GraduationCard({ program }: { program: Program }) {
   const store = useStore((s) => s.store);
   const removeActiveProgram = useStore((s) => s.removeActiveProgram);
   const markGraduated = useStore((s) => s.markGraduated);
+  const restartProgram = useStore((s) => s.restartProgram);
   const [confirmEnd, setConfirmEnd] = useState(false);
   const [manifest, setManifest] = useState<ProgramManifest | null>(null);
   const userTier = program.slug
@@ -803,7 +804,21 @@ function GraduationCard({ program }: { program: Program }) {
           >
             {nextBlockEntry ? "Browse other programs →" : "Pick your next program →"}
           </Link>
+          {program.slug ? (
+            <button
+              type="button"
+              onClick={() => {
+                if (!program.slug) return;
+                restartProgram(program.slug, todayISO());
+              }}
+              className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-muted hover:text-ink hover:bg-line-soft min-h-[36px]"
+              title="Restart this arc from today. Keeps your intake answers + baselines."
+            >
+              Repeat this arc
+            </button>
+          ) : null}
         </div>
+        <GraduationFeedback slug={program.slug ?? null} />
         <button
           type="button"
           onClick={() => setConfirmEnd(true)}
@@ -824,6 +839,87 @@ function GraduationCard({ program }: { program: Program }) {
         }}
         onCancel={() => setConfirmEnd(false)}
       />
+    </div>
+  );
+}
+
+function GraduationFeedback({ slug }: { slug: string | null }) {
+  const stored = useStore((s) =>
+    slug ? s.store.user_profile?.program_states?.[slug]?.graduation_feedback : undefined,
+  );
+  const saveGraduationFeedback = useStore((s) => s.saveGraduationFeedback);
+  const [rating, setRating] = useState<number | null>(stored?.rating ?? null);
+  const [note, setNote] = useState<string>(stored?.note ?? "");
+  const [open, setOpen] = useState(!stored);
+  if (!slug) return null;
+
+  if (!open && stored) {
+    return (
+      <p className="text-[12px] text-muted italic pt-1">
+        You rated this arc {stored.rating}/5.{" "}
+        <button
+          type="button"
+          className="underline decoration-muted/40 hover:text-ink"
+          onClick={() => setOpen(true)}
+        >
+          Change
+        </button>
+      </p>
+    );
+  }
+
+  return (
+    <div className="rounded border border-line-soft bg-surface p-3 space-y-2">
+      <p className="font-mono text-[10px] uppercase tracking-wider text-muted">
+        How was this arc?
+      </p>
+      <div className="flex items-center gap-2">
+        {[1, 2, 3, 4, 5].map((n) => (
+          <button
+            key={n}
+            type="button"
+            onClick={() => setRating(n)}
+            aria-label={`Rate ${n} of 5`}
+            className={`w-9 h-9 rounded font-mono text-sm ${
+              rating === n
+                ? "bg-bronze text-ground"
+                : "border border-line text-muted hover:text-ink"
+            }`}
+          >
+            {n}
+          </button>
+        ))}
+      </div>
+      <textarea
+        rows={2}
+        value={note}
+        onChange={(e) => setNote(e.target.value)}
+        placeholder="Optional — what worked, what didn't, what surprised you"
+        className="w-full text-[13px] px-2 py-1.5 border border-line rounded bg-ground focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze resize-none"
+      />
+      <div className="flex gap-2">
+        <button
+          type="button"
+          disabled={rating == null}
+          onClick={() => {
+            if (rating == null) return;
+            saveGraduationFeedback(slug, rating, note.trim() || undefined);
+            setOpen(false);
+          }}
+          className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover disabled:opacity-40 disabled:cursor-not-allowed min-h-[36px]"
+        >
+          Save
+        </button>
+        {stored ? (
+          <button
+            type="button"
+            onClick={() => setOpen(false)}
+            className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-muted hover:text-ink min-h-[36px]"
+          >
+            Cancel
+          </button>
+        ) : null}
+      </div>
     </div>
   );
 }

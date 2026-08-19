@@ -210,6 +210,18 @@ type StoreState = {
    */
   markGraduated: (slug: string, dateISO: string) => void;
   /**
+   * Save user's graduation feedback (1-5 rating + optional note). Idempotent
+   * per-program — subsequent calls overwrite. Delta-3 2026-08-19.
+   */
+  saveGraduationFeedback: (slug: string, rating: number, note?: string) => void;
+  /**
+   * Restart an arc the user just graduated. Clears graduated_at and
+   * bumps started_at to today so phase-shift math re-anchors. Keeps
+   * intake_answers + baseline_capabilities so the user doesn't re-do
+   * intake. Delta-3 2026-08-19.
+   */
+  restartProgram: (slug: string, dateISO: string) => void;
+  /**
    * Phase A: dismiss the "your plan is built" reveal card for a program. Sets
    * program_states[slug].reveal_seen = true. Card never re-appears for the
    * same program.
@@ -965,6 +977,51 @@ export const useStore = create<StoreState>((set, get) => ({
     profile.program_states = states;
     s.user_profile = profile;
     commit(s);
+    set({ store: s });
+  },
+
+  saveGraduationFeedback: (slug, rating, note) => {
+    const s = { ...get().store };
+    const profile = { ...(s.user_profile ?? {}) };
+    const states = { ...(profile.program_states ?? {}) };
+    const prior = states[slug] ?? {};
+    states[slug] = {
+      ...prior,
+      graduation_feedback: {
+        rating,
+        ...(note ? { note } : {}),
+        submitted_at: new Date().toISOString(),
+      },
+    };
+    profile.program_states = states;
+    s.user_profile = profile;
+    commitImmediate(s);
+    set({ store: s });
+  },
+
+  restartProgram: (slug, dateISO) => {
+    const s = { ...get().store };
+    const profile = { ...(s.user_profile ?? {}) };
+    const states = { ...(profile.program_states ?? {}) };
+    const prior = states[slug] ?? {};
+    // Preserve intake_answers + baseline_capabilities + tier; reset the
+    // arc-clock (started_at) and drop graduated_at + graduation_feedback
+    // so the second arc gets its own end-of-arc surface.
+    const next = { ...prior, started_at: dateISO };
+    delete next.graduated_at;
+    delete next.graduation_feedback;
+    // Also clear phase_shift_days so the implicit fallback (schedule.ts)
+    // recomputes shift from the new started_at.
+    delete next.phase_shift_days;
+    states[slug] = next;
+    profile.program_states = states;
+    // Bump the top-level started_at too — reveal-copy + several other
+    // surfaces read either the per-program or the profile field.
+    if (profile.active_program_id === slug) {
+      profile.active_program_started_at = dateISO;
+    }
+    s.user_profile = profile;
+    commitImmediate(s);
     set({ store: s });
   },
 
