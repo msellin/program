@@ -10,17 +10,19 @@
 
 These are **IDEAS, not action items**. The engine + rehab-first positioning overrides "cleaner is better," so Margus picks what to ship. Batches ship in 6-12h chunks — don't try to close the whole list in one sitting, and respect the "no UI churn between audits" rule (each shipped batch should stand on its own before the next audit re-scans). Real bugs go first because they're broken code the audits happened to surface; everything else is prioritized by user-visible ROI. Sizing (S/M/L/XL) is per item.
 
-**Counts by bucket (post-Batch-25):**
+**Counts by bucket (post-Batch-25 audit round):**
 
-- **Bugs (fix regardless):** 0 open
-- **P0 (biggest ROI):** 0 open
-- **P1 (visible quality gap):** 0 open
-- **P2 (defensible polish):** 0 open
-- **Features on-deck:** 0 open — all shipped (F1-F10; F3+F4 in Batch 22, F2+F5+F7 in Batch 23, F6+F10 in Batch 24, F1+F8+F9 in Batch 25)
-- **Strategic (founder decision):** 3 items (S2, S3, S4 — S1 Coach shelved)
-- **Rejected:** 12 items — do not ship (R12 Coach added)
+- **Bugs (fix regardless):** 6 items (A5-A10) — mostly Batch-25 cleanup leftovers (~2h combined)
+- **P0 (highest ROI):** 2 items (P0-5 ProposalStack inline-below-nav + P0-6 /report force-zoom)
+- **P1 (visible quality gap):** 14 items (~10-12h) — accessibility 7, visual craft 1, landing 2, copy 3, motion+perf 1
+- **P2 (defensible polish):** 11 items (~6-8h) — mostly a11y polish + landing undersell
+- **Features on-deck:** 0 open — all shipped
+- **Strategic (founder decision):** 3 items (S2, S3, S4)
+- **Rejected:** 12 items — do not ship
 
-Total open surface: **3 strategic + 12 rejected = 15 line items** (down from 110 pre-Batch-17). **Every buildable task is shipped.** Only founder-decision items remain — those are calls to make, not code to write. Next action: full audit round with fresh persona harness to validate everything.
+Total open surface: **6 bugs + 2 P0 + 14 P1 + 11 P2 + 3 strategic + 12 rejected = 48 line items** (was 15 pre-audit, 110 pre-Batch-17). The post-Batch-25 audit surfaced fresh material because Batches 22-25 shipped ~7 new surfaces (MoveSheet, /account, GraduationCard 4-verb, RetestReminder card, Week 3-verb grid, FirstRunBanner primary, F1 Extensions).
+
+**Suggested Batch 26 shape (~4-5h):** A5-A10 (6 real bugs, ~2h) + P0-5/P0-6 investigation (~1-2h) + the 7 accessibility P1s (~2-3h) — accessibility is a clean natural batch and clears the biggest quality bucket in one push. Copy + visual-craft + landing P1s can be Batch 27.
 
 ---
 
@@ -48,45 +50,70 @@ Keep the convention terse — the four markers cover every state. Don't invent n
 
 ## Section A — Real bugs (fix regardless)
 
+*Sourced from the post-Batch-25 audit round (2026-08-19, 6 agents).*
+
+- [ ] **A5** FirstRunBanner still lists "Coach" in the overflow-menu enumeration — Batch 25 killed the route but this copy leftover names a tab that no longer exists. Fresh users search for it. Source: copy-clarity-batch25 §P0. Files: `next-app/src/components/FirstRunBanner.tsx:70`. Size: S
+- [ ] **A6** `/coach` direct-URL hits a bare Next.js 404 — bookmark friendliness broken. Redirect to `/progress` (or soft-land with a "moved" message). Source: copy-clarity-batch25 §P0, visual-craft-batch25 §Coach kill. Files: `next-app/next.config.ts` (add redirect) or new `next-app/src/app/coach/page.tsx` stub. Size: S
+- [ ] **A7** Cites strip on program preview still points to `/guide` for full bibliography — Batch 21 moved the walled-garden bibliography to `/evidence`. One-line href swap. Source: landing-alignment-batch25 §P1-2. Files: `next-app/src/app/programs/[slug]/ProgramPreviewClient.tsx:350`. Size: S
+- [ ] **A8** ProposalCard renders an empty `<h3>` element when `eyebrow` prop is falsy — SR reads a phantom heading. Guard the render. Source: accessibility-batch25 §3 persona-strength. Files: `next-app/src/components/workout/ProposalCard.tsx:43-53`. Size: S
+- [ ] **A9** Persona harness `tests/e2e/harness/personas.ts` still enumerates `/coach` — every persona ships 2× 404 in captures. Cosmetic in prod (persona-only), but pollutes harness logs. Remove `/coach` from the enumeration. Source: motion-perf-batch25 §Coach cleanup. Files: `next-app/tests/e2e/harness/personas.ts`. Size: S
+- [ ] **A10** HeritageClusterChip surfaces "Cluster A/B/C" internal jargon + raw `metric_id` snake_case + `No explanation available.` fallback in a live code path — not visible to current personas (no seeded `retest_readings`) but reads as debug dump when it fires. Source: copy-clarity-batch25 §P0. Files: `next-app/src/components/progress/HeritageClusterChip.tsx:62-79`. Size: S
 
 ---
 
 ## Section B — P0 (highest ROI)
 
+- [ ] **P0-5** ProposalStack inline cards on Today can render behind the fixed BottomNav (60 px sticky) when scrolled — the sticky action bar handles the TOP proposal but non-top inline cards still sit in the ouch zone. Mobile-UX flagged this as a carry-forward P0; needs verification of whether the sticky bar alone is sufficient, or if inline non-top proposals also need `pb-safe` reserve or in-view detection. Source: mobile-ux-batch25 §1. Files: `next-app/src/components/workout/ProposalStack.tsx`, verify at persona-recover:/, persona-graduate:/, persona-strength:/. Size: M
+- [ ] **P0-6** `/report` still ships desktop layout that force-zooms on 393 px — same failure as the 2026-08-19 audit, not remediated. Report is the specialist-share surface — should render legibly on the phone the user is on when they show it to a clinician. Source: mobile-ux-batch25 §1. Files: `next-app/src/app/report/page.tsx`. Size: M
 
 ---
 
 ## Section C — P1 (ship this month)
 
-### Accessibility
+### Accessibility (post-Batch-25 round)
 
-*(all 7 shipped in Batch 18 — see appendix)*
+- [ ] **P1-56** No skip link on any authenticated route — WCAG 2.4.1 partial mitigation via `<main>` landmark, but non-SR keyboard users have no bypass mechanism. Add `<a href="#main-content">` in `AppShell.tsx` before the `<header>` + `id="main-content" tabIndex={-1}` on `<main>`. Source: accessibility-batch25 §2.1. Files: `next-app/src/components/AppShell.tsx:102-146`. Size: S
+- [ ] **P1-57** Heading hierarchy skips h1→h3 on Today + Progress — ProposalCard + SignalCompletenessCard emit `<h3>` before the first `<h2>`. Demote both to `<h2>` (visual style is class-based, not tag-based). Source: accessibility-batch25 §2.2. Files: `next-app/src/components/workout/ProposalCard.tsx:39`, `next-app/src/components/progress/SignalCompletenessCard.tsx:114`. Size: S
+- [ ] **P1-58** SignalsStrip uses `aria-expanded` without `aria-controls` — inconsistent with the Batch 24 Week-row pattern. Add `aria-controls="signals-detail"` + `id="signals-detail"` on the expanded body. Source: accessibility-batch25 §2.3. Files: `next-app/src/components/workout/SignalsStrip.tsx:234`. Size: S
+- [ ] **P1-59** `text-red` on `red/20`-over-surface = 4.12:1 (fails WCAG 1.4.3 for 14 px body). Introduce `text-red-strong` (~#f28068, ~4.9:1) OR drop the /20 background and use `bg-red/10 text-red` (~5:1). Applies to arc-verdict chip + retest-metric red badges. Source: accessibility-batch25 §4. Files: `next-app/src/app/page.tsx:838`, other `bg-red/20 text-red` pairings. Size: S
+- [ ] **P1-60** `--color-line` (#3a3f4a) on `bg-surface` = 1.82:1 — fails WCAG 1.4.11 for input borders. Bump toward `#4d525d` (~3.05:1) OR switch input `bg-surface` to `bg-ground` so the surface delta carries the boundary. Affected: MoveSheet reason input, SetRow, RetestLoggingSheet, `/check`, sign-in/up forms. Source: accessibility-batch25 §4. Files: `next-app/src/app/globals.css` (token) OR per-input bg swap. Size: S
+- [ ] **P1-61** `/account` Undo underline `decoration-line` (1.82:1) is essentially invisible — fails WCAG 1.4.1 + 1.4.11. Swap `decoration-line` → `decoration-slate/60` (~4.6:1) OR color the text `text-slate` (8.01:1). Source: accessibility-batch25 §7 Extensions. Files: `next-app/src/app/account/page.tsx:187-194`. Size: S
+- [ ] **P1-62** MoveSheet initial focus lands on the close X button (first DOM-order focusable), not on the first non-source target-day radio. Design intent is picker-first. Reorder DOM (X after radios) or explicitly focus first radio via `useEffect`. Source: accessibility-batch25 §7 MoveSheet. Files: `next-app/src/components/workout/MoveSheet.tsx`. Size: S
 
-### Mobile UX (thumb reach + tap targets)
+### Visual craft (post-Batch-25 round)
 
-*(all 11 shipped in Batch 19 — see appendix)*
+- [ ] **P1-63** `font-mono text-[11px] uppercase tracking-wider` button labels are now overloaded across 4 semantic jobs (legal, row-meta, button-label, active verb). Migrate the *button-label* usage to sentence-case `text-[14px] font-semibold` on GraduationCard verbs, RetestReminder CTAs, Week expanded action grid, FirstRunBanner primary. Mono-caps stays for eyebrows + pills. Source: visual-craft-batch25 §P0. Files: `next-app/src/app/page.tsx` (GraduationCard VerbRow + RetestReminder + Week actions), `next-app/src/components/FirstRunBanner.tsx`. Size: M
 
-### Motion + perf
+### Landing→app (post-Batch-25 round)
 
-*(all 8 shipped in Batch 20 — see appendix)*
+- [ ] **P1-64** Citation-count drift — landing hero says "92 studies", app `/evidence` shows 126 (from `citations.json`). Same voice, two different numbers. Pick the canonical count and propagate. Source: landing-alignment-batch25 §1. Files: `landing/src/i18n/dictionaries/en.ts` OR `next-app/public/data/citations.json`. Size: S
+- [ ] **P1-65** AMBER soften proposal card renders without an inline `Source:` line — `proposal-citations.ts` wires `day_adjustment_soften` → Halson 2014, but persona-erratic's Today capture shows the AMBER card without the source. Render path in `ProposalCard.tsx` / `select.ts` needs verification — either the citationId isn't populated or the render is skipping the CitationRef. Source: landing-alignment-batch25 §3. Files: `next-app/src/components/workout/ProposalCard.tsx`, `next-app/src/lib/proposals/select.ts`. Size: S
 
-### Visual craft
+### Copy clarity (post-Batch-25 round)
 
-*(all 6 shipped in Batch 20 — see appendix)*
+- [ ] **P1-66** `exercise_id` snake_case leaks in 3 surfaces — Today proposals + Progress top lift + Report (Report handles it; use as fix model). Humanize like `humanizeMetricId` from Batch 17. Source: copy-clarity-batch25 §P1. Files: `next-app/src/components/workout/ProposalCard.tsx`, `next-app/src/app/progress/page.tsx`. Size: S
+- [ ] **P1-67** `metric_id` lowercase leak in "trending well" proposal on persona-multitrack. Same fix pattern as P1-66. Source: copy-clarity-batch25 §P1. Files: `next-app/src/components/workout/ProposalCard.tsx`. Size: S
+- [ ] **P1-68** `/account` Extensions row "retest window pushed" is vague — name the new date if state permits. Source: copy-clarity-batch25 §P1. Files: `next-app/src/app/account/page.tsx:180`. Size: S
 
-### Copy clarity
+### Motion + perf (post-Batch-25 round)
 
-*(all 19 shipped in Batch 17 — see appendix)*
-
-### Landing→app promise gaps (still open from 2026-08-17)
-
-*(all 4 shipped in Batch 21 — see appendix)*
+- [ ] **P1-69** `/profile` micro-CLS: the programs list renders only when `manifest != null`, but `activeProgramIds.length` is known synchronously from Zustand. Reserve height via `min-h` while manifest is loading, or render the list from Zustand and lazy-fill program names. Source: motion-perf-batch25 §hot surfaces. Files: `next-app/src/app/profile/page.tsx`. Size: S
 
 ---
 
-## Section D — P2 (defensible polish)
+## Section D — P2 (defensible polish, post-Batch-25 round)
 
-*(all 19 shipped in Batch 21 — see appendix)*
+- [ ] **P2-20** Extensions "Undo" underline link on /account — ~55×16 hit rect. Wrap in `inline-flex items-center min-h-[44px] py-2`. Source: mobile-ux-batch25 §P1 nits. Files: `next-app/src/app/account/page.tsx:187-194`. Size: S
+- [ ] **P2-21** FirstRunBanner Close-X at `w-10 h-10` (40 px, below Apple 44). Bump to `w-11 h-11`. Source: mobile-ux-batch25 §P1 nits. Files: `next-app/src/components/FirstRunBanner.tsx`. Size: S
+- [ ] **P2-22** GraduationFeedback 1-5 rating buttons at `w-9 h-9` (36 px). Bump to `w-11 h-11`. Source: mobile-ux-batch25 §P1 nits. Files: `next-app/src/app/page.tsx` (GraduationFeedback component). Size: S
+- [ ] **P2-23** `<section aria-labelledby>` on `/account` four groups (Sign-in, Programs, Extensions, Data & privacy). Source: accessibility-batch25 §2.4. Files: `next-app/src/app/account/page.tsx:126, 146, 170, 203`. Size: S
+- [ ] **P2-24** Week row `aria-label={dayName — expand/collapse details}` overrides visible content from SR — drop the aria-label; let visible text compute. Source: accessibility-batch25 §7 Week row. Files: `next-app/src/app/week/page.tsx:484`. Size: S
+- [ ] **P2-25** `role="alert"` on `/account` delete error `<p>` + MoveSheet amber stacking warning — currently silent to SR. Source: accessibility-batch25 §6. Files: `next-app/src/app/account/page.tsx:231-234`, `next-app/src/components/workout/MoveSheet.tsx:161-166`. Size: S
+- [ ] **P2-26** Route-mount focus-to-h1 (via `tabIndex={-1}` + effect) so `router.back()` restores focus somewhere useful. Not batch-specific — applies to every route. Source: accessibility-batch25 §7. Files: `next-app/src/components/AppShell.tsx`. Size: M
+- [ ] **P2-27** Remove dead `role="gridcell"` on non-interactive Heatmap cells — ignored due to parent `role="img"`. Source: accessibility-batch25 §5. Files: `next-app/src/components/charts/Heatmap.tsx:183`. Size: S
+- [ ] **P2-28** Verify SymptomLoadChart summary `aria-label` exists (heatmap has one, chart may not). Source: accessibility-batch25 §5. Files: `next-app/src/components/charts/SymptomLoadChart.tsx`. Size: S
+- [ ] **P2-29** `/events` "Not available" — add explanatory `<p>` for context. Source: accessibility-batch25 §3. Files: `next-app/src/app/events/page.tsx`. Size: S
+- [ ] **P2-30** Landing hero "strength, skill, engine" omits mobility (Overhead Mobility ships REFERENCED). Undersell — trust-safe but a marketing asset stranded. Consider adding as fourth term or rephrasing. Source: landing-alignment-batch25 §4. Files: `landing/src/i18n/dictionaries/en.ts`. Size: S
 
 ---
 
