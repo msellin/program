@@ -45,7 +45,7 @@ export const en: LandingDict = {
     step_02_title: "A session, cited.",
     step_02_body: "Tomorrow's plan, written against your history.",
     step_03_title: "Log. Engine sharpens.",
-    step_03_body: "You log a note. Engine proposes. You Accept or Ignore.",
+    step_03_body: "You log a note. Engine proposes. You apply the change or ignore it.",
     evidence_link: "See what every step cites →",
   },
   programs: {
@@ -88,7 +88,7 @@ export const en: LandingDict = {
   beta: {
     h2_a: "One intake.",
     h2_b: "Then your focus sharpens every session.",
-    body: "Ten minutes of questions and a short physical check. Tomorrow your first focus session lands — written against your history, with citations. You Accept or Ignore each change.",
+    body: "Ten minutes of questions and a short physical check. Tomorrow your first focus session lands — written against your history, with citations. You apply each change — or ignore it.",
     cta_primary: "Pick my focus",
     cta_secondary: "Talk to the founder",
   },

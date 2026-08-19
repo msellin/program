@@ -305,6 +305,26 @@ const SELF_REPORT_TO_NUMERIC: Record<
     },
     erg_familiar: { yes: 1, no: 0 },
   },
+  "first-strict-pullup": {
+    // Tier gates: A hang<15, B hang>=15 & reps<1, C reps>=1 & reps<3, D reps>=3.
+    // strict_pullup enum maps to a rep count that lands in the intended tier
+    // per the `hint` on each option. Assisted/partial rank as 0 strict reps.
+    current_strict_pullups: {
+      zero_no_hang: 0,
+      zero_can_hang: 0,
+      assisted_only: 0,
+      one_partial: 0,
+      one_two: 1,
+      three_five: 3,
+    },
+    dead_hang_seconds_selfreport: {
+      under_10s: 8,
+      "10_20s": 15,
+      "20_45s": 32,
+      "45_60s": 52,
+      over_60s: 75,
+    },
+  },
 };
 
 /**
@@ -323,6 +343,10 @@ const SELF_REPORT_TO_TEST_VAR: Record<string, Record<string, string>> = {
     // is `current_2k_time`. Map answer → seconds via SELF_REPORT_TO_NUMERIC
     // and bind to the variable name the conditions actually check.
     current_2k_time: "current_2k_seconds",
+  },
+  "first-strict-pullup": {
+    current_strict_pullups: "strict_pullup_max_reps",
+    dead_hang_seconds_selfreport: "dead_hang_max_seconds",
   },
 };
 
@@ -385,6 +409,10 @@ export function inferTier(
       if (vars[testVar] == null && ans != null && ans !== "") {
         const conservativeDefaults: Record<string, Record<string, number>> = {
           "rowing-2k-test-prep": { current_2k_seconds: 630 },
+          "first-strict-pullup": {
+            strict_pullup_max_reps: 0,
+            dead_hang_max_seconds: 0,
+          },
         };
         const def = conservativeDefaults[programSlug]?.[testVar];
         if (typeof def === "number") vars[testVar] = def;

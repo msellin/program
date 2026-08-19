@@ -97,3 +97,60 @@ describe("inferTier", () => {
     expect(out!.vars.walk_distance_max_metres).toBe(20);
   });
 });
+
+describe("inferTier · first-strict-pullup (regression: 2026-08-19 BUG-4)", () => {
+  const program = loadProgram("first-strict-pullup");
+
+  it("returns Tier D when user reports 3-5 strict reps (physical tests skipped)", () => {
+    const answers = {
+      current_strict_pullups: "three_five",
+      dead_hang_seconds_selfreport: "over_60s",
+    };
+    const out = inferTier(program, "first-strict-pullup", answers, {});
+    expect(out).not.toBeNull();
+    expect(out!.tier_id).toBe("tier_d_volume");
+  });
+
+  it("returns Tier C when user reports one-two strict reps", () => {
+    const answers = {
+      current_strict_pullups: "one_two",
+      dead_hang_seconds_selfreport: "over_60s",
+    };
+    const out = inferTier(program, "first-strict-pullup", answers, {});
+    expect(out).not.toBeNull();
+    expect(out!.tier_id).toBe("tier_c_first_rep");
+  });
+
+  it("returns Tier B when user has hang but no strict rep", () => {
+    const answers = {
+      current_strict_pullups: "zero_can_hang",
+      dead_hang_seconds_selfreport: "20_45s",
+    };
+    const out = inferTier(program, "first-strict-pullup", answers, {});
+    expect(out).not.toBeNull();
+    expect(out!.tier_id).toBe("tier_b_assisted");
+  });
+
+  it("returns Tier A when user has no hang yet", () => {
+    const answers = {
+      current_strict_pullups: "zero_no_hang",
+      dead_hang_seconds_selfreport: "under_10s",
+    };
+    const out = inferTier(program, "first-strict-pullup", answers, {});
+    expect(out).not.toBeNull();
+    expect(out!.tier_id).toBe("tier_a_hang");
+  });
+
+  it("physical test overrides self-report — 6 measured reps beats 'one_two'", () => {
+    const answers = {
+      current_strict_pullups: "one_two",
+      dead_hang_seconds_selfreport: "over_60s",
+    };
+    const out = inferTier(program, "first-strict-pullup", answers, {
+      strict_pullup_max_reps: 6,
+    });
+    expect(out).not.toBeNull();
+    expect(out!.tier_id).toBe("tier_d_volume");
+    expect(out!.vars.strict_pullup_max_reps).toBe(6);
+  });
+});

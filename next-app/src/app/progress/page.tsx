@@ -149,7 +149,7 @@ function ProgressBody({
         <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">Progress</h1>
         <a
           href="/report"
-          className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-muted hover:text-ink hover:bg-line-soft min-h-[36px] whitespace-nowrap"
+          className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-muted hover:text-ink hover:bg-line-soft min-h-[44px] inline-flex items-center whitespace-nowrap"
         >
           Export report
         </a>

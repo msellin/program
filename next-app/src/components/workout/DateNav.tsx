@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronLeft, ChevronRight, Home } from "lucide-react";
-import { today as todayISO, iso } from "@/lib/utils";
+import { today as todayISO, iso, cn } from "@/lib/utils";
 
 type Props = {
   date: string;
@@ -46,16 +46,22 @@ export function DateNav({ date, onChange }: Props) {
       >
         <ChevronRight size={18} />
       </button>
-      {!isToday ? (
-        <button
-          type="button"
-          onClick={() => onChange(todayISO())}
-          aria-label="Jump to today"
-          className="w-11 h-11 flex items-center justify-center rounded hover:bg-surface-2 text-bronze"
-        >
-          <Home size={16} />
-        </button>
-      ) : null}
+      <button
+        type="button"
+        onClick={() => onChange(todayISO())}
+        disabled={isToday}
+        aria-label={isToday ? "Currently on today" : "Jump to today"}
+        aria-hidden={isToday}
+        tabIndex={isToday ? -1 : 0}
+        className={cn(
+          "w-11 h-11 flex items-center justify-center rounded",
+          isToday
+            ? "invisible pointer-events-none"
+            : "hover:bg-surface-2 text-bronze",
+        )}
+      >
+        <Home size={16} />
+      </button>
     </div>
   );
 }
