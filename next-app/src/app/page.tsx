@@ -834,15 +834,17 @@ function GraduationCard({ program }: { program: Program }) {
             ) : null}
           </div>
           {arcVerdict ? (
-            <span
-              className={`font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded ${
-                arcVerdict.tone === "green"
-                  ? "bg-green/20 text-green"
-                  : arcVerdict.tone === "amber"
-                    ? "bg-amber/20 text-amber"
-                    : "bg-red/20 text-red-strong"
-              }`}
-            >
+            <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
+              <span
+                aria-hidden
+                className={`h-1.5 w-1.5 rounded-full ${
+                  arcVerdict.tone === "green"
+                    ? "bg-green"
+                    : arcVerdict.tone === "amber"
+                      ? "bg-amber"
+                      : "bg-red"
+                }`}
+              />
               {arcVerdict.label}
             </span>
           ) : null}

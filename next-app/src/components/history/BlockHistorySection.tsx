@@ -22,18 +22,21 @@ const WINDOW_DAYS = 14;
  * Audit 2026-08-18 (copy) — "downshifted" was engineer-speak in a chip.
  * Rewrote to "eased." Color mapping stays canonical per tokens.md.
  */
-function stateChip(state: ScheduledBlock["state"]): { label: string; className: string } {
+// P0-8 palette-collision fix 2026-08-19: semantic tone lives on a 6px
+// dot; chip body is neutral-outlined. Category / status axes no longer
+// compete for the same amber/green/slate token weight.
+function stateChip(state: ScheduledBlock["state"]): { label: string; dotClass: string | null } {
   switch (state) {
     case "done":
-      return { label: "done", className: "bg-green/20 text-green" };
+      return { label: "done", dotClass: "bg-green" };
     case "skipped":
-      return { label: "skipped", className: "bg-amber/20 text-amber" };
+      return { label: "skipped", dotClass: "bg-amber" };
     case "moved":
-      return { label: "moved", className: "bg-slate/20 text-slate" };
+      return { label: "moved", dotClass: "bg-slate" };
     case "amber_downshifted":
-      return { label: "eased", className: "bg-amber/20 text-amber" };
+      return { label: "eased", dotClass: "bg-amber" };
     default:
-      return { label: state, className: "bg-line-soft/60 text-muted" };
+      return { label: state, dotClass: null };
   }
 }
 
@@ -133,9 +136,10 @@ export function BlockHistorySection() {
                         {b.actual_date}
                       </span>
                       <span className="flex-1 text-strong">{blockName}</span>
-                      <span
-                        className={`font-mono text-[10px] uppercase tracking-widest px-1.5 py-0.5 rounded ${chip.className}`}
-                      >
+                      <span className="font-mono text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
+                        {chip.dotClass ? (
+                          <span aria-hidden className={`h-1.5 w-1.5 rounded-full ${chip.dotClass}`} />
+                        ) : null}
                         {chip.label}
                       </span>
                     </li>

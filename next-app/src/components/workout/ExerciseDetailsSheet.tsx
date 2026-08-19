@@ -118,19 +118,25 @@ export function ExerciseDetailsSheet({
             <section>
               <p className="text-[12px] text-muted mb-1">Flags</p>
               <div className="flex flex-wrap gap-1.5">
-                {exercise.flags.map((f) => (
-                  <span
-                    key={f}
-                    className={cn(
-                      "font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded",
-                      f.startsWith("monitor") || f.startsWith("historical_provocateur")
-                        ? "bg-amber/20 text-amber"
-                        : "bg-line-soft text-muted",
-                    )}
-                  >
-                    {humanizeFlag(f)}
-                  </span>
-                ))}
+                {exercise.flags.map((f) => {
+                  const isWarn =
+                    f.startsWith("monitor") || f.startsWith("historical_provocateur");
+                  return (
+                    <span
+                      key={f}
+                      className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5"
+                    >
+                      <span
+                        aria-hidden
+                        className={cn(
+                          "h-1.5 w-1.5 rounded-full",
+                          isWarn ? "bg-amber" : "bg-muted/40",
+                        )}
+                      />
+                      {humanizeFlag(f)}
+                    </span>
+                  );
+                })}
               </div>
             </section>
           ) : null}

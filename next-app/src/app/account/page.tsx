@@ -373,7 +373,8 @@ export default function AccountPage() {
                     >
                       <span className="text-sm text-strong">{p.name}</span>
                       {isCurrent ? (
-                        <span className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-bronze/20 text-bronze">
+                        <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
+                          <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-bronze" />
                           current
                         </span>
                       ) : (

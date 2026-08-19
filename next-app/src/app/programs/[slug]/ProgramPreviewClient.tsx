@@ -189,27 +189,32 @@ export function ProgramPreviewClient({ slug }: Props) {
             // F10 Batch 31 (2026-08-19): DRAFT/PROVISIONAL now hidden from
             // catalog + chip returns null. REFERENCED / REVIEWED / VERIFIED
             // shown. Legacy `stable` aliases to VERIFIED.
+            // P0-8 palette-collision fix 2026-08-19: neutral-outlined pill
+            // + 6px colored dot. Semantic tone lives on the dot, not the
+            // whole chip.
             const s = entry.status;
             if (!s || s === "draft" || s === "DRAFT" || s === "PROVISIONAL") return null;
-            const map: Record<string, { label: string; className: string; title: string }> = {
-              REFERENCED: { label: "referenced", className: "bg-amber/20 text-amber", title: "Default state: every claim cites a paper. Simulator harness passes across archetypes." },
-              REVIEWED: { label: "reviewed", className: "bg-slate/20 text-slate", title: "Domain-specialist audit complete: cited studies verified against literature. Drill sequencing evidence-backed." },
-              VERIFIED: { label: "verified", className: "bg-green/20 text-green", title: "Field-verified: ≥5 beta users completed the arc with subjective success." },
-              stable: { label: "verified", className: "bg-green/20 text-green", title: "Legacy status — same meaning as Verified." },
+            const map: Record<string, { label: string; dotClass: string; title: string }> = {
+              REFERENCED: { label: "referenced", dotClass: "bg-amber", title: "Default state: every claim cites a paper. Simulator harness passes across archetypes." },
+              REVIEWED: { label: "reviewed", dotClass: "bg-slate", title: "Domain-specialist audit complete: cited studies verified against literature. Drill sequencing evidence-backed." },
+              VERIFIED: { label: "verified", dotClass: "bg-green", title: "Field-verified: ≥5 beta users completed the arc with subjective success." },
+              stable: { label: "verified", dotClass: "bg-green", title: "Legacy status — same meaning as Verified." },
             };
             const meta = map[s];
             if (!meta) return null;
             return (
               <span
-                className={`font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded ${meta.className}`}
+                className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5"
                 title={meta.title}
               >
+                <span aria-hidden className={`h-1.5 w-1.5 rounded-full ${meta.dotClass}`} />
                 {meta.label}
               </span>
             );
           })()}
           {entry.personal ? (
-            <span className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-slate/20 text-slate">
+            <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
+              <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-slate" />
               personal
             </span>
           ) : null}
@@ -600,7 +605,8 @@ export function ProgramPreviewClient({ slug }: Props) {
                   <li key={ph.id} className="text-ink">
                     <div className="flex items-center gap-2 flex-wrap">
                       {tierTag ? (
-                        <span className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-slate/20 text-slate">
+                        <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
+                          <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-slate" />
                           {tierTag}
                         </span>
                       ) : null}

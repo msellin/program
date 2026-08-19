@@ -247,25 +247,29 @@ function StatusChip({ status }: { status?: string }) {
   // and-suspenders in case a DRAFT program leaks through some other surface
   // (super-admin view, direct URL, /account list). No visible chip.
   if (!status || status === "draft" || status === "DRAFT" || status === "PROVISIONAL") return null;
-  const map: Record<string, { label: string; className: string; title: string }> = {
+  // P0-8 palette-collision fix 2026-08-19: status chips become neutral-
+  // outlined pill + 6px colored dot. Category color still lives on the
+  // card border-l-4 accent; status is now a small semantic tag that
+  // doesn't compete for attention. Legend keeps the semantic tone words.
+  const map: Record<string, { label: string; dotClass: string; title: string }> = {
     REFERENCED: {
       label: "referenced",
-      className: "bg-amber/20 text-amber",
+      dotClass: "bg-amber",
       title: "Default state: every claim cites a paper. Simulator harness passes across archetypes.",
     },
     REVIEWED: {
       label: "reviewed",
-      className: "bg-slate/20 text-slate",
+      dotClass: "bg-slate",
       title: "Domain-specialist audit complete: cited studies verified against literature. Drill sequencing evidence-backed.",
     },
     VERIFIED: {
       label: "verified",
-      className: "bg-green/20 text-green",
+      dotClass: "bg-green",
       title: "Field-verified: ≥5 beta users completed the arc with subjective success.",
     },
     stable: {
       label: "verified",
-      className: "bg-green/20 text-green",
+      dotClass: "bg-green",
       title: "Legacy status — same meaning as Verified.",
     },
   };
@@ -273,9 +277,10 @@ function StatusChip({ status }: { status?: string }) {
   if (!meta) return null;
   return (
     <span
-      className={`font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded ${meta.className}`}
+      className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5"
       title={meta.title}
     >
+      <span aria-hidden className={`h-1.5 w-1.5 rounded-full ${meta.dotClass}`} />
       {meta.label}
     </span>
   );
@@ -332,9 +337,10 @@ function ProgramCard({
             <StatusChip status={p.status} />
             {p.personal ? (
               <span
-                className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-slate/20 text-slate"
+                className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5"
                 title="Authored for one specific user's clinical context. Not general-purpose."
               >
+                <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-slate" />
                 personal
               </span>
             ) : null}

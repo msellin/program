@@ -264,12 +264,14 @@ function DayList({
                   </p>
                 </div>
                 {d.hasSession && !isSource ? (
-                  <span className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber/20 text-amber flex-shrink-0">
+                  <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted flex-shrink-0 inline-flex items-center gap-1.5">
+                    <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-amber" />
                     has session
                   </span>
                 ) : null}
                 {d.isLogged ? (
-                  <span className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-green/20 text-green flex-shrink-0">
+                  <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted flex-shrink-0 inline-flex items-center gap-1.5">
+                    <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-green" />
                     logged
                   </span>
                 ) : null}

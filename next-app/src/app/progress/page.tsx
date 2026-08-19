@@ -494,19 +494,21 @@ function MilestoneLiftGroup({
                   <p className="text-sm mt-0.5">
                     TM target {effective} kg{" "}
                     {beaten ? (
-                      <span className="ml-1 px-1.5 py-0.5 rounded bg-green/20 text-green text-[10px] font-mono uppercase tracking-wider">
+                      <span className="ml-1 px-2 py-0.5 rounded-full border border-line-soft text-muted text-[10px] font-mono uppercase tracking-wider inline-flex items-center gap-1.5">
+                        <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-green" />
                         beaten
                       </span>
                     ) : days < 0 ? (
-                      <span className="ml-1 px-1.5 py-0.5 rounded bg-red text-surface text-[10px] font-mono uppercase tracking-wider">
+                      <span className="ml-1 px-2 py-0.5 rounded-full border border-line-soft text-muted text-[10px] font-mono uppercase tracking-wider inline-flex items-center gap-1.5">
+                        <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-red" />
                         missed
                       </span>
                     ) : days <= 14 ? (
-                      // Visual-craft audit 2026-08-18 — was `bg-amber` full-fill
-                      // which competed with `beaten` for loudest pill and
-                      // stacked amber alerts on Progress. Only `beaten` keeps
-                      // full-fill; every warning treatment goes to /20 alpha.
-                      <span className="ml-1 px-1.5 py-0.5 rounded bg-amber/20 text-amber text-[10px] font-mono uppercase tracking-wider">
+                      // P0-8 palette-collision fix 2026-08-19 — neutral-outlined
+                      // pill + colored dot. Semantic tone lives on the dot; the
+                      // chip body no longer competes with category color axes.
+                      <span className="ml-1 px-2 py-0.5 rounded-full border border-line-soft text-muted text-[10px] font-mono uppercase tracking-wider inline-flex items-center gap-1.5">
+                        <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-amber" />
                         soon
                       </span>
                     ) : null}

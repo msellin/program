@@ -125,9 +125,10 @@ export default function ProfilePage() {
             ) : null}
             {isSuperAdmin ? (
               <span
-                className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-slate/20 text-slate"
+                className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5"
                 title="Staff account — you can enrol in multiple programs at once."
               >
+                <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-slate" />
                 staff
               </span>
             ) : null}
@@ -200,7 +201,8 @@ export default function ProfilePage() {
                     <p className="text-sm font-semibold text-strong truncate flex items-center gap-1.5">
                       <span className="truncate">{p.name}</span>
                       {graduated ? (
-                        <span className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-green/20 text-green flex-shrink-0">
+                        <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted flex-shrink-0 inline-flex items-center gap-1.5">
+                          <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-green" />
                           graduated
                         </span>
                       ) : null}
@@ -208,27 +210,32 @@ export default function ProfilePage() {
                     <p className="text-[11px] text-muted mt-0.5 flex items-center gap-1.5 flex-wrap">
                       <span>{p.duration_weeks} weeks · {p.difficulty}</span>
                       {isPrimary && activePrograms.length > 1 && !graduated && !paused ? (
-                        <span className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-bronze/20 text-bronze">
+                        <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
+                          <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-bronze" />
                           today&rsquo;s
                         </span>
                       ) : null}
                       {tierLabel && !graduated && !paused ? (
-                        <span className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-slate/15 text-slate">
+                        <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
+                          <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-slate" />
                           {tierLabel}
                         </span>
                       ) : null}
                       {!hasIntake && !graduated && !paused ? (
-                        <span className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber/15 text-amber">
+                        <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
+                          <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-amber" />
                           intake pending
                         </span>
                       ) : null}
                       {paused ? (
-                        <span className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-slate/20 text-slate">
+                        <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
+                          <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-slate" />
                           paused
                         </span>
                       ) : null}
                       {extendedWeeks > 0 && !graduated && !paused ? (
-                        <span className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-bronze/15 text-bronze">
+                        <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
+                          <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-bronze" />
                           extended +{extendedWeeks}w
                         </span>
                       ) : null}

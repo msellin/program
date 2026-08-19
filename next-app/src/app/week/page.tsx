@@ -501,7 +501,8 @@ export default function WeekPage() {
                           </span>
                         ) : null}
                         {contributingProgramCount > 1 ? (
-                          <span className="text-[10px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber/20 text-amber font-normal">
+                          <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted font-normal inline-flex items-center gap-1.5">
+                            <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-amber" />
                             {contributingProgramCount} tracks
                           </span>
                         ) : null}
