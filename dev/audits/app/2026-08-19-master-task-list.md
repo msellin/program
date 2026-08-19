@@ -10,17 +10,17 @@
 
 These are **IDEAS, not action items**. The engine + rehab-first positioning overrides "cleaner is better," so Margus picks what to ship. Batches ship in 6-12h chunks — don't try to close the whole list in one sitting, and respect the "no UI churn between audits" rule (each shipped batch should stand on its own before the next audit re-scans). Real bugs go first because they're broken code the audits happened to surface; everything else is prioritized by user-visible ROI. Sizing (S/M/L/XL) is per item.
 
-**Counts by bucket (post-Batch-18):**
+**Counts by bucket (post-Batch-19):**
 
 - **Bugs (fix regardless):** 1 item blocked (A4 harness), 3 shipped
 - **P0 (biggest ROI):** 0 open — all 4 shipped
-- **P1 (visible quality gap):** 29 items, ~15-20h (mobile-ux 11 + motion-perf 8 + visual craft 6 + landing-alignment 4; a11y 7 shipped, copy batch 19 shipped)
+- **P1 (visible quality gap):** 18 items, ~10-13h (motion-perf 8 + visual craft 6 + landing-alignment 4; a11y 7 + mobile-UX 11 + copy 19 shipped)
 - **P2 (defensible polish):** 19 items, ~8-12h
 - **Features on-deck:** 9 items, ~30-50h
 - **Strategic (founder decision):** 4 items — decision, not build
 - **Rejected:** 11 items — do not ship
 
-Total open surface: **61 open ideas + 4 strategic + 11 rejected = 76 line items** (was 110 pre-Batch-17, 83 pre-Batch-18). Natural next batch: **mobile-UX P1-8 through P1-18** — 11 items, ~5-7h, or **motion+perf P1-19 through P1-26** — 8 items, ~3-4h.
+Total open surface: **50 open ideas + 4 strategic + 11 rejected = 65 line items** (was 110 pre-Batch-17, 83 pre-Batch-18, 76 pre-Batch-19). Natural next batch: **motion+perf P1-19 through P1-26** — 8 items, ~3-4h.
 
 ---
 
@@ -65,17 +65,7 @@ Keep the convention terse — the four markers cover every state. Don't invent n
 
 ### Mobile UX (thumb reach + tap targets)
 
-- [ ] **P1-8** Bottom-nav active-tab indicator — add 4-px top-border in `bg-bronze` on active `<li>` (currently color + weight only). WCAG 1.4.1 + peripheral-vision affordance. Source: `2026-08-19-open-task-list.md` (C1), `2026-08-19-app-audit-mobile-ux.md` §2.3. Files: `next-app/src/components/nav/BottomNav.tsx:57-59`. Size: S
-- [ ] **P1-9** `HeaderQuickLinks` More button `w-9 h-9` (36 px) → `w-11 h-11` (44 px). Apple 44. Source: `2026-08-19-open-task-list.md` (C2), `2026-08-18-mobile-ux-sweep.md` §2.2. Files: `next-app/src/components/nav/HeaderQuickLinks.tsx:73`. Size: S
-- [ ] **P1-10** Session-row icon buttons `w-8-9` → `w-11 h-11` across YourPlanCard, RunSlotCard, RestTimer (7+ sites). Apple 44. Source: `2026-08-19-open-task-list.md` (C3), `2026-08-18-mobile-ux-sweep.md` §2.2. Files: `YourPlanCard.tsx:84`, `RunSlotCard.tsx:254,303`, `RestTimer.tsx:85,103,114`. Size: M
-- [ ] **P1-11** RunSlotCard "Log session" / "Import GPX" links are `text-[13px]` with no min-height (~20px tall). Only extras entry point on 4/5 programs. Add `min-h-[44px] py-2`. Source: `2026-08-18-mobile-ux-sweep.md` §2.3. Files: `next-app/src/components/workout/RunSlotCard.tsx:578-593`. Size: S
-- [ ] **P1-12** Heatmap cell min 44px OR reduce to 6 columns for thumb-tappability (currently 32px, 8 cols). Source: `2026-08-19-open-task-list.md` (C4), `2026-08-18-mobile-ux-sweep.md` §2.5. Files: `next-app/src/components/charts/Heatmap.tsx:135`. Size: M
-- [ ] **P1-13** Week collapsed-row expand affordance — chevron on collapsed day rows; currently discoverable only by trying. Source: `2026-08-19-open-task-list.md` (C5). Files: `next-app/src/app/week/page.tsx`. Size: S
-- [ ] **P1-14** Legal-row link `min-h-[44px]` enforcement on Profile footer (post-Batch 16 collapse). Currently ~16px hits; wrap inline links in `inline-flex items-center min-h-[44px] py-2`. Source: `2026-08-19-open-task-list.md` (C6), `2026-08-18-profile-mobile-ux.md` P0.1. Files: `next-app/src/app/profile/page.tsx:250-272`. Size: S
-- [ ] **P1-15** Add `active:` / `focus-visible:` twins to top 20 `hover:` sites, or ship a `.tap-feedback` utility. 174 `hover:` app-wide, only 1 has a focus/active twin. iOS sticky-hover on first-tap. Source: `2026-08-19-open-task-list.md` (C7), `2026-08-18-mobile-ux-sweep.md` §2.1. Files: cross-cutting (`src/**`). Size: M
-- [ ] **P1-16** Profile row residual `hover:` states — switch to `active:` on nav rows so iOS doesn't leave rows tinted after tap. Source: `2026-08-18-profile-mobile-ux.md` P1.2. Files: `next-app/src/app/profile/page.tsx:212,223,250,258,269`. Size: S
-- [ ] **P1-17** ConfirmSheet body scroll lock on iOS Safari — page scroll behind the sheet is still active; rubber-band shifts the underlying Profile page. Add `document.body.style.overflow = 'hidden'` on open + `overscroll-behavior: contain`. Source: `2026-08-18-profile-mobile-ux.md` P1.4. Files: `next-app/src/components/ConfirmSheet.tsx:59-70`. Size: S
-- [ ] **P1-18** ConfirmSheet close-X `-m-2` collides with wrapped-title baseline — tapping last character of a wrapped title cancels the sheet. Remove `-m-2`; add `pr-11` to title container. Source: `2026-08-18-profile-mobile-ux.md` P1.5. Files: `next-app/src/components/ConfirmSheet.tsx:75-82`. Size: S
+*(all 11 shipped in Batch 19 — see appendix)*
 
 ### Motion + perf (mostly carried from 2026-08-18)
 
@@ -181,6 +171,22 @@ Deduplicated across visual-craft §16 + mobile-ux §10 + roadmap:
 ## Closed items appendix (shipped since 2026-08-17)
 
 Strikethrough preserves history; these items are OUT of the open list.
+
+**Batch 19 — mobile UX (deployed https://082ef16e.program-v2.pages.dev, 2026-08-19):**
+
+11 items — mobile-UX batch (P1-8 through P1-18). Full lines preserved:
+
+- [x] **P1-8** — done 2026-08-19 Batch 19 — Bottom-nav active-tab indicator — add 4-px top-border in `bg-bronze` on active `<li>` (currently color + weight only). WCAG 1.4.1 + peripheral-vision affordance. Source: `2026-08-19-open-task-list.md` (C1), `2026-08-19-app-audit-mobile-ux.md` §2.3. Files: `next-app/src/components/nav/BottomNav.tsx:57-59`. Size: S
+- [x] **P1-9** — done 2026-08-19 Batch 19 — `HeaderQuickLinks` More button `w-9 h-9` (36 px) → `w-11 h-11` (44 px). Apple 44. Source: `2026-08-19-open-task-list.md` (C2), `2026-08-18-mobile-ux-sweep.md` §2.2. Files: `next-app/src/components/nav/HeaderQuickLinks.tsx:73`. Size: S
+- [x] **P1-10** — done 2026-08-19 Batch 19 — Session-row icon buttons `w-8-9` → `w-11 h-11` across YourPlanCard, RunSlotCard, RestTimer (7+ sites). Apple 44. Source: `2026-08-19-open-task-list.md` (C3), `2026-08-18-mobile-ux-sweep.md` §2.2. Files: `YourPlanCard.tsx:84`, `RunSlotCard.tsx:254,303`, `RestTimer.tsx:85,103,114`. Size: M
+- [x] **P1-11** — done 2026-08-19 Batch 19 — RunSlotCard "Log session" / "Import GPX" links are `text-[13px]` with no min-height (~20px tall). Only extras entry point on 4/5 programs. Add `min-h-[44px] py-2`. Source: `2026-08-18-mobile-ux-sweep.md` §2.3. Files: `next-app/src/components/workout/RunSlotCard.tsx:578-593`. Size: S
+- [x] **P1-12** — done 2026-08-19 Batch 19 — Heatmap cell min 44px OR reduce to 6 columns for thumb-tappability (currently 32px, 8 cols). Source: `2026-08-19-open-task-list.md` (C4), `2026-08-18-mobile-ux-sweep.md` §2.5. Files: `next-app/src/components/charts/Heatmap.tsx:135`. Size: M
+- [x] **P1-13** — done 2026-08-19 Batch 19 — Week collapsed-row expand affordance — chevron on collapsed day rows; currently discoverable only by trying. Source: `2026-08-19-open-task-list.md` (C5). Files: `next-app/src/app/week/page.tsx`. Size: S
+- [x] **P1-14** — done 2026-08-19 Batch 19 — Legal-row link `min-h-[44px]` enforcement on Profile footer (post-Batch 16 collapse). Currently ~16px hits; wrap inline links in `inline-flex items-center min-h-[44px] py-2`. Source: `2026-08-19-open-task-list.md` (C6), `2026-08-18-profile-mobile-ux.md` P0.1. Files: `next-app/src/app/profile/page.tsx:250-272`. Size: S
+- [x] **P1-15** — done 2026-08-19 Batch 19 — Add `active:` / `focus-visible:` twins to top 20 `hover:` sites, or ship a `.tap-feedback` utility. 174 `hover:` app-wide, only 1 has a focus/active twin. iOS sticky-hover on first-tap. Source: `2026-08-19-open-task-list.md` (C7), `2026-08-18-mobile-ux-sweep.md` §2.1. Files: cross-cutting (`src/**`). Size: M
+- [x] **P1-16** — done 2026-08-19 Batch 19 — Profile row residual `hover:` states — switch to `active:` on nav rows so iOS doesn't leave rows tinted after tap. Source: `2026-08-18-profile-mobile-ux.md` P1.2. Files: `next-app/src/app/profile/page.tsx:212,223,250,258,269`. Size: S
+- [x] **P1-17** — done 2026-08-19 Batch 19 — ConfirmSheet body scroll lock on iOS Safari — page scroll behind the sheet is still active; rubber-band shifts the underlying Profile page. Add `document.body.style.overflow = 'hidden'` on open + `overscroll-behavior: contain`. Source: `2026-08-18-profile-mobile-ux.md` P1.4. Files: `next-app/src/components/ConfirmSheet.tsx:59-70`. Size: S
+- [x] **P1-18** — done 2026-08-19 Batch 19 — ConfirmSheet close-X `-m-2` collides with wrapped-title baseline — tapping last character of a wrapped title cancels the sheet. Remove `-m-2`; add `pr-11` to title container. Source: `2026-08-18-profile-mobile-ux.md` P1.5. Files: `next-app/src/components/ConfirmSheet.tsx:75-82`. Size: S
 
 **Batch 18 — accessibility (deployed https://8e41fcd2.program-v2.pages.dev, 2026-08-19):**
 

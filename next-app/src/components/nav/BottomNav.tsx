@@ -48,7 +48,17 @@ export function BottomNav() {
             (href === "/" && pathname === "/") ||
             (href !== "/" && (pathname === href || pathname === href.replace(/\/$/, "")));
           return (
-            <li key={href} className="flex-1 min-w-0">
+            <li key={href} className="flex-1 min-w-0 relative">
+              {/* P1-8 — 3-px bronze top-border on the active tab. Prior
+                  active state relied on ink vs muted color + stroke
+                  weight, which fails WCAG 1.4.1 (color-alone signal)
+                  and is invisible in peripheral vision. */}
+              {active ? (
+                <span
+                  aria-hidden
+                  className="absolute inset-x-2 top-0 h-[3px] rounded-b-sm bg-bronze"
+                />
+              ) : null}
               <Link
                 href={href}
                 aria-current={active ? "page" : undefined}

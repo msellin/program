@@ -169,7 +169,13 @@ main { animation: route-in 150ms ease-out; }
 /* Kill iOS sticky-hover — coarse-pointer devices don't have hover, but iOS
    Safari retains the last-tapped element's :hover state until another
    element is tapped. That's the "web feel" tell across ~170 hover: sites
-   in the app. Reset hover-derived styles on touch devices. Audit 2026-08-18. */
+   in the app. Reset hover-derived styles on touch devices. Audit 2026-08-18.
+
+   P1-15 (Batch 19) — pair the sticky-hover reset with an active: cue so
+   taps still register as "the app noticed." A 60ms opacity dip is enough
+   feedback without competing with the pulse-accept + haptic on primary
+   actions. Motion-safe respected via the transition property; users with
+   prefers-reduced-motion still see the opacity change but instantly. */
 @media (hover: none) {
   a:hover, button:hover, [role="button"]:hover {
     background-color: revert;
@@ -177,4 +183,12 @@ main { animation: route-in 150ms ease-out; }
     border-color: revert;
     text-decoration-color: revert;
   }
+  a:active, button:active, [role="button"]:active {
+    opacity: 0.7;
+    transition: opacity 60ms ease-out;
+  }
 }
+
+/* Keyboard focus twin — every hover: site should be reachable + visible
+   via keyboard. The global :focus-visible rules earlier already draw the
+   bronze outline, so no per-class twins are needed for the top 20 sites. */

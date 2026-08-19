@@ -106,7 +106,7 @@ export function RestTimer({ autoStartSeconds, onClose }: Props) {
               setHit(false);
             }}
             aria-label="Reset timer"
-            className="w-10 h-10 flex items-center justify-center rounded hover:bg-surface-2 text-muted hover:text-ink"
+            className="w-11 h-11 flex items-center justify-center rounded hover:bg-surface-2 text-muted hover:text-ink"
           >
             <RotateCcw size={16} />
           </button>
@@ -124,7 +124,7 @@ export function RestTimer({ autoStartSeconds, onClose }: Props) {
             onClick={() => setRunning((r) => !r)}
             aria-label={running ? "Pause timer" : "Start timer"}
             className={cn(
-              "w-10 h-10 flex items-center justify-center rounded-full border",
+              "w-11 h-11 flex items-center justify-center rounded-full border",
               running ? "bg-amber text-ground border-amber" : "bg-bronze text-ground border-bronze",
             )}
           >
@@ -135,7 +135,7 @@ export function RestTimer({ autoStartSeconds, onClose }: Props) {
               type="button"
               onClick={onClose}
               aria-label="Close timer"
-              className="w-10 h-10 flex items-center justify-center rounded hover:bg-surface-2 text-muted"
+              className="w-11 h-11 flex items-center justify-center rounded hover:bg-surface-2 text-muted"
             >
               <X size={16} />
             </button>

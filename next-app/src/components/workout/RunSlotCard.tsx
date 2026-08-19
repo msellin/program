@@ -251,7 +251,7 @@ export function RunSlotCard({ date }: { date: string }) {
           type="button"
           onClick={() => setPrimerOpen(true)}
           aria-label="Warm-up + cool-down"
-          className="w-9 h-9 flex items-center justify-center text-muted hover:text-ink rounded"
+          className="w-11 h-11 flex items-center justify-center text-muted hover:text-ink rounded"
         >
           <Info size={15} strokeWidth={1.75} />
         </button>
@@ -300,7 +300,7 @@ export function RunSlotCard({ date }: { date: string }) {
                 type="button"
                 onClick={() => removeRun(date, i)}
                 aria-label="Remove logged session"
-                className="text-muted hover:text-red w-8 h-8 -my-1 flex items-center justify-center flex-shrink-0"
+                className="text-muted hover:text-red w-11 h-11 -my-1 flex items-center justify-center flex-shrink-0"
               >
                 <X size={13} />
               </button>

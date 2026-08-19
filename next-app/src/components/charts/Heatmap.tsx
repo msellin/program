@@ -24,10 +24,9 @@ type Cell = {
   isToday: boolean;
 };
 
-// 8 weeks × ~32px cell = ~285px wide at 393px mobile, comfortably fitting
-// the container. Was 12 weeks × ~26px which fell below Apple's 44px touch
-// target minimum when cells become `<button onDayClick>`. See app-mobile-ux
-// audit D3.
+// P1-12 — 8 weeks × 44 px cell = 352 px + gaps at 393 mobile, cells
+// meet Apple 44 min tap target when they render as `<button onDayClick>`.
+// Was 8 weeks × 32 px (audit D3 partial fix from Batch 5).
 const WEEKS = 8;
 const DAYS = WEEKS * 7;
 
@@ -151,7 +150,7 @@ export function Heatmap({ store, onDayClick }: { store: Store; onDayClick?: (dat
             className="grid grid-flow-col gap-0.5"
             style={{
               gridTemplateRows: "repeat(7, 1fr)",
-              gridAutoColumns: "minmax(32px, 1fr)",
+              gridAutoColumns: "minmax(44px, 1fr)",
             }}
           >
             {cells.map((c) =>

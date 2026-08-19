@@ -81,7 +81,7 @@ export function YourPlanCard({ program }: { program: Program }) {
         type="button"
         onClick={dismiss}
         aria-label="Dismiss"
-        className="absolute right-2 top-2 w-8 h-8 flex items-center justify-center rounded text-muted hover:text-ink"
+        className="absolute right-2 top-2 w-11 h-11 flex items-center justify-center rounded text-muted hover:text-ink"
       >
         <X size={14} />
       </button>

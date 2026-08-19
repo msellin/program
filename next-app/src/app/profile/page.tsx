@@ -310,19 +310,32 @@ export default function ProfilePage() {
           44 px away from same-styled Privacy link. Legal + Export
           reduce to one line each, muted 11 px. */}
       <footer className="pt-6 space-y-3 border-t border-line-soft">
-        <nav aria-label="Legal" className="text-[11px] text-muted">
+        {/* P1-14 — each legal link is a 44 px tap target. Prior "single-
+            row · separated" pattern from Batch 16 read cleanly but the
+            hit surfaces were ~16 px tall. Keep the visual density
+            (11 px muted text) via inline-flex + min-h-[44px] py-2. */}
+        <nav
+          aria-label="Legal"
+          className="text-[11px] text-muted flex items-center flex-wrap"
+        >
           <Link
             href="/legal/privacy"
-            className="hover:text-ink"
+            className="inline-flex items-center min-h-[44px] py-2 hover:text-ink"
           >
             Privacy
           </Link>
           <span className="mx-1.5" aria-hidden>·</span>
-          <Link href="/legal/terms" className="hover:text-ink">
+          <Link
+            href="/legal/terms"
+            className="inline-flex items-center min-h-[44px] py-2 hover:text-ink"
+          >
             Terms
           </Link>
           <span className="mx-1.5" aria-hidden>·</span>
-          <Link href="/legal/disclaimer" className="hover:text-ink">
+          <Link
+            href="/legal/disclaimer"
+            className="inline-flex items-center min-h-[44px] py-2 hover:text-ink"
+          >
             Medical disclaimer
           </Link>
         </nav>

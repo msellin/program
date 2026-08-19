@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { ChevronDown } from "lucide-react";
 import { loadProgram } from "@/lib/data-loader";
 import { EmptyStateCard } from "@/components/EmptyStateCard";
 import { useStore } from "@/lib/useStore";
@@ -419,8 +420,19 @@ export default function WeekPage() {
                         </span>
                       ) : null}
                     </div>
-                    <span className="font-mono text-[11px] text-muted text-right">
+                    <span className="font-mono text-[11px] text-muted text-right flex items-center gap-1">
                       {isRest ? "rest" : names ? "" : "—"}
+                      {/* P1-13 — chevron affordance so users can see the
+                          row is expandable without discovery-by-tap.
+                          Rotates 180° when expanded. */}
+                      <ChevronDown
+                        size={14}
+                        aria-hidden
+                        className={cn(
+                          "transition-transform text-muted flex-shrink-0",
+                          isExpanded && "rotate-180",
+                        )}
+                      />
                     </span>
                   </div>
                   <p

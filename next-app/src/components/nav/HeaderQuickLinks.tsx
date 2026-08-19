@@ -70,7 +70,7 @@ export function HeaderQuickLinks() {
         aria-label="More"
         aria-haspopup="menu"
         aria-expanded={open}
-        className="w-9 h-9 flex items-center justify-center rounded hover:bg-surface-2 text-muted"
+        className="w-11 h-11 flex items-center justify-center rounded hover:bg-surface-2 text-muted"
       >
         <MoreVertical size={18} strokeWidth={1.75} aria-hidden />
       </button>
