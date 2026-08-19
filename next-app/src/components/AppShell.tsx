@@ -8,8 +8,6 @@ import { BottomNav } from "@/components/nav/BottomNav";
 import { StoreHydrator } from "@/components/StoreHydrator";
 import { RestTimerHost } from "@/components/workout/RestTimerHost";
 import { OnboardingRunner } from "@/components/onboarding/OnboardingRunner";
-import { useStore } from "@/lib/useStore";
-import { today as todayISO } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
 
 /**
@@ -137,9 +135,10 @@ function AuthGatedShell({
           check / ⋮ overflow all deleted — bottom nav owns tab-switching,
           top owns identity + preferences (Whoop / Runna / Pliability
           model). Extras / Report / Evidence moved to Profile → More.
-          Wordmark aligns with landing pattern: bronze pip + white
-          wordmark (P1-72). ReadinessDot stays as the persona at-a-glance
-          signal (single semantic use per design-lead brief). */}
+          Wordmark aligns with landing pattern: bronze pip + strong
+          wordmark (P1-72). ReadinessDot removed 2026-08-19 (P1-78 · F8
+          second push) — redundant with the MorningCheckBlock at the top
+          of Today's dashboard, which is the primary signal now. */}
       <header
         className="max-w-[760px] mx-auto w-full"
         style={{ paddingTop: "env(safe-area-inset-top)" }}
@@ -152,7 +151,6 @@ function AuthGatedShell({
           >
             <span aria-hidden className="inline-block h-2 w-2 rounded-full bg-bronze" />
             TERAV
-            <ReadinessDot />
           </Link>
           <Link
             href="/settings/"
@@ -180,28 +178,5 @@ function AuthGatedShell({
       <RestTimerHost />
       <BottomNav />
     </>
-  );
-}
-
-/**
- * Colored dot next to the TERAV wordmark reflecting today's derived symptom
- * state (green / amber / red). Whoop / Ultrahuman convention — persistent
- * readiness at-a-glance without a whole panel. Hidden if no check saved.
- */
-function ReadinessDot() {
-  const derived = useStore((s) => s.store.logs[todayISO()]?.derived_state);
-  if (!derived) return null;
-  const bg =
-    derived === "green"
-      ? "bg-green"
-      : derived === "amber"
-        ? "bg-amber"
-        : "bg-red";
-  return (
-    <span
-      aria-label={`Today: ${derived}`}
-      title={`Today's state: ${derived}`}
-      className={`h-2 w-2 rounded-full ${bg}`}
-    />
   );
 }

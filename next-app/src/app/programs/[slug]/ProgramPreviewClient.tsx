@@ -9,6 +9,7 @@ import { useStore } from "@/lib/useStore";
 import { useIsSuperAdmin } from "@/lib/super-admin";
 import { cn } from "@/lib/utils";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
+import { DashboardBlock } from "@/components/DashboardBlock";
 import type { Program, ProgramManifest, ProgramManifestEntry } from "@/lib/schemas";
 
 type Props = {
@@ -318,21 +319,34 @@ export function ProgramPreviewClient({ slug }: Props) {
         </div>
       </header>
 
-      <section className="space-y-2">
-        <h2 className="text-[14px] font-semibold text-strong">Who this is for</h2>
+      {/* P1-74 (F9 Batch 30) — 3 top-priority prose sections wrapped in
+          DashboardBlock so the info hierarchy reads cleanly. Was: 3 flat
+          <h2 text-[14px]> + <p text-sm> stacks that looked identical to
+          body copy (1.0× hierarchy ratio). Now: 16px semibold title +
+          mono-caps eyebrow ("Section N of 3") + 14px body inside a
+          bordered card. First-time visitors get "is it for me?" → "what
+          do I get?" → "how do we prove it?" in scannable order. */}
+      <DashboardBlock
+        eyebrow="Section 1 of 3"
+        title="Who this is for"
+      >
         <p className="text-sm leading-relaxed text-ink">{entry.who_this_is_for}</p>
-      </section>
+      </DashboardBlock>
 
-      <section className="space-y-2">
-        <h2 className="text-[14px] font-semibold text-strong">What you&apos;ll achieve</h2>
+      <DashboardBlock
+        eyebrow="Section 2 of 3"
+        title="What you'll achieve"
+      >
         <p className="text-sm leading-relaxed text-ink">{entry.what_youll_achieve}</p>
-      </section>
+      </DashboardBlock>
 
       {entry.retest ? (
-        <section className="space-y-2">
-          <h2 className="text-[14px] font-semibold text-strong">Retest</h2>
+        <DashboardBlock
+          eyebrow="Section 3 of 3"
+          title="How we prove it works"
+        >
           <p className="text-sm leading-relaxed text-ink">{entry.retest}</p>
-        </section>
+        </DashboardBlock>
       ) : null}
 
       {entry.prerequisites?.length ? (
