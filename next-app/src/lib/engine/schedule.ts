@@ -106,6 +106,37 @@ export function isPastProgramEnd(
   return dateISO > last.ends;
 }
 
+/**
+ * Consult `program.phase_gates[]` to see whether a given phase should be
+ * skipped based on the user's intake answers. Returns true when the
+ * gate's `skip_if_value_in` matches the user's answer. Vector A audit
+ * 2026-08-18 flagged this field as dead code — now consumed.
+ */
+function isPhaseGateSkipped(
+  program: Program,
+  phaseId: string,
+  profile: Store["user_profile"] | undefined,
+): boolean {
+  const gates = (program as unknown as {
+    phase_gates?: Array<{
+      phase_id: string;
+      gate_type: string;
+      question_id: string;
+      skip_if_value_in?: string[];
+      run_if_value_in?: string[];
+    }>;
+  }).phase_gates;
+  if (!gates?.length) return false;
+  const gate = gates.find((g) => g.phase_id === phaseId);
+  if (!gate) return false;
+  const slug = program.slug;
+  if (!slug) return false;
+  const answer = profile?.program_states?.[slug]?.intake_answers?.[gate.question_id];
+  if (!answer) return false;
+  if (gate.skip_if_value_in?.includes(answer)) return true;
+  return false;
+}
+
 export function activePhaseFor(
   program: Program,
   dateISO: string,
@@ -121,9 +152,9 @@ export function activePhaseFor(
   // user has a tier set, prefer phases whose `for_tier_ids` matches or
   // that have no `for_tier_ids` (shared phases like phase_all_weeks_3_8).
   // Comprehensive audit 2026-08-18 P0-6.
-  const matches = phases.filter(
-    (p) => dateISO >= p.starts && (p.ends == null || dateISO <= p.ends),
-  );
+  const matches = phases
+    .filter((p) => dateISO >= p.starts && (p.ends == null || dateISO <= p.ends))
+    .filter((p) => !isPhaseGateSkipped(program, p.id, profile));
   if (matches.length > 0) {
     if (tier) {
       const tierMatch = matches.find((p) => p.for_tier_ids?.includes(tier));
@@ -229,6 +260,7 @@ function blockIdsFromWeeklyTemplate(
     // `block_replacements_final_week` on the taper phase to swap high-CNS
     // blocks (race pace) for low-CNS blocks (recovery) in the last 7 days
     // before the test. Fresh legs on test day.
+    let out = ids;
     if (phase && (phase as unknown as { is_taper?: boolean }).is_taper && phase.ends) {
       const endD = new Date(phase.ends + "T00:00:00").getTime();
       const nowD = new Date(dateISO + "T00:00:00").getTime();
@@ -236,10 +268,19 @@ function blockIdsFromWeeklyTemplate(
       if (daysToEnd <= 7) {
         const rep = (phase as unknown as { block_replacements_final_week?: Record<string, string> })
           .block_replacements_final_week;
-        if (rep) return ids.map((id) => rep[id] ?? id);
+        if (rep) out = ids.map((id) => rep[id] ?? id);
       }
     }
-    return ids;
+    // Phase-block-scope filter — the weekly_template can reference blocks
+    // that aren't in the current phase's `blocks[]` list. Rowing's taper
+    // (post-2026-08-19 delta-2) still rendered `block_threshold_row` on
+    // Wednesdays because the template said so, even though phase_3_taper
+    // declares only easy-recovery + race-pace blocks. Filter out.
+    if (phase?.blocks?.length) {
+      const allowed = new Set(phase.blocks);
+      out = out.filter((id) => allowed.has(id));
+    }
+    return out;
   }
 
   // Shape B: weekly_template.week_N.layout[] — week varies per program week.
@@ -272,7 +313,13 @@ function blockIdsFromWeeklyTemplate(
   const layout = (isPush && weekObj.push_tier_override) || weekObj.layout;
   if (!layout) return [];
   const entry = layout.find((e) => e.day === dayShort);
-  return extractBlockIds(entry?.session, program);
+  const ids = extractBlockIds(entry?.session, program);
+  // Same phase-block-scope filter as Shape A.
+  if (phase?.blocks?.length) {
+    const allowed = new Set(phase.blocks);
+    return ids.filter((id) => allowed.has(id));
+  }
+  return ids;
 }
 
 function extractBlockIds(session: string | undefined, program: Program): string[] {

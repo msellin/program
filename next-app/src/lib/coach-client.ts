@@ -76,8 +76,13 @@ export function extractState(store: Store) {
     training_maxes: store.training_maxes,
     recent_logs,
     recent_symptoms: lastWithSymptoms ? store.logs[lastWithSymptoms].symptoms : null,
-    current_phase: store.cycle?.phase_id ?? null,
-    cycle_week: store.cycle?.week_in_cycle ?? null,
+    // cycle.phase_id + cycle.week_in_cycle were never written by any
+    // code path — the schema kept them for backwards-compat with old KV
+    // blobs but every read returned null. Coach LLM now derives phase
+    // context from `active_program_id` + today's date via its own tool
+    // calls. Delta reports 2026-08-19 P1-10.
+    current_phase: null,
+    cycle_week: null,
     stretch_targets: store.stretch_targets ?? {},
     skipped,
     blocks_summary,

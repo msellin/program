@@ -79,7 +79,14 @@ function computeRows(store: Store, slugs: string[]): ProgramRow[] {
 
     if (blocks.length === 0 && done === 0) continue;
 
-    const total = Math.max(blocks.length, done + planned + skipped + moved);
+    // Total = the four counts summed. Was `Math.max(blocks.length, sum)`
+    // which let the "total" go out of sync with the segment breakdown
+    // when the log-augment pushed `done` above the materialized-blocks
+    // count. Delta-2 caught: "0/51 done" + "39 upcoming" + "12 skipped"
+    // = 51 counted as total-moved but breakdown summed to 51 too — the
+    // two nominal totals just weren't the same 51. Recomputing here
+    // makes the label + bar + aria all agree.
+    const total = done + planned + skipped + moved;
     const denom = total - moved;
     rows.push({
       slug,

@@ -353,7 +353,30 @@ export async function runSimulationV2(
       const isRow = /row|erg/.test(name);
       const isBike = /bike|cycle/.test(name);
       const isThreshold = /4×4|4x4|threshold|interval|race/.test(name);
+      // Detect 2K-test / test / retest blocks by name so rowing (and
+      // engine-builder's retest week) emit a session_type=2k_test run
+      // that the primary retest_metrics can trend against. Delta-2 P1
+      // 2026-08-19 — rowing 2K time retest never populated because sim
+      // only produced z2 + threshold runs.
+      const is2kTest = /2k[\s_-]?test|retest\b/.test(name) && programSlug === "rowing-2k-test-prep";
       const activity = isRow ? "row" : isBike ? "cycle" : "run";
+      if (is2kTest) {
+        // Baseline 500m pace ~130s (7:00 2K = 105s/500m; slower baselines
+        // land at 130-140s). Adaptation over sim days: pace drops
+        // ~0.15s / day for a consistent user. Total time = pace × 4.
+        const pace = Math.max(95, 130 - Math.floor(day * 0.15));
+        const total = pace * 4;
+        return [{
+          activity_type: "row",
+          intensity: "hard",
+          session_type: "2k_test",
+          minutes: Math.round(total / 60),
+          avg_hr: 175 + Math.round((Math.random() - 0.5) * 4),
+          max_hr: 190,
+          avg_pace_500m_seconds: pace,
+          source: "manual",
+        }];
+      }
       if (isThreshold) {
         return [{
           activity_type: activity,

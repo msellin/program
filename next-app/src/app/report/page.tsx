@@ -8,6 +8,8 @@ import { useStore } from "@/lib/useStore";
 import { loadProgram, loadExercises, loadClinicalContext, type ClinicalContext } from "@/lib/data-loader";
 import { computeReport, type ReportData } from "@/lib/engine/report";
 import { RetestMetricsPanel } from "@/components/progress/RetestMetricsPanel";
+import { isPastProgramEnd } from "@/lib/engine/schedule";
+import { evaluateRetestMetrics, deltaFromBaseline, formatMetric } from "@/lib/engine/retest-evaluator";
 import { today as todayISO, iso } from "@/lib/utils";
 import type { Program, Exercise } from "@/lib/schemas";
 import { HIP_FLEXOR_PACK } from "@/lib/assessments-data";
@@ -238,6 +240,14 @@ export default function ReportPage() {
             : "This is a self-tracked training log, not medical advice. Values below are the user's own logged sessions, morning checks, and derived retest deltas."}
         </p>
       </section>
+
+      {/* Arc summary — renders only when the user has graduated this
+          program. Delta-3 graduation audit 2026-08-19 flagged Report
+          rendered identically to a mid-arc report; there's now a
+          verdict chip + target pass-fail. */}
+      {isPastProgramEnd(program, todayISO(), store.user_profile) ? (
+        <ArcSummarySection program={program} store={store} />
+      ) : null}
 
       {/* Overview */}
       <ReportSection title="Overview">
@@ -865,5 +875,130 @@ function Stat({ label, value }: { label: string; value: string }) {
       <p className="text-[11px] text-muted uppercase tracking-wider">{label}</p>
       <p className="text-[15px] font-mono font-semibold text-strong mt-0.5">{value}</p>
     </div>
+  );
+}
+
+/**
+ * ArcSummarySection — graduated-arc verdict + target pass/fail.
+ * Only renders when isPastProgramEnd(program, today) is true.
+ * Delta-3 graduation audit 2026-08-19 flagged Report rendered
+ * identically to a mid-arc report; this gives graduation a distinct
+ * shareable surface.
+ */
+function ArcSummarySection({
+  program,
+  store,
+}: {
+  program: Program;
+  store: import("@/lib/schemas").Store;
+}) {
+  const userTier = program.slug
+    ? store.user_profile?.program_states?.[program.slug]?.tier
+    : undefined;
+  const metrics = evaluateRetestMetrics(program, store, userTier ?? undefined);
+  const displayable = metrics.filter((m) => m.supported && m.current != null);
+  const feedback = program.slug
+    ? store.user_profile?.program_states?.[program.slug]?.graduation_feedback
+    : undefined;
+
+  // Arc verdict — same logic as GraduationCard's chip. Compare each
+  // retest's delta direction against target direction.
+  const verdict = (() => {
+    if (!displayable.length) return null;
+    let hit = 0;
+    let total = 0;
+    for (const m of displayable) {
+      const delta = deltaFromBaseline(m);
+      if (!delta || m.target == null) continue;
+      total++;
+      if (delta.isImprovement) hit++;
+    }
+    if (total === 0) return null;
+    if (hit === total) return { tone: "green" as const, label: "Targets hit" };
+    if (hit > 0) return { tone: "amber" as const, label: `${hit}/${total} on track` };
+    return { tone: "red" as const, label: "Below target" };
+  })();
+
+  return (
+    <ReportSection title="Arc summary">
+      <div className="space-y-3">
+        <div className="flex items-baseline justify-between gap-2 flex-wrap">
+          <p className="text-[13px] text-muted">
+            <strong className="text-ink">Status:</strong> graduated
+          </p>
+          {verdict ? (
+            <span
+              className={`font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded ${
+                verdict.tone === "green"
+                  ? "bg-green/20 text-green"
+                  : verdict.tone === "amber"
+                    ? "bg-amber/20 text-amber"
+                    : "bg-red/20 text-red"
+              }`}
+            >
+              {verdict.label}
+            </span>
+          ) : null}
+        </div>
+        {displayable.length ? (
+          <div className="rounded border border-line-soft bg-surface p-3 space-y-2">
+            <p className="font-mono text-[10px] uppercase tracking-wider text-muted">
+              Retest deltas vs baseline
+            </p>
+            <ul className="space-y-1.5">
+              {displayable.map((m) => {
+                const delta = deltaFromBaseline(m);
+                return (
+                  <li
+                    key={m.metric_id}
+                    className="flex items-baseline justify-between gap-2 text-[13px]"
+                  >
+                    <span className="text-ink truncate">{m.display_name}</span>
+                    <span className="font-mono flex items-baseline gap-2 flex-shrink-0">
+                      <span className="text-muted">
+                        {formatMetric(m.baseline, m.unit)} →
+                      </span>
+                      <span className="text-strong">
+                        {formatMetric(m.current, m.unit)}
+                      </span>
+                      {delta ? (
+                        <span
+                          className={
+                            delta.isImprovement ? "text-green" : "text-red"
+                          }
+                        >
+                          ({formatMetric(delta.value, m.unit)})
+                        </span>
+                      ) : null}
+                      {m.target != null ? (
+                        <span className="text-muted italic">
+                          target {formatMetric(m.target, m.unit)}
+                        </span>
+                      ) : null}
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ) : (
+          <p className="text-[13px] text-muted italic">
+            No retest metrics recorded — log final readings on Progress to
+            complete this section.
+          </p>
+        )}
+        {feedback ? (
+          <div className="rounded border border-line-soft bg-surface p-3 space-y-1">
+            <p className="font-mono text-[10px] uppercase tracking-wider text-muted">
+              User feedback
+            </p>
+            <p className="text-[13px] text-ink">
+              Rated {feedback.rating}/5
+              {feedback.note ? ` — "${feedback.note}"` : ""}
+            </p>
+          </div>
+        ) : null}
+      </div>
+    </ReportSection>
   );
 }
