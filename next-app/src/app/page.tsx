@@ -179,15 +179,22 @@ export default function TodayPage() {
   const multipleProgramsToday = groupsWithBlocks.length >= 2;
 
   return (
-    <div className="space-y-5">
-      {/* P1-4 — promoted from sr-only to visible for parity with Week /
-          Progress / History / Profile / Programs H1s. The word "Today"
-          duplicates the bottom-nav tab, but heading-hierarchy consistency
-          wins for SR + sighted-keyboard flow. Same 32 px treatment as
-          other top-level routes. */}
-      <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">
-        Today
-      </h1>
+    <div className="space-y-6 pt-4">
+      {/* P1-70 (2026-08-19) — H1 replaced with the active date so it carries
+          information instead of duplicating the bottom-nav "Today" label
+          (WCAG 2.4.6 preserved — visible H1 still there). Founder-observed
+          tab-switch jitter closes: same 32 px H1 + same space-y-6 pt-4
+          rhythm on every tab route (P1-80 rhythm stabilization). */}
+      <header>
+        <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">
+          {formatDateHeading(activeDate)}
+        </h1>
+        {activeDate === todayISO() ? (
+          <p className="mt-2 text-[14px] text-muted">Today</p>
+        ) : (
+          <p className="mt-2 text-[14px] text-muted">{dateOffsetLabel(activeDate)}</p>
+        )}
+      </header>
 
       {/* Suppress the reveal card once the user has any real log history —
           if they've been using the app, they know what plan they're on.
@@ -1362,5 +1369,35 @@ function dedupeItems<T extends { exercise_id?: string | null; scheme?: string }>
     }
   }
   return out;
+}
+
+/**
+ * P1-70 · Today's H1 carries the active date, not the tab-name "Today".
+ * Formats as "Wednesday 19 Aug" — matches the DateNav label pattern used
+ * inside the workout view so the two don't disagree.
+ */
+function formatDateHeading(dateISO: string): string {
+  const d = new Date(dateISO + "T12:00:00");
+  return d.toLocaleDateString("en-GB", {
+    weekday: "long",
+    day: "numeric",
+    month: "short",
+  });
+}
+
+function dateOffsetLabel(dateISO: string): string {
+  const today = new Date();
+  const t = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate(),
+  ).getTime();
+  const d = new Date(dateISO + "T00:00:00").getTime();
+  const days = Math.round((d - t) / 864e5);
+  if (days === 0) return "Today";
+  if (days === 1) return "Tomorrow";
+  if (days === -1) return "Yesterday";
+  if (days > 0) return `+${days} days`;
+  return `${days} days`;
 }
 

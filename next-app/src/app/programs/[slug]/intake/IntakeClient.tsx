@@ -8,6 +8,7 @@ import { loadProgram, loadProgramManifest } from "@/lib/data-loader";
 import { useStore } from "@/lib/useStore";
 import { cn } from "@/lib/utils";
 import { inferTier } from "@/lib/engine/intake-tier";
+import { DashboardBlock } from "@/components/DashboardBlock";
 import { announce } from "@/lib/announce";
 import type {
   Program,
@@ -523,89 +524,88 @@ export function IntakeClient({ slug }: Props) {
             const inferredTier = program.plan_tiers?.find((t) => t.id === inferred.tier_id);
             const typicalOutcome = (inferredTier as { typical_outcome?: string } | undefined)
               ?.typical_outcome;
+            const testsDeclared = physicalTests.length > 0;
+            const testsSkipped =
+              testsDeclared &&
+              Object.values(testResults).filter(
+                (v) => typeof v === "number" && v > 0,
+              ).length === 0;
+            const answersSummary = summarizeAnswers(
+              inferred.vars,
+              answers,
+              physicalTests,
+            );
             return (
-              <section className="rounded border border-bronze/40 bg-bronze/10 p-4 space-y-2">
-                <p className="text-[11px] font-mono uppercase tracking-wider text-bronze">
-                  Recommended
-                </p>
-                <p className="text-[16px] font-semibold text-strong">
-                  {inferred.tier_label}
-                </p>
-                {typicalOutcome ? (
-                  <p className="text-[14px] text-ink leading-relaxed">
-                    {typicalOutcome}
+              <>
+                <section className="rounded border border-bronze/40 bg-bronze/10 p-4 space-y-2">
+                  <p className="text-[11px] font-mono uppercase tracking-wider text-bronze">
+                    Recommended
                   </p>
-                ) : null}
-                {/* P0-10 · three-branch disclosure. Branch B (physical
-                    tests skipped → conservative default) is the founder's
-                    O10c case — the previous version dumped raw vars and
-                    couldn't explain the conservative-default logic. Now
-                    the copy names the signal weight explicitly and points
-                    at the override list below. */}
-                {(() => {
-                  const testsDeclared = physicalTests.length > 0;
-                  const testsSkipped =
-                    testsDeclared &&
-                    Object.values(testResults).filter(
-                      (v) => typeof v === "number" && v > 0,
-                    ).length === 0;
-                  const answersSummary = summarizeAnswers(
-                    inferred.vars,
-                    answers,
-                    physicalTests,
-                  );
-                  return (
-                    <details className="text-[12px] text-muted">
-                      <summary className="cursor-pointer hover:text-ink">
-                        How this was picked
-                      </summary>
-                      <div className="mt-2 space-y-2">
-                        {testsSkipped ? (
-                          <>
-                            <p className="leading-relaxed">
-                              <span className="text-strong">We used:</span>{" "}
-                              your intake answers ({answersSummary}).{" "}
-                              Physical tests: you skipped these.
-                            </p>
-                            <p className="leading-relaxed">
-                              Skipped tests default us conservative — we
-                              start you lower rather than higher, because
-                              starting too heavy risks injury and starting
-                              too easy costs one week you can skip past.
-                            </p>
-                            <p className="leading-relaxed">
-                              If the numbers above feel wrong, tap a
-                              different tier below — or run the physical
-                              tests from Profile → Programs to let the
-                              engine pick with full signal.
-                            </p>
-                          </>
-                        ) : testsDeclared ? (
-                          <>
-                            <p className="leading-relaxed">
-                              <span className="text-strong">We used:</span>{" "}
-                              your intake answers plus your physical test
-                              results ({answersSummary}).
-                            </p>
-                            <p className="leading-relaxed">
-                              Physical tests carry the most weight because
-                              they&apos;re measured numbers. Intake answers
-                              confirm the direction. Confident pick.
-                            </p>
-                          </>
-                        ) : (
-                          <p className="leading-relaxed">
-                            <span className="text-strong">We used:</span>{" "}
-                            your intake answers ({answersSummary}). This
-                            program doesn&apos;t require physical tests —
-                            self-report is the intended signal.
-                          </p>
-                        )}
-                      </div>
-                    </details>
-                  );
-                })()}
-              </section>
+                  <p className="text-[16px] font-semibold text-strong">
+                    {inferred.tier_label}
+                  </p>
+                  {typicalOutcome ? (
+                    <p className="text-[14px] text-ink leading-relaxed">
+                      {typicalOutcome}
+                    </p>
+                  ) : null}
+                </section>
+
+                {/* F11 (Batch 32) · explain-back DashboardBlock promoted from
+                    the previous <details> disclosure into an always-visible
+                    block above the tier picker. Uses P0-10 three-branch
+                    content model — the copy names the signal weight
+                    explicitly. Branch B (tests skipped) is the founder's
+                    O10c case; the "How we picked this" heading tells the
+                    user without them having to open anything. */}
+                <DashboardBlock
+                  eyebrow="Explain-back"
+                  title="How we picked this"
+                  eyebrowTone={testsSkipped ? "amber" : "default"}
+                >
+                  {testsSkipped ? (
+                    <div className="space-y-2 text-[14px] text-ink leading-relaxed">
+                      <p>
+                        <span className="text-strong">We used:</span>{" "}
+                        your intake answers ({answersSummary}). Physical
+                        tests: you skipped these.
+                      </p>
+                      <p>
+                        Skipped tests default us conservative — we start you
+                        lower rather than higher, because starting too heavy
+                        risks injury and starting too easy costs one week
+                        you can skip past.
+                      </p>
+                      <p className="text-muted">
+                        If the numbers above feel wrong, tap a different
+                        tier below — or run the physical tests from
+                        Profile → Programs to let the engine pick with full
+                        signal.
+                      </p>
+                    </div>
+                  ) : testsDeclared ? (
+                    <div className="space-y-2 text-[14px] text-ink leading-relaxed">
+                      <p>
+                        <span className="text-strong">We used:</span>{" "}
+                        your intake answers plus your physical test results
+                        ({answersSummary}).
+                      </p>
+                      <p className="text-muted">
+                        Physical tests carry the most weight because
+                        they&apos;re measured numbers. Intake answers
+                        confirm the direction. Confident pick.
+                      </p>
+                    </div>
+                  ) : (
+                    <p className="text-[14px] text-ink leading-relaxed">
+                      <span className="text-strong">We used:</span>{" "}
+                      your intake answers ({answersSummary}). This program
+                      doesn&apos;t require physical tests — self-report is
+                      the intended signal.
+                    </p>
+                  )}
+                </DashboardBlock>
+              </>
             );
           })()
         ) : null}

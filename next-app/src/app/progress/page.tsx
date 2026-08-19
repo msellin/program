@@ -144,7 +144,10 @@ function ProgressBody({
     s.split("-").map((w) => (w.length ? w[0].toUpperCase() + w.slice(1) : w)).join(" ");
 
   return (
-    <div className="space-y-5 pt-4">
+    // P1-80 (2026-08-19) — unified space-y-6 pt-4 rhythm across /, /week,
+    // /progress, /history. Was space-y-5 here + space-y-6 on /week +
+    // /history — 48 px cumulative shift caught by motion-perf audit.
+    <div className="space-y-6 pt-4">
       <header className="flex items-baseline justify-between gap-3">
         <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">Progress</h1>
         <a
