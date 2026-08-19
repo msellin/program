@@ -10,17 +10,17 @@
 
 These are **IDEAS, not action items**. The engine + rehab-first positioning overrides "cleaner is better," so Margus picks what to ship. Batches ship in 6-12h chunks — don't try to close the whole list in one sitting, and respect the "no UI churn between audits" rule (each shipped batch should stand on its own before the next audit re-scans). Real bugs go first because they're broken code the audits happened to surface; everything else is prioritized by user-visible ROI. Sizing (S/M/L/XL) is per item.
 
-**Counts by bucket (post-Batch-21):**
+**Counts by bucket (post-Batch-22):**
 
-- **Bugs (fix regardless):** 1 blocked (A4 harness), 3 shipped
+- **Bugs (fix regardless):** 2 blocked (A4 harness rerun, X1 design brief usage-limit)
 - **P0 (biggest ROI):** 0 open — all 4 shipped
 - **P1 (visible quality gap):** 0 open — all 55 shipped
 - **P2 (defensible polish):** 0 open — all 19 shipped
-- **Features on-deck:** 9 items, ~30-50h
+- **Features on-deck:** 7 items, ~24-42h (F1 + F2 + F5-F9; F3 + F4 shipped)
 - **Strategic (founder decision):** 4 items — decision, not build
 - **Rejected:** 11 items — do not ship
 
-Total open surface: **9 features on-deck + 4 strategic + 1 blocked + 11 rejected = 25 line items** (was 110 pre-Batch-17, then 83, 76, 65, 51 as batches shipped). **All P0/P1/P2 closed.** Only Section E (features) and Section F (strategic decisions) remain to make progress on.
+Total open surface: **7 features + 4 strategic + 2 blocked + 11 rejected = 24 line items**. Next step: unblock X1 (retry design-lead brief) so F2 + F5 + F6 + F7 can ship coherently; F1 + F8 need founder decisions; F9 is standalone infra work.
 
 ---
 
@@ -49,6 +49,7 @@ Keep the convention terse — the four markers cover every state. Don't invent n
 ## Section A — Real bugs (fix regardless)
 
 - [!] **A4** — blocked: Playwright harness times out on anterior-hip day-30 sim step 2026-08-19 (both app.terav.fit and 6a6ac147 preview serve identical bytes, real-browser sign-in works; rerun once flake is diagnosed) — Persona harness artifacts predate Batch 16 by ~24h. Re-run `dev/scripts/run-app-audit.sh` before the next audit round so cross-references reflect current UI. Source: `2026-08-19-open-task-list.md` (A4). Files: `dev/scripts/run-app-audit.sh`, `next-app/tests/e2e/artifacts/personas/`. Size: S
+- [!] **X1** — blocked: product-design-lead sub-agent hit a usage-limit anomaly 2026-08-19 (returned "safety classifier unavailable" + "usage limit set to $0"). Prompt dispatched, no file written. Retry once the group usage limit is reset OR run interactively. Blocks F2 + F5 + F6 + F7 shipping as a coherent batch. Files: `dev/audits/app/2026-08-19-design-brief-features.md` (missing). Size: M (agent dispatch is ~1-2h wall clock, unlocks 8-15h of implementation).
 
 ---
 
@@ -97,8 +98,6 @@ From roadmap sync + product-concerns-2026-08-17. All pre-Batch-17 and founder-su
 
 - [ ] **F1** Extend-by-N-weeks at graduation — Batch 12 shipped feedback + repeat-arc; extending an existing arc without full re-enrol is the next affordance. Source: `2026-08-19-open-task-list.md` (E1), `product-concerns-2026-08-17/roadmap.md`. Files: graduation flow, `GraduationCard.tsx`. Size: M
 - [ ] **F2** First-run tutorial overlay on Today — carried from Phase 4 SaaS-launch tasks; skippable, one-shot. Source: `2026-08-19-open-task-list.md` (E2). Files: Today shell, new component. Size: M
-- [ ] **F3** Switch-program flow warning — Phase 2 catalog UI gap; multi-program is live, but "switch primary" confirmation is missing. Source: `2026-08-19-open-task-list.md` (E3). Files: Profile programs list + ConfirmSheet. Size: S
-- [ ] **F4** Sort catalog by difficulty/duration — filter shipped, sort didn't. Source: `2026-08-19-open-task-list.md` (E4). Files: `next-app/src/app/programs/page.tsx`. Size: S
 - [ ] **F5** Retest-week UX polish — HERITAGE Phase 5 shipped scheduler; "you're at the end" state + post-retest actions (extend / switch / take break / graduate) still need tightening. Source: `2026-08-19-open-task-list.md` (E5). Files: retest flow, Progress. Size: M
 - [ ] **F6** Runna-style Week collapse+expand full impl — Batch 15 shipped collapse-by-default; expanded state, Move-sheet, per-row `Open in Today / Move… / Skip` verbs still open. Source: `2026-08-19-open-task-list.md` (E6). Files: `next-app/src/app/week/page.tsx`, new `MoveSheet.tsx`. Size: L
 - [ ] **F7** `/account` deep-link route so Delete has a real home — Batch 16 removed Delete from Profile footer equal-weight row; identity-chip-tap destination `/account` is the proper home. Source: `2026-08-19-open-task-list.md` (E7). Files: new `next-app/src/app/account/page.tsx`. Size: S
@@ -139,6 +138,13 @@ Deduplicated across visual-craft §16 + mobile-ux §10 + roadmap:
 ## Closed items appendix (shipped since 2026-08-17)
 
 Strikethrough preserves history; these items are OUT of the open list.
+
+**Batch 22 — mechanical F items (deployed https://4ea779c6.program-v2.pages.dev, 2026-08-19):**
+
+2 items — the trivial ships from Section E. Full lines preserved:
+
+- [x] **F3** — done 2026-08-19 Batch 22 — Switch-program flow warning — Phase 2 catalog UI gap; multi-program is live, but "switch primary" confirmation is missing. Source: `2026-08-19-open-task-list.md` (E3). Files: Profile programs list + ConfirmSheet. Size: S
+- [x] **F4** — done 2026-08-19 Batch 22 — Sort catalog by difficulty/duration — filter shipped, sort didn't. Source: `2026-08-19-open-task-list.md` (E4). Files: `next-app/src/app/programs/page.tsx`. Size: S
 
 **Batch 21 — landing→app + P2 polish (deployed https://286e37f1.program-v2.pages.dev, 2026-08-19):**
 

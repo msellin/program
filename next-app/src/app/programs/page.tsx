@@ -9,6 +9,17 @@ import { cn } from "@/lib/utils";
 import type { ProgramManifest, ProgramManifestEntry } from "@/lib/schemas";
 
 type FilterCat = "all" | ProgramManifestEntry["category"];
+// F4 — sort ordering. `default` preserves the manifest's authored order
+// (curated + status_priority). `duration_asc` sorts shortest arc first
+// so week-length shoppers scan quickly. `difficulty_asc` sorts
+// beginner → intermediate → multi-tier so newcomers see the on-ramps.
+type SortOrder = "default" | "duration_asc" | "difficulty_asc";
+const DIFFICULTY_RANK: Record<string, number> = {
+  beginner: 0,
+  intermediate: 1,
+  advanced: 2,
+  "multi-tier": 3,
+};
 
 /**
  * Program catalog — user browses available programs and picks one to start.
@@ -21,6 +32,7 @@ export default function ProgramCatalogPage() {
   const [manifest, setManifest] = useState<ProgramManifest | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<FilterCat>("all");
+  const [sort, setSort] = useState<SortOrder>("default");
   const activeProgramId = useStore((s) => s.store.user_profile?.active_program_id);
   const activeProgramIds = useStore((s) => s.store.user_profile?.active_program_ids);
   const activeSet = new Set([
@@ -45,13 +57,29 @@ export default function ProgramCatalogPage() {
     const list = filter === "all"
       ? publicOnly
       : publicOnly.filter((p) => p.category === filter);
+    // F4 — apply sort ordering. `default` preserves authored order (already
+    // in manifest sequence). Sorting is applied WITHIN the current filter's
+    // list so category grouping still reads cleanly per row.
+    const sorted = (() => {
+      if (sort === "duration_asc") {
+        return [...list].sort((a, b) => (a.duration_weeks ?? 99) - (b.duration_weeks ?? 99));
+      }
+      if (sort === "difficulty_asc") {
+        return [...list].sort(
+          (a, b) =>
+            (DIFFICULTY_RANK[a.difficulty ?? ""] ?? 9) -
+            (DIFFICULTY_RANK[b.difficulty ?? ""] ?? 9),
+        );
+      }
+      return list;
+    })();
     const byCat = new Map<string, ProgramManifestEntry[]>();
-    for (const p of list) {
+    for (const p of sorted) {
       if (!byCat.has(p.category)) byCat.set(p.category, []);
       byCat.get(p.category)!.push(p);
     }
     return byCat;
-  }, [manifest, filter]);
+  }, [manifest, filter, sort]);
 
   if (error) {
     return (
@@ -123,6 +151,26 @@ export default function ProgramCatalogPage() {
           </button>
         ))}
       </nav>
+
+      {/* F4 — sort control. Uses <select> for cheap accessibility (SR
+          reads native, keyboard works, no custom popover needed). Sits
+          under the filter chips so the visual hierarchy stays: what
+          category → then what order. */}
+      <div className="flex items-center gap-2 -mt-2 text-[11px] text-muted">
+        <label htmlFor="programs-sort" className="font-mono uppercase tracking-widest">
+          Sort
+        </label>
+        <select
+          id="programs-sort"
+          value={sort}
+          onChange={(e) => setSort(e.target.value as SortOrder)}
+          className="font-mono text-[11px] px-2 py-1 min-h-[36px] rounded border border-line-soft bg-surface text-ink focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
+        >
+          <option value="default">Curated</option>
+          <option value="duration_asc">Shortest first</option>
+          <option value="difficulty_asc">Easiest first</option>
+        </select>
+      </div>
 
       {Array.from(grouped.entries()).length === 0 ? (
         <p className="text-sm text-muted italic">

@@ -9,7 +9,7 @@ import { useStore } from "@/lib/useStore";
 import { useIsSuperAdmin } from "@/lib/super-admin";
 import { cn } from "@/lib/utils";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
-import type { Program, ProgramManifestEntry } from "@/lib/schemas";
+import type { Program, ProgramManifest, ProgramManifestEntry } from "@/lib/schemas";
 
 type Props = {
   slug: string;
@@ -32,6 +32,7 @@ export function ProgramPreviewClient({ slug }: Props) {
   const router = useRouter();
   const [entry, setEntry] = useState<ProgramManifestEntry | null>(null);
   const [program, setProgram] = useState<Program | null>(null);
+  const [manifest, setManifest] = useState<ProgramManifest | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [confirmEnd, setConfirmEnd] = useState(false);
   const activeProgramId = useStore((s) => s.store.user_profile?.active_program_id);
@@ -50,6 +51,10 @@ export function ProgramPreviewClient({ slug }: Props) {
     open: boolean;
     acknowledged: boolean;
   }>({ open: false, acknowledged: false });
+  // F3 — switch-primary confirmation. Fires when the user starts a
+  // program while a *different* primary is already active. Silent
+  // primary-swaps were the multi-program surface's biggest UX gap.
+  const [switchWarning, setSwitchWarning] = useState(false);
 
   useEffect(() => {
     void Promise.all([loadProgramManifest(), loadProgram(slug)])
@@ -58,6 +63,7 @@ export function ProgramPreviewClient({ slug }: Props) {
         if (!found) throw new Error(`No program with slug "${slug}" in catalog`);
         setEntry(found);
         setProgram(p);
+        setManifest(m);
       })
       .catch((e) => setError(e instanceof Error ? e.message : String(e)));
   }, [slug]);
@@ -119,6 +125,22 @@ export function ProgramPreviewClient({ slug }: Props) {
     router.push(`/programs/${slug}/intake`);
   };
 
+  const currentPrimarySlug = activeProgramId ?? null;
+  const currentPrimaryName = (() => {
+    if (!currentPrimarySlug || !manifest) return null;
+    return manifest.programs.find((p) => p.slug === currentPrimarySlug)?.name ?? currentPrimarySlug;
+  })();
+  const isSwitchingPrimary =
+    !!currentPrimarySlug && currentPrimarySlug !== slug && !isActive;
+
+  const commitStart = () => {
+    saveTierIfNeeded();
+    setStarting(true);
+    setActiveProgram(slug);
+    writeTraceOnStart();
+    router.push("/");
+  };
+
   const startAlone = () => {
     if (routeThroughIntake) return goToIntake();
     // Personal programs are authored against a specific clinical context. A
@@ -128,11 +150,14 @@ export function ProgramPreviewClient({ slug }: Props) {
       setPersonalGate({ open: true, acknowledged: false });
       return;
     }
-    saveTierIfNeeded();
-    setStarting(true);
-    setActiveProgram(slug);
-    writeTraceOnStart();
-    router.push("/");
+    // F3 — if another primary is currently active, warn before the swap.
+    // The prior primary stays in `active_program_ids` as secondary; we
+    // just want the user to know their focus is moving.
+    if (isSwitchingPrimary) {
+      setSwitchWarning(true);
+      return;
+    }
+    commitStart();
   };
 
   // startAlongside intentionally removed for launch: 1 main track at a time.
@@ -495,6 +520,38 @@ export function ProgramPreviewClient({ slug }: Props) {
           }}
         />
       ) : null}
+
+      {/* F3 — switch-primary confirmation. Prior primary stays in the
+          active_program_ids list (multi-program is preserved); the swap
+          only moves the "today's" focus. Copy is factual, not scolding. */}
+      <ConfirmSheet
+        open={switchWarning}
+        title={`Make ${entry.name} your focus?`}
+        body={
+          currentPrimaryName ? (
+            <>
+              <p>
+                <strong className="text-strong">{currentPrimaryName}</strong>{" "}
+                will move to your secondary track — your logs, phase, and history
+                stay intact. You can switch back any time from Profile.
+              </p>
+              <p className="mt-2 text-[13px] text-muted">
+                Terav only sharpens one focus per session. The others ride
+                alongside until you promote them.
+              </p>
+            </>
+          ) : (
+            "This will make it your primary focus."
+          )
+        }
+        confirmLabel="Make it my focus"
+        cancelLabel="Not yet"
+        onCancel={() => setSwitchWarning(false)}
+        onConfirm={() => {
+          setSwitchWarning(false);
+          commitStart();
+        }}
+      />
 
       <details className="pt-4 border-t border-line-soft">
         <summary className={cn(
