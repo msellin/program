@@ -527,6 +527,11 @@
         "choice": "Block pull over conventional deadlift",
         "rationale": "Bertolotti-friendly reference from the founder's clinical context. Substitutable per athlete.",
         "flag": "engineering"
+      },
+      {
+        "choice": "Cycling framed as cleanest bidirectional compatibility with strength",
+        "rationale": "Berryman 2018 tested short-term cessation (energy cost of running + neuromuscular performance), not modality-to-modality interference. We extrapolate to modality preference: cycling's lower eccentric damage vs running reduces bidirectional cost — Wilson 2012 meta + Doma 2019 carry the actual interference evidence. Berryman documents the running-side sensitivity that makes cycling the safer partner. Engineering read, not a direct finding.",
+        "flag": "engineering"
       }
     ],
     "contraindications": [
@@ -668,7 +673,7 @@
         "year": 2018,
         "title": "Effects of short-term concurrent training cessation on the energy cost of running and neuromuscular performances",
         "source": "Int J Sports Physiol Perform 13(1):57-64",
-        "used_for": "Cycling as cleanest bidirectional compatibility with strength"
+        "used_for": "Short-term cessation effects on running energy cost + neuromuscular performance. Terav extrapolates this running-side sensitivity to a modality-preference read (cycling as the safer concurrent partner) — see engineering_choices_flagged. Wilson 2012 + Doma 2019 carry the direct concurrent-interference evidence."
       },
       {
         "id": "fyfe_2016",

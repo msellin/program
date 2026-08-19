@@ -784,9 +784,9 @@
         "id": "proteau_1992",
         "authors": "Proteau L, Marteniuk RG, Lévesque L",
         "year": 1992,
-        "title": "A sensorimotor basis for motor learning",
-        "source": "QJEP 44A:557-575",
-        "used_for": "Specificity of practice — race-pace work rationale"
+        "title": "Specificity of practice: the case of the goal-directed aiming task",
+        "source": "J Motor Behav 24(1):81-104",
+        "used_for": "Specificity of practice — race-pace work rationale. Title/source corrected 2026-08-18 (Path A Q2)."
       },
       {
         "id": "henry_1968",
@@ -843,14 +843,24 @@
         "verification_status": "unverified"
       },
       {
-        "id": "das_2019",
-        "authors": "Das A, Kumar S, Guha S, Chatterjee S",
-        "year": 2019,
-        "title": "Physiological demands of rowing sport",
-        "source": "J Phys Ed Sports Manage 6(1):5-11",
-        "used_for": "Rowing metabolic profile — informs Z2 dose",
-        "url": "https://scholar.google.com/scholar?q=Das+Kumar+physiological+demands+rowing+sport+2019",
+        "id": "steinacker_1998",
+        "authors": "Steinacker JM, Lormes W, Lehmann M, Altenburg D",
+        "year": 1998,
+        "title": "Training of rowers before world championships",
+        "source": "Medicine & Science in Sports & Exercise 30(7):1158-1163",
+        "used_for": "Rowing-specific physiological profile in elite rowers preparing for world championships. Replaced das_2019 as a stronger anchor for the metabolic-profile claims (Path A Q5).",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/9662688/",
         "verification_status": "unverified"
+      },
+      {
+        "id": "bosquet_2007",
+        "authors": "Bosquet L, Montpetit J, Arvisais D, Mujika I",
+        "year": 2007,
+        "title": "Effects of tapering on performance: a meta-analysis",
+        "source": "MSSE 39(8):1358-1365",
+        "used_for": "Meta-analysis anchor for the ~3% performance uplift claim on the taper. Stronger single-source anchor than Mujika & Padilla 2000 alone; both are now cited.",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/17762369/",
+        "verification_status": "verified"
       },
       {
         "id": "kilding_2012",
@@ -890,7 +900,8 @@
       "hagerman_1994",
       "steinacker_1993",
       "mikulic_2011",
-      "das_2019",
+      "steinacker_1998",
+      "bosquet_2007",
       "kilding_2012"
     ]
   },
@@ -948,28 +959,6 @@
       }
     ]
   },
-  "references": [
-    {
-      "id": "steinacker_1998",
-      "authors": "Steinacker JM, Lormes W, Lehmann M, Altenburg D",
-      "year": 1998,
-      "title": "Training of rowers before world championships",
-      "source": "Medicine & Science in Sports & Exercise 30(7):1158-1163",
-      "used_for": "Rowing-specific physiological profile in elite rowers preparing for world championships. Replaced das_2019 as a stronger anchor for the metabolic-profile claims (Path A · Q5).",
-      "verification_status": "unverified",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/9662688/"
-    },
-    {
-      "id": "bosquet_2007",
-      "authors": "Bosquet L, Montpetit J, Arvisais D, Mujika I",
-      "year": 2007,
-      "title": "Effects of tapering on performance: a meta-analysis",
-      "source": "MSSE 39(8):1358-1365",
-      "used_for": "Meta-analysis anchor for the ~3% performance uplift claim on the taper. Stronger single-source anchor than Mujika & Padilla 2000 alone; both are now cited.",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/17762369/",
-      "verification_status": "verified"
-    }
-  ],
   "non_responder_classifier": {
     "variance_source": {
       "citation_id": "bouchard_1999_heritage",

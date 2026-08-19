@@ -79,7 +79,7 @@
     {
       "id": "shoulder_pain_stops_session",
       "rule": "Any shoulder pain during a handstand attempt ends the session \u2014 no working through it",
-      "detail": "Sci Reports 2026 pain-associated technique data: shoulder pain during handstand walk is coupled to axial-torsional work and shorter effective arm length \u2014 training through it reinforces the compensation. Stop, review the video review recording if made, restart next day."
+      "detail": "Sci Reports 2026 pain-associated technique data: shoulder pain during handstand walk is coupled to a compensation pattern \u2014 training through it reinforces the compensation. Stop, review the video recording if made, restart next day."
     },
     {
       "id": "wrist_volume_capped",
@@ -682,7 +682,7 @@
         "block_skill_B_walk_attempts",
         "block_recovery"
       ],
-      "goal": "Extend freestand hold to 15+ seconds and chain first walking steps. Ferrari 2021 CoP-shift work informs the single-step drill order.",
+      "goal": "Extend freestand hold to 15+ seconds and chain first walking steps. Yiou 2017 CoP-shift work informs the single-step drill order.",
       "template_note": "Freestand hold and walk-step drills interleaved from week 1 (CI benefit expected because user is past cognitive stage). Wall shoulder taps as bridge from week 1.",
       "notes": [
         "Walk KPI: continuous steps per attempt, best of 5.",
@@ -780,7 +780,7 @@
         10,
         15
       ],
-      "note": "Tier A weeks 1-2: blocked practice of Kinoshita positions 1-2. Progressive shoulder overhead endurance without full inversion.",
+      "note": "Kinoshita position ladder — progressive shoulder overhead endurance without full inversion.",
       "items": [
         {
           "exercise_id": "hs_incline_90_hold",
@@ -1504,7 +1504,7 @@
       "block_skill_A_wall_hold": "Chest-to-wall hold builds the plumb-line shape under load (Kerwin & Trewartha 2001 wrist-strategy characterisation). Wall shrugs isolate the serratus / trap endurance that a handstand demands over time (Ludewig & Cook 2000). Belly-to-wall added when static hold is level 2: introduces active wrist strategy that a chest-to-wall hold hides.",
       "block_skill_B_freestand_search": "Kick-up practice + freestand attempts + optional tuck freestand for reduced moment of inertia. Video review button is self-controlled (Chiviacowsky & Wulf 2002) \u2014 user taps if they want feedback, no auto-show. Potdevin 2018 pattern: KP after ~5 reps, not every rep.",
       "block_skill_A_freestand_hold": "Freestand hold is the primary KPI at Tier C \u2014 trackable weekly, sensitive early indicator. Sobera 2019: elite-novice CoP-variability differences mean the freestand hold time is a valid capability marker across the skill acquisition arc.",
-      "block_skill_B_walk_attempts": "Single-step attempts + 2-3-step shuttles. Ferrari 2021 walking-initiation biomechanics: the CoP shift precedes the step. Short shuttles beat one long attempt \u2014 Shea & Morgan 1979 CI + spacing effect + Shea 2000 spaced practice.",
+      "block_skill_B_walk_attempts": "Single-step attempts + 2-3-step shuttles. Yiou 2017 walking-initiation biomechanics: the CoP shift precedes the step. Short shuttles beat one long attempt \u2014 Shea & Morgan 1979 CI + spacing effect + Shea 2000 spaced practice.",
       "block_skill_A_variability": "Line + markers + precision-lane walks train variability of practice (Schmidt 1975 schema theory; Wulf & Shea 2002 constant\u2192variable progression). Tier D users are past the cognitive stage; variable practice benefits are largest here.",
       "block_skill_B_obstacles_or_turns": "Weakest-capability priority (Henry 1968; Proteau 1992). Generator picks turns vs obstacles based on which capability_domain has the lower estimated_level. Progressive gate: wall pirouette level 4 \u2192 free half-pirouette; free half \u2192 full pirouette. Plate \u2192 cones \u2192 narrow lane.",
       "block_recovery": "Down-dog + child's pose wrist decompression. Vidal-Torija 2025: chronic wrist pain is technique-driven \u2014 a decompression flush is not a fix for bad technique, but paired with the video-review button it drives the user to notice + correct."
@@ -1538,7 +1538,7 @@
       }
     },
     "contraindications": [
-      "Shoulder pain during a handstand attempt \u2014 session ends immediately. Do not train through it. Sci Reports 2026 (237 stance phases): pain-associated practitioners show shorter effective arm length + greater axial torsional work \u2014 continued exposure reinforces the compensation.",
+      "Shoulder pain during a handstand attempt \u2014 session ends immediately. Do not train through it. Sci Reports 2026 (flagged for founder review): pain-associated practitioners show a compensation pattern \u2014 continued exposure reinforces the compensation.",
       "Osteoporosis diagnosis (or low-BMD DEXA) \u2014 freestanding and any bail-risk attempts contraindicated. DiFiori 2006 catalogued distal radius as a common fracture site under this mechanism; vertebral and hip fractures follow. Tier A wall walks + Kinoshita positions with a spotter and soft floor are permitted only after clinician clearance.",
       "Uncontrolled hypertension (BP > 160/100 at rest or unmedicated) \u2014 defer all inversions until BP is controlled. Yoga-inversion literature documents transient systolic increases that stack with Valsalva during a kick-up attempt.",
       "Acute wrist injury (sprain, TFCC tear, ligament instability) in the last 6 weeks \u2014 wrist-load drills prohibited until cleared by a clinician. Program will offer hollow-body and shoulder-endurance drills only during this window.",
@@ -1716,19 +1716,20 @@
         "authors": "Sci Reports handstand-walk shoulder pain team",
         "year": 2026,
         "title": "Handstand walking biomechanics and shoulder pain association",
-        "source": "Scientific Reports (s41598-026-51612-w), 237 stance phases",
-        "used_for": "Pain-associated practitioners show shorter effective arm length + greater axial torsional work \u2014 technique-driven. Underpins the non-negotiable 'shoulder pain stops session' rule. Flagged for founder review: paper existence at claimed URL unconfirmed. The stop-session rule survives on general principle even if the specific '237 stance phases' figure is unverifiable.",
+        "source": "Scientific Reports (s41598-026-51612-w)",
+        "used_for": "Pain-associated practitioners show a technique-driven compensation pattern. Underpins the non-negotiable 'shoulder pain stops session' rule. Flagged for founder review: paper existence at claimed URL unconfirmed. The stop-session rule survives on general principle regardless of the specific biomechanical figures.",
         "url": "https://www.nature.com/articles/s41598-026-51612-w",
         "verification_status": "unverified"
       },
       {
-        "id": "ferrari_2021",
-        "authors": "Ferrari A, et al.",
-        "year": 2021,
-        "title": "Walking initiation biomechanics",
-        "source": "Gait & Posture",
-        "used_for": "CoP shift precedes step. Informs the single_step_attempt drill design and the 'lean the shape toward the far wall' external-focus cue. Flagged for founder review: DOI/volume unresolved. Drill design does not require this specific citation \u2014 Yiou 2017 or canonical Winter walking-initiation work would substitute.",
-        "verification_status": "unverified"
+        "id": "yiou_2017",
+        "authors": "Yiou E, Caderby T, Delafontaine A, Fourcade P, Honeine JL",
+        "year": 2017,
+        "title": "Balance control during gait initiation: State-of-the-art and research perspectives",
+        "source": "World J Orthop 8(11):815-828",
+        "used_for": "Walking initiation biomechanics \u2014 CoP shift precedes step. Informs the single_step_attempt drill design and the 'lean the shape toward the far wall' external-focus cue. Replaced ferrari_2021 (unlocatable) 2026-08-18 per founder-approved plan.",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/29184756/",
+        "verification_status": "verified"
       },
       {
         "id": "simunkova_2024",
@@ -1855,7 +1856,7 @@
       "walker_2003",
       "shea_morgan_1979",
       "sci_reports_2026_handstand_shoulder",
-      "ferrari_2021",
+      "yiou_2017",
       "simunkova_2024",
       "wulf_1998",
       "wulf_2013",
@@ -2045,18 +2046,6 @@
         "can_exit_reliably"
       ],
       "note": "Users who can already exit reliably skip Phase 0 entirely. Everyone else runs the week."
-    }
-  ],
-  "references": [
-    {
-      "id": "yiou_2017",
-      "authors": "Yiou E, Caderby T, Delafontaine A, Fourcade P, Honeine JL",
-      "year": 2017,
-      "title": "Balance control during gait initiation: State-of-the-art and research perspectives",
-      "source": "World J Orthop 8(11):815-828",
-      "used_for": "Walking initiation biomechanics \u2014 CoP shift precedes step. Informs the single_step_attempt drill design and the 'lean the shape toward the far wall' external-focus cue. Replaced ferrari_2021 (unlocatable) 2026-08-18 per founder-approved plan.",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/29184756/",
-      "verification_status": "verified"
     }
   ]
 }

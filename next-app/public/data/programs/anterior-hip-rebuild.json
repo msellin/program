@@ -1,8 +1,8 @@
 {
   "schema_version": "1.2.0",
   "generated": "2026-08-06",
-  "status": "ACTIVE",
-  "status_note": "Refreshed 2026-08-06 after all open-questions answers landed. Mechanical model confirmed (inflammatory features absent, disc golf gone, groin/back/buttock quiet). User is NOT detrained — power clean triple at 100 kg two days pre-generation. Program shifted to 4 leg sessions/week with a 5/3/1 FSL scaffold and a Sept 12 local comp as mid-cycle demo point.",
+  "status": "REFERENCED",
+  "status_note": "Refreshed 2026-08-06 after all open-questions answers landed. Mechanical model confirmed (inflammatory features absent, disc golf gone, groin/back/buttock quiet). User is NOT detrained — power clean triple at 100 kg two days pre-generation. Program shifted to 4 leg sessions/week with a 5/3/1 FSL scaffold and a Sept 12 local comp as mid-cycle demo point. Status set to REFERENCED to match manifest — was 'ACTIVE' (legacy value not in ladder); S6 decision open re: personal-program ladder policy.",
   "goals": {
     "generated": "2026-08-06",
     "primary_intent": "Ongoing lower-body strength progression, competitive for CrossFit and Hyrox where legs are the main driver. Not a fixed finish line — the plan continues past every waypoint. Numeric targets are milestones, not endpoints.",
