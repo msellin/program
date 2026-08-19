@@ -275,74 +275,90 @@ export function ProgramPreviewClient({ slug }: Props) {
             ))}
           </div>
         ) : null}
-        {entry.adapts ? (
-          <div className="rounded border border-bronze/30 border-l-4 border-l-bronze bg-bronze/[0.06] px-3 py-2 mt-2">
-            <p className="text-[14px] text-strong leading-snug">
-              <span className="font-semibold text-bronze">Adapts to you.</span>{" "}
-              {entry.adapts} Every session sharpens further from your logs.
-            </p>
-          </div>
-        ) : null}
-        <div className="flex flex-wrap gap-3 pt-1 text-[12px] font-mono text-muted">
-          <span>{entry.duration_weeks} weeks</span>
-          {entry.load_hint ? (
-            <>
-              <span aria-hidden="true">·</span>
-              <span>{entry.load_hint}</span>
-            </>
-          ) : null}
-          {entry.difficulty !== "multi-tier" ? (
-            <>
-              <span aria-hidden="true">·</span>
-              <span>{entry.difficulty}</span>
-            </>
-          ) : null}
-          {entry.positioning === "side_track" ? (
-            <>
-              <span aria-hidden="true">·</span>
-              <span
-                className="text-slate"
-                title="This program layers on top of any main track — safe to run alongside your existing week."
-              >
-                layers on any main
-              </span>
-            </>
-          ) : null}
-          {entry.prerequisites?.length ? (
-            <>
-              <span aria-hidden="true">·</span>
-              <span className="text-amber" title="Recommended background — not enforced by the app; self-assess honestly.">
-                Recommended background
-              </span>
-            </>
-          ) : null}
-        </div>
       </header>
 
-      {/* P1-74 (F9 Batch 30) — 3 top-priority prose sections wrapped in
-          DashboardBlock so the info hierarchy reads cleanly. Was: 3 flat
-          <h2 text-[14px]> + <p text-sm> stacks that looked identical to
-          body copy (1.0× hierarchy ratio). Now: 16px semibold title +
-          mono-caps eyebrow ("Section N of 3") + 14px body inside a
-          bordered card. First-time visitors get "is it for me?" → "what
-          do I get?" → "how do we prove it?" in scannable order. */}
+      {/* P1-74 remaining (2026-08-19) — full section reorder per
+          design-lead brief §Decision 2. Reading flow is
+          "is it for me? → what do I get? → what does it cost? → why
+          should I trust it? → how do we prove it?"
+          Adapts-to-you was in the header (top-loaded before Who/What);
+          moved down between Commitment and Proves-it-works so it lands
+          after the user has decided "yes, this is for me". */}
       <DashboardBlock
-        eyebrow="Section 1 of 3"
+        eyebrow="Section 1 of 4"
         title="Who this is for"
       >
         <p className="text-sm leading-relaxed text-ink">{entry.who_this_is_for}</p>
       </DashboardBlock>
 
       <DashboardBlock
-        eyebrow="Section 2 of 3"
+        eyebrow="Section 2 of 4"
         title="What you'll achieve"
       >
         <p className="text-sm leading-relaxed text-ink">{entry.what_youll_achieve}</p>
       </DashboardBlock>
 
+      <DashboardBlock
+        eyebrow="Section 3 of 4"
+        title="What it takes"
+      >
+        <ul className="text-sm leading-relaxed text-ink space-y-1">
+          <li>
+            <span className="font-mono text-slate">{entry.duration_weeks} weeks</span>
+            {entry.load_hint ? (
+              <span className="text-muted"> · {entry.load_hint}</span>
+            ) : null}
+          </li>
+          {entry.difficulty !== "multi-tier" ? (
+            <li className="text-muted">
+              Difficulty · <span className="text-ink">{entry.difficulty}</span>
+            </li>
+          ) : null}
+          {entry.levels?.length ? (
+            <li className="text-muted">
+              Levels ·{" "}
+              {entry.levels.map((lvl, i) => (
+                <span key={lvl}>
+                  <span className="text-slate">{lvl}</span>
+                  {i < (entry.levels?.length ?? 0) - 1 ? (
+                    <span className="text-muted/60"> → </span>
+                  ) : null}
+                </span>
+              ))}
+            </li>
+          ) : null}
+          {entry.positioning === "side_track" ? (
+            <li className="text-slate text-[13px]">
+              Layers on any main track — safe to run alongside your existing week.
+            </li>
+          ) : null}
+          {entry.prerequisites?.length ? (
+            <li className="text-amber text-[13px]">
+              Recommended background — see the amber card below.
+            </li>
+          ) : null}
+        </ul>
+      </DashboardBlock>
+
+      {/* Adapts-to-you dropped down here per design-lead reorder — was
+          in the header. Lands AFTER the user has decided "yes, this is
+          for me" (Who + What + What it takes) — so the differentiator
+          reads as "and here's what's special about it" not "before we
+          even tell you what it is." Bronze accent economy locked. */}
+      {entry.adapts ? (
+        <div className="rounded border border-bronze/30 border-l-4 border-l-bronze bg-bronze/[0.06] px-4 py-3">
+          <p className="font-mono text-[10px] uppercase tracking-widest text-bronze mb-1">
+            Adapts to you
+          </p>
+          <p className="text-[14px] text-strong leading-snug">
+            {entry.adapts} Every session sharpens further from your logs.
+          </p>
+        </div>
+      ) : null}
+
       {entry.retest ? (
         <DashboardBlock
-          eyebrow="Section 3 of 3"
+          eyebrow="Section 4 of 4"
           title="How we prove it works"
         >
           <p className="text-sm leading-relaxed text-ink">{entry.retest}</p>
