@@ -86,7 +86,7 @@ describe("classify · Engine Builder", () => {
     const result = classify(program, emptyStore(), {
       baselines: [
         {
-          metric_id: "submax_hr_bpm",
+          metric_id: "submax_hr_pace5_bpm",
           value: 150,
           observed_at: "2026-01-05",
         },
@@ -100,12 +100,12 @@ describe("classify · Engine Builder", () => {
   it("returns under_dosing when signal is flat AND compliance is low", () => {
     // Signal barely moved (delta = -1, but target expects -5-ish).
     const baselines: MetricBaseline[] = [
-      { metric_id: "submax_hr_bpm", value: 150, observed_at: "2026-01-05" },
-      { metric_id: "submax_hr_bpm", value: 149, observed_at: "2026-02-01" },
+      { metric_id: "submax_hr_pace5_bpm", value: 150, observed_at: "2026-01-05" },
+      { metric_id: "submax_hr_pace5_bpm", value: 149, observed_at: "2026-02-01" },
     ];
     const result = classify(program, emptyStore(), {
       baselines,
-      targets: { submax_hr_bpm: -12 },
+      targets: { submax_hr_pace5_bpm: -12 },
       intensity_compliance_pct: 60,
     });
     expect(result.composite_verdict).toBe("under_dosing");
@@ -117,14 +117,14 @@ describe("classify · Engine Builder", () => {
 
   it("returns true_non_response when signal is flat, compliance high, resting HR unchanged", () => {
     const baselines: MetricBaseline[] = [
-      { metric_id: "submax_hr_bpm", value: 150, observed_at: "2026-01-05" },
-      { metric_id: "submax_hr_bpm", value: 149, observed_at: "2026-02-01" },
+      { metric_id: "submax_hr_pace5_bpm", value: 150, observed_at: "2026-01-05" },
+      { metric_id: "submax_hr_pace5_bpm", value: 149, observed_at: "2026-02-01" },
       { metric_id: "resting_hr_bpm", value: 62, observed_at: "2026-01-05" },
       { metric_id: "resting_hr_bpm", value: 62, observed_at: "2026-02-01" },
     ];
     const result = classify(program, emptyStore(), {
       baselines,
-      targets: { submax_hr_bpm: -12 },
+      targets: { submax_hr_pace5_bpm: -12 },
       intensity_compliance_pct: 90,
     });
     expect(result.composite_verdict).toBe("true_non_response");
@@ -135,12 +135,12 @@ describe("classify · Engine Builder", () => {
 
   it("returns responding when signal is trending appropriately", () => {
     const baselines: MetricBaseline[] = [
-      { metric_id: "submax_hr_bpm", value: 150, observed_at: "2026-01-05" },
-      { metric_id: "submax_hr_bpm", value: 143, observed_at: "2026-02-01" },
+      { metric_id: "submax_hr_pace5_bpm", value: 150, observed_at: "2026-01-05" },
+      { metric_id: "submax_hr_pace5_bpm", value: 143, observed_at: "2026-02-01" },
     ];
     const result = classify(program, emptyStore(), {
       baselines,
-      targets: { submax_hr_bpm: -12 },
+      targets: { submax_hr_pace5_bpm: -12 },
       intensity_compliance_pct: 90,
     });
     expect(result.composite_verdict).toBe("responding");
@@ -151,14 +151,14 @@ describe("classify · Engine Builder", () => {
     // Primary is responding, secondary is not (resting HR flat while
     // submax HR dropped — genuinely useful clinical insight).
     const baselines: MetricBaseline[] = [
-      { metric_id: "submax_hr_bpm", value: 150, observed_at: "2026-01-05" },
-      { metric_id: "submax_hr_bpm", value: 143, observed_at: "2026-02-01" },
+      { metric_id: "submax_hr_pace5_bpm", value: 150, observed_at: "2026-01-05" },
+      { metric_id: "submax_hr_pace5_bpm", value: 143, observed_at: "2026-02-01" },
       { metric_id: "resting_hr_bpm", value: 62, observed_at: "2026-01-05" },
       { metric_id: "resting_hr_bpm", value: 63, observed_at: "2026-02-01" },
     ];
     const result = classify(program, emptyStore(), {
       baselines,
-      targets: { submax_hr_bpm: -12, resting_hr_bpm: -5 },
+      targets: { submax_hr_pace5_bpm: -12, resting_hr_bpm: -5 },
       intensity_compliance_pct: 90,
     });
     // Primary submax is responding.
@@ -182,12 +182,12 @@ describe("classify · Rowing 2K", () => {
 
   it("returns under_dosing for flat threshold + missed sessions", () => {
     const baselines: MetricBaseline[] = [
-      { metric_id: "threshold_pace_500m", value: 130, observed_at: "2026-08-01" },
-      { metric_id: "threshold_pace_500m", value: 129, observed_at: "2026-08-15" },
+      { metric_id: "threshold_pace_500m_seconds", value: 130, observed_at: "2026-08-01" },
+      { metric_id: "threshold_pace_500m_seconds", value: 129, observed_at: "2026-08-15" },
     ];
     const result = classify(program, emptyStore(), {
       baselines,
-      targets: { threshold_pace_500m: -8 },
+      targets: { threshold_pace_500m_seconds: -8 },
       session_compliance_pct: 65,
     });
     expect(result.composite_verdict).toBe("under_dosing");
@@ -196,12 +196,12 @@ describe("classify · Rowing 2K", () => {
 
   it("returns responding for good threshold trend", () => {
     const baselines: MetricBaseline[] = [
-      { metric_id: "threshold_pace_500m", value: 130, observed_at: "2026-08-01" },
-      { metric_id: "threshold_pace_500m", value: 125, observed_at: "2026-08-15" },
+      { metric_id: "threshold_pace_500m_seconds", value: 130, observed_at: "2026-08-01" },
+      { metric_id: "threshold_pace_500m_seconds", value: 125, observed_at: "2026-08-15" },
     ];
     const result = classify(program, emptyStore(), {
       baselines,
-      targets: { threshold_pace_500m: -8 },
+      targets: { threshold_pace_500m_seconds: -8 },
       session_compliance_pct: 95,
     });
     expect(result.composite_verdict).toBe("responding");

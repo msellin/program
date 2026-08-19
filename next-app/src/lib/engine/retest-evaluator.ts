@@ -239,13 +239,28 @@ export function evaluateRetestMetrics(
   // end-of-block entry, prefix its display_name so both can coexist on
   // the panel. Programs sometimes use the exact same metric_id — that's
   // OK for scoring but reads as duplicate on Progress.
-  const endIds = new Set(endOfBlock.map((m) => String(m.metric_id ?? "")));
+  // Also inherit source_ref / source / direction / unit / aggregation /
+  // window_days from the sibling when mid-block omits them — authors add
+  // a mid-block cadence check without repeating all the source metadata.
+  // BUG-7 fix 2026-08-19: was silently showing "This metric will land
+  // once its data source is wired" because mid-block entries lacked
+  // source_ref, so the HERITAGE two-baseline classifier never fired.
+  const endById = new Map<string, Record<string, unknown>>();
+  for (const m of endOfBlock) endById.set(String(m.metric_id ?? ""), m);
   const midWithFlag = midBlock.map((m) => {
     const id = String(m.metric_id ?? "");
-    if (endIds.has(id)) {
+    const sibling = endById.get(id);
+    if (sibling) {
+      const inherit = (k: string) => (m[k] === undefined ? sibling[k] : m[k]);
       return {
         ...m,
-        display_name: `${String(m.display_name ?? id)} · mid-block`,
+        source: inherit("source"),
+        source_ref: inherit("source_ref"),
+        direction: inherit("direction"),
+        unit: inherit("unit"),
+        aggregation: inherit("aggregation"),
+        window_days: inherit("window_days"),
+        display_name: `${String(m.display_name ?? sibling.display_name ?? id)} · mid-block`,
         metric_id: `${id}__mid_block`,
       };
     }
