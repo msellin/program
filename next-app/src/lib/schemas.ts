@@ -1211,6 +1211,15 @@ export const storeSchema = z.object({
              */
             reveal_seen: z.boolean().optional(),
             /**
+             * When the user first landed on the graduated-arc surface for
+             * this program (isPastProgramEnd = true). Auto-written from
+             * GraduationCard on mount so downstream surfaces (Profile,
+             * Programs catalog, Programs detail) can flip the ACTIVE badge
+             * to GRADUATED without another explicit user action.
+             * Delta-3 graduation audit 2026-08-19.
+             */
+            graduated_at: z.string().optional(),
+            /**
              * Phase A / generation_trace stub: the input snapshot at the moment
              * the user committed this program. Persists intake_answers + tier
              * + any capability_profile values that were used to shape the plan,

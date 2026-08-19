@@ -204,6 +204,12 @@ type StoreState = {
    */
   removeActiveProgram: (slug: string) => void;
   /**
+   * Delta-3 (2026-08-19): stamp a program as graduated. Auto-called from
+   * GraduationCard on first mount so downstream surfaces (Profile,
+   * catalog, program detail) can flip ACTIVE badges to GRADUATED.
+   */
+  markGraduated: (slug: string, dateISO: string) => void;
+  /**
    * Phase A: dismiss the "your plan is built" reveal card for a program. Sets
    * program_states[slug].reveal_seen = true. Card never re-appears for the
    * same program.
@@ -946,6 +952,19 @@ export const useStore = create<StoreState>((set, get) => ({
     }
     s.user_profile = profile;
     commitImmediate(s);
+    set({ store: s });
+  },
+
+  markGraduated: (slug, dateISO) => {
+    const s = { ...get().store };
+    const profile = { ...(s.user_profile ?? {}) };
+    const states = { ...(profile.program_states ?? {}) };
+    const prior = states[slug] ?? {};
+    if (prior.graduated_at) return; // idempotent
+    states[slug] = { ...prior, graduated_at: dateISO };
+    profile.program_states = states;
+    s.user_profile = profile;
+    commit(s);
     set({ store: s });
   },
 

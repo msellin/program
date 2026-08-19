@@ -22,6 +22,11 @@ export default function ProgramCatalogPage() {
   const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<FilterCat>("all");
   const activeProgramId = useStore((s) => s.store.user_profile?.active_program_id);
+  const activeProgramIds = useStore((s) => s.store.user_profile?.active_program_ids);
+  const activeSet = new Set([
+    ...(activeProgramIds ?? []),
+    ...(activeProgramId ? [activeProgramId] : []),
+  ]);
 
   useEffect(() => {
     void loadProgramManifest()
@@ -149,7 +154,7 @@ export default function ProgramCatalogPage() {
                     <li key={p.slug}>
                       <ProgramCard
                         program={p}
-                        isActive={p.slug === activeProgramId}
+                        isActive={activeSet.has(p.slug)}
                         category={category}
                       />
                     </li>

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { loadProgram, loadExercises } from "@/lib/data-loader";
+import { loadProgram, loadProgramManifest, loadExercises } from "@/lib/data-loader";
 import { ExerciseCard } from "@/components/workout/ExerciseCard";
 import { HeroStateCard } from "@/components/workout/HeroStateCard";
 import { SessionActions } from "@/components/workout/SessionActions";
@@ -29,7 +29,7 @@ import { blocksForDate } from "@/lib/engine/plan-generator";
 import { getBlocksForDate, isBlockObjectOn } from "@/lib/engine/block-selectors";
 import { migrateLegacyToBlocks, needsBlockMigration } from "@/lib/migrations/legacy-to-blocks";
 import { PerProgramActions } from "@/components/workout/PerProgramActions";
-import type { Program, Block, Exercise, Phase, Store, ScheduledBlock } from "@/lib/schemas";
+import type { Program, Block, Exercise, Phase, Store, ScheduledBlock, ProgramManifest } from "@/lib/schemas";
 
 export default function TodayPage() {
   const [programs, setPrograms] = useState<Program[]>([]);
@@ -343,7 +343,9 @@ export default function TodayPage() {
       {multipleProgramsToday ? (
         <div className="rounded border border-amber/40 bg-amber/10 px-3 py-2.5 text-[13px]">
           <p className="text-amber-strong">
-            <span className="font-semibold">Two tracks scheduled today.</span>{" "}
+            <span className="font-semibold">
+              {groupsWithBlocks.length} tracks scheduled today.
+            </span>{" "}
             If it&apos;s too much, snooze one from{" "}
             <Link href="/profile" className="underline">Profile</Link>.
           </p>
@@ -455,8 +457,16 @@ export default function TodayPage() {
   );
 }
 
-function programDisplayName(program: Program, slug: string): string {
-  return program.program_goal?.display_name ?? slug.replace(/-/g, " ");
+function programDisplayName(_program: Program, slug: string): string {
+  // Slug title-case matches the manifest name for every current program;
+  // `program_goal.display_name` is often the target metric ("Loaded
+  // overhead shoulder flexion") and reads as a bug. Same anti-pattern
+  // reveal-copy.ts + BlockHistorySection.tsx already fix. Multi-track
+  // delta-3 caught this leaked in the multi-program h2 render.
+  return slug
+    .split("-")
+    .map((w) => (w.length ? w[0].toUpperCase() + w.slice(1) : w))
+    .join(" ");
 }
 
 /**
@@ -638,7 +648,9 @@ function LogSessionShortcut({ date }: { date: string }) {
 function GraduationCard({ program }: { program: Program }) {
   const store = useStore((s) => s.store);
   const removeActiveProgram = useStore((s) => s.removeActiveProgram);
+  const markGraduated = useStore((s) => s.markGraduated);
   const [confirmEnd, setConfirmEnd] = useState(false);
+  const [manifest, setManifest] = useState<ProgramManifest | null>(null);
   const userTier = program.slug
     ? store.user_profile?.program_states?.[program.slug]?.tier
     : undefined;
@@ -657,18 +669,82 @@ function GraduationCard({ program }: { program: Program }) {
 
   const displayable = metrics.filter((m) => m.supported && m.current != null);
 
-  const programName = program.program_goal?.display_name ?? program.slug ?? "your program";
+  // Slug title-case — same anti-pattern reveal-copy / BlockHistorySection
+  // / programDisplayName already avoid. Multi-track + graduation delta-3
+  // both caught the metric-name leak.
+  const programName = program.slug
+    ? program.slug
+        .split("-")
+        .map((w) => (w.length ? w[0].toUpperCase() + w.slice(1) : w))
+        .join(" ")
+    : program.program_goal?.display_name ?? "Your program";
+
+  // Follow-on program pointer. Programs authored as `block_1_of_N` can
+  // declare `next_block_slug` in JSON to link to Block 2. Falls back to
+  // a generic Programs catalog CTA. Graduation delta-3 2026-08-19.
+  const nextBlockSlug =
+    (program as unknown as { next_block_slug?: string }).next_block_slug ??
+    (program.goals as unknown as { next_block_slug?: string })?.next_block_slug ??
+    null;
+  const nextBlockEntry = nextBlockSlug
+    ? manifest?.programs.find((p) => p.slug === nextBlockSlug) ?? null
+    : null;
+
+  // Arc-verdict chip — compare current-vs-baseline against block_1_targets.
+  const blockTargets =
+    (program.goals as unknown as { block_1_targets?: Record<string, number[]> })
+      ?.block_1_targets ?? null;
+  const arcVerdict = (() => {
+    if (!displayable.length || !blockTargets) return null;
+    let hit = 0;
+    let total = 0;
+    for (const m of displayable) {
+      const delta = deltaFromBaseline(m);
+      if (!delta) continue;
+      total++;
+      if (delta.isImprovement) hit++;
+    }
+    if (total === 0) return null;
+    if (hit === total) return { tone: "green" as const, label: "Targets hit" };
+    if (hit > 0) return { tone: "amber" as const, label: `${hit}/${total} on track` };
+    return { tone: "red" as const, label: "Below target" };
+  })();
+
+  // Load manifest for next-block preview + write graduated_at once.
+  useEffect(() => {
+    void loadProgramManifest().then(setManifest).catch(() => setManifest(null));
+    if (program.slug) {
+      const already = store.user_profile?.program_states?.[program.slug]?.graduated_at;
+      if (!already) markGraduated(program.slug, todayISO());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [program.slug]);
 
   return (
     <div className="space-y-4">
       <div className="rounded-lg border border-bronze/40 border-l-4 border-l-bronze bg-bronze/[0.06] p-4 space-y-3">
-        <div>
-          <p className="font-mono text-[10px] uppercase tracking-widest text-bronze">You finished</p>
-          <h2 className="text-lg font-semibold text-strong mt-1">{programName}</h2>
-          {weeksIn ? (
-            <p className="text-[13px] text-muted mt-0.5">
-              {weeksIn} weeks logged. Nice.
-            </p>
+        <div className="flex items-baseline justify-between gap-2 flex-wrap">
+          <div>
+            <p className="font-mono text-[10px] uppercase tracking-widest text-bronze">You finished</p>
+            <h2 className="text-lg font-semibold text-strong mt-1">{programName}</h2>
+            {weeksIn ? (
+              <p className="text-[13px] text-muted mt-0.5">
+                {weeksIn} weeks logged. Nice.
+              </p>
+            ) : null}
+          </div>
+          {arcVerdict ? (
+            <span
+              className={`font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded ${
+                arcVerdict.tone === "green"
+                  ? "bg-green/20 text-green"
+                  : arcVerdict.tone === "amber"
+                    ? "bg-amber/20 text-amber"
+                    : "bg-red/20 text-red"
+              }`}
+            >
+              {arcVerdict.label}
+            </span>
           ) : null}
         </div>
         {displayable.length ? (
@@ -699,6 +775,21 @@ function GraduationCard({ program }: { program: Program }) {
             No retest metrics recorded — head to Progress to log your final numbers.
           </p>
         )}
+        {nextBlockEntry ? (
+          <Link
+            href={`/programs/${nextBlockEntry.slug}`}
+            className="block rounded border border-slate/40 bg-slate/[0.06] p-3 hover:bg-slate/10 transition-colors"
+          >
+            <p className="font-mono text-[10px] uppercase tracking-widest text-slate">Next block</p>
+            <p className="text-sm font-semibold text-strong mt-0.5">{nextBlockEntry.name}</p>
+            <p className="text-[12px] text-muted mt-1 line-clamp-2">
+              {nextBlockEntry.short_description ?? "The next arc in this program family."}
+            </p>
+            <p className="text-[11px] font-mono uppercase tracking-wider text-slate mt-1.5">
+              Preview →
+            </p>
+          </Link>
+        ) : null}
         <div className="flex flex-wrap gap-2 pt-1">
           <Link
             href="/progress"
@@ -710,7 +801,7 @@ function GraduationCard({ program }: { program: Program }) {
             href="/programs"
             className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-slate/60 text-slate hover:bg-slate/10 min-h-[36px]"
           >
-            Pick your next program →
+            {nextBlockEntry ? "Browse other programs →" : "Pick your next program →"}
           </Link>
         </div>
         <button

@@ -16,6 +16,7 @@
       ],
       "note": "The three blocks compound. Block 1 in isolation moves the needle 5-8% on VO2max and drops resting HR meaningfully. Full engine transformation is a 6-month project across all three blocks."
     },
+    "next_block_slug": "engine-builder-block-2",
     "block_1_targets": {
       "resting_hr_change_bpm": [
         -5,
