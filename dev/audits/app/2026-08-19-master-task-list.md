@@ -107,11 +107,11 @@ Keep the convention terse — the four markers cover every state. Don't invent n
 
 ## Section D — P2 (defensible polish, post-Batch-25 round + founder-obs round)
 
-- [ ] **P2-31** — O14a a11y-side truncation nudge (mirrors P1-73 fix). Track only if P1-73 doesn't ship. Source: `2026-08-19-founder-obs-accessibility.md` §O14a. Files: `next-app/src/components/workout/ExerciseCard.tsx:176`. Size: XS
-- [ ] **P2-32** — N4 icon-stroke discipline. Terav has 3 sizes (14/16/18) and 2 stroke weights (2, 1.75) in circulation. Shared `<Icon>` wrapper with defaults `strokeWidth={1.75}` + `xs=14/sm=16/md=18`, then codemod call sites. Or ESLint rule against bare `size={n}` on lucide imports. Source: `2026-08-19-founder-obs-visual-craft.md` §N4. Size: M
+- [x] **P2-31** — Closed as duplicate of P1-73 (shipped `b68812f`). Exercise-name `truncate` → `line-clamp-2 leading-snug text-[15px]` already resolves the a11y nudge; no separate a11y-side fix needed.
+- [ ] **P2-32** — N4 icon-stroke discipline. Terav has 3 sizes (14/16/18) and 2 stroke weights (2, 1.75) in circulation. Shared `<Icon>` wrapper or ESLint rule. **Deferred** — the codemod touches ~40 call sites and is high-touch / low-user-visible. Track for a future polish batch. Source: `2026-08-19-founder-obs-visual-craft.md` §N4. Size: M
 - [x] **P2-33** — Label parity shipped 2026-08-19. `manifest.json:302` category label "Left/right & mobility" → "Mobility" + description tightened. Description reorder puts mobility use case first.
 - [x] **P2-34** — Recharts axis review — already resolved before founder-obs round. `SymptomLoadChart.tsx:86-91` uses themed palette tokens (grid #24272f, axisLine #3A3F4A, axisTick #D6D9DE) — no defaults leak. Was fixed in P2-13 earlier.
-- [ ] **P2-35** — S-6 hover-on-touch sticky-state sweep. `hover:` classes without `focus:`/`active:` twins across ExerciseCard, AppShell, DateNav, HeaderQuickLinks. Source: `2026-08-19-founder-obs-mobile-ux.md` §S-6. Size: M
+- [x] **P2-35** — Hover-on-touch sticky-state sweep shipped 2026-08-20 (`6d97ec5`). AppShell settings icon + DateNav prev/next chevrons now have focus + active twins. ExerciseCard + Programs list cards + Profile More rows already had `active:bg-line-soft/50` from prior audit rounds. HeaderQuickLinks was deleted in F8 first push, so no sweep needed there.
 
 ---
 
@@ -144,7 +144,7 @@ From roadmap sync + product-concerns-2026-08-17 + design-lead brief `2026-08-19-
 
   Source: `2026-08-19-founder-obs-design-lead.md` Decision 3 + `dev/archive/citations-under-review-2026-08-17.md` + 6 agent reports (task IDs a8a6c86 anterior-hip, a840816 engine, a2e72b3 hsw, a42be41 csm, af11b8b rowing, aec3b59 overhead). Depends on: BUG-7 through BUG-11 for HOLDs to promote.
 - [x] **F11 · Batch 32 — Tier-bug explain-back** shipped 2026-08-19 (`1d43ece`). Three-branch content model promoted from collapsed `<details>` to always-visible DashboardBlock above tier picker. Amber eyebrow when tests skipped (Branch B) — visible signal that the pick is conservative. Uses P0-10 copy + F9 primitive.
-- [ ] **F12 · CSM amber-week schedule swap.** Author a block-substitution primitive so `csm.json:435-436` ("≥ 3 amber days → drop 4×4 for a week; resume next week at 3×4") becomes machine-executable. Currently the SignalsStrip advisory + prose in the expanded body tell the user to substitute manually. Requires: (a) detect amber-week in `plan-generator.ts` or a scheduled_block post-processor; (b) substitute `block_4x4_row` with `block_easy_recovery` (or delete) for the next week; (c) record the substitution in `engine_adjustments[]` on the block so history is honest. Related: opens the door for other JSON-authored "drop N for a week" rules across programs. Source: S5 REV-4 P1 promoted from BUG-11 (b). Size: L (3-5h).
+- [x] **F12 · CSM amber-week schedule swap** — Already implemented at `plan-generator.ts:82-103` (pre-session-audit-round). Filter drops `block_4x4_row` when ≥ 3 amber-state days in trailing 7 days. Discovery during 2026-08-20 continue-thread revealed only the SignalsStrip advisory copy was stale (said "coming"). Advisory copy refreshed (`60c85ff`) to reflect current behavior + cite JSON hook + Bouchard 1999 rationale. General "if X, swap block Y for Z" primitive still valuable for other programs — file as future infrastructure work when a second program authors this pattern.
 
 ---
 
