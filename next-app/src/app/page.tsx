@@ -9,6 +9,7 @@ import { SessionActions } from "@/components/workout/SessionActions";
 import { DateNav } from "@/components/workout/DateNav";
 import { FirstRunBanner } from "@/components/FirstRunBanner";
 import { EmptyStateCard } from "@/components/EmptyStateCard";
+import { DashboardBlock } from "@/components/DashboardBlock";
 import { YourPlanCard } from "@/components/workout/YourPlanCard";
 import { SignalsStrip } from "@/components/workout/SignalsStrip";
 import { RunSlotCard } from "@/components/workout/RunSlotCard";
@@ -264,29 +265,19 @@ export function TodayView({ slugOverride }: { slugOverride?: string } = {}) {
           Today showed "Taper + test · week 1 of 3" alongside the graduation
           card — 4 contradictory clocks on rowing per delta audit
           2026-08-19. */}
-      {phase && !isPastProgramEnd(primary, activeDate, userProfile) ? (
-        <div className="-mt-3 flex items-baseline justify-between gap-3">
-          <p className="text-[14px] text-muted leading-tight">
-            <span className="text-strong">{humanPhaseName(phase.name)}</span>
-            {phaseProgress(phase, activeDate) ? (
-              <span className="text-slate"> · {phaseProgress(phase, activeDate)}</span>
-            ) : null}
-          </p>
-          {/* F8-second (2026-08-19) — "Focus session →" affordance. Routes
-              to /session/[slug] which currently renders the same view but
-              narrowed to a single program. Users on multi-track can jump
-              to just one program's session without the cross-track chrome.
-              Suppressed when already in session mode (slugOverride set) or
-              on a rest day (no blocks). */}
-          {!slugOverride && allBlocks.length > 0 && primary.slug ? (
-            <Link
-              href={`/session/${primary.slug}`}
-              className="font-mono text-[11px] uppercase tracking-wider text-bronze hover:opacity-80 whitespace-nowrap"
-            >
-              Focus session →
-            </Link>
+      {/* Phase readout — shown only in session mode (/session/[slug]) or
+          on rest days (allBlocks.length === 0). Dashboard mode's
+          workout DashboardBlock lede already carries the phase name,
+          so showing it here too would repeat the same info twice. */}
+      {phase &&
+      !isPastProgramEnd(primary, activeDate, userProfile) &&
+      (slugOverride || allBlocks.length === 0) ? (
+        <p className="-mt-3 text-[14px] text-muted leading-tight">
+          <span className="text-strong">{humanPhaseName(phase.name)}</span>
+          {phaseProgress(phase, activeDate) ? (
+            <span className="text-slate"> · {phaseProgress(phase, activeDate)}</span>
           ) : null}
-        </div>
+        </p>
       ) : null}
 
       {(() => {
@@ -488,6 +479,62 @@ export function TodayView({ slugOverride }: { slugOverride?: string } = {}) {
               />
             );
           })()}
+          <div id="log-session" className="cv-auto"><RunSlotCard date={activeDate} /></div>
+        </>
+      ) : !slugOverride ? (
+        /* F8-second (2026-08-20) — Today's dashboard mode. When NOT
+           already in session mode, replace the inline workout render
+           with a compact DashboardBlock summary + "Open session →" CTA.
+           Users scan today's workout at a glance and dive into the
+           focused session only when they're ready to work. Session
+           route (/session/[slug]) below still renders the full inline
+           workout UI. */
+        <>
+          {groups.map((g, gi) => {
+            if (g.blocks.length === 0) return null;
+            const groupPhase = gi === 0 ? phase : activePhaseFor(g.program, activeDate, userProfile);
+            const totalExercises = g.blocks.reduce(
+              (n, b) => n + (b.items?.length ?? 0),
+              0,
+            );
+            const blockWord = g.blocks.length === 1 ? "block" : "blocks";
+            const exWord = totalExercises === 1 ? "exercise" : "exercises";
+            return (
+              <DashboardBlock
+                key={`summary:${g.program.schema_version}:${gi}`}
+                eyebrow={
+                  groupsWithBlocks.length > 1
+                    ? `Today · ${programDisplayName(g.program, activeSlugs[gi])}`
+                    : "Today"
+                }
+                title={`${g.blocks.length} ${blockWord} · ${totalExercises} ${exWord}`}
+                lede={
+                  groupPhase
+                    ? `${humanPhaseName(groupPhase.name)}${phaseProgress(groupPhase, activeDate) ? " · " + phaseProgress(groupPhase, activeDate) : ""}`
+                    : undefined
+                }
+                primaryCta={
+                  g.program.slug
+                    ? {
+                        label: "Open session",
+                        href: `/session/${g.program.slug}`,
+                      }
+                    : undefined
+                }
+              >
+                <ul className="text-[13px] text-muted space-y-0.5">
+                  {g.blocks.slice(0, 5).map((b) => (
+                    <li key={b.id} className="truncate">
+                      · {humanBlockName(b.name)}
+                    </li>
+                  ))}
+                  {g.blocks.length > 5 ? (
+                    <li className="text-muted/60">+ {g.blocks.length - 5} more</li>
+                  ) : null}
+                </ul>
+              </DashboardBlock>
+            );
+          })}
           <div id="log-session" className="cv-auto"><RunSlotCard date={activeDate} /></div>
         </>
       ) : (
