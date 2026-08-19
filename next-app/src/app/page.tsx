@@ -31,7 +31,20 @@ import { migrateLegacyToBlocks, needsBlockMigration } from "@/lib/migrations/leg
 import { PerProgramActions } from "@/components/workout/PerProgramActions";
 import type { Program, Block, Exercise, Phase, Store, ScheduledBlock, ProgramManifest } from "@/lib/schemas";
 
+/**
+ * Default export for the / route. Thin wrapper around TodayView so the
+ * same session-rendering logic can be reused by the /session/[slug]
+ * route without duplication. F8-second (2026-08-19) — extraction step
+ * only; both routes still render the same content for now. Future work
+ * will make Today a pure dashboard (MorningCheck + Workout summary +
+ * Extras blocks) and /session hold the full workout UI — but that
+ * needs its own focused pass, see dev/active/F8-second-plan.md.
+ */
 export default function TodayPage() {
+  return <TodayView />;
+}
+
+export function TodayView({ slugOverride }: { slugOverride?: string } = {}) {
   const [programs, setPrograms] = useState<Program[]>([]);
   const [byId, setById] = useState<Record<string, Exercise>>({});
   const [error, setError] = useState<string | null>(null);
@@ -58,10 +71,15 @@ export default function TodayPage() {
   );
   const setActiveProgram = useStore((s) => s.setActiveProgram);
 
-  // Effective list of programs Today should render. Legacy path: fall back to
+  // Effective list of programs to render. Legacy path: fall back to
   // just the primary. Multi-program: use the full active_program_ids list,
   // ordering primary first so its phase drives the header.
+  //
+  // F8-second (2026-08-19) — when slugOverride is set (from /session/[slug]
+  // route), narrow to just that program's session. Other active tracks are
+  // suppressed so the session view is single-focus.
   const activeSlugs: string[] = (() => {
+    if (slugOverride) return [slugOverride];
     if (activeProgramIds && activeProgramIds.length) {
       const ordered = activeProgramSlug
         ? [activeProgramSlug, ...activeProgramIds.filter((s) => s !== activeProgramSlug)]
