@@ -50,6 +50,13 @@ export function blocksForDate(
   drillsById?: DrillsById,
   store?: Store,
 ): Block[] {
+  // F5 (Batch 23) — paused programs return [] from Today. The program stays
+  // in `active_program_ids`, still visible on Profile, still gets its "Resume"
+  // affordance — it just doesn't prescribe. Multi-program: other programs
+  // still render normally.
+  if (program.slug && profile?.program_states?.[program.slug]?.paused_at) {
+    return [];
+  }
   const blocks =
     program.generation_strategy === "multi_dimensional"
       ? multiDimensionalBlocksForDate(program, profile, dateISO, drillsById)

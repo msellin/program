@@ -10,17 +10,17 @@
 
 These are **IDEAS, not action items**. The engine + rehab-first positioning overrides "cleaner is better," so Margus picks what to ship. Batches ship in 6-12h chunks — don't try to close the whole list in one sitting, and respect the "no UI churn between audits" rule (each shipped batch should stand on its own before the next audit re-scans). Real bugs go first because they're broken code the audits happened to surface; everything else is prioritized by user-visible ROI. Sizing (S/M/L/XL) is per item.
 
-**Counts by bucket (post-Batch-22, brief delivered, harness fresh):**
+**Counts by bucket (post-Batch-23):**
 
-- **Bugs (fix regardless):** 0 open — all closed (A4 harness rerun passed 15/15)
-- **P0 (biggest ROI):** 0 open — all 4 shipped
-- **P1 (visible quality gap):** 0 open — all 55 shipped
-- **P2 (defensible polish):** 0 open — all 19 shipped
-- **Features on-deck:** 7 items, ~24-42h (F1 + F2 + F5-F9). Design brief at `dev/audits/app/2026-08-19-design-brief-features.md` proposes Batch 23 (F2 + F5 partial + F7) → Batch 24 (F6 + F5 remainder) → Batch 25 (F1)
+- **Bugs (fix regardless):** 0 open
+- **P0 (biggest ROI):** 0 open
+- **P1 (visible quality gap):** 0 open
+- **P2 (defensible polish):** 0 open
+- **Features on-deck:** 4 items (F1 · F6 · F8 · F9). F2 + F5 partial + F7 shipped in Batch 23. Design brief proposes Batch 24 (F6 MoveSheet + F5 retest-window remainder) → Batch 25 (F1 extension hook into `/account`).
 - **Strategic (founder decision):** 4 items — decision, not build
 - **Rejected:** 11 items — do not ship
 
-Total open surface: **7 features + 4 strategic + 11 rejected = 22 line items** (down from 110 pre-Batch-17). Next batch (Batch 23) has a full design brief with mockups, file:line pointers, and interaction contracts — ready to implement.
+Total open surface: **4 features + 4 strategic + 11 rejected = 19 line items** (down from 110 pre-Batch-17). Next batch (Batch 24) is the largest remaining ship: Week MoveSheet + retest-window UX (10-12h combined).
 
 ---
 
@@ -95,10 +95,7 @@ Keep the convention terse — the four markers cover every state. Don't invent n
 From roadmap sync + product-concerns-2026-08-17. All pre-Batch-17 and founder-surfaced.
 
 - [ ] **F1** Extend-by-N-weeks at graduation — Batch 12 shipped feedback + repeat-arc; extending an existing arc without full re-enrol is the next affordance. Source: `2026-08-19-open-task-list.md` (E1), `product-concerns-2026-08-17/roadmap.md`. Files: graduation flow, `GraduationCard.tsx`. Size: M
-- [ ] **F2** First-run tutorial overlay on Today — carried from Phase 4 SaaS-launch tasks; skippable, one-shot. Source: `2026-08-19-open-task-list.md` (E2). Files: Today shell, new component. Size: M
-- [ ] **F5** Retest-week UX polish — HERITAGE Phase 5 shipped scheduler; "you're at the end" state + post-retest actions (extend / switch / take break / graduate) still need tightening. Source: `2026-08-19-open-task-list.md` (E5). Files: retest flow, Progress. Size: M
 - [ ] **F6** Runna-style Week collapse+expand full impl — Batch 15 shipped collapse-by-default; expanded state, Move-sheet, per-row `Open in Today / Move… / Skip` verbs still open. Source: `2026-08-19-open-task-list.md` (E6). Files: `next-app/src/app/week/page.tsx`, new `MoveSheet.tsx`. Size: L
-- [ ] **F7** `/account` deep-link route so Delete has a real home — Batch 16 removed Delete from Profile footer equal-weight row; identity-chip-tap destination `/account` is the proper home. Source: `2026-08-19-open-task-list.md` (E7). Files: new `next-app/src/app/account/page.tsx`. Size: S
 - [ ] **F8** CSM amber-week drop-4×4 hook — engine consumer for a rule already documented in `concurrent-strength-maintenance.json`. Founder-decision whether to ship for first CSM paid user or defer. Source: `2026-08-19-open-task-list.md` (E8). Files: engine adapt path, CSM program JSON. Size: M
 - [ ] **F9** Skill/mobility exercise logging in simulator — blocks adaptation verification for handstand-walk + overhead-mobility retest windows. Source: `2026-08-19-open-task-list.md` (E9). Files: persona harness, simulator matrix. Size: M
 
@@ -136,6 +133,14 @@ Deduplicated across visual-craft §16 + mobile-ux §10 + roadmap:
 ## Closed items appendix (shipped since 2026-08-17)
 
 Strikethrough preserves history; these items are OUT of the open list.
+
+**Batch 23 — hand-off co-ship: F2 + F5 partial + F7 (deployed https://49a8a7d9.program-v2.pages.dev, 2026-08-19):**
+
+3 items — first-run banner primary CTA, retest hand-off 4-verb refactor + Extend/Pause store actions + Profile pause pill, `/account` deep-link route with Delete relocated. Full lines preserved:
+
+- [x] **F2** — done 2026-08-19 Batch 23 — First-run tutorial overlay on Today — carried from Phase 4 SaaS-launch tasks; skippable, one-shot. Source: `2026-08-19-open-task-list.md` (E2). Files: Today shell, new component. Size: M
+- [x] **F5** — done 2026-08-19 Batch 23 — Retest-week UX polish — HERITAGE Phase 5 shipped scheduler; "you're at the end" state + post-retest actions (extend / switch / take break / graduate) still need tightening. Source: `2026-08-19-open-task-list.md` (E5). Files: retest flow, Progress. Size: M
+- [x] **F7** — done 2026-08-19 Batch 23 — `/account` deep-link route so Delete has a real home — Batch 16 removed Delete from Profile footer equal-weight row; identity-chip-tap destination `/account` is the proper home. Source: `2026-08-19-open-task-list.md` (E7). Files: new `next-app/src/app/account/page.tsx`. Size: S
 
 **Design-lead brief + harness rerun (2026-08-19):**
 - [x] **X1** — done 2026-08-19 — product-design-lead brief for F2 + F5 + F6 + F7 delivered at `dev/audits/app/2026-08-19-design-brief-features.md` (493 lines). First dispatch hit a usage-limit anomaly; retry after reset succeeded. Brief recommends **Batch 23** (F2 + F5 partial + F7 co-ship, 7-8h) then **Batch 24** (F6 MoveSheet + F5 retest-window, 10-12h) then **Batch 25** (F1 extend hook into `/account`).

@@ -81,12 +81,30 @@ function shiftedPhases(program: Program, profile?: Store["user_profile"]): Phase
     }
   }
 
-  if (!shift) return program.phases;
-  return program.phases.map((p) => ({
-    ...p,
-    starts: shiftIsoDate(p.starts, shift),
-    ends: p.ends ? shiftIsoDate(p.ends, shift) : p.ends,
-  }));
+  // F5 (Batch 23) — extend_weeks pushes only the LAST phase's `ends`
+  // forward by N*7 days. Purpose: user tapped "Extend +N weeks" at
+  // retest hand-off, we want isPastProgramEnd to return false for
+  // another N weeks so the graduation card doesn't re-fire. Middle
+  // phases keep their shape — the extension gets absorbed by the
+  // final phase (which for most programs is the peak / test-taper).
+  const extensionWeeks = slug
+    ? profile?.program_states?.[slug]?.extension_weeks ?? 0
+    : 0;
+
+  if (!shift && extensionWeeks === 0) return program.phases;
+  const shifted = shift
+    ? program.phases.map((p) => ({
+        ...p,
+        starts: shiftIsoDate(p.starts, shift),
+        ends: p.ends ? shiftIsoDate(p.ends, shift) : p.ends,
+      }))
+    : program.phases;
+  if (extensionWeeks === 0) return shifted;
+  return shifted.map((p, i, arr) =>
+    i === arr.length - 1 && p.ends
+      ? { ...p, ends: shiftIsoDate(p.ends, extensionWeeks * 7) }
+      : p,
+  );
 }
 
 /**

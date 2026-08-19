@@ -17,7 +17,6 @@ import { loadProgramManifest } from "@/lib/data-loader";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
 import { coachConfigured } from "@/lib/coach-client";
 import { useInstallPrompt } from "@/lib/useInstallPrompt";
-import { today } from "@/lib/utils";
 import type { ProgramManifest } from "@/lib/schemas";
 
 /**
@@ -34,7 +33,6 @@ import type { ProgramManifest } from "@/lib/schemas";
  */
 export default function ProfilePage() {
   const store = useStore((s) => s.store);
-  const wipe = useStore((s) => s.wipe);
   const isSuperAdmin = useIsSuperAdmin();
   // P2-8 — Add to Home Screen from Profile when Chrome/Edge fires
   // beforeinstallprompt. iOS Safari never fires the event so the button
@@ -45,58 +43,8 @@ export default function ProfilePage() {
   const [email, setEmail] = useState<string | null>(null);
   const [memberSince, setMemberSince] = useState<string | null>(null);
   const [manifest, setManifest] = useState<ProgramManifest | null>(null);
-  const [confirmDelete, setConfirmDelete] = useState(false);
-  const [deleting, setDeleting] = useState(false);
-  const [deleteError, setDeleteError] = useState<string | null>(null);
-
-  const exportMyData = () => {
-    const blob = new Blob([JSON.stringify(store, null, 2)], {
-      type: "application/json",
-    });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `terav-data-${today()}.json`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-  };
-
-  const deleteAccount = async () => {
-    setConfirmDelete(false);
-    setDeleting(true);
-    setDeleteError(null);
-    try {
-      const supabase = createClient();
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      if (!session?.access_token) {
-        setDeleteError("Not signed in. Sign in first, then try again.");
-        setDeleting(false);
-        return;
-      }
-      const res = await fetch("/api/delete-account", {
-        method: "DELETE",
-        headers: { authorization: `Bearer ${session.access_token}` },
-      });
-      if (!res.ok) {
-        const text = await res.text().catch(() => "");
-        setDeleteError(
-          `Delete failed (${res.status}). ${text || "Try again in a moment."}`,
-        );
-        setDeleting(false);
-        return;
-      }
-      wipe();
-      await supabase.auth.signOut();
-      router.replace("/sign-in");
-    } catch (e) {
-      setDeleteError(e instanceof Error ? e.message : String(e));
-      setDeleting(false);
-    }
-  };
+  // Delete + Export moved to /account in F7 (Batch 23). The identity chip
+  // above deep-links there.
 
   useEffect(() => {
     const supabase = createClient();
@@ -134,6 +82,7 @@ export default function ProfilePage() {
     (typeof activePrograms)[number] | null
   >(null);
   const removeActiveProgram = useStore((s) => s.removeActiveProgram);
+  const resumeProgram = useStore((s) => s.resumeProgram);
 
   const doSignOut = async () => {
     const supabase = createClient();
@@ -151,12 +100,14 @@ export default function ProfilePage() {
         Profile
       </h1>
 
-      {/* Identity chip (brief §1.2 + §4.2). Replaces the baseline-flex row
-          that put email + staff + joined on one line. 76 px tall, 48 px
-          avatar with bronze-tint using the first letter of the email, name
-          at 16 px semibold, meta stacked on the right. Non-interactive for
-          now; becomes chevron+link once /account route ships. */}
-      <div className="rounded border border-line-soft bg-surface px-4 py-3 flex items-center gap-3">
+      {/* F7 (Batch 23) — identity chip now deep-links to /account where
+          Delete + Export + primary-picker + email-change live. The chip
+          is a full-tap surface with a chevron; nothing about identity
+          state mutates on Profile itself. */}
+      <Link
+        href="/account"
+        className="rounded border border-line-soft bg-surface px-4 py-3 flex items-center gap-3 active:bg-line-soft/50"
+      >
         <div className="w-12 h-12 rounded-full bg-bronze/20 flex items-center justify-center flex-shrink-0">
           <span className="font-semibold text-lg text-bronze-hi">
             {(email ?? "?").charAt(0).toUpperCase()}
@@ -184,7 +135,8 @@ export default function ProfilePage() {
             ) : null}
           </p>
         </div>
-      </div>
+        <ChevronRight size={16} className="text-muted flex-shrink-0" aria-hidden />
+      </Link>
 
       {/* Active plan(s). No inline × — removal happens on the program page
           (see product-design-lead brief). Row is chevron → deep link. */}
@@ -200,6 +152,10 @@ export default function ProfilePage() {
             const hasIntake =
               !!state?.tier || !!state?.intake_answers || !!state?.baseline_capabilities;
             const graduated = !!state?.graduated_at;
+            // F5 (Batch 23) — pause + extension surface as pills on the
+            // program row. Paused arcs get an inline Resume link.
+            const paused = !!state?.paused_at;
+            const extendedWeeks = state?.extension_weeks ?? 0;
             // Non-primary rows in a multi-track setup get a "Remove"
             // text-link. Deliberately quiet — the row itself is a
             // deep-link to the program page (where the primary remove
@@ -235,26 +191,45 @@ export default function ProfilePage() {
                     </p>
                     <p className="text-[11px] text-muted mt-0.5 flex items-center gap-1.5 flex-wrap">
                       <span>{p.duration_weeks} weeks · {p.difficulty}</span>
-                      {isPrimary && activePrograms.length > 1 && !graduated ? (
+                      {isPrimary && activePrograms.length > 1 && !graduated && !paused ? (
                         <span className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-bronze/20 text-bronze">
                           today&rsquo;s
                         </span>
                       ) : null}
-                      {tierLabel && !graduated ? (
+                      {tierLabel && !graduated && !paused ? (
                         <span className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-slate/15 text-slate">
                           {tierLabel}
                         </span>
                       ) : null}
-                      {!hasIntake && !graduated ? (
+                      {!hasIntake && !graduated && !paused ? (
                         <span className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber/15 text-amber">
                           intake pending
+                        </span>
+                      ) : null}
+                      {paused ? (
+                        <span className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-slate/20 text-slate">
+                          paused
+                        </span>
+                      ) : null}
+                      {extendedWeeks > 0 && !graduated && !paused ? (
+                        <span className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-bronze/15 text-bronze">
+                          extended +{extendedWeeks}w
                         </span>
                       ) : null}
                     </p>
                   </div>
                   <ChevronRight size={16} className="text-muted flex-shrink-0" />
                 </Link>
-                {canRemoveHere ? (
+                {paused ? (
+                  <button
+                    type="button"
+                    onClick={() => resumeProgram(p.slug)}
+                    className="ml-auto mr-3 mb-2 -mt-1 text-[11px] text-bronze hover:text-bronze-hover underline decoration-bronze/40 hover:decoration-bronze block"
+                  >
+                    Resume
+                  </button>
+                ) : null}
+                {canRemoveHere && !paused ? (
                   <button
                     type="button"
                     onClick={() => setRemoveOpen(p)}
@@ -320,20 +295,10 @@ export default function ProfilePage() {
       </nav>
       </div>
 
-      {/* Footer: legal + GDPR utility links. Deliberately quiet — reachable
-          (legally required) but not shouting. Both Export and Delete fire a
-          ConfirmSheet. Founder request 2026-08-19 — Sign out moves BELOW
-          the footer so it's the last thing on the screen (bottom-anchored
-          rest position). */}
-      {/* Design-lead brief 2026-08-19 §4.2 — collapse footer. Delete moves
-          under a Danger-zone disclosure so the destructive action isn't
-          44 px away from same-styled Privacy link. Legal + Export
-          reduce to one line each, muted 11 px. */}
-      <footer className="pt-6 space-y-3 border-t border-line-soft">
-        {/* P1-14 — each legal link is a 44 px tap target. Prior "single-
-            row · separated" pattern from Batch 16 read cleanly but the
-            hit surfaces were ~16 px tall. Keep the visual density
-            (11 px muted text) via inline-flex + min-h-[44px] py-2. */}
+      {/* F7 (Batch 23) — Delete + Export moved to /account. Profile footer
+          is now legal-only, one row. The identity chip above deep-links to
+          /account where the destructive actions live. */}
+      <footer className="pt-6 border-t border-line-soft">
         <nav
           aria-label="Legal"
           className="text-[11px] text-muted flex items-center flex-wrap"
@@ -359,38 +324,6 @@ export default function ProfilePage() {
             Medical disclaimer
           </Link>
         </nav>
-        <button
-          type="button"
-          onClick={exportMyData}
-          className="inline-flex items-center min-h-[44px] py-2 text-[11px] text-muted hover:text-ink underline underline-offset-2 decoration-muted/50 hover:decoration-ink/60"
-        >
-          Export my data
-        </button>
-        <details className="text-[11px]">
-          <summary className="cursor-pointer inline-flex items-center min-h-[44px] py-2 text-muted hover:text-ink select-none">
-            Danger zone
-          </summary>
-          <div className="mt-1 pl-2 border-l border-red/30 py-2">
-            <button
-              type="button"
-              onClick={() => {
-                setDeleteError(null);
-                setConfirmDelete(true);
-              }}
-              disabled={deleting}
-              className="inline-flex items-center min-h-[44px] py-2 text-red/80 hover:text-red underline underline-offset-2 decoration-red/40 disabled:opacity-50"
-            >
-              {deleting ? "Deleting…" : "Delete my account"}
-            </button>
-            <p className="text-muted italic mt-1">
-              Wipes your account, logs, morning checks, everything synced.
-              Cannot be undone.
-            </p>
-          </div>
-        </details>
-        {deleteError ? (
-          <p className="text-[12px] text-red border-l-4 border-red pl-2">{deleteError}</p>
-        ) : null}
       </footer>
 
       {/* Sign out — bottom-anchored (founder request 2026-08-19). Last
@@ -417,15 +350,6 @@ export default function ProfilePage() {
           void doSignOut();
         }}
         onCancel={() => setSignOutOpen(false)}
-      />
-      <ConfirmSheet
-        open={confirmDelete}
-        title="Delete your account permanently?"
-        body="Everything goes — logs, training maxes, morning checks, server copies. This cannot be undone."
-        confirmLabel="Delete forever"
-        danger
-        onConfirm={() => void deleteAccount()}
-        onCancel={() => setConfirmDelete(false)}
       />
       <ConfirmSheet
         open={!!removeOpen}

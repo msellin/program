@@ -689,11 +689,62 @@ function LogSessionShortcut({ date }: { date: string }) {
   );
 }
 
+/**
+ * F5 (Batch 23) — one-tap verb row with caption. Vertical stack replaces
+ * the prior horizontal chip row on GraduationCard; the caption is the
+ * load-bearing "what does this do" affordance for a rare-frequency
+ * end-of-arc decision.
+ */
+function VerbRow({
+  label,
+  caption,
+  variant,
+  onClick,
+}: {
+  label: string;
+  caption: string;
+  variant: "primary" | "secondary";
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={
+        variant === "primary"
+          ? "w-full text-left rounded bg-bronze text-ground active:bg-bronze-active px-3 py-2.5 min-h-[52px]"
+          : "w-full text-left rounded border border-line-soft bg-surface active:bg-line-soft/60 px-3 py-2.5 min-h-[52px]"
+      }
+    >
+      <p
+        className={
+          variant === "primary"
+            ? "font-mono text-[11px] uppercase tracking-wider"
+            : "font-mono text-[11px] uppercase tracking-wider text-ink"
+        }
+      >
+        {label}
+      </p>
+      <p
+        className={
+          variant === "primary"
+            ? "text-[12px] text-ground/80 mt-0.5"
+            : "text-[12px] text-muted mt-0.5"
+        }
+      >
+        {caption}
+      </p>
+    </button>
+  );
+}
+
 function GraduationCard({ program }: { program: Program }) {
   const store = useStore((s) => s.store);
   const removeActiveProgram = useStore((s) => s.removeActiveProgram);
   const markGraduated = useStore((s) => s.markGraduated);
   const restartProgram = useStore((s) => s.restartProgram);
+  const extendProgram = useStore((s) => s.extendProgram);
+  const pauseProgram = useStore((s) => s.pauseProgram);
   const [confirmEnd, setConfirmEnd] = useState(false);
   const [manifest, setManifest] = useState<ProgramManifest | null>(null);
   const userTier = program.slug
@@ -835,32 +886,56 @@ function GraduationCard({ program }: { program: Program }) {
             </p>
           </Link>
         ) : null}
-        <div className="flex flex-wrap gap-2 pt-1">
-          <Link
-            href="/progress"
-            className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover min-h-[36px]"
-          >
-            Retest — log your numbers
-          </Link>
-          <Link
-            href="/programs"
-            className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-slate/60 text-slate hover:bg-slate/10 min-h-[36px]"
-          >
-            {nextBlockEntry ? "Browse other programs →" : "Pick your next program →"}
-          </Link>
+        {/* F5 (Batch 23) — 4-verb vertical stack replaces the prior chip
+            row. Each verb has a caption to disambiguate — this is a rare-
+            frequency decision, so density < clarity. Order: Repeat is
+            the primary (bronze fill); Extend / Take a break / Pick next
+            are secondary. */}
+        <div className="space-y-2 pt-1">
           {program.slug ? (
-            <button
-              type="button"
+            <VerbRow
+              variant="primary"
+              label="Repeat this arc"
+              caption="Restart · keep intake + baselines"
               onClick={() => {
                 if (!program.slug) return;
                 restartProgram(program.slug, todayISO());
               }}
-              className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-muted hover:text-ink hover:bg-line-soft min-h-[36px]"
-              title="Restart this arc from today. Keeps your intake answers + baselines."
-            >
-              Repeat this arc
-            </button>
+            />
           ) : null}
+          {program.slug ? (
+            <VerbRow
+              variant="secondary"
+              label="Extend +4 weeks"
+              caption="Push the retest date · keep the arc going"
+              onClick={() => {
+                if (!program.slug) return;
+                extendProgram(program.slug, 4);
+              }}
+            />
+          ) : null}
+          {program.slug ? (
+            <VerbRow
+              variant="secondary"
+              label="Take a break"
+              caption="Pauses Today · stays in your programs list"
+              onClick={() => {
+                if (!program.slug) return;
+                pauseProgram(program.slug, todayISO());
+              }}
+            />
+          ) : null}
+          <Link
+            href="/programs"
+            className="block rounded border border-slate/40 bg-surface active:bg-slate/10 px-3 py-2.5 min-h-[52px]"
+          >
+            <p className="font-mono text-[11px] uppercase tracking-wider text-slate">
+              Pick your next focus →
+            </p>
+            <p className="text-[12px] text-muted mt-0.5">
+              {nextBlockEntry ? "Preview the next block or browse the catalog" : "Browse the catalog"}
+            </p>
+          </Link>
         </div>
         <GraduationFeedback slug={program.slug ?? null} />
         <button

@@ -6,6 +6,17 @@ import { useStore } from "@/lib/useStore";
 
 const DISMISS_KEY = "program.firstrun.dismissed";
 
+/**
+ * F2 (Batch 23) — one-shot hero card on Today for fresh accounts.
+ * Explains the five tabs + the ⋮ overflow menu, then dismisses to
+ * localStorage. Design-lead brief `dev/audits/app/2026-08-19-
+ * design-brief-features.md` §F2 chose hero-card over spotlight
+ * overlay for confirm-first register + Krug clarity + persona-
+ * erratic tolerance.
+ *
+ * Gates: hydrated + zero logs + zero TMs + not-yet-dismissed. The
+ * component silently returns null once the user has any real history.
+ */
 export function FirstRunBanner() {
   const [dismissed, setDismissed] = useState(true);
   const hydrated = useStore((s) => s.hydrated);
@@ -31,13 +42,18 @@ export function FirstRunBanner() {
   if (logsCount > 0 || tmCount > 0) return null;
 
   return (
-    <div className="rounded-lg border border-line-soft bg-surface p-4 space-y-2.5">
+    <section
+      aria-labelledby="firstrun-title"
+      className="rounded-lg border border-line-soft bg-surface p-4 space-y-2.5"
+    >
       <div className="flex items-start justify-between gap-3">
-        <p className="font-semibold text-strong text-[14px]">Five tabs, one flow</p>
+        <p id="firstrun-title" className="font-semibold text-strong text-[14px]">
+          Five tabs, one flow
+        </p>
         <button
           type="button"
           onClick={dismiss}
-          aria-label="Dismiss"
+          aria-label="Dismiss five-tab tour"
           className="text-muted hover:text-ink w-10 h-10 -m-2 flex items-center justify-center"
         >
           <X size={16} />
@@ -53,6 +69,15 @@ export function FirstRunBanner() {
       <p className="text-[12px] text-muted pt-1">
         More lives behind the <span className="font-mono">⋮</span> menu (top right): Programs, Check, Extras, Coach, Report, Guide.
       </p>
-    </div>
+      <div className="pt-1">
+        <button
+          type="button"
+          onClick={dismiss}
+          className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover min-h-[44px]"
+        >
+          Got it — start the day
+        </button>
+      </div>
+    </section>
   );
 }

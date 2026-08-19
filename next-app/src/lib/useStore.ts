@@ -222,6 +222,23 @@ type StoreState = {
    */
   restartProgram: (slug: string, dateISO: string) => void;
   /**
+   * F5 (Batch 23) — extend a graduating arc by N more weeks before the
+   * next retest window fires. Adds to `program_states[slug].extension_weeks`
+   * so repeated extensions accumulate. Consumers: `activePhaseFor` +
+   * RetestReminder trigger math.
+   */
+  extendProgram: (slug: string, weeks: number) => void;
+  /**
+   * F5 (Batch 23) — soft-dismiss a program from Today without removing
+   * it. Sets `program_states[slug].paused_at`; the plan-generator returns
+   * [] for blocks on that program until Resume clears the flag.
+   */
+  pauseProgram: (slug: string, dateISO: string) => void;
+  /**
+   * F5 (Batch 23) — clear `paused_at` so the program re-renders on Today.
+   */
+  resumeProgram: (slug: string) => void;
+  /**
    * Phase A: dismiss the "your plan is built" reveal card for a program. Sets
    * program_states[slug].reveal_seen = true. Card never re-appears for the
    * same program.
@@ -1013,6 +1030,9 @@ export const useStore = create<StoreState>((set, get) => ({
     // Also clear phase_shift_days so the implicit fallback (schedule.ts)
     // recomputes shift from the new started_at.
     delete next.phase_shift_days;
+    // Restart also clears any pending extension or pause.
+    delete next.extension_weeks;
+    delete next.paused_at;
     states[slug] = next;
     profile.program_states = states;
     // Bump the top-level started_at too — reveal-copy + several other
@@ -1020,6 +1040,50 @@ export const useStore = create<StoreState>((set, get) => ({
     if (profile.active_program_id === slug) {
       profile.active_program_started_at = dateISO;
     }
+    s.user_profile = profile;
+    commitImmediate(s);
+    set({ store: s });
+  },
+
+  extendProgram: (slug, weeks) => {
+    const s = { ...get().store };
+    const profile = { ...(s.user_profile ?? {}) };
+    const states = { ...(profile.program_states ?? {}) };
+    const prior = states[slug] ?? {};
+    const priorExt = prior.extension_weeks ?? 0;
+    // Also clear graduated_at so the extended arc reads as active until
+    // the new retest window closes.
+    const next = { ...prior, extension_weeks: priorExt + weeks };
+    delete next.graduated_at;
+    delete next.graduation_feedback;
+    states[slug] = next;
+    profile.program_states = states;
+    s.user_profile = profile;
+    commitImmediate(s);
+    set({ store: s });
+  },
+
+  pauseProgram: (slug, dateISO) => {
+    const s = { ...get().store };
+    const profile = { ...(s.user_profile ?? {}) };
+    const states = { ...(profile.program_states ?? {}) };
+    states[slug] = { ...(states[slug] ?? {}), paused_at: dateISO };
+    profile.program_states = states;
+    s.user_profile = profile;
+    commitImmediate(s);
+    set({ store: s });
+  },
+
+  resumeProgram: (slug) => {
+    const s = { ...get().store };
+    const profile = { ...(s.user_profile ?? {}) };
+    const states = { ...(profile.program_states ?? {}) };
+    const prior = states[slug];
+    if (!prior) return;
+    const next = { ...prior };
+    delete next.paused_at;
+    states[slug] = next;
+    profile.program_states = states;
     s.user_profile = profile;
     commitImmediate(s);
     set({ store: s });

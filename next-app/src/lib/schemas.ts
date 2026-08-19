@@ -1220,6 +1220,19 @@ export const storeSchema = z.object({
              */
             graduated_at: z.string().optional(),
             /**
+             * F5 (Batch 23) — user chose "Extend +N weeks" at retest hand-off.
+             * Consumed by `activePhaseFor` in schedule.ts to shift phase
+             * end-dates. Additive across multiple extensions.
+             */
+            extension_weeks: z.number().int().min(0).optional(),
+            /**
+             * F5 (Batch 23) — user chose "Take a break" at retest hand-off.
+             * Program stays in `active_program_ids` but the plan-generator
+             * returns [] for its blocks until Resume from Profile clears
+             * this. Multi-program: other programs still render.
+             */
+            paused_at: z.string().optional(),
+            /**
              * User's own rating of the arc at graduation. 1-5 scale +
              * optional freeform note. Written by GraduationCard's survey.
              * Delta-3 2026-08-19: gives the user a place to say "this
