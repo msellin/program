@@ -198,6 +198,17 @@ export function TodayView({ slugOverride }: { slugOverride?: string } = {}) {
 
   return (
     <div className="space-y-6 pt-4">
+      {/* F8-second (2026-08-19) · session-mode Back link. Shown only on
+          /session/[slug] so users can escape back to the dashboard.
+          On Today (/), slugOverride is undefined and this stays hidden. */}
+      {slugOverride ? (
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1 text-[14px] text-muted hover:text-ink -mb-2"
+        >
+          ← Back to Today
+        </Link>
+      ) : null}
       {/* P1-70 (2026-08-19) — H1 replaced with the active date so it carries
           information instead of duplicating the bottom-nav "Today" label
           (WCAG 2.4.6 preserved — visible H1 still there). Founder-observed
@@ -208,7 +219,9 @@ export function TodayView({ slugOverride }: { slugOverride?: string } = {}) {
           {formatDateHeading(activeDate)}
         </h1>
         {activeDate === todayISO() ? (
-          <p className="mt-2 text-[14px] text-muted">Today</p>
+          <p className="mt-2 text-[14px] text-muted">
+            {slugOverride ? `Focus session · ${primary.slug ?? ""}` : "Today"}
+          </p>
         ) : (
           <p className="mt-2 text-[14px] text-muted">{dateOffsetLabel(activeDate)}</p>
         )}
@@ -252,12 +265,28 @@ export function TodayView({ slugOverride }: { slugOverride?: string } = {}) {
           card — 4 contradictory clocks on rowing per delta audit
           2026-08-19. */}
       {phase && !isPastProgramEnd(primary, activeDate, userProfile) ? (
-        <p className="-mt-3 text-[14px] text-muted leading-tight">
-          <span className="text-strong">{humanPhaseName(phase.name)}</span>
-          {phaseProgress(phase, activeDate) ? (
-            <span className="text-slate"> · {phaseProgress(phase, activeDate)}</span>
+        <div className="-mt-3 flex items-baseline justify-between gap-3">
+          <p className="text-[14px] text-muted leading-tight">
+            <span className="text-strong">{humanPhaseName(phase.name)}</span>
+            {phaseProgress(phase, activeDate) ? (
+              <span className="text-slate"> · {phaseProgress(phase, activeDate)}</span>
+            ) : null}
+          </p>
+          {/* F8-second (2026-08-19) — "Focus session →" affordance. Routes
+              to /session/[slug] which currently renders the same view but
+              narrowed to a single program. Users on multi-track can jump
+              to just one program's session without the cross-track chrome.
+              Suppressed when already in session mode (slugOverride set) or
+              on a rest day (no blocks). */}
+          {!slugOverride && allBlocks.length > 0 && primary.slug ? (
+            <Link
+              href={`/session/${primary.slug}`}
+              className="font-mono text-[11px] uppercase tracking-wider text-bronze hover:opacity-80 whitespace-nowrap"
+            >
+              Focus session →
+            </Link>
           ) : null}
-        </p>
+        </div>
       ) : null}
 
       {(() => {
