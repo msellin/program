@@ -368,21 +368,26 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
             </div>
           ) : null}
 
-          {/* CSM amber-week 4×4 advisory. Signal-computed at
-              SignalsStrip.tsx:154; expanded body was missing a render
-              branch so the label never showed — phantom fix. CSM delta-2
-              (2026-08-19) caught. */}
+          {/* F12 (2026-08-20) — CSM amber-week auto-swap confirmed.
+              plan-generator.ts:82-103 already drops block_4x4_row from
+              this week's schedule when ≥ 3 amber days in the trailing
+              7 days (concurrent-strength-maintenance.json:435-436).
+              Advisory copy updated to reflect the swap is automatic —
+              was "coming, substitute manually" which is now stale. */}
           {signals.some((s) => s.id === "csm-amber-week") ? (
             <div className="rounded border border-amber/40 border-l-4 border-l-amber bg-amber/10 p-3 text-sm">
-              <p className="font-semibold text-strong">Amber week detected</p>
+              <p className="font-semibold text-strong">Amber week — 4×4 dropped</p>
               <p className="text-[14px] text-muted mt-1">
                 {signals.find((s) => s.id === "csm-amber-week")?.label ??
-                  "Multiple amber days this week — plan will drop 4×4 next week"}
-                .{" "}
-                Program authors: `concurrent-strength-maintenance.json:541` says
-                &quot;drop 4×4 for a week&quot;. Scheduled-block swap is coming
-                — until then, feel free to substitute an easy Z2 recovery on
-                Thu.
+                  "Multiple amber days this week"}
+                . The engine is holding the Norwegian 4×4 for this week
+                and will resume it next week — per{" "}
+                <span className="font-mono text-[12px]">
+                  concurrent-strength-maintenance.json:435
+                </span>
+                . Bouchard 1999 HERITAGE variance says a hard aerobic
+                stimulus on top of amber symptoms doesn&apos;t pay back;
+                the strength work stays.
               </p>
             </div>
           ) : null}
