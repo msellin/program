@@ -7,6 +7,10 @@ const SUPER_ADMIN_EMAILS = new Set<string>([
   "sellinmargus@gmail.com",
   "margus@dolmit.com",
   "test@terav.fit",
+  // Persona harness admin personas — validate multi-track UI states.
+  // Safe: test-prefix guard in setup-test-user.ts prevents these from
+  // ever touching real accounts.
+  "e2e-persona-multitrack@example.test",
 ]);
 
 export function isSuperAdminEmail(email: string | null | undefined): boolean {

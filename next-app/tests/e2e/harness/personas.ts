@@ -191,6 +191,38 @@ export const PERSONAS: Persona[] = [
     focus:
       "Race-anchored user with 40% skip rate. Does the taper still fire when session compliance is under 60%? Does the 2K retest render honestly with sparse baseline runs? Does the classifier flag 'under-dosing' vs 'true non-response'?",
   },
+  // 2026-08-19 · founder request — improve harness with multi-track + graduation
+  // coverage. Multi-track uses super-admin's "Add alongside" affordance to
+  // stack programs; graduation runs a program past its last phase.ends to
+  // hit isPastProgramEnd + GraduationCard + verify what happens next.
+  {
+    id: "persona-multitrack",
+    displayName: "Multi-track super-admin",
+    archetypeId: "consistent-average",
+    programSlug: "engine-builder",
+    additionalProgramSlugs: [
+      "concurrent-strength-maintenance",
+      "overhead-mobility",
+    ],
+    tier: "foundation",
+    days: 45,
+    email: "e2e-persona-multitrack@example.test",
+    password: DEFAULT_PASSWORD,
+    focus:
+      "Three concurrent programs. Audit target: how does Today render when multiple programs schedule blocks on the same day? Do interference banners fire? Does Programs list show all three with 'primary'/'today's' badges correctly? Are per-track adherence rows all populated? Super-admin badge visible on Profile.",
+  },
+  {
+    id: "persona-graduate",
+    displayName: "Post-graduation user",
+    archetypeId: "consistent-average",
+    programSlug: "engine-builder",
+    tier: "foundation",
+    days: 64,
+    email: "e2e-persona-graduate@example.test",
+    password: DEFAULT_PASSWORD,
+    focus:
+      "8-week arc + 8 days past graduation. Audit target: does GraduationCard fire? Does it suggest a follow-on (Block 2 engine-builder, Progression/Push tier, another program)? Retest card populates real deltas? Report renders a shareable summary of the arc? What SHOULD happen after finishing but currently doesn't?",
+  },
 ];
 
 export function personaArchetype(persona: Persona) {

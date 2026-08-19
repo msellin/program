@@ -59,6 +59,7 @@ for (const persona of PERSONAS) {
     const simResult = await runSimulationV2(page, {
       archetype: personaArchetype(persona),
       programSlug: persona.programSlug,
+      additionalProgramSlugs: persona.additionalProgramSlugs,
       tier: persona.tier,
       startDate: computeStartDate(persona.days),
       days: persona.days,

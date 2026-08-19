@@ -153,6 +153,7 @@ export async function runSimulationV2(
   opts: {
     archetype: Archetype;
     programSlug: string;
+    additionalProgramSlugs?: string[];
     tier?: string;
     startDate: string;
     days: number;
@@ -166,7 +167,16 @@ export async function runSimulationV2(
   finalStore: unknown;
   program: ProgramShape;
 }> {
-  const { archetype, programSlug, tier, startDate, days, snapshotDays, screenshotDir } = opts;
+  const {
+    archetype,
+    programSlug,
+    additionalProgramSlugs = [],
+    tier,
+    startDate,
+    days,
+    snapshotDays,
+    screenshotDir,
+  } = opts;
 
   await page.clock.install({ time: new Date(startDate + "T08:00:00Z") });
   const program = await loadProgramClientSide(page, programSlug);
@@ -214,7 +224,7 @@ export async function runSimulationV2(
   const capabilitySeed = CAPABILITY_SEEDS[programSlug] ?? {};
 
   await page.evaluate(
-    ({ slug, tier, tms, uid, capabilitySeed }) => {
+    ({ slug, extras, tier, tms, uid, capabilitySeed }) => {
       const raw = localStorage.getItem("program.log.v2");
       const store = raw ? JSON.parse(raw) : {
         version: 2,
@@ -229,14 +239,29 @@ export async function runSimulationV2(
       if (store.cycle == null) {
         store.cycle = { phase_id: null, cycle_number: 1, week_in_cycle: 1 };
       }
+      const allSlugs = [slug, ...extras];
+      const startedAtISO = new Date().toISOString();
       store.user_profile = {
         ...(store.user_profile ?? {}),
         uid: uid ?? store.user_profile?.uid,
         active_program_id: slug,
-        active_program_ids: [slug],
-        active_program_started_at: new Date().toISOString(),
+        active_program_ids: allSlugs,
+        active_program_started_at: startedAtISO,
         tier: "beta_forever",
       };
+      // Seed program_states for each secondary program too so the
+      // implicit phase-shift fallback + tier gating work. Multi-track
+      // personas use the primary's started_at for all — approximates a
+      // super-admin who added extra tracks the same day.
+      for (const extraSlug of extras) {
+        store.user_profile.program_states = {
+          ...(store.user_profile.program_states ?? {}),
+          [extraSlug]: {
+            ...(store.user_profile.program_states?.[extraSlug] ?? {}),
+            started_at: startedAtISO,
+          },
+        };
+      }
       if (tier || Object.keys(capabilitySeed).length > 0) {
         const priorState = store.user_profile.program_states?.[slug] ?? {};
         store.user_profile.program_states = {
@@ -277,7 +302,7 @@ export async function runSimulationV2(
       // one green matrix run confirms every persona seed uses the new key.
       localStorage.setItem("program.onboarding.done", "1");
     },
-    { slug: programSlug, tier: tier ?? null, tms: INITIAL_TMS, uid: sessionUid, capabilitySeed },
+    { slug: programSlug, extras: additionalProgramSlugs, tier: tier ?? null, tms: INITIAL_TMS, uid: sessionUid, capabilitySeed },
   );
 
   await page.goto("/");
