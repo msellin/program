@@ -10,17 +10,17 @@
 
 These are **IDEAS, not action items**. The engine + rehab-first positioning overrides "cleaner is better," so Margus picks what to ship. Batches ship in 6-12h chunks — don't try to close the whole list in one sitting, and respect the "no UI churn between audits" rule (each shipped batch should stand on its own before the next audit re-scans). Real bugs go first because they're broken code the audits happened to surface; everything else is prioritized by user-visible ROI. Sizing (S/M/L/XL) is per item.
 
-**Counts by bucket (post-Batch-26):**
+**Counts by bucket (post-Batch-27):**
 
-- **Bugs (fix regardless):** 0 open — all 6 shipped
-- **P0 (highest ROI):** 0 open — both shipped
-- **P1 (visible quality gap):** 7 items (~5-6h) — visual craft 1, landing 2, copy 3, motion+perf 1; accessibility bucket fully closed
-- **P2 (defensible polish):** 10 items (~5-7h)
+- **Bugs:** 0 open
+- **P0:** 0 open
+- **P1:** 0 open — every category closed
+- **P2:** 10 items (~5-7h)
 - **Features on-deck:** 0 open
 - **Strategic (founder decision):** 3 items (S2, S3, S4)
 - **Rejected:** 12 items — do not ship
 
-Total open surface: **7 P1 + 10 P2 + 3 strategic + 12 rejected = 32 line items** (was 48 pre-Batch-26). Accessibility bucket fully closed (7/7). Next natural batch (Batch 27): visual-craft 11px sweep + copy leaks + landing citation count + AMBER Source line + /profile CLS — ~5-6h.
+Total open surface: **10 P2 + 3 strategic + 12 rejected = 25 line items** (was 32 pre-Batch-27, 48 pre-Batch-26, 15 pre-audit-round). **All P0/P1/bugs closed across two audit rounds.** Only P2 polish + founder-decision items remain.
 
 ---
 
@@ -65,22 +65,15 @@ Keep the convention terse — the four markers cover every state. Don't invent n
 
 ### Visual craft (post-Batch-25 round)
 
-- [ ] **P1-63** `font-mono text-[11px] uppercase tracking-wider` button labels are now overloaded across 4 semantic jobs (legal, row-meta, button-label, active verb). Migrate the *button-label* usage to sentence-case `text-[14px] font-semibold` on GraduationCard verbs, RetestReminder CTAs, Week expanded action grid, FirstRunBanner primary. Mono-caps stays for eyebrows + pills. Source: visual-craft-batch25 §P0. Files: `next-app/src/app/page.tsx` (GraduationCard VerbRow + RetestReminder + Week actions), `next-app/src/components/FirstRunBanner.tsx`. Size: M
 
 ### Landing→app (post-Batch-25 round)
 
-- [ ] **P1-64** Citation-count drift — landing hero says "92 studies", app `/evidence` shows 126 (from `citations.json`). Same voice, two different numbers. Pick the canonical count and propagate. Source: landing-alignment-batch25 §1. Files: `landing/src/i18n/dictionaries/en.ts` OR `next-app/public/data/citations.json`. Size: S
-- [ ] **P1-65** AMBER soften proposal card renders without an inline `Source:` line — `proposal-citations.ts` wires `day_adjustment_soften` → Halson 2014, but persona-erratic's Today capture shows the AMBER card without the source. Render path in `ProposalCard.tsx` / `select.ts` needs verification — either the citationId isn't populated or the render is skipping the CitationRef. Source: landing-alignment-batch25 §3. Files: `next-app/src/components/workout/ProposalCard.tsx`, `next-app/src/lib/proposals/select.ts`. Size: S
 
 ### Copy clarity (post-Batch-25 round)
 
-- [ ] **P1-66** `exercise_id` snake_case leaks in 3 surfaces — Today proposals + Progress top lift + Report (Report handles it; use as fix model). Humanize like `humanizeMetricId` from Batch 17. Source: copy-clarity-batch25 §P1. Files: `next-app/src/components/workout/ProposalCard.tsx`, `next-app/src/app/progress/page.tsx`. Size: S
-- [ ] **P1-67** `metric_id` lowercase leak in "trending well" proposal on persona-multitrack. Same fix pattern as P1-66. Source: copy-clarity-batch25 §P1. Files: `next-app/src/components/workout/ProposalCard.tsx`. Size: S
-- [ ] **P1-68** `/account` Extensions row "retest window pushed" is vague — name the new date if state permits. Source: copy-clarity-batch25 §P1. Files: `next-app/src/app/account/page.tsx:180`. Size: S
 
 ### Motion + perf (post-Batch-25 round)
 
-- [ ] **P1-69** `/profile` micro-CLS: the programs list renders only when `manifest != null`, but `activeProgramIds.length` is known synchronously from Zustand. Reserve height via `min-h` while manifest is loading, or render the list from Zustand and lazy-fill program names. Source: motion-perf-batch25 §hot surfaces. Files: `next-app/src/app/profile/page.tsx`. Size: S
 
 ---
 
@@ -138,6 +131,18 @@ Deduplicated across visual-craft §16 + mobile-ux §10 + roadmap:
 ## Closed items appendix (shipped since 2026-08-17)
 
 Strikethrough preserves history; these items are OUT of the open list.
+
+**Batch 27 — remaining P1s (deployed https://bc360eb1.program-v2.pages.dev, 2026-08-19):**
+
+7 items — visual-craft 11px sweep across 4 button surfaces, landing citation count 92 → 126, AMBER soften Source line on SignalsStrip expanded body, exercise_id humanization via shared lib helper, Extensions vague-copy fix, /profile CLS reserve. Full lines preserved:
+
+- [x] **P1-63** — done 2026-08-19 Batch 27 — `font-mono text-[11px] uppercase tracking-wider` button labels are now overloaded across 4 semantic jobs (legal, row-meta, button-label, active verb). Migrate the *button-label* usage to sentence-case `text-[14px] font-semibold` on GraduationCard verbs, RetestReminder CTAs, Week expanded action grid, FirstRunBanner primary. Mono-caps stays for eyebrows + pills. Source: visual-craft-batch25 §P0. Files: `next-app/src/app/page.tsx` (GraduationCard VerbRow + RetestReminder + Week actions), `next-app/src/components/FirstRunBanner.tsx`. Size: M
+- [x] **P1-64** — done 2026-08-19 Batch 27 — Citation-count drift — landing hero says "92 studies", app `/evidence` shows 126 (from `citations.json`). Same voice, two different numbers. Pick the canonical count and propagate. Source: landing-alignment-batch25 §1. Files: `landing/src/i18n/dictionaries/en.ts` OR `next-app/public/data/citations.json`. Size: S
+- [x] **P1-65** — done 2026-08-19 Batch 27 — AMBER soften proposal card renders without an inline `Source:` line — `proposal-citations.ts` wires `day_adjustment_soften` → Halson 2014, but persona-erratic's Today capture shows the AMBER card without the source. Render path in `ProposalCard.tsx` / `select.ts` needs verification — either the citationId isn't populated or the render is skipping the CitationRef. Source: landing-alignment-batch25 §3. Files: `next-app/src/components/workout/ProposalCard.tsx`, `next-app/src/lib/proposals/select.ts`. Size: S
+- [x] **P1-66** — done 2026-08-19 Batch 27 — `exercise_id` snake_case leaks in 3 surfaces — Today proposals + Progress top lift + Report (Report handles it; use as fix model). Humanize like `humanizeMetricId` from Batch 17. Source: copy-clarity-batch25 §P1. Files: `next-app/src/components/workout/ProposalCard.tsx`, `next-app/src/app/progress/page.tsx`. Size: S
+- [x] **P1-67** — done 2026-08-19 Batch 27 — `metric_id` lowercase leak in "trending well" proposal on persona-multitrack. Same fix pattern as P1-66. Source: copy-clarity-batch25 §P1. Files: `next-app/src/components/workout/ProposalCard.tsx`. Size: S
+- [x] **P1-68** — done 2026-08-19 Batch 27 — `/account` Extensions row "retest window pushed" is vague — name the new date if state permits. Source: copy-clarity-batch25 §P1. Files: `next-app/src/app/account/page.tsx:180`. Size: S
+- [x] **P1-69** — done 2026-08-19 Batch 27 — `/profile` micro-CLS: the programs list renders only when `manifest != null`, but `activeProgramIds.length` is known synchronously from Zustand. Reserve height via `min-h` while manifest is loading, or render the list from Zustand and lazy-fill program names. Source: motion-perf-batch25 §hot surfaces. Files: `next-app/src/app/profile/page.tsx`. Size: S
 
 **Batch 26 — post-Batch-25 audit followup: bugs + P0s + accessibility (deployed https://dd004788.program-v2.pages.dev, 2026-08-19):**
 

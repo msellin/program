@@ -73,7 +73,7 @@ export function FirstRunBanner() {
         <button
           type="button"
           onClick={dismiss}
-          className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover min-h-[44px]"
+          className="text-[14px] font-semibold px-4 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover min-h-[44px]"
         >
           Got it — start the day
         </button>

@@ -716,11 +716,15 @@ function VerbRow({
           : "w-full text-left rounded border border-line-soft bg-surface active:bg-line-soft/60 px-3 py-2.5 min-h-[52px]"
       }
     >
+      {/* P1-63 (Batch 27) — button labels migrated from 11 px mono-caps
+          to 14 px sentence-case font-semibold. Mono-caps stays for
+          eyebrows + pills + row-meta; button-labels want the same
+          weight/scale as body text so verbs read as verbs, not chips. */}
       <p
         className={
           variant === "primary"
-            ? "font-mono text-[11px] uppercase tracking-wider"
-            : "font-mono text-[11px] uppercase tracking-wider text-ink"
+            ? "text-[14px] font-semibold"
+            : "text-[14px] font-semibold text-ink"
         }
       >
         {label}
@@ -1210,17 +1214,19 @@ function RetestReminder({
           </ul>
         </div>
       ) : null}
+      {/* P1-63 (Batch 27) — RetestReminder CTAs migrated to sentence-case
+          14 px font-semibold. Reads as verbs, not chips. */}
       <div className="flex flex-wrap gap-2 pt-1">
         <Link
           href="/progress"
-          className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover min-h-[44px] inline-flex items-center"
+          className="text-[14px] font-semibold px-4 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover min-h-[44px] inline-flex items-center"
         >
           Log retest →
         </Link>
         <button
           type="button"
           onClick={onDismiss}
-          className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-ink hover:bg-line-soft min-h-[44px]"
+          className="text-[14px] font-semibold px-4 py-2 rounded border border-line text-ink hover:bg-line-soft min-h-[44px]"
         >
           Not this week
         </button>

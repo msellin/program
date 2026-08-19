@@ -180,8 +180,13 @@ export default function AccountPage() {
               >
                 <div className="min-w-0 flex-1">
                   <p className="text-sm text-strong truncate">{e.name}</p>
+                  {/* P1-68 (Batch 27) — "retest window pushed" was
+                      vague; now names the delta directly. Not computing
+                      the destination date because /account doesn't load
+                      programs, and the +Nw already communicates the
+                      change unambiguously. */}
                   <p className="text-[11px] text-muted mt-0.5">
-                    Extended +{e.weeks}w · retest window pushed
+                    Retest window pushed by {e.weeks} week{e.weeks === 1 ? "" : "s"}
                   </p>
                 </div>
                 {/* P1-61 (Batch 26) — was `text-muted underline

@@ -4,7 +4,7 @@ import { ArrowUp } from "lucide-react";
 import { CitationRef } from "@/components/citations/CitationRef";
 import { RetestLoggingSheet } from "@/components/workout/RetestLoggingSheet";
 import { useProposalActions } from "@/lib/proposals/useProposalActions";
-import { humanizeMetricId, humanizeVerdict } from "@/lib/humanize-metrics";
+import { humanizeMetricId, humanizeVerdict, humanizeExerciseId } from "@/lib/humanize-metrics";
 import type { Proposal } from "@/lib/schemas";
 
 /**
@@ -67,7 +67,10 @@ export function ProposalCard({
             <ul className="text-[12px] font-mono text-ink mt-1 space-y-0.5">
               {proposal.lifts.map((l) => (
                 <li key={l.exerciseId}>
-                  {l.exerciseId} · {l.currentTM} → {l.newTM} kg (+{l.delta})
+                  {/* P1-66 (Batch 27) — was rendering raw exercise_id
+                      like "back_squat_highbar" — snake_case leak in a
+                      user-facing string. Humanize via shared helper. */}
+                  {humanizeExerciseId(l.exerciseId)} · {l.currentTM} → {l.newTM} kg (+{l.delta})
                 </li>
               ))}
             </ul>

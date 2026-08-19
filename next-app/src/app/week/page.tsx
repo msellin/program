@@ -12,6 +12,7 @@ import { blocksForDate } from "@/lib/engine/plan-generator";
 import { getBlocksForDate, isBlockObjectOn } from "@/lib/engine/block-selectors";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
 import { MoveSheet } from "@/components/workout/MoveSheet";
+import { humanizeExerciseId } from "@/lib/humanize-metrics";
 import type { DayLog, Program, RunLog, ScheduledBlock, Store } from "@/lib/schemas";
 
 type WeekDayEntry = {
@@ -663,18 +664,21 @@ function WeekDayActions({
 
   return (
     <>
+      {/* P1-63 (Batch 27) — 3-verb action grid migrated from 11 px
+          mono-caps to 14 px sentence-case. Verb labels shouldn't read
+          as chip pills. */}
       <div className="mt-3 grid grid-cols-3 gap-2">
         {isToday ? (
           <Link
             href="/"
-            className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover min-h-[44px] flex items-center justify-center text-center"
+            className="text-[14px] font-semibold px-3 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover min-h-[44px] flex items-center justify-center text-center"
           >
             Open in Today
           </Link>
         ) : isPast ? (
           <Link
             href={`/history?date=${dateISO}`}
-            className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-muted hover:text-ink hover:bg-line-soft min-h-[44px] flex items-center justify-center text-center"
+            className="text-[14px] font-semibold px-3 py-2 rounded border border-line text-muted hover:text-ink hover:bg-line-soft min-h-[44px] flex items-center justify-center text-center"
           >
             History →
           </Link>
@@ -687,7 +691,7 @@ function WeekDayActions({
           type="button"
           onClick={() => setMoveOpen(true)}
           disabled={!canMove}
-          className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-ink hover:bg-line-soft min-h-[44px] disabled:opacity-40 disabled:cursor-not-allowed"
+          className="text-[14px] font-semibold px-3 py-2 rounded border border-line text-ink hover:bg-line-soft min-h-[44px] disabled:opacity-40 disabled:cursor-not-allowed"
         >
           Move…
         </button>
@@ -695,7 +699,7 @@ function WeekDayActions({
           type="button"
           onClick={() => setConfirmSkip(true)}
           disabled={!canSkip}
-          className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-ink hover:bg-line-soft min-h-[44px] disabled:opacity-40 disabled:cursor-not-allowed"
+          className="text-[14px] font-semibold px-3 py-2 rounded border border-line text-ink hover:bg-line-soft min-h-[44px] disabled:opacity-40 disabled:cursor-not-allowed"
         >
           Skip
         </button>
@@ -857,7 +861,10 @@ function topLoggedLift(day: DayLog | undefined): string | null {
       if (s.weight_kg == null || s.weight_kg <= 0 || s.reps == null || s.reps <= 0) continue;
       if (!best || s.weight_kg > best.weight) {
         const exId = key.split(":")[1] ?? key;
-        best = { name: exId.replace(/_/g, " "), weight: s.weight_kg, reps: s.reps };
+        // P1-66 (Batch 27) — was `replace(/_/g, " ")` which produced
+        // "back squat highbar" (lossy). Shared humanize helper knows
+        // the pretty forms like "back squat (high bar)".
+        best = { name: humanizeExerciseId(exId), weight: s.weight_kg, reps: s.reps };
       }
     }
   }

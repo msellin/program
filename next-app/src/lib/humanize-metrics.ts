@@ -34,3 +34,25 @@ export function humanizeVerdict(v: string): string {
       return v.replace(/_/g, " ");
   }
 }
+
+/**
+ * P1-66 (Batch 27) — humanize exercise_id snake_case. The canonical
+ * pretty names live in exercises.json, but we don't want to fetch that
+ * JSON every render just to display "back_squat_highbar" → "back squat
+ * (high bar)". Simple heuristic: underscore→space, and capitalize each
+ * word except common prep articles. If a program authors a slug that
+ * doesn't parse well, add it to EXERCISE_DISPLAY_NAMES.
+ */
+const EXERCISE_DISPLAY_NAMES: Record<string, string> = {
+  back_squat_highbar: "back squat (high bar)",
+  back_squat_ssb: "back squat (SSB)",
+  block_pull_midshin: "block pull (midshin)",
+  trap_bar_dl_blocks: "trap-bar DL (blocks)",
+  trap_bar_dl_floor: "trap-bar DL (floor)",
+  deadlift_conventional: "conventional deadlift",
+  front_squat: "front squat",
+};
+
+export function humanizeExerciseId(id: string): string {
+  return EXERCISE_DISPLAY_NAMES[id] ?? id.replace(/_/g, " ");
+}

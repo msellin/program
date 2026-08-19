@@ -138,6 +138,24 @@ export default function ProfilePage() {
 
       {/* Active plan(s). No inline × — removal happens on the program page
           (see product-design-lead brief). Row is chevron → deep link. */}
+      {/* P1-69 (Batch 27) — the programs section renders only when
+          `manifest != null` (map produces empty). But `activeSlugs.length`
+          is synchronous from Zustand. Reserve height while manifest is
+          loading so the sign-out row + footer don't jump up. Each row
+          is ~72 px (48 min-height + padding); reserve N*72 to match
+          the eventual list. */}
+      {activeSlugs.length && !manifest ? (
+        <div>
+          <p className="font-mono text-[10px] uppercase tracking-widest text-muted mb-2">
+            Your programs
+          </p>
+          <div
+            aria-hidden
+            className="rounded border border-line-soft bg-surface"
+            style={{ minHeight: `${activeSlugs.length * 72}px` }}
+          />
+        </div>
+      ) : null}
       {activePrograms.length ? (
         <div>
           <p className="font-mono text-[10px] uppercase tracking-widest text-muted mb-2">

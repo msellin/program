@@ -265,6 +265,37 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
           {/* Red-state expansion body deleted — HeroStateCard now owns this
               signal (compact strip with an inline Escalate → link). */}
 
+          {/* P1-65 (Batch 27) — day-adjustment applied: show the source
+              on expand so the landing's "every change cites a study"
+              promise carries through to post-accept state. The citation
+              snapshot lives on the accepted record; render only when
+              present so pre-Halson-fix legacy records don't error. */}
+          {signals.some((s) => s.id === "day-adj-active")
+            ? (() => {
+                const accepted = store.day_adjustments?.[date];
+                if (!accepted) return null;
+                const snap = accepted.citation_snapshot;
+                return (
+                  <div className="rounded border border-line-soft border-l-4 border-l-slate bg-surface p-3 text-sm">
+                    <p className="font-semibold text-strong">
+                      Today softened ×{accepted.load_multiplier.toFixed(2)}
+                    </p>
+                    {accepted.reason ? (
+                      <p className="text-[14px] text-muted mt-0.5">
+                        Because: {accepted.reason}
+                      </p>
+                    ) : null}
+                    {snap ? (
+                      <p className="text-[12px] text-muted mt-2">
+                        <span className="font-mono uppercase tracking-wider text-muted">Source:</span>{" "}
+                        {snap.display_short}
+                      </p>
+                    ) : null}
+                  </div>
+                );
+              })()
+            : null}
+
           {/* Override / moved-in. */}
           {signals.some((s) => s.id === "override") ? (
             <div className="rounded border border-line-soft border-l-4 border-l-slate bg-surface p-3 text-sm">
