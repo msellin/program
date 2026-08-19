@@ -55,6 +55,11 @@ export default function ExtrasPage() {
   ];
 
   const isToday = activeDate === todayISO();
+  const activeProgramIds = useStore.getState().store.user_profile?.active_program_ids ?? [];
+  const extraSlugs = activeProgramIds.filter((s) => s !== primarySlug);
+  const titleCase = (s: string) =>
+    s.split("-").map((w) => (w.length ? w[0].toUpperCase() + w.slice(1) : w)).join(" ");
+
   return (
     <div className="space-y-8 pt-4">
       <header>
@@ -62,6 +67,15 @@ export default function ExtrasPage() {
         <p className="mt-1 text-sm text-muted">
           Accessory work, home rehab, around-runs. {isToday ? "Logging to today." : "Logging to the selected date."}
         </p>
+        {extraSlugs.length > 0 ? (
+          <p className="mt-1 text-[12px] text-muted italic">
+            Showing extras from{" "}
+            <span className="text-ink font-semibold">
+              {primarySlug ? titleCase(primarySlug) : "primary program"}
+            </span>
+            . Also active: {extraSlugs.map(titleCase).join(", ")}.
+          </p>
+        ) : null}
       </header>
 
       <DateNav date={activeDate} onChange={setActiveDate} />

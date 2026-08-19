@@ -151,6 +151,12 @@ export default function ReportPage() {
     .filter((d) => d.date >= range.start && d.date <= range.end)
     .sort((a, b) => a.date.localeCompare(b.date));
 
+  // Delta-3 multi-track: acknowledge extras that this report doesn't
+  // (yet) render. Compact strip only shows when the user has secondary
+  // tracks. Full multi-track rewrite of Report is bigger scope.
+  const activeProgramIds = store.user_profile?.active_program_ids ?? [];
+  const extraSlugs = activeProgramIds.filter((s) => s !== primarySlug);
+
   return (
     <div className="space-y-6 pt-4 report-root">
       <header className="no-print space-y-3">
@@ -200,11 +206,32 @@ export default function ReportPage() {
       <section className="report-header space-y-1">
         <h1 className="hidden print:block text-xl font-semibold text-strong">Training summary</h1>
         <p className="text-[13px] text-muted">
+          <strong className="text-ink">Program:</strong>{" "}
+          {program.slug
+            ?.split("-")
+            .map((w) => (w.length ? w[0].toUpperCase() + w.slice(1) : w))
+            .join(" ") ?? program.slug}
+        </p>
+        <p className="text-[13px] text-muted">
           <strong className="text-ink">Range:</strong> {startPretty} → {endPretty}
         </p>
         <p className="text-[13px] text-muted">
           <strong className="text-ink">Generated:</strong> {generatedPretty}
         </p>
+        {extraSlugs.length > 0 ? (
+          <p className="text-[12px] text-muted italic pt-1">
+            Also active for this user (not in this report yet):{" "}
+            {extraSlugs
+              .map((s) =>
+                s
+                  .split("-")
+                  .map((w) => (w.length ? w[0].toUpperCase() + w.slice(1) : w))
+                  .join(" "),
+              )
+              .join(", ")}
+            .
+          </p>
+        ) : null}
         <p className="text-[13px] text-muted italic pt-1">
           {isHipProgram
             ? "This is a self-tracked training log, not a diagnosis. Symptom scores are the user's own 0–10 ratings from a daily morning check. Load values are logged workout data."

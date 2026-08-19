@@ -162,6 +162,22 @@ export default function ProfilePage() {
         <ul className="rounded border border-line-soft bg-surface divide-y divide-line-soft">
           {activePrograms.map((p, i) => {
             const isPrimary = i === 0 && p.slug === activeProgramId;
+            const state = store.user_profile?.program_states?.[p.slug];
+            const hasIntake =
+              !!state?.tier || !!state?.intake_answers || !!state?.baseline_capabilities;
+            const graduated = !!state?.graduated_at;
+            // Resolve tier label from plan_tiers using the stored tier id.
+            const tierLabel = (() => {
+              if (!state?.tier || !manifest) return null;
+              // manifest doesn't carry plan_tiers detail; use the state's
+              // tier id + strip any prefix so "tier_a_foundation" → "Foundation".
+              const t = state.tier;
+              if (t === "foundation" || t === "progression" || t === "push") {
+                return t.charAt(0).toUpperCase() + t.slice(1);
+              }
+              const short = t.replace(/^tier_[a-z]_?/i, "");
+              return short.length ? short.charAt(0).toUpperCase() + short.slice(1) : t;
+            })();
             return (
               <li key={p.slug}>
                 <Link
@@ -169,14 +185,29 @@ export default function ProfilePage() {
                   className="flex items-center justify-between gap-3 px-3 py-3 min-h-[48px] active:bg-line-soft/50"
                 >
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-semibold text-strong truncate">
-                      {p.name}
+                    <p className="text-sm font-semibold text-strong truncate flex items-center gap-1.5">
+                      <span className="truncate">{p.name}</span>
+                      {graduated ? (
+                        <span className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-green/20 text-green flex-shrink-0">
+                          graduated
+                        </span>
+                      ) : null}
                     </p>
-                    <p className="text-[11px] text-muted mt-0.5 flex items-center gap-1.5">
+                    <p className="text-[11px] text-muted mt-0.5 flex items-center gap-1.5 flex-wrap">
                       <span>{p.duration_weeks} weeks · {p.difficulty}</span>
-                      {isPrimary && activePrograms.length > 1 ? (
+                      {isPrimary && activePrograms.length > 1 && !graduated ? (
                         <span className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-bronze/20 text-bronze">
                           today&rsquo;s
+                        </span>
+                      ) : null}
+                      {tierLabel && !graduated ? (
+                        <span className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-slate/15 text-slate">
+                          {tierLabel}
+                        </span>
+                      ) : null}
+                      {!hasIntake && !graduated ? (
+                        <span className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber/15 text-amber">
+                          intake pending
                         </span>
                       ) : null}
                     </p>

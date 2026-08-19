@@ -138,6 +138,11 @@ function ProgressBody({
     activeSlug === "handstand-walk" ||
     activeSlug === "overhead-mobility";
 
+  const activeProgramIds = store.user_profile?.active_program_ids ?? [];
+  const extraSlugs = activeProgramIds.filter((s) => s !== _program.slug);
+  const titleCase = (s: string) =>
+    s.split("-").map((w) => (w.length ? w[0].toUpperCase() + w.slice(1) : w)).join(" ");
+
   return (
     <div className="space-y-5 pt-4">
       <header className="flex items-baseline justify-between gap-3">
@@ -149,6 +154,21 @@ function ProgressBody({
           Export report
         </a>
       </header>
+
+      {/* Delta-3 multi-track: show which program this Progress is for +
+          acknowledge any extras that aren't rendered here yet. Compact,
+          only shows when the user has ≥ 2 active programs. */}
+      {activeProgramIds.length > 1 ? (
+        <div className="rounded border border-line-soft bg-surface px-3 py-2 text-[12px] text-muted">
+          Showing{" "}
+          <span className="text-strong font-semibold">
+            {_program.slug ? titleCase(_program.slug) : "primary program"}
+          </span>
+          . Also active:{" "}
+          {extraSlugs.map(titleCase).join(", ")}. Per-program summary
+          coming.
+        </div>
+      ) : null}
 
       {/* Progress used to be a 3-tab surface — flattened to single scroll.
           Order: engine banners (surface adaptive proposals up-front) →
