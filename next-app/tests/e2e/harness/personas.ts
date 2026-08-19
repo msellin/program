@@ -1,5 +1,27 @@
 import { ARCHETYPES, type ArchetypeId } from "./archetype";
 
+/**
+ * COVERAGE RULE — every shipped catalog program MUST have a persona here.
+ *
+ * When you add a program, graduate one from PROVISIONAL, or restructure
+ * an existing program's tiers/phases, update this file in the same
+ * commit. A shipped program without a persona bundle means no audit can
+ * catch its regressions.
+ *
+ * Minimum coverage per program:
+ *   1× consistent-average persona at the program's lowest tier + arc
+ *     length in `days`
+ *   1× archetype variant (overperformer or erratic) for the fast/slow
+ *     path — only required once the program leaves PROVISIONAL
+ *
+ * Assertive check: at simulator load, `runSimulationV2` throws if a
+ * persona references a slug not in `manifest.programs[]`. Keeps the two
+ * lists honest.
+ *
+ * See also: reference_app-audit-system.md + feedback_harness-persona-
+ * coverage.md in the founder's auto-memory.
+ */
+
 export type Persona = {
   id: string;
   displayName: string;

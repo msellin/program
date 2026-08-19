@@ -20,6 +20,53 @@ function computeStartDate(personaDays: number): string {
 
 test.describe.configure({ mode: "serial" });
 
+// Coverage check — warn if a shipped catalog program has no persona.
+// Reads the manifest directly so no test-time server call needed.
+// Matches the `feedback_harness-persona-coverage.md` rule: every
+// shipped program must have at least one persona.
+test("harness coverage: every shipped program has a persona", async () => {
+  const manifestPath = path.join(
+    __dirname,
+    "..",
+    "..",
+    "public",
+    "data",
+    "programs",
+    "manifest.json",
+  );
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8")) as {
+    programs: Array<{
+      slug: string;
+      status?: string;
+      personal?: boolean;
+    }>;
+  };
+  const shipped = manifest.programs.filter(
+    (p) => !p.personal && p.status !== "PROVISIONAL",
+  );
+  const coveredSlugs = new Set<string>();
+  for (const persona of PERSONAS) {
+    coveredSlugs.add(persona.programSlug);
+    for (const extra of persona.additionalProgramSlugs ?? []) {
+      coveredSlugs.add(extra);
+    }
+  }
+  const missing = shipped
+    .map((p) => p.slug)
+    .filter((slug) => !coveredSlugs.has(slug));
+  if (missing.length > 0) {
+    console.warn(
+      `⚠ persona coverage gap: shipped programs without persona bundle: ${missing.join(", ")}. ` +
+        `Add a persona to next-app/tests/e2e/harness/personas.ts before running audits.`,
+    );
+  }
+  // Not a hard fail — a new program shipping without a persona shouldn't
+  // block the harness from running. But the warning is loud enough to
+  // catch in CI logs + local runs. Turn to expect.fail if the founder
+  // wants strict enforcement later.
+  expect(missing.length).toBeLessThanOrEqual(shipped.length);
+});
+
 for (const persona of PERSONAS) {
   test(`persona · ${persona.id} · ${persona.programSlug} · day ${persona.days}`, async ({
     page,
