@@ -6,7 +6,9 @@ import {
   BookOpen,
   LogOut,
   ChevronRight,
-  Download,
+  ListPlus,
+  FileText,
+  Library,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useStore } from "@/lib/useStore";
@@ -14,7 +16,6 @@ import { createClient } from "@/lib/supabase/client";
 import { useIsSuperAdmin } from "@/lib/super-admin";
 import { loadProgramManifest } from "@/lib/data-loader";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
-import { useInstallPrompt } from "@/lib/useInstallPrompt";
 import type { ProgramManifest } from "@/lib/schemas";
 
 /**
@@ -36,7 +37,6 @@ export default function ProfilePage() {
   // beforeinstallprompt. iOS Safari never fires the event so the button
   // stays hidden there; direct-URL "Add to Home Screen" from Share is
   // documented in Guide.
-  const { canInstall, promptInstall } = useInstallPrompt();
   const router = useRouter();
   const [email, setEmail] = useState<string | null>(null);
   const [memberSince, setMemberSince] = useState<string | null>(null);
@@ -283,7 +283,30 @@ export default function ProfilePage() {
         {/* S1 (Batch 25) — Coach shelved until N ≥ 50 users. AI-token
             costs don't pencil at beta scale. Row removed from Profile,
             /coach route + coach-client.ts deleted. R12 covers the
-            explicit "don't reopen without paid user base" call. */}
+            explicit "don't reopen without paid user base" call.
+            F8 Batch 29 (2026-08-19) — Extras / Report / Evidence relocated
+            here from the deleted HeaderQuickLinks ⋮ menu. Header now only
+            has TERAV + Settings. Install prompt relocated to Settings. */}
+        <Link
+          href="/extras"
+          className="flex items-center justify-between gap-3 px-3 py-3 min-h-[48px] active:bg-line-soft/50"
+        >
+          <span className="flex items-center gap-3 text-sm">
+            <ListPlus size={16} className="text-muted" />
+            Extras
+          </span>
+          <ChevronRight size={16} className="text-muted flex-shrink-0" />
+        </Link>
+        <Link
+          href="/report"
+          className="flex items-center justify-between gap-3 px-3 py-3 min-h-[48px] active:bg-line-soft/50"
+        >
+          <span className="flex items-center gap-3 text-sm">
+            <FileText size={16} className="text-muted" />
+            Report
+          </span>
+          <ChevronRight size={16} className="text-muted flex-shrink-0" />
+        </Link>
         <Link
           href="/guide"
           className="flex items-center justify-between gap-3 px-3 py-3 min-h-[48px] active:bg-line-soft/50"
@@ -294,19 +317,16 @@ export default function ProfilePage() {
           </span>
           <ChevronRight size={16} className="text-muted flex-shrink-0" />
         </Link>
-        {canInstall ? (
-          <button
-            type="button"
-            onClick={() => void promptInstall()}
-            className="w-full flex items-center justify-between gap-3 px-3 py-3 min-h-[48px] active:bg-line-soft/50 text-left"
-          >
-            <span className="flex items-center gap-3 text-sm">
-              <Download size={16} className="text-muted" />
-              Add to home screen
-            </span>
-            <ChevronRight size={16} className="text-muted flex-shrink-0" />
-          </button>
-        ) : null}
+        <Link
+          href="/evidence"
+          className="flex items-center justify-between gap-3 px-3 py-3 min-h-[48px] active:bg-line-soft/50"
+        >
+          <span className="flex items-center gap-3 text-sm">
+            <Library size={16} className="text-muted" />
+            Evidence
+          </span>
+          <ChevronRight size={16} className="text-muted flex-shrink-0" />
+        </Link>
       </nav>
       </div>
 

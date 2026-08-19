@@ -3,14 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
-import { Stethoscope, Layers } from "lucide-react";
+import { Settings } from "lucide-react";
 import { BottomNav } from "@/components/nav/BottomNav";
 import { StoreHydrator } from "@/components/StoreHydrator";
 import { RestTimerHost } from "@/components/workout/RestTimerHost";
 import { OnboardingRunner } from "@/components/onboarding/OnboardingRunner";
 import { useStore } from "@/lib/useStore";
 import { today as todayISO } from "@/lib/utils";
-import { HeaderQuickLinks } from "@/components/nav/HeaderQuickLinks";
 import { createClient } from "@/lib/supabase/client";
 
 /**
@@ -119,9 +118,8 @@ function AuthGatedShell({
   return (
     <>
       {/* P1-56 (Batch 26) — WCAG 2.4.1 bypass block. Keyboard-only users
-          skip the 4-6 header taps (brand, Programs, Morning check, ⋮,
-          readiness dot) to reach content. `sr-only focus:not-sr-only`
-          keeps it visually hidden until focused. */}
+          skip the header (brand, Settings) to reach content.
+          `sr-only focus:not-sr-only` keeps it visually hidden until focused. */}
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-bronze focus:text-ground focus:px-3 focus:py-2 focus:rounded"
@@ -134,11 +132,14 @@ function AuthGatedShell({
           firing it when a user arrives from the landing on /programs was
           the whole reason we shipped the /programs public preview. */}
       {isTodayRoute ? <OnboardingRunner /> : null}
-      {/* Top nav — in-flow, scrolls with content. Whoop / Strava / Runna
-          convention: only the bottom tab bar is fixed; the top chrome
-          (brand + utilities) appears on load and scrolls away so content
-          dominates. Reclaims 48px of scroll real estate + eliminates the
-          "two fixed bars compound weirdly on pinch-zoom" issue. */}
+      {/* F8 Batch 29 · IA restructure (2026-08-19). Header collapses to
+          TERAV wordmark (left) + Settings icon (right). Programs / Morning-
+          check / ⋮ overflow all deleted — bottom nav owns tab-switching,
+          top owns identity + preferences (Whoop / Runna / Pliability
+          model). Extras / Report / Evidence moved to Profile → More.
+          Wordmark aligns with landing pattern: bronze pip + white
+          wordmark (P1-72). ReadinessDot stays as the persona at-a-glance
+          signal (single semantic use per design-lead brief). */}
       <header
         className="max-w-[760px] mx-auto w-full"
         style={{ paddingTop: "env(safe-area-inset-top)" }}
@@ -147,28 +148,19 @@ function AuthGatedShell({
           <Link
             href="/"
             aria-label="Terav — Today"
-            className="flex items-center gap-2 font-mono text-[14px] uppercase tracking-[0.22em] text-bronze hover:text-ink"
+            className="flex items-center gap-2 font-mono text-[14px] uppercase tracking-[0.22em] text-strong hover:opacity-80"
           >
+            <span aria-hidden className="inline-block h-2 w-2 rounded-full bg-bronze" />
             TERAV
             <ReadinessDot />
           </Link>
-          <div className="flex items-center gap-0.5">
-            <Link
-              href="/programs/"
-              aria-label="Programs"
-              className="w-11 h-11 flex items-center justify-center rounded text-muted hover:text-ink hover:bg-line-soft"
-            >
-              <Layers size={18} strokeWidth={1.75} />
-            </Link>
-            <Link
-              href="/check/"
-              aria-label="Morning check"
-              className="w-11 h-11 flex items-center justify-center rounded text-muted hover:text-ink hover:bg-line-soft"
-            >
-              <Stethoscope size={18} strokeWidth={1.75} />
-            </Link>
-            <HeaderQuickLinks />
-          </div>
+          <Link
+            href="/settings/"
+            aria-label="Settings"
+            className="w-11 h-11 flex items-center justify-center rounded text-muted hover:text-ink hover:bg-line-soft"
+          >
+            <Settings size={18} strokeWidth={1.75} />
+          </Link>
         </div>
       </header>
       <main

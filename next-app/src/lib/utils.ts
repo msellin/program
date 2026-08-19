@@ -18,7 +18,14 @@ export function cn(...inputs: ClassValue[]) {
  */
 export function hapticTap(kind: "light" | "medium" | "error" = "light"): void {
   if (typeof navigator === "undefined" || !navigator.vibrate) return;
+  // F8 Batch 29 · gate on Settings → Haptic feedback preference. Reads
+  // synchronously via localStorage (no hook needed at call site). Default
+  // true — silent-by-default is confusing for a confirm-first app.
   try {
+    if (typeof window !== "undefined") {
+      const raw = window.localStorage.getItem("terav.pref.haptic");
+      if (raw === "false") return;
+    }
     if (kind === "light") navigator.vibrate(8);
     else if (kind === "medium") navigator.vibrate(15);
     else navigator.vibrate([20, 40, 20]);
