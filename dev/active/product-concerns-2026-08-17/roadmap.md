@@ -1,284 +1,152 @@
-# Combined roadmap — F track + remaining P tiers (2026-08-17)
+# Combined roadmap — F track + remaining P tiers
 
-Synthesis of:
-- Post-audit backlog `dev/active/session-audit-2026-08-17/backlog.md`
-- Research briefs A / B / C at `dev/audits/product-concerns/`
-
-**Bottom line up front:** three of the research findings materially rewrite the F track. One earlier proposal is a fail-mode (Concern C); the other two need reshaping.
+**Synth date:** 2026-08-17 · **Last audit:** 2026-08-19
+**Bottom line up front:** F1 Path 1 and F2 Phase A both shipped. The whole P-tier polish backlog is closed. Beta stack is on Postgres, on `terav.fit`, on 9 programs (up from 5), with an 8-persona harness catching regressions. F4 (wearable ingest) and F5 (trend + correlation) remain the paid-tier keystones on deck; F6 (concurrent tracks) is half-shipped as free multi-track and just needs paid-gating when billing lands.
 
 ---
 
-## What the research changed
+## Recently shipped (since 2026-08-17)
 
-**Concern A → Sharpness "A/B/C/D grade" is the wrong shape.** LinkedIn Profile Strength + Whoop Journal + TrainerRoad Progression Levels all validate the transparency pattern, but every commercial success avoided A/B/C/D letter grades (D reads as failing, punitive baggage). Duolingo tried Skill Strength decay, users hated it. Grade *data*, not users.
+Major items only. Task-level detail lives in `dev/active/*/tasks.md`.
 
-**Concern B → Self-learning-from-notes is validated.** MacroFactor, Strava, Whoop, Fitbod, Runna all rule-tune adaptively without LLM. Founder's premise is correct. One warning: at beta scale "padel → red" probably really means "Sunday → red" — the sample size gates when Phase B correlation lift becomes trustworthy.
-
-**Concern C → Video form analysis as paid pillar is almost certainly wrong.** Coach's Eye shut down. Hudl Technique shut down. OnForm pivoted to B2B (coaches, teams). Uplift Labs same. HomeCourt narrowed to basketball only. **Nobody has built a durable D2C AI-form-check subscription.** Founder-obvious feature, commercially unproven. Video demos = ship free. AI form check = don't build the backend as paid pillar.
-
-The pattern that CONVERTS to paid: **adaptive planning + a small daily number derived from your own data**. Terav's confirm-first proposals map exactly onto this. Ideological model: **Hevy Pro (narrow, quiet paid)** not Runna (wide content paywall).
+- **F1 Path 1 · Signal-completeness surface** — free-tier "engine reads these" enumeration + notes micro-copy landed (`9b9a15c`, `17b4815`).
+- **F2 Phase A · Note-keyword surfacing** — admin-only weekly scan queue shipped (`4bff8cc`).
+- **Postgres migration end-to-end** — Phases 2A–2F all landed, KV retired, migrations auto-apply via GH Actions (`8edde7c` → `8c3ffc9`). Storage is Postgres for all users; KV path deleted.
+- **Domain migration** — live on `terav.fit` + `app.terav.fit` with Google OAuth on both auth pages (`d2b511d`, `76d6efe`).
+- **Catalog 5 → 9 programs** — First Strict Pull-Up, Muscle-Up Acquisition, Engine Builder Block 2 promoted; Overhead Mobility motor-learning wired (`ff2ce64`, `e044463`).
+- **Block-object rebuild** — Phases A–F shipped; Week/Today/Heatmap/History/Progress all block-object aware, feature flag default-ON (`1ee18ce` → `03f57a5`).
+- **HERITAGE non-responder gate** — schema + classifier + proposal wiring + retest scheduler + idempotent retest logging (`274cf76` → `ba1a00f`).
+- **Multi-track / concurrent programs (free-tier)** — Profile multi-track, Week dot-per-program, Report/Progress/Extras extras-strip, Delta-3 graduation, repeat-arc option (Batches 9–15).
+- **Batch 12 · Graduation + repeat-arc** — end-of-arc feedback capture + one-tap re-enrol (`99e6cb8`).
+- **Batch 15 · Week compact-by-default** — collapse-per-day rows + Profile sign-out at bottom (`210c373`).
+- **Batch 16 · GOWOD-scale visual system** — oversized H1s, identity chip on Profile, generous card padding across all primary routes (`fa348d0`).
+- **Intake wizard rebuild** — declarative program-agnostic intake, quiet-form pattern, physical-test split, wizard a11y, rehydration (`cefeabe` → `4714707`, plus batches).
+- **Beta ops** — Delete-account cascade + Sentry User Feedback widget; GDPR-hardened legal pages (`553f254`, `5d2b8e4`).
+- **Persona harness scaled to 8 personas** — multi-track + graduation + concurrent + 4 archetype variants; catalog-coverage assertion (`8047cf5`, `5e91397`, `12727f6`).
+- **Auditor infrastructure** — canonical competitor peer set (`competitor-refs.md`) + GOWOD steal-vs-leave brief; audit agents now benchmark against a stable peer list.
 
 ---
 
 ## F track (research-validated, ranked)
 
-### F1 (revised) · Signal-completeness surface
+### F1 · Signal-completeness surface
 
-**Was:** Sharpness A/B/C/D grade with video as final +1 to A.
-**Now:** literal "the engine sees / would additionally use" enumeration per program. No letter grade. No user shame. Named tiers only if we ship v2 later (e.g., **Baseline / Calibrated / Full** or the sword metaphor **Blunt / Honed / Sharp / Razor** — the sword metaphor threads the Terav brand verb).
-
-**Path 1 first (ship now, ~4-5h):**
-- Add a `signals` block to each program JSON: what the engine currently reads, what it would additionally use, per-signal user actions to close the gap
-- New `<SignalCompletenessCard>` on Progress route
-- Copy: literal + non-punitive ("your engine reads pace + notes. It would also use HR if you logged it. → Log HR each session · Connect wearable")
-- No score. No grade. Just a list.
-
-**Path 2 (promote later if Path 1 gets clicks):** program-level engine-capability tier with named states.
-
-**F1 is NOT paid.** It's a free-tier transparency feature that USES paid features as its "add wearable" upgrade. Points at F4.
+**Status: Path 1 SHIPPED 2026-08-18.** Free-tier enumeration live on Progress with per-signal upgrade paths. Path 2 (named tiers) still deferred behind F4 evidence.
 
 ### F4 · Wearable ingest (Garmin FIT + Whoop HRV + Oura HR/sleep)
 
-**Concern C validates this as a paid pillar.** Wearable ingest is the clearest paid-tier upgrade that fits Terav's positioning. FIT spec exists at `dev/active/saas-launch/future-features.md`.
+**Status: OPEN — the paid-tier keystone.** FIT spec at `dev/active/saas-launch/future-features.md`. Object storage EU region still the blocker for real ingest. Feeds F1 Path 1's "connect wearable" upgrade path.
 
-- Garmin manual FIT upload (spec ready)
-- Later: Whoop HRV, Oura sleep
-- Sets up F1 Path 1's "log HR" checklist → "connect wearable" one-tap
-
-Estimated: **~3-4 weeks solo** for the FIT parser + Supabase schema + upload UI. Big lift, but this is the paid-tier keystone.
+Estimated: **~3-4 weeks solo**.
 
 ### F5 · Multi-year trend + symptom-load correlation view
 
-**Concern C validates this as a paid pillar.** MacroFactor's expenditure V3, TrainerRoad's PLs — users pay for the small daily number derived from their own data. Terav's version:
+**Status: OPEN — paid-tier pillar 2.** Blocked on 90+ days of real log data from beta users. Correlation math + chart component still ~1-2 weeks when data volume warrants.
 
-- Chart: your last N months of load + symptoms + proposals accepted
-- "Your groin pain correlates with load spikes 3-4 days earlier"
-- Requires real data volume, so paid-users self-select via the FIT ingest + long log history
-- Only meaningful for users with 90+ days of logs — so it's a natural post-beta unlock
+### F2 · Self-learning-notes
 
-Estimated: **~1-2 weeks** for the correlation math + chart component.
+**Status: Phase A SHIPPED. Phase B/C/D open.**
+- Phase A · admin queue landed 2026-08-18. Founder reviews surfaced keywords weekly.
+- Phase B · correlation lift on existing keywords, founder-approves rule weight — ~1-2d when Phase A has 30+ days of data.
+- Phase C · per-user vocabulary calibration (paid) — ~1 week, ships after B.
+- Phase D · reshaped per D-brief — becomes founder-side batch LLM review, NOT a user-facing LLM in prod. Cross-user path deferred until N > 1000 weekly note-writers.
 
-### F2 · Self-learning-notes (Phase A first)
+### F6 · Concurrent tracks
 
-**Concern B validates all 4 phases.** Modified per research: Phase B must produce PROPOSALS (founder-review), not auto-mutations. Phase A can ship now safely.
+**Status: FREE-TIER SHIPPED; paid gate pending.** Multi-track Profile/Week/Report/Progress/Extras landed across Batches 10–14. The concurrent-tracks Today-view design brief (`dev/design-briefs/2026-08-17-concurrent-tracks-density.md`) is largely implemented. Remaining: paid-gate to "only 1 active program on free tier" when Phase 3 billing ships.
 
-**Phase A (ship now, ~4-6h):**
-- Weekly Worker cron scans users' notes for words that appear ≥3× in 30 days AND aren't in `note-signals.ts` regex
-- Emits a JSON queue you review
-- You decide which to add to the regex
+### F3 · Coach chat — included, not the pitch
 
-**Phase B (ship after A, ~1-2d):** correlation lift on existing keywords. Founder approves rule weight changes. Never auto-applied.
-
-**Phase C (paid tier, ~1 week):** per-user vocabulary calibration. Strongest positioning move. Ships after A + B have data.
-
-**Phase D (deferred):** LLM only for genuinely novel phrasing. Not in hot path.
-
-### F6 · Concurrent tracks (paid)
-
-**Concern C confirms multi-program concurrent use as paid.** Design brief already at `dev/design-briefs/2026-08-17-concurrent-tracks-density.md`. ~12-14h behind feature flags.
-
-### F3 (revised) · Coach chat — included, not the pitch
-
-**Concern C:** coach chat as **included-not-marketed** feature. Not a paid pillar. Turn on eventually, don't lead with it.
-
-Worker already built at `worker/src/index.ts`. Env-var-gated OFF in prod. Turn-on cost: ~1 week to productionize with rate limiting + billing hookup.
+**Status: DEFERRED, unchanged.** Worker at `worker/src/index.ts` still env-var-gated OFF in prod. Coach route now super-admin-only in the More menu (`9eba1fa`). Turn-on ~1 week when billing hookup is real.
 
 ### F-KILL · Video form analysis as paid pillar
 
-**REJECTED by Concern C evidence.** Do not build the backend AI form check as a paid tier feature. Every attempt in this space since 2016 has failed or pivoted to B2B.
-
-**What we CAN do:**
-- Ship exercise demo videos for every drill (**free tier**)
-- Feed the Sharpness-completeness surface's "video the retest" checkbox as an OPTIONAL free-tier upload (user films, gets stored in their log, no AI)
-- Never charge for AI form analysis
-
-If a beta user asks about form check: point at OnForm / their coach. Don't build it.
+**REJECTED, unchanged.** Concern C evidence stands. Ship exercise demo videos free-tier only (see research queue F).
 
 ---
 
 ## Ranked F-track roadmap
 
-| # | Feature | Free/Paid | Estimate | Blocked by |
+| # | Feature | Free/Paid | Status | Blocked by |
 |---|---|---|---|---|
-| 1 | **F1 Path 1** — Signal-completeness surface (no letter grades) | Free | 4-5h | — |
-| 2 | **F2 Phase A** — Note-keyword surfacing | Backend | 4-6h | — |
-| 3 | **F4** — Garmin FIT ingest (paid) | **Paid** | 3-4wk | Object storage EU region |
-| 4 | **F5** — Trend + correlation view (paid) | **Paid** | 1-2wk | 90d log history |
-| 5 | **F2 Phase B** — Correlation lift (founder-review) | Backend | 1-2d | F2 Phase A shipped + data |
-| 6 | **F6** — Concurrent tracks (paid) | **Paid** | 12-14h | Design brief already filed |
-| 7 | **F2 Phase C** — Per-user vocabulary calibration | **Paid** | ~1wk | F2 A+B shipped |
-| 8 | **F3** — Coach chat (included, not the pitch) | Free (bundled with paid) | ~1wk | Rate limiting + billing |
+| ~~1~~ | ~~**F1 Path 1** — Signal-completeness surface~~ | Free | **SHIPPED 2026-08-18** | — |
+| ~~2~~ | ~~**F2 Phase A** — Note-keyword surfacing~~ | Backend | **SHIPPED 2026-08-18** | — |
+| 3 | **F4** — Garmin FIT ingest | **Paid** | Open · 3-4wk | Object storage EU region |
+| 4 | **F5** — Trend + correlation view | **Paid** | Open · 1-2wk | 90d log history from real users |
+| 5 | **F2 Phase B** — Correlation lift (founder-review) | Backend | Open · 1-2d | Phase A data volume |
+| ~~6~~ | ~~**F6** — Concurrent tracks (free)~~ | Free | **SHIPPED as free-tier**; paid gate pending Phase 3 billing | — |
+| 7 | **F2 Phase C** — Per-user vocabulary calibration | **Paid** | Open · ~1wk | F2 A+B shipped |
+| 8 | **F3** — Coach chat (included, not the pitch) | Free (bundled with paid) | Deferred · ~1wk to productionize | Rate limiting + billing |
 | — | ~~Video form analysis as paid pillar~~ | KILLED | — | Concern C evidence |
 
 ---
 
-## Remaining P tier polish (post-foundation)
+## P-tier polish — CLOSED
 
-Foundation shipped tonight (`9135bc5`). Remaining P items:
-
-**P2 — mobile UX (~5 items left, ~2h):**
-- M2 Programs snap-carousel dots (S) — delete or wire
-- M4 Hero stat row wraps at 393px (S)
-- M6 body+main compound bottom padding (S)
-- M7 ProposalCard two dismiss affordances (S) — X vs Ignore
-- M9 OnboardingRunner + iOS soft keyboard (M)
-
-**P3 — visual craft (9 items, ~2h):** V1-V9. **Component-level** — several touch surfaces F1 will change (SignalCompletenessCard). Defer P3 until after F1.
-
-**P4 — copy craft (5 items, ~2h):**
-- C1 Landing hero verb "sharpen" doesn't survive to app (S)
-- C2 `life_load` label conflict across 6 programs (S)
-- C3 Pick-my-focus CTA lacks friction disclosure (S)
-- C4 Landing sub-pages don't reference focused-improvement (M)
-- C5 Landing 88 studies / library 112 reconciliation (S)
-
-**P5 — motion + perf (2 items left, MO1 + MO3):**
-- MO1 `animate-card-in` referenced but not defined (S)
-- MO3 Landing font loading verify (S)
-
-**X — cross-cutting (2 remaining):**
-- X2 Repurpose old `program` project (Cloudflare dashboard)
-- X3 iOS PWA splash images (M)
-
-**Total remaining polish: ~9h.**
+All P0/P1/P2/P3/P4/P5/X items from the 2026-08-17 audit backlog shipped between `9135bc5` and Batch 16. What remains is either (a) waiting on billing (paid gates), (b) waiting on real beta signal (F5 correlation), or (c) new items surfaced by post-Batch-16 competitor audits (see next section).
 
 ---
 
-## Suggested interleave sequence
+## On deck — new items surfaced post-audit
 
-Ship in this order to avoid the double-polish problem:
+Founder-explicit or competitor-benchmark ideas that arose from Batches 9–16 and the GOWOD brief. Not F-track pillars — polish + UX depth.
 
-1. **F1 Path 1** (4-5h) — signal-completeness surface. Ships free-tier value + primes paid upsell paths.
-2. **P2 residual** (2h) — mobile UX. Stable surfaces, unaffected by F1.
-3. **F2 Phase A** (4-6h) — note keyword surfacing. Backend-only, doesn't touch UI.
-4. **P4 copy craft** (2h) — all 5 items, landing sub-pages + label discipline.
-5. **P5 motion** (30 min) — MO1 + MO3 tiny fixes.
-6. **F4 FIT ingest** (3-4 weeks) — the paid-tier keystone. Own session sequence.
-7. Post-F4: **P3 visual craft** as the "one final audit pass" the founder identified — this is when the new surfaces (SignalCompletenessCard, FIT-connected screens, correlation view) have all landed and can be polished together, not in isolation.
-8. **F5 correlation view** — paid tier pillar 2.
-9. **F6 concurrent tracks**, **F2 Phase B+C**, **F3 coach chat** — parallel or sequenced based on beta signal.
+- **Extend-by-N-weeks at graduation** — Batch 12 shipped feedback + repeat-arc; extending an existing arc without full re-enrol is the natural next affordance.
+- **First-run tutorial overlay on Today** — carried from Phase 4 SaaS-launch tasks; still open, skippable, one-shot.
+- **Switch-program warning** — Phase 2 catalog UI gap; multi-program is live, but explicit "switch primary" confirmation is missing.
+- **Sort catalog by difficulty / duration** — Phase 2 catalog UI gap; filter shipped, sort didn't.
+- **Retest-week UX polish** — HERITAGE Phase 5 shipped scheduler, but the "you're at the end" state + post-retest actions (extend / switch / take break / graduate) still need tightening.
+- **Runna-style Week collapse+expand full impl** — Batch 15 shipped collapse-by-default; the expanded state, Move-sheet, and per-row "Open in Today / Move… / Skip" verbs from the GOWOD brief §3 are still open (~6-8h).
+- **/account deep-link route for Delete** — Batch 16 removed Delete from the Profile footer's equal-weight row; the interim Danger-zone disclosure works, but the identity-chip-tap destination `/account` is the proper home.
+- **CSM amber-week drop-4×4 hook (P1-11)** — engine consumer for a rule already documented in `concurrent-strength-maintenance.json`; ~3-4h engine feature, founder-decision whether to ship for first CSM paid user or defer.
+- **Skill/mobility exercise logging in simulator** — blocks adaptation verification for handstand-walk + overhead-mobility retest windows.
 
 ---
 
-## Research queue (not yet designed, agent-dispatchable)
+## Design-system ideas (from competitor benchmarks — IDEAS, not decisions)
 
-Ideas surfaced during founder conversation that deserve prior-art research before any implementation call. Each entry frames the question + the specific agent brief. Not on the F track.
+Surfaced by the GOWOD visual-system brief and the competitor-refs canonical peer set. **Founder is deliberate about not auto-implementing every audit finding** — these live here until an explicit "yes ship it" call.
 
-### E · Diagnostic intake — bilateral self-report screen with demo videos
+- **Runna-style row-expand with in-line Move sheet** — one-line-per-day default, tap to expand, always-explicit Move menu (never swipe-only). Reference: Runna weekly view. Partially begun in Batch 15.
+- **Whoop-style single-metric hero cards** — one color = one job, big number + tiny caption. Reference for the upcoming Progress milestone visualization when F5 correlation lands.
+- **Pliability-scale identity chip** — Batch 16 shipped GOWOD-scale on Profile; Pliability-scale card discipline (single idea per card, 24-32px internal padding) could extend to Progress and History.
+- **Hevy set-log + rest-timer patterns** — reference for any future strength-log input surface (currently non-blocking, we're not a logging-first app).
+- **GMB tier-progression visual metaphor** — reference for Handstand Walk and Muscle-Up skill programs when tier-progression gets its own screen.
+- **Deliberately rejected (kept as reminders):** photography anywhere, blue CTA, persistent premium/upsell bar, session-type carousel on Today, streak/challenge counters.
 
-**Surfaced by:** founder + friend, 2026-08-17. Prompted by GoWOD's actual model (~500K users, ~$10-15/mo, mobility-focused).
+---
 
-**Corrected mechanism (founder clarification, 2026-08-17):** GoWOD does NOT watch or analyze user video. The pattern is:
-1. Video demo shows the user how to perform the movement (e.g. seated forward fold, wall shoulder rotation, forward reach with one leg lead)
-2. User performs it, both sides separately
-3. User answers a 0-10 slider: "how well / how far did you get?"
-4. L / R asymmetry captured cleanly
-5. Results feed a weakness map that recommends program(s) to close the gap
+## Research queue (agent-dispatchable, not on the F track)
 
-**Zero AI. Zero video analysis. Zero measurement equipment.** Just structured self-report with visual guidance + bilateral capture. Trivial technically.
+Unchanged from the 2026-08-17 synth. Still queued, still not built.
 
-**What we already have:**
-- `intake.physical_tests` block on every program JSON (`schemas.ts:physicalTestSchema`)
-- Each test: `id`, `label`, `instructions` (text), `unit` (degrees/seconds/reps/kg/m/bpm), `min`, `max`
-- Handstand-walk has 5 tests (wrist ext, shoulder flexion, wall hold, cold press, etc.), overhead-mobility more, engine-builder some
-- Our existing pattern captures numeric measurement in program-specific units — NOT self-report sliders, NOT bilateral
+- **E · Diagnostic intake — bilateral self-report battery** (GoWOD-shaped, zero-AI). Deliverable at `dev/audits/product-concerns/E-diagnostic-intake-battery.md`. Do NOT build without the brief; scope creep risk is high.
+- **F · Video demo library** (free tier). Hosting/delivery/WCAG trade-offs. Deliverable at `dev/audits/product-concerns/F-video-demo-library.md`.
+- **G · Founder personal video-vision experiment.** ~30 min sanity-check with Gemini/Claude on a training clip. Confirms or reinforces Concern C's kill. Deliverable at `dev/active/product-concerns-2026-08-17/G-video-vision-experiment.md`.
+- **Wearable ingest deep-dive** — competitive analysis before F4 starts. Spec at `dev/active/saas-launch/future-features.md`.
+- **Community / social layer** — validated NEGATIVE by Concern C, documented explicitly for future "why not."
 
-**What E would ADD to what we have:**
-- `demo_video_url` or `demo_image_url` on physicalTestSchema (Concern F resolves the hosting question)
-- Optional `bilateral: true` flag → capture L + R separately, engine sees asymmetry
-- Optional `self_report_scale: "0-10"` → alternative to numeric unit measurement
-- Optional "general movement screen" that runs across all programs at signup, not per-program
-- Cross-program synthesis: results feed program picker recommendations ("your left ankle is 3, right ankle is 7 — Overhead Mobility would help; or run engine-builder with the caveat that squat depth may limit you")
+---
 
-**Terav-specific scope discipline:**
-- GoWOD is mobility-only. Terav is NOT. Keep the screen SHORT (10-15 movements max) and cross-cutting (some mobility, some balance, some symmetry) so it serves all program types.
-- Bilateral asymmetry is the highest-signal component (a program that ignores your L-R gap will keep failing you).
-- Every movement in the screen must map onto AT LEAST one Terav program's weakness dimension, or it doesn't earn a slot.
+## Auth polish
 
-**Question for a future research agent:**
+- **Resend confirmation email** — shipped 2026-08-17 (`20e04ef`).
+- **Google sign-in** — shipped 2026-08-18 (`76d6efe`).
+- **Apple sign-in** — deferred until Google demand signal is real.
 
-*"For a focused-improvement app that runs alongside your other training (Terav), what's the right diagnostic-intake movement battery? Constraint: 10-15 movements max, no video analysis, bilateral where relevant, self-report + demo video only, must map to Terav's existing programs (engine-builder, concurrent-strength-maintenance, overhead-mobility, handstand-walk, rowing-2k-test-prep, first-strict-pull-up, muscle-up)."*
-
-*Research targets — start with published batteries + Terav's own whitepapers:*
-- *Functional Movement Screen (FMS) — 7 tests, industry standard, published sensitivity/specificity*
-- *Selective Functional Movement Assessment (SFMA) — clinical version, 10+ tests*
-- *Beighton hypermobility scale — 9 measurements*
-- *Y-Balance Test — single-leg reach in 3 directions, sensitive asymmetry detector*
-- *Thomas test, ankle dorsiflexion knee-to-wall, sit-and-reach — sport-adjacent*
-- *GoWOD's public materials — what movements do they use, how do they validate*
-- *Kneesovertoesguy ATG assessment battery — published free*
-- *NBA / NFL / NCAA combine mobility screens — public methodology*
-- ***Terav's own whitepapers*** *at `dev/whitepapers/*.md` — motor learning + handstand-walk sections already reference specific test batteries. Cross-check what we've already documented.*
-- ***Terav's own program JSONs*** *— existing physical_tests may already list the right movements per program; a general screen might just be their union*
-
-*Deliverable: `dev/audits/product-concerns/E-diagnostic-intake-battery.md` with:*
-1. *3-5 candidate 10-15 movement batteries + trade-offs*
-2. *Recommended MVP battery, with each movement mapped to which Terav program(s) it informs*
-3. *Data-shape extensions to physicalTestSchema needed to support GoWOD-style bilateral + slider + demo-video*
-4. *Cross-reference to Concern F (video demo library) — if we ship the demos, this becomes cheap*
-
-**Do NOT build without the E-brief.** Scope discipline: GoWOD-shaped feature could easily eat the roadmap if we mistake it for a mobility-track feature instead of an intake-tier upgrade. Terav's diagnostic intake serves ALL programs; must stay short.
-
-### F · Video demo library for exercises (free tier)
-
-**Surfaced by:** founder, 2026-08-17. Concern C validates video demos as legitimately free-tier. But: build it ourselves vs. embed YouTube vs. license from a stock library? Storage + delivery cost at scale? Estonian language subtitles? Should each program author its OWN demos or share a global drill library?
-
-**Question for a future research agent:**
-
-*What are the actual delivery + hosting patterns for exercise demo libraries in fitness apps at Terav's scale (10-10K users)? Fitbod embeds YouTube, Hevy hosts its own MP4s, Ladder shoots pro video, MacroFactor has no video at all. What's the cost/quality/legal trade-off? Video accessibility (captions, audio descriptions, playback speed) for WCAG.*
-
-*Deliverable: `dev/audits/product-concerns/F-video-demo-library.md` — hosting patterns, cost estimates, WCAG requirements, build vs. license recommendation.*
-
-### G · Personal experiment — video analysis capability sanity-check
-
-**Surfaced by:** founder, 2026-08-17. Even though Concern C killed AI video form analysis as a paid pillar (Coach's Eye / Hudl Technique / OnForm precedents), the founder is curious what current-generation vision models actually SEE in a training video. Cheap, personal, no build required.
-
-**Founder-side experiment (~30 min):**
-- Shoot a random 15-30 second movement video (squat, handstand, snatch, whatever's convenient)
-- Upload to Gemini Pro or Claude (founder has both) — pick one initially
-- Prompt: "grade the technique of this movement. What's good? What would you flag? What would you have me change?"
-- Also try: "measure the joint angle at the bottom of the squat" or similar quantitative ask
-- Note: (a) what the model got right, (b) what it hallucinated, (c) whether it could measure anything numeric
-
-**Deliverable (~15 min after):** a scratch note at `dev/active/product-concerns-2026-08-17/G-video-vision-experiment.md` with the founder's observations. No agent needed — this is a personal sanity-check, not a research brief.
-
-**Why worth doing anyway (given Concern C rejection):**
-- If current vision models can NOT reliably measure joint angles: reinforces Concern C's kill-decision
-- If current vision models CAN reliably measure: doesn't change the paid-pillar rejection (Coach's Eye had good tech and still failed commercially), but might inform E-brief's approach — could a passive video assist self-report accuracy without being the pitch?
-
-### Later additions
-
-- Wearable ingest deep-dive (Garmin FIT vs. Whoop OAuth vs. Oura API — F4 pillar) — has spec at `dev/active/saas-launch/future-features.md`, could use a stronger competitive analysis before starting
-- Community / social layer (validated NEGATIVE by Concern C — Terav's positioning rejects streaks + leaderboards — but folks always ask, worth documenting the "no" explicitly)
-
-## Auth polish queued separately (not the F/P track)
-
-Signup + sign-in currently support only email + password. Adds queued:
-
-- **Resend confirmation email** — shipped 2026-08-17 (`sign-up/page.tsx` "Check your email" screen + `sign-in/page.tsx` "Email not confirmed" detected state). Founder observed one beta user (`margussellin112@hot.ee`) sitting in unconfirmed state; without a resend button they'd hit the "email already registered" trap on retry.
-- **Google sign-in** — queued. Requires Supabase Auth → Providers → Google enabled + Google Cloud Console OAuth client + callback URL `https://app.terav.fit/auth/callback` (route currently doesn't exist; needs creation). Founder cost: ~10 min (Google Cloud + Supabase dashboard). Code cost: ~1h (add `<SignInWithGoogle />` button on both auth pages, add `/auth/callback` route for the OAuth code-exchange). Total: ~half a day of shared work.
-- **Apple sign-in** — deferred until Google ships and signals demand. Requires Apple Developer team ($99/yr) + Sign-in-with-Apple entitlement. Higher setup cost, iOS-first buyer segment though.
+---
 
 ## What NOT to do (rejected explicitly)
 
-- ~~Sharpness A/B/C/D letter grades~~ — Concern A says grade data not users
-- ~~Video form analysis as paid pillar~~ — Concern C evidence-based rejection
+- ~~Sharpness A/B/C/D letter grades~~ — Concern A
+- ~~Video form analysis as paid pillar~~ — Concern C
 - ~~Re-paywalling any currently-free feature~~ — Strava/Whoop churn warning
-- ~~Marketing coach chat as a paid pillar~~ — dilutes the "engine-not-content" positioning
-- ~~Cross-user note aggregation at beta scale~~ — Concern D rejection: Strava 2018 / Flo 2021 / 23andMe 2023 precedents; free-text resists safe anonymization; noise-dominated at N < 1000. **Deferred**, not killed — narrow path documented at `dev/audits/product-concerns/D-cross-user-note-learning.md` for future.
-
-## D-brief follow-up: what F2 actually looks like post-D
-
-The D-brief argues cross-user is a **different product**, not a superset of F2 per-user. Concrete change to F2 roadmap:
-
-- **F2 Phase A + B + C stay** — all per-user, no cross-user aggregation needed
-- **F2 Phase D (LLM fallback for novel phrasing) reshaped** — becomes: monthly founder-side batch review using the founder's Claude Team seat, per-user (or founder-only aggregate for pattern discovery), NOT a user-facing LLM in prod
-- **Cross-user D-path** — deferred until N > 1000 active weekly note-writers AND we've introduced structured toggles as the primary aggregation substrate
-
-**Architecture implication:** you still need Supabase Postgres for F2 Phase A/B/C per-user time-window queries. Cross-user analytics warehouse not needed for years. See `dev/active/product-concerns-2026-08-17/architecture.md` (to be filed if founder approves).
+- ~~Marketing coach chat as a paid pillar~~ — dilutes "engine-not-content" positioning
+- ~~Cross-user note aggregation at beta scale~~ — Concern D; deferred until N > 1000
+- ~~Streak/challenge counters (StreakChip)~~ — removed 2026-08-17 (`B1` in post-audit-p0s/tasks.md)
 
 ---
 
 ## Immediate next action
 
-**F1 Path 1** is the highest-leverage next commit — 4-5h, ships value now, primes the paid ladder without over-committing to grades. Should I start on it, or continue P track polish first?
+**F4 (wearable ingest) OR the on-deck polish set.** F4 is the paid-tier keystone but a 3-4 week solo lift; the on-deck items (extend-by-N-weeks, sort catalog, switch-program warning, retest UX polish, Week expand + Move sheet) collectively close ~10-15h of founder-visible gaps and unblock the "concurrent tracks paid-gate" story when billing lands. Founder call.
