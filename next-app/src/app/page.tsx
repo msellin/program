@@ -180,7 +180,13 @@ export default function TodayPage() {
           the DateNav as a single compact line. Reclaims ~120px of fold. */}
       <h1 className="sr-only">Today</h1>
 
-      <YourPlanCard program={primary} />
+      {/* Suppress the reveal card once the user has any real log history —
+          if they've been using the app, they know what plan they're on.
+          Also suppress after graduation. Delta audit 2026-08-19. */}
+      {!isPastProgramEnd(primary, activeDate, userProfile) &&
+      Object.keys(logs ?? {}).length < 3 ? (
+        <YourPlanCard program={primary} />
+      ) : null}
 
       <FirstRunBanner />
 
@@ -206,7 +212,12 @@ export default function TodayPage() {
 
       <DateNav date={activeDate} onChange={setActiveDate} />
 
-      {phase ? (
+      {/* Suppress phase readout when the user has already graduated. Prior
+          behavior: activePhaseFor returned the LAST phase as fallback, so
+          Today showed "Taper + test · week 1 of 3" alongside the graduation
+          card — 4 contradictory clocks on rowing per delta audit
+          2026-08-19. */}
+      {phase && !isPastProgramEnd(primary, activeDate, userProfile) ? (
         <p className="-mt-3 text-[13px] text-muted leading-tight">
           <span className="text-strong">{humanPhaseName(phase.name)}</span>
           {phaseProgress(phase, activeDate) ? (
@@ -234,7 +245,9 @@ export default function TodayPage() {
 
       <SignalsStrip program={primary} date={activeDate} />
 
-      <RetestReminder program={primary} profile={userProfile} activeDate={activeDate} />
+      {!isPastProgramEnd(primary, activeDate, userProfile) ? (
+        <RetestReminder program={primary} profile={userProfile} activeDate={activeDate} />
+      ) : null}
 
       {/* Taper phase — surface it prominently so the reduced session duration
           isn't read as an error. Read the phase's is_taper flag which we set

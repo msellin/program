@@ -112,6 +112,9 @@ function evaluateSource(
   store: Store,
   parsed: ParsedSource,
   slug: string | undefined,
+  aggregation?: string,
+  windowDays?: number,
+  direction?: "higher_is_better" | "lower_is_better",
 ): {
   current: number | null;
   baseline: number | null;
@@ -158,9 +161,53 @@ function evaluateSource(
     );
     const matching = all.filter(({ run }) => runMatchesFilters(run, parsed.filters));
     if (matching.length === 0) return { current: null, baseline: null };
-    const firstV = readRunNumericField(matching[0].run, parsed.field);
-    const lastV = readRunNumericField(matching[matching.length - 1].run, parsed.field);
-    return { current: lastV, baseline: firstV };
+    const values = matching
+      .map(({ run }) => readRunNumericField(run, parsed.field))
+      .filter((v): v is number => v != null);
+    if (values.length === 0) return { current: null, baseline: null };
+
+    // Aggregation-aware current/baseline selection. Prior behavior was
+    // point-sample first vs last regardless of the JSON-declared
+    // `aggregation` and `window_days` — which inverted persona-engine-fast's
+    // Δ from real −1 bpm to false +4 bpm because random per-session noise
+    // dominated the point sample. Delta audit 2026-08-19.
+    if (aggregation === "trend_slope" && values.length >= 2) {
+      // Baseline = mean of first third of the values (or first ceil(N/3)).
+      // Current = mean of last third. Δ then reads the trend, not noise.
+      const third = Math.max(1, Math.ceil(values.length / 3));
+      const firstThird = values.slice(0, third);
+      const lastThird = values.slice(values.length - third);
+      const mean = (a: number[]) => a.reduce((s, v) => s + v, 0) / a.length;
+      return { current: Math.round(mean(lastThird) * 10) / 10, baseline: Math.round(mean(firstThird) * 10) / 10 };
+    }
+
+    if (aggregation === "best_of_last_n") {
+      // Best-of-window: current = the "best" value (respects direction);
+      // baseline = the first value in the window (unchanged).
+      // Optional windowDays trims the tail to that many days from the last
+      // date; if unset, use the full match set.
+      let windowed = matching;
+      if (windowDays && windowDays > 0) {
+        const lastDate = matching[matching.length - 1].date;
+        const cutoffMs = new Date(lastDate + "T00:00:00").getTime() - windowDays * 864e5;
+        windowed = matching.filter(({ date }) =>
+          new Date(date + "T00:00:00").getTime() >= cutoffMs,
+        );
+      }
+      const windowedValues = windowed
+        .map(({ run }) => readRunNumericField(run, parsed.field))
+        .filter((v): v is number => v != null);
+      if (windowedValues.length === 0) return { current: null, baseline: values[0] };
+      const best =
+        direction === "higher_is_better"
+          ? Math.max(...windowedValues)
+          : Math.min(...windowedValues);
+      return { current: best, baseline: values[0] };
+    }
+
+    // Default / "latest" mode — original behavior. Point-sample first vs
+    // last. This is the correct semantic when aggregation isn't declared.
+    return { current: values[values.length - 1], baseline: values[0] };
   }
   return { current: null, baseline: null };
 }
@@ -174,10 +221,38 @@ export function evaluateRetestMetrics(
   store: Store,
   userTierId?: string,
 ): RetestValue[] {
-  const metrics =
+  // Include both end-of-block and mid-block metrics. Mid-block was
+  // authored on engine-builder + rowing but never rendered on Progress —
+  // silent gap flagged in delta audit 2026-08-19. Mid-block entries
+  // reference the same metric_id family as their end-of-block sibling
+  // (see rowing-2k-test-prep.json), so we tag them with a `mid_block`
+  // marker so the panel can render a distinct row.
+  const endOfBlock =
     ((program as unknown as { retest_metrics?: unknown[] }).retest_metrics as
       | Array<Record<string, unknown>>
       | undefined) ?? [];
+  const midBlock =
+    ((program as unknown as { retest_metrics_mid_block?: unknown[] })
+      .retest_metrics_mid_block as Array<Record<string, unknown>> | undefined) ?? [];
+
+  // De-dupe: if a mid_block entry has the same metric_id as an
+  // end-of-block entry, prefix its display_name so both can coexist on
+  // the panel. Programs sometimes use the exact same metric_id — that's
+  // OK for scoring but reads as duplicate on Progress.
+  const endIds = new Set(endOfBlock.map((m) => String(m.metric_id ?? "")));
+  const midWithFlag = midBlock.map((m) => {
+    const id = String(m.metric_id ?? "");
+    if (endIds.has(id)) {
+      return {
+        ...m,
+        display_name: `${String(m.display_name ?? id)} · mid-block`,
+        metric_id: `${id}__mid_block`,
+      };
+    }
+    return m;
+  });
+
+  const metrics = [...endOfBlock, ...midWithFlag];
   if (!metrics.length) return [];
 
   return metrics.map((m): RetestValue => {
@@ -210,7 +285,16 @@ export function evaluateRetestMetrics(
       };
     }
 
-    const { current, baseline } = evaluateSource(store, parsed, program.slug);
+    const aggregation = typeof m.aggregation === "string" ? m.aggregation : undefined;
+    const windowDays = typeof m.window_days === "number" ? m.window_days : undefined;
+    const { current, baseline } = evaluateSource(
+      store,
+      parsed,
+      program.slug,
+      aggregation,
+      windowDays,
+      direction,
+    );
 
     // Pick the user's tier target row when present.
     const targets = (m.targets as Array<Record<string, unknown>> | undefined) ?? [];

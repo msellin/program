@@ -93,6 +93,29 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
       list.push({ id: "pause", tone: "amber", label: `Back after ${pause.gapDays} days — soften plan?` });
     }
 
+    // CSM amber-week 4×4 drop signal. Program authors this hook at
+    // concurrent-strength-maintenance.json:541 ("≥3 amber days in a week
+    // → drop 4×4 next week"). Delta audit 2026-08-19 P1-11 flagged that
+    // no engine code consumed it. Signal-strip advisory here — actual
+    // scheduled-block replacement is a follow-up (needs Accept flow).
+    if (program.slug === "concurrent-strength-maintenance") {
+      const t0 = new Date(date + "T00:00:00");
+      let amberCount = 0;
+      for (let back = 0; back < 7; back++) {
+        const d = new Date(t0);
+        d.setDate(t0.getDate() - back);
+        const key = iso(d);
+        if (store.logs[key]?.derived_state === "amber") amberCount++;
+      }
+      if (amberCount >= 3) {
+        list.push({
+          id: "csm-amber-week",
+          tone: "amber",
+          label: `${amberCount} amber days this week — plan will drop 4×4 next week`,
+        });
+      }
+    }
+
     // Morning check overdue: today has no derived_state AND the plan wants a strength
     // session AND the last saved check was ≥ 3 days ago. Nudge to /check so the
     // load-adjustment rules have something to base themselves on. Suppressed on

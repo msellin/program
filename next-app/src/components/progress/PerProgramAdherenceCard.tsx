@@ -35,33 +35,55 @@ type ProgramRow = {
 
 function computeRows(store: Store, slugs: string[]): ProgramRow[] {
   const today = new Date();
-  const start = new Date(today.getTime() - WINDOW_DAYS * 864e5)
+  const startISO = new Date(today.getTime() - WINDOW_DAYS * 864e5)
     .toISOString()
     .slice(0, 10);
-  const end = today.toISOString().slice(0, 10);
+  const endISO = today.toISOString().slice(0, 10);
   const rows: ProgramRow[] = [];
   for (const slug of slugs) {
-    const blocks = getBlocksForProgram(store, slug, start, end);
-    if (blocks.length === 0) continue;
-    let done = 0;
-    let planned = 0;
-    let skipped = 0;
-    let moved = 0;
-    for (const b of blocks) {
-      if (b.state === "done") done++;
-      else if (b.state === "skipped") skipped++;
-      else if (b.state === "moved") moved++;
-      else planned++;
+    const blocks = getBlocksForProgram(store, slug, startISO, endISO);
+    if (blocks.length > 0) {
+      let done = 0;
+      let planned = 0;
+      let skipped = 0;
+      let moved = 0;
+      for (const b of blocks) {
+        if (b.state === "done") done++;
+        else if (b.state === "skipped") skipped++;
+        else if (b.state === "moved") moved++;
+        else planned++;
+      }
+      const denom = blocks.length - moved;
+      rows.push({
+        slug,
+        done,
+        planned,
+        skipped,
+        moved,
+        total: blocks.length,
+        adherencePct: denom > 0 ? Math.round((done / denom) * 100) : 0,
+      });
+      continue;
     }
-    const denom = blocks.length - moved;
+    // Fallback for programs / users where scheduled_blocks isn't populated
+    // yet — count log-based done sessions instead of showing "0/25 done"
+    // while the user has 17 real runs. Delta audit 2026-08-19 P1.
+    let done = 0;
+    for (const [dateISO, day] of Object.entries(store.logs ?? {})) {
+      if (dateISO < startISO || dateISO > endISO) continue;
+      const anyExerciseDone = Object.values(day.exercises ?? {}).some((e) => e.done);
+      const anyRun = (day.runs ?? []).length > 0;
+      if (anyExerciseDone || anyRun) done++;
+    }
+    if (done === 0) continue;
     rows.push({
       slug,
       done,
-      planned,
-      skipped,
-      moved,
-      total: blocks.length,
-      adherencePct: denom > 0 ? Math.round((done / denom) * 100) : 0,
+      planned: 0,
+      skipped: 0,
+      moved: 0,
+      total: done,
+      adherencePct: 100,
     });
   }
   return rows;

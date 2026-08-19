@@ -105,13 +105,65 @@ function labelFor(v: ClassificationVerdict): { text: string; tone: string } | nu
 }
 
 /**
- * Gather baselines from wherever the store keeps them. Today: the future
- * `retest_readings` array (Phase 5 scheduler). Legacy `assessments` packs
- * won't populate this; they're a different flow.
+ * Gather baselines from wherever the store keeps them. Primary source is
+ * the `retest_readings` array (Phase 5 scheduler). Fallback: synthesize
+ * from `runs[]` — programs like engine-builder + rowing-2k declare a
+ * `primary_signal_metric_id` matching a `retest_metrics` entry that
+ * queries runs. When retest_readings is empty (persona harness, users
+ * pre-Phase-5), read the same runs the retest evaluator reads so the
+ * classifier can fire. Delta audit 2026-08-19 P1.
  */
-function collectBaselines(store: Store, _program: Program): MetricBaseline[] {
+function collectBaselines(store: Store, program: Program): MetricBaseline[] {
   const readings = (store as unknown as { retest_readings?: MetricBaseline[] })
     .retest_readings;
-  if (!Array.isArray(readings)) return [];
-  return readings;
+  if (Array.isArray(readings) && readings.length > 0) return readings;
+
+  const classifier = (program as unknown as {
+    non_responder_classifier?: { primary_signal_metric_id?: string };
+  }).non_responder_classifier;
+  if (!classifier?.primary_signal_metric_id) return [];
+
+  const retestMetrics = (program as unknown as {
+    retest_metrics?: Array<{ metric_id?: string; source?: string; source_ref?: string }>;
+  }).retest_metrics ?? [];
+  const primary = retestMetrics.find((m) => m.metric_id === classifier.primary_signal_metric_id);
+  if (!primary || primary.source !== "run_field" && primary.source !== "log_field") return [];
+
+  const ref = primary.source_ref ?? "";
+  const runFieldMatch = /^runs\[\]\.([a-z0-9_]+)(?:\s+where\s+(.+))?$/i.exec(ref);
+  if (!runFieldMatch) return [];
+  const field = runFieldMatch[1];
+  const filters: Array<{ k: string; v: string }> = [];
+  const whereClause = runFieldMatch[2];
+  if (whereClause) {
+    for (const part of whereClause.split(/\s+and\s+/i)) {
+      const eq = /^([a-z0-9_]+)\s*==\s*'([^']*)'$/i.exec(part.trim());
+      if (eq) filters.push({ k: eq[1], v: eq[2] });
+    }
+  }
+
+  const out: MetricBaseline[] = [];
+  for (const [date, day] of Object.entries(store.logs ?? {})) {
+    for (const run of day.runs ?? []) {
+      const runRec = run as unknown as Record<string, unknown>;
+      // Field aliasing mirrors retest-evaluator: `modality` == activity_type.
+      let matchesAll = true;
+      for (const f of filters) {
+        const actual = f.k === "modality" ? runRec.activity_type : runRec[f.k];
+        if (String(actual ?? "") !== f.v) {
+          matchesAll = false;
+          break;
+        }
+      }
+      if (!matchesAll) continue;
+      const v = runRec[field];
+      if (typeof v !== "number" || !Number.isFinite(v)) continue;
+      out.push({
+        metric_id: classifier.primary_signal_metric_id,
+        value: v,
+        observed_at: date,
+      });
+    }
+  }
+  return out.sort((a, b) => a.observed_at.localeCompare(b.observed_at));
 }
