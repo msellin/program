@@ -894,14 +894,19 @@ function WizardProgress({
       aria-valuemax={total}
     >
       {/* Founder screenshot 2026-08-18 — program name lives in the rail
-          instead of a repeating H1/description block above each step. */}
+          instead of a repeating H1/description block above each step.
+          P1-83 (2026-08-19) — bumped program-name eyebrow 10 → 12 px so
+          the intake header reads as intent, not chrome. */}
       {programName ? (
-        <p className="font-mono text-[10px] uppercase tracking-widest text-muted mb-1 truncate">
+        <p className="font-mono text-[12px] uppercase tracking-widest text-muted mb-1.5 truncate">
           Intake · <span className="text-strong">{programName}</span>
         </p>
       ) : null}
       <div className="flex items-center gap-3">
-        <div className="h-[3px] flex-1 rounded-full bg-line-soft overflow-hidden">
+        {/* P1-83 (2026-08-19) — progress bar 3 → 5 px so the fill signal
+            is legible at arm's length. Still visually restrained — the
+            step counter beside it does the numeric read. */}
+        <div className="h-[5px] flex-1 rounded-full bg-line-soft overflow-hidden">
           <div
             className="h-full rounded-full bg-bronze transition-[width] motion-reduce:transition-none"
             style={{ width: `${pct}%` }}
@@ -909,8 +914,12 @@ function WizardProgress({
           />
         </div>
         {/* Audit 2026-08-18 (P1) — section label merged into the rail so
-            the section identity + step counter share one row. */}
-        <span className="font-mono text-[10px] text-muted uppercase tracking-widest whitespace-nowrap">
+            the section identity + step counter share one row.
+            P1-83 (2026-08-19) — counter bumped 10 → 13 px so it reads as
+            a real signal, not chrome. Keep "Step N of M" form (do NOT
+            switch to %) per audit + a11y warning (only one progressbar
+            role per view). */}
+        <span className="font-mono text-[13px] text-muted uppercase tracking-widest whitespace-nowrap">
           {sectionLabel ? <span className="mr-1 text-strong">{sectionLabel}</span> : null}
           <span>
             {sectionLabel ? "· " : ""}Step {currentIndex + 1} of {total}
@@ -1066,11 +1075,16 @@ function WizardQuestionScreen({
             );
           }
           // Short-label case → chip strip (components.md#buttons#6).
+          // P1-82 (2026-08-19) — was `flex flex-wrap gap-2` which left
+          // dead space beside Yes/No answers. `grid grid-cols-2 gap-2`
+          // fills the row width so both options are equal-width thumb-
+          // friendly targets. When N > 2 options the grid wraps, so
+          // longer chip strips still work.
           return (
             <div
               role="radiogroup"
               aria-labelledby={`q-heading-${q.id}`}
-              className="flex flex-wrap gap-2 pt-1"
+              className="grid grid-cols-2 gap-2 pt-1"
             >
               {q.options.map((opt, idx) => {
                 const picked = currentValue === opt.value;
