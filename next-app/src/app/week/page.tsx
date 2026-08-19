@@ -36,6 +36,18 @@ type Wt = {
 export default function WeekPage() {
   const [programs, setPrograms] = useState<Program[]>([]);
   const [offset, setOffset] = useState(0);
+  // Per-day expand state — Week defaults to compact (Runna-style,
+  // founder request 2026-08-19). Tap a day to reveal runs / top-lift /
+  // reason / conditioning. Otherwise header + one-line name only.
+  const [expandedDays, setExpandedDays] = useState<Set<string>>(new Set());
+  const toggleDay = (dateISO: string) => {
+    setExpandedDays((prev) => {
+      const next = new Set(prev);
+      if (next.has(dateISO)) next.delete(dateISO);
+      else next.add(dateISO);
+      return next;
+    });
+  };
   const hydrated = useStore((s) => s.hydrated);
   const store = useStore((s) => s.store);
   const skipped = useStore((s) => s.store.skipped);
@@ -338,6 +350,7 @@ export default function WeekPage() {
               ? perProgramDayStates(blocksTodayByProgram, activeSlugs, isToday)
               : null;
 
+            const isExpanded = expandedDays.has(dateISO);
             return (
               <div
                 key={dayName + i}
@@ -384,7 +397,13 @@ export default function WeekPage() {
                     className={cn("mt-2 w-2 h-2 rounded-full flex-shrink-0", dotColor)}
                   />
                 )}
-                <div className="flex-1 min-w-0">
+                <button
+                  type="button"
+                  onClick={() => toggleDay(dateISO)}
+                  className="flex-1 min-w-0 text-left"
+                  aria-expanded={isExpanded}
+                  aria-label={`${dayName} — ${isExpanded ? "collapse" : "expand"} details`}
+                >
                   <div className="flex items-baseline justify-between gap-3">
                     <div className="font-semibold flex items-baseline gap-2 flex-wrap">
                       <span>{dayName}</span>
@@ -410,56 +429,58 @@ export default function WeekPage() {
                     className={cn(
                       "text-[13px] mt-1",
                       skip ? "line-through text-muted" : "text-muted",
+                      !isExpanded && "line-clamp-1",
                     )}
                   >
                     {names || displayLabel}
                   </p>
-                {override?.reason ? (
-                  <p className="text-[12px] text-slate italic mt-1">↳ {override.reason}</p>
+                {isExpanded ? (
+                  <>
+                    {override?.reason ? (
+                      <p className="text-[12px] text-slate italic mt-1">↳ {override.reason}</p>
+                    ) : null}
+                    {skip ? (
+                      <p className="text-[12px] text-muted italic mt-1">
+                        Skipped{skip.reason ? `: ${skip.reason}` : ""}
+                        {skip.moved_to ? ` · moved to ${skip.moved_to}` : ""}
+                      </p>
+                    ) : null}
+                    {templateEntry?.conditioning && !skip && !override ? (
+                      <p className="text-[12px] text-muted italic mt-1">{templateEntry.conditioning}</p>
+                    ) : null}
+                    {/* Runna-style default-compact 2026-08-19: runs + top lift
+                        + reasons only render on tap-expand. */}
+                    {dayLog?.runs?.length ? (
+                      <ul className="mt-1 space-y-0.5">
+                        {dayLog.runs.map((r, idx) => (
+                          <li
+                            key={idx}
+                            className="text-[12px] font-mono text-green flex items-baseline gap-1.5"
+                          >
+                            <span aria-hidden>✓</span>
+                            <span>
+                              {prettyRun(r)}
+                              {r.note ? (
+                                <span className="text-muted italic font-sans"> · {r.note}</span>
+                              ) : null}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : null}
+                    {(() => {
+                      const topLift = topLoggedLift(dayLog);
+                      if (!topLift) return null;
+                      return (
+                        <p className="mt-1 text-[12px] font-mono text-green flex items-baseline gap-1.5">
+                          <span aria-hidden>✓</span>
+                          <span>{topLift}</span>
+                        </p>
+                      );
+                    })()}
+                  </>
                 ) : null}
-                {skip ? (
-                  <p className="text-[12px] text-muted italic mt-1">
-                    Skipped{skip.reason ? `: ${skip.reason}` : ""}
-                    {skip.moved_to ? ` · moved to ${skip.moved_to}` : ""}
-                  </p>
-                ) : null}
-                {templateEntry?.conditioning && !skip && !override ? (
-                  <p className="text-[12px] text-muted italic mt-1">{templateEntry.conditioning}</p>
-                ) : null}
-                {/* Founder request 2026-08-18 — Week view should show what
-                    actually happened, not just what was scheduled. Compact
-                    lines for logged runs / classes + a per-lift roll-up
-                    when top sets were recorded. Both draw from `dayLog`,
-                    which is authoritative for actual work. */}
-                {dayLog?.runs?.length ? (
-                  <ul className="mt-1 space-y-0.5">
-                    {dayLog.runs.map((r, idx) => (
-                      <li
-                        key={idx}
-                        className="text-[12px] font-mono text-green flex items-baseline gap-1.5"
-                      >
-                        <span aria-hidden>✓</span>
-                        <span>
-                          {prettyRun(r)}
-                          {r.note ? (
-                            <span className="text-muted italic font-sans"> · {r.note}</span>
-                          ) : null}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                ) : null}
-                {(() => {
-                  const topLift = topLoggedLift(dayLog);
-                  if (!topLift) return null;
-                  return (
-                    <p className="mt-1 text-[12px] font-mono text-green flex items-baseline gap-1.5">
-                      <span aria-hidden>✓</span>
-                      <span>{topLift}</span>
-                    </p>
-                  );
-                })()}
-                </div>
+                </button>
               </div>
             );
           })}

@@ -271,25 +271,11 @@ export default function ProfilePage() {
         </Link>
       </nav>
 
-      {/* Sign out — Fitts-separated from the "More" card. `pt-4` on top of
-          the outer `space-y-5` gap yields ~36 px between blocks so the
-          destructive-adjacent button isn't in the same rhythm-unit as
-          the nav rows above. */}
-      <section className="pt-4">
-        <button
-          type="button"
-          onClick={() => setSignOutOpen(true)}
-          className="w-full inline-flex items-center justify-center gap-2 font-mono text-[12px] uppercase tracking-wider px-4 py-3 rounded border border-line text-ink active:bg-line-soft min-h-[48px]"
-        >
-          <LogOut size={16} />
-          Sign out
-        </button>
-      </section>
-
       {/* Footer: legal + GDPR utility links. Deliberately quiet — reachable
           (legally required) but not shouting. Both Export and Delete fire a
-          ConfirmSheet. All footer links padded to 44 px hit area even though
-          the visual weight is small — mobile-UX audit P0 fix. */}
+          ConfirmSheet. Founder request 2026-08-19 — Sign out moves BELOW
+          the footer so it's the last thing on the screen (bottom-anchored
+          rest position). */}
       <footer className="pt-6 space-y-3 border-t border-line-soft">
         <nav
           aria-label="Legal"
@@ -338,6 +324,20 @@ export default function ProfilePage() {
           <p className="text-[12px] text-red border-l-4 border-red pl-2">{deleteError}</p>
         ) : null}
       </footer>
+
+      {/* Sign out — bottom-anchored (founder request 2026-08-19). Last
+          thing on the screen so scrolling the whole Profile lands on
+          the resting exit affordance. */}
+      <section>
+        <button
+          type="button"
+          onClick={() => setSignOutOpen(true)}
+          className="w-full inline-flex items-center justify-center gap-2 font-mono text-[12px] uppercase tracking-wider px-4 py-3 rounded border border-line text-ink active:bg-line-soft min-h-[48px]"
+        >
+          <LogOut size={16} />
+          Sign out
+        </button>
+      </section>
 
       <ConfirmSheet
         open={signOutOpen}
