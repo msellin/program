@@ -1128,36 +1128,103 @@ function RetestReminder({
   profile: Store["user_profile"] | undefined;
   activeDate: string;
 }) {
+  const [dismissed, setDismissed] = useState(false);
   const metrics = (program as unknown as { retest_metrics?: Array<{ cadence_weeks?: number; display_name?: string }> }).retest_metrics;
-  if (!metrics?.length) return null;
-  const cadences = metrics
+  const cadences = (metrics ?? [])
     .map((m) => (typeof m.cadence_weeks === "number" ? m.cadence_weeks : null))
     .filter((c): c is number => c != null && c > 0);
-  if (!cadences.length) return null;
   const startedRaw =
     profile?.program_states?.[program.slug ?? ""]?.started_at ??
     profile?.active_program_started_at;
-  if (!startedRaw) return null;
-  const startedISO = startedRaw.slice(0, 10);
-  const startMs = new Date(startedISO + "T00:00:00").getTime();
+  const startedISO = startedRaw?.slice(0, 10);
+  const startMs = startedISO ? new Date(startedISO + "T00:00:00").getTime() : NaN;
   const nowMs = new Date(activeDate + "T00:00:00").getTime();
-  if (!Number.isFinite(startMs) || !Number.isFinite(nowMs)) return null;
-  const daysIn = Math.floor((nowMs - startMs) / 864e5);
-  if (daysIn < 7) return null; // never in first week
-  const weeksIn = Math.floor(daysIn / 7);
-  // Fire on the exact week (dow 0-6 within the week) that hits any cadence
-  // milestone. Only when at least one cadence divides the current whole-week
-  // count and today is Mon (start of a fresh week — hits once per cycle).
+  const daysIn = Number.isFinite(startMs) && Number.isFinite(nowMs)
+    ? Math.floor((nowMs - startMs) / 864e5)
+    : 0;
+  const weeksIn = daysIn > 0 ? Math.floor(daysIn / 7) : 0;
   const dow = new Date(activeDate + "T12:00:00").getDay(); // 0 Sun, 1 Mon
+
+  // ISO week key so the "Not this week" dismiss re-fires next Monday.
+  const isoWeekKey = (() => {
+    const d = new Date(activeDate + "T12:00:00");
+    const yearStart = new Date(d.getFullYear(), 0, 1);
+    const weeks = Math.ceil(((d.getTime() - yearStart.getTime()) / 864e5 + yearStart.getDay() + 1) / 7);
+    return `${d.getFullYear()}-W${String(weeks).padStart(2, "0")}`;
+  })();
+  const dismissKey = program.slug ? `retest.dismissed.${program.slug}.${isoWeekKey}` : null;
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !dismissKey) return;
+    setDismissed(localStorage.getItem(dismissKey) === "1");
+  }, [dismissKey]);
+
+  if (!metrics?.length || !cadences.length) return null;
+  if (!startedISO || !Number.isFinite(startMs) || !Number.isFinite(nowMs)) return null;
+  if (daysIn < 7) return null;
   if (dow !== 1) return null;
   const dueThisWeek = cadences.some((c) => weeksIn > 0 && weeksIn % c === 0);
   if (!dueThisWeek) return null;
+  if (dismissed) return null;
+
+  const displayMetrics = metrics.slice(0, 4);
+
+  const onDismiss = () => {
+    if (!dismissKey) return;
+    try {
+      localStorage.setItem(dismissKey, "1");
+    } catch {
+      /* ignore */
+    }
+    setDismissed(true);
+  };
+
   return (
-    <div className="rounded border border-bronze/30 border-l-4 border-l-bronze bg-bronze/10 px-3 py-2 text-[14px]">
-      <p className="font-semibold text-bronze">Retest window this week.</p>
-      <p className="text-muted mt-0.5">
-        You&apos;re {weeksIn} weeks in. Progress → Insights shows your current retest metrics against baseline and target.
+    <div className="rounded border border-bronze/30 border-l-4 border-l-bronze bg-bronze/10 p-4 text-[14px] space-y-2">
+      {/* F10 (Batch 24) — retest-window Monday hand-off. Fires on the
+          Mon of a week that hits a cadence (weeksIn % cadence === 0).
+          "Not this week" dismisses to localStorage under the ISO-week
+          key; re-fires next Monday. */}
+      <p className="font-mono text-[10px] uppercase tracking-widest text-bronze">
+        Retest window open
       </p>
+      <p className="font-semibold text-strong">
+        End of week {weeksIn} · {program.program_goal?.display_name ?? program.slug}
+      </p>
+      <p className="text-muted leading-snug">
+        You&apos;ve logged {weeksIn} weeks. The retest catches whether the arc
+        actually moved the numbers.
+      </p>
+      {displayMetrics.length > 0 ? (
+        <div>
+          <p className="font-mono text-[10px] uppercase tracking-widest text-muted mt-1">
+            Log these on Progress → Insights
+          </p>
+          <ul className="mt-1 space-y-0.5">
+            {displayMetrics.map((m, idx) => (
+              <li key={idx} className="text-[13px] text-ink flex items-baseline gap-1.5">
+                <span aria-hidden className="text-muted">·</span>
+                <span>{m.display_name ?? "Metric"}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+      <div className="flex flex-wrap gap-2 pt-1">
+        <Link
+          href="/progress"
+          className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover min-h-[44px] inline-flex items-center"
+        >
+          Log retest →
+        </Link>
+        <button
+          type="button"
+          onClick={onDismiss}
+          className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-ink hover:bg-line-soft min-h-[44px]"
+        >
+          Not this week
+        </button>
+      </div>
     </div>
   );
 }

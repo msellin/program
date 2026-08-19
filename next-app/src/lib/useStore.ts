@@ -95,7 +95,7 @@ type StoreState = {
   skipDay: (date: string, reason?: string) => void;
   skipAndShiftWeek: (date: string, program: Program, reason?: string) => WeekShift;
   skipWholeWeek: (anchorDate: string, program: Program, reason?: string) => WholeWeekShift;
-  moveSession: (fromDate: string, toDate: string, blockIds: string[]) => void;
+  moveSession: (fromDate: string, toDate: string, blockIds: string[], reason?: string) => void;
   clearSkip: (date: string) => void;
   clearShift: (fromDate: string, shift: WeekShift) => void;
   clearWholeWeek: (shift: WholeWeekShift) => void;
@@ -694,10 +694,17 @@ export const useStore = create<StoreState>((set, get) => ({
     set({ store: s });
   },
 
-  moveSession: (fromDate, toDate, blockIds) => {
+  moveSession: (fromDate, toDate, blockIds, reason) => {
     const s = { ...get().store };
     const overrides = { ...(s.scheduled_overrides ?? {}) };
-    overrides[toDate] = { blocks: blockIds, reason: `moved from ${fromDate}` };
+    // F6 (Batch 24) — MoveSheet passes a user-typed "why?" string. When
+    // present, prepend to the auto "moved from X" trailer so both the
+    // engine and the user's future self can read the context.
+    const trailer = `moved from ${fromDate}`;
+    const composed = reason && reason.trim()
+      ? `${reason.trim()} · ${trailer}`
+      : trailer;
+    overrides[toDate] = { blocks: blockIds, reason: composed };
     const skipped = { ...(s.skipped ?? {}) };
     skipped[fromDate] = { moved_to: toDate };
     s.scheduled_overrides = overrides;

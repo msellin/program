@@ -10,7 +10,18 @@ import { today as todayISO, iso, cn } from "@/lib/utils";
 import { activePhaseFor } from "@/lib/engine/schedule";
 import { blocksForDate } from "@/lib/engine/plan-generator";
 import { getBlocksForDate, isBlockObjectOn } from "@/lib/engine/block-selectors";
+import { ConfirmSheet } from "@/components/ConfirmSheet";
+import { MoveSheet } from "@/components/workout/MoveSheet";
 import type { DayLog, Program, RunLog, ScheduledBlock, Store } from "@/lib/schemas";
+
+type WeekDayEntry = {
+  dateISO: string;
+  label: string;
+  hasSession: boolean;
+  summary: string;
+  isSource: boolean;
+  isLogged: boolean;
+};
 
 const DAY_NAMES = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as const;
 
@@ -118,6 +129,68 @@ export default function WeekPage() {
 
   const atFutureEdge = offset >= FUTURE_WEEKS;
   const atPastEdge = offset <= -PAST_WEEKS;
+
+  // F6 (Batch 24) — MoveSheet needs a full 14-day catalog (this week +
+  // next week) to render its target-day radio list. Compute once per
+  // Week render.
+  const weekDaysCatalog: Array<{
+    dateISO: string;
+    label: string;
+    hasSession: boolean;
+    summary: string;
+    isSource: boolean;
+    isLogged: boolean;
+  }> = [];
+  for (let dayOffset = 0; dayOffset < 14; dayOffset++) {
+    const d = new Date(viewedMon);
+    d.setDate(viewedMon.getDate() + dayOffset);
+    const iSO = iso(d);
+    const label = d.toLocaleDateString("en-GB", {
+      weekday: "short",
+      day: "numeric",
+      month: "short",
+    });
+    const catSkip = skipped?.[iSO];
+    const catOverride = overrides?.[iSO];
+    const catLog = logs?.[iSO];
+    const logged = !!(
+      catLog &&
+      (Object.values(catLog.exercises).some((e) => e.done) ||
+        (catLog.runs?.length ?? 0) > 0)
+    );
+    let hasSession = false;
+    let summary = "Rest day";
+    if (catOverride) {
+      hasSession = true;
+      summary = "Moved-in session";
+    } else if (!catSkip) {
+      const dayPhase = activePhaseFor(program, iSO, userProfile);
+      const blocks = blocksForDate(
+        program,
+        userProfile,
+        dayPhase,
+        iSO,
+        undefined,
+        store,
+      );
+      if (blocks.length > 0) {
+        hasSession = true;
+        summary = blocks.map((b) => b.name).join(" + ");
+      }
+    } else if (catSkip.moved_to) {
+      summary = `Moved to ${catSkip.moved_to}`;
+    } else {
+      summary = "Skipped";
+    }
+    weekDaysCatalog.push({
+      dateISO: iSO,
+      label,
+      hasSession,
+      summary,
+      isSource: false,
+      isLogged: logged,
+    });
+  }
 
   return (
     <div className="space-y-6 pt-4">
@@ -396,101 +469,118 @@ export default function WeekPage() {
                     className={cn("mt-2 w-2 h-2 rounded-full flex-shrink-0", dotColor)}
                   />
                 )}
-                <button
-                  type="button"
-                  onClick={() => toggleDay(dateISO)}
-                  className="flex-1 min-w-0 text-left"
-                  aria-expanded={isExpanded}
-                  aria-label={`${dayName} — ${isExpanded ? "collapse" : "expand"} details`}
-                >
-                  <div className="flex items-baseline justify-between gap-3">
-                    <div className="font-semibold flex items-baseline gap-2 flex-wrap">
-                      <span>{dayName}</span>
-                      <span className="font-mono text-[11px] text-muted font-normal">
-                        {dateForDay.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
-                      </span>
-                      {doneCount > 0 && !isToday ? (
-                        <span className="text-[11px] text-green font-mono font-normal">
-                          · {doneCount} logged
-                        </span>
-                      ) : null}
-                      {contributingProgramCount > 1 ? (
-                        <span className="text-[10px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber/20 text-amber font-normal">
-                          {contributingProgramCount} tracks
-                        </span>
-                      ) : null}
-                    </div>
-                    <span className="font-mono text-[11px] text-muted text-right flex items-center gap-1">
-                      {isRest ? "rest" : names ? "" : "—"}
-                      {/* P1-13 — chevron affordance so users can see the
-                          row is expandable without discovery-by-tap.
-                          Rotates 180° when expanded. */}
-                      <ChevronDown
-                        size={14}
-                        aria-hidden
-                        className={cn(
-                          "transition-transform text-muted flex-shrink-0",
-                          isExpanded && "rotate-180",
-                        )}
-                      />
-                    </span>
-                  </div>
-                  <p
-                    className={cn(
-                      "text-[14px] mt-1",
-                      skip ? "line-through text-muted" : "text-muted",
-                      !isExpanded && "line-clamp-1",
-                    )}
+                {/* F6 (Batch 24) — the row is a <div> so the expanded
+                    content can contain interactive buttons (Open in
+                    Today / Move… / Skip) without nesting them inside
+                    the toggle button. The toggle now wraps only the
+                    header + summary line. */}
+                <div className="flex-1 min-w-0">
+                  <button
+                    type="button"
+                    onClick={() => toggleDay(dateISO)}
+                    className="w-full text-left"
+                    aria-expanded={isExpanded}
+                    aria-controls={`weekday-${dateISO}`}
+                    aria-label={`${dayName} — ${isExpanded ? "collapse" : "expand"} details`}
                   >
-                    {names || displayLabel}
-                  </p>
-                {isExpanded ? (
-                  <>
-                    {override?.reason ? (
-                      <p className="text-[12px] text-slate italic mt-1">↳ {override.reason}</p>
-                    ) : null}
-                    {skip ? (
-                      <p className="text-[12px] text-muted italic mt-1">
-                        Skipped{skip.reason ? `: ${skip.reason}` : ""}
-                        {skip.moved_to ? ` · moved to ${skip.moved_to}` : ""}
-                      </p>
-                    ) : null}
-                    {templateEntry?.conditioning && !skip && !override ? (
-                      <p className="text-[12px] text-muted italic mt-1">{templateEntry.conditioning}</p>
-                    ) : null}
-                    {/* Runna-style default-compact 2026-08-19: runs + top lift
-                        + reasons only render on tap-expand. */}
-                    {dayLog?.runs?.length ? (
-                      <ul className="mt-1 space-y-0.5">
-                        {dayLog.runs.map((r, idx) => (
-                          <li
-                            key={idx}
-                            className="text-[12px] font-mono text-green flex items-baseline gap-1.5"
-                          >
-                            <span aria-hidden>✓</span>
-                            <span>
-                              {prettyRun(r)}
-                              {r.note ? (
-                                <span className="text-muted italic font-sans"> · {r.note}</span>
-                              ) : null}
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
-                    ) : null}
-                    {(() => {
-                      const topLift = topLoggedLift(dayLog);
-                      if (!topLift) return null;
-                      return (
-                        <p className="mt-1 text-[12px] font-mono text-green flex items-baseline gap-1.5">
-                          <span aria-hidden>✓</span>
-                          <span>{topLift}</span>
+                    <div className="flex items-baseline justify-between gap-3">
+                      <div className="font-semibold flex items-baseline gap-2 flex-wrap">
+                        <span>{dayName}</span>
+                        <span className="font-mono text-[11px] text-muted font-normal">
+                          {dateForDay.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
+                        </span>
+                        {doneCount > 0 && !isToday ? (
+                          <span className="text-[11px] text-green font-mono font-normal">
+                            · {doneCount} logged
+                          </span>
+                        ) : null}
+                        {contributingProgramCount > 1 ? (
+                          <span className="text-[10px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber/20 text-amber font-normal">
+                            {contributingProgramCount} tracks
+                          </span>
+                        ) : null}
+                      </div>
+                      <span className="font-mono text-[11px] text-muted text-right flex items-center gap-1">
+                        {isRest ? "rest" : names ? "" : "—"}
+                        <ChevronDown
+                          size={14}
+                          aria-hidden
+                          className={cn(
+                            "transition-transform text-muted flex-shrink-0",
+                            isExpanded && "rotate-180",
+                          )}
+                        />
+                      </span>
+                    </div>
+                    <p
+                      className={cn(
+                        "text-[14px] mt-1",
+                        skip ? "line-through text-muted" : "text-muted",
+                        !isExpanded && "line-clamp-1",
+                      )}
+                    >
+                      {names || displayLabel}
+                    </p>
+                  </button>
+                  {isExpanded ? (
+                    <div id={`weekday-${dateISO}`}>
+                      {override?.reason ? (
+                        <p className="text-[12px] text-slate italic mt-1">↳ {override.reason}</p>
+                      ) : null}
+                      {skip ? (
+                        <p className="text-[12px] text-muted italic mt-1">
+                          Skipped{skip.reason ? `: ${skip.reason}` : ""}
+                          {skip.moved_to ? ` · moved to ${skip.moved_to}` : ""}
                         </p>
-                      );
-                    })()}
-                  </>
-                ) : null}
-                </button>
+                      ) : null}
+                      {templateEntry?.conditioning && !skip && !override ? (
+                        <p className="text-[12px] text-muted italic mt-1">{templateEntry.conditioning}</p>
+                      ) : null}
+                      {dayLog?.runs?.length ? (
+                        <ul className="mt-1 space-y-0.5">
+                          {dayLog.runs.map((r, idx) => (
+                            <li
+                              key={idx}
+                              className="text-[12px] font-mono text-green flex items-baseline gap-1.5"
+                            >
+                              <span aria-hidden>✓</span>
+                              <span>
+                                {prettyRun(r)}
+                                {r.note ? (
+                                  <span className="text-muted italic font-sans"> · {r.note}</span>
+                                ) : null}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : null}
+                      {(() => {
+                        const topLift = topLoggedLift(dayLog);
+                        if (!topLift) return null;
+                        return (
+                          <p className="mt-1 text-[12px] font-mono text-green flex items-baseline gap-1.5">
+                            <span aria-hidden>✓</span>
+                            <span>{topLift}</span>
+                          </p>
+                        );
+                      })()}
+
+                      <WeekDayActions
+                        dateISO={dateISO}
+                        dayLabel={`${dayName} ${dateForDay.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}`}
+                        sessionSummary={names || displayLabel}
+                        isToday={isToday}
+                        isPast={isPast}
+                        isFuture={dateISO > todayISO()}
+                        hasSession={!isRest}
+                        isSkipped={!!skip}
+                        isOverride={!!override}
+                        blockIds={displayBlocks.map((b) => b.id)}
+                        weekDaysCatalog={weekDaysCatalog}
+                      />
+                    </div>
+                  ) : null}
+                </div>
               </div>
             );
           })}
@@ -498,6 +588,144 @@ export default function WeekPage() {
 
       {wt?.principles?.length ? <RulesAccordion principles={wt.principles} /> : null}
     </div>
+  );
+}
+
+/**
+ * F6 (Batch 24) — the 3-verb action row inside the expanded Week day.
+ *
+ * Verbs:
+ *   Open in Today  — visible only for today's row. Past days show a
+ *                    History → link instead; future days show nothing.
+ *   Move…          — opens MoveSheet. Hidden when the day is already
+ *                    skipped or an override is in place (there's
+ *                    nothing to move).
+ *   Skip           — opens ConfirmSheet. Hidden when the day is
+ *                    already skipped.
+ *
+ * Skipped rows get an inline "Unskip" affordance; overridden rows get
+ * "Undo move." Both call `clearSkip` (which the store handles as the
+ * inverse of both skipDay and moveSession — see useStore.ts:668).
+ */
+function WeekDayActions({
+  dateISO,
+  dayLabel,
+  sessionSummary,
+  isToday,
+  isPast,
+  isFuture,
+  hasSession,
+  isSkipped,
+  isOverride,
+  blockIds,
+  weekDaysCatalog,
+}: {
+  dateISO: string;
+  dayLabel: string;
+  sessionSummary: string;
+  isToday: boolean;
+  isPast: boolean;
+  isFuture: boolean;
+  hasSession: boolean;
+  isSkipped: boolean;
+  isOverride: boolean;
+  blockIds: string[];
+  weekDaysCatalog: WeekDayEntry[];
+}) {
+  const skipDay = useStore((s) => s.skipDay);
+  const clearSkip = useStore((s) => s.clearSkip);
+  const [moveOpen, setMoveOpen] = useState(false);
+  const [confirmSkip, setConfirmSkip] = useState(false);
+
+  const canMove = hasSession && !isSkipped && !isOverride;
+  const canSkip = hasSession && !isSkipped;
+
+  // "Unskip" / "Undo move" replaces the whole row when the day is in
+  // one of those states. Single affordance, single tap.
+  if (isSkipped || isOverride) {
+    return (
+      <div className="mt-3">
+        <button
+          type="button"
+          onClick={() => clearSkip(dateISO)}
+          className="w-full font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-muted hover:text-ink hover:bg-line-soft min-h-[44px]"
+        >
+          {isOverride ? "Undo move" : "Unskip"}
+        </button>
+      </div>
+    );
+  }
+
+  if (!hasSession) {
+    // Rest days show no actions — nothing to open, move, or skip.
+    return null;
+  }
+
+  return (
+    <>
+      <div className="mt-3 grid grid-cols-3 gap-2">
+        {isToday ? (
+          <Link
+            href="/"
+            className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover min-h-[44px] flex items-center justify-center text-center"
+          >
+            Open in Today
+          </Link>
+        ) : isPast ? (
+          <Link
+            href={`/history?date=${dateISO}`}
+            className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-muted hover:text-ink hover:bg-line-soft min-h-[44px] flex items-center justify-center text-center"
+          >
+            History →
+          </Link>
+        ) : (
+          // Future day — no direct-open verb. Placeholder keeps the 3-
+          // column grid alignment without shipping a dead button.
+          <span aria-hidden />
+        )}
+        <button
+          type="button"
+          onClick={() => setMoveOpen(true)}
+          disabled={!canMove}
+          className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-ink hover:bg-line-soft min-h-[44px] disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          Move…
+        </button>
+        <button
+          type="button"
+          onClick={() => setConfirmSkip(true)}
+          disabled={!canSkip}
+          className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-ink hover:bg-line-soft min-h-[44px] disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          Skip
+        </button>
+      </div>
+
+      <ConfirmSheet
+        open={confirmSkip}
+        title={`Skip ${dayLabel}'s session?`}
+        body="Marked as skipped. The engine reads that as an intentional off-day, not a missed one."
+        confirmLabel="Skip"
+        cancelLabel="Keep it"
+        onCancel={() => setConfirmSkip(false)}
+        onConfirm={() => {
+          setConfirmSkip(false);
+          skipDay(dateISO);
+        }}
+      />
+
+      <MoveSheet
+        open={moveOpen}
+        fromDate={dateISO}
+        fromLabel={dayLabel}
+        sessionSummary={sessionSummary}
+        blockIds={blockIds}
+        weekDays={weekDaysCatalog}
+        onClose={() => setMoveOpen(false)}
+      />
+
+      {isFuture ? null : null}
+    </>
   );
 }
 

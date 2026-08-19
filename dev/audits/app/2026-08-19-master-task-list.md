@@ -10,17 +10,17 @@
 
 These are **IDEAS, not action items**. The engine + rehab-first positioning overrides "cleaner is better," so Margus picks what to ship. Batches ship in 6-12h chunks — don't try to close the whole list in one sitting, and respect the "no UI churn between audits" rule (each shipped batch should stand on its own before the next audit re-scans). Real bugs go first because they're broken code the audits happened to surface; everything else is prioritized by user-visible ROI. Sizing (S/M/L/XL) is per item.
 
-**Counts by bucket (post-Batch-23):**
+**Counts by bucket (post-Batch-24):**
 
 - **Bugs (fix regardless):** 0 open
 - **P0 (biggest ROI):** 0 open
 - **P1 (visible quality gap):** 0 open
 - **P2 (defensible polish):** 0 open
-- **Features on-deck:** 4 items (F1 · F6 · F8 · F9). F2 + F5 partial + F7 shipped in Batch 23. Design brief proposes Batch 24 (F6 MoveSheet + F5 retest-window remainder) → Batch 25 (F1 extension hook into `/account`).
+- **Features on-deck:** 3 items (F1 extend-hook · F8 CSM amber engine · F9 simulator logging). F2 + F5 (both halves) + F6 + F7 all shipped. F1 is the natural next ship (per brief: Batch 25).
 - **Strategic (founder decision):** 4 items — decision, not build
 - **Rejected:** 11 items — do not ship
 
-Total open surface: **4 features + 4 strategic + 11 rejected = 19 line items** (down from 110 pre-Batch-17). Next batch (Batch 24) is the largest remaining ship: Week MoveSheet + retest-window UX (10-12h combined).
+Total open surface: **3 features + 4 strategic + 11 rejected = 18 line items** (down from 110 pre-Batch-17). All F items with active design-brief scope are shipped; remaining features need founder input (F1 semantics call, F8 waits on S3 billing, F9 is standalone infra).
 
 ---
 
@@ -95,7 +95,6 @@ Keep the convention terse — the four markers cover every state. Don't invent n
 From roadmap sync + product-concerns-2026-08-17. All pre-Batch-17 and founder-surfaced.
 
 - [ ] **F1** Extend-by-N-weeks at graduation — Batch 12 shipped feedback + repeat-arc; extending an existing arc without full re-enrol is the next affordance. Source: `2026-08-19-open-task-list.md` (E1), `product-concerns-2026-08-17/roadmap.md`. Files: graduation flow, `GraduationCard.tsx`. Size: M
-- [ ] **F6** Runna-style Week collapse+expand full impl — Batch 15 shipped collapse-by-default; expanded state, Move-sheet, per-row `Open in Today / Move… / Skip` verbs still open. Source: `2026-08-19-open-task-list.md` (E6). Files: `next-app/src/app/week/page.tsx`, new `MoveSheet.tsx`. Size: L
 - [ ] **F8** CSM amber-week drop-4×4 hook — engine consumer for a rule already documented in `concurrent-strength-maintenance.json`. Founder-decision whether to ship for first CSM paid user or defer. Source: `2026-08-19-open-task-list.md` (E8). Files: engine adapt path, CSM program JSON. Size: M
 - [ ] **F9** Skill/mobility exercise logging in simulator — blocks adaptation verification for handstand-walk + overhead-mobility retest windows. Source: `2026-08-19-open-task-list.md` (E9). Files: persona harness, simulator matrix. Size: M
 
@@ -133,6 +132,13 @@ Deduplicated across visual-craft §16 + mobile-ux §10 + roadmap:
 ## Closed items appendix (shipped since 2026-08-17)
 
 Strikethrough preserves history; these items are OUT of the open list.
+
+**Batch 24 — Week MoveSheet + retest-window (deployed https://3504d030.program-v2.pages.dev, 2026-08-19):**
+
+2 items — F6 full Week expanded state with 3-verb action grid + MoveSheet bottom sheet, and F10 retest-window Monday hand-off with Log retest / Not this week dismiss. Full lines preserved:
+
+- [x] **F6** — done 2026-08-19 Batch 24 — Runna-style Week collapse+expand full impl — Batch 15 shipped collapse-by-default; expanded state, Move-sheet, per-row `Open in Today / Move… / Skip` verbs still open. Source: `2026-08-19-open-task-list.md` (E6). Files: `next-app/src/app/week/page.tsx`, new `MoveSheet.tsx`. Size: L
+- [x] **F10** — done 2026-08-19 Batch 24 — Retest-window Monday hand-off — F5 partial shipped the 4-verb graduation stack; the remaining bit is the "you're at the end of block" state on Today (Monday of retest window) with `[ Log retest → ]` + `[ Not this week ]` dismiss. Extend `RetestReminder` at `page.tsx:1047-1088`. Source: `dev/audits/app/2026-08-19-design-brief-features.md` §F5 first sketch. Files: `next-app/src/app/page.tsx:1047-1088`. Size: S
 
 **Batch 23 — hand-off co-ship: F2 + F5 partial + F7 (deployed https://49a8a7d9.program-v2.pages.dev, 2026-08-19):**
 
