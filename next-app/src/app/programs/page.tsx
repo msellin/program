@@ -6,7 +6,21 @@ import { ChevronRight } from "lucide-react";
 import { loadProgramManifest } from "@/lib/data-loader";
 import { useStore } from "@/lib/useStore";
 import { cn } from "@/lib/utils";
+import { DashboardBlock } from "@/components/DashboardBlock";
 import type { ProgramManifest, ProgramManifestEntry } from "@/lib/schemas";
+
+// F9 Batch 30 · category → accent tone mapping for the DashboardBlock left
+// stripe. Was previously duplicated in CATEGORY_META's borderClass.
+const CATEGORY_ACCENT: Record<string, "slate" | "bronze" | "green" | "amber" | "default"> = {
+  rehab: "slate",
+  strength: "bronze",
+  skill: "slate",
+  gymnastics: "slate",
+  endurance: "green",
+  hyrox: "amber",
+  mobility: "slate",
+  other: "default",
+};
 
 type FilterCat = "all" | ProgramManifestEntry["category"];
 // F4 — sort ordering. `default` preserves the manifest's authored order
@@ -119,7 +133,7 @@ export default function ProgramCatalogPage() {
   ];
 
   return (
-    <div className="space-y-5 pt-4">
+    <div className="space-y-8 pt-4">
       <header className="space-y-1">
         <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">Pick your focus.</h1>
         <p className="text-sm text-muted">
@@ -199,23 +213,18 @@ export default function ProgramCatalogPage() {
         Array.from(grouped.entries())
           .sort((a, b) => (manifest.categories[a[0]]?.order ?? 99) - (manifest.categories[b[0]]?.order ?? 99))
           .map(([category, programs]) => {
-            const cat = CATEGORY_META[category] ?? CATEGORY_META.other;
+            const meta = manifest.categories[category];
+            const label = meta?.label ?? category;
+            const accent = CATEGORY_ACCENT[category] ?? CATEGORY_ACCENT.other;
+            const count = programs.length;
             return (
-              <section key={category} className="space-y-3">
-                <div className="flex items-baseline gap-2">
-                  <span className={`text-[15px] ${cat.iconClass}`}>{cat.icon}</span>
-                  <h2 className="text-[15px] font-semibold text-strong">
-                    {manifest.categories[category]?.label ?? category}
-                  </h2>
-                  <span className="text-[11px] font-mono text-muted">
-                    · {programs.length}
-                  </span>
-                </div>
-                {manifest.categories[category]?.description ? (
-                  <p className="text-[14px] text-muted -mt-1">
-                    {manifest.categories[category].description}
-                  </p>
-                ) : null}
+              <DashboardBlock
+                key={category}
+                accent={accent}
+                title={label}
+                eyebrow={`${count} program${count === 1 ? "" : "s"}`}
+                lede={meta?.description}
+              >
                 <ul className="space-y-2">
                   {programs.map((p) => (
                     <li key={p.slug}>
@@ -227,7 +236,7 @@ export default function ProgramCatalogPage() {
                     </li>
                   ))}
                 </ul>
-              </section>
+              </DashboardBlock>
             );
           })
       )}
@@ -331,7 +340,13 @@ function ProgramCard({
   return (
     <Link
       href={`/programs/${p.slug}`}
-      className={`block rounded border border-line border-l-4 ${cat.borderClass} bg-surface px-4 py-3.5 hover:bg-line-soft/50 transition-colors`}
+      className={cn(
+        // F9 Batch 30 · when inside a category DashboardBlock, drop the
+        // per-card border (block owns the container + accent stripe). Left
+        // border-l-2 keeps the category color as a subtle marker on the row.
+        "block rounded border-l-2 bg-line-soft/30 hover:bg-line-soft/60 transition-colors px-4 py-3.5",
+        cat.borderClass,
+      )}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">

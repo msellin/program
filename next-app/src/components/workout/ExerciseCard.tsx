@@ -171,16 +171,20 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
             className="flex-1 flex items-center gap-2 min-w-0 text-left py-1 -my-1"
           >
             <div className="flex-1 min-w-0">
+              {/* P1-73 (F9 Batch 30) — `truncate` → `line-clamp-2 leading-snug
+                  text-[15px]` so "Active hang (scap-engaged)" and similar
+                  parenthetical modifiers no longer clip. Line height tightens
+                  to keep the two-line height under ~40px. */}
               <h3
                 className={cn(
-                  "font-semibold tracking-tight truncate",
+                  "text-[15px] font-semibold tracking-tight line-clamp-2 leading-snug",
                   done && "line-through decoration-1 opacity-60",
                 )}
               >
                 {exercise.name}
               </h3>
               {previewText ? (
-                <p className="font-mono text-[12px] text-slate mt-0.5 truncate">{previewText}</p>
+                <p className="font-mono text-[12px] text-slate mt-0.5 line-clamp-2">{previewText}</p>
               ) : null}
               {typeof (item as { note?: string }).note === "string" && (item as { note: string }).note.trim() ? (
                 <p className="text-[14px] text-muted italic mt-1 leading-snug">
@@ -191,7 +195,13 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
                 </p>
               ) : null}
             </div>
-            {expanded ? (
+            {/* P1-71 (F9 Batch 30) — when card is done, expanded state shows
+                only the note editor. Swap the chevron for a MessageSquare
+                icon so the affordance matches the content. When not done,
+                keep the chevron for the sets/timer/notes stack. */}
+            {done ? (
+              <MessageSquare size={16} className="text-muted flex-shrink-0" aria-hidden />
+            ) : expanded ? (
               <ChevronDown size={16} className="text-muted flex-shrink-0" aria-hidden />
             ) : (
               <ChevronRight size={16} className="text-muted flex-shrink-0" aria-hidden />

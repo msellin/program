@@ -1,0 +1,176 @@
+"use client";
+
+import { useState, type ReactNode } from "react";
+import Link from "next/link";
+import { ChevronDown, ChevronRight, ChevronUp } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+/**
+ * F9 Batch 30 · DashboardBlock primitive.
+ *
+ * Design-lead brief 2026-08-19: one primitive, five surfaces. Consolidates
+ * a card pattern that had drifted across 15+ places. Container:
+ *   rounded border border-line-soft bg-surface px-4 py-4
+ *
+ * Layout (top to bottom):
+ *   1. EYEBROW (mono-caps, optional accent) + right-side status slot
+ *   2. Title (16-18px semibold strong)
+ *   3. Lede (14px muted, optional)
+ *   4. Slot content (children)
+ *   5. Primary CTA (single bronze, optional)
+ *
+ * Accent economy locked: one bronze accent per block max — either the CTA
+ * or a bronze eyebrow, never both.
+ */
+
+type EyebrowTone = "default" | "amber" | "red" | "bronze" | "green" | "slate";
+
+type PrimaryCta = {
+  label: string;
+  href?: string;
+  onClick?: () => void;
+};
+
+type DashboardBlockProps = {
+  eyebrow?: string;
+  eyebrowTone?: EyebrowTone;
+  /** Optional left-edge color stripe (category color, semantic). */
+  accent?: EyebrowTone;
+  title: string;
+  lede?: string;
+  /** Right-side status: readiness dot, progress %, chip, etc. */
+  status?: ReactNode;
+  children?: ReactNode;
+  primaryCta?: PrimaryCta;
+  collapsible?: boolean;
+  defaultExpanded?: boolean;
+  /** Extra outer classes for one-off adjustments (rarely needed). */
+  className?: string;
+};
+
+const EYEBROW_TONE: Record<EyebrowTone, string> = {
+  default: "text-muted",
+  amber: "text-amber",
+  red: "text-red-strong",
+  bronze: "text-bronze",
+  green: "text-green",
+  slate: "text-slate",
+};
+
+const ACCENT_STRIPE: Record<EyebrowTone, string> = {
+  default: "",
+  amber: "border-l-4 border-l-amber",
+  red: "border-l-4 border-l-red",
+  bronze: "border-l-4 border-l-bronze",
+  green: "border-l-4 border-l-green",
+  slate: "border-l-4 border-l-slate",
+};
+
+export function DashboardBlock({
+  eyebrow,
+  eyebrowTone = "default",
+  accent,
+  title,
+  lede,
+  status,
+  children,
+  primaryCta,
+  collapsible = false,
+  defaultExpanded = true,
+  className,
+}: DashboardBlockProps) {
+  const [expanded, setExpanded] = useState(defaultExpanded);
+  const showBody = !collapsible || expanded;
+  const bodyId = collapsible
+    ? `db-body-${title.replace(/\s+/g, "-").toLowerCase()}`
+    : undefined;
+
+  return (
+    <section
+      className={cn(
+        "rounded border border-line-soft bg-surface px-4 py-4",
+        accent ? ACCENT_STRIPE[accent] : null,
+        className,
+      )}
+    >
+      <header
+        className={cn(
+          "flex items-start justify-between gap-3",
+          collapsible ? "cursor-pointer select-none" : null,
+        )}
+        onClick={collapsible ? () => setExpanded((v) => !v) : undefined}
+        onKeyDown={
+          collapsible
+            ? (e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setExpanded((v) => !v);
+                }
+              }
+            : undefined
+        }
+        role={collapsible ? "button" : undefined}
+        tabIndex={collapsible ? 0 : undefined}
+        aria-expanded={collapsible ? expanded : undefined}
+        aria-controls={bodyId}
+      >
+        <div className="min-w-0 flex-1 space-y-1">
+          {eyebrow ? (
+            <p
+              className={cn(
+                "font-mono text-[10px] uppercase tracking-widest",
+                EYEBROW_TONE[eyebrowTone],
+              )}
+            >
+              {eyebrow}
+            </p>
+          ) : null}
+          <h2 className="text-[16px] font-semibold text-strong tracking-tight leading-snug">
+            {title}
+          </h2>
+          {lede && showBody ? (
+            <p className="text-[14px] text-muted leading-relaxed">{lede}</p>
+          ) : null}
+        </div>
+        <div className="flex items-center gap-2 flex-shrink-0">
+          {status}
+          {collapsible ? (
+            expanded ? (
+              <ChevronUp size={16} className="text-muted" aria-hidden />
+            ) : (
+              <ChevronRight size={16} className="text-muted" aria-hidden />
+            )
+          ) : null}
+        </div>
+      </header>
+      {showBody && (children || primaryCta) ? (
+        <div id={bodyId} className="mt-3 space-y-3">
+          {children}
+          {primaryCta ? (
+            primaryCta.href ? (
+              <Link
+                href={primaryCta.href}
+                className="inline-flex items-center gap-1.5 rounded border border-bronze bg-bronze text-ground px-3 py-2 text-[14px] font-semibold hover:opacity-90 min-h-[44px]"
+              >
+                {primaryCta.label}
+                <ChevronRight size={14} strokeWidth={2} />
+              </Link>
+            ) : (
+              <button
+                type="button"
+                onClick={primaryCta.onClick}
+                className="inline-flex items-center gap-1.5 rounded border border-bronze bg-bronze text-ground px-3 py-2 text-[14px] font-semibold hover:opacity-90 min-h-[44px]"
+              >
+                {primaryCta.label}
+                <ChevronRight size={14} strokeWidth={2} />
+              </button>
+            )
+          ) : null}
+        </div>
+      ) : null}
+    </section>
+  );
+}
+
+// Re-export the chevron used inside for consumers who need the same icon set.
+export { ChevronDown as DashboardChevronDown };
