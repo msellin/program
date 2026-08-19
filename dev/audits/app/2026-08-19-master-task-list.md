@@ -10,17 +10,17 @@
 
 These are **IDEAS, not action items**. The engine + rehab-first positioning overrides "cleaner is better," so Margus picks what to ship. Batches ship in 6-12h chunks — don't try to close the whole list in one sitting, and respect the "no UI churn between audits" rule (each shipped batch should stand on its own before the next audit re-scans). Real bugs go first because they're broken code the audits happened to surface; everything else is prioritized by user-visible ROI. Sizing (S/M/L/XL) is per item.
 
-**Counts by bucket (post-Batch-22):**
+**Counts by bucket (post-Batch-22, brief delivered):**
 
-- **Bugs (fix regardless):** 2 blocked (A4 harness rerun, X1 design brief usage-limit)
+- **Bugs (fix regardless):** 1 blocked (A4 harness rerun — retrying now)
 - **P0 (biggest ROI):** 0 open — all 4 shipped
 - **P1 (visible quality gap):** 0 open — all 55 shipped
 - **P2 (defensible polish):** 0 open — all 19 shipped
-- **Features on-deck:** 7 items, ~24-42h (F1 + F2 + F5-F9; F3 + F4 shipped)
+- **Features on-deck:** 7 items, ~24-42h (F1 + F2 + F5-F9). Design brief at `dev/audits/app/2026-08-19-design-brief-features.md` proposes Batch 23 (F2 + F5 partial + F7) → Batch 24 (F6 + F5 remainder) → Batch 25 (F1)
 - **Strategic (founder decision):** 4 items — decision, not build
 - **Rejected:** 11 items — do not ship
 
-Total open surface: **7 features + 4 strategic + 2 blocked + 11 rejected = 24 line items**. Next step: unblock X1 (retry design-lead brief) so F2 + F5 + F6 + F7 can ship coherently; F1 + F8 need founder decisions; F9 is standalone infra work.
+Total open surface: **7 features + 4 strategic + 1 blocked + 11 rejected = 23 line items**. Next batch (Batch 23) has a full design brief with mockups, file:line pointers, and interaction contracts — ready to implement.
 
 ---
 
@@ -49,7 +49,6 @@ Keep the convention terse — the four markers cover every state. Don't invent n
 ## Section A — Real bugs (fix regardless)
 
 - [!] **A4** — blocked: Playwright harness times out on anterior-hip day-30 sim step 2026-08-19 (both app.terav.fit and 6a6ac147 preview serve identical bytes, real-browser sign-in works; rerun once flake is diagnosed) — Persona harness artifacts predate Batch 16 by ~24h. Re-run `dev/scripts/run-app-audit.sh` before the next audit round so cross-references reflect current UI. Source: `2026-08-19-open-task-list.md` (A4). Files: `dev/scripts/run-app-audit.sh`, `next-app/tests/e2e/artifacts/personas/`. Size: S
-- [!] **X1** — blocked: product-design-lead sub-agent hit a usage-limit anomaly 2026-08-19 (returned "safety classifier unavailable" + "usage limit set to $0"). Prompt dispatched, no file written. Retry once the group usage limit is reset OR run interactively. Blocks F2 + F5 + F6 + F7 shipping as a coherent batch. Files: `dev/audits/app/2026-08-19-design-brief-features.md` (missing). Size: M (agent dispatch is ~1-2h wall clock, unlocks 8-15h of implementation).
 
 ---
 
@@ -138,6 +137,9 @@ Deduplicated across visual-craft §16 + mobile-ux §10 + roadmap:
 ## Closed items appendix (shipped since 2026-08-17)
 
 Strikethrough preserves history; these items are OUT of the open list.
+
+**Design-lead brief (2026-08-19):**
+- [x] **X1** — done 2026-08-19 — product-design-lead brief for F2 + F5 + F6 + F7 delivered at `dev/audits/app/2026-08-19-design-brief-features.md` (493 lines). First dispatch hit a usage-limit anomaly; retry after reset succeeded. Brief recommends **Batch 23** (F2 + F5 partial + F7 co-ship, 7-8h) then **Batch 24** (F6 MoveSheet + F5 retest-window, 10-12h) then **Batch 25** (F1 extend hook into `/account`).
 
 **Batch 22 — mechanical F items (deployed https://4ea779c6.program-v2.pages.dev, 2026-08-19):**
 
