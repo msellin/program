@@ -29,8 +29,10 @@ if (DSN) {
     const Sentry = await import("@sentry/nextjs");
     Sentry.init({
       dsn: DSN,
-      // Send only 10% of transactions in prod — free-tier quota.
-      tracesSampleRate: 0.1,
+      // P1-24 — dropped 0.10 → 0.05 in prod so beta traffic doesn't burn
+      // the Sentry free-tier transaction quota. Adjust when we're on a
+      // paid plan.
+      tracesSampleRate: 0.05,
       // Session replays: sample 10% of sessions, 100% of sessions with an
       // error. Cheap way to see reproducers without eating the free-tier
       // event budget.
@@ -51,6 +53,8 @@ if (DSN) {
           showBranding: false,
           formTitle: "Send feedback",
           submitButtonLabel: "Send",
+          // P1-23 — widget positioning nudged above BottomNav via CSS
+          // custom properties in globals.css (--sentry-feedback-*).
           useSentryUser: {
             email: "email",
             name: "name",

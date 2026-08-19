@@ -192,3 +192,14 @@ main { animation: route-in 150ms ease-out; }
 /* Keyboard focus twin — every hover: site should be reachable + visible
    via keyboard. The global :focus-visible rules earlier already draw the
    bronze outline, so no per-class twins are needed for the top 20 sites. */
+
+/* P1-23 — Sentry Feedback trigger widget sits at bottom-right and by
+   default collides with the 60-px BottomNav on iPhone. Sentry's Feedback
+   integration exposes CSS custom properties for positioning; override
+   them at :root so the widget rides above the nav (and its safe-area). */
+:root {
+  --sentry-feedback-widget-bottom: calc(60px + env(safe-area-inset-bottom) + 12px);
+  --sentry-feedback-widget-right: 12px;
+  --bottom: var(--sentry-feedback-widget-bottom);
+  --right: var(--sentry-feedback-widget-right);
+}

@@ -342,7 +342,7 @@ export default function TodayPage() {
           const mode = week <= 2 ? "blocked practice — drills in the composed order" : "random practice — order shuffled by the seed";
           return (
             <p className="text-[11px] text-muted font-mono">
-              Week {week} · {mode}. <span className="text-muted/70">Shea &amp; Morgan 1979.</span>
+              Week {week} · {mode}. <span className="text-muted">Shea &amp; Morgan 1979.</span>
             </p>
           );
         })()
@@ -539,7 +539,7 @@ function DayHeaderShortcut({ date, programCount }: { date: string; programCount:
     if (confirming) confirmRef.current?.focus();
   }, [confirming]);
   return (
-    <div className="rounded border border-line-soft border-l-4 border-l-slate bg-surface p-3 flex items-center justify-between gap-3">
+    <div className="rounded border border-line-soft border-l-4 border-l-line bg-surface p-3 flex items-center justify-between gap-3">
       <div className="text-sm">
         <p className="font-semibold text-strong">{humanDate}</p>
         <p className="text-muted text-[14px] mt-0.5">
@@ -1024,7 +1024,7 @@ function RestDayCard({
   }
   if (variant === "holiday") {
     return (
-      <div className="rounded border border-line-soft border-l-4 border-l-slate bg-surface p-4 text-sm">
+      <div className="rounded border border-line-soft border-l-4 border-l-line bg-surface p-4 text-sm">
         <p className="font-semibold">Holiday / light period.</p>
         <p className="mt-1 text-muted">
           Documented light window between Phase 4 (test) and Phase 5 (Hatch). No prescribed strength session.
@@ -1034,7 +1034,7 @@ function RestDayCard({
     );
   }
   return (
-    <div className="rounded border border-line-soft border-l-4 border-l-slate bg-surface p-4 text-sm">
+    <div className="rounded border border-line-soft border-l-4 border-l-line bg-surface p-4 text-sm">
       <p className="font-semibold">Rest day.</p>
       <p className="mt-1 text-muted">
         {programName ? `${programName} has no session on the schedule today. ` : "No session on the schedule today. "}

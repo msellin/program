@@ -158,7 +158,7 @@ export default function ProfilePage() {
         <div className="min-w-0 flex-1">
           <p className="text-[16px] font-semibold text-strong break-words">
             {email ?? (
-              <span className="inline-block w-48 h-4 bg-line-soft rounded animate-pulse" aria-label="Loading email" />
+              <span className="inline-block w-48 h-4 bg-line-soft rounded motion-safe:animate-pulse" aria-label="Loading email" />
             )}
           </p>
           <p className="text-[11px] text-muted mt-0.5 flex items-center gap-2 flex-wrap">

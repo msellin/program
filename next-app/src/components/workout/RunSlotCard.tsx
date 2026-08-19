@@ -253,7 +253,7 @@ export function RunSlotCard({ date }: { date: string }) {
           aria-label="Warm-up + cool-down"
           className="w-11 h-11 flex items-center justify-center text-muted hover:text-ink rounded"
         >
-          <Info size={15} strokeWidth={1.75} />
+          <Info size={16} strokeWidth={1.75} />
         </button>
       </header>
 

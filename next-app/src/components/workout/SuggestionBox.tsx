@@ -35,7 +35,7 @@ export function SuggestionBox({ suggestion }: { suggestion: Suggestion }) {
       {suggestion.fsl ? (
         <p className="text-xs font-mono text-muted mt-2">
           FSL {suggestion.fsl.sets}×{suggestion.fsl.reps} @ {suggestion.fsl.kg} kg
-          <span className="text-[10px] ml-1 text-muted/70">
+          <span className="text-[10px] ml-1 text-muted">
             ({platesLabel(suggestion.fsl.kg)})
           </span>
         </p>

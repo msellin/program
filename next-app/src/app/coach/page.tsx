@@ -190,7 +190,15 @@ export default function CoachPage() {
   }, [messages]);
 
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+    // P1-22 — respect prefers-reduced-motion. Smooth scroll on a chat
+    // feed is churn for users with vestibular sensitivity.
+    const reduce =
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    scrollRef.current?.scrollTo({
+      top: scrollRef.current.scrollHeight,
+      behavior: reduce ? "auto" : "smooth",
+    });
   }, [messages, pending]);
 
   const send = async (text: string) => {
@@ -401,7 +409,7 @@ function Bubble({
         )}
       >
         {text}
-        {streaming ? <span className="inline-block ml-1 w-1.5 h-4 bg-bronze align-middle animate-pulse" aria-hidden /> : null}
+        {streaming ? <span className="inline-block ml-1 w-1.5 h-4 bg-bronze align-middle motion-safe:animate-pulse" aria-hidden /> : null}
       </div>
     </div>
   );

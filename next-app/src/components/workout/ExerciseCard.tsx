@@ -206,7 +206,7 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
                 aria-label="Watch demo"
                 className="w-11 h-11 flex items-center justify-center text-muted hover:text-ink hover:bg-line-soft rounded"
               >
-                <Play size={15} strokeWidth={1.75} />
+                <Play size={16} strokeWidth={1.75} />
               </button>
             ) : null}
             <button
@@ -219,9 +219,9 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
               )}
             >
               {hasWarning ? (
-                <AlertTriangle size={15} strokeWidth={1.75} />
+                <AlertTriangle size={16} strokeWidth={1.75} />
               ) : (
-                <Info size={15} strokeWidth={1.75} />
+                <Info size={16} strokeWidth={1.75} />
               )}
             </button>
           </div>

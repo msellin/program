@@ -15,6 +15,14 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
+  // P1-25 — force per-icon tree-shake on lucide-react. Without this,
+  // some bundlers pull the barrel module and ship every icon. Terav
+  // uses ~30 lucide icons; the full package is ~600 KB. This directive
+  // rewrites `import { X } from "lucide-react"` to a per-icon path at
+  // build time.
+  experimental: {
+    optimizePackageImports: ["lucide-react"],
+  },
 };
 
 // Sentry wraps the config to upload source maps at build time. When

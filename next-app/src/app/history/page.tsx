@@ -402,7 +402,7 @@ function LogRow({
             />
           ) : null}
           <span>{label}</span>
-          <span className="text-muted/70 hidden sm:inline">{day.date}</span>
+          <span className="text-muted hidden sm:inline">{day.date}</span>
         </span>
         <span className="text-muted">
           {doneCount} done{notesCount ? ` · ${notesCount} note${notesCount === 1 ? "" : "s"}` : ""}

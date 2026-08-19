@@ -91,7 +91,7 @@ export function RestTimer({ autoStartSeconds, onClose }: Props) {
         <div className="h-1 bg-line-soft relative">
           <div
             className={cn(
-              "h-full transition-all duration-500",
+              "h-full transition-[width] duration-500 motion-reduce:transition-none",
               hit ? "bg-green" : "bg-bronze",
             )}
             style={{ width: `${pct * 100}%` }}

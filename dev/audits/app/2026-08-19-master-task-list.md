@@ -10,17 +10,17 @@
 
 These are **IDEAS, not action items**. The engine + rehab-first positioning overrides "cleaner is better," so Margus picks what to ship. Batches ship in 6-12h chunks — don't try to close the whole list in one sitting, and respect the "no UI churn between audits" rule (each shipped batch should stand on its own before the next audit re-scans). Real bugs go first because they're broken code the audits happened to surface; everything else is prioritized by user-visible ROI. Sizing (S/M/L/XL) is per item.
 
-**Counts by bucket (post-Batch-19):**
+**Counts by bucket (post-Batch-20):**
 
 - **Bugs (fix regardless):** 1 item blocked (A4 harness), 3 shipped
 - **P0 (biggest ROI):** 0 open — all 4 shipped
-- **P1 (visible quality gap):** 18 items, ~10-13h (motion-perf 8 + visual craft 6 + landing-alignment 4; a11y 7 + mobile-UX 11 + copy 19 shipped)
+- **P1 (visible quality gap):** 4 items open (landing-alignment); a11y 7 + mobile-UX 11 + motion-perf 8 + visual craft 6 + copy 19 shipped
 - **P2 (defensible polish):** 19 items, ~8-12h
 - **Features on-deck:** 9 items, ~30-50h
 - **Strategic (founder decision):** 4 items — decision, not build
 - **Rejected:** 11 items — do not ship
 
-Total open surface: **50 open ideas + 4 strategic + 11 rejected = 65 line items** (was 110 pre-Batch-17, 83 pre-Batch-18, 76 pre-Batch-19). Natural next batch: **motion+perf P1-19 through P1-26** — 8 items, ~3-4h.
+Total open surface: **36 open ideas + 4 strategic + 11 rejected = 51 line items** (was 110 pre-Batch-17, 83, 76, 65 as batches shipped). Natural next batch: **landing→app P1-52..55** — 4 items (S+M+M+L, mixed 3-6h), then **P2 batch** (19 items, ~8-12h).
 
 ---
 
@@ -67,28 +67,17 @@ Keep the convention terse — the four markers cover every state. Don't invent n
 
 *(all 11 shipped in Batch 19 — see appendix)*
 
-### Motion + perf (mostly carried from 2026-08-18)
+### Motion + perf
 
-- [ ] **P1-19** Coach caret needs `motion-safe:animate-pulse` — unguarded Tailwind `animate-pulse`. Source: `2026-08-19-open-task-list.md` (C8), `2026-08-18-motion-perf-sweep.md` §2. Files: `next-app/src/app/coach/page.tsx:404`. Size: S
-- [ ] **P1-20** Profile skeleton `motion-safe:animate-pulse`. Same class of gap. Source: `2026-08-19-open-task-list.md` (C9). Files: `next-app/src/app/profile/page.tsx:161`. Size: S
-- [ ] **P1-21** RestTimer `transition-[width]` + `motion-reduce:transition-none` (currently `transition-all duration-500`). Source: `2026-08-19-open-task-list.md` (C10). Files: `next-app/src/components/workout/RestTimer.tsx:70`. Size: S
-- [ ] **P1-22** Coach smooth-scroll — read `prefers-reduced-motion` before setting `behavior: "smooth"`. Source: `2026-08-19-open-task-list.md` (C11). Files: `next-app/src/app/coach/page.tsx:193`. Size: S
-- [ ] **P1-23** Sentry Feedback widget position — floats over BottomNav on iPhone. Either `{ autoInject: false }` + mount from Profile, or reposition. Source: `2026-08-19-open-task-list.md` (C12), `2026-08-18-motion-perf-sweep.md` §5. Files: `next-app/src/sentry.client.config.ts:47`. Size: S
-- [ ] **P1-24** Drop `tracesSampleRate: 0.1` → `0.05` in prod — will burn free tier at beta scale. Source: `2026-08-19-open-task-list.md` (C13), `2026-08-18-motion-perf-sweep.md` §5. Files: `next-app/src/sentry.client.config.ts`. Size: S
-- [ ] **P1-25** Lucide-react tree-shake verify — chunk `598-*` is suspiciously large. Run `next build --profile` before Batch 17. Source: `2026-08-19-open-task-list.md` (C14), `2026-08-18-motion-perf-sweep.md` §4. Files: `next-app/package.json`, bundle. Size: S
-- [ ] **P1-26** next/font weight explosion — no `weight: [...]` on Inter or JetBrains Mono → 13 woff2 files, ~305 KB. Set `weight: ["400","500","600"]` + `["400"]`. Cuts to ~90-110 KB. Source: `2026-08-18-motion-perf-sweep.md` §4. Files: `next-app/src/app/layout.tsx:11-21`. Size: S
+*(all 8 shipped in Batch 20 — see appendix)*
 
 ### Visual craft
 
-- [ ] **P1-27** Rehab safety copy at 13-muted is wrong — bump to 14 px minimum regardless of P0-4 sweep. Applies to skill safety, interference, taper blocks. Source: `2026-08-19-open-task-list.md` (C15). Files: `next-app/src/app/page.tsx:315-321, 299-307, 267-273`. Size: S
-- [ ] **P1-28** Icon size sprawl → 4 sizes. Kill 15 px, bump to 16 in ExerciseCard and RunSlotCard. Source: `2026-08-19-open-task-list.md` (C16), `2026-08-19-app-audit-visual-craft.md`. Files: `ExerciseCard.tsx:209,222,224`, `RunSlotCard.tsx:256`. Size: S
-- [ ] **P1-29** Slate demotion on non-interactive left-borders — `border-l-slate` on DayHeaderShortcut and RestDayCard variants → `border-l-line`. Slate reserves for interactive/marker roles. Source: `2026-08-19-open-task-list.md` (C17). Files: `next-app/src/app/page.tsx:538,999,1023,1033`. Size: S
-- [ ] **P1-30** Kill `text-muted/70` (6 usages). Two muted levels max; currently three. Source: `2026-08-19-open-task-list.md` (C18). Files: 6 cross-cutting sites. Size: S
-- [ ] **P1-31** Profile body-copy size collision — `text-sm` and `text-[14px]` used side-by-side for the same role. Delete `text-[14px]` in `profile/page.tsx`, use `text-sm` uniformly. Source: `2026-08-18-profile-visual-craft.md` P0-1. Files: `next-app/src/app/profile/page.tsx:140,181,214,225`. Size: S
-- [ ] **P1-32** Profile card frame weight — Programs list + "More" nav use `border-line-soft` with no `bg-surface`, so containers read one z-layer below Progress/Today cards. Promote to `border-line-soft bg-surface`. Source: `2026-08-18-profile-visual-craft.md` P0-2. Files: `next-app/src/app/profile/page.tsx:171,208`. Size: S
+*(all 6 shipped in Batch 20 — see appendix)*
 
-### Copy clarity (post-2026-08-18)
+### Copy clarity
 
+*(all 19 shipped in Batch 17 — see appendix)*
 
 ### Landing→app promise gaps (still open from 2026-08-17)
 
@@ -171,6 +160,25 @@ Deduplicated across visual-craft §16 + mobile-ux §10 + roadmap:
 ## Closed items appendix (shipped since 2026-08-17)
 
 Strikethrough preserves history; these items are OUT of the open list.
+
+**Batch 20 — motion+perf + visual craft (deployed https://f5ed595d.program-v2.pages.dev, 2026-08-19):**
+
+14 items — motion+perf (P1-19..26) + visual craft (P1-27..32). Full lines preserved:
+
+- [x] **P1-19** — done 2026-08-19 Batch 20 — Coach caret needs `motion-safe:animate-pulse` — unguarded Tailwind `animate-pulse`. Source: `2026-08-19-open-task-list.md` (C8), `2026-08-18-motion-perf-sweep.md` §2. Files: `next-app/src/app/coach/page.tsx:404`. Size: S
+- [x] **P1-20** — done 2026-08-19 Batch 20 — Profile skeleton `motion-safe:animate-pulse`. Same class of gap. Source: `2026-08-19-open-task-list.md` (C9). Files: `next-app/src/app/profile/page.tsx:161`. Size: S
+- [x] **P1-21** — done 2026-08-19 Batch 20 — RestTimer `transition-[width]` + `motion-reduce:transition-none` (currently `transition-all duration-500`). Source: `2026-08-19-open-task-list.md` (C10). Files: `next-app/src/components/workout/RestTimer.tsx:70`. Size: S
+- [x] **P1-22** — done 2026-08-19 Batch 20 — Coach smooth-scroll — read `prefers-reduced-motion` before setting `behavior: "smooth"`. Source: `2026-08-19-open-task-list.md` (C11). Files: `next-app/src/app/coach/page.tsx:193`. Size: S
+- [x] **P1-23** — done 2026-08-19 Batch 20 — Sentry Feedback widget position — floats over BottomNav on iPhone. Either `{ autoInject: false }` + mount from Profile, or reposition. Source: `2026-08-19-open-task-list.md` (C12), `2026-08-18-motion-perf-sweep.md` §5. Files: `next-app/src/sentry.client.config.ts:47`. Size: S
+- [x] **P1-24** — done 2026-08-19 Batch 20 — Drop `tracesSampleRate: 0.1` → `0.05` in prod — will burn free tier at beta scale. Source: `2026-08-19-open-task-list.md` (C13), `2026-08-18-motion-perf-sweep.md` §5. Files: `next-app/src/sentry.client.config.ts`. Size: S
+- [x] **P1-25** — done 2026-08-19 Batch 20 — Lucide-react tree-shake verify — chunk `598-*` is suspiciously large. Run `next build --profile` before Batch 17. Source: `2026-08-19-open-task-list.md` (C14), `2026-08-18-motion-perf-sweep.md` §4. Files: `next-app/package.json`, bundle. Size: S
+- [x] **P1-26** — done 2026-08-19 Batch 20 — next/font weight explosion — no `weight: [...]` on Inter or JetBrains Mono → 13 woff2 files, ~305 KB. Set `weight: ["400","500","600"]` + `["400"]`. Cuts to ~90-110 KB. Source: `2026-08-18-motion-perf-sweep.md` §4. Files: `next-app/src/app/layout.tsx:11-21`. Size: S
+- [x] **P1-27** — done 2026-08-19 Batch 20 — Rehab safety copy at 13-muted is wrong — bump to 14 px minimum regardless of P0-4 sweep. Applies to skill safety, interference, taper blocks. Source: `2026-08-19-open-task-list.md` (C15). Files: `next-app/src/app/page.tsx:315-321, 299-307, 267-273`. Size: S
+- [x] **P1-28** — done 2026-08-19 Batch 20 — Icon size sprawl → 4 sizes. Kill 15 px, bump to 16 in ExerciseCard and RunSlotCard. Source: `2026-08-19-open-task-list.md` (C16), `2026-08-19-app-audit-visual-craft.md`. Files: `ExerciseCard.tsx:209,222,224`, `RunSlotCard.tsx:256`. Size: S
+- [x] **P1-29** — done 2026-08-19 Batch 20 — Slate demotion on non-interactive left-borders — `border-l-slate` on DayHeaderShortcut and RestDayCard variants → `border-l-line`. Slate reserves for interactive/marker roles. Source: `2026-08-19-open-task-list.md` (C17). Files: `next-app/src/app/page.tsx:538,999,1023,1033`. Size: S
+- [x] **P1-30** — done 2026-08-19 Batch 20 — Kill `text-muted/70` (6 usages). Two muted levels max; currently three. Source: `2026-08-19-open-task-list.md` (C18). Files: 6 cross-cutting sites. Size: S
+- [x] **P1-31** — done 2026-08-19 Batch 20 — Profile body-copy size collision — `text-sm` and `text-[14px]` used side-by-side for the same role. Delete `text-[14px]` in `profile/page.tsx`, use `text-sm` uniformly. Source: `2026-08-18-profile-visual-craft.md` P0-1. Files: `next-app/src/app/profile/page.tsx:140,181,214,225`. Size: S
+- [x] **P1-32** — done 2026-08-19 Batch 20 — Profile card frame weight — Programs list + "More" nav use `border-line-soft` with no `bg-surface`, so containers read one z-layer below Progress/Today cards. Promote to `border-line-soft bg-surface`. Source: `2026-08-18-profile-visual-craft.md` P0-2. Files: `next-app/src/app/profile/page.tsx:171,208`. Size: S
 
 **Batch 19 — mobile UX (deployed https://082ef16e.program-v2.pages.dev, 2026-08-19):**
 
