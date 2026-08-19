@@ -232,6 +232,7 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
         type="button"
         onClick={() => setExpanded((v) => !v)}
         aria-expanded={expanded}
+        aria-controls="signals-detail"
         className={cn(
           "w-full text-left border border-l-4 rounded-md px-3 py-2.5 flex items-center gap-2.5 min-h-[44px]",
           toneClasses[strongestTone],
@@ -260,7 +261,7 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
       </button>
 
       {expanded ? (
-        <div className="space-y-3">
+        <div id="signals-detail" className="space-y-3">
           {/* Red-state expansion body deleted — HeroStateCard now owns this
               signal (compact strip with an inline Escalate → link). */}
 

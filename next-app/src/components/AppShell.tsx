@@ -101,6 +101,16 @@ function AuthGatedShell({
   const isTodayRoute = pathname === "/" || pathname === "";
   return (
     <>
+      {/* P1-56 (Batch 26) — WCAG 2.4.1 bypass block. Keyboard-only users
+          skip the 4-6 header taps (brand, Programs, Morning check, ⋮,
+          readiness dot) to reach content. `sr-only focus:not-sr-only`
+          keeps it visually hidden until focused. */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-bronze focus:text-ground focus:px-3 focus:py-2 focus:rounded"
+      >
+        Skip to content
+      </a>
       <StoreHydrator />
       {/* Onboarding modal only makes sense on Today — the morning-check card
           is meaningless on catalog / program preview / progress pages, and
@@ -145,7 +155,9 @@ function AuthGatedShell({
         </div>
       </header>
       <main
-        className="max-w-[760px] mx-auto w-full px-4 sm:px-6 flex-1"
+        id="main-content"
+        tabIndex={-1}
+        className="max-w-[760px] mx-auto w-full px-4 sm:px-6 flex-1 focus:outline-none"
         style={{
           paddingBottom: "calc(64px + env(safe-area-inset-bottom) + 1rem)",
         }}

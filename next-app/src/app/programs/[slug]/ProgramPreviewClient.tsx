@@ -347,8 +347,8 @@ export function ProgramPreviewClient({ slug }: Props) {
             </p>
             <p className="text-[11px] text-muted">
               Full bibliography lives in{" "}
-              <Link href="/guide" className="underline underline-offset-2 hover:text-ink">
-                Guide
+              <Link href="/evidence" className="underline underline-offset-2 hover:text-ink">
+                Evidence
               </Link>
               .
             </p>

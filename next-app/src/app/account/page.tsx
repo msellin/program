@@ -184,10 +184,18 @@ export default function AccountPage() {
                     Extended +{e.weeks}w · retest window pushed
                   </p>
                 </div>
+                {/* P1-61 (Batch 26) — was `text-muted underline
+                    decoration-line` — the underline was 1.82:1 (fails
+                    1.4.1 + 1.4.11) and the "Undo" was visually
+                    identical to adjacent body text. Now `text-slate`
+                    (8.01:1) so the link affordance carries. Kept the
+                    RotateCcw icon so tap target reads as a control,
+                    not prose. Hit rect min-h stays at natural button
+                    height; P2-20 addresses 44 px min-height. */}
                 <button
                   type="button"
                   onClick={() => setPendingRevert(e.slug)}
-                  className="inline-flex items-center gap-1.5 text-[11px] text-muted hover:text-ink underline decoration-line hover:decoration-ink"
+                  className="inline-flex items-center gap-1.5 text-[11px] text-slate hover:text-ink underline underline-offset-2 decoration-slate/60 hover:decoration-ink min-h-[44px] py-2"
                 >
                   <RotateCcw size={12} aria-hidden />
                   Undo

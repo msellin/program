@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { classify } from "@/lib/engine/non-responder-classifier";
 import { InfoSheet } from "@/components/InfoSheet";
+import { humanizeMetricId, humanizeVerdict } from "@/lib/humanize-metrics";
 import type { Program, Store } from "@/lib/schemas";
 import type {
   ClassificationVerdict,
@@ -66,13 +67,19 @@ export function HeritageClusterChip({
       </button>
       {open ? (
         <InfoSheet title={`${label.text} — engine read`} onClose={() => setOpen(false)}>
-          <p>{result.composite_copy || "No explanation available."}</p>
+          {/* A10 (Batch 26) — was rendering a "No explanation available."
+              fallback + raw metric_id + (role) parenthetical + underscore
+              verdicts. All debug-dump. Now: only render composite_copy if
+              present (skip the sheet-body entirely otherwise; the chip
+              itself is the label), and humanize per-metric identifiers +
+              verdicts the same way ProposalCard does (P1-40). */}
+          {result.composite_copy ? <p>{result.composite_copy}</p> : null}
           {result.per_metric.length > 0 ? (
             <ul className="mt-3 space-y-1 font-mono text-[12px]">
               {result.per_metric.map((m) => (
                 <li key={m.metric_id}>
-                  <span className="text-muted">{m.metric_id} ({m.role}):</span>{" "}
-                  <span className="text-ink">{m.verdict.replace(/_/g, " ")}</span>
+                  <span className="text-muted">{humanizeMetricId(m.metric_id)}:</span>{" "}
+                  <span className="text-ink">{humanizeVerdict(m.verdict)}</span>
                   {m.delta_at_mid_block != null ? (
                     <> · Δ {m.delta_at_mid_block.toFixed(2)}</>
                   ) : null}

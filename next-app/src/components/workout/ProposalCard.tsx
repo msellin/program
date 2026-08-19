@@ -4,6 +4,7 @@ import { ArrowUp } from "lucide-react";
 import { CitationRef } from "@/components/citations/CitationRef";
 import { RetestLoggingSheet } from "@/components/workout/RetestLoggingSheet";
 import { useProposalActions } from "@/lib/proposals/useProposalActions";
+import { humanizeMetricId, humanizeVerdict } from "@/lib/humanize-metrics";
 import type { Proposal } from "@/lib/schemas";
 
 /**
@@ -36,22 +37,29 @@ export function ProposalCard({
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
-          <h3
-            id={`proposal-${proposal.id}`}
-            className={`font-mono text-[10px] uppercase tracking-widest ${tone.eyebrow} flex items-center gap-1.5 font-normal`}
-          >
-            {proposal.kind === "tm_bump" ||
-            proposal.kind === "tier_advance" ||
-            (proposal.kind === "non_responder_recommendation" &&
-              proposal.verdict === "under_dosing") ? (
-              // Visual-craft audit 2026-08-18 — under_dosing means "more",
-              // same directional semantic as tm_bump + tier_advance. The
-              // ArrowUp differentiates it from the amber-tone soften
-              // proposal which is directionally "less".
-              <ArrowUp size={12} className={tone.eyebrow} aria-hidden="true" />
-            ) : null}
-            {eyebrow}
-          </h3>
+          {/* A8 + P1-57 (Batch 26) — guard empty eyebrow (was rendering
+              a phantom h3 to SR when the switch returned nothing), and
+              demote h3 → h2 so the Today page hierarchy stops skipping
+              h1 → h3. Visual style is class-based; tag change has no
+              visual effect. */}
+          {eyebrow ? (
+            <h2
+              id={`proposal-${proposal.id}`}
+              className={`font-mono text-[10px] uppercase tracking-widest ${tone.eyebrow} flex items-center gap-1.5 font-normal`}
+            >
+              {proposal.kind === "tm_bump" ||
+              proposal.kind === "tier_advance" ||
+              (proposal.kind === "non_responder_recommendation" &&
+                proposal.verdict === "under_dosing") ? (
+                // Visual-craft audit 2026-08-18 — under_dosing means "more",
+                // same directional semantic as tm_bump + tier_advance. The
+                // ArrowUp differentiates it from the amber-tone soften
+                // proposal which is directionally "less".
+                <ArrowUp size={12} className={tone.eyebrow} aria-hidden="true" />
+              ) : null}
+              {eyebrow}
+            </h2>
+          ) : null}
           <p className="text-[14px] text-ink mt-1 leading-snug">
             <span className="text-muted">Because:</span> {proposal.reason}
           </p>
@@ -209,33 +217,8 @@ function toneFor(p: Proposal): Tone {
   }
 }
 
-// P1-40 — humanize the per-metric readout on non-responder proposals.
-// Metric IDs come from engine payloads (`submax_hr_bpm`, `resting_hr_bpm`,
-// `time_to_exhaustion_min`, ...). Underscore→space + acronym uppercase is
-// enough for beta; if a program authors a fully unreadable id, add it to
-// the DISPLAY_NAMES map below rather than baking that into the JSON.
-const DISPLAY_NAMES: Record<string, string> = {
-  submax_hr_bpm: "sub-max HR",
-  resting_hr_bpm: "resting HR",
-  hrv_rmssd_ms: "HRV (RMSSD)",
-};
-function humanizeMetricId(id: string): string {
-  return DISPLAY_NAMES[id] ?? id.replace(/_/g, " ");
-}
-function humanizeVerdict(v: string): string {
-  switch (v) {
-    case "true_non_response":
-      return "not responding";
-    case "under_dosing":
-      return "room to push";
-    case "responding":
-      return "responding";
-    case "insufficient_data":
-      return "not enough data yet";
-    default:
-      return v.replace(/_/g, " ");
-  }
-}
+// P1-40 → A10 (Batch 26): humanizeMetricId + humanizeVerdict moved to
+// `lib/humanize-metrics.ts` so HeritageClusterChip can share them.
 
 function eyebrowFor(p: Proposal): string {
   switch (p.kind) {

@@ -16,15 +16,22 @@
   --color-strong: #f4f5f7;
   --color-muted: #8a8f9a;
 
-  /* Lines */
-  --color-line: #3a3f4a;
+  /* Lines. P1-60 (Batch 26) — bumped `--color-line` from #3a3f4a
+     (1.82:1 on surface) to #4d525d (~3.05:1) so input borders pass
+     WCAG 1.4.11 non-text UI contrast without redesigning form-field
+     backgrounds. `line-soft` stays as the divider-only token. */
+  --color-line: #4d525d;
   --color-line-soft: #24272f;
 
-  /* Semantic states */
+  /* Semantic states. P1-59 (Batch 26) — added `--color-red-strong`
+     (~#f28068) as the on-tint variant for `bg-red/20` pairings that
+     were failing 1.4.3 at 4.12:1. Base red stays for icons + inline
+     text on dark ground. */
   --color-green: #5fb37a;
   --color-amber: #e0a63a;
   --color-amber-strong: #f0b854;
   --color-red: #e5654b;
+  --color-red-strong: #f28068;
 
   /* Accents — bronze primary, teal secondary. Slate bumped from #4a8894 (4.44:1)
      to #79b8c4 (~7.5:1 on #16181c) after the a11y audit flagged 20+ violations.

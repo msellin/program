@@ -79,7 +79,7 @@ export const PERSONAS: Persona[] = [
     email: "e2e-persona-strength@example.test",
     password: DEFAULT_PASSWORD,
     focus:
-      "Adaptive load progression, engine proposing increases, high accept rate on Coach page",
+      "Adaptive load progression, engine proposing increases, high accept rate on ProposalStack",
   },
   {
     id: "persona-erratic",

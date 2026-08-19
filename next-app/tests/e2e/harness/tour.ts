@@ -19,7 +19,11 @@ export function buildRoutes(activeProgramSlug: string): TourRoute[] {
   return [
     { slug: "01-today", path: "/", desc: "Today" },
     { slug: "02-week", path: "/week", desc: "Week" },
-    { slug: "03-coach", path: "/coach", desc: "Coach (proposals)" },
+    // A9 (Batch 26) — /coach shelved by S1 kill. Slot 03 kept open with a
+    // stable slug ("03-account") so downstream tooling that indexes by
+    // route position stays coherent; if a fresh route lands here, it
+    // takes 03 naturally.
+    { slug: "03-account", path: "/account", desc: "Account" },
     { slug: "04-history", path: "/history", desc: "History (heatmap)" },
     { slug: "05-progress", path: "/progress", desc: "Progress (charts)" },
     { slug: "06-programs", path: "/programs", desc: "Programs catalog" },

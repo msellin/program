@@ -67,7 +67,7 @@ export function FirstRunBanner() {
         <li><span className="text-ink">Profile</span> — account, active plans, menu.</li>
       </ul>
       <p className="text-[12px] text-muted pt-1">
-        More lives behind the <span className="font-mono">⋮</span> menu (top right): Programs, Check, Extras, Coach, Report, Guide.
+        More lives behind the <span className="font-mono">⋮</span> menu (top right): Programs, Check, Extras, Report, Guide, Evidence.
       </p>
       <div className="pt-1">
         <button

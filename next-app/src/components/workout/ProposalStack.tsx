@@ -44,14 +44,23 @@ export function ProposalStack({ program, date }: { program: Program | null | und
   }
   if (proposals.length === 0) return null;
 
-  // P0-1: the top proposal's Accept/Ignore verbs render in the sticky
-  // bottom action bar (thumb-reach). Non-top proposals keep inline
-  // buttons. `pb-20` on the section reserves scroll room so the sticky
-  // bar doesn't overlap the last card's content.
+  // P0-1 (Batch 17): top proposal's verbs live in the sticky bottom bar
+  // (thumb-reach). Non-top proposals keep inline buttons.
+  //
+  // P0-5 (Batch 26): the pb-20 (80 px) reserve wasn't enough — the sticky
+  // bar (~56 px) sits above BottomNav (60 px) + safe-area, so total
+  // reserved footprint is ~120 px + safe-area. Bumped to match so the
+  // last inline card's Accept/Ignore buttons never sit under the sticky
+  // bar. Also caps pb at pb-32 on small screens where safe-area is 0
+  // to avoid gratuitous whitespace.
   const [topProposal, ...rest] = proposals;
   return (
     <>
-      <section aria-label="Engine proposals" className="space-y-3 pb-20">
+      <section
+        aria-label="Engine proposals"
+        className="space-y-3"
+        style={{ paddingBottom: "calc(128px + env(safe-area-inset-bottom))" }}
+      >
         <ProposalCard proposal={topProposal} date={date} showInlineActions={false} />
         {rest.map((p) => (
           <ProposalCard key={p.id} proposal={p} date={date} />

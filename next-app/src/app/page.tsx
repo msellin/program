@@ -836,7 +836,7 @@ function GraduationCard({ program }: { program: Program }) {
                   ? "bg-green/20 text-green"
                   : arcVerdict.tone === "amber"
                     ? "bg-amber/20 text-amber"
-                    : "bg-red/20 text-red"
+                    : "bg-red/20 text-red-strong"
               }`}
             >
               {arcVerdict.label}

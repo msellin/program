@@ -111,14 +111,17 @@ export function SignalCompletenessCard({
           <p className="font-mono text-[10px] uppercase tracking-widest text-muted">
             What the engine reads
           </p>
-          <h3
+          {/* P1-57 (Batch 26) — demoted from h3 → h2. Progress page had
+              h1 → h3 skip; visual style is class-based, tag change has
+              no visual effect. */}
+          <h2
             id="signal-completeness-title"
             className="text-[15px] font-semibold text-strong mt-0.5"
           >
             {hasGaps
               ? `${reads.length} signals active · ${wouldUse.length} could be added`
               : `${reads.length} signals active — at engine ceiling for this program`}
-          </h3>
+          </h2>
           <p className="text-[12px] text-muted mt-1">
             {hasGaps
               ? "Adding any of the below sharpens what the engine can propose."

@@ -73,9 +73,20 @@ export function MoveSheet({
     window.addEventListener("keydown", onKey);
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    // P1-62 (Batch 26) — the focus-trap picks first-DOM-focusable which
+    // is the close X. Design intent: user lands on a target-day radio.
+    // Explicitly focus the first non-source, non-disabled radio after
+    // the panel mounts.
+    const raf = requestAnimationFrame(() => {
+      const firstRadio = panelRef.current?.querySelector<HTMLInputElement>(
+        'input[type="radio"]:not(:disabled)',
+      );
+      firstRadio?.focus({ preventScroll: true });
+    });
     return () => {
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = prevOverflow;
+      cancelAnimationFrame(raf);
     };
   }, [open, onClose]);
 

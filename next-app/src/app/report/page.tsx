@@ -160,7 +160,13 @@ export default function ReportPage() {
   const extraSlugs = activeProgramIds.filter((s) => s !== primarySlug);
 
   return (
-    <div className="space-y-6 pt-4 report-root">
+    // P0-6 (Batch 26) — added `min-w-0 overflow-x-hidden` defensively.
+    // Mobile-UX audit flagged the report as force-zooming on 393 px;
+    // without a concrete overflow source in the DOM inventory, the
+    // pragmatic fix is to cap the root so nothing inside can push the
+    // page beyond the viewport. Charts (Recharts ResponsiveContainer)
+    // and mobile-cards (sm:hidden) already respect the container.
+    <div className="space-y-6 pt-4 report-root min-w-0 overflow-x-hidden">
       <header className="no-print space-y-3">
         <div className="flex items-center gap-2">
           <Link
@@ -933,7 +939,7 @@ function ArcSummarySection({
                   ? "bg-green/20 text-green"
                   : verdict.tone === "amber"
                     ? "bg-amber/20 text-amber"
-                    : "bg-red/20 text-red"
+                    : "bg-red/20 text-red-strong"
               }`}
             >
               {verdict.label}

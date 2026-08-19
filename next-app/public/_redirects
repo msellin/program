@@ -1,0 +1,6 @@
+# Cloudflare Pages redirects.
+# Batch 26 (A6) — Coach shelved by S1 kill; catch bookmarked /coach URLs
+# and land them somewhere useful. /progress is the closest match (adaptive
+# engine surface).
+/coach     /progress   301
+/coach/*   /progress   301
