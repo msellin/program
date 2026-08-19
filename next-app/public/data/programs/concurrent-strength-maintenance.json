@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "generated": "2026-08-12",
-  "status": "REFERENCED",
+  "status": "REVIEWED",
   "status_note": "First-authored draft. Evidence base is fully sourced from whitepaper 02_concurrent_training.md — 32 primary citations. Weekly template + block structure are the initial engineering proposal; will refine after beta feedback.",
   "generation_strategy": "correlated_tier",
   "goals": {
@@ -1008,5 +1008,26 @@
         "user_action_paid": "Connect Garmin / Whoop / Apple Watch — HR auto-logs."
       }
     ]
-  }
+  },
+  "reviewed_by": {
+    "name": "Terav specialist audit agent",
+    "role": "domain review · concurrent training + interference",
+    "date": "2026-08-19",
+    "scope": "citations, Berryman engineering-choice documentation, interference-cost claims, deload placement"
+  },
+  "reviewed_at": "2026-08-19",
+  "review_evidence": [
+    "dev/archive/citations-under-review-2026-08-17.md",
+    "dev/audits/programs/2026-08-18-concurrent-strength-maintenance-comprehensive.md",
+    "dev/audits/programs/2026-08-19-concurrent-strength-maintenance-delta.md",
+    "dev/audits/programs/2026-08-19-concurrent-strength-maintenance-delta-2.md"
+  ],
+  "status_history": [
+    {
+      "from": "REFERENCED",
+      "to": "REVIEWED",
+      "date": "2026-08-19",
+      "note": "C-1/C-2/C-3 closed; Berryman engineering-choice entry added 2026-08-19. Path A Tier 1+2 fixes clean. Amber-week schedule swap (F12) tracked separately as authoring feature, not blocker."
+    }
+  ]
 }

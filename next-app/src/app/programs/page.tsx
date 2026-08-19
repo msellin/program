@@ -53,7 +53,12 @@ export default function ProgramCatalogPage() {
     // context. The program still loads if the user has active_program_id set
     // to it (legacy accounts, direct URL, or Margus himself), but it doesn't
     // show up in browse.
-    const publicOnly = manifest.programs.filter((p) => !p.personal);
+    // P0-9 (F10 Batch 31, 2026-08-19): DRAFT / PROVISIONAL programs also
+    // hidden from the public catalog. Same filter — they render on direct
+    // URL for authoring but never leak past the trust surface.
+    const publicOnly = manifest.programs.filter(
+      (p) => !p.personal && p.status !== "DRAFT" && p.status !== "PROVISIONAL",
+    );
     const list = filter === "all"
       ? publicOnly
       : publicOnly.filter((p) => p.category === filter);
@@ -101,7 +106,9 @@ export default function ProgramCatalogPage() {
   // program. Founder observed 2026-08-17 that "HYROX prep" and
   // "Left/right & mobility" chips existed but were empty — a promise-then-
   // deliver-nothing pattern. Hidden until they have at least one program.
-  const publicPrograms = manifest.programs.filter((p) => !p.personal);
+  const publicPrograms = manifest.programs.filter(
+    (p) => !p.personal && p.status !== "DRAFT" && p.status !== "PROVISIONAL",
+  );
   const populatedCategoryIds = new Set<string>(publicPrograms.map((p) => p.category));
 
   const filterOptions: Array<{ id: FilterCat; label: string }> = [
@@ -127,6 +134,15 @@ export default function ProgramCatalogPage() {
           <span className="font-mono uppercase text-amber">referenced</span> = every claim cites a paper, simulator harness passes.{" "}
           <span className="font-mono uppercase text-slate">reviewed</span> = domain specialist has audited the citations against literature.{" "}
           <span className="font-mono uppercase text-green">verified</span> = ≥5 users completed the arc with subjective success.
+        </p>
+        {/* F10 Batch 31 · honesty callout below the legend. Names the actual
+            distribution so users can see the ladder isn't marketing — some
+            programs will earn REVIEWED and some may never, depending on
+            specialist availability and user completion volume. */}
+        <p className="text-[12px] text-muted pt-1 leading-relaxed italic">
+          Every program ships at least REFERENCED. Higher tiers unlock as
+          specialists audit and as users complete arcs — that&apos;s the ladder,
+          not a marketing gradient.
         </p>
       </header>
 
@@ -226,13 +242,12 @@ export default function ProgramCatalogPage() {
  * confidence. See legend on this page for meaning.
  */
 function StatusChip({ status }: { status?: string }) {
-  if (!status || status === "draft") return null;
+  // DRAFT / draft / PROVISIONAL programs are hidden from the catalog by the
+  // publicOnly filter above; the chip returning null here is defensive belt-
+  // and-suspenders in case a DRAFT program leaks through some other surface
+  // (super-admin view, direct URL, /account list). No visible chip.
+  if (!status || status === "draft" || status === "DRAFT" || status === "PROVISIONAL") return null;
   const map: Record<string, { label: string; className: string; title: string }> = {
-    PROVISIONAL: {
-      label: "provisional",
-      className: "bg-amber/20 text-amber",
-      title: "Legacy status — being migrated to Referenced. Same meaning: every claim cites a paper.",
-    },
     REFERENCED: {
       label: "referenced",
       className: "bg-amber/20 text-amber",

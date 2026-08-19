@@ -1382,20 +1382,59 @@ export const programManifestEntrySchema = z.object({
   what_youll_achieve: z.string(),
   retest: z.string().optional(),
   tags: z.array(z.string()).optional(),
-  // Governance model (B1, 2026-08-17):
-  //   draft       — authored but not shipped to catalog
+  // Governance model (B1, 2026-08-17; DRAFT replaces PROVISIONAL 2026-08-19 P0-9):
+  //   DRAFT       — authored but not shipped to public catalog. Hidden by the
+  //                 same filter as `personal:true`. Was PROVISIONAL — legend
+  //                 didn't cover it and copy leaked debug intent.
+  //   draft       — legacy lowercase alias for DRAFT (schema back-compat)
   //   REFERENCED  — default shipped state; every claim cites a paper,
-  //                 simulator harness passes across archetypes. Retires
-  //                 PROVISIONAL (which incorrectly implied "waiting for
-  //                 clinician sign-off" — wrong bar per Terav's positioning).
-  //   REVIEWED    — a domain-specialist agent audited the program
-  //                 against its whitepaper; cited studies match claims,
-  //                 drill sequencing evidence-backed
+  //                 simulator harness passes across archetypes.
+  //   REVIEWED    — a domain-specialist audited the program against its
+  //                 whitepaper; cited studies match claims, drill sequencing
+  //                 evidence-backed. `reviewed_by` + `review_evidence[]`
+  //                 required.
   //   VERIFIED    — ≥5 beta users completed the arc with subjective success
   //   stable      — legacy alias for VERIFIED; kept for schema back-compat
+  //   PROVISIONAL — legacy alias for DRAFT; kept for schema back-compat while
+  //                 program JSONs are migrated.
   status: z
-    .enum(["draft", "PROVISIONAL", "REFERENCED", "REVIEWED", "VERIFIED", "stable"])
+    .enum(["DRAFT", "draft", "PROVISIONAL", "REFERENCED", "REVIEWED", "VERIFIED", "stable"])
     .optional(),
+  /**
+   * F10 Batch 31 · promotion attribution. Set on REVIEWED programs to name
+   * the specialist who audited + the date + which files anchor the review.
+   * Absent on REFERENCED programs (no external review yet).
+   */
+  reviewed_by: z
+    .object({
+      name: z.string(),
+      role: z.string(),
+      date: z.string(),
+      scope: z.string().optional(),
+    })
+    .optional(),
+  reviewed_at: z.string().optional(),
+  /**
+   * Append-only history of status transitions. Every promotion records
+   * from→to + date + optional note. Enables the "See review trail" affordance
+   * on the preview page.
+   */
+  status_history: z
+    .array(
+      z.object({
+        from: z.string(),
+        to: z.string(),
+        date: z.string(),
+        note: z.string().optional(),
+      }),
+    )
+    .optional(),
+  /**
+   * Anchor files that back the current status. For REVIEWED programs this
+   * is the list of audit / delta / review reports the promotion consulted.
+   * Enables provenance without inlining the audit content in program JSON.
+   */
+  review_evidence: z.array(z.string()).optional(),
   featured: z.boolean().optional(),
   /**
    * When true, this program is authored for one specific user's clinical context

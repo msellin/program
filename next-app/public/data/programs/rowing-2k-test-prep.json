@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "generated": "2026-08-13",
-  "status": "REFERENCED",
+  "status": "REVIEWED",
   "status_note": "First-authored 6-week race-prep block for the Concept2 2K row test. Evidence base fully sourced from whitepaper 01_aerobic_physiology.md — 28 primary citations, with 3 rowing-specific studies flagged for pre-launch URL verification.",
   "generation_strategy": "correlated_tier",
   "positioning": "main_track",
@@ -992,6 +992,26 @@
       "cadence_weeks": 3,
       "trigger": "user_initiated",
       "purpose": "Half-way check between Week-1 base 2K test and end-block retest. Two baselines feed the classifier."
+    }
+  ],
+  "reviewed_by": {
+    "name": "Terav specialist audit agent",
+    "role": "domain review · race-prep + threshold + taper",
+    "date": "2026-08-19",
+    "scope": "citations, R-3 Das 2019 drop + Steinacker 1998 addition, R-1 Bosquet taper anchor, HERITAGE Week-3 mid-block"
+  },
+  "reviewed_at": "2026-08-19",
+  "review_evidence": [
+    "dev/archive/citations-under-review-2026-08-17.md",
+    "dev/audits/programs/2026-08-18-rowing-2k-test-prep-comprehensive.md",
+    "dev/audits/programs/2026-08-19-rowing-2k-test-prep-delta.md"
+  ],
+  "status_history": [
+    {
+      "from": "REFERENCED",
+      "to": "REVIEWED",
+      "date": "2026-08-19",
+      "note": "R-1/R-2/R-4 shipped; R-3 Das drop + Proteau inline fix executed in HOLD-fix pass 2026-08-19. Split references[] schema drift merged into evidence_base. HERITAGE data flow now works via BUG-7 sibling-inheritance fix."
     }
   ]
 }

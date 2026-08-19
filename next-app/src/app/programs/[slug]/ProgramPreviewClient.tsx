@@ -186,13 +186,12 @@ export function ProgramPreviewClient({ slug }: Props) {
             </span>
           ) : null}
           {(() => {
-            // B1 (2026-08-17): 3-tier governance model. Same map as
-            // programs/page.tsx StatusChip; kept in-line here rather than
-            // extracting shared to avoid a new component for one caller.
+            // F10 Batch 31 (2026-08-19): DRAFT/PROVISIONAL now hidden from
+            // catalog + chip returns null. REFERENCED / REVIEWED / VERIFIED
+            // shown. Legacy `stable` aliases to VERIFIED.
             const s = entry.status;
-            if (!s || s === "draft") return null;
+            if (!s || s === "draft" || s === "DRAFT" || s === "PROVISIONAL") return null;
             const map: Record<string, { label: string; className: string; title: string }> = {
-              PROVISIONAL: { label: "provisional", className: "bg-amber/20 text-amber", title: "Legacy status — being migrated to Referenced. Same meaning: every claim cites a paper." },
               REFERENCED: { label: "referenced", className: "bg-amber/20 text-amber", title: "Default state: every claim cites a paper. Simulator harness passes across archetypes." },
               REVIEWED: { label: "reviewed", className: "bg-slate/20 text-slate", title: "Domain-specialist audit complete: cited studies verified against literature. Drill sequencing evidence-backed." },
               VERIFIED: { label: "verified", className: "bg-green/20 text-green", title: "Field-verified: ≥5 beta users completed the arc with subjective success." },
@@ -216,6 +215,31 @@ export function ProgramPreviewClient({ slug }: Props) {
           ) : null}
         </div>
         <p className="text-sm text-muted">{entry.short_description}</p>
+        {/* F10 Batch 31 · attribution row for REVIEWED programs. Names the
+            reviewer + date + scope so the trust tier isn't a bare chip —
+            it's an audit trail. review_evidence[] entries are audit files
+            in the repo; we don't link them (privacy) but we name them. */}
+        {(program.status === "REVIEWED" || program.status === "VERIFIED") &&
+        program.reviewed_by ? (
+          <div className="rounded border border-slate/40 border-l-4 border-l-slate bg-surface p-3 text-[14px] mt-2 space-y-1">
+            <p className="text-strong">
+              <span className="font-semibold">Reviewed by</span>{" "}
+              {program.reviewed_by.name}
+              {program.reviewed_by.role ? (
+                <span className="text-muted"> · {program.reviewed_by.role}</span>
+              ) : null}
+            </p>
+            <p className="text-[12px] text-muted">
+              {program.reviewed_by.date}
+              {program.reviewed_by.scope ? (
+                <> · scope: {program.reviewed_by.scope}</>
+              ) : null}
+              {program.review_evidence?.length ? (
+                <> · {program.review_evidence.length} anchor files on record</>
+              ) : null}
+            </p>
+          </div>
+        ) : null}
         {entry.personal ? (
           <p className="text-[14px] text-muted italic border-l-2 border-slate/40 pl-3 mt-2">
             Authored for one specific clinical context. Not marketed as an evidence-backed
