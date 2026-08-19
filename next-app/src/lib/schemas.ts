@@ -35,6 +35,13 @@ export const drillRetestMetricSchema = z.object({
 export const exerciseSchema = z.object({
   id: z.string(),
   name: z.string(),
+  /**
+   * P1-79 (2026-08-19) — the parenthetical modifier extracted out of
+   * `name` so cards can render it as a subtitle instead of truncating
+   * "Active hang (scap-engaged)" mid-word. Optional; only present on
+   * exercises whose original name had a `(...)` variant clause.
+   */
+  variant: z.string().optional(),
   name_et: z.string().optional(),
   category: z.string(),
   targets: z.array(z.string()).optional(),

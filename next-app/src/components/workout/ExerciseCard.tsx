@@ -183,6 +183,21 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
               >
                 {exercise.name}
               </h3>
+              {/* P1-79 (2026-08-19) — variant subtitle for exercises that
+                  had a parenthetical modifier in the original name
+                  ("Active hang (scap-engaged)"). Rendered as a demoted
+                  second line below the base name so the modifier stays
+                  visible without truncation. */}
+              {exercise.variant ? (
+                <p
+                  className={cn(
+                    "text-[12px] text-muted mt-0.5 line-clamp-1",
+                    done && "opacity-60",
+                  )}
+                >
+                  {exercise.variant}
+                </p>
+              ) : null}
               {previewText ? (
                 <p className="font-mono text-[12px] text-slate mt-0.5 line-clamp-2">{previewText}</p>
               ) : null}

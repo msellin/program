@@ -53,9 +53,14 @@ export function ExerciseDetailsSheet({
       >
         <header className="sticky top-0 flex items-start justify-between gap-3 px-4 py-3 border-b border-line bg-surface">
           <div className="min-w-0">
-            <h3 id={titleId} className="text-[15px] font-semibold text-strong truncate">
+            <h3 id={titleId} className="text-[15px] font-semibold text-strong">
               {exercise.name}
             </h3>
+            {/* P1-79 (2026-08-19) — variant subtitle. Renders before the
+                dose/scheme so hierarchy reads: name → variant → dose. */}
+            {exercise.variant ? (
+              <p className="text-[12px] text-muted mt-0.5">{exercise.variant}</p>
+            ) : null}
             {(dose || scheme) ? (
               <p className="text-[14px] text-muted mt-0.5 truncate">
                 {[dose, scheme].filter(Boolean).join(" · ")}
