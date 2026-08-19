@@ -43,6 +43,7 @@ export default function TodayPage() {
   const activeProgramIds = useStore((s) => s.store.user_profile?.active_program_ids);
   const userProfile = useStore((s) => s.store.user_profile);
   const logs = useStore((s) => s.store.logs);
+  const store = useStore((s) => s.store);
   // Phase C · block-object rebuild — flag gate + block-object read.
   // See dev/active/block-object-rebuild-2026-08-18.md §5-§7.
   const blockObjectOn = useStore((s) => isBlockObjectOn(s.store));
@@ -166,7 +167,7 @@ export default function TodayPage() {
     const phaseForProg = i === 0 ? phase : activePhaseFor(p, activeDate, userProfile);
     const composed = overrideBlocks && overrideBlocks.length
       ? overrideBlocks
-      : blocksForDate(p, userProfile, phaseForProg, activeDate, byId);
+      : blocksForDate(p, userProfile, phaseForProg, activeDate, byId, store);
     return { program: p, blocks: composed, scheduled: [] as ScheduledBlock[] };
   });
   const allBlocks = groups.flatMap((g) => g.blocks);

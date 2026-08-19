@@ -378,7 +378,7 @@ export async function runSimulationV2(
     });
 
     await page.evaluate(
-      ({ dateISO, decision, blockIds, aerobicRuns, symptoms, derivedState, note, tms, factor, baseRpe, jitter, itemsByBlock, slug, uid, tier }) => {
+      ({ dateISO, decision, blockIds, aerobicRuns, symptoms, derivedState, note, tms, factor, baseRpe, jitter, itemsByBlock, slug, extras, uid, tier }) => {
         // Read local, or start from a valid baseline if StoreHydrator wiped
         // us during the initial page.goto (see: reset-on-fresh-mount bug).
         const raw = localStorage.getItem("program.log.v2");
@@ -396,11 +396,13 @@ export async function runSimulationV2(
             };
         // Re-stamp user_profile/tms/program every day — the reset can wipe
         // user_profile.active_program_id even when logs survive.
+        // Preserve multi-track state: primary + extras, deduped.
+        const allSlugs = Array.from(new Set([slug, ...(extras ?? [])]));
         store.user_profile = {
           ...(store.user_profile ?? {}),
           uid: uid ?? store.user_profile?.uid,
           active_program_id: slug,
-          active_program_ids: [slug],
+          active_program_ids: allSlugs,
           active_program_started_at:
             store.user_profile?.active_program_started_at ?? new Date().toISOString(),
           tier: "beta_forever",
@@ -490,6 +492,7 @@ export async function runSimulationV2(
           blockIds.map((bid) => [bid, itemsForBlock(program, bid)]),
         ),
         slug: programSlug,
+        extras: additionalProgramSlugs,
         uid: sessionUid,
         tier: tier ?? null,
       },

@@ -246,12 +246,29 @@ export function proposedLoadMultiplier(sig: NoteSignals): {
     };
   }
   if (sig.fatigue === "elevated") {
-    const driftBit = sig.rpeDrift != null && sig.rpeDrift >= 1.5
-      ? " RPE drift across sets last session."
-      : " Fatigue signals in recent notes.";
+    // Attribute to what actually drove the signal, not a hardcoded
+    // "notes" string. Engine delta-2 caught: "Fatigue signals in recent
+    // notes" fired on personas with 0 notes because life_load ≥4 also
+    // triggers elevated. matches[] carries the real trigger names.
+    let attribution: string;
+    if (sig.rpeDrift != null && sig.rpeDrift >= 1.5) {
+      attribution = "RPE drift across sets last session.";
+    } else if (sig.matches.length > 0) {
+      // Prefer the most-informative match. life_load slider first because
+      // it's the most common non-note trigger for elevated.
+      const lifeLoad = sig.matches.find((m) => m.startsWith("life load"));
+      const cardio = sig.matches.find((m) => m.startsWith("cardio "));
+      const noteMatch = sig.matches.find((m) =>
+        ["high fatigue", "stiff/sore", "outside load", "pain"].includes(m),
+      );
+      const pick = lifeLoad ?? cardio ?? noteMatch ?? sig.matches[0];
+      attribution = `Signal: ${pick}.`;
+    } else {
+      attribution = "Elevated fatigue signal.";
+    }
     return {
       multiplier: 0.95,
-      reason: `${driftBit} Consider trimming 5% from the top set.`,
+      reason: `${attribution} Consider trimming 5% from the top set.`,
     };
   }
   return null;

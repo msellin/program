@@ -48,11 +48,51 @@ export function blocksForDate(
   phase: Phase | undefined,
   dateISO: string,
   drillsById?: DrillsById,
+  store?: Store,
 ): Block[] {
-  if (program.generation_strategy === "multi_dimensional") {
-    return multiDimensionalBlocksForDate(program, profile, dateISO, drillsById);
+  const blocks =
+    program.generation_strategy === "multi_dimensional"
+      ? multiDimensionalBlocksForDate(program, profile, dateISO, drillsById)
+      : strengthBlocksForDate(program, phase, dateISO, profile);
+  if (store) return applyProgramSoftening(blocks, program, dateISO, store);
+  return blocks;
+}
+
+/**
+ * Program-level softening filters. Adaptive-engine hooks that programs
+ * declare in JSON but that the engine actually consumes at block-
+ * resolution time.
+ *
+ * Current hooks:
+ *   - CSM amber-week: if ≥ 3 amber days in the trailing 7 days,
+ *     drop `block_4x4_row` for the next 7 days.
+ *     (concurrent-strength-maintenance.json:541.)
+ *
+ * Deterministic + read-only; can be re-evaluated at any time. No store
+ * mutation. If the user Accepts an explicit proposal later, that write
+ * lands as a scheduled_blocks state change and overrides this filter.
+ */
+function applyProgramSoftening(
+  blocks: Block[],
+  program: Program,
+  dateISO: string,
+  store: Store,
+): Block[] {
+  if (program.slug !== "concurrent-strength-maintenance") return blocks;
+
+  // Amber-window: count amber derived_states in trailing 7 days
+  // (inclusive of dateISO). Applies to days within 7 of the trigger.
+  const today = new Date(dateISO + "T00:00:00");
+  let amberCount = 0;
+  for (let back = 0; back < 7; back++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - back);
+    const key = d.toISOString().slice(0, 10);
+    if (store.logs?.[key]?.derived_state === "amber") amberCount++;
   }
-  return strengthBlocksForDate(program, phase, dateISO, profile);
+  if (amberCount < 3) return blocks;
+
+  return blocks.filter((b) => b.id !== "block_4x4_row");
 }
 
 /**

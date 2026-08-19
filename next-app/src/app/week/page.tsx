@@ -37,6 +37,7 @@ export default function WeekPage() {
   const [programs, setPrograms] = useState<Program[]>([]);
   const [offset, setOffset] = useState(0);
   const hydrated = useStore((s) => s.hydrated);
+  const store = useStore((s) => s.store);
   const skipped = useStore((s) => s.store.skipped);
   const overrides = useStore((s) => s.store.scheduled_overrides);
   const logs = useStore((s) => s.store.logs);
@@ -278,7 +279,7 @@ export default function WeekPage() {
             } else {
               const perProgram = programs.map((p) => ({
                 slug: activeSlugs[programs.indexOf(p)],
-                blocks: blocksForDate(p, userProfile, activePhaseFor(p, dateISO, userProfile), dateISO),
+                blocks: blocksForDate(p, userProfile, activePhaseFor(p, dateISO, userProfile), dateISO, undefined, store),
               }));
               contributingProgramCount = perProgram.filter((g) => g.blocks.length > 0).length;
               displayBlocks = perProgram.flatMap((g) =>
