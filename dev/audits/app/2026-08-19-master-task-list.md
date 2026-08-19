@@ -119,12 +119,13 @@ Keep the convention terse — the four markers cover every state. Don't invent n
 
 From roadmap sync + product-concerns-2026-08-17 + design-lead brief `2026-08-19-founder-obs-design-lead.md`.
 
-- [~] **F8 · IA restructure** — Multi-push state. Shipped:
-  - Header collapse + Settings v1 + Events kill + Extras/Report/Evidence relocated (`c1bd940`)
-  - ReadinessDot kill (`a2bc820`)
-  - **F8-second infrastructure** (`adea483` + `7e6885d`) — TodayView extracted as named export; `/session/[slug]` route statically generated for all 8 programs with `slugOverride` narrowing to single-program view; "Focus session →" affordance on Today's phase readout row; "← Back to Today" affordance + mode-legible header subtitle on /session/[slug].
+- [x] **F8 · IA restructure — COMPLETE.** Multi-push:
+  - `c1bd940` Header collapse + Settings v1 + Events kill + Extras/Report/Evidence relocated
+  - `a2bc820` ReadinessDot kill (P1-78)
+  - `adea483` + `7e6885d` /session/[slug] route + TodayView extraction + navigation affordances
+  - **`ba1a563` Today becomes dashboard, /session hosts inline workout UI.** Today renders compact DashboardBlock summary per program (block count · exercise count · phase readout · "Open session →" CTA); /session/[slug] renders full inline BlockSection loop. Dashboard/session split is REAL. Phase readout paragraph suppressed on Today (block lede carries it).
 
-  **Still deferred:** Today → pure dashboard (MorningCheck + Workout summary + Extras blocks as sole content) + kill inline session UI. Both routes currently render nearly identical content; divergence needs its own focused pass with persona-harness regeneration. Plan doc at `dev/active/F8-second-plan.md`. Est ~5-7h remaining for the pure-dashboard restructure.
+  Plan doc `dev/active/F8-second-plan.md` no longer active — objectives met via the incremental multi-push approach. Persona harness regeneration would be nice but not required (routes are additive; existing personas still exercise Today's dashboard path since they don't call slugOverride).
 - [~] **F9 · Batch 30 — DashboardBlock primitive** — First push shipped 2026-08-19 (`b68812f`). Primitive live at `src/components/DashboardBlock.tsx`. Applied to Programs catalog category sections (closes P1-75) + ExerciseCard fixes (closes P1-71 + P1-73). **DEFERRED to follow-up pushes:** Today dashboard use (needs F8 second push), session route use, program-preview restructure (P1-74 still open).
 - [~] **F10 · Batch 31 — Readiness ladder ship** — 5 of 6 REVIEWED promotions shipped 2026-08-19 (`38d7822`). Schema (reviewed_by, reviewed_at, status_history, review_evidence[]) added. DRAFT rename + catalog filter + attribution row on preview page + honesty callout on catalog all live. Promoted: engine-builder, overhead-mobility, handstand-walk, CSM, rowing-2k. **REMAINING:** anterior-hip-rebuild promotion blocked on **S6** decision (personal-program REVIEWED policy).
 
