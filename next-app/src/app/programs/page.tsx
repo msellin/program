@@ -7,6 +7,7 @@ import { loadProgramManifest } from "@/lib/data-loader";
 import { useStore } from "@/lib/useStore";
 import { cn } from "@/lib/utils";
 import { DashboardBlock } from "@/components/DashboardBlock";
+import { InfoSheet } from "@/components/InfoSheet";
 import type { ProgramManifest, ProgramManifestEntry } from "@/lib/schemas";
 
 // F9 Batch 30 · category → accent tone mapping for the DashboardBlock left
@@ -47,6 +48,7 @@ export default function ProgramCatalogPage() {
   const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<FilterCat>("all");
   const [sort, setSort] = useState<SortOrder>("default");
+  const [ladderSheetOpen, setLadderSheetOpen] = useState(false);
   const activeProgramId = useStore((s) => s.store.user_profile?.active_program_id);
   const activeProgramIds = useStore((s) => s.store.user_profile?.active_program_ids);
   const activeSet = new Set([
@@ -144,10 +146,35 @@ export default function ProgramCatalogPage() {
             affordance for the catalog. 11px muted was invisible on
             iPhone SE. Promoted to 12px ink; mono-caps colored terms
             keep their brightness. */}
+        {/* P1-77 (2026-08-19) — tap any tier word to open the deeper
+            "How programs earn each status" sheet. Was inline-legend
+            only; the sheet adds the full definitional detail without
+            crowding the catalog surface. */}
         <p className="text-[12px] text-ink pt-1 leading-relaxed">
-          <span className="font-mono uppercase text-amber">referenced</span> = every claim cites a paper, simulator harness passes.{" "}
-          <span className="font-mono uppercase text-slate">reviewed</span> = domain specialist has audited the citations against literature.{" "}
-          <span className="font-mono uppercase text-green">verified</span> = ≥5 users completed the arc with subjective success.
+          <button
+            type="button"
+            onClick={() => setLadderSheetOpen(true)}
+            className="font-mono uppercase text-amber underline-offset-2 hover:underline"
+          >
+            referenced
+          </button>{" "}
+          = every claim cites a paper, simulator harness passes.{" "}
+          <button
+            type="button"
+            onClick={() => setLadderSheetOpen(true)}
+            className="font-mono uppercase text-slate underline-offset-2 hover:underline"
+          >
+            reviewed
+          </button>{" "}
+          = domain specialist has audited the citations against literature.{" "}
+          <button
+            type="button"
+            onClick={() => setLadderSheetOpen(true)}
+            className="font-mono uppercase text-green underline-offset-2 hover:underline"
+          >
+            verified
+          </button>{" "}
+          = ≥5 users completed the arc with subjective success.
         </p>
         {/* F10 Batch 31 · honesty callout below the legend. Names the actual
             distribution so users can see the ladder isn't marketing — some
@@ -244,6 +271,60 @@ export default function ProgramCatalogPage() {
       <footer className="pt-6 border-t border-line-soft text-[14px] text-muted italic">
         More programs land as they&apos;re authored.
       </footer>
+
+      {/* P1-77 (2026-08-19) — long-form disclosure sheet. Content per
+          the copy-clarity audit's Ginny Redish framework: users scan
+          headings first, then read the tier that matters. */}
+      {ladderSheetOpen ? (
+        <InfoSheet
+          title="How programs earn each status"
+          onClose={() => setLadderSheetOpen(false)}
+        >
+          <section className="space-y-2">
+            <p className="font-mono text-[11px] uppercase tracking-widest text-amber">
+              Referenced — default state
+            </p>
+            <ul className="list-disc pl-5 space-y-1 text-[14px]">
+              <li>Every claim in the program cites a peer-reviewed paper.</li>
+              <li>
+                The adaptive engine passes the simulator harness across
+                archetypes (novice, intermediate, advanced) without stalling.
+              </li>
+              <li>Written by Terav; not reviewed by an outside specialist.</li>
+            </ul>
+          </section>
+          <section className="space-y-2">
+            <p className="font-mono text-[11px] uppercase tracking-widest text-slate">
+              Reviewed — external audit complete
+            </p>
+            <ul className="list-disc pl-5 space-y-1 text-[14px]">
+              <li>
+                A named domain specialist (physiotherapist, coach, or sport
+                scientist) has audited the citations against current literature.
+              </li>
+              <li>They record which references they checked and on what date.</li>
+              <li>Not endorsed — audited. They flag anything they&apos;d change.</li>
+            </ul>
+          </section>
+          <section className="space-y-2">
+            <p className="font-mono text-[11px] uppercase tracking-widest text-green">
+              Verified — 5+ users completed the arc
+            </p>
+            <ul className="list-disc pl-5 space-y-1 text-[14px]">
+              <li>Five or more real users have completed the full arc.</li>
+              <li>Each rated the outcome vs. what the program promised.</li>
+              <li>This is field evidence, not endorsement.</li>
+            </ul>
+          </section>
+          <p className="text-[13px] text-muted italic pt-1 border-t border-line-soft">
+            Every program starts at Referenced. We don&apos;t ship anything
+            below that. Some programs will never leave Referenced (small
+            user base = no Verified) and that&apos;s honest. Personal
+            programs (author&apos;s own clinical context) sit outside this
+            ladder entirely — see the &ldquo;personal&rdquo; badge instead.
+          </p>
+        </InfoSheet>
+      ) : null}
     </div>
   );
 }
