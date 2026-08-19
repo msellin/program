@@ -1,23 +1,36 @@
 # Concurrent-tracks Today-view audit
 
-**Status update 2026-08-18:** `persona-concurrent` definition landed in
-`next-app/tests/e2e/harness/personas.ts`, along with a new
-`Persona.additionalProgramSlugs` field. Primary + secondary programs
-declared (anterior-hip-rebuild + engine-builder) so the scope below is
-half-satisfied. Remaining work:
-1. Extend `simulator-v2.ts` to activate multiple programs (call
-   `addSecondaryProgram` for each additionalProgramSlugs entry; per-day
-   scheduling logic to route logs to the right program based on which
-   scheduled work that day).
-2. Run the harness against `persona-concurrent` to produce artifacts.
-3. Dispatch the 3 specialist agents (mobile-ux, visual-craft, copy-clarity)
-   against the artifacts.
-4. Product-design-lead follow-up brief.
+**Closed 2026-08-19 (S2 walk-through, Batch 28).** The four "remaining work"
+items shipped implicitly during Batches 10-27:
 
-Estimated remaining: ~3-4h. Runnable when the E2E harness has a Supabase-auth
-setup or when the founder confirms the flow to run it manually.
+1. **Simulator-v2 multi-program activation** — persona-concurrent
+   (anterior-hip + engine-builder) and persona-multitrack (engine-builder
+   + secondary) both run cleanly through `simulator-v2.ts`. Full 15/15
+   personas pass in the 2026-08-19 harness rerun.
+2. **Harness artifacts against persona-concurrent** — fresh in
+   `next-app/tests/e2e/artifacts/personas/persona-concurrent/` (mtime
+   2026-08-19 15:03) and persona-multitrack (15:12).
+3. **Three specialist agents against the artifacts** — Batch 25 audit
+   round dispatched all 6 UX/UI agents against all 15 personas. mobile-ux
+   flagged persona-multitrack density findings; visual-craft covered the
+   `PerProgramAdherenceCard`; copy-clarity covered the multi-track surfaces.
+   Reports at `dev/audits/app/2026-08-19-app-audit-*-batch25.md`.
+4. **Product-design-lead follow-up brief** — the F2/F5/F6/F7 brief at
+   `dev/audits/app/2026-08-19-design-brief-features.md` covered the
+   multi-track hand-offs (Pause, Extend, `/account` primary-picker for
+   ≥ 2 programs). Batches 22-24 shipped the resulting UI: F3
+   switch-program ConfirmSheet, F5 GraduationCard 4-verb with
+   `pauseProgram` store action, F7 `/account` primary picker (only shown
+   when ≥ 2 active).
 
-**Original brief follows.** Surfaced 2026-08-17 from founder screenshots of a superadmin-added secondary program.
+Additional multi-track work not scoped in this plan but shipped:
+- `PerProgramAdherenceCard` (Batch 5) — per-program tri-color adherence bar
+- `PerProgramActions` (Batches 10-14) — per-program Skip/Move
+- `CrossTrackWeekTile` — Week per-program dots
+- `persona-concurrent` + `persona-multitrack` in the harness
+
+**Original brief follows for archival reference.** Surfaced 2026-08-17
+from founder screenshots of a superadmin-added secondary program.
 
 ## Why this matters
 

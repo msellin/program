@@ -122,9 +122,12 @@ export default function AccountPage() {
         </div>
       </div>
 
+      {/* P2-23 (Batch 28) — the four /account groups (Sign-in, Programs,
+          Extensions, Data & privacy) now use <section aria-labelledby>
+          so SR users get a landmark to jump between. */}
       {/* Sign-in section — currently just email, change deferred. */}
-      <div>
-        <p className="font-mono text-[10px] uppercase tracking-widest text-muted mb-2">
+      <section aria-labelledby="acct-signin">
+        <p id="acct-signin" className="font-mono text-[10px] uppercase tracking-widest text-muted mb-2">
           Sign-in
         </p>
         <button
@@ -138,13 +141,13 @@ export default function AccountPage() {
           </div>
           <ChevronRight size={16} className="text-muted flex-shrink-0" />
         </button>
-      </div>
+      </section>
 
       {/* Primary-program picker — only surfaces for multi-program users.
           Single-program users have nothing to pick from. */}
       {multiProgram && manifest ? (
-        <div>
-          <p className="font-mono text-[10px] uppercase tracking-widest text-muted mb-2">
+        <section aria-labelledby="acct-programs">
+          <p id="acct-programs" className="font-mono text-[10px] uppercase tracking-widest text-muted mb-2">
             Programs
           </p>
           <button
@@ -158,7 +161,7 @@ export default function AccountPage() {
             </div>
             <ChevronRight size={16} className="text-muted flex-shrink-0" />
           </button>
-        </div>
+        </section>
       ) : null}
 
       {/* F1 (Batch 25) — extensions surface. Only renders when at least
@@ -168,8 +171,8 @@ export default function AccountPage() {
           §Cross-feature coherence chose /account (not Today) as the
           undo home so the graduation card stays celebratory. */}
       {extendedPrograms.length > 0 ? (
-        <div>
-          <p className="font-mono text-[10px] uppercase tracking-widest text-muted mb-2">
+        <section aria-labelledby="acct-extensions">
+          <p id="acct-extensions" className="font-mono text-[10px] uppercase tracking-widest text-muted mb-2">
             Extensions
           </p>
           <ul className="rounded border border-line-soft bg-surface divide-y divide-line-soft">
@@ -208,13 +211,13 @@ export default function AccountPage() {
               </li>
             ))}
           </ul>
-        </div>
+        </section>
       ) : null}
 
       {/* Data & privacy — Export + Delete. Delete lives here exclusively;
           the prior Profile-footer Danger-zone disclosure is gone. */}
-      <div>
-        <p className="font-mono text-[10px] uppercase tracking-widest text-muted mb-2">
+      <section aria-labelledby="acct-data">
+        <p id="acct-data" className="font-mono text-[10px] uppercase tracking-widest text-muted mb-2">
           Data & privacy
         </p>
         <div className="rounded border border-line-soft bg-surface divide-y divide-line-soft">
@@ -242,11 +245,14 @@ export default function AccountPage() {
           </button>
         </div>
         {deleteError ? (
-          <p className="text-[12px] text-red border-l-4 border-red pl-2 mt-2">
+          <p
+            role="alert"
+            className="text-[12px] text-red border-l-4 border-red pl-2 mt-2"
+          >
             {deleteError}
           </p>
         ) : null}
-      </div>
+      </section>
 
       <footer className="pt-4 border-t border-line-soft">
         <nav

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Stethoscope, Layers } from "lucide-react";
@@ -27,6 +27,23 @@ function isPublic(pathname: string): boolean {
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() ?? "/";
   const publicRoute = isPublic(pathname);
+
+  // P2-26 (Batch 28) — focus <main> on every route change (including
+  // browser back/forward via router.back()). Next.js App Router doesn't
+  // restore focus after client-side navigation, so keyboard users lose
+  // focus to <body>. `useEffect` on pathname is the cheapest cross-
+  // route hook; skip the initial mount so hard-loads don't fight the
+  // browser's default focus behavior.
+  const didMount = useRef(false);
+  useEffect(() => {
+    if (!didMount.current) {
+      didMount.current = true;
+      return;
+    }
+    if (publicRoute) return;
+    const el = document.getElementById("main-content");
+    el?.focus({ preventScroll: true });
+  }, [pathname, publicRoute]);
   if (publicRoute) {
     return (
       <main className="max-w-[760px] mx-auto w-full px-4 sm:px-6 flex-1 py-6">

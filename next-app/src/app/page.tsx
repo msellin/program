@@ -1003,7 +1003,7 @@ function GraduationFeedback({ slug }: { slug: string | null }) {
             type="button"
             onClick={() => setRating(n)}
             aria-label={`Rate ${n} of 5`}
-            className={`w-9 h-9 rounded font-mono text-sm ${
+            className={`w-11 h-11 rounded font-mono text-sm ${
               rating === n
                 ? "bg-bronze text-ground"
                 : "border border-line text-muted hover:text-ink"

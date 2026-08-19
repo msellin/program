@@ -476,13 +476,18 @@ export default function WeekPage() {
                     the toggle button. The toggle now wraps only the
                     header + summary line. */}
                 <div className="flex-1 min-w-0">
+                  {/* P2-24 (Batch 28) — dropped the `aria-label` override
+                      that was reading as "Mon — expand details". Visible
+                      content (day name + date + chevron) is expressive
+                      enough; aria-expanded announces the state. Letting
+                      the accessible name compute from visible text keeps
+                      SR + visible content in sync. */}
                   <button
                     type="button"
                     onClick={() => toggleDay(dateISO)}
                     className="w-full text-left"
                     aria-expanded={isExpanded}
                     aria-controls={`weekday-${dateISO}`}
-                    aria-label={`${dayName} — ${isExpanded ? "collapse" : "expand"} details`}
                   >
                     <div className="flex items-baseline justify-between gap-3">
                       <div className="font-semibold flex items-baseline gap-2 flex-wrap">

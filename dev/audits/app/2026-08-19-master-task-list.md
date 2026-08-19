@@ -10,17 +10,17 @@
 
 These are **IDEAS, not action items**. The engine + rehab-first positioning overrides "cleaner is better," so Margus picks what to ship. Batches ship in 6-12h chunks — don't try to close the whole list in one sitting, and respect the "no UI churn between audits" rule (each shipped batch should stand on its own before the next audit re-scans). Real bugs go first because they're broken code the audits happened to surface; everything else is prioritized by user-visible ROI. Sizing (S/M/L/XL) is per item.
 
-**Counts by bucket (post-Batch-27):**
+**Counts by bucket (post-Batch-28):**
 
 - **Bugs:** 0 open
 - **P0:** 0 open
-- **P1:** 0 open — every category closed
-- **P2:** 10 items (~5-7h)
+- **P1:** 0 open
+- **P2:** 0 open — 10/10 shipped in Batch 28
 - **Features on-deck:** 0 open
-- **Strategic (founder decision):** 3 items (S2, S3, S4)
+- **Strategic (founder decision):** 2 items (S3, S4 — S2 closed via walk-through)
 - **Rejected:** 12 items — do not ship
 
-Total open surface: **10 P2 + 3 strategic + 12 rejected = 25 line items** (was 32 pre-Batch-27, 48 pre-Batch-26, 15 pre-audit-round). **All P0/P1/bugs closed across two audit rounds.** Only P2 polish + founder-decision items remain.
+Total open surface: **2 strategic + 12 rejected = 14 line items** (down from 110 pre-Batch-17). **Every audit finding shipped or explicitly rejected.** Only S3 (billing timing) + S4 (F5 correlation trigger) remain — both are founder decisions gated on future user counts.
 
 ---
 
@@ -79,16 +79,6 @@ Keep the convention terse — the four markers cover every state. Don't invent n
 
 ## Section D — P2 (defensible polish, post-Batch-25 round)
 
-- [ ] **P2-21** FirstRunBanner Close-X at `w-10 h-10` (40 px, below Apple 44). Bump to `w-11 h-11`. Source: mobile-ux-batch25 §P1 nits. Files: `next-app/src/components/FirstRunBanner.tsx`. Size: S
-- [ ] **P2-22** GraduationFeedback 1-5 rating buttons at `w-9 h-9` (36 px). Bump to `w-11 h-11`. Source: mobile-ux-batch25 §P1 nits. Files: `next-app/src/app/page.tsx` (GraduationFeedback component). Size: S
-- [ ] **P2-23** `<section aria-labelledby>` on `/account` four groups (Sign-in, Programs, Extensions, Data & privacy). Source: accessibility-batch25 §2.4. Files: `next-app/src/app/account/page.tsx:126, 146, 170, 203`. Size: S
-- [ ] **P2-24** Week row `aria-label={dayName — expand/collapse details}` overrides visible content from SR — drop the aria-label; let visible text compute. Source: accessibility-batch25 §7 Week row. Files: `next-app/src/app/week/page.tsx:484`. Size: S
-- [ ] **P2-25** `role="alert"` on `/account` delete error `<p>` + MoveSheet amber stacking warning — currently silent to SR. Source: accessibility-batch25 §6. Files: `next-app/src/app/account/page.tsx:231-234`, `next-app/src/components/workout/MoveSheet.tsx:161-166`. Size: S
-- [ ] **P2-26** Route-mount focus-to-h1 (via `tabIndex={-1}` + effect) so `router.back()` restores focus somewhere useful. Not batch-specific — applies to every route. Source: accessibility-batch25 §7. Files: `next-app/src/components/AppShell.tsx`. Size: M
-- [ ] **P2-27** Remove dead `role="gridcell"` on non-interactive Heatmap cells — ignored due to parent `role="img"`. Source: accessibility-batch25 §5. Files: `next-app/src/components/charts/Heatmap.tsx:183`. Size: S
-- [ ] **P2-28** Verify SymptomLoadChart summary `aria-label` exists (heatmap has one, chart may not). Source: accessibility-batch25 §5. Files: `next-app/src/components/charts/SymptomLoadChart.tsx`. Size: S
-- [ ] **P2-29** `/events` "Not available" — add explanatory `<p>` for context. Source: accessibility-batch25 §3. Files: `next-app/src/app/events/page.tsx`. Size: S
-- [ ] **P2-30** Landing hero "strength, skill, engine" omits mobility (Overhead Mobility ships REFERENCED). Undersell — trust-safe but a marketing asset stranded. Consider adding as fourth term or rephrasing. Source: landing-alignment-batch25 §4. Files: `landing/src/i18n/dictionaries/en.ts`. Size: S
 
 ---
 
@@ -103,7 +93,6 @@ From roadmap sync + product-concerns-2026-08-17. All pre-Batch-17 and founder-su
 
 Not tasks — calls to make.
 
-- [ ] **S2** Concurrent-tracks Today audit at `dev/active/concurrent-tracks-audit/plan.md` still says "half-satisfied." Batches 10-15 may have resolved implicitly. **Decision:** re-open + close, or archive? Source: `2026-08-19-open-task-list.md` (F2).
 - [ ] **S3** SaaS Phase 3 (billing/Paddle) is 0% done — gates F6 paid-gating, F4 monetization, F2 Phase C, F3 turn-on. Real critical-path item for anything labeled "Paid." **Decision:** when does this become top-of-stack? Source: `2026-08-19-open-task-list.md` (F3), `product-concerns-2026-08-17/roadmap.md`.
 - [ ] **S4** F5 correlation view is chicken-and-egg with beta data volume. **Decision:** set explicit "N users × 90 days" trigger, or defer indefinitely? Source: `2026-08-19-open-task-list.md` (F4).
 
@@ -131,6 +120,22 @@ Deduplicated across visual-craft §16 + mobile-ux §10 + roadmap:
 ## Closed items appendix (shipped since 2026-08-17)
 
 Strikethrough preserves history; these items are OUT of the open list.
+
+**Batch 28 — P2 polish + S2 concurrent-tracks close-out (deployed https://b4056901.program-v2.pages.dev, 2026-08-19):**
+
+11 items — 10 P2 polish items across a11y, tap targets, landing hero, plus S2 concurrent-tracks audit closed via walk-through (all four scope items shipped implicitly during Batches 10-27). Full lines preserved:
+
+- [x] **P2-21** — done 2026-08-19 Batch 28 — FirstRunBanner Close-X at `w-10 h-10` (40 px, below Apple 44). Bump to `w-11 h-11`. Source: mobile-ux-batch25 §P1 nits. Files: `next-app/src/components/FirstRunBanner.tsx`. Size: S
+- [x] **P2-22** — done 2026-08-19 Batch 28 — GraduationFeedback 1-5 rating buttons at `w-9 h-9` (36 px). Bump to `w-11 h-11`. Source: mobile-ux-batch25 §P1 nits. Files: `next-app/src/app/page.tsx` (GraduationFeedback component). Size: S
+- [x] **P2-23** — done 2026-08-19 Batch 28 — `<section aria-labelledby>` on `/account` four groups (Sign-in, Programs, Extensions, Data & privacy). Source: accessibility-batch25 §2.4. Files: `next-app/src/app/account/page.tsx:126, 146, 170, 203`. Size: S
+- [x] **P2-24** — done 2026-08-19 Batch 28 — Week row `aria-label={dayName — expand/collapse details}` overrides visible content from SR — drop the aria-label; let visible text compute. Source: accessibility-batch25 §7 Week row. Files: `next-app/src/app/week/page.tsx:484`. Size: S
+- [x] **P2-25** — done 2026-08-19 Batch 28 — `role="alert"` on `/account` delete error `<p>` + MoveSheet amber stacking warning — currently silent to SR. Source: accessibility-batch25 §6. Files: `next-app/src/app/account/page.tsx:231-234`, `next-app/src/components/workout/MoveSheet.tsx:161-166`. Size: S
+- [x] **P2-26** — done 2026-08-19 Batch 28 — Route-mount focus-to-h1 (via `tabIndex={-1}` + effect) so `router.back()` restores focus somewhere useful. Not batch-specific — applies to every route. Source: accessibility-batch25 §7. Files: `next-app/src/components/AppShell.tsx`. Size: M
+- [x] **P2-27** — done 2026-08-19 Batch 28 — Remove dead `role="gridcell"` on non-interactive Heatmap cells — ignored due to parent `role="img"`. Source: accessibility-batch25 §5. Files: `next-app/src/components/charts/Heatmap.tsx:183`. Size: S
+- [x] **P2-28** — done 2026-08-19 Batch 28 — Verify SymptomLoadChart summary `aria-label` exists (heatmap has one, chart may not). Source: accessibility-batch25 §5. Files: `next-app/src/components/charts/SymptomLoadChart.tsx`. Size: S
+- [x] **P2-29** — done 2026-08-19 Batch 28 — `/events` "Not available" — add explanatory `<p>` for context. Source: accessibility-batch25 §3. Files: `next-app/src/app/events/page.tsx`. Size: S
+- [x] **P2-30** — done 2026-08-19 Batch 28 — Landing hero "strength, skill, engine" omits mobility (Overhead Mobility ships REFERENCED). Undersell — trust-safe but a marketing asset stranded. Consider adding as fourth term or rephrasing. Source: landing-alignment-batch25 §4. Files: `landing/src/i18n/dictionaries/en.ts`. Size: S
+- [x] **S2** — done 2026-08-19 Batch 28 (walk-through) — Concurrent-tracks Today audit at `dev/active/concurrent-tracks-audit/plan.md` still says "half-satisfied." Batches 10-15 may have resolved implicitly. **Decision:** re-open + close, or archive? Source: `2026-08-19-open-task-list.md` (F2).
 
 **Batch 27 — remaining P1s (deployed https://bc360eb1.program-v2.pages.dev, 2026-08-19):**
 

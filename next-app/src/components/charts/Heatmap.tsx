@@ -178,10 +178,12 @@ export function Heatmap({ store, onDayClick }: { store: Store; onDayClick?: (dat
                   )}
                 />
               ) : (
+              // P2-27 (Batch 28) — dropped role="gridcell". Parent
+              // wrapper is role="img" (see line 130-ish) which absorbs
+              // grid-cell semantics anyway; the role was dead code.
               <span
                 key={c.date}
-                role="gridcell"
-                aria-label={c.isFuture ? `${c.date}: not yet` : cellAria(c)}
+                aria-hidden
                 title={c.isFuture ? `${c.date}: not yet` : cellAria(c)}
                 className={cn(
                   "aspect-square rounded-[2px] transition-colors",

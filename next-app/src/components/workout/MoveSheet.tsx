@@ -169,7 +169,10 @@ export function MoveSheet({
           ) : null}
 
           {targetHasSession && selected ? (
-            <p className="text-[12px] text-amber border-l-4 border-amber pl-2 leading-snug">
+            <p
+              role="alert"
+              className="text-[12px] text-amber border-l-4 border-amber pl-2 leading-snug"
+            >
               {confirmedStack === selected
                 ? "OK — this will stack two sessions on that day."
                 : "That day already has a session. Tap Move session again to confirm you want to stack them."}
