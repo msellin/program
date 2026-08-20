@@ -12,8 +12,9 @@ import { blocksForDate } from "@/lib/engine/plan-generator";
 import { getBlocksForDate, isBlockObjectOn } from "@/lib/engine/block-selectors";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
 import { MoveSheet } from "@/components/workout/MoveSheet";
+import { ArcProgressBar } from "@/components/ui/ArcProgressBar";
 import { humanizeExerciseId } from "@/lib/humanize-metrics";
-import type { DayLog, Program, RunLog, ScheduledBlock, Store } from "@/lib/schemas";
+import type { DayLog, Phase, Program, RunLog, ScheduledBlock, Store } from "@/lib/schemas";
 
 type WeekDayEntry = {
   dateISO: string;
@@ -25,6 +26,31 @@ type WeekDayEntry = {
 };
 
 const DAY_NAMES = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as const;
+
+/**
+ * Batch 36 Step 14e — phase week pair for the Week surface. Only
+ * returns a valid {current,total} when the user is viewing the CURRENT
+ * week (offset === 0) since the progress bar represents "current phase
+ * week", not the browsed range.
+ */
+function phaseWeekPairForWeek(
+  phase: Phase | null | undefined,
+  weekStartISO: string,
+  offset: number,
+): { current: number; total: number } | null {
+  if (offset !== 0) return null;
+  if (!phase || !phase.starts || !phase.ends) return null;
+  const start = new Date(phase.starts + "T00:00:00");
+  const end = new Date(phase.ends + "T00:00:00");
+  const anchor = new Date(weekStartISO + "T00:00:00");
+  if (anchor < start || anchor > end) return null;
+  const daysIn = Math.floor((anchor.getTime() - start.getTime()) / 864e5);
+  const totalDays = Math.floor((end.getTime() - start.getTime()) / 864e5) + 1;
+  return {
+    current: Math.floor(daysIn / 7) + 1,
+    total: Math.max(1, Math.ceil(totalDays / 7)),
+  };
+}
 
 /**
  * How far ahead / behind Week lets you jump.
@@ -207,6 +233,29 @@ export default function WeekPage() {
           The 7-day rhythm, with your skips and moves applied.
         </p>
       </header>
+
+      {/* Batch 36 Step 14e · ArcProgressBar above the week nav when a
+          single-program user with a resolvable phase week is on the
+          current week. Multi-track suppressed (same reason as Today).
+          Also suppressed when browsing past/future weeks — the
+          progress bar represents "current phase week", not the
+          browsed range. */}
+      {weekPhase && phaseWeekPairForWeek(weekPhase, iso(viewedMon), offset) ? (
+        (() => {
+          const pair = phaseWeekPairForWeek(weekPhase, iso(viewedMon), offset)!;
+          const programName = program.slug
+            ? program.slug.split("-").map((w) => w[0].toUpperCase() + w.slice(1)).join(" ")
+            : "Program";
+          return (
+            <ArcProgressBar
+              programName={programName}
+              weekCurrent={pair.current}
+              weekTotal={pair.total}
+              ariaLabel={`${programName} progress: week ${pair.current} of ${pair.total}.`}
+            />
+          );
+        })()
+      ) : null}
 
       {/* Bug fix 2026-08-18 (#71) — the forward arrow used to shift left when
           the "Now" affordance appeared on offset !== 0. Founder principle:
