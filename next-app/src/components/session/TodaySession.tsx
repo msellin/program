@@ -227,15 +227,21 @@ export function TodaySession({ slugOverride }: { slugOverride?: string } = {}) {
 
       {/* Suppress the reveal card once the user has any real log history —
           if they've been using the app, they know what plan they're on.
-          Also suppress after graduation. Delta audit 2026-08-19. */}
-      {!isPastProgramEnd(primary, activeDate, userProfile) &&
+          Also suppress after graduation. Delta audit 2026-08-19.
+          Session mode suppresses too — Focus session is single-program;
+          the reveal card is a "which program am I on" dashboard tool. */}
+      {!slugOverride &&
+      !isPastProgramEnd(primary, activeDate, userProfile) &&
       Object.keys(logs ?? {}).length < 3 ? (
         <YourPlanCard program={primary} />
       ) : null}
 
-      <FirstRunBanner />
+      {/* FirstRunBanner + MissedSessionPrompt are dashboard-scoped — they
+          nudge users toward opening a session. On /session/[slug] the
+          user is ALREADY in the session; these are noise. */}
+      {!slugOverride ? <FirstRunBanner /> : null}
 
-      {activeDate === todayISO() ? (
+      {!slugOverride && activeDate === todayISO() ? (
         <MissedSessionPrompt
           program={primary}
           todayISO={todayISO()}
@@ -255,7 +261,15 @@ export function TodaySession({ slugOverride }: { slugOverride?: string } = {}) {
         />
       ) : null}
 
-      <DateNav date={activeDate} onChange={setActiveDate} />
+      {/* DateNav — dashboard tool for browsing days. On /session/[slug]
+          the user is focused on today's workout; if they need to browse
+          another day they go back to Today. Founder feedback 2026-08-20:
+          session route was rendering DateNav + morning-check strip +
+          full workout — reads as a duplicate of Today, not a focused
+          view. */}
+      {!slugOverride ? (
+        <DateNav date={activeDate} onChange={setActiveDate} />
+      ) : null}
 
       {/* Suppress phase readout when the user has already graduated. Prior
           behavior: activePhaseFor returned the LAST phase as fallback, so
@@ -277,34 +291,39 @@ export function TodaySession({ slugOverride }: { slugOverride?: string } = {}) {
         </p>
       ) : null}
 
-      {(() => {
-        // Day-1 empty-state gate (Bug #3 fix from 2026-08-17 flow-review).
-        // Fresh user with no morning check today AND no history anywhere —
-        // one CTA card owns the "start here" attention. Existing HeroStateCard
-        // full-tile still renders below for non-day-1 no-check cases; this
-        // just short-circuits the day-1 fresh case.
-        const noCheckToday = !logs[activeDate]?.symptoms;
-        if (!hasHistory && noCheckToday && activeDate === todayISO()) {
-          return <Day1EmptyState />;
-        }
-        return null;
-      })()}
+      {/* Day-1 empty-state, ProposalStack, HeroStateCard, SignalsStrip,
+          RetestReminder — dashboard-scoped. On session route the user
+          is already in the workout; these are noise. Founder-caught
+          2026-08-20: "no check yet" appearing on session mode reads as
+          a dashboard-page duplicate.
 
-      {/* Post-graduation, ProposalStack + SignalsStrip + RetestReminder all
-          suppressed — the graduation experience is one card, not a menu of
-          proposals + signals mixed in with "you finished". CSM delta-2
-          2026-08-19 caught "You finished · 8 weeks logged" rendering
-          alongside "Not feeling 100% · ×0.95 applied" simultaneously. */}
+          ProposalStack does stay on session — proposals are workout-
+          relevant (accept the TM bump before starting the block, etc.).
+          The other three go. */}
+      {!slugOverride ? (
+        (() => {
+          const noCheckToday = !logs[activeDate]?.symptoms;
+          if (!hasHistory && noCheckToday && activeDate === todayISO()) {
+            return <Day1EmptyState />;
+          }
+          return null;
+        })()
+      ) : null}
+
       {!isPastProgramEnd(primary, activeDate, userProfile) ? (
         <>
           <ProposalStack program={primary} date={activeDate} />
-          <HeroStateCard date={activeDate} />
-          <SignalsStrip program={primary} date={activeDate} />
-          <RetestReminder program={primary} profile={userProfile} activeDate={activeDate} />
+          {!slugOverride ? (
+            <>
+              <HeroStateCard date={activeDate} />
+              <SignalsStrip program={primary} date={activeDate} />
+              <RetestReminder program={primary} profile={userProfile} activeDate={activeDate} />
+            </>
+          ) : null}
         </>
-      ) : (
+      ) : !slugOverride ? (
         <HeroStateCard date={activeDate} />
-      )}
+      ) : null}
 
       {/* Taper phase — surface it prominently so the reduced session duration
           isn't read as an error. Read the phase's is_taper flag which we set
@@ -390,7 +409,9 @@ export function TodaySession({ slugOverride }: { slugOverride?: string } = {}) {
         })()
       ) : null}
 
-      {multipleProgramsToday ? (
+      {/* Multi-track interference banner — dashboard-scoped. Session
+          route is single-program by definition; suppress. */}
+      {!slugOverride && multipleProgramsToday ? (
         (() => {
           // Track-specific interference wording. Delta-3 flagged the
           // hardcoded Schumann text fired for every pair including
