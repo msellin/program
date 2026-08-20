@@ -64,15 +64,23 @@ export function BottomNav() {
                 aria-current={active ? "page" : undefined}
                 title={label}
                 className={cn(
-                  "flex flex-col items-center justify-center gap-0.5 py-2 px-0.5 text-[10px] font-medium tracking-[0.08em] uppercase min-h-[52px]",
-                  active ? "text-ink" : "text-muted hover:text-ink",
+                  // Batch 36 Step 2 (v1.1.1 §2.14 P1-1) — active tab uses
+                  // THREE concurrent signals, not color alone: (a) font-weight
+                  // 600 vs 500 inactive, (b) text-strong vs text-muted color,
+                  // (c) 2-3px bronze top-edge indicator (rendered as absolute
+                  // ::before above). SC 1.4.1 (color-alone fail) resolved.
+                  // Passes protanopia/deuteranopia simulation.
+                  "flex flex-col items-center justify-center gap-0.5 py-2 px-0.5 text-[10px] tracking-[0.08em] uppercase min-h-[52px]",
+                  active
+                    ? "text-strong font-semibold"
+                    : "text-muted font-medium hover:text-ink",
                 )}
               >
                 <Icon
                   size={20}
                   strokeWidth={active ? 2.25 : 1.75}
                   aria-hidden
-                  className={active ? "text-ink" : "text-muted"}
+                  className={active ? "text-strong" : "text-muted"}
                 />
                 <span className="truncate max-w-full">{label}</span>
               </Link>

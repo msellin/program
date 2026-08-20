@@ -161,12 +161,19 @@ function AuthGatedShell({
           </Link>
         </div>
       </header>
+      {/* Batch 36 Step 2 (v1.1.1 §2.14 P1-5) — Today gets
+          overscroll-behavior-y: contain so iOS Safari's rubber-band →
+          refresh gesture doesn't fire when the user overscrolls the
+          readiness sparkline area. The SVG interferes with the browser's
+          chrome heuristics and produces intermittent refreshes. Other
+          routes keep default browser behavior. */}
       <main
         id="main-content"
         tabIndex={-1}
         className="max-w-[760px] mx-auto w-full px-4 sm:px-6 flex-1 focus:outline-none"
         style={{
           paddingBottom: "calc(64px + env(safe-area-inset-bottom) + 1rem)",
+          overscrollBehaviorY: isTodayRoute ? "contain" : undefined,
         }}
       >
         {children}
