@@ -572,7 +572,7 @@
           "or_persistent_buttock_si_ache_hours_gte": 48,
           "or_radicular_flavor_present": true
         },
-        "conditions_prose": "Any symptom > 5/10 OR night pain OR gait change OR painful+persistent click OR left buttock/SI ache lasting >=48h OR radicular-flavor (numbing/tingling/pulsation) noted",
+        "conditions_prose": "Any symptom > 5/10 OR night pain OR gait change OR painful+persistent click OR left buttock/SI ache lasting >=48h OR unambiguous radicular symptoms (tingling, pins-and-needles, or pain radiating down/into leg). Excludes 'numbing' / 'weakness' vocabulary — those are often muscular-capability descriptions, not neurological, per founder clarification 2026-08-21.",
         "action": "regress_two_steps_and_reset_tm",
         "escalate_if_repeated": true
       }

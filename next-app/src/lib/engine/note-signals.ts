@@ -17,6 +17,23 @@ export type NoteSignals = {
   externalLoad: boolean; // padel, hiking, long day, etc.
   pain: boolean;
   easy: boolean;
+  /**
+   * Batch 36 Phase-A additions.
+   * `radicular` — nerve-involvement signal (tingling, pins-and-needles, pain
+   *   radiating down/into leg). Explicit exclusion of "numbing"/"numb" per
+   *   founder clarification 2026-08-21: those words are often muscular-
+   *   weakness descriptions in personal vocabulary, not neurological. False
+   *   positive risk too high to include.
+   * `weakness` — informational only, NOT a red-flag. Fires when a user notes
+   *   feeling weaker than expected at a load. Complements STIFF (fatigue)
+   *   by capturing capability-at-load descriptions.
+   * `programFeedback` — user commenting on programming ("2 days in a row",
+   *   "48h between", "next cycle"). Feeds a founder-facing review queue,
+   *   not the training engine's Accept/Ignore proposal path.
+   */
+  radicular: boolean;
+  weakness: boolean;
+  programFeedback: boolean;
   /** Within-session RPE drift (avg of last 2 sets − avg of first 2 sets). null when unmeasurable. */
   rpeDrift: number | null;
   /** Human-readable labels of what matched, for surfacing in the UI. */
@@ -25,14 +42,40 @@ export type NoteSignals = {
 
 // Word-boundary matchers. `\b` is fine for both English and Estonian roots here.
 const HIGH_FATIGUE = /\b(exhaust\w*|wrecked|toast|hangover|hungover|sick|flu|fever|no ?sleep|didn['’]?t ?sleep|tough ?week|beat ?up|beaten|väsi\w*|magamata|haige)\b/i;
-const STIFF = /\b(stiff|sore|tight|tired|fatigued|drained|dead|heavy|slow|sluggish|krambid|krampis|kanged?|väsinud|jäik|jäigad)\b/i;
+// Batch 36 Phase-A additions to STIFF: bounce/bouncing (form breakdown from
+// fatigue), no-strength-at-parallel (depth capability loss). Both surfaced
+// from Aug 19-20 founder notes as unmatched fatigue signals.
+const STIFF = /\b(stiff|sore|tight|tired|fatigued|drained|dead|heavy|slow|sluggish|bounc\w+|no ?strength ?at ?parallel|below ?parallel|krambid|krampis|kanged?|väsinud|jäik|jäigad)\b/i;
 const EXTERNAL_LOAD = /\b(padel|padle|tennis|hike|hiked|hiking|climbed|climbing|match|game|long ?day|late ?night|long ?weekend|festival|party|long ?run|ran \d+ ?km|drive|drove \d+|walked \d+|matk|matkasin|reisisin|reisil|pidu|peol)\b/i;
 // Includes movement-quality words (click, catch, stuck) that skill/mobility
 // users type without meaning clinical pain. Feeds the load-reduction signal
 // (proposes 5-10% off next session), NOT any rehab-specific escalation —
 // Terav is a training app, not a rehab tool.
 const PAIN = /\b(pain|hurt\w*|sharp|twinge|flare|shooting|pinch|ache|aching|click\w*|clunk\w*|catch\w*|stuck|giving ?way|gave ?way|valu\w*|valus|torkab|kipitab)\b/i;
-const EASY = /\b(easy|light|grooved|snappy|smooth|effortless|too ?easy|felt ?good|felt ?great|felt ?strong|kerge|hea tunne|lihtne|sujus)\b/i;
+// Batch 36 Phase-A additions to EASY: controlled/in-control (positive
+// stability signal, moving well at load). Surfaced from Aug 17+19 founder
+// notes ("feels so much more controlled", "feels controlled") as unmatched
+// positive-adaptation vocabulary.
+const EASY = /\b(easy|light|grooved|snappy|smooth|effortless|controlled|in ?control|too ?easy|felt ?good|felt ?great|felt ?strong|kerge|hea tunne|lihtne|sujus|kontrolli all)\b/i;
+
+// Batch 36 Phase-A NEW pattern — RADICULAR (nerve-involvement signal).
+// Deliberately EXCLUDES "numb"/"numbing" per founder clarification 2026-08-21:
+// those words are often muscular-weakness descriptions, not neurological.
+// Only unambiguous radicular vocabulary lands here. Fires on the red state
+// via progression_rules.or_radicular_flavor_present.
+const RADICULAR = /\b(tingling|tingl\w+|pins ?and ?needles|shooting ?(down|into|along)|radiating|radiat\w+ ?(down|into|along)|kihelus|kipituse)\b/i;
+
+// Batch 36 Phase-A NEW pattern — WEAKNESS (informational, not red-flag).
+// Complements STIFF (fatigue vocab) by capturing capability-at-load
+// descriptions. Weight-relative interpretation happens downstream in the
+// engine (weakness at 60% TM = strong signal; weakness at 100% TM = expected).
+const WEAKNESS = /\b(weak\w+|weakness|felt ?weaker|couldn'?t ?push|no ?power|no ?legs|nõrku|nõrk)\b/i;
+
+// Batch 36 Phase-A NEW pattern — PROGRAM_FEEDBACK. User commenting on
+// programming (spacing, cycle structure, rest between). Feeds a founder-
+// facing review queue, NOT the training engine's Accept/Ignore path. This
+// is data about the PROGRAM, not the user's readiness.
+const PROGRAM_FEEDBACK = /\b(days? ?in ?a ?row|back ?to ?back|rest ?between|48 ?hours?|48 ?h\b|next ?cycle|too ?many ?days)\b/i;
 
 /**
  * Parse a single free-text string into a signal set.
@@ -45,6 +88,9 @@ export function extractSignals(text: string | undefined | null): NoteSignals {
     externalLoad: false,
     pain: false,
     easy: false,
+    radicular: false,
+    weakness: false,
+    programFeedback: false,
     rpeDrift: null,
     matches: [],
   };
@@ -55,6 +101,9 @@ export function extractSignals(text: string | undefined | null): NoteSignals {
   const isExtLoad = EXTERNAL_LOAD.test(t);
   const isPain = PAIN.test(t);
   const isEasy = EASY.test(t);
+  const isRadicular = RADICULAR.test(t);
+  const isWeakness = WEAKNESS.test(t);
+  const isProgramFeedback = PROGRAM_FEEDBACK.test(t);
 
   const matches: string[] = [];
   if (isHigh) matches.push("high fatigue");
@@ -62,6 +111,9 @@ export function extractSignals(text: string | undefined | null): NoteSignals {
   if (isExtLoad) matches.push("outside load");
   if (isPain) matches.push("pain");
   if (isEasy) matches.push("felt easy");
+  if (isRadicular) matches.push("radicular flavor");
+  if (isWeakness) matches.push("weakness at load");
+  if (isProgramFeedback) matches.push("program feedback");
 
   let fatigue: FatigueLevel = "normal";
   if (isHigh || (isStiff && isExtLoad)) fatigue = "high";
@@ -72,6 +124,9 @@ export function extractSignals(text: string | undefined | null): NoteSignals {
     externalLoad: isExtLoad,
     pain: isPain,
     easy: isEasy,
+    radicular: isRadicular,
+    weakness: isWeakness,
+    programFeedback: isProgramFeedback,
     rpeDrift: null,
     matches,
   };
@@ -127,6 +182,9 @@ function merge(a: NoteSignals, b: NoteSignals): NoteSignals {
     externalLoad: a.externalLoad || b.externalLoad,
     pain: a.pain || b.pain,
     easy: a.easy || b.easy,
+    radicular: a.radicular || b.radicular,
+    weakness: a.weakness || b.weakness,
+    programFeedback: a.programFeedback || b.programFeedback,
     rpeDrift,
     matches: merged,
   };
@@ -142,6 +200,9 @@ export function daySignals(day: DayLog | null | undefined): NoteSignals {
     externalLoad: false,
     pain: false,
     easy: false,
+    radicular: false,
+    weakness: false,
+    programFeedback: false,
     rpeDrift: null,
     matches: [],
   };
