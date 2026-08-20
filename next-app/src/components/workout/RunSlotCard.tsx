@@ -64,7 +64,10 @@ export function RunSlotCard({ date }: { date: string }) {
   const slot = useGenericSlot
     ? {
         type: "optional" as const,
-        title: "Log an extra session",
+        // Batch 36 P1 (audit 2026-08-21 · app-copy) — matched §2.13
+        // CTA vocabulary. "Log an extra session" → "Log extra session →"
+        // (dropped article, added arrow suffix per §2.13 row 8).
+        title: "Log extra session →",
         detail:
           "Cross-modal work, walks, class attendance, mobility — anything not in the prescribed block. Optional. Nothing here changes the plan.",
       }

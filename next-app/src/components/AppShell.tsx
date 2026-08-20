@@ -155,7 +155,7 @@ function AuthGatedShell({
           <Link
             href="/settings/"
             aria-label="Settings"
-            className="w-11 h-11 flex items-center justify-center rounded text-muted hover:text-ink hover:bg-line-soft focus:text-ink focus:bg-line-soft active:bg-surface-2"
+            className="w-11 h-11 flex items-center justify-center rounded text-muted hover:text-ink hover:bg-line-soft focus-visible:text-ink focus-visible:bg-line-soft focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2 active:bg-surface-2"
           >
             <Settings size={18} strokeWidth={1.75} />
           </Link>

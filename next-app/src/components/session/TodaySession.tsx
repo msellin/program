@@ -228,7 +228,13 @@ export function TodaySession({ slugOverride }: { slugOverride?: string } = {}) {
               programName={programName}
               weekCurrent={pair.current}
               weekTotal={pair.total}
-              ariaLabel={`${programName} progress: week ${pair.current} of ${pair.total}.`}
+              /* Batch 36 P1 (audit 2026-08-21 · app-a11y) — dropped
+                 program-name from aria-label to avoid SR-duplication
+                 with the H1 that immediately follows. Program name
+                 already sits in the eyebrow tier above the H1 and in
+                 the visible label of the bar itself. Aria now carries
+                 only the progress state. */
+              ariaLabel={`Program progress: week ${pair.current} of ${pair.total}.`}
             />
           );
         })()
