@@ -253,11 +253,13 @@ export function TodaySession({ slugOverride }: { slugOverride?: string } = {}) {
               ? "Focus session"
               : "Today"}
         </h1>
-        {phase && !slugOverride ? (
-          <p className="mt-1 text-[14px] text-muted leading-snug">
-            {humanPhaseName(phase.name)}
-          </p>
-        ) : null}
+        {/* Batch 36 P0 hotfix — removed the phase-name sub-caption here
+            because it duplicates the existing phase readout below DateNav
+            (which fires when `slugOverride || allBlocks.length === 0`).
+            Founder-caught 2026-08-20 on rest day: "Weeks 1-4 — Hang, scap,
+            row base (Tier A)" appeared twice. The eyebrow above already
+            carries "WEEK 1 OF 4"; the detailed readout below carries
+            phase-name + week + end date. Two tiers cover the ground. */}
       </header>
 
       {/* Suppress the reveal card once the user has any real log history —
