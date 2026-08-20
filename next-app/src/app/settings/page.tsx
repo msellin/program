@@ -31,8 +31,11 @@ export default function SettingsPage() {
         Back
       </Link>
 
+      {/* Batch 36 · H1 sized per v1.1.1 §1 h1-display (32px). Settings
+          is a top-level route; carries the display H1 like Progress /
+          Profile / Programs / History / Week. */}
       <h1
-        className="text-2xl font-semibold tracking-tight text-strong"
+        className="text-[32px] font-semibold tracking-tight text-strong leading-none"
         tabIndex={-1}
       >
         Settings

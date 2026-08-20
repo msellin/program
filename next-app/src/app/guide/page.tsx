@@ -2,8 +2,10 @@ export default function GuidePage() {
   return (
     <div className="space-y-6 pt-4">
       <header>
-        <h1 className="text-2xl font-semibold tracking-tight text-strong">Guide</h1>
-        <p className="mt-1 text-sm text-muted">Everything the app assumes you know, in one place.</p>
+        {/* Batch 36 · H1 sized per v1.1.1 §1 h1-display (32px) — top-level
+            authenticated routes carry the display H1. Was text-2xl (24px). */}
+        <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">Guide</h1>
+        <p className="mt-2 text-[14px] text-muted">Everything the app assumes you know, in one place.</p>
       </header>
 
       <Section title="How Terav plans training">
