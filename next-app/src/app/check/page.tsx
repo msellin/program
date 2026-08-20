@@ -5,6 +5,8 @@ import { useStore } from "@/lib/useStore";
 import { today as todayISO } from "@/lib/utils";
 import type { Symptoms } from "@/lib/schemas";
 import { EngineReadsNotesHint } from "@/components/workout/EngineReadsNotesHint";
+import { StickyCta } from "@/components/ui/StickyCta";
+import { ChevronRight } from "lucide-react";
 
 // Hip-program regions — laterality + specific joints.
 const HIP_REGIONS: { key: keyof Symptoms; label: string; lat?: "L" | "R" }[] = [
@@ -180,24 +182,24 @@ export default function CheckPage() {
         </div>
       </div>
 
-      {/* P2-2 — sticky Save above BottomNav so users don't scroll to the
-          bottom of a long check to save. Prior behavior: Save sat at
-          document flow bottom, easy to miss on a 5-6 slider morning
-          check. */}
-      <div
-        className="sticky z-10 -mx-4 px-4 pt-2 pb-3 bg-ground/95 backdrop-blur-sm border-t border-line-soft"
-        style={{ bottom: "calc(60px + env(safe-area-inset-bottom))" }}
-      >
+      {state ? <Verdict state={state} /> : null}
+
+      {/* Batch 36 Step 14 — sticky Save now uses the StickyCta primitive
+          per v1.1.1 §2.14, with keyboard-aware repositioning per mobile-
+          UX P0-7. When the "Outside training" text input is focused on
+          iOS Safari, StickyCta lifts the CTA above the on-screen
+          keyboard via visualViewport fallback. CTA string updated to
+          match §2.13 vocabulary (arrow suffix). */}
+      <StickyCta keyboardAware>
         <button
           type="button"
           onClick={save}
-          className="w-full bg-bronze text-ground rounded py-3 font-semibold text-[15px] hover:bg-bronze-hover active:bg-bronze-active transition-colors min-h-[44px]"
+          className="w-full inline-flex items-center justify-center gap-2 bg-bronze text-ground rounded-lg py-3 font-semibold text-[15px] hover:bg-bronze-hover active:bg-bronze-active transition-colors min-h-[44px] shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_1px_2px_rgba(0,0,0,0.4)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-strong focus-visible:outline-offset-2"
         >
           Save check
+          <ChevronRight size={16} strokeWidth={2.25} aria-hidden />
         </button>
-      </div>
-
-      {state ? <Verdict state={state} /> : null}
+      </StickyCta>
     </div>
   );
 }
