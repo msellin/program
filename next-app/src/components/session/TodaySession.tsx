@@ -17,6 +17,7 @@ import { MissedSessionPrompt } from "@/components/workout/MissedSessionPrompt";
 import { ProposalStack } from "@/components/workout/ProposalStack";
 import { Day1EmptyState } from "@/components/workout/Day1EmptyState";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
+import { ArcProgressBar } from "@/components/ui/ArcProgressBar";
 import { useStore } from "@/lib/useStore";
 import { today as todayISO } from "@/lib/utils";
 import {
@@ -207,6 +208,27 @@ export function TodaySession({ slugOverride }: { slugOverride?: string } = {}) {
           ← Back to Today
         </Link>
       ) : null}
+      {/* Batch 36 Step 10 · ArcProgressBar above the header when we have
+          a single-program user with a resolvable phase week. Multi-track
+          users get program-specific progress bars inside their group
+          cards below — surfacing a single top-level progress bar in a
+          multi-program state would misrepresent which program you're
+          progressing through. */}
+      {!slugOverride && programs.length === 1 && phase && phaseWeekPair(phase, activeDate) ? (
+        (() => {
+          const pair = phaseWeekPair(phase, activeDate)!;
+          const programName = primary.slug ? programDisplayName(primary, primary.slug) : "Program";
+          return (
+            <ArcProgressBar
+              programName={programName}
+              weekCurrent={pair.current}
+              weekTotal={pair.total}
+              ariaLabel={`${programName} progress: week ${pair.current} of ${pair.total}.`}
+            />
+          );
+        })()
+      ) : null}
+
       {/* Batch 36 Step 10 · H1 inversion per v1.1.1 §5 + landing C1
           (Aug 2026). The workout name (or focus name for concurrent
           tracks) is the H1; the route scope moves to a mono-caps
@@ -1570,6 +1592,28 @@ function phaseProgress(phase: Phase, dateISO: string): string | null {
   const totalWeeks = Math.max(1, Math.ceil(totalDays / 7));
   const endsShort = end.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
   return `week ${currentWeek} of ${totalWeeks} · ends ${endsShort}`;
+}
+
+/**
+ * Batch 36 Step 10 — same math as phaseProgress but returns the numeric
+ * pair so ArcProgressBar can render a real progress bar. Returns null
+ * when phase has no start/end anchors or when the date falls outside.
+ */
+function phaseWeekPair(
+  phase: Phase | null | undefined,
+  dateISO: string,
+): { current: number; total: number } | null {
+  if (!phase || !phase.starts || !phase.ends) return null;
+  const start = new Date(phase.starts + "T00:00:00");
+  const end = new Date(phase.ends + "T00:00:00");
+  const today = new Date(dateISO + "T00:00:00");
+  if (today < start || today > end) return null;
+  const daysIn = Math.floor((today.getTime() - start.getTime()) / 864e5);
+  const totalDays = Math.floor((end.getTime() - start.getTime()) / 864e5) + 1;
+  return {
+    current: Math.floor(daysIn / 7) + 1,
+    total: Math.max(1, Math.ceil(totalDays / 7)),
+  };
 }
 
 // Merge duplicate exercise entries in the same block (e.g. squat "main" + squat "volume"),
