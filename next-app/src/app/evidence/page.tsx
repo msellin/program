@@ -80,13 +80,15 @@ export default function EvidencePage() {
 
       <ul className="rounded border border-line-soft bg-surface divide-y divide-line-soft">
         {citations.map((c) => {
-          // Batch 36 Step 14 · status ladder shown per-citation. If the
-          // citation carries no `status` field (legacy), default to
-          // REFERENCED — every shipped citation is at least referenced
-          // per v1.1.1 §7.5.
+          // Batch 36 P0 (audit 2026-08-21 · app-copy-clarity) —
+          // 2-tier ladder per v1.1.1 §7.5. REFERENCED → CITED (slate);
+          // REVIEWED + VERIFIED + stable → VERIFIED (green). Aligned
+          // with Programs catalog + Program preview label maps so the
+          // same program shows the same label on every surface.
           const status = c.status ?? "REFERENCED";
-          const label = status === "REVIEWED" ? "VERIFIED" : status; // §7.5 collapse
-          const tone = label === "VERIFIED" ? "green" : "slate";
+          const label =
+            status === "REVIEWED" || status === "VERIFIED" ? "VERIFIED" : "CITED";
+          const tone: "slate" | "green" = label === "VERIFIED" ? "green" : "slate";
           return (
             <li key={c.id} className="px-4 py-3 space-y-1.5">
               <div className="flex items-start justify-between gap-3">

@@ -15,6 +15,7 @@ import { EmptyStateCard } from "@/components/EmptyStateCard";
 import { InfoSheet } from "@/components/InfoSheet";
 import { WeeklyHeatmap, type WeeklyHeatmapCell, type WeeklyHeatmapCellState } from "@/components/ui/WeeklyHeatmap";
 import { ReadinessTrail } from "@/components/workout/ReadinessTrail";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { today } from "@/lib/utils";
 import dynamic from "next/dynamic";
 import type { Program, Exercise, Milestone } from "@/lib/schemas";
@@ -221,25 +222,30 @@ function ProgressBody({
       ) : null}
 
       {/* Batch 36 Step 11 · WeeklyHeatmap + interactive ReadinessTrail at
-          top of Progress per v1.1.1 §3 row 4. Reads derived_state per day
-          from logs + falls back to "session logged" for dates without a
-          morning check. */}
-      <ProgressReadinessSection store={store} />
+          top of Progress per v1.1.1 §3 row 4. Wrapped in an ErrorBoundary
+          per the 2026-08-21 audit — 4 audits found Progress crashing for
+          non-hip personas on the client, suspects included this section
+          (progress/page.tsx:~790). Contain the blast radius so the rest
+          of Progress renders even if the readiness section throws. */}
+      <ErrorBoundary boundary="ProgressReadinessSection">
+        <ProgressReadinessSection store={store} />
+      </ErrorBoundary>
 
       {/* Interactive ReadinessTrail 30-day per §2.4 (interactive variant).
-          Tapping a cell opens an InfoSheet with the day detail via
-          ProgressReadinessSection state. */}
-      <section className="space-y-2">
-        <h2 className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted">
-          Recent readiness — past 30 days
-        </h2>
-        <ReadinessTrail
-          logs={store.logs}
-          activeDate={today()}
-          days={30}
-          interactive
-        />
-      </section>
+          Also wrapped for containment. */}
+      <ErrorBoundary boundary="ProgressReadinessTrail30">
+        <section className="space-y-2">
+          <h2 className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted">
+            Recent readiness — past 30 days
+          </h2>
+          <ReadinessTrail
+            logs={store.logs}
+            activeDate={today()}
+            days={30}
+            interactive
+          />
+        </section>
+      </ErrorBoundary>
 
       {/* SECTION 1 — Insights (retest metrics + weekly narrative + charts). */}
       <div className="space-y-5">

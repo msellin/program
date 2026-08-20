@@ -35,19 +35,23 @@ const ACCENT_STRIPE: Record<string, string> = {
   default: "border-l-line-strong",
 };
 
-// Batch 36 Step 13 · map program-manifest `status` (REFERENCED / REVIEWED
-// / VERIFIED / stable / … legacy aliases) to StatusPill label + tone.
-// Fallback keeps the raw uppercase status if we don't recognise it — no
-// silent hiding.
+// Batch 36 P0 (audit 2026-08-21 · app-copy-clarity) — collapse the
+// 3-tier ladder (REFERENCED / REVIEWED / VERIFIED) to 2 tiers per
+// v1.1.1 §7.5. Prior 3-tier map created a same-program-3-labels
+// collision (catalog: REVIEWED / preview: VERIFIED / evidence:
+// REFERENCED for the same program).
+// Now: REFERENCED → "CITED" (slate) · REVIEWED + VERIFIED + stable
+// → "VERIFIED" (green). Two tiers, consistent everywhere.
 function statusLabelOf(status: string | undefined): string {
-  if (!status) return "REFERENCED";
+  if (!status) return "CITED";
   if (status === "stable") return "VERIFIED";
+  if (status === "REVIEWED") return "VERIFIED";
+  if (status === "REFERENCED") return "CITED";
   return status.toUpperCase();
 }
 
 function statusToneOf(status: string | undefined): "slate" | "green" | "amber" | "muted" {
-  if (status === "VERIFIED" || status === "stable") return "green";
-  if (status === "REVIEWED") return "slate";
+  if (status === "VERIFIED" || status === "stable" || status === "REVIEWED") return "green";
   if (status === "REFERENCED") return "slate";
   return "muted";
 }
@@ -228,11 +232,15 @@ export default function ProgramCatalogPage() {
       {publicPrograms.length > 0 ? (
         <section className="space-y-2 -mx-4 sm:-mx-6" aria-labelledby="live-now-eyebrow">
           <div className="px-4 sm:px-6 flex items-baseline gap-2">
+            {/* Batch 36 P0 (audit 2026-08-21 · app-visual-craft) — swapped
+                text-bronze to text-muted. Bronze is CTA-only per R2; the
+                strip eyebrow is a label, not an invitation. Also collapsed
+                "referenced" wording to "cited" per §7.5 2-tier ladder. */}
             <p
               id="live-now-eyebrow"
-              className="font-mono text-[10px] font-medium uppercase tracking-widest text-bronze"
+              className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted"
             >
-              {publicPrograms.length} referenced · live now
+              {publicPrograms.length} cited · live now
             </p>
           </div>
           <ul
@@ -434,25 +442,27 @@ function StatusChip({ status, personal }: { status?: string; personal?: boolean 
   // is trying to draw.
   if (personal) return null;
   if (!status || status === "draft" || status === "DRAFT" || status === "PROVISIONAL") return null;
-  // P0-8 palette-collision fix 2026-08-19: status chips become neutral-
-  // outlined pill + 6px colored dot. Category color still lives on the
-  // card border-l-4 accent; status is now a small semantic tag that
-  // doesn't compete for attention. Legend keeps the semantic tone words.
+  // Batch 36 P0 (audit 2026-08-21 · app-copy-clarity) — collapsed 3-tier
+  // ladder to 2-tier per v1.1.1 §7.5. Prior 3-tier (REFERENCED/REVIEWED/
+  // VERIFIED) created a same-program-3-labels collision: catalog showed
+  // REVIEWED while preview showed VERIFIED and evidence showed REFERENCED.
+  // Now: REFERENCED → "cited" (slate); REVIEWED + VERIFIED + stable →
+  // "verified" (green). Two tiers, consistent across every surface.
   const map: Record<string, { label: string; dotClass: string; title: string }> = {
     REFERENCED: {
-      label: "referenced",
-      dotClass: "bg-amber",
-      title: "Default state: every claim cites a paper. Simulator harness passes across archetypes.",
+      label: "cited",
+      dotClass: "bg-slate",
+      title: "Cited: every claim references a peer-reviewed paper. Simulator harness passes across archetypes.",
     },
     REVIEWED: {
-      label: "reviewed",
-      dotClass: "bg-slate",
-      title: "Domain-specialist audit complete: cited studies verified against literature. Drill sequencing evidence-backed.",
+      label: "verified",
+      dotClass: "bg-green",
+      title: "Verified: domain-specialist audit complete + field completions confirm the arc works.",
     },
     VERIFIED: {
       label: "verified",
       dotClass: "bg-green",
-      title: "Field-verified: ≥5 beta users completed the arc with subjective success.",
+      title: "Verified: ≥5 beta users completed the arc with subjective success + specialist-audited citations.",
     },
     stable: {
       label: "verified",

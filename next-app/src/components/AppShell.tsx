@@ -147,7 +147,7 @@ function AuthGatedShell({
           <Link
             href="/"
             aria-label="Terav — Today"
-            className="flex items-center gap-2 font-mono text-[14px] uppercase tracking-[0.22em] text-strong hover:opacity-80"
+            className="flex items-center gap-2 font-sans font-semibold text-[14px] uppercase tracking-[0.22em] text-strong hover:opacity-80"
           >
             <span aria-hidden className="inline-block h-2 w-2 rounded-full bg-bronze" />
             TERAV

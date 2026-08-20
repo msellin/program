@@ -63,7 +63,13 @@ export function StickyCta({ children, keyboardAware = false, className }: Sticky
       />
       <div
         className={cn(
-          "fixed left-0 right-0 z-30 border-t border-line-soft bg-surface-2",
+          // Batch 36 P0 (audit 2026-08-21 · app-motion-perf watchlist)
+          // — bumped z-30 → z-50 so StickyCta sits ABOVE BottomNav (z-40)
+          // rather than behind it. Previously the "Save check →" / "Start
+          // block ▶" CTAs got covered by the nav. z-50 is the Tailwind
+          // default max — same layer as modals — reserved for
+          // action-critical chrome only.
+          "fixed left-0 right-0 z-50 border-t border-line-soft bg-surface-2",
           "px-4 sm:px-6 py-3",
           className,
         )}
