@@ -6,6 +6,8 @@ import { useStore } from "@/lib/useStore";
 import { loadExercises } from "@/lib/data-loader";
 import { Heatmap } from "@/components/charts/Heatmap";
 import { BlockHistorySection } from "@/components/history/BlockHistorySection";
+import { ReadinessTrail } from "@/components/workout/ReadinessTrail";
+import { today as todayISO } from "@/lib/utils";
 import type { Exercise, DayLog, ExerciseLog } from "@/lib/schemas";
 import { EmptyStateCard } from "@/components/EmptyStateCard";
 
@@ -97,6 +99,23 @@ export default function HistoryPage() {
           Symptom trends and strength progression over time.
         </p>
       </header>
+
+      {/* Batch 36 Step 14 · interactive ReadinessTrail 30-day per v1.1.1
+          §2.4 upgrade + §3 History pattern. Sits above the activity
+          heatmap so recent-day readiness is glanceable before the user
+          drills into the calendar. */}
+      <section className="space-y-2">
+        <h2 className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted">
+          Readiness — past 30 days
+        </h2>
+        <ReadinessTrail
+          logs={store.logs}
+          activeDate={todayISO()}
+          days={30}
+          interactive
+          onCellTap={(date) => setOpenDate(date)}
+        />
+      </section>
 
       <section className="space-y-3">
         <h2 className="font-mono text-[14px] uppercase tracking-widest">Activity heatmap</h2>

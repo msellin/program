@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { StatusPill } from "@/components/ui/StatusPill";
 
 type Citation = {
   id: string;
@@ -12,6 +13,13 @@ type Citation = {
   url?: string;
   display_short?: string;
   display_line?: string;
+  /**
+   * Batch 36 Step 14 · v1.1.1 §7.5 status ladder collapse.
+   * REFERENCED = cited but not verified. VERIFIED = cited + confirmed
+   * against source by a specialist audit. Older schemas used a 3-tier
+   * REFERENCED/REVIEWED/VERIFIED — collapsed to 2 tiers here.
+   */
+  status?: "REFERENCED" | "VERIFIED" | "REVIEWED";
 };
 
 /**
@@ -71,30 +79,42 @@ export default function EvidencePage() {
       </header>
 
       <ul className="rounded border border-line-soft bg-surface divide-y divide-line-soft">
-        {citations.map((c) => (
-          <li key={c.id} className="px-4 py-3">
-            <p className="text-[14px] text-ink leading-snug">
-              <span className="font-semibold text-strong">
-                {c.authors} ({c.year}).
-              </span>{" "}
-              {c.title}
-              {c.source ? <span className="text-muted"> — {c.source}</span> : null}
-              {c.url ? (
-                <>
-                  {" "}
-                  <a
-                    href={c.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-slate underline underline-offset-2 hover:text-ink"
-                  >
-                    link
-                  </a>
-                </>
-              ) : null}
-            </p>
-          </li>
-        ))}
+        {citations.map((c) => {
+          // Batch 36 Step 14 · status ladder shown per-citation. If the
+          // citation carries no `status` field (legacy), default to
+          // REFERENCED — every shipped citation is at least referenced
+          // per v1.1.1 §7.5.
+          const status = c.status ?? "REFERENCED";
+          const label = status === "REVIEWED" ? "VERIFIED" : status; // §7.5 collapse
+          const tone = label === "VERIFIED" ? "green" : "slate";
+          return (
+            <li key={c.id} className="px-4 py-3 space-y-1.5">
+              <div className="flex items-start justify-between gap-3">
+                <p className="text-[14px] text-ink leading-snug min-w-0 flex-1">
+                  <span className="font-semibold text-strong">
+                    {c.authors} ({c.year}).
+                  </span>{" "}
+                  {c.title}
+                  {c.source ? <span className="text-muted"> — {c.source}</span> : null}
+                  {c.url ? (
+                    <>
+                      {" "}
+                      <a
+                        href={c.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-slate underline underline-offset-2 hover:text-ink"
+                      >
+                        link
+                      </a>
+                    </>
+                  ) : null}
+                </p>
+                <StatusPill label={label} tone={tone} className="flex-shrink-0 mt-0.5" />
+              </div>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
