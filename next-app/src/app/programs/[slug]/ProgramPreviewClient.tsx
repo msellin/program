@@ -10,6 +10,7 @@ import { useIsSuperAdmin } from "@/lib/super-admin";
 import { cn } from "@/lib/utils";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
 import { DashboardBlock } from "@/components/DashboardBlock";
+import { StatusPill } from "@/components/ui/StatusPill";
 import type { Program, ProgramManifest, ProgramManifestEntry } from "@/lib/schemas";
 
 type Props = {
@@ -178,49 +179,40 @@ export function ProgramPreviewClient({ slug }: Props) {
         </Link>
       </div>
 
+      {/* Batch 36 Step 14f · Program preview header modernized per v1.1.1
+          §2.2 (h2-hero 26px on Preview) + StatusPill migration for the
+          "active", ladder status, and personal chips. Prior inline
+          "active" chip used `bg-bronze text-ground` — a CTA styling
+          for a state pill (R2 violation). Now uses StatusPill green
+          tone. Personal chip stays slate. Ladder chip collapses to
+          CITED/VERIFIED per v1.1.1 §7.5 (REFERENCED shows as CITED
+          slate; REVIEWED+VERIFIED show as VERIFIED green). */}
       <header className="space-y-2">
         <div className="flex items-baseline gap-2 flex-wrap">
-          <h1 className="text-2xl font-semibold tracking-tight text-strong">{entry.name}</h1>
+          <h1 className="text-[26px] font-semibold tracking-tight text-strong leading-tight">
+            {entry.name}
+          </h1>
           {isActive ? (
-            <span className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-bronze text-ground">
-              active
-            </span>
+            <StatusPill label="active" tone="green" className="flex-shrink-0" />
           ) : null}
           {(() => {
-            // F10 Batch 31 (2026-08-19): DRAFT/PROVISIONAL now hidden from
-            // catalog + chip returns null. REFERENCED / REVIEWED / VERIFIED
-            // shown. Legacy `stable` aliases to VERIFIED.
-            // P0-8 palette-collision fix 2026-08-19: neutral-outlined pill
-            // + 6px colored dot. Semantic tone lives on the dot, not the
-            // whole chip.
-            // S6 (2026-08-19): personal programs are outside the ladder
-            // entirely — the "personal" chip below carries their signal.
             if (entry.personal) return null;
             const s = entry.status;
             if (!s || s === "draft" || s === "DRAFT" || s === "PROVISIONAL") return null;
-            const map: Record<string, { label: string; dotClass: string; title: string }> = {
-              REFERENCED: { label: "referenced", dotClass: "bg-amber", title: "Default state: every claim cites a paper. Simulator harness passes across archetypes." },
-              REVIEWED: { label: "reviewed", dotClass: "bg-slate", title: "Domain-specialist audit complete: cited studies verified against literature. Drill sequencing evidence-backed." },
-              VERIFIED: { label: "verified", dotClass: "bg-green", title: "Field-verified: ≥5 beta users completed the arc with subjective success." },
-              stable: { label: "verified", dotClass: "bg-green", title: "Legacy status — same meaning as Verified." },
-            };
-            const meta = map[s];
-            if (!meta) return null;
+            // §7.5 collapse: REFERENCED → CITED slate; REVIEWED + VERIFIED
+            // + stable → VERIFIED green. Prior 3-tier chip collapses to 2
+            // per the copy jury caveat.
+            const isVerified = s === "REVIEWED" || s === "VERIFIED" || s === "stable";
             return (
-              <span
-                className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5"
-                title={meta.title}
-              >
-                <span aria-hidden className={`h-1.5 w-1.5 rounded-full ${meta.dotClass}`} />
-                {meta.label}
-              </span>
+              <StatusPill
+                label={isVerified ? "verified" : "cited"}
+                tone={isVerified ? "green" : "slate"}
+                className="flex-shrink-0"
+              />
             );
           })()}
           {entry.personal ? (
-            <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
-              <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-slate" />
-              personal
-            </span>
+            <StatusPill label="personal" tone="slate" className="flex-shrink-0" />
           ) : null}
         </div>
         <p className="text-sm text-muted">{entry.short_description}</p>
