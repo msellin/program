@@ -133,7 +133,7 @@ export function DashboardBlock({
               {eyebrow}
             </p>
           ) : null}
-          <h2 className="text-[16px] font-semibold text-strong tracking-tight leading-snug">
+          <h2 className="text-[18px] font-semibold text-strong tracking-[-0.02em] leading-snug">
             {title}
           </h2>
           {lede && showBody ? (
@@ -151,34 +151,52 @@ export function DashboardBlock({
           ) : null}
         </div>
       </header>
-      {showBody && (children || primaryCta) ? (
-        <div id={bodyId} className="mt-3 space-y-3">
-          {children}
-          {primaryCta ? (
-            /* Batch 33 · M5 · bronze CTA elevation. rounded-lg instead
-               of rounded; inset-highlight + drop-shadow pair so the
-               button reads as pressed/pressable; :active token
-               (--color-bronze-active at globals.css:43, previously
-               unused) fires on tap so touch users get real feedback. */
-            primaryCta.href ? (
-              <Link
-                href={primaryCta.href}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-bronze bg-bronze text-ground px-3.5 py-2 text-[14px] font-semibold hover:bg-bronze-hover active:bg-bronze-active min-h-[44px] shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_1px_2px_rgba(0,0,0,0.4)]"
-              >
-                {primaryCta.label}
-                <ChevronRight size={14} strokeWidth={2} />
-              </Link>
-            ) : (
-              <button
-                type="button"
-                onClick={primaryCta.onClick}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-bronze bg-bronze text-ground px-3.5 py-2 text-[14px] font-semibold hover:bg-bronze-hover active:bg-bronze-active min-h-[44px] shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_1px_2px_rgba(0,0,0,0.4)]"
-              >
-                {primaryCta.label}
-                <ChevronRight size={14} strokeWidth={2} />
-              </button>
-            )
-          ) : null}
+      {/* Batch 34 · M3 · smooth expand/collapse via grid-template-rows
+          0fr↔1fr transition. Works without needing measured heights.
+          Non-collapsible blocks stay at 1fr so the transition is a
+          no-op. `motion-reduce:transition-none` gates for prefers-
+          reduced-motion users. Children stay mounted across
+          collapse cycles so form state / expanded exercise notes /
+          etc. don't lose position. */}
+      {children || primaryCta ? (
+        <div
+          id={bodyId}
+          className={cn(
+            "grid transition-[grid-template-rows] duration-200 ease-out motion-reduce:transition-none",
+            showBody ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+          )}
+          aria-hidden={collapsible && !showBody ? true : undefined}
+        >
+          <div className="overflow-hidden">
+            <div className="mt-3 space-y-3">
+              {children}
+              {primaryCta ? (
+                /* Batch 33 · M5 · bronze CTA elevation. rounded-lg instead
+                   of rounded; inset-highlight + drop-shadow pair so the
+                   button reads as pressed/pressable; :active token
+                   (--color-bronze-active at globals.css:43, previously
+                   unused) fires on tap so touch users get real feedback. */
+                primaryCta.href ? (
+                  <Link
+                    href={primaryCta.href}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-bronze bg-bronze text-ground px-3.5 py-2 text-[14px] font-semibold hover:bg-bronze-hover active:bg-bronze-active min-h-[44px] shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_1px_2px_rgba(0,0,0,0.4)]"
+                  >
+                    {primaryCta.label}
+                    <ChevronRight size={14} strokeWidth={2} />
+                  </Link>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={primaryCta.onClick}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-bronze bg-bronze text-ground px-3.5 py-2 text-[14px] font-semibold hover:bg-bronze-hover active:bg-bronze-active min-h-[44px] shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_1px_2px_rgba(0,0,0,0.4)]"
+                  >
+                    {primaryCta.label}
+                    <ChevronRight size={14} strokeWidth={2} />
+                  </button>
+                )
+              ) : null}
+            </div>
+          </div>
         </div>
       ) : null}
     </section>

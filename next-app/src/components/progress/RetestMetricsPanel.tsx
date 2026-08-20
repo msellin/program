@@ -179,7 +179,7 @@ function RetestCard({
             </div>
             <div>
               <p className="text-muted text-[10px] uppercase tracking-wider">Current</p>
-              <p className="font-mono text-strong font-semibold">
+              <p className="font-mono text-[20px] leading-tight text-strong font-semibold tracking-tight">
                 {formatMetric(m.current, m.unit)}
               </p>
             </div>

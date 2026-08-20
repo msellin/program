@@ -215,7 +215,7 @@ export function TodaySession({ slugOverride }: { slugOverride?: string } = {}) {
           Progress / History label their scope while the DateNav-style
           picker below carries the range. */}
       <header>
-        <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">
+        <h1 className="text-[32px] font-bold tracking-[-0.03em] text-strong leading-none">
           {slugOverride ? "Focus session" : "Today"}
         </h1>
         {slugOverride && primary.slug ? (
