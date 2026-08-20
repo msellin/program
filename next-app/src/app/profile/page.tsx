@@ -16,6 +16,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useIsSuperAdmin } from "@/lib/super-admin";
 import { loadProgramManifest } from "@/lib/data-loader";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
+import { StatusPill } from "@/components/ui/StatusPill";
 import type { ProgramManifest } from "@/lib/schemas";
 
 /**
@@ -124,13 +125,7 @@ export default function ProfilePage() {
               </span>
             ) : null}
             {isSuperAdmin ? (
-              <span
-                className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5"
-                title="Staff account — you can enrol in multiple programs at once."
-              >
-                <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-slate" />
-                staff
-              </span>
+              <StatusPill label="staff" tone="slate" />
             ) : null}
           </p>
         </div>
@@ -201,43 +196,31 @@ export default function ProfilePage() {
                     <p className="text-sm font-semibold text-strong truncate flex items-center gap-1.5">
                       <span className="truncate">{p.name}</span>
                       {graduated ? (
-                        <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted flex-shrink-0 inline-flex items-center gap-1.5">
-                          <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-green" />
-                          graduated
-                        </span>
+                        <StatusPill label="graduated" tone="green" className="flex-shrink-0" />
                       ) : null}
                     </p>
                     <p className="text-[11px] text-muted mt-0.5 flex items-center gap-1.5 flex-wrap">
                       <span>{p.duration_weeks} weeks · {p.difficulty}</span>
                       {isPrimary && activePrograms.length > 1 && !graduated && !paused ? (
-                        <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
-                          <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-bronze" />
-                          today&rsquo;s
-                        </span>
+                        // Batch 36 · migrated from inline bronze-dot pill to
+                        // StatusPill tone="slate" — bronze is CTA-only per R2.
+                        // "Today's" is a state indicator, not an invitation.
+                        <StatusPill label="today's" tone="slate" />
                       ) : null}
                       {tierLabel && !graduated && !paused ? (
-                        <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
-                          <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-slate" />
-                          {tierLabel}
-                        </span>
+                        <StatusPill label={tierLabel} tone="slate" />
                       ) : null}
                       {!hasIntake && !graduated && !paused ? (
-                        <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
-                          <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-amber" />
-                          intake pending
-                        </span>
+                        <StatusPill label="intake pending" tone="amber" />
                       ) : null}
                       {paused ? (
-                        <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
-                          <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-slate" />
-                          paused
-                        </span>
+                        <StatusPill label="paused" tone="slate" />
                       ) : null}
                       {extendedWeeks > 0 && !graduated && !paused ? (
-                        <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
-                          <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-bronze" />
-                          extended +{extendedWeeks}w
-                        </span>
+                        // Batch 36 · migrated from bronze-dot pill to slate
+                        // per R2 (bronze is CTA-only). "Extended +Nw" is an
+                        // informational state, not a CTA.
+                        <StatusPill label={`extended +${extendedWeeks}w`} tone="slate" />
                       ) : null}
                     </p>
                   </div>
