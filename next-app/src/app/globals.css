@@ -14,14 +14,23 @@
   /* Text */
   --color-ink: #d6d9de;
   --color-strong: #f4f5f7;
-  --color-muted: #8a8f9a;
+  /* Batch 36 Step 1 · muted bumped from #8a8f9a → #93989f per v1.1.1 §1 a11y jury.
+     #8a8f9a computed 4.19 on surface-3 (fails WCAG 1.4.3); #93989f gives 4.60 on
+     surface-3, 5.15 on surface-2. Muted is now legible everywhere the design
+     puts it, including inside ExplainSheet body captions. */
+  --color-muted: #93989f;
 
   /* Lines. P1-60 (Batch 26) — bumped `--color-line` from #3a3f4a
-     (1.82:1 on surface) to #4d525d (~3.05:1) so input borders pass
-     WCAG 1.4.11 non-text UI contrast without redesigning form-field
-     backgrounds. `line-soft` stays as the divider-only token. */
-  --color-line: #4d525d;
+     (1.82:1 on surface) to #4d525d. Batch 36 Step 1 (v1.1.1 §1 a11y jury)
+     bumps again from #4d525d (2.45 on ground, 2.27 on surface — fails 1.4.11
+     for non-text-interactive-boundary carrying meaning) to #5f6570 (~3.16 on
+     ground — passes 3:1). `line-soft` stays as the divider-only token. */
+  --color-line: #5f6570;
   --color-line-soft: #24272f;
+  /* Batch 36 Step 1 (v1.1.1 §1 new) — line-strong for focusable input outline,
+     StatusPill outline when interactive, arc-progress rest-color, and
+     MetricStripCluster cell dividers that carry semantic separation. */
+  --color-line-strong: #6b717d;
 
   /* Semantic states. P1-59 (Batch 26) — added `--color-red-strong`
      (~#f28068) as the on-tint variant for `bg-red/20` pairings that
@@ -52,6 +61,30 @@
     var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono:
     var(--font-mono), ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Batch 36 Step 1 (v1.1.1 §1 mobile-UX P0-1) — safe-area env() tokens.
+     Every fixed / sticky bottom element (bottom-nav, sticky primary CTA,
+     ExplainSheet drag handle) MUST pad by --safe-area-bottom or the iPhone
+     home-indicator overlaps CTAs. --safe-area-keyboard uses the VirtualKeyboard
+     API (Chromium) with a visualViewport fallback for iOS Safari — the two
+     surfaces that need it are Intake and Check (keyboard-aware sticky CTA
+     per §2.2). */
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-left: env(safe-area-inset-left, 0px);
+  --safe-area-right: env(safe-area-inset-right, 0px);
+  --safe-area-keyboard: env(keyboard-inset-height, 0px);
+
+  /* Batch 36 Step 1 (v1.1.1 §1 motion tokens) — the canonical ease.
+     Used by every primitive transition. Named so components don't reinvent. */
+  --ease-out-terav: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Batch 36 Step 1 (v1.1.1 §1 mobile-UX P0-1) — every full-height container MUST
+   use `100dvh`, not `100vh`. 100vh miscalculates on iOS Safari with dynamic
+   address-bar chrome and produces "primary CTA hidden below the fold" (P0). */
+.dvh-screen {
+  min-height: 100dvh;
 }
 
 html,
