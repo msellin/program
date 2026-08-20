@@ -14,6 +14,7 @@ import { HeritageClusterChip } from "@/components/progress/HeritageClusterChip";
 import { EmptyStateCard } from "@/components/EmptyStateCard";
 import { InfoSheet } from "@/components/InfoSheet";
 import { WeeklyHeatmap, type WeeklyHeatmapCell, type WeeklyHeatmapCellState } from "@/components/ui/WeeklyHeatmap";
+import { ReadinessTrail } from "@/components/workout/ReadinessTrail";
 import { today } from "@/lib/utils";
 import dynamic from "next/dynamic";
 import type { Program, Exercise, Milestone } from "@/lib/schemas";
@@ -219,32 +220,26 @@ function ProgressBody({
         />
       ) : null}
 
-      {/* Batch 36 Step 11 · WeeklyHeatmap at top of Progress per v1.1.1 §3
-          row 4. Reads derived_state per day from logs + falls back to
-          "session logged" for dates without a morning check. Compact 12
-          weeks; row-tap surfaces are stub-ready (no handler wired yet). */}
-      {(() => {
-        const cells = buildProgressHeatmap(store.logs, 12, today());
-        const anyState = cells.some((c) => c.sessionState !== "none");
-        if (!anyState) return null;
-        const counts = cells.reduce<Record<WeeklyHeatmapCellState, number>>(
-          (acc, c) => ({ ...acc, [c.sessionState]: (acc[c.sessionState] ?? 0) + 1 }),
-          { green: 0, amber: 0, red: 0, rest: 0, missed: 0, none: 0 },
-        );
-        const ariaLabel =
-          `Session history, past 12 weeks: ${counts.green} green, ${counts.amber} amber, ` +
-          `${counts.red} red, ${counts.none} no session logged.`;
-        return (
-          <section className="space-y-2">
-            <div className="flex items-center justify-between gap-3">
-              <h2 className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted">
-                Readiness — past 12 weeks
-              </h2>
-            </div>
-            <WeeklyHeatmap cells={cells} ariaLabel={ariaLabel} legend />
-          </section>
-        );
-      })()}
+      {/* Batch 36 Step 11 · WeeklyHeatmap + interactive ReadinessTrail at
+          top of Progress per v1.1.1 §3 row 4. Reads derived_state per day
+          from logs + falls back to "session logged" for dates without a
+          morning check. */}
+      <ProgressReadinessSection store={store} />
+
+      {/* Interactive ReadinessTrail 30-day per §2.4 (interactive variant).
+          Tapping a cell opens an InfoSheet with the day detail via
+          ProgressReadinessSection state. */}
+      <section className="space-y-2">
+        <h2 className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted">
+          Recent readiness — past 30 days
+        </h2>
+        <ReadinessTrail
+          logs={store.logs}
+          activeDate={today()}
+          days={30}
+          interactive
+        />
+      </section>
 
       {/* SECTION 1 — Insights (retest metrics + weekly narrative + charts). */}
       <div className="space-y-5">
@@ -787,6 +782,72 @@ function CrossTrackWeekTile({
       <p className="text-[11px] text-muted italic pt-1">
         Rolled up across every active track. Per-track detail on the card above.
       </p>
+    </section>
+  );
+}
+
+/**
+ * Batch 36 Step 11 — ProgressReadinessSection extracts the WeeklyHeatmap
+ * into its own component so it can own the row-tap → InfoSheet state
+ * cleanly. The InfoSheet uses the ExplainSheet contract via `trigger`.
+ */
+function ProgressReadinessSection({
+  store,
+}: {
+  store: import("@/lib/schemas").Store;
+}) {
+  const [openWeek, setOpenWeek] = useState<number | null>(null);
+  const cells = buildProgressHeatmap(store.logs, 12, today());
+  const anyState = cells.some((c) => c.sessionState !== "none");
+  if (!anyState) return null;
+  const counts = cells.reduce<Record<WeeklyHeatmapCellState, number>>(
+    (acc, c) => ({ ...acc, [c.sessionState]: (acc[c.sessionState] ?? 0) + 1 }),
+    { green: 0, amber: 0, red: 0, rest: 0, missed: 0, none: 0 },
+  );
+  const ariaLabel =
+    `Session history, past 12 weeks: ${counts.green} green, ${counts.amber} amber, ` +
+    `${counts.red} red, ${counts.none} no session logged.`;
+
+  const weekCells = openWeek != null ? cells.slice(openWeek * 7, openWeek * 7 + 7) : [];
+  const weekSummary =
+    weekCells.length > 0
+      ? `${weekCells.filter((c) => c.sessionState === "green").length} done, ${
+          weekCells.filter((c) => c.sessionState === "amber").length
+        } amber, ${weekCells.filter((c) => c.sessionState === "red").length} red, ${
+          weekCells.filter((c) => c.sessionState === "none").length
+        } no log`
+      : "";
+  const weekTitle = weekCells.length > 0 ? `Week of ${weekCells[0].date}` : "Week detail";
+
+  return (
+    <section className="space-y-2">
+      <div className="flex items-center justify-between gap-3">
+        <h2 className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted">
+          Readiness — past 12 weeks
+        </h2>
+      </div>
+      <WeeklyHeatmap
+        cells={cells}
+        ariaLabel={ariaLabel}
+        legend
+        onRowTap={(w) => setOpenWeek(w)}
+      />
+      {openWeek != null ? (
+        <InfoSheet
+          title={weekTitle}
+          trigger="readiness-trail"
+          onClose={() => setOpenWeek(null)}
+        >
+          <p className="text-[14px]">{weekSummary}</p>
+          <ul className="mt-2 space-y-1 text-[13px] text-muted">
+            {weekCells.map((c) => (
+              <li key={c.date} className="font-mono">
+                {c.date} · {c.sessionState}
+              </li>
+            ))}
+          </ul>
+        </InfoSheet>
+      ) : null}
     </section>
   );
 }

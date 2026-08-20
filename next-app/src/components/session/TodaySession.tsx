@@ -213,8 +213,13 @@ export function TodaySession({ slugOverride }: { slugOverride?: string } = {}) {
           users get program-specific progress bars inside their group
           cards below — surfacing a single top-level progress bar in a
           multi-program state would misrepresent which program you're
-          progressing through. */}
-      {!slugOverride && programs.length === 1 && phase && phaseWeekPair(phase, activeDate) ? (
+          progressing through.
+
+          Session mode (slugOverride) always shows this — session route
+          IS single-focus by definition (that's what slugOverride means),
+          so the multi-track suppression doesn't apply. Founder feedback
+          continued 2026-08-20. */}
+      {(programs.length === 1 || slugOverride) && phase && phaseWeekPair(phase, activeDate) ? (
         (() => {
           const pair = phaseWeekPair(phase, activeDate)!;
           const programName = primary.slug ? programDisplayName(primary, primary.slug) : "Program";

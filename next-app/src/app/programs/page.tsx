@@ -8,6 +8,7 @@ import { useStore } from "@/lib/useStore";
 import { cn } from "@/lib/utils";
 import { DashboardBlock } from "@/components/DashboardBlock";
 import { InfoSheet } from "@/components/InfoSheet";
+import { StatusPill } from "@/components/ui/StatusPill";
 import type { ProgramManifest, ProgramManifestEntry } from "@/lib/schemas";
 
 // F9 Batch 30 · category → accent tone mapping for the DashboardBlock left
@@ -22,6 +23,34 @@ const CATEGORY_ACCENT: Record<string, "slate" | "bronze" | "green" | "amber" | "
   mobility: "slate",
   other: "default",
 };
+
+// Batch 36 Step 13 · same accent → left-stripe classname map used by the
+// "5 REFERENCED · Live now" strip card. Kept local so the strip doesn't
+// pull the whole CategoryTileGrid primitive when it only needs a stripe.
+const ACCENT_STRIPE: Record<string, string> = {
+  slate: "border-l-slate",
+  bronze: "border-l-bronze",
+  green: "border-l-green",
+  amber: "border-l-amber",
+  default: "border-l-line-strong",
+};
+
+// Batch 36 Step 13 · map program-manifest `status` (REFERENCED / REVIEWED
+// / VERIFIED / stable / … legacy aliases) to StatusPill label + tone.
+// Fallback keeps the raw uppercase status if we don't recognise it — no
+// silent hiding.
+function statusLabelOf(status: string | undefined): string {
+  if (!status) return "REFERENCED";
+  if (status === "stable") return "VERIFIED";
+  return status.toUpperCase();
+}
+
+function statusToneOf(status: string | undefined): "slate" | "green" | "amber" | "muted" {
+  if (status === "VERIFIED" || status === "stable") return "green";
+  if (status === "REVIEWED") return "slate";
+  if (status === "REFERENCED") return "slate";
+  return "muted";
+}
 
 type FilterCat = "all" | ProgramManifestEntry["category"];
 // F4 — sort ordering. `default` preserves the manifest's authored order
@@ -189,6 +218,66 @@ export default function ProgramCatalogPage() {
           clinical context) sit outside this ladder — see the &ldquo;personal&rdquo; badge instead.
         </p>
       </header>
+
+      {/* Batch 36 Step 13 · "5 REFERENCED · Live now" strip per v1.1.1
+          §3 row 5. Horizontal peek-scroll of every shipping REFERENCED+
+          program with a category-tint stripe on the left edge. Sits
+          above the filter chips so the browse mental model is: "here's
+          what's shipping today" first, "browse by category" second.
+          Sizes tuned for one-and-a-half card peek at 393px. */}
+      {publicPrograms.length > 0 ? (
+        <section className="space-y-2 -mx-4 sm:-mx-6" aria-labelledby="live-now-eyebrow">
+          <div className="px-4 sm:px-6 flex items-baseline gap-2">
+            <p
+              id="live-now-eyebrow"
+              className="font-mono text-[10px] font-medium uppercase tracking-widest text-bronze"
+            >
+              {publicPrograms.length} referenced · live now
+            </p>
+          </div>
+          <ul
+            className="flex gap-3 overflow-x-auto px-4 sm:px-6 pb-2 snap-x snap-mandatory"
+            style={{ overscrollBehaviorX: "contain" }}
+          >
+            {publicPrograms.map((p) => {
+              const accent = CATEGORY_ACCENT[p.category] ?? CATEGORY_ACCENT.other;
+              const stripeClass = ACCENT_STRIPE[accent];
+              return (
+                <li key={p.slug} className="snap-start flex-shrink-0 w-[240px]">
+                  <Link
+                    href={`/programs/${p.slug}`}
+                    className={cn(
+                      "block h-full rounded-lg border border-line-soft border-l-4 bg-surface-2 p-3 space-y-2",
+                      "hover:bg-surface-3 active:scale-[0.98] transition-transform duration-100 motion-reduce:transition-none",
+                      "focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2",
+                      stripeClass,
+                    )}
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="font-mono text-[10px] uppercase tracking-widest text-muted">
+                        {p.category}
+                      </p>
+                      <StatusPill
+                        label={statusLabelOf(p.status)}
+                        tone={statusToneOf(p.status)}
+                      />
+                    </div>
+                    <p className="text-[14px] font-semibold text-strong leading-snug line-clamp-2">
+                      {p.name}
+                    </p>
+                    <p className="text-[12px] text-muted leading-snug line-clamp-2">
+                      {p.short_description}
+                    </p>
+                    <p className="font-mono text-[10px] tabular-nums text-muted">
+                      {p.duration_weeks} wks · {p.difficulty}
+                    </p>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      ) : null}
 
       <nav
         aria-label="Program category filter"
