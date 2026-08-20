@@ -47,8 +47,12 @@ export type WeeklyHeatmapProps = {
   className?: string;
 };
 
+// Batch 36 P0 fix (visual-craft audit) — "green" was mapped to bg-bronze
+// which paints every "session done" cell CTA-bronze and violates R2/V4
+// (bronze is CTA-only). Green cells now use bg-green as the semantic
+// state color. Bronze reserved for target/PR waypoints and primary CTA.
 const STATE_CLASS: Record<WeeklyHeatmapCellState, string> = {
-  green: "bg-bronze",
+  green: "bg-green",
   amber: "bg-amber/70",
   red: "bg-red/70",
   rest: "border border-line-strong bg-transparent",

@@ -173,8 +173,10 @@ export function WorkoutHero({
                   onClick={onExplain}
                   aria-label="Why this?"
                   className={cn(
-                    "font-mono text-[11px] uppercase tracking-widest text-slate hover:text-ink",
-                    "min-h-[24px] py-1 px-2 rounded",
+                    "font-mono text-[11px] uppercase tracking-widest text-slate hover:text-ink active:text-strong",
+                    // Batch 36 P0 (visual-craft audit) — bumped from min-h-[24px]
+                    // to min-h-11 per §2.0 invariant 2 (44×44 tap target).
+                    "min-h-11 min-w-11 py-1 px-2 rounded flex items-center justify-center",
                     "focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2",
                   )}
                 >
@@ -227,8 +229,11 @@ export function WorkoutHero({
                       onClick={() => onBlockCite(block.number)}
                       aria-label={`Show ${block.citationCount} citation${block.citationCount === 1 ? "" : "s"} for ${block.name}`}
                       className={cn(
-                        "font-mono text-[10px] uppercase tracking-widest text-bronze hover:text-bronze-hi",
-                        "min-h-[24px] px-2 py-1 rounded flex-shrink-0",
+                        "font-mono text-[10px] uppercase tracking-widest text-bronze hover:text-bronze-hi active:text-bronze-active",
+                        // Batch 36 P0 (visual-craft audit) — 44×44 tap target
+                        // per §2.0 invariant 2. Visual chip stays 10px inline;
+                        // hit-slop provided by flex-centered min-h-11 wrapper.
+                        "min-h-11 min-w-11 px-2 py-1 rounded flex-shrink-0 flex items-center justify-center",
                         "focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2",
                       )}
                     >

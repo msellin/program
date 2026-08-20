@@ -64,7 +64,7 @@ export function WeeklySessionStrip({
             key={`${d.dayLetter}-${i}`}
             type="button"
             onClick={onCellTap ? () => onCellTap(i) : undefined}
-            aria-label={cellAriaLabel(d)}
+            aria-label={cellAriaLabel(d, i)}
             aria-current={d.isToday ? "date" : undefined}
             aria-pressed={d.completed}
             className={cn(
@@ -127,7 +127,7 @@ function StateDot({ day }: { day: WeeklySessionStripDay }) {
   return <span aria-hidden className={cn("h-2 w-2 rounded-full flex-shrink-0", classes)} />;
 }
 
-function cellAriaLabel(d: WeeklySessionStripDay): string {
+function cellAriaLabel(d: WeeklySessionStripDay, dayIndex: number): string {
   const state = d.isRest
     ? "rest day"
     : d.completed
@@ -137,14 +137,25 @@ function cellAriaLabel(d: WeeklySessionStripDay): string {
         : d.scheduled
           ? "scheduled"
           : "no session";
-  return `${dayFull(d.dayLetter)}: ${state}`;
+  return `${dayFullByIndex(dayIndex)}: ${state}`;
 }
 
-function dayFull(letter: string): string {
-  return (
-    { M: "Monday", T: "Tuesday", W: "Wednesday", F: "Friday", S: "Saturday" }[letter[0]] ??
-    letter
-  );
+// Batch 36 P0 fix (visual-craft audit) — replaces prior `dayFull(letter)`
+// helper whose object literal `{M,T,W,T,F,S,S}` collapsed to 5 keys, so
+// Thursday returned undefined and Sunday collided with Saturday. Now
+// index-based (0..6 = M..S) so all 7 days resolve correctly.
+const DAY_FULL_NAMES = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+] as const;
+
+function dayFullByIndex(i: number): string {
+  return DAY_FULL_NAMES[i] ?? "Day";
 }
 
 function computeSummary(days: WeeklySessionStripDay[]): string {

@@ -117,9 +117,10 @@ export function ProposalCard({
           type="button"
           onClick={() => setSheetOpen(true)}
           className={cn(
-            "font-mono text-[11px] uppercase tracking-wider text-slate hover:text-ink",
+            "font-mono text-[11px] uppercase tracking-wider text-slate hover:text-ink active:text-strong",
             "focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2",
-            "min-h-[24px] py-1",
+            // Batch 36 P0 (visual-craft audit) — 44×44 tap target per §2.0.
+            "min-h-11 py-1 px-2 -mx-2 rounded inline-flex items-center",
           )}
           aria-label={`Why ${title}?`}
         >
