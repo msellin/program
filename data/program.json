@@ -540,29 +540,55 @@
       {
         "id": "green",
         "label": "Progress the load next session; increment TM at cycle end",
-        "conditions": { "pain_during_max": 3, "returns_to_baseline_within_hours": 24 },
+        "conditions": {
+          "all_symptoms_lte": 3,
+          "morning_stiffness_min_lt": 30,
+          "click_painful": false,
+          "night_pain": false,
+          "gait_change": false
+        },
+        "conditions_prose": "All logged symptoms (groin_left, low_back, buttock_left, shoulder_right) <= 3/10 AND morning stiffness < 30 min AND no painful click / night pain / gait change",
         "action": "increment_load"
       },
       {
         "id": "amber",
         "label": "Hold the load; repeat the week",
         "conditions": {
-          "pain_during_range": [4, 5],
-          "or": "morning stiffness slightly worse but settling by midday"
+          "any_symptom_between": [4, 5],
+          "or_morning_stiffness_min_between": [30, 45],
+          "or_click_painful": true
         },
+        "conditions_prose": "Any symptom scoring 4-5/10 OR morning stiffness 30-45 min OR click reported as painful",
         "action": "hold_load"
       },
       {
         "id": "red",
         "label": "Back off two steps AND drop TM by 10% at cycle end",
         "conditions": {
-          "any_of": ["painful_click", "persistent_si_ache", "night_pain", "gait_change"]
+          "any_symptom_gt": 5,
+          "or_night_pain": true,
+          "or_gait_change": true,
+          "or_click_painful_and_persistent": true,
+          "or_persistent_buttock_si_ache_hours_gte": 48,
+          "or_radicular_flavor_present": true
         },
+        "conditions_prose": "Any symptom > 5/10 OR night pain OR gait change OR painful+persistent click OR left buttock/SI ache lasting >=48h OR radicular-flavor (numbing/tingling/pulsation) noted",
         "action": "regress_two_steps_and_reset_tm",
         "escalate_if_repeated": true
       }
     ],
     "cycle_end_rule": "At the end of every 4-week 5/3/1 cycle: if all 4 weeks green → TM +5 kg squat / +7.5 kg pull. Any amber week → hold TM. Any red week → TM -10%.",
+    "cycle_end_rule_machine": {
+      "on_all_weeks_green": { "back_squat_highbar": "+5", "block_pull_midshin": "+7.5", "front_squat": "+2.5" },
+      "on_any_amber": { "action": "hold_all_tms" },
+      "on_any_red": { "action": "multiply_tms", "factor": 0.9 }
+    },
+    "session_spacing": {
+      "note": "Batch 36 v1.1.1 · founder-flagged 2026-08-20 after 3 heavy compound sessions in 4 days (Sun+Tue+Wed) in Phase 1. Whitepaper defense: ACSM lumbosacral rehab consensus + Schoenfeld 2016 (JSCR) meta on frequency + fatigue.",
+      "min_hours_between_heavy_compound": 48,
+      "heavy_compound_ids": ["back_squat_highbar", "block_pull_midshin", "deadlift_conventional", "front_squat"],
+      "applies_to_phases": ["phase_1_rebuild_evaluate", "phase_2_cycle_1", "phase_3_cycle_2", "phase_4_cycles_3_4_test", "phase_5_hatch_specialise", "phase_6_peak_test", "phase_7_continue"]
+    },
     "escalation": "Night pain, a clear step-change in symptoms, or three amber weeks in a row means see the orthopaedist. Do not simply keep resetting the TM."
   },
   "daily_log_schema": {
