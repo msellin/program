@@ -67,6 +67,18 @@ export function WeeklyHeatmap({
   legend = true,
   className,
 }: WeeklyHeatmapProps) {
+  // Batch 36 P1 (audit 2026-08-21 · app-copy) — empty state placeholder
+  // when no cells or all cells "none". Was previously blank grid; now
+  // a small caption tells the user why.
+  const anyState = cells.some((c) => c.sessionState !== "none");
+  if (!cells.length || !anyState) {
+    return (
+      <p className={cn("text-[12px] text-muted italic min-h-11 flex items-center", className)}>
+        No session history yet — log a session or morning check to start the trail.
+      </p>
+    );
+  }
+
   // Group cells into weeks. Column-major (each week is a column of 7).
   const weeks = groupByWeek(cells);
 

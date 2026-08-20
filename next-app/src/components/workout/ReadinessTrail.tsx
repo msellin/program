@@ -58,7 +58,22 @@ export function ReadinessTrail({
 }: ReadinessTrailProps) {
   const cells = buildCells(activeDate, days, logs);
   const anyState = cells.some((c) => c.state !== null);
-  if (!anyState) return null;
+  if (!anyState) {
+    // Batch 36 P1 (audit 2026-08-21 · app-copy) — was silent null, now
+    // renders a small placeholder so the section eyebrow doesn't hover
+    // over an empty area. Reserved layout height matches interactive
+    // (min-h-11) so no CLS on hydration.
+    return (
+      <p
+        className={cn(
+          "text-[12px] text-muted italic min-h-11 flex items-center",
+          className,
+        )}
+      >
+        No morning checks logged in the last {days} days yet.
+      </p>
+    );
+  }
 
   const ariaLabel = buildAriaLabel(cells, days);
 
