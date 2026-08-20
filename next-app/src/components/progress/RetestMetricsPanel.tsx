@@ -11,6 +11,7 @@ import {
 import { dueRetestMetrics } from "@/lib/engine/tier-promotion";
 import { useStore } from "@/lib/useStore";
 import { today as todayISO } from "@/lib/utils";
+import { Sparkline } from "@/components/charts/Sparkline";
 import type { Program, Store } from "@/lib/schemas";
 
 /**
@@ -87,6 +88,28 @@ function RetestCard({
       ? "text-green"
       : "text-amber";
 
+  // Batch 35 · sparkline data source. Pull all readings for this metric
+  // from retest_readings + prepend the baseline so the line starts from
+  // the anchor. Sparkline auto-scales; if only baseline + current exist,
+  // we still get a 2-point trend line.
+  const readings = useStore((s) => s.store.retest_readings ?? []);
+  const trendValues = readings
+    .filter((r) => r.metric_id === m.metric_id)
+    .sort((a, b) => a.observed_at.localeCompare(b.observed_at))
+    .map((r) => r.value);
+  if (
+    trendValues.length &&
+    m.baseline != null &&
+    trendValues[0] !== m.baseline
+  ) {
+    trendValues.unshift(m.baseline);
+  }
+  const sparklineDirection: "improving" | "worsening" | "flat" = !delta
+    ? "flat"
+    : delta.isImprovement
+      ? "improving"
+      : "worsening";
+
   const [retestOpen, setRetestOpen] = useState(false);
   const [value, setValue] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -148,23 +171,38 @@ function RetestCard({
           No readings yet. Log your baseline below so the delta has something to track against.
         </p>
       ) : (
-        <div className="mt-2 grid grid-cols-3 gap-2 text-[14px]">
-          <div>
-            <p className="text-muted text-[10px] uppercase tracking-wider">Baseline</p>
-            <p className="font-mono text-ink">{formatMetric(m.baseline, m.unit)}</p>
+        <div className="mt-2 space-y-2">
+          <div className="grid grid-cols-3 gap-2 text-[14px]">
+            <div>
+              <p className="text-muted text-[10px] uppercase tracking-wider">Baseline</p>
+              <p className="font-mono text-ink">{formatMetric(m.baseline, m.unit)}</p>
+            </div>
+            <div>
+              <p className="text-muted text-[10px] uppercase tracking-wider">Current</p>
+              <p className="font-mono text-strong font-semibold">
+                {formatMetric(m.current, m.unit)}
+              </p>
+            </div>
+            <div>
+              <p className="text-muted text-[10px] uppercase tracking-wider">Δ</p>
+              <p className={`font-mono ${deltaColor}`}>
+                {delta ? formatDelta(delta.value, m.unit) : "—"}
+              </p>
+            </div>
           </div>
-          <div>
-            <p className="text-muted text-[10px] uppercase tracking-wider">Current</p>
-            <p className="font-mono text-strong font-semibold">
-              {formatMetric(m.current, m.unit)}
-            </p>
-          </div>
-          <div>
-            <p className="text-muted text-[10px] uppercase tracking-wider">Δ</p>
-            <p className={`font-mono ${deltaColor}`}>
-              {delta ? formatDelta(delta.value, m.unit) : "—"}
-            </p>
-          </div>
+          {/* Batch 35 · sparkline of retest_readings history. Renders
+              only when there are ≥ 2 data points so the trend line has
+              something to say. Direction (improving/worsening/flat) is
+              honest — no glow, no confetti (R5). */}
+          {trendValues.length >= 2 ? (
+            <Sparkline
+              values={trendValues}
+              direction={sparklineDirection}
+              width={200}
+              height={28}
+              className="mt-1"
+            />
+          ) : null}
         </div>
       )}
 

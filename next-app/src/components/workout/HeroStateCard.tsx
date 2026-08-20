@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useStore } from "@/lib/useStore";
 import { today as todayISO } from "@/lib/utils";
+import { ReadinessTrail } from "./ReadinessTrail";
 
 type Copy = { title: string; sub: string; tone: "green" | "amber" | "red" | "neutral" };
 
@@ -20,6 +21,7 @@ const COPY: Record<string, Copy> = {
 export function HeroStateCard({ date }: { date: string }) {
   const derived = useStore((s) => s.store.logs[date]?.derived_state ?? null);
   const symptoms = useStore((s) => s.store.logs[date]?.symptoms ?? null);
+  const logs = useStore((s) => s.store.logs);
   const isToday = date === todayISO();
   const state = derived ?? (symptoms ? "green" : "none");
   const copy = COPY[state] ?? COPY.none;
@@ -45,23 +47,29 @@ export function HeroStateCard({ date }: { date: string }) {
   // readiness dot in the top nav; here we render a single-line strip so the
   // primary session content dominates the fold. Tappable as a shortcut back
   // to the Check page for adjustments.
+  //
+  // Batch 35 · added ReadinessTrail below the strip so the 14-day history
+  // reads visually (dots, not text). Data as viz, not another sentence.
   if (isToday && state !== "none") {
     const escalate = state === "red";
     return (
-      <div className="flex items-center justify-between gap-2 text-[14px]">
-        <Link href="/check/" className="flex items-center gap-2 hover:opacity-80">
-          <span className={`w-1.5 h-1.5 rounded-full ${dotColour}`} />
-          <span className={`font-mono uppercase tracking-wider ${textColour}`}>{copy.title}</span>
-          <span className="text-muted">· {copy.sub}</span>
-        </Link>
-        {escalate ? (
-          <Link
-            href="/guide/#red-flags"
-            className="font-mono text-[11px] text-red border-b border-red/50 hover:opacity-80 whitespace-nowrap"
-          >
-            Escalate →
+      <div className="space-y-2">
+        <div className="flex items-center justify-between gap-2 text-[14px]">
+          <Link href="/check/" className="flex items-center gap-2 hover:opacity-80">
+            <span className={`w-1.5 h-1.5 rounded-full ${dotColour}`} />
+            <span className={`font-mono uppercase tracking-wider ${textColour}`}>{copy.title}</span>
+            <span className="text-muted">· {copy.sub}</span>
           </Link>
-        ) : null}
+          {escalate ? (
+            <Link
+              href="/guide/#red-flags"
+              className="font-mono text-[11px] text-red border-b border-red/50 hover:opacity-80 whitespace-nowrap"
+            >
+              Escalate →
+            </Link>
+          ) : null}
+        </div>
+        <ReadinessTrail logs={logs} activeDate={date} />
       </div>
     );
   }
