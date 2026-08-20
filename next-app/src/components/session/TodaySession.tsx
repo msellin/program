@@ -496,9 +496,31 @@ export function TodaySession({ slugOverride }: { slugOverride?: string } = {}) {
             );
             const blockWord = g.blocks.length === 1 ? "block" : "blocks";
             const exWord = totalExercises === 1 ? "exercise" : "exercises";
+            // Batch 33 · M6 · category accent stripe on the workout summary
+            // block. Same DashboardBlock `accent` prop already used on the
+            // Programs catalog. Mapping cribbed from CATEGORY_ACCENT in
+            // src/app/programs/page.tsx — rehab/skill/mobility=slate,
+            // strength=bronze, endurance=green, hyrox=amber. Falls back
+            // to "default" (no stripe) for unknown categories.
+            const category = programManifest?.programs.find(
+              (p) => p.slug === g.program.slug,
+            )?.category;
+            const accent: "slate" | "bronze" | "green" | "amber" | "default" =
+              category === "strength"
+                ? "bronze"
+                : category === "endurance"
+                  ? "green"
+                  : category === "hyrox"
+                    ? "amber"
+                    : category === "rehab" ||
+                        category === "skill" ||
+                        category === "asymmetry"
+                      ? "slate"
+                      : "default";
             return (
               <DashboardBlock
                 key={`summary:${g.program.schema_version}:${gi}`}
+                accent={accent}
                 eyebrow={
                   groupsWithBlocks.length > 1
                     ? `Today · ${programDisplayName(g.program, activeSlugs[gi])}`

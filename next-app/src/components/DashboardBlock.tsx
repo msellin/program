@@ -88,7 +88,15 @@ export function DashboardBlock({
   return (
     <section
       className={cn(
-        "rounded border border-line-soft bg-surface px-4 py-4",
+        // Batch 33 · M1 · surface-2 activates the two-tier hierarchy so
+        // DashboardBlocks don't sit at the same visual weight as inline
+        // cards below them. Token already declared at globals.css:12,
+        // zero call sites until now.
+        // Batch 33 · M8 · shadow-plus-line elevation. Two-part shadow:
+        // 0/1/2 rgba(0,0,0,0.4) tight rim + 0/4/12/-6 halo for float.
+        // Reads as a genuine surface, not a bordered rectangle.
+        "rounded-lg border border-line-soft bg-surface-2 px-4 py-4",
+        "shadow-[0_1px_2px_rgba(0,0,0,0.4),0_4px_12px_-6px_rgba(0,0,0,0.5)]",
         accent ? ACCENT_STRIPE[accent] : null,
         className,
       )}
@@ -147,10 +155,15 @@ export function DashboardBlock({
         <div id={bodyId} className="mt-3 space-y-3">
           {children}
           {primaryCta ? (
+            /* Batch 33 · M5 · bronze CTA elevation. rounded-lg instead
+               of rounded; inset-highlight + drop-shadow pair so the
+               button reads as pressed/pressable; :active token
+               (--color-bronze-active at globals.css:43, previously
+               unused) fires on tap so touch users get real feedback. */
             primaryCta.href ? (
               <Link
                 href={primaryCta.href}
-                className="inline-flex items-center gap-1.5 rounded border border-bronze bg-bronze text-ground px-3 py-2 text-[14px] font-semibold hover:opacity-90 min-h-[44px]"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-bronze bg-bronze text-ground px-3.5 py-2 text-[14px] font-semibold hover:bg-bronze-hover active:bg-bronze-active min-h-[44px] shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_1px_2px_rgba(0,0,0,0.4)]"
               >
                 {primaryCta.label}
                 <ChevronRight size={14} strokeWidth={2} />
@@ -159,7 +172,7 @@ export function DashboardBlock({
               <button
                 type="button"
                 onClick={primaryCta.onClick}
-                className="inline-flex items-center gap-1.5 rounded border border-bronze bg-bronze text-ground px-3 py-2 text-[14px] font-semibold hover:opacity-90 min-h-[44px]"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-bronze bg-bronze text-ground px-3.5 py-2 text-[14px] font-semibold hover:bg-bronze-hover active:bg-bronze-active min-h-[44px] shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_1px_2px_rgba(0,0,0,0.4)]"
               >
                 {primaryCta.label}
                 <ChevronRight size={14} strokeWidth={2} />
