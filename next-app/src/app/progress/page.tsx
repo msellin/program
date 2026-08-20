@@ -13,6 +13,7 @@ import { PerProgramAdherenceCard } from "@/components/progress/PerProgramAdheren
 import { HeritageClusterChip } from "@/components/progress/HeritageClusterChip";
 import { EmptyStateCard } from "@/components/EmptyStateCard";
 import { InfoSheet } from "@/components/InfoSheet";
+import { WeeklyHeatmap, type WeeklyHeatmapCell, type WeeklyHeatmapCellState } from "@/components/ui/WeeklyHeatmap";
 import { today } from "@/lib/utils";
 import dynamic from "next/dynamic";
 import type { Program, Exercise, Milestone } from "@/lib/schemas";
@@ -217,6 +218,33 @@ function ProgressBody({
           body={waypointStatus.reasoning}
         />
       ) : null}
+
+      {/* Batch 36 Step 11 · WeeklyHeatmap at top of Progress per v1.1.1 §3
+          row 4. Reads derived_state per day from logs + falls back to
+          "session logged" for dates without a morning check. Compact 12
+          weeks; row-tap surfaces are stub-ready (no handler wired yet). */}
+      {(() => {
+        const cells = buildProgressHeatmap(store.logs, 12, today());
+        const anyState = cells.some((c) => c.sessionState !== "none");
+        if (!anyState) return null;
+        const counts = cells.reduce<Record<WeeklyHeatmapCellState, number>>(
+          (acc, c) => ({ ...acc, [c.sessionState]: (acc[c.sessionState] ?? 0) + 1 }),
+          { green: 0, amber: 0, red: 0, rest: 0, missed: 0, none: 0 },
+        );
+        const ariaLabel =
+          `Session history, past 12 weeks: ${counts.green} green, ${counts.amber} amber, ` +
+          `${counts.red} red, ${counts.none} no session logged.`;
+        return (
+          <section className="space-y-2">
+            <div className="flex items-center justify-between gap-3">
+              <h2 className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted">
+                Readiness — past 12 weeks
+              </h2>
+            </div>
+            <WeeklyHeatmap cells={cells} ariaLabel={ariaLabel} legend />
+          </section>
+        );
+      })()}
 
       {/* SECTION 1 — Insights (retest metrics + weekly narrative + charts). */}
       <div className="space-y-5">
@@ -761,4 +789,36 @@ function CrossTrackWeekTile({
       </p>
     </section>
   );
+}
+
+/**
+ * Batch 36 Step 11 — build 12-week WeeklyHeatmap cells from the store.
+ * Chronological (day-by-day, 7 per week column). Cell state derives from
+ * `derived_state` first, falls back to "session logged" for dates with
+ * exercises but no morning check.
+ */
+function buildProgressHeatmap(
+  logs: import("@/lib/schemas").Store["logs"],
+  weeks: number,
+  todayISO: string,
+): WeeklyHeatmapCell[] {
+  const todayDate = new Date(todayISO + "T00:00:00");
+  const totalDays = weeks * 7;
+  const startDate = new Date(todayDate);
+  startDate.setDate(todayDate.getDate() - (totalDays - 1));
+
+  const cells: WeeklyHeatmapCell[] = [];
+  for (let i = 0; i < totalDays; i++) {
+    const d = new Date(startDate);
+    d.setDate(startDate.getDate() + i);
+    const iso = d.toISOString().slice(0, 10);
+    const log = logs[iso];
+    let state: WeeklyHeatmapCellState = "none";
+    if (log?.derived_state === "green") state = "green";
+    else if (log?.derived_state === "amber") state = "amber";
+    else if (log?.derived_state === "red") state = "red";
+    else if (log && Object.keys(log.exercises ?? {}).length > 0) state = "green";
+    cells.push({ date: iso, sessionState: state });
+  }
+  return cells;
 }
