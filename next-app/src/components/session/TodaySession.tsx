@@ -207,20 +207,33 @@ export function TodaySession({ slugOverride }: { slugOverride?: string } = {}) {
           ← Back to Today
         </Link>
       ) : null}
-      {/* H1 revised 2026-08-20 · founder-caught date duplication.
-          P1-70 originally moved the date into the H1, but DateNav
-          below ALREADY shows "Wednesday 20 Aug · Today" — same info
-          twice. Instead: H1 carries the ROUTE SCOPE (Today / Focus
-          session), DateNav owns the date display. Matches how Week /
-          Progress / History label their scope while the DateNav-style
-          picker below carries the range. */}
-      <header>
+      {/* Batch 36 Step 10 · H1 inversion per v1.1.1 §5 + landing C1
+          (Aug 2026). The workout name (or focus name for concurrent
+          tracks) is the H1; the route scope moves to a mono-caps
+          eyebrow above. Overturns commit 100760b which reverted H1 to
+          the route label "Today" to fix date-duplication with
+          DateNav — that fix was directionally right (kill duplication)
+          but landed the wrong hierarchy inversion. The correct
+          resolution: eyebrow tier owns scope + week, H1 owns the
+          workout name, DateNav still owns the calendar date.
+
+          Multi-track: primary program's display name is the H1;
+          concurrent tracks render below in their own DashboardBlock
+          groups (existing behavior preserved). */}
+      <header className="space-y-1">
+        <p className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted">
+          {todayEyebrow(slugOverride, activeDate, phase)}
+        </p>
         <h1 className="text-[32px] font-bold tracking-[-0.03em] text-strong leading-none">
-          {slugOverride ? "Focus session" : "Today"}
+          {primary.slug
+            ? programDisplayName(primary, primary.slug)
+            : slugOverride
+              ? "Focus session"
+              : "Today"}
         </h1>
-        {slugOverride && primary.slug ? (
-          <p className="mt-2 text-[14px] text-muted">
-            {programDisplayName(primary, primary.slug)}
+        {phase && !slugOverride ? (
+          <p className="mt-1 text-[14px] text-muted leading-snug">
+            {humanPhaseName(phase.name)}
           </p>
         ) : null}
       </header>
@@ -695,6 +708,46 @@ function programDisplayName(_program: Program, slug: string): string {
     .split("-")
     .map((w) => (w.length ? w[0].toUpperCase() + w.slice(1) : w))
     .join(" ");
+}
+
+/**
+ * Batch 36 Step 10 — mono-caps eyebrow above the Today H1 per v1.1.1 §5.
+ *
+ * On today: "TODAY" or "TODAY · WEEK 3 OF 6" (when phase carries a week
+ * progress). On date-nav browsing: "MON · AUG 18" style short-form. On
+ * session route: "SESSION · WEEK 3 OF 6".
+ *
+ * Purpose: solve the DateNav duplication without inverting hierarchy.
+ * The eyebrow tier gives just enough scope + progress that the H1 can
+ * carry the workout name unchallenged.
+ */
+function todayEyebrow(
+  slugOverride: string | undefined,
+  activeDate: string,
+  phase: Phase | null | undefined,
+): string {
+  const iso = todayISO();
+  const scopeToken = slugOverride
+    ? "SESSION"
+    : activeDate === iso
+      ? "TODAY"
+      : shortDateToken(activeDate);
+  const progressToken = phase ? phaseProgressToken(phase, activeDate) : null;
+  return progressToken ? `${scopeToken} · ${progressToken}` : scopeToken;
+}
+
+function shortDateToken(iso: string): string {
+  const d = new Date(iso + "T12:00:00");
+  return d
+    .toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" })
+    .toUpperCase();
+}
+
+function phaseProgressToken(phase: Phase, activeDate: string): string | null {
+  const raw = phaseProgress(phase, activeDate);
+  if (!raw) return null;
+  // phaseProgress returns "week 3 of 6" style; upper-case for the eyebrow tier.
+  return raw.toUpperCase();
 }
 
 /**
