@@ -271,12 +271,12 @@ export default function ProfilePage() {
             here from the deleted HeaderQuickLinks ⋮ menu. Header now only
             has TERAV + Settings. Install prompt relocated to Settings. */}
         <Link
-          href="/extras"
+          href="/off-plan/"
           className="flex items-center justify-between gap-3 px-3 py-3 min-h-[48px] active:bg-line-soft/50"
         >
           <span className="flex items-center gap-3 text-sm">
             <ListPlus size={16} className="text-muted" />
-            Extras
+            Off-plan
           </span>
           <ChevronRight size={16} className="text-muted flex-shrink-0" />
         </Link>

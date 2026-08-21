@@ -656,10 +656,10 @@ export function TodaySession({
             );
             return (
               <DashboardBlock
-                eyebrow="Extras"
+                eyebrow="Off-plan"
                 title={`${drillCount} drill${drillCount === 1 ? "" : "s"} available`}
                 lede="Accessory work, mobility, around-runs. Optional — logged to today."
-                primaryCta={{ label: "Open extras", href: "/extras" }}
+                primaryCta={{ label: "Open off-plan", href: "/off-plan/" }}
               >
                 <ul className="text-[13px] text-muted space-y-0.5">
                   {extraBlocks.slice(0, 4).map((b) => (

@@ -17,8 +17,13 @@ export const DEFAULT_VIEWPORTS: TourViewport[] = [
 
 export function buildRoutes(activeProgramSlug: string): TourRoute[] {
   return [
-    { slug: "01-today", path: "/", desc: "Today" },
-    { slug: "02-week", path: "/week", desc: "Week" },
+    // Week 4a/b (2026-08-21) — Today tab renamed to Day (label only,
+    // route stays /); Week tab renamed to Plan and moved to /plan/
+    // (old /week/ now redirects). Keep both tour entries so we verify
+    // the redirect stub + the new canonical route both render.
+    { slug: "01-day", path: "/", desc: "Day (formerly Today)" },
+    { slug: "02-plan", path: "/plan", desc: "Plan (formerly Week — new canonical route)" },
+    { slug: "02b-week-redirect", path: "/week", desc: "Week → Plan redirect stub" },
     // A9 (Batch 26) — /coach shelved by S1 kill. Slot 03 kept open with a
     // stable slug ("03-account") so downstream tooling that indexes by
     // route position stays coherent; if a fresh route lands here, it
@@ -40,7 +45,8 @@ export function buildRoutes(activeProgramSlug: string): TourRoute[] {
     // /data was removed 2026-08-18 — GDPR export + delete inlined on /profile.
     { slug: "10-report", path: "/report", desc: "Report" },
     { slug: "11-guide", path: "/guide", desc: "Guide" },
-    { slug: "12-extras", path: "/extras", desc: "Extras" },
+    { slug: "12-off-plan", path: "/off-plan", desc: "Off-plan (formerly Extras)" },
+    { slug: "12b-extras-redirect", path: "/extras", desc: "Extras → Off-plan redirect stub" },
     { slug: "13-check", path: "/check", desc: "Check" },
     { slug: "14-check-hip", path: "/check/hip", desc: "Check — hip" },
     { slug: "15-events", path: "/events", desc: "Events" },

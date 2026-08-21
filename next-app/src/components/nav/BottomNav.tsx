@@ -19,15 +19,15 @@ import { cn } from "@/lib/utils";
 // browsing while Day stays fixed to today (kills the class of bug
 // that produced the tomorrow-then-session date-context issue).
 //
-// The routes themselves stay as `/` and `/week/` for now (renaming to
-// `/plan/` requires a redirect stub + external link updates; deferred
-// to Week 4b). Labels change, mental model changes, URLs stable.
+// Week 4b (2026-08-21) — route renames landed: /week/ → /plan/,
+// /extras/ → /off-plan/. Old paths client-side redirect (matches the
+// /progress + /history pattern from Cut C Phase 3).
 //
 // See dev/active/decisions-2026-08-21-locked.md for the full locked
 // decision set.
 const TABS = [
   { href: "/", label: "Day", Icon: Dumbbell },
-  { href: "/week/", label: "Plan", Icon: CalendarDays },
+  { href: "/plan/", label: "Plan", Icon: CalendarDays },
   { href: "/record/", label: "Record", Icon: Activity },
   { href: "/profile/", label: "Profile", Icon: User },
 ];
