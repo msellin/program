@@ -43,11 +43,20 @@ import type { Program, Block, Exercise, Phase, Store, ScheduledBlock, ProgramMan
  * Today shows a compact DashboardBlock summary per active program
  * with a "Open session →" CTA.
  */
-export function TodaySession({ slugOverride }: { slugOverride?: string } = {}) {
+export function TodaySession({
+  slugOverride,
+  initialDate,
+}: { slugOverride?: string; initialDate?: string } = {}) {
   const [programs, setPrograms] = useState<Program[]>([]);
   const [byId, setById] = useState<Record<string, Exercise>>({});
   const [error, setError] = useState<string | null>(null);
-  const [activeDate, setActiveDate] = useState(() => todayISO());
+  // 2026-08-21 date-context bug fix (option A) — activeDate seeds from
+  // an optional prop so /session/[slug]?date=YYYY-MM-DD lands on the
+  // date the user was viewing on Today, not today. Falls back to today
+  // when the prop is absent (bookmarks, direct nav). See dev/active/
+  // redesign-progress/ upcoming brainstorm for the full date-context
+  // refactor plan (option B — this is only the tactical fix).
+  const [activeDate, setActiveDate] = useState(() => initialDate ?? todayISO());
   const [programManifest, setProgramManifest] = useState<ProgramManifest | null>(null);
   useEffect(() => {
     void loadProgramManifest().then(setProgramManifest).catch(() => setProgramManifest(null));
@@ -606,7 +615,12 @@ export function TodaySession({ slugOverride }: { slugOverride?: string } = {}) {
                   g.program.slug
                     ? {
                         label: "Open session",
-                        href: `/session/${g.program.slug}`,
+                        // 2026-08-21 fix — pass activeDate so tomorrow /
+                        // yesterday navigation on Today is preserved when
+                        // opening the session. Was `/session/${slug}`
+                        // which always landed on todayISO() regardless
+                        // of what the user was browsing.
+                        href: `/session/${g.program.slug}?date=${activeDate}`,
                       }
                     : undefined
                 }
