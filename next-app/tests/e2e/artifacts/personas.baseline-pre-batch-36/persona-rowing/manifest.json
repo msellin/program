@@ -1,0 +1,158 @@
+{
+  "personaId": "persona-rowing",
+  "capturedAt": "2026-08-19T21:33:56.848Z",
+  "viewports": [
+    {
+      "name": "mobile",
+      "width": 393,
+      "height": 852
+    },
+    {
+      "name": "desktop",
+      "width": 1280,
+      "height": 800
+    }
+  ],
+  "routes": [
+    {
+      "route": "/",
+      "slug": "01-today",
+      "status": "ok",
+      "loadMs": 1718,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/week",
+      "slug": "02-week",
+      "status": "ok",
+      "loadMs": 1639,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/account",
+      "slug": "03-account",
+      "status": "ok",
+      "loadMs": 1853,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/history",
+      "slug": "04-history",
+      "status": "ok",
+      "loadMs": 1704,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/progress",
+      "slug": "05-progress",
+      "status": "ok",
+      "loadMs": 1624,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/programs",
+      "slug": "06-programs",
+      "status": "ok",
+      "loadMs": 1713,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/programs/rowing-2k-test-prep",
+      "slug": "07-programs-active",
+      "status": "ok",
+      "loadMs": 1676,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/profile",
+      "slug": "08-profile",
+      "status": "ok",
+      "loadMs": 2322,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/report",
+      "slug": "10-report",
+      "status": "ok",
+      "loadMs": 1685,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/guide",
+      "slug": "11-guide",
+      "status": "ok",
+      "loadMs": 1766,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/extras",
+      "slug": "12-extras",
+      "status": "ok",
+      "loadMs": 1634,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/check",
+      "slug": "13-check",
+      "status": "ok",
+      "loadMs": 1627,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/check/hip",
+      "slug": "14-check-hip",
+      "status": "ok",
+      "loadMs": 1649,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    },
+    {
+      "route": "/events",
+      "slug": "15-events",
+      "status": "ok",
+      "loadMs": 1561,
+      "viewports": [
+        "mobile",
+        "desktop"
+      ]
+    }
+  ]
+}

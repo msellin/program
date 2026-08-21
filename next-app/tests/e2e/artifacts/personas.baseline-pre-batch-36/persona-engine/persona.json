@@ -1,0 +1,26 @@
+{
+  "id": "persona-engine",
+  "displayName": "Engine-builder solo",
+  "archetypeId": "consistent-average",
+  "programSlug": "engine-builder",
+  "days": 60,
+  "focus": "Aerobic Zone-2 arc. 60 days spans multiple phase transitions and the 4-week retest window. Audit target: HR-drift retest UX, phase-progression transparency, run/rest cadence readability on Week + Today.",
+  "simulatedAt": "2026-08-19T21:31:15.975Z",
+  "simSummary": {
+    "logs_count": 60,
+    "skipped_count": 6,
+    "day_adjustments_count": 0,
+    "dismissed_proposals_count": 0,
+    "training_maxes": {
+      "back_squat_highbar": 110,
+      "block_pull_midshin": 140,
+      "front_squat": 85,
+      "deadlift_conventional": 150,
+      "trap_bar_dl_floor": 145
+    }
+  },
+  "tourSummary": {
+    "routes": 14,
+    "errored": 0
+  }
+}

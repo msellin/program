@@ -1,0 +1,26 @@
+{
+  "id": "persona-engine-fast",
+  "displayName": "Engine-builder overperformer",
+  "archetypeId": "overperformer",
+  "programSlug": "engine-builder",
+  "days": 60,
+  "focus": "Aerobic overperformer. Every logged Z2 session at RPE 5-6, HR runs low, 'felt strong' notes. Does the engine propose faster progression? Does the Progression → Push tier promotion fire from mid-block retest?",
+  "simulatedAt": "2026-08-19T21:34:50.321Z",
+  "simSummary": {
+    "logs_count": 60,
+    "skipped_count": 0,
+    "day_adjustments_count": 0,
+    "dismissed_proposals_count": 0,
+    "training_maxes": {
+      "back_squat_highbar": 120,
+      "block_pull_midshin": 155,
+      "front_squat": 95,
+      "deadlift_conventional": 165,
+      "trap_bar_dl_floor": 160
+    }
+  },
+  "tourSummary": {
+    "routes": 14,
+    "errored": 0
+  }
+}

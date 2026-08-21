@@ -1,0 +1,59 @@
+Skip to content
+TERAV
+All programs
+Concurrent-Strength Maintenance
+ACTIVE
+REVIEWED
+
+For lifters adding cardio without losing the squat. Explosive-strength cost bounded, cited, PR-banned.
+
+Reviewed by Terav specialist audit agent · domain review · concurrent training + interference
+
+2026-08-19 · scope: citations, Berryman engineering-choice documentation, interference-cost claims, deload placement · 4 anchor files on record
+
+SECTION 1 OF 4
+
+Who this is for
+
+You have a documented strength floor you'd rather not lose. You want aerobic capacity. Traditional 5/3/1 fights with running; this program bounds the cost against Schumann 2022's SMD data.
+
+SECTION 2 OF 4
+
+What you'll achieve
+
+Submax HR down 8-15 bpm at fixed pace, back squat / block pull / front squat maintained within 2.5 kg of pre-block TM, RPE ceiling 7 throughout (Schumann 2022 explosive-strength discipline).
+
+SECTION 3 OF 4
+
+What it takes
+8 weeks · ~4-5 hr/week
+Difficulty · intermediate
+Recommended background — see the amber card below.
+
+SECTION 4 OF 4
+
+How we prove it works
+
+Cycle-end 5RM confirm + submax HR at row pace-5. At week 8 (end of block).
+
+Recommended background
+
+A known current back-squat 5RM — the program's whole promise is that this number doesn't fall.
+At least some prior cardio exposure — you can hold Z1 pace for 15 min without HR runaway.
+
+Not enforced — you can still start if you assess honestly that you're close enough. The plan will hold you to the paces / loads it prescribes.
+
+Baseline setup — a few minutes
+
+7 short questions to set your baseline. The rest of the program is generated from that.
+
+This is your current program
+
+GO TO TODAY
+END PROGRAM
+Program shape (peek inside)
+TODAY
+WEEK
+PROGRESS
+HISTORY
+PROFILE

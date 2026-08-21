@@ -1,0 +1,67 @@
+Skip to content
+TERAV
+Progress
+EXPORT REPORT
+
+Skill progression indicators — retest metrics + tier gates.
+
+Week of 17 Aug
+
+This week so far
+
+Sessions
+0 / 0
+Morning check
+3 green
+HOW THE ENGINE READS YOU
+Per-track adherence
+LAST 28 DAYS
+
+handstand walk
+
+0/51 done · 0%
+
+· 51 UPCOMING
+
+Moved sessions don't count as misses — they're rescheduled work.
+
+Retest metrics
+Tier target: tier_a_foundation
+
+Wall handstand hold (max)
+
+CHECK AT WEEK 8
+
+No readings yet. Log your baseline below so the delta has something to track against.
+
+Target 15s · stretch 30s
+
+LOG BASELINE
+
+Freestand handstand hold (max)
+
+CHECK AT WEEK 8
+
+No readings yet. Log your baseline below so the delta has something to track against.
+
+Target 3s · stretch 5s
+
+LOG BASELINE
+
+Handstand walk (max continuous)
+
+CHECK AT WEEK 8
+
+No readings yet. Log your baseline below so the delta has something to track against.
+
+Target 0 m · stretch 0 m
+
+LOG BASELINE
+
+Current = latest logged value. Baseline = first. Delta measured in the metric's direction (lower is better for times, higher for kg).
+
+TODAY
+WEEK
+PROGRESS
+HISTORY
+PROFILE

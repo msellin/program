@@ -6,18 +6,20 @@ import { usePathname } from "next/navigation";
 import {
   CalendarDays,
   Dumbbell,
-  TrendingUp,
-  History as HistoryIcon,
+  Activity,
   User,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// 5 primary tabs — Coach lives inside Profile until it actually works. Per IA audit 2026-08-11.
+// 4 primary tabs — Cut C · 2026-08-21 · Progress + History collapsed into
+// the unified Record surface (decisions doc `dev/active/decisions-2026-
+// 08-21-locked.md` D2/D4). /progress and /history now redirect to
+// /record. The Today/Week refactor (D1-D5, rename to Day/Plan) is Week 4
+// after the D6 hallway test.
 const TABS = [
   { href: "/", label: "Today", Icon: Dumbbell },
   { href: "/week/", label: "Week", Icon: CalendarDays },
-  { href: "/progress/", label: "Progress", Icon: TrendingUp },
-  { href: "/history/", label: "History", Icon: HistoryIcon },
+  { href: "/record/", label: "Record", Icon: Activity },
   { href: "/profile/", label: "Profile", Icon: User },
 ];
 

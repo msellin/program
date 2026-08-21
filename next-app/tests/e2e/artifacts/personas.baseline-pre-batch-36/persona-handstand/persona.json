@@ -1,0 +1,26 @@
+{
+  "id": "persona-handstand",
+  "displayName": "Handstand walk beginner",
+  "archetypeId": "consistent-average",
+  "programSlug": "handstand-walk",
+  "days": 45,
+  "focus": "Skill arc, multi-tier. Persona picks Tier A wall-hold entry. 45 days covers phase_0 bail-out prep + first tier-gate + wall-to-free transition window. Audit target: does the tier selection surface tell the user why? Do wall-hold retests fire? Bail-out prep gating.",
+  "simulatedAt": "2026-08-19T21:32:10.100Z",
+  "simSummary": {
+    "logs_count": 45,
+    "skipped_count": 5,
+    "day_adjustments_count": 0,
+    "dismissed_proposals_count": 0,
+    "training_maxes": {
+      "back_squat_highbar": 110,
+      "block_pull_midshin": 140,
+      "front_squat": 85,
+      "deadlift_conventional": 150,
+      "trap_bar_dl_floor": 145
+    }
+  },
+  "tourSummary": {
+    "routes": 14,
+    "errored": 0
+  }
+}

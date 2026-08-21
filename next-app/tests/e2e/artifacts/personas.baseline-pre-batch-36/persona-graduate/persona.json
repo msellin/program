@@ -1,0 +1,26 @@
+{
+  "id": "persona-graduate",
+  "displayName": "Post-graduation user",
+  "archetypeId": "consistent-average",
+  "programSlug": "engine-builder",
+  "days": 64,
+  "focus": "8-week arc + 8 days past graduation. Audit target: does GraduationCard fire? Does it suggest a follow-on (Block 2 engine-builder, Progression/Push tier, another program)? Retest card populates real deltas? Report renders a shareable summary of the arc? What SHOULD happen after finishing but currently doesn't?",
+  "simulatedAt": "2026-08-19T21:39:18.967Z",
+  "simSummary": {
+    "logs_count": 64,
+    "skipped_count": 6,
+    "day_adjustments_count": 0,
+    "dismissed_proposals_count": 0,
+    "training_maxes": {
+      "back_squat_highbar": 115,
+      "block_pull_midshin": 147.5,
+      "front_squat": 90,
+      "deadlift_conventional": 157.5,
+      "trap_bar_dl_floor": 152.5
+    }
+  },
+  "tourSummary": {
+    "routes": 14,
+    "errored": 0
+  }
+}

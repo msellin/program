@@ -1,0 +1,82 @@
+Skip to content
+TERAV
+Progress
+EXPORT REPORT
+
+Aerobic base indicators — HR trend, weekly minutes, retest deltas.
+
+Week of 17 Aug
+RESPONDING
+
+This week so far
+
+Sessions
+0 / 0
+Morning check
+3 green
+Signals
+3 fatigue
+HOW THE ENGINE READS YOU
+Per-track adherence
+LAST 28 DAYS
+
+engine builder
+
+10/14 done · 71%
+
+10 DONE · 2 UPCOMING · 2 SKIPPED
+
+Moved sessions don't count as misses — they're rescheduled work.
+
+Retest metrics
+Tier target: foundation
+
+Submax HR at pace-5 (row 2:00/500m)
+
+CHECK AT WEEK 8
+
+BASELINE
+
+141 bpm
+
+CURRENT
+
+140 bpm
+
+Δ
+
+−1.2 bpm
+
+Target -5 bpm · stretch -10 bpm
+
+Resting HR
+
+CHECK AT WEEK 8
+
+No readings yet. Log your baseline below so the delta has something to track against.
+
+Target -5 bpm · stretch -8 bpm
+
+LOG BASELINE
+
+Submax HR at pace-5 (row 2:00/500m) · mid-block
+
+BASELINE
+
+141 bpm
+
+CURRENT
+
+140 bpm
+
+Δ
+
+−1.2 bpm
+
+Current = latest logged value. Baseline = first. Delta measured in the metric's direction (lower is better for times, higher for kg).
+
+TODAY
+WEEK
+PROGRESS
+HISTORY
+PROFILE

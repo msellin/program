@@ -1,0 +1,26 @@
+{
+  "id": "persona-handstand-fast",
+  "displayName": "Handstand overperformer",
+  "archetypeId": "overperformer",
+  "programSlug": "handstand-walk",
+  "days": 60,
+  "focus": "Skill overperformer. Long wall holds early, freestand attempts push past drilled instructions. Does a tier-advance proposal (Tier A → Tier B) fire from retest readings? Does the multi-dim generator start blending Tier B blocks?",
+  "simulatedAt": "2026-08-19T21:36:36.432Z",
+  "simSummary": {
+    "logs_count": 60,
+    "skipped_count": 0,
+    "day_adjustments_count": 0,
+    "dismissed_proposals_count": 0,
+    "training_maxes": {
+      "back_squat_highbar": 120,
+      "block_pull_midshin": 155,
+      "front_squat": 95,
+      "deadlift_conventional": 165,
+      "trap_bar_dl_floor": 160
+    }
+  },
+  "tourSummary": {
+    "routes": 14,
+    "errored": 0
+  }
+}

@@ -1,0 +1,29 @@
+Skip to content
+TERAV
+Morning check
+
+Judged by how you feel the morning AFTER training, not during.
+
+Shoulder
+0
+Wrist
+0
+Muscle soreness
+0
+Low back
+0
+Woke me at night
+Morning stiffness
+0min
+Life load (0=fresh, 10=cooked)
+0
+Outside training yesterday
+
+The engine reads these. Keywords like padel, hike, poor sleep feed today's proposal — no LLM, just a keyword parser, all done on-device.
+
+Save check
+TODAY
+WEEK
+PROGRESS
+HISTORY
+PROFILE

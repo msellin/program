@@ -34,6 +34,9 @@ import { CutCLatestRetestTile } from "@/components/record/CutCLatestRetestTile";
 import { CutCRetestTimeline } from "@/components/record/CutCRetestTimeline";
 import { CutCActivityHeatmap } from "@/components/record/CutCActivityHeatmap";
 import { CutCProgramCurveCard } from "@/components/record/CutCProgramCurveCard";
+import { CutCLogList } from "@/components/record/CutCLogList";
+import { CutCRecordOnboardingBeacon } from "@/components/record/CutCRecordOnboardingBeacon";
+import { downloadRecordExport } from "@/lib/engine/record-export";
 import { today } from "@/lib/utils";
 import dynamic from "next/dynamic";
 import type { Program, Exercise } from "@/lib/schemas";
@@ -67,25 +70,6 @@ function SectionAnchor({ label }: { label: string }) {
   );
 }
 
-/**
- * Phase-1 placeholder for CutC- components not yet built.
- * Renders a muted "under construction" card so the surface shape reads
- * clearly during incremental development without shipping "coming soon"
- * verbiage to real users (the /progress route stays functional until
- * feature parity — see cut-c-code-sprint/plan.md for cut-over policy).
- */
-function ScaffoldPlaceholder({ name }: { name: string }) {
-  return (
-    <div className="rounded border border-dashed border-line-soft bg-surface p-4">
-      <p className="font-mono text-[10px] uppercase tracking-widest text-muted">
-        Scaffold · {name} — Phase 2
-      </p>
-      <p className="text-[12px] text-muted italic mt-1">
-        This component ships during Cut C code sprint Phase 2. Route is live so the IA shape is visible; not yet at feature parity with /progress.
-      </p>
-    </div>
-  );
-}
 
 export default function RecordPage() {
   const [program, setProgram] = useState<Program | null>(null);
@@ -144,18 +128,24 @@ export default function RecordPage() {
 
   return (
     <div className="space-y-8" role="main">
-      {/* Header — H1 + export button. Export ships in Phase 4. */}
+      {/* Header — H1 + Export button. Phase 3 wired: JSON export downloads
+          a citation-attributed payload per R-CutC-2. */}
       <header className="flex items-baseline justify-between gap-3">
         <h1 className="text-[32px] font-bold tracking-[-0.03em] text-strong leading-none">Record</h1>
         <button
           type="button"
-          disabled
-          className="border border-line-strong rounded-md px-3 py-2 min-h-[44px] font-mono text-[11px] uppercase tracking-widest text-muted opacity-60 cursor-not-allowed"
-          aria-label="Export — ships in Phase 4"
+          onClick={() => downloadRecordExport(store)}
+          className="border border-line-strong rounded-md px-3 py-2 min-h-[44px] font-mono text-[11px] uppercase tracking-widest text-ink motion-reduce:transition-none transition-colors hover:bg-line-soft focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2"
+          aria-label="Export your record as JSON"
         >
           Export
         </button>
       </header>
+
+      {/* C5 — one-time onboarding beacon dramatizing the cite-per-adjustment
+          differentiator per matrix rec #4. Renders on first /record visit
+          only; localStorage-persisted seen state. */}
+      <CutCRecordOnboardingBeacon />
 
       {/* NOW section */}
       <section aria-labelledby="record-now">
@@ -236,7 +226,9 @@ export default function RecordPage() {
           <ErrorBoundary fallback={<p className="text-[12px] text-muted italic">Activity heatmap unavailable.</p>}>
             <CutCActivityHeatmap store={store} />
           </ErrorBoundary>
-          <ScaffoldPlaceholder name="LogList (accordion rows) — Phase 3" />
+          <ErrorBoundary fallback={<p className="text-[12px] text-muted italic">Log unavailable.</p>}>
+            <CutCLogList store={store} />
+          </ErrorBoundary>
         </div>
       </section>
     </div>

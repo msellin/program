@@ -1,0 +1,26 @@
+{
+  "id": "persona-strength-slow",
+  "displayName": "CSM underperformer",
+  "archetypeId": "underperformer",
+  "programSlug": "concurrent-strength-maintenance",
+  "days": 60,
+  "focus": "CSM underperformer. RPE creeps high, symptoms elevated. Does the engine hold TM instead of bumping? Does the amber-week drop-4×4 hook fire (P1-11 from tonight's audit — currently unimplemented, this persona will surface whether the copy shows up but no engine action)?",
+  "simulatedAt": "2026-08-19T21:35:43.002Z",
+  "simSummary": {
+    "logs_count": 60,
+    "skipped_count": 0,
+    "day_adjustments_count": 45,
+    "dismissed_proposals_count": 0,
+    "training_maxes": {
+      "back_squat_highbar": 89,
+      "block_pull_midshin": 113.5,
+      "front_squat": 69,
+      "deadlift_conventional": 121.5,
+      "trap_bar_dl_floor": 117.5
+    }
+  },
+  "tourSummary": {
+    "routes": 14,
+    "errored": 0
+  }
+}

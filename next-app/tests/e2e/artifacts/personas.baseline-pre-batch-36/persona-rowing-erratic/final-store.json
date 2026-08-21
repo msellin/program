@@ -1,0 +1,815 @@
+{
+  "version": 2,
+  "logs": {
+    "2026-07-06": {
+      "date": "2026-07-06",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "life_load": 7
+      },
+      "derived_state": "amber"
+    },
+    "2026-07-07": {
+      "date": "2026-07-07",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 1,
+        "life_load": 7
+      },
+      "notes": "Traveling this week.",
+      "derived_state": "amber"
+    },
+    "2026-07-08": {
+      "date": "2026-07-08",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "life_load": 7
+      },
+      "notes": "Traveling this week.",
+      "derived_state": "amber"
+    },
+    "2026-07-09": {
+      "date": "2026-07-09",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 7
+      },
+      "notes": "Big day at work — brain fried.",
+      "derived_state": "amber",
+      "runs": [
+        {
+          "activity_type": "row",
+          "intensity": "easy",
+          "session_type": "z2",
+          "minutes": 45,
+          "avg_hr": 143,
+          "avg_pace_500m_seconds": 129,
+          "source": "manual"
+        }
+      ]
+    },
+    "2026-07-10": {
+      "date": "2026-07-10",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "life_load": 7
+      },
+      "notes": "Traveling this week.",
+      "derived_state": "amber"
+    },
+    "2026-07-11": {
+      "date": "2026-07-11",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 2,
+        "life_load": 7
+      },
+      "notes": "Slept 5 hours.",
+      "derived_state": "amber"
+    },
+    "2026-07-12": {
+      "date": "2026-07-12",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "life_load": 7
+      },
+      "notes": "Traveling this week.",
+      "derived_state": "amber"
+    },
+    "2026-07-13": {
+      "date": "2026-07-13",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 2,
+        "life_load": 7
+      },
+      "notes": "Big day at work — brain fried.",
+      "derived_state": "amber"
+    },
+    "2026-07-14": {
+      "date": "2026-07-14",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "life_load": 7
+      },
+      "notes": "Slept 5 hours.",
+      "derived_state": "amber",
+      "runs": [
+        {
+          "activity_type": "row",
+          "intensity": "hard",
+          "session_type": "2k_test",
+          "minutes": 9,
+          "avg_hr": 176,
+          "max_hr": 190,
+          "avg_pace_500m_seconds": 129,
+          "source": "manual"
+        }
+      ]
+    },
+    "2026-07-15": {
+      "date": "2026-07-15",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 2,
+        "life_load": 7
+      },
+      "notes": "Traveling this week.",
+      "derived_state": "amber"
+    },
+    "2026-07-16": {
+      "date": "2026-07-16",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "life_load": 7
+      },
+      "derived_state": "amber",
+      "runs": [
+        {
+          "activity_type": "row",
+          "intensity": "easy",
+          "session_type": "z2",
+          "minutes": 45,
+          "avg_hr": 139,
+          "avg_pace_500m_seconds": 121,
+          "source": "manual"
+        }
+      ]
+    },
+    "2026-07-17": {
+      "date": "2026-07-17",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "life_load": 7
+      },
+      "notes": "Traveling this week.",
+      "derived_state": "amber"
+    },
+    "2026-07-18": {
+      "date": "2026-07-18",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 1,
+        "life_load": 7
+      },
+      "derived_state": "amber",
+      "runs": [
+        {
+          "activity_type": "row",
+          "intensity": "hard",
+          "session_type": "2k_test",
+          "minutes": 9,
+          "avg_hr": 174,
+          "max_hr": 190,
+          "avg_pace_500m_seconds": 129,
+          "source": "manual"
+        }
+      ]
+    },
+    "2026-07-19": {
+      "date": "2026-07-19",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 2,
+        "life_load": 7
+      },
+      "notes": "Slept 5 hours.",
+      "derived_state": "amber"
+    },
+    "2026-07-20": {
+      "date": "2026-07-20",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 2,
+        "life_load": 7
+      },
+      "notes": "Kid was up all night.",
+      "derived_state": "amber"
+    },
+    "2026-07-21": {
+      "date": "2026-07-21",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 1,
+        "life_load": 7
+      },
+      "notes": "Big day at work — brain fried.",
+      "derived_state": "amber",
+      "runs": [
+        {
+          "activity_type": "row",
+          "intensity": "hard",
+          "session_type": "threshold",
+          "minutes": 32,
+          "avg_hr": 162,
+          "max_hr": 178,
+          "source": "manual"
+        }
+      ]
+    },
+    "2026-07-22": {
+      "date": "2026-07-22",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 1,
+        "life_load": 7
+      },
+      "notes": "Kid was up all night.",
+      "derived_state": "amber"
+    },
+    "2026-07-23": {
+      "date": "2026-07-23",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 2,
+        "life_load": 7
+      },
+      "notes": "Traveling this week.",
+      "derived_state": "amber",
+      "runs": [
+        {
+          "activity_type": "row",
+          "intensity": "hard",
+          "session_type": "threshold",
+          "minutes": 32,
+          "avg_hr": 165,
+          "max_hr": 178,
+          "source": "manual"
+        }
+      ]
+    },
+    "2026-07-24": {
+      "date": "2026-07-24",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 7
+      },
+      "notes": "Traveling this week.",
+      "derived_state": "amber"
+    },
+    "2026-07-25": {
+      "date": "2026-07-25",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 7
+      },
+      "notes": "Traveling this week.",
+      "derived_state": "amber",
+      "runs": [
+        {
+          "activity_type": "row",
+          "intensity": "easy",
+          "session_type": "z2",
+          "minutes": 45,
+          "avg_hr": 142,
+          "avg_pace_500m_seconds": 126,
+          "source": "manual"
+        }
+      ]
+    },
+    "2026-07-26": {
+      "date": "2026-07-26",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 7
+      },
+      "notes": "Big day at work — brain fried.",
+      "derived_state": "amber"
+    },
+    "2026-07-27": {
+      "date": "2026-07-27",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "life_load": 7
+      },
+      "notes": "Kid was up all night.",
+      "derived_state": "amber"
+    },
+    "2026-07-28": {
+      "date": "2026-07-28",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "life_load": 7
+      },
+      "derived_state": "amber",
+      "runs": [
+        {
+          "activity_type": "row",
+          "intensity": "hard",
+          "session_type": "threshold",
+          "minutes": 32,
+          "avg_hr": 165,
+          "max_hr": 178,
+          "source": "manual"
+        }
+      ]
+    },
+    "2026-07-29": {
+      "date": "2026-07-29",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "life_load": 7
+      },
+      "notes": "Traveling this week.",
+      "derived_state": "amber"
+    },
+    "2026-07-30": {
+      "date": "2026-07-30",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 1,
+        "life_load": 7
+      },
+      "derived_state": "amber"
+    },
+    "2026-07-31": {
+      "date": "2026-07-31",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 1,
+        "life_load": 7
+      },
+      "notes": "Slept 5 hours.",
+      "derived_state": "amber"
+    },
+    "2026-08-01": {
+      "date": "2026-08-01",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 7
+      },
+      "notes": "Big day at work — brain fried.",
+      "derived_state": "amber"
+    },
+    "2026-08-02": {
+      "date": "2026-08-02",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 2,
+        "life_load": 7
+      },
+      "derived_state": "amber"
+    },
+    "2026-08-03": {
+      "date": "2026-08-03",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 2,
+        "life_load": 7
+      },
+      "notes": "Slept 5 hours.",
+      "derived_state": "amber"
+    },
+    "2026-08-04": {
+      "date": "2026-08-04",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 1,
+        "life_load": 7
+      },
+      "notes": "Big day at work — brain fried.",
+      "derived_state": "amber",
+      "runs": [
+        {
+          "activity_type": "row",
+          "intensity": "hard",
+          "session_type": "2k_test",
+          "minutes": 8,
+          "avg_hr": 174,
+          "max_hr": 190,
+          "avg_pace_500m_seconds": 126,
+          "source": "manual"
+        }
+      ]
+    },
+    "2026-08-05": {
+      "date": "2026-08-05",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 1,
+        "life_load": 7
+      },
+      "notes": "Traveling this week.",
+      "derived_state": "amber"
+    },
+    "2026-08-06": {
+      "date": "2026-08-06",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "life_load": 7
+      },
+      "derived_state": "amber",
+      "runs": [
+        {
+          "activity_type": "row",
+          "intensity": "easy",
+          "session_type": "z2",
+          "minutes": 45,
+          "avg_hr": 137,
+          "avg_pace_500m_seconds": 128,
+          "source": "manual"
+        }
+      ]
+    },
+    "2026-08-07": {
+      "date": "2026-08-07",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 1,
+        "life_load": 7
+      },
+      "notes": "Kid was up all night.",
+      "derived_state": "amber"
+    },
+    "2026-08-08": {
+      "date": "2026-08-08",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 7
+      },
+      "notes": "Traveling this week.",
+      "derived_state": "amber"
+    },
+    "2026-08-09": {
+      "date": "2026-08-09",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 7
+      },
+      "derived_state": "amber"
+    },
+    "2026-08-10": {
+      "date": "2026-08-10",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 2,
+        "life_load": 7
+      },
+      "derived_state": "amber"
+    },
+    "2026-08-11": {
+      "date": "2026-08-11",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "life_load": 7
+      },
+      "notes": "Big day at work — brain fried.",
+      "derived_state": "amber",
+      "runs": [
+        {
+          "activity_type": "row",
+          "intensity": "hard",
+          "session_type": "2k_test",
+          "minutes": 8,
+          "avg_hr": 173,
+          "max_hr": 190,
+          "avg_pace_500m_seconds": 125,
+          "source": "manual"
+        }
+      ]
+    },
+    "2026-08-12": {
+      "date": "2026-08-12",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 0,
+        "life_load": 7
+      },
+      "notes": "Slept 5 hours.",
+      "derived_state": "amber"
+    },
+    "2026-08-13": {
+      "date": "2026-08-13",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 1,
+        "life_load": 7
+      },
+      "notes": "Traveling this week.",
+      "derived_state": "amber",
+      "runs": [
+        {
+          "activity_type": "row",
+          "intensity": "easy",
+          "session_type": "z2",
+          "minutes": 45,
+          "avg_hr": 137,
+          "avg_pace_500m_seconds": 124,
+          "source": "manual"
+        }
+      ]
+    },
+    "2026-08-14": {
+      "date": "2026-08-14",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 1,
+        "life_load": 7
+      },
+      "notes": "Slept 5 hours.",
+      "derived_state": "amber"
+    },
+    "2026-08-15": {
+      "date": "2026-08-15",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 1,
+        "life_load": 7
+      },
+      "notes": "Traveling this week.",
+      "derived_state": "amber",
+      "runs": [
+        {
+          "activity_type": "row",
+          "intensity": "hard",
+          "session_type": "2k_test",
+          "minutes": 8,
+          "avg_hr": 176,
+          "max_hr": 190,
+          "avg_pace_500m_seconds": 124,
+          "source": "manual"
+        }
+      ]
+    },
+    "2026-08-16": {
+      "date": "2026-08-16",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 1,
+        "life_load": 7
+      },
+      "notes": "Big day at work — brain fried.",
+      "derived_state": "amber"
+    },
+    "2026-08-17": {
+      "date": "2026-08-17",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 3,
+        "life_load": 7
+      },
+      "notes": "Big day at work — brain fried.",
+      "derived_state": "amber"
+    },
+    "2026-08-18": {
+      "date": "2026-08-18",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 1,
+        "life_load": 7
+      },
+      "notes": "Kid was up all night.",
+      "derived_state": "amber"
+    },
+    "2026-08-19": {
+      "date": "2026-08-19",
+      "exercises": {},
+      "symptoms": {
+        "low_back": 1,
+        "life_load": 7
+      },
+      "notes": "Kid was up all night.",
+      "derived_state": "amber"
+    }
+  },
+  "training_maxes": {
+    "back_squat_highbar": 110,
+    "block_pull_midshin": 140,
+    "front_squat": 85,
+    "deadlift_conventional": 150,
+    "trap_bar_dl_floor": 145
+  },
+  "cycle": {
+    "phase_id": null,
+    "cycle_number": 1,
+    "week_in_cycle": 1
+  },
+  "updated_at": 1787040000000,
+  "feature_flags": {
+    "block_object": true
+  },
+  "user_profile": {
+    "uid": "3de3d1ad-0b54-45cc-b8d7-9e567512062f",
+    "email": "e2e-persona-rowing-erratic@example.test",
+    "active_program_id": "rowing-2k-test-prep",
+    "active_program_ids": [
+      "rowing-2k-test-prep"
+    ],
+    "active_program_started_at": "2026-07-05T08:00:01.206Z",
+    "tier": "beta_forever",
+    "program_states": {
+      "rowing-2k-test-prep": {
+        "tier": "foundation"
+      }
+    }
+  },
+  "day_adjustments": {
+    "2026-07-06": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1783238401206
+    },
+    "2026-07-08": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1783411200000
+    },
+    "2026-07-09": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1783497600000
+    },
+    "2026-07-13": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1783843200000
+    },
+    "2026-07-14": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1783929600000
+    },
+    "2026-07-16": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1784102400000
+    },
+    "2026-07-17": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1784188800000
+    },
+    "2026-07-18": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1784275200000
+    },
+    "2026-07-21": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1784534400000
+    },
+    "2026-07-22": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1784620800000
+    },
+    "2026-07-27": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1785052800000
+    },
+    "2026-07-28": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1785139200000
+    },
+    "2026-07-31": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1785398400000
+    },
+    "2026-08-02": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1785571200000
+    },
+    "2026-08-05": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1785830400000
+    },
+    "2026-08-06": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1785916800000
+    },
+    "2026-08-10": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1786262400000
+    },
+    "2026-08-13": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1786521600000
+    },
+    "2026-08-14": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1786608000000
+    },
+    "2026-08-18": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1786953600000
+    },
+    "2026-08-19": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1787040000000
+    }
+  },
+  "skipped": {
+    "2026-07-07": {
+      "blocks": [],
+      "reason": "sim: archetype skipped"
+    },
+    "2026-07-10": {
+      "blocks": [],
+      "reason": "sim: archetype skipped"
+    },
+    "2026-07-11": {
+      "blocks": [],
+      "reason": "sim: archetype skipped"
+    },
+    "2026-07-15": {
+      "blocks": [],
+      "reason": "sim: archetype skipped"
+    },
+    "2026-07-19": {
+      "blocks": [],
+      "reason": "sim: archetype skipped"
+    },
+    "2026-07-20": {
+      "blocks": [],
+      "reason": "sim: archetype skipped"
+    },
+    "2026-07-24": {
+      "blocks": [],
+      "reason": "sim: archetype skipped"
+    },
+    "2026-07-26": {
+      "blocks": [],
+      "reason": "sim: archetype skipped"
+    },
+    "2026-07-30": {
+      "blocks": [],
+      "reason": "sim: archetype skipped"
+    },
+    "2026-08-01": {
+      "blocks": [],
+      "reason": "sim: archetype skipped"
+    },
+    "2026-08-07": {
+      "blocks": [],
+      "reason": "sim: archetype skipped"
+    },
+    "2026-08-08": {
+      "blocks": [],
+      "reason": "sim: archetype skipped"
+    },
+    "2026-08-12": {
+      "blocks": [],
+      "reason": "sim: archetype skipped"
+    },
+    "2026-08-16": {
+      "blocks": [],
+      "reason": "sim: archetype skipped"
+    },
+    "2026-08-17": {
+      "blocks": [],
+      "reason": "sim: archetype skipped"
+    }
+  }
+}

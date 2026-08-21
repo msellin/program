@@ -1,0 +1,26 @@
+{
+  "id": "persona-rowing-erratic",
+  "displayName": "Rowing erratic through taper",
+  "archetypeId": "erratic",
+  "programSlug": "rowing-2k-test-prep",
+  "days": 45,
+  "focus": "Race-anchored user with 40% skip rate. Does the taper still fire when session compliance is under 60%? Does the 2K retest render honestly with sparse baseline runs? Does the classifier flag 'under-dosing' vs 'true non-response'?",
+  "simulatedAt": "2026-08-19T21:37:30.388Z",
+  "simSummary": {
+    "logs_count": 45,
+    "skipped_count": 15,
+    "day_adjustments_count": 21,
+    "dismissed_proposals_count": 0,
+    "training_maxes": {
+      "back_squat_highbar": 110,
+      "block_pull_midshin": 140,
+      "front_squat": 85,
+      "deadlift_conventional": 150,
+      "trap_bar_dl_floor": 145
+    }
+  },
+  "tourSummary": {
+    "routes": 14,
+    "errored": 0
+  }
+}

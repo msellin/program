@@ -1,0 +1,81 @@
+Skip to content
+TERAV
+Progress
+EXPORT REPORT
+
+Concurrent training indicators — HR trend, weekly minutes, strength retention, retest deltas.
+
+Week of 17 Aug
+
+This week so far
+
+Sessions
+2 / 2
+Top lift
+block_pull_midshin · 125 kg × 5
+Weekly bests
+3 lifts
+Endurance
+1 session · 32 min
+Morning check
+3 green
+Signals
+1 fatigue · 1 outside load
+HOW THE ENGINE READS YOU
+Per-track adherence
+LAST 28 DAYS
+
+concurrent strength maintenance
+
+6/23 done · 26%
+
+6 DONE · 17 UPCOMING
+
+Moved sessions don't count as misses — they're rescheduled work.
+
+Retest metrics
+Program targets
+
+Back squat 5RM
+
+CHECK AT WEEK 8
+
+BASELINE
+
+—
+
+CURRENT
+
+115 kg
+
+Δ
+
+—
+
+Target 0 kg · stretch 3 kg
+
+Submax HR at pace-5
+
+CHECK AT WEEK 8
+
+BASELINE
+
+142 bpm
+
+CURRENT
+
+140 bpm
+
+Δ
+
+−2.2 bpm
+
+Target -5 bpm · stretch -10 bpm
+
+Current = latest logged value. Baseline = first. Delta measured in the metric's direction (lower is better for times, higher for kg).
+
+TODAY
+WEEK
+PROGRESS
+HISTORY
+PROFILE
