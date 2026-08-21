@@ -631,6 +631,7 @@ export default function WeekPage() {
                         hasSession={!isRest}
                         isSkipped={!!skip}
                         isOverride={!!override}
+                        primarySlug={primarySlug}
                         blockIds={displayBlocks.map((b) => b.id)}
                         weekDaysCatalog={weekDaysCatalog}
                       />
@@ -673,6 +674,7 @@ function WeekDayActions({
   hasSession,
   isSkipped,
   isOverride,
+  primarySlug,
   blockIds,
   weekDaysCatalog,
 }: {
@@ -685,6 +687,7 @@ function WeekDayActions({
   hasSession: boolean;
   isSkipped: boolean;
   isOverride: boolean;
+  primarySlug: string | undefined;
   blockIds: string[];
   weekDaysCatalog: WeekDayEntry[];
 }) {
@@ -721,21 +724,30 @@ function WeekDayActions({
     <>
       {/* P1-63 (Batch 27) — 3-verb action grid migrated from 11 px
           mono-caps to 14 px sentence-case. Verb labels shouldn't read
-          as chip pills. */}
+          as chip pills.
+          Week 4d (2026-08-21) — past-day verb was "History →" pointing
+          to /history?date=..., which now redirects to /record (read-
+          only Record surface). Founder use-case ("did workout
+          yesterday, forgot to log"): they need to LOG the past day,
+          not just view it. Repoint to /session/[slug]?date=... which
+          renders the session in an editable state (SessionClient
+          reads ?date=, seeds activeDate, SetRow inputs write to
+          logs[activeDate]). Verb changed to "Log session →" to make
+          the action affordance obvious. */}
       <div className="mt-3 grid grid-cols-3 gap-2">
         {isToday ? (
           <Link
             href="/"
             className="text-[14px] font-semibold px-3 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover min-h-[44px] flex items-center justify-center text-center"
           >
-            Open in Today
+            Open Day
           </Link>
-        ) : isPast ? (
+        ) : isPast && primarySlug ? (
           <Link
-            href={`/history?date=${dateISO}`}
-            className="text-[14px] font-semibold px-3 py-2 rounded border border-line text-muted hover:text-ink hover:bg-line-soft min-h-[44px] flex items-center justify-center text-center"
+            href={`/session/${primarySlug}?date=${dateISO}`}
+            className="text-[14px] font-semibold px-3 py-2 rounded border border-line-strong text-ink hover:bg-line-soft min-h-[44px] flex items-center justify-center text-center"
           >
-            History →
+            Log session →
           </Link>
         ) : (
           // Future day — no direct-open verb. Placeholder keeps the 3-
