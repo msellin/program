@@ -33,6 +33,7 @@ import { CutCWindowTierControl, type WindowTier } from "@/components/record/CutC
 import { CutCLatestRetestTile } from "@/components/record/CutCLatestRetestTile";
 import { CutCRetestTimeline } from "@/components/record/CutCRetestTimeline";
 import { CutCActivityHeatmap } from "@/components/record/CutCActivityHeatmap";
+import { CutCProgramCurveCard } from "@/components/record/CutCProgramCurveCard";
 import { today } from "@/lib/utils";
 import dynamic from "next/dynamic";
 import type { Program, Exercise } from "@/lib/schemas";
@@ -91,8 +92,8 @@ export default function RecordPage() {
   const [_byId, setById] = useState<Record<string, Exercise>>({});
   const [error, setError] = useState<string | null>(null);
   // The WindowTierControl is the source of truth for the Trend section's
-  // zoom. Curve + timeline (Phase 2 remaining) will react to this state.
-  const [_zoomTier, setZoomTier] = useState<WindowTier>("30d");
+  // zoom. Curve + timeline read from this state to filter their data.
+  const [zoomTier, setZoomTier] = useState<WindowTier>("30d");
   const hydrated = useStore((s) => s.hydrated);
   const store = useStore((s) => s.store);
   const primarySlug = useStore((s) => s.store.user_profile?.active_program_id);
@@ -201,7 +202,9 @@ export default function RecordPage() {
           <ErrorBoundary fallback={<p className="text-[12px] text-muted italic">Zoom control unavailable.</p>}>
             <CutCWindowTierControl dataDays={dataDays} onChange={setZoomTier} />
           </ErrorBoundary>
-          <ScaffoldPlaceholder name="CutCProgramCurveCard — Phase 2c" />
+          <ErrorBoundary fallback={<p className="text-[12px] text-muted italic">Trend curve unavailable.</p>}>
+            <CutCProgramCurveCard program={program} store={store} zoomTier={zoomTier} />
+          </ErrorBoundary>
           <ErrorBoundary fallback={<p className="text-[12px] text-muted italic">Retest timeline unavailable.</p>}>
             <CutCRetestTimeline program={program} store={store} />
           </ErrorBoundary>
