@@ -82,7 +82,21 @@ export function HipProgressTile() {
               ) : null}
             </div>
           ) : (
-            <p className="mt-1 text-[14px] text-muted">Not logged yet.</p>
+            /* Batch 36 P1 (audit 2026-08-21 · app-copy) — was orient-only
+               ("Not logged yet."). Empty state now also motivates + guides
+               with an explicit run-length hint and the canonical §2.13
+               arrow CTA to /check/hip. */
+            <div className="mt-1 space-y-2">
+              <p className="text-[14px] text-muted">
+                No hip check on file yet. Runs 6 items, ~4 min.
+              </p>
+              <Link
+                href="/check/hip"
+                className="inline-flex items-center gap-1 font-mono text-[11px] uppercase tracking-widest text-slate hover:text-ink"
+              >
+                Start check →
+              </Link>
+            </div>
           )}
           <MiniSpark points={scoreSeries.map((p) => p.overall)} max={10} />
           {scoreSeries.length > 0 ? (

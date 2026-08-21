@@ -112,7 +112,7 @@ export function ProposalCard({
               <ul className="text-[12px] font-mono text-ink mt-1 space-y-0.5">
                 {proposal.evidence.map((e) => (
                   <li key={e.date + e.exerciseId}>
-                    {e.date} · {e.exerciseId} · {e.weightKg} kg × {e.reps}
+                    {e.date} · {humanizeExerciseId(e.exerciseId)} · {e.weightKg} kg × {e.reps}
                     {e.rpe != null ? ` @ RPE ${e.rpe}` : ""} · {e.pctTM}% TM
                   </li>
                 ))}
