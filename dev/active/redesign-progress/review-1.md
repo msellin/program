@@ -193,12 +193,65 @@ Screenshot: `record-mockup-day400-v2.png`. All 4 audits folded in.
 - **RetestTimeline glanceability.** Date labels every 3rd pin (Q1'24, Q2'24, Q3'24, Q4'24, Q1'25). 5 milestone pins (cycle boundaries) render at 10px vs 8px for regular retests. Container gets `role="group"` + full aria-label describing the tenure story.
 - **Year-heatmap honesty.** Replaced 4-cells-per-month-block layout (48 cells claiming to be 365 days) with 12 vertical monthly-total mini-bars per year. Each bar height maps to sessions logged that month. No false density.
 
+## V3 patch — data-viz palette (founder mandate: "colorful, users like it")
+
+Screenshot: `record-mockup-day400-v3.png`. Delegated to app-visual-craft to design a data-viz palette that satisfies "colorful" WITHOUT violating R2 (bronze CTA-only) or R8 (no score-drama red).
+
+**Reconciliation:** R2 is a UI-chrome rule (CTAs, buttons, badges). Data visualization is a different domain — v1.1.1 already ships semantic state tokens (`--color-green`, `--color-amber`, `--color-red`, `--color-slate`, `--color-muted`) that were always permitted in state contexts. Cut C data-viz uses ONLY these existing tokens + a 3-step neutral lightness ramp. No new decorative accent. R2 stays intact.
+
+**New tokens added to Cut C palette:**
+
+| Token | Aliases / hex | Use |
+|---|---|---|
+| `--dv-curve-primary` | slate `#79b8c4` | rolling-avg curve line (peer: Oura Trends mint, TP CTL blue) |
+| `--dv-retest-hit` | green `#6bb885` | retest event met/beat target |
+| `--dv-retest-hold` | muted `#93989f` | retest event flat/held (majority state over 400d — mathematically prevents green-wash) |
+| `--dv-retest-back` | amber `#d9a86b` | retest event regressed — **NEVER red** (that's R8 score-drama) |
+| `--dv-bar-low/mid/high` | `#5f6570 / #7c8493 / #a8b0bd` | 3-step lightness ramp on monthly-total bars, mapped to session-count buckets |
+
+**Per-element application in v3:**
+- **Rolling-avg curve** — slate `#79b8c4`, 2px stroke. Same hue for every program (one identity, not per-program rainbow like Hevy).
+- **Retest event pins on curve** — tri-color by outcome, 1px `text-strong` outline for color-blind redundancy. Terminal "today" pin is slightly larger (5px vs 4px).
+- **Y-axis grid** — reduced 5 lines → 3 (min/mean/max). Oura restraint.
+- **RetestTimeline dots** — match pin colors. Story: 3 muted "hold" pins early (learning phase), 11 green "hit" pins after (found the groove). Milestone pins (5 cycle boundaries) render larger.
+- **Monthly-total bars** — 3-tone density ramp. Light bars = high-session months (>85% of max), dark = low (<70%), mid = default. Redundant encoding with height so ramp is legible.
+- **Legend** — three items now: line + hit dot + hold dot.
+- **12-week readiness heatmap** — kept as-is (already used semantic green/amber). Design system-compliant.
+
+**Peer alignment:** closest to Oura Trends + TrainingPeaks PMC. Explicitly NOT like Whoop (green/yellow/red threat-vector — R8), Strava (activity-orange as chart color), Peloton (category tints + milestone celebration hues), Hevy (per-exercise multi-line rainbow).
+
+**Risk flags (from visual-craft agent):**
+- 400-day aging: slate curve holds at any zoom; monthly-bar ramp bounded (3 steps, not per-month unique). Retest pins scale — at 40+ events the strip becomes a bar-chart-of-outcomes, which is a *feature* (tenure identity via history, not streak).
+- Gamification (R5): green pins are the highest risk — could read as "achievement stickers." Mitigation: pin sits ON the curve at its date, tied to a citation, never floats in a "trophies won" strip.
+- Score-drama (R8): amber-for-regression (not red) is the deliberate softening. If any future retest metric ever renders as a composite/aggregated score, this palette must NOT follow it — tri-state applies to per-metric per-retest facts, not summaries.
+- Accessibility: color-only signal risk mitigated by 1px outline on pins + `+/-` prefix on delta chips + `role="img"` + aria-labels on chart containers.
+
+## Founder's 6 review questions — answered
+
+The founder delegated these back with "answer them yourself or with agent help." My answers:
+
+**Q1 — "Record" as the tab name.** Keep. Design-lead's brief already made the call: unique in the 31-app peer set, three overlapping meanings (archive · personal-best · verb), the "Now / Trend / Log" IA depends on it. Not switching.
+
+**Q2 — Now → Trend → Log section order.** Keep. WeeklyNarrativeTile is Terav's confirm-first differentiator (matrix G1 vacancy — no peer surfaces "here's what the engine sees this week") and belongs above fold. Oura/Hevy orders don't apply because they don't have a confirm-first coach layer. Only open concern: iPhone SE (375×667) fold likely lands mid-Trend — verify at code time.
+
+**Q3 — Chart curve color.** Answered by visual-craft agent (v3 patch above). Slate curve + tri-state retest pins + 3-tone monthly bars. Colorful without violating R2. Recommend approving v3.
+
+**Q4 — Retest events as tenure identity, enough?** Enough for Cut C. v2's `+25.0 kg since Q1'24 · 14 retests` since-baseline line + milestone-modulated pins + tap-for-citation hint carry the "you're 400 days in" moment. Year-in-Review as bounded annual artifact deferred to Cut A (would build an artifact users won't hit for another year — premature).
+
+**Q5 — Activity year-heatmap (monthly-total bars), legible?** v3 improves this — added 3-tone lightness ramp so the density story now has TWO redundant signals (height + brightness), not just height. High-session months are visibly lighter/brighter; low months are darker. Peer analog: Hevy monthly bars use single-tone opacity (adopted); Strava uses hue for activity type (rejected because Terav is single-focus).
+
+**Q6 — What's missing at day 400.** Three candidates, one I recommend adding, two to defer:
+- **Add for Cut C: "Every change cites its source" onboarding beacon.** Design-lead flagged this — the differentiator isn't obvious to a new user landing cold. Cheap (one-time InfoSheet on first `/record` visit), high leverage. I'll add this to the day-14 empty-state mockup.
+- **Defer to Cut A: Program transitions on the curve.** If a user switched 5/3/1 → CSM at week 40, that context is invisible. Peer analog: TrainingPeaks phase markers. Adds engineering surface (track program-changeover dates) — worth doing but not blocking.
+- **Defer to Cut A: Deload period shading.** Currently invisible; 4-week dip reads as a plateau not intentional recovery. Peer analog: TrainingPeaks deload shading. Same engineering surface concern.
+
 ## Next step
 
-Awaiting your review of the v2 mockup. Two paths:
+Awaiting your review of the **v3 mockup** (`record-mockup-day400-v3.png`) — this is now the canonical Cut C artifact. Three paths:
 
-1. **Approve v2 → generate day-90 mockup with persona-recover state** — verifies rehab firewall is structural. Then day-14 for empty state. Then code.
-2. **Redirect on any of the 6 review questions at the top of this doc** — I re-render before day-90.
+1. **Approve v3** → generate day-90 mockup with persona-recover state (verifies rehab firewall — currently unproven since day-400 uses strength persona with no rehab track). Then day-14 empty state. Then code.
+2. **Push back on the palette** — I can push the color harder (add a raw-points overlay in `dv-curve-soft`, add category color to programs), or pull back (revert to monotone). Say the direction.
+3. **Push back on any Q1-Q6 answer** — I re-render before day-90.
 
 ## Not yet decided (I want to flag these before committing to code)
 

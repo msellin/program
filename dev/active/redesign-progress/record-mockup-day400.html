@@ -18,6 +18,19 @@
     --bronze: #d97e5b;
     --green: #6bb885;
     --amber: #d9a86b;
+    /* Data-viz palette (visual-craft audit 2026-08-21, v3 patch).
+       Aliases existing v1.1.1 state tokens for chart use — does NOT
+       violate R2 (bronze reserves CTA), R5 (no gamification), R8
+       (no score-drama red). Slate curve echoes Oura Trends / TP CTL;
+       tri-state retest pins echo TrainingPeaks compliance dots.
+       See dev/active/redesign-progress/review-1.md v3 patch notes. */
+    --dv-curve-primary: #79b8c4;   /* slate — main rolling-avg line */
+    --dv-retest-hit:    #6bb885;   /* green — retest met/beat target */
+    --dv-retest-hold:   #93989f;   /* muted — retest flat/held */
+    --dv-retest-back:   #d9a86b;   /* amber — retest regressed (never red) */
+    --dv-bar-low:       #5f6570;   /* low-session months */
+    --dv-bar-mid:       #7c8493;   /* mid-session months */
+    --dv-bar-high:      #a8b0bd;   /* high-session months */
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { background: var(--ground); color: var(--ink); font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; font-size: 14px; line-height: 1.5; }
@@ -85,9 +98,11 @@
   /* Chart card */
   .chart-card { position: relative; padding: 12px 12px 16px; }
   .chart-svg { width: 100%; height: 160px; display: block; margin-top: 4px; }
-  .chart-legend { display: flex; gap: 12px; font-size: 11px; color: var(--muted); margin-top: 8px; }
-  .chart-legend .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--strong); margin-right: 4px; vertical-align: middle; }
-  .chart-legend .line-mark { display: inline-block; width: 14px; height: 2px; background: var(--strong); vertical-align: middle; margin-right: 4px; }
+  .chart-legend { display: flex; gap: 12px; font-size: 11px; color: var(--muted); margin-top: 8px; flex-wrap: wrap; }
+  .chart-legend .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; vertical-align: middle; border: 1px solid var(--strong); }
+  .chart-legend .dot.hit  { background: var(--dv-retest-hit); }
+  .chart-legend .dot.hold { background: var(--dv-retest-hold); }
+  .chart-legend .line-mark { display: inline-block; width: 14px; height: 2px; background: var(--dv-curve-primary); vertical-align: middle; margin-right: 4px; }
   .show-raw { margin-top: 10px; }
   .show-raw button { font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--ink); background: transparent; border: 1px solid var(--line-strong); border-radius: 4px; padding: 12px 14px; min-height: 44px; }
   .delta-callout { margin-top: 12px; font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; color: var(--ink); font-size: 12px; }
@@ -98,9 +113,14 @@
   .timeline-row { display: flex; align-items: center; gap: 0; overflow-x: auto; padding-bottom: 4px; scroll-snap-type: x mandatory; }
   /* pin now a 44px hitbox around the visible dot; scroll-snaps to center */
   .timeline-row .pin { flex: 0 0 22px; height: 44px; display: flex; align-items: center; justify-content: center; scroll-snap-align: center; cursor: pointer; position: relative; }
-  .timeline-row .pin::after { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--strong); }
-  /* size-modulated pins: milestone events (cycle end) render larger */
-  .timeline-row .pin.milestone::after { width: 10px; height: 10px; background: var(--strong); }
+  /* Tri-color pins by outcome. Default (no class) = hold; .hit = green;
+     .back = amber. NEVER red. Ring outline is strong-ink for color-blind
+     redundancy. */
+  .timeline-row .pin::after { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--dv-retest-hold); border: 1px solid var(--strong); box-sizing: border-box; }
+  .timeline-row .pin.hit::after { background: var(--dv-retest-hit); }
+  .timeline-row .pin.back::after { background: var(--dv-retest-back); }
+  /* Size-modulated: milestone events (cycle end) render larger. */
+  .timeline-row .pin.milestone::after { width: 12px; height: 12px; }
   .timeline-row .pin .pin-date { position: absolute; bottom: -2px; font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--muted); white-space: nowrap; }
   .timeline-row .connector { width: 14px; height: 1px; background: var(--line-strong); flex: 0 0 14px; }
   .timeline-row .today-marker { color: var(--strong); font-size: 14px; margin-left: 4px; }
@@ -122,7 +142,11 @@
   .year-heatmap .months .year-label-header { padding-left: 8px; visibility: hidden; }
   .year-heatmap .year-row { display: grid; grid-template-columns: repeat(12, 1fr) auto; gap: 4px; align-items: end; margin-bottom: 6px; height: 32px; }
   .year-heatmap .month-bar { background: transparent; border-bottom: 1px solid var(--line-soft); position: relative; height: 100%; display: flex; align-items: flex-end; }
-  .year-heatmap .month-bar .fill { width: 100%; background: var(--strong); opacity: 0.6; border-radius: 1px 1px 0 0; }
+  /* 3-tone ramp: high sessions = light hex (more contrast on dark bg);
+     low = dark hex. Density-not-state — no hue, only lightness. */
+  .year-heatmap .month-bar .fill { width: 100%; background: var(--dv-bar-mid); border-radius: 1px 1px 0 0; }
+  .year-heatmap .month-bar .fill.high { background: var(--dv-bar-high); }
+  .year-heatmap .month-bar .fill.low  { background: var(--dv-bar-low); }
   .year-heatmap .year-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); padding-left: 8px; align-self: end; }
   .log-summary { font-size: 12px; color: var(--muted); margin: 12px 0 8px; }
 
@@ -231,25 +255,24 @@
         <text x="24" y="100">110</text>
         <text x="24" y="128">100</text>
       </g>
-      <!-- X grid rules -->
+      <!-- X grid rules — Oura restraint: 3 lines (min/mean/max), not 5 -->
       <g stroke="#2a2e37" stroke-width="1">
-        <line x1="30" y1="12" x2="320" y2="12" />
-        <line x1="30" y1="40" x2="320" y2="40" />
-        <line x1="30" y1="68" x2="320" y2="68" />
-        <line x1="30" y1="96" x2="320" y2="96" />
+        <line x1="30" y1="20" x2="320" y2="20" />
+        <line x1="30" y1="72" x2="320" y2="72" />
         <line x1="30" y1="124" x2="320" y2="124" />
       </g>
-      <!-- Rolling avg curve (neutral warm-gray, NOT bronze) -->
+      <!-- Rolling avg curve — slate (dv-curve-primary), 2px stroke -->
       <path d="M 30 118 C 60 116, 90 110, 120 100 C 150 92, 180 82, 210 68 C 240 54, 270 40, 310 20"
-            fill="none" stroke="#F0F1F3" stroke-width="1.5" />
-      <!-- Retest event pins (filled, strong-ink) -->
-      <circle cx="34" cy="120" r="3" fill="#F0F1F3" />
-      <circle cx="82" cy="112" r="3" fill="#F0F1F3" />
-      <circle cx="126" cy="98" r="3" fill="#F0F1F3" />
-      <circle cx="174" cy="86" r="3" fill="#F0F1F3" />
-      <circle cx="218" cy="66" r="3" fill="#F0F1F3" />
-      <circle cx="262" cy="46" r="3" fill="#F0F1F3" />
-      <circle cx="308" cy="20" r="4" fill="#F0F1F3" />
+            fill="none" stroke="#79b8c4" stroke-width="2" />
+      <!-- Retest event pins · tri-color by outcome (muted early, green as user found groove).
+           Each pin has a 1px strong-ink outline for shape-not-color-only redundancy. -->
+      <circle cx="34"  cy="120" r="4" fill="#93989f" stroke="#F0F1F3" stroke-width="1" /> <!-- cycle 1 · hold -->
+      <circle cx="82"  cy="112" r="4" fill="#93989f" stroke="#F0F1F3" stroke-width="1" /> <!-- cycle 3 · hold -->
+      <circle cx="126" cy="98"  r="4" fill="#6bb885" stroke="#F0F1F3" stroke-width="1" /> <!-- cycle 5 · hit -->
+      <circle cx="174" cy="86"  r="4" fill="#6bb885" stroke="#F0F1F3" stroke-width="1" /> <!-- cycle 7 · hit -->
+      <circle cx="218" cy="66"  r="4" fill="#6bb885" stroke="#F0F1F3" stroke-width="1" /> <!-- cycle 9 · hit -->
+      <circle cx="262" cy="46"  r="4" fill="#6bb885" stroke="#F0F1F3" stroke-width="1" /> <!-- cycle 12 · hit -->
+      <circle cx="308" cy="20"  r="5" fill="#6bb885" stroke="#F0F1F3" stroke-width="1.5" /> <!-- cycle 14 · hit (today) -->
       <!-- ▲today marker under last pin -->
       <text x="308" y="142" font-family="JetBrains Mono, monospace" font-size="10" fill="#F0F1F3" text-anchor="middle">▲today</text>
       <!-- X-axis labels -->
@@ -262,8 +285,9 @@
       </g>
     </svg>
     <div class="chart-legend">
-      <span><span class="dot"></span>retest event</span>
       <span><span class="line-mark"></span>12-wk rolling avg</span>
+      <span><span class="dot hit"></span>retest · hit target</span>
+      <span><span class="dot hold"></span>retest · held</span>
     </div>
     <div class="show-raw"><button>Show raw</button></div>
     <div class="delta-callout">12-wk avg 136.2 kg &nbsp; +25.4 since Q1'24</div>
@@ -275,20 +299,20 @@
          Now: date labels every 3rd pin, size-modulated dots for cycle-end
          milestones, cursor+hitbox on each. Tap opens per-event citation. -->
     <div class="timeline-row">
-      <span class="pin" title="Cycle 1 · Q1'24"><span class="pin-date">Q1'24</span></span><span class="connector"></span>
-      <span class="pin"></span><span class="connector"></span>
-      <span class="pin milestone"></span><span class="connector"></span>
-      <span class="pin"><span class="pin-date">Q2'24</span></span><span class="connector"></span>
-      <span class="pin"></span><span class="connector"></span>
-      <span class="pin milestone"></span><span class="connector"></span>
-      <span class="pin"><span class="pin-date">Q3'24</span></span><span class="connector"></span>
-      <span class="pin"></span><span class="connector"></span>
-      <span class="pin milestone"></span><span class="connector"></span>
-      <span class="pin"><span class="pin-date">Q4'24</span></span><span class="connector"></span>
-      <span class="pin"></span><span class="connector"></span>
-      <span class="pin milestone"></span><span class="connector"></span>
-      <span class="pin"><span class="pin-date">Q1'25</span></span><span class="connector"></span>
-      <span class="pin milestone"></span>
+      <span class="pin hold" title="Cycle 1 · Q1'24 · held"><span class="pin-date">Q1'24</span></span><span class="connector"></span>
+      <span class="pin hold"></span><span class="connector"></span>
+      <span class="pin milestone hold"></span><span class="connector"></span>
+      <span class="pin hit"><span class="pin-date">Q2'24</span></span><span class="connector"></span>
+      <span class="pin hit"></span><span class="connector"></span>
+      <span class="pin milestone hit"></span><span class="connector"></span>
+      <span class="pin hit"><span class="pin-date">Q3'24</span></span><span class="connector"></span>
+      <span class="pin hit"></span><span class="connector"></span>
+      <span class="pin milestone hit"></span><span class="connector"></span>
+      <span class="pin hit"><span class="pin-date">Q4'24</span></span><span class="connector"></span>
+      <span class="pin hit"></span><span class="connector"></span>
+      <span class="pin milestone hit"></span><span class="connector"></span>
+      <span class="pin hit"><span class="pin-date">Q1'25</span></span><span class="connector"></span>
+      <span class="pin milestone hit"></span>
       <span class="today-marker">▲</span>
     </div>
     <div class="timeline-dates">
@@ -320,27 +344,27 @@
     <div class="year-row" aria-hidden="true">
       <div class="month-bar"><span class="fill" style="height:82%"></span></div>
       <div class="month-bar"><span class="fill" style="height:75%"></span></div>
-      <div class="month-bar"><span class="fill" style="height:88%"></span></div>
+      <div class="month-bar"><span class="fill high" style="height:88%"></span></div>
       <div class="month-bar"><span class="fill" style="height:70%"></span></div>
       <div class="month-bar"><span class="fill" style="height:80%"></span></div>
-      <div class="month-bar"><span class="fill" style="height:92%"></span></div>
-      <div class="month-bar"><span class="fill" style="height:65%"></span></div>
-      <div class="month-bar"><span class="fill" style="height:95%"></span></div>
+      <div class="month-bar"><span class="fill high" style="height:92%"></span></div>
+      <div class="month-bar"><span class="fill low" style="height:65%"></span></div>
+      <div class="month-bar"><span class="fill high" style="height:95%"></span></div>
       <div class="month-bar"><span class="fill" style="height:78%"></span></div>
       <div class="month-bar"><span class="fill" style="height:72%"></span></div>
-      <div class="month-bar"><span class="fill" style="height:85%"></span></div>
-      <div class="month-bar"><span class="fill" style="height:68%"></span></div>
+      <div class="month-bar"><span class="fill high" style="height:85%"></span></div>
+      <div class="month-bar"><span class="fill low" style="height:68%"></span></div>
       <span class="year-label">2024</span>
     </div>
     <div class="year-row" aria-hidden="true">
       <div class="month-bar"><span class="fill" style="height:75%"></span></div>
-      <div class="month-bar"><span class="fill" style="height:60%"></span></div>
+      <div class="month-bar"><span class="fill low" style="height:60%"></span></div>
       <div class="month-bar"><span class="fill" style="height:82%"></span></div>
       <div class="month-bar"><span class="fill" style="height:70%"></span></div>
       <div class="month-bar"><span class="fill" style="height:78%"></span></div>
-      <div class="month-bar"><span class="fill" style="height:88%"></span></div>
-      <div class="month-bar"><span class="fill" style="height:65%"></span></div>
-      <div class="month-bar"><span class="fill" style="height:52%"></span></div>
+      <div class="month-bar"><span class="fill high" style="height:88%"></span></div>
+      <div class="month-bar"><span class="fill low" style="height:65%"></span></div>
+      <div class="month-bar"><span class="fill low" style="height:52%"></span></div>
       <div class="month-bar"></div>
       <div class="month-bar"></div>
       <div class="month-bar"></div>
