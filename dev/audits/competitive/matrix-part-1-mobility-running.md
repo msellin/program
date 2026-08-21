@@ -1,0 +1,1059 @@
+# Competitive design matrix — Part 1 (mobility/recovery + running/cardio)
+
+**Date:** 2026-08-21
+**Agent:** research-agent-1
+**Apps covered:** 12
+
+**Method note.** Sources are marketing sites, App Store / Play Store listings, review sites, ScreensDesign UI teardowns, help-center articles, and community forums. Where an attribute can't be observed from marketing/screenshots alone (typography px sizes, in-app 400-day behavior, etc.) I say "unknown" with a reason instead of guessing. The scale-behavior H bucket was prioritized; most H attributes are still partly inferential because none of these apps publish a "what my app looks like at year 2" screenshot in marketing.
+
+## Sources consulted per app
+
+| App | Marketing URL | App Store URL | Review/teardown URLs | Notes |
+|---|---|---|---|---|
+| Pliability | https://pliability.com | https://apps.apple.com/us/app/pliability-stretch-mobility/id1175346453 | https://fitnessdrum.com/pliability-app-review/ ; https://mensfitness.co.uk/review/pliability-review/ ; https://fitnesstoolsreviewed.com/app-reviews/pliability-review-the-unfiltered-truth-after-90-days/ ; https://www.erwancompes.com/cases/pliability | Rebrand of ROMWOD; Android bundle id is still `com.romwodllc.android`. |
+| GOWOD | https://www.gowod.app/ | https://apps.apple.com/us/app/gowod-mobility-stretching/id1227834875 | https://screensdesign.com/showcase/gowod-mobility-stretching ; https://willpowerstrength.com/injury-prevention/gowod/ ; https://www.gowod.app/how-it-works | ScreensDesign teardown covers onboarding, dashboard, player. |
+| ROMWOD legacy | (archive not fetchable) | — | https://theprogrm.com/romwod-vs-gowod/ | Wayback Machine blocked from WebFetch; relied on rebrand notes + comparison review. |
+| Down Dog | https://www.downdogapp.com | https://apps.apple.com/us/app/yoga-down-dog/id983693694 | https://www.downdogapp.com/faq ; https://play.google.com/store/apps/details?id=com.downdogapp ; https://www.behance.net/gallery/43279831/Down-Dog-App-UIUX-design | Behance gallery is a *concept redesign* by an intern, not the shipping UI — used cautiously. |
+| Yoga With Adriene (FWFG) | https://yogawithadriene.com | (FWFG app — separate storefront, not fetched) | — | Product is primarily YouTube + calendars + separate FWFG membership app; the "app" question is answered but shallow detail. |
+| Alo Moves | https://www.alomoves.com → https://wellnessclub.aloyoga.com/ | (not fetched; Apple redirect) | https://screensdesign.com/showcase/alo-moves ; https://www.garagegymreviews.com/alo-moves-review ; https://www.choosingtherapy.com/alo-moves-yoga-app-review/ | Product was rebranded to "Alo Wellness Club" in 2025. |
+| Runna | https://runna.com | https://apps.apple.com/us/app/runna-running-plans-coach/id1594204443 | https://screensdesign.com/showcase/runna-running-training-plans ; https://legitandscam.com/runna-app-review/ ; https://grittyrunners.co.uk/2024/01/28/marathon-training-plans-why-i-chose-runna/ ; https://support.runna.com/en/articles/6306200-using-your-apple-watch-with-runna-and-getting-the-most-out-of-it | Acquired by Strava April 2025. |
+| Strava | https://strava.com | (not fetched) | https://support.strava.com/en-us/articles/15402014-viewing-your-activity-history-on-strava ; https://support.strava.com/en-us/articles/15401959-your-year-in-sport ; https://support.strava.com/hc/en-us/articles/216917697-Your-Strava-Profile-Page ; https://support.strava.com/en-us/articles/16046277-a-guide-to-strava-heatmaps ; https://communityhub.strava.com/strava-features-chat-5/view-strava-history-for-cycling-running-broken-down-by-years-891 | Help center is the best long-term-behavior source for any app in the set. |
+| Nike Run Club | https://www.nike.com/nrc-app (403) | https://apps.apple.com/au/app/nike-run-club-running-fitness/id387771637 | https://screensdesign.com/showcase/nike-run-club-running-coach ; https://www.designrush.com/best-designs/apps/nike-run-club ; https://www.portorocha.com/nikerun | Marketing landing blocked; relied on Nike design-system writeup + teardown. |
+| Adidas Running (Runtastic) | https://www.runtastic.com → https://www.adidas.com/us/running-app/ (403) | https://apps.apple.com/us/app/adidas-running-app-runtastic/id336599882 | https://tomsguide.com/reviews/adidas-running-app ; https://www.treadmillreviews.net/adidas-runtastic-app/ ; https://justuseapp.com/en/app/336599882/adidas-running-app-runtastic/reviews | Marketing landing 403; App Store listing readable. |
+| Garmin Connect | https://connect.garmin.com | (not directly fetched) | https://www.wareable.com/garmin/garmin-connect-how-to-change-light-dark-mode ; https://support.garmin.com/en-US/?faq=go6yEhw6xJ9MiEJ63UC6OA ; https://forums.garmin.com/apps-software/mobile-apps-web/f/garmin-connect-mobile-ios/253555/dark-mode-issues | Garmin marketing describes light default; forums confirm dark mode added Sep 2023. |
+| Coros | https://coros.com | (not fetched) | https://support.coros.com/hc/en-us/articles/4412383468180-COROS-Training-Hub-Athlete-Tutorial ; https://support.coros.com/hc/en-us/articles/38180411247892-EvoLab ; https://coros.com/stories/coros-metrics/c/training-load ; https://www.sapphirerunningzone.com/post/coros-app-explained-how-it-works-features-and-compatibility ; https://support.coros.com/hc/en-us/articles/15284799576980-Activities-Page-Activity-Summary | Training Hub is web; the phone app is thinner. |
+
+---
+
+## Attribute matrix
+
+### 1. Pliability
+
+- **A1 Background scheme:** dark-only (App Store screenshots consistently dark; brand shift from ROMWOD kept the dark aesthetic) [source: https://fitnessdrum.com/pliability-app-review/]
+- **A2 Primary accent color:** warm off-white / cream on near-black; secondary gold-yellow used for ratings and highlights — exact hex not published [source: https://pliability.com/]
+- **A3 Accent economy:** single-accent (cream/white against black) [source: https://pliability.com/]
+- **A4 H1 max size:** unknown — no published spec, and marketing screenshots not measurable to the pixel
+- **A5 Body-copy default:** unknown — same reason
+- **A6 Mono/tabular numerals for data:** unknown — mobility-score display is described qualitatively in reviews, no clear evidence
+- **A7 Card border radius:** rounded (~16px estimated from App Store screenshots; explicit spec not published) [source: https://apps.apple.com/us/app/pliability-stretch-mobility/id1175346453]
+- **A8 Card border weight:** hairline / 0 (dark surfaces with elevation, no visible strokes) [source: App Store screenshots]
+- **A9 Icon stroke weight:** regular (thin-to-regular line icons in tab bar per teardown) [source: https://www.erwancompes.com/cases/pliability]
+- **A10 Icon size default:** ~24px (standard iOS tab-bar sizing observed) [source: App Store screenshots]
+- **A11 Font family:** custom sans (Pliability brand type — post-ROMWOD rebrand favours a rounded modern sans; exact family not disclosed) [source: https://pliability.com/]
+- **A12 Illustration or photography:** photography-heavy (poses shot on plain floors, athlete portraits) [source: https://pliability.com/]
+
+- **B1 Number of primary tabs:** 4–5 — teardown references Home / Sessions / Mobility Test / Profile-Settings [source: https://www.erwancompes.com/cases/pliability]
+- **B2 Nav position:** bottom [source: https://www.erwancompes.com/cases/pliability]
+- **B3 Persistent header:** yes (title bar with search / filter present on browse tabs) [source: teardown]
+- **B4 Dashboard vs session split:** yes — Home dashboard is separate from the in-session video player [source: teardown]
+- **B5 Program picker:** hybrid — catalog (2,000+ routines) + algorithmic "Daily protocol" [source: https://apps.apple.com/us/app/pliability-stretch-mobility/id1175346453]
+- **B6 Onboarding step count:** ~6 steps (goals, sport, pain areas, training frequency, optional mobility test, paywall) — inferred from marketing but not counted precisely [source: https://pliability.com/]
+- **B7 Auth-first or content-first:** auth-first for full library; free mobility test accessible on web pre-signup [source: https://pliability.com/mobility-test]
+- **B8 Web app parity:** partial (web player exists but mobile is primary) [source: https://pliability.com/]
+- **B9 Watch app included:** unknown — not called out in App Store listing; likely no dedicated watch app [source: App Store listing]
+- **B10 Widget included:** unknown — not observed
+- **C1 Line chart present:** yes — mobility score over time in progress view [source: https://mensfitness.co.uk/review/pliability-review/]
+- **C2 Bar chart present:** unknown
+- **C3 Heatmap present:** no (no calendar heatmap observed)
+- **C4 Ring / donut present:** yes — the mobility score is rendered as a large circular score / donut per teardown [source: https://www.erwancompes.com/cases/pliability]
+- **C5 Sparkline present:** unknown
+- **C6 Sankey / flow present:** no
+- **C7 Time-scale zoom levels:** unknown at the exact-tier level; reviews reference "month over month" comparison of mobility score, not day granularity [source: https://fitnesstoolsreviewed.com/app-reviews/pliability-review-the-unfiltered-truth-after-90-days/]
+- **C8 Absolute + relative deltas:** partial — score deltas reported qualitatively; not confirmed as "+2 pts, +3%" pattern
+- **C9 Comparison mode:** yes at retest granularity (last test vs previous test) [source: teardown]
+- **C10 Trend arrow chips:** unknown
+- **C11 Aggregation tier at scale:** unknown — no long-time-user screenshots available
+- **C12 Empty-state visualization design:** illustration/text mix per teardown [source: teardown]
+- **D1 Words-per-screen on primary home:** low-medium (card grid, tile titles + duration) [source: teardown]
+- **D2 Cards-per-scroll on primary home:** ~3–4 above the fold on a phone [source: App Store screenshots]
+- **D3 Text-to-visual ratio:** visual-heavy (large pose photos on cards) [source: App Store screenshots]
+- **D4 Video embedded in session:** yes (full-screen instructor video) [source: App Store listing]
+- **D5 GIF/anim for exercises:** no — video is the primary asset [source: App Store]
+- **D6 Voice guidance:** yes (instructor voiceover) [source: App Store]
+- **D7 Music integration:** yes — background music selectable; no third-party music integration confirmed [source: App Store]
+- **D8 Instructor photos on session:** yes (session cards feature instructor + pose) [source: App Store screenshots]
+- **D9 Long-form articles / blog inside app:** no (blog lives on the web) [source: https://pliability.com/]
+- **D10 Colored states used:** minimal — cream/white accents; mobility score uses cool→warm gradient across zones [source: teardown]
+- **E1 Confirm-first or auto-apply changes:** none — nothing to confirm; the app doesn't propose load changes
+- **E2 Streaks visible on home:** yes (user reviews mention 90+ week streaks; streak surface exists) [source: https://pliability.com/]
+- **E3 Achievements / badges surface:** partial (streaks are the main gamification; badge library not prominent) [source: App Store]
+- **E4 Points / XP / rings:** no
+- **E5 Push notification frequency:** daily (reminders for daily routine) [source: reviews]
+- **E6 Social feed:** no
+- **E7 Skip / move affordance for planned session:** yes — daily routine can be swapped [source: App Store description]
+- **E8 Undo affordance:** unknown
+- **E9 Rest-timer type:** large digit within player [source: teardown]
+- **E10 Set-log input pattern:** not applicable — no set/rep logging; sessions are timed videos
+- **F1 Load-adjust proposals surface:** no (mobility protocols adjust via retest, not per-session load)
+- **F2 Skip-effect propagation:** no evidence
+- **F3 Readiness / recovery score:** partial — WHOOP/Garmin/Health integration pulls recovery data in [source: App Store listing]
+- **F4 Symptom / injury tracking:** partial — "tell us what hurts" onboarding but no ongoing symptom log [source: https://pliability.com/]
+- **F5 Deload / rest indication:** no
+- **F6 Program deviation tolerance:** flexible (browse library at will) [source: App Store]
+- **F7 Off-plan session logging:** no explicit logging beyond "session completed"
+- **F8 Coach chat surface:** none
+- **G1 Study citations visible in-product:** no — "recovery science" is asserted, no in-product citations [source: https://pliability.com/]
+- **G2 Coach photos and credentials:** yes (instructor bios) [source: https://pliability.com/]
+- **G3 Peer testimonials in-app:** unknown in-app; heavy on marketing site [source: https://pliability.com/]
+- **G4 "Backed by science" marketing:** yes ("recovery science" phrasing) [source: https://pliability.com/]
+- **G5 Research / whitepaper pages:** no
+- **G6 Data export:** none observed
+- **G7 Clinical / physio endorsement:** partial — HYROX partnership + generic PT endorsements [source: https://pliability.com/]
+- **H1 History time-range default:** unknown — reviews reference month/6-month comparisons but not the default view
+- **H2 History aggregation at 400 days:** unknown — no long-term-user screenshots public
+- **H3 Progress metrics tier at 400 days:** unknown — likely still individual mobility-test rollups since retesting is user-triggered
+- **H4 Retest list growth:** unknown — likely uncapped list of mobility-test results (retests are the main long-run artifact); not verified from marketing
+- **H5 Off-day representation:** unknown — streak surface implies some off-day marking
+- **H6 Program-completion archive:** unknown
+- **H7 Chart densification at 400 points:** unknown — no long-run screenshots
+- **H8 Weekly-narrative retention:** unknown — "weekly insights" mentioned; retention duration not published [source: https://pliability.com/]
+- **H9 Data export as counterweight:** none — no CSV/PDF export observed
+- **H10 Long-time-user identity — "power user" surface:** partial — long streaks are surfaced (Trustpilot user brags about 90+ week streak); no formal year-in-review found [source: https://pliability.com/]
+
+### 2. GOWOD
+
+- **A1 Background scheme:** dark-only (marketing hero and app screenshots consistently dark) [source: https://www.gowod.app/]
+- **A2 Primary accent color:** gold/yellow highlights + hot-pink/magenta for mobility-score elements (per teardown palette) [source: https://screensdesign.com/showcase/gowod-mobility-stretching]
+- **A3 Accent economy:** multi-accent (yellow + magenta + cool-to-warm heatmap gradient on the body-zone infographic) [source: teardown]
+- **A4 H1 max size:** unknown
+- **A5 Body-copy default:** unknown
+- **A6 Mono/tabular numerals for data:** yes (mobility score is a bold numeric on the dashboard — the "high-level mobility score" the teardown calls out) [source: teardown]
+- **A7 Card border radius:** rounded ~16px [source: App Store screenshots]
+- **A8 Card border weight:** hairline / 0 [source: teardown]
+- **A9 Icon stroke weight:** regular
+- **A10 Icon size default:** ~24px (standard iOS)
+- **A11 Font family:** custom sans (specific family not disclosed)
+- **A12 Illustration or photography:** mixed — body-zone heatmap infographic is illustrative; exercise player is photographic video [source: teardown]
+
+- **B1 Number of primary tabs:** 4 — Home / Profile / Library / Protocols per teardown [source: teardown]
+- **B2 Nav position:** bottom [source: teardown]
+- **B3 Persistent header:** yes
+- **B4 Dashboard vs session split:** yes
+- **B5 Program picker:** algorithmic — 12-minute mobility test drives the daily routine; the library is secondary [source: https://willpowerstrength.com/injury-prevention/gowod/]
+- **B6 Onboarding step count:** ~8 steps (goals, sport(s), branded program, mobility test intro, mobility test, results, paywall, home) [source: teardown]
+- **B7 Auth-first or content-first:** auth-first — mobility test itself requires signup [source: https://www.gowod.app/]
+- **B8 Web app parity:** no (mobile-only) [source: https://www.gowod.app/]
+- **B9 Watch app included:** unknown — no marketing callout; likely no [source: App Store]
+- **B10 Widget included:** unknown — no callout
+- **C1 Line chart present:** yes — "compare stats month after month" [source: https://willpowerstrength.com/injury-prevention/gowod/]
+- **C2 Bar chart present:** unknown
+- **C3 Heatmap present:** yes — full-body zone heatmap on the mobility-profile screen [source: teardown]
+- **C4 Ring / donut present:** yes — mobility score rendered as a headline ring [source: teardown]
+- **C5 Sparkline present:** unknown
+- **C6 Sankey / flow present:** no
+- **C7 Time-scale zoom levels:** month, 6-month at minimum [source: https://willpowerstrength.com/injury-prevention/gowod/]
+- **C8 Absolute + relative deltas:** yes — "20 percent" improvement figures surfaced in progress [source: https://willpowerstrength.com/injury-prevention/gowod/]
+- **C9 Comparison mode:** yes (test vs previous test / month comparisons) [source: same]
+- **C10 Trend arrow chips:** unknown
+- **C11 Aggregation tier at scale:** monthly rollup at minimum [source: same]
+- **C12 Empty-state visualization design:** illustration (body silhouette) [source: teardown]
+- **D1 Words-per-screen on primary home:** low (card-driven) [source: teardown]
+- **D2 Cards-per-scroll on primary home:** ~2–3 [source: teardown]
+- **D3 Text-to-visual ratio:** visual-heavy [source: teardown]
+- **D4 Video embedded in session:** yes [source: teardown]
+- **D5 GIF/anim for exercises:** no — video primary [source: teardown]
+- **D6 Voice guidance:** yes [source: App Store]
+- **D7 Music integration:** unknown
+- **D8 Instructor photos on session:** yes (single demonstrator per exercise) [source: teardown]
+- **D9 Long-form articles / blog inside app:** no
+- **D10 Colored states used:** red-orange-yellow-green on the body-zone heatmap (weakness → strength) [source: teardown]
+- **E1 Confirm-first or auto-apply changes:** none
+- **E2 Streaks visible on home:** unknown — no explicit streak callout in reviews
+- **E3 Achievements / badges surface:** no strong surface
+- **E4 Points / XP / rings:** no
+- **E5 Push notification frequency:** daily
+- **E6 Social feed:** no
+- **E7 Skip / move affordance for planned session:** yes (skip today, do library instead) [source: teardown]
+- **E8 Undo affordance:** unknown
+- **E9 Rest-timer type:** large digit within player [source: teardown]
+- **E10 Set-log input pattern:** n/a (timed video)
+- **F1 Load-adjust proposals surface:** no
+- **F2 Skip-effect propagation:** no
+- **F3 Readiness / recovery score:** no
+- **F4 Symptom / injury tracking:** partial — pain zones asked at onboarding, no ongoing log [source: teardown]
+- **F5 Deload / rest indication:** yes — mobility test recommended on rest day [source: https://willpowerstrength.com/injury-prevention/gowod/]
+- **F6 Program deviation tolerance:** flexible
+- **F7 Off-plan session logging:** yes — Strava integration syncs sport sessions [source: https://www.gowod.app/]
+- **F8 Coach chat surface:** none
+- **G1 Study citations visible in-product:** no
+- **G2 Coach photos and credentials:** yes (instructor bios) [source: https://www.gowod.app/]
+- **G3 Peer testimonials in-app:** unknown in-app; heavy on marketing
+- **G4 "Backed by science" marketing:** yes [source: https://www.gowod.app/]
+- **G5 Research / whitepaper pages:** no
+- **G6 Data export:** none observed
+- **G7 Clinical / physio endorsement:** partial (professional-athlete endorsements) [source: https://www.gowod.app/]
+- **H1 History time-range default:** month (per how-it-works page) [source: https://www.gowod.app/how-it-works]
+- **H2 History aggregation at 400 days:** unknown — the app is designed around retest cadence (multi-month), so long-run view is likely month-tile rollup, not day-by-day; not verified from public screenshots
+- **H3 Progress metrics tier at 400 days:** likely monthly-tile rollup + mobility-test-event points; inferred not confirmed
+- **H4 Retest list growth:** likely uncapped list of past test events (this is the app's central artifact) — not verified
+- **H5 Off-day representation:** unknown
+- **H6 Program-completion archive:** unknown
+- **H7 Chart densification at 400 points:** unknown — no long-run screenshots
+- **H8 Weekly-narrative retention:** unknown
+- **H9 Data export as counterweight:** none
+- **H10 Long-time-user identity — "power user" surface:** partial — mobility-score-over-time is the closest thing to a tenure identity; no year-in-review [source: https://www.gowod.app/how-it-works]
+
+### 3. ROMWOD legacy
+
+Note: I could not fetch the Wayback Machine (WebFetch blocked on web.archive.org). All ROMWOD-legacy details below are from the surviving Play-Store bundle id (`com.romwodllc.android` — still Pliability's Android package), the ROMWOD-vs-GOWOD comparison, and prior brand memory publicly documented.
+
+- **A1 Background scheme:** dark-only (this was the canonical property the ROMWOD brand established, and Pliability inherited it) [source: https://theprogrm.com/romwod-vs-gowod/]
+- **A2 Primary accent color:** near-white on charcoal; occasional teal in later versions [source: comparison review]
+- **A3 Accent economy:** single-accent [source: comparison review]
+- **A4 H1 max size:** unknown
+- **A5 Body-copy default:** unknown
+- **A6 Mono/tabular numerals for data:** unknown (there was little numerical data — this is what the category rejected)
+- **A7 Card border radius:** rounded card tiles [source: comparison review]
+- **A8 Card border weight:** 0
+- **A9 Icon stroke weight:** regular
+- **A10 Icon size default:** ~24px
+- **A11 Font family:** custom sans
+- **A12 Illustration or photography:** photography (dim-lit yoga-studio shots — that was the mood ROMWOD sold) [source: comparison review]
+
+- **B1 Number of primary tabs:** ~3 — daily video / library / profile [source: comparison review]
+- **B2 Nav position:** bottom
+- **B3 Persistent header:** yes
+- **B4 Dashboard vs session split:** minimal split — home was largely a "today's video" card [source: comparison review]
+- **B5 Program picker:** catalog (a curated daily video, plus browsable library) — critically **not** algorithmic [source: comparison review]
+- **B6 Onboarding step count:** minimal (~2–3) [source: comparison review]
+- **B7 Auth-first or content-first:** auth-first
+- **B8 Web app parity:** yes (web player was primary for gyms) [source: comparison review]
+- **B9 Watch app included:** no
+- **B10 Widget included:** no
+- **C1 Line chart present:** no
+- **C2 Bar chart present:** no
+- **C3 Heatmap present:** no
+- **C4 Ring / donut present:** no
+- **C5 Sparkline present:** no
+- **C6 Sankey / flow present:** no
+- **C7 Time-scale zoom levels:** none — history was a completion list, not charts [source: comparison review]
+- **C8 Absolute + relative deltas:** no
+- **C9 Comparison mode:** no
+- **C10 Trend arrow chips:** no
+- **C11 Aggregation tier at scale:** none visible — this is the category's founding problem that Pliability and GOWOD both addressed
+- **C12 Empty-state visualization design:** text-only
+- **D1 Words-per-screen on primary home:** very low
+- **D2 Cards-per-scroll on primary home:** 1 (today's video hero)
+- **D3 Text-to-visual ratio:** visual-heavy
+- **D4 Video embedded in session:** yes
+- **D5 GIF/anim for exercises:** no
+- **D6 Voice guidance:** yes
+- **D7 Music integration:** yes (branded playlist)
+- **D8 Instructor photos on session:** yes
+- **D9 Long-form articles / blog inside app:** no
+- **D10 Colored states used:** none (monochrome)
+- **E1 Confirm-first or auto-apply changes:** none — nothing to change
+- **E2 Streaks visible on home:** partial — later versions added it; the "why rebranded" thesis is that streaks and mobility test were bolted on late [source: comparison review]
+- **E3 Achievements / badges surface:** no
+- **E4 Points / XP / rings:** no
+- **E5 Push notification frequency:** daily
+- **E6 Social feed:** no
+- **E7 Skip / move affordance for planned session:** effectively yes (browse the library instead)
+- **E8 Undo affordance:** n/a
+- **E9 Rest-timer type:** large digit
+- **E10 Set-log input pattern:** n/a
+- **F1 Load-adjust proposals surface:** no
+- **F2 Skip-effect propagation:** no
+- **F3 Readiness / recovery score:** no
+- **F4 Symptom / injury tracking:** no
+- **F5 Deload / rest indication:** no
+- **F6 Program deviation tolerance:** flexible
+- **F7 Off-plan session logging:** no
+- **F8 Coach chat surface:** none
+- **G1 Study citations visible in-product:** no
+- **G2 Coach photos and credentials:** yes
+- **G3 Peer testimonials in-app:** no
+- **G4 "Backed by science" marketing:** partial — pitched more as "elite athlete recovery" than science
+- **G5 Research / whitepaper pages:** no
+- **G6 Data export:** none
+- **G7 Clinical / physio endorsement:** partial (CrossFit affiliate + pro-athlete endorsements)
+- **H1 History time-range default:** all-time list [source: comparison review]
+- **H2 History aggregation at 400 days:** list of completed videos, uncapped and unrolled — this is the failure mode Pliability & GOWOD were built to fix [source: comparison review]
+- **H3 Progress metrics tier at 400 days:** individual entries — no phase or month rollups [source: comparison review]
+- **H4 Retest list growth:** n/a (no retest mechanic)
+- **H5 Off-day representation:** blank / not represented
+- **H6 Program-completion archive:** not applicable — no programs, just an infinite feed
+- **H7 Chart densification at 400 points:** n/a (no charts)
+- **H8 Weekly-narrative retention:** none
+- **H9 Data export as counterweight:** none
+- **H10 Long-time-user identity — "power user" surface:** no — this is the exact gap ROMWOD had, and the rebrand to Pliability is largely an admission of it [source: https://theprogrm.com/romwod-vs-gowod/]
+
+### 4. Down Dog
+
+- **A1 Background scheme:** light-only in free tier; dark theme is a Premium unlock [source: https://www.downdogapp.com/faq]
+- **A2 Primary accent color:** cool teal / muted green — Tortilla-mascot palette; exact hex not disclosed [source: https://www.downdogapp.com/]
+- **A3 Accent economy:** single-accent [source: marketing]
+- **A4 H1 max size:** unknown
+- **A5 Body-copy default:** unknown
+- **A6 Mono/tabular numerals for data:** no (very little numerical UI — the app is generative)
+- **A7 Card border radius:** unknown
+- **A8 Card border weight:** unknown
+- **A9 Icon stroke weight:** regular
+- **A10 Icon size default:** ~24px
+- **A11 Font family:** custom sans
+- **A12 Illustration or photography:** minimal + illustration (Tortilla mascot; app itself is largely text controls over a video) [source: https://www.downdogapp.com/]
+
+- **B1 Number of primary tabs:** ~3 (Practice / History / Settings) — not fully confirmed
+- **B2 Nav position:** bottom
+- **B3 Persistent header:** yes
+- **B4 Dashboard vs session split:** dashboard is the "practice generator" configurator; session is separate video screen [source: https://www.downdogapp.com/]
+- **B5 Program picker:** algorithmic (each practice generated fresh — "over a million possible configurations") [source: https://www.downdogapp.com/]
+- **B6 Onboarding step count:** ~3 steps [source: marketing]
+- **B7 Auth-first or content-first:** content-first — you can generate and play a practice with no account, and 2 weeks trial "no credit card required" [source: https://www.downdogapp.com/]
+- **B8 Web app parity:** yes — full web app [source: https://www.downdogapp.com/]
+- **B9 Watch app included:** unknown — not called out
+- **B10 Widget included:** unknown
+- **C1 Line chart present:** no
+- **C2 Bar chart present:** no
+- **C3 Heatmap present:** unknown (calendar-heatmap-style streak view possible; not confirmed)
+- **C4 Ring / donut present:** no
+- **C5 Sparkline present:** no
+- **C6 Sankey / flow present:** no
+- **C7 Time-scale zoom levels:** unknown — history is a session list [source: marketing]
+- **C8 Absolute + relative deltas:** no
+- **C9 Comparison mode:** no
+- **C10 Trend arrow chips:** no
+- **C11 Aggregation tier at scale:** unknown — likely just a list
+- **C12 Empty-state visualization design:** illustration (Tortilla)
+- **D1 Words-per-screen on primary home:** medium (configurator has many drop-down controls) [source: https://www.downdogapp.com/]
+- **D2 Cards-per-scroll on primary home:** n/a (configurator, not cards)
+- **D3 Text-to-visual ratio:** balanced
+- **D4 Video embedded in session:** yes [source: marketing]
+- **D5 GIF/anim for exercises:** no
+- **D6 Voice guidance:** yes (multiple voice options) [source: marketing]
+- **D7 Music integration:** yes (integrated playlists; Apple Music playback) [source: marketing]
+- **D8 Instructor photos on session:** partial — animated demonstrator [source: marketing]
+- **D9 Long-form articles / blog inside app:** no
+- **D10 Colored states used:** none pronounced
+- **E1 Confirm-first or auto-apply changes:** confirm — you configure and press Start; the app doesn't propose changes [source: marketing]
+- **E2 Streaks visible on home:** yes (streak tracking + challenges) [source: marketing]
+- **E3 Achievements / badges surface:** partial — challenges [source: marketing]
+- **E4 Points / XP / rings:** no
+- **E5 Push notification frequency:** daily
+- **E6 Social feed:** no
+- **E7 Skip / move affordance for planned session:** n/a (no scheduled session — regenerate at will) [source: marketing]
+- **E8 Undo affordance:** yes for pose likes/dislikes [source: marketing]
+- **E9 Rest-timer type:** hidden in-flow (paced by the video)
+- **E10 Set-log input pattern:** n/a
+- **F1 Load-adjust proposals surface:** no
+- **F2 Skip-effect propagation:** yes in a soft sense (like/dislike a pose → shows less/more) [source: marketing]
+- **F3 Readiness / recovery score:** no
+- **F4 Symptom / injury tracking:** no
+- **F5 Deload / rest indication:** no
+- **F6 Program deviation tolerance:** flexible (nothing to deviate from)
+- **F7 Off-plan session logging:** n/a
+- **F8 Coach chat surface:** none
+- **G1 Study citations visible in-product:** no
+- **G2 Coach photos and credentials:** no (voices are anonymized voice actors)
+- **G3 Peer testimonials in-app:** no
+- **G4 "Backed by science" marketing:** no
+- **G5 Research / whitepaper pages:** no
+- **G6 Data export:** partial — Apple Health / Google Fit / Fitbit sync [source: marketing]
+- **G7 Clinical / physio endorsement:** no
+- **H1 History time-range default:** unknown — likely session-list
+- **H2 History aggregation at 400 days:** unknown — no long-run screenshots public; the FAQ and marketing don't describe long-term history
+- **H3 Progress metrics tier at 400 days:** unknown
+- **H4 Retest list growth:** n/a
+- **H5 Off-day representation:** unknown (streak view exists → some off-day marking is likely)
+- **H6 Program-completion archive:** n/a (no programs)
+- **H7 Chart densification at 400 points:** n/a
+- **H8 Weekly-narrative retention:** unknown
+- **H9 Data export as counterweight:** partial (health-app sync) [source: marketing]
+- **H10 Long-time-user identity — "power user" surface:** partial — streak challenge system is the main long-tenure surface [source: marketing]
+
+### 5. Yoga With Adriene (FWFG app)
+
+Note: separate paid app (FWFG — "Find What Feels Good") distinct from the YouTube channel. Content-shallow: no strong teardown found, so many attributes are "unknown."
+
+- **A1 Background scheme:** light-only (brand aesthetic is warm-cream) [source: https://yogawithadriene.com/]
+- **A2 Primary accent color:** warm mustard / terracotta [source: https://yogawithadriene.com/]
+- **A3 Accent economy:** single-accent
+- **A4 H1 max size:** unknown
+- **A5 Body-copy default:** unknown
+- **A6 Mono/tabular numerals for data:** no (minimal numeric UI)
+- **A7 Card border radius:** unknown
+- **A8 Card border weight:** unknown
+- **A9 Icon stroke weight:** unknown
+- **A10 Icon size default:** unknown
+- **A11 Font family:** custom serif display + sans body [source: https://yogawithadriene.com/]
+- **A12 Illustration or photography:** photography (Adriene as the recurring subject) [source: https://yogawithadriene.com/]
+
+- **B1 Number of primary tabs:** unknown
+- **B2 Nav position:** unknown (likely bottom)
+- **B3 Persistent header:** unknown
+- **B4 Dashboard vs session split:** unknown
+- **B5 Program picker:** catalog (700+ videos, monthly calendars) [source: https://yogawithadriene.com/]
+- **B6 Onboarding step count:** unknown
+- **B7 Auth-first or content-first:** content-first for YouTube (the majority of the audience); auth-first for FWFG [source: https://yogawithadriene.com/]
+- **B8 Web app parity:** yes (FWFG has web + YouTube backdoor) [source: same]
+- **B9 Watch app included:** unknown — none observed
+- **B10 Widget included:** unknown
+- **C1 Line chart present:** unknown
+- **C2 Bar chart present:** unknown
+- **C3 Heatmap present:** unknown
+- **C4 Ring / donut present:** unknown
+- **C5 Sparkline present:** unknown
+- **C6 Sankey / flow present:** no
+- **C7 Time-scale zoom levels:** unknown
+- **C8 Absolute + relative deltas:** unknown
+- **C9 Comparison mode:** unknown
+- **C10 Trend arrow chips:** unknown
+- **C11 Aggregation tier at scale:** unknown
+- **C12 Empty-state visualization design:** unknown
+- **D1 Words-per-screen on primary home:** medium (Adriene's brand voice is chatty) [source: https://yogawithadriene.com/]
+- **D2 Cards-per-scroll on primary home:** unknown
+- **D3 Text-to-visual ratio:** balanced
+- **D4 Video embedded in session:** yes [source: marketing]
+- **D5 GIF/anim for exercises:** no
+- **D6 Voice guidance:** yes (Adriene, primarily)
+- **D7 Music integration:** no
+- **D8 Instructor photos on session:** yes
+- **D9 Long-form articles / blog inside app:** yes (blog present) [source: https://yogawithadriene.com/]
+- **D10 Colored states used:** none
+- **E1 Confirm-first or auto-apply changes:** none — no adjustments
+- **E2 Streaks visible on home:** unknown (monthly calendars imply streak-like completion; unconfirmed)
+- **E3 Achievements / badges surface:** unknown
+- **E4 Points / XP / rings:** no
+- **E5 Push notification frequency:** unknown
+- **E6 Social feed:** partial (community forum, not a feed)
+- **E7 Skip / move affordance for planned session:** yes (monthly calendars are advisory)
+- **E8 Undo affordance:** unknown
+- **E9 Rest-timer type:** hidden (video-paced)
+- **E10 Set-log input pattern:** n/a
+- **F1 Load-adjust proposals surface:** no
+- **F2 Skip-effect propagation:** no
+- **F3 Readiness / recovery score:** no
+- **F4 Symptom / injury tracking:** no
+- **F5 Deload / rest indication:** no
+- **F6 Program deviation tolerance:** self-authored — the calendar is advisory
+- **F7 Off-plan session logging:** unknown
+- **F8 Coach chat surface:** community/human moderators, not 1:1 [source: https://yogawithadriene.com/]
+- **G1 Study citations visible in-product:** no
+- **G2 Coach photos and credentials:** yes — Adriene is the whole brand
+- **G3 Peer testimonials in-app:** yes (community stories)
+- **G4 "Backed by science" marketing:** no (values are the pitch, not science)
+- **G5 Research / whitepaper pages:** no
+- **G6 Data export:** none
+- **G7 Clinical / physio endorsement:** no
+- **H1 History time-range default:** unknown
+- **H2 History aggregation at 400 days:** unknown
+- **H3 Progress metrics tier at 400 days:** unknown
+- **H4 Retest list growth:** n/a
+- **H5 Off-day representation:** unknown
+- **H6 Program-completion archive:** likely visible — completed monthly calendars are the artefact [source: https://yogawithadriene.com/]
+- **H7 Chart densification at 400 points:** n/a
+- **H8 Weekly-narrative retention:** unknown
+- **H9 Data export as counterweight:** none
+- **H10 Long-time-user identity — "power user" surface:** partial — the community identity ("YWA years") lives socially, not in-product [source: https://yogawithadriene.com/]
+
+### 6. Alo Moves (Alo Wellness Club)
+
+- **A1 Background scheme:** light-only (bright, warm-cream, matches the Alo Yoga apparel brand) [source: https://wellnessclub.aloyoga.com/]
+- **A2 Primary accent color:** warm sage / muted taupe with occasional black CTAs [source: https://wellnessclub.aloyoga.com/]
+- **A3 Accent economy:** single-accent
+- **A4 H1 max size:** unknown
+- **A5 Body-copy default:** unknown
+- **A6 Mono/tabular numerals for data:** no
+- **A7 Card border radius:** ~12–16px [source: teardown]
+- **A8 Card border weight:** 0
+- **A9 Icon stroke weight:** thin (matches Alo apparel brand line-weight) [source: teardown]
+- **A10 Icon size default:** ~24px
+- **A11 Font family:** custom serif for display, sans for body [source: https://wellnessclub.aloyoga.com/]
+- **A12 Illustration or photography:** photography-heavy (instructor + studio photography) [source: teardown]
+
+- **B1 Number of primary tabs:** ~4 (Home / Classes / Community / Profile) [source: https://screensdesign.com/showcase/alo-moves]
+- **B2 Nav position:** bottom [source: teardown]
+- **B3 Persistent header:** yes
+- **B4 Dashboard vs session split:** yes [source: teardown]
+- **B5 Program picker:** catalog (curated classes + series; not algorithmic) [source: https://www.garagegymreviews.com/alo-moves-review]
+- **B6 Onboarding step count:** ~5 steps (goals, level, equipment, preferences, paywall) [source: https://www.choosingtherapy.com/alo-moves-yoga-app-review/]
+- **B7 Auth-first or content-first:** auth-first
+- **B8 Web app parity:** yes
+- **B9 Watch app included:** no — reviewers flag the lack as a limitation [source: https://www.garagegymreviews.com/alo-moves-review]
+- **B10 Widget included:** unknown — none observed
+- **C1 Line chart present:** no
+- **C2 Bar chart present:** no
+- **C3 Heatmap present:** no
+- **C4 Ring / donut present:** no
+- **C5 Sparkline present:** no
+- **C6 Sankey / flow present:** no
+- **C7 Time-scale zoom levels:** unknown — history is basic workout-log per reviewers [source: https://www.garagegymreviews.com/alo-moves-review]
+- **C8 Absolute + relative deltas:** no
+- **C9 Comparison mode:** no
+- **C10 Trend arrow chips:** no
+- **C11 Aggregation tier at scale:** unknown — likely list rollup only [source: same]
+- **C12 Empty-state visualization design:** photography-based (branded imagery) [source: teardown]
+- **D1 Words-per-screen on primary home:** low-medium (magazine layout)
+- **D2 Cards-per-scroll on primary home:** ~2–3 [source: teardown]
+- **D3 Text-to-visual ratio:** visual-heavy
+- **D4 Video embedded in session:** yes
+- **D5 GIF/anim for exercises:** no
+- **D6 Voice guidance:** yes (instructor voiceover) [source: teardown]
+- **D7 Music integration:** yes — curated soundtracks; volume control in player [source: teardown]
+- **D8 Instructor photos on session:** yes
+- **D9 Long-form articles / blog inside app:** partial — wellness content beyond classes [source: https://wellnessclub.aloyoga.com/]
+- **D10 Colored states used:** difficulty tiers (5 levels), intensity tiers (4 levels) — earthy palette [source: https://wellnessclub.aloyoga.com/]
+- **E1 Confirm-first or auto-apply changes:** none
+- **E2 Streaks visible on home:** unknown (reviewers say tracking is basic)
+- **E3 Achievements / badges surface:** no strong surface [source: https://www.garagegymreviews.com/alo-moves-review]
+- **E4 Points / XP / rings:** no
+- **E5 Push notification frequency:** daily
+- **E6 Social feed:** yes — per-class Community tab [source: teardown]
+- **E7 Skip / move affordance for planned session:** n/a — no adaptive schedule
+- **E8 Undo affordance:** unknown
+- **E9 Rest-timer type:** hidden (video-paced)
+- **E10 Set-log input pattern:** n/a
+- **F1 Load-adjust proposals surface:** no
+- **F2 Skip-effect propagation:** no
+- **F3 Readiness / recovery score:** no
+- **F4 Symptom / injury tracking:** no
+- **F5 Deload / rest indication:** no
+- **F6 Program deviation tolerance:** flexible
+- **F7 Off-plan session logging:** yes (log any workout completion) [source: https://www.garagegymreviews.com/alo-moves-review]
+- **F8 Coach chat surface:** none (community-based)
+- **G1 Study citations visible in-product:** no
+- **G2 Coach photos and credentials:** yes
+- **G3 Peer testimonials in-app:** yes (Community tab)
+- **G4 "Backed by science" marketing:** no
+- **G5 Research / whitepaper pages:** no
+- **G6 Data export:** none observed
+- **G7 Clinical / physio endorsement:** no
+- **H1 History time-range default:** unknown — reviewers call it "basic" [source: https://www.garagegymreviews.com/alo-moves-review]
+- **H2 History aggregation at 400 days:** unknown; reviewers imply flat list, no rollups
+- **H3 Progress metrics tier at 400 days:** unknown; likely still individual entries — this is explicitly the reviewer complaint [source: same]
+- **H4 Retest list growth:** n/a
+- **H5 Off-day representation:** unknown
+- **H6 Program-completion archive:** partial (finished series listed)
+- **H7 Chart densification at 400 points:** n/a — no charts
+- **H8 Weekly-narrative retention:** unknown
+- **H9 Data export as counterweight:** none
+- **H10 Long-time-user identity — "power user" surface:** no strong surface — reviewers repeatedly identify the tracking gap [source: https://www.garagegymreviews.com/alo-moves-review]
+
+### 7. Runna
+
+- **A1 Background scheme:** light-only marketing site; app itself supports dual/auto based on screenshots [source: https://runna.com/ ; https://apps.apple.com/us/app/runna-running-plans-coach/id1594204443]
+- **A2 Primary accent color:** navy/dark-blue for CTAs, orange as secondary highlight [source: https://runna.com/]
+- **A3 Accent economy:** dual accent (navy + orange) [source: https://runna.com/]
+- **A4 H1 max size:** unknown
+- **A5 Body-copy default:** unknown
+- **A6 Mono/tabular numerals for data:** yes (pace/distance tiles rendered in tabular numerals) [source: App Store screenshots]
+- **A7 Card border radius:** ~16px [source: App Store screenshots]
+- **A8 Card border weight:** hairline
+- **A9 Icon stroke weight:** regular
+- **A10 Icon size default:** ~24px
+- **A11 Font family:** custom sans
+- **A12 Illustration or photography:** photography (real runners, race environments) [source: https://runna.com/]
+
+- **B1 Number of primary tabs:** 4–5 (Home / Plan / Log / Insights / Spaces) [source: https://screensdesign.com/showcase/runna-running-training-plans]
+- **B2 Nav position:** bottom
+- **B3 Persistent header:** yes
+- **B4 Dashboard vs session split:** yes
+- **B5 Program picker:** algorithmic (race-goal driven) with catalog of ancillary strength/yoga [source: https://runna.com/]
+- **B6 Onboarding step count:** ~26 steps (unusually long, teardown-confirmed) [source: https://screensdesign.com/showcase/runna-running-training-plans]
+- **B7 Auth-first or content-first:** auth-first (paywall gates plan) [source: https://runna.com/]
+- **B8 Web app parity:** partial (marketing site only; product is mobile) [source: https://runna.com/]
+- **B9 Watch app included:** yes — iOS (Apple Watch), Garmin, COROS integrations [source: https://support.runna.com/en/articles/6306200-using-your-apple-watch-with-runna-and-getting-the-most-out-of-it]
+- **B10 Widget included:** yes on iOS (weekly-distance-run complication + widget) [source: forum reference]
+- **C1 Line chart present:** yes (pace / distance) [source: App Store screenshots]
+- **C2 Bar chart present:** yes (weekly mileage) [source: App Store screenshots]
+- **C3 Heatmap present:** unknown
+- **C4 Ring / donut present:** yes (session-progress ring) [source: App Store screenshots]
+- **C5 Sparkline present:** unknown
+- **C6 Sankey / flow present:** no
+- **C7 Time-scale zoom levels:** week, month, plan-block [source: App Store screenshots]
+- **C8 Absolute + relative deltas:** yes (delta pace vs target) [source: App Store screenshots]
+- **C9 Comparison mode:** yes (planned vs actual) [source: https://grittyrunners.co.uk/2024/01/28/marathon-training-plans-why-i-chose-runna/]
+- **C10 Trend arrow chips:** yes (workout status chips) [source: App Store screenshots]
+- **C11 Aggregation tier at scale:** phase-block rollup — the plan itself is the chunking mechanism [source: teardown]
+- **C12 Empty-state visualization design:** illustration + text [source: teardown]
+- **D1 Words-per-screen on primary home:** medium (today's workout + tiles) [source: App Store]
+- **D2 Cards-per-scroll on primary home:** ~2–3 [source: App Store]
+- **D3 Text-to-visual ratio:** balanced
+- **D4 Video embedded in session:** partial (strength/yoga classes have video; runs don't)
+- **D5 GIF/anim for exercises:** no
+- **D6 Voice guidance:** yes (live pace coaching audio) [source: https://support.runna.com/en/articles/6306200-using-your-apple-watch-with-runna-and-getting-the-most-out-of-it]
+- **D7 Music integration:** partial (Apple Music / Spotify handoff)
+- **D8 Instructor photos on session:** no (running is unattributed audio)
+- **D9 Long-form articles / blog inside app:** no (blog on web)
+- **D10 Colored states used:** yes — green/amber/red on workout compliance (per grittyrunners writeup) [source: https://grittyrunners.co.uk/2024/01/28/marathon-training-plans-why-i-chose-runna/]
+- **E1 Confirm-first or auto-apply changes:** confirm — user moves the run, app **recalculates and asks**; sessions can be moved without the "red failed workout" pattern [source: https://legitandscam.com/runna-app-review/]
+- **E2 Streaks visible on home:** partial — weekly compliance more than streaks per se
+- **E3 Achievements / badges surface:** yes [source: App Store]
+- **E4 Points / XP / rings:** no
+- **E5 Push notification frequency:** daily + pre-workout
+- **E6 Social feed:** yes — "Spaces" (post-Strava-acquisition) [source: teardown]
+- **E7 Skip / move affordance for planned session:** yes — this is a differentiator [source: https://legitandscam.com/runna-app-review/]
+- **E8 Undo affordance:** unknown
+- **E9 Rest-timer type:** large digit + ring in-workout [source: App Store screenshots]
+- **E10 Set-log input pattern:** keypad for post-workout logging [source: teardown]
+- **F1 Load-adjust proposals surface:** yes — AI-powered insights suggest plan adjustments after each workout [source: https://legitandscam.com/runna-app-review/]
+- **F2 Skip-effect propagation:** yes — plan recalculates around skipped/moved sessions [source: same]
+- **F3 Readiness / recovery score:** partial (via HR / Apple Watch health data)
+- **F4 Symptom / injury tracking:** partial — recovery/injury-focused plan variants [source: https://runna.com/]
+- **F5 Deload / rest indication:** yes — plan includes recovery weeks [source: teardown]
+- **F6 Program deviation tolerance:** flexible (move sessions freely) [source: https://legitandscam.com/runna-app-review/]
+- **F7 Off-plan session logging:** yes [source: teardown]
+- **F8 Coach chat surface:** AI insights + human community; no dedicated 1:1 coach chat [source: teardown]
+- **G1 Study citations visible in-product:** no explicit citations; "scientific programming" claim only [source: https://apps.apple.com/us/app/runna-running-plans-coach/id1594204443]
+- **G2 Coach photos and credentials:** yes (coach bios on marketing) [source: https://runna.com/]
+- **G3 Peer testimonials in-app:** yes (Spaces + reviews) [source: teardown]
+- **G4 "Backed by science" marketing:** yes ("scientific programming") [source: App Store]
+- **G5 Research / whitepaper pages:** no
+- **G6 Data export:** partial (Strava sync counts) [source: App Store]
+- **G7 Clinical / physio endorsement:** partial — physio-designed recovery plans [source: https://runna.com/]
+- **H1 History time-range default:** week [source: App Store screenshots]
+- **H2 History aggregation at 400 days:** unknown — no long-time user screenshots public; plan phases likely act as the natural aggregation
+- **H3 Progress metrics tier at 400 days:** phase / plan-cycle rollup by design (each race cycle is a bounded artefact); inferred not confirmed [source: teardown]
+- **H4 Retest list growth:** n/a (no retest ritual)
+- **H5 Off-day representation:** marked (rest days shown, not blank) [source: App Store screenshots]
+- **H6 Program-completion archive:** partial (past plans / race cycles archived) [source: teardown]
+- **H7 Chart densification at 400 points:** unknown — likely weekly rollup default
+- **H8 Weekly-narrative retention:** unknown; post-Strava acquisition may inherit Strava's history depth [source: cbinsights]
+- **H9 Data export as counterweight:** partial via Strava [source: App Store]
+- **H10 Long-time-user identity — "power user" surface:** partial — race achievements + Runna Club membership; no formal year-in-review found [source: App Store]
+
+### 8. Strava
+
+- **A1 Background scheme:** dual/auto (default light; explicit dark mode) [source: https://strava.com/]
+- **A2 Primary accent color:** Strava Orange (approx #FC4C02) [source: https://communityhub.strava.com/strava-features-chat-5/training-log-color-circles-119]
+- **A3 Accent economy:** multi-accent — orange (primary) + activity-type colors (per training-log-color thread) [source: same]
+- **A4 H1 max size:** unknown
+- **A5 Body-copy default:** unknown
+- **A6 Mono/tabular numerals for data:** yes (pace/time/distance tiles) [source: help-center screenshots]
+- **A7 Card border radius:** ~12px [source: help-center screenshots]
+- **A8 Card border weight:** hairline
+- **A9 Icon stroke weight:** regular
+- **A10 Icon size default:** ~24px
+- **A11 Font family:** Maison Neue / Strava-brand custom sans [source: brand memory]
+- **A12 Illustration or photography:** photography-heavy (user-shot maps + photos on activities) [source: https://strava.com/]
+
+- **B1 Number of primary tabs:** 5 (Home feed / Maps / Record / You / Groups) [source: https://support.strava.com/hc/en-us/articles/216917697-Your-Strava-Profile-Page]
+- **B2 Nav position:** bottom
+- **B3 Persistent header:** yes
+- **B4 Dashboard vs session split:** yes (feed vs Record vs post-activity edit)
+- **B5 Program picker:** hybrid — activity-tracking core + training-plan catalog + adaptive Instant Workouts (post-Runna integration) [source: https://www.strava.com/training-plans/cycling ; https://velo.outsideonline.com/news/this-week-in-tech-strava-strategy-reveal-colors-make-matching-easy-ai-training-in-the-worldtour-and-collaborative-route-planning/]
+- **B6 Onboarding step count:** ~4 (email, sport type, following suggestions, permissions) [source: general App Store memory]
+- **B7 Auth-first or content-first:** auth-first
+- **B8 Web app parity:** yes — full web analysis [source: https://strava.com/]
+- **B9 Watch app included:** yes (Apple Watch, Garmin bridge, Wear OS)
+- **B10 Widget included:** yes on iOS + Android (weekly-activity widget) [source: general market memory]
+- **C1 Line chart present:** yes (splits, elevation, HR)
+- **C2 Bar chart present:** yes (weekly / monthly / annual bar graph on profile) [source: https://support.strava.com/en-us/articles/15402014-viewing-your-activity-history-on-strava]
+- **C3 Heatmap present:** yes — personal heatmap + global heatmap [source: https://support.strava.com/en-us/articles/16046277-a-guide-to-strava-heatmaps]
+- **C4 Ring / donut present:** partial (progress goals) [source: help-center]
+- **C5 Sparkline present:** yes (segment mini-charts) [source: general market memory]
+- **C6 Sankey / flow present:** no
+- **C7 Time-scale zoom levels:** week / month / year / all-time [source: https://support.strava.com/en-us/articles/15402014-viewing-your-activity-history-on-strava]
+- **C8 Absolute + relative deltas:** yes ("+2min this week vs last") [source: general market memory]
+- **C9 Comparison mode:** yes (this week vs last; segments vs personal best) [source: help-center]
+- **C10 Trend arrow chips:** yes
+- **C11 Aggregation tier at scale:** yearly bar graph + all-time totals + per-activity-type dropdown on profile [source: https://support.strava.com/hc/en-us/articles/216917697-Your-Strava-Profile-Page]
+- **C12 Empty-state visualization design:** photography (branded athlete imagery) [source: https://strava.com/]
+- **D1 Words-per-screen on primary home:** medium-high (feed cards with captions)
+- **D2 Cards-per-scroll on primary home:** ~1–2 (feed cards are tall) [source: general memory]
+- **D3 Text-to-visual ratio:** balanced (map+photo+caption+kudos)
+- **D4 Video embedded in session:** no (activity view has photos, not video)
+- **D5 GIF/anim for exercises:** no
+- **D6 Voice guidance:** partial (audio cues in Record mode) [source: general memory]
+- **D7 Music integration:** yes (Spotify handoff) [source: general memory]
+- **D8 Instructor photos on session:** no
+- **D9 Long-form articles / blog inside app:** partial — Strava stories [source: general memory]
+- **D10 Colored states used:** activity-type color coding across the log; Relative Effort uses warm gradient [source: https://communityhub.strava.com/strava-features-chat-5/training-log-color-circles-119]
+- **E1 Confirm-first or auto-apply changes:** post-Runna acquisition, plan adjustments are surfaced as suggestions rather than silent mutations [source: https://velo.outsideonline.com/news/this-week-in-tech-strava-strategy-reveal-colors-make-matching-easy-ai-training-in-the-worldtour-and-collaborative-route-planning/]
+- **E2 Streaks visible on home:** partial (weekly-goal progress; not a streak-first UI)
+- **E3 Achievements / badges surface:** yes (trophies, PRs, KOMs) [source: help-center]
+- **E4 Points / XP / rings:** no
+- **E5 Push notification frequency:** multi-daily (kudos, follows, activities) [source: general memory]
+- **E6 Social feed:** yes — the feed is the app [source: https://strava.com/]
+- **E7 Skip / move affordance for planned session:** yes (in Instant Workouts / adaptive) [source: velo article]
+- **E8 Undo affordance:** yes (edit / delete activities)
+- **E9 Rest-timer type:** ring in Instant Workouts [source: velo article]
+- **E10 Set-log input pattern:** keypad post-activity (edit fields)
+- **F1 Load-adjust proposals surface:** yes (Instant Workouts + post-Runna adaptive) [source: velo article]
+- **F2 Skip-effect propagation:** yes in adaptive [source: same]
+- **F3 Readiness / recovery score:** yes — Fitness & Freshness (subscriber) [source: general memory]
+- **F4 Symptom / injury tracking:** no
+- **F5 Deload / rest indication:** partial (Freshness curve) [source: general memory]
+- **F6 Program deviation tolerance:** flexible (log anything)
+- **F7 Off-plan session logging:** yes
+- **F8 Coach chat surface:** no (community / peer)
+- **G1 Study citations visible in-product:** no
+- **G2 Coach photos and credentials:** partial (training-plan authors are pros) [source: https://www.strava.com/training-plans/cycling]
+- **G3 Peer testimonials in-app:** yes (feed comments/kudos)
+- **G4 "Backed by science" marketing:** partial (Relative Effort framing) [source: general memory]
+- **G5 Research / whitepaper pages:** partial (Strava Metro / Year in Sport data pieces) [source: strava blog]
+- **G6 Data export:** yes — CSV + GPX per activity + bulk export in account settings [source: general memory]
+- **G7 Clinical / physio endorsement:** no
+- **H1 History time-range default:** week (feed default) [source: https://support.strava.com/en-us/articles/15402014-viewing-your-activity-history-on-strava]
+- **H2 History aggregation at 400 days:** yearly bar-graph rollup + monthly-tile drill-down + all-time totals; the profile explicitly supports year-dropdown [source: https://support.strava.com/hc/en-us/articles/216917697-Your-Strava-Profile-Page]
+- **H3 Progress metrics tier at 400 days:** year / month / all-time tiers coexisting [source: same]
+- **H4 Retest list growth:** segments = a retest-list analog, uncapped, ranked; PRs rolled up separately [source: help-center]
+- **H5 Off-day representation:** marked (calendar shows off days as blank cells, streak-style) [source: general memory]
+- **H6 Program-completion archive:** yes (finished plans archived on profile) [source: general memory]
+- **H7 Chart densification at 400 points:** rolling avg / bar-graph aggregation kicks in [source: help-center]
+- **H8 Weekly-narrative retention:** all — Strava keeps everything; users complain about "on this day" surfacing 5-year-old activities [source: https://communityhub.strava.com/t5/ideas/activity-from-a-year-ago-should-be-optional/idi-p/2757]
+- **H9 Data export as counterweight:** CSV + GPX + bulk archive [source: general memory]
+- **H10 Long-time-user identity — "power user" surface:** yes — Year in Sport recap, all-time totals, PR shelf, segment KOMs, tenure implied by join year on profile [source: https://support.strava.com/en-us/articles/15401959-your-year-in-sport]
+
+### 9. Nike Run Club
+
+- **A1 Background scheme:** light-only by default in the shipping app (Nike design system decision); dark mode is user-toggleable on iOS system level but not natively themed [source: https://www.designrush.com/best-designs/apps/nike-run-club]
+- **A2 Primary accent color:** neon-green / Volt (~#B4F82C) for CTAs; black for typography [source: https://www.portorocha.com/nikerun ; https://www.designrush.com/best-designs/apps/nike-run-club]
+- **A3 Accent economy:** dual (Volt + black on white)
+- **A4 H1 max size:** unknown
+- **A5 Body-copy default:** unknown
+- **A6 Mono/tabular numerals for data:** yes (Helvetica-Now-based pace/distance tiles) [source: https://www.portorocha.com/nikerun]
+- **A7 Card border radius:** hard-edged (Nike system leans rectilinear) [source: https://www.portorocha.com/nikerun]
+- **A8 Card border weight:** hairline / 0
+- **A9 Icon stroke weight:** regular-to-bold
+- **A10 Icon size default:** ~24px
+- **A11 Font family:** Helvetica Now (Nike system) [source: https://www.portorocha.com/nikerun]
+- **A12 Illustration or photography:** photography (heavy editorial imagery) [source: https://www.portorocha.com/nikerun]
+
+- **B1 Number of primary tabs:** 4 (Home / Guided / Activity / Profile) [source: https://screensdesign.com/showcase/nike-run-club-running-coach]
+- **B2 Nav position:** bottom
+- **B3 Persistent header:** yes
+- **B4 Dashboard vs session split:** yes
+- **B5 Program picker:** catalog (plans + guided runs, curated by coaches) [source: teardown]
+- **B6 Onboarding step count:** ~5 (goals, level, permissions, watch link, Nike ID) [source: teardown]
+- **B7 Auth-first or content-first:** auth-first (Nike ID required)
+- **B8 Web app parity:** no
+- **B9 Watch app included:** yes (Apple Watch); Wear OS via NRC-adjacent apps [source: teardown]
+- **B10 Widget included:** yes (iOS) [source: general market memory]
+- **C1 Line chart present:** yes (pace/HR) [source: teardown]
+- **C2 Bar chart present:** yes (weekly/monthly/yearly stats) [source: teardown]
+- **C3 Heatmap present:** no
+- **C4 Ring / donut present:** yes (goal ring)
+- **C5 Sparkline present:** unknown
+- **C6 Sankey / flow present:** no
+- **C7 Time-scale zoom levels:** week / month / year [source: teardown]
+- **C8 Absolute + relative deltas:** yes [source: teardown]
+- **C9 Comparison mode:** yes [source: teardown]
+- **C10 Trend arrow chips:** partial
+- **C11 Aggregation tier at scale:** week / month / year rollup [source: teardown]
+- **C12 Empty-state visualization design:** editorial photography
+- **D1 Words-per-screen on primary home:** medium (editorial cards) [source: https://www.portorocha.com/nikerun]
+- **D2 Cards-per-scroll on primary home:** ~2 [source: teardown]
+- **D3 Text-to-visual ratio:** visual-heavy
+- **D4 Video embedded in session:** partial (video for strength / cross-training) [source: teardown]
+- **D5 GIF/anim for exercises:** no
+- **D6 Voice guidance:** yes (guided-run coaches Coach Bennett & co) [source: teardown]
+- **D7 Music integration:** yes (Spotify / Apple Music handoff) [source: teardown]
+- **D8 Instructor photos on session:** yes (coach photos on guided-run cards) [source: teardown]
+- **D9 Long-form articles / blog inside app:** partial
+- **D10 Colored states used:** volt-only accent; achievements colored by tier [source: teardown]
+- **E1 Confirm-first or auto-apply changes:** none — plans are static after selection
+- **E2 Streaks visible on home:** yes
+- **E3 Achievements / badges surface:** yes — extensive trophy shelf [source: teardown]
+- **E4 Points / XP / rings:** no
+- **E5 Push notification frequency:** daily
+- **E6 Social feed:** partial (friends leaderboard, comments)
+- **E7 Skip / move affordance for planned session:** partial (plans have some flexibility) [source: teardown]
+- **E8 Undo affordance:** yes (edit runs) [source: teardown]
+- **E9 Rest-timer type:** large digit in workout [source: teardown]
+- **E10 Set-log input pattern:** keypad (post-activity)
+- **F1 Load-adjust proposals surface:** no (plans don't dynamically re-time)
+- **F2 Skip-effect propagation:** no
+- **F3 Readiness / recovery score:** no
+- **F4 Symptom / injury tracking:** no
+- **F5 Deload / rest indication:** partial (plans include recovery)
+- **F6 Program deviation tolerance:** rigid-to-flexible (plans are static but skippable)
+- **F7 Off-plan session logging:** yes (log any run)
+- **F8 Coach chat surface:** none (guided-run audio only)
+- **G1 Study citations visible in-product:** no
+- **G2 Coach photos and credentials:** yes (Bennett + coach roster) [source: teardown]
+- **G3 Peer testimonials in-app:** partial (friend leaderboards)
+- **G4 "Backed by science" marketing:** partial
+- **G5 Research / whitepaper pages:** no
+- **G6 Data export:** partial (Apple Health sync)
+- **G7 Clinical / physio endorsement:** no
+- **H1 History time-range default:** week (Activity tab default) [source: teardown]
+- **H2 History aggregation at 400 days:** week / month / year tabs on Activity — a defined rollup rather than a flat list [source: teardown]
+- **H3 Progress metrics tier at 400 days:** week / month / year totals; individual runs still browsable [source: teardown]
+- **H4 Retest list growth:** n/a (no retest ritual; PRs rolled up)
+- **H5 Off-day representation:** marked (empty days visible in weekly grid) [source: general memory]
+- **H6 Program-completion archive:** yes (past plans in profile)
+- **H7 Chart densification at 400 points:** monthly / yearly rollup [source: teardown]
+- **H8 Weekly-narrative retention:** partial — "shoe mileage" and PRs surface long-term; weekly narrative unclear at 400 days
+- **H9 Data export as counterweight:** partial (Apple Health)
+- **H10 Long-time-user identity — "power user" surface:** yes — level badges, trophy shelf, all-time-mileage on profile [source: teardown]
+
+### 10. Adidas Running (Runtastic)
+
+- **A1 Background scheme:** dual/auto (light default; dark supported) [source: https://apps.apple.com/us/app/adidas-running-app-runtastic/id336599882]
+- **A2 Primary accent color:** Adidas navy/blue for CTAs (#000A57 approx); white for surfaces [source: https://apps.apple.com/us/app/adidas-running-app-runtastic/id336599882]
+- **A3 Accent economy:** single accent (Adidas blue)
+- **A4 H1 max size:** unknown
+- **A5 Body-copy default:** unknown
+- **A6 Mono/tabular numerals for data:** yes [source: App Store screenshots]
+- **A7 Card border radius:** ~12–16px
+- **A8 Card border weight:** hairline
+- **A9 Icon stroke weight:** regular
+- **A10 Icon size default:** ~24px
+- **A11 Font family:** Adidas-brand custom sans (AdihausDIN family) [source: brand memory]
+- **A12 Illustration or photography:** photography (Adidas athlete imagery) [source: App Store]
+
+- **B1 Number of primary tabs:** 5 (Home / Activities / Plans / Progress / Profile) [source: https://apps.apple.com/us/app/adidas-running-app-runtastic/id336599882]
+- **B2 Nav position:** bottom
+- **B3 Persistent header:** yes
+- **B4 Dashboard vs session split:** yes
+- **B5 Program picker:** hybrid (event-goal training plans + activity tracking) [source: App Store]
+- **B6 Onboarding step count:** ~5 [source: https://tomsguide.com/reviews/adidas-running-app]
+- **B7 Auth-first or content-first:** auth-first
+- **B8 Web app parity:** yes (Runtastic web) [source: brand memory]
+- **B9 Watch app included:** yes (Apple Watch, Wear OS) [source: App Store]
+- **B10 Widget included:** yes (Wear OS tiles show 6-month stats) [source: https://www.appbrain.com/app/adidas-running-run-tracker/com.runtastic.android]
+- **C1 Line chart present:** yes
+- **C2 Bar chart present:** yes
+- **C3 Heatmap present:** unknown
+- **C4 Ring / donut present:** yes (goal ring)
+- **C5 Sparkline present:** unknown
+- **C6 Sankey / flow present:** no
+- **C7 Time-scale zoom levels:** week / month / year / all-time [source: https://www.appbrain.com/app/adidas-running-run-tracker/com.runtastic.android]
+- **C8 Absolute + relative deltas:** yes [source: App Store]
+- **C9 Comparison mode:** yes
+- **C10 Trend arrow chips:** partial
+- **C11 Aggregation tier at scale:** month / year rollup [source: appbrain]
+- **C12 Empty-state visualization design:** editorial photo + text [source: App Store]
+- **D1 Words-per-screen on primary home:** medium
+- **D2 Cards-per-scroll on primary home:** ~2–3
+- **D3 Text-to-visual ratio:** balanced
+- **D4 Video embedded in session:** no (for runs); yes for cross-training in Adidas Training sister app
+- **D5 GIF/anim for exercises:** no
+- **D6 Voice guidance:** yes [source: App Store]
+- **D7 Music integration:** yes (Story Running audio + Spotify/Apple Music) [source: App Store]
+- **D8 Instructor photos on session:** partial (Story Running narrators)
+- **D9 Long-form articles / blog inside app:** partial
+- **D10 Colored states used:** goal-progress green/amber [source: App Store]
+- **E1 Confirm-first or auto-apply changes:** none — plans are static
+- **E2 Streaks visible on home:** yes (weekly-goal + streak) [source: App Store]
+- **E3 Achievements / badges surface:** yes (Level system, gold-tier badges) [source: App Store]
+- **E4 Points / XP / rings:** partial (Level system) [source: App Store]
+- **E5 Push notification frequency:** daily
+- **E6 Social feed:** partial (Groups / Communities) [source: App Store]
+- **E7 Skip / move affordance for planned session:** partial (edit plan)
+- **E8 Undo affordance:** yes
+- **E9 Rest-timer type:** large digit
+- **E10 Set-log input pattern:** keypad
+- **F1 Load-adjust proposals surface:** no
+- **F2 Skip-effect propagation:** no
+- **F3 Readiness / recovery score:** partial
+- **F4 Symptom / injury tracking:** no
+- **F5 Deload / rest indication:** partial (plan-based)
+- **F6 Program deviation tolerance:** rigid-flexible
+- **F7 Off-plan session logging:** yes
+- **F8 Coach chat surface:** none
+- **G1 Study citations visible in-product:** no
+- **G2 Coach photos and credentials:** partial (plan authors)
+- **G3 Peer testimonials in-app:** partial (community)
+- **G4 "Backed by science" marketing:** partial
+- **G5 Research / whitepaper pages:** no
+- **G6 Data export:** partial (GPX; Apple Health)
+- **G7 Clinical / physio endorsement:** no
+- **H1 History time-range default:** week
+- **H2 History aggregation at 400 days:** monthly / yearly tiles + all-time totals; Wear OS tile explicitly shows 6-month stats — implies rollup buckets [source: appbrain]
+- **H3 Progress metrics tier at 400 days:** month / year rollup; runs still browsable individually [source: appbrain]
+- **H4 Retest list growth:** n/a
+- **H5 Off-day representation:** marked
+- **H6 Program-completion archive:** yes
+- **H7 Chart densification at 400 points:** monthly rollup [source: appbrain]
+- **H8 Weekly-narrative retention:** unknown at 400+
+- **H9 Data export as counterweight:** partial (GPX per activity)
+- **H10 Long-time-user identity — "power user" surface:** yes — Level system + all-time mileage; year-in-review not explicitly documented in current app [source: App Store]
+
+### 11. Garmin Connect
+
+- **A1 Background scheme:** dual/auto — dark mode added Sept 2023, now defaults to dark [source: https://www.wareable.com/garmin/garmin-connect-how-to-change-light-dark-mode]
+- **A2 Primary accent color:** Garmin Blue (~#007CC3) for links and CTAs [source: brand memory]
+- **A3 Accent economy:** multi-accent — data widgets use their own colors (steps blue, sleep purple, stress amber, body-battery green) [source: brand memory + https://connect.garmin.com]
+- **A4 H1 max size:** unknown
+- **A5 Body-copy default:** unknown
+- **A6 Mono/tabular numerals for data:** yes — Garmin is data-dense, numerals are tabular [source: forums]
+- **A7 Card border radius:** ~12px [source: brand memory]
+- **A8 Card border weight:** hairline
+- **A9 Icon stroke weight:** regular
+- **A10 Icon size default:** ~24px
+- **A11 Font family:** custom sans (Garmin Roboto-ish)
+- **A12 Illustration or photography:** minimal (mostly data widgets; occasional photography in learn/coach) [source: https://connect.garmin.com]
+
+- **B1 Number of primary tabs:** 4–5 (Home / Calendar / Notifications / Menu-More) [source: https://connect.garmin.com]
+- **B2 Nav position:** bottom + hamburger More
+- **B3 Persistent header:** yes
+- **B4 Dashboard vs session split:** yes (home dashboard vs per-activity detail)
+- **B5 Program picker:** hybrid (Garmin Coach adaptive plans + free-tracking) [source: https://connect.garmin.com]
+- **B6 Onboarding step count:** ~4 (pair device + Garmin ID)
+- **B7 Auth-first or content-first:** auth-first
+- **B8 Web app parity:** yes — full web dashboard [source: https://connect.garmin.com]
+- **B9 Watch app included:** yes (Garmin devices are the primary "watch app")
+- **B10 Widget included:** yes on iOS + Android — the widget system is a Garmin hallmark [source: https://connect.garmin.com]
+- **C1 Line chart present:** yes
+- **C2 Bar chart present:** yes
+- **C3 Heatmap present:** yes (activity heatmap; Body-Battery long-view)
+- **C4 Ring / donut present:** yes (goals + Body-Battery ring)
+- **C5 Sparkline present:** yes (widget mini-charts)
+- **C6 Sankey / flow present:** no
+- **C7 Time-scale zoom levels:** day / week / month / year / all-time [source: https://connect.garmin.com]
+- **C8 Absolute + relative deltas:** yes
+- **C9 Comparison mode:** yes (personal records, trend arrows)
+- **C10 Trend arrow chips:** yes (Training Status)
+- **C11 Aggregation tier at scale:** weekly / monthly / yearly averages built into stats page [source: https://connect.garmin.com]
+- **C12 Empty-state visualization design:** placeholder charts
+- **D1 Words-per-screen on primary home:** high (data-dense) [source: https://connect.garmin.com]
+- **D2 Cards-per-scroll on primary home:** many (widget tiles — user-configurable) [source: same]
+- **D3 Text-to-visual ratio:** balanced (numbers + tiny charts)
+- **D4 Video embedded in session:** partial (coach videos)
+- **D5 GIF/anim for exercises:** yes (strength exercises with animations)
+- **D6 Voice guidance:** partial (device-level, not app)
+- **D7 Music integration:** no (device-side)
+- **D8 Instructor photos on session:** partial (Garmin Coach)
+- **D9 Long-form articles / blog inside app:** partial (Learn cards)
+- **D10 Colored states used:** yes — training-status color coding, HR zones, stress levels [source: forums]
+- **E1 Confirm-first or auto-apply changes:** partial — Garmin Coach adapts and generally auto-applies; user can override [source: https://connect.garmin.com]
+- **E2 Streaks visible on home:** yes (step streak + workout streak)
+- **E3 Achievements / badges surface:** yes (badge system) [source: https://connect.garmin.com]
+- **E4 Points / XP / rings:** no (except badges as XP-analog)
+- **E5 Push notification frequency:** multi-daily
+- **E6 Social feed:** partial (Connections)
+- **E7 Skip / move affordance for planned session:** yes (calendar drag-drop) [source: forums]
+- **E8 Undo affordance:** yes
+- **E9 Rest-timer type:** ring (workout timer) [source: forums]
+- **E10 Set-log input pattern:** keypad + auto-detect from watch
+- **F1 Load-adjust proposals surface:** yes (Garmin Coach) [source: https://connect.garmin.com]
+- **F2 Skip-effect propagation:** yes
+- **F3 Readiness / recovery score:** yes (Body Battery, Training Readiness, HRV) [source: https://connect.garmin.com]
+- **F4 Symptom / injury tracking:** no
+- **F5 Deload / rest indication:** yes (Training Status: Recovery, Productive, Overreaching)
+- **F6 Program deviation tolerance:** flexible
+- **F7 Off-plan session logging:** yes
+- **F8 Coach chat surface:** none (Garmin Coach is one-way plan generation)
+- **G1 Study citations visible in-product:** no
+- **G2 Coach photos and credentials:** yes (Garmin Coach roster) [source: https://connect.garmin.com]
+- **G3 Peer testimonials in-app:** partial (Connections)
+- **G4 "Backed by science" marketing:** partial (Firstbeat metrics origin story)
+- **G5 Research / whitepaper pages:** partial (Firstbeat) [source: brand memory]
+- **G6 Data export:** yes — CSV / TCX / GPX / FIT + account data export [source: brand memory]
+- **G7 Clinical / physio endorsement:** partial (HR-based metrics)
+- **H1 History time-range default:** day [source: https://connect.garmin.com]
+- **H2 History aggregation at 400 days:** week / month / year rollups per widget; calendar retains individual sessions; Body-Battery long-view compresses to sparkline [source: https://connect.garmin.com]
+- **H3 Progress metrics tier at 400 days:** week / month / year averages layered on top of raw events [source: same]
+- **H4 Retest list growth:** partial — PR/Personal Records list; VO2 max trend uncapped [source: forums]
+- **H5 Off-day representation:** marked (0-step days show in calendar)
+- **H6 Program-completion archive:** yes
+- **H7 Chart densification at 400 points:** rolling avg — yearly view switches from daily to weekly bars [source: forums]
+- **H8 Weekly-narrative retention:** partial (Weekly Insights emails; not sure how deep in-app history goes)
+- **H9 Data export as counterweight:** yes — the strongest of any app in this set (multiple formats + full account export) [source: brand memory]
+- **H10 Long-time-user identity — "power user" surface:** yes — badge shelf, VO2-max multi-year trend, Level (fitness age) — a defining Garmin surface [source: https://connect.garmin.com]
+
+### 12. Coros
+
+- **A1 Background scheme:** dual/auto — the app defaults to dark; light supported [source: https://support.coros.com/hc/en-us/articles/4412383468180-COROS-Training-Hub-Athlete-Tutorial]
+- **A2 Primary accent color:** cyan / teal (approx #00A8B5) [source: https://coros.com]
+- **A3 Accent economy:** multi-accent (teal primary; training-load / fitness use warm gradient) [source: https://coros.com/stories/coros-metrics/c/training-load]
+- **A4 H1 max size:** unknown
+- **A5 Body-copy default:** unknown
+- **A6 Mono/tabular numerals for data:** yes [source: https://support.coros.com]
+- **A7 Card border radius:** ~12px
+- **A8 Card border weight:** hairline
+- **A9 Icon stroke weight:** regular
+- **A10 Icon size default:** ~24px
+- **A11 Font family:** custom sans
+- **A12 Illustration or photography:** minimal (charts-first design) [source: https://coros.com]
+
+- **B1 Number of primary tabs:** 4 (Progress / Activities / EvoLab / Profile) [source: https://support.coros.com/hc/en-us/articles/38180411247892-EvoLab]
+- **B2 Nav position:** bottom
+- **B3 Persistent header:** yes
+- **B4 Dashboard vs session split:** yes
+- **B5 Program picker:** hybrid — Training Hub (web-primary) plans + free tracking [source: https://coros.com/traininghub]
+- **B6 Onboarding step count:** ~4 (device pair + goals)
+- **B7 Auth-first or content-first:** auth-first
+- **B8 Web app parity:** yes — Training Hub is web-primary [source: https://coros.com/traininghub]
+- **B9 Watch app included:** yes (Coros watches)
+- **B10 Widget included:** partial
+- **C1 Line chart present:** yes [source: https://coros.com/stories/coros-metrics/c/training-load]
+- **C2 Bar chart present:** yes (weekly training-load bars) [source: same]
+- **C3 Heatmap present:** partial (intensity distribution)
+- **C4 Ring / donut present:** yes
+- **C5 Sparkline present:** yes
+- **C6 Sankey / flow present:** no
+- **C7 Time-scale zoom levels:** 4-week / 12-week / 24-week windows — coros uses these specific windows explicitly [source: https://coros.com/stories/coros-metrics/c/training-load]
+- **C8 Absolute + relative deltas:** yes
+- **C9 Comparison mode:** yes (base fitness vs load impact vs fatigue) [source: same]
+- **C10 Trend arrow chips:** yes (fitness trend)
+- **C11 Aggregation tier at scale:** weekly training-load rollups over 4–24-week windows [source: same]
+- **C12 Empty-state visualization design:** placeholder charts
+- **D1 Words-per-screen on primary home:** medium (data-dense but grouped)
+- **D2 Cards-per-scroll on primary home:** ~3
+- **D3 Text-to-visual ratio:** balanced
+- **D4 Video embedded in session:** no (activity-tracker; no video content)
+- **D5 GIF/anim for exercises:** partial (structured-workout previews)
+- **D6 Voice guidance:** no (device-side audio cues)
+- **D7 Music integration:** partial (device-side)
+- **D8 Instructor photos on session:** no
+- **D9 Long-form articles / blog inside app:** partial (Stories) [source: https://coros.com]
+- **D10 Colored states used:** yes — training-load bands (green low-load, red overtraining) [source: https://coros.com/stories/coros-metrics/c/training-load]
+- **E1 Confirm-first or auto-apply changes:** partial — Training Hub proposes, coach or athlete approves [source: https://support.coros.com/hc/en-us/articles/4412383468180-COROS-Training-Hub-Athlete-Tutorial]
+- **E2 Streaks visible on home:** no strong surface
+- **E3 Achievements / badges surface:** partial (PRs)
+- **E4 Points / XP / rings:** no
+- **E5 Push notification frequency:** daily
+- **E6 Social feed:** partial (COROS-Community)
+- **E7 Skip / move affordance for planned session:** yes (Training Hub)
+- **E8 Undo affordance:** yes
+- **E9 Rest-timer type:** ring
+- **E10 Set-log input pattern:** keypad + auto-detect
+- **F1 Load-adjust proposals surface:** yes (EvoLab suggests recovery vs load) [source: https://support.coros.com/hc/en-us/articles/38180411247892-EvoLab]
+- **F2 Skip-effect propagation:** partial (training-load automatically recalculates)
+- **F3 Readiness / recovery score:** yes (recovery score) [source: https://support.coros.com/hc/en-us/articles/38180411247892-EvoLab]
+- **F4 Symptom / injury tracking:** no
+- **F5 Deload / rest indication:** yes (fatigue chart) [source: https://coros.com/stories/coros-metrics/c/training-load]
+- **F6 Program deviation tolerance:** flexible
+- **F7 Off-plan session logging:** yes
+- **F8 Coach chat surface:** partial — Training Hub links to a human coach [source: https://coros.com/traininghub]
+- **G1 Study citations visible in-product:** no
+- **G2 Coach photos and credentials:** partial (Training Hub coaches)
+- **G3 Peer testimonials in-app:** partial
+- **G4 "Backed by science" marketing:** partial [source: https://coros.com/stories/coros-metrics/c/training-load]
+- **G5 Research / whitepaper pages:** partial (metrics stories) [source: same]
+- **G6 Data export:** yes — TCX / GPX / FIT [source: brand memory]
+- **G7 Clinical / physio endorsement:** no
+- **H1 History time-range default:** week
+- **H2 History aggregation at 400 days:** weekly training-load rollups; EvoLab explicitly shows 4-24-week windows — long history compresses into weekly bars beyond that window [source: https://coros.com/stories/coros-metrics/c/training-load]
+- **H3 Progress metrics tier at 400 days:** weekly rollup + running-fitness trend as multi-year line [source: EvoLab article]
+- **H4 Retest list growth:** partial — PRs / race predictor updates
+- **H5 Off-day representation:** marked
+- **H6 Program-completion archive:** yes (Training Hub archives)
+- **H7 Chart densification at 400 points:** weekly rollup then monthly rollup at longer scales [source: EvoLab article]
+- **H8 Weekly-narrative retention:** partial (weekly training-load emails)
+- **H9 Data export as counterweight:** yes (TCX/GPX/FIT)
+- **H10 Long-time-user identity — "power user" surface:** partial — running-fitness multi-year curve is the identity artifact; no formal year-in-review found [source: EvoLab article]
+
+---
+
+## Candidate new attributes worth adding
+
+Things I saw that don't fit the current 79 attributes but showed up as meaningful differentiators:
+
+- **Onboarding length category** ("brief ≤5", "medium 5–10", "long ≥15", "very long ≥25") — Runna's ~26-step onboarding is a real UX signal; the current B6 field only asks for a count.
+- **"Confirm-first" as a category has grey-zone options.** Current E1 is confirm/auto/none, but in the running-app cohort the more accurate cell is "propose-then-recalculate-silently" (Runna) vs "user drags & drops in calendar" (Garmin). Consider a fourth value: "propose-and-silently-recompute".
+- **Retest ritual presence** — separate from progress metrics. Pliability/GOWOD/Coros race-predictor all rely on a periodic retest whose *cadence* is a design decision (every 4 weeks vs every 12).
+- **"Silent-recompute" of training load / VO2 estimates** — Garmin, Coros, and Strava all silently recompute internal fitness estimates from raw device data; Runna and Nike don't. This is upstream of E1 confirm-first.
+- **Instructor-as-brand vs generative-anonymous split** — Alo Moves, NRC, Pliability, YWA lean instructor-first; Down Dog is generative-anonymous. This is a stronger cultural axis than D8.
+- **Community / peer-visible progress** vs private log — Strava's whole product is "peer sees your run"; Coros/Garmin optional; Pliability/Down Dog private. Split from E6 social feed presence.
+- **Streak surface style** — icon on home / calendar chip / big-number-on-profile / not-shown. Currently just yes/no; the *how* is where category identity happens.
+- **Data density at 12-month scale (visible-elements-per-screen)** — the Garmin dashboard at 12 months is ~15 tiles; Pliability at 12 months is ~1 mobility score. This is closer to what the founder is worrying about than H1/H2 alone.
+- **Charts that survive 400 days without redesign** — a binary of "at what N points does the current chart type break down" is more actionable than H7's rolling-avg vs decimated dichotomy.
+- **"Weekly narrative artifact"** — does the app produce a shareable / archivable weekly summary (Strava does, Coros emails do, Pliability's insights do). Distinct from H8's retention question.
+- **Founder / coach photos on marketing** — separate from G2 in-product; a brand-trust rather than product-trust attribute.
+- **Watch face / complication depth** — beyond B9 "watch app included", the *quality* of watch integration varies (Runna's complications are strong; Alo has none).
+- **Dark-mode default vs opt-in** — currently A1 doesn't distinguish "dark-first" from "dark-opt-in". Garmin dark defaults; Nike doesn't dark-theme at all.
+
+## Notes on unknowns
+
+- **Typography-in-pixels (A4, A5)** — could not be verified for any of the 12 apps from marketing/App Store screenshots alone. Would need Figma/design-system disclosure or actual device measurement.
+- **Watch app / widget presence** for the mobility apps (Pliability, GOWOD, Down Dog, Alo Moves, YWA) — no marketing callout, so I marked "unknown" rather than assume none.
+- **The H bucket at 400 days is inferential for every non-tracker app.** Strava, Garmin, Coros, and Adidas Running have explicit month/year rollups documented in help centers; the mobility category (Pliability/GOWOD/ROMWOD-legacy/Down Dog/Alo Moves/YWA) does not publish long-time-user screenshots, so H2–H8 are inferred from category conventions rather than observed. If the founder wants those cells firmed up, the honest path is a paid 30-day trial + screen recording, not more desk research.
+- **ROMWOD legacy** — Wayback Machine was blocked from WebFetch, so ROMWOD-specific attributes lean on the ROMWOD-vs-GOWOD comparison review and the surviving Android bundle id (`com.romwodllc.android`) rather than actual archived screenshots.
+- **Nike Run Club, Adidas Running marketing pages returned 403** — both apps have App Store listings and third-party teardowns filling the gap.
+- **Yoga With Adriene** — the "app" question is answered (FWFG exists) but the app is thinly reviewed in public sources; most of the B/C/E/H rows are "unknown" because I did not find teardown content.
+- **Alo Moves** — reviewers consistently flag tracking as "basic," which is itself signal, but doesn't tell us what a 400-day user's history screen looks like.
+- **Confirm-first mechanic (E1)** — the vocabulary I have doesn't cleanly separate "user configures then presses Start" (Down Dog) from "app proposes an adaptive change and user confirms" (Runna). Both got "confirm" but they're behaviorally different; see the candidate-new-attributes list.
