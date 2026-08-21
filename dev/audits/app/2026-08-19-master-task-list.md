@@ -90,7 +90,6 @@ Keep the convention terse — the four markers cover every state. Don't invent n
 ### Copy clarity (post-Batch-25 round + founder-obs round)
 
 - [x] **P1-77** — Ladder disclosure sheet shipped 2026-08-19 (`2ce7032`). Legend words on /programs are now tap-targets that open InfoSheet with full REFERENCED/REVIEWED/VERIFIED definitions. Content from copy-clarity audit's Ginny Redish framework. Personal-programs-outside-ladder note included (matches S6 shipped).
-- [ ] **P1-78** — O13 kill ReadinessDot in header + refine banner en-dash polish. `AppShell.tsx:199-215` — remove the dot (redundant with HeroStateCard banner). Refine banner strings at `HeroStateCard.tsx:9-18` to en-dash form: `"Progress load — nothing above 3/10 today."` (drop "in your check", tighten with en-dash). Micro-CLS ~0.03 also disappears. Source: `2026-08-19-founder-obs-copy-clarity.md` O13 + motion-perf. Files: `next-app/src/components/AppShell.tsx:199-215` (delete), `next-app/src/components/workout/HeroStateCard.tsx:9-18` (polish). Size: S
 - [x] **P1-79** — Exercise name/variant schema split shipped 2026-08-19 (`5069610`). 42 exercises migrated. Schema added `variant?: string`. ExerciseCard renders variant as 12 px muted subtitle under the 15 px name. ExerciseDetailsSheet also updated. Coach proposal formatters use `.name` directly — automatically read the shorter base name now.
 
 ### Motion + perf (post-Batch-25 round + founder-obs round)
@@ -184,6 +183,15 @@ Deduplicated across visual-craft §16 + mobile-ux §10 + roadmap:
 ## Closed items appendix (shipped since 2026-08-17)
 
 Strikethrough preserves history; these items are OUT of the open list.
+
+**Batch 38 — F10 promote-with-caveats close-outs + P1-78 (deployed https://5e7b5450.program-v2.pages.dev, 2026-08-21):**
+
+4 items — the F10 close-outs from the S5 rerun agent reports. Verification pass discovered that 4 of 5 rowing findings and 1 of 2 HSW findings were ALREADY-DONE work whose changelogs read as "unshipped" in the audit — real bug fixes for 1 rowing item + 1 CSM P0 + 1 HSW soften. P1-78 folded in as the S-sized closer. 162/162 vitest pass · persona harness re-run in progress.
+
+- [x] **F10-CSM-P0** — done 2026-08-21 Batch 38 — Users migrated under blocks_v1 (before Batch 37 BUG-8 shipped shouldFlipDone logic) had state=planned blocks stuck even with log evidence. Bumped MIGRATION_ID v1→v2 so `needsBlockMigration` returns true for stores that ran the old migrator; dropped `if (b.log_entry_id) continue;` short-circuit so log-linked blocks get shouldFlipDone re-evaluated. Idempotent — `b.state === "planned"` guard still prevents flipping done/skipped/moved. Regression test added: planned+log_entry_id block → done under v2. Source: 2026-08-19 F10 REV-4 §a (H impact). Files: `next-app/src/lib/migrations/legacy-to-blocks.ts:36-52,142-172`, `.test.ts`. Size: M
+- [x] **F10-Rowing** — done 2026-08-21 Batch 38 — Verified R-3 Das drop, orphan references, Proteau title, HERITAGE dual-write all ALREADY DONE (REV-5 findings stale). Real bug: on graduated program TodaySession rendered HeroStateCard "WORKOUT READY" above GraduationCard "YOU FINISHED" — direct workflow contradiction. Removed graduated branch's HeroStateCard render; GraduationCard is the single anchored state. Source: 2026-08-19 F10 REV-5 §e. Files: `next-app/src/components/session/TodaySession.tsx:356-376`. Size: S
+- [x] **F10-HSW** — done 2026-08-21 Batch 38 — H-4 sci_reports specifics softened across 5 in-body sites. Was citing unverified paper (whose own used_for flags "paper existence at claimed URL unconfirmed") for specific biomechanical claims. Softened to general motor-learning principle (pain-during-load reinforces compensation) — the shoulder-pain-stop-session rule survives on principle. H-3 Ferrari 2021 drop verified already done. Source: 2026-08-19 F10 REV-3 §H-4. Files: `next-app/public/data/programs/handstand-walk.json:82,463,1437,1491,1549`. Size: S
+- [x] **P1-78** — done 2026-08-21 Batch 38 — HeroStateCard banner strings tightened to em-dash form across green/amber/red: "Progress load. Nothing above 3/10 in your check." → "Progress load — nothing above 3/10 today." Drops redundant "in your check" (users know the source), parallel one-sentence shape across all three tones. ReadinessDot removal half already shipped in earlier F8 push. Source: `2026-08-19-founder-obs-copy-clarity.md` O13 + motion-perf. Files: `next-app/src/components/workout/HeroStateCard.tsx:41-77`. Size: S
 
 **Batch 37 — post-Batch-36 audit sweep + crash fix (deployed https://03f71229.program-v2.pages.dev, 2026-08-21):**
 
