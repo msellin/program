@@ -190,6 +190,25 @@ export const PERSONAS: Persona[] = [
       "CSM underperformer. RPE creeps high, symptoms elevated. Does the engine hold TM instead of bumping? Does the amber-week drop-4×4 hook fire (P1-11 from tonight's audit — currently unimplemented, this persona will surface whether the copy shows up but no engine action)?",
   },
   {
+    // Cut C code sprint (2026-08-21) — a 400-day tenure persona to
+    // verify the Record surface at scale. Exercises the
+    // ActivityHeatmap year-column mode (auto-switches ≥120 days),
+    // the full RetestTimeline with ~14 events, and the rolling-
+    // avg curve's 12-week baseline math at 1y/All zoom. Same
+    // archetype as persona-strength (overperformer) but with a
+    // year+ of history simulated so the tenure story reads
+    // honest.
+    id: "persona-strength-long",
+    displayName: "Strength · 400-day tenure",
+    archetypeId: "overperformer",
+    programSlug: "concurrent-strength-maintenance",
+    days: 400,
+    email: "e2e-persona-strength-long@example.test",
+    password: DEFAULT_PASSWORD,
+    focus:
+      "Long-tenure Cut C validation. Verify Record's year-column ActivityHeatmap, 14+ retest events on the timeline, since-baseline line on LatestRetestTile (+X kg since Q1'24 pattern), and the rolling-avg curve at 1y/All zoom without a mode-switch.",
+  },
+  {
     id: "persona-handstand-fast",
     displayName: "Handstand overperformer",
     archetypeId: "overperformer",

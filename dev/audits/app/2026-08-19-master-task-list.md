@@ -184,6 +184,39 @@ Deduplicated across visual-craft §16 + mobile-ux §10 + roadmap:
 
 Strikethrough preserves history; these items are OUT of the open list.
 
+**Batch 39 · Cut C code sprint · Record surface (deployed https://9746a90f.program-v2.pages.dev, 2026-08-21):**
+
+W1-W2 of the locked 4-week sequence. `/progress` + `/history` collapsed into unified `/record` surface. 5 tabs → 4 tabs. All 8 sprint deliverables landed:
+
+- [x] **Cut C · Phase 1 · foundations** — data-viz palette tokens added to globals.css (`--dv-curve-primary`, `--dv-retest-hit/hold/back`, `--dv-bar-low/mid/high`); `/record` scaffold with 3-section shape (Now/Trend/Log); persona harness tour extended with `05b-record` slug. Deploy `14589f30`.
+- [x] **Cut C · Phase 2a · WindowTierControl + LatestRetestTile** — segmented 4-tier zoom (30d/90d/1y/All) with data-adaptive default + localStorage persist; LatestRetestTile with 4px left rail + since-baseline line + inline CitationRef (first-class UI per matrix rec #4, NOT a footnote). Deploy `411e10a2`.
+- [x] **Cut C · Phase 2b · RetestTimeline + ActivityHeatmap** — horizontal event strip with tri-color pins by outcome + milestone modulation + 22×44 tap hitbox + scroll-snap; auto-switching primitive (12-week matrix at <120 days, year-column mode with 3-tone density ramp at ≥120 days). Deploy `6cc91059`.
+- [x] **Cut C · Phase 2c · ProgramCurveCard** — Recharts wrapper (dynamic-imported, reuses SymptomLoadChart chunk = zero incremental bytes) with slate rolling-avg curve, tri-color retest event pins, reduced gridlines (3 not 5 per Oura restraint), delta callout, [Show raw] toggle. New engine helper `lib/engine/rolling-avg.ts`. Deploy `6b4145ad`.
+- [x] **Cut C · Phase 3 · IA cut-over** — BottomNav 5 → 4 tabs (Progress + History → Record); `/progress` and `/history` client-side redirect to `/record`; CutCLogList extracted from history pattern with 30-per-page pagination + Load-30-more button; JSON export wired via `lib/engine/record-export.ts` (Blob download, Whoop-wipe anti-pattern is the peer we reject per matrix rec #3); CutCRecordOnboardingBeacon (C5) — one-time InfoSheet dramatizing cite-per-adjustment differentiator. Deploy `9746a90f`.
+- [x] **Persona harness · persona-strength-long added** — 400-day tenure persona for verifying Record at scale: year-column ActivityHeatmap, 14+ retest events on RetestTimeline, since-baseline pattern, curve at 1y/All zoom without mode-switch. Auto-added to tour.ts via existing PERSONAS iteration.
+
+**Constraints preserved through the whole sprint:**
+- R2 bronze CTA-only (chart curve is slate; segmented-control active state is strong-ink underline)
+- R5 no gamification (retest events replace PRs per R-CutC-1)
+- R7 no drag-to-reschedule (confirm-first mechanic unchanged)
+- R8 no autonomous score-hero (amber-not-red for regression; no composite score)
+- R-CutC-1 retests supersede PRs (LogList shows session/run/notes counts, zero PR badges)
+- R-CutC-2 export supersedes share (JSON export shipped; zero social affordance)
+- Batch 37 useStore-selector trap avoided (all new components read props, no `?? []` inside selectors)
+
+**Remaining Cut C (Week 3 · prod verify + D6 hallway test):**
+- Run D6 3-user paper prototype on real iPhone 15 to resolve D1 (Today → Day rename) before Week 4 refactor
+- Founder review of `/record` on live app
+
+**Then Week 4 · Today/Week/Extras refactor (Shape 1 per locked decisions):**
+- Today → Day rename
+- Week → Plan rename + absorbs date browsing
+- Extras → Off-plan + absorb into Day peek-strip
+- Kill DateNav on Day (Plan owns date browsing)
+- Fix 3 landing/app string drifts (FLAG-2)
+- Add beta feedback channel (FLAG-1)
+- Add analytics falsification event for D1 rename (FLAG-5)
+
 **Batch 38 — F10 promote-with-caveats close-outs + P1-78 (deployed https://5e7b5450.program-v2.pages.dev, 2026-08-21):**
 
 4 items — the F10 close-outs from the S5 rerun agent reports. Verification pass discovered that 4 of 5 rowing findings and 1 of 2 HSW findings were ALREADY-DONE work whose changelogs read as "unshipped" in the audit — real bug fixes for 1 rowing item + 1 CSM P0 + 1 HSW soften. P1-78 folded in as the S-sized closer. 162/162 vitest pass · persona harness re-run in progress.
