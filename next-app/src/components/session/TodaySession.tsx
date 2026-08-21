@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { loadProgram, loadProgramManifest, loadExercises } from "@/lib/data-loader";
 import { ExerciseCard } from "@/components/workout/ExerciseCard";
 import { HeroStateCard } from "@/components/workout/HeroStateCard";
@@ -50,13 +51,14 @@ export function TodaySession({
   const [byId, setById] = useState<Record<string, Exercise>>({});
   const [error, setError] = useState<string | null>(null);
   // Week 4a (2026-08-21) — DateNav removed from Day per D2 (Plan tab owns
-  // date browsing). setActiveDate is now only mutated by the
-  // MissedSessionPrompt "log yesterday" flow (an explicit user tap to
-  // jump to yesterday's session state in-place). This is technically
-  // inconsistent with Shape 1's "Day always shows today" principle;
-  // Week 4b will replace with a redirect to /session/[slug]?date=YYYY-MM-DD.
-  // Session route seeds from `initialDate` (SessionClient reads ?date=).
-  const [activeDate, setActiveDate] = useState(() => initialDate ?? todayISO());
+  // date browsing). Week 4d cleanup (2026-08-21) — MissedSessionPrompt
+  // no longer mutates activeDate in-place; it now redirects to
+  // /session/[slug]?date=yesterday like every other past-day flow.
+  // activeDate is now truly read-only inside this component; the setter
+  // remains only because React's useState pattern returns it. Session
+  // route seeds via `initialDate` from SessionClient's ?date= param.
+  const [activeDate] = useState(() => initialDate ?? todayISO());
+  const router = useRouter();
   const [programManifest, setProgramManifest] = useState<ProgramManifest | null>(null);
   useEffect(() => {
     void loadProgramManifest().then(setProgramManifest).catch(() => setProgramManifest(null));
@@ -298,17 +300,28 @@ export function TodaySession({
           program={primary}
           todayISO={todayISO()}
           onLogYesterday={() => {
+            // Week 4d (2026-08-21) — redirect to /session/[slug]?date=yesterday
+            // instead of mutating Day's activeDate in place. Matches Shape
+            // 1's "Day is always today" principle: non-today dates live at
+            // /session/[slug]?date=... exclusively. Same destination as
+            // Plan's "Log session →" verb for consistency.
+            if (!primary.slug) return;
             const d = new Date();
             d.setDate(d.getDate() - 1);
-            setActiveDate(d.toISOString().slice(0, 10));
+            const yesterday = d.toISOString().slice(0, 10);
+            router.push(`/session/${primary.slug}?date=${yesterday}`);
           }}
           onSkipYesterday={() => {
+            // Same destination as the "log yesterday" path — the Skip
+            // affordance lives on the session-detail surface via
+            // SessionActions once the user is viewing yesterday's session.
+            // Prior implementation mutated Day's activeDate silently; that
+            // pattern is retired per Shape 1.
+            if (!primary.slug) return;
             const d = new Date();
             d.setDate(d.getDate() - 1);
-            const iso = d.toISOString().slice(0, 10);
-            setActiveDate(iso);
-            // SessionActions Skip flow will surface via the standard controls
-            // once the user is viewing yesterday.
+            const yesterday = d.toISOString().slice(0, 10);
+            router.push(`/session/${primary.slug}?date=${yesterday}`);
           }}
         />
       ) : null}
