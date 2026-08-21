@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Record — day 90 mockup (persona-engine · Engine Builder)</title>
+<style>
+  :root {
+    --ground: #0E0F12;
+    --surface: #16181c;
+    --surface-2: #20232a;
+    --line: #5f6570;
+    --line-soft: #2a2e37;
+    --line-strong: #6b717d;
+    --muted: #93989f;
+    --ink: #D6D9DE;
+    --strong: #F0F1F3;
+    --bronze: #d97e5b;
+    --green: #6bb885;
+    --amber: #d9a86b;
+    /* Data-viz palette (visual-craft audit 2026-08-21, v3 patch).
+       Aliases existing v1.1.1 state tokens for chart use — does NOT
+       violate R2 (bronze reserves CTA), R5 (no gamification), R8
+       (no score-drama red). Slate curve echoes Oura Trends / TP CTL;
+       tri-state retest pins echo TrainingPeaks compliance dots.
+       See dev/active/redesign-progress/review-1.md v3 patch notes. */
+    --dv-curve-primary: #79b8c4;   /* slate — main rolling-avg line */
+    --dv-retest-hit:    #6bb885;   /* green — retest met/beat target */
+    --dv-retest-hold:   #93989f;   /* muted — retest flat/held */
+    --dv-retest-back:   #d9a86b;   /* amber — retest regressed (never red) */
+    --dv-bar-low:       #5f6570;   /* low-session months */
+    --dv-bar-mid:       #7c8493;   /* mid-session months */
+    --dv-bar-high:      #a8b0bd;   /* high-session months */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--ground); color: var(--ink); font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; font-size: 14px; line-height: 1.5; }
+  body { width: 393px; padding: max(16px, env(safe-area-inset-top)) 16px 96px; }
+  .mono { font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace; font-variant-numeric: tabular-nums; }
+  .mono-caps { font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); }
+  h1 { font-size: 32px; font-weight: 600; letter-spacing: -0.03em; color: var(--strong); line-height: 1; }
+  .strong { color: var(--strong); }
+  .muted { color: var(--muted); }
+  .green { color: var(--green); }
+  .amber { color: var(--amber); }
+  .card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: 6px; padding: 12px; }
+  .card + .card { margin-top: 12px; }
+  .section { margin-top: 24px; }
+  .section:first-of-type { margin-top: 20px; }
+
+  /* Header */
+  header.app { display: flex; justify-content: space-between; align-items: baseline; }
+  .btn-ghost { border: 1px solid var(--line-strong); border-radius: 6px; padding: 10px 14px; min-height: 44px; font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--ink); background: transparent; cursor: pointer; }
+
+  /* Section eyebrow with horizontal rule */
+  .section-anchor { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .section-anchor .rule { flex: 1; height: 1px; background: linear-gradient(to right, var(--line-soft), transparent); }
+  .section-anchor .rule.left { background: linear-gradient(to left, var(--line-soft), transparent); flex: 0 0 20px; }
+
+  /* Now: weekly heatmap 12x7 */
+  .heatmap-12 { display: grid; grid-template-columns: repeat(12, 1fr); gap: 3px; }
+  .heatmap-12 .row { display: contents; }
+  .cell { width: 100%; aspect-ratio: 1; border-radius: 2px; }
+  .cell.g { background: var(--green); opacity: 0.85; }
+  .cell.a { background: var(--amber); opacity: 0.85; }
+  .cell.d { background: var(--line-soft); }
+  .heatmap-labels { display: flex; justify-content: space-between; margin-top: 6px; }
+
+  /* Latest retest tile */
+  .retest-tile { border-left: 4px solid var(--strong); }
+  .retest-tile .metric-row { display: flex; justify-content: space-between; align-items: baseline; }
+  .retest-tile .metric-name { color: var(--strong); font-size: 14px; font-weight: 500; }
+  .retest-tile .metric-value { color: var(--strong); font-size: 20px; font-weight: 600; font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
+  .retest-tile .delta { color: var(--green); font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; font-size: 14px; margin-left: 6px; }
+  .retest-tile .prev-row { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .retest-tile .prev-row .mono { color: var(--muted); }
+  .retest-tile hr { border: 0; height: 1px; background: var(--line-soft); margin: 10px 0; }
+  .retest-tile .basis { font-size: 12px; color: var(--ink); margin: 6px 0; line-height: 1.5; }
+  .retest-tile code { font-family: 'JetBrains Mono', monospace; background: var(--surface-2); padding: 1px 4px; border-radius: 3px; font-size: 11px; }
+  /* Product-design-lead audit 2026-08-21: citation was a mono-caps footnote.
+     Promoted to body content — 13px ink strong, hairline underline, chevron
+     affordance (→) indicating tap-to-open. This is Terav's genuine peer
+     vacancy (matrix rec #4 · cite-per-adjustment as first-class UI). Do NOT
+     retreat this back to footnote treatment. */
+  .retest-tile .cited { font-size: 13px; color: var(--strong); margin: 8px 0 4px; display: flex; align-items: center; gap: 6px; cursor: pointer; padding: 6px 0; min-height: 44px; }
+  .retest-tile .cited-glyph { font-family: 'JetBrains Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--strong); font-weight: 500; }
+  .retest-tile .cited .arrow { color: var(--muted); font-family: 'JetBrains Mono', monospace; margin-left: auto; }
+  /* Since-baseline tenure line — massive tenure payoff for one row */
+  .retest-tile .since-baseline { font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-top: 2px; margin-bottom: 6px; font-variant-numeric: tabular-nums; }
+  .retest-tile .next-retest { text-align: right; font-size: 11px; color: var(--muted); margin-top: 8px; }
+
+  /* Trend: WindowTierControl segmented */
+  .tier-control { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid var(--line-soft); }
+  .tier-control button { background: none; border: 0; padding: 14px 0; min-height: 44px; color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; cursor: pointer; position: relative; }
+  .tier-control button.active { color: var(--strong); }
+  .tier-control button.active::after { content: ''; position: absolute; bottom: -1px; left: 20%; right: 20%; height: 2px; background: var(--strong); }
+  .trend-sublabel { font-size: 12px; color: var(--muted); margin-top: 8px; margin-bottom: 12px; }
+
+  /* Chart card */
+  .chart-card { position: relative; padding: 12px 12px 16px; }
+  .chart-svg { width: 100%; height: 160px; display: block; margin-top: 4px; }
+  .chart-legend { display: flex; gap: 12px; font-size: 11px; color: var(--muted); margin-top: 8px; flex-wrap: wrap; }
+  .chart-legend .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; vertical-align: middle; border: 1px solid var(--strong); }
+  .chart-legend .dot.hit  { background: var(--dv-retest-hit); }
+  .chart-legend .dot.hold { background: var(--dv-retest-hold); }
+  .chart-legend .line-mark { display: inline-block; width: 14px; height: 2px; background: var(--dv-curve-primary); vertical-align: middle; margin-right: 4px; }
+  .show-raw { margin-top: 10px; }
+  .show-raw button { font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--ink); background: transparent; border: 1px solid var(--line-strong); border-radius: 4px; padding: 12px 14px; min-height: 44px; }
+  .delta-callout { margin-top: 12px; font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; color: var(--ink); font-size: 12px; }
+
+  /* Retest timeline */
+  .retest-timeline { padding: 12px; }
+  .retest-timeline .eyebrow { margin-bottom: 8px; }
+  .timeline-row { display: flex; align-items: center; gap: 0; overflow-x: auto; padding-bottom: 4px; scroll-snap-type: x mandatory; }
+  /* pin now a 44px hitbox around the visible dot; scroll-snaps to center */
+  .timeline-row .pin { flex: 0 0 22px; height: 44px; display: flex; align-items: center; justify-content: center; scroll-snap-align: center; cursor: pointer; position: relative; }
+  /* Tri-color pins by outcome. Default (no class) = hold; .hit = green;
+     .back = amber. NEVER red. Ring outline is strong-ink for color-blind
+     redundancy. */
+  .timeline-row .pin::after { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--dv-retest-hold); border: 1px solid var(--strong); box-sizing: border-box; }
+  .timeline-row .pin.hit::after { background: var(--dv-retest-hit); }
+  .timeline-row .pin.back::after { background: var(--dv-retest-back); }
+  /* Size-modulated: milestone events (cycle end) render larger. */
+  .timeline-row .pin.milestone::after { width: 12px; height: 12px; }
+  .timeline-row .pin .pin-date { position: absolute; bottom: -2px; font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--muted); white-space: nowrap; }
+  .timeline-row .connector { width: 14px; height: 1px; background: var(--line-strong); flex: 0 0 14px; }
+  .timeline-row .today-marker { color: var(--strong); font-size: 14px; margin-left: 4px; }
+  .timeline-dates { display: flex; justify-content: space-between; margin-top: 12px; }
+  .timeline-summary { margin-top: 8px; font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; color: var(--ink); font-size: 12px; }
+  .timeline-hint { margin-top: 4px; font-size: 11px; color: var(--muted); font-style: italic; }
+
+  /* Log: activity year heatmap */
+  /* Product-design-lead audit 2026-08-21: previous 4-cell-per-month layout
+     was a density lie (48 cells to represent 365 days). Switched to honest
+     monthly-total mini-bars — each month is a single vertical bar whose
+     height maps to sessions logged that month. Legible at 400+ days, no
+     false pixel-density, no per-day tap targets to fake. Cell-level detail
+     lives in the LogList below. Matrix rec #9 (aggregation is the primary
+     surface at scale; enumeration is the drill-in). */
+  .year-heatmap { padding: 12px; }
+  .year-heatmap .months { display: grid; grid-template-columns: repeat(12, 1fr) auto; margin-bottom: 6px; align-items: baseline; }
+  .year-heatmap .months span { text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); text-transform: uppercase; }
+  .year-heatmap .months .year-label-header { padding-left: 8px; visibility: hidden; }
+  .year-heatmap .year-row { display: grid; grid-template-columns: repeat(12, 1fr) auto; gap: 4px; align-items: end; margin-bottom: 6px; height: 32px; }
+  .year-heatmap .month-bar { background: transparent; border-bottom: 1px solid var(--line-soft); position: relative; height: 100%; display: flex; align-items: flex-end; }
+  /* 3-tone ramp: high sessions = light hex (more contrast on dark bg);
+     low = dark hex. Density-not-state — no hue, only lightness. */
+  .year-heatmap .month-bar .fill { width: 100%; background: var(--dv-bar-mid); border-radius: 1px 1px 0 0; }
+  .year-heatmap .month-bar .fill.high { background: var(--dv-bar-high); }
+  .year-heatmap .month-bar .fill.low  { background: var(--dv-bar-low); }
+  .year-heatmap .year-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); padding-left: 8px; align-self: end; }
+  .log-summary { font-size: 12px; color: var(--muted); margin: 12px 0 8px; }
+
+  /* Log rows */
+  .log-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; min-height: 44px; border-bottom: 1px solid var(--line-soft); font-size: 13px; }
+  .log-row:last-of-type { border-bottom: 0; }
+  .log-row .chev { color: var(--muted); margin-right: 6px; }
+  .log-row .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--green); margin-right: 8px; vertical-align: middle; }
+  .log-row .count { color: var(--muted); font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
+  .load-more { width: 100%; margin-top: 12px; }
+
+  /* Bottom nav (visual only) */
+  .bottomnav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--ground); border-top: 1px solid var(--line-soft); display: grid; grid-template-columns: repeat(4, 1fr); padding: 8px 0 max(24px, env(safe-area-inset-bottom)); max-width: 393px; margin: 0 auto; }
+  .bottomnav .tab { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; padding: 6px 0; position: relative; }
+  .bottomnav .tab.active { color: var(--strong); font-weight: 600; }
+  .bottomnav .tab.active::before { content: ''; position: absolute; top: 0; left: 25%; right: 25%; height: 2px; background: var(--bronze); }
+  .bottomnav .tab .icon { width: 20px; height: 20px; display: inline-block; }
+
+  /* Weekly narrative */
+  .narrative { padding: 12px; }
+  .narrative .body { color: var(--ink); font-size: 14px; margin-top: 4px; line-height: 1.5; }
+  .narrative .signal-row { margin-top: 10px; color: var(--muted); font-size: 12px; }
+  .narrative .signal-row .frac { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; color: var(--ink); }
+</style>
+</head>
+<body>
+
+<header class="app">
+  <h1>Record</h1>
+  <button class="btn-ghost">Export</button>
+</header>
+
+<!-- ─── NOW SECTION ─── -->
+<div class="section">
+  <div class="section-anchor">
+    <span class="rule left"></span>
+    <span class="mono-caps">Now</span>
+    <span class="rule"></span>
+  </div>
+
+  <div class="card">
+    <div class="mono-caps" style="margin-bottom:8px">Readiness — 12 weeks</div>
+    <div class="heatmap-12" role="img" aria-label="12-week readiness heatmap · mostly green with 2 amber days in the past 12 weeks" aria-hidden="false">
+      <!-- 7 rows × 12 cols; g=green, a=amber, d=dot -->
+      <div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div>
+      <div class="cell d"></div><div class="cell d"></div><div class="cell d"></div><div class="cell d"></div><div class="cell g"></div><div class="cell d"></div><div class="cell g"></div><div class="cell d"></div><div class="cell d"></div><div class="cell d"></div><div class="cell g"></div><div class="cell d"></div>
+      <div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell a"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div>
+      <div class="cell d"></div><div class="cell d"></div><div class="cell g"></div><div class="cell d"></div><div class="cell d"></div><div class="cell a"></div><div class="cell d"></div><div class="cell d"></div><div class="cell d"></div><div class="cell d"></div><div class="cell d"></div><div class="cell d"></div>
+      <div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div>
+      <div class="cell d"></div><div class="cell g"></div><div class="cell d"></div><div class="cell d"></div><div class="cell g"></div><div class="cell d"></div><div class="cell g"></div><div class="cell d"></div><div class="cell g"></div><div class="cell d"></div><div class="cell g"></div><div class="cell d"></div>
+      <div class="cell d"></div><div class="cell d"></div><div class="cell d"></div><div class="cell d"></div><div class="cell d"></div><div class="cell d"></div><div class="cell d"></div><div class="cell d"></div><div class="cell d"></div><div class="cell d"></div><div class="cell d"></div><div class="cell d"></div>
+    </div>
+    <div class="heatmap-labels">
+      <span class="mono-caps">wk1</span>
+      <span class="mono-caps">this</span>
+    </div>
+    <div style="margin-top:8px; font-size:11px; color: var(--muted); display: flex; gap: 12px; flex-wrap: wrap;">
+      <span><span style="display:inline-block; width:8px; height:8px; border-radius:2px; background: var(--green); vertical-align: middle; margin-right: 4px;"></span>green day (workout ready)</span>
+      <span><span style="display:inline-block; width:8px; height:8px; border-radius:2px; background: var(--amber); vertical-align: middle; margin-right: 4px;"></span>amber (check first)</span>
+    </div>
+  </div>
+
+  <div class="card narrative">
+    <div class="mono-caps">Week 13 — Phase 2 · threshold build</div>
+    <div class="body">Green week — 4/4 sessions. Day 90. 148 min at Z2 this week, 5 min above phase target.</div>
+    <div class="signal-row">▸ Signals logged <span class="frac">7/7</span></div>
+  </div>
+
+  <div class="card retest-tile">
+    <div class="mono-caps" style="margin-bottom:8px">Latest retest · week 12 mid-block</div>
+    <div class="metric-row">
+      <span class="metric-name">Submax HR — easy-effort avg</span>
+      <span><span class="metric-value">146 <span style="font-size:14px">bpm</span></span><span class="delta">−7</span></span>
+    </div>
+    <div class="prev-row">
+      <span>vs week 4 baseline (24 Jun)</span>
+      <span class="mono">153 bpm</span>
+    </div>
+    <div class="since-baseline">−7 bpm at same effort · 2 retests</div>
+    <hr />
+    <div class="basis">Basis · 8 green weeks · <code>runs[].avg_hr where intensity=='easy'</code> trend ↓</div>
+    <div class="cited" role="button" tabindex="0" aria-label="View study: Rønnestad 2014 aerobic-base progression"><span class="cited-glyph">Cited</span> Rønnestad 2014 · aerobic-base progression <span class="arrow">→</span></div>
+    <div class="next-retest">Next retest in 14d</div>
+  </div>
+</div>
+
+<!-- ─── TREND SECTION ─── -->
+<div class="section">
+  <div class="section-anchor">
+    <span class="rule left"></span>
+    <span class="mono-caps">Trend</span>
+    <span class="rule"></span>
+  </div>
+
+  <div class="tier-control">
+    <button>30d</button>
+    <button class="active">90d</button>
+    <button>1y</button>
+    <button>All</button>
+  </div>
+  <div class="trend-sublabel">90-day rolling submax HR · 4-week baseline · lower at same effort is better</div>
+
+  <div class="card chart-card">
+    <svg class="chart-svg" viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Rolling submax HR at easy effort, decreasing from 155 to 146 bpm over 90 days. Lower at same effort is better.">
+      <!-- Y axis labels · bpm, LOWER IS BETTER (same effort, lower HR = fitter) -->
+      <g font-family="JetBrains Mono, monospace" font-size="10" fill="#93989f" text-anchor="end">
+        <text x="24" y="16">160</text>
+        <text x="24" y="44">155</text>
+        <text x="24" y="72">150</text>
+        <text x="24" y="100">145</text>
+        <text x="24" y="128">140</text>
+      </g>
+      <!-- X grid rules -->
+      <g stroke="#2a2e37" stroke-width="1">
+        <line x1="30" y1="20" x2="320" y2="20" />
+        <line x1="30" y1="72" x2="320" y2="72" />
+        <line x1="30" y1="124" x2="320" y2="124" />
+      </g>
+      <!-- Rolling avg curve — slate; curving DOWNWARD (submax HR decreasing = fitness rising).
+           Starts around 155bpm week 1 → 146bpm week 12. -->
+      <path d="M 30 44 C 60 48, 90 56, 120 68 C 150 78, 180 88, 210 96 C 240 100, 270 104, 310 108"
+            fill="none" stroke="#79b8c4" stroke-width="2" />
+      <!-- Retest event pins · 2 events over 90 days at mid-block cadence.
+           Both hits (HR trending down at same effort). -->
+      <circle cx="115" cy="70"  r="4" fill="#6bb885" stroke="#F0F1F3" stroke-width="1" /> <!-- week 4 mid-block · hit -->
+      <circle cx="290" cy="108" r="5" fill="#6bb885" stroke="#F0F1F3" stroke-width="1.5" /> <!-- week 12 · hit (today) -->
+      <!-- ▲today marker under last pin -->
+      <text x="290" y="142" font-family="JetBrains Mono, monospace" font-size="10" fill="#F0F1F3" text-anchor="middle">▲today</text>
+      <!-- X-axis labels -->
+      <g font-family="JetBrains Mono, monospace" font-size="10" fill="#93989f" text-anchor="middle">
+        <text x="34" y="152">wk1</text>
+        <text x="115" y="152">wk4</text>
+        <text x="200" y="152">wk8</text>
+        <text x="290" y="152">wk12</text>
+      </g>
+    </svg>
+    <div class="chart-legend">
+      <span><span class="line-mark"></span>4-wk rolling avg</span>
+      <span><span class="dot hit"></span>retest · HR ↓</span>
+    </div>
+    <div class="show-raw"><button>Show raw</button></div>
+    <div class="delta-callout">4-wk avg 148 bpm &nbsp; −7 since baseline</div>
+  </div>
+
+  <div class="card retest-timeline" role="group" aria-label="2 retest events over 90 days; submax HR delta −7 bpm at same effort">
+    <div class="mono-caps eyebrow">Retests · 2 events</div>
+    <div class="timeline-row">
+      <span class="pin hit" title="Week 4 mid-block · HR ↓"><span class="pin-date">wk4</span></span><span class="connector"></span>
+      <span class="pin milestone hit" title="Week 12 end-block · HR ↓"><span class="pin-date">wk12</span></span>
+      <span class="today-marker">▲</span>
+    </div>
+    <div class="timeline-dates">
+      <span class="mono-caps">week 1</span>
+      <span class="mono-caps">today</span>
+    </div>
+    <div class="timeline-summary">Base 153 bpm · Now 146 bpm · −7 at same effort</div>
+    <div class="timeline-hint">tap any pin for the source behind that retest →</div>
+  </div>
+</div>
+
+<!-- ─── LOG SECTION ─── -->
+<div class="section">
+  <div class="section-anchor">
+    <span class="rule left"></span>
+    <span class="mono-caps">Log</span>
+    <span class="rule"></span>
+  </div>
+
+  <!-- Day-90 engine-builder: under 120 days so activity heatmap uses
+       12-week matrix mode. Aerobic pattern: 4 sessions/week clustered
+       around weekdays with some weekend long-runs. -->
+  <div class="card year-heatmap" role="img" aria-label="Activity over the past 12 weeks. Aerobic pattern — 4 sessions per week, weekday-heavy with weekend long runs.">
+    <div class="mono-caps" style="margin-bottom:8px">Activity — last 12 weeks</div>
+    <div class="heatmap-12" style="max-width: 100%;">
+      <div class="cell g"></div><div class="cell d"></div><div class="cell g"></div><div class="cell d"></div><div class="cell g"></div><div class="cell g"></div><div class="cell d"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div>
+      <div class="cell d"></div><div class="cell g"></div><div class="cell d"></div><div class="cell g"></div><div class="cell d"></div><div class="cell d"></div><div class="cell g"></div><div class="cell d"></div><div class="cell d"></div><div class="cell d"></div><div class="cell d"></div><div class="cell d"></div>
+      <div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div>
+      <div class="cell d"></div><div class="cell d"></div><div class="cell g"></div><div class="cell d"></div><div class="cell a"></div><div class="cell g"></div><div class="cell d"></div><div class="cell d"></div><div class="cell g"></div><div class="cell d"></div><div class="cell g"></div><div class="cell d"></div>
+      <div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div><div class="cell g"></div>
+      <div class="cell d"></div><div class="cell d"></div><div class="cell d"></div><div class="cell g"></div><div class="cell d"></div><div class="cell d"></div><div class="cell g"></div><div class="cell d"></div><div class="cell d"></div><div class="cell g"></div><div class="cell d"></div><div class="cell d"></div>
+      <div class="cell g"></div><div class="cell d"></div><div class="cell d"></div><div class="cell d"></div><div class="cell g"></div><div class="cell d"></div><div class="cell d"></div><div class="cell g"></div><div class="cell d"></div><div class="cell d"></div><div class="cell g"></div><div class="cell d"></div>
+    </div>
+  </div>
+
+  <div class="log-summary">58 active days over 90 · showing last 30</div>
+
+  <div class="card" style="padding: 4px 12px;">
+    <div class="log-row"><span><span class="chev">▸</span><span class="dot"></span>Wed 21 Aug</span><span class="count">Z2 · 45 min</span></div>
+    <div class="log-row"><span><span class="chev">▸</span><span class="dot"></span>Tue 20 Aug</span><span class="count">4×4 · 22 min</span></div>
+    <div class="log-row"><span><span class="chev">▸</span><span class="dot"></span>Sun 18 Aug</span><span class="count">Long run · 62 min</span></div>
+  </div>
+
+  <button class="btn-ghost load-more">Load 30 more</button>
+</div>
+
+<!-- Bottom nav (visual context only) -->
+<nav class="bottomnav">
+  <div class="tab"><span class="icon">◈</span>Today</div>
+  <div class="tab"><span class="icon">▤</span>Week</div>
+  <div class="tab active"><span class="icon">◈</span>Record</div>
+  <div class="tab"><span class="icon">◫</span>Programs</div>
+</nav>
+
+</body>
+</html>
