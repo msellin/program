@@ -70,6 +70,19 @@ export async function runTour(
   const consoleListener = (msg: ConsoleMessage) => {
     consoleLines.push(`[${msg.type()}] ${msg.text()}`);
   };
+  // Batch 36 · 2026-08-21 — capture uncaught JS errors so Progress/Report
+  // crash diagnosis has an actual stack trace next time. Prior tour only
+  // logged console + network, which is why static analysis couldn't find
+  // the throw source. `pageerror` fires on any unhandled JS exception
+  // (React render errors, promise rejections). Persisted alongside
+  // console.log per route.
+  const pageErrorListener = (err: Error) => {
+    consoleLines.push(`[pageerror] ${err.message}`);
+    if (err.stack) {
+      const frames = err.stack.split("\n").slice(0, 10).map((s) => `  ${s.trim()}`).join("\n");
+      consoleLines.push(frames);
+    }
+  };
   const requestListener = (req: import("@playwright/test").Request) => {
     networkLines.push(`REQ ${req.method()} ${req.url()}`);
   };
@@ -78,6 +91,7 @@ export async function runTour(
   };
 
   page.on("console", consoleListener);
+  page.on("pageerror", pageErrorListener);
   page.on("request", requestListener);
   page.on("response", responseListener);
 

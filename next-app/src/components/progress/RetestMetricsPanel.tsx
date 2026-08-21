@@ -92,7 +92,18 @@ function RetestCard({
   // from retest_readings + prepend the baseline so the line starts from
   // the anchor. Sparkline auto-scales; if only baseline + current exist,
   // we still get a 2-point trend line.
-  const readings = useStore((s) => s.store.retest_readings ?? []);
+  // Batch 36 · 2026-08-21 bugfix — was `useStore((s) => s.store.retest_readings ?? [])`
+  // which returns a NEW `[]` reference every render when the underlying field
+  // is undefined. Zustand's default equality is Object.is → new ref → subscriber
+  // fires → rerender → new ref → INFINITE LOOP (React #185, "Maximum update
+  // depth exceeded"). Was crashing /progress + /report on every non-hip persona
+  // and any user without any logged retest readings.
+  //
+  // Fix: select the raw (possibly undefined) value with stable reference, then
+  // derive the fallback outside the store subscription. `undefined` is always
+  // === itself; `[]` isn't.
+  const readingsRaw = useStore((s) => s.store.retest_readings);
+  const readings = readingsRaw ?? [];
   const trendValues = readings
     .filter((r) => r.metric_id === m.metric_id)
     .sort((a, b) => a.observed_at.localeCompare(b.observed_at))
