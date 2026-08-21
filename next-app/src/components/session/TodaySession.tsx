@@ -219,27 +219,6 @@ export function TodaySession({ slugOverride }: { slugOverride?: string } = {}) {
           IS single-focus by definition (that's what slugOverride means),
           so the multi-track suppression doesn't apply. Founder feedback
           continued 2026-08-20. */}
-      {(programs.length === 1 || slugOverride) && phase && phaseWeekPair(phase, activeDate) ? (
-        (() => {
-          const pair = phaseWeekPair(phase, activeDate)!;
-          const programName = primary.slug ? programDisplayName(primary, primary.slug) : "Program";
-          return (
-            <ArcProgressBar
-              programName={programName}
-              weekCurrent={pair.current}
-              weekTotal={pair.total}
-              /* Batch 36 P1 (audit 2026-08-21 · app-a11y) — dropped
-                 program-name from aria-label to avoid SR-duplication
-                 with the H1 that immediately follows. Program name
-                 already sits in the eyebrow tier above the H1 and in
-                 the visible label of the bar itself. Aria now carries
-                 only the progress state. */
-              ariaLabel={`Program progress: week ${pair.current} of ${pair.total}.`}
-            />
-          );
-        })()
-      ) : null}
-
       {/* Batch 36 Step 10 · H1 inversion per v1.1.1 §5 + landing C1
           (Aug 2026). The workout name (or focus name for concurrent
           tracks) is the H1; the route scope moves to a mono-caps
@@ -252,7 +231,15 @@ export function TodaySession({ slugOverride }: { slugOverride?: string } = {}) {
 
           Multi-track: primary program's display name is the H1;
           concurrent tracks render below in their own DashboardBlock
-          groups (existing behavior preserved). */}
+          groups (existing behavior preserved).
+
+          Batch 36 audit 2026-08-21 (app-a11y §2.2) — the H1 now
+          precedes the ArcProgressBar in source order. Prior order
+          rendered ArcProgressBar (a progressbar widget) before the
+          H1, which broke WCAG 2.4.3 (Focus Order) and the standard
+          "landmark → heading → controls" reading model for SR
+          users. Aria-label on the bar already drops program name to
+          avoid double-announcement with the H1 (fixed earlier). */}
       <header className="space-y-1">
         <p className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted">
           {todayEyebrow(slugOverride, activeDate, phase)}
@@ -264,14 +251,22 @@ export function TodaySession({ slugOverride }: { slugOverride?: string } = {}) {
               ? "Focus session"
               : "Today"}
         </h1>
-        {/* Batch 36 P0 hotfix — removed the phase-name sub-caption here
-            because it duplicates the existing phase readout below DateNav
-            (which fires when `slugOverride || allBlocks.length === 0`).
-            Founder-caught 2026-08-20 on rest day: "Weeks 1-4 — Hang, scap,
-            row base (Tier A)" appeared twice. The eyebrow above already
-            carries "WEEK 1 OF 4"; the detailed readout below carries
-            phase-name + week + end date. Two tiers cover the ground. */}
       </header>
+
+      {(programs.length === 1 || slugOverride) && phase && phaseWeekPair(phase, activeDate) ? (
+        (() => {
+          const pair = phaseWeekPair(phase, activeDate)!;
+          const programName = primary.slug ? programDisplayName(primary, primary.slug) : "Program";
+          return (
+            <ArcProgressBar
+              programName={programName}
+              weekCurrent={pair.current}
+              weekTotal={pair.total}
+              ariaLabel={`Program progress: week ${pair.current} of ${pair.total}.`}
+            />
+          );
+        })()
+      ) : null}
 
       {/* Suppress the reveal card once the user has any real log history —
           if they've been using the app, they know what plan they're on.
@@ -1216,10 +1211,17 @@ function GraduationCard({ program }: { program: Program }) {
           </Link>
         </div>
         <GraduationFeedback slug={program.slug ?? null} />
+        {/* Batch 36 audit 2026-08-21 (app-mobile-ux) — was a bare inline
+            text link (~14px, sub-44px target). Wrapped in a button-shaped
+            hit zone with min-h-11 and destructive-color tone. It's a
+            program-wipe so it should look and feel like a considered
+            press, not a stray tap. Still text-only (no bronze) so it
+            does not compete with the "Pick your next focus →" primary
+            CTA above it — bronze is CTA-only per R2. */}
         <button
           type="button"
           onClick={() => setConfirmEnd(true)}
-          className="text-[12px] text-muted underline decoration-muted/40 hover:text-red hover:decoration-red pt-1"
+          className="self-start min-h-11 inline-flex items-center px-3 -mx-3 text-[12px] text-red hover:text-red-strong hover:bg-line-soft rounded"
         >
           End this program
         </button>

@@ -52,7 +52,7 @@ export function SessionActions({ blockIds, date, program }: Props) {
         <button
           type="button"
           onClick={() => setOpen("move")}
-          className="flex flex-col items-center justify-center gap-1 px-2 py-2 min-h-[52px] border border-line rounded bg-surface hover:bg-surface-2 text-[12px]"
+          className="flex flex-col items-center justify-center gap-1 px-2 py-2 min-h-[52px] border border-line-strong rounded bg-surface hover:bg-surface-2 text-[12px]"
         >
           <CalendarClock size={14} />
           <span>Move day</span>
@@ -60,7 +60,7 @@ export function SessionActions({ blockIds, date, program }: Props) {
         <button
           type="button"
           onClick={() => setOpen("skip")}
-          className="flex flex-col items-center justify-center gap-1 px-2 py-2 min-h-[52px] border border-line rounded bg-surface hover:bg-surface-2 text-[12px]"
+          className="flex flex-col items-center justify-center gap-1 px-2 py-2 min-h-[52px] border border-line-strong rounded bg-surface hover:bg-surface-2 text-[12px]"
         >
           <SkipForward size={14} />
           <span>Skip today</span>
@@ -68,7 +68,7 @@ export function SessionActions({ blockIds, date, program }: Props) {
         <button
           type="button"
           onClick={() => setOpen("week")}
-          className="flex flex-col items-center justify-center gap-1 px-2 py-2 min-h-[52px] border border-line rounded bg-surface hover:bg-surface-2 text-[12px]"
+          className="flex flex-col items-center justify-center gap-1 px-2 py-2 min-h-[52px] border border-line-strong rounded bg-surface hover:bg-surface-2 text-[12px]"
         >
           <CalendarX2 size={14} />
           <span>Whole week</span>
@@ -207,7 +207,7 @@ function WeekSheet({
           />
         </div>
         <div className="flex gap-2 pt-1">
-          <button type="button" onClick={onCancel} className="flex-1 border border-line rounded py-2 min-h-[44px] text-sm hover:bg-surface-2">
+          <button type="button" onClick={onCancel} className="flex-1 border border-line-strong rounded py-2 min-h-[44px] text-sm hover:bg-surface-2">
             Cancel
           </button>
           <button
@@ -283,7 +283,7 @@ function ConfirmSheet({
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 border border-line rounded py-2 text-sm hover:bg-surface-2"
+            className="flex-1 border border-line-strong rounded py-2 text-sm hover:bg-surface-2"
           >
             Cancel
           </button>
@@ -402,7 +402,7 @@ function SkipSheet({
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 border border-line rounded py-2 min-h-[44px] text-sm hover:bg-surface-2"
+            className="flex-1 border border-line-strong rounded py-2 min-h-[44px] text-sm hover:bg-surface-2"
           >
             Cancel
           </button>
@@ -474,7 +474,7 @@ function MoveSheet({
           />
         </div>
         <div className="flex gap-2 pt-1">
-          <button type="button" onClick={onCancel} className="flex-1 border border-line rounded py-2 text-sm hover:bg-surface-2">
+          <button type="button" onClick={onCancel} className="flex-1 border border-line-strong rounded py-2 text-sm hover:bg-surface-2">
             Cancel
           </button>
           <button

@@ -6,7 +6,6 @@ import { today as todayISO } from "@/lib/utils";
 import type { Symptoms } from "@/lib/schemas";
 import { EngineReadsNotesHint } from "@/components/workout/EngineReadsNotesHint";
 import { StickyCta } from "@/components/ui/StickyCta";
-import { ChevronRight } from "lucide-react";
 
 // Hip-program regions — laterality + specific joints.
 const HIP_REGIONS: { key: keyof Symptoms; label: string; lat?: "L" | "R" }[] = [
@@ -190,14 +189,18 @@ export default function CheckPage() {
           iOS Safari, StickyCta lifts the CTA above the on-screen
           keyboard via visualViewport fallback. CTA string updated to
           match §2.13 vocabulary (arrow suffix). */}
+      {/* Batch 36 audit 2026-08-21 (app-copy-clarity) — replaced
+          <ChevronRight/> with literal → glyph to match §2.13 CTA
+          vocabulary. Every other primary CTA in the app uses the
+          literal arrow ("Check due →", "Start check →", "Why this? →"),
+          so the icon here was the outlier. */}
       <StickyCta keyboardAware>
         <button
           type="button"
           onClick={save}
           className="w-full inline-flex items-center justify-center gap-2 bg-bronze text-ground rounded-lg py-3 font-semibold text-[15px] hover:bg-bronze-hover active:bg-bronze-active transition-colors min-h-[44px] shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_1px_2px_rgba(0,0,0,0.4)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-strong focus-visible:outline-offset-2"
         >
-          Save check
-          <ChevronRight size={16} strokeWidth={2.25} aria-hidden />
+          Save check <span aria-hidden>→</span>
         </button>
       </StickyCta>
     </div>

@@ -183,23 +183,22 @@ export default function ProgramCatalogPage() {
             "How programs earn each status" sheet. Was inline-legend
             only; the sheet adds the full definitional detail without
             crowding the catalog surface. */}
+        {/* Batch 36 audit 2026-08-21 (app-copy-clarity) — legend now
+            describes the 2-tier ladder the CARDS actually render. Prior
+            legend still named 3 tiers ("referenced / reviewed / verified"),
+            which drifted from §7.5's collapse to `cited` / `verified` and
+            from `statusLabelOf` above (which never emits "REVIEWED"). One
+            lexicon everywhere. Sheet still holds the historical 3-tier
+            detail for anyone who wants it. */}
         <p className="text-[12px] text-ink pt-1 leading-relaxed">
-          <button
-            type="button"
-            onClick={() => setLadderSheetOpen(true)}
-            className="font-mono uppercase text-amber underline-offset-2 hover:underline"
-          >
-            referenced
-          </button>{" "}
-          = every claim cites a paper, simulator harness passes.{" "}
           <button
             type="button"
             onClick={() => setLadderSheetOpen(true)}
             className="font-mono uppercase text-slate underline-offset-2 hover:underline"
           >
-            reviewed
+            cited
           </button>{" "}
-          = domain specialist has audited the citations against literature.{" "}
+          = every claim references a study, simulator harness passes.{" "}
           <button
             type="button"
             onClick={() => setLadderSheetOpen(true)}
@@ -207,16 +206,10 @@ export default function ProgramCatalogPage() {
           >
             verified
           </button>{" "}
-          = ≥5 users completed the arc with subjective success.
+          = specialist-audited AND ≥5 users completed the arc with subjective success.
         </p>
-        {/* F10 Batch 31 · honesty callout below the legend. Names the actual
-            distribution so users can see the ladder isn't marketing — some
-            programs will earn REVIEWED and some may never, depending on
-            specialist availability and user completion volume.
-            S6 (2026-08-19) · one-line addendum for personal programs. They
-            sit outside this ladder — the "personal" badge is their signal. */}
         <p className="text-[12px] text-muted pt-1 leading-relaxed italic">
-          Every program ships at least REFERENCED. Higher tiers unlock as
+          Every program ships at least CITED. VERIFIED unlocks as
           specialists audit and as users complete arcs — that&apos;s the ladder,
           not a marketing gradient. Personal programs (author&apos;s own
           clinical context) sit outside this ladder — see the &ldquo;personal&rdquo; badge instead.
