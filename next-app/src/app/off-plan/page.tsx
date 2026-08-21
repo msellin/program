@@ -63,7 +63,7 @@ export default function ExtrasPage() {
   return (
     <div className="space-y-8 pt-4">
       <header>
-        <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">Extras</h1>
+        <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">Off-plan</h1>
         <p className="mt-1 text-sm text-muted">
           Accessory work, home rehab, around-runs. {isToday ? "Logging to today." : "Logging to the selected date."}
         </p>

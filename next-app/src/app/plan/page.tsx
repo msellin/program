@@ -227,10 +227,10 @@ export default function WeekPage() {
           breathing room. */}
       <header>
         <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">
-          Week
+          Plan
         </h1>
         <p className="mt-2 text-[14px] text-muted">
-          The 7-day rhythm, with your skips and moves applied.
+          The 7-day rhythm. Browse other days, move sessions, skip a day — all from here.
         </p>
       </header>
 
