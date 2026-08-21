@@ -231,6 +231,23 @@ export default function RecordPage() {
           </ErrorBoundary>
         </div>
       </section>
+
+      {/* Footer — beta feedback channel per FLAG-1 (product-owner panel
+          made this an explicit prerequisite for M2 billing trigger: "you
+          literally cannot detect the payment-intent trigger without an
+          inbound channel"). Ships as mailto until real analytics + inbox
+          infra decision. Founder-durable email per user_founder-email
+          memory. */}
+      <footer className="pt-6 border-t border-line-soft flex items-center justify-between gap-3 text-[12px] text-muted">
+        <span>Terav — Cut C · Record</span>
+        <a
+          href="mailto:sellinmargus@gmail.com?subject=Terav%20feedback"
+          className="inline-flex items-center gap-1 font-mono text-[11px] uppercase tracking-widest text-slate hover:text-ink motion-reduce:transition-none transition-colors min-h-[44px] py-2"
+          aria-label="Send feedback to Terav founder"
+        >
+          Feedback? →
+        </a>
+      </footer>
     </div>
   );
 }

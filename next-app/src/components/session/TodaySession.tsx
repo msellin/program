@@ -6,7 +6,6 @@ import { loadProgram, loadProgramManifest, loadExercises } from "@/lib/data-load
 import { ExerciseCard } from "@/components/workout/ExerciseCard";
 import { HeroStateCard } from "@/components/workout/HeroStateCard";
 import { SessionActions } from "@/components/workout/SessionActions";
-import { DateNav } from "@/components/workout/DateNav";
 import { FirstRunBanner } from "@/components/FirstRunBanner";
 import { EmptyStateCard } from "@/components/EmptyStateCard";
 import { DashboardBlock } from "@/components/DashboardBlock";
@@ -50,12 +49,13 @@ export function TodaySession({
   const [programs, setPrograms] = useState<Program[]>([]);
   const [byId, setById] = useState<Record<string, Exercise>>({});
   const [error, setError] = useState<string | null>(null);
-  // 2026-08-21 date-context bug fix (option A) — activeDate seeds from
-  // an optional prop so /session/[slug]?date=YYYY-MM-DD lands on the
-  // date the user was viewing on Today, not today. Falls back to today
-  // when the prop is absent (bookmarks, direct nav). See dev/active/
-  // redesign-progress/ upcoming brainstorm for the full date-context
-  // refactor plan (option B — this is only the tactical fix).
+  // Week 4a (2026-08-21) — DateNav removed from Day per D2 (Plan tab owns
+  // date browsing). setActiveDate is now only mutated by the
+  // MissedSessionPrompt "log yesterday" flow (an explicit user tap to
+  // jump to yesterday's session state in-place). This is technically
+  // inconsistent with Shape 1's "Day always shows today" principle;
+  // Week 4b will replace with a redirect to /session/[slug]?date=YYYY-MM-DD.
+  // Session route seeds from `initialDate` (SessionClient reads ?date=).
   const [activeDate, setActiveDate] = useState(() => initialDate ?? todayISO());
   const [programManifest, setProgramManifest] = useState<ProgramManifest | null>(null);
   useEffect(() => {
@@ -313,15 +313,16 @@ export function TodaySession({
         />
       ) : null}
 
-      {/* DateNav — dashboard tool for browsing days. On /session/[slug]
-          the user is focused on today's workout; if they need to browse
-          another day they go back to Today. Founder feedback 2026-08-20:
-          session route was rendering DateNav + morning-check strip +
-          full workout — reads as a duplicate of Today, not a focused
-          view. */}
-      {!slugOverride ? (
-        <DateNav date={activeDate} onChange={setActiveDate} />
-      ) : null}
+      {/* Week 4a (2026-08-21) — DateNav removed from the Day surface per
+          locked decision D2 (Plan tab owns date browsing). The Day tab
+          is fixed to today structurally; a user who wants to browse
+          tomorrow's plan or yesterday's log goes to the Plan tab.
+          This is the fix-by-policy for the tomorrow→session date bug:
+          Day literally cannot render a non-today state now, so there is
+          no caller-date to inherit.
+          Session route seeds activeDate via SessionClient's initialDate
+          from ?date= query param — no DateNav visual either; sessions
+          are single-day focused views. */}
 
       {/* Suppress phase readout when the user has already graduated. Prior
           behavior: activePhaseFor returned the LAST phase as fallback, so

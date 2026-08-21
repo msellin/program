@@ -11,14 +11,23 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// 4 primary tabs — Cut C · 2026-08-21 · Progress + History collapsed into
-// the unified Record surface (decisions doc `dev/active/decisions-2026-
-// 08-21-locked.md` D2/D4). /progress and /history now redirect to
-// /record. The Today/Week refactor (D1-D5, rename to Day/Plan) is Week 4
-// after the D6 hallway test.
+// 4 primary tabs — Cut C · 2026-08-21 shipped: Progress + History
+// collapsed into Record. Week 4a · 2026-08-21 shipped: Today tab
+// renamed to "Day" per D1 (copy-clarity semantic honesty — "Today"
+// as a tab label lied the moment users tapped DateNav to browse
+// tomorrow). Week tab renamed to "Plan" per D4 — Plan absorbs date
+// browsing while Day stays fixed to today (kills the class of bug
+// that produced the tomorrow-then-session date-context issue).
+//
+// The routes themselves stay as `/` and `/week/` for now (renaming to
+// `/plan/` requires a redirect stub + external link updates; deferred
+// to Week 4b). Labels change, mental model changes, URLs stable.
+//
+// See dev/active/decisions-2026-08-21-locked.md for the full locked
+// decision set.
 const TABS = [
-  { href: "/", label: "Today", Icon: Dumbbell },
-  { href: "/week/", label: "Week", Icon: CalendarDays },
+  { href: "/", label: "Day", Icon: Dumbbell },
+  { href: "/week/", label: "Plan", Icon: CalendarDays },
   { href: "/record/", label: "Record", Icon: Activity },
   { href: "/profile/", label: "Profile", Icon: User },
 ];

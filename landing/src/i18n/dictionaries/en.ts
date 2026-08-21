@@ -71,7 +71,7 @@ export const en: LandingDict = {
     summary: "What Terav is not",
     not_a_clinician_title: "Not a clinician.",
     not_a_clinician_body:
-      "Red-flag patterns fire an escalate banner, not a diagnosis.",
+      "Red-flag patterns surface a banner, not a diagnosis.",
     not_certain_title: "Not certain about you.",
     not_certain_body:
       "VO2max response varies ~10× person-to-person. We quote ranges, not one number.",
