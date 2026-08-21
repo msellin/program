@@ -56,6 +56,25 @@
   --color-lat-left: #4a8894;
   --color-lat-right: #a279a8;
 
+  /* Cut C data-viz palette · 2026-08-21 (see dev/active/redesign-progress/
+     DESIGN-cut-c.md · founder mandate "colorful, users like it" · visual-craft
+     panel + peer stress test both approved).
+     Aliases existing state tokens for chart use. R2 (bronze CTA-only) stays
+     intact — this is state color, always permitted for state contexts, never
+     an accent for CTAs. Peer alignment: Oura Trends + TrainingPeaks PMC.
+     Explicitly NOT Whoop (score-drama red/green), Strava (activity-orange),
+     Peloton (category tints), Hevy (per-exercise rainbow).
+     Amber-for-regression (not red) is the deliberate softening — if a future
+     metric ever renders as a composite/aggregated score, this palette must
+     NOT follow it (would violate R8). */
+  --dv-curve-primary: #79b8c4; /* alias --color-slate — rolling-avg curve */
+  --dv-retest-hit:    #6bb885; /* alias --color-green    — retest met/beat target */
+  --dv-retest-hold:   #93989f; /* alias --color-muted    — retest flat/held (majority state at scale) */
+  --dv-retest-back:   #d9a86b; /* alias --color-amber    — retest regressed. NEVER red. */
+  --dv-bar-low:       #5f6570; /* alias --color-line     — low-session months (density ramp) */
+  --dv-bar-mid:       #7c8493; /* NEW — mid-session months */
+  --dv-bar-high:      #a8b0bd; /* NEW — high-session months */
+
   /* Typography */
   --font-sans:
     var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;

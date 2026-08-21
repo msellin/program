@@ -25,7 +25,11 @@ export function buildRoutes(activeProgramSlug: string): TourRoute[] {
     // takes 03 naturally.
     { slug: "03-account", path: "/account", desc: "Account" },
     { slug: "04-history", path: "/history", desc: "History (heatmap)" },
-    { slug: "05-progress", path: "/progress", desc: "Progress (charts)" },
+    { slug: "05-progress", path: "/progress", desc: "Progress (charts) — deprecating in Cut C" },
+    // Cut C · 2026-08-21 sprint · Phase 1 scaffold — /record shipping in
+    // parallel with /progress until feature parity. Cut-over happens at
+    // end of sprint (Phase 5). See dev/active/cut-c-code-sprint/plan.md.
+    { slug: "05b-record", path: "/record", desc: "Record (Cut C new — Phase 1 scaffold)" },
     { slug: "06-programs", path: "/programs", desc: "Programs catalog" },
     {
       slug: "07-programs-active",
