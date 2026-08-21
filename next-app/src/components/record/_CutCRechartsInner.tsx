@@ -90,6 +90,11 @@ export function CutCRechartsInner({ points, showRaw, unit, direction }: CutCRech
             fontSize: 12,
             color: "#D6D9DE",
           }}
+          // Founder-reported 2026-08-21: default Recharts cursor draws a
+          // full-height white rectangle band across the chart on hover/tap.
+          // Ugly on the warm-dark palette + reads as "selection box". Replace
+          // with a hairline dashed vertical guide in line-strong.
+          cursor={{ stroke: "#3A3F4A", strokeWidth: 1, strokeDasharray: "3 3" }}
           formatter={(value, name) => {
             const num = typeof value === "number" ? value : null;
             if (num == null) return ["—", String(name)];
