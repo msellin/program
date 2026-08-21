@@ -40,7 +40,11 @@ type Copy = {
 const COPY: Record<string, Copy> = {
   green: {
     title: "Green",
-    sub: "Progress load. Nothing above 3/10 in your check.",
+    // Batch 38 (2026-08-21) P1-78 — tightened to em-dash form. Was
+    // "Progress load. Nothing above 3/10 in your check." — the trailing
+    // "in your check" was redundant (users know the source of the score)
+    // and the two-sentence shape read heavier than the amber/red variants.
+    sub: "Progress load — nothing above 3/10 today.",
     tone: "green",
     pillLabel: "Workout ready",
     pillTone: "green",
@@ -55,7 +59,7 @@ const COPY: Record<string, Copy> = {
   },
   amber: {
     title: "Amber",
-    sub: "Hold load. A 4-5/10 or morning stiffness over 30 min.",
+    sub: "Hold load — a 4-5/10 or morning stiffness over 30 min.",
     tone: "amber",
     pillLabel: "Check first",
     pillTone: "amber",
@@ -70,7 +74,7 @@ const COPY: Record<string, Copy> = {
   },
   red: {
     title: "Red",
-    sub: "Back off. Something above 5/10 or a red flag noted.",
+    sub: "Back off — something above 5/10 or a red flag noted.",
     tone: "red",
     pillLabel: "Back off",
     pillTone: "red",

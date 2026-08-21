@@ -364,9 +364,15 @@ export function TodaySession({ slugOverride }: { slugOverride?: string } = {}) {
             </>
           ) : null}
         </>
-      ) : !slugOverride ? (
-        <HeroStateCard date={activeDate} />
       ) : null}
+      {/* Batch 38 (2026-08-21) — HeroStateCard no longer renders on
+          graduated programs. Prior branch surfaced "WORKOUT READY ·
+          Progress load. Nothing above 3/10 in your check." above the
+          GraduationCard's "YOU FINISHED · 6 weeks logged. Nice."
+          which was a direct workflow contradiction (Rowing 2K REV-5
+          §e). GraduationCard is the single anchored state for a
+          finished arc; the daily readiness readout has no meaning
+          without a prescribed session to gate. */}
 
       {/* Taper phase — surface it prominently so the reduced session duration
           isn't read as an error. Read the phase's is_taper flag which we set

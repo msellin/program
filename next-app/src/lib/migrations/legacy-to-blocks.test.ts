@@ -24,13 +24,22 @@ function makeBaseStore(activeSlug: string): Store {
 }
 
 describe("legacy-to-blocks migrator", () => {
-  it("short-circuits when migrations_applied already contains blocks_v1", () => {
+  it("short-circuits when migrations_applied already contains blocks_v2", () => {
     const store = makeBaseStore("concurrent-strength-maintenance");
-    store.migrations_applied = ["blocks_v1"];
+    store.migrations_applied = ["blocks_v2"];
     const program = loadProgram("concurrent-strength-maintenance");
     const out = migrateLegacyToBlocks(store, { "concurrent-strength-maintenance": program }, program.phases[0].starts);
     expect(out).toBe(store);
     expect(needsBlockMigration(out)).toBe(false);
+  });
+
+  it("re-runs when only blocks_v1 is applied (Batch 38 repair path)", () => {
+    // Users migrated under blocks_v1 (before BUG-8's shouldFlipDone logic)
+    // must get their stuck state=planned blocks re-evaluated. This is the
+    // whole reason for the v1→v2 bump.
+    const store = makeBaseStore("concurrent-strength-maintenance");
+    store.migrations_applied = ["blocks_v1"];
+    expect(needsBlockMigration(store)).toBe(true);
   });
 
   it("materializes blocks for the active program on first run", () => {
@@ -38,7 +47,7 @@ describe("legacy-to-blocks migrator", () => {
     const store = makeBaseStore("concurrent-strength-maintenance");
     const anchor = program.phases[0].starts;
     const out = migrateLegacyToBlocks(store, { "concurrent-strength-maintenance": program }, anchor);
-    expect(out.migrations_applied).toContain("blocks_v1");
+    expect(out.migrations_applied).toContain("blocks_v2");
     expect(Object.keys(out.scheduled_blocks ?? {}).length).toBeGreaterThan(0);
     expect(out.program_materialization?.["concurrent-strength-maintenance"]).toBeTruthy();
   });
@@ -186,5 +195,45 @@ describe("legacy-to-blocks migrator", () => {
     const first = migrateLegacyToBlocks(store, { "concurrent-strength-maintenance": program }, anchor);
     const second = migrateLegacyToBlocks(first, { "concurrent-strength-maintenance": program }, anchor);
     expect(second).toBe(first); // short-circuit returns the same reference
+  });
+
+  it("Batch 38 regression — planned block WITH log_entry_id re-flips to done under v2", () => {
+    // The exact bug from F10-CSM-P0: user's data was migrated under
+    // blocks_v1 (before BUG-8's shouldFlipDone logic). Their block has
+    // both log_entry_id set AND state === "planned" — because the v1
+    // migrator linked the log but didn't yet know to flip the state.
+    // Under v2 the log-link step re-evaluates and flips.
+    const program = loadProgram("concurrent-strength-maintenance");
+    const anchor = program.phases[0].starts;
+    const store = makeBaseStore("concurrent-strength-maintenance");
+    // Simulate the stuck-under-v1 state: a materialized block on anchor
+    // with log_entry_id and state=planned.
+    const firstPass = migrateLegacyToBlocks(store, { "concurrent-strength-maintenance": program }, anchor);
+    const anchorBlock = Object.values(firstPass.scheduled_blocks ?? {}).find(
+      (b) => b.actual_date === anchor,
+    );
+    if (!anchorBlock) throw new Error("no anchor block materialized");
+    // Force the stuck v1 shape: state=planned + log_entry_id present.
+    firstPass.scheduled_blocks![anchorBlock.id] = {
+      ...anchorBlock,
+      state: "planned",
+      log_entry_id: anchor,
+    };
+    // Attach a matching exercise log entry (evidence).
+    firstPass.logs = {
+      [anchor]: {
+        date: anchor,
+        exercises: {
+          [`${anchorBlock.id}:some_exercise`]: { done: true } as unknown as Store["logs"][string]["exercises"][string],
+        },
+      } as unknown as Store["logs"][string],
+    };
+    // Pretend the store was migrated under v1 (so v2 will re-run).
+    firstPass.migrations_applied = ["blocks_v1"];
+    const secondPass = migrateLegacyToBlocks(firstPass, { "concurrent-strength-maintenance": program }, anchor);
+    const flipped = secondPass.scheduled_blocks?.[anchorBlock.id];
+    expect(flipped?.state).toBe("done"); // was stuck at "planned" pre-Batch-38
+    expect(flipped?.log_entry_id).toBe(anchor);
+    expect(secondPass.migrations_applied).toContain("blocks_v2");
   });
 });

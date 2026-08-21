@@ -33,10 +33,20 @@
 import type { Program, Store, ScheduledBlock } from "../schemas";
 import { materializeBlocks, blockInstanceId, mergeMaterialization } from "../engine/materialize-blocks";
 
-const MIGRATION_ID = "blocks_v1";
+// Batch 38 (2026-08-21) — bumped v1 → v2 so users whose data was migrated
+// under v1 (before BUG-8's shouldFlipDone logic landed) get their stuck
+// state=planned blocks re-evaluated. Without the bump, `needsBlockMigration`
+// returns false on repeat hydrations and the fix never applies to already-
+// migrated stores. The v2 run is idempotent — it only flips planned→done
+// where log evidence exists; done/skipped/moved blocks are untouched.
+const MIGRATION_ID = "blocks_v2";
 
 export function needsBlockMigration(store: Store): boolean {
-  return !(store.migrations_applied ?? []).includes(MIGRATION_ID);
+  const applied = store.migrations_applied ?? [];
+  // Any prior migration counts as "applied" for the base materialization
+  // step (steps 1-3). Only the log-link + state-flip step needs to re-run
+  // if the store was last migrated under blocks_v1.
+  return !applied.includes(MIGRATION_ID);
 }
 
 /**
@@ -139,6 +149,14 @@ export function migrateLegacyToBlocks(
   // PerProgramAdherenceCard was reporting 0/25 despite 23 logged sessions
   // because blocks never flipped from "planned" to "done" without an
   // explicit "Mark done" tap.
+  //
+  // Batch 38 (2026-08-21) — dropped the `if (b.log_entry_id) continue;`
+  // short-circuit. It prevented the shouldFlipDone check from firing on
+  // blocks that were already log-linked under blocks_v1 (before BUG-8
+  // shipped). With the migration ID bump above (v1 → v2), every stuck
+  // planned block now gets re-evaluated exactly once. Idempotent: the
+  // `b.state === "planned"` guard still prevents flipping done→done or
+  // touching skipped/moved.
   const logs = next.logs;
   if (logs) {
     for (const [date, dayLog] of Object.entries(logs)) {
@@ -146,7 +164,6 @@ export function migrateLegacyToBlocks(
       for (const id in blocks) {
         const b = blocks[id];
         if (b.actual_date !== date) continue;
-        if (b.log_entry_id) continue;
         // Exercise-key prefix match: `${blockId}:${exId}` in day.exercises.
         const hasMatchingExercise = Object.entries(dayLog.exercises ?? {}).some(
           ([k, v]) => k.startsWith(`${b.id}:`) && v.done,

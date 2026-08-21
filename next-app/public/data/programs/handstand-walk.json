@@ -79,7 +79,7 @@
     {
       "id": "shoulder_pain_stops_session",
       "rule": "Any shoulder pain during a handstand attempt ends the session — no working through it",
-      "detail": "Sci Reports 2026 pain-associated technique data: shoulder pain during handstand walk is coupled to a compensation pattern — training through it reinforces the compensation. Stop, review the video recording if made, restart next day."
+      "detail": "Pain during load consistently signals a compensation pattern that reinforces with continued exposure. Stop, review the video recording if made, restart next day. (General motor-learning principle; the specific handstand-shoulder biomechanics paper is flagged unverified — the rule survives on principle regardless.)"
     },
     {
       "id": "wrist_volume_capped",
@@ -460,7 +460,7 @@
       },
       {
         "id": "shoulder_pain_stop_rule",
-        "label": "I agree to stop the session if shoulder pain appears during any handstand attempt — no training through it (Sci Reports 2026 pain-associated technique data).",
+        "label": "I agree to stop the session if shoulder pain appears during any handstand attempt — no training through it.",
         "required": true
       }
     ],
@@ -1434,7 +1434,7 @@
       }
     ],
     "week_end_rule": "If the week's freestand-hold retest improved OR wrist symptom score trended down → advance capability_profile.estimated_level where applicable. If freestand hold regressed AND wrist symptom score elevated → hold the level; engine picks lower-level drills next week.",
-    "escalation": "Two red days in a week → skip the higher-load skill session (kick-up or walk attempts) that week, replace with Kinoshita position 1 and hollow-body only. Persistent shoulder pain > 3 days → stop, see a clinician. Sci Reports 2026: pain-associated technique reinforces itself with continued exposure."
+    "escalation": "Two red days in a week → skip the higher-load skill session (kick-up or walk attempts) that week, replace with Kinoshita position 1 and hollow-body only. Persistent shoulder pain > 3 days → stop, see a clinician. Pain-during-load motor-learning principle: continued exposure with pain reinforces the compensation pattern."
   },
   "daily_log_schema": {
     "date": "ISO date",
@@ -1488,7 +1488,7 @@
     {
       "priority": 3,
       "action": "Read the shoulder-pain-stops-session rule and agree to it.",
-      "reason": "Sci Reports 2026 pain-associated technique data: continued exposure with pain reinforces the compensation. Non-negotiable."
+      "reason": "Pain-during-load motor-learning principle: continued exposure with pain reinforces the compensation pattern. Non-negotiable."
     },
     {
       "priority": 4,
@@ -1546,7 +1546,7 @@
       }
     },
     "contraindications": [
-      "Shoulder pain during a handstand attempt — session ends immediately. Do not train through it. Sci Reports 2026 (flagged for founder review): pain-associated practitioners show a compensation pattern — continued exposure reinforces the compensation.",
+      "Shoulder pain during a handstand attempt — session ends immediately. Do not train through it. Pain-during-load motor-learning principle: continued exposure with pain reinforces a compensation pattern.",
       "Osteoporosis diagnosis (or low-BMD DEXA) — freestanding and any bail-risk attempts contraindicated. DiFiori 2006 catalogued distal radius as a common fracture site under this mechanism; vertebral and hip fractures follow. Tier A wall walks + Kinoshita positions with a spotter and soft floor are permitted only after clinician clearance.",
       "Uncontrolled hypertension (BP > 160/100 at rest or unmedicated) — defer all inversions until BP is controlled. Yoga-inversion literature documents transient systolic increases that stack with Valsalva during a kick-up attempt.",
       "Acute wrist injury (sprain, TFCC tear, ligament instability) in the last 6 weeks — wrist-load drills prohibited until cleared by a clinician. Program will offer hollow-body and shoulder-endurance drills only during this window.",
