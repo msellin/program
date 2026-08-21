@@ -21,7 +21,7 @@
  * See `dev/active/cut-c-code-sprint/tasks.md` for phase-by-phase progress.
  */
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { loadProgram, loadExercises } from "@/lib/data-loader";
 import { useStore } from "@/lib/useStore";
 import { WeeklyHeatmap, type WeeklyHeatmapCell, type WeeklyHeatmapCellState } from "@/components/ui/WeeklyHeatmap";
@@ -29,6 +29,8 @@ import { WeeklyNarrativeTile } from "@/components/WeeklyNarrativeTile";
 import { HipProgressTile } from "@/components/HipProgressTile";
 import { EmptyStateCard } from "@/components/EmptyStateCard";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { CutCWindowTierControl, type WindowTier } from "@/components/record/CutCWindowTierControl";
+import { CutCLatestRetestTile } from "@/components/record/CutCLatestRetestTile";
 import { today } from "@/lib/utils";
 import dynamic from "next/dynamic";
 import type { Program, Exercise } from "@/lib/schemas";
@@ -86,9 +88,24 @@ export default function RecordPage() {
   const [program, setProgram] = useState<Program | null>(null);
   const [_byId, setById] = useState<Record<string, Exercise>>({});
   const [error, setError] = useState<string | null>(null);
+  // The WindowTierControl is the source of truth for the Trend section's
+  // zoom. Curve + timeline (Phase 2 remaining) will react to this state.
+  const [_zoomTier, setZoomTier] = useState<WindowTier>("30d");
   const hydrated = useStore((s) => s.hydrated);
   const store = useStore((s) => s.store);
   const primarySlug = useStore((s) => s.store.user_profile?.active_program_id);
+
+  // Data-adaptive default for the zoom control — count days from the
+  // earliest log entry to today.
+  const dataDays = useMemo(() => {
+    const logs = store.logs ?? {};
+    const dates = Object.keys(logs).sort();
+    if (dates.length === 0) return 0;
+    const first = new Date(dates[0] + "T00:00:00");
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return Math.max(0, Math.round((today.getTime() - first.getTime()) / (1000 * 60 * 60 * 24)));
+  }, [store.logs]);
 
   useEffect(() => {
     if (!primarySlug) {
@@ -168,7 +185,9 @@ export default function RecordPage() {
             <WeeklyNarrativeTile program={program} />
           </ErrorBoundary>
 
-          <ScaffoldPlaceholder name="CutCLatestRetestTile" />
+          <ErrorBoundary fallback={<p className="text-[12px] text-muted italic">Latest retest unavailable.</p>}>
+            <CutCLatestRetestTile program={program} store={store} />
+          </ErrorBoundary>
         </div>
       </section>
 
@@ -177,7 +196,10 @@ export default function RecordPage() {
         <SectionAnchor label="Trend" />
         <span id="record-trend" className="sr-only">Trend</span>
         <div className="space-y-3">
-          <ScaffoldPlaceholder name="CutCWindowTierControl · CutCProgramCurveCard · CutCRetestTimeline" />
+          <ErrorBoundary fallback={<p className="text-[12px] text-muted italic">Zoom control unavailable.</p>}>
+            <CutCWindowTierControl dataDays={dataDays} onChange={setZoomTier} />
+          </ErrorBoundary>
+          <ScaffoldPlaceholder name="CutCProgramCurveCard · CutCRetestTimeline" />
 
           {/* Rehab firewall — never in the main Trend curve. Renders as its
               own subsection ONLY when the user has a rehab track. Matrix
