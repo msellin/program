@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Cut D · Morning check — fresh (no yesterday prefill)</title>
+<style>
+  :root {
+    --ground: #0E0F12;
+    --surface: #16181c;
+    --surface-2: #20232a;
+    --line: #5f6570;
+    --line-soft: #2a2e37;
+    --line-strong: #6b717d;
+    --muted: #93989f;
+    --ink: #D6D9DE;
+    --strong: #F0F1F3;
+    --bronze: #d97e5b;
+    --green: #6bb885;
+    --amber: #d9a86b;
+    --red: #d97e6b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--ground); color: var(--ink); font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; font-size: 14px; line-height: 1.5; }
+  body { width: 393px; padding: max(16px, env(safe-area-inset-top)) 16px calc(100px + env(safe-area-inset-bottom)); }
+  .mono { font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace; font-variant-numeric: tabular-nums; }
+  .mono-caps { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); }
+  h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; color: var(--strong); line-height: 1.1; }
+  .strong { color: var(--strong); }
+  .muted { color: var(--muted); }
+
+  /* Back link */
+  .back-link { display: inline-flex; align-items: center; gap: 4px; font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 12px; text-decoration: none; min-height: 44px; padding-top: 12px; padding-bottom: 12px; }
+
+  /* Header */
+  header.check-header { margin-bottom: 16px; }
+  header.check-header .eyebrow { margin-top: 4px; }
+
+  /* Live verdict card */
+  .verdict { padding: 12px; border-radius: 6px; border: 1px solid var(--line-soft); background: var(--surface); margin-bottom: 24px; border-left: 4px solid var(--green); }
+  .verdict.amber { border-left-color: var(--amber); }
+  .verdict.red { border-left-color: var(--red); }
+  .verdict-pill { display: inline-flex; align-items: center; gap: 6px; font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--strong); }
+  .verdict-pill .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+  .verdict.amber .verdict-pill .dot { background: var(--amber); }
+  .verdict.red .verdict-pill .dot { background: var(--red); }
+  .verdict-sub { color: var(--ink); font-size: 13px; margin-top: 6px; line-height: 1.5; }
+  .verdict-cited { color: var(--ink); font-size: 12px; margin-top: 6px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; padding: 6px 0; min-height: 44px; }
+  .verdict-cited .cited-glyph { font-family: 'JetBrains Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--strong); font-weight: 500; }
+  .verdict-cited .arrow { color: var(--muted); margin-left: auto; }
+
+  /* Section eyebrow with rule */
+  .section-anchor { display: flex; align-items: center; gap: 8px; margin: 20px 0 12px; }
+  .section-anchor .rule { flex: 1; height: 1px; background: linear-gradient(to right, var(--line-soft), transparent); }
+  .section-anchor .rule.left { background: linear-gradient(to left, var(--line-soft), transparent); flex: 0 0 20px; }
+
+  /* Region row */
+  .region-row { padding: 14px 0; border-bottom: 1px solid var(--line-soft); }
+  .region-row:last-child { border-bottom: 0; }
+  .region-row .row-label { display: flex; align-items: baseline; justify-content: space-between; font-size: 14px; color: var(--strong); font-weight: 500; margin-bottom: 8px; }
+  .region-row .row-label .lat { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.15em; }
+  .tap-scale { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .tap-scale button { min-height: 44px; padding: 10px 6px; font-size: 12px; font-family: 'Inter', sans-serif; color: var(--muted); background: transparent; border: 1px solid var(--line-strong); border-radius: 6px; cursor: pointer; text-align: center; }
+  .tap-scale button.active { color: var(--strong); border-color: var(--strong); background: var(--surface-2); position: relative; }
+  .tap-scale button.active::after { content: ''; position: absolute; left: 20%; right: 20%; bottom: -1px; height: 2px; background: var(--strong); border-radius: 1px; }
+  .tap-scale button.amber.active { border-color: var(--amber); }
+  .tap-scale button.amber.active::after { background: var(--amber); }
+  .tap-scale button.red.active { border-color: var(--red); }
+  .tap-scale button.red.active::after { background: var(--red); }
+
+  /* Regions block wrapper */
+  .regions-block, .selectors-block { background: var(--surface); border: 1px solid var(--line-soft); border-radius: 6px; padding: 4px 12px; }
+
+  /* Flag chips row */
+  .flags-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .flag-chip { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 8px 14px; border: 1px solid var(--line-strong); border-radius: 20px; color: var(--muted); background: transparent; font-size: 13px; cursor: pointer; }
+  .flag-chip.on { color: var(--strong); border-color: var(--amber); background: rgba(217, 168, 107, 0.08); }
+  .flag-chip .indicator { width: 8px; height: 8px; border-radius: 50%; background: var(--line-strong); }
+  .flag-chip.on .indicator { background: var(--amber); }
+
+  /* Selector rows (context) */
+  .selector-row { padding: 12px 0; border-bottom: 1px solid var(--line-soft); }
+  .selector-row:last-child { border-bottom: 0; }
+  .selector-row .sel-label { font-size: 14px; color: var(--strong); font-weight: 500; margin-bottom: 8px; }
+  .selector-row .seg { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; border: 1px solid var(--line-soft); border-radius: 6px; padding: 3px; }
+  .selector-row .seg-2 { grid-template-columns: repeat(3, 1fr); }
+  .selector-row .seg button { min-height: 40px; padding: 8px 4px; font-size: 12px; color: var(--muted); background: transparent; border: 0; border-radius: 4px; cursor: pointer; }
+  .selector-row .seg button.active { background: var(--surface-2); color: var(--strong); font-weight: 500; }
+
+  /* Outside training */
+  .free-text-block { margin-top: 20px; }
+  .free-text-block label { font-size: 14px; color: var(--strong); font-weight: 500; display: block; margin-bottom: 8px; }
+  .free-text-block input { display: block; width: 100%; padding: 12px 14px; min-height: 44px; font-size: 15px; border: 1px solid var(--line-strong); border-radius: 6px; background: var(--surface); color: var(--ink); }
+  .free-text-block .hint { color: var(--muted); font-size: 12px; margin-top: 6px; }
+
+  /* Sticky CTA */
+  .sticky-cta { position: fixed; left: 0; right: 0; bottom: 0; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); background: linear-gradient(to top, var(--ground) 0%, var(--ground) 60%, rgba(14,15,18,0)); max-width: 393px; margin: 0 auto; }
+  .sticky-cta button { width: 100%; min-height: 52px; padding: 14px; background: var(--bronze); color: var(--ground); border: 0; border-radius: 8px; font-weight: 600; font-size: 15px; cursor: pointer; box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 1px 2px rgba(0,0,0,0.4); }
+
+  /* Bottom nav (visual context only) */
+  .bottomnav { position: fixed; bottom: calc(80px + env(safe-area-inset-bottom)); left: 0; right: 0; display: none; }
+
+</style>
+</head>
+<body>
+
+<a class="back-link" href="#">← Back to Day</a>
+
+<header class="check-header">
+  <h1>Morning check</h1>
+  <p class="mono-caps eyebrow">Wednesday · 21 Aug · 05:47</p>
+</header>
+
+<!-- LIVE VERDICT (renders live as user taps) -->
+<div class="verdict">
+  <span class="verdict-pill"><span class="dot"></span>Workout ready</span>
+  <p class="verdict-sub">Progress load — nothing above <span class="mono">3/10</span> and no flags.</p>
+  <div class="verdict-cited">
+    <span class="cited-glyph">Cited</span>
+    Kellmann 2010 · pain-provocation thresholds
+    <span class="arrow">→</span>
+  </div>
+</div>
+
+<!-- REGIONS -->
+<div class="section-anchor">
+  <span aria-hidden class="rule left"></span>
+  <span class="mono-caps">Regions</span>
+  <span aria-hidden class="rule"></span>
+</div>
+
+<div class="regions-block">
+  <div class="region-row">
+    <div class="row-label"><span>Groin</span><span class="lat">L</span></div>
+    <div class="tap-scale">
+      <button class="active">None</button>
+      <button>Mild</button>
+      <button class="amber">Notable</button>
+      <button class="red">Severe</button>
+    </div>
+  </div>
+  <div class="region-row">
+    <div class="row-label"><span>Low back</span></div>
+    <div class="tap-scale">
+      <button class="active">None</button>
+      <button>Mild</button>
+      <button class="amber">Notable</button>
+      <button class="red">Severe</button>
+    </div>
+  </div>
+  <div class="region-row">
+    <div class="row-label"><span>Buttock</span><span class="lat">L</span></div>
+    <div class="tap-scale">
+      <button>None</button>
+      <button class="active">Mild</button>
+      <button class="amber">Notable</button>
+      <button class="red">Severe</button>
+    </div>
+  </div>
+  <div class="region-row">
+    <div class="row-label"><span>Shoulder</span><span class="lat">R</span></div>
+    <div class="tap-scale">
+      <button class="active">None</button>
+      <button>Mild</button>
+      <button class="amber">Notable</button>
+      <button class="red">Severe</button>
+    </div>
+  </div>
+</div>
+
+<!-- FLAGS -->
+<div class="section-anchor">
+  <span aria-hidden class="rule left"></span>
+  <span class="mono-caps">Flags · tap to toggle</span>
+  <span aria-hidden class="rule"></span>
+</div>
+
+<div class="flags-row">
+  <button class="flag-chip"><span class="indicator" aria-hidden></span>Woke me at night</button>
+  <button class="flag-chip"><span class="indicator" aria-hidden></span>Shortened stride</button>
+  <button class="flag-chip"><span class="indicator" aria-hidden></span>Painful click</button>
+</div>
+
+<!-- CONTEXT -->
+<div class="section-anchor">
+  <span aria-hidden class="rule left"></span>
+  <span class="mono-caps">Context</span>
+  <span aria-hidden class="rule"></span>
+</div>
+
+<div class="selectors-block">
+  <div class="selector-row">
+    <div class="sel-label">Morning stiffness</div>
+    <div class="seg">
+      <button class="active">None</button>
+      <button>&lt;15 min</button>
+      <button>15-30</button>
+      <button>&gt;30</button>
+    </div>
+  </div>
+  <div class="selector-row">
+    <div class="sel-label">Life load</div>
+    <div class="seg seg-2">
+      <button class="active">Fresh</button>
+      <button>Normal</button>
+      <button>Cooked</button>
+    </div>
+  </div>
+</div>
+
+<!-- OUTSIDE TRAINING -->
+<div class="free-text-block">
+  <label for="outside">Outside training yesterday</label>
+  <input id="outside" type="text" placeholder="e.g. 90 min padel, poor sleep" />
+  <p class="hint">Notes fold into the weekly narrative — the engine reads keywords, doesn't parse sentences.</p>
+</div>
+
+<!-- STICKY CTA -->
+<div class="sticky-cta">
+  <button type="submit">Save check <span aria-hidden>→</span></button>
+</div>
+
+</body>
+</html>
