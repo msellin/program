@@ -127,6 +127,16 @@ body {
   color: var(--color-muted);
 }
 
+/* Batch 36 P1 (audit 2026-08-21 · app-mobile-ux) — iOS sticky-hover
+   note. Tailwind 4 already gates all `hover:` utilities via
+   `@media (hover: hover)` by default, so touch devices don't apply
+   :hover styles after tap. The audit's "17 bare hover:" concern is
+   a non-issue on Tailwind 4 (was a real risk on Tailwind 2). Kept
+   this comment as documentation so future authors don't try to
+   manually add `active:` twins to every hover: site "just to be safe."
+   Tap-highlight is separately killed on `html,body` above via
+   -webkit-tap-highlight-color: transparent. */
+
 /* Range slider — light-on-dark reskin */
 input[type="range"] {
   accent-color: var(--color-bronze);
