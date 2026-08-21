@@ -97,7 +97,28 @@ Reject anything the matrix flagged as anti-pattern OR anything that would compet
 
 - **Streaks, XP, tenure counters** (R5) — retest events carry tenure identity
 - **Autonomous score-hero** (R8) — no single number that summarises "how am I doing overall"
-- **Multi-accent palette** — bronze reserves CTA slot; no green/amber/red status pips in the curve
+- **Multi-accent palette in UI chrome** — bronze reserves CTA slot. Data-viz palette uses semantic state tokens (green/amber/muted/slate) which have always been permitted for state contexts; no new decorative accents.
 - **Whoop-style score reveal animation** — Trend curve draws statically with `motion-reduce` guard
 - **Peloton-style milestone gamification** — no confetti, no "100 sessions" award badge
 - **Fitbod-style implicit tenure mode** — this surface works identically at day 30 and day 400
+
+## Cut C substitution rules (peer patterns Terav explicitly replaces)
+
+Stress-test 2026-08-21 (product-design-lead) surfaced two peer conventions Terav omits in favour of confirm-first alternatives. Locking these in as R-rules prevents accidental regression during day-90/day-14 mockups + code:
+
+- **R-CutC-1 · Retests supersede PRs as the atomic celebration unit.** Every strength peer (Hevy, Strava, Peloton, NRC, btwb, Freeletics) has a PR badge/trophy grid or personal-best-notification pattern. Terav uses RetestTimeline events instead. The unit-of-celebration is a scheduled retest tied to a citation — not an arbitrary lifetime PR. Do NOT add a "PRs" section, badge shelf, or PR-notification banner to Record.
+- **R-CutC-2 · Export supersedes share as the tenure-social affordance.** Every peer with a progress surface (Strava, Hevy, Peloton, Freeletics, SugarWOD, Wodwell) has social share/feed integration on progress. Terav uses the top-right EXPORT button (JSON with citation payload) instead. The tenure-external artifact is portable data, not a shareable image. Do NOT add a "Share" affordance, an activity feed, or peer comparison overlays to Record.
+
+## Data-viz palette (added 2026-08-21 per founder mandate "colorful, users like it")
+
+The chart palette lives under state-color rules (R2 remains intact for UI chrome). Aliases existing v1.1.1 state tokens plus a 3-step lightness ramp:
+
+| Token | Value | Use |
+|---|---|---|
+| `--dv-curve-primary` | slate `#79b8c4` | rolling-avg line, single hue for every program |
+| `--dv-retest-hit` | green `#6bb885` | retest event met/beat target |
+| `--dv-retest-hold` | muted `#93989f` | retest event flat/held (majority state over 400 days) |
+| `--dv-retest-back` | amber `#d9a86b` | retest event regressed — NEVER red (that's R8 score-drama) |
+| `--dv-bar-low/mid/high` | `#5f6570 / #7c8493 / #a8b0bd` | 3-step lightness ramp on monthly-total bars |
+
+**Zoom tier label convention:** `30d / 90d / 1y / All`. This is Hevy-aligned, NOT Oura-aligned. Oura uses `d/w/m/y`. Correct citation matters — Hevy is the twin.

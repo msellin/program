@@ -245,13 +245,51 @@ The founder delegated these back with "answer them yourself or with agent help."
 - **Defer to Cut A: Program transitions on the curve.** If a user switched 5/3/1 → CSM at week 40, that context is invisible. Peer analog: TrainingPeaks phase markers. Adds engineering surface (track program-changeover dates) — worth doing but not blocking.
 - **Defer to Cut A: Deload period shading.** Currently invisible; 4-week dip reads as a plateau not intentional recovery. Peer analog: TrainingPeaks deload shading. Same engineering surface concern.
 
+## Peer-screenshot stress test (2026-08-21 product-design-lead)
+
+Founder mandate: "do a stress test and if all good, then proceed." Fired product-design-lead with WebFetch access to pull actual peer screenshots and verify my 3 claims about chart-type category-alignment.
+
+**Result: PROCEED.** All 3 claims verified with peer citations:
+
+1. **5 chart types are mainstream.** VERIFIED with one citation correction: the 30d/90d/1y/All zoom labels are Hevy-aligned, NOT Oura-aligned (Oura uses d/w/m/y). Correction folded into DESIGN-cut-c.md.
+2. **Retest pins on curve + RetestTimeline as tenure surface are Terav-specific.** VERIFIED — zero of 31 peers do either. Matrix G1 vacancy confirmed.
+3. **Score ring intentionally omitted.** VERIFIED — Terav sits with the strength/rehab peer cluster (Hevy, StrongLifts, Boostcamp, btwb) which does NOT use score rings; the ring cluster is wearable/readiness apps (Whoop, Oura, Apple, Garmin) which is a different reference class per R8.
+
+**3 hidden divergences the stress test surfaced** — all now locked in as R-rules in DESIGN-cut-c.md:
+- **R-CutC-1** · Retests supersede PRs as the atomic celebration unit (every strength peer has PR badges; Terav uses RetestTimeline events tied to citations instead)
+- **R-CutC-2** · Export supersedes share as the tenure-social affordance (every peer has social share/feed on progress; Terav uses JSON export with citation payload)
+- **State-heatmap semantic** — Terav's readiness heatmap encodes state per week, not activity density like btwb/Strava. Added explicit "green day / amber day" legend row beneath the heatmap so the semantic doesn't get miscategorized on first glance.
+
+## Day-90 persona-recover mockup
+
+Design-lead's original ask was: verify the rehab firewall is structural, not just absent. Now proven.
+
+- File: `record-mockup-day90-recover.html`
+- Screenshot: `record-mockup-day90-recover.png` (canonical rehab-persona artifact)
+
+**What day-90 verifies:**
+- The same three-section shape (Now / Trend / Log) accommodates a rehab-primary user natively
+- Zero code-level "rehab mode" — every component adapts via data, not layout
+- WindowTierControl auto-selects 90d (data-adaptive default)
+- Chart curve renders symptom score (0-10) with direction: "lower is better"; slate line slopes downward = improvement
+- Retest events use the same tri-color palette — all 3 events are green ("symptom ↓") since the persona is recovering; would show muted (hold) or amber (regressed) if the retest missed
+- Weekly narrative uses rehab-appropriate framing ("Groin (L) trending down — 3.5/10 avg this week vs 5.0/10 in phase 1")
+- LatestRetestTile cites "Kellmann 2010 · pain-provocation guidelines" — a physio source, not a strength coach source. Citation contract holds across program types.
+- Log rows use rehab volume unit ("4 drills · 22 min") instead of strength block count
+- Log heatmap reverts to 12-week matrix mode (under-120-days threshold) instead of year-column bars — the primitive re-projects axes based on data range, as designed
+
+**What day-90 does NOT verify (deferred to code + a concurrent-persona harness run):**
+- The firewall when a user has BOTH strength AND rehab tracks — that's persona-strength-hip or similar concurrent persona. At code time the aggregation math must exclude rehab metrics from the strength curve. Mockup-level verification isn't possible for that case.
+
 ## Next step
 
-Awaiting your review of the **v3 mockup** (`record-mockup-day400-v3.png`) — this is now the canonical Cut C artifact. Three paths:
+Cut C mockup phase is essentially complete. Three paths:
 
-1. **Approve v3** → generate day-90 mockup with persona-recover state (verifies rehab firewall — currently unproven since day-400 uses strength persona with no rehab track). Then day-14 empty state. Then code.
-2. **Push back on the palette** — I can push the color harder (add a raw-points overlay in `dv-curve-soft`, add category color to programs), or pull back (revert to monotone). Say the direction.
-3. **Push back on any Q1-Q6 answer** — I re-render before day-90.
+1. **Approve day-400 v3 + day-90 recover** → generate day-14 empty-state mockup (with "every change cites its source" onboarding beacon per Q6), then move to code (React components with `CutC-` prefix + `/record` route + JSON export endpoint + synthetic 400-day persona for verification harness).
+2. **Push back on anything specific in v3 or day-90** — I re-render before moving to day-14.
+3. **Skip day-14 mockup** — day-14 is largely a "less data" version of the same surface. The brief §3a already has a detailed ASCII wireframe for it. If you're confident in the shape from v3 + day-90, I can go straight to code and validate day-14 empty state in Playwright at code time.
+
+My recommendation: **skip day-14 mockup, go to code.** Day-14 is the low-density state; the ASCII wireframe in the brief covers it; verification is cheap at code time via a synthetic day-14 persona. Saves one mockup cycle.
 
 ## Not yet decided (I want to flag these before committing to code)
 
