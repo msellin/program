@@ -258,7 +258,7 @@ export function TodaySession({
             ? programDisplayName(primary, primary.slug)
             : slugOverride
               ? "Focus session"
-              : "Today"}
+              : "Day"}
         </h1>
       </header>
 

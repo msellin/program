@@ -60,10 +60,9 @@ export function FirstRunBanner() {
         </button>
       </div>
       <ul className="text-[14px] text-muted space-y-1 leading-relaxed">
-        <li><span className="text-ink">Today</span> — the session you&apos;re prescribed right now.</li>
-        <li><span className="text-ink">Week</span> — the 7-day rhythm.</li>
-        <li><span className="text-ink">Progress</span> — training maxes, retests, trends.</li>
-        <li><span className="text-ink">History</span> — every logged session, replayable.</li>
+        <li><span className="text-ink">Day</span> — the session you&apos;re prescribed right now.</li>
+        <li><span className="text-ink">Plan</span> — the 7-day rhythm; browse other days from here.</li>
+        <li><span className="text-ink">Record</span> — training maxes, retests, trends, and every logged session.</li>
         <li><span className="text-ink">Profile</span> — account, active plans, menu.</li>
       </ul>
       <p className="text-[12px] text-muted pt-1">

@@ -99,17 +99,19 @@ export default function GuidePage() {
       </Section>
 
       <Section title="How to use the tabs">
-        <Row label="Today">
-          Today&apos;s prescribed session. Strength shows exercises with weight, reps,
-          RPE per set, plate breakdown and a bar visual. Aerobic / rowing shows the block
+        <Row label="Day">
+          Today&apos;s prescribed session — fixed to the current calendar day.
+          Strength shows exercises with weight, reps, RPE per set, plate
+          breakdown and a bar visual. Aerobic / rowing shows the block
           prescription plus a session-log card (duration, HR, splits, watts).
+          To browse tomorrow or yesterday, go to Plan.
         </Row>
-        <Row label="Week">The 7-day rhythm. Today is highlighted. Tap any date to view its session.</Row>
-        <Row label="Progress">
-          Training maxes, milestones, retest metrics + trend charts. Insights tab
-          surfaces weekly narrative and program-specific progress.
+        <Row label="Plan">The 7-day rhythm plus date browsing. Tap any date to view or open its session; move / skip / reschedule from here.</Row>
+        <Row label="Record">
+          Rolling-average trend, retest events (each one cited to a study or
+          your log signal), and the full activity log. Same surface at day 30
+          and day 400 — the zoom control up top adjusts the window.
         </Row>
-        <Row label="History">Activity heatmap, symptom trend, strength progression, and an expandable day log with set-level detail.</Row>
         <Row label="Profile">Signed-in identity, active plan(s), and a compact menu.</Row>
         <p className="text-[14px] text-muted italic pt-2">
           These are the bottom-nav tabs. The rest live behind the ⋮ menu in the top right:
