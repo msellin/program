@@ -31,6 +31,8 @@ import { EmptyStateCard } from "@/components/EmptyStateCard";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { CutCWindowTierControl, type WindowTier } from "@/components/record/CutCWindowTierControl";
 import { CutCLatestRetestTile } from "@/components/record/CutCLatestRetestTile";
+import { CutCRetestTimeline } from "@/components/record/CutCRetestTimeline";
+import { CutCActivityHeatmap } from "@/components/record/CutCActivityHeatmap";
 import { today } from "@/lib/utils";
 import dynamic from "next/dynamic";
 import type { Program, Exercise } from "@/lib/schemas";
@@ -199,7 +201,10 @@ export default function RecordPage() {
           <ErrorBoundary fallback={<p className="text-[12px] text-muted italic">Zoom control unavailable.</p>}>
             <CutCWindowTierControl dataDays={dataDays} onChange={setZoomTier} />
           </ErrorBoundary>
-          <ScaffoldPlaceholder name="CutCProgramCurveCard · CutCRetestTimeline" />
+          <ScaffoldPlaceholder name="CutCProgramCurveCard — Phase 2c" />
+          <ErrorBoundary fallback={<p className="text-[12px] text-muted italic">Retest timeline unavailable.</p>}>
+            <CutCRetestTimeline program={program} store={store} />
+          </ErrorBoundary>
 
           {/* Rehab firewall — never in the main Trend curve. Renders as its
               own subsection ONLY when the user has a rehab track. Matrix
@@ -225,7 +230,10 @@ export default function RecordPage() {
         <SectionAnchor label="Log" />
         <span id="record-log" className="sr-only">Log</span>
         <div className="space-y-3">
-          <ScaffoldPlaceholder name="CutCActivityHeatmap · LogList" />
+          <ErrorBoundary fallback={<p className="text-[12px] text-muted italic">Activity heatmap unavailable.</p>}>
+            <CutCActivityHeatmap store={store} />
+          </ErrorBoundary>
+          <ScaffoldPlaceholder name="LogList (accordion rows) — Phase 3" />
         </div>
       </section>
     </div>
