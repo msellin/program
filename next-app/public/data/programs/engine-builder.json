@@ -1581,7 +1581,8 @@
   "retest_metrics": [
     {
       "metric_id": "submax_hr_pace5_bpm",
-      "display_name": "Submax HR at pace-5 (row 2:00/500m)",
+      "display_name": "Submax HR — easy-effort avg",
+      "note": "Batch 39 (2026-08-21) F10-EB caveat b: display_name was 'Submax HR at pace-5 (row 2:00/500m)' but the source_ref filters only on intensity == 'easy' — RunLog has no pace_500m field, so the pace anchor couldn't be enforced. Renamed to reflect what's actually computed. metric_id retained for schema stability.",
       "unit": "bpm",
       "direction": "lower_is_better",
       "source": "run_field",
@@ -1747,7 +1748,7 @@
       "from": "REFERENCED",
       "to": "REVIEWED",
       "date": "2026-08-19",
-      "note": "Rønnestad restated + HERITAGE gate shipped + population caveats added. 3 caveats: mid-block source_ref (now fixed via BUG-7), display_name overclaim, GraduationCard collision (already resolved)."
+      "note": "Rønnestad restated + HERITAGE gate shipped + population caveats added. 3 caveats resolved: mid-block source_ref (fixed via BUG-7), display_name overclaim (fixed Batch 38 2026-08-21 · dropped pace anchor to match runs[] schema reality), GraduationCard collision (already resolved)."
     }
   ]
 }

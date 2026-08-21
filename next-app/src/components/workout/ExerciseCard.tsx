@@ -367,7 +367,7 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
                 onClick={() => setNotesOpen(true)}
                 className="inline-flex items-center gap-1.5 text-[12px] text-slate hover:text-ink"
               >
-                <MessageSquare size={13} />
+                <MessageSquare size={14} />
                 Add note
               </button>
             )}
