@@ -5,15 +5,16 @@ import { ChevronLeft, Volume2, Vibrate, Palette, Languages, Download } from "luc
 import { useHapticPref, useSoundPref } from "@/lib/useUserPrefs";
 import { useInstallPrompt } from "@/lib/useInstallPrompt";
 import { hapticTap } from "@/lib/utils";
+import { playConfirm } from "@/lib/sound";
 
 /**
  * F8 Batch 29 · Settings v1.
  *
- * Live toggles: sound (forward-looking — no Audio() calls exist yet but the
- * toggle exists so timer-complete sounds land as a real feature), haptic
- * (gates existing hapticTap). Theme + language are placeholder rows with
- * "coming soon" captions — visible roadmap without a broken toggle.
- * Add-to-home-screen row absorbs the P2-8 install prompt from Profile More.
+ * Live toggles: sound (gates lib/sound.ts — Accept/Confirm blip + rest-
+ * timer 3-note ding), haptic (gates existing hapticTap). Theme + language
+ * are placeholder rows with "coming soon" captions — visible roadmap
+ * without a broken toggle. Add-to-home-screen row absorbs the P2-8
+ * install prompt from Profile More.
  */
 export default function SettingsPage() {
   const [sound, setSound] = useSoundPref();
@@ -50,6 +51,13 @@ export default function SettingsPage() {
           onToggle={(v) => {
             setSound(v);
             hapticTap("light");
+            // Preview the sound on toggle-ON so users can confirm audio
+            // actually plays (previously the toggle was a no-op placeholder).
+            if (v) {
+              // The store write happens synchronously via localStorage;
+              // playConfirm reads the same key, so this fires audibly.
+              queueMicrotask(() => playConfirm());
+            }
           }}
         />
       </Section>

@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { X } from "lucide-react";
 import { useFocusTrap } from "@/lib/useFocusTrap";
 import { hapticTap } from "@/lib/utils";
+import { playConfirm } from "@/lib/sound";
 
 /**
  * In-app modal that replaces `window.confirm()`. Same yes/no semantics, but
@@ -104,6 +105,7 @@ export function ConfirmSheet({
             type="button"
             onClick={() => {
               hapticTap(danger ? "medium" : "light");
+              playConfirm();
               onConfirm();
             }}
             className={`flex-1 rounded py-2 min-h-[44px] text-sm font-semibold ${

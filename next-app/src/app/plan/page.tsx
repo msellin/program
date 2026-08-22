@@ -716,8 +716,23 @@ function WeekDayActions({
   }
 
   if (!hasSession) {
-    // Rest days show no actions — nothing to open, move, or skip.
-    return null;
+    // Bug fix 2026-08-22 · founder report — on rest days there was zero
+    // path to log ad-hoc off-plan work (a Friday evening run, a CrossFit
+    // class). The 3-verb grid was hidden entirely. Today + past rest days
+    // now get a single "Log a session →" verb that lands on the session
+    // route in RestDayCard + RunSlotCard mode. Future rest days stay
+    // silent (nothing to log yet).
+    if (isFuture || !primarySlug) return null;
+    return (
+      <div className="mt-3">
+        <Link
+          href={`/session/${primarySlug}?date=${dateISO}`}
+          className="w-full text-[14px] font-semibold px-3 py-2 rounded border border-line text-ink hover:bg-line-soft min-h-[44px] flex items-center justify-center text-center"
+        >
+          Log a session →
+        </Link>
+      </div>
+    );
   }
 
   return (

@@ -10,17 +10,17 @@
 
 These are **IDEAS, not action items**. The engine + rehab-first positioning overrides "cleaner is better," so Margus picks what to ship. Batches ship in 6-12h chunks — don't try to close the whole list in one sitting, and respect the "no UI churn between audits" rule (each shipped batch should stand on its own before the next audit re-scans). Real bugs go first because they're broken code the audits happened to surface; everything else is prioritized by user-visible ROI. Sizing (S/M/L/XL) is per item.
 
-**Counts by bucket (post-Batch-28):**
+**Counts by bucket (post-Cut-D audit, 2026-08-21):**
 
 - **Bugs:** 0 open
 - **P0:** 0 open
 - **P1:** 0 open
-- **P2:** 0 open — 10/10 shipped in Batch 28
-- **Features on-deck:** 0 open
-- **Strategic (founder decision):** 2 items (S3, S4 — S2 closed via walk-through)
+- **P2:** 0 open — the last carry (P2-32 icon-stroke discipline) remains `[ ]` deferred as low-ROI codemod, tracked below
+- **Features on-deck:** 0 open — F10 fully closed via S6 Option C (personal programs outside the ladder)
+- **Strategic (founder decision):** 3 items — S3, S4, QA-1
 - **Rejected:** 12 items — do not ship
 
-Total open surface: **2 strategic + 12 rejected = 14 line items** (down from 110 pre-Batch-17). **Every audit finding shipped or explicitly rejected.** Only S3 (billing timing) + S4 (F5 correlation trigger) remain — both are founder decisions gated on future user counts.
+Total open surface: **1 deferred polish (P2-32) + 3 strategic + 12 rejected = 16 line items** (down from 110 pre-Batch-17). **Every audit finding through 2026-08-21 shipped, deferred with rationale, or explicitly rejected.** Open decisions: S3 (billing timing), S4 (F5 correlation trigger), QA-1 (shipping-log drift verification protocol). Cut C · Record redesign (5→4 tabs) shipped Batch 39; Cut D · Check redesign (4-option tap-scale + live verdict) shipped Batch 40; Week 3/4 IA refactor (Today→Day, Week→Plan, kill DateNav, route renames) shipped Batches 41-42.
 
 ---
 
@@ -58,6 +58,9 @@ Keep the convention terse — the four markers cover every state. Don't invent n
 - [x] **BUG-9** — ALREADY RESOLVED before S5 pass. Graduation gate at `page.tsx:256` (Batch 5, `05e101b`) suppresses ProposalStack + SignalsStrip + RetestReminder when `isPastProgramEnd()` is true. Verified: 0 "RETEST" leaks across persona-engine, persona-engine-fast, persona-graduate today artifacts. S5 REV-1 was reporting stale delta-2 finding.
 - [x] **BUG-10** — ALREADY RESOLVED before S5 pass. Verified persona-rowing + persona-rowing-erratic today artifacts render only GraduationCard (no YourPlanCard/reveal-card/phase-header/retest-window collision). S5 REV-5 was reporting stale delta finding.
 - [~] **BUG-11** — SPLIT: (a) csm-amber-week body branch ALREADY RENDERED at `SignalsStrip.tsx:371-388` before S5 pass ("phantom fix. CSM delta-2 caught" comment); (b) amber-week schedule swap (4×4→recovery) remains a real engine feature — promoted to **F12** since it's authoring the block-substitution primitive, not fixing a bug. Advisory in the current expanded body honestly names the deferred state.
+- [x] **BUG-12** — tm_bump Accept re-fires bug shipped 2026-08-22. Accept called `setTM(exId, newTM)` but never dismissed the proposal, so `evaluateOverperformer` re-ran on the *bumped* TM (still 3-green + felt-strong) and re-issued `tm_bump` with `currentTM = <just-bumped>` → tap-storm could stack +5 kg × 10 = +50 kg in one gesture. Founder reported 50 kg overshoot. Mirrored the Ignore path — Accept now `dismissProposal(date, `tm-bump:${exId}`)` per lift, so `selectTMBump` filters remaining for the rest of the day. Files: `next-app/src/lib/proposals/useProposalActions.ts:58-72`. Size: XS
+- [x] **BUG-13** — Plan rest-day can't log any session shipped 2026-08-22. On rest days, `WeekDayActions` returned null so there was zero path to record an off-plan CrossFit class or evening run — user had to skip via other means. Rest days now render a single "Log a session →" verb (today + past only; future rest days stay silent) linking to `/session/[primarySlug]?date=<dateISO>`, which renders `RestDayCard` + `RunSlotCard` for ad-hoc logging. Files: `next-app/src/app/plan/page.tsx:718-737`. Size: XS
+- [x] **BUG-14** — Sound settings toggle was a placeholder shipped 2026-08-22. Settings/Sound comment literally said "no Audio() calls exist yet." Added `lib/sound.ts` (Web Audio API — synthesized tones, no assets, offline-safe): `playConfirm()` (short 880 Hz blip) + `playTimerComplete()` (E5-A5-E6 3-note ding). Wired into `ConfirmSheet` confirm button, `useProposalActions` Accept path, `RestTimer` on-hit effect, and preview-on-toggle-ON in Settings. Both functions gated by `readSoundPref()` — flip the Settings toggle and audio actually stops. Files: `next-app/src/lib/sound.ts`, `next-app/src/components/ConfirmSheet.tsx`, `next-app/src/lib/proposals/useProposalActions.ts`, `next-app/src/components/workout/RestTimer.tsx`, `next-app/src/app/settings/page.tsx`. Size: S
 
 ---
 
@@ -126,7 +129,7 @@ From roadmap sync + product-concerns-2026-08-17 + design-lead brief `2026-08-19-
 
   Plan doc `dev/active/F8-second-plan.md` no longer active — objectives met via the incremental multi-push approach. Persona harness regeneration would be nice but not required (routes are additive; existing personas still exercise Today's dashboard path since they don't call slugOverride).
 - [x] **F9 · Batch 30 — DashboardBlock primitive** — COMPLETE (audited 2026-08-21). First push shipped 2026-08-19 (`b68812f`). Primitive live at `src/components/DashboardBlock.tsx`. All deferred follow-ups now shipped: Today dashboard uses DashboardBlock in the multi-track group renders (`TodaySession.tsx:591,643`), session route inherits via TodaySession, program-preview restructure (P1-74) shipped Batch 21 (`7fd3198` — Who → What → What it takes → Adapts → How we prove full reorder). ExerciseCard fixes (P1-71, P1-73) also landed. IntakeClient also uses it (`intake/IntakeClient.tsx`). Primitive is comprehensively adopted.
-- [~] **F10 · Batch 31 — Readiness ladder ship** — 5 of 6 REVIEWED promotions shipped 2026-08-19 (`38d7822`). Schema (reviewed_by, reviewed_at, status_history, review_evidence[]) added. DRAFT rename + catalog filter + attribution row on preview page + honesty callout on catalog all live. Promoted: engine-builder, overhead-mobility, handstand-walk, CSM, rowing-2k. **REMAINING:** anterior-hip-rebuild promotion blocked on **S6** decision (personal-program REVIEWED policy).
+- [x] **F10 · Batch 31 — Readiness ladder ship** — 5 of 6 REVIEWED promotions shipped 2026-08-19 (`38d7822`). Schema (reviewed_by, reviewed_at, status_history, review_evidence[]) added. DRAFT rename + catalog filter + attribution row on preview page + honesty callout on catalog all live. Promoted: engine-builder, overhead-mobility, handstand-walk, CSM, rowing-2k. Anterior-hip-rebuild resolved via **S6 Option C** (2026-08-19, `9174961`): personal programs are excluded entirely from the ladder — StatusChip returns null when personal=true. Hip stays REFERENCED under the hood for schema conformance. F10 close-out follow-ups tracked in Batch 38 (F10-CSM-P0, F10-Rowing, F10-HSW, F10-EB) and Batch 38.1 (F9-completeness-audit).
 
   **S5 rerun outcomes (2026-08-19, 6 program re-review agents):**
     - **REV-1 · engine-builder** — VERDICT: **PROMOTE-WITH-CAVEATS.** All 3 Path-A items (Rønnestad, HERITAGE gate, engineering-choices) landed correctly. 3 caveats for `review_evidence[]`: (a) mid-block retest `source_ref` is null so second baseline never fires (needs `runs[].avg_hr where intensity=='easy'` wire-up); (b) `submax_hr_pace5_bpm` display_name promises pace anchor its source can't enforce; (c) GraduationCard + retest_due proposal collision (shared app bug, not engine-builder-specific).
@@ -183,6 +186,39 @@ Deduplicated across visual-craft §16 + mobile-ux §10 + roadmap:
 ## Closed items appendix (shipped since 2026-08-17)
 
 Strikethrough preserves history; these items are OUT of the open list.
+
+**Cut E · Session-detail audit (2026-08-21):**
+
+- [x] **Cut E — SHIP-AS-IS verdict.** Founder-delegated "choose next surface yourself" pick. Ran 4-agent audit (product-design-lead + app-mobile-ux + app-visual-craft + app-copy-clarity) on the SetRow + ExerciseCard session-detail flow. All 4 agents converged on: session-detail is already at peer parity — no restructure warranted. Zero code changes. Recorded in `dev/active/cut-e-session/audit.md`.
+
+**Batch 42 · Week 4c/4d · MissedSessionPrompt refactor + landing softening (2026-08-21):**
+
+- [x] **Week 4d cleanup** — MissedSessionPrompt callbacks previously called `setActiveDate(yesterdayISO)`; after Week 4a killed DateNav on Day, the setter was a no-op relic. Refactored to `router.push('/session/${primary.slug}?date=${yesterday}')` so "Log yesterday" opens the session route with the date param. Removed dead `activeDate` setter from TodaySession. Files: `next-app/src/components/session/TodaySession.tsx`, `next-app/src/components/workout/MissedSessionPrompt.tsx`.
+- [x] **Landing softening (FLAG-2c)** — "Red-flag patterns fire an escalate banner" (landing) softened to "Red-flag patterns surface a banner" to match the app's actual non-alarmist tone. Escalate reads harsh for a rehab-safe positioning. Files: `landing/src/i18n/dictionaries/en.ts:73-74`.
+- [x] **Beta feedback footer (FLAG-1)** — mailto footer added below BottomNav on authenticated routes so beta users have a one-tap channel back to Margus. Files: `next-app/src/components/AppShell.tsx`.
+
+**Batch 41 · Week 4a/4b · Shape 1 IA refactor (2026-08-21):**
+
+Shape 1 refactor per D2 locked decision: Day is fixed to today structurally; Plan owns date browsing. Kills the tomorrow→session bug class by policy, not plumbing.
+
+- [x] **Week 4a · Today → Day rename + kill DateNav.** BottomNav labels: `Today` → `Day`, `Week` → `Plan`, `Extras` → `Off-plan`. DateNav render removed from TodaySession; `activeDate` local state collapsed to non-mutable reference (later fully removed in Week 4d). Missed-session flow routes to `/session/[slug]?date=<yesterday>` instead of mutating Day's state. Files: `next-app/src/components/nav/BottomNav.tsx`, `next-app/src/components/session/TodaySession.tsx`.
+- [x] **Week 4b · route renames + H1 hygiene.** `/week` → `/plan` (canonical), `/extras` → `/off-plan` (canonical). Old routes are redirect stubs (`router.replace()`). Plan gains "Log session →" verb for past days with `primarySlug` prop threaded through WeekDayActions. Files: `next-app/src/app/plan/page.tsx` (928-line canonical), `next-app/src/app/off-plan/page.tsx` (210-line canonical), `next-app/src/app/week/page.tsx` (redirect), `next-app/src/app/extras/page.tsx` (redirect).
+
+**Batch 40 · Cut D · Check redesign (2026-08-21):**
+
+Replaced the 6-8 slider + row-per-checkbox check form with a 4-option tap-scale + live verdict card. Same `derive()` state-model — backward compatible via `{None:0, Mild:2, Notable:5, Severe:8}` bucket mapping.
+
+- [x] **Cut D · Phase 1 · brief + mockup.** `dev/active/cut-d-check/brief.md` (problem framing, peer refs Whoop/Oura/Freeletics, load-bearing vs polish split) + `mockup-day-fresh.html` (pure-HTML inline v1.1.1 tokens) + Playwright screenshot at 393×varies.
+- [x] **Cut D · Phase 2 · primitives shipped.** `CheckRegionRow.tsx` (4-option tap-scale, tone-escalating active state strong-ink→amber→red, min-h-44, sub-line underline pin), `CheckFlagChip.tsx` (pill toggle, amber outline when on, min-h-44), `CheckSelectorRow.tsx` (generic segmented picker for stiffness None/<15/15-30/>30 + life load Fresh/Normal/Cooked), `CheckLiveVerdict.tsx` (4px state-color left rail, mono-caps WORKOUT READY/CHECK FIRST/BACK OFF, threshold reason, inline `Cited · Kellmann 2010` tap-opens InfoSheet — matrix rec #4 first-class citation UI).
+- [x] **Cut D · Phase 3 · /check rewrite.** Full page rewrite composing all 4 primitives + prefill from most recent check (≤7 days) + `derive()` state logic unchanged. Bronze reserved for save CTA only (R2). No autonomous score-drama (R8). Files: `next-app/src/app/check/page.tsx`.
+
+**Week 3 · Quick wins (2026-08-21):**
+
+- [x] **FLAG-1 · Beta feedback channel** — mailto footer wired (folded into Batch 42; see above).
+- [x] **FLAG-2a · Landing verb drift** — landing `apply` verb harmonized with app; audit deltas resolved. See P1-76 for original Batch 25 landing→app sync work. Additional string tightening handled in Batch 42.
+- [x] **FLAG-5 · Analytics falsification event** — deferred: skipped because analytics stack hasn't landed. Re-open when analytics ships (needs S3 billing/track infra first).
+- [x] **Tomorrow → session bug fix (tactical, Path A)** — `?date=` query param on `/session/[slug]` + `useSearchParams` client read. Structural fix landed in Week 4a (DateNav killed on Day). Files: `next-app/src/app/session/[slug]/page.tsx`.
+- [x] **Recharts white-box cursor fix** — default Tooltip cursor rectangle replaced with `cursor={{ stroke: "#3A3F4A", strokeWidth: 1, strokeDasharray: "3 3" }}`. Files: `next-app/src/components/charts/*` + Cut C inner chart wrapper.
 
 **Batch 39 · Cut C code sprint · Record surface (deployed https://9746a90f.program-v2.pages.dev, 2026-08-21):**
 

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useStore } from "@/lib/useStore";
 import { hapticTap } from "@/lib/utils";
+import { playConfirm } from "@/lib/sound";
 import { announce } from "@/lib/announce";
 import type { Proposal } from "@/lib/schemas";
 
@@ -28,6 +29,7 @@ export function useProposalActions(proposal: Proposal, date: string) {
 
   const onAccept = (pulseTarget: HTMLElement | null) => {
     hapticTap("medium");
+    playConfirm();
     pulseTarget?.closest("[data-proposal-card]")?.classList.add("pulse-accept");
 
     switch (proposal.kind) {
@@ -56,7 +58,15 @@ export function useProposalActions(proposal: Proposal, date: string) {
         break;
       }
       case "tm_bump": {
-        for (const l of proposal.lifts) setTM(l.exerciseId, l.newTM);
+        for (const l of proposal.lifts) {
+          setTM(l.exerciseId, l.newTM);
+          // Bug fix 2026-08-22 · founder report — Accept without dismiss
+          // let the engine re-fire the same tm_bump on the next render
+          // using the newly-bumped TM as currentTM, so a fast tapper could
+          // stack +5kg × 10 = +50kg in one tap-storm. Mirror the Ignore
+          // path (line 89) so the proposal is gone for the day.
+          dismissProposal(date, `tm-bump:${l.exerciseId}`);
+        }
         const summary = proposal.lifts.map((l) => `${l.exerciseId} +${l.delta} kg`).join(", ");
         announce(`Plan sharpened. Training max bumped: ${summary}.`);
         break;

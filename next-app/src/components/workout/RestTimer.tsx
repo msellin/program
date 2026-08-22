@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Play, Pause, RotateCcw, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { announce } from "@/lib/announce";
+import { playTimerComplete } from "@/lib/sound";
 
 const PRESETS = [
   { label: "60s", seconds: 60 },
@@ -48,6 +49,7 @@ export function RestTimer({ autoStartSeconds, onClose }: Props) {
       if (typeof navigator !== "undefined" && "vibrate" in navigator) {
         navigator.vibrate?.([80, 60, 80]);
       }
+      playTimerComplete();
       announce("Rest complete.");
     }
   }, [elapsed, target, hit]);
