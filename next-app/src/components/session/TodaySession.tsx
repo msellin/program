@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { loadProgram, loadProgramManifest, loadExercises } from "@/lib/data-loader";
 import { HeroStateCard } from "@/components/workout/HeroStateCard";
 import { FirstRunBanner } from "@/components/FirstRunBanner";
@@ -11,7 +10,6 @@ import { DashboardBlock } from "@/components/DashboardBlock";
 import { YourPlanCard } from "@/components/workout/YourPlanCard";
 import { SignalsStrip } from "@/components/workout/SignalsStrip";
 import { RunSlotCard } from "@/components/workout/RunSlotCard";
-import { MissedSessionPrompt } from "@/components/workout/MissedSessionPrompt";
 import { ProposalStack } from "@/components/workout/ProposalStack";
 import { Day1EmptyState } from "@/components/workout/Day1EmptyState";
 import { ArcProgressBar } from "@/components/ui/ArcProgressBar";
@@ -49,14 +47,11 @@ export function TodaySession({
   const [byId, setById] = useState<Record<string, Exercise>>({});
   const [error, setError] = useState<string | null>(null);
   // Week 4a (2026-08-21) — DateNav removed from Day per D2 (Plan tab owns
-  // date browsing). Week 4d cleanup (2026-08-21) — MissedSessionPrompt
-  // no longer mutates activeDate in-place; it now redirects to
-  // /session/[slug]?date=yesterday like every other past-day flow.
-  // activeDate is now truly read-only inside this component; the setter
-  // remains only because React's useState pattern returns it. Session
-  // route seeds via `initialDate` from SessionClient's ?date= param.
+  // date browsing). activeDate is read-only inside this component; the
+  // setter remains only because React's useState pattern returns it.
+  // Session route seeds via `initialDate` from SessionClient's ?date=
+  // param.
   const [activeDate] = useState(() => initialDate ?? todayISO());
-  const router = useRouter();
   const [programManifest, setProgramManifest] = useState<ProgramManifest | null>(null);
   useEffect(() => {
     void loadProgramManifest().then(setProgramManifest).catch(() => setProgramManifest(null));
@@ -240,36 +235,11 @@ export function TodaySession({
 
       <FirstRunBanner />
 
-      {activeDate === todayISO() ? (
-        <MissedSessionPrompt
-          program={primary}
-          todayISO={todayISO()}
-          onLogYesterday={() => {
-            // Week 4d (2026-08-21) — redirect to /session/[slug]?date=yesterday
-            // instead of mutating Day's activeDate in place. Matches Shape
-            // 1's "Day is always today" principle: non-today dates live at
-            // /session/[slug]?date=... exclusively. Same destination as
-            // Plan's "Log session →" verb for consistency.
-            if (!primary.slug) return;
-            const d = new Date();
-            d.setDate(d.getDate() - 1);
-            const yesterday = d.toISOString().slice(0, 10);
-            router.push(`/session/${primary.slug}?date=${yesterday}`);
-          }}
-          onSkipYesterday={() => {
-            // Same destination as the "log yesterday" path — the Skip
-            // affordance lives on the session-detail surface via
-            // SessionActions once the user is viewing yesterday's session.
-            // Prior implementation mutated Day's activeDate silently; that
-            // pattern is retired per Shape 1.
-            if (!primary.slug) return;
-            const d = new Date();
-            d.setDate(d.getDate() - 1);
-            const yesterday = d.toISOString().slice(0, 10);
-            router.push(`/session/${primary.slug}?date=${yesterday}`);
-          }}
-        />
-      ) : null}
+      {/* MissedSessionPrompt removed 2026-08-23 — its job (a single-day
+          "yesterday was missed" nudge) is superseded by WeekRecoveryCard
+          on /plan, which generalizes it to the whole week and is where
+          the README's own capability table says it belongs. See
+          dev/active/week-recovery-plan.md. */}
 
       {/* Week 4a (2026-08-21) — DateNav removed from the Day surface per
           locked decision D2 (Plan tab owns date browsing). The Day tab

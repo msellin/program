@@ -14,6 +14,8 @@ import { ConfirmSheet } from "@/components/ConfirmSheet";
 import { MoveSheet } from "@/components/workout/MoveSheet";
 import { ArcProgressBar } from "@/components/ui/ArcProgressBar";
 import { humanizeExerciseId } from "@/lib/humanize-metrics";
+import { detectMissedWeek } from "@/lib/engine/missed-week";
+import { WeekRecoveryCard } from "@/components/plan/WeekRecoveryCard";
 import type { DayLog, Phase, Program, RunLog, ScheduledBlock, Store } from "@/lib/schemas";
 
 type WeekDayEntry = {
@@ -99,6 +101,8 @@ export default function WeekPage() {
   // See dev/active/block-object-rebuild-2026-08-18.md §5.
   const blockObjectOn = useStore((s) => isBlockObjectOn(s.store));
   const scheduledBlocksMap = useStore((s) => s.store.scheduled_blocks);
+  const dismissProposal = useStore((s) => s.dismissProposal);
+  const dismissedProposals = useStore((s) => s.store.dismissed_proposals);
 
   const activeSlugs: string[] = activeProgramIds && activeProgramIds.length
     ? primarySlug
@@ -353,6 +357,27 @@ export default function WeekPage() {
           </span>
         </div>
       ) : null}
+
+      {/* Design package t3/3b ("the week going wrong"), 2026-08-23 —
+          dismissible banner above the day-list, current week only. Present-
+          tense nudge, not archaeology on browsed weeks — see
+          dev/active/week-recovery-plan.md for why this is a banner rather
+          than the mockup's full-page replacement, and why it supersedes
+          MissedSessionPrompt (removed from the Day dashboard). */}
+      {offset === 0
+        ? (() => {
+            const signal = detectMissedWeek(program, store, userProfile, todayISO());
+            if (!signal) return null;
+            if (dismissedProposals?.[signal.weekStartISO]?.includes("week-recovery")) return null;
+            return (
+              <WeekRecoveryCard
+                program={program}
+                signal={signal}
+                onDismiss={() => dismissProposal(signal.weekStartISO, "week-recovery")}
+              />
+            );
+          })()
+        : null}
 
       {/* Bug fix 2026-08-18 · founder reported empty Week view on Handstand
           Walk. Cause: the prior top-level bail on `!wt?.week` skipped
