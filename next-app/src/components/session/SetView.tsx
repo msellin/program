@@ -88,8 +88,9 @@ export function SetView({
   // set index changes, instead of an effect reaching back to reset
   // state — React's own recommended pattern over "sync state via effect."
 
-  const wouldBePR = weight > 0 && reps > 0 && isSetPR(store, active.exercise.id, weight, reps, date);
-  const plates = platesLabel(weight);
+  const wouldBePR =
+    active.isLoadable && weight > 0 && reps > 0 && isSetPR(store, active.exercise.id, weight, reps, date);
+  const plates = active.isLoadable ? platesLabel(weight) : null;
 
   const totalRemaining = railExercises.reduce((n, r) => {
     const rEntry = store.logs[date]?.exercises[r.key] ?? null;
@@ -98,7 +99,13 @@ export function SetView({
   }, 0);
 
   const confirm = (finalReps: number) => {
-    updateSet(active.blockId, active.exercise.id, activeSetIndex, { weight_kg: weight, reps: finalReps }, date);
+    updateSet(
+      active.blockId,
+      active.exercise.id,
+      activeSetIndex,
+      { weight_kg: active.isLoadable ? weight : null, reps: finalReps },
+      date,
+    );
     onConfirmed(restSecondsFor(active.exercise));
   };
 
@@ -172,13 +179,21 @@ export function SetView({
             </span>
           ) : null}
         </p>
-        <div className="flex items-baseline gap-1.5 mb-3">
-          <span className="text-[92px] leading-[.9] font-semibold tracking-[-.05em] text-strong">
-            {weight}
-          </span>
-          <span className="text-[24px] font-medium text-muted">kg</span>
-        </div>
-        <p className="text-[26px] leading-[1.2] font-semibold tracking-[-.02em] text-strong mb-3">
+        {active.isLoadable ? (
+          <div className="flex items-baseline gap-1.5 mb-3">
+            <span className="text-[92px] leading-[.9] font-semibold tracking-[-.05em] text-strong">
+              {weight}
+            </span>
+            <span className="text-[24px] font-medium text-muted">kg</span>
+          </div>
+        ) : null}
+        <p
+          className={
+            active.isLoadable
+              ? "text-[26px] leading-[1.2] font-semibold tracking-[-.02em] text-strong mb-3"
+              : "text-[92px] leading-[.9] font-semibold tracking-[-.05em] text-strong mb-3"
+          }
+        >
           {isAmrap ? `${reps}+ reps` : `${reps} reps`}
         </p>
         {prev || prescribed ? (
@@ -189,7 +204,7 @@ export function SetView({
                   Last time
                 </p>
                 <p className="text-[15px] font-semibold text-ink">
-                  {prev.weight_kg} × {prev.reps}
+                  {active.isLoadable ? `${prev.weight_kg} × ${prev.reps}` : prev.reps}
                 </p>
               </div>
             ) : null}
@@ -200,13 +215,13 @@ export function SetView({
                   Prescribed
                 </p>
                 <p className="text-[15px] font-semibold text-ink">
-                  {prescribed.kg} × {prescribed.reps}
+                  {active.isLoadable ? `${prescribed.kg} × ${prescribed.reps}` : prescribed.reps}
                 </p>
               </div>
             ) : null}
           </div>
         ) : null}
-        <p className="font-mono text-[11px] text-line">{plates}</p>
+        {plates ? <p className="font-mono text-[11px] text-line">{plates}</p> : null}
       </div>
 
       <div className="flex-shrink-0 px-[22px] pb-[22px]">
@@ -227,22 +242,19 @@ export function SetView({
           <>
             {editingLoad ? (
               <div className="border border-line-strong rounded-[10px] bg-surface p-3 mb-2.5 flex flex-col gap-2">
-                <StepperRow
-                  label="kg"
-                  value={weight}
-                  step={2.5}
-                  onChange={setWeight}
-                />
+                {active.isLoadable ? (
+                  <StepperRow label="kg" value={weight} step={2.5} onChange={setWeight} />
+                ) : null}
                 <StepperRow label="reps" value={reps} step={1} onChange={setReps} />
                 <div className="flex items-center justify-between pt-0.5">
                   <span className="font-mono text-[10px] uppercase tracking-[.14em] text-ink">
-                    Steps of 2.5 kg
+                    {active.isLoadable ? "Steps of 2.5 kg" : "Steps of 1 rep"}
                   </span>
                   {prescribed ? (
                     <button
                       type="button"
                       onClick={() => {
-                        setWeight(prescribed.kg);
+                        if (active.isLoadable) setWeight(prescribed.kg);
                         setReps(parseInt(prescribed.reps, 10) || reps);
                       }}
                       className="text-slate text-[13px]"
@@ -258,14 +270,14 @@ export function SetView({
               onClick={() => confirm(reps)}
               className="w-full h-[62px] rounded-[10px] bg-bronze text-ground text-[17px] font-semibold tracking-[-.01em]"
             >
-              Done — {weight} kg
+              {active.isLoadable ? `Done — ${weight} kg` : "Done"}
             </button>
             <button
               type="button"
               onClick={() => onEditingLoad(!editingLoad)}
               className="w-full h-10 mt-1.5 text-ink text-[14px]"
             >
-              {editingLoad ? "Hide" : "Change the weight"}
+              {editingLoad ? "Hide" : active.isLoadable ? "Change the weight" : "Change the reps"}
             </button>
           </>
         )}

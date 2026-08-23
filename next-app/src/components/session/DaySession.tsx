@@ -41,6 +41,12 @@ export type RailExercise = {
   item: NonNullable<Block["items"]>[number];
   rowCount: number;
   suggestion: Suggestion | null;
+  // Ported from the old ExerciseCard's isLoadable gate — mobility/cardio
+  // exercises don't carry a weight. SetView hides the weight row when
+  // false. Every Day session exercise is loadable (blocksForDate only
+  // ever selects strength blocks); OffPlanSession's accessory/run rail
+  // is where this actually varies.
+  isLoadable: boolean;
 };
 
 export type SessionSheet = "off-plan" | "overflow" | "note" | "jump" | "details" | null;
@@ -325,6 +331,7 @@ function useMemoRail(
           item,
           rowCount: schemeRowCount,
           suggestion,
+          isLoadable: true, // blocksForDate only ever selects strength blocks
         });
       }
     }

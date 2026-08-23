@@ -1,0 +1,286 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+import { loadProgram, loadExercises } from "@/lib/data-loader";
+import { useStore, entrySets } from "@/lib/useStore";
+import { today as todayISO } from "@/lib/utils";
+import { suggestForExercise } from "@/lib/engine/suggest";
+import { dedupeItems, humanBlockName } from "@/lib/day-format";
+import { DateNav } from "@/components/workout/DateNav";
+import { EmptyStateCard } from "@/components/EmptyStateCard";
+import { SetView } from "@/components/session/SetView";
+import { RestTakeover } from "@/components/session/RestTakeover";
+import { NoteSheet } from "@/components/session/NoteSheet";
+import type { RailExercise, SessionSheet } from "@/components/session/DaySession";
+import type { Exercise, Program } from "@/lib/schemas";
+
+/**
+ * Off-plan redesign (2026-08-24) — brings /off-plan onto the same
+ * Brief/Set/Rest pattern as /session/[slug], rather than the pre-
+ * redesign ExerciseCard/SetRow/RestTimer stack it used to run.
+ * Consistency-sweep finding: this was the one screen left behind.
+ *
+ * Sibling to DaySession.tsx, not a modification of it — off-plan blocks
+ * aren't schedule-gated (no blocksForDate/activePhaseFor; blocks are
+ * filtered straight from program.blocks by category) and there's no
+ * single "top set" hero, so the browsing state here is a grouped list
+ * rather than Brief's hero-card layout. Once an exercise is tapped,
+ * everything downstream (SetView/RestTakeover/OverflowSheet/NoteSheet)
+ * is the exact same, already-tested components Day uses. See
+ * dev/active/offplan-redesign-plan.md.
+ */
+export function OffPlanSession() {
+  const [program, setProgram] = useState<Program | null>(null);
+  const [byId, setById] = useState<Record<string, Exercise>>({});
+  const [activeDate, setActiveDate] = useState(() => todayISO());
+  const hydrated = useStore((s) => s.hydrated);
+  const store = useStore((s) => s.store);
+  const primarySlug = store.user_profile?.active_program_id;
+
+  useEffect(() => {
+    if (!primarySlug) {
+      void loadExercises().then((x) => setById(x.byId));
+      return;
+    }
+    void Promise.all([loadProgram(primarySlug), loadExercises()]).then(([p, x]) => {
+      setProgram(p);
+      setById(x.byId);
+    });
+  }, [primarySlug]);
+
+  const [mode, setMode] = useState<"brief" | "set">("brief");
+  const [activeKey, setActiveKey] = useState<string | null>(null);
+  const [activeSetIndex, setActiveSetIndex] = useState(0);
+  const [editingLoad, setEditingLoad] = useState(false);
+  const [sheet, setSheet] = useState<SessionSheet>(null);
+  const [resting, setResting] = useState(false);
+  const [restSeconds, setRestSeconds] = useState(90);
+  const [effortAnswered, setEffortAnswered] = useState(false);
+
+  // Same category → group labels the pre-redesign page used. Run-category
+  // copy depends on the primary program (hip-rebuild users read these as
+  // around-run accessory work; aerobic-program users read them as the
+  // actual cardio sessions).
+  const groupDefs = useMemo(() => {
+    const runTitle = primarySlug === "anterior-hip-rebuild" ? "Around runs" : "Cardio & conditioning";
+    const runNote =
+      primarySlug === "anterior-hip-rebuild"
+        ? "Attach these to your run sessions. Log to today."
+        : "Aerobic + conditioning blocks from your program.";
+    return [
+      { cat: "accessory" as const, title: "Accessories & home rehab", note: "Do these when you can — no calendar constraint." },
+      { cat: "run" as const, title: runTitle, note: runNote },
+    ];
+  }, [primarySlug]);
+
+  // Rail: flattened across both groups, so mid-set rail-tap and Rest's
+  // "next up" work the same way Day's cross-block rail already does.
+  // Not schedule-gated — off-plan blocks are always available, filtered
+  // straight from program.blocks by category rather than via
+  // blocksForDate/activePhaseFor.
+  const railExercises: RailExercise[] = useMemo(() => {
+    if (!program) return [];
+    const out: RailExercise[] = [];
+    for (const def of groupDefs) {
+      const blocks = program.blocks.filter((b) => (b.category ?? "strength") === def.cat);
+      for (const block of blocks) {
+        const items = dedupeItems(block.items ?? (block.segments ?? []).flatMap((s) => s.items));
+        for (const item of items) {
+          if (!item.exercise_id) continue;
+          const exercise = byId[item.exercise_id];
+          if (!exercise) continue;
+          const suggestion = suggestForExercise(exercise.id, block.id, program, store, activeDate);
+          const isLoadable = ["strength", "unilateral"].includes(exercise.category);
+          const defaultSets =
+            (typeof item.sets === "number" ? item.sets : undefined) ??
+            (typeof exercise.default?.sets === "number" ? (exercise.default.sets as number) : undefined) ??
+            3;
+          out.push({
+            key: `${block.id}:${exercise.id}`,
+            blockId: block.id,
+            blockName: humanBlockName(block.name),
+            exercise,
+            item,
+            rowCount: suggestion?.fsl ? suggestion.fsl.sets + 1 : defaultSets,
+            suggestion,
+            isLoadable,
+          });
+        }
+      }
+    }
+    return out;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [program, byId, groupDefs, store.logs, store.training_maxes, activeDate]);
+
+  if (!hydrated) return <div className="mt-8 text-sm text-muted">Loading…</div>;
+  if (!primarySlug) {
+    return (
+      <EmptyStateCard
+        title="Accessory work lives here — once you have a focus."
+        body="Accessory work, mobility drills, and around-session blocks show up here once you pick a program. Optional — the plan's core sessions live on Today."
+        cta={{ href: "/programs/", label: "Browse programs" }}
+      />
+    );
+  }
+  if (!program) return <div className="mt-8 text-sm text-muted">Loading…</div>;
+
+  const activeIdx = activeKey ? railExercises.findIndex((r) => r.key === activeKey) : -1;
+  const active = activeIdx >= 0 ? railExercises[activeIdx] : null;
+
+  const jumpTo = (key: string) => {
+    setActiveKey(key);
+    const r = railExercises.find((re) => re.key === key);
+    const entry = r ? store.logs[activeDate]?.exercises[r.key] ?? null : null;
+    const logged = entrySets(entry).filter((s) => s.reps != null).length;
+    setActiveSetIndex(r ? Math.min(logged, r.rowCount - 1) : 0);
+    setEditingLoad(false);
+    setResting(false);
+    setSheet(null);
+    setMode("set");
+  };
+
+  if (mode === "set" && active) {
+    return (
+      <div className="fixed inset-0 z-50 flex flex-col bg-ground">
+        <SetView
+          key={`${active.key}:${activeSetIndex}`}
+          railExercises={railExercises}
+          active={active}
+          activeSetIndex={activeSetIndex}
+          editingLoad={editingLoad}
+          onEditingLoad={setEditingLoad}
+          onSelectExercise={jumpTo}
+          onBackToBrief={() => setMode("brief")}
+          onConfirmed={(secs) => {
+            setRestSeconds(secs);
+            setResting(true);
+          }}
+          sheet={sheet}
+          onOpenSheet={setSheet}
+          onCloseSheet={() => setSheet(null)}
+          date={activeDate}
+        />
+        {resting ? (
+          <RestTakeover
+            active={active}
+            justLoggedSetIndex={activeSetIndex}
+            targetSeconds={restSeconds}
+            railExercises={railExercises}
+            nextExercise={railExercises[activeIdx + 1] ?? railExercises[0]}
+            effortAnswered={effortAnswered}
+            onEffortAnswered={setEffortAnswered}
+            date={activeDate}
+            onDone={() => {
+              setResting(false);
+              setEffortAnswered(false);
+              setEditingLoad(false);
+              const loggedForActive = entrySets(
+                store.logs[activeDate]?.exercises[active.key] ?? null,
+              ).filter((s) => s.reps != null).length;
+              if (loggedForActive < active.rowCount) {
+                setActiveSetIndex(loggedForActive);
+              } else {
+                const nextIdx = activeIdx + 1;
+                if (nextIdx < railExercises.length) {
+                  setActiveKey(railExercises[nextIdx].key);
+                  setActiveSetIndex(0);
+                } else {
+                  setMode("brief");
+                }
+              }
+            }}
+            onJump={jumpTo}
+            onOpenNoteSheet={() => setSheet("note")}
+          />
+        ) : null}
+        {sheet === "note" ? (
+          <NoteSheet
+            active={active}
+            date={activeDate}
+            isSkillProgram={primarySlug === "handstand-walk"}
+            onClose={() => setSheet(null)}
+            onStopSession={() => {
+              setSheet(null);
+              setResting(false);
+              setMode("brief");
+            }}
+          />
+        ) : null}
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6 pt-4">
+      <header>
+        <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">Off-plan</h1>
+        <p className="mt-1 text-sm text-muted">
+          Accessory work, home rehab, around-runs.{" "}
+          {activeDate === todayISO() ? "Logging to today." : "Logging to the selected date."}
+        </p>
+      </header>
+
+      <DateNav date={activeDate} onChange={setActiveDate} />
+
+      {(() => {
+        const rendered = groupDefs
+          .map((def) => {
+            const rows = railExercises.filter((r) => {
+              const block = program.blocks.find((b) => b.id === r.blockId);
+              return (block?.category ?? "strength") === def.cat;
+            });
+            if (!rows.length) return null;
+            return (
+              <section key={def.cat} className="space-y-3">
+                <header>
+                  <h2 className="font-mono text-[14px] uppercase tracking-widest">{def.title}</h2>
+                  <p className="mt-1 text-[14px] text-muted">{def.note}</p>
+                </header>
+                <div className="space-y-[7px]">
+                  {rows.map((r) => {
+                    const entry = store.logs[activeDate]?.exercises[r.key] ?? null;
+                    const loggedCount = entrySets(entry).filter((s) => s.reps != null).length;
+                    const isDone = loggedCount >= r.rowCount;
+                    return (
+                      <button
+                        key={r.key}
+                        type="button"
+                        onClick={() => jumpTo(r.key)}
+                        className="w-full flex items-center justify-between gap-3 rounded border border-line-soft bg-surface px-3.5 py-[13px] text-left"
+                      >
+                        <span className="min-w-0">
+                          <span className="block text-[15px] font-semibold text-strong tracking-[-.01em] mb-0.5">
+                            {r.exercise.name}
+                          </span>
+                          <span className="block text-[13px] text-ink">{r.blockName} · {r.rowCount} sets</span>
+                        </span>
+                        <span
+                          className={
+                            "flex-shrink-0 font-mono text-[10px] uppercase tracking-[.1em] " +
+                            (isDone ? "text-line" : loggedCount > 0 ? "text-bronze" : "text-muted")
+                          }
+                        >
+                          {isDone ? "Done" : loggedCount > 0 ? "Held" : ""}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </section>
+            );
+          })
+          .filter(Boolean);
+        if (rendered.length === 0) {
+          return (
+            <div className="rounded border border-line-soft bg-surface p-4 text-sm text-muted">
+              This program has no extras — every prescribed session lives on Day. You can still log
+              cross-modal work (cardio, class attendance, walks) from Day&apos;s off-plan sheet if you
+              want it in your history.
+            </div>
+          );
+        }
+        return rendered;
+      })()}
+    </div>
+  );
+}
