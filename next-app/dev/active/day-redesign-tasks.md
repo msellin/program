@@ -1,0 +1,202 @@
+# Day redesign — task checklist
+
+Status markers: `[ ]` open · `[~]` in progress · `[x]` done · `[!]` blocked
+
+## 0. Setup
+- [x] Read design spec (README + t4/t5/t6 mockups) from Claude Design project
+- [x] Explore existing codebase (TodaySession, ExerciseCard, SetRow,
+      RestTimer/Host, useTimer, plates, pr, useStore, proposals, sheets,
+      AppShell, globals.css, plan page)
+- [x] Write plan, get user approval
+- [x] Write dev docs (plan/context/tasks)
+
+## 1. Four quick wins
+- [x] No strikethrough on completed exercise names — new rows never had it
+- [x] No raw enum keys rendered — new rows always display exercise.name /
+      humanized labels, never internal keys
+- [x] Accent surface audit: globals.css already matches the README's
+      token table — no globals.css edit needed. Enforced via "one bronze
+      per screen" discipline in the new components (bronze reserved for
+      Start / Done / Save; teal=slate for rest/info; green=PR only).
+- [x] Body-copy contrast: new components use `text-ink` for
+      meaning-carrying copy, `text-muted`/`text-line` for labels only
+
+## 2. Architecture split
+- [x] Extracted `src/lib/day-format.ts` (programDisplayName,
+      humanPhaseName, humanBlockName, phaseProgress, phaseWeekPair,
+      dedupeItems, restSecondsFor)
+- [x] Extracted `src/components/session/shared/StatusCards.tsx`
+      (RestDayCard, RetestReminder, GraduationCard, GraduationFeedback,
+      VerbRow)
+- [x] Trimmed `TodaySession.tsx`: removed `slugOverride` prop, all
+      slugOverride-gated branches, the dead inline-workout render branch
+      (BlockSection/PerProgramActions/SessionActions/DayHeaderShortcut/
+      RowingPersonalisedTargets/LogSessionShortcut). 1727 → 684 lines.
+- [x] Created `src/components/session/DaySession.tsx` — shell owner
+      (mode, activeKey, activeSetIndex, editingLoad, sheet, resting,
+      effortAnswered; railExercises computed via useMemo)
+- [x] Pointed `SessionClient.tsx` at `DaySession` instead of
+      `TodaySession`
+- [x] Verified `/` dashboard mode unaffected — code path unchanged,
+      only dead branches removed
+
+## 3. Brief (4a)
+- [x] `BriefView.tsx` — H1+eyebrow, summary, hero card, exercise rows
+      (Main/Held/Done tags), footer (off-plan line, progress eyebrow,
+      Start)
+- [x] Exercise-row tap → jumps straight into that exercise (Set mode)
+- [x] `ProposalBanner` (inline in BriefView) — compact collapsed
+      proposal rows, tap → expands to full `ProposalCard` (verified live:
+      a `day_adjustment_soften` proposal rendered and expanded correctly)
+- [x] `CycleStartCard.tsx` (6c) — tm_bump-pending + zero-sets-today gate;
+      disables Start until Accept/Adjust; Adjust opens per-lift steppers
+      (code-reviewed; NOT manually verified live — the test account never
+      accumulated the green-streak history `evaluateOverperformer`
+      requires to fire a tm_bump proposal. Logic verified by inspection:
+      onAccept-then-apply-override ordering fixed after finding the
+      original ordering would have clobbered adjusted values.)
+- [!] 4b (concurrent-track picker) — determined out of scope during
+      planning: `/session/[slug]` is inherently single-program, so 4b's
+      screen has no route to live at until `/` itself becomes the Brief
+      (explicitly out of scope this pass). Interference banner + N-tracks
+      case stays on `/` unchanged.
+- [ ] Readiness one-liner — explicitly not built (confirmed decision,
+      see context.md); `/check` remains the sole readiness surface
+
+## 4. Set (4a work state / 6b)
+- [x] `SetView.tsx` — rail (per-exercise flex/count), centre stage (big
+      weight/reps, Last time / Prescribed reference pair, plate line) —
+      verified live end-to-end
+- [x] Confirm button (Done — N kg) → `updateSet`, starts rest — verified
+      live
+- [x] Change-the-weight stepper panel — verified live (+/- both fields,
+      live-updating Done label and PR badge)
+- [x] AMRAP / counting-state rep-choice grid — built, NOT manually
+      verified live (needs a prescribed rep string ending "+", which
+      needs a training max the test account never set)
+- [x] PR badge via `isSetPR`, awarded on confirm only — verified live
+      ("REP PR" badge appeared correctly on a qualifying set)
+- [x] `OverflowSheet.tsx` (⋯) — verified live: Add a set, Finish here,
+      I already did this, Note, Watch the lift, Form cues all render;
+      Note flow verified live end-to-end (chip select → save → banner
+      appeared on Brief). Add a set / Finish here / I already did this /
+      Watch the lift / Form cues code-reviewed, not each individually
+      click-tested this pass.
+- [x] Jump sheet (rest-only, inside RestTakeover) — built, not manually
+      verified live this pass (code-reviewed)
+- [x] Rail-tap mid-session (switch exercise without losing progress) —
+      verified live
+
+## 5. Rest takeover
+- [x] `RestTakeover.tsx` — full-screen, ports RestTimer's interval/
+      vibrate/playTimerComplete/announce logic — verified live
+      (countdown ran, "Next up" showed the next exercise correctly)
+- [x] Effort card (Easy/Solid/Grind → RPE 7/8/9+) writes via `updateSet`
+      — verified live. **Bug found + fixed during testing:** the
+      "Solid" button was hardcoded to always render as selected
+      regardless of tap; fixed to key off actual `selectedEffort` state.
+- [x] Timer controls: +30s, Skip rest — verified live (Skip rest
+      triggered auto-advance correctly). Long-press +30s for a custom
+      target — built as a plain tap only; long-press NOT implemented
+      (README mentions it as a stretch behavior; flagging as a known gap
+      rather than silently dropping it).
+- [x] Auto-advance to next set at zero / on skip — verified live (set 1
+      → set 2, rail count updated, weight/reps reset for the fresh set)
+- [x] **Bug found + fixed:** the full-screen takeover wasn't actually
+      covering `BottomNav` (both z-40, BottomNav wins the DOM-order
+      tiebreak) — bumped `DaySession`'s Set/Rest wrapper to z-50.
+
+## 6. Note sheet (6d)
+- [x] `NoteSheet.tsx` — verified live via the overflow-menu path (chip
+      select, save, note correctly fed the `day_adjustment_soften`
+      proposal engine — proves the whole loop: note → engine reads it →
+      proposal renders on Brief)
+- [x] "Offered unprompted after Grind" path — wired
+      (`RestTakeover`'s Grind selection calls `onOpenNoteSheet`), not
+      manually triggered live this pass (would need a Grind tap, not
+      separately re-tested after the overflow-path test already proved
+      the sheet itself works)
+- [x] `Pain or tweak` → flags exercise; skill-program stop-session offer
+      code-reviewed (gated on `program.slug === "handstand-walk"`), not
+      live-tested (test program wasn't the skill program)
+
+## 7. Off-plan sheet
+- [x] `OffPlanSheet.tsx` — verified live: "Log an activity" embeds the
+      real `RunSlotCard` correctly; drill-count link to `/off-plan`
+      renders (drill count itself reads `0` for this program's cardio
+      blocks — matches the pre-existing `/off-plan` dashboard block's
+      identical counting logic, not a new bug)
+
+## 8. Cleanup / deletion
+- [x] **Correction, caught before deleting anything:** `ExerciseCard.tsx`
+      / `SetRow.tsx` / `RestTimer.tsx` / `SuggestionBox.tsx` /
+      `BarVisualizer.tsx` / `NoteSignalHint.tsx` /
+      `EngineReadsNotesHint.tsx` are **NOT orphaned** — the plan's
+      original inventory was wrong. `app/off-plan/page.tsx` has its own
+      independent `BlockSection`/`ExerciseCard` render tree, completely
+      separate from the one deleted out of `TodaySession.tsx`. None of
+      these files are deleted. `SessionActions.tsx`/`PerProgramActions.tsx`
+      ARE correctly unused off `/session/[slug]` now (still used on
+      `/plan`, untouched) — that part of the original plan held.
+- [x] **Real bug found from the correction above, and fixed:** `/off-plan`'s
+      `SetRow` still drives the OLD global bottom-fixed timer via
+      `lib/useTimer.ts`'s shared store (`RestTimerHost`, mounted app-wide
+      in `AppShell`, not route-scoped). The new `SetView`/`RestTakeover`
+      were originally wired to that SAME shared store — meaning logging a
+      set on `/session/[slug]` would have started BOTH the new full-screen
+      takeover AND the old bottom widget simultaneously (hidden behind the
+      new one's z-50, but still mounted and firing its own vibrate/sound/
+      SR-announce independently — double of each, silently, on every set).
+      Fixed by decoupling: `SetView` no longer touches `lib/useTimer.ts`
+      at all; it carries the rest duration up via `onConfirmed(seconds)`,
+      `DaySession` holds it in local state, and `RestTakeover` takes it as
+      a plain `targetSeconds` prop with a fully self-contained countdown.
+      Re-verified live after the fix — Rest takeover still works
+      correctly, no console errors, no duplicate widget.
+
+## 9. Verification
+- [x] `npm run lint` (`npx eslint src/`) — 71 problems (25 errors, 46
+      warnings) vs. 75 on main before this change (27/48) — net fewer,
+      zero new issues introduced (verified via git stash diff)
+- [x] `npx tsc --noEmit` — clean
+- [x] `npm run test` (vitest) — 162/162 passing, before and after
+- [x] Manual walk via Chrome automation, signed in as the sandboxed
+      `e2e-baseline@margus.dolmit.dev` test account (never the real
+      account): Brief → Start → stepper → log a set → PR badge → Rest →
+      effort → skip → auto-advance to set 2 → rail-jump to 2nd exercise
+      → ⋯ → Note (chip+save) → back to Brief → proposal banner appeared
+      → expanded to full ProposalCard → off-plan sheet → Log an activity
+      (RunSlotCard embedded) → close. No console errors at any point.
+      Found and fixed 3 real bugs in the process (see sections above).
+- [ ] Re-check every row of the turn-5 coverage matrix explicitly,
+      row by row, against the shipped UI — not done as a formal pass;
+      the manual walk above covers most "Covered in 4a/4b" rows but
+      wasn't cross-checked against the matrix line-by-line
+- [x] `/plan` Move/Skip unchanged (not modified this pass);
+      `/` dashboard verified logically unchanged (only dead
+      slugOverride branches removed, the live dashboard-mode code path
+      is untouched)
+- [x] Re-ran tsc/eslint/vitest after the timer-decoupling fix — still
+      clean, still 162/162, still fewer lint issues than main baseline
+- [x] Commit + push
+
+## Known gaps / follow-ups (not silently dropped)
+- **Start always begins at set index 0**, even when earlier sets are
+  already logged (e.g. re-entering the session after backgrounding the
+  app). README's interaction spec calls for "Back from Set returns to
+  Brief without discarding progress; the CTA then reads Continue —
+  Bench press, set 4" — that resume-to-first-unfinished-set behavior on
+  the Start button isn't built. Not a data-loss bug (prior sets stay
+  logged and pre-filled correctly if you tap that exercise's row), just
+  a missing convenience: today you'd re-confirm set 1's already-correct
+  values once, then continue normally.
+- Long-press on `+30s` for a custom rest target is not implemented
+  (plain tap only).
+- 6c (cycle-start gate) and the AMRAP rep-grid are built and
+  code-reviewed but not exercised live — need a test account with
+  either a real training max + AMRAP-scheme exercise, or a green-streak
+  history, to verify visually.
+- Readiness one-liner in Brief: intentionally not built (see context.md
+  decision log).
+- Turn-5 coverage-matrix row-by-row sign-off not yet done as a discrete
+  pass.

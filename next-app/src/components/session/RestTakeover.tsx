@@ -1,0 +1,259 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import { useStore, entrySets } from "@/lib/useStore";
+import { announce } from "@/lib/announce";
+import { playTimerComplete } from "@/lib/sound";
+import type { RailExercise } from "@/components/session/DaySession";
+
+const EFFORTS = [
+  { label: "Easy", rpe: 7 },
+  { label: "Solid", rpe: 8 },
+  { label: "Grind", rpe: 9 },
+] as const;
+
+/**
+ * Screens "4a resting" / "6a" from the Day redesign — a full-screen
+ * takeover (`position: fixed; inset: 0`), because rest is the only
+ * moment the lifter is actually looking at the phone. The countdown
+ * logic (interval, vibrate, sound, screen-reader announce at 30s/zero)
+ * is ported from `RestTimer.tsx`, not rewritten — same behavior, new
+ * full-screen presentation instead of a bottom-fixed widget.
+ *
+ * Deliberately does NOT touch `lib/useTimer.ts`'s shared store. That
+ * store also drives the OLD bottom-fixed `RestTimerHost`/`RestTimer`
+ * widget, still live on `/off-plan` (the pre-redesign ExerciseCard/
+ * SetRow flow) and mounted app-wide via `AppShell`. `targetSeconds`
+ * comes in as a plain prop instead, so this component's countdown is
+ * fully self-contained — no risk of both timers firing (double
+ * vibration/sound/announce) on this route.
+ *
+ * Answering the effort prompt is optional and costs nothing (the engine
+ * already infers difficulty from reps hit vs. prescribed) — the timer
+ * runs and auto-advances regardless of whether it's answered.
+ */
+export function RestTakeover({
+  active,
+  justLoggedSetIndex,
+  targetSeconds,
+  railExercises,
+  nextExercise,
+  effortAnswered,
+  onEffortAnswered,
+  date,
+  onDone,
+  onJump,
+  onOpenNoteSheet,
+}: {
+  active: RailExercise;
+  justLoggedSetIndex: number;
+  targetSeconds: number;
+  railExercises: RailExercise[];
+  nextExercise: RailExercise;
+  effortAnswered: boolean;
+  onEffortAnswered: (v: boolean) => void;
+  date: string;
+  onDone: () => void;
+  onJump: (key: string) => void;
+  onOpenNoteSheet: () => void;
+}) {
+  const updateSet = useStore((s) => s.updateSet);
+  const store = useStore((s) => s.store);
+
+  const target = targetSeconds;
+  const [elapsed, setElapsed] = useState(0);
+  const [selectedEffort, setSelectedEffort] = useState<(typeof EFFORTS)[number]["label"] | null>(null);
+  const [jumpOpen, setJumpOpen] = useState(false);
+  const tick = useRef<ReturnType<typeof setInterval> | null>(null);
+  const announced30sRef = useRef(false);
+  // Completion (vibrate/sound/announce/onDone) fires once via
+  // `doneFiredRef` guarding the interval callback itself — no separate
+  // "did we hit zero" state, no reactive effect keyed on it.
+  const doneFiredRef = useRef(false);
+
+  useEffect(() => {
+    announce(`Rest timer started, ${target} seconds.`);
+    tick.current = setInterval(() => {
+      setElapsed((e) => {
+        const next = e + 1;
+        const remaining = Math.max(0, target - next);
+        if (!announced30sRef.current && remaining === 30) {
+          announce("30 seconds remaining.");
+          announced30sRef.current = true;
+        }
+        if (next >= target && !doneFiredRef.current) {
+          doneFiredRef.current = true;
+          if (typeof navigator !== "undefined" && "vibrate" in navigator) {
+            navigator.vibrate?.([80, 60, 80]);
+          }
+          playTimerComplete();
+          announce("Rest complete.");
+          onDone();
+        }
+        return next;
+      });
+    }, 1000);
+    return () => {
+      if (tick.current) clearInterval(tick.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const remaining = Math.max(0, target - elapsed);
+  const mins = Math.floor(remaining / 60);
+  const secs = remaining % 60;
+  const fmt = `${mins}:${String(secs).padStart(2, "0")}`;
+  const pct = Math.min(1, elapsed / target) * 100;
+
+  const justLogged = entrySets(store.logs[date]?.exercises[active.key] ?? null)[justLoggedSetIndex];
+  const summary =
+    justLogged?.weight_kg != null && justLogged?.reps != null
+      ? `Logged · ${justLogged.weight_kg} kg × ${justLogged.reps}`
+      : null;
+
+  const selectEffort = (effort: (typeof EFFORTS)[number]) => {
+    setSelectedEffort(effort.label);
+    onEffortAnswered(true);
+    updateSet(active.blockId, active.exercise.id, justLoggedSetIndex, { rpe: effort.rpe }, date);
+    if (effort.label === "Grind") onOpenNoteSheet();
+  };
+
+  const skip = () => {
+    onDone();
+  };
+
+  return (
+    <div className="fixed inset-0 z-40 bg-ground flex flex-col">
+      <div className="flex-shrink-0 px-[22px] pt-1">
+        <div className="h-[3px] bg-surface-2 rounded-full overflow-hidden">
+          <div className="h-full bg-slate rounded-full transition-[width]" style={{ width: `${pct}%` }} />
+        </div>
+      </div>
+      <div className="flex-1 flex flex-col items-center justify-center px-6 text-center min-h-0">
+        <p className="font-mono text-[11px] uppercase tracking-[.18em] text-slate mb-[18px]">Rest</p>
+        <p className="text-[104px] leading-[.9] font-semibold tracking-[-.05em] text-strong mb-2">{fmt}</p>
+        {effortAnswered && selectedEffort ? (
+          <p className="text-[14.5px] text-line">
+            {selectedEffort} · RPE {EFFORTS.find((e) => e.label === selectedEffort)?.rpe}+
+            {" · "}
+            <button type="button" onClick={() => onEffortAnswered(false)} className="text-slate">
+              change
+            </button>
+          </p>
+        ) : nextExercise && nextExercise.key !== active.key ? (
+          <>
+            <p className="font-mono text-[10px] uppercase tracking-[.16em] text-line mb-2">Next up</p>
+            <p className="text-[20px] font-semibold text-strong mb-1 tracking-[-.02em]">
+              {nextExercise.suggestion
+                ? `${nextExercise.suggestion.top_set.kg} kg × ${nextExercise.suggestion.top_set.reps}`
+                : `${nextExercise.rowCount} sets`}
+            </p>
+            <p className="text-[14.5px] text-ink">{nextExercise.exercise.name}</p>
+          </>
+        ) : (
+          <p className="text-[14.5px] text-line">{summary ?? ""}</p>
+        )}
+      </div>
+      <div className="flex-shrink-0 px-[22px] pb-[22px] flex flex-col gap-3.5">
+        {!effortAnswered ? (
+          <div className="border border-line-strong rounded-xl bg-surface px-[14px] pt-[15px] pb-3.5">
+            <p className="text-[15.5px] font-semibold text-strong mb-1 tracking-[-.01em]">How was that?</p>
+            <p className="text-[13px] text-ink mb-3">Tells the engine whether to push next week.</p>
+            <div className="flex gap-2">
+              {EFFORTS.map((effort) => (
+                <button
+                  key={effort.label}
+                  type="button"
+                  onClick={() => selectEffort(effort)}
+                  className={
+                    "flex-1 h-[66px] rounded-[10px] border " +
+                    (selectedEffort === effort.label
+                      ? "border-bronze bg-[rgba(200,150,102,.14)]"
+                      : "border-line-strong bg-surface-2")
+                  }
+                >
+                  <span className="block text-[15px] font-semibold text-strong">{effort.label}</span>
+                  <span
+                    className={
+                      "block font-mono text-[10px] mt-0.5 " +
+                      (selectedEffort === effort.label ? "text-bronze" : "text-line")
+                    }
+                  >
+                    RPE {effort.rpe}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        ) : null}
+        <div className="flex gap-2.5">
+          <button
+            type="button"
+            onClick={() => setElapsed((e) => Math.max(0, e - 30))}
+            className="flex-shrink-0 w-24 h-[58px] rounded-[10px] border border-line-strong text-ink text-[14.5px]"
+          >
+            +30s
+          </button>
+          <button
+            type="button"
+            onClick={skip}
+            className="flex-1 h-[58px] rounded-[10px] border border-line-strong bg-surface-2 text-strong text-[16px] font-semibold"
+          >
+            Skip rest
+          </button>
+        </div>
+        <button
+          type="button"
+          onClick={() => setJumpOpen(true)}
+          className="w-full h-10 text-ink text-[14px]"
+        >
+          Do something else next
+        </button>
+      </div>
+
+      {jumpOpen ? (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Jump to"
+          onClick={() => setJumpOpen(false)}
+          className="fixed inset-0 z-50 bg-ground/70 flex flex-col justify-end"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="w-full bg-surface border-t border-line-strong rounded-t-[16px] px-5 pt-[18px] pb-[calc(22px+env(safe-area-inset-bottom))]"
+          >
+            <p className="text-[16px] font-semibold text-strong mb-1 tracking-[-.015em]">Jump to</p>
+            <p className="text-[13.5px] leading-snug text-ink mb-3.5">
+              Order isn&apos;t sacred. The log records what you actually did, in the order you did it.
+            </p>
+            <div className="flex flex-col gap-[7px] mb-3">
+              {railExercises.map((r) => (
+                <button
+                  key={r.key}
+                  type="button"
+                  onClick={() => {
+                    setJumpOpen(false);
+                    onJump(r.key);
+                  }}
+                  className="flex items-center justify-between gap-3 rounded border border-line-soft bg-ground px-3.5 py-3"
+                >
+                  <span className="text-[14.5px] font-semibold text-strong tracking-[-.01em]">
+                    {r.exercise.name}
+                  </span>
+                </button>
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={() => setJumpOpen(false)}
+              className="w-full h-[50px] rounded-[10px] border border-line-strong text-ink text-[15px]"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}

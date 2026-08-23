@@ -1,12 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { loadProgram, loadProgramManifest, loadExercises } from "@/lib/data-loader";
-import { ExerciseCard } from "@/components/workout/ExerciseCard";
 import { HeroStateCard } from "@/components/workout/HeroStateCard";
-import { SessionActions } from "@/components/workout/SessionActions";
 import { FirstRunBanner } from "@/components/FirstRunBanner";
 import { EmptyStateCard } from "@/components/EmptyStateCard";
 import { DashboardBlock } from "@/components/DashboardBlock";
@@ -16,7 +14,6 @@ import { RunSlotCard } from "@/components/workout/RunSlotCard";
 import { MissedSessionPrompt } from "@/components/workout/MissedSessionPrompt";
 import { ProposalStack } from "@/components/workout/ProposalStack";
 import { Day1EmptyState } from "@/components/workout/Day1EmptyState";
-import { ConfirmSheet } from "@/components/ConfirmSheet";
 import { ArcProgressBar } from "@/components/ui/ArcProgressBar";
 import { useStore } from "@/lib/useStore";
 import { today as todayISO } from "@/lib/utils";
@@ -26,27 +23,28 @@ import {
   RACE_DATE,
   HOLIDAY_GAP,
 } from "@/lib/engine/schedule";
-import { evaluateRetestMetrics, formatMetric, deltaFromBaseline } from "@/lib/engine/retest-evaluator";
 import { blocksForDate } from "@/lib/engine/plan-generator";
 import { getBlocksForDate, isBlockObjectOn } from "@/lib/engine/block-selectors";
 import { migrateLegacyToBlocks, needsBlockMigration } from "@/lib/migrations/legacy-to-blocks";
-import { PerProgramActions } from "@/components/workout/PerProgramActions";
+import { RestDayCard, RetestReminder, GraduationCard } from "@/components/session/shared/StatusCards";
+import { programDisplayName, humanPhaseName, humanBlockName, phaseProgress, phaseWeekPair } from "@/lib/day-format";
 import type { Program, Block, Exercise, Phase, Store, ScheduledBlock, ProgramManifest } from "@/lib/schemas";
 /**
- * F8-second (2026-08-19/20) — the shared TodayView component that
- * powers both the / route (Today dashboard) and /session/[slug]
- * (focused session). Moved out of app/page.tsx because Next.js App
- * Router disallows non-default named exports from page files.
- *
- * When slugOverride is set (from /session/[slug]), the view narrows to
- * a single program and renders the full inline workout UI. Otherwise
- * Today shows a compact DashboardBlock summary per active program
- * with a "Open session →" CTA.
+ * F8-second (2026-08-19/20), trimmed for the Day redesign (2026-08-23) —
+ * this component now powers ONLY the `/` Today dashboard (compact
+ * DashboardBlock summary per active program + "Open session →" CTA).
+ * `/session/[slug]` moved to its own dedicated shell,
+ * `src/components/session/DaySession.tsx` — the old shared-component-via-
+ * `slugOverride` approach tangled two very different render trees (a
+ * compact dashboard vs. the full Brief/Set/Rest session UI) in one file.
+ * Empty/end-state cards (RestDayCard, RetestReminder, GraduationCard) and
+ * display-formatting helpers moved to `@/components/session/shared/
+ * StatusCards` and `@/lib/day-format` so both this file and DaySession.tsx
+ * reuse the identical logic instead of forking it.
  */
 export function TodaySession({
-  slugOverride,
   initialDate,
-}: { slugOverride?: string; initialDate?: string } = {}) {
+}: { initialDate?: string } = {}) {
   const [programs, setPrograms] = useState<Program[]>([]);
   const [byId, setById] = useState<Record<string, Exercise>>({});
   const [error, setError] = useState<string | null>(null);
@@ -84,12 +82,7 @@ export function TodaySession({
   // Effective list of programs to render. Legacy path: fall back to
   // just the primary. Multi-program: use the full active_program_ids list,
   // ordering primary first so its phase drives the header.
-  //
-  // F8-second (2026-08-19) — when slugOverride is set (from /session/[slug]
-  // route), narrow to just that program's session. Other active tracks are
-  // suppressed so the session view is single-focus.
   const activeSlugs: string[] = (() => {
-    if (slugOverride) return [slugOverride];
     if (activeProgramIds && activeProgramIds.length) {
       const ordered = activeProgramSlug
         ? [activeProgramSlug, ...activeProgramIds.filter((s) => s !== activeProgramSlug)]
@@ -208,63 +201,21 @@ export function TodaySession({
 
   return (
     <div className="space-y-6 pt-4">
-      {/* F8-second (2026-08-19) · session-mode Back link. Shown only on
-          /session/[slug] so users can escape back to the dashboard.
-          On Today (/), slugOverride is undefined and this stays hidden. */}
-      {slugOverride ? (
-        <Link
-          href="/"
-          className="inline-flex items-center gap-1 text-[14px] text-muted hover:text-ink -mb-2"
-        >
-          ← Back to Today
-        </Link>
-      ) : null}
-      {/* Batch 36 Step 10 · ArcProgressBar above the header when we have
-          a single-program user with a resolvable phase week. Multi-track
-          users get program-specific progress bars inside their group
-          cards below — surfacing a single top-level progress bar in a
-          multi-program state would misrepresent which program you're
-          progressing through.
-
-          Session mode (slugOverride) always shows this — session route
-          IS single-focus by definition (that's what slugOverride means),
-          so the multi-track suppression doesn't apply. Founder feedback
-          continued 2026-08-20. */}
       {/* Batch 36 Step 10 · H1 inversion per v1.1.1 §5 + landing C1
-          (Aug 2026). The workout name (or focus name for concurrent
-          tracks) is the H1; the route scope moves to a mono-caps
-          eyebrow above. Overturns commit 100760b which reverted H1 to
-          the route label "Today" to fix date-duplication with
-          DateNav — that fix was directionally right (kill duplication)
-          but landed the wrong hierarchy inversion. The correct
-          resolution: eyebrow tier owns scope + week, H1 owns the
-          workout name, DateNav still owns the calendar date.
-
-          Multi-track: primary program's display name is the H1;
-          concurrent tracks render below in their own DashboardBlock
-          groups (existing behavior preserved).
-
-          Batch 36 audit 2026-08-21 (app-a11y §2.2) — the H1 now
-          precedes the ArcProgressBar in source order. Prior order
-          rendered ArcProgressBar (a progressbar widget) before the
-          H1, which broke WCAG 2.4.3 (Focus Order) and the standard
-          "landmark → heading → controls" reading model for SR
-          users. Aria-label on the bar already drops program name to
-          avoid double-announcement with the H1 (fixed earlier). */}
+          (Aug 2026). The workout name is the H1; the route scope moves to
+          a mono-caps eyebrow above. Multi-track: primary program's
+          display name is the H1; concurrent tracks render below in their
+          own DashboardBlock groups. */}
       <header className="space-y-1">
         <p className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted">
-          {todayEyebrow(slugOverride, activeDate, phase)}
+          {todayEyebrow(activeDate, phase)}
         </p>
         <h1 className="text-[32px] font-bold tracking-[-0.03em] text-strong leading-none">
-          {primary.slug
-            ? programDisplayName(primary, primary.slug)
-            : slugOverride
-              ? "Focus session"
-              : "Day"}
+          {primary.slug ? programDisplayName(primary, primary.slug) : "Day"}
         </h1>
       </header>
 
-      {(programs.length === 1 || slugOverride) && phase && phaseWeekPair(phase, activeDate) ? (
+      {programs.length === 1 && phase && phaseWeekPair(phase, activeDate) ? (
         (() => {
           const pair = phaseWeekPair(phase, activeDate)!;
           const programName = primary.slug ? programDisplayName(primary, primary.slug) : "Program";
@@ -281,21 +232,15 @@ export function TodaySession({
 
       {/* Suppress the reveal card once the user has any real log history —
           if they've been using the app, they know what plan they're on.
-          Also suppress after graduation. Delta audit 2026-08-19.
-          Session mode suppresses too — Focus session is single-program;
-          the reveal card is a "which program am I on" dashboard tool. */}
-      {!slugOverride &&
-      !isPastProgramEnd(primary, activeDate, userProfile) &&
+          Also suppress after graduation. Delta audit 2026-08-19. */}
+      {!isPastProgramEnd(primary, activeDate, userProfile) &&
       Object.keys(logs ?? {}).length < 3 ? (
         <YourPlanCard program={primary} />
       ) : null}
 
-      {/* FirstRunBanner + MissedSessionPrompt are dashboard-scoped — they
-          nudge users toward opening a session. On /session/[slug] the
-          user is ALREADY in the session; these are noise. */}
-      {!slugOverride ? <FirstRunBanner /> : null}
+      <FirstRunBanner />
 
-      {!slugOverride && activeDate === todayISO() ? (
+      {activeDate === todayISO() ? (
         <MissedSessionPrompt
           program={primary}
           todayISO={todayISO()}
@@ -342,13 +287,13 @@ export function TodaySession({
           Today showed "Taper + test · week 1 of 3" alongside the graduation
           card — 4 contradictory clocks on rowing per delta audit
           2026-08-19. */}
-      {/* Phase readout — shown only in session mode (/session/[slug]) or
-          on rest days (allBlocks.length === 0). Dashboard mode's
-          workout DashboardBlock lede already carries the phase name,
-          so showing it here too would repeat the same info twice. */}
+      {/* Phase readout — shown on rest days (allBlocks.length === 0).
+          Dashboard mode's workout DashboardBlock lede already carries the
+          phase name on workout days, so showing it here too would repeat
+          the same info twice. */}
       {phase &&
       !isPastProgramEnd(primary, activeDate, userProfile) &&
-      (slugOverride || allBlocks.length === 0) ? (
+      allBlocks.length === 0 ? (
         <p className="-mt-3 text-[14px] text-muted leading-tight">
           <span className="text-strong">{humanPhaseName(phase.name)}</span>
           {phaseProgress(phase, activeDate) ? (
@@ -357,35 +302,20 @@ export function TodaySession({
         </p>
       ) : null}
 
-      {/* Day-1 empty-state, ProposalStack, HeroStateCard, SignalsStrip,
-          RetestReminder — dashboard-scoped. On session route the user
-          is already in the workout; these are noise. Founder-caught
-          2026-08-20: "no check yet" appearing on session mode reads as
-          a dashboard-page duplicate.
-
-          ProposalStack does stay on session — proposals are workout-
-          relevant (accept the TM bump before starting the block, etc.).
-          The other three go. */}
-      {!slugOverride ? (
-        (() => {
-          const noCheckToday = !logs[activeDate]?.symptoms;
-          if (!hasHistory && noCheckToday && activeDate === todayISO()) {
-            return <Day1EmptyState />;
-          }
-          return null;
-        })()
-      ) : null}
+      {(() => {
+        const noCheckToday = !logs[activeDate]?.symptoms;
+        if (!hasHistory && noCheckToday && activeDate === todayISO()) {
+          return <Day1EmptyState />;
+        }
+        return null;
+      })()}
 
       {!isPastProgramEnd(primary, activeDate, userProfile) ? (
         <>
           <ProposalStack program={primary} date={activeDate} />
-          {!slugOverride ? (
-            <>
-              <HeroStateCard date={activeDate} />
-              <SignalsStrip program={primary} date={activeDate} />
-              <RetestReminder program={primary} profile={userProfile} activeDate={activeDate} />
-            </>
-          ) : null}
+          <HeroStateCard date={activeDate} />
+          <SignalsStrip program={primary} date={activeDate} />
+          <RetestReminder program={primary} profile={userProfile} activeDate={activeDate} />
         </>
       ) : null}
       {/* Batch 38 (2026-08-21) — HeroStateCard no longer renders on
@@ -481,9 +411,8 @@ export function TodaySession({
         })()
       ) : null}
 
-      {/* Multi-track interference banner — dashboard-scoped. Session
-          route is single-program by definition; suppress. */}
-      {!slugOverride && multipleProgramsToday ? (
+      {/* Multi-track interference banner. */}
+      {multipleProgramsToday ? (
         (() => {
           // Track-specific interference wording. Delta-3 flagged the
           // hardcoded Schumann text fired for every pair including
@@ -571,14 +500,11 @@ export function TodaySession({
           })()}
           <div id="log-session" className="cv-auto"><RunSlotCard date={activeDate} /></div>
         </>
-      ) : !slugOverride ? (
-        /* F8-second (2026-08-20) — Today's dashboard mode. When NOT
-           already in session mode, replace the inline workout render
-           with a compact DashboardBlock summary + "Open session →" CTA.
-           Users scan today's workout at a glance and dive into the
-           focused session only when they're ready to work. Session
-           route (/session/[slug]) below still renders the full inline
-           workout UI. */
+      ) : (
+        /* Today's dashboard mode: a compact DashboardBlock summary per
+           active program + "Open session →" CTA. Users scan today's
+           workout at a glance and dive into the focused session
+           (/session/[slug], DaySession.tsx) only when ready to work. */
         <>
           {groups.map((g, gi) => {
             if (g.blocks.length === 0) return null;
@@ -697,105 +623,27 @@ export function TodaySession({
           })()}
           <div id="log-session" className="cv-auto"><RunSlotCard date={activeDate} /></div>
         </>
-      ) : (
-        <div className="space-y-6">
-          {/* Phase C · Day-header shortcut — only when block-object is on AND
-              2+ programs have blocks today. Single-program stays visually
-              identical to the legacy path. See §0.2 of the plan. */}
-          {blockObjectOn && multipleProgramsToday ? (
-            <DayHeaderShortcut date={activeDate} programCount={groupsWithBlocks.length} />
-          ) : null}
-          {groups.map((g, gi) =>
-            g.blocks.length === 0 ? null : (
-              <div key={g.program.schema_version + ":" + gi} className="space-y-5">
-                {/* Audit 2026-08-18 (a11y P1) — h2 for landmark jumping.
-                    Visual styling unchanged. */}
-                {groupsWithBlocks.length > 1 ? (
-                  <h2 className="font-mono text-[11px] uppercase tracking-widest text-muted -mb-2 font-normal">
-                    {programDisplayName(g.program, activeSlugs[gi])}
-                  </h2>
-                ) : null}
-                {g.blocks.map((b) => {
-                  // Apply the primary program's phase.duration_multiplier when
-                  // present — used by test-prep programs' taper phase to
-                  // visually shrink the session card without duplicating every
-                  // block. Only applies to the primary program; secondary
-                  // programs use their own phase progression.
-                  const groupPhase = gi === 0 ? phase : undefined;
-                  const mult =
-                    ((groupPhase as unknown as { duration_multiplier?: number } | undefined)
-                      ?.duration_multiplier) ?? 1;
-                  return (
-                    <BlockSection
-                      key={`${activeSlugs[gi]}:${b.id}`}
-                      block={b}
-                      byId={byId}
-                      program={g.program}
-                      date={activeDate}
-                      durationMultiplier={mult}
-                    />
-                  );
-                })}
-                {/* Phase C · Per-program Skip / Move menu, ONLY when
-                    block-object is on. Legacy path still uses the one
-                    SessionActions at the bottom (below). */}
-                {blockObjectOn && g.program.slug ? (
-                  <PerProgramActions
-                    programSlug={g.program.slug}
-                    programName={programDisplayName(g.program, activeSlugs[gi])}
-                    date={activeDate}
-                    scheduledBlocks={g.scheduled}
-                  />
-                ) : null}
-              </div>
-            ),
-          )}
-          <div id="log-session" className="cv-auto"><RunSlotCard date={activeDate} /></div>
-          {/* Legacy whole-day actions. Block-object mode drives skip/move
-              per program via <PerProgramActions> above. */}
-          {!blockObjectOn ? (
-            <SessionActions blockIds={allBlocks.map((b) => b.id)} date={activeDate} program={primary} />
-          ) : null}
-        </div>
       )}
     </div>
   );
 }
 
-function programDisplayName(_program: Program, slug: string): string {
-  // Slug title-case matches the manifest name for every current program;
-  // `program_goal.display_name` is often the target metric ("Loaded
-  // overhead shoulder flexion") and reads as a bug. Same anti-pattern
-  // reveal-copy.ts + BlockHistorySection.tsx already fix. Multi-track
-  // delta-3 caught this leaked in the multi-program h2 render.
-  return slug
-    .split("-")
-    .map((w) => (w.length ? w[0].toUpperCase() + w.slice(1) : w))
-    .join(" ");
-}
-
 /**
  * Batch 36 Step 10 — mono-caps eyebrow above the Today H1 per v1.1.1 §5.
  *
- * On today: "TODAY" or "TODAY · WEEK 3 OF 6" (when phase carries a week
- * progress). On date-nav browsing: "MON · AUG 18" style short-form. On
- * session route: "SESSION · WEEK 3 OF 6".
+ * "TODAY" or "TODAY · WEEK 3 OF 6" (when phase carries a week progress).
+ * On date-nav browsing: "MON · AUG 18" style short-form.
  *
  * Purpose: solve the DateNav duplication without inverting hierarchy.
  * The eyebrow tier gives just enough scope + progress that the H1 can
  * carry the workout name unchallenged.
  */
 function todayEyebrow(
-  slugOverride: string | undefined,
   activeDate: string,
   phase: Phase | null | undefined,
 ): string {
   const iso = todayISO();
-  const scopeToken = slugOverride
-    ? "SESSION"
-    : activeDate === iso
-      ? "TODAY"
-      : shortDateToken(activeDate);
+  const scopeToken = activeDate === iso ? "TODAY" : shortDateToken(activeDate);
   const progressToken = phase ? phaseProgressToken(phase, activeDate) : null;
   return progressToken ? `${scopeToken} · ${progressToken}` : scopeToken;
 }
@@ -814,75 +662,6 @@ function phaseProgressToken(phase: Phase, activeDate: string): string | null {
   return raw.toUpperCase();
 }
 
-/**
- * Phase C — day-level header that appears ONLY when 2+ programs are
- * scheduled on the same date. Carries a compact "Skip whole day"
- * shortcut so the founder doesn't have to hit Skip on every card
- * individually. See §0.2 of the plan. Single-program state omits this
- * entirely — no chrome tax.
- */
-function DayHeaderShortcut({ date, programCount }: { date: string; programCount: number }) {
-  const skipWholeDay = useStore((s) => s.skipWholeDay);
-  const [confirming, setConfirming] = useState(false);
-  const confirmRef = useRef<HTMLButtonElement>(null);
-  const humanDate = new Date(date + "T12:00:00").toLocaleDateString("en-GB", {
-    weekday: "long",
-    day: "numeric",
-    month: "short",
-  });
-  // Audit 2026-08-18 (a11y + mobile-UX + visual-craft) — was 40px (Apple 44
-  // fail); confirm-swap jumped ~50px (Cancel + Confirm pair widened the
-  // container in `justify-between`); focus was lost on swap. Fix: bump
-  // every button to min-h-[44px]; wrap the swap area in a stable-width
-  // container so Confirm lands under the original Skip position; autofocus
-  // Confirm after swap.
-  useEffect(() => {
-    if (confirming) confirmRef.current?.focus();
-  }, [confirming]);
-  return (
-    <div className="rounded border border-line-soft border-l-4 border-l-line bg-surface p-3 flex items-center justify-between gap-3">
-      <div className="text-sm">
-        <p className="font-semibold text-strong">{humanDate}</p>
-        <p className="text-muted text-[14px] mt-0.5">
-          {programCount} tracks scheduled today. Skip or move each independently below.
-        </p>
-      </div>
-      <div className="min-w-[176px] flex justify-end items-center gap-2">
-        {!confirming ? (
-          <button
-            type="button"
-            onClick={() => setConfirming(true)}
-            className="text-[12px] mono-caps border border-line rounded px-3 py-2 min-h-[44px] hover:bg-line-soft"
-          >
-            Skip whole day
-          </button>
-        ) : (
-          <>
-            <button
-              type="button"
-              onClick={() => setConfirming(false)}
-              className="text-[12px] mono-caps text-muted hover:text-ink px-3 py-2 min-h-[44px]"
-            >
-              Cancel
-            </button>
-            <button
-              ref={confirmRef}
-              type="button"
-              onClick={() => {
-                skipWholeDay(date);
-                setConfirming(false);
-              }}
-              className="text-[12px] mono-caps rounded bg-bronze text-ground px-3 py-2 min-h-[44px] hover:bg-bronze-hover"
-            >
-              Confirm skip
-            </button>
-          </>
-        )}
-      </div>
-    </div>
-  );
-}
-
 function NoActiveProgram() {
   return (
     <>
@@ -898,829 +677,3 @@ function NoActiveProgram() {
     </>
   );
 }
-
-/**
- * For rowing programs, derive a personal target pace from the user's intake
- * `current_2k_time` answer. Renders below the block note so a user reads
- * "4×8 min @ 1:53 target split" instead of "5-10 sec/500m over 2K pace".
- */
-function RowingPersonalisedTargets({
-  block,
-  program,
-}: {
-  block: Block;
-  program: Program;
-}) {
-  const userProfile = useStore((s) => s.store.user_profile);
-  if (program.slug !== "rowing-2k-test-prep") return null;
-  const answer =
-    program.slug
-      ? userProfile?.program_states?.[program.slug]?.intake_answers?.current_2k_time
-      : undefined;
-  if (!answer) return null;
-  // Prefer exact mm:ss format ("7:52") over the legacy enum midpoints. Falls
-  // back to the enum map for existing users who answered before the input
-  // switched to text.
-  let twoKSec: number | null = null;
-  const mmss = /^\s*(\d{1,2}):(\d{2})\s*$/.exec(answer);
-  if (mmss) {
-    const mins = Number(mmss[1]);
-    const secs = Number(mmss[2]);
-    if (Number.isFinite(mins) && Number.isFinite(secs) && secs < 60) {
-      twoKSec = mins * 60 + secs;
-    }
-  }
-  if (twoKSec == null) {
-    const map: Record<string, number> = {
-      sub_7: 400,
-      "7_8": 450,
-      "8_9": 510,
-      "9_10": 570,
-      over_10: 630,
-    };
-    twoKSec = map[answer] ?? null;
-  }
-  if (twoKSec == null) return null;
-  const paceSec = Math.round(twoKSec / 4);
-  const fmt = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
-  const targets: Array<{ label: string; pace: string }> = [];
-  // Match on block id to keep this precise; each rowing block has an intended
-  // pace derived off 2K time.
-  if (block.id === "block_threshold_row") {
-    targets.push({ label: "Threshold split", pace: fmt(paceSec + 8) });
-    targets.push({ label: "Target HR zone", pace: "82-88% max" });
-  } else if (block.id === "block_race_pace_row") {
-    targets.push({ label: "Race-pace split", pace: fmt(paceSec) });
-  } else if (block.id === "block_z2_row") {
-    targets.push({ label: "Z2 split (approx.)", pace: fmt(paceSec + 20) });
-  } else if (block.id === "block_open_2k") {
-    targets.push({ label: "Target 2K split", pace: fmt(paceSec - 2) });
-  }
-  if (!targets.length) return null;
-  return (
-    <div className="rounded border border-bronze/30 bg-bronze/5 px-3 py-2 text-[14px]">
-      <p className="mono-caps mb-1 text-bronze">Your target</p>
-      {targets.map((t) => (
-        <p key={t.label} className="text-ink">
-          <span className="text-muted">{t.label}:</span>{" "}
-          <span className="font-mono font-semibold">{t.pace}</span>
-        </p>
-      ))}
-      <p className="mt-1 text-[10px] text-muted italic">
-        Derived from your intake&apos;s current 2K. Update on Progress to refine.
-      </p>
-    </div>
-  );
-}
-
-/**
- * Small "Log this session" affordance shown under aerobic block cards — opens
- * the same RunSlotCard on the same date. Cuts a scroll for rowing / engine
- * users whose primary interaction is logging the run they just did.
- */
-function LogSessionShortcut({ date }: { date: string }) {
-  void date;
-  return (
-    <a
-      href="#log-session"
-      className="inline-flex items-center gap-1.5 rounded-full border border-slate/40 bg-slate/[0.08] px-3 py-1.5 text-[12px] font-mono uppercase tracking-wider text-slate hover:bg-slate/15"
-    >
-      ↓ Log this session
-    </a>
-  );
-}
-
-/**
- * F5 (Batch 23) — one-tap verb row with caption. Vertical stack replaces
- * the prior horizontal chip row on GraduationCard; the caption is the
- * load-bearing "what does this do" affordance for a rare-frequency
- * end-of-arc decision.
- */
-function VerbRow({
-  label,
-  caption,
-  variant,
-  onClick,
-}: {
-  label: string;
-  caption: string;
-  variant: "primary" | "secondary";
-  onClick: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={
-        variant === "primary"
-          ? "w-full text-left rounded bg-bronze text-ground active:bg-bronze-active px-3 py-2.5 min-h-[52px]"
-          : "w-full text-left rounded border border-line-soft bg-surface active:bg-line-soft/60 px-3 py-2.5 min-h-[52px]"
-      }
-    >
-      {/* P1-63 (Batch 27) — button labels migrated from 11 px mono-caps
-          to 14 px sentence-case font-semibold. Mono-caps stays for
-          eyebrows + pills + row-meta; button-labels want the same
-          weight/scale as body text so verbs read as verbs, not chips. */}
-      <p
-        className={
-          variant === "primary"
-            ? "text-[14px] font-semibold"
-            : "text-[14px] font-semibold text-ink"
-        }
-      >
-        {label}
-      </p>
-      <p
-        className={
-          variant === "primary"
-            ? "text-[12px] text-ground/80 mt-0.5"
-            : "text-[12px] text-muted mt-0.5"
-        }
-      >
-        {caption}
-      </p>
-    </button>
-  );
-}
-
-function GraduationCard({ program }: { program: Program }) {
-  const store = useStore((s) => s.store);
-  const removeActiveProgram = useStore((s) => s.removeActiveProgram);
-  const markGraduated = useStore((s) => s.markGraduated);
-  const restartProgram = useStore((s) => s.restartProgram);
-  const extendProgram = useStore((s) => s.extendProgram);
-  const pauseProgram = useStore((s) => s.pauseProgram);
-  const [confirmEnd, setConfirmEnd] = useState(false);
-  const [manifest, setManifest] = useState<ProgramManifest | null>(null);
-  const userTier = program.slug
-    ? store.user_profile?.program_states?.[program.slug]?.tier
-    : undefined;
-  const metrics = evaluateRetestMetrics(program, store, userTier ?? undefined);
-  const startedAt =
-    (program.slug && store.user_profile?.program_states?.[program.slug]?.started_at) ||
-    store.user_profile?.active_program_started_at ||
-    undefined;
-  const weeksIn = (() => {
-    if (!startedAt) return null;
-    const start = new Date(startedAt.slice(0, 10) + "T00:00:00").getTime();
-    const now = Date.now();
-    const days = Math.floor((now - start) / 864e5);
-    return days > 0 ? Math.floor(days / 7) : null;
-  })();
-
-  const displayable = metrics.filter((m) => m.supported && m.current != null);
-
-  // Slug title-case — same anti-pattern reveal-copy / BlockHistorySection
-  // / programDisplayName already avoid. Multi-track + graduation delta-3
-  // both caught the metric-name leak.
-  const programName = program.slug
-    ? program.slug
-        .split("-")
-        .map((w) => (w.length ? w[0].toUpperCase() + w.slice(1) : w))
-        .join(" ")
-    : program.program_goal?.display_name ?? "Your program";
-
-  // Follow-on program pointer. Programs authored as `block_1_of_N` can
-  // declare `next_block_slug` in JSON to link to Block 2. Falls back to
-  // a generic Programs catalog CTA. Graduation delta-3 2026-08-19.
-  const nextBlockSlug =
-    (program as unknown as { next_block_slug?: string }).next_block_slug ??
-    (program.goals as unknown as { next_block_slug?: string })?.next_block_slug ??
-    null;
-  const nextBlockEntry = nextBlockSlug
-    ? manifest?.programs.find((p) => p.slug === nextBlockSlug) ?? null
-    : null;
-
-  // Arc-verdict chip — compare current-vs-baseline against block_1_targets.
-  const blockTargets =
-    (program.goals as unknown as { block_1_targets?: Record<string, number[]> })
-      ?.block_1_targets ?? null;
-  const arcVerdict = (() => {
-    if (!displayable.length || !blockTargets) return null;
-    let hit = 0;
-    let total = 0;
-    for (const m of displayable) {
-      const delta = deltaFromBaseline(m);
-      if (!delta) continue;
-      total++;
-      if (delta.isImprovement) hit++;
-    }
-    if (total === 0) return null;
-    if (hit === total) return { tone: "green" as const, label: "Targets hit" };
-    if (hit > 0) return { tone: "amber" as const, label: `${hit}/${total} on track` };
-    return { tone: "red" as const, label: "Below target" };
-  })();
-
-  // Load manifest for next-block preview + write graduated_at once.
-  useEffect(() => {
-    void loadProgramManifest().then(setManifest).catch(() => setManifest(null));
-    if (program.slug) {
-      const already = store.user_profile?.program_states?.[program.slug]?.graduated_at;
-      if (!already) markGraduated(program.slug, todayISO());
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [program.slug]);
-
-  return (
-    <div className="space-y-4">
-      <div className="rounded-lg border border-bronze/40 border-l-4 border-l-bronze bg-bronze/[0.06] p-4 space-y-3">
-        <div className="flex items-baseline justify-between gap-2 flex-wrap">
-          <div>
-            <p className="font-mono text-[10px] uppercase tracking-widest text-bronze">You finished</p>
-            <h2 className="text-lg font-semibold text-strong mt-1">{programName}</h2>
-            {weeksIn ? (
-              <p className="text-[14px] text-muted mt-0.5">
-                {weeksIn} weeks logged. Nice.
-              </p>
-            ) : null}
-          </div>
-          {arcVerdict ? (
-            <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
-              <span
-                aria-hidden
-                className={`h-1.5 w-1.5 rounded-full ${
-                  arcVerdict.tone === "green"
-                    ? "bg-green"
-                    : arcVerdict.tone === "amber"
-                      ? "bg-amber"
-                      : "bg-red"
-                }`}
-              />
-              {arcVerdict.label}
-            </span>
-          ) : null}
-        </div>
-        {displayable.length ? (
-          <div className="rounded border border-line-soft bg-surface p-3 space-y-2">
-            <p className="font-mono text-[10px] uppercase tracking-wider text-muted">Where you landed</p>
-            <ul className="space-y-1.5">
-              {displayable.map((m) => {
-                const delta = deltaFromBaseline(m);
-                return (
-                  <li key={m.metric_id} className="flex items-baseline justify-between gap-2 text-[14px]">
-                    <span className="text-ink truncate">{m.display_name}</span>
-                    <span className="font-mono flex items-baseline gap-2 flex-shrink-0">
-                      <span className="text-strong">{formatMetric(m.current, m.unit)}</span>
-                      {delta ? (
-                        <span className={delta.isImprovement ? "text-green" : "text-red"}>
-                          {delta.value >= 0 ? "+" : ""}
-                          {formatMetric(delta.value, m.unit)}
-                        </span>
-                      ) : null}
-                    </span>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        ) : (
-          <p className="text-[14px] text-muted italic">
-            No retest metrics recorded — head to Progress to log your final numbers.
-          </p>
-        )}
-        {nextBlockEntry ? (
-          <Link
-            href={`/programs/${nextBlockEntry.slug}`}
-            className="block rounded border border-slate/40 bg-slate/[0.06] p-3 hover:bg-slate/10 transition-colors"
-          >
-            <p className="font-mono text-[10px] uppercase tracking-widest text-slate">Next block</p>
-            <p className="text-sm font-semibold text-strong mt-0.5">{nextBlockEntry.name}</p>
-            <p className="text-[12px] text-muted mt-1 line-clamp-2">
-              {nextBlockEntry.short_description ?? "The next arc in this program family."}
-            </p>
-            <p className="text-[11px] font-mono uppercase tracking-wider text-slate mt-1.5">
-              Preview →
-            </p>
-          </Link>
-        ) : null}
-        {/* F5 (Batch 23) — 4-verb vertical stack replaces the prior chip
-            row. Each verb has a caption to disambiguate — this is a rare-
-            frequency decision, so density < clarity. Order: Repeat is
-            the primary (bronze fill); Extend / Take a break / Pick next
-            are secondary. */}
-        <div className="space-y-2 pt-1">
-          {program.slug ? (
-            <VerbRow
-              variant="primary"
-              label="Repeat this arc"
-              caption="Restart · keep intake + baselines"
-              onClick={() => {
-                if (!program.slug) return;
-                restartProgram(program.slug, todayISO());
-              }}
-            />
-          ) : null}
-          {program.slug ? (
-            <VerbRow
-              variant="secondary"
-              label="Extend +4 weeks"
-              caption="Push the retest date · keep the arc going"
-              onClick={() => {
-                if (!program.slug) return;
-                extendProgram(program.slug, 4);
-              }}
-            />
-          ) : null}
-          {program.slug ? (
-            <VerbRow
-              variant="secondary"
-              label="Take a break"
-              caption="Pauses Today · stays in your programs list"
-              onClick={() => {
-                if (!program.slug) return;
-                pauseProgram(program.slug, todayISO());
-              }}
-            />
-          ) : null}
-          <Link
-            href="/programs"
-            className="block rounded border border-slate/40 bg-surface active:bg-slate/10 px-3 py-2.5 min-h-[52px]"
-          >
-            <p className="font-mono text-[11px] uppercase tracking-wider text-slate">
-              Pick your next focus →
-            </p>
-            <p className="text-[12px] text-muted mt-0.5">
-              {nextBlockEntry ? "Preview the next block or browse the catalog" : "Browse the catalog"}
-            </p>
-          </Link>
-        </div>
-        <GraduationFeedback slug={program.slug ?? null} />
-        {/* Batch 36 audit 2026-08-21 (app-mobile-ux) — was a bare inline
-            text link (~14px, sub-44px target). Wrapped in a button-shaped
-            hit zone with min-h-11 and destructive-color tone. It's a
-            program-wipe so it should look and feel like a considered
-            press, not a stray tap. Still text-only (no bronze) so it
-            does not compete with the "Pick your next focus →" primary
-            CTA above it — bronze is CTA-only per R2. */}
-        <button
-          type="button"
-          onClick={() => setConfirmEnd(true)}
-          className="self-start min-h-11 inline-flex items-center px-3 -mx-3 text-[12px] text-red hover:text-red-strong hover:bg-line-soft rounded"
-        >
-          End this program
-        </button>
-      </div>
-      <ConfirmSheet
-        open={confirmEnd}
-        title={`End "${programName}"?`}
-        body="Your log history stays. You'll return to the catalog to pick another."
-        confirmLabel="End program"
-        danger
-        onConfirm={() => {
-          setConfirmEnd(false);
-          if (program.slug) removeActiveProgram(program.slug);
-        }}
-        onCancel={() => setConfirmEnd(false)}
-      />
-    </div>
-  );
-}
-
-function GraduationFeedback({ slug }: { slug: string | null }) {
-  const stored = useStore((s) =>
-    slug ? s.store.user_profile?.program_states?.[slug]?.graduation_feedback : undefined,
-  );
-  const saveGraduationFeedback = useStore((s) => s.saveGraduationFeedback);
-  const [rating, setRating] = useState<number | null>(stored?.rating ?? null);
-  const [note, setNote] = useState<string>(stored?.note ?? "");
-  const [open, setOpen] = useState(!stored);
-  if (!slug) return null;
-
-  if (!open && stored) {
-    return (
-      <p className="text-[12px] text-muted italic pt-1">
-        You rated this arc {stored.rating}/5.{" "}
-        <button
-          type="button"
-          className="underline decoration-muted/40 hover:text-ink"
-          onClick={() => setOpen(true)}
-        >
-          Change
-        </button>
-      </p>
-    );
-  }
-
-  return (
-    <div className="rounded border border-line-soft bg-surface p-3 space-y-2">
-      <p className="font-mono text-[10px] uppercase tracking-wider text-muted">
-        How was this arc?
-      </p>
-      <div className="flex items-center gap-2">
-        {[1, 2, 3, 4, 5].map((n) => (
-          <button
-            key={n}
-            type="button"
-            onClick={() => setRating(n)}
-            aria-label={`Rate ${n} of 5`}
-            className={`w-11 h-11 rounded font-mono text-sm ${
-              rating === n
-                ? "bg-bronze text-ground"
-                : "border border-line text-muted hover:text-ink"
-            }`}
-          >
-            {n}
-          </button>
-        ))}
-      </div>
-      <textarea
-        rows={2}
-        value={note}
-        onChange={(e) => setNote(e.target.value)}
-        placeholder="Optional — what worked, what didn't, what surprised you"
-        className="w-full text-[14px] px-2 py-1.5 border border-line rounded bg-ground focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze resize-none"
-      />
-      <div className="flex gap-2">
-        <button
-          type="button"
-          disabled={rating == null}
-          onClick={() => {
-            if (rating == null) return;
-            saveGraduationFeedback(slug, rating, note.trim() || undefined);
-            setOpen(false);
-          }}
-          className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover disabled:opacity-40 disabled:cursor-not-allowed min-h-[36px]"
-        >
-          Save
-        </button>
-        {stored ? (
-          <button
-            type="button"
-            onClick={() => setOpen(false)}
-            className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-muted hover:text-ink min-h-[36px]"
-          >
-            Cancel
-          </button>
-        ) : null}
-      </div>
-    </div>
-  );
-}
-
-function RestDayCard({
-  variant = "rest",
-  programName,
-  firstSessionDate,
-  programSlug,
-}: {
-  variant?: "rest" | "before" | "race" | "holiday" | "test";
-  programName?: string;
-  firstSessionDate?: string;
-  programSlug?: string;
-}) {
-  if (variant === "test") {
-    return (
-      <div className="rounded border border-bronze/30 border-l-4 border-l-bronze bg-bronze/10 p-4 text-sm">
-        <p className="font-semibold text-strong">Test day.</p>
-        <p className="mt-1 text-muted">
-          The 2K test is on. Warm-up 15-20 min including 2-3 short race-pace pieces.
-          Log the result via the session card below — the retest metric picks it up.
-        </p>
-      </div>
-    );
-  }
-  if (variant === "before") {
-    const humanDate = firstSessionDate
-      ? new Date(firstSessionDate + "T00:00:00").toLocaleDateString(undefined, {
-          weekday: "long",
-          month: "short",
-          day: "numeric",
-        })
-      : null;
-    const isRowing = programSlug === "rowing-2k-test-prep";
-    return (
-      <div className="rounded border border-line-soft border-l-4 border-l-bronze bg-surface p-4 text-sm">
-        <p className="font-semibold text-strong">
-          {humanDate ? `First session on ${humanDate}.` : "Before the program starts."}
-        </p>
-        <p className="mt-1 text-muted">
-          {isRowing
-            ? "You've scheduled your test date further out than the program's 6-week arc. Use the intervening weeks to keep easy Z2 volume — log any sessions via the card below and they'll anchor your baseline."
-            : "You're looking at a day before Phase 1 begins. Log any training you do via the card below — it counts toward your history."}
-        </p>
-      </div>
-    );
-  }
-  if (variant === "race") {
-    return (
-      <div className="rounded border border-bronze/30 border-l-4 border-l-bronze bg-bronze/10 p-4 text-sm">
-        <p className="font-semibold text-strong">Race day.</p>
-        <p className="mt-1 text-muted">
-          Race day. No strength today. Reach the start line healthy.
-        </p>
-      </div>
-    );
-  }
-  if (variant === "holiday") {
-    return (
-      <div className="rounded border border-line-soft border-l-4 border-l-line bg-surface p-4 text-sm">
-        <p className="font-semibold">Holiday / light period.</p>
-        <p className="mt-1 text-muted">
-          Documented light window between Phase 4 (test) and Phase 5 (Hatch). No prescribed strength session.
-          Optional 60% TM movement work; see the Extras tab.
-        </p>
-      </div>
-    );
-  }
-  return (
-    <div className="rounded border border-line-soft border-l-4 border-l-line bg-surface p-4 text-sm">
-      <p className="font-semibold">Rest day.</p>
-      <p className="mt-1 text-muted">
-        {programName ? `${programName} has no session on the schedule today. ` : "No session on the schedule today. "}
-        Optional work (accessories, mobility, easy movement) lives on the Extras tab and still logs to today.
-      </p>
-    </div>
-  );
-}
-
-function RetestReminder({
-  program,
-  profile,
-  activeDate,
-}: {
-  program: Program;
-  profile: Store["user_profile"] | undefined;
-  activeDate: string;
-}) {
-  const [dismissed, setDismissed] = useState(false);
-  const metrics = (program as unknown as { retest_metrics?: Array<{ cadence_weeks?: number; display_name?: string }> }).retest_metrics;
-  const cadences = (metrics ?? [])
-    .map((m) => (typeof m.cadence_weeks === "number" ? m.cadence_weeks : null))
-    .filter((c): c is number => c != null && c > 0);
-  const startedRaw =
-    profile?.program_states?.[program.slug ?? ""]?.started_at ??
-    profile?.active_program_started_at;
-  const startedISO = startedRaw?.slice(0, 10);
-  const startMs = startedISO ? new Date(startedISO + "T00:00:00").getTime() : NaN;
-  const nowMs = new Date(activeDate + "T00:00:00").getTime();
-  const daysIn = Number.isFinite(startMs) && Number.isFinite(nowMs)
-    ? Math.floor((nowMs - startMs) / 864e5)
-    : 0;
-  const weeksIn = daysIn > 0 ? Math.floor(daysIn / 7) : 0;
-  const dow = new Date(activeDate + "T12:00:00").getDay(); // 0 Sun, 1 Mon
-
-  // ISO week key so the "Not this week" dismiss re-fires next Monday.
-  const isoWeekKey = (() => {
-    const d = new Date(activeDate + "T12:00:00");
-    const yearStart = new Date(d.getFullYear(), 0, 1);
-    const weeks = Math.ceil(((d.getTime() - yearStart.getTime()) / 864e5 + yearStart.getDay() + 1) / 7);
-    return `${d.getFullYear()}-W${String(weeks).padStart(2, "0")}`;
-  })();
-  const dismissKey = program.slug ? `retest.dismissed.${program.slug}.${isoWeekKey}` : null;
-
-  useEffect(() => {
-    if (typeof window === "undefined" || !dismissKey) return;
-    setDismissed(localStorage.getItem(dismissKey) === "1");
-  }, [dismissKey]);
-
-  if (!metrics?.length || !cadences.length) return null;
-  if (!startedISO || !Number.isFinite(startMs) || !Number.isFinite(nowMs)) return null;
-  if (daysIn < 7) return null;
-  if (dow !== 1) return null;
-  const dueThisWeek = cadences.some((c) => weeksIn > 0 && weeksIn % c === 0);
-  if (!dueThisWeek) return null;
-  if (dismissed) return null;
-
-  const displayMetrics = metrics.slice(0, 4);
-
-  const onDismiss = () => {
-    if (!dismissKey) return;
-    try {
-      localStorage.setItem(dismissKey, "1");
-    } catch {
-      /* ignore */
-    }
-    setDismissed(true);
-  };
-
-  return (
-    <div className="rounded border border-bronze/30 border-l-4 border-l-bronze bg-bronze/10 p-4 text-[14px] space-y-2">
-      {/* F10 (Batch 24) — retest-window Monday hand-off. Fires on the
-          Mon of a week that hits a cadence (weeksIn % cadence === 0).
-          "Not this week" dismisses to localStorage under the ISO-week
-          key; re-fires next Monday. */}
-      <p className="font-mono text-[10px] uppercase tracking-widest text-bronze">
-        Retest window open
-      </p>
-      <p className="font-semibold text-strong">
-        End of week {weeksIn} · {program.program_goal?.display_name ?? program.slug}
-      </p>
-      <p className="text-muted leading-snug">
-        You&apos;ve logged {weeksIn} weeks. The retest catches whether the arc
-        actually moved the numbers.
-      </p>
-      {displayMetrics.length > 0 ? (
-        <div>
-          <p className="font-mono text-[10px] uppercase tracking-widest text-muted mt-1">
-            Log these on Progress → Insights
-          </p>
-          <ul className="mt-1 space-y-0.5">
-            {displayMetrics.map((m, idx) => (
-              <li key={idx} className="text-[13px] text-ink flex items-baseline gap-1.5">
-                <span aria-hidden className="text-muted">·</span>
-                <span>{m.display_name ?? "Metric"}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
-      {/* P1-63 (Batch 27) — RetestReminder CTAs migrated to sentence-case
-          14 px font-semibold. Reads as verbs, not chips. */}
-      <div className="flex flex-wrap gap-2 pt-1">
-        <Link
-          href="/progress"
-          className="text-[14px] font-semibold px-4 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover min-h-[44px] inline-flex items-center"
-        >
-          Log retest →
-        </Link>
-        <button
-          type="button"
-          onClick={onDismiss}
-          className="text-[14px] font-semibold px-4 py-2 rounded border border-line text-ink hover:bg-line-soft min-h-[44px]"
-        >
-          Not this week
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function BlockSection({
-  block,
-  byId,
-  program,
-  date,
-  durationMultiplier = 1,
-}: {
-  block: Block;
-  byId: Record<string, Exercise>;
-  program: Program;
-  date: string;
-  durationMultiplier?: number;
-}) {
-  const scaleDur = (d: number) => Math.round(d * durationMultiplier);
-  const meta = [
-    block.frequency ?? (block.frequency_per_week ? `${block.frequency_per_week}×/week` : ""),
-    block.duration_min
-      ? Array.isArray(block.duration_min)
-        ? `${block.duration_min.map(scaleDur).join("–")} min`
-        : `${scaleDur(block.duration_min)} min`
-      : "",
-  ]
-    .filter(Boolean)
-    .join(" · ");
-  const items = block.items ?? [];
-  const categoryColor = block.category === "run" ? "border-l-green" : block.category === "accessory" ? "border-l-slate" : "border-l-bronze";
-  return (
-    <section className={`space-y-3 pl-3 border-l-4 ${categoryColor}`}>
-      <header className="flex items-baseline justify-between gap-3">
-        <h2 className="font-mono text-[14px] font-semibold uppercase tracking-widest">
-          {humanBlockName(block.name)}
-        </h2>
-        <span className="font-mono text-[11px] text-muted">{meta}</span>
-      </header>
-      {block.note ? (
-        <p className="rounded border border-line-soft border-l-4 border-l-slate bg-surface px-3 py-2 text-[14px] text-muted">
-          {block.note}
-        </p>
-      ) : null}
-      <RowingPersonalisedTargets block={block} program={program} />
-      {block.category === "run" ? <LogSessionShortcut date={date} /> : null}
-      <div className="space-y-2">
-        {dedupeItems(items).map((it, i) => {
-          if (!it.exercise_id) return null;
-          const ex = byId[it.exercise_id];
-          if (!ex) return null;
-          return (
-            <ExerciseCard
-              key={`${it.exercise_id}-${i}`}
-              blockId={block.id}
-              item={it}
-              exercise={ex}
-              program={program}
-              date={date}
-            />
-          );
-        })}
-      </div>
-    </section>
-  );
-}
-
-// Strip only obvious dev / phase-scope suffixes. Keep em-dash context intact:
-// "Week 1 — pure Z1 introduction" is the phase's actual intent and the user
-// wants to see it. Only kill parentheticals that look like phase-scope hints
-// ("(Phase 1 weeks 0-1)") or explicit developer tags ("(sub-goal)").
-function humanPhaseName(name: string): string {
-  return name
-    .replace(/\s*\((?:Phase|weeks?|week|sub-goal|dev|internal)\b[^)]*\)\s*$/i, "")
-    .trim();
-}
-
-// Same idea for block names: the source data carries phase-scope hints like
-// "(Phase 1 weeks 0-1)" which are misleading when read literally by a user
-// looking at Today (they imply the phase is only 2 weeks long).
-function humanBlockName(name: string): string {
-  return name.replace(/\s*\((?:Phase|weeks?|week)\b[^)]*\)\s*$/i, "").trim();
-}
-
-/**
- * Turn a phase and today's date into a "week N of M · ends dd Mon" line.
- * That way the user always sees where they are in the phase, and never has
- * to infer duration from a misleading block-name parenthetical.
- */
-function phaseProgress(phase: Phase, dateISO: string): string | null {
-  if (!phase.starts || !phase.ends) return null;
-  const start = new Date(phase.starts + "T00:00:00");
-  const end = new Date(phase.ends + "T00:00:00");
-  const today = new Date(dateISO + "T00:00:00");
-  if (today < start || today > end) return null;
-  const daysIn = Math.floor((today.getTime() - start.getTime()) / 864e5);
-  const totalDays = Math.floor((end.getTime() - start.getTime()) / 864e5) + 1;
-  const currentWeek = Math.floor(daysIn / 7) + 1;
-  const totalWeeks = Math.max(1, Math.ceil(totalDays / 7));
-  const endsShort = end.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
-  return `week ${currentWeek} of ${totalWeeks} · ends ${endsShort}`;
-}
-
-/**
- * Batch 36 Step 10 — same math as phaseProgress but returns the numeric
- * pair so ArcProgressBar can render a real progress bar. Returns null
- * when phase has no start/end anchors or when the date falls outside.
- */
-function phaseWeekPair(
-  phase: Phase | null | undefined,
-  dateISO: string,
-): { current: number; total: number } | null {
-  if (!phase || !phase.starts || !phase.ends) return null;
-  const start = new Date(phase.starts + "T00:00:00");
-  const end = new Date(phase.ends + "T00:00:00");
-  const today = new Date(dateISO + "T00:00:00");
-  if (today < start || today > end) return null;
-  const daysIn = Math.floor((today.getTime() - start.getTime()) / 864e5);
-  const totalDays = Math.floor((end.getTime() - start.getTime()) / 864e5) + 1;
-  return {
-    current: Math.floor(daysIn / 7) + 1,
-    total: Math.max(1, Math.ceil(totalDays / 7)),
-  };
-}
-
-// Merge duplicate exercise entries in the same block (e.g. squat "main" + squat "volume"),
-// keeping the first occurrence but appending secondary schemes so the card still shows both.
-function dedupeItems<T extends { exercise_id?: string | null; scheme?: string }>(
-  items: T[],
-): T[] {
-  const seen = new Map<string, number>();
-  const out: T[] = [];
-  for (const it of items) {
-    if (!it.exercise_id) {
-      out.push(it);
-      continue;
-    }
-    const idx = seen.get(it.exercise_id);
-    if (idx == null) {
-      seen.set(it.exercise_id, out.length);
-      out.push(it);
-    } else if (it.scheme) {
-      // Merge scheme text so the card indicates both roles in one card
-      const existing = out[idx];
-      const merged: T = {
-        ...existing,
-        scheme: existing.scheme ? `${existing.scheme} · then ${it.scheme}` : it.scheme,
-      };
-      out[idx] = merged;
-    }
-  }
-  return out;
-}
-
-/**
- * P1-70 · Today's H1 carries the active date, not the tab-name "Today".
- * Formats as "Wednesday 19 Aug" — matches the DateNav label pattern used
- * inside the workout view so the two don't disagree.
- */
-function formatDateHeading(dateISO: string): string {
-  const d = new Date(dateISO + "T12:00:00");
-  return d.toLocaleDateString("en-GB", {
-    weekday: "long",
-    day: "numeric",
-    month: "short",
-  });
-}
-
-function dateOffsetLabel(dateISO: string): string {
-  const today = new Date();
-  const t = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate(),
-  ).getTime();
-  const d = new Date(dateISO + "T00:00:00").getTime();
-  const days = Math.round((d - t) / 864e5);
-  if (days === 0) return "Today";
-  if (days === 1) return "Tomorrow";
-  if (days === -1) return "Yesterday";
-  if (days > 0) return `+${days} days`;
-  return `${days} days`;
-}
-
