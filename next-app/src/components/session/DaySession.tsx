@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { loadProgram, loadExercises } from "@/lib/data-loader";
-import { useStore, useDayExercise, entrySets } from "@/lib/useStore";
+import { useStore, entrySets } from "@/lib/useStore";
 import { today as todayISO } from "@/lib/utils";
 import { activePhaseFor, isPastProgramEnd, RACE_DATE, HOLIDAY_GAP } from "@/lib/engine/schedule";
 import { blocksForDate } from "@/lib/engine/plan-generator";
@@ -158,16 +158,31 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
   const activeIdx = activeKey ? railExercises.findIndex((r) => r.key === activeKey) : -1;
   const active = activeIdx >= 0 ? railExercises[activeIdx] : null;
 
+  // README: "Back from Set returns to Brief without discarding progress;
+  // the CTA then reads Continue — Bench press, set 4." Landing on set 0
+  // regardless of what's already logged would silently re-prompt for
+  // sets the user already did (harmless — Done just re-writes the same
+  // values — but not what Continue means). Land on the first unfinished
+  // set instead; if every set is already logged, land on the last one.
+  const firstUnfinishedSetIndex = (key: string): number => {
+    const r = railExercises.find((re) => re.key === key);
+    if (!r) return 0;
+    const entry = store.logs[activeDate]?.exercises[key] ?? null;
+    const logged = entrySets(entry).filter((s) => s.weight_kg != null && s.reps != null).length;
+    return Math.min(logged, r.rowCount - 1);
+  };
+
   const startSession = (key?: string) => {
-    setActiveKey(key ?? railExercises[0]?.key ?? null);
-    setActiveSetIndex(0);
+    const target = key ?? railExercises[0]?.key ?? null;
+    setActiveKey(target);
+    setActiveSetIndex(target ? firstUnfinishedSetIndex(target) : 0);
     setEditingLoad(false);
     setMode("set");
   };
 
   const jumpTo = (key: string) => {
     setActiveKey(key);
-    setActiveSetIndex(0);
+    setActiveSetIndex(firstUnfinishedSetIndex(key));
     setEditingLoad(false);
     setResting(false);
     setSheet(null);
@@ -317,5 +332,3 @@ function useMemoRail(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [blocks, byId, program, store.logs, store.training_maxes, activeDate]);
 }
-
-export { useDayExercise, entrySets };

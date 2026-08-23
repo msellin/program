@@ -180,16 +180,42 @@ Status markers: `[ ]` open · `[~]` in progress · `[x]` done · `[!]` blocked
       clean, still 162/162, still fewer lint issues than main baseline
 - [x] Commit + push
 
+## Post-ship regression pass (user asked: anything left over / broken?)
+
+Went back through with fresh eyes specifically hunting for regressions
+and dead code, beyond what the original ship already covered:
+
+- [x] **Fixed:** dead code — `DaySession.tsx` imported `useDayExercise`
+  from `useStore` and re-exported it (with `entrySets`) at the bottom of
+  the file for no reason; nothing ever imported it (every consumer only
+  imports the `RailExercise`/`SessionSheet` *types*). Removed the import
+  and the re-export.
+- [x] **Fixed:** Start/Continue now resumes at the first unfinished set
+  instead of always landing on set 1. Was a real gap against the
+  README's interaction spec ("Continue — Bench press, set 4"), not
+  data-destructive (prior sets stayed logged and pre-filled correctly
+  either way) but confusing — re-entering a session with 1-of-5 logged
+  used to always show "Start — squat" with set 1 blank... no, set 1
+  pre-filled, but positioned as if nothing had happened. `DaySession`'s
+  `startSession`/`jumpTo` now land on `min(loggedCount, rowCount-1)`;
+  `BriefView`'s CTA label switches to "Continue — X, set N" once any
+  progress exists. Verified live: after logging set 1, Brief showed
+  "Continue — High-bar back squat, set 2" and tapping it landed
+  correctly on a fresh Set 2.
+- [x] Re-verified `/` (Today dashboard) live — unaffected, renders
+  identically (DashboardBlock summaries, Open session link, off-plan
+  block, extras block all intact). This route was never visually
+  re-checked during the original ship, only reasoned about via diff +
+  tsc/eslint/vitest.
+- [x] Re-verified `/off-plan` live — unaffected. This is the page that
+  revealed the timer-store conflict (see below); confirmed it still
+  loads and navigates cleanly with the old ExerciseCard/SetRow/RestTimer
+  stack, no console errors.
+- [x] Re-verified `/plan` live — unaffected, no console errors.
+- [x] Re-ran tsc/eslint/vitest after all of the above — still clean,
+  still 162/162, still 71 problems (vs 75 on main) with zero new issues.
+
 ## Known gaps / follow-ups (not silently dropped)
-- **Start always begins at set index 0**, even when earlier sets are
-  already logged (e.g. re-entering the session after backgrounding the
-  app). README's interaction spec calls for "Back from Set returns to
-  Brief without discarding progress; the CTA then reads Continue —
-  Bench press, set 4" — that resume-to-first-unfinished-set behavior on
-  the Start button isn't built. Not a data-loss bug (prior sets stay
-  logged and pre-filled correctly if you tap that exercise's row), just
-  a missing convenience: today you'd re-confirm set 1's already-correct
-  values once, then continue normally.
 - Long-press on `+30s` for a custom rest target is not implemented
   (plain tap only).
 - 6c (cycle-start gate) and the AMRAP rep-grid are built and

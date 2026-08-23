@@ -67,6 +67,21 @@ export function BriefView({
 
   const gateUnresolved = !!cycleGateProposal;
 
+  // README: the Start CTA reads "Continue — Bench press, set 4" once
+  // progress exists, never re-announcing "Start" for a session already
+  // under way. Mirrors DaySession's own resume-to-first-unfinished-set
+  // logic so the label always matches where tapping it actually lands.
+  const heroLoggedCount = hero
+    ? entrySets(store.logs[activeDate]?.exercises[hero.key] ?? null).filter(
+        (s) => s.weight_kg != null && s.reps != null,
+      ).length
+    : 0;
+  const startLabel = !hero
+    ? "Start"
+    : heroLoggedCount > 0
+      ? `Continue — ${hero.exercise.name}, set ${Math.min(heroLoggedCount + 1, hero.rowCount)}`
+      : `Start — ${hero.exercise.name}`;
+
   return (
     <div className="flex flex-col" style={{ minHeight: "calc(100vh - 64px - env(safe-area-inset-bottom))" }}>
       <div className="flex-1 space-y-5">
@@ -213,7 +228,7 @@ export function BriefView({
               : "bg-bronze text-ground hover:bg-bronze-hover")
           }
         >
-          {hero ? `Start — ${hero.exercise.name}` : "Start"}
+          {startLabel}
         </button>
       </div>
 
