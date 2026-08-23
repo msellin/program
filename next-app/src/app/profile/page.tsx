@@ -17,6 +17,7 @@ import { useIsSuperAdmin } from "@/lib/super-admin";
 import { loadProgramManifest } from "@/lib/data-loader";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
 import { StatusPill } from "@/components/ui/StatusPill";
+import { BeliefsSection } from "@/components/profile/BeliefsSection";
 import type { ProgramManifest } from "@/lib/schemas";
 
 /**
@@ -131,6 +132,11 @@ export default function ProfilePage() {
         </div>
         <ChevronRight size={16} className="text-muted flex-shrink-0" aria-hidden />
       </Link>
+
+      {/* Design package t2/2b ("what Terav believes about you"), scoped
+          to two rows — see dev/active/profile-beliefs-plan.md. Renders
+          null when there's nothing to show yet (no TM, no active tier). */}
+      <BeliefsSection />
 
       {/* Active plan(s). No inline × — removal happens on the program page
           (see product-design-lead brief). Row is chevron → deep link. */}

@@ -789,9 +789,20 @@ function WeekDayActions({
           >
             Log session →
           </Link>
+        ) : primarySlug ? (
+          // 2026-08-23 — future days used to render nothing here. Real
+          // gap: the app is used as an installed PWA (no address bar),
+          // so there was no way to actually reach a future day's Brief
+          // screen short of hand-typing a URL, which isn't a real
+          // affordance. DaySession already accepts any ?date=, so this
+          // is just exposing that.
+          <Link
+            href={`/session/${primarySlug}?date=${dateISO}`}
+            className="text-[14px] font-semibold px-3 py-2 rounded border border-line-strong text-ink hover:bg-line-soft min-h-[44px] flex items-center justify-center text-center"
+          >
+            Preview →
+          </Link>
         ) : (
-          // Future day — no direct-open verb. Placeholder keeps the 3-
-          // column grid alignment without shipping a dead button.
           <span aria-hidden />
         )}
         <button
