@@ -11,7 +11,11 @@ import { ensureTestUser, TEST_EMAIL, TEST_PASSWORD } from "./setup-test-user";
  */
 const TODAY = new Date().toISOString().slice(0, 10);
 
-async function signInWithPersona(page: import("@playwright/test").Page, persona: string) {
+async function signInWithPersona(
+  page: import("@playwright/test").Page,
+  persona: string,
+  mutate?: (store: Record<string, unknown>) => void,
+) {
   const { uid } = await ensureTestUser();
   await page.goto("/sign-in/");
   await page.fill('input[type="email"]', TEST_EMAIL);
@@ -23,6 +27,7 @@ async function signInWithPersona(page: import("@playwright/test").Page, persona:
   const seed = JSON.parse(
     fs.readFileSync(path.join(__dirname, "artifacts", "personas", persona, "final-store.json"), "utf8"),
   ) as Record<string, unknown>;
+  mutate?.(seed);
   await page.evaluate(
     (args) => {
       const s = args.seed as {
@@ -74,7 +79,12 @@ test("Set CTA names the set, and rest announces the set the timer lands on", asy
 });
 
 test("off-plan runs the same Set/Rest pattern", async ({ page }) => {
-  await signInWithPersona(page, "persona-recover");
+  // Off-plan ships dark for the public catalog (2026-08-24), so this has
+  // to run as a flagged account. See tests/e2e/offplan-flag.spec.ts for
+  // the gate itself and lib/features.ts for how real accounts qualify.
+  await signInWithPersona(page, "persona-recover", (store) => {
+    store.feature_flags = { ...((store.feature_flags as object) ?? {}), off_plan: true };
+  });
   await page.goto("/off-plan/");
   const row = page.locator("button", { hasText: /\d+ sets/ }).first();
   await row.click({ timeout: 20_000 });

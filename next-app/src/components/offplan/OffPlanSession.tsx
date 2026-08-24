@@ -9,6 +9,7 @@ import { composeBlockForUser } from "@/lib/engine/plan-generator";
 import { dedupeItems, humanBlockName } from "@/lib/day-format";
 import { DateNav } from "@/components/workout/DateNav";
 import { EmptyStateCard } from "@/components/EmptyStateCard";
+import { isOffPlanOn } from "@/lib/features";
 import { SetView } from "@/components/session/SetView";
 import { RestTakeover } from "@/components/session/RestTakeover";
 import { nextAfterSet } from "@/components/session/shared/advance";
@@ -37,6 +38,7 @@ export function OffPlanSession() {
   const [activeDate, setActiveDate] = useState(() => todayISO());
   const hydrated = useStore((s) => s.hydrated);
   const store = useStore((s) => s.store);
+  const offPlanOn = useStore((s) => isOffPlanOn(s.store));
   const userProfile = store.user_profile;
   const primarySlug = store.user_profile?.active_program_id;
 
@@ -121,6 +123,20 @@ export function OffPlanSession() {
   }, [program, byId, groupDefs, userProfile, store.logs, store.training_maxes, activeDate]);
 
   if (!hydrated) return <div className="mt-8 text-sm text-muted">Loading…</div>;
+  // Off-plan ships dark for the public catalog (2026-08-24). The route
+  // stays alive rather than 404ing — a bookmark or an installed-PWA
+  // shortcut should explain itself, not break. Nothing is lost: every
+  // accessory and mobility block in every program is already scheduled
+  // onto a specific day, which is where they now live exclusively.
+  if (!offPlanOn) {
+    return (
+      <EmptyStateCard
+        title="Accessory work lives in your sessions now."
+        body="Mobility drills, activation and around-run work are scheduled into the days your plan puts them on, so there's no separate list to keep up with. To log a run, a row or a class, use “Log a run, row, or class” at the bottom of any session."
+        cta={{ href: "/", label: "Back to Day" }}
+      />
+    );
+  }
   if (!primarySlug) {
     return (
       <EmptyStateCard

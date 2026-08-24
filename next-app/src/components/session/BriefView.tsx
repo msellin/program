@@ -203,7 +203,13 @@ export function BriefView({
           onClick={() => onOpenSheet("off-plan")}
           className="w-full flex items-center justify-between gap-2.5 py-0.5 text-left"
         >
-          <span className="text-[13.5px] text-muted">Off-plan work, or log another activity</span>
+          {/* Renamed 2026-08-24. "Off-plan work" bundled two unrelated
+              things under one vague label: the program's own accessory
+              drills (now behind a flag — the plan already schedules them)
+              and activity logging, which is the retest data source for
+              four programs. Only the second survives here, so the line
+              names it. */}
+          <span className="text-[13.5px] text-muted">Log a run, row, or class</span>
           <span className="flex-shrink-0 text-[14px] text-line">›</span>
         </button>
         {progressLabel ? (

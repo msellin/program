@@ -551,55 +551,13 @@ export function TodaySession({
               </DashboardBlock>
             );
           })}
-          {/* O20 (2026-08-20) · Extras (extra exercises) surfaced on Today
-              as a daily thing per founder's Garmin-dashboard ask. Counts
-              accessory + cardio-conditioning drills the primary program
-              offers; CTA lands users on the fuller /extras page. Renders
-              only when the primary program has extras defined. */}
-          {(() => {
-            const extraBlocks =
-              primary.blocks
-                ?.filter((b) => b.category === "accessory" || b.category === "run")
-                // Same composition the off-plan page itself runs — slot-based
-                // programs author no items, so the raw blocks counted zero.
-                .map((b) =>
-                  composeBlockForUser(primary, b, userProfile, activeDate, byId, {
-                    onlyIfEmpty: true,
-                  }),
-                ) ?? [];
-            if (extraBlocks.length === 0) return null;
-            const drillCount = extraBlocks.reduce(
-              (n, b) => n + (b.items?.length ?? 0),
-              0,
-            );
-            return (
-              <DashboardBlock
-                eyebrow="Off-plan"
-                title={`${drillCount} drill${drillCount === 1 ? "" : "s"} available`}
-                lede="Accessory work, mobility, around-runs. Optional — logged to today."
-                primaryCta={{ label: "Open off-plan", href: "/off-plan/" }}
-              >
-                <ul className="text-[13px] text-muted space-y-0.5">
-                  {extraBlocks.slice(0, 4).map((b) => (
-                    <li key={b.id} className="truncate">
-                      · {humanBlockName(b.name)}
-                      {b.items?.length ? (
-                        <span className="text-muted/60">
-                          {" "}
-                          ({b.items.length})
-                        </span>
-                      ) : null}
-                    </li>
-                  ))}
-                  {extraBlocks.length > 4 ? (
-                    <li className="text-muted/60">
-                      + {extraBlocks.length - 4} more
-                    </li>
-                  ) : null}
-                </ul>
-              </DashboardBlock>
-            );
-          })()}
+          {/* Day's off-plan card removed 2026-08-24. It was the third
+              surface for the same thing (Profile row + the Brief's
+              activity footer being the others), and it advertised
+              "N drills available" for work the plan already schedules on
+              specific days — so tapping it was a route to double-logging.
+              Activity logging (a run, a row, a class) is unaffected and
+              still lives in the RunSlotCard below + the session Brief. */}
           <div id="log-session" className="cv-auto"><RunSlotCard date={activeDate} /></div>
         </>
       )}

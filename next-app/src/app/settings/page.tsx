@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { ChevronLeft, Volume2, Vibrate, Palette, Languages, Download } from "lucide-react";
+import { ChevronLeft, Volume2, Vibrate, Palette, Languages, Download, ListPlus } from "lucide-react";
+import { useStore } from "@/lib/useStore";
+import { hasOffPlanSetting, isOffPlanOn } from "@/lib/features";
 import { useHapticPref, useSoundPref } from "@/lib/useUserPrefs";
 import { useInstallPrompt } from "@/lib/useInstallPrompt";
 import { hapticTap } from "@/lib/utils";
@@ -18,6 +20,14 @@ import { playConfirm } from "@/lib/sound";
  */
 export default function SettingsPage() {
   const [sound, setSound] = useSoundPref();
+  // Off-plan drills ship dark for the public catalog. The row renders
+  // only for accounts that have the flag defined — grandfathered from
+  // real usage, or set here before. New accounts never see it. This is
+  // the only in-app way back: the PWA has no URL bar, so there is no
+  // query-string escape hatch if the flag ends up off by accident.
+  const offPlanVisible = useStore((st) => hasOffPlanSetting(st.store));
+  const offPlan = useStore((st) => isOffPlanOn(st.store));
+  const setFeatureFlag = useStore((st) => st.setFeatureFlag);
   const [haptic, setHaptic] = useHapticPref();
   const { canInstall, promptInstall } = useInstallPrompt();
 
@@ -74,6 +84,21 @@ export default function SettingsPage() {
           }}
         />
       </Section>
+
+      {offPlanVisible ? (
+        <Section eyebrow="Off-plan">
+          <ToggleRow
+            icon={<ListPlus size={16} className="text-muted" aria-hidden />}
+            label="Off-plan drills"
+            hint="Accessory and mobility work outside the schedule. Your plan already puts these on specific days."
+            value={offPlan}
+            onToggle={(v) => {
+              setFeatureFlag("off_plan", v);
+              hapticTap("light");
+            }}
+          />
+        </Section>
+      ) : null}
 
       <Section eyebrow="Appearance">
         <PlaceholderRow

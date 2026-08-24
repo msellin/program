@@ -11,7 +11,12 @@ import {
   slugsNeedingMaterialization,
   activeSlugsOf,
 } from "@/lib/engine/ensure-materialized";
-import type { Program } from "@/lib/schemas";
+import {
+  shouldGrandfatherOffPlan,
+  hasOffPlanSetting,
+  OFF_PLAN_GRANDFATHER_MARKER,
+} from "@/lib/features";
+import type { Program, Store } from "@/lib/schemas";
 
 const KEY = "program.log.v2";
 
@@ -50,6 +55,13 @@ export function StoreHydrator() {
   // Day can't see it. Joined into a string so the effect isn't retriggered
   // by a new array identity on every store write.
   const activeSlugsKey = useStore((s) => activeSlugsOf(s.store).join("|"));
+  // Both effects below defer to the one-shot block-object migration, which
+  // is itself async (it fetches program JSON, then `replaceStore`s a whole
+  // new store object). Without a dependency on migration state they would
+  // run once, bail on the guard, and never re-run — or worse, land a
+  // `replaceStore` from a snapshot the migration then overwrites. Keying on
+  // `migrations_applied` makes them re-run the moment it completes.
+  const migrationsKey = useStore((s) => (s.store.migrations_applied ?? []).join("|"));
   const hydrate = useStore((s) => s.hydrate);
   const resetForNewSession = useStore((s) => s.resetForNewSession);
   const setSessionIdentity = useStore((s) => s.setSessionIdentity);
@@ -206,7 +218,47 @@ export function StoreHydrator() {
       .catch(() => {
         // Silent — idempotent, retries on next mount.
       });
-  }, [hydrated, activeSlugsKey]);
+  }, [hydrated, activeSlugsKey, migrationsKey]);
+
+  // Off-plan grandfathering (2026-08-24). Off-plan drills ship dark for
+  // the public catalog, but accounts that actually used the surface keep
+  // it. One-shot: the marker in `migrations_applied` means an account
+  // that later turns the toggle OFF in Settings doesn't get it silently
+  // switched back on the next time they open the app.
+  useEffect(() => {
+    if (!hydrated) return;
+    const state = useStore.getState();
+    if (state.store.feature_flags?.block_object === true && needsBlockMigration(state.store)) {
+      // The migration is about to replace the whole store from its own
+      // snapshot. Let it land; `migrationsKey` re-runs this effect after.
+      return;
+    }
+    if (state.store.migrations_applied?.includes(OFF_PLAN_GRANDFATHER_MARKER)) return;
+    if (hasOffPlanSetting(state.store)) return;
+
+    const slugs = activeSlugsOf(state.store);
+    if (!slugs.length) return;
+
+    void Promise.all(slugs.map((slug) => loadProgram(slug)))
+      .then((programs) => {
+        const current = useStore.getState().store;
+        if (current.migrations_applied?.includes(OFF_PLAN_GRANDFATHER_MARKER)) return;
+        const next: Store = {
+          ...current,
+          migrations_applied: [
+            ...(current.migrations_applied ?? []),
+            OFF_PLAN_GRANDFATHER_MARKER,
+          ],
+        };
+        if (shouldGrandfatherOffPlan(current, programs)) {
+          next.feature_flags = { ...(current.feature_flags ?? {}), off_plan: true };
+        }
+        useStore.getState().replaceStore(next);
+      })
+      .catch(() => {
+        // Silent — no marker written, so it retries on the next mount.
+      });
+  }, [hydrated, activeSlugsKey, migrationsKey]);
 
   return null;
 }

@@ -5,6 +5,8 @@ import Link from "next/link";
 import { BottomSheet } from "@/components/session/shared/BottomSheet";
 import { RunSlotCard } from "@/components/workout/RunSlotCard";
 import { humanBlockName } from "@/lib/day-format";
+import { useStore } from "@/lib/useStore";
+import { isOffPlanOn } from "@/lib/features";
 import type { Program } from "@/lib/schemas";
 
 /**
@@ -30,6 +32,10 @@ export function OffPlanSheet({
   onClose: () => void;
 }) {
   const [loggingActivity, setLoggingActivity] = useState(false);
+  // Drill list ships dark for the public catalog — every accessory/run
+  // block is already scheduled onto a day, so this was a second door into
+  // prescribed work. See lib/features.ts.
+  const offPlanOn = useStore((s) => isOffPlanOn(s.store));
   const drillBlocks =
     program.blocks?.filter((b) => b.category === "accessory" || b.category === "run") ?? [];
   const drillCount = drillBlocks.reduce((n, b) => n + (b.items?.length ?? 0), 0);
@@ -37,10 +43,16 @@ export function OffPlanSheet({
   return (
     <BottomSheet titleId="off-plan-title" onClose={onClose}>
       <p id="off-plan-title" className="text-[16px] font-semibold text-strong mb-1 tracking-[-.015em]">
-        Off-plan
+        Log an activity
       </p>
+      {/* Copy is deliberately neutral about whether this was prescribed.
+          For Engine Builder and rowing-2k it usually WAS — those programs
+          are made entirely of run-category blocks, and their retest
+          metrics read `runs[]`. Calling it "anything that isn't the
+          program" was wrong for half the catalog. */}
       <p className="text-[13.5px] leading-snug text-ink mb-[14px]">
-        Anything that isn&apos;t the program. Logs to today, doesn&apos;t touch the progression.
+        A run, a row, a class. Recorded against today — the engine reads duration,
+        effort and heart rate.
       </p>
 
       {loggingActivity ? (
@@ -53,17 +65,19 @@ export function OffPlanSheet({
           onClick={() => setLoggingActivity(true)}
           className="w-full flex items-center justify-between gap-3 rounded border border-line-strong bg-surface-2 px-3.5 py-[13px] mb-[14px] text-left"
         >
+          {/* Was also "Log an activity", which now duplicates the sheet
+              title directly above it. Lead with the thing, not the verb. */}
           <span className="min-w-0">
             <span className="block text-[14.5px] font-semibold text-strong mb-0.5 tracking-[-.01em]">
-              Log an activity
+              A run, a row, a class
             </span>
-            <span className="block text-[13px] text-ink">A run, a row, a class — time and effort</span>
+            <span className="block text-[13px] text-ink">Time, effort, heart rate</span>
           </span>
           <span className="flex-shrink-0 text-[15px] text-line">›</span>
         </button>
       )}
 
-      {drillBlocks.length ? (
+      {offPlanOn && drillBlocks.length ? (
         <>
           <p className="font-mono text-[10px] uppercase tracking-[.16em] text-line mb-2.5">
             Or pick a drill

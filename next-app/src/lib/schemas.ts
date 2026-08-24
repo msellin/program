@@ -947,6 +947,29 @@ const featureFlagsSchema = z.object({
    * blocks become the sole write target.
    */
   block_object_writes: z.boolean().optional(),
+  /**
+   * Off-plan drill logging — the `/off-plan` page, its Profile row, and
+   * the drill list inside the session's activity sheet.
+   *
+   * Tri-state on purpose (2026-08-24):
+   *   undefined — never had it. Nothing renders, no Settings row. The
+   *               default for every new account.
+   *   true/false — has had it. The Settings toggle renders so it can be
+   *               turned back on. The PWA has no URL bar, so a
+   *               query-string escape hatch is not a real recovery path;
+   *               the toggle has to persist once the account qualifies.
+   *
+   * Cut from the public catalog because no program has off-plan-ONLY
+   * content — every accessory/run block is already scheduled onto a day
+   * by the phases + weekly template, so the page was a second door into
+   * prescribed work (and a double-logging path). It survives for
+   * anterior-hip-rebuild, the one program that deliberately routes its
+   * non-strength blocks off Day (see schedule.ts:457).
+   *
+   * NOT related to activity logging (`logs[].runs[]`), which stays on for
+   * everyone — four programs read it for their retest metrics.
+   */
+  off_plan: z.boolean().optional(),
 });
 
 export const storeSchema = z.object({

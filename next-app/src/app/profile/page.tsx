@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import { useStore } from "@/lib/useStore";
 import { createClient } from "@/lib/supabase/client";
 import { useIsSuperAdmin } from "@/lib/super-admin";
+import { isOffPlanOn } from "@/lib/features";
 import { loadProgramManifest } from "@/lib/data-loader";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
 import { StatusPill } from "@/components/ui/StatusPill";
@@ -34,6 +35,7 @@ import type { ProgramManifest } from "@/lib/schemas";
  */
 export default function ProfilePage() {
   const store = useStore((s) => s.store);
+  const offPlanOn = useStore((s) => isOffPlanOn(s.store));
   const isSuperAdmin = useIsSuperAdmin();
   // P2-8 — Add to Home Screen from Profile when Chrome/Edge fires
   // beforeinstallprompt. iOS Safari never fires the event so the button
@@ -276,16 +278,22 @@ export default function ProfilePage() {
             F8 Batch 29 (2026-08-19) — Extras / Report / Evidence relocated
             here from the deleted HeaderQuickLinks ⋮ menu. Header now only
             has TERAV + Settings. Install prompt relocated to Settings. */}
-        <Link
-          href="/off-plan/"
-          className="flex items-center justify-between gap-3 px-3 py-3 min-h-[48px] active:bg-line-soft/50"
-        >
-          <span className="flex items-center gap-3 text-sm">
-            <ListPlus size={16} className="text-muted" />
-            Off-plan
-          </span>
-          <ChevronRight size={16} className="text-muted flex-shrink-0" />
-        </Link>
+        {/* Off-plan ships dark for the public catalog (2026-08-24) — no
+            program has off-plan-ONLY content, so the page was a second
+            door into work the plan already schedules. Kept for accounts
+            grandfathered from real usage; see lib/features.ts. */}
+        {offPlanOn ? (
+          <Link
+            href="/off-plan/"
+            className="flex items-center justify-between gap-3 px-3 py-3 min-h-[48px] active:bg-line-soft/50"
+          >
+            <span className="flex items-center gap-3 text-sm">
+              <ListPlus size={16} className="text-muted" />
+              Off-plan
+            </span>
+            <ChevronRight size={16} className="text-muted flex-shrink-0" />
+          </Link>
+        ) : null}
         <Link
           href="/report"
           className="flex items-center justify-between gap-3 px-3 py-3 min-h-[48px] active:bg-line-soft/50"
