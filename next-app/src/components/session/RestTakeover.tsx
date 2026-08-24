@@ -5,6 +5,7 @@ import { useStore, entrySets } from "@/lib/useStore";
 import { announce } from "@/lib/announce";
 import { playTimerComplete } from "@/lib/sound";
 import type { RailExercise } from "@/components/session/DaySession";
+import type { UpNext } from "@/components/session/shared/advance";
 
 const EFFORTS = [
   { label: "Easy", rpe: 7 },
@@ -37,7 +38,7 @@ export function RestTakeover({
   justLoggedSetIndex,
   targetSeconds,
   railExercises,
-  nextExercise,
+  upNext,
   effortAnswered,
   onEffortAnswered,
   date,
@@ -49,7 +50,8 @@ export function RestTakeover({
   justLoggedSetIndex: number;
   targetSeconds: number;
   railExercises: RailExercise[];
-  nextExercise: RailExercise;
+  /** Where the timer will actually land. Drives the "Next up" copy. */
+  upNext: UpNext;
   effortAnswered: boolean;
   onEffortAnswered: (v: boolean) => void;
   date: string;
@@ -140,15 +142,17 @@ export function RestTakeover({
               change
             </button>
           </p>
-        ) : nextExercise && nextExercise.key !== active.key ? (
+        ) : upNext.kind !== "done" ? (
           <>
             <p className="font-mono text-[10px] uppercase tracking-[.16em] text-line mb-2">Next up</p>
             <p className="text-[20px] font-semibold text-strong mb-1 tracking-[-.02em]">
-              {nextExercise.suggestion
-                ? `${nextExercise.suggestion.top_set.kg} kg × ${nextExercise.suggestion.top_set.reps}`
-                : `${nextExercise.rowCount} sets`}
+              {upNext.kind === "set"
+                ? `Set ${upNext.setIndex + 1} of ${upNext.rail.rowCount}`
+                : upNext.rail.suggestion
+                  ? `${upNext.rail.suggestion.top_set.kg} kg × ${upNext.rail.suggestion.top_set.reps}`
+                  : `${upNext.rail.rowCount} sets`}
             </p>
-            <p className="text-[14.5px] text-ink">{nextExercise.exercise.name}</p>
+            <p className="text-[14.5px] text-ink">{upNext.rail.exercise.name}</p>
           </>
         ) : (
           <p className="text-[14.5px] text-line">{summary ?? ""}</p>

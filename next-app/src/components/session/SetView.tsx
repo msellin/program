@@ -226,18 +226,23 @@ export function SetView({
 
       <div className="flex-shrink-0 px-[22px] pb-[22px]">
         {isAmrap ? (
-          <div className="flex flex-wrap gap-2">
-            {Array.from({ length: 9 }, (_, i) => i + 1).map((n) => (
-              <button
-                key={n}
-                type="button"
-                onClick={() => confirm(n)}
-                className="flex-1 basis-[60px] h-[62px] rounded-[10px] border border-line-soft bg-surface text-strong text-[22px] font-semibold tracking-[-.02em]"
-              >
-                {n}
-              </button>
-            ))}
-          </div>
+          <>
+            <p className="font-mono text-[10px] uppercase tracking-[.14em] text-muted mb-2 text-center">
+              Reps you got on set {activeSetIndex + 1}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {Array.from({ length: 9 }, (_, i) => i + 1).map((n) => (
+                <button
+                  key={n}
+                  type="button"
+                  onClick={() => confirm(n)}
+                  className="flex-1 basis-[60px] h-[62px] rounded-[10px] border border-line-soft bg-surface text-strong text-[22px] font-semibold tracking-[-.02em]"
+                >
+                  {n}
+                </button>
+              ))}
+            </div>
+          </>
         ) : (
           <>
             {editingLoad ? (
@@ -265,12 +270,19 @@ export function SetView({
                 </div>
               </div>
             ) : null}
+            {/* Names the SET, not just the weight (2026-08-24). "Done —
+                115 kg" read as a session-level number, so per-set logging
+                looked like it wasn't there: the set counter is the smallest
+                type on the screen, and the button covered by your thumb was
+                the only other place a number appeared. */}
             <button
               type="button"
               onClick={() => confirm(reps)}
               className="w-full h-[62px] rounded-[10px] bg-bronze text-ground text-[17px] font-semibold tracking-[-.01em]"
             >
-              {active.isLoadable ? `Done — ${weight} kg` : "Done"}
+              {active.isLoadable
+                ? `Done — set ${activeSetIndex + 1} · ${weight} kg`
+                : `Done — set ${activeSetIndex + 1}`}
             </button>
             <button
               type="button"

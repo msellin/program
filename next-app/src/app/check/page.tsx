@@ -31,6 +31,7 @@
  */
 
 import { useState, useEffect, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { useStore } from "@/lib/useStore";
 import { today as todayISO } from "@/lib/utils";
 import type { Symptoms } from "@/lib/schemas";
@@ -185,6 +186,7 @@ function shortDate(iso: string): string {
 }
 
 export default function CheckPage() {
+  const router = useRouter();
   const hydrated = useStore((s) => s.hydrated);
   const saveDay = useStore((s) => s.setDaySymptoms);
   const today = todayISO();
@@ -228,11 +230,20 @@ export default function CheckPage() {
 
   if (!hydrated) return <div className="mt-8 text-sm text-muted">Loading…</div>;
 
+  // Return to Day after saving (2026-08-24). The check is entered from
+  // Day, has no back affordance of its own, and its whole payoff — "today's
+  // prescription adjusts to this read" — is only visible on Day. Staying
+  // put also hid the confirmation: the ✓ line renders at the top of the
+  // form while the CTA is pinned to the bottom, so on a phone the only
+  // feedback for a save was three words changing on the button under your
+  // thumb. The `saved` state below still matters for re-entering /check
+  // later the same day.
   const save = () => {
     const derived = derive(values);
     saveDay(today, values, derived);
     setSaved(true);
     setPrefilledFrom(null);
+    router.push("/");
   };
 
   const startFresh = () => {

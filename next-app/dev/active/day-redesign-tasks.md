@@ -276,3 +276,41 @@ reproduced against a signed-in browser with persona state, both fixed.
   session (handstand-walk, when composition is allowed to run). It needs
   cross-block dedupe before composition can be trusted over authored
   items. Until then `onlyIfEmpty` is load-bearing, not a nicety.
+
+## Flow batch — 2026-08-24 (post-save dead end, set ambiguity, wrong "Next up")
+
+Three founder questions off the same session walk-through, all three real.
+
+- [x] **Morning check dead-ended on the form.** `save()` wrote the check
+  and set `saved = true` — no navigation. The only feedback was a ✓ line
+  at the TOP of the form while the CTA is pinned to the BOTTOM in
+  `StickyCta`, so on a phone the whole visible result of saving was three
+  words changing on a button under your thumb; re-tapping "Update check"
+  without editing was a pure no-op. The Cut D brief specifies the live
+  verdict and sticky CTA but never says what happens after save, so this
+  was never decided either way. Now routes to `/` — the check is entered
+  from Day, has no back affordance of its own, and "today's prescription
+  adjusts to this read" is only observable on Day. `saved` state stays for
+  re-entering /check later the same day.
+- [x] **"Done — 115 kg" read as a session-level number.** Per-set logging
+  was already correct (verified: set 1 logged at 77 kg while set 2 opened
+  at its own prescription), but nothing on screen said so — the set
+  counter is the smallest type on the page and the CTA named only the
+  weight. CTA is now "Done — set 1 · 77 kg", and the AMRAP rep grid gets
+  a "Reps you got on set N" label.
+- [x] **Rest screen announced the wrong thing.** "Next up" rendered
+  `railExercises[activeIdx + 1]` — the next EXERCISE — while the timer
+  advanced to the next unfinished SET of the current lift. Both shells
+  also had that advance branch inlined in their own `onDone`. Extracted
+  `nextAfterSet` (`components/session/shared/advance.ts`); DaySession and
+  OffPlanSession compute `upNext` once and pass it to RestTakeover, so the
+  label and the landing cannot drift apart again.
+- [x] Regression tests: `tests/e2e/session-flow.spec.ts` — check-save
+  navigation, set-named CTA + rest label + landing on set 2, and the
+  off-plan Set/Rest path. tsc clean, vitest 170/170, eslint unchanged at
+  7 problems in the touched paths (all pre-existing).
+
+### Noted, not changed
+- RPE capture is three buckets (Easy/Solid/Grind → 7/8/9) on the rest
+  screen only. Skipping rest before answering leaves the set with no RPE.
+  Founder asked where RPE lives — answered, no change requested.

@@ -11,6 +11,7 @@ import { DateNav } from "@/components/workout/DateNav";
 import { EmptyStateCard } from "@/components/EmptyStateCard";
 import { SetView } from "@/components/session/SetView";
 import { RestTakeover } from "@/components/session/RestTakeover";
+import { nextAfterSet } from "@/components/session/shared/advance";
 import { NoteSheet } from "@/components/session/NoteSheet";
 import type { RailExercise, SessionSheet } from "@/components/session/DaySession";
 import type { Exercise, Program } from "@/lib/schemas";
@@ -146,6 +147,16 @@ export function OffPlanSession() {
     setMode("set");
   };
 
+  const upNext = nextAfterSet(
+    railExercises,
+    activeIdx,
+    active
+      ? entrySets(store.logs[activeDate]?.exercises[active.key] ?? null).filter(
+          (s) => s.reps != null,
+        ).length
+      : 0,
+  );
+
   if (mode === "set" && active) {
     return (
       <div className="fixed inset-0 z-50 flex flex-col bg-ground">
@@ -173,7 +184,7 @@ export function OffPlanSession() {
             justLoggedSetIndex={activeSetIndex}
             targetSeconds={restSeconds}
             railExercises={railExercises}
-            nextExercise={railExercises[activeIdx + 1] ?? railExercises[0]}
+            upNext={upNext}
             effortAnswered={effortAnswered}
             onEffortAnswered={setEffortAnswered}
             date={activeDate}
@@ -181,19 +192,14 @@ export function OffPlanSession() {
               setResting(false);
               setEffortAnswered(false);
               setEditingLoad(false);
-              const loggedForActive = entrySets(
-                store.logs[activeDate]?.exercises[active.key] ?? null,
-              ).filter((s) => s.reps != null).length;
-              if (loggedForActive < active.rowCount) {
-                setActiveSetIndex(loggedForActive);
+              // Same `upNext` the rest screen just showed.
+              if (upNext.kind === "set") {
+                setActiveSetIndex(upNext.setIndex);
+              } else if (upNext.kind === "exercise") {
+                setActiveKey(upNext.rail.key);
+                setActiveSetIndex(0);
               } else {
-                const nextIdx = activeIdx + 1;
-                if (nextIdx < railExercises.length) {
-                  setActiveKey(railExercises[nextIdx].key);
-                  setActiveSetIndex(0);
-                } else {
-                  setMode("brief");
-                }
+                setMode("brief");
               }
             }}
             onJump={jumpTo}

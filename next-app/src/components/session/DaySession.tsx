@@ -15,6 +15,7 @@ import { RestDayCard, GraduationCard } from "@/components/session/shared/StatusC
 import { BriefView } from "@/components/session/BriefView";
 import { SetView } from "@/components/session/SetView";
 import { RestTakeover } from "@/components/session/RestTakeover";
+import { nextAfterSet } from "@/components/session/shared/advance";
 import { NoteSheet } from "@/components/session/NoteSheet";
 import type { Block, Exercise, Program, Store } from "@/lib/schemas";
 
@@ -207,6 +208,18 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
     setMode("set");
   };
 
+  // Auto-advance target: the next unfinished set on this exercise, or the
+  // next exercise in the rail once its rows are full.
+  const upNext = nextAfterSet(
+    railExercises,
+    activeIdx,
+    active
+      ? entrySets(store.logs[activeDate]?.exercises[active.key] ?? null).filter(
+          (s) => s.weight_kg != null && s.reps != null,
+        ).length
+      : 0,
+  );
+
   const proposals = selectProposals(store, program, activeDate);
   const tmBump = proposals.find((p) => p.kind === "tm_bump") ?? null;
   const loggedSetsToday = Object.values(store.logs[activeDate]?.exercises ?? {}).some(
@@ -264,7 +277,7 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
           justLoggedSetIndex={activeSetIndex}
           targetSeconds={restSeconds}
           railExercises={railExercises}
-          nextExercise={railExercises[activeIdx + 1] ?? railExercises[0]}
+          upNext={upNext}
           effortAnswered={effortAnswered}
           onEffortAnswered={setEffortAnswered}
           date={activeDate}
@@ -272,21 +285,15 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
             setResting(false);
             setEffortAnswered(false);
             setEditingLoad(false);
-            // Auto-advance: move to the next unfinished set on this exercise,
-            // or the next exercise in the rail if this one's rows are full.
-            const loggedForActive = entrySets(
-              store.logs[activeDate]?.exercises[active.key] ?? null,
-            ).filter((s) => s.weight_kg != null && s.reps != null).length;
-            if (loggedForActive < active.rowCount) {
-              setActiveSetIndex(loggedForActive);
+            // Same `upNext` the rest screen just showed — label and
+            // landing can't drift apart.
+            if (upNext.kind === "set") {
+              setActiveSetIndex(upNext.setIndex);
+            } else if (upNext.kind === "exercise") {
+              setActiveKey(upNext.rail.key);
+              setActiveSetIndex(0);
             } else {
-              const nextIdx = activeIdx + 1;
-              if (nextIdx < railExercises.length) {
-                setActiveKey(railExercises[nextIdx].key);
-                setActiveSetIndex(0);
-              } else {
-                setMode("brief");
-              }
+              setMode("brief");
             }
           }}
           onJump={(key) => {
