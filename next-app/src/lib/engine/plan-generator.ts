@@ -202,22 +202,68 @@ function multiDimensionalBlocksForDate(
     .map((id) => program.blocks.find((b) => b.id === id))
     .filter((b): b is Block => !!b);
   if (!drillsById) return blocks;
+  return blocks.map((b) => composeBlockForUser(program, b, profile, dateISO, drillsById));
+}
+
+/**
+ * Resolve ONE authored block into what this user should actually see today:
+ * capability-slot blocks get their items composed from the program's
+ * `drill_library` (+ contextual-interference shuffle); everything else gets
+ * its authored items pruned by prerequisite.
+ *
+ * Extracted from multiDimensionalBlocksForDate (2026-08-24) because the
+ * block-object read path never ran it. `scheduled_blocks` stores template
+ * IDs, and both Today and the session shell resolved them with a bare
+ * `program.blocks.find(...)` — the raw authored block. For slot-based
+ * programs (overhead-mobility: all seven blocks are `capability_slot` +
+ * `slot_drill_count`, zero authored items) that meant every session
+ * rendered "0 exercises" with nothing to start. Every real account has
+ * `feature_flags.block_object === true`, so the legacy path this composition
+ * lived on was dead code in production.
+ */
+export function composeBlockForUser(
+  program: Program,
+  block: Block,
+  profile: Store["user_profile"] | undefined,
+  dateISO: string,
+  drillsById?: DrillsById,
+  opts?: {
+    /**
+     * Only compose when the block has nothing authored to show. The
+     * block-object read path passes this: composing over authored items
+     * changes what users mid-program already see, and the composer has no
+     * cross-block dedupe — on handstand-walk it turned eight distinct
+     * authored movements into "Kinoshita position 1" three times. Authored
+     * items win where they exist; composition fills the blocks that would
+     * otherwise be empty.
+     */
+    onlyIfEmpty?: boolean;
+  },
+): Block {
+  if (!drillsById) return block;
+  const tierId = resolveActiveTier(program, profile) ?? "";
   const levels = deriveLevelsFromProfile(profile, program, tierId);
-  const weekNumber = weekNumberFromProgramStart(profile, dateISO);
-  return blocks.map((b) => {
-    // Milestone 2: if the block declares a capability_slot AND the program has
-    // a drill_library, REPLACE authored items with drills composed from the
-    // library targeting that slot at the user's estimated level. If no slot,
-    // fall through to Milestone 1's prerequisite-filter behavior.
-    if (b.capability_slot && program.drill_library?.length) {
-      const composed = composeSlotDrills(program, b, drillsById, levels);
-      if (composed) {
-        const seedKey = ciSeedKey(profile, program, dateISO, b.id);
-        return applyContextualInterference(composed, weekNumber, seedKey);
-      }
+  const authoredCount =
+    (block.items?.length ?? 0) +
+    (block.segments ?? []).reduce((n, seg) => n + (seg.items?.length ?? 0), 0);
+  // Strictly additive under onlyIfEmpty: a block with authored items is
+  // returned untouched, prerequisite pruning included. That pruning never
+  // ran on the block-object path either, and switching it on would silently
+  // drop drills out of sessions people are mid-way through.
+  if (opts?.onlyIfEmpty && authoredCount > 0) return block;
+  // Milestone 2: if the block declares a capability_slot AND the program has
+  // a drill_library, REPLACE authored items with drills composed from the
+  // library targeting that slot at the user's estimated level. If no slot,
+  // fall through to Milestone 1's prerequisite-filter behavior.
+  if (block.capability_slot && program.drill_library?.length) {
+    const composed = composeSlotDrills(program, block, drillsById, levels);
+    if (composed) {
+      const weekNumber = weekNumberFromProgramStart(profile, dateISO);
+      const seedKey = ciSeedKey(profile, program, dateISO, block.id);
+      return applyContextualInterference(composed, weekNumber, seedKey);
     }
-    return filterBlockItemsByPrerequisites(b, drillsById, levels);
-  });
+  }
+  return filterBlockItemsByPrerequisites(block, drillsById, levels);
 }
 
 /**

@@ -4,6 +4,7 @@ import path from "node:path";
 import {
   arePrerequisitesMet,
   blocksForDate,
+  composeBlockForUser,
   composeSlotDrills,
   filterBlockItemsByPrerequisites,
   resolveActiveTier,
@@ -443,5 +444,56 @@ describe("F-105 M3 · contextual interference", () => {
     const block: Block = { id: "b", name: "b", items: [{ exercise_id: "only" }] };
     const out = applyContextualInterference(block, 5, "2026-01-19");
     expect(out).toBe(block);
+  });
+});
+
+describe("composeBlockForUser (block-object read path)", () => {
+  const mobility = JSON.parse(
+    fs.readFileSync(
+      path.resolve(__dirname, "../../../public/data/programs/overhead-mobility.json"),
+      "utf8",
+    ),
+  ) as Program;
+  const handstand = JSON.parse(
+    fs.readFileSync(
+      path.resolve(__dirname, "../../../public/data/programs/handstand-walk.json"),
+      "utf8",
+    ),
+  ) as Program;
+  const exs = JSON.parse(
+    fs.readFileSync(path.resolve(__dirname, "../../../public/data/exercises.json"), "utf8"),
+  ) as { exercises: Exercise[] };
+  const drillsById = Object.fromEntries(exs.exercises.map((e) => [e.id, e]));
+  const profile = {
+    active_program_id: "overhead-mobility",
+    program_states: { "overhead-mobility": { tier: "foundation" } },
+  } as unknown as Store["user_profile"];
+
+  it("fills a slot block that authors no items — the empty-session bug", () => {
+    const block = mobility.blocks.find((b) => b.id === "block_thoracic_prep")!;
+    expect(block.items ?? []).toHaveLength(0);
+    const out = composeBlockForUser(mobility, block, profile, "2026-08-24", drillsById, {
+      onlyIfEmpty: true,
+    });
+    expect(out.items!.length).toBeGreaterThan(0);
+    for (const it of out.items!) {
+      expect(drillsById[it.exercise_id!].capability_domains).toContain(
+        "thoracic_extension_mobility",
+      );
+    }
+  });
+
+  it("leaves an authored block untouched under onlyIfEmpty", () => {
+    const block = handstand.blocks.find((b) => b.capability_slot && b.items?.length)!;
+    const out = composeBlockForUser(handstand, block, profile, "2026-08-24", drillsById, {
+      onlyIfEmpty: true,
+    });
+    expect(out).toBe(block);
+  });
+
+  it("without onlyIfEmpty it still composes over authored items (legacy path)", () => {
+    const block = handstand.blocks.find((b) => b.capability_slot && b.items?.length)!;
+    const out = composeBlockForUser(handstand, block, profile, "2026-08-24", drillsById);
+    expect(out).not.toBe(block);
   });
 });

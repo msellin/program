@@ -5,7 +5,7 @@ import { loadProgram, loadExercises } from "@/lib/data-loader";
 import { useStore, entrySets } from "@/lib/useStore";
 import { today as todayISO } from "@/lib/utils";
 import { activePhaseFor, isPastProgramEnd, RACE_DATE, HOLIDAY_GAP } from "@/lib/engine/schedule";
-import { blocksForDate } from "@/lib/engine/plan-generator";
+import { blocksForDate, composeBlockForUser } from "@/lib/engine/plan-generator";
 import { getBlocksForDate, isBlockObjectOn } from "@/lib/engine/block-selectors";
 import { migrateLegacyToBlocks, needsBlockMigration } from "@/lib/migrations/legacy-to-blocks";
 import { suggestForExercise, type Suggestion } from "@/lib/engine/suggest";
@@ -109,7 +109,14 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
           );
           return scheduledForToday
             .map((sb) => program.blocks.find((b) => b.id === sb.block_template_id))
-            .filter((b): b is Block => Boolean(b));
+            .filter((b): b is Block => Boolean(b))
+            // `scheduled_blocks` stores template IDs, so what comes back is
+            // the AUTHORED block. Slot-based programs (overhead-mobility)
+            // author no items at all — their exercises are composed per user
+            // from `drill_library` — so without this the rail was empty and
+            // the Brief had nothing to start. Legacy path gets the same
+            // treatment inside blocksForDate.
+            .map((b) => composeBlockForUser(program, b, userProfile, activeDate, byId, { onlyIfEmpty: true }));
         }
         const overrideBlocks = override
           ? program.blocks.filter((b) => override.blocks.includes(b.id) && (b.category ?? "strength") === "strength")
@@ -186,12 +193,18 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
     setMode("set");
   };
 
+  // Reached from both shells: the Brief's exercise rows (where it must
+  // also open Set — tapping a row from the Brief did nothing before,
+  // because mode stayed "brief" and the Brief is what renders) and
+  // SetView / RestTakeover's rail (where mode is already "set", so the
+  // last line is a no-op). Mirrors OffPlanSession's jumpTo.
   const jumpTo = (key: string) => {
     setActiveKey(key);
     setActiveSetIndex(firstUnfinishedSetIndex(key));
     setEditingLoad(false);
     setResting(false);
     setSheet(null);
+    setMode("set");
   };
 
   const proposals = selectProposals(store, program, activeDate);

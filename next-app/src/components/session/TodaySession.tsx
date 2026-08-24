@@ -21,7 +21,7 @@ import {
   RACE_DATE,
   HOLIDAY_GAP,
 } from "@/lib/engine/schedule";
-import { blocksForDate } from "@/lib/engine/plan-generator";
+import { blocksForDate, composeBlockForUser } from "@/lib/engine/plan-generator";
 import { getBlocksForDate, isBlockObjectOn } from "@/lib/engine/block-selectors";
 import { migrateLegacyToBlocks, needsBlockMigration } from "@/lib/migrations/legacy-to-blocks";
 import { RestDayCard, RetestReminder, GraduationCard } from "@/components/session/shared/StatusCards";
@@ -177,7 +177,10 @@ export function TodaySession({
       );
       const composed = scheduledForToday
         .map((sb) => p.blocks.find((b) => b.id === sb.block_template_id))
-        .filter((b): b is Block => Boolean(b));
+        .filter((b): b is Block => Boolean(b))
+        // Template ID → authored block, which for slot-based programs has no
+        // items until they're composed per user. See composeBlockForUser.
+        .map((b) => composeBlockForUser(p, b, userProfile, activeDate, byId, { onlyIfEmpty: true }));
       return { program: p, blocks: composed, scheduled: scheduledForToday };
     }
     // Legacy path.
@@ -555,9 +558,15 @@ export function TodaySession({
               only when the primary program has extras defined. */}
           {(() => {
             const extraBlocks =
-              primary.blocks?.filter(
-                (b) => b.category === "accessory" || b.category === "run",
-              ) ?? [];
+              primary.blocks
+                ?.filter((b) => b.category === "accessory" || b.category === "run")
+                // Same composition the off-plan page itself runs — slot-based
+                // programs author no items, so the raw blocks counted zero.
+                .map((b) =>
+                  composeBlockForUser(primary, b, userProfile, activeDate, byId, {
+                    onlyIfEmpty: true,
+                  }),
+                ) ?? [];
             if (extraBlocks.length === 0) return null;
             const drillCount = extraBlocks.reduce(
               (n, b) => n + (b.items?.length ?? 0),

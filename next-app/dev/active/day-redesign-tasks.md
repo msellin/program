@@ -226,3 +226,53 @@ and dead code, beyond what the original ship already covered:
   decision log).
 - Turn-5 coverage-matrix row-by-row sign-off not yet done as a discrete
   pass.
+
+## Post-ship bug batch — 2026-08-24 ("can't start a block")
+
+Founder report: "when I open session from Day tab, then I can see the
+blocks but I can't seem to start a block." Two independent causes, both
+reproduced against a signed-in browser with persona state, both fixed.
+
+- [x] **Brief's exercise rows were dead.** `DaySession.jumpTo` set
+  `activeKey` but never `setMode("set")` — it was written for the Set
+  view's rail, where mode is already "set", then reused as BriefView's
+  `onSelectExercise`. Tapping any row from the Brief re-rendered the
+  Brief and nothing happened; only the bottom CTA could open Set (and
+  that CTA is disabled whenever the cycle-start gate is up, so a user
+  with a pending TM bump had no way in at all). `OffPlanSession.jumpTo`
+  already had the line — this was a gap, not a design choice.
+  Regression test: `tests/e2e/day-brief-start.spec.ts` (fails on the
+  parent commit, passes here).
+- [x] **Slot-based programs rendered zero exercises everywhere.**
+  `scheduled_blocks` stores template IDs, and the block-object read path
+  (Today, the session shell, off-plan) resolved them with a bare
+  `program.blocks.find(...)` — the AUTHORED block, skipping the drill
+  composition that `blocksForDate` runs. `overhead-mobility` authors no
+  items at all (all seven blocks are `capability_slot` +
+  `slot_drill_count`, composed per user from `drill_library`), so every
+  session read "0 exercises · about 15 min" with a Start button that did
+  nothing, and off-plan read "0 drills available". Every real account has
+  `feature_flags.block_object === true`, so the composition path was dead
+  code in production. Extracted `composeBlockForUser` from
+  `multiDimensionalBlocksForDate` and called it at all four read sites.
+  Verified live: Overhead Mobility now renders a 4-exercise session and
+  10 off-plan drills.
+- [x] Scoped that fix with `onlyIfEmpty: true` at the UI call sites —
+  strictly additive, blocks with authored items pass through untouched.
+  First pass composed over authored items too (matching the legacy path)
+  and regressed handstand-walk: the composer has no cross-block dedupe,
+  so eight distinct authored movements became "Kinoshita position 1"
+  three times and "Wall walk" twice. Prerequisite pruning is also left
+  off for authored blocks — it never ran on this path either, and
+  enabling it silently dropped a drill (Kinoshita position 2) out of a
+  session a live user is mid-way through. Personas re-checked
+  before/after: handstand-walk and anterior-hip-rebuild render
+  identically, overhead-mobility goes from empty to real.
+- [x] tsc clean, vitest 170/170 (3 new `composeBlockForUser` cases),
+  eslint unchanged at 4 problems in the touched files (all pre-existing).
+
+### Follow-up worth doing separately
+- The composer picks the same low-level drill for several slots in one
+  session (handstand-walk, when composition is allowed to run). It needs
+  cross-block dedupe before composition can be trusted over authored
+  items. Until then `onlyIfEmpty` is load-bearing, not a nicety.

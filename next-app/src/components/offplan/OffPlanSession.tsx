@@ -5,6 +5,7 @@ import { loadProgram, loadExercises } from "@/lib/data-loader";
 import { useStore, entrySets } from "@/lib/useStore";
 import { today as todayISO } from "@/lib/utils";
 import { suggestForExercise } from "@/lib/engine/suggest";
+import { composeBlockForUser } from "@/lib/engine/plan-generator";
 import { dedupeItems, humanBlockName } from "@/lib/day-format";
 import { DateNav } from "@/components/workout/DateNav";
 import { EmptyStateCard } from "@/components/EmptyStateCard";
@@ -35,6 +36,7 @@ export function OffPlanSession() {
   const [activeDate, setActiveDate] = useState(() => todayISO());
   const hydrated = useStore((s) => s.hydrated);
   const store = useStore((s) => s.store);
+  const userProfile = store.user_profile;
   const primarySlug = store.user_profile?.active_program_id;
 
   useEffect(() => {
@@ -82,7 +84,12 @@ export function OffPlanSession() {
     if (!program) return [];
     const out: RailExercise[] = [];
     for (const def of groupDefs) {
-      const blocks = program.blocks.filter((b) => (b.category ?? "strength") === def.cat);
+      const blocks = program.blocks
+        .filter((b) => (b.category ?? "strength") === def.cat)
+        // Slot-based programs author no items — their drills are composed
+        // per user from `drill_library`. Without this the off-plan rail read
+        // "0 drills available" for overhead-mobility. See composeBlockForUser.
+        .map((b) => composeBlockForUser(program, b, userProfile, activeDate, byId, { onlyIfEmpty: true }));
       for (const block of blocks) {
         const items = dedupeItems(block.items ?? (block.segments ?? []).flatMap((s) => s.items));
         for (const item of items) {
@@ -110,7 +117,7 @@ export function OffPlanSession() {
     }
     return out;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [program, byId, groupDefs, store.logs, store.training_maxes, activeDate]);
+  }, [program, byId, groupDefs, userProfile, store.logs, store.training_maxes, activeDate]);
 
   if (!hydrated) return <div className="mt-8 text-sm text-muted">Loading…</div>;
   if (!primarySlug) {
