@@ -18,7 +18,12 @@ function loadProgram(slug: string): Program {
     "../../../public/data/programs",
     `${slug}.json`,
   );
-  return JSON.parse(fs.readFileSync(p, "utf8")) as Program;
+  const parsed = JSON.parse(fs.readFileSync(p, "utf8")) as Program;
+  // Mirror the real loader (lib/data-loader.ts) — most program JSONs
+  // carry no `slug` field of their own; it's stamped on at load. Tests
+  // that skip the stamp aren't testing what the app runs.
+  parsed.slug = slug;
+  return parsed;
 }
 
 describe("blocksForDate — correlated_tier (legacy)", () => {
@@ -64,21 +69,28 @@ describe("blocksForDate — multi_dimensional (handstand-walk)", () => {
     expect(ids).toContain("block_recovery");
   });
 
-  it("substitutes primary_block from the active phase (Tier D user during phase_1 gets prep blocks, not tier-D variability)", () => {
-    // Bug #70 fix: phase-aware substitution. Tier D's reference week says
-    // Mon primary = block_skill_A_variability. But during phase_1
-    // (Weeks 1-2 — Wrist prep + Kinoshita), variability isn't authorised —
-    // phase_1.blocks = [wrist_prep, kinoshita, recovery]. Substitution
-    // picks Kinoshita (same skill_A category) so the day still fires with
-    // a phase-appropriate session.
+  it("puts a Tier D user in the Tier D phase on the same date, not Tier A's", () => {
+    // Rewritten 2026-08-24. This previously asserted that a Tier D user on
+    // this date landed in phase_1 (Tier A's phase) and got Kinoshita
+    // substituted in. That only happened because the test's loader didn't
+    // stamp `program.slug`, and `activePhaseFor` reads the user's tier via
+    // `program.slug` — so tier came back undefined and phase selection fell
+    // through to `matches[0]`, which is Tier A's phase. The real loader
+    // always stamps the slug, so the app never behaved that way.
+    //
+    // What actually happens, and what handstand-walk.json authors: every
+    // tier has its own phase covering the SAME dates, tagged with
+    // `for_tier_ids`. A Tier D user on this date is in phase_4_variability,
+    // whose blocks include block_skill_A_variability — so the tier's
+    // reference-week layout needs no substitution at all.
     const profile = profileWith("tier_d_advanced");
     const out = blocksForDate(program, profile, undefined, phase1MondayISO);
     const ids = out.map((b) => b.id);
-    expect(ids).toContain("block_skill_A_kinoshita");
+    expect(ids).toContain("block_skill_A_variability");
     expect(ids).toContain("block_wrist_prep");
     expect(ids).toContain("block_recovery");
-    // Tier-D-specific block was substituted OUT — phase_1 doesn't run it.
-    expect(ids).not.toContain("block_skill_A_variability");
+    // Tier A's headline block belongs to a phase this user is not in.
+    expect(ids).not.toContain("block_skill_A_kinoshita");
   });
 
   it("phase_0 gates every tier to bail-out blocks (fear-of-falling prep)", () => {
@@ -116,6 +128,22 @@ describe("resolveActiveTier", () => {
     const profile: Store["user_profile"] = {
       active_program_id: "handstand-walk",
       program_states: {
+        "handstand-walk": { tier: "tier_c_freestand" },
+      },
+    };
+    expect(resolveActiveTier(program, profile)).toBe("tier_c_freestand");
+  });
+
+  it("resolves the tier of the program passed in, not the primary program", () => {
+    // Regression (2026-08-24): this read `profile.active_program_id`, so a
+    // second active track resolved the PRIMARY's tier — or, when the
+    // primary had no entry, silently fell back to tier 1. Handstand-walk
+    // is the secondary here; the primary is a different program entirely.
+    const profile: Store["user_profile"] = {
+      active_program_id: "anterior-hip-rebuild",
+      active_program_ids: ["anterior-hip-rebuild", "handstand-walk"],
+      program_states: {
+        "anterior-hip-rebuild": { tier: "tier_a_foundation" },
         "handstand-walk": { tier: "tier_c_freestand" },
       },
     };

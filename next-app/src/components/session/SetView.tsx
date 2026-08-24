@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useStore, useDayExercise, entrySets } from "@/lib/useStore";
 import { isSetPR } from "@/lib/pr";
 import { platesLabel } from "@/lib/plates";
@@ -22,8 +22,10 @@ export function SetView({
   editingLoad,
   onEditingLoad,
   onSelectExercise,
+  onSelectSetIndex,
   onBackToBrief,
   onConfirmed,
+  onEdited,
   sheet,
   onOpenSheet,
   onCloseSheet,
@@ -35,6 +37,15 @@ export function SetView({
   editingLoad: boolean;
   onEditingLoad: (v: boolean) => void;
   onSelectExercise: (key: string) => void;
+  /**
+   * Move to any set on the CURRENT exercise, including one already
+   * logged. Every other entry point into Set (`startSession`, `jumpTo`,
+   * Rest's auto-advance) lands on the first UNFINISHED set, which is
+   * what made a logged set unreachable — and therefore unfixable —
+   * once you'd passed it. The set pips below are the only backwards
+   * affordance in the flow.
+   */
+  onSelectSetIndex: (index: number) => void;
   onBackToBrief: () => void;
   // Carries the rest duration up rather than starting `lib/useTimer.ts`'s
   // shared store directly — that store also drives the OLD bottom-fixed
@@ -45,6 +56,12 @@ export function SetView({
   // app-wide in `AppShell`, not scoped to this route. `RestTakeover`
   // manages its own fully independent countdown instead.
   onConfirmed: (restSeconds: number) => void;
+  /**
+   * Confirm on a set that was ALREADY logged — a correction, not a set
+   * you just did. No rest timer (you're not between efforts), and the
+   * shell returns you to where you were working.
+   */
+  onEdited: () => void;
   sheet: SessionSheet;
   onOpenSheet: (s: SessionSheet) => void;
   onCloseSheet: () => void;
@@ -53,6 +70,16 @@ export function SetView({
   const store = useStore((s) => s.store);
   const updateSet = useStore((s) => s.updateSet);
   const addSet = useStore((s) => s.addSet);
+
+  // Long rails scroll, so the active exercise can start off-screen —
+  // most obviously on off-plan, where you tap in from a grouped list and
+  // could land on item 20 of 34. Pull it into view on mount. SetView is
+  // keyed on exercise + set index by both shells, so this runs on every
+  // move without needing to watch anything.
+  const activeRailRef = useRef<HTMLButtonElement | null>(null);
+  useEffect(() => {
+    activeRailRef.current?.scrollIntoView({ block: "nearest", inline: "center" });
+  }, []);
 
   const entry = useDayExercise(active.blockId, active.exercise.id, date);
   const sets = entrySets(entry);
@@ -88,6 +115,16 @@ export function SetView({
   // set index changes, instead of an effect reaching back to reset
   // state — React's own recommended pattern over "sync state via effect."
 
+  // A set counts as logged once it carries reps (and a weight, when the
+  // exercise is loadable) — the same rule DaySession/OffPlanSession use
+  // to count progress, so the pips and the rail's `n/m` never disagree.
+  const loggedAt = (i: number): boolean => {
+    const s = sets[i];
+    if (!s || s.reps == null) return false;
+    return active.isLoadable ? s.weight_kg != null : true;
+  };
+  const isEditingLoggedSet = loggedAt(activeSetIndex);
+
   const wouldBePR =
     active.isLoadable && weight > 0 && reps > 0 && isSetPR(store, active.exercise.id, weight, reps, date);
   const plates = active.isLoadable ? platesLabel(weight) : null;
@@ -106,7 +143,10 @@ export function SetView({
       { weight_kg: active.isLoadable ? weight : null, reps: finalReps },
       date,
     );
-    onConfirmed(restSecondsFor(active.exercise));
+    // Correcting set 2 while you're really on set 5 shouldn't start a
+    // rest timer — you aren't between efforts, you're fixing a number.
+    if (isEditingLoggedSet) onEdited();
+    else onConfirmed(restSecondsFor(active.exercise));
   };
 
   return (
@@ -121,6 +161,17 @@ export function SetView({
           >
             ‹
           </button>
+          {/* Rail scrolls (2026-08-24). It used to be a plain flex row of
+              `flex: 1` buttons with no minimum, sized to fit whatever the
+              rail held. Fine on Day, where a session is 2-5 exercises —
+              but off-plan flattens EVERY accessory and cardio block into
+              one rail: 16 exercises for anterior-hip-rebuild, 23 for
+              first-strict-pullup, 34 for handstand-walk. At 393px that's
+              roughly 11px per tab, i.e. clickable but not tappable. A
+              minimum width plus horizontal scroll keeps every target
+              thumb-sized no matter how long the rail gets. Back and `⋯`
+              sit outside the scroller so they never drift off-screen. */}
+          <div className="flex-1 min-w-0 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
           {railExercises.map((r) => {
             const rEntry = store.logs[date]?.exercises[r.key] ?? null;
             const logged = entrySets(rEntry).filter((s) => s.weight_kg != null && s.reps != null).length;
@@ -129,11 +180,13 @@ export function SetView({
               <button
                 key={r.key}
                 type="button"
+                ref={isActive ? activeRailRef : undefined}
                 onClick={() => onSelectExercise(r.key)}
-                style={{ flex: isActive ? 2 : 1 }}
                 className={
-                  "min-w-0 rounded-[7px] px-1 py-1.5 text-center border " +
-                  (isActive ? "border-bronze bg-[rgba(200,150,102,.14)]" : "border-line-soft bg-surface")
+                  "min-w-0 rounded-[7px] px-1 py-1.5 text-center border flex-shrink-0 " +
+                  (isActive
+                    ? "flex-[2] min-w-[104px] border-bronze bg-[rgba(200,150,102,.14)]"
+                    : "flex-1 min-w-[74px] border-line-soft bg-surface")
                 }
               >
                 <span
@@ -151,6 +204,7 @@ export function SetView({
               </button>
             );
           })}
+          </div>
           <button
             type="button"
             onClick={() => onOpenSheet("overflow")}
@@ -160,19 +214,86 @@ export function SetView({
             ⋯
           </button>
         </div>
-        <div className="flex justify-between mt-2.5 px-1.5">
-          <span className="font-mono text-[10px] uppercase tracking-[.14em] text-ink">
+        {/* min-w-0 + truncate: long exercise names used to wrap and
+            interleave with the "N sets left" counter — "wrist extension
+            prep on floor · set 121 sets 1 of 2 left". The name is the
+            part that can be shortened; the counters can't. */}
+        <div className="flex items-baseline justify-between gap-3 mt-2.5 px-1.5">
+          <span className="min-w-0 truncate font-mono text-[10px] uppercase tracking-[.14em] text-ink">
             {active.exercise.name} · set {activeSetIndex + 1} of {active.rowCount}
           </span>
-          <span className="font-mono text-[10px] uppercase tracking-[.14em] text-ink">
+          <span className="flex-shrink-0 font-mono text-[10px] uppercase tracking-[.14em] text-ink">
             {totalRemaining} sets left
           </span>
         </div>
+        {/* Set pips (2026-08-24). The set counter above used to be the
+            only place a set index appeared, and it was plain text — so
+            once a set was logged there was no way back to it, and a
+            mis-tapped weight was permanent. These are the backwards
+            affordance: every set on this exercise, one tap away, logged
+            ones showing what they hold. */}
+        {active.rowCount > 1 ? (
+          <div className="flex items-center gap-1 mt-1.5">
+            {Array.from({ length: active.rowCount }, (_, i) => {
+              const done = loggedAt(i);
+              const isCurrent = i === activeSetIndex;
+              const logged = sets[i];
+              return (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => onSelectSetIndex(i)}
+                  aria-current={isCurrent ? "step" : undefined}
+                  aria-label={
+                    done && logged
+                      ? active.isLoadable
+                        ? `Set ${i + 1}, logged ${logged.weight_kg} kilos by ${logged.reps} reps. Edit.`
+                        : `Set ${i + 1}, logged ${logged.reps} reps. Edit.`
+                      : `Set ${i + 1}, not logged yet`
+                  }
+                  className={
+                    "flex-1 min-w-0 h-[34px] rounded-[7px] border text-center " +
+                    (isCurrent
+                      ? "border-bronze bg-[rgba(200,150,102,.14)]"
+                      : done
+                        ? "border-line-strong bg-surface-2"
+                        : "border-line-soft bg-surface")
+                  }
+                >
+                  <span
+                    className={
+                      "block font-mono text-[10px] leading-none " +
+                      (isCurrent ? "text-bronze" : done ? "text-ink" : "text-line")
+                    }
+                  >
+                    {i + 1}
+                  </span>
+                  <span
+                    className={
+                      "block font-mono text-[9px] leading-none mt-0.5 truncate " +
+                      (isCurrent ? "text-strong" : done ? "text-ink" : "text-line")
+                    }
+                  >
+                    {done && logged
+                      ? active.isLoadable
+                        ? `${logged.weight_kg}×${logged.reps}`
+                        : `${logged.reps}`
+                      : "·"}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        ) : null}
       </div>
 
       <div className="flex-1 flex flex-col items-center justify-center px-6 text-center min-h-0">
         <p className="font-mono text-[11px] uppercase tracking-[.18em] text-bronze mb-[18px] flex items-center gap-2">
-          {activeSetIndex === active.rowCount - 1 ? "Top set" : "Set"}
+          {isEditingLoggedSet
+            ? "Editing"
+            : activeSetIndex === active.rowCount - 1
+              ? "Top set"
+              : "Set"}
           {wouldBePR ? (
             <span className="font-mono text-[9.5px] font-semibold uppercase tracking-[.12em] text-ground bg-green rounded px-1.5 py-0.5">
               Rep PR
@@ -228,7 +349,9 @@ export function SetView({
         {isAmrap ? (
           <>
             <p className="font-mono text-[10px] uppercase tracking-[.14em] text-muted mb-2 text-center">
-              Reps you got on set {activeSetIndex + 1}
+              {isEditingLoggedSet
+                ? `Fix the reps on set ${activeSetIndex + 1}`
+                : `Reps you got on set ${activeSetIndex + 1}`}
             </p>
             <div className="flex flex-wrap gap-2">
               {Array.from({ length: 9 }, (_, i) => i + 1).map((n) => (
@@ -281,8 +404,8 @@ export function SetView({
               className="w-full h-[62px] rounded-[10px] bg-bronze text-ground text-[17px] font-semibold tracking-[-.01em]"
             >
               {active.isLoadable
-                ? `Done — set ${activeSetIndex + 1} · ${weight} kg`
-                : `Done — set ${activeSetIndex + 1}`}
+                ? `${isEditingLoggedSet ? "Save" : "Done"} — set ${activeSetIndex + 1} · ${weight} kg`
+                : `${isEditingLoggedSet ? "Save" : "Done"} — set ${activeSetIndex + 1}`}
             </button>
             <button
               type="button"

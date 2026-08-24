@@ -112,7 +112,11 @@ export function resolveActiveTier(
   program: Program,
   profile: Store["user_profile"] | undefined,
 ): string | undefined {
-  const slug = profile?.active_program_id;
+  // Keyed off the program being resolved, NOT `active_program_id`
+  // (2026-08-24). Reading the primary slug here meant a SECOND active
+  // track resolved the primary's tier — so a multi-dimensional secondary
+  // got the wrong reference week, or none at all.
+  const slug = program.slug;
   const picked = slug ? profile?.program_states?.[slug]?.tier : undefined;
   if (picked) return picked;
   return program.plan_tiers?.[0]?.id;

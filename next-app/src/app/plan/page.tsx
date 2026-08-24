@@ -9,7 +9,7 @@ import { useStore } from "@/lib/useStore";
 import { today as todayISO, iso, cn } from "@/lib/utils";
 import { activePhaseFor } from "@/lib/engine/schedule";
 import { blocksForDate } from "@/lib/engine/plan-generator";
-import { getBlocksForDate, isBlockObjectOn } from "@/lib/engine/block-selectors";
+import { getBlocksForDate, isBlockObjectOn, DAY_VISIBLE_BLOCK_STATES } from "@/lib/engine/block-selectors";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
 import { MoveSheet } from "@/components/workout/MoveSheet";
 import { ArcProgressBar } from "@/components/ui/ArcProgressBar";
@@ -436,10 +436,36 @@ export default function WeekPage() {
               displayLabel = "Moved-in session";
               contributingProgramCount = displayBlocks.length ? 1 : 0;
             } else {
-              const perProgram = programs.map((p) => ({
-                slug: activeSlugs[programs.indexOf(p)],
-                blocks: blocksForDate(p, userProfile, activePhaseFor(p, dateISO, userProfile), dateISO, undefined, store),
-              }));
+              // 2026-08-24 — Plan used to derive every day's blocks from
+              // phase math even when `block_object` was on, while Day read
+              // materialized `scheduled_blocks`. Two sources, one question:
+              // Plan would count "2 tracks" for a day Day rendered as one.
+              // Read the same map Day reads, with the same state filter.
+              const perProgram = programs.map((p, pi) => {
+                const slug = activeSlugs[pi];
+                if (blockObjectOn) {
+                  const scheduled = (blocksTodayByProgram[slug] ?? []).filter((sb) =>
+                    DAY_VISIBLE_BLOCK_STATES.includes(sb.state),
+                  );
+                  return {
+                    slug,
+                    blocks: scheduled
+                      .map((sb) => p.blocks.find((b) => b.id === sb.block_template_id))
+                      .filter((b): b is NonNullable<typeof b> => !!b),
+                  };
+                }
+                return {
+                  slug,
+                  blocks: blocksForDate(
+                    p,
+                    userProfile,
+                    activePhaseFor(p, dateISO, userProfile),
+                    dateISO,
+                    undefined,
+                    store,
+                  ),
+                };
+              });
               contributingProgramCount = perProgram.filter((g) => g.blocks.length > 0).length;
               displayBlocks = perProgram.flatMap((g) =>
                 g.blocks.map((b) => ({ id: b.id, name: b.name, programSlug: g.slug })),

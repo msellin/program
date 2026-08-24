@@ -6,6 +6,11 @@ import { createClient } from "@/lib/supabase/client";
 import { loadProgram } from "@/lib/data-loader";
 import { getAdapter } from "@/lib/persistence/adapter";
 import { migrateLegacyToBlocks, needsBlockMigration } from "@/lib/migrations/legacy-to-blocks";
+import {
+  ensureMaterialized,
+  slugsNeedingMaterialization,
+  activeSlugsOf,
+} from "@/lib/engine/ensure-materialized";
 import type { Program } from "@/lib/schemas";
 
 const KEY = "program.log.v2";
@@ -40,6 +45,11 @@ function storedUidFromLocal(): string | null {
  */
 export function StoreHydrator() {
   const hydrated = useStore((s) => s.hydrated);
+  // Re-run the materialization keeper when the active-program set
+  // changes — adding a second track has to give that track blocks, or
+  // Day can't see it. Joined into a string so the effect isn't retriggered
+  // by a new array identity on every store write.
+  const activeSlugsKey = useStore((s) => activeSlugsOf(s.store).join("|"));
   const hydrate = useStore((s) => s.hydrate);
   const resetForNewSession = useStore((s) => s.resetForNewSession);
   const setSessionIdentity = useStore((s) => s.setSessionIdentity);
@@ -167,6 +177,36 @@ export function StoreHydrator() {
         // Silent — migration is idempotent, next mount will retry.
       });
   }, [hydrated]);
+
+  // Materialization keeper. Separate from the migration effect above:
+  // the migration runs once per user forever, this has to keep running —
+  // on every load (the window rolls forward) and on every program add
+  // (a new track needs its own blocks). See lib/engine/ensure-materialized.ts.
+  useEffect(() => {
+    if (!hydrated) return;
+    const state = useStore.getState();
+    if (state.store.feature_flags?.block_object !== true) return;
+    // Let the one-shot migration land first — it seeds the map and the
+    // replayed move/skip/done states. This effect will re-run after it
+    // replaces the store.
+    if (needsBlockMigration(state.store)) return;
+
+    const todayISO = new Date().toISOString().slice(0, 10);
+    const slugs = slugsNeedingMaterialization(state.store, todayISO);
+    if (!slugs.length) return;
+
+    void Promise.all(slugs.map((slug) => loadProgram(slug)))
+      .then((programs) => {
+        const bySlug: Record<string, Program> = {};
+        for (const p of programs) if (p.slug) bySlug[p.slug] = p;
+        // Re-read: the store may have moved while the fetch was in flight.
+        const next = ensureMaterialized(useStore.getState().store, bySlug, todayISO);
+        if (next) useStore.getState().replaceStore(next);
+      })
+      .catch(() => {
+        // Silent — idempotent, retries on next mount.
+      });
+  }, [hydrated, activeSlugsKey]);
 
   return null;
 }

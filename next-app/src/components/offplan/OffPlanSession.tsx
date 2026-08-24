@@ -135,12 +135,20 @@ export function OffPlanSession() {
   const activeIdx = activeKey ? railExercises.findIndex((r) => r.key === activeKey) : -1;
   const active = activeIdx >= 0 ? railExercises[activeIdx] : null;
 
+  // Mirrors DaySession's helper — the set to LAND on when entering an
+  // exercise: the first unfinished one, or the last if every row is
+  // logged. Backwards movement is the set pips' job, not this.
+  const firstUnfinishedSetIndex = (key: string): number => {
+    const r = railExercises.find((re) => re.key === key);
+    if (!r) return 0;
+    const entry = store.logs[activeDate]?.exercises[r.key] ?? null;
+    const logged = entrySets(entry).filter((s) => s.reps != null).length;
+    return Math.min(logged, r.rowCount - 1);
+  };
+
   const jumpTo = (key: string) => {
     setActiveKey(key);
-    const r = railExercises.find((re) => re.key === key);
-    const entry = r ? store.logs[activeDate]?.exercises[r.key] ?? null : null;
-    const logged = entrySets(entry).filter((s) => s.reps != null).length;
-    setActiveSetIndex(r ? Math.min(logged, r.rowCount - 1) : 0);
+    setActiveSetIndex(firstUnfinishedSetIndex(key));
     setEditingLoad(false);
     setResting(false);
     setSheet(null);
@@ -168,10 +176,18 @@ export function OffPlanSession() {
           editingLoad={editingLoad}
           onEditingLoad={setEditingLoad}
           onSelectExercise={jumpTo}
+          onSelectSetIndex={(i) => {
+            setEditingLoad(false);
+            setActiveSetIndex(i);
+          }}
           onBackToBrief={() => setMode("brief")}
           onConfirmed={(secs) => {
             setRestSeconds(secs);
             setResting(true);
+          }}
+          onEdited={() => {
+            setEditingLoad(false);
+            setActiveSetIndex(firstUnfinishedSetIndex(active.key));
           }}
           sheet={sheet}
           onOpenSheet={setSheet}

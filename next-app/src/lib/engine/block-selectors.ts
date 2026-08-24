@@ -11,6 +11,21 @@
 
 import type { ScheduledBlock, Store } from "../schemas";
 
+/**
+ * The states a block must be in to count as "on the plan for this day"
+ * in a day-facing view. Shared by Today, the session shell, and Plan so
+ * the three can't disagree about whether a day has a session on it —
+ * they did (2026-08-24): Plan derived days from phase math while Day read
+ * `scheduled_blocks`, so a day could read "2 tracks" on Plan and render
+ * one on Day. `skipped` is the only state deliberately absent.
+ */
+export const DAY_VISIBLE_BLOCK_STATES: ScheduledBlock["state"][] = [
+  "planned",
+  "amber_downshifted",
+  "moved",
+  "done",
+];
+
 export type GetBlocksOptions = {
   /** Filter to a specific program slug. */
   slug?: string;

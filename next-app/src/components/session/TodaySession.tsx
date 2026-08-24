@@ -22,7 +22,7 @@ import {
   HOLIDAY_GAP,
 } from "@/lib/engine/schedule";
 import { blocksForDate, composeBlockForUser } from "@/lib/engine/plan-generator";
-import { getBlocksForDate, isBlockObjectOn } from "@/lib/engine/block-selectors";
+import { getBlocksForDate, isBlockObjectOn, DAY_VISIBLE_BLOCK_STATES } from "@/lib/engine/block-selectors";
 import { migrateLegacyToBlocks, needsBlockMigration } from "@/lib/migrations/legacy-to-blocks";
 import { RestDayCard, RetestReminder, GraduationCard } from "@/components/session/shared/StatusCards";
 import { programDisplayName, humanPhaseName, humanBlockName, phaseProgress, phaseWeekPair } from "@/lib/day-format";
@@ -172,7 +172,7 @@ export function TodaySession({
         activeDate,
         {
           slug: p.slug,
-          states: ["planned", "amber_downshifted", "moved", "done"],
+          states: DAY_VISIBLE_BLOCK_STATES,
         },
       );
       const composed = scheduledForToday

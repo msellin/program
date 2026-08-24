@@ -282,3 +282,15 @@ main { animation: route-in 150ms ease-out; }
   --bottom: var(--sentry-feedback-widget-bottom);
   --right: var(--sentry-feedback-widget-right);
 }
+
+/* Horizontal rails (the session exercise rail) scroll, but a visible
+   scrollbar inside a 34px-tall strip of tap targets is noise on mobile
+   and steals vertical room on desktop. Overflow still works — this only
+   hides the indicator. */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

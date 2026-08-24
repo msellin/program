@@ -6,7 +6,7 @@ import { useStore, entrySets } from "@/lib/useStore";
 import { today as todayISO } from "@/lib/utils";
 import { activePhaseFor, isPastProgramEnd, RACE_DATE, HOLIDAY_GAP } from "@/lib/engine/schedule";
 import { blocksForDate, composeBlockForUser } from "@/lib/engine/plan-generator";
-import { getBlocksForDate, isBlockObjectOn } from "@/lib/engine/block-selectors";
+import { getBlocksForDate, isBlockObjectOn, DAY_VISIBLE_BLOCK_STATES } from "@/lib/engine/block-selectors";
 import { migrateLegacyToBlocks, needsBlockMigration } from "@/lib/migrations/legacy-to-blocks";
 import { suggestForExercise, type Suggestion } from "@/lib/engine/suggest";
 import { selectProposals } from "@/lib/proposals/select";
@@ -106,7 +106,7 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
           const scheduledForToday = getBlocksForDate(
             { scheduled_blocks: scheduledBlocksMap } as Store,
             activeDate,
-            { slug: program.slug, states: ["planned", "amber_downshifted", "moved", "done"] },
+            { slug: program.slug, states: DAY_VISIBLE_BLOCK_STATES },
           );
           return scheduledForToday
             .map((sb) => program.blocks.find((b) => b.id === sb.block_template_id))
@@ -261,10 +261,21 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
         editingLoad={editingLoad}
         onEditingLoad={setEditingLoad}
         onSelectExercise={jumpTo}
+        onSelectSetIndex={(i) => {
+          setEditingLoad(false);
+          setActiveSetIndex(i);
+        }}
         onBackToBrief={() => setMode("brief")}
         onConfirmed={(secs) => {
           setRestSeconds(secs);
           setResting(true);
+        }}
+        onEdited={() => {
+          // A correction, not a set — no rest. Put the user back where
+          // they were actually working rather than leaving them parked
+          // on the set they just fixed.
+          setEditingLoad(false);
+          setActiveSetIndex(firstUnfinishedSetIndex(active.key));
         }}
         sheet={sheet}
         onOpenSheet={setSheet}

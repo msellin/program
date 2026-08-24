@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useStore, entrySets } from "@/lib/useStore";
 import { announce } from "@/lib/announce";
-import { playTimerComplete } from "@/lib/sound";
+import { playCountdownTick, playTimerComplete } from "@/lib/sound";
 import type { RailExercise } from "@/components/session/DaySession";
 import type { UpNext } from "@/components/session/shared/advance";
 
@@ -62,12 +62,30 @@ export function RestTakeover({
   const updateSet = useStore((s) => s.updateSet);
   const store = useStore((s) => s.store);
 
-  const target = targetSeconds;
+  // Seconds the user has added with +30s. Kept separate from `elapsed`
+  // so the timer EXTENDS rather than rewinds (2026-08-24): the button
+  // used to do `setElapsed(e => Math.max(0, e - 30))`, which clamped at
+  // zero — so tapping it inside the first 30 seconds snapped the display
+  // back to the full duration instead of adding anything, and remaining
+  // could never exceed the original target at all.
+  const [extra, setExtra] = useState(0);
+  const target = targetSeconds + extra;
   const [elapsed, setElapsed] = useState(0);
   const [selectedEffort, setSelectedEffort] = useState<(typeof EFFORTS)[number]["label"] | null>(null);
   const [jumpOpen, setJumpOpen] = useState(false);
+  // The countdown effect runs once, so `target` inside it would be the
+  // mount-time value forever. A ref, refreshed every render, is what the
+  // interval reads.
+  const targetRef = useRef(target);
+  useEffect(() => {
+    targetRef.current = target;
+  }, [target]);
   const tick = useRef<ReturnType<typeof setInterval> | null>(null);
   const announced30sRef = useRef(false);
+  // Which of the 3-2-1 ticks have already fired. A Set rather than a
+  // counter because +30s can push `remaining` back above 3, and the
+  // lead-in should then play again on the way down.
+  const tickedRef = useRef<Set<number>>(new Set());
   // Completion (vibrate/sound/announce/onDone) fires once via
   // `doneFiredRef` guarding the interval callback itself — no separate
   // "did we hit zero" state, no reactive effect keyed on it.
@@ -78,12 +96,22 @@ export function RestTakeover({
     tick.current = setInterval(() => {
       setElapsed((e) => {
         const next = e + 1;
-        const remaining = Math.max(0, target - next);
+        const t = targetRef.current;
+        const remaining = Math.max(0, t - next);
         if (!announced30sRef.current && remaining === 30) {
           announce("30 seconds remaining.");
           announced30sRef.current = true;
         }
-        if (next >= target && !doneFiredRef.current) {
+        // Audible 3-2-1. The chime alone was easy to miss mid-workout;
+        // this gives you a beat to put the bar down and look up.
+        if (remaining > 0 && remaining <= 3 && !tickedRef.current.has(remaining)) {
+          tickedRef.current.add(remaining);
+          playCountdownTick();
+          if (typeof navigator !== "undefined" && "vibrate" in navigator) {
+            navigator.vibrate?.(25);
+          }
+        }
+        if (next >= t && !doneFiredRef.current) {
           doneFiredRef.current = true;
           if (typeof navigator !== "undefined" && "vibrate" in navigator) {
             navigator.vibrate?.([80, 60, 80]);
@@ -193,10 +221,22 @@ export function RestTakeover({
         <div className="flex gap-2.5">
           <button
             type="button"
-            onClick={() => setElapsed((e) => Math.max(0, e - 30))}
+            onClick={() => {
+              setExtra((x) => x + 30);
+              // Past the 30-second warning already? Adding time puts us
+              // back above it, so let it fire again on the way down.
+              if (Math.max(0, target - elapsed) <= 30) announced30sRef.current = false;
+              tickedRef.current.clear();
+            }}
+            aria-label="Add 30 seconds to the rest timer"
             className="flex-shrink-0 w-24 h-[58px] rounded-[10px] border border-line-strong text-ink text-[14.5px]"
           >
             +30s
+            {extra > 0 ? (
+              <span className="block font-mono text-[9.5px] text-line leading-none mt-0.5">
+                +{extra}s added
+              </span>
+            ) : null}
           </button>
           <button
             type="button"
