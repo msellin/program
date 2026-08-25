@@ -47,6 +47,13 @@ export type Flow = {
 };
 
 const SESSION_SETTLE_MS = 700;
+/**
+ * Every click gets a bound. A flow must never be able to hang the whole
+ * persona: on the first prod sweep a single disabled button consumed the
+ * 900s test budget and cascaded "Target page, context or browser has been
+ * closed" into eight downstream flows.
+ */
+const CLICK_TIMEOUT_MS = 15_000;
 
 function shiftISO(days: number): string {
   return new Date(Date.now() + days * 864e5).toISOString().slice(0, 10);
@@ -78,9 +85,31 @@ async function openBrief(ctx: FlowContext): Promise<void> {
         : `/session/${ctx.programSlug}/?date=${shiftISO(offset)}`;
     await ctx.page.goto(url, { waitUntil: "domcontentloaded" });
     await ctx.page.waitForTimeout(1200);
-    if ((await ctx.page.getByRole("button", { name: /^(Start|Continue) —/ }).count()) > 0) {
-      return;
+    const start = ctx.page.getByRole("button", { name: /^(Start|Continue) —/ });
+    if ((await start.count()) === 0) continue;
+
+    // The confirm-first gate. When a cycle-start proposal is pending, the
+    // Brief disables Start and reads "Accept the numbers to start" — you
+    // cannot train until you have accepted or adjusted the new training
+    // maxes. persona-strength (the overperformer, so always carrying a
+    // TM bump) hit this on prod: `openBrief` saw the button, clicked it,
+    // and Playwright waited 900 SECONDS for a permanently-disabled control
+    // before failing the whole persona and taking the eight downstream
+    // flows with it.
+    //
+    // Resolving the gate here is not a workaround — it is the product's
+    // core mechanic, and this is the only place the harness exercises it.
+    if (await start.first().isDisabled()) {
+      const accept = ctx.page.getByRole("button", { name: /^Use these$/ });
+      if ((await accept.count()) > 0) {
+        await accept.first().click({ timeout: CLICK_TIMEOUT_MS });
+        await ctx.page.waitForTimeout(900);
+      }
+      if (await start.first().isDisabled()) {
+        throw new SkipFlow("Start is gated and the gate could not be resolved");
+      }
     }
+    return;
   }
   throw new SkipFlow(
     "no session prescribed within ±7 days (graduated, pre-start, or a fully-rest window)",
@@ -91,13 +120,13 @@ async function openBrief(ctx: FlowContext): Promise<void> {
 async function logCurrentSet(ctx: FlowContext): Promise<void> {
   const done = ctx.page.getByRole("button", { name: /^(Done|Save) — set \d+/ });
   if (await done.count()) {
-    await done.first().click();
+    await done.first().click({ timeout: CLICK_TIMEOUT_MS });
     return;
   }
   // AMRAP sets render a rep keypad instead of a single confirm button.
   const keypad = ctx.page.getByRole("button", { name: /^[1-9]$/ });
   if (await keypad.count()) {
-    await keypad.first().click();
+    await keypad.first().click({ timeout: CLICK_TIMEOUT_MS });
     return;
   }
   throw new SkipFlow("no confirm control on the set screen");
@@ -110,14 +139,14 @@ export const FLOWS: Flow[] = [
     async run(ctx) {
       await openBrief(ctx);
       await ctx.capture("01-brief");
-      await ctx.page.getByRole("button", { name: /^(Start|Continue) —/ }).click();
+      await ctx.page.getByRole("button", { name: /^(Start|Continue) —/ }).click({ timeout: CLICK_TIMEOUT_MS });
       await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
       await ctx.capture("02-set");
       await logCurrentSet(ctx);
       await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
       await ctx.capture("03-rest");
       const skip = ctx.page.getByRole("button", { name: /skip rest/i });
-      if (await skip.count()) await skip.click();
+      if (await skip.count()) await skip.click({ timeout: CLICK_TIMEOUT_MS });
       await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
       await ctx.capture("04-next-set");
     },
@@ -127,12 +156,12 @@ export const FLOWS: Flow[] = [
     desc: "Go BACK to a logged set via the pips and correct it",
     async run(ctx) {
       await openBrief(ctx);
-      await ctx.page.getByRole("button", { name: /^(Start|Continue) —/ }).click();
+      await ctx.page.getByRole("button", { name: /^(Start|Continue) —/ }).click({ timeout: CLICK_TIMEOUT_MS });
       await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
       await logCurrentSet(ctx);
       await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
       const skip = ctx.page.getByRole("button", { name: /skip rest/i });
-      if (await skip.count()) await skip.click();
+      if (await skip.count()) await skip.click({ timeout: CLICK_TIMEOUT_MS });
       await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
       await ctx.capture("01-after-logging");
 
@@ -141,19 +170,19 @@ export const FLOWS: Flow[] = [
       if ((await pip.count()) === 0) {
         throw new SkipFlow("no logged set to go back to (single-set exercise?)");
       }
-      await pip.first().click();
+      await pip.first().click({ timeout: CLICK_TIMEOUT_MS });
       await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
       await ctx.capture("02-editing-past-set");
 
       const change = ctx.page.getByRole("button", { name: /change the (weight|reps)/i });
       if (await change.count()) {
-        await change.click();
+        await change.click({ timeout: CLICK_TIMEOUT_MS });
         await ctx.page.waitForTimeout(300);
         await ctx.capture("03-stepper-open");
       }
       const save = ctx.page.getByRole("button", { name: /^Save — set \d+/ });
       if (await save.count()) {
-        await save.first().click();
+        await save.first().click({ timeout: CLICK_TIMEOUT_MS });
         await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
         await ctx.capture("04-after-save");
       }
@@ -164,14 +193,14 @@ export const FLOWS: Flow[] = [
     desc: "+30s on the rest timer — the control that used to reset it",
     async run(ctx) {
       await openBrief(ctx);
-      await ctx.page.getByRole("button", { name: /^(Start|Continue) —/ }).click();
+      await ctx.page.getByRole("button", { name: /^(Start|Continue) —/ }).click({ timeout: CLICK_TIMEOUT_MS });
       await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
       await logCurrentSet(ctx);
       await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
       const add = ctx.page.getByRole("button", { name: /add 30 seconds/i });
       if ((await add.count()) === 0) throw new SkipFlow("rest takeover did not open");
       await ctx.capture("01-rest-before");
-      await add.click();
+      await add.click({ timeout: CLICK_TIMEOUT_MS });
       await ctx.page.waitForTimeout(400);
       await ctx.capture("02-rest-extended");
     },
@@ -181,11 +210,11 @@ export const FLOWS: Flow[] = [
     desc: "The ⋯ sheet on the set screen",
     async run(ctx) {
       await openBrief(ctx);
-      await ctx.page.getByRole("button", { name: /^(Start|Continue) —/ }).click();
+      await ctx.page.getByRole("button", { name: /^(Start|Continue) —/ }).click({ timeout: CLICK_TIMEOUT_MS });
       await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
       const more = ctx.page.getByRole("button", { name: /more options/i });
       if ((await more.count()) === 0) throw new SkipFlow("no overflow control on the set screen");
-      await more.click();
+      await more.click({ timeout: CLICK_TIMEOUT_MS });
       await ctx.page.waitForTimeout(400);
       await ctx.capture("01-overflow-sheet");
     },
@@ -197,12 +226,12 @@ export const FLOWS: Flow[] = [
       await openBrief(ctx);
       const footer = ctx.page.getByRole("button", { name: /log a run, row, or class/i });
       if ((await footer.count()) === 0) throw new SkipFlow("no activity footer on the Brief");
-      await footer.click();
+      await footer.click({ timeout: CLICK_TIMEOUT_MS });
       await ctx.page.waitForTimeout(400);
       await ctx.capture("01-activity-sheet");
       const form = ctx.page.getByRole("button", { name: /a run, a row, a class/i });
       if (await form.count()) {
-        await form.click();
+        await form.click({ timeout: CLICK_TIMEOUT_MS });
         await ctx.page.waitForTimeout(400);
         await ctx.capture("02-activity-form");
       }
@@ -213,15 +242,15 @@ export const FLOWS: Flow[] = [
     desc: "⋯ → Note for this exercise — the only place notes still live",
     async run(ctx) {
       await openBrief(ctx);
-      await ctx.page.getByRole("button", { name: /^(Start|Continue) —/ }).click();
+      await ctx.page.getByRole("button", { name: /^(Start|Continue) —/ }).click({ timeout: CLICK_TIMEOUT_MS });
       await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
       const more = ctx.page.getByRole("button", { name: /more options/i });
       if ((await more.count()) === 0) throw new SkipFlow("no overflow control");
-      await more.click();
+      await more.click({ timeout: CLICK_TIMEOUT_MS });
       await ctx.page.waitForTimeout(400);
       const note = ctx.page.getByRole("button", { name: /note for this exercise/i });
       if ((await note.count()) === 0) throw new SkipFlow("no note row in the overflow sheet");
-      await note.click();
+      await note.click({ timeout: CLICK_TIMEOUT_MS });
       await ctx.page.waitForTimeout(400);
       await ctx.capture("01-note-sheet");
     },
@@ -231,15 +260,15 @@ export const FLOWS: Flow[] = [
     desc: "⋯ → Form cues and warnings",
     async run(ctx) {
       await openBrief(ctx);
-      await ctx.page.getByRole("button", { name: /^(Start|Continue) —/ }).click();
+      await ctx.page.getByRole("button", { name: /^(Start|Continue) —/ }).click({ timeout: CLICK_TIMEOUT_MS });
       await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
       const more = ctx.page.getByRole("button", { name: /more options/i });
       if ((await more.count()) === 0) throw new SkipFlow("no overflow control");
-      await more.click();
+      await more.click({ timeout: CLICK_TIMEOUT_MS });
       await ctx.page.waitForTimeout(400);
       const cues = ctx.page.getByRole("button", { name: /form cues and warnings/i });
       if ((await cues.count()) === 0) throw new SkipFlow("no form-cues row");
-      await cues.click();
+      await cues.click({ timeout: CLICK_TIMEOUT_MS });
       await ctx.page.waitForTimeout(400);
       await ctx.capture("01-exercise-details");
     },
@@ -251,10 +280,13 @@ export const FLOWS: Flow[] = [
       await ctx.page.goto(`/programs/${ctx.programSlug}/`, { waitUntil: "domcontentloaded" });
       await ctx.page.waitForTimeout(1200);
       await ctx.capture("01-program-detail");
-      // Any disclosure on the preview — phase list, week preview, evidence.
-      const disclosure = ctx.page.locator("button[aria-expanded]");
+      // The preview's disclosure is a native <details>/<summary>, not a
+      // button with aria-expanded — which is what this looked for, so the
+      // flow skipped on 14 of 15 personas and ProgramPreviewClient stayed
+      // unreached. Accepts either.
+      const disclosure = ctx.page.locator("summary, button[aria-expanded]");
       if ((await disclosure.count()) === 0) throw new SkipFlow("no expandable section on the preview");
-      await disclosure.first().click();
+      await disclosure.first().click({ timeout: CLICK_TIMEOUT_MS });
       await ctx.page.waitForTimeout(400);
       await ctx.capture("02-expanded");
     },
@@ -289,7 +321,7 @@ export const FLOWS: Flow[] = [
       await ctx.capture("01-plan");
       const row = ctx.page.locator("button[aria-expanded]");
       if ((await row.count()) === 0) throw new SkipFlow("no expandable day rows on Plan");
-      await row.first().click();
+      await row.first().click({ timeout: CLICK_TIMEOUT_MS });
       await ctx.page.waitForTimeout(400);
       await ctx.capture("02-day-expanded");
     },
