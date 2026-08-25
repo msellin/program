@@ -176,3 +176,50 @@ the next increment, worth roughly another 25 points of surface coverage.
 remain unwritten. They are hip-rebuild-specific or near-legacy (1–4
 referencing source files each); worth deciding whether they belong in the
 denominator at all before chasing them.
+
+
+---
+
+# First production sweep (2026-08-25)
+
+Prior runs were all against `localhost:3000`. This is the first full sweep
+against `app.terav.fit`, on the build deployed the same day.
+
+Result: **15/15 personas, routes 100%, surfaces 61.4% mean, store 65%
+mean, 13 of 15 running all 10 flows.** ~20 min at 5 workers (vs 10.6 on
+localhost — network latency, not extra work).
+
+## Three bugs prod found that localhost did not
+
+**The confirm-first gate hung the harness.** The Brief disables Start when
+a cycle-start proposal is pending ("Accept the numbers to start").
+persona-strength is the overperformer, so it always carries a TM bump.
+`openBrief` saw the button, clicked, and Playwright waited the full 900s
+test budget on a permanently-disabled control — then the closed context
+cascaded "Target page, context or browser has been closed" into eight
+downstream flows, which made a one-persona failure look systemic in the
+logs. `openBrief` now resolves the gate by accepting the proposal, and
+every click in every flow carries a 15s bound.
+
+**`program-preview` never reached its target.** It looked for
+`button[aria-expanded]`; the preview's disclosure is a native
+`<details>/<summary>`. Skipped on 14 of 15 personas — `ProgramPreviewClient`
+had never been reached at all.
+
+**Stale session cookies killed sign-in.** persona-strength failed two
+consecutive sweeps at `page.fill('input[type="email"]')` — a leftover
+session makes `/sign-in/` redirect to Day, so the form never renders, and
+the persona died before a single flow ran. Cookies are now cleared before
+sign-in and the wait is bounded.
+
+None of these were reachable on localhost, because the persona accounts
+carry different server-side state there. The case for sweeping prod made
+itself on the first run.
+
+## Coverage note
+
+`persona-rowing` and `persona-rowing-erratic` sit at 26.7% surfaces
+(3/10 flows). Their 45-day arcs end at the 2K test date, so there is
+genuinely no session within +/-7 days. Correct behaviour, recorded with a
+reason. The handstand pair sits at 8/10 — their sessions are hold-based,
+so the rest takeover does not always open.

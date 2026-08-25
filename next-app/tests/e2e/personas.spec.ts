@@ -91,7 +91,20 @@ for (const persona of PERSONAS) {
     await resetTestUser(persona.email, persona.password);
 
     // Sign in with this persona's credentials (not the shared fixture).
+    //
+    // Cookies are cleared first (2026-08-25). persona-strength failed two
+    // consecutive prod sweeps here, burning the full 900s test budget
+    // waiting for `input[type="email"]` that never appeared: a session
+    // cookie left over from a prior run makes /sign-in/ redirect straight
+    // to Day, so the form never renders. Nothing downstream can recover
+    // from that, and the persona dies before a single flow runs.
+    await page.context().clearCookies();
     await page.goto("/sign-in/");
+    // Bounded so a non-rendering form fails fast and legibly instead of
+    // consuming the whole budget.
+    await page
+      .locator('input[type="email"]')
+      .waitFor({ state: "visible", timeout: 30_000 });
     await page.fill('input[type="email"]', persona.email);
     await page.fill('input[type="password"]', persona.password);
     await Promise.all([
