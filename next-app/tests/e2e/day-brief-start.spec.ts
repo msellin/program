@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { ensureTestUser, TEST_EMAIL, TEST_PASSWORD } from "./setup-test-user";
+import { gotoSessionWithWork } from "./helpers/session";
 
 /**
  * Repro for "I can see the blocks but I can't start a block" (2026-08-24).
@@ -45,7 +46,9 @@ test("Brief: tapping an exercise row opens the Set view", async ({ page }) => {
     { seed, uid, email: TEST_EMAIL, slug: SLUG },
   );
 
-  await page.goto(`/session/${SLUG}/`);
+  // Walks nearby dates rather than pinning to today — CSM trains on a
+  // schedule, so this spec passed or failed on the weekday it ran.
+  expect(await gotoSessionWithWork(page, SLUG)).toBe(true);
   // Brief renders: "The whole session" list of exercise rows.
   await expect(page.getByText("The whole session")).toBeVisible({ timeout: 20_000 });
   const rows = page.locator('button:has-text("sets")').filter({ hasNotText: "Start" });

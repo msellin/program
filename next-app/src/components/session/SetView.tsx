@@ -85,11 +85,44 @@ export function SetView({
   const sets = entrySets(entry);
   const prevSets = lastSessionSetsFor(store, active.exercise.id, date);
   const setForRow = sets[activeSetIndex] ?? { weight_kg: null, reps: null, rpe: null };
-  const prevForRow = prevSets?.[activeSetIndex];
+  // Last time's matching row — or, when this index has no counterpart
+  // (last session stopped after two sets and you're on set three), the
+  // last row it DID log. Without the second half, set 3 of an exercise
+  // you've only ever done for two sets had no "last time" at all and fell
+  // straight through to the zero default below.
+  const prevForRow =
+    prevSets?.[activeSetIndex] ??
+    (prevSets ?? []).filter((p) => p.reps != null).slice(-1)[0];
   const prev =
     prevForRow && prevForRow.weight_kg != null && prevForRow.reps != null
       ? { weight_kg: prevForRow.weight_kg, reps: prevForRow.reps }
       : null;
+  // The authored dose from exercises.json. `default` is a loose record, so
+  // read it through a narrow helper rather than casting the whole thing.
+  const authored = active.exercise.default ?? {};
+  const num = (k: string): number | null =>
+    typeof authored[k] === "number" ? (authored[k] as number) : null;
+  const authoredReps = num("reps");
+  const holdSeconds = num("hold_seconds");
+  const authoredSets = num("sets");
+  const perSide = authored.per_side === true;
+  // Hold-based work (isometrics, stretches) authors `hold_seconds` and no
+  // reps — there is no rep count to predefine. One hold is one effort, so
+  // seed 1: zero is never a correct starting value for something you are
+  // about to do.
+  const defaultReps = authoredReps ?? (holdSeconds != null ? 1 : null);
+  // What the program actually asks for, in words. The "Prescribed" card
+  // below only ever rendered for TM-derived strength suggestions, so
+  // accessory and mobility work showed no dose at all — you had to know
+  // that 90/90 hip switches are 10 a side from memory.
+  const authoredDose = (() => {
+    const parts: string[] = [];
+    if (holdSeconds != null) parts.push(`${holdSeconds}s hold`);
+    else if (authoredReps != null) parts.push(`${authoredReps} reps`);
+    if (authoredSets != null) parts.push(`${authoredSets} sets`);
+    if (perSide) parts.push("per side");
+    return parts.length ? parts.join(" · ") : null;
+  })();
   const prescribed = active.suggestion?.fsl
     ? activeSetIndex === 0
       ? active.suggestion.top_set
@@ -106,8 +139,22 @@ export function SetView({
   const [weight, setWeight] = useState<number>(
     () => setForRow.weight_kg ?? prescribed?.kg ?? prev?.weight_kg ?? 0,
   );
+  // Seeding chain (2026-08-25): what you logged → what the engine
+  // prescribes → what you did last time → the exercise's authored default
+  // → 0.
+  //
+  // `default` was missing from that chain, so any exercise without a
+  // TM-derived prescription AND without a same-index history seeded at
+  // ZERO — and tapping Done committed the zero. That is where the founder's
+  // 2026-08-24 log got `hip_switch_9090` set 1 at 0 reps between two sets
+  // of 12, and `air_squat_daily` set 3 at 0 after two sets of 10. Both
+  // exercises author `default.reps: 10`; nothing ever read it. `rowCount`
+  // in DaySession already fell back to `exercise.default.sets` — only reps
+  // was missing the same treatment.
   const [reps, setReps] = useState<number>(
-    () => setForRow.reps ?? (parseInt(prescribed?.reps ?? "", 10) || prev?.reps || 0),
+    () =>
+      setForRow.reps ??
+      (parseInt(prescribed?.reps ?? "", 10) || prev?.reps || defaultReps || 0),
   );
   // No resync-effect: DaySession mounts this component with
   // `key={active.key + activeSetIndex}`, so React fully remounts (and
@@ -315,8 +362,18 @@ export function SetView({
               : "text-[92px] leading-[.9] font-semibold tracking-[-.05em] text-strong mb-3"
           }
         >
-          {isAmrap ? `${reps}+ reps` : `${reps} reps`}
+          {isAmrap ? `${reps}+ reps` : `${reps} ${reps === 1 ? "rep" : "reps"}`}
         </p>
+        {!prev && !prescribed && authoredDose ? (
+          <div className="border border-line-soft rounded-[8px] overflow-hidden mb-3">
+            <div className="px-4 py-2.5 bg-surface">
+              <p className="font-mono text-[9.5px] uppercase tracking-[.14em] text-line mb-0.5">
+                Programme asks for
+              </p>
+              <p className="text-[15px] font-semibold text-ink">{authoredDose}</p>
+            </div>
+          </div>
+        ) : null}
         {prev || prescribed ? (
           <div className="flex items-stretch border border-line-soft rounded-[8px] overflow-hidden mb-3">
             {prev ? (

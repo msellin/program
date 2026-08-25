@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { ensureTestUser, TEST_EMAIL, TEST_PASSWORD } from "./setup-test-user";
+import { gotoSessionWithWork } from "./helpers/session";
 
 /**
  * Off-plan behind a flag (2026-08-24).
@@ -109,7 +110,7 @@ test("public account: activity logging survives and is named", async ({ page }) 
   // so it behaves exactly as a public account. Chosen over persona-strength
   // because hip-rebuild prescribes work most days, so the Brief is reachable.
   await signInWithPersona(page, "persona-recover");
-  await page.goto("/session/anterior-hip-rebuild/");
+  expect(await gotoSessionWithWork(page, "anterior-hip-rebuild")).toBe(true);
   const footer = page.getByRole("button", { name: /log a run, row, or class/i });
   await expect(footer).toBeVisible({ timeout: 20_000 });
   await footer.click();
@@ -154,4 +155,28 @@ test("an incidental single use does not grandfather", async ({ page }) => {
   await page.goto("/profile/");
   await page.waitForSelector("text=More", { timeout: 20_000 });
   await expect(page.getByRole("link", { name: /^Off-plan$/ })).toHaveCount(0);
+});
+
+test("accessory exercises seed their authored reps, not zero", async ({ page }) => {
+  // Regression for the founder's 2026-08-24 log, which carried
+  // `hip_switch_9090` set 1 at 0 reps between two sets of 12 and
+  // `air_squat_daily` set 3 at 0 after two sets of 10. Both author
+  // `default.reps: 10` in exercises.json; SetView's seeding chain never
+  // consulted it, so any set without a TM prescription and without a
+  // same-index history landed on zero — and Done committed the zero.
+  await signInWithPersona(page, "persona-recover", (store) => {
+    store.feature_flags = { ...((store.feature_flags as object) ?? {}), off_plan: true };
+  });
+  await page.goto("/off-plan/");
+  const row = page.locator("button", { hasText: /\d+ sets/ }).first();
+  await row.click({ timeout: 20_000 });
+  await expect(page.getByText(/· set 1 of \d+/i)).toBeVisible({ timeout: 10_000 });
+
+  // `reps?` — a set seeded at 1 renders "1 rep", not "1 reps".
+  const shown = await page.locator("p").filter({ hasText: /^\d+\+? reps?$/ }).first().textContent();
+  const reps = Number((shown ?? "").match(/\d+/)?.[0] ?? "0");
+  expect(reps).toBeGreaterThan(0);
+
+  // And the number the button commits matches what the screen shows.
+  await expect(page.getByRole("button", { name: /^Done — set 1/ })).toBeVisible();
 });

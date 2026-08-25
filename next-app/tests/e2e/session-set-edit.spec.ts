@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { ensureTestUser, TEST_EMAIL, TEST_PASSWORD } from "./setup-test-user";
+import { gotoSessionWithWork } from "./helpers/session";
 
 /**
  * Founder-reported gaps from a live workout (2026-08-24):
@@ -42,8 +43,8 @@ async function signInWithPersona(page: import("@playwright/test").Page, persona:
 
 test("a logged set can be reopened and corrected from the set pips", async ({ page }) => {
   await signInWithPersona(page, "persona-recover");
-  await page.goto("/session/anterior-hip-rebuild/");
-  await page.getByRole("button", { name: /^Start —/ }).click({ timeout: 20_000 });
+  expect(await gotoSessionWithWork(page, "anterior-hip-rebuild")).toBe(true);
+  await page.getByRole("button", { name: /^(Start|Continue) —/ }).click({ timeout: 20_000 });
 
   await expect(page.getByText(/· set 1 of \d+/i)).toBeVisible();
   await page.getByRole("button", { name: /^Done — set 1 · \d/ }).click();
@@ -64,6 +65,10 @@ test("a logged set can be reopened and corrected from the set pips", async ({ pa
   await save.click();
 
   await expect(page.getByText("Next up")).toHaveCount(0);
+  // Read back the date the session actually logged to. `gotoSessionWithWork`
+  // may have walked to another day, and asserting against TODAY silently
+  // looked at an empty log.
+  const loggedDate = new URL(page.url()).searchParams.get("date") ?? TODAY;
   const weight = await page.evaluate((today) => {
     const s = JSON.parse(localStorage.getItem("program.log.v2") ?? "{}");
     const exercises = s.logs?.[today]?.exercises ?? {};
@@ -72,7 +77,7 @@ test("a logged set can be reopened and corrected from the set pips", async ({ pa
       if (first?.weight_kg === 42.5) return first.weight_kg;
     }
     return null;
-  }, TODAY);
+  }, loggedDate);
   expect(weight).toBe(42.5);
 });
 
@@ -113,21 +118,31 @@ test("Day renders tracks that were never materialized", async ({ page }) => {
     "overhead-mobility",
   ]);
 
-  // And Plan agrees with Day about how many tracks today carries.
+  // Day renders one "Open session" per track that has work scheduled
+  // today. Compare against the block map rather than Plan's "N tracks"
+  // chip: `getByText(/^\d+ tracks$/).first()` picked up whichever day in
+  // the visible week happened to carry a chip, not today's row — so the
+  // assertion was comparing today's Day against some other day's Plan.
   const dayTracks = await page.getByRole("link", { name: /open session/i }).count();
-  await page.goto("/plan/");
-  await page.waitForSelector("text=/rest|·/", { timeout: 20_000 });
-  const chip = page.getByText(/^\d+ tracks$/).first();
-  const planTracks = (await chip.count())
-    ? Number((await chip.textContent())!.match(/\d+/)![0])
-    : 1;
-  expect(dayTracks).toBe(planTracks);
+  const scheduledToday = await page.evaluate((today) => {
+    const s = JSON.parse(localStorage.getItem("program.log.v2") ?? "{}");
+    const slugs = new Set<string>();
+    for (const b of Object.values(s.scheduled_blocks ?? {}) as Array<{
+      program_slug: string;
+      actual_date: string;
+      state: string;
+    }>) {
+      if (b.actual_date === today && b.state !== "skipped") slugs.add(b.program_slug);
+    }
+    return slugs.size;
+  }, TODAY);
+  expect(dayTracks).toBe(scheduledToday);
 });
 
 test("+30s extends the rest timer instead of resetting it", async ({ page }) => {
   await signInWithPersona(page, "persona-recover");
-  await page.goto("/session/anterior-hip-rebuild/");
-  await page.getByRole("button", { name: /^Start —/ }).click({ timeout: 20_000 });
+  expect(await gotoSessionWithWork(page, "anterior-hip-rebuild")).toBe(true);
+  await page.getByRole("button", { name: /^(Start|Continue) —/ }).click({ timeout: 20_000 });
   await page.getByRole("button", { name: /^Done — set 1 · \d/ }).click();
 
   const clock = page.locator("p").filter({ hasText: /^\d+:\d\d$/ }).first();

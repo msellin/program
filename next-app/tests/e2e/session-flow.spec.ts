@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { ensureTestUser, TEST_EMAIL, TEST_PASSWORD } from "./setup-test-user";
+import { gotoSessionWithWork } from "./helpers/session";
 
 /**
  * Post-ship flow checks (2026-08-24), all three founder-reported gaps:
@@ -63,8 +64,8 @@ test("morning check returns to Day on save", async ({ page }) => {
 
 test("Set CTA names the set, and rest announces the set the timer lands on", async ({ page }) => {
   await signInWithPersona(page, "persona-recover");
-  await page.goto("/session/anterior-hip-rebuild/");
-  await page.getByRole("button", { name: /^Start —/ }).click({ timeout: 20_000 });
+  expect(await gotoSessionWithWork(page, "anterior-hip-rebuild")).toBe(true);
+  await page.getByRole("button", { name: /^(Start|Continue) —/ }).click({ timeout: 20_000 });
   await expect(page.getByText(/· set 1 of \d+/i)).toBeVisible();
   const cta = page.getByRole("button", { name: /^Done — set 1 · \d/ });
   await expect(cta).toBeVisible();
