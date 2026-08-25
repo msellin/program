@@ -36,7 +36,13 @@ type ProgramShape = {
     id: string;
     category?: string;
     items?: Array<{ exercise_id?: string | null }>;
+    capability_slot?: string;
+    slot_drill_count?: number;
   }>;
+  /** Flat list of exercise ids that slot-based blocks draw from. */
+  drill_library?: string[];
+  /** Note the field is `metric_id`, not `id`. */
+  retest_metrics?: Array<{ metric_id?: string }>;
   weekly_template?: unknown;
 };
 
@@ -88,14 +94,30 @@ function pickBlocksForDate(
   const dow = new Date(dateISO + "T12:00:00Z").getUTCDay();
   // Only train Mon (1) / Wed (3) / Fri (5) — 3-day upper-body-esque split for sim.
   if (dow !== 1 && dow !== 3 && dow !== 5) return [];
-  // Prefer specific known blocks by name pattern; fall back to first strength block.
-  const strengthBlocks = program.blocks.filter(
-    (b) => phase.blocks.includes(b.id) && (b.category ?? "strength") === "strength",
-  );
-  if (!strengthBlocks.length) return [];
+  // Mirrors src/lib/engine/schedule.ts:457 — anterior-hip-rebuild is the
+  // ONLY program that filters its non-strength blocks out of the day;
+  // every other program's scheduled blocks count regardless of category.
+  //
+  // The simulator applied the strength filter universally, which is the
+  // third and final reason persona-mobility and the handstand personas
+  // logged nothing across 150 simulated days: all 7 overhead-mobility
+  // blocks are `accessory`, so `strengthBlocks` was empty every single
+  // day. (The other two: `itemsForBlock` returned [] for slot-based
+  // blocks, and the TM gate dropped every non-loadable drill.)
+  //
+  // `run` blocks stay excluded here — `pickAerobicBlocksForDate` owns
+  // those and writes them as `runs[]`, not exercise logs.
+  const isHip = program.slug === "anterior-hip-rebuild";
+  const candidates = program.blocks.filter((b) => {
+    if (!phase.blocks.includes(b.id)) return false;
+    const category = b.category ?? "strength";
+    if (category === "run") return false;
+    return isHip ? category === "strength" : true;
+  });
+  if (!candidates.length) return [];
   // Alternate by day-of-week: Mon → first, Wed → second, Fri → third.
   const idx = dow === 1 ? 0 : dow === 3 ? 1 : 2;
-  const chosen = strengthBlocks[idx % strengthBlocks.length];
+  const chosen = candidates[idx % candidates.length];
   return [chosen.id];
 }
 
@@ -126,6 +148,31 @@ function pickAerobicBlocksForDate(
 
 function itemsForBlock(program: ProgramShape, blockId: string): string[] {
   const block = program.blocks.find((b) => b.id === blockId);
+  // Slot-based blocks (overhead-mobility: all 7; handstand-walk: 9 of 13)
+  // author NO items — their drills are composed per user from
+  // `drill_library` at read time. `block.items` is therefore empty and the
+  // early return below fired for every one of them, which is why
+  // persona-mobility, persona-handstand and persona-handstand-fast logged
+  // literally nothing across 150 simulated days. The F9/Batch-25 fix that
+  // slug-gated these programs to "log every drill" returned an empty list,
+  // so it never did anything.
+  //
+  // This is an APPROXIMATION, not a port of `composeSlotDrills`: it takes
+  // `slot_drill_count` ids off `drill_library`, rotated by a stable hash of
+  // the block id so different slots draw different drills. The goal is
+  // non-empty, plausibly-shaped artifacts — heatmaps, adherence, history —
+  // not fidelity to the engine's real selection.
+  if ((!block?.items || block.items.length === 0) && block?.capability_slot) {
+    const library = program.drill_library ?? [];
+    if (library.length === 0) return [];
+    const count = Math.max(1, block.slot_drill_count ?? 2);
+    let h = 0;
+    for (let i = 0; i < blockId.length; i++) h = (h * 31 + blockId.charCodeAt(i)) >>> 0;
+    const offset = h % library.length;
+    return Array.from({ length: Math.min(count, library.length) }, (_, i) =>
+      library[(offset + i) % library.length],
+    );
+  }
   if (!block?.items) return [];
   const ids = block.items.map((it) => it.exercise_id).filter((x): x is string => !!x);
   // F9 (Batch 25) — for strength programs we log only TM lifts (the
@@ -417,7 +464,7 @@ export async function runSimulationV2(
     });
 
     await page.evaluate(
-      ({ dateISO, decision, blockIds, aerobicRuns, symptoms, derivedState, note, tms, factor, baseRpe, jitter, itemsByBlock, slug, extras, uid, tier }) => {
+      ({ dateISO, decision, blockIds, aerobicRuns, symptoms, derivedState, note, tms, factor, baseRpe, jitter, itemsByBlock, slug, extras, uid, tier, partialSession, dismissToday, acceptRate, retestToday, retestMetricIds, moveToday }) => {
         // Read local, or start from a valid baseline if StoreHydrator wiped
         // us during the initial page.goto (see: reset-on-fresh-mount bug).
         const raw = localStorage.getItem("program.log.v2");
@@ -481,25 +528,52 @@ export async function runSimulationV2(
           store.skipped = store.skipped ?? {};
           store.skipped[dateISO] = { blocks: [], reason: "sim: archetype skipped" };
         } else if (decision === "log") {
+          // Some sessions stop partway. Before 2026-08-24 the simulator
+          // only ever wrote `{done: true, 3 full sets}` or nothing at all —
+          // across 15 personas and 1,064 days it produced 117 fully-logged
+          // exercises and ZERO partial ones. So no artifact had ever shown a
+          // session in progress: not the "Continue — <lift>, set 4" CTA, not
+          // an exercise in the Held state, not the rail's logged/total
+          // counter at anything but 0 or full, not the set pips. Roughly one
+          // logging day in five now stops after 1-2 sets.
+          const partialToday = partialSession;
           for (const blockId of blockIds) {
             const items = itemsByBlock[blockId] ?? [];
             for (const exId of items) {
               const key = `${blockId}:${exId}`;
               const tm = tms[exId];
-              if (!tm) continue;
+              // Second gate that silenced the skill/mobility personas: an
+              // exercise with no training max was skipped outright. Mobility
+              // drills and skill holds have no TM by nature — the app logs
+              // them reps-only (SetView's `isLoadable === false` path), so
+              // the simulator does too. Fixing `itemsForBlock` alone left
+              // persona-mobility at zero because every composed drill fell
+              // through here.
+              const loadable = !!tm;
+              const stopAfter = partialToday ? 1 + (Math.random() < 0.5 ? 0 : 1) : 3;
               // 3 sets with varied RPE — simulate drift where relevant.
               const sets = [0, 1, 2].map((i) => {
+                if (i >= stopAfter) {
+                  // An unlogged row of a session that was left mid-way.
+                  return { weight_kg: null, reps: null, rpe: null };
+                }
                 const rpe = Math.max(4, Math.min(10, baseRpe + i * 0.5 + (Math.random() - 0.5) * jitter));
                 return {
-                  weight_kg: Math.round(tm * 0.85 * factor * 2) / 2,
-                  reps: 5,
+                  weight_kg: loadable ? Math.round(tm * 0.85 * factor * 2) / 2 : null,
+                  reps: loadable ? 5 : 8 + Math.round((factor - 1) * 10),
                   rpe: Math.round(rpe * 2) / 2,
                 };
               });
-              store.logs[dateISO].exercises[key] = { done: true, sets };
+              store.logs[dateISO].exercises[key] = { done: !partialToday, sets };
             }
           }
 
+          // Ignored proposals. `dismissed_proposals` was initialised to
+          // `{}` and never written — including for persona-erratic, whose
+          // declared focus is literally "Skipped sessions, dismissed
+          // proposals, re-plan behavior". An archetype with a low accept
+          // rate should leave a trail of ignores, and Record's proposal
+          // history should have something to render.
           // Accept proposal on red/amber days per archetype probability.
           if (derivedState !== "green" && Math.random() < 0.7) {
             store.day_adjustments = store.day_adjustments ?? {};
@@ -510,6 +584,64 @@ export async function runSimulationV2(
               accepted_at: Date.now(),
             };
           }
+        }
+
+        // Ignored proposals + their audit trail. `dismissed_proposals` and
+        // `proposal_history` were both initialised to empty and never
+        // written — including for persona-erratic, whose declared focus is
+        // "Skipped sessions, dismissed proposals, re-plan behavior". Kept
+        // OUTSIDE the `decision === "log"` branch on purpose: ignoring a
+        // proposal is something you do on a day you skipped, too, and
+        // gating it on training made the write vanishingly rare.
+        if (derivedState !== "green" && dismissToday && acceptRate < 1) {
+          store.dismissed_proposals = store.dismissed_proposals ?? {};
+          store.dismissed_proposals[dateISO] = Array.from(
+            new Set([...(store.dismissed_proposals[dateISO] ?? []), "day-adjustment"]),
+          );
+          store.proposal_history = [
+            ...(store.proposal_history ?? []),
+            {
+              id: "day-adjustment",
+              kind: "day_adjustment_soften",
+              outcome: "ignored",
+              at: new Date(dateISO + "T18:00:00Z").getTime(),
+              date: dateISO,
+            },
+          ];
+        }
+
+        // Retest readings every ~2 weeks, drifting toward the metric's
+        // direction of improvement. `retest_readings` is read by ten source
+        // files — the retest cards, the non-responder classifier, the
+        // HERITAGE cluster chips — and was empty in every persona bundle,
+        // so none of that surface had ever been captured with data.
+        if (retestToday && retestMetricIds.length > 0) {
+          const priorCount = (store.retest_readings ?? []).length;
+          store.retest_readings = [
+            ...(store.retest_readings ?? []),
+            ...retestMetricIds.map((metricId, i) => ({
+              metric_id: metricId,
+              // Monotonic drift so trend lines have a slope. Absolute values
+              // are not meant to be physiologically right — the point is
+              // that two readings exist and differ.
+              value: Math.round((100 + priorCount * 3 + i * 7) * 10) / 10,
+              observed_at: dateISO,
+              program_slug: slug,
+            })),
+          ];
+        }
+
+        // One moved session per arc. `scheduled_overrides` was initialised
+        // to `{}` and never populated, so Plan's "Moved-in session" row and
+        // the move-reason line had never been rendered by any persona.
+        if (moveToday && Object.keys(store.scheduled_overrides ?? {}).length === 0) {
+          store.scheduled_overrides = store.scheduled_overrides ?? {};
+          store.scheduled_overrides[dateISO] = {
+            blocks: blockIds,
+            reason: `moved from ${new Date(new Date(dateISO + "T00:00:00").getTime() - 864e5)
+              .toISOString()
+              .slice(0, 10)}`,
+          };
         }
 
         store.updated_at = Date.now();
@@ -534,6 +666,34 @@ export async function runSimulationV2(
         extras: additionalProgramSlugs,
         uid: sessionUid,
         tier: tier ?? null,
+        // ~1 logging day in 5 stops mid-session. Seeded off the day index
+        // rather than Math.random so a persona's partial days are stable
+        // across re-runs and an auditor comparing two sweeps isn't reading
+        // noise.
+        // Every Wednesday session stops partway. Tied to day-of-week
+        // rather than the day index because training only happens
+        // Mon/Wed/Fri — `day % 5` rarely landed on a training day at all,
+        // so partial sessions stayed nearly as rare as before.
+        partialSession: dow === 3,
+        // Deterministic ignore trail on ~1 in 5 non-green days. Seeded off
+        // the day index, not the archetype's accept rate: gating on
+        // `random() > acceptProposal` meant the 0.9-accept archetypes
+        // produced almost no ignores, and `dismissed_proposals` stayed the
+        // empty object it had always been. Personas with no non-green days
+        // (the overperformer) still correctly produce none.
+        dismissToday: day % 5 === 0,
+        acceptRate: archetype.acceptProposal,
+        retestToday: day > 0 && day % 14 === 0,
+        retestMetricIds: (program.retest_metrics ?? [])
+          .map((m) => m.metric_id)
+          .filter((x): x is string => !!x)
+          .slice(0, 2),
+        // A single moved session, roughly a third of the way in. Expressed
+        // as a WINDOW rather than an exact day because training only lands
+        // on Mon/Wed/Fri — pinning it to `day === days/3` silently produced
+        // nothing whenever that day was a rest day. The write itself
+        // no-ops once one override exists.
+        moveToday: day >= Math.floor(days / 3) && day < Math.floor(days / 3) + 7 && blockIds.length > 0,
       },
     );
 

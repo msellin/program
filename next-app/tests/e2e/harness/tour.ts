@@ -15,6 +15,11 @@ export const DEFAULT_VIEWPORTS: TourViewport[] = [
   { name: "desktop", width: 1280, height: 800 },
 ];
 
+/** ISO date `n` days from today. Used for the timeline tour variants. */
+function shiftISO(days: number): string {
+  return new Date(Date.now() + days * 864e5).toISOString().slice(0, 10);
+}
+
 export function buildRoutes(activeProgramSlug: string): TourRoute[] {
   return [
     // Week 4a/b (2026-08-21) — Today tab renamed to Day (label only,
@@ -49,7 +54,43 @@ export function buildRoutes(activeProgramSlug: string): TourRoute[] {
     { slug: "12b-extras-redirect", path: "/extras", desc: "Extras → Off-plan redirect stub" },
     { slug: "13-check", path: "/check", desc: "Check" },
     { slug: "14-check-hip", path: "/check/hip", desc: "Check — hip" },
-    { slug: "15-events", path: "/events", desc: "Events" },
+    // 15-events removed 2026-08-24 — `src/app/events` does not exist and
+    // never did in this repo's history. Every persona had been capturing a
+    // 404 into 15-events.png at both viewports since the slot was added.
+    { slug: "15-settings", path: "/settings", desc: "Settings" },
+    // The session shell — the app's most-used screen and the entire
+    // subject of the Day redesign — was absent from the tour until
+    // 2026-08-24. Toured at three points on the timeline, because
+    // `?date=` is the only way to reach another day's session and none
+    // of it had ever been captured.
+    {
+      slug: "16-session-today",
+      path: `/session/${activeProgramSlug}`,
+      desc: "Session — today",
+    },
+    {
+      slug: "17-session-past",
+      path: `/session/${activeProgramSlug}?date=${shiftISO(-3)}`,
+      desc: "Session — a past day (already logged or missed)",
+    },
+    {
+      slug: "18-session-future",
+      path: `/session/${activeProgramSlug}?date=${shiftISO(3)}`,
+      desc: "Session — a future day (planned, nothing logged)",
+    },
+    {
+      slug: "19-intake",
+      path: `/programs/${activeProgramSlug}/intake`,
+      desc: "Program intake",
+    },
+    { slug: "20-evidence", path: "/evidence", desc: "Evidence" },
+    { slug: "21-legal-privacy", path: "/legal/privacy", desc: "Legal — privacy" },
+    { slug: "22-legal-terms", path: "/legal/terms", desc: "Legal — terms" },
+    { slug: "23-legal-disclaimer", path: "/legal/disclaimer", desc: "Legal — disclaimer" },
+    // Reached without a recovery token, so this captures the route's
+    // error/expired state — which is what a user who clicks a stale email
+    // link actually sees, and had never been looked at.
+    { slug: "24-reset-password", path: "/reset-password", desc: "Reset password (no token)" },
   ];
 }
 

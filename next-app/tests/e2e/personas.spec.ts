@@ -4,6 +4,8 @@ import * as path from "node:path";
 import { PERSONAS, personaArchetype } from "./harness/personas";
 import { runSimulationV2 } from "./harness/simulator-v2";
 import { buildRoutes, DEFAULT_VIEWPORTS, runTour } from "./harness/tour";
+import { runFlows } from "./harness/flows";
+import { buildCoverage, writeCoverage, writeFleetSummary, collectReports } from "./harness/coverage";
 import { resetTestUser } from "./setup-test-user";
 
 const ARTIFACT_ROOT = "tests/e2e/artifacts/personas";
@@ -18,7 +20,12 @@ function computeStartDate(personaDays: number): string {
   return t.toISOString().slice(0, 10);
 }
 
-test.describe.configure({ mode: "serial" });
+// Parallel (2026-08-25). This was serial from the days when every persona
+// shared one test account; each persona now resets and signs in as its OWN
+// user (`persona.email`), so they no longer contend for anything. A full
+// sweep is ~15 personas × 2-3.5 min — serial that is 40+ minutes of
+// wall-clock for work that is embarrassingly parallel.
+test.describe.configure({ mode: "parallel" });
 
 // Coverage check — warn if a shipped catalog program has no persona.
 // Reads the manifest directly so no test-time server call needed.
@@ -71,7 +78,11 @@ for (const persona of PERSONAS) {
   test(`persona · ${persona.id} · ${persona.programSlug} · day ${persona.days}`, async ({
     page,
   }) => {
-    test.setTimeout(360_000);
+    // Raised from 360s (2026-08-25). The per-persona budget was set when a
+    // sweep was sim + a 17-route tour; it is now sim + a 24-route tour +
+    // 10 interaction flows, run 5-wide so workers share CPU. persona-strength
+    // tipped over the old ceiling and failed at the very last step.
+    test.setTimeout(900_000);
 
     const outDir = path.join(ARTIFACT_ROOT, persona.id);
     fs.mkdirSync(outDir, { recursive: true });
@@ -240,6 +251,44 @@ for (const persona of PERSONAS) {
       "utf8",
     );
 
+    // Flows — the interaction pass. Runs AFTER the tour on purpose: flows
+    // log real sets, and doing that first would leave every tour
+    // screenshot showing a session already under way. See
+    // dev/audits/app/2026-08-24-persona-coverage-audit.md for why the
+    // sweep had no interaction layer until now.
+    const flowResults = await runFlows(page, {
+      outDir,
+      programSlug: persona.programSlug,
+    });
+    const skippedFlows = flowResults.filter((f) => f.status === "skipped");
+    if (skippedFlows.length > 0) {
+      console.log(
+        `[${persona.id}] flows skipped: ` +
+          skippedFlows.map((f) => `${f.id} (${f.reason})`).join(", "),
+      );
+    }
+    const erroredFlows = flowResults.filter((f) => f.status === "error");
+    if (erroredFlows.length > 0) {
+      console.warn(
+        `[${persona.id}] flows errored: ` +
+          erroredFlows.map((f) => `${f.id} (${f.reason})`).join(", "),
+      );
+    }
+
+    // Store state AFTER the flows, so the coverage numbers reflect
+    // everything the sweep actually produced.
+    const postFlowStore = await page.evaluate(() =>
+      JSON.parse(localStorage.getItem("program.log.v2") ?? "{}"),
+    );
+    const coverage = buildCoverage({
+      personaId: persona.id,
+      activeSlug: persona.programSlug,
+      touredPaths: routes.map((r) => r.path),
+      flows: flowResults,
+      store: postFlowStore,
+    });
+    writeCoverage(outDir, coverage);
+
     // Non-fatal: log any failed routes so the report notes them, but keep going.
     const failed = tourResults.filter((r) => r.status === "error");
     if (failed.length > 0) {
@@ -252,6 +301,13 @@ for (const persona of PERSONAS) {
     expect(tourResults.length).toBeGreaterThan(0);
   });
 }
+
+// Reads the per-persona files off disk rather than an in-memory array —
+// with parallel workers each worker only sees its own share. Runs in every
+// worker; last one to finish writes the complete picture.
+test.afterAll(() => {
+  writeFleetSummary(ARTIFACT_ROOT, collectReports(ARTIFACT_ROOT));
+});
 
 function summariseStore(store: unknown): Record<string, unknown> {
   const s = (store ?? {}) as {
