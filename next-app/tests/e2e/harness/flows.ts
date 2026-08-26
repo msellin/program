@@ -357,8 +357,14 @@ export const FLOWS: Flow[] = [
         "an already-logged set offers Save, not Done",
         async () => (await save.count()) > 0,
       );
+      // Save via `tap`, not a raw click. A raw click that cannot land
+      // throws and kills the flow — which is what happened to eight
+      // personas: the stepper poking and rail walking above had moved the
+      // view on, so "Save — set N" belonged to a different set by the time
+      // this ran, and the whole flow errored out on a 15s timeout instead
+      // of recording one missed control.
       if (await save.count()) {
-        await save.first().click({ timeout: CLICK_TIMEOUT_MS });
+        await ctx.tap("SetView", /^Save — set/);
         await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
         await ctx.capture("04-after-save");
         // Correcting a set is not a set you just did, so no rest timer.
