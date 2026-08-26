@@ -258,6 +258,33 @@ export const FLOWS: Flow[] = [
           return Number(reps.match(/\d+/)?.[0] ?? "0") > 0;
         },
       );
+      // A9 (2026-08-26): `isLoadable` was hardcoded true in DaySession, so
+      // dead_bug (trunk) and every mobility drill rendered a 92px kilo
+      // counter and a 2.5 kg stepper for work that is never loaded. The
+      // confirm button is the tell — it names kg only for loadable work —
+      // so the two must agree.
+      await ctx.check(
+        "a non-loadable exercise offers no weight control",
+        async () => {
+          const cta = await ctx.page
+            .getByRole("button", { name: /^(Done|Save) — set/ })
+            .first()
+            .textContent()
+            .catch(() => null);
+          if (cta == null) return true; // AMRAP keypad or hold screen
+          const namesKg = /·\s*[\d.]+\s*kg/.test(cta);
+          // Compare against the weight HERO, not the stepper input: the
+          // input only exists while the "Change the weight" panel is open,
+          // so checking for it reported a mismatch on loadable exercises
+          // too, and the check failed for the wrong reason.
+          const showsWeight =
+            (await ctx.page
+              .locator('[data-surface="SetView"] span')
+              .filter({ hasText: /^kg$/ })
+              .count()) > 0;
+          return namesKg === showsWeight;
+        },
+      );
       const change = ctx.page.getByRole("button", { name: /change the (weight|reps|time)/i });
       if (await change.count()) {
         await change.click({ timeout: CLICK_TIMEOUT_MS });
@@ -407,11 +434,18 @@ export const FLOWS: Flow[] = [
       }
 
       // Skip rest last — it closes the surface everything above needs.
-      await ctx.tap("RestTakeover", /skip rest/i);
-      await ctx.page.waitForTimeout(500);
+      // Escape first: the jump sheet's scrim can still be up if Cancel
+      // missed, and a scrim swallows the click without failing it.
+      await ctx.page.keyboard.press("Escape").catch(() => {});
+      await ctx.page.waitForTimeout(250);
+      const tapped = await ctx.tap("RestTakeover", /skip rest/i);
+      await ctx.page.waitForTimeout(600);
+      const stillOpen = await ctx.page.locator('[data-surface="RestTakeover"]').count();
+      const dialogsUp = await ctx.page.locator('[role="dialog"]').count();
       await ctx.check(
         "Skip rest closes the rest takeover",
-        async () => (await ctx.page.locator('[data-surface="RestTakeover"]').count()) === 0,
+        async () => stillOpen === 0,
+        `tapped=${tapped} stillOpen=${stillOpen} dialogsUp=${dialogsUp}`,
       );
       await ctx.capture("05-rest-skipped");
     },
@@ -782,6 +816,31 @@ export const FLOWS: Flow[] = [
       await ctx.capture("01-plan");
       const row = ctx.page.locator("button[aria-expanded]");
       if ((await row.count()) === 0) throw new SkipFlow("no expandable day rows on Plan");
+
+      // A8 (2026-08-26): phase 1 scheduled one combined squat+pull block on
+      // Mon/Wed/Thu/Sat, so Wednesday and Thursday were a heavy squat 24h
+      // apart — against the program's own "48h between heavy squat days"
+      // principle. On Plan it reads as two identical adjacent rows, which
+      // the tour had been screenshotting every run without noticing.
+      const summaries = await ctx.page
+        .locator("button[aria-expanded] p")
+        .allTextContents()
+        .catch(() => [] as string[]);
+      const meaningful = summaries.map((t) => t.trim()).filter((t) => t.length > 0);
+      let adjacentDuplicate: string | null = null;
+      for (let i = 1; i < meaningful.length; i++) {
+        const prev = meaningful[i - 1];
+        if (prev === meaningful[i] && !/rest/i.test(prev)) {
+          adjacentDuplicate = prev;
+          break;
+        }
+      }
+      await ctx.check(
+        "no two consecutive days present as the same session",
+        async () => adjacentDuplicate === null,
+        adjacentDuplicate ? `"${adjacentDuplicate}" on two days running` : undefined,
+      );
+
       await row.first().click({ timeout: CLICK_TIMEOUT_MS });
       await ctx.page.waitForTimeout(400);
       await ctx.capture("02-day-expanded");
@@ -827,6 +886,47 @@ export const FLOWS: Flow[] = [
         },
       );
       await ctx.capture("03-hold-logged");
+    },
+  },
+  {
+    id: "cold-load-resume",
+    desc: "A cold load returns you to the session you were in",
+    async run(ctx) {
+      // A10 (2026-08-26): iOS evicts a backgrounded web view and relaunches
+      // cold at the manifest's start_url, which is "/". Nothing remembered
+      // the route, so a workout three sets in simply vanished. A full
+      // `goto` is the same cold entry the OS performs.
+      await openBrief(ctx);
+      const sessionUrl = ctx.page.url();
+      await ctx.capture("01-in-session");
+
+      await ctx.page.goto("/", { waitUntil: "domcontentloaded" });
+      await ctx.page.waitForTimeout(2000);
+      const landed = ctx.page.url();
+      await ctx.capture("02-after-cold-load");
+      await ctx.check(
+        "a cold load restores the session you were in",
+        async () => {
+          const was = new URL(sessionUrl).pathname;
+          const now = new URL(landed).pathname;
+          return now === was;
+        },
+        `was ${new URL(sessionUrl).pathname}, landed ${new URL(landed).pathname}`,
+      );
+
+      // And a DELIBERATE tap on Day must not be hijacked back into the
+      // session — a resume that fights navigation is worse than none.
+      const dayTab = ctx.page.getByRole("link", { name: /^Day$/ });
+      if (await dayTab.count()) {
+        await dayTab.first().click({ timeout: CLICK_TIMEOUT_MS });
+        await ctx.page.waitForTimeout(1500);
+        await ctx.check(
+          "tapping Day is not hijacked by the resume",
+          async () => new URL(ctx.page.url()).pathname === "/",
+          `landed ${new URL(ctx.page.url()).pathname}`,
+        );
+        await ctx.capture("03-day-tab-respected");
+      }
     },
   },
   // ---- Destructive flows. These COMMIT, and run last. ----
