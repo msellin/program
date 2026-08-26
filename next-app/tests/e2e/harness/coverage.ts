@@ -70,6 +70,7 @@ export const INTERACTIVE_SURFACES = [
 const FLOW_SURFACES: Record<string, string[]> = {
   "session-log-set": ["SetView", "RestTakeover"],
   "session-edit-past-set": ["SetView"],
+  "session-controls": ["SetView"],
   "session-rest-extend": ["RestTakeover"],
   "session-overflow-sheet": ["OverflowSheet"],
   "activity-log-sheet": ["OffPlanSheet"],

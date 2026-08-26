@@ -229,19 +229,24 @@ export const FLOWS: Flow[] = [
   },
   {
     id: "session-edit-past-set",
-    desc: "Go BACK to a logged set via the pips and correct it",
+    desc: "Go BACK to a logged set and correct it — assertions only",
     async run(ctx) {
+      // Deliberately minimal (2026-08-26). This flow used to log a set,
+      // skip rest, walk the pips, poke the steppers, walk the rail, open
+      // the overflow and return to the Brief — and then assert that saving
+      // a correction starts no rest timer. By then the exploration had
+      // muddled the state, and the assertion failed on personas where a
+      // timer was still up. The assertion was right; the flow around it
+      // was not. Control exploration now lives in `session-controls`.
       await openBrief(ctx);
       await ctx.page.getByRole("button", { name: /^(Start|Continue) —/ }).click({ timeout: CLICK_TIMEOUT_MS });
       await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
       await logCurrentSet(ctx);
       await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
-      const skip = ctx.page.getByRole("button", { name: /skip rest/i });
-      if (await skip.count()) await skip.click({ timeout: CLICK_TIMEOUT_MS });
+      await ctx.tap("RestTakeover", /skip rest/i);
       await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
       await ctx.capture("01-after-logging");
 
-      // The pips are the only backwards affordance in the session flow.
       const pip = ctx.page.getByRole("button", { name: /^Set \d+, logged .*Edit\.$/ });
       if ((await pip.count()) === 0) {
         throw new SkipFlow("no logged set to go back to (single-set exercise?)");
@@ -250,104 +255,6 @@ export const FLOWS: Flow[] = [
       await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
       await ctx.capture("02-editing-past-set");
 
-      await ctx.probe("SetView", '[data-surface="SetView"]');
-      // The accessory-reps bug: with no TM prescription and no same-index
-      // history the seed fell through to 0, and Done committed the zero.
-      await ctx.check(
-        "the set screen never offers 0 as the value it will log",
-        async () => {
-          const reps = await ctx.page
-            .locator('[data-surface="SetView"] p')
-            .filter({ hasText: /^\d+\+? reps?$/ })
-            .first()
-            .textContent()
-            .catch(() => null);
-          if (reps == null) return true; // a hold screen, checked elsewhere
-          return Number(reps.match(/\d+/)?.[0] ?? "0") > 0;
-        },
-      );
-      // A9 (2026-08-26): `isLoadable` was hardcoded true in DaySession, so
-      // dead_bug (trunk) and every mobility drill rendered a 92px kilo
-      // counter and a 2.5 kg stepper for work that is never loaded. The
-      // confirm button is the tell — it names kg only for loadable work —
-      // so the two must agree.
-      await ctx.check(
-        "a non-loadable exercise offers no weight control",
-        async () => {
-          const cta = await ctx.page
-            .getByRole("button", { name: /^(Done|Save) — set/ })
-            .first()
-            .textContent()
-            .catch(() => null);
-          if (cta == null) return true; // AMRAP keypad or hold screen
-          const namesKg = /·\s*[\d.]+\s*kg/.test(cta);
-          // Compare against the weight HERO, not the stepper input: the
-          // input only exists while the "Change the weight" panel is open,
-          // so checking for it reported a mismatch on loadable exercises
-          // too, and the check failed for the wrong reason.
-          const showsWeight =
-            (await ctx.page
-              .locator('[data-surface="SetView"] span')
-              .filter({ hasText: /^kg$/ })
-              .count()) > 0;
-          return namesKg === showsWeight;
-        },
-      );
-      const change = ctx.page.getByRole("button", { name: /change the (weight|reps|time)/i });
-      if (await change.count()) {
-        await change.click({ timeout: CLICK_TIMEOUT_MS });
-        await ctx.page.waitForTimeout(300);
-        await ctx.capture("03-stepper-open");
-        await ctx.probe("SetView", '[data-surface="SetView"]');
-        // The steppers themselves — the controls that actually change what
-        // gets logged. Opening the panel and photographing it proved
-        // nothing about whether +/- work.
-        await ctx.tap("SetView", /^\+/);
-        await ctx.page.waitForTimeout(200);
-        await ctx.tap("SetView", /^−/);
-        await ctx.page.waitForTimeout(200);
-        await ctx.capture("03b-stepper-used");
-        await ctx.tap("SetView", /back to prescription/i);
-        await ctx.page.waitForTimeout(250);
-        await ctx.tap("SetView", /^Hide/);
-        await ctx.page.waitForTimeout(200);
-      }
-
-      // The pips and the rail are SetView's whole navigation surface, and
-      // the pips are the affordance this batch added. Drive each pip, then
-      // a rail tab.
-      const pips = ctx.page.getByRole("button", { name: /^Set \d+, / });
-      const pipCount = Math.min(await pips.count(), 5);
-      for (let i = 0; i < pipCount; i++) {
-        await ctx.tap("SetView", new RegExp(`^Set ${i + 1}, `));
-        await ctx.page.waitForTimeout(250);
-      }
-      await ctx.capture("05-pips-walked");
-      // Every rail tab, not just the second one. The rail is how you move
-      // between exercises mid-session and each tab is its own control.
-      const rail = ctx.page.locator("div.overflow-x-auto button");
-      const railCount = Math.min(await rail.count(), 6);
-      for (let i = 0; i < railCount; i++) {
-        const label = ((await rail.nth(i).textContent()) ?? "").trim().split("\n")[0];
-        if (!label) continue;
-        await ctx.tap("SetView", new RegExp(`^${label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`));
-        await ctx.page.waitForTimeout(350);
-      }
-      await ctx.capture("06-rail-walked");
-      // The steppers' own inputs, and the confirm button as labelled here.
-      await ctx.tap("SetView", /^kg$/);
-      await ctx.tap("SetView", /^reps$/);
-      await ctx.tap("SetView", /change the weight/i);
-      await ctx.tap("SetView", /^(Done|Save) — set/);
-      await ctx.tap("SetView", /^More options/);
-      await ctx.page.waitForTimeout(300);
-      await ctx.tap("SetView", /^Close/);
-      await ctx.page.waitForTimeout(250);
-      await ctx.tap("SetView", /back to brief/i);
-      await ctx.page.waitForTimeout(300);
-      await ctx.capture("07-back-to-brief");
-      // Reopening a logged set must show the EDITING state — not offer a
-      // fresh "Done", which is what made a mis-logged weight permanent.
       await ctx.check(
         "reopening a logged set enters edit mode",
         async () => (await ctx.page.getByText("Editing").count()) > 0,
@@ -357,22 +264,113 @@ export const FLOWS: Flow[] = [
         "an already-logged set offers Save, not Done",
         async () => (await save.count()) > 0,
       );
-      // Save via `tap`, not a raw click. A raw click that cannot land
-      // throws and kills the flow — which is what happened to eight
-      // personas: the stepper poking and rail walking above had moved the
-      // view on, so "Save — set N" belonged to a different set by the time
-      // this ran, and the whole flow errored out on a 15s timeout instead
-      // of recording one missed control.
-      if (await save.count()) {
-        await ctx.tap("SetView", /^Save — set/);
-        await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
-        await ctx.capture("04-after-save");
-        // Correcting a set is not a set you just did, so no rest timer.
-        await ctx.check(
-          "saving a correction does not start a rest timer",
-          async () => (await ctx.page.locator('[data-surface="RestTakeover"]').count()) === 0,
-        );
+      if ((await save.count()) === 0) return;
+      await ctx.tap("SetView", /^Save — set/);
+      await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
+      await ctx.capture("03-after-save");
+      // Correcting a set is not a set you just did, so no rest timer.
+      await ctx.check(
+        "saving a correction does not start a rest timer",
+        async () => (await ctx.page.locator('[data-surface="RestTakeover"]').count()) === 0,
+      );
+    },
+  },
+  {
+    id: "session-controls",
+    desc: "Sweep every control on the set screen — steppers, pips, rail, overflow",
+    async run(ctx) {
+      // The exploration half of what `session-edit-past-set` used to do.
+      // Coverage work, no state assertions: it moves between sets and
+      // exercises on purpose, so nothing here can assume a stable view.
+      await openBrief(ctx);
+      await ctx.page.getByRole("button", { name: /^(Start|Continue) —/ }).click({ timeout: CLICK_TIMEOUT_MS });
+      await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
+      await ctx.probe("SetView", '[data-surface="SetView"]');
+      await ctx.capture("01-set");
+
+      await ctx.check(
+        "the set screen never offers 0 as the value it will log",
+        async () => {
+          const reps = await ctx.page
+            .locator('[data-surface="SetView"] p')
+            .filter({ hasText: /^\d+\+? reps?$/ })
+            .first()
+            .textContent()
+            .catch(() => null);
+          if (reps == null) return true; // a hold or duration screen
+          return Number(reps.match(/\d+/)?.[0] ?? "0") > 0;
+        },
+      );
+      await ctx.check(
+        "a non-loadable exercise offers no weight control",
+        async () => {
+          const cta = await ctx.page
+            .getByRole("button", { name: /^(Done|Save) — set/ })
+            .first()
+            .textContent()
+            .catch(() => null);
+          if (cta == null) return true;
+          const namesKg = /·\s*[\d.]+\s*kg/.test(cta);
+          const showsWeight =
+            (await ctx.page
+              .locator('[data-surface="SetView"] span')
+              .filter({ hasText: /^kg$/ })
+              .count()) > 0;
+          return namesKg === showsWeight;
+        },
+      );
+
+      const change = ctx.page.getByRole("button", { name: /change the (weight|reps|time)/i });
+      if (await change.count()) {
+        await change.click({ timeout: CLICK_TIMEOUT_MS });
+        await ctx.page.waitForTimeout(300);
+        await ctx.probe("SetView", '[data-surface="SetView"]');
+        await ctx.tap("SetView", /^\+/);
+        await ctx.page.waitForTimeout(200);
+        await ctx.tap("SetView", /^−/);
+        await ctx.page.waitForTimeout(200);
+        await ctx.capture("02-stepper-used");
+        await ctx.tap("SetView", /back to prescription/i);
+        await ctx.page.waitForTimeout(250);
+        await ctx.tap("SetView", /^Hide/);
+        await ctx.page.waitForTimeout(200);
       }
+
+      const pips = ctx.page.getByRole("button", { name: /^Set \d+, / });
+      const pipCount = Math.min(await pips.count(), 5);
+      for (let i = 0; i < pipCount; i++) {
+        await ctx.tap("SetView", new RegExp(`^Set ${i + 1}, `));
+        await ctx.page.waitForTimeout(250);
+      }
+      await ctx.capture("03-pips-walked");
+
+      const railCount = Math.min(
+        await ctx.page.locator('[data-surface="SetView"] div.overflow-x-auto button').count(),
+        6,
+      );
+      for (let i = 0; i < railCount; i++) {
+        const tab = ctx.page.locator('[data-surface="SetView"] div.overflow-x-auto button').nth(i);
+        if ((await tab.count()) === 0) break;
+        const label = ((await tab.textContent()) ?? "").trim().split("\n")[0];
+        if (!label) continue;
+        await ctx.tap("SetView", new RegExp(`^${label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`));
+        await ctx.page.waitForTimeout(400);
+      }
+      await ctx.capture("04-rail-walked");
+      await ctx.tap("SetView", /^kg$/);
+      await ctx.tap("SetView", /^reps$/);
+      await ctx.tap("SetView", /change the weight/i);
+      await ctx.tap("SetView", /^(Done|Save) — set/);
+      await ctx.page.waitForTimeout(400);
+      await ctx.tap("RestTakeover", /skip rest/i);
+      await ctx.page.waitForTimeout(300);
+      await ctx.tap("SetView", /^More options/);
+      await ctx.page.waitForTimeout(300);
+      await ctx.tap("SetView", /^Close/);
+      await ctx.page.waitForTimeout(250);
+      await ctx.tap("SetView", /back to brief/i);
+      await ctx.page.waitForTimeout(300);
+      await ctx.capture("05-back-to-brief");
     },
   },
   {
