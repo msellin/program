@@ -46,6 +46,14 @@ export type SurfaceProbe = {
   seen: string[];
   exercised: string[];
   skipped: Array<{ name: string; why: string }>;
+  /**
+   * Why a tap did not register. Added after two wrong hypotheses about
+   * why SetView stalled at 7 of 17: guessing from the outside cost two
+   * five-minute runs and taught nothing. Each miss now says whether the
+   * control was never found, found but unclickable, or clicked and
+   * recorded under a label the probe never saw.
+   */
+  misses: Array<{ pattern: string; why: string }>;
 };
 /**
  * A behavioural assertion made inside a flow (2026-08-26).
@@ -1167,7 +1175,7 @@ export async function runFlows(
     const probeFor = (surface: string): SurfaceProbe => {
       let p = probes.find((x) => x.surface === surface);
       if (!p) {
-        p = { surface, seen: [], exercised: [], skipped: [] };
+        p = { surface, seen: [], exercised: [], skipped: [], misses: [] };
         probes.push(p);
       }
       return p;
@@ -1232,7 +1240,10 @@ export async function runFlows(
           // because they carry no text, so the steppers could never match.
           target = scope.getByLabel(name);
         }
-        if ((await target.count()) === 0) return false;
+        if ((await target.count()) === 0) {
+          p.misses.push({ pattern: String(name), why: "no element matched" });
+          return false;
+        }
         // Derive the label EXACTLY as `probe` does. They disagreed before:
         // probe read `aria-label ?? innerText`, tap read `textContent`, so
         // the same control was filed under two different strings and every
@@ -1251,10 +1262,20 @@ export async function runFlows(
           .catch(() => String(name));
         try {
           await target.first().click({ timeout: CLICK_TIMEOUT_MS });
-        } catch {
+        } catch (e) {
+          p.misses.push({
+            pattern: String(name),
+            why: `click failed: ${(e instanceof Error ? e.message : String(e)).split("\n")[0].slice(0, 90)}`,
+          });
           return false;
         }
         const key = normalise(label);
+        if (!p.seen.includes(key) && p.seen.length > 0) {
+          // Clicked something the probe never recorded — the two are
+          // looking at different elements, which is a measurement fault,
+          // not a coverage one.
+          p.misses.push({ pattern: String(name), why: `clicked "${key}" but probe never saw it` });
+        }
         if (!p.exercised.includes(key)) p.exercised.push(key);
         if (!p.seen.includes(key)) p.seen.push(key);
         return true;
