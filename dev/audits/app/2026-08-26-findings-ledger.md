@@ -4,7 +4,7 @@ Everything discovered across three days: the founder's live-workout report,
 the fixes that report led into, the off-plan investigation, the persona-harness
 rebuild, and the bugs the improved harness then found on its own.
 
-**45 findings. 7 reported by the founder; 38 found while working.**
+**48 findings. 10 reported by the founder; 38 found while working.**
 
 Of those 38, **11 were found only because the harness was improved**, and
 **3 of those were invisible on localhost and only appeared against production.**
@@ -24,6 +24,9 @@ Live workout, 2026-08-24.
 | A5 | Rest completion sound too short to notice mid-workout | Fixed — ~1.3s chime + audible 3-2-1 |
 | A6 | `+30s` reset the rest timer instead of extending it | Fixed |
 | A7 | Notes far less visible after the redesign | Recorded, unscheduled |
+| A8 | **Phase 1 put two heavy days back to back.** `block_reintro` is one session containing both squat and pull, scheduled Mon/Wed/Thu/Sat — Wed and Thu were a heavy squat 24h apart, contradicting the program's own "48h between heavy squat days" principle | Fixed — Mon/Wed/Sat |
+| A9 | `dead_bug` (and every mobility drill in a session) showed a weight selector — `isLoadable` was hardcoded `true` in DaySession | Fixed |
+| A10 | Backgrounding the PWA lost your place — iOS relaunches cold at `start_url`, and nothing remembered the route | Fixed — ResumeLastRoute |
 
 Root cause behind A1/A2: `activeSetIndex` only ever moved forward, and
 `ExerciseCard` — the app's only per-set editable UI — was orphaned when
@@ -134,11 +137,12 @@ Each made coverage read lower or higher than the truth.
 
 ---
 
-## I · Open, unclassified (1)
+## I · Open, unclassified (2)
 
 | # | Finding |
 |---|---|
 | I1 | The check "Skip rest closes the rest takeover" fails. Not yet determined whether the app fails to close it or the harness fails to tap it |
+| I2 | Control coverage has stalled at 61.4%. Scoping `tap` to the surface root — the hypothesis that page-wide `getByRole` was resolving to the Brief behind the overlay — made no difference. SetView sits at 7 of 17 and the cause is not yet known |
 
 ---
 
@@ -148,3 +152,27 @@ The harness moved from **0% of interactive surfaces** to every surface reached
 by at least one persona, from 63% to 100% of routes, and from no behavioural
 assertions at all to eight. It then found E1–E3 and I1 on its own — bugs that
 existed before any of this work and that nothing would otherwise have caught.
+
+
+---
+
+## Postscript: what the harness still missed (2026-08-26)
+
+A8, A9 and A10 were all found by the founder in a gym, not by the sweep —
+and all three are visible on surfaces the harness now reaches:
+
+- **A8** shows on Plan as two identical day rows. The tour screenshots Plan
+  every run; nothing asserts that heavy days are spaced.
+- **A9** shows on the set screen as a kilo counter on a trunk exercise. The
+  flows drive that screen; nothing asserts that a non-loadable exercise has
+  no weight control.
+- **A10** needs a lifecycle the harness never simulates — background the
+  app, wait, cold-load.
+
+Reaching a surface is not the same as knowing what should be true on it.
+The next checks write themselves:
+
+    no two barbell days are consecutive          (already added, unit)
+    a non-loadable exercise offers no kg control (flow check)
+    two day rows in a week are never identical   (flow check)
+    a cold load restores the last route          (flow check)
