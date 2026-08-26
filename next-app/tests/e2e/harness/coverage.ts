@@ -149,6 +149,12 @@ export type CoverageReport = {
     timelinePositions: number;
   };
   flows: { ok: number; skipped: number; error: number; total: number };
+  /**
+   * Behavioural assertions. Coverage says a control was driven; these say
+   * driving it did the right thing. A failed check is a FINDING — the
+   * sweep's whole point — so failures are named, not just counted.
+   */
+  checks: { passed: number; failed: number; failures: Array<{ name: string; detail?: string }> };
 };
 
 /** Normalise a toured path back to its route pattern. */
@@ -261,6 +267,14 @@ export function buildCoverage(opts: {
       // past / today / future session captures from the tour
       timelinePositions: opts.touredPaths.filter((p) => p.includes("date=")).length,
     },
+    checks: (() => {
+      const all = opts.flows.flatMap((f) => f.checks ?? []);
+      return {
+        passed: all.filter((c) => c.ok).length,
+        failed: all.filter((c) => !c.ok).length,
+        failures: all.filter((c) => !c.ok).map((c) => ({ name: c.name, detail: c.detail })),
+      };
+    })(),
     flows: {
       ok: opts.flows.filter((f) => f.status === "ok").length,
       skipped: opts.flows.filter((f) => f.status === "skipped").length,
@@ -323,6 +337,8 @@ export function writeFleetSummary(rootDir: string, reports: CoverageReport[]): v
     `| Interactive surfaces reached | ${avg((r) => r.surfaces.pct)}% |`,
     `| Store keys populated | ${avg((r) => r.store.pct)}% |`,
     `| Controls exercised within surfaces | ${avg((r) => r.controls.pct)}% |`,
+    `| Behavioural checks passed | ${reports.reduce((n, r) => n + (r.checks?.passed ?? 0), 0)} |`,
+    `| Behavioural checks FAILED | ${reports.reduce((n, r) => n + (r.checks?.failed ?? 0), 0)} |`,
     "",
     "| Persona | Routes | Surfaces | Controls | Store | Flows ok/skip/err | Full ex | Partial ex |",
     "|---|---|---|---|---|---|---|---|",
@@ -346,6 +362,19 @@ export function writeFleetSummary(rootDir: string, reports: CoverageReport[]): v
       });
     }
   }
+  // Failed checks are the sweep's output, not a footnote.
+  const failures = reports.flatMap((r) =>
+    (r.checks?.failures ?? []).map((f) => ({ persona: r.personaId, ...f })),
+  );
+  if (failures.length) {
+    lines.push("", "## Behavioural check FAILURES", "", "| Persona | Check | Detail |", "|---|---|---|");
+    for (const f of failures) {
+      lines.push(`| ${f.persona} | ${f.name} | ${f.detail ?? ""} |`);
+    }
+  } else {
+    lines.push("", "## Behavioural check failures", "", "None.");
+  }
+
   if (merged.size) {
     lines.push("", "## Controls per surface (best across the fleet)", "",
       "| Surface | Exercised | Found | Held back (mutating) |", "|---|---|---|---|");

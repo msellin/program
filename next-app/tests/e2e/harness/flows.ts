@@ -47,6 +47,18 @@ export type SurfaceProbe = {
   exercised: string[];
   skipped: Array<{ name: string; why: string }>;
 };
+/**
+ * A behavioural assertion made inside a flow (2026-08-26).
+ *
+ * Coverage answers "was this control driven". It does not answer "did
+ * driving it do the right thing" — a flow that taps +30s and photographs
+ * the result would have passed happily while the button reset the timer,
+ * which is exactly the bug the founder reported. Checks close that gap:
+ * each one names an expectation, evaluates it against the live page or
+ * the store, and is reported whether it passes or fails.
+ */
+export type CheckResult = { name: string; ok: boolean; detail?: string };
+
 export type FlowResult = {
   id: string;
   desc: string;
@@ -54,6 +66,7 @@ export type FlowResult = {
   reason?: string;
   steps: StepResult[];
   probes: SurfaceProbe[];
+  checks: CheckResult[];
 };
 
 export type FlowContext = {
@@ -72,6 +85,14 @@ export type FlowContext = {
   tap: (surface: string, name: RegExp) => Promise<boolean>;
   /** Record a control as seen but deliberately not driven, with a reason. */
   note: (surface: string, name: string, why: string) => void;
+  /**
+   * Assert something about the app's behaviour. Never throws — a failed
+   * check is a FINDING, recorded and reported, not a crash that hides the
+   * rest of the flow.
+   */
+  check: (name: string, fn: () => Promise<boolean>, detail?: string) => Promise<void>;
+  /** The persisted store, for checks that need to see what was written. */
+  store: () => Promise<Record<string, unknown>>;
 };
 
 export type Flow = {
@@ -222,6 +243,21 @@ export const FLOWS: Flow[] = [
       await ctx.capture("02-editing-past-set");
 
       await ctx.probe("SetView", '[data-surface="SetView"]');
+      // The accessory-reps bug: with no TM prescription and no same-index
+      // history the seed fell through to 0, and Done committed the zero.
+      await ctx.check(
+        "the set screen never offers 0 as the value it will log",
+        async () => {
+          const reps = await ctx.page
+            .locator('[data-surface="SetView"] p')
+            .filter({ hasText: /^\d+\+? reps?$/ })
+            .first()
+            .textContent()
+            .catch(() => null);
+          if (reps == null) return true; // a hold screen, checked elsewhere
+          return Number(reps.match(/\d+/)?.[0] ?? "0") > 0;
+        },
+      );
       const change = ctx.page.getByRole("button", { name: /change the (weight|reps|time)/i });
       if (await change.count()) {
         await change.click({ timeout: CLICK_TIMEOUT_MS });
@@ -275,57 +311,109 @@ export const FLOWS: Flow[] = [
       await ctx.tap("SetView", /back to brief/i);
       await ctx.page.waitForTimeout(300);
       await ctx.capture("07-back-to-brief");
+      // Reopening a logged set must show the EDITING state — not offer a
+      // fresh "Done", which is what made a mis-logged weight permanent.
+      await ctx.check(
+        "reopening a logged set enters edit mode",
+        async () => (await ctx.page.getByText("Editing").count()) > 0,
+      );
       const save = ctx.page.getByRole("button", { name: /^Save — set \d+/ });
+      await ctx.check(
+        "an already-logged set offers Save, not Done",
+        async () => (await save.count()) > 0,
+      );
       if (await save.count()) {
         await save.first().click({ timeout: CLICK_TIMEOUT_MS });
         await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
         await ctx.capture("04-after-save");
+        // Correcting a set is not a set you just did, so no rest timer.
+        await ctx.check(
+          "saving a correction does not start a rest timer",
+          async () => (await ctx.page.locator('[data-surface="RestTakeover"]').count()) === 0,
+        );
       }
     },
   },
   {
     id: "session-rest-extend",
-    desc: "+30s on the rest timer — the control that used to reset it",
+    desc: "The rest takeover — timer, effort scale, jump sheet",
     async run(ctx) {
       await openBrief(ctx);
       await ctx.page.getByRole("button", { name: /^(Start|Continue) —/ }).click({ timeout: CLICK_TIMEOUT_MS });
       await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
       await logCurrentSet(ctx);
       await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
-      const add = ctx.page.getByRole("button", { name: /add 30 seconds/i });
-      if ((await add.count()) === 0) throw new SkipFlow("rest takeover did not open");
+      const rest = ctx.page.locator('[data-surface="RestTakeover"]');
+      if ((await rest.count()) === 0) throw new SkipFlow("rest takeover did not open");
       await ctx.capture("01-rest-before");
       await ctx.probe("RestTakeover", '[data-surface="RestTakeover"]');
 
-      // The effort scale feeds the engine's push-or-hold decision, and had
-      // never been tapped by anything.
-      // Every rung of the effort scale — each writes a different RPE and
-      // feeds the engine's push-or-hold decision differently.
+      const readClock = async (): Promise<number> => {
+        const t = await rest
+          .locator("p")
+          .filter({ hasText: /^\d+:\d\d$/ })
+          .first()
+          .textContent()
+          .catch(() => null);
+        const [m, sec] = (t ?? "0:00").trim().split(":").map(Number);
+        return m * 60 + sec;
+      };
+
+      // +30s FIRST. Ordering matters: when this ran after the effort loop
+      // the click timed out, and the clock had fallen by exactly the 15s
+      // click bound — the tap never landed because the effort card was
+      // still in the way. Assert the extension before anything else can
+      // cover the control.
+      const before = await readClock();
+      await ctx.tap("RestTakeover", /add 30 seconds/i);
+      await ctx.page.waitForTimeout(500);
+      const after = await readClock();
+      await ctx.check(
+        "+30s extends the rest timer",
+        // Allow for the second that elapses between the two readings.
+        async () => after > before,
+        `before=${before}s after=${after}s`,
+      );
+      await ctx.capture("02-rest-extended");
+
+      // Every rung of the effort scale — each writes a different RPE.
       for (const effort of [/^Easy/, /^Grind/, /^Solid/]) {
         if (await ctx.tap("RestTakeover", effort)) {
           await ctx.page.waitForTimeout(350);
           await ctx.tap("RestTakeover", /^change/);
-          await ctx.page.waitForTimeout(250);
+          await ctx.page.waitForTimeout(300);
         }
       }
-      await ctx.capture("02-effort-logged");
-      // +30s through `tap` rather than a bare click: the rest takeover
-      // closes the moment the timer reaches zero, and a raw click on a
-      // detached control burned the 15s bound and failed the whole flow
-      // before its remaining taps ever ran.
-      await ctx.tap("RestTakeover", /add 30 seconds/i);
-      await ctx.page.waitForTimeout(400);
-      await ctx.capture("03-rest-extended");
+      await ctx.capture("03-effort-logged");
+      await ctx.check(
+        "effort selection writes an RPE to the logged set",
+        async () => {
+          const st = (await ctx.store()) as {
+            logs?: Record<string, { exercises?: Record<string, { sets?: Array<{ rpe?: number | null }> }> }>;
+          };
+          return Object.values(st.logs ?? {}).some((d) =>
+            Object.values(d.exercises ?? {}).some((e) => (e.sets ?? []).some((x) => x.rpe != null)),
+          );
+        },
+      );
 
-      // "Do something else next" opens the jump sheet — the mid-rest
-      // exercise switch. Cancel out; jumping would abandon the flow.
+      // The mid-rest exercise switch. Open, photograph, cancel out.
       if (await ctx.tap("RestTakeover", /do something else next/i)) {
-        await ctx.page.waitForTimeout(400);
+        await ctx.page.waitForTimeout(450);
         await ctx.probe("RestTakeover", '[data-surface="RestTakeover"] [role="dialog"]');
         await ctx.capture("04-jump-sheet");
         await ctx.tap("RestTakeover", /^Cancel/);
         await ctx.page.waitForTimeout(300);
       }
+
+      // Skip rest last — it closes the surface everything above needs.
+      await ctx.tap("RestTakeover", /skip rest/i);
+      await ctx.page.waitForTimeout(500);
+      await ctx.check(
+        "Skip rest closes the rest takeover",
+        async () => (await ctx.page.locator('[data-surface="RestTakeover"]').count()) === 0,
+      );
+      await ctx.capture("05-rest-skipped");
     },
   },
   {
@@ -377,14 +465,38 @@ export const FLOWS: Flow[] = [
           await ctx.page.waitForTimeout(350);
         }
       }
+      const reopenOverflow = async () => {
+        const btn = ctx.page.getByRole("button", { name: /more options/i });
+        if ((await btn.count()) === 0) return false;
+        await btn.first().click({ timeout: CLICK_TIMEOUT_MS }).catch(() => {});
+        await ctx.page.waitForTimeout(350);
+        return true;
+      };
+      if (await ctx.tap("OverflowSheet", /^Watch the lift/)) {
+        await ctx.page.waitForTimeout(600);
+        await ctx.capture("04-video");
+        await ctx.page.keyboard.press("Escape").catch(() => {});
+        await ctx.page.waitForTimeout(300);
+        await reopenOverflow();
+      }
       if (await ctx.tap("OverflowSheet", /^Form cues and warnings/)) {
         await ctx.page.waitForTimeout(500);
+        // Scoped to the dialog WITHOUT a data-surface, so Close resolves
+        // to the details sheet rather than the overflow sheet beneath it.
         await ctx.probe("ExerciseDetailsSheet", '[role="dialog"]:not([data-surface])');
-        await ctx.capture("04-form-cues");
-        await ctx.tap("ExerciseDetailsSheet", /^Close/);
-        await ctx.page.waitForTimeout(250);
+        await ctx.capture("05-form-cues");
+        const detailsClose = ctx.page
+          .locator('[role="dialog"]:not([data-surface]) button')
+          .filter({ hasText: /^Close$/ });
+        if (await detailsClose.count()) {
+          await detailsClose.first().click({ timeout: CLICK_TIMEOUT_MS }).catch(() => {});
+          ctx.note("ExerciseDetailsSheet", "Close", "driven via a scoped locator");
+        }
         await ctx.page.waitForTimeout(300);
+        await reopenOverflow();
       }
+      await ctx.tap("OverflowSheet", /^Close/);
+      await ctx.page.waitForTimeout(250);
     },
   },
   {
@@ -675,6 +787,48 @@ export const FLOWS: Flow[] = [
       await ctx.capture("02-day-expanded");
     },
   },
+  {
+    id: "session-hold",
+    desc: "A held exercise runs a countdown and records seconds",
+    async run(ctx) {
+      await ctx.page.goto("/off-plan/", { waitUntil: "domcontentloaded" });
+      await ctx.page.waitForTimeout(1200);
+      const row = ctx.page.locator("button", { hasText: /\d+ sets/ });
+      if ((await row.count()) === 0) throw new SkipFlow("off-plan is not enabled for this persona");
+      await row.first().click({ timeout: CLICK_TIMEOUT_MS });
+      await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
+      const start = ctx.page.getByRole("button", { name: /start the hold/i });
+      if ((await start.count()) === 0) throw new SkipFlow("first off-plan drill is not hold-based");
+      await ctx.capture("01-hold-idle");
+      await ctx.check(
+        "a held exercise shows its authored dose",
+        async () => (await ctx.page.getByText(/Programme asks for/i).count()) > 0,
+      );
+      await start.click({ timeout: CLICK_TIMEOUT_MS });
+      await ctx.page.waitForTimeout(2600);
+      await ctx.capture("02-holding");
+      await ctx.tap("SetView", /log it now/i);
+      await ctx.page.waitForTimeout(800);
+      await ctx.check(
+        "a held set records seconds AND still counts as logged",
+        async () => {
+          const st = (await ctx.store()) as {
+            logs?: Record<string, { exercises?: Record<string, { sets?: Array<{ seconds?: number | null; reps?: number | null }> }> }>;
+          };
+          for (const day of Object.values(st.logs ?? {})) {
+            for (const e of Object.values(day.exercises ?? {})) {
+              const hit = (e.sets ?? []).find((x) => x.seconds != null);
+              // `reps != null` is the logged predicate in 42 places — a
+              // hold that wrote only seconds would read as unlogged.
+              if (hit) return hit.reps != null && (hit.seconds ?? 0) > 0;
+            }
+          }
+          return false;
+        },
+      );
+      await ctx.capture("03-hold-logged");
+    },
+  },
   // ---- Destructive flows. These COMMIT, and run last. ----
   {
     id: "activity-log-commit",
@@ -786,8 +940,22 @@ export const FLOWS: Flow[] = [
             await ctx.page.waitForTimeout(400);
           }
           await ctx.tap("ConfirmSheet", /^Skip/);
-          await ctx.page.waitForTimeout(700);
+          await ctx.page.waitForTimeout(900);
           await ctx.capture("01-skipped");
+          await ctx.check(
+            "confirming Skip records the day as skipped",
+            async () => {
+              const st = (await ctx.store()) as {
+                skipped?: Record<string, unknown>;
+                scheduled_blocks?: Record<string, { state?: string }>;
+              };
+              const legacy = Object.keys(st.skipped ?? {}).length > 0;
+              const blocks = Object.values(st.scheduled_blocks ?? {}).some(
+                (b) => b.state === "skipped",
+              );
+              return legacy || blocks;
+            },
+          );
           return;
         }
         await row.nth(i).click({ timeout: CLICK_TIMEOUT_MS });
@@ -831,8 +999,22 @@ export const FLOWS: Flow[] = [
           if (await reason.count()) await reason.fill("harness: moved for coverage");
           await ctx.capture("01-move-filled");
           await ctx.tap("MoveSheet", /^Move session/);
-          await ctx.page.waitForTimeout(700);
+          await ctx.page.waitForTimeout(900);
           await ctx.capture("02-moved");
+          await ctx.check(
+            "confirming Move records the session on its new date",
+            async () => {
+              const st = (await ctx.store()) as {
+                scheduled_overrides?: Record<string, unknown>;
+                scheduled_blocks?: Record<string, { state?: string }>;
+              };
+              const legacy = Object.keys(st.scheduled_overrides ?? {}).length > 0;
+              const blocks = Object.values(st.scheduled_blocks ?? {}).some(
+                (b) => b.state === "moved",
+              );
+              return legacy || blocks;
+            },
+          );
           return;
         }
         await row.nth(i).click({ timeout: CLICK_TIMEOUT_MS });
@@ -864,6 +1046,23 @@ export async function runFlows(
     fs.mkdirSync(flowDir, { recursive: true });
     const steps: StepResult[] = [];
     const probes: SurfaceProbe[] = [];
+    const checks: CheckResult[] = [];
+
+    /**
+     * Collapse the numbers out of a control label.
+     *
+     * Several controls relabel themselves per set or per weight — "Save —
+     * set 1 · 79.5 kg", "Done — set 3 · 82.5 kg", "Set 2, logged 0 kilos
+     * by 5 reps. Edit." Counted raw, each variant became its OWN control:
+     * the denominator inflated without bound, and what `probe` saw could
+     * never intersect with what `tap` recorded, because they observed the
+     * button at different moments with different numbers in it.
+     */
+    const normalise = (label: string): string =>
+      label
+        .replace(/\d+([.,]\d+)?/g, "N")
+        .replace(/\s+/g, " ")
+        .trim();
 
     const probeFor = (surface: string): SurfaceProbe => {
       let p = probes.find((x) => x.surface === surface);
@@ -901,7 +1100,10 @@ export async function runFlows(
               .filter((n) => !/Next\.js Dev Tools/i.test(n)),
           )
           .catch(() => [] as string[]);
-        for (const n of names) if (!p.seen.includes(n)) p.seen.push(n);
+        for (const raw of names) {
+          const n = normalise(raw);
+          if (!p.seen.includes(n)) p.seen.push(n);
+        }
       },
       tap: async (surface, name) => {
         const p = probeFor(surface);
@@ -912,7 +1114,10 @@ export async function runFlows(
         // clear.
         let target = page.getByRole("button", { name }).or(page.getByRole("link", { name }));
         if ((await target.count()) === 0) {
-          target = page.locator("[aria-label]").filter({ hasText: /.*/ }).and(page.getByLabel(name));
+          // `getByLabel` directly — an earlier version wrapped this in
+          // `.filter({ hasText: /.*/ })`, which excludes inputs entirely
+          // because they carry no text, so the steppers could never match.
+          target = page.getByLabel(name);
         }
         if ((await target.count()) === 0) return false;
         // Derive the label EXACTLY as `probe` does. They disagreed before:
@@ -936,14 +1141,31 @@ export async function runFlows(
         } catch {
           return false;
         }
-        if (!p.exercised.includes(label)) p.exercised.push(label);
-        if (!p.seen.includes(label)) p.seen.push(label);
+        const key = normalise(label);
+        if (!p.exercised.includes(key)) p.exercised.push(key);
+        if (!p.seen.includes(key)) p.seen.push(key);
         return true;
       },
+      check: async (name, fn, detail) => {
+        try {
+          checks.push({ name, ok: await fn(), detail });
+        } catch (e) {
+          checks.push({
+            name,
+            ok: false,
+            detail: `${detail ?? ""} threw: ${e instanceof Error ? e.message : String(e)}`.trim(),
+          });
+        }
+      },
+      store: async () =>
+        page
+          .evaluate(() => JSON.parse(localStorage.getItem("program.log.v2") ?? "{}"))
+          .catch(() => ({}) as Record<string, unknown>),
       note: (surface, name, why) => {
         const p = probeFor(surface);
-        if (!p.skipped.some((x) => x.name === name)) p.skipped.push({ name, why });
-        if (!p.seen.includes(name)) p.seen.push(name);
+        const key = normalise(name);
+        if (!p.skipped.some((x) => x.name === key)) p.skipped.push({ name: key, why });
+        if (!p.seen.includes(key)) p.seen.push(key);
       },
       capture: async (stepName: string) => {
         try {
@@ -963,10 +1185,10 @@ export async function runFlows(
 
     try {
       await flow.run(ctx);
-      results.push({ id: flow.id, desc: flow.desc, status: "ok", steps, probes });
+      results.push({ id: flow.id, desc: flow.desc, status: "ok", steps, probes, checks });
     } catch (e) {
       if (e instanceof SkipFlow) {
-        results.push({ id: flow.id, desc: flow.desc, status: "skipped", reason: e.message, steps, probes });
+        results.push({ id: flow.id, desc: flow.desc, status: "skipped", reason: e.message, steps, probes, checks });
       } else {
         results.push({
           id: flow.id,
@@ -975,6 +1197,7 @@ export async function runFlows(
           reason: e instanceof Error ? e.message : String(e),
           steps,
           probes,
+          checks,
         });
       }
     }
