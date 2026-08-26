@@ -1,6 +1,16 @@
 import { describe, it, expect } from "vitest";
 import { blocksForDate } from "./plan-generator";
+import { strengthBlocksForDate } from "./schedule";
+import fs from "node:fs";
+import path from "node:path";
 import type { Program, Store } from "../schemas";
+
+function loadProgramJson(slug: string): Program {
+  const p = path.resolve(__dirname, "../../../public/data/programs", `${slug}.json`);
+  const parsed = JSON.parse(fs.readFileSync(p, "utf8")) as Program;
+  parsed.slug = slug; // Mirrors lib/data-loader.ts.
+  return parsed;
+}
 
 // Minimal program shape for override tests. Base weekly_template has heavy
 // sessions Mon/Wed/Thu/Sat; the phase declares an override for one week
@@ -294,5 +304,44 @@ describe("user events (race / competition / travel)", () => {
     expect(
       blocksForDate(program, profile as unknown as Store["user_profile"], program.phases[0], "2026-08-25"),
     ).toEqual([]);
+  });
+});
+
+describe("phase 1 barbell-day spacing (anterior-hip-rebuild)", () => {
+  // Founder hit two heavy days back to back on 2026-08-26. `block_reintro`
+  // is a single session containing BOTH back_squat_highbar and
+  // block_pull_midshin, and phase 1 scheduled it Mon/Wed/Thu/Sat — so Wed
+  // and Thu were a heavy squat 24h apart, contradicting the program's own
+  // first principle: "48h between the two heavy squat days".
+  const program = loadProgramJson("anterior-hip-rebuild");
+  const phase = program.phases.find((p) => p.id === "phase_1_rebuild_evaluate")!;
+
+  function barbellDowsInWeek(): number[] {
+    // Walk the first week of the phase and collect the days that prescribe work.
+    // Day-of-week is derived from the ISO string at UTC noon, exactly as
+    // `strengthBlockIdsForDate` does. Using a local Date and calling
+    // getDay() disagreed with the engine by a day in a UTC+3 timezone,
+    // and the test reported Sun/Tue/Thu for a Mon/Wed/Sat schedule.
+    const out: number[] = [];
+    const start = Date.parse(phase.starts + "T12:00:00Z");
+    for (let i = 0; i < 7; i++) {
+      const iso = new Date(start + i * 864e5).toISOString().slice(0, 10);
+      if (strengthBlocksForDate(program, phase, iso).length > 0) {
+        out.push(new Date(iso + "T12:00:00Z").getUTCDay());
+      }
+    }
+    return out.sort((a, b) => a - b);
+  }
+
+  it("never schedules two barbell sessions on consecutive days", () => {
+    const dows = barbellDowsInWeek();
+    expect(dows.length).toBeGreaterThan(0);
+    for (let i = 1; i < dows.length; i++) {
+      expect(dows[i] - dows[i - 1]).toBeGreaterThan(1);
+    }
+  });
+
+  it("leaves Sunday clear, per the program's rest-day principle", () => {
+    expect(barbellDowsInWeek()).not.toContain(0);
   });
 });

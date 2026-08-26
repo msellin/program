@@ -1107,17 +1107,30 @@ export async function runFlows(
       },
       tap: async (surface, name) => {
         const p = probeFor(surface);
-        // Buttons and links first, then anything carrying a matching
-        // aria-label (MoveSheet's "Close move sheet" is one), then form
-        // fields — the steppers are <input aria-label="kg"> and were
-        // counted by probe but unreachable by tap, so they could never
-        // clear.
-        let target = page.getByRole("button", { name }).or(page.getByRole("link", { name }));
+        // Scope to the surface being driven.
+        //
+        // `tap` searched the whole page, and the session shells are fixed
+        // overlays rendered ON TOP of the Brief — which stays mounted
+        // underneath. So `getByRole(...).first()` could resolve to the
+        // Brief's exercise row rather than the rail tab of the same name,
+        // and click something invisible: the tap "succeeded", nothing
+        // happened, and the control never registered as exercised. That
+        // is the whole reason SetView sat at 10 of 20 while every other
+        // surface climbed.
+        //
+        // Falls back to the page when the surface carries no
+        // `data-surface` root (ConfirmSheet, MoveSheet, the details
+        // sheet), where the topmost dialog is unambiguous anyway.
+        const rootSel = `[data-surface="${surface}"]`;
+        const scope = (await page.locator(rootSel).count()) > 0 ? page.locator(rootSel) : page;
+        let target = scope
+          .getByRole("button", { name })
+          .or(scope.getByRole("link", { name }));
         if ((await target.count()) === 0) {
           // `getByLabel` directly — an earlier version wrapped this in
           // `.filter({ hasText: /.*/ })`, which excludes inputs entirely
           // because they carry no text, so the steppers could never match.
-          target = page.getByLabel(name);
+          target = scope.getByLabel(name);
         }
         if ((await target.count()) === 0) return false;
         // Derive the label EXACTLY as `probe` does. They disagreed before:

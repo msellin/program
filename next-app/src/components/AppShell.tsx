@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Settings } from "lucide-react";
 import { BottomNav } from "@/components/nav/BottomNav";
 import { StoreHydrator } from "@/components/StoreHydrator";
+import { ResumeLastRoute } from "@/components/ResumeLastRoute";
 import { RestTimerHost } from "@/components/workout/RestTimerHost";
 import { OnboardingRunner } from "@/components/onboarding/OnboardingRunner";
 import { createClient } from "@/lib/supabase/client";
@@ -125,6 +126,7 @@ function AuthGatedShell({
         Skip to content
       </a>
       <StoreHydrator />
+      <ResumeLastRoute />
       {/* Onboarding modal only makes sense on Today — the morning-check card
           is meaningless on catalog / program preview / progress pages, and
           firing it when a user arrives from the landing on /programs was

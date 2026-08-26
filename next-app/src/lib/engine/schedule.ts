@@ -413,7 +413,22 @@ export function strengthBlockIdsForDate(
     const today = new Date(dateISO + "T00:00:00");
     const days = Math.max(0, Math.floor((today.getTime() - start.getTime()) / 864e5));
     const week = Math.floor(days / 7);
-    const barbellDays = new Set<number>([1, 3, 4, 6]);
+    // Mon / Wed / Sat, not Mon/Wed/Thu/Sat (2026-08-26).
+    //
+    // The four-day set was inherited from the phase-2+ rhythm, where Wed
+    // is pull-ONLY and Thu is a squat variant — which is why the program's
+    // second principle says 24h between them is fine. Phase 1 does not
+    // work that way: `block_reintro` is ONE session containing both
+    // `back_squat_highbar` and `block_pull_midshin`, scheduled identically
+    // on every barbell day. So Wed and Thu were a heavy squat 24h apart,
+    // in direct contradiction of the program's own first principle:
+    // "48h between the two heavy squat days".
+    //
+    // Founder hit this in the gym on 2026-08-26 — two heavy days back to
+    // back. With a squat in every phase-1 session, 48h spacing caps the
+    // week at three barbell days; Mon/Wed/Sat gives gaps of 2, 3 and 2
+    // days and leaves Sunday's full-rest principle intact.
+    const barbellDays = new Set<number>([1, 3, 6]);
     const evalDays = new Set<number>([2, 5]);
     if (week === 2) {
       return evalDays.has(dow) ? ["block_evaluate"] : barbellDays.has(dow) ? ["block_reintro"] : [];

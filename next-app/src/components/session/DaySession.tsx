@@ -362,7 +362,14 @@ function useMemoRail(
           item,
           rowCount: schemeRowCount,
           suggestion,
-          isLoadable: true, // blocksForDate only ever selects strength blocks
+          // Was hardcoded `true` with the comment "blocksForDate only ever
+          // selects strength blocks". That is false: a strength BLOCK
+          // contains items of any category, so dead_bug (trunk), planks
+          // and every mobility drill in a session were rendering a 92px
+          // kilo counter and a 2.5 kg stepper for work that is never
+          // loaded. Founder hit it on 2026-08-26. Same rule OffPlanSession
+          // has always used.
+          isLoadable: ["strength", "unilateral"].includes(exercise.category),
         });
       }
     }
