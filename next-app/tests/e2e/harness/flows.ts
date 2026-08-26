@@ -150,7 +150,7 @@ function shiftISO(days: number): string {
  * affordance and had never been exercised by anything, so walking it here
  * is coverage in its own right, not just a workaround.
  */
-async function openBrief(ctx: FlowContext): Promise<void> {
+async function openBrief(ctx: FlowContext, opts?: { requireSetFlow?: boolean }): Promise<void> {
   // Today first, then forward (a planned session), then back (one already
   // logged — which is what the edit-a-past-set flow actually wants).
   const offsets = [0, 1, 2, 3, 4, 5, 6, -1, -2, -3, -4, -5, -6, -7];
@@ -183,6 +183,14 @@ async function openBrief(ctx: FlowContext): Promise<void> {
     //
     // Resolving the gate here is not a workaround — it is the product's
     // core mechanic, and this is the only place the harness exercises it.
+    // A prescription session (rowing, any cardio day) has a real CTA but
+    // no set flow. Flows that need one must keep walking, or coverage
+    // swings on whether the sweep happened to land on a lifting day —
+    // exactly the weekday fragility this walk exists to remove.
+    if (opts?.requireSetFlow) {
+      const label = (await start.first().textContent()) ?? "";
+      if (/log this session/i.test(label)) continue;
+    }
     if (await start.first().isDisabled()) {
       const accept = ctx.page.getByRole("button", { name: /^Use these$/ });
       if ((await accept.count()) > 0) {
@@ -212,15 +220,25 @@ async function openBrief(ctx: FlowContext): Promise<void> {
  * dying.
  */
 async function enterSetFlow(ctx: FlowContext): Promise<void> {
-  await openBrief(ctx);
+  await openBrief(ctx, { requireSetFlow: true });
   await ctx.page
     .getByRole("button", { name: /^(Start|Continue) —|^Log this session$/ })
     .first()
     .click({ timeout: CLICK_TIMEOUT_MS });
-  await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
-  if ((await ctx.page.locator('[data-surface="SetView"]').count()) === 0) {
+  // WAIT for the surface rather than sampling once after a fixed delay.
+  // A flat 700ms was not enough for SetView to mount against production,
+  // so the guard fired on sessions that DO have a set flow and dropped
+  // twelve personas from 93.3% surfaces to 53.3%. A skip has to mean "this
+  // session has no set flow", never "the page was still painting".
+  try {
+    await ctx.page
+      .locator('[data-surface="SetView"]')
+      .first()
+      .waitFor({ state: "attached", timeout: 8000 });
+  } catch {
     throw new SkipFlow("prescription session — logged as an activity, no set flow");
   }
+  await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
 }
 
 /** Log the currently-shown set, whatever its shape. */
