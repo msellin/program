@@ -94,10 +94,18 @@ export function BriefView({
   //
   // Same shape for any block that prescribes work in prose rather than
   // sets — this is not rowing-specific.
-  const prescriptionBlocks = railExercises.length === 0
-    ? blocks.filter((b) => (b.note ?? "").trim().length > 0)
-    : [];
-  const isPrescriptionSession = prescriptionBlocks.length > 0;
+  // Any block the set flow cannot represent: run-category work (logged as
+  // an activity) or a block that authors no items at all. Both are
+  // described in prose, and both were previously invisible.
+  const prescriptionBlocks = blocks.filter(
+    (b) =>
+      ((b.category ?? "strength") === "run" || (b.items?.length ?? 0) === 0) &&
+      (b.note ?? "").trim().length > 0,
+  );
+  // "Log this session" replaces Start only when there is nothing to step
+  // through. A mixed day — strength blocks plus a run — keeps Start and
+  // shows the run's prescription alongside the exercise rows.
+  const isPrescriptionSession = prescriptionBlocks.length > 0 && railExercises.length === 0;
 
   const startLabel = isPrescriptionSession
     ? "Log this session"
@@ -224,6 +232,19 @@ export function BriefView({
                     <span className="block text-[13px] text-ink">
                       {r.rowCount} sets{r.suggestion ? ` · ${r.suggestion.top_set.kg} kg` : ""}
                     </span>
+                    {/* A7 (2026-08-26): notes were WRITE-ONLY. Two buried
+                        entry points, and no screen ever showed one back —
+                        so there was no reason to write one, and the
+                        founder's 24 Aug session recorded eight exercises,
+                        five sets at RPE 9, and not a single note. The
+                        engine mines these for fatigue and pain signals
+                        (note-signals.ts), so an invisible note is a lost
+                        engine input, not just lost prose. */}
+                    {entry?.notes?.trim() ? (
+                      <span className="block text-[12.5px] italic text-slate mt-1 line-clamp-2">
+                        “{entry.notes.trim()}”
+                      </span>
+                    ) : null}
                   </span>
                   <span
                     className={

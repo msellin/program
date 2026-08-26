@@ -343,6 +343,16 @@ function useMemoRail(
     const out: RailExercise[] = [];
     if (!program) return out;
     for (const block of blocks) {
+      // Run-category blocks are logged as ACTIVITIES, not as sets
+      // (2026-08-26). Engine Builder authors one vestigial item per run
+      // block, which made the app draw a set screen for a 45-minute Zone 1
+      // run and write reps and kilos into `exercises[]` — where nothing
+      // reads them. Its only log-based metric is
+      // `runs[].avg_hr where intensity == 'easy'`, so a diligent user could
+      // log every session and show zero progress. CSM's run blocks already
+      // author zero items; rowing's do too. Route by category so all three
+      // behave the same.
+      if ((block.category ?? "strength") === "run") continue;
       const items = dedupeItems(block.items ?? []);
       for (const item of items) {
         if (!item.exercise_id) continue;

@@ -135,6 +135,7 @@ export function RestTakeover({
   const fmt = `${mins}:${String(secs).padStart(2, "0")}`;
   const pct = Math.min(1, elapsed / target) * 100;
 
+  const existingNote = (store.logs[date]?.exercises[active.key]?.notes ?? "").trim();
   const justLogged = entrySets(store.logs[date]?.exercises[active.key] ?? null)[justLoggedSetIndex];
   const summary =
     justLogged?.weight_kg != null && justLogged?.reps != null
@@ -246,6 +247,29 @@ export function RestTakeover({
             Skip rest
           </button>
         </div>
+        {/* A7 (2026-08-26): note capture was reachable two ways, both
+            buried — `⋯` → "Note for this exercise", or an auto-open that
+            fired ONLY if you tapped "Grind". Rest is the one moment in a
+            session you are actually holding the phone, so the affordance
+            belongs here unconditionally. Shows what you already wrote, so
+            the loop closes: notes stopped being write-only. */}
+        <button
+          type="button"
+          onClick={onOpenNoteSheet}
+          className="w-full flex items-center justify-between gap-2.5 rounded border border-line-soft bg-surface px-3.5 py-2.5 text-left"
+        >
+          <span className="min-w-0">
+            <span className="block text-[13.5px] text-ink">
+              {existingNote ? "Note" : "Add a note"}
+            </span>
+            {existingNote ? (
+              <span className="block text-[12.5px] italic text-slate truncate">
+                “{existingNote}”
+              </span>
+            ) : null}
+          </span>
+          <span className="flex-shrink-0 text-[14px] text-line">›</span>
+        </button>
         <button
           type="button"
           onClick={() => setJumpOpen(true)}
