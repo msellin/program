@@ -754,6 +754,25 @@ export const setLogSchema = z.object({
   weight_kg: z.number().nullable(),
   reps: z.number().nullable(),
   rpe: z.number().nullable().optional(),
+  /**
+   * Seconds actually held, for time-based work (2026-08-25).
+   *
+   * Isometrics and stretches author `hold_seconds` and no reps —
+   * `hip_flexor_iso_seated` is `{sets: 5, hold_seconds: 20, per_side: true}`
+   * — but the set screen only ever offered a rep counter, so a 30-second
+   * kneeling stretch got logged as "x12". Meaningless, and for a programme
+   * that is half holds it meant the rehab layer had no measurable dose at
+   * all.
+   *
+   * ADDITIVE on purpose. `reps != null` is the "this set is logged"
+   * predicate in 42 places across 18 files — the pips, the rail counters,
+   * adherence, PR detection, history, the engine's did-you-train check.
+   * A hold set therefore still writes `reps` (the number of holds
+   * completed, normally 1) and carries the duration here. Writing
+   * `seconds` INSTEAD of `reps` would make every hold set read as
+   * unlogged everywhere at once.
+   */
+  seconds: z.number().nullable().optional(),
   notes: z.string().optional(),
 });
 

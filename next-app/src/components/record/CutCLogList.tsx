@@ -201,8 +201,13 @@ function ExerciseRow({
           {validSets.map((s, i) => (
             <li key={i} className="flex gap-2 items-center">
               <span className="w-5 text-center">#{i + 1}</span>
+              {/* A held set reads as its duration, not as "— × 1".
+                  Isometrics and stretches carry `seconds`; see
+                  setLogSchema. */}
               <span className="tabular-nums">
-                {s.weight_kg != null ? `${s.weight_kg} kg` : "—"} × {s.reps != null ? s.reps : "—"}
+                {s.seconds != null
+                  ? `${s.seconds}s hold`
+                  : `${s.weight_kg != null ? `${s.weight_kg} kg` : "—"} × ${s.reps != null ? s.reps : "—"}`}
                 {s.rpe != null ? ` @ RPE ${s.rpe}` : ""}
               </span>
               {s.notes ? (

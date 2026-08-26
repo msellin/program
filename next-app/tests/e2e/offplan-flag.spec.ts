@@ -173,10 +173,57 @@ test("accessory exercises seed their authored reps, not zero", async ({ page }) 
   await expect(page.getByText(/· set 1 of \d+/i)).toBeVisible({ timeout: 10_000 });
 
   // `reps?` — a set seeded at 1 renders "1 rep", not "1 reps".
-  const shown = await page.locator("p").filter({ hasText: /^\d+\+? reps?$/ }).first().textContent();
-  const reps = Number((shown ?? "").match(/\d+/)?.[0] ?? "0");
-  expect(reps).toBeGreaterThan(0);
+  // Two shapes now. Counted work shows "N reps"; held work (isometrics,
+  // stretches — `hold_seconds` and no reps) shows a countdown instead,
+  // because a rep stepper is the wrong instrument for a 20-second hold.
+  // Either way the assertion is the same: the screen must never offer
+  // ZERO as the thing you are about to log.
+  const holdCta = page.getByRole("button", { name: /start the hold · \d+s/i });
+  if (await holdCta.count()) {
+    const clock = await page.locator("p").filter({ hasText: /^\d+:\d\d$/ }).first().textContent();
+    const [m, sec] = (clock ?? "0:00").split(":").map(Number);
+    expect(m * 60 + sec).toBeGreaterThan(0);
+    await expect(page.getByText(/Programme asks for/i)).toBeVisible();
+  } else {
+    const shown = await page.locator("p").filter({ hasText: /^\d+\+? reps?$/ }).first().textContent();
+    expect(Number((shown ?? "").match(/\d+/)?.[0] ?? "0")).toBeGreaterThan(0);
+    await expect(page.getByRole("button", { name: /^Done — set 1/ })).toBeVisible();
+  }
+});
 
-  // And the number the button commits matches what the screen shows.
-  await expect(page.getByRole("button", { name: /^Done — set 1/ })).toBeVisible();
+
+test("a held set records seconds, and still counts as logged", async ({ page }) => {
+  // The founder's 2026-08-24 log recorded a 30-second kneeling stretch as
+  // "x12" — the set screen only ever offered a rep counter. Hold-based work
+  // now runs a countdown and writes `seconds`.
+  //
+  // It still writes `reps: 1` as well, and that is load-bearing: `reps != null`
+  // is the "this set is logged" predicate in 42 places across 18 files.
+  // Writing seconds INSTEAD would make every hold read as unlogged.
+  await signInWithPersona(page, "persona-recover", (store) => {
+    store.feature_flags = { ...((store.feature_flags as object) ?? {}), off_plan: true };
+  });
+  await page.goto("/off-plan/");
+  await page.locator("button", { hasText: /\d+ sets/ }).first().click({ timeout: 20_000 });
+  const start = page.getByRole("button", { name: /start the hold · \d+s/i });
+  await expect(start).toBeVisible({ timeout: 10_000 });
+  await start.click();
+  await page.waitForTimeout(2600);
+  await page.getByRole("button", { name: /log it now/i }).click();
+  await page.waitForTimeout(800);
+
+  const logged = await page.evaluate((today) => {
+    const s = JSON.parse(localStorage.getItem("program.log.v2") ?? "{}");
+    for (const entry of Object.values(s.logs?.[today]?.exercises ?? {}) as Array<{
+      sets?: Array<{ seconds?: number | null; reps?: number | null }>;
+    }>) {
+      const hit = (entry.sets ?? []).find((x) => x.seconds != null);
+      if (hit) return hit;
+    }
+    return null;
+  }, TODAY);
+
+  expect(logged).not.toBeNull();
+  expect(logged!.seconds).toBeGreaterThan(0);
+  expect(logged!.reps).not.toBeNull();
 });

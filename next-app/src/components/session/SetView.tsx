@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { announce } from "@/lib/announce";
+import { playTimerComplete } from "@/lib/sound";
 import { useStore, useDayExercise, entrySets } from "@/lib/useStore";
 import { isSetPR } from "@/lib/pr";
 import { platesLabel } from "@/lib/plates";
@@ -131,6 +133,11 @@ export function SetView({
       ? active.suggestion.top_set
       : null;
   const isAmrap = !!prescribed?.reps?.includes("+");
+  // Time-based work. An exercise that authors `hold_seconds` and no reps
+  // is held, not counted — a rep stepper is the wrong instrument for it,
+  // and offering one is how a 30-second kneeling stretch ended up logged
+  // as "x12" in the founder's 2026-08-24 record.
+  const isHold = holdSeconds != null && authoredReps == null;
 
   // Local editable weight/reps, seeded from the logged value (if any) or
   // the prescription/last-time fallback. Committed to the store only on
@@ -172,6 +179,36 @@ export function SetView({
   };
   const isEditingLoggedSet = loggedAt(activeSetIndex);
 
+  // Seconds held on THIS set: what was logged, else the authored dose.
+  const [seconds, setSeconds] = useState<number>(
+    () => setForRow.seconds ?? holdSeconds ?? 30,
+  );
+  // Countdown state. `running` starts it; `remaining` drives the clock.
+  // Deliberately independent of RestTakeover's timer — that one owns the
+  // between-sets rest and lives in a different component; two countdowns
+  // sharing a store is how the old RestTimerHost double-fired.
+  const [running, setRunning] = useState(false);
+  const [remaining, setRemaining] = useState<number>(() => seconds);
+  useEffect(() => {
+    if (!running) return;
+    const id = setInterval(() => {
+      setRemaining((r) => {
+        if (r <= 1) {
+          clearInterval(id);
+          setRunning(false);
+          if (typeof navigator !== "undefined" && "vibrate" in navigator) {
+            navigator.vibrate?.([80, 60, 80]);
+          }
+          playTimerComplete();
+          announce("Hold complete.");
+          return 0;
+        }
+        return r - 1;
+      });
+    }, 1000);
+    return () => clearInterval(id);
+  }, [running]);
+
   const wouldBePR =
     active.isLoadable && weight > 0 && reps > 0 && isSetPR(store, active.exercise.id, weight, reps, date);
   const plates = active.isLoadable ? platesLabel(weight) : null;
@@ -187,7 +224,20 @@ export function SetView({
       active.blockId,
       active.exercise.id,
       activeSetIndex,
-      { weight_kg: active.isLoadable ? weight : null, reps: finalReps },
+      {
+        weight_kg: active.isLoadable ? weight : null,
+        // A hold still records `reps` — one completed hold — because
+        // `reps != null` is what marks a set logged everywhere else.
+        // `seconds` is the dose that actually means something.
+        reps: finalReps,
+        // What was actually held. Reaching zero means the full dose;
+        // stopping early banks the elapsed portion. Keying this off
+        // `running` was wrong for the paused case — pausing then logging
+        // recorded the full authored time regardless of when you stopped.
+        ...(isHold
+          ? { seconds: remaining === 0 ? seconds : Math.max(0, seconds - remaining) }
+          : {}),
+      },
       date,
     );
     // Correcting set 2 while you're really on set 5 shouldn't start a
@@ -293,9 +343,11 @@ export function SetView({
                   aria-current={isCurrent ? "step" : undefined}
                   aria-label={
                     done && logged
-                      ? active.isLoadable
-                        ? `Set ${i + 1}, logged ${logged.weight_kg} kilos by ${logged.reps} reps. Edit.`
-                        : `Set ${i + 1}, logged ${logged.reps} reps. Edit.`
+                      ? logged.seconds != null
+                        ? `Set ${i + 1}, held ${logged.seconds} seconds. Edit.`
+                        : active.isLoadable
+                          ? `Set ${i + 1}, logged ${logged.weight_kg} kilos by ${logged.reps} reps. Edit.`
+                          : `Set ${i + 1}, logged ${logged.reps} reps. Edit.`
                       : `Set ${i + 1}, not logged yet`
                   }
                   className={
@@ -322,9 +374,11 @@ export function SetView({
                     }
                   >
                     {done && logged
-                      ? active.isLoadable
-                        ? `${logged.weight_kg}×${logged.reps}`
-                        : `${logged.reps}`
+                      ? logged.seconds != null
+                        ? `${logged.seconds}s`
+                        : active.isLoadable
+                          ? `${logged.weight_kg}×${logged.reps}`
+                          : `${logged.reps}`
                       : "·"}
                   </span>
                 </button>
@@ -355,15 +409,26 @@ export function SetView({
             <span className="text-[24px] font-medium text-muted">kg</span>
           </div>
         ) : null}
-        <p
-          className={
-            active.isLoadable
-              ? "text-[26px] leading-[1.2] font-semibold tracking-[-.02em] text-strong mb-3"
-              : "text-[92px] leading-[.9] font-semibold tracking-[-.05em] text-strong mb-3"
-          }
-        >
-          {isAmrap ? `${reps}+ reps` : `${reps} ${reps === 1 ? "rep" : "reps"}`}
-        </p>
+        {isHold ? (
+          <>
+            <p className="text-[92px] leading-[.9] font-semibold tracking-[-.05em] text-strong mb-1">
+              {Math.floor(remaining / 60)}:{String(remaining % 60).padStart(2, "0")}
+            </p>
+            <p className="font-mono text-[11px] uppercase tracking-[.16em] text-line mb-3">
+              {running ? "holding" : remaining === 0 ? "done" : `${seconds}s hold`}
+            </p>
+          </>
+        ) : (
+          <p
+            className={
+              active.isLoadable
+                ? "text-[26px] leading-[1.2] font-semibold tracking-[-.02em] text-strong mb-3"
+                : "text-[92px] leading-[.9] font-semibold tracking-[-.05em] text-strong mb-3"
+            }
+          >
+            {isAmrap ? `${reps}+ reps` : `${reps} ${reps === 1 ? "rep" : "reps"}`}
+          </p>
+        )}
         {!prev && !prescribed && authoredDose ? (
           <div className="border border-line-soft rounded-[8px] overflow-hidden mb-3">
             <div className="px-4 py-2.5 bg-surface">
@@ -403,7 +468,71 @@ export function SetView({
       </div>
 
       <div className="flex-shrink-0 px-[22px] pb-[22px]">
-        {isAmrap ? (
+        {isHold ? (
+          <>
+            {editingLoad ? (
+              <div className="border border-line-strong rounded-[10px] bg-surface p-3 mb-2.5 flex flex-col gap-2">
+                <StepperRow
+                  label="seconds"
+                  value={seconds}
+                  step={5}
+                  onChange={(v) => {
+                    setSeconds(v);
+                    if (!running) setRemaining(v);
+                  }}
+                />
+              </div>
+            ) : null}
+            <button
+              type="button"
+              onClick={() => {
+                if (running) {
+                  // Pause and bank what was held.
+                  setRunning(false);
+                  return;
+                }
+                if (remaining === 0) {
+                  // Finished — log it.
+                  confirm(1);
+                  return;
+                }
+                setRunning(true);
+                announce(`Hold started, ${remaining} seconds.`);
+              }}
+              className="w-full h-[62px] rounded-[10px] bg-bronze text-ground text-[17px] font-semibold tracking-[-.01em]"
+            >
+              {running
+                ? "Pause"
+                : remaining === 0
+                  ? `${isEditingLoggedSet ? "Save" : "Done"} — set ${activeSetIndex + 1} · ${seconds}s`
+                  : remaining < seconds
+                    ? "Resume"
+                    : `Start the hold · ${seconds}s`}
+            </button>
+            <div className="flex gap-2 mt-1.5">
+              <button
+                type="button"
+                onClick={() => onEditingLoad(!editingLoad)}
+                className="flex-1 h-10 text-ink text-[14px]"
+              >
+                {editingLoad ? "Hide" : "Change the time"}
+              </button>
+              {/* Held it without the timer running, or cut it short — log
+                  whatever was actually held rather than forcing the clock
+                  to zero. */}
+              <button
+                type="button"
+                onClick={() => {
+                  setRunning(false);
+                  confirm(1);
+                }}
+                className="flex-1 h-10 text-ink text-[14px]"
+              >
+                Log it now
+              </button>
+            </div>
+          </>
+        ) : isAmrap ? (
           <>
             <p className="font-mono text-[10px] uppercase tracking-[.14em] text-muted mb-2 text-center">
               {isEditingLoggedSet
