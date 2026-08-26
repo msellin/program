@@ -273,13 +273,30 @@ export const FLOWS: Flow[] = [
         "reopening a logged set enters edit mode",
         async () => (await ctx.page.getByText("Editing").count()) > 0,
       );
+      // A logged set must present an EDIT affordance, but its shape
+      // depends on the set: a normal set gets "Save — set N", an AMRAP set
+      // gets a rep keypad under "Fix the reps on set N", a held set gets
+      // the hold CTA. Asserting only the first shape failed on
+      // persona-concurrent, whose opening lift prescribes 5+ — the app was
+      // right and the check was too narrow. The detail line reports what
+      // was actually found, so a future mismatch explains itself instead
+      // of costing another five-minute run to diagnose.
       const save = ctx.page.getByRole("button", { name: /^Save — set \d+/ });
+      const amrapPrompt = ctx.page.getByText(/fix the reps on set \d+/i);
+      const holdCta = ctx.page.getByRole("button", {
+        name: /start the hold|start the timer|log it now/i,
+      });
+      const hasSave = await save.count();
+      const hasAmrap = await amrapPrompt.count();
+      const hasHold = await holdCta.count();
       await ctx.check(
-        "an already-logged set offers Save, not Done",
-        async () => (await save.count()) > 0,
+        "an already-logged set offers to edit it, not to log it fresh",
+        async () => hasSave + hasAmrap + hasHold > 0,
+        `save=${hasSave} amrapPrompt=${hasAmrap} hold=${hasHold}`,
       );
-      if ((await save.count()) === 0) return;
-      await ctx.tap("SetView", /^Save — set/);
+      if (hasSave === 0 && hasAmrap === 0) return;
+      if (hasSave > 0) await ctx.tap("SetView", /^Save — set/);
+      else await ctx.tap("SetView", /^[1-9]$/);
       await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
       await ctx.capture("03-after-save");
       // Correcting a set is not a set you just did, so no rest timer.
