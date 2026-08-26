@@ -252,7 +252,7 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
     // BottomNav renders after <main> in AppShell) so the "full-screen
     // takeover" the README specifies actually hides the tab bar, not just
     // the content behind it.
-    <div className="fixed inset-0 z-50 flex flex-col bg-ground">
+    <div data-surface="SetView" className="fixed inset-0 z-50 flex flex-col bg-ground">
       <SetView
         key={`${active.key}:${activeSetIndex}`}
         railExercises={railExercises}

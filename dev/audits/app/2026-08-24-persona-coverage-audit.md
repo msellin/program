@@ -223,3 +223,80 @@ itself on the first run.
 genuinely no session within +/-7 days. Correct behaviour, recorded with a
 reason. The handstand pair sits at 8/10 — their sessions are hold-based,
 so the rest takeover does not always open.
+
+
+---
+
+# Closing the remaining gaps (2026-08-25 / 26)
+
+## Interactive surfaces: 61.4% -> 100% reachable
+
+Four of the five unreached surfaces were **wrong selectors, not missing
+state** — the flows already got to the right screen and stopped one click
+short:
+
+| Surface | Why it was unreached |
+|---|---|
+| `MoveSheet` | Plan's expanded day offers "Move…"; no flow clicked it |
+| `ConfirmSheet` | Same row's "Skip" opens it; no flow clicked it |
+| `VideoModal` | `⋯` -> "Watch the lift", only for exercises with a video |
+| `InfoSheet` | The catalog's disclosure is an inline text button reading **"cited"**, not a heading-shaped control |
+
+Move and Skip flows deliberately **open and cancel** ("Cancel", "Keep
+it"). A flow photographs; it must not mutate the persona's plan, or the
+next sweep's artifacts stop being comparable.
+
+`RetestLoggingSheet` was the one that genuinely needed state. It only
+renders for a `retest_due` proposal, which fires when the persona's
+current week lands inside a metric's `at_week` window AND no reading for
+it exists in the past 7 days. New `persona-retest`: engine-builder, 25
+days, which lands in week 4 — the program's mid-block check for
+`submax_hr_pace5_bpm` — while the simulator's own readings fire on day 14,
+outside the freshness window that would suppress the proposal.
+
+**persona-retest reaches 100% of surfaces, 16/16 flows.**
+
+## The hip-check flow took four wrong selectors to land
+
+Worth recording, because each failure looked like the last one:
+
+1. `/start check|begin/i` — the control reads `Start check (6 items)`.
+2. Clicking a value doesn't advance; there is a separate **Next**.
+3. `getByRole("button", {name: /^2$/})` matches **nothing** — the 0-10
+   scale buttons carry an aria-label that overrides the visible digit, so
+   a name-based selector silently found zero elements and Next stayed
+   disabled forever. Targeted by grid position instead.
+4. The advance button relabels to **"Review"** on the final question, so
+   a `/^Next$/` selector broke the loop one step short of the submit.
+
+It now writes `assessments`, the only store key that had a real writer and
+no coverage. Store: 75% -> 88.9% on persona-recover.
+
+## Store denominator corrected
+
+`daily_plans` and `stretch_targets` were removed from `STORE_KEYS`.
+`lib/engine/daily-plan.ts` has **zero callers**, and `stretch_targets`
+appears only in a parse path in `storage.ts` and in the export — nothing
+in the app writes either. Counting keys no code path can reach made the
+denominator dishonest and the percentage permanently unreachable.
+
+## The rowing personas: a product finding, not a persona one
+
+My first read was that they were badly positioned — arcs ending at the 2K
+test date, so no session within +/-7 days. `persona-rowing-mid` (21 days,
+mid-arc) was added to test that, and **it still found no session**.
+
+The actual cause: **every rowing-2k-test-prep block has zero items.** They
+are `run` blocks described by `duration_min` and a note, with no exercises
+at all. The session shell has nothing to render, on any date. Rowing is
+currently un-startable in the session flow by data design, and the only
+way to record it is activity logging — which is also where its retest
+metric reads from (`runs[].total_seconds`).
+
+Engine Builder authors one item per run block, which is why its personas
+walk sessions normally.
+
+This is the sharper version of the gap logged on 2026-08-24: for
+run-modality programs the prescribed session and the logged data live in
+different places. For rowing there is no session screen content at all.
+`persona-rowing-mid` is kept because it documents this precisely.

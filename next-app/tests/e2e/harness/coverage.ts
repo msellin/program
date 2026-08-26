@@ -78,9 +78,23 @@ const FLOW_SURFACES: Record<string, string[]> = {
   "session-exercise-details": ["ExerciseDetailsSheet"],
   "program-preview": ["ProgramPreviewClient"],
   "onboarding-first-run": ["OnboardingRunner"],
+  "session-video": ["VideoModal"],
+  "programs-info-sheet": ["InfoSheet"],
+  "plan-move-sheet": ["MoveSheet"],
+  "plan-skip-confirm": ["ConfirmSheet"],
+  "retest-logging": ["RetestLoggingSheet"],
 };
 
 /** Store keys the schema declares, for the fidelity denominator. */
+/**
+ * Store keys the coverage denominator counts.
+ *
+ * `daily_plans` and `stretch_targets` are deliberately absent (2026-08-25):
+ * `lib/engine/daily-plan.ts` has zero callers, and `stretch_targets`
+ * appears only in a parse path in `storage.ts` and in the export — nothing
+ * in the app writes either. Counting keys no code path can reach makes the
+ * denominator dishonest and the percentage permanently unreachable.
+ */
 export const STORE_KEYS = [
   "version",
   "logs",
@@ -90,7 +104,6 @@ export const STORE_KEYS = [
   "user_profile",
   "assessments",
   "contraindications",
-  "daily_plans",
   "day_adjustments",
   "dismissed_proposals",
   "feature_flags",
@@ -101,7 +114,6 @@ export const STORE_KEYS = [
   "scheduled_blocks",
   "scheduled_overrides",
   "skipped",
-  "stretch_targets",
 ] as const;
 
 export type CoverageReport = {
@@ -109,6 +121,20 @@ export type CoverageReport = {
   capturedAt: string;
   routes: { toured: string[]; missing: string[]; pct: number };
   surfaces: { reached: string[]; missed: string[]; pct: number };
+  /**
+   * Within-surface control coverage. "Surface reached" is a binary that
+   * flatters the harness — opening the overflow sheet scored the same as
+   * testing its six rows. This counts controls actually driven against
+   * controls found, and reports the mutating ones held back by name so the
+   * shortfall is explained rather than mysterious.
+   */
+  controls: {
+    seen: number;
+    exercised: number;
+    heldBack: number;
+    pct: number;
+    bySurface: Array<{ surface: string; seen: number; exercised: number; heldBack: number }>;
+  };
   store: { populated: string[]; empty: string[]; pct: number };
   states: {
     fullyLoggedExercises: number;
@@ -168,7 +194,31 @@ export function buildCoverage(opts: {
     }
   }
 
-  const pct = (a: number, b: number) => Math.round((a / b) * 1000) / 10;
+  const pct = (a: number, b: number) => (b === 0 ? 0 : Math.round((a / b) * 1000) / 10);
+
+  // Fold every flow's probes into one per-surface picture.
+  const bySurface = new Map<string, { seen: Set<string>; exercised: Set<string>; held: Set<string> }>();
+  for (const f of opts.flows) {
+    for (const pr of f.probes ?? []) {
+      let e = bySurface.get(pr.surface);
+      if (!e) {
+        e = { seen: new Set(), exercised: new Set(), held: new Set() };
+        bySurface.set(pr.surface, e);
+      }
+      for (const n of pr.seen) e.seen.add(n);
+      for (const n of pr.exercised) e.exercised.add(n);
+      for (const k of pr.skipped) e.held.add(k.name);
+    }
+  }
+  const controlRows = Array.from(bySurface.entries()).map(([surface, e]) => ({
+    surface,
+    seen: e.seen.size,
+    exercised: e.exercised.size,
+    heldBack: e.held.size,
+  }));
+  const controlsSeen = controlRows.reduce((n, r) => n + r.seen, 0);
+  const controlsExercised = controlRows.reduce((n, r) => n + r.exercised, 0);
+  const controlsHeld = controlRows.reduce((n, r) => n + r.heldBack, 0);
 
   return {
     personaId: opts.personaId,
@@ -177,6 +227,16 @@ export function buildCoverage(opts: {
       toured: routesToured as unknown as string[],
       missing: routesMissing as unknown as string[],
       pct: pct(routesToured.length, USER_FACING_ROUTES.length),
+    },
+    controls: {
+      seen: controlsSeen,
+      exercised: controlsExercised,
+      heldBack: controlsHeld,
+      // Mutating controls are excluded from the denominator: they are
+      // deliberately not driven, so counting them as misses would make
+      // 100% permanently unreachable and the number meaningless.
+      pct: pct(controlsExercised, Math.max(0, controlsSeen - controlsHeld)),
+      bySurface: controlRows.sort((a, b) => a.surface.localeCompare(b.surface)),
     },
     surfaces: {
       reached: Array.from(reached),
@@ -228,7 +288,12 @@ export function collectReports(rootDir: string): CoverageReport[] {
     if (!fs.existsSync(file)) continue;
     try {
       const parsed = JSON.parse(fs.readFileSync(file, "utf8")) as CoverageReport;
-      if (parsed && typeof parsed.personaId === "string") out.push(parsed);
+      // Skip reports written by an older harness. A file from before
+      // within-surface control coverage existed has no `controls` block,
+      // and folding it in would either crash the summary or drag the
+      // average down with data that was never collected. Stale bundles
+      // belong to a different question.
+      if (parsed && typeof parsed.personaId === "string" && parsed.controls) out.push(parsed);
     } catch {
       // A half-written file from a worker still in flight — skip it.
     }
@@ -252,15 +317,36 @@ export function writeFleetSummary(rootDir: string, reports: CoverageReport[]): v
     `| Routes toured | ${avg((r) => r.routes.pct)}% |`,
     `| Interactive surfaces reached | ${avg((r) => r.surfaces.pct)}% |`,
     `| Store keys populated | ${avg((r) => r.store.pct)}% |`,
+    `| Controls exercised within surfaces | ${avg((r) => r.controls.pct)}% |`,
     "",
-    "| Persona | Routes | Surfaces | Store | Flows ok/skip/err | Full ex | Partial ex |",
-    "|---|---|---|---|---|---|---|",
+    "| Persona | Routes | Surfaces | Controls | Store | Flows ok/skip/err | Full ex | Partial ex |",
+    "|---|---|---|---|---|---|---|---|",
   ];
   for (const r of reports) {
     lines.push(
-      `| ${r.personaId} | ${r.routes.pct}% | ${r.surfaces.pct}% | ${r.store.pct}% | ` +
+      `| ${r.personaId} | ${r.routes.pct}% | ${r.surfaces.pct}% | ` +
+        `${r.controls.pct}% (${r.controls.exercised}/${r.controls.seen - r.controls.heldBack}) | ${r.store.pct}% | ` +
         `${r.flows.ok}/${r.flows.skipped}/${r.flows.error} | ${r.states.fullyLoggedExercises} | ${r.states.partiallyLoggedExercises} |`,
     );
+  }
+  // Per-surface control detail, unioned across the fleet.
+  const merged = new Map<string, { seen: number; exercised: number; held: number }>();
+  for (const r of reports) {
+    for (const row of r.controls.bySurface) {
+      const cur = merged.get(row.surface) ?? { seen: 0, exercised: 0, held: 0 };
+      merged.set(row.surface, {
+        seen: Math.max(cur.seen, row.seen),
+        exercised: Math.max(cur.exercised, row.exercised),
+        held: Math.max(cur.held, row.heldBack),
+      });
+    }
+  }
+  if (merged.size) {
+    lines.push("", "## Controls per surface (best across the fleet)", "",
+      "| Surface | Exercised | Found | Held back (mutating) |", "|---|---|---|---|");
+    for (const [surface, v] of Array.from(merged.entries()).sort()) {
+      lines.push(`| ${surface} | ${v.exercised} | ${v.seen} | ${v.held} |`);
+    }
   }
   const everMissedRoute = reports[0].routes.missing.filter((route) =>
     reports.every((r) => r.routes.missing.includes(route)),

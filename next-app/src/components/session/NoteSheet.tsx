@@ -59,7 +59,7 @@ export function NoteSheet({
 
   if (offerStop) {
     return (
-      <BottomSheet titleId="note-stop-title" onClose={onClose}>
+      <BottomSheet surface="NoteSheet" titleId="note-stop-title" onClose={onClose}>
         <p id="note-stop-title" className="text-[16px] font-semibold text-strong mb-1 tracking-[-.015em]">
           Stop the session?
         </p>

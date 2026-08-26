@@ -264,6 +264,42 @@ export const PERSONAS: Persona[] = [
     focus:
       "8-week arc + 8 days past graduation. Audit target: does GraduationCard fire? Does it suggest a follow-on (Block 2 engine-builder, Progression/Push tier, another program)? Retest card populates real deltas? Report renders a shareable summary of the arc? What SHOULD happen after finishing but currently doesn't?",
   },
+  {
+    // 2026-08-25 — positioned to sit INSIDE a retest window. engine-builder
+    // declares a mid-block retest for `submax_hr_pace5_bpm` at week 4, and
+    // `selectRetestDue` opens the proposal from that week's start through
+    // the end of the following one. 25 days lands in week 4; the
+    // simulator's own readings fire on day 14, comfortably outside the
+    // 7-day freshness window that would suppress the proposal.
+    //
+    // Exists because RetestLoggingSheet was the last interactive surface
+    // no persona could reach — it needs real state, not a better selector.
+    id: "persona-retest",
+    displayName: "Retest-window user",
+    archetypeId: "consistent-average",
+    programSlug: "engine-builder",
+    days: 25,
+    email: "e2e-persona-retest@example.test",
+    password: DEFAULT_PASSWORD,
+    focus:
+      "Sits inside engine-builder's week-4 mid-block retest window. Audit target: does the retest proposal explain what to log and why, and does the logging sheet make the reading easy to enter mid-session?",
+  },
+  {
+    // 2026-08-25 — the existing rowing personas run 45 days, which ends AT
+    // the 2K test date, so they are past the program end with no session
+    // within +/-7 days: seven of ten flows correctly skip and the rowing
+    // UI never gets exercised interactively. This one stops mid-arc so it
+    // actually has sessions to walk.
+    id: "persona-rowing-mid",
+    displayName: "Rowing user mid-arc",
+    archetypeId: "consistent-average",
+    programSlug: "rowing-2k-test-prep",
+    days: 21,
+    email: "e2e-persona-rowing-mid@example.test",
+    password: DEFAULT_PASSWORD,
+    focus:
+      "Rowing block partway through, before the test date. Audit target: mid-arc session flow for a row-modality program, where the prescribed session IS the logged activity.",
+  },
 ];
 
 export function personaArchetype(persona: Persona) {

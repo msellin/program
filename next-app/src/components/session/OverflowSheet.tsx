@@ -59,7 +59,7 @@ export function OverflowSheet({
 
   return (
     <>
-      <BottomSheet titleId="overflow-title" onClose={onClose}>
+      <BottomSheet surface="OverflowSheet" titleId="overflow-title" onClose={onClose}>
         <p id="overflow-title" className="text-[16px] font-semibold text-strong mb-3.5 tracking-[-.015em]">
           {exercise.name}
         </p>

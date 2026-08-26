@@ -153,7 +153,7 @@ export function RestTakeover({
   };
 
   return (
-    <div className="fixed inset-0 z-40 bg-ground flex flex-col">
+    <div data-surface="RestTakeover" className="fixed inset-0 z-40 bg-ground flex flex-col">
       <div className="flex-shrink-0 px-[22px] pt-1">
         <div className="h-[3px] bg-surface-2 rounded-full overflow-hidden">
           <div className="h-full bg-slate rounded-full transition-[width]" style={{ width: `${pct}%` }} />

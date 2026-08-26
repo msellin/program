@@ -41,7 +41,7 @@ export function OffPlanSheet({
   const drillCount = drillBlocks.reduce((n, b) => n + (b.items?.length ?? 0), 0);
 
   return (
-    <BottomSheet titleId="off-plan-title" onClose={onClose}>
+    <BottomSheet surface="OffPlanSheet" titleId="off-plan-title" onClose={onClose}>
       <p id="off-plan-title" className="text-[16px] font-semibold text-strong mb-1 tracking-[-.015em]">
         Log an activity
       </p>

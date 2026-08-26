@@ -24,12 +24,36 @@ import * as path from "node:path";
 export class SkipFlow extends Error {}
 
 export type StepResult = { name: string; status: "ok" | "error"; error?: string };
+
+/**
+ * Within-surface control coverage (2026-08-26).
+ *
+ * "Surface reached" is a binary that flatters the harness: opening the
+ * overflow sheet and photographing it scored the same as testing its six
+ * rows. A probe records every interactive control visible inside an open
+ * surface; `tap` records the ones actually driven. Coverage is then
+ * exercised / seen, per surface.
+ *
+ * `skipped` is not a failure. Some controls MUTATE — "Finish here" marks
+ * the exercise done, "I already did this" writes every prescribed set,
+ * "Stop session" ends the workout. A flow photographs; driving those would
+ * corrupt the persona's state and make the next sweep incomparable. They
+ * are recorded as seen-but-deliberately-untouched so the number stays
+ * honest rather than quietly counting them as covered.
+ */
+export type SurfaceProbe = {
+  surface: string;
+  seen: string[];
+  exercised: string[];
+  skipped: Array<{ name: string; why: string }>;
+};
 export type FlowResult = {
   id: string;
   desc: string;
   status: "ok" | "skipped" | "error";
   reason?: string;
   steps: StepResult[];
+  probes: SurfaceProbe[];
 };
 
 export type FlowContext = {
@@ -38,6 +62,16 @@ export type FlowContext = {
   programSlug: string;
   /** Capture a screenshot + innerText snapshot for this step. */
   capture: (stepName: string) => Promise<void>;
+  /**
+   * Record every interactive control inside an open surface. `root` scopes
+   * the query so page chrome (bottom nav, header) isn't counted as part of
+   * the sheet.
+   */
+  probe: (surface: string, root: string) => Promise<void>;
+  /** Drive one control by accessible name and record it as exercised. */
+  tap: (surface: string, name: RegExp) => Promise<boolean>;
+  /** Record a control as seen but deliberately not driven, with a reason. */
+  note: (surface: string, name: string, why: string) => void;
 };
 
 export type Flow = {
@@ -174,12 +208,53 @@ export const FLOWS: Flow[] = [
       await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
       await ctx.capture("02-editing-past-set");
 
-      const change = ctx.page.getByRole("button", { name: /change the (weight|reps)/i });
+      await ctx.probe("SetView", '[data-surface="SetView"]');
+      const change = ctx.page.getByRole("button", { name: /change the (weight|reps|time)/i });
       if (await change.count()) {
         await change.click({ timeout: CLICK_TIMEOUT_MS });
         await ctx.page.waitForTimeout(300);
         await ctx.capture("03-stepper-open");
+        await ctx.probe("SetView", '[data-surface="SetView"]');
+        // The steppers themselves — the controls that actually change what
+        // gets logged. Opening the panel and photographing it proved
+        // nothing about whether +/- work.
+        await ctx.tap("SetView", /^\+$/);
+        await ctx.page.waitForTimeout(200);
+        await ctx.tap("SetView", /^−$/);
+        await ctx.page.waitForTimeout(200);
+        await ctx.capture("03b-stepper-used");
+        await ctx.tap("SetView", /back to prescription/i);
+        await ctx.page.waitForTimeout(250);
+        await ctx.tap("SetView", /^Hide$/);
+        await ctx.page.waitForTimeout(200);
       }
+
+      // The pips and the rail are SetView's whole navigation surface, and
+      // the pips are the affordance this batch added. Drive each pip, then
+      // a rail tab.
+      const pips = ctx.page.getByRole("button", { name: /^Set \d+, / });
+      const pipCount = Math.min(await pips.count(), 5);
+      for (let i = 0; i < pipCount; i++) {
+        await ctx.tap("SetView", new RegExp(`^Set ${i + 1}, `));
+        await ctx.page.waitForTimeout(250);
+      }
+      await ctx.capture("05-pips-walked");
+      const railTab = ctx.page.locator("div.overflow-x-auto button").nth(1);
+      if (await railTab.count()) {
+        const label = ((await railTab.textContent()) ?? "").trim().split("\n")[0];
+        if (label) {
+          await ctx.tap("SetView", new RegExp(`^${label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`));
+          await ctx.page.waitForTimeout(400);
+          await ctx.capture("06-rail-switched");
+        }
+      }
+      await ctx.tap("SetView", /^More options$/);
+      await ctx.page.waitForTimeout(300);
+      await ctx.tap("SetView", /^Close$/);
+      await ctx.page.waitForTimeout(250);
+      await ctx.tap("SetView", /back to brief/i);
+      await ctx.page.waitForTimeout(300);
+      await ctx.capture("07-back-to-brief");
       const save = ctx.page.getByRole("button", { name: /^Save — set \d+/ });
       if (await save.count()) {
         await save.first().click({ timeout: CLICK_TIMEOUT_MS });
@@ -200,9 +275,34 @@ export const FLOWS: Flow[] = [
       const add = ctx.page.getByRole("button", { name: /add 30 seconds/i });
       if ((await add.count()) === 0) throw new SkipFlow("rest takeover did not open");
       await ctx.capture("01-rest-before");
+      await ctx.probe("RestTakeover", '[data-surface="RestTakeover"]');
+
+      // The effort scale feeds the engine's push-or-hold decision, and had
+      // never been tapped by anything.
+      // Every rung of the effort scale — each writes a different RPE and
+      // feeds the engine's push-or-hold decision differently.
+      for (const effort of [/^Easy/, /^Grind/, /^Solid/]) {
+        if (await ctx.tap("RestTakeover", effort)) {
+          await ctx.page.waitForTimeout(350);
+          await ctx.tap("RestTakeover", /^change$/);
+          await ctx.page.waitForTimeout(250);
+        }
+      }
+      await ctx.capture("02-effort-logged");
       await add.click({ timeout: CLICK_TIMEOUT_MS });
       await ctx.page.waitForTimeout(400);
-      await ctx.capture("02-rest-extended");
+      await ctx.capture("03-rest-extended");
+
+      // "Do something else next" opens the jump sheet — the mid-rest
+      // exercise switch. Cancel out; jumping would abandon the flow.
+      if (await ctx.tap("RestTakeover", /do something else next/i)) {
+        await ctx.page.waitForTimeout(400);
+        await ctx.probe("RestTakeover", '[data-surface="RestTakeover"] [role="dialog"]');
+        await ctx.capture("04-jump-sheet");
+        await ctx.tap("RestTakeover", /^Cancel$/);
+        await ctx.page.waitForTimeout(300);
+      }
+      ctx.note("RestTakeover", "Skip rest", "ends the rest the other flows depend on");
     },
   },
   {
@@ -217,6 +317,53 @@ export const FLOWS: Flow[] = [
       await more.click({ timeout: CLICK_TIMEOUT_MS });
       await ctx.page.waitForTimeout(400);
       await ctx.capture("01-overflow-sheet");
+
+      // Every row in the sheet, not just the fact that it opened.
+      await ctx.probe("OverflowSheet", '[data-surface="OverflowSheet"]');
+      // Two rows write to the log the moment they are tapped. A flow
+      // photographs; committing these would leave the persona with a
+      // session it never did and make the next sweep incomparable.
+      ctx.note("OverflowSheet", "Finish here", "mutating — marks the exercise done");
+      ctx.note("OverflowSheet", "I already did this", "mutating — writes every prescribed set");
+
+      // "Add a set" is reversible in practice (it extends rowCount for the
+      // day only) and is the one row whose effect is worth photographing.
+      if (await ctx.tap("OverflowSheet", /^Add a set$/)) {
+        await ctx.page.waitForTimeout(500);
+        await ctx.capture("02-after-add-set");
+        // Re-open for the remaining rows — tapping a row closes the sheet.
+        const reopen = ctx.page.getByRole("button", { name: /more options/i });
+        if (await reopen.count()) {
+          await reopen.click({ timeout: CLICK_TIMEOUT_MS });
+          await ctx.page.waitForTimeout(350);
+        }
+      }
+      if (await ctx.tap("OverflowSheet", /^Note for this exercise$/)) {
+        await ctx.page.waitForTimeout(450);
+        await ctx.probe("NoteSheet", '[data-surface="NoteSheet"]');
+        // The quick-note chips are the fastest path to a real note, and
+        // the reason the sheet exists.
+        await ctx.tap("NoteSheet", /^Felt heavy$/);
+        await ctx.page.waitForTimeout(200);
+        await ctx.tap("NoteSheet", /^Form broke down$/);
+        await ctx.page.waitForTimeout(200);
+        await ctx.capture("03-note-chips");
+        ctx.note("NoteSheet", "Stop session", "mutating — ends the workout the other flows need");
+        await ctx.tap("NoteSheet", /^Save to /);
+        await ctx.page.waitForTimeout(400);
+        const reopen2 = ctx.page.getByRole("button", { name: /more options/i });
+        if (await reopen2.count()) {
+          await reopen2.click({ timeout: CLICK_TIMEOUT_MS });
+          await ctx.page.waitForTimeout(350);
+        }
+      }
+      if (await ctx.tap("OverflowSheet", /^Form cues and warnings/)) {
+        await ctx.page.waitForTimeout(500);
+        await ctx.probe("ExerciseDetailsSheet", '[role="dialog"]:not([data-surface])');
+        await ctx.capture("04-form-cues");
+        await ctx.tap("ExerciseDetailsSheet", /^Close$/);
+        await ctx.page.waitForTimeout(300);
+      }
     },
   },
   {
@@ -229,12 +376,24 @@ export const FLOWS: Flow[] = [
       await footer.click({ timeout: CLICK_TIMEOUT_MS });
       await ctx.page.waitForTimeout(400);
       await ctx.capture("01-activity-sheet");
+      await ctx.probe("OffPlanSheet", '[data-surface="OffPlanSheet"]');
       const form = ctx.page.getByRole("button", { name: /a run, a row, a class/i });
       if (await form.count()) {
         await form.click({ timeout: CLICK_TIMEOUT_MS });
         await ctx.page.waitForTimeout(400);
         await ctx.capture("02-activity-form");
+        // The form itself — modality pickers, duration, effort. Probed so
+        // its controls count toward coverage even where driving them would
+        // write a run the persona never did.
+        await ctx.probe("OffPlanSheet", '[data-surface="OffPlanSheet"]');
+        await ctx.tap("OffPlanSheet", /^Warm-up \+ cool-down$/);
+        await ctx.page.waitForTimeout(250);
+        await ctx.capture("03-activity-options");
+        ctx.note("OffPlanSheet", "Save activity", "mutating — would log a run the persona never did");
+        ctx.note("OffPlanSheet", "Log session", "mutating — writes the activity to the log");
+        ctx.note("OffPlanSheet", "Import GPX", "opens a native file picker the harness cannot drive");
       }
+      await ctx.tap("OffPlanSheet", /^Close$/);
     },
   },
   {
@@ -253,6 +412,17 @@ export const FLOWS: Flow[] = [
       await note.click({ timeout: CLICK_TIMEOUT_MS });
       await ctx.page.waitForTimeout(400);
       await ctx.capture("01-note-sheet");
+      await ctx.probe("NoteSheet", '[data-surface="NoteSheet"]');
+      // Type a note — the sheet's whole purpose, and the thing the founder
+      // flagged as having receded after the redesign.
+      const field = ctx.page.locator('[role="dialog"] textarea, [role="dialog"] input[type="text"]');
+      if (await field.count()) {
+        await field.first().fill("harness: felt solid, no groin pain");
+        await ctx.page.waitForTimeout(250);
+        await ctx.capture("02-note-typed");
+      }
+      ctx.note("NoteSheet", "Stop session", "mutating — ends the workout the other flows need");
+      await ctx.tap("NoteSheet", /^(Close|Save|Done)$/);
     },
   },
   {
@@ -313,6 +483,167 @@ export const FLOWS: Flow[] = [
     },
   },
   {
+    id: "session-video",
+    desc: "⋯ → Watch the lift",
+    async run(ctx) {
+      await openBrief(ctx);
+      await ctx.page.getByRole("button", { name: /^(Start|Continue) —/ }).click({ timeout: CLICK_TIMEOUT_MS });
+      await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
+      const more = ctx.page.getByRole("button", { name: /more options/i });
+      if ((await more.count()) === 0) throw new SkipFlow("no overflow control");
+      await more.click({ timeout: CLICK_TIMEOUT_MS });
+      await ctx.page.waitForTimeout(400);
+      // Only rendered for exercises that carry a video_url / video_search.
+      const watch = ctx.page.getByRole("button", { name: /watch the lift/i });
+      if ((await watch.count()) === 0) throw new SkipFlow("this exercise has no video");
+      await watch.click({ timeout: CLICK_TIMEOUT_MS });
+      await ctx.page.waitForTimeout(600);
+      await ctx.capture("01-video-modal");
+    },
+  },
+  {
+    id: "programs-info-sheet",
+    desc: "Programs catalog → the status-ladder disclosure",
+    async run(ctx) {
+      await ctx.page.goto("/programs/", { waitUntil: "domcontentloaded" });
+      await ctx.page.waitForTimeout(1200);
+      // The disclosure is an inline text button inside a sentence — it
+      // reads "cited", not "how programs earn each status" (that is the
+      // sheet's own title, which only exists once the sheet is open).
+      const opener = ctx.page.getByRole("button", { name: /^cited$/i });
+      if ((await opener.count()) === 0) throw new SkipFlow("no ladder disclosure on the catalog");
+      await opener.first().click({ timeout: CLICK_TIMEOUT_MS });
+      await ctx.page.waitForTimeout(500);
+      await ctx.capture("01-info-sheet");
+    },
+  },
+  {
+    id: "plan-move-sheet",
+    desc: "Plan → expand a day → Move… (opened and cancelled, never committed)",
+    async run(ctx) {
+      await ctx.page.goto("/plan/", { waitUntil: "domcontentloaded" });
+      await ctx.page.waitForTimeout(1200);
+      const row = ctx.page.locator("button[aria-expanded]");
+      if ((await row.count()) === 0) throw new SkipFlow("no expandable day rows on Plan");
+      // Walk the rows until one offers Move — past and rest days do not.
+      const rowCount = Math.min(await row.count(), 7);
+      for (let i = 0; i < rowCount; i++) {
+        await row.nth(i).click({ timeout: CLICK_TIMEOUT_MS });
+        await ctx.page.waitForTimeout(350);
+        const move = ctx.page.getByRole("button", { name: /^Move…$/ });
+        if ((await move.count()) > 0 && (await move.first().isEnabled())) {
+          await move.first().click({ timeout: CLICK_TIMEOUT_MS });
+          await ctx.page.waitForTimeout(450);
+          await ctx.capture("01-move-sheet");
+          // Cancel. A flow photographs; it must not mutate the persona's
+          // plan, or the next sweep's artifacts stop being comparable.
+          const cancel = ctx.page.getByRole("button", { name: /^(Cancel|Close)$/ });
+          if (await cancel.count()) await cancel.first().click({ timeout: CLICK_TIMEOUT_MS });
+          return;
+        }
+        await row.nth(i).click({ timeout: CLICK_TIMEOUT_MS });
+        await ctx.page.waitForTimeout(200);
+      }
+      throw new SkipFlow("no day in the visible week offers Move");
+    },
+  },
+  {
+    id: "plan-skip-confirm",
+    desc: "Plan → expand a day → Skip → the confirm sheet (cancelled, never committed)",
+    async run(ctx) {
+      await ctx.page.goto("/plan/", { waitUntil: "domcontentloaded" });
+      await ctx.page.waitForTimeout(1200);
+      const row = ctx.page.locator("button[aria-expanded]");
+      if ((await row.count()) === 0) throw new SkipFlow("no expandable day rows on Plan");
+      const rowCount = Math.min(await row.count(), 7);
+      for (let i = 0; i < rowCount; i++) {
+        await row.nth(i).click({ timeout: CLICK_TIMEOUT_MS });
+        await ctx.page.waitForTimeout(350);
+        const skip = ctx.page.getByRole("button", { name: /^Skip$/ });
+        if ((await skip.count()) > 0 && (await skip.first().isEnabled())) {
+          await skip.first().click({ timeout: CLICK_TIMEOUT_MS });
+          await ctx.page.waitForTimeout(450);
+          await ctx.capture("01-skip-confirm");
+          // "Keep it" is the cancel — the session stays on the plan.
+          const keep = ctx.page.getByRole("button", { name: /^Keep it$/ });
+          if (await keep.count()) await keep.first().click({ timeout: CLICK_TIMEOUT_MS });
+          return;
+        }
+        await row.nth(i).click({ timeout: CLICK_TIMEOUT_MS });
+        await ctx.page.waitForTimeout(200);
+      }
+      throw new SkipFlow("no day in the visible week offers Skip");
+    },
+  },
+  {
+    id: "hip-check",
+    desc: "The hip self-check — the only writer of `assessments`",
+    async run(ctx) {
+      await ctx.page.goto("/check/hip/", { waitUntil: "domcontentloaded" });
+      await ctx.page.waitForTimeout(1200);
+      await ctx.capture("01-check-start");
+      const begin = ctx.page.getByRole("button", { name: /^Start check \(/i });
+      if ((await begin.count()) === 0) throw new SkipFlow("no Start check control");
+      await begin.first().click({ timeout: CLICK_TIMEOUT_MS });
+      await ctx.page.waitForTimeout(500);
+
+      // Each question is an 11-button 0-10 scale plus Back/Next. Answering
+      // does NOT advance on its own — Next does, which is why picking a
+      // value in a loop got stuck on question one forever.
+      //
+      // Answer 2 rather than 0: a mild, plausible score, so what this
+      // writes into `assessments` reads like a real check instead of a
+      // wall of zeroes that the rehab trend would then have to explain.
+      for (let i = 0; i < 15; i++) {
+        const submit = ctx.page.getByRole("button", { name: /log this hip check/i });
+        if ((await submit.count()) > 0) {
+          await ctx.capture("02-answered");
+          await submit.first().click({ timeout: CLICK_TIMEOUT_MS });
+          await ctx.page.waitForTimeout(900);
+          await ctx.capture("03-saved");
+          return;
+        }
+        // Targeted by position in the 11-button grid, not by accessible
+        // name: `getByRole("button", {name: /^2$/})` matches nothing —
+        // the scale buttons carry an aria-label that overrides the visible
+        // digit, so a name-based selector silently found zero elements and
+        // Next stayed disabled forever.
+        const scale = ctx.page.locator("div.grid button");
+        if (await scale.count()) {
+          await scale.nth(2).click({ timeout: CLICK_TIMEOUT_MS });
+          await ctx.page.waitForTimeout(250);
+        }
+        // The advance button relabels to "Review" on the final question
+        // (`stepIdx === totalSteps - 1`), so a /^Next$/ selector found
+        // nothing there and broke the loop one step short of the submit.
+        const next = ctx.page.getByRole("button", { name: /^(Next|Review)$/ });
+        if ((await next.count()) === 0 || !(await next.first().isEnabled())) break;
+        await next.first().click({ timeout: CLICK_TIMEOUT_MS });
+        await ctx.page.waitForTimeout(300);
+      }
+      throw new SkipFlow("hip check did not reach a submit state");
+    },
+  },
+  {
+    id: "retest-logging",
+    desc: "A retest-due proposal → Log reading → the retest sheet",
+    async run(ctx) {
+      // Only fires when the persona's current week lands inside a metric's
+      // at_week window AND no reading exists for it in the past 7 days
+      // (select.ts:selectRetestDue). persona-retest is positioned for
+      // engine-builder's week-4 mid-block check; every other persona
+      // legitimately skips.
+      await ctx.page.goto("/", { waitUntil: "domcontentloaded" });
+      await ctx.page.waitForTimeout(1500);
+      const log = ctx.page.getByRole("button", { name: /^Log reading$/ });
+      if ((await log.count()) === 0) throw new SkipFlow("no retest-due proposal open");
+      await ctx.capture("01-retest-proposal");
+      await log.first().click({ timeout: CLICK_TIMEOUT_MS });
+      await ctx.page.waitForTimeout(600);
+      await ctx.capture("02-retest-sheet");
+    },
+  },
+  {
     id: "plan-expand-day",
     desc: "Expand a Plan day row to reveal its per-day actions",
     async run(ctx) {
@@ -344,11 +675,65 @@ export async function runFlows(
     const flowDir = path.join(opts.outDir, "flows", flow.id);
     fs.mkdirSync(flowDir, { recursive: true });
     const steps: StepResult[] = [];
+    const probes: SurfaceProbe[] = [];
+
+    const probeFor = (surface: string): SurfaceProbe => {
+      let p = probes.find((x) => x.surface === surface);
+      if (!p) {
+        p = { surface, seen: [], exercised: [], skipped: [] };
+        probes.push(p);
+      }
+      return p;
+    };
 
     const ctx: FlowContext = {
       page,
       outDir: flowDir,
       programSlug: opts.programSlug,
+      probe: async (surface, root) => {
+        const p = probeFor(surface);
+        const names = await page
+          .locator(`${root} button, ${root} a[href], ${root} input, ${root} summary`)
+          .evaluateAll((els) =>
+            els
+              .map((el) => {
+                const label =
+                  el.getAttribute("aria-label") ??
+                  (el as HTMLElement).innerText ??
+                  el.getAttribute("placeholder") ??
+                  "";
+                return label.trim().split("\n")[0].slice(0, 60);
+              })
+              // The bottom nav and the Next.js dev-tools button are page
+              // chrome, present behind every surface. Counting them made
+              // each sheet look far larger than it is and put a floor
+              // under the miss rate that no flow could ever clear.
+              .filter((n) => n.length > 0)
+              .filter((n) => !/^(DAY|PLAN|RECORD|PROFILE)$/.test(n))
+              .filter((n) => !/Next\.js Dev Tools/i.test(n)),
+          )
+          .catch(() => [] as string[]);
+        for (const n of names) if (!p.seen.includes(n)) p.seen.push(n);
+      },
+      tap: async (surface, name) => {
+        const p = probeFor(surface);
+        const target = page.getByRole("button", { name }).or(page.getByRole("link", { name }));
+        if ((await target.count()) === 0) return false;
+        const label = ((await target.first().textContent()) ?? String(name)).trim().slice(0, 60);
+        try {
+          await target.first().click({ timeout: CLICK_TIMEOUT_MS });
+        } catch {
+          return false;
+        }
+        if (!p.exercised.includes(label)) p.exercised.push(label);
+        if (!p.seen.includes(label)) p.seen.push(label);
+        return true;
+      },
+      note: (surface, name, why) => {
+        const p = probeFor(surface);
+        if (!p.skipped.some((x) => x.name === name)) p.skipped.push({ name, why });
+        if (!p.seen.includes(name)) p.seen.push(name);
+      },
       capture: async (stepName: string) => {
         try {
           await page.screenshot({ path: path.join(flowDir, `${stepName}.png`), fullPage: false });
@@ -367,10 +752,10 @@ export async function runFlows(
 
     try {
       await flow.run(ctx);
-      results.push({ id: flow.id, desc: flow.desc, status: "ok", steps });
+      results.push({ id: flow.id, desc: flow.desc, status: "ok", steps, probes });
     } catch (e) {
       if (e instanceof SkipFlow) {
-        results.push({ id: flow.id, desc: flow.desc, status: "skipped", reason: e.message, steps });
+        results.push({ id: flow.id, desc: flow.desc, status: "skipped", reason: e.message, steps, probes });
       } else {
         results.push({
           id: flow.id,
@@ -378,6 +763,7 @@ export async function runFlows(
           status: "error",
           reason: e instanceof Error ? e.message : String(e),
           steps,
+          probes,
         });
       }
     }

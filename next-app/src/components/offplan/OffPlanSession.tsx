@@ -183,7 +183,7 @@ export function OffPlanSession() {
 
   if (mode === "set" && active) {
     return (
-      <div className="fixed inset-0 z-50 flex flex-col bg-ground">
+      <div data-surface="SetView" className="fixed inset-0 z-50 flex flex-col bg-ground">
         <SetView
           key={`${active.key}:${activeSetIndex}`}
           railExercises={railExercises}
