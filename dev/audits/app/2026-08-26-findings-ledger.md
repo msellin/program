@@ -4,7 +4,7 @@ Everything discovered across three days: the founder's live-workout report,
 the fixes that report led into, the off-plan investigation, the persona-harness
 rebuild, and the bugs the improved harness then found on its own.
 
-**48 findings. 10 reported by the founder; 38 found while working.**
+**54 findings. 10 reported by the founder; 44 found while working.**
 
 Of those 38, **11 were found only because the harness was improved**, and
 **3 of those were invisible on localhost and only appeared against production.**
@@ -108,6 +108,7 @@ server-side state there.
 | F3 | For run-modality programs the prescribed session and the logged data live in different places — doing the run in the session doesn't feed the retest metric | Open |
 | F4 | Off-plan's session header read "121 sets left" — the whole program's accessory inventory presented as one session | Fixed by the off-plan cut |
 | F5 | No persona had ever exercised off-plan: 0 off-plan days across all 15 | Corroborated the cut |
+| F6 | **A 45-minute Zone 1 run showed a rep counter reading 0.** Aerobic, skill and mobility exercises author neither reps nor `hold_seconds` — `aerobic_z1_steady` is `{minutes: 45}`, `om_wall_slides` has no default at all. Found by the harness across nine personas, not by a person | Fixed — timed mode covers minutes |
 
 ---
 
@@ -124,6 +125,12 @@ Each made coverage read lower or higher than the truth.
 | G5 | `tap`'s input fallback wrapped `getByLabel` in `.filter({hasText})`, which excludes inputs — the steppers were unreachable |
 | G6 | Dynamic labels (`"Save — set 1 · 79.5 kg"`) inflated the denominator without bound |
 | G7 | The fleet summary raced under parallel workers — a module-scoped array only ever saw one worker's share |
+| G8 | MoveSheet's destination days are `<input type="radio">`, not buttons — the selector matched none, `selected` stayed null, and the commit button stayed disabled. Presented as "found but click timed out" |
+| G9 | `"Skip"` names both the day row and the sheet's confirm, so the tap resolved to the row behind the scrim |
+| G10 | The move commit relabels to `"Confirm — stack the session"` and needs a SECOND tap when the destination already has a session — which the first enabled day usually is |
+| G11 | The adjacent-duplicate check flagged `overhead-mobility`'s Sat/Sun `block_daily_reset` — a five-minute pre-bed routine doing exactly what it should. False positive; the concern is consecutive LOADED sessions |
+| G12 | A raw `.click()` that cannot land throws and kills the whole flow, where `tap` records one missed control and carries on. Nine flow errors across the fleet came from one such click |
+| G13 | `session-edit-past-set` had accumulated so much exploration that its own assertion had no clean state left to assert against. Split into an assertion flow and a control sweep |
 
 ---
 
@@ -142,7 +149,7 @@ Each made coverage read lower or higher than the truth.
 | # | Finding |
 |---|---|
 | I1 | The check "Skip rest closes the rest takeover" fails. Not yet determined whether the app fails to close it or the harness fails to tap it |
-| I2 | Control coverage has stalled at 61.4%. Scoping `tap` to the surface root — the hypothesis that page-wide `getByRole` was resolving to the Brief behind the overlay — made no difference. SetView sits at 7 of 17 and the cause is not yet known |
+| I2 | ~~Control coverage stalled at 61.4%~~ **Resolved.** The cause was never one thing: dynamic labels inflating the denominator, page chrome in the count, probe and tap deriving labels differently, anchored regexes, and inputs unreachable by tap. Fleet control coverage now 75%+, best persona 85% |
 
 ---
 
