@@ -116,6 +116,7 @@ export function MoveSheet({
       role="dialog"
       aria-modal="true"
       aria-labelledby="movesheet-title"
+      data-surface="MoveSheet"
       onClick={onClose}
       className="fixed inset-0 z-50 bg-ground/80 flex items-end sm:items-center justify-center"
     >

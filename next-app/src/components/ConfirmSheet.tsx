@@ -69,6 +69,7 @@ export function ConfirmSheet({
       role="dialog"
       aria-modal="true"
       aria-labelledby="cs-title"
+      data-surface="ConfirmSheet"
       onClick={onCancel}
       className="fixed inset-0 z-50 bg-ground/80 flex items-end sm:items-center justify-center p-3"
     >

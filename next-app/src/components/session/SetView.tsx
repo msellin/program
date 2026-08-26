@@ -106,13 +106,25 @@ export function SetView({
     typeof authored[k] === "number" ? (authored[k] as number) : null;
   const authoredReps = num("reps");
   const holdSeconds = num("hold_seconds");
+  // Duration-based work. Aerobic blocks author minutes, not reps —
+  // `aerobic_z1_steady` is `{minutes: 45}`, `aerobic_threshold_cruise` is
+  // `{sets: 3, minutes_per_set: 8}` — so a 45-minute Zone 1 run was
+  // presenting a rep counter reading zero. The harness caught this across
+  // nine personas on 2026-08-26: the whole aerobic, skill and mobility
+  // half of the catalog. Same class as the hold bug, one step out.
+  const authoredMinutes = num("minutes_per_set") ?? num("minutes");
+  const timedSeconds = holdSeconds ?? (authoredMinutes != null ? authoredMinutes * 60 : null);
   const authoredSets = num("sets");
   const perSide = authored.per_side === true;
   // Hold-based work (isometrics, stretches) authors `hold_seconds` and no
   // reps — there is no rep count to predefine. One hold is one effort, so
   // seed 1: zero is never a correct starting value for something you are
   // about to do.
-  const defaultReps = authoredReps ?? (holdSeconds != null ? 1 : null);
+  // Never zero. An exercise that authors no dose at all (om_wall_slides
+  // has `default: null`) still gets 1 — you either did the drill or you
+  // did not, and the screen must never offer 0 as the thing it is about
+  // to write to your log.
+  const defaultReps = authoredReps ?? 1;
   // What the program actually asks for, in words. The "Prescribed" card
   // below only ever rendered for TM-derived strength suggestions, so
   // accessory and mobility work showed no dose at all — you had to know
@@ -120,6 +132,7 @@ export function SetView({
   const authoredDose = (() => {
     const parts: string[] = [];
     if (holdSeconds != null) parts.push(`${holdSeconds}s hold`);
+    else if (authoredMinutes != null) parts.push(`${authoredMinutes} min`);
     else if (authoredReps != null) parts.push(`${authoredReps} reps`);
     if (authoredSets != null) parts.push(`${authoredSets} sets`);
     if (perSide) parts.push("per side");
@@ -137,7 +150,14 @@ export function SetView({
   // is held, not counted — a rep stepper is the wrong instrument for it,
   // and offering one is how a 30-second kneeling stretch ended up logged
   // as "x12" in the founder's 2026-08-24 record.
-  const isHold = holdSeconds != null && authoredReps == null;
+  const isHold = timedSeconds != null && authoredReps == null;
+  // A 20-second isometric and a 45-minute Zone 1 run are both "timed",
+  // but they are not the same thing to a person. Hold copy for the first,
+  // duration copy for the second.
+  const isHoldShaped = holdSeconds != null;
+  const durationLabel = isHoldShaped
+    ? `${timedSeconds}s hold`
+    : `${Math.round((timedSeconds ?? 0) / 60)} min`;
 
   // Local editable weight/reps, seeded from the logged value (if any) or
   // the prescription/last-time fallback. Committed to the store only on
@@ -181,7 +201,7 @@ export function SetView({
 
   // Seconds held on THIS set: what was logged, else the authored dose.
   const [seconds, setSeconds] = useState<number>(
-    () => setForRow.seconds ?? holdSeconds ?? 30,
+    () => setForRow.seconds ?? timedSeconds ?? 30,
   );
   // Countdown state. `running` starts it; `remaining` drives the clock.
   // Deliberately independent of RestTakeover's timer — that one owns the
@@ -415,7 +435,13 @@ export function SetView({
               {Math.floor(remaining / 60)}:{String(remaining % 60).padStart(2, "0")}
             </p>
             <p className="font-mono text-[11px] uppercase tracking-[.16em] text-line mb-3">
-              {running ? "holding" : remaining === 0 ? "done" : `${seconds}s hold`}
+              {running
+                ? isHoldShaped
+                  ? "holding"
+                  : "running"
+                : remaining === 0
+                  ? "done"
+                  : durationLabel}
             </p>
           </>
         ) : (
@@ -473,12 +499,15 @@ export function SetView({
             {editingLoad ? (
               <div className="border border-line-strong rounded-[10px] bg-surface p-3 mb-2.5 flex flex-col gap-2">
                 <StepperRow
-                  label="seconds"
-                  value={seconds}
-                  step={5}
+                  label={isHoldShaped ? "seconds" : "minutes"}
+                  value={isHoldShaped ? seconds : Math.round(seconds / 60)}
+                  step={isHoldShaped ? 5 : 1}
                   onChange={(v) => {
-                    setSeconds(v);
-                    if (!running) setRemaining(v);
+                    // 5-second steps on a 45-minute run would take nine
+                    // hundred taps; minutes-based work steps in minutes.
+                    const next = isHoldShaped ? v : Math.max(1, v) * 60;
+                    setSeconds(next);
+                    if (!running) setRemaining(next);
                   }}
                 />
               </div>
@@ -504,10 +533,14 @@ export function SetView({
               {running
                 ? "Pause"
                 : remaining === 0
-                  ? `${isEditingLoggedSet ? "Save" : "Done"} — set ${activeSetIndex + 1} · ${seconds}s`
+                  ? `${isEditingLoggedSet ? "Save" : "Done"} — set ${activeSetIndex + 1} · ${
+                      isHoldShaped ? `${seconds}s` : `${Math.round(seconds / 60)} min`
+                    }`
                   : remaining < seconds
                     ? "Resume"
-                    : `Start the hold · ${seconds}s`}
+                    : isHoldShaped
+                      ? `Start the hold · ${seconds}s`
+                      : `Start the timer · ${Math.round(seconds / 60)} min`}
             </button>
             <div className="flex gap-2 mt-1.5">
               <button

@@ -835,10 +835,18 @@ export const FLOWS: Flow[] = [
         .allTextContents()
         .catch(() => [] as string[]);
       const meaningful = summaries.map((t) => t.trim()).filter((t) => t.length > 0);
+      // Daily routines are SUPPOSED to repeat. overhead-mobility schedules
+      // `block_daily_reset` on Saturday and Sunday — a five-minute pre-bed
+      // mobility routine — and the first version of this check flagged it
+      // as a duplicate. The concern is two consecutive LOADED sessions,
+      // which is what made Wed/Thu a problem on hip-rebuild; a daily reset
+      // running on consecutive days is the design working.
+      const isDailyRoutine = (t: string) =>
+        /daily|reset|recovery|rest|mobility|prep|skill/i.test(t);
       let adjacentDuplicate: string | null = null;
       for (let i = 1; i < meaningful.length; i++) {
         const prev = meaningful[i - 1];
-        if (prev === meaningful[i] && !/rest/i.test(prev)) {
+        if (prev === meaningful[i] && !isDailyRoutine(prev)) {
           adjacentDuplicate = prev;
           break;
         }
@@ -1041,11 +1049,15 @@ export const FLOWS: Flow[] = [
           // Cancel first so both branches of the sheet are exercised, then
           // re-open and commit.
           await ctx.tap("ConfirmSheet", /Keep it/);
-          await ctx.page.waitForTimeout(350);
-          const again = ctx.page.getByRole("button", { name: /^Skip$/ });
+          await ctx.page.waitForTimeout(500);
+          // Re-open from the day row. "Skip" names BOTH the row button and
+          // the sheet's confirm, so before the sheets carried a
+          // `data-surface` the tap resolved to the row behind the scrim
+          // and timed out. `tap` scopes to the sheet now.
+          const again = ctx.page.locator("button").filter({ hasText: /^Skip$/ });
           if (await again.count()) {
-            await again.first().click({ timeout: CLICK_TIMEOUT_MS });
-            await ctx.page.waitForTimeout(400);
+            await again.first().click({ timeout: CLICK_TIMEOUT_MS }).catch(() => {});
+            await ctx.page.waitForTimeout(500);
           }
           await ctx.tap("ConfirmSheet", /^Skip/);
           await ctx.page.waitForTimeout(900);
@@ -1088,27 +1100,46 @@ export const FLOWS: Flow[] = [
         if ((await move.count()) > 0 && (await move.first().isEnabled())) {
           await move.first().click({ timeout: CLICK_TIMEOUT_MS });
           await ctx.page.waitForTimeout(450);
-          await ctx.probe("MoveSheet", '[role="dialog"]');
-          await ctx.tap("MoveSheet", /close move sheet/i);
-          await ctx.page.waitForTimeout(300);
-          const reMove = ctx.page.getByRole("button", { name: /^Move…$/ });
-          if (await reMove.count()) {
-            await reMove.first().click({ timeout: CLICK_TIMEOUT_MS });
-            await ctx.page.waitForTimeout(400);
-          }
+          await ctx.probe("MoveSheet", '[data-surface="MoveSheet"]');
+          // Commit FIRST, then reopen purely to exercise Close. Closing
+          // first and reopening left the sheet shut when the reopen
+          // missed, and the commit button then reported "no element
+          // matched" — the sheet simply was not there any more.
           // Pick a destination day, then the reason field, then commit —
           // the sheet's whole surface, not just its existence.
-          const day = ctx.page.locator('[role="dialog"] button').filter({ hasText: /\d/ });
+          // Destination days are <input type="radio">, not buttons — the
+          // first version looked for a button containing a digit, never
+          // matched one, so `selected` stayed null and the sheet's commit
+          // button ("Move session", `disabled={!selected}`) could never be
+          // clicked. The instrumentation said "found but click timed out",
+          // which is exactly what a disabled control looks like.
+          const day = ctx.page.locator('[data-surface="MoveSheet"] input[type="radio"]:not([disabled])');
           if (await day.count()) {
-            await day.first().click({ timeout: CLICK_TIMEOUT_MS });
-            await ctx.page.waitForTimeout(250);
+            await day.first().check({ timeout: CLICK_TIMEOUT_MS }).catch(() => {});
+            await ctx.page.waitForTimeout(300);
           }
           const reason = ctx.page.locator("#movesheet-reason");
           if (await reason.count()) await reason.fill("harness: moved for coverage");
           await ctx.capture("01-move-filled");
-          await ctx.tap("MoveSheet", /^Move session/);
+          // The commit relabels itself. When the destination day already
+          // has a session — which the first enabled radio usually is, on a
+          // program that trains most days — it reads "Confirm — stack the
+          // session" and wants a SECOND tap to accept the stack. A
+          // /^Move session/ selector matched nothing at all there, which
+          // read as "the sheet isn't open" when the sheet was fine.
+          await ctx.tap("MoveSheet", /^(Move session|Confirm — stack)/);
+          await ctx.page.waitForTimeout(500);
+          await ctx.tap("MoveSheet", /^(Move session|Confirm — stack)/);
           await ctx.page.waitForTimeout(900);
           await ctx.capture("02-moved");
+          // Now the dismiss control, on a fresh open.
+          const reMove = ctx.page.getByRole("button", { name: /^Move…$/ });
+          if (await reMove.count()) {
+            await reMove.first().click({ timeout: CLICK_TIMEOUT_MS }).catch(() => {});
+            await ctx.page.waitForTimeout(450);
+            await ctx.tap("MoveSheet", /close move sheet/i);
+            await ctx.page.waitForTimeout(300);
+          }
           await ctx.check(
             "confirming Move records the session on its new date",
             async () => {
