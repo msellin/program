@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { humanPhaseName, phaseProgress, programDisplayName } from "@/lib/day-format";
+import { humanPhaseName, phaseProgress, programDisplayName, humanBlockName } from "@/lib/day-format";
 import { entrySets } from "@/lib/useStore";
 import { ProposalCard } from "@/components/workout/ProposalCard";
 import { CycleStartCard } from "@/components/session/CycleStartCard";
@@ -58,9 +58,15 @@ export function BriefView({
     return sum + d;
   }, 0);
   const exWord = railExercises.length === 1 ? "exercise" : "exercises";
-  const summary = totalMinutes
-    ? `${railExercises.length} ${exWord} · about ${totalMinutes} min`
-    : `${railExercises.length} ${exWord}`;
+  // "0 exercises · about 40 min" for a threshold row is a count of the
+  // wrong thing. When a session prescribes in prose rather than sets, the
+  // duration IS the summary.
+  const summary =
+    railExercises.length === 0 && totalMinutes
+      ? `About ${totalMinutes} min`
+      : totalMinutes
+        ? `${railExercises.length} ${exWord} · about ${totalMinutes} min`
+        : `${railExercises.length} ${exWord}`;
 
   const progressLabel = phase ? humanPhaseName(phase.name) : null;
   const progressDetail = phase ? phaseProgress(phase, activeDate) : null;
@@ -76,7 +82,26 @@ export function BriefView({
         (s) => s.weight_kg != null && s.reps != null,
       ).length
     : 0;
-  const startLabel = !hero
+  // Prescription-only sessions (2026-08-26).
+  //
+  // Rowing's six blocks author ZERO items — they are described by a `note`
+  // and `duration_min`, not by a list of exercises. The Brief only knew how
+  // to render a session as exercise rows, so a rowing user saw "0 exercises
+  // · about 40 min", an empty "The whole session", and a Start button that
+  // started nothing. The prescription was in the data the whole time:
+  // block_threshold_row's note is "4×8 min @ ~5-10 sec/500m over 2K pace,
+  // 2 min rest. HR 82-88%".
+  //
+  // Same shape for any block that prescribes work in prose rather than
+  // sets — this is not rowing-specific.
+  const prescriptionBlocks = railExercises.length === 0
+    ? blocks.filter((b) => (b.note ?? "").trim().length > 0)
+    : [];
+  const isPrescriptionSession = prescriptionBlocks.length > 0;
+
+  const startLabel = isPrescriptionSession
+    ? "Log this session"
+    : !hero
     ? "Start"
     : heroLoggedCount > 0
       ? `Continue — ${hero.exercise.name}, set ${Math.min(heroLoggedCount + 1, hero.rowCount)}`
@@ -152,9 +177,27 @@ export function BriefView({
 
         <div>
           <p className="font-mono text-[10px] uppercase tracking-[.16em] text-muted mb-[9px]">
-            The whole session
+            {isPrescriptionSession ? "Today's session" : "The whole session"}
           </p>
           <div className="space-y-[7px]">
+            {prescriptionBlocks.map((b) => (
+              <div
+                key={b.id}
+                className="rounded border border-line-soft bg-surface px-3.5 py-[13px]"
+              >
+                <p className="text-[15px] font-semibold text-strong tracking-[-.01em] mb-0.5">
+                  {humanBlockName(b.name)}
+                </p>
+                {b.duration_min ? (
+                  <p className="font-mono text-[10px] uppercase tracking-[.14em] text-line mb-1">
+                    {Array.isArray(b.duration_min)
+                      ? `${b.duration_min[0]}–${b.duration_min[1]} min`
+                      : `${b.duration_min} min`}
+                  </p>
+                ) : null}
+                <p className="text-[13.5px] leading-snug text-ink">{b.note}</p>
+              </div>
+            ))}
             {railExercises.map((r) => {
               const entry = store.logs[activeDate]?.exercises[r.key] ?? null;
               const loggedCount = entrySets(entry).filter(
@@ -226,7 +269,15 @@ export function BriefView({
         <button
           type="button"
           disabled={gateUnresolved}
-          onClick={() => onStart()}
+          onClick={() => {
+            // A prescription-only session has no sets to step through —
+            // the row IS the session, and it is recorded as an activity,
+            // which is also where the program's retest metric reads from
+            // (`runs[].total_seconds where activity_type == 'row'`).
+            // Starting the set flow here opened an empty shell.
+            if (isPrescriptionSession) onOpenSheet("off-plan");
+            else onStart();
+          }}
           className={
             "w-full h-[60px] rounded-[10px] text-[17px] font-semibold tracking-[-.01em] " +
             (gateUnresolved

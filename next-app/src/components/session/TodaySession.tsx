@@ -488,6 +488,20 @@ export function TodaySession({
             );
             const blockWord = g.blocks.length === 1 ? "block" : "blocks";
             const exWord = totalExercises === 1 ? "exercise" : "exercises";
+            // Blocks that prescribe in prose rather than sets — every
+            // rowing block is one — counted as zero exercises, so Day
+            // announced "1 block · 0 exercises" for a 40-minute threshold
+            // row. Give the duration those blocks actually author.
+            const prescriptionMinutes = g.blocks.reduce((n, b) => {
+              if ((b.items?.length ?? 0) > 0) return n;
+              const d = (b as unknown as { duration_min?: number | number[] }).duration_min;
+              if (Array.isArray(d)) return n + (d[1] ?? d[0] ?? 0);
+              return n + (typeof d === "number" ? d : 0);
+            }, 0);
+            const summary =
+              totalExercises === 0 && prescriptionMinutes > 0
+                ? `${g.blocks.length} ${blockWord} · about ${prescriptionMinutes} min`
+                : `${g.blocks.length} ${blockWord} · ${totalExercises} ${exWord}`;
             // Batch 33 · M6 · category accent stripe on the workout summary
             // block. Same DashboardBlock `accent` prop already used on the
             // Programs catalog. Mapping cribbed from CATEGORY_ACCENT in
@@ -518,7 +532,7 @@ export function TodaySession({
                     ? `Today · ${programDisplayName(g.program, activeSlugs[gi])}`
                     : "Today"
                 }
-                title={`${g.blocks.length} ${blockWord} · ${totalExercises} ${exWord}`}
+                title={summary}
                 lede={
                   groupPhase
                     ? `${humanPhaseName(groupPhase.name)}${phaseProgress(groupPhase, activeDate) ? " · " + phaseProgress(groupPhase, activeDate) : ""}`
