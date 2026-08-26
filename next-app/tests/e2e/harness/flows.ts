@@ -200,6 +200,29 @@ async function openBrief(ctx: FlowContext): Promise<void> {
   );
 }
 
+/**
+ * Enter the set flow, or skip when this session has none.
+ *
+ * A prescription-only session (rowing, any run-category block) opens the
+ * activity sheet rather than SetView. Without this guard every set-flow
+ * flow entered anyway, found no controls, and burned its bounded timeouts
+ * one after another — which blew the persona's whole 900s budget and
+ * cascaded "Target page, context or browser has been closed" through all
+ * 24 flows. The rowing personas looked like they were skipping; they were
+ * dying.
+ */
+async function enterSetFlow(ctx: FlowContext): Promise<void> {
+  await openBrief(ctx);
+  await ctx.page
+    .getByRole("button", { name: /^(Start|Continue) —|^Log this session$/ })
+    .first()
+    .click({ timeout: CLICK_TIMEOUT_MS });
+  await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
+  if ((await ctx.page.locator('[data-surface="SetView"]').count()) === 0) {
+    throw new SkipFlow("prescription session — logged as an activity, no set flow");
+  }
+}
+
 /** Log the currently-shown set, whatever its shape. */
 async function logCurrentSet(ctx: FlowContext): Promise<void> {
   const done = ctx.page.getByRole("button", { name: /^(Done|Save) — set \d+/ });
@@ -249,12 +272,7 @@ export const FLOWS: Flow[] = [
       // muddled the state, and the assertion failed on personas where a
       // timer was still up. The assertion was right; the flow around it
       // was not. Control exploration now lives in `session-controls`.
-      await openBrief(ctx);
-      await ctx.page
-        .getByRole("button", { name: /^(Start|Continue) —|^Log this session$/ })
-        .first()
-        .click({ timeout: CLICK_TIMEOUT_MS });
-      await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
+      await enterSetFlow(ctx);
       await logCurrentSet(ctx);
       await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
       await ctx.tap("RestTakeover", /skip rest/i);
@@ -313,12 +331,7 @@ export const FLOWS: Flow[] = [
       // The exploration half of what `session-edit-past-set` used to do.
       // Coverage work, no state assertions: it moves between sets and
       // exercises on purpose, so nothing here can assume a stable view.
-      await openBrief(ctx);
-      await ctx.page
-        .getByRole("button", { name: /^(Start|Continue) —|^Log this session$/ })
-        .first()
-        .click({ timeout: CLICK_TIMEOUT_MS });
-      await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
+      await enterSetFlow(ctx);
       await ctx.probe("SetView", '[data-surface="SetView"]');
       await ctx.capture("01-set");
 
@@ -411,12 +424,7 @@ export const FLOWS: Flow[] = [
     id: "session-rest-extend",
     desc: "The rest takeover — timer, effort scale, jump sheet",
     async run(ctx) {
-      await openBrief(ctx);
-      await ctx.page
-        .getByRole("button", { name: /^(Start|Continue) —|^Log this session$/ })
-        .first()
-        .click({ timeout: CLICK_TIMEOUT_MS });
-      await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
+      await enterSetFlow(ctx);
       await logCurrentSet(ctx);
       await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
       const rest = ctx.page.locator('[data-surface="RestTakeover"]');
@@ -503,12 +511,7 @@ export const FLOWS: Flow[] = [
     id: "session-overflow-sheet",
     desc: "The ⋯ sheet on the set screen",
     async run(ctx) {
-      await openBrief(ctx);
-      await ctx.page
-        .getByRole("button", { name: /^(Start|Continue) —|^Log this session$/ })
-        .first()
-        .click({ timeout: CLICK_TIMEOUT_MS });
-      await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
+      await enterSetFlow(ctx);
       const more = ctx.page.getByRole("button", { name: /more options/i });
       if ((await more.count()) === 0) throw new SkipFlow("no overflow control on the set screen");
       await more.click({ timeout: CLICK_TIMEOUT_MS });
@@ -616,12 +619,7 @@ export const FLOWS: Flow[] = [
     id: "session-note-sheet",
     desc: "⋯ → Note for this exercise — the only place notes still live",
     async run(ctx) {
-      await openBrief(ctx);
-      await ctx.page
-        .getByRole("button", { name: /^(Start|Continue) —|^Log this session$/ })
-        .first()
-        .click({ timeout: CLICK_TIMEOUT_MS });
-      await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
+      await enterSetFlow(ctx);
       const more = ctx.page.getByRole("button", { name: /more options/i });
       if ((await more.count()) === 0) throw new SkipFlow("no overflow control");
       await more.click({ timeout: CLICK_TIMEOUT_MS });
@@ -648,12 +646,7 @@ export const FLOWS: Flow[] = [
     id: "session-exercise-details",
     desc: "⋯ → Form cues and warnings",
     async run(ctx) {
-      await openBrief(ctx);
-      await ctx.page
-        .getByRole("button", { name: /^(Start|Continue) —|^Log this session$/ })
-        .first()
-        .click({ timeout: CLICK_TIMEOUT_MS });
-      await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
+      await enterSetFlow(ctx);
       const more = ctx.page.getByRole("button", { name: /more options/i });
       if ((await more.count()) === 0) throw new SkipFlow("no overflow control");
       await more.click({ timeout: CLICK_TIMEOUT_MS });
@@ -708,12 +701,7 @@ export const FLOWS: Flow[] = [
     id: "session-video",
     desc: "⋯ → Watch the lift",
     async run(ctx) {
-      await openBrief(ctx);
-      await ctx.page
-        .getByRole("button", { name: /^(Start|Continue) —|^Log this session$/ })
-        .first()
-        .click({ timeout: CLICK_TIMEOUT_MS });
-      await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
+      await enterSetFlow(ctx);
       const more = ctx.page.getByRole("button", { name: /more options/i });
       if ((await more.count()) === 0) throw new SkipFlow("no overflow control");
       await more.click({ timeout: CLICK_TIMEOUT_MS });
@@ -1032,12 +1020,7 @@ export const FLOWS: Flow[] = [
     desc: "⋯ → Finish here — commits a partial session",
     destructive: true,
     async run(ctx) {
-      await openBrief(ctx);
-      await ctx.page
-        .getByRole("button", { name: /^(Start|Continue) —|^Log this session$/ })
-        .first()
-        .click({ timeout: CLICK_TIMEOUT_MS });
-      await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
+      await enterSetFlow(ctx);
       const more = ctx.page.getByRole("button", { name: /more options/i });
       if ((await more.count()) === 0) throw new SkipFlow("no overflow control");
       await more.click({ timeout: CLICK_TIMEOUT_MS });
@@ -1065,12 +1048,7 @@ export const FLOWS: Flow[] = [
     desc: "Note sheet → Stop session — ends the workout",
     destructive: true,
     async run(ctx) {
-      await openBrief(ctx);
-      await ctx.page
-        .getByRole("button", { name: /^(Start|Continue) —|^Log this session$/ })
-        .first()
-        .click({ timeout: CLICK_TIMEOUT_MS });
-      await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
+      await enterSetFlow(ctx);
       const more = ctx.page.getByRole("button", { name: /more options/i });
       if ((await more.count()) === 0) throw new SkipFlow("no overflow control");
       await more.click({ timeout: CLICK_TIMEOUT_MS });
