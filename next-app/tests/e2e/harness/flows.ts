@@ -77,6 +77,19 @@ export type FlowContext = {
 export type Flow = {
   id: string;
   desc: string;
+  /**
+   * Commits something — finishes a session, skips a day, moves a block,
+   * writes an activity. Destructive flows run LAST (see `runFlows`), which
+   * is the only real constraint on driving them.
+   *
+   * The earlier version refused to touch these at all, on the theory that
+   * mutating a persona would make the next sweep incomparable. That was
+   * simply wrong: `resetTestUser` DELETES the auth account at the start of
+   * every persona run and the simulator rebuilds state from scratch, so
+   * nothing a flow does survives to the next sweep. The only thing that
+   * can break is a later flow in the SAME run — which ordering fixes.
+   */
+  destructive?: boolean;
   run: (ctx: FlowContext) => Promise<void>;
 };
 
@@ -218,14 +231,14 @@ export const FLOWS: Flow[] = [
         // The steppers themselves — the controls that actually change what
         // gets logged. Opening the panel and photographing it proved
         // nothing about whether +/- work.
-        await ctx.tap("SetView", /^\+$/);
+        await ctx.tap("SetView", /^\+/);
         await ctx.page.waitForTimeout(200);
-        await ctx.tap("SetView", /^−$/);
+        await ctx.tap("SetView", /^−/);
         await ctx.page.waitForTimeout(200);
         await ctx.capture("03b-stepper-used");
         await ctx.tap("SetView", /back to prescription/i);
         await ctx.page.waitForTimeout(250);
-        await ctx.tap("SetView", /^Hide$/);
+        await ctx.tap("SetView", /^Hide/);
         await ctx.page.waitForTimeout(200);
       }
 
@@ -239,18 +252,25 @@ export const FLOWS: Flow[] = [
         await ctx.page.waitForTimeout(250);
       }
       await ctx.capture("05-pips-walked");
-      const railTab = ctx.page.locator("div.overflow-x-auto button").nth(1);
-      if (await railTab.count()) {
-        const label = ((await railTab.textContent()) ?? "").trim().split("\n")[0];
-        if (label) {
-          await ctx.tap("SetView", new RegExp(`^${label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`));
-          await ctx.page.waitForTimeout(400);
-          await ctx.capture("06-rail-switched");
-        }
+      // Every rail tab, not just the second one. The rail is how you move
+      // between exercises mid-session and each tab is its own control.
+      const rail = ctx.page.locator("div.overflow-x-auto button");
+      const railCount = Math.min(await rail.count(), 6);
+      for (let i = 0; i < railCount; i++) {
+        const label = ((await rail.nth(i).textContent()) ?? "").trim().split("\n")[0];
+        if (!label) continue;
+        await ctx.tap("SetView", new RegExp(`^${label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`));
+        await ctx.page.waitForTimeout(350);
       }
-      await ctx.tap("SetView", /^More options$/);
+      await ctx.capture("06-rail-walked");
+      // The steppers' own inputs, and the confirm button as labelled here.
+      await ctx.tap("SetView", /^kg$/);
+      await ctx.tap("SetView", /^reps$/);
+      await ctx.tap("SetView", /change the weight/i);
+      await ctx.tap("SetView", /^(Done|Save) — set/);
+      await ctx.tap("SetView", /^More options/);
       await ctx.page.waitForTimeout(300);
-      await ctx.tap("SetView", /^Close$/);
+      await ctx.tap("SetView", /^Close/);
       await ctx.page.waitForTimeout(250);
       await ctx.tap("SetView", /back to brief/i);
       await ctx.page.waitForTimeout(300);
@@ -284,12 +304,16 @@ export const FLOWS: Flow[] = [
       for (const effort of [/^Easy/, /^Grind/, /^Solid/]) {
         if (await ctx.tap("RestTakeover", effort)) {
           await ctx.page.waitForTimeout(350);
-          await ctx.tap("RestTakeover", /^change$/);
+          await ctx.tap("RestTakeover", /^change/);
           await ctx.page.waitForTimeout(250);
         }
       }
       await ctx.capture("02-effort-logged");
-      await add.click({ timeout: CLICK_TIMEOUT_MS });
+      // +30s through `tap` rather than a bare click: the rest takeover
+      // closes the moment the timer reaches zero, and a raw click on a
+      // detached control burned the 15s bound and failed the whole flow
+      // before its remaining taps ever ran.
+      await ctx.tap("RestTakeover", /add 30 seconds/i);
       await ctx.page.waitForTimeout(400);
       await ctx.capture("03-rest-extended");
 
@@ -299,10 +323,9 @@ export const FLOWS: Flow[] = [
         await ctx.page.waitForTimeout(400);
         await ctx.probe("RestTakeover", '[data-surface="RestTakeover"] [role="dialog"]');
         await ctx.capture("04-jump-sheet");
-        await ctx.tap("RestTakeover", /^Cancel$/);
+        await ctx.tap("RestTakeover", /^Cancel/);
         await ctx.page.waitForTimeout(300);
       }
-      ctx.note("RestTakeover", "Skip rest", "ends the rest the other flows depend on");
     },
   },
   {
@@ -323,12 +346,10 @@ export const FLOWS: Flow[] = [
       // Two rows write to the log the moment they are tapped. A flow
       // photographs; committing these would leave the persona with a
       // session it never did and make the next sweep incomparable.
-      ctx.note("OverflowSheet", "Finish here", "mutating — marks the exercise done");
-      ctx.note("OverflowSheet", "I already did this", "mutating — writes every prescribed set");
 
       // "Add a set" is reversible in practice (it extends rowCount for the
       // day only) and is the one row whose effect is worth photographing.
-      if (await ctx.tap("OverflowSheet", /^Add a set$/)) {
+      if (await ctx.tap("OverflowSheet", /^Add a set/)) {
         await ctx.page.waitForTimeout(500);
         await ctx.capture("02-after-add-set");
         // Re-open for the remaining rows — tapping a row closes the sheet.
@@ -338,17 +359,16 @@ export const FLOWS: Flow[] = [
           await ctx.page.waitForTimeout(350);
         }
       }
-      if (await ctx.tap("OverflowSheet", /^Note for this exercise$/)) {
+      if (await ctx.tap("OverflowSheet", /^Note for this exercise/)) {
         await ctx.page.waitForTimeout(450);
         await ctx.probe("NoteSheet", '[data-surface="NoteSheet"]');
         // The quick-note chips are the fastest path to a real note, and
         // the reason the sheet exists.
-        await ctx.tap("NoteSheet", /^Felt heavy$/);
+        await ctx.tap("NoteSheet", /^Felt heavy/);
         await ctx.page.waitForTimeout(200);
-        await ctx.tap("NoteSheet", /^Form broke down$/);
+        await ctx.tap("NoteSheet", /^Form broke down/);
         await ctx.page.waitForTimeout(200);
         await ctx.capture("03-note-chips");
-        ctx.note("NoteSheet", "Stop session", "mutating — ends the workout the other flows need");
         await ctx.tap("NoteSheet", /^Save to /);
         await ctx.page.waitForTimeout(400);
         const reopen2 = ctx.page.getByRole("button", { name: /more options/i });
@@ -361,7 +381,8 @@ export const FLOWS: Flow[] = [
         await ctx.page.waitForTimeout(500);
         await ctx.probe("ExerciseDetailsSheet", '[role="dialog"]:not([data-surface])');
         await ctx.capture("04-form-cues");
-        await ctx.tap("ExerciseDetailsSheet", /^Close$/);
+        await ctx.tap("ExerciseDetailsSheet", /^Close/);
+        await ctx.page.waitForTimeout(250);
         await ctx.page.waitForTimeout(300);
       }
     },
@@ -386,14 +407,11 @@ export const FLOWS: Flow[] = [
         // its controls count toward coverage even where driving them would
         // write a run the persona never did.
         await ctx.probe("OffPlanSheet", '[data-surface="OffPlanSheet"]');
-        await ctx.tap("OffPlanSheet", /^Warm-up \+ cool-down$/);
+        await ctx.tap("OffPlanSheet", /^Warm-up \+ cool-down/);
         await ctx.page.waitForTimeout(250);
         await ctx.capture("03-activity-options");
-        ctx.note("OffPlanSheet", "Save activity", "mutating — would log a run the persona never did");
-        ctx.note("OffPlanSheet", "Log session", "mutating — writes the activity to the log");
-        ctx.note("OffPlanSheet", "Import GPX", "opens a native file picker the harness cannot drive");
       }
-      await ctx.tap("OffPlanSheet", /^Close$/);
+      await ctx.tap("OffPlanSheet", /^Close/);
     },
   },
   {
@@ -422,7 +440,7 @@ export const FLOWS: Flow[] = [
         await ctx.capture("02-note-typed");
       }
       ctx.note("NoteSheet", "Stop session", "mutating — ends the workout the other flows need");
-      await ctx.tap("NoteSheet", /^(Close|Save|Done)$/);
+      await ctx.tap("NoteSheet", /^(Close|Save|Done)/);
     },
   },
   {
@@ -657,13 +675,183 @@ export const FLOWS: Flow[] = [
       await ctx.capture("02-day-expanded");
     },
   },
+  // ---- Destructive flows. These COMMIT, and run last. ----
+  {
+    id: "activity-log-commit",
+    desc: "Log a real activity through the run/row/class form",
+    destructive: true,
+    async run(ctx) {
+      await openBrief(ctx);
+      const footer = ctx.page.getByRole("button", { name: /log a run, row, or class/i });
+      if ((await footer.count()) === 0) throw new SkipFlow("no activity footer on the Brief");
+      await footer.click({ timeout: CLICK_TIMEOUT_MS });
+      await ctx.page.waitForTimeout(400);
+      if (!(await ctx.tap("OffPlanSheet", /a run, a row, a class/i))) {
+        throw new SkipFlow("activity form did not open");
+      }
+      await ctx.page.waitForTimeout(400);
+      await ctx.probe("OffPlanSheet", '[data-surface="OffPlanSheet"]');
+
+      // GPX import is drivable after all — the picker is a real
+      // <input type="file">, and Playwright sets files on it directly
+      // rather than going through the OS dialog.
+      const gpx = ctx.page.locator('input[type="file"]');
+      if (await gpx.count()) {
+        ctx.note("OffPlanSheet", "Import GPX", "input present; no fixture file to attach");
+      }
+      await ctx.tap("OffPlanSheet", /^Log session/);
+      await ctx.page.waitForTimeout(700);
+      await ctx.capture("01-activity-logged");
+    },
+  },
+  {
+    id: "session-finish-here",
+    desc: "⋯ → Finish here — commits a partial session",
+    destructive: true,
+    async run(ctx) {
+      await openBrief(ctx);
+      await ctx.page.getByRole("button", { name: /^(Start|Continue) —/ }).click({ timeout: CLICK_TIMEOUT_MS });
+      await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
+      const more = ctx.page.getByRole("button", { name: /more options/i });
+      if ((await more.count()) === 0) throw new SkipFlow("no overflow control");
+      await more.click({ timeout: CLICK_TIMEOUT_MS });
+      await ctx.page.waitForTimeout(400);
+      await ctx.probe("OverflowSheet", '[data-surface="OverflowSheet"]');
+      if (!(await ctx.tap("OverflowSheet", /^I already did this/))) {
+        throw new SkipFlow("no mark-all row");
+      }
+      await ctx.page.waitForTimeout(700);
+      await ctx.capture("01-marked-all-prescribed");
+
+      // And the other commit path, on the next exercise.
+      const more2 = ctx.page.getByRole("button", { name: /more options/i });
+      if (await more2.count()) {
+        await more2.click({ timeout: CLICK_TIMEOUT_MS });
+        await ctx.page.waitForTimeout(400);
+        await ctx.tap("OverflowSheet", /^Finish here/);
+        await ctx.page.waitForTimeout(600);
+        await ctx.capture("02-finished-here");
+      }
+    },
+  },
+  {
+    id: "session-stop",
+    desc: "Note sheet → Stop session — ends the workout",
+    destructive: true,
+    async run(ctx) {
+      await openBrief(ctx);
+      await ctx.page.getByRole("button", { name: /^(Start|Continue) —/ }).click({ timeout: CLICK_TIMEOUT_MS });
+      await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
+      const more = ctx.page.getByRole("button", { name: /more options/i });
+      if ((await more.count()) === 0) throw new SkipFlow("no overflow control");
+      await more.click({ timeout: CLICK_TIMEOUT_MS });
+      await ctx.page.waitForTimeout(400);
+      if (!(await ctx.tap("OverflowSheet", /^Note for this exercise/))) {
+        throw new SkipFlow("no note row");
+      }
+      await ctx.page.waitForTimeout(450);
+      await ctx.probe("NoteSheet", '[data-surface="NoteSheet"]');
+      await ctx.tap("NoteSheet", /^Pain or tweak/);
+      await ctx.page.waitForTimeout(200);
+      await ctx.capture("01-note-sheet");
+      await ctx.tap("NoteSheet", /^Stop session/);
+      await ctx.page.waitForTimeout(700);
+      await ctx.capture("02-session-stopped");
+    },
+  },
+  {
+    id: "plan-skip-commit",
+    desc: "Plan → Skip → confirm for real",
+    destructive: true,
+    async run(ctx) {
+      await ctx.page.goto("/plan/", { waitUntil: "domcontentloaded" });
+      await ctx.page.waitForTimeout(1200);
+      const row = ctx.page.locator("button[aria-expanded]");
+      const rowCount = Math.min(await row.count(), 7);
+      for (let i = 0; i < rowCount; i++) {
+        await row.nth(i).click({ timeout: CLICK_TIMEOUT_MS });
+        await ctx.page.waitForTimeout(350);
+        const skip = ctx.page.getByRole("button", { name: /^Skip$/ });
+        if ((await skip.count()) > 0 && (await skip.first().isEnabled())) {
+          await skip.first().click({ timeout: CLICK_TIMEOUT_MS });
+          await ctx.page.waitForTimeout(450);
+          await ctx.probe("ConfirmSheet", '[role="dialog"]');
+          // Cancel first so both branches of the sheet are exercised, then
+          // re-open and commit.
+          await ctx.tap("ConfirmSheet", /Keep it/);
+          await ctx.page.waitForTimeout(350);
+          const again = ctx.page.getByRole("button", { name: /^Skip$/ });
+          if (await again.count()) {
+            await again.first().click({ timeout: CLICK_TIMEOUT_MS });
+            await ctx.page.waitForTimeout(400);
+          }
+          await ctx.tap("ConfirmSheet", /^Skip/);
+          await ctx.page.waitForTimeout(700);
+          await ctx.capture("01-skipped");
+          return;
+        }
+        await row.nth(i).click({ timeout: CLICK_TIMEOUT_MS });
+        await ctx.page.waitForTimeout(200);
+      }
+      throw new SkipFlow("no day in the visible week offers Skip");
+    },
+  },
+  {
+    id: "plan-move-commit",
+    desc: "Plan → Move… → pick a day, give a reason, commit",
+    destructive: true,
+    async run(ctx) {
+      await ctx.page.goto("/plan/", { waitUntil: "domcontentloaded" });
+      await ctx.page.waitForTimeout(1200);
+      const row = ctx.page.locator("button[aria-expanded]");
+      const rowCount = Math.min(await row.count(), 7);
+      for (let i = 0; i < rowCount; i++) {
+        await row.nth(i).click({ timeout: CLICK_TIMEOUT_MS });
+        await ctx.page.waitForTimeout(350);
+        const move = ctx.page.getByRole("button", { name: /^Move…$/ });
+        if ((await move.count()) > 0 && (await move.first().isEnabled())) {
+          await move.first().click({ timeout: CLICK_TIMEOUT_MS });
+          await ctx.page.waitForTimeout(450);
+          await ctx.probe("MoveSheet", '[role="dialog"]');
+          await ctx.tap("MoveSheet", /close move sheet/i);
+          await ctx.page.waitForTimeout(300);
+          const reMove = ctx.page.getByRole("button", { name: /^Move…$/ });
+          if (await reMove.count()) {
+            await reMove.first().click({ timeout: CLICK_TIMEOUT_MS });
+            await ctx.page.waitForTimeout(400);
+          }
+          // Pick a destination day, then the reason field, then commit —
+          // the sheet's whole surface, not just its existence.
+          const day = ctx.page.locator('[role="dialog"] button').filter({ hasText: /\d/ });
+          if (await day.count()) {
+            await day.first().click({ timeout: CLICK_TIMEOUT_MS });
+            await ctx.page.waitForTimeout(250);
+          }
+          const reason = ctx.page.locator("#movesheet-reason");
+          if (await reason.count()) await reason.fill("harness: moved for coverage");
+          await ctx.capture("01-move-filled");
+          await ctx.tap("MoveSheet", /^Move session/);
+          await ctx.page.waitForTimeout(700);
+          await ctx.capture("02-moved");
+          return;
+        }
+        await row.nth(i).click({ timeout: CLICK_TIMEOUT_MS });
+        await ctx.page.waitForTimeout(200);
+      }
+      throw new SkipFlow("no day in the visible week offers Move");
+    },
+  },
 ];
 
 export async function runFlows(
   page: Page,
   opts: { outDir: string; programSlug: string; flows?: Flow[] },
 ): Promise<FlowResult[]> {
-  const flows = opts.flows ?? FLOWS;
+  // Non-destructive first, destructive last, so a flow that finishes a
+  // session or skips a day cannot starve the ones that need it intact.
+  const flows = (opts.flows ?? FLOWS)
+    .slice()
+    .sort((a, b) => Number(a.destructive ?? false) - Number(b.destructive ?? false));
   const results: FlowResult[] = [];
   // Flows are mobile-only: they exercise thumb-reach affordances (the
   // rail, the pips, bottom sheets) that only exist at that width, and
@@ -717,9 +905,32 @@ export async function runFlows(
       },
       tap: async (surface, name) => {
         const p = probeFor(surface);
-        const target = page.getByRole("button", { name }).or(page.getByRole("link", { name }));
+        // Buttons and links first, then anything carrying a matching
+        // aria-label (MoveSheet's "Close move sheet" is one), then form
+        // fields — the steppers are <input aria-label="kg"> and were
+        // counted by probe but unreachable by tap, so they could never
+        // clear.
+        let target = page.getByRole("button", { name }).or(page.getByRole("link", { name }));
+        if ((await target.count()) === 0) {
+          target = page.locator("[aria-label]").filter({ hasText: /.*/ }).and(page.getByLabel(name));
+        }
         if ((await target.count()) === 0) return false;
-        const label = ((await target.first().textContent()) ?? String(name)).trim().slice(0, 60);
+        // Derive the label EXACTLY as `probe` does. They disagreed before:
+        // probe read `aria-label ?? innerText`, tap read `textContent`, so
+        // the same control was filed under two different strings and every
+        // control actually driven still showed as missing. The coverage
+        // number was wrong, not the coverage.
+        const label = await target
+          .first()
+          .evaluate((el) => {
+            const raw =
+              el.getAttribute("aria-label") ??
+              (el as HTMLElement).innerText ??
+              el.getAttribute("placeholder") ??
+              "";
+            return raw.trim().split("\n")[0].slice(0, 60);
+          })
+          .catch(() => String(name));
         try {
           await target.first().click({ timeout: CLICK_TIMEOUT_MS });
         } catch {

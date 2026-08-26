@@ -83,6 +83,11 @@ const FLOW_SURFACES: Record<string, string[]> = {
   "plan-move-sheet": ["MoveSheet"],
   "plan-skip-confirm": ["ConfirmSheet"],
   "retest-logging": ["RetestLoggingSheet"],
+  "activity-log-commit": ["OffPlanSheet"],
+  "session-finish-here": ["OverflowSheet"],
+  "session-stop": ["NoteSheet", "OverflowSheet"],
+  "plan-skip-commit": ["ConfirmSheet"],
+  "plan-move-commit": ["MoveSheet"],
 };
 
 /** Store keys the schema declares, for the fidelity denominator. */
