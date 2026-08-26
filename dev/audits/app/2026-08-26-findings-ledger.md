@@ -4,7 +4,7 @@ Everything discovered across three days: the founder's live-workout report,
 the fixes that report led into, the off-plan investigation, the persona-harness
 rebuild, and the bugs the improved harness then found on its own.
 
-**54 findings. 10 reported by the founder; 44 found while working.**
+**64 findings. 10 reported by the founder; 54 found while working.**
 
 Of those 38, **11 were found only because the harness was improved**, and
 **3 of those were invisible on localhost and only appeared against production.**
@@ -183,3 +183,43 @@ The next checks write themselves:
     a non-loadable exercise offers no kg control (flow check)
     two day rows in a week are never identical   (flow check)
     a cold load restores the last route          (flow check)
+
+
+---
+
+## Closing state (2026-08-27)
+
+Final production sweep, 17 personas, 16.9 min, **146 behavioural checks,
+zero failures**.
+
+| Dimension | Session start | Close |
+|---|---|---|
+| Routes toured | 63% | **100%** |
+| Interactive surfaces | **0%** | 93.3% on nine personas |
+| Controls within surfaces | not measured | **81.2%** mean |
+| Store keys populated | 35% | **81.7%** |
+| Behavioural assertions | **0** | **146, all passing** |
+| Sweep wall-clock | ~40 min serial | **16.9 min** |
+
+The eight personas sitting at 53.3% surfaces are cardio-only or graduated
+programs — engine-builder is entirely run blocks, and rowing has no set
+flow on any day. After F3 that is the correct answer, not a gap: those
+sessions are logged as activities, so the set-flow flows have nothing to
+reach and skip with a reason.
+
+## Four more harness faults, all self-inflicted this session (G14-G17)
+
+Worth recording as a class. Each time an app fix changed what the UI
+offered, the harness read the change as reduced COVERAGE rather than as a
+fault of its own:
+
+| # | Finding |
+|---|---|
+| G14 | The rowing CTA rename to "Log this session" made `openBrief` walk past sessions that had started working |
+| G15 | Prescription sessions made every set-flow flow die in bounded timeouts, blowing the 900s persona budget and cascading a closed context through all 24 flows — reported as fifteen skips |
+| G16 | The guard for G15 sampled once after a flat 700ms and over-fired on slow paints, dropping twelve personas from 93.3% to 53.3% |
+| G17 | F3 made cardio days legitimately flowless, so a persona whose sweep day was a cardio day skipped every set-flow flow — correct behaviour reading as a regression |
+
+The lesson the instrumentation encodes: **a skip and a death must never
+look the same in a report**, and a coverage number that moves has to say
+why it moved.
