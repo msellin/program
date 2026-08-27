@@ -31,6 +31,8 @@ import type {
   RetestDueProposalPayload,
 } from "@/lib/schemas";
 import { daySignals, proposedLoadMultiplier } from "@/lib/engine/note-signals";
+import { activePhaseFor } from "@/lib/engine/schedule";
+import { blocksForDate } from "@/lib/engine/plan-generator";
 import { assessReintroReadiness } from "@/lib/engine/readiness";
 import { nextEligibleTier, isProposalDismissed } from "@/lib/engine/tier-promotion";
 import { evaluateOverperformer } from "@/lib/engine/adapt";
@@ -74,7 +76,33 @@ function todayHasOnlyLifeLoadSeed(store: Store, date: string): boolean {
   return true;
 }
 
-function selectDayAdjustment(store: Store, date: string): DayAdjustmentProposalPayload | null {
+/**
+ * The next day that actually carries loaded work, searching forward from
+ * `from` for a week. Returns null when nothing loaded is scheduled.
+ *
+ * A load softening has to land on a day with a load to soften. Accepted on
+ * a rest day it wrote `day_adjustments[thatRestDay]`, where no session
+ * would ever read it.
+ */
+function nextLoadedDay(store: Store, program: Program, from: string): string | null {
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(Date.parse(from + "T12:00:00Z") + i * 864e5).toISOString().slice(0, 10);
+    const phase = activePhaseFor(program, d, store.user_profile);
+    const blocks = blocksForDate(program, store.user_profile, phase, d, undefined, store);
+    const loaded = blocks.some(
+      (b: { category?: string; items?: unknown[] }) =>
+        (b.category ?? "strength") === "strength" && (b.items?.length ?? 0) > 0,
+    );
+    if (loaded) return d;
+  }
+  return null;
+}
+
+function selectDayAdjustment(
+  store: Store,
+  program: Program,
+  date: string,
+): DayAdjustmentProposalPayload | null {
   // Already accepted? Not a proposal any more.
   if (store.day_adjustments?.[date]) return null;
 
@@ -99,6 +127,11 @@ function selectDayAdjustment(store: Store, date: string): DayAdjustmentProposalP
     if (!priorSignalPresent) return null;
   }
 
+  // Target the next day that has loaded work, which may not be today.
+  const target = nextLoadedDay(store, program, date);
+  if (!target) return null;
+  if (store.day_adjustments?.[target]) return null;
+
   const id = `day-adj:load-${proposal.multiplier}`;
   const dismissed = store.dismissed_proposals?.[date] ?? [];
   if (dismissed.includes(`load-${proposal.multiplier}`)) return null;
@@ -109,7 +142,8 @@ function selectDayAdjustment(store: Store, date: string): DayAdjustmentProposalP
     priority: sig.pain ? 100 : 80,
     reason: proposal.reason,
     citationId: citationIdForKind("day_adjustment_soften"),
-    date,
+    date: target,
+    ...(target !== date ? { signalDate: date } : {}),
     multiplier: proposal.multiplier,
     matches: sig.matches,
   };
@@ -412,7 +446,7 @@ function selectTMBump(
 
 export function selectProposals(store: Store, program: Program, date: string): Proposal[] {
   const out: Proposal[] = [];
-  const dayAdj = selectDayAdjustment(store, date);
+  const dayAdj = selectDayAdjustment(store, program, date);
   if (dayAdj) out.push(dayAdj);
   const readiness = selectReadiness(store, program, date);
   if (readiness) out.push(readiness);

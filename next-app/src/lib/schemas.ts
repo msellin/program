@@ -1634,7 +1634,20 @@ export type ReadinessProposalPayload = ProposalBase & {
 
 export type DayAdjustmentProposalPayload = ProposalBase & {
   kind: "day_adjustment_soften";
+  /**
+   * The day the softening APPLIES to — the next day carrying loaded work,
+   * which is not always the day the signal appeared (2026-08-27).
+   *
+   * `acceptDayAdjustment` writes `day_adjustments[date]` and the suggester
+   * reads `day_adjustments[dateBeingViewed]`, so an adjustment accepted on
+   * a rest day silently did nothing: there was no session for it to
+   * change, and it did not carry forward. The founder logged two sessions
+   * on a Thursday with no strength scheduled, was offered 10% lighter, and
+   * reasonably asked what day it was for.
+   */
   date: string;
+  /** The day the SIGNAL came from, when that differs from `date`. */
+  signalDate?: string;
   multiplier: number;
   matches: string[];
 };

@@ -75,6 +75,21 @@ export function ProposalCard({
               ))}
             </ul>
           ) : null}
+          {/* Which day this actually changes (2026-08-27). The proposal used
+              to be silent about it, and accepting it on a rest day wrote an
+              adjustment nothing would ever read. It now targets the next
+              loaded day, and says so when that is not today. */}
+          {proposal.kind === "day_adjustment_soften" && proposal.signalDate ? (
+            <p className="text-[12px] font-mono uppercase tracking-wider text-bronze mt-1">
+              Applies to{" "}
+              {new Date(proposal.date + "T12:00:00Z").toLocaleDateString("en-GB", {
+                weekday: "long",
+                day: "numeric",
+                month: "short",
+              })}{" "}
+              — your next session with load
+            </p>
+          ) : null}
           {proposal.kind === "day_adjustment_soften" && proposal.matches.length > 0 ? (
             <div className="flex flex-wrap gap-1.5 mt-1">
               {proposal.matches.map((m) => (
