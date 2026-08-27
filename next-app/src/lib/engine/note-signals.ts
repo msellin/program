@@ -32,6 +32,11 @@ export type NoteSignals = {
    *   not the training engine's Accept/Ignore proposal path.
    */
   radicular: boolean;
+  /**
+   * Where it was felt, with side when the note gives one — "groin (left)",
+   * "buttock/SI (left)". Empty when the note names no site.
+   */
+  sites: string[];
   weakness: boolean;
   programFeedback: boolean;
   /** Within-session RPE drift (avg of last 2 sets − avg of first 2 sets). null when unmeasurable. */
@@ -63,7 +68,30 @@ const EASY = /\b(easy|light|grooved|snappy|smooth|effortless|controlled|in ?cont
 // those words are often muscular-weakness descriptions, not neurological.
 // Only unambiguous radicular vocabulary lands here. Fires on the red state
 // via progression_rules.or_radicular_flavor_present.
-const RADICULAR = /\b(tingling|tingl\w+|pins ?and ?needles|shooting ?(down|into|along)|radiating|radiat\w+ ?(down|into|along)|kihelus|kipituse)\b/i;
+// Numbness and pulsation added 2026-08-27. The founder's 19 Aug note read
+// "left buttocks stiff ... when deadlifting, gives numbing pulsation
+// there", and his 17 Aug note "make lower back pulsate" — neither matched
+// anything, so the strongest neural language in his whole log scored as
+// ordinary stiffness. `clinical-context.json` treats this territory
+// carefully for a reason; the extractor should at least see it.
+const RADICULAR =
+  /\b(tingling|tingl\w+|pins ?and ?needles|shooting ?(down|into|along)|radiating|radiat\w+ ?(down|into|along)|numb\w*|pulsat\w+|pulsate\w*|throb\w+|kihelus|kipituse|tuim\w*|surin\w*)\b/i;
+
+/**
+ * WHERE it was felt (2026-08-27).
+ *
+ * The extractor read intensity but never site, so "a little bit front
+ * groin left" and "left buttocks stiff" collapsed into the same
+ * undifferentiated "pain" as a sore shoulder. Site is the whole point in
+ * this file's clinical context: anterior groin is the documented symptom,
+ * and a left buttock / SI ache lasting past 48h is a named red flag with
+ * a defined action (`persistent_si_ache` → back off two steps).
+ */
+const SITE_GROIN = /\b(groin|adductor|kubeme?|kube)\b/i;
+const SITE_BUTTOCK_SI = /\b(buttock\w*|glute\w*|si ?joint|sacroiliac|tuhar\w*)\b/i;
+const SITE_LOW_BACK = /\b(low(er)? ?back|lumbar|alaselg\w*|selja?)\b/i;
+const SIDE_LEFT = /\b(left|vasak\w*)\b/i;
+const SIDE_RIGHT = /\b(right|parem\w*)\b/i;
 
 // Batch 36 Phase-A NEW pattern — WEAKNESS (informational, not red-flag).
 // Complements STIFF (fatigue vocab) by capturing capability-at-load
@@ -89,6 +117,7 @@ export function extractSignals(text: string | undefined | null): NoteSignals {
     pain: false,
     easy: false,
     radicular: false,
+    sites: [],
     weakness: false,
     programFeedback: false,
     rpeDrift: null,
@@ -112,6 +141,16 @@ export function extractSignals(text: string | undefined | null): NoteSignals {
   if (isPain) matches.push("pain");
   if (isEasy) matches.push("felt easy");
   if (isRadicular) matches.push("radicular flavor");
+
+  // Site, with side when the note says one. Reported as a match so it
+  // reaches the Coach line and the weekly narrative instead of being
+  // flattened into "pain".
+  const side = SIDE_LEFT.test(t) ? " (left)" : SIDE_RIGHT.test(t) ? " (right)" : "";
+  const sites: string[] = [];
+  if (SITE_GROIN.test(t)) sites.push(`groin${side}`);
+  if (SITE_BUTTOCK_SI.test(t)) sites.push(`buttock/SI${side}`);
+  if (SITE_LOW_BACK.test(t)) sites.push(`low back${side}`);
+  for (const site of sites) matches.push(site);
   if (isWeakness) matches.push("weakness at load");
   if (isProgramFeedback) matches.push("program feedback");
 
@@ -125,6 +164,7 @@ export function extractSignals(text: string | undefined | null): NoteSignals {
     pain: isPain,
     easy: isEasy,
     radicular: isRadicular,
+    sites,
     weakness: isWeakness,
     programFeedback: isProgramFeedback,
     rpeDrift: null,
@@ -183,6 +223,8 @@ function merge(a: NoteSignals, b: NoteSignals): NoteSignals {
     pain: a.pain || b.pain,
     easy: a.easy || b.easy,
     radicular: a.radicular || b.radicular,
+    // Union, deduped — two exercises can each name a different site.
+    sites: Array.from(new Set([...a.sites, ...b.sites])),
     weakness: a.weakness || b.weakness,
     programFeedback: a.programFeedback || b.programFeedback,
     rpeDrift,
@@ -201,6 +243,7 @@ export function daySignals(day: DayLog | null | undefined): NoteSignals {
     pain: false,
     easy: false,
     radicular: false,
+    sites: [],
     weakness: false,
     programFeedback: false,
     rpeDrift: null,
