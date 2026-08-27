@@ -593,7 +593,37 @@ export async function runSimulationV2(
         // OUTSIDE the `decision === "log"` branch on purpose: ignoring a
         // proposal is something you do on a day you skipped, too, and
         // gating it on training made the write vanishingly rare.
-        if (derivedState !== "green" && dismissToday && acceptRate < 1) {
+        // Contraindications — movements the user has told the app to keep
+        // out of their sessions. Real state: `addContraindication` writes
+        // it, `/report` and the record export read it, and it was empty in
+        // 17 of 17 personas, so neither reader had ever been captured with
+        // anything in it.
+        //
+        // Written here, in the daily loop, rather than in `seedStore`.
+        // Seeded before sign-in it did not survive: the account's remote
+        // copy carries no contraindications and wins the `updated_at`
+        // comparison on hydration, so the key was silently dropped every
+        // run — the H1 pattern, presenting as "my seeding does nothing".
+        if (!Array.isArray(store.contraindications) || store.contraindications.length === 0) {
+          store.contraindications = [
+            {
+              id: "sim-contra-1",
+              label: "Overhead pressing",
+              reason: "sim: shoulder flagged during intake",
+              added_at: Date.now(),
+            },
+          ];
+        }
+
+        // The `derivedState !== "green"` gate left `dismissed_proposals`
+        // and `proposal_history` empty in 12 of 17 personas: an athlete
+        // who trains steadily never goes amber, so the engine never
+        // proposed anything for them to ignore, and Record's proposal
+        // history had nothing to render for most of the fleet. Green days
+        // still surface tm_bump and tier_advance proposals, and ignoring
+        // one is a normal thing to do — the state gate was modelling
+        // symptom severity, not whether a proposal existed.
+        if (dismissToday && acceptRate < 1) {
           store.dismissed_proposals = store.dismissed_proposals ?? {};
           store.dismissed_proposals[dateISO] = Array.from(
             new Set([...(store.dismissed_proposals[dateISO] ?? []), "day-adjustment"]),

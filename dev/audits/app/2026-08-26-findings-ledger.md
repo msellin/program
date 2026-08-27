@@ -256,3 +256,53 @@ J4 is the one that would have hit on day one, and it was found only by
 driving the app rather than by reading it — the same lesson as the
 2026-08-26 postscript. The sweep that would have caught it ran the day
 before the commit that introduced it.
+
+---
+
+## K · Two prod sweeps before the beta invite (2026-08-27)
+
+Run 1 was a baseline against prod at `0477614`, unchanged. Run 2 followed
+a round of harness work. The app was asked to break twice and did not.
+
+**Run 1 found nothing.** 17 personas, 146 behavioural checks, **zero
+failures, zero flow errors, zero console errors, zero non-2xx
+responses**. The three lifecycle fixes and the `away_periods` crash fix
+hold on production.
+
+Every finding below is therefore about the harness, not the app — the
+same class as the G-series, found again in six new places.
+
+| # | Finding |
+|---|---|
+| K1 | **`RetestLoggingSheet` was never unreachable.** The proposal renders on persona-retest's Day in every sweep ever taken — its own tour capture reads "MID-BLOCK RETEST WINDOW OPEN / LOG READING". Three faults stacked: `/^Log reading$/` is case-SENSITIVE while Playwright derives the accessible name from RENDERED text, and the button is `font-mono uppercase`, so its name is "LOG READING"; a flat 1500ms wait is shorter than this account's KV hydration, and proposals are derived from the store; and `goto("/")` does not land on Day, because `ResumeLastRoute` (the A10 fix) redirects a cold "/" to wherever the PREVIOUS flow finished — this one runs after `hip-check`, and its own failure capture is a screenshot of the hip check |
+| K2 | The first diagnosis of K1 was **wrong**: engine-builder's end-of-block targets are `at_week: 8` and the persona runs 25 days, so it looked mis-positioned. It also declares a mid-block metric at `at_week: 4`, which is exactly where the persona sits. Recorded because the wrong answer was plausible enough to act on |
+| K3 | Fixing K1 made the flow stop skipping and start **failing**, which re-triggered G15: an 8-15s wait plus a 15s click timeout blew the 900s persona budget and cascaded a closed context. Every timeout in a flow that begins doing real work has to be re-budgeted — the standing cost of coverage going up |
+| K4 | `SetView`'s denominator grew with session content. Rail tabs were filed under exercise names, and the tap regex was built from `textContent`, which glues the label to its set counter ("High-bar back squat2/6") and never matches the accessible name. G6, one surface over |
+| K5 | `kg` and `reps` were tapped two lines after `Hide` closed the editor that contains them. `probe` saw them (it runs while the editor is open); `tap` reported "no element matched". A measurement fault wearing a coverage gap's clothes |
+| K6 | RestTakeover's "Add a note", "Solid" and "Do something else next" were driven AFTER the effort scale, which commits the RPE and takes the surface down with it. Three controls the flow had dismissed before reaching for them |
+| K7 | `contraindications` seeded in `seedStore` never survived: that runs before sign-in, the account's remote copy carries no such key and wins the `updated_at` comparison on hydration. The H1 pattern, presenting as "my seeding does nothing" |
+| K8 | `CONSISTENT_AVERAGE` hardcoded `life_load: 4` in its symptom payload while its own `lifeLoad(d)` returned 3-5 — dead code, and a flat 4 sits one point under the amber threshold. An archetype promising an "occasional life event" had zero elevated days in 25, so the engine never proposed a softening and `day_adjustments` was empty in 13 of 17 personas |
+| K9 | Surface coverage counted sheets that cannot exist. Six surfaces hang off a set flow; engine-builder is entirely run blocks and rowing has no set flow on any day. Eight personas were marked down for sheets their program cannot render — G17's lesson at the surface level. Now scored against what the program can produce, with the unscoped figure reported alongside |
+
+### Result
+
+| Dimension | Run 1 | Run 2 |
+|---|---|---|
+| Routes toured | 100% | 100% |
+| Interactive surfaces | 74.5% | **92.3%** (75.3% unscoped) |
+| Store keys populated | 81.4% | **97.7%** |
+| Controls within surfaces | 82% | **91.7%** |
+| Behavioural checks | 146 / 0 failed | **148 / 0 failed** |
+| Surfaces never reached | RetestLoggingSheet | **none** |
+
+The first sweep in this harness's history where every surface is reached
+by at least one persona.
+
+### Still open
+
+One bug, three symptoms: **`Close` on a STACKED sheet times out at 15s.**
+ExerciseDetailsSheet (still 0/1), OverflowSheet and NoteSheet each open
+over another sheet, and the one underneath still owns the scrim, so the
+press is swallowed without failing. Nine personas × three attempts is
+also why wall-clock went 16.9 → 22.9 min: fixing it should buy time back.
+Tracked as R3-1 in `dev/active/harness-coverage/plan.md`.

@@ -66,6 +66,30 @@ export const INTERACTIVE_SURFACES = [
   "SetView",
 ] as const;
 
+/**
+ * Surfaces that only exist inside a set flow.
+ *
+ * A program whose blocks are all `category: "run"` — engine-builder is
+ * entirely run blocks, rowing has no set flow on any day — logs its work
+ * as activities. There is no set screen, so there is no rest takeover, no
+ * overflow sheet on it, no exercise-details sheet, no per-set note sheet
+ * and no video modal. Eight personas were scored 53.3% for failing to
+ * reach sheets their program cannot produce.
+ *
+ * This is the surface-level form of what G17 recorded for flows: a skip
+ * and a death must not look the same in a report. `pct` is scored against
+ * what the persona's program can actually render; `pctRaw` keeps the
+ * unscoped number so the rescope hides nothing.
+ */
+const SET_FLOW_SURFACES = [
+  "SetView",
+  "RestTakeover",
+  "OverflowSheet",
+  "NoteSheet",
+  "ExerciseDetailsSheet",
+  "VideoModal",
+] as const;
+
 /** Which surfaces each flow reaches when it completes. */
 const FLOW_SURFACES: Record<string, string[]> = {
   "session-log-set": ["SetView", "RestTakeover"],
@@ -126,7 +150,15 @@ export type CoverageReport = {
   personaId: string;
   capturedAt: string;
   routes: { toured: string[]; missing: string[]; pct: number };
-  surfaces: { reached: string[]; missed: string[]; pct: number };
+  surfaces: {
+    reached: string[];
+    missed: string[];
+    /** Scored against the surfaces this persona's program can render. */
+    pct: number;
+    /** The same figure against all 15 surfaces, rescope or no rescope. */
+    pctRaw: number;
+    setFlowApplicable: boolean;
+  };
   /**
    * Within-surface control coverage. "Surface reached" is a binary that
    * flatters the harness — opening the overflow sheet scored the same as
@@ -253,7 +285,23 @@ export function buildCoverage(opts: {
     surfaces: {
       reached: Array.from(reached),
       missed: surfacesMissed as unknown as string[],
-      pct: pct(reached.size, INTERACTIVE_SURFACES.length),
+      // A persona that logged no exercise entries across its whole
+      // simulated history is on a program with no set work — every block
+      // is run-modality and logs as an activity. Its denominator drops
+      // the set-flow sheets, which cannot exist for it. `pctRaw` below
+      // keeps the unscoped figure honest.
+      pct: (() => {
+        const hasSetWork = full + partial > 0;
+        const applicable = hasSetWork
+          ? (INTERACTIVE_SURFACES as readonly string[])
+          : (INTERACTIVE_SURFACES as readonly string[]).filter(
+              (s) => !(SET_FLOW_SURFACES as readonly string[]).includes(s),
+            );
+        const hit = Array.from(reached).filter((s) => applicable.includes(s)).length;
+        return pct(hit, applicable.length);
+      })(),
+      pctRaw: pct(reached.size, INTERACTIVE_SURFACES.length),
+      setFlowApplicable: full + partial > 0,
     },
     store: {
       populated: populated as unknown as string[],
@@ -336,6 +384,7 @@ export function writeFleetSummary(rootDir: string, reports: CoverageReport[]): v
     "|---|---|",
     `| Routes toured | ${avg((r) => r.routes.pct)}% |`,
     `| Interactive surfaces reached | ${avg((r) => r.surfaces.pct)}% |`,
+    `| — unscoped (counts set-flow sheets cardio programs cannot render) | ${avg((r) => r.surfaces.pctRaw)}% |`,
     `| Store keys populated | ${avg((r) => r.store.pct)}% |`,
     `| Controls exercised within surfaces | ${avg((r) => r.controls.pct)}% |`,
     `| Behavioural checks passed | ${reports.reduce((n, r) => n + (r.checks?.passed ?? 0), 0)} |`,
@@ -346,7 +395,7 @@ export function writeFleetSummary(rootDir: string, reports: CoverageReport[]): v
   ];
   for (const r of reports) {
     lines.push(
-      `| ${r.personaId} | ${r.routes.pct}% | ${r.surfaces.pct}% | ` +
+      `| ${r.personaId} | ${r.routes.pct}% | ${r.surfaces.pct}%${r.surfaces.setFlowApplicable ? "" : `<br><sub>${r.surfaces.pctRaw}% raw · no set flow</sub>`} | ` +
         `${r.controls.pct}% (${r.controls.exercised}/${r.controls.seen - r.controls.heldBack}) | ${r.store.pct}% | ` +
         `${r.flows.ok}/${r.flows.skipped}/${r.flows.error} | ${r.states.fullyLoggedExercises} | ${r.states.partiallyLoggedExercises} |`,
     );

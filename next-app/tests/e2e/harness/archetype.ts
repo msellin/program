@@ -112,7 +112,19 @@ export const CONSISTENT_AVERAGE: Archetype = {
     return seededRand("consistent-average", d) < 0.14 ? "skip" : "log";
   },
   lifeLoad: (d) => 3 + Math.floor(seededRand("consistent-average", d, 2) * 3),
-  symptoms: (d) => ({ low_back: seededRand("consistent-average", d, 5) < 0.2 ? 2 : 0, life_load: 4 }),
+  // `life_load` was hardcoded to a flat 4 here while `lifeLoad(d)` above
+  // returned 3-5 — so the varying value was dead code for every symptom
+  // consumer, and this archetype's "occasional life event" never
+  // happened. A flat 4 sits one point under the amber threshold, so a
+  // consistent-average athlete went 25+ simulated days without a single
+  // elevated day, the engine never proposed a softening, and
+  // `day_adjustments` stayed empty in 13 of 17 personas. Wired to the
+  // declared range, the occasional 5 lands amber, which is what the
+  // description promised all along.
+  symptoms: (d) => ({
+    low_back: seededRand("consistent-average", d, 5) < 0.2 ? 2 : 0,
+    life_load: 3 + Math.floor(seededRand("consistent-average", d, 2) * 3),
+  }),
   acceptProposal: 0.5,
   loadFactor: () => 1.0,
   sessionNote: () => null,

@@ -89,10 +89,30 @@ export type FlowContext = {
    * the sheet.
    */
   probe: (surface: string, root: string) => Promise<void>;
-  /** Drive one control by accessible name and record it as exercised. */
-  tap: (surface: string, name: RegExp) => Promise<boolean>;
+  /**
+   * Drive one control by accessible name and record it as exercised.
+   *
+   * `as` files the hit under a stable alias instead of the control's own
+   * label. Use it for controls whose label is session CONTENT rather than
+   * an app string — the exercise rail, whose tabs are named after
+   * whichever drills the program authored. Without it the denominator
+   * grows with the catalog and never converges.
+   */
+  tap: (surface: string, name: RegExp, as?: string) => Promise<boolean>;
   /** Record a control as seen but deliberately not driven, with a reason. */
   note: (surface: string, name: string, why: string) => void;
+  /**
+   * Record a control as driven when the flow clicked it through its own
+   * locator rather than through `tap`.
+   *
+   * Needed where the control cannot be addressed by accessible name: the
+   * exercise rail's tabs render their label and their set progress in one
+   * text node, so `textContent` yields "High-bar back squat2/6" while the
+   * accessible name is spaced differently, and a regex built from one
+   * never matches the other. The flow holds a perfectly good locator —
+   * this lets the click it already made count.
+   */
+  record: (surface: string, name: string) => void;
   /**
    * Assert something about the app's behaviour. Never throws — a failed
    * check is a FINDING, recorded and reported, not a crash that hides the
@@ -150,6 +170,29 @@ function shiftISO(days: number): string {
  * affordance and had never been exercised by anything, so walking it here
  * is coverage in its own right, not just a workaround.
  */
+/**
+ * Land on Day, and actually stay there.
+ *
+ * `goto("/")` is not enough. `ResumeLastRoute` (the A10 fix) redirects a
+ * cold load of "/" to whatever route the user was last on, within six
+ * hours — which for a flow means wherever the PREVIOUS flow finished.
+ * The retest flow ran after `hip-check`, so it opened Day, found the
+ * proposal mid-hydration, and was then navigated to `/check/hip` out
+ * from under itself: `count()` saw the button, the click timed out on a
+ * detached node, and the 15s bound plus a closed context blew the whole
+ * persona budget. Its own capture is a screenshot of the hip check.
+ *
+ * Clearing the remembered route is the honest fix — the resume is real
+ * app behaviour and `cold-load-resume` exists to assert it, so it must
+ * keep its own `goto("/")` untouched.
+ */
+async function gotoDay(ctx: FlowContext): Promise<void> {
+  await ctx.page
+    .evaluate(() => localStorage.removeItem("program.lastRoute.v1"))
+    .catch(() => {});
+  await ctx.page.goto("/", { waitUntil: "domcontentloaded" });
+}
+
 async function openBrief(ctx: FlowContext, opts?: { requireSetFlow?: boolean }): Promise<void> {
   // Today first, then forward (a planned session), then back (one already
   // logged — which is what the edit-a-past-set flow actually wants).
@@ -394,6 +437,14 @@ export const FLOWS: Flow[] = [
         await ctx.page.waitForTimeout(200);
         await ctx.tap("SetView", /^−/);
         await ctx.page.waitForTimeout(200);
+        // The kg / reps number fields live INSIDE this editor. Tapped
+        // after `Hide` they reported "no element matched" on nine
+        // personas — the flow had closed the editor two lines earlier
+        // and then went looking for its contents. `probe` saw them
+        // (it runs while the editor is open), which is exactly how a
+        // measurement fault disguises itself as a coverage gap.
+        await ctx.tap("SetView", /^kg$/);
+        await ctx.tap("SetView", /^reps$/);
         await ctx.capture("02-stepper-used");
         await ctx.tap("SetView", /back to prescription/i);
         await ctx.page.waitForTimeout(250);
@@ -409,6 +460,9 @@ export const FLOWS: Flow[] = [
       }
       await ctx.capture("03-pips-walked");
 
+      await ctx.tap("SetView", /change the weight/i);
+      await ctx.tap("SetView", /^(Done|Save) — set/);
+
       const railCount = Math.min(
         await ctx.page.locator('[data-surface="SetView"] div.overflow-x-auto button').count(),
         6,
@@ -416,16 +470,26 @@ export const FLOWS: Flow[] = [
       for (let i = 0; i < railCount; i++) {
         const tab = ctx.page.locator('[data-surface="SetView"] div.overflow-x-auto button').nth(i);
         if ((await tab.count()) === 0) break;
-        const label = ((await tab.textContent()) ?? "").trim().split("\n")[0];
-        if (!label) continue;
-        await ctx.tap("SetView", new RegExp(`^${label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`));
+        // Clicked through the locator we already hold, then recorded
+        // under a stable alias.
+        //
+        // Two faults in one line before this: the regex was built from
+        // `textContent`, which glues the tab's label to its set counter
+        // ("High-bar back squat2/6") and never matches the accessible
+        // name; and filing the hit under the exercise's own name made
+        // SetView's denominator a function of session content, so a
+        // program with twelve drills scored worse than one with four for
+        // doing exactly the same thing. Same class as G6, which was only
+        // ever fixed for the "Save — set N · N kg" family.
+        try {
+          await tab.click({ timeout: CLICK_TIMEOUT_MS });
+          ctx.record("SetView", "rail tab");
+        } catch {
+          /* a tab that will not take a click is the rail's problem, not the walk's */
+        }
         await ctx.page.waitForTimeout(400);
       }
       await ctx.capture("04-rail-walked");
-      await ctx.tap("SetView", /^kg$/);
-      await ctx.tap("SetView", /^reps$/);
-      await ctx.tap("SetView", /change the weight/i);
-      await ctx.tap("SetView", /^(Done|Save) — set/);
       await ctx.page.waitForTimeout(400);
       await ctx.tap("RestTakeover", /skip rest/i);
       await ctx.page.waitForTimeout(300);
@@ -478,6 +542,33 @@ export const FLOWS: Flow[] = [
       );
       await ctx.capture("02-rest-extended");
 
+      // The note affordance and the mid-rest exercise switch run BEFORE
+      // the effort scale. Picking an effort commits the RPE and takes the
+      // takeover down with it — and "Grind" additionally opens the note
+      // sheet over the top. Driven afterwards, all three controls found
+      // an element that was detached or scrimmed and burned a 15-second
+      // click timeout each: "Solid" reported no match (the surface had
+      // already gone), the other two reported timeouts. Three controls
+      // that read as uncovered were really three controls the flow had
+      // dismissed before reaching for them.
+      if (await ctx.tap("RestTakeover", /add a note/i)) {
+        await ctx.page.waitForTimeout(400);
+        await ctx.capture("02b-rest-note");
+        if (!(await ctx.tap("RestTakeover", /^(Close|Save|Done|Cancel)/))) {
+          await ctx.page.keyboard.press("Escape").catch(() => {});
+        }
+        await ctx.page.waitForTimeout(300);
+      }
+      if (await ctx.tap("RestTakeover", /do something else next/i)) {
+        await ctx.page.waitForTimeout(450);
+        await ctx.probe("RestTakeover", '[data-surface="RestTakeover"] [role="dialog"]');
+        await ctx.capture("02c-jump-sheet");
+        if (!(await ctx.tap("RestTakeover", /^Cancel/))) {
+          await ctx.page.keyboard.press("Escape").catch(() => {});
+        }
+        await ctx.page.waitForTimeout(300);
+      }
+
       // Every rung of the effort scale — each writes a different RPE.
       for (const effort of [/^Easy/, /^Grind/, /^Solid/]) {
         if (await ctx.tap("RestTakeover", effort)) {
@@ -498,15 +589,6 @@ export const FLOWS: Flow[] = [
           );
         },
       );
-
-      // The mid-rest exercise switch. Open, photograph, cancel out.
-      if (await ctx.tap("RestTakeover", /do something else next/i)) {
-        await ctx.page.waitForTimeout(450);
-        await ctx.probe("RestTakeover", '[data-surface="RestTakeover"] [role="dialog"]');
-        await ctx.capture("04-jump-sheet");
-        await ctx.tap("RestTakeover", /^Cancel/);
-        await ctx.page.waitForTimeout(300);
-      }
 
       // Skip rest last — it closes the surface everything above needs.
       // Escape first: the jump sheet's scrim can still be up if Cancel
@@ -673,7 +755,18 @@ export const FLOWS: Flow[] = [
       if ((await cues.count()) === 0) throw new SkipFlow("no form-cues row");
       await cues.click({ timeout: CLICK_TIMEOUT_MS });
       await ctx.page.waitForTimeout(400);
+      // Scoped away from `data-surface` dialogs: every sheet shares
+      // `role="dialog"`, so an unscoped probe here reads back the
+      // overflow sheet still mounted underneath (G3).
+      await ctx.probe("ExerciseDetailsSheet", '[role="dialog"]:not([data-surface])');
       await ctx.capture("01-exercise-details");
+      // Close was the sheet's only control and sat at 0 of 1 across the
+      // whole fleet: the flow opened the sheet, photographed it, and left
+      // the next flow to dismiss it by navigating away. Dismissing a
+      // sheet is part of using it.
+      await ctx.tap("ExerciseDetailsSheet", /^Close/);
+      await ctx.page.waitForTimeout(300);
+      await ctx.capture("02-details-closed");
     },
   },
   {
@@ -705,7 +798,9 @@ export const FLOWS: Flow[] = [
         localStorage.removeItem("program.firstrun.dismissed");
         localStorage.removeItem(`program.intro-gallery.seen.${slug}`);
       }, ctx.programSlug);
-      await ctx.page.goto("/", { waitUntil: "domcontentloaded" });
+      // Via gotoDay: the first-run surface only renders on Day, and a
+      // bare goto("/") is subject to the same resume redirect.
+      await gotoDay(ctx);
       await ctx.page.waitForTimeout(1500);
       await ctx.capture("01-first-run");
       // Restore so nothing downstream sees the overlay.
@@ -766,10 +861,17 @@ export const FLOWS: Flow[] = [
           await move.first().click({ timeout: CLICK_TIMEOUT_MS });
           await ctx.page.waitForTimeout(450);
           await ctx.capture("01-move-sheet");
+          await ctx.probe("MoveSheet", '[role="dialog"]');
           // Cancel. A flow photographs; it must not mutate the persona's
           // plan, or the next sweep's artifacts stop being comparable.
-          const cancel = ctx.page.getByRole("button", { name: /^(Cancel|Close)$/ });
-          if (await cancel.count()) await cancel.first().click({ timeout: CLICK_TIMEOUT_MS });
+          //
+          // Routed through `tap` rather than a raw `.click()`: the dismiss
+          // control is real coverage, and a raw click records nothing —
+          // which is why "Close move sheet" showed as seen-but-never-
+          // driven on every persona that opened the sheet.
+          if (!(await ctx.tap("MoveSheet", /^(Cancel|Close)/))) {
+            await ctx.page.keyboard.press("Escape").catch(() => {});
+          }
           return;
         }
         await row.nth(i).click({ timeout: CLICK_TIMEOUT_MS });
@@ -864,14 +966,62 @@ export const FLOWS: Flow[] = [
       // (select.ts:selectRetestDue). persona-retest is positioned for
       // engine-builder's week-4 mid-block check; every other persona
       // legitimately skips.
-      await ctx.page.goto("/", { waitUntil: "domcontentloaded" });
-      await ctx.page.waitForTimeout(1500);
-      const log = ctx.page.getByRole("button", { name: /^Log reading$/ });
-      if ((await log.count()) === 0) throw new SkipFlow("no retest-due proposal open");
+      await gotoDay(ctx);
+      // Three faults kept RetestLoggingSheet at zero in every sweep ever
+      // run, and persona-retest's own Day capture disproved both: the
+      // proposal was on screen the whole time, reading "MID-BLOCK RETEST
+      // WINDOW OPEN / LOG READING".
+      //
+      //  1. `/^Log reading$/` is case-SENSITIVE, and Playwright derives
+      //     the accessible name from RENDERED text. The button is styled
+      //     `font-mono uppercase`, so its name is "LOG READING".
+      //  2. A flat 1500ms is shorter than this account's hydration. The
+      //     store arrives from KV, and proposals are derived from it, so
+      //     the button does not exist yet when a fixed sleep expires.
+      //     The tour waits longer, which is why its capture disagreed
+      //     with the flow's own `count()` on the same page.
+      const log = ctx.page.getByRole("button", { name: /^log reading$/i });
+      // Bounded well under the persona budget. An earlier version of this
+      // wait plus a 15s click timeout was enough to cascade a closed
+      // context through the rest of the fleet — G15, rediscovered by
+      // making a flow that used to skip instantly actually try.
+      await log
+        .first()
+        .waitFor({ state: "visible", timeout: 8_000 })
+        .catch(() => {});
+      if ((await log.count()) === 0) {
+        // Capture WHY before skipping. The tour's Day screenshot shows
+        // the proposal on the same account, so a bare skip reason has
+        // been actively misleading for every sweep so far.
+        await ctx.capture("00-no-proposal");
+        throw new SkipFlow("no retest-due proposal open");
+      }
       await ctx.capture("01-retest-proposal");
+      // Clear anything a previous flow left over the page. This runs late
+      // in the sequence, and with the button finally being FOUND the
+      // click then failed on a 15s timeout instead — a scrim from an
+      // earlier sheet swallows the press without failing it. Escape, then
+      // scroll the proposal into view: the stack sits below the fold on a
+      // 390px viewport once a session card is above it.
+      await ctx.page.keyboard.press("Escape").catch(() => {});
+      await ctx.page.waitForTimeout(300);
+      await log.first().scrollIntoViewIfNeeded().catch(() => {});
+      await ctx.page.waitForTimeout(200);
       await log.first().click({ timeout: CLICK_TIMEOUT_MS });
       await ctx.page.waitForTimeout(600);
+      await ctx.probe("RetestLoggingSheet", '[role="dialog"]');
       await ctx.capture("02-retest-sheet");
+      await ctx.check(
+        "the retest sheet offers a field to enter the reading",
+        async () =>
+          (await ctx.page.locator('[role="dialog"] input, [role="dialog"] textarea').count()) > 0,
+      );
+      // Dismissed, not submitted: committing a reading would close the
+      // window and the next sweep would find no proposal to open.
+      ctx.note("RetestLoggingSheet", "Save reading", "mutating — would close the retest window");
+      if (!(await ctx.tap("RetestLoggingSheet", /^(Close|Cancel|Not now)/))) {
+        await ctx.page.keyboard.press("Escape").catch(() => {});
+      }
     },
   },
   {
@@ -1275,9 +1425,16 @@ export async function runFlows(
         const p = probeFor(surface);
         const names = await page
           .locator(`${root} button, ${root} a[href], ${root} input, ${root} summary`)
-          .evaluateAll((els) =>
+          .evaluateAll((els, sfc) =>
             els
               .map((el) => {
+                // The exercise rail is a horizontal scroller of tabs
+                // named after the session's drills. Those names are
+                // content, not app strings — see the `as` note on `tap`.
+                // Both sides must agree on the alias or the control
+                // reads as seen-but-never-driven forever. Scoped to
+                // SetView so other surfaces keep their real labels.
+                if (sfc === "SetView" && el.closest("div.overflow-x-auto")) return "rail tab";
                 const label =
                   el.getAttribute("aria-label") ??
                   (el as HTMLElement).innerText ??
@@ -1292,6 +1449,7 @@ export async function runFlows(
               .filter((n) => n.length > 0)
               .filter((n) => !/^(DAY|PLAN|RECORD|PROFILE)$/.test(n))
               .filter((n) => !/Next\.js Dev Tools/i.test(n)),
+            surface,
           )
           .catch(() => [] as string[]);
         for (const raw of names) {
@@ -1299,7 +1457,7 @@ export async function runFlows(
           if (!p.seen.includes(n)) p.seen.push(n);
         }
       },
-      tap: async (surface, name) => {
+      tap: async (surface, name, as) => {
         const p = probeFor(surface);
         // Scope to the surface being driven.
         //
@@ -1325,6 +1483,25 @@ export async function runFlows(
           // `.filter({ hasText: /.*/ })`, which excludes inputs entirely
           // because they carry no text, so the steppers could never match.
           target = scope.getByLabel(name);
+        }
+        if ((await target.count()) === 0 && !name.flags.includes("i")) {
+          // Case-insensitive retry.
+          //
+          // Playwright computes the accessible name from RENDERED text,
+          // which applies `text-transform`. Terav styles most of its
+          // action buttons `font-mono uppercase`, so the proposal accept
+          // button's name is "LOG READING" — and a case-sensitive
+          // `/^Log reading$/` matched nothing. That single character
+          // class is why RetestLoggingSheet was the one surface no
+          // persona had ever reached, in every sweep since the flow was
+          // written: the flow looked for a button that, as far as the
+          // accessibility tree was concerned, did not exist.
+          //
+          // Retried rather than applied up front so an exact match still
+          // wins; this only ever converts a miss into a hit.
+          const ci = new RegExp(name.source, name.flags + "i");
+          target = scope.getByRole("button", { name: ci }).or(scope.getByRole("link", { name: ci }));
+          if ((await target.count()) === 0) target = scope.getByLabel(ci);
         }
         if ((await target.count()) === 0) {
           p.misses.push({ pattern: String(name), why: "no element matched" });
@@ -1355,8 +1532,8 @@ export async function runFlows(
           });
           return false;
         }
-        const key = normalise(label);
-        if (!p.seen.includes(key) && p.seen.length > 0) {
+        const key = as ?? normalise(label);
+        if (!as && !p.seen.includes(key) && p.seen.length > 0) {
           // Clicked something the probe never recorded — the two are
           // looking at different elements, which is a measurement fault,
           // not a coverage one.
@@ -1381,6 +1558,12 @@ export async function runFlows(
         page
           .evaluate(() => JSON.parse(localStorage.getItem("program.log.v2") ?? "{}"))
           .catch(() => ({}) as Record<string, unknown>),
+      record: (surface, name) => {
+        const p = probeFor(surface);
+        const key = normalise(name);
+        if (!p.seen.includes(key)) p.seen.push(key);
+        if (!p.exercised.includes(key)) p.exercised.push(key);
+      },
       note: (surface, name, why) => {
         const p = probeFor(surface);
         const key = normalise(name);

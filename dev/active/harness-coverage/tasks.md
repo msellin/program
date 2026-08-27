@@ -42,3 +42,15 @@ trusting the code:
   which sends `loadLocal` to its empty default and hands the whole store to
   the remote copy — a silent, total data loss that presents as "my seeding
   does nothing".
+
+## Round 2 — 2026-08-27
+
+- [x] R2-1 · RetestLoggingSheet reached — NOT the persona's window. Three stacked faults: case-sensitive regex vs uppercase accessible name, a flat wait shorter than hydration, and ResumeLastRoute redirecting goto("/")
+- [x] R2-2 · applicability-scoped surface coverage, raw reported alongside
+- [x] R2-3 · normalise rail tabs out of SetView's denominator
+- [x] R2-4 · tap the steppers before the rail walk
+- [x] R2-5 · drive the Close controls + RestTakeover trio
+- [x] R2-6 · seed contraindications (in the daily loop — seedStore is pre-hydration and gets clobbered); widen the dismissed/proposal_history gate
+- [x] R2-7 · CONSISTENT_AVERAGE's life_load was hardcoded flat, one point under amber — its own lifeLoad(d) was dead code
+- [x] Re-run the sweep against prod — surfaces 92.3%, store 97.7%, controls 91.7%, 148 checks / 0 failures
+- [ ] Docs + commit
