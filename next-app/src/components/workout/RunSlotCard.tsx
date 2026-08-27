@@ -5,7 +5,9 @@ import { Info, X, Plus, Footprints, Upload } from "lucide-react";
 import { useStore } from "@/lib/useStore";
 import { InfoSheet } from "@/components/InfoSheet";
 import { EngineReadsNotesHint } from "./EngineReadsNotesHint";
-import { parseGpx } from "@/lib/gpx";
+import { parseGpx, intensityFromHr, observedMaxHrFrom } from "@/lib/gpx";
+import { parseFit } from "@/lib/fit";
+import { useIsSuperAdmin } from "@/lib/super-admin";
 import { cn } from "@/lib/utils";
 import type { RunLog } from "@/lib/schemas";
 
@@ -30,6 +32,10 @@ export function RunSlotCard({ date }: { date: string }) {
   // instead so aerobic / skill users can still record cross-modal work without
   // being told to keep it easy on their primary lift day.
   const useGenericSlot = activeProgramSlug !== "anterior-hip-rebuild";
+  // FIT import is admin-only until a real device export has confirmed the
+  // field-number mapping. See lib/fit.ts.
+  const isAdmin = useIsSuperAdmin();
+  const [fitDebug, setFitDebug] = useState<string | null>(null);
 
   const [open, setOpen] = useState(false);
   const [primerOpen, setPrimerOpen] = useState(false);
@@ -49,13 +55,17 @@ export function RunSlotCard({ date }: { date: string }) {
   const [twoKTime, setTwoKTime] = useState<string>(""); // mm:ss for 2K tests
   const [watts, setWatts] = useState<string>("");
   const [importedMeta, setImportedMeta] = useState<{
-    source: "gpx";
+    // "fit" added 2026-08-27. A FIT export carries no track, so elevation,
+    // device name and the raw document are absent rather than zero — the
+    // fields are nullable so an absent value cannot masquerade as a
+    // measured one.
+    source: "gpx" | "fit";
     avg_hr: number | null;
     max_hr: number | null;
-    elevation_gain_m: number;
+    elevation_gain_m: number | null;
     device_name: string | null;
     started_at: string | null;
-    raw_gpx: string;
+    raw_gpx: string | null;
   } | null>(null);
   const [importError, setImportError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -182,12 +192,15 @@ export function RunSlotCard({ date }: { date: string }) {
       entry.source = importedMeta.source;
       if (importedMeta.avg_hr != null) entry.avg_hr = importedMeta.avg_hr;
       if (importedMeta.max_hr != null) entry.max_hr = importedMeta.max_hr;
-      if (importedMeta.elevation_gain_m > 0)
+      if (importedMeta.elevation_gain_m != null && importedMeta.elevation_gain_m > 0)
         entry.elevation_gain_m = importedMeta.elevation_gain_m;
       if (importedMeta.device_name) entry.device_name = importedMeta.device_name;
       if (importedMeta.started_at) entry.started_at = importedMeta.started_at;
       // Only store raw GPX if it's compact — spare the sync PUT budget.
-      if (importedMeta.raw_gpx.length <= 500_000) entry.raw_gpx = importedMeta.raw_gpx;
+      // A FIT import has no raw document to keep.
+      if (importedMeta.raw_gpx && importedMeta.raw_gpx.length <= 500_000) {
+        entry.raw_gpx = importedMeta.raw_gpx;
+      }
     }
     logRun(date, entry);
     reset();
@@ -208,6 +221,51 @@ export function RunSlotCard({ date }: { date: string }) {
       setImportError(err instanceof Error ? err.message : String(err));
       return;
     }
+    // FIT is binary; GPX is XML. Route on the extension.
+    if (file.name.toLowerCase().endsWith(".fit")) {
+      const fit = parseFit(await file.arrayBuffer());
+      if ("error" in fit) {
+        setImportError(fit.error);
+        return;
+      }
+      if (fit.seconds != null) setMinutes(String(Math.round(fit.seconds / 60)));
+      if (fit.distance_km != null) setDistance(String(fit.distance_km));
+      const obsMax = Math.max(observedMaxHrFrom(store.logs) ?? 0, fit.max_hr ?? 0);
+      const eff = intensityFromHr(fit.avg_hr, obsMax || null);
+      if (eff) setIntensity(eff);
+      setImportedMeta({
+        source: "fit",
+        avg_hr: fit.avg_hr,
+        max_hr: fit.max_hr,
+        elevation_gain_m: null,
+        device_name: null,
+        started_at: null,
+        raw_gpx: null,
+      });
+      // Raw dump so the first real file can confirm or refute the field
+      // mapping — that is the whole point of the admin gate.
+      setFitDebug(
+        JSON.stringify(
+          {
+            seconds: fit.seconds,
+            distance_km: fit.distance_km,
+            avg_hr: fit.avg_hr,
+            max_hr: fit.max_hr,
+            avg_power: fit.avg_power,
+            sport: fit.sport,
+            lapCount: fit.laps.length,
+            firstLaps: fit.laps.slice(0, 6),
+            rawSessionFields: fit.rawSessionFields,
+          },
+          null,
+          1,
+        ),
+      );
+      setOpen(true);
+      e.target.value = "";
+      return;
+    }
+
     const parsed = parseGpx(text);
     if ("error" in parsed) {
       setImportError(parsed.error);
@@ -225,6 +283,17 @@ export function RunSlotCard({ date }: { date: string }) {
     setActivity(guessed);
     setDistance(String(parsed.distance_km));
     setMinutes(String(parsed.minutes));
+    // Pre-select effort from the imported HR. Still editable — this fills
+    // the field the way distance and duration are filled, it does not
+    // decide for you. But leaving it unset meant an imported easy run
+    // could sit outside `runs[].avg_hr where intensity == 'easy'` and
+    // never reach the retest trend at all.
+    const observedMax = Math.max(
+      observedMaxHrFrom(store.logs) ?? 0,
+      parsed.max_hr ?? 0,
+    );
+    const derived = intensityFromHr(parsed.avg_hr, observedMax || null);
+    if (derived) setIntensity(derived);
     setImportedMeta({
       source: "gpx",
       avg_hr: parsed.avg_hr,
@@ -342,10 +411,20 @@ export function RunSlotCard({ date }: { date: string }) {
               <p className="text-muted">
                 {importedMeta.avg_hr != null ? `avg HR ${importedMeta.avg_hr}` : "no HR data"}
                 {importedMeta.max_hr != null ? ` · max ${importedMeta.max_hr}` : ""}
-                {importedMeta.elevation_gain_m > 5
+                {importedMeta.elevation_gain_m != null && importedMeta.elevation_gain_m > 5
                   ? ` · +${importedMeta.elevation_gain_m} m elevation`
                   : ""}
               </p>
+              {fitDebug ? (
+                <details className="mt-2">
+                  <summary className="font-mono text-[10px] uppercase tracking-wider text-muted cursor-pointer">
+                    FIT fields (admin) — check these against your device
+                  </summary>
+                  <pre className="mt-1 text-[10px] leading-tight text-muted overflow-x-auto whitespace-pre">
+{fitDebug}
+                  </pre>
+                </details>
+              ) : null}
             </div>
           ) : null}
 
@@ -600,7 +679,7 @@ export function RunSlotCard({ date }: { date: string }) {
       <input
         ref={fileInputRef}
         type="file"
-        accept=".gpx,application/gpx+xml,application/xml,text/xml"
+        accept={isAdmin ? ".gpx,.fit,application/gpx+xml,application/xml,text/xml" : ".gpx,application/gpx+xml,application/xml,text/xml"}
         onChange={onFile}
         className="hidden"
         aria-hidden

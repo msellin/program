@@ -120,3 +120,48 @@ function haversine(lat1: number, lon1: number, lat2: number, lon2: number): numb
     Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
   return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
+
+/**
+ * Classify effort from heart rate (2026-08-27).
+ *
+ * GPX import filled distance, duration and HR but left `intensity` to a
+ * manual pick — and `intensity` is precisely what the retest metrics
+ * filter on: engine-builder, engine-builder-block-2 and
+ * concurrent-strength-maintenance all read
+ * `runs[].avg_hr where intensity == 'easy'`. Import a ride, leave the
+ * dropdown on its default, and the session is invisible to the thing
+ * measuring whether the programme works. The same silent-drop as the
+ * rowing-modality bug already noted in RunSlotCard.
+ *
+ * Calibrated against the highest max HR ever logged rather than a
+ * 220-minus-age guess: it needs no profile field, and it sharpens as the
+ * log grows. Returns null when there is nothing to go on, so the user
+ * still picks.
+ */
+export function intensityFromHr(
+  avgHr: number | null | undefined,
+  observedMaxHr: number | null | undefined,
+): "easy" | "moderate" | "hard" | null {
+  if (avgHr == null || observedMaxHr == null || observedMaxHr <= 0) return null;
+  // Below roughly 70% of max is conversational; above 85% is genuinely hard.
+  // Deliberately conservative at the top: mislabelling a moderate session
+  // "hard" costs an interference warning, mislabelling a hard one "easy"
+  // corrupts the retest trend.
+  const pct = avgHr / observedMaxHr;
+  if (pct < 0.72) return "easy";
+  if (pct < 0.85) return "moderate";
+  return "hard";
+}
+
+/** The highest max HR ever recorded, used to calibrate the above. */
+export function observedMaxHrFrom(
+  logs: Record<string, { runs?: Array<{ max_hr?: number | null }> }> | undefined,
+): number | null {
+  let best = 0;
+  for (const day of Object.values(logs ?? {})) {
+    for (const r of day.runs ?? []) {
+      if (typeof r.max_hr === "number" && r.max_hr > best) best = r.max_hr;
+    }
+  }
+  return best > 0 ? best : null;
+}
