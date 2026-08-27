@@ -325,6 +325,9 @@ type StoreState = {
     key: "block_object" | "block_object_writes" | "postgres_store" | "off_plan",
     value: boolean,
   ) => void;
+  /** Mark a date range as away — no prescribed sessions, logging still open. */
+  addAwayPeriod: (start: string, end: string, reason?: string) => void;
+  removeAwayPeriod: (start: string, end: string) => void;
   /**
    * HERITAGE Phase 5 (2026-08-18 · #63) — log a single retest reading.
    * Two per metric unlock the classifier. Idempotent for same metric+date
@@ -1313,6 +1316,50 @@ export const useStore = create<StoreState>((set, get) => ({
     commit(s);
     set({ store: s });
     announce(`Moved ${changed} session${changed === 1 ? "" : "s"} to ${toDate}`);
+  },
+
+  addAwayPeriod: (start, end, reason) => {
+    const s = { ...get().store };
+    const profile = { ...(s.user_profile ?? {}) };
+    const [from, to] = start <= end ? [start, end] : [end, start];
+    const existing = profile.away_periods ?? [];
+    // Same range twice is a no-op rather than a duplicate row.
+    if (existing.some((p) => p.start === from && p.end === to)) return;
+    profile.away_periods = [...existing, { start: from, end: to, ...(reason ? { reason } : {}) }].sort(
+      (a, b) => a.start.localeCompare(b.start),
+    );
+    s.user_profile = profile;
+    // Away days change what is scheduled, so the materialized blocks are
+    // now wrong. Clearing the stamp makes the keeper regenerate the
+    // forward window on the next load — the same mechanism a rules change
+    // uses. Without it the blocked days would keep their sessions.
+    if (s.program_materialization) {
+      const next = { ...s.program_materialization };
+      for (const slug of Object.keys(next)) {
+        next[slug] = { ...next[slug], rules_version: "away-changed" };
+      }
+      s.program_materialization = next;
+    }
+    commitImmediate(s);
+    set({ store: s });
+  },
+
+  removeAwayPeriod: (start, end) => {
+    const s = { ...get().store };
+    const profile = { ...(s.user_profile ?? {}) };
+    profile.away_periods = (profile.away_periods ?? []).filter(
+      (p) => !(p.start === start && p.end === end),
+    );
+    s.user_profile = profile;
+    if (s.program_materialization) {
+      const next = { ...s.program_materialization };
+      for (const slug of Object.keys(next)) {
+        next[slug] = { ...next[slug], rules_version: "away-changed" };
+      }
+      s.program_materialization = next;
+    }
+    commitImmediate(s);
+    set({ store: s });
   },
 
   setFeatureFlag: (key, value) => {

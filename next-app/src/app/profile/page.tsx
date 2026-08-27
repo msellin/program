@@ -19,6 +19,7 @@ import { loadProgramManifest } from "@/lib/data-loader";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
 import { StatusPill } from "@/components/ui/StatusPill";
 import { BeliefsSection } from "@/components/profile/BeliefsSection";
+import { AwayDays } from "@/components/profile/AwayDays";
 import type { ProgramManifest } from "@/lib/schemas";
 
 /**
@@ -265,6 +266,8 @@ export default function ProfilePage() {
           Pick your focus →
         </Link>
       )}
+
+      <AwayDays />
 
       <div>
         <p className="font-mono text-[10px] uppercase tracking-widest text-muted mb-2">

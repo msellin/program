@@ -1219,6 +1219,28 @@ export const storeSchema = z.object({
       active_program_id: z.string().optional(),
       active_program_started_at: z.string().optional(),
       /**
+       * Dates the user is away and cannot train (2026-08-27).
+       *
+       * Replaces `HIP_RACE_DATE`, a single date hard-coded into the
+       * scheduler. That constant blocked 2026-08-29 for a race the founder
+       * then decided to skip, and there was no way to change it without a
+       * deploy — while a genuine away week (travel, summer) had no
+       * representation at all.
+       *
+       * Blocks PRESCRIBED sessions only. Activity logging stays open, on
+       * purpose: an away day is usually not an empty day. The founder's
+       * first use of this is a Saturday he is riding 90 km.
+       */
+      away_periods: z
+        .array(
+          z.object({
+            start: z.string(),
+            end: z.string(),
+            reason: z.string().optional(),
+          }),
+        )
+        .optional(),
+      /**
        * v2 multi-program: full list of concurrently-active program slugs. The
        * legacy `active_program_id` remains as the "primary" (drives global
        * phase headers, TM proposals, milestones). Additional entries here are

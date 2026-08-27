@@ -18,7 +18,7 @@ import { today as todayISO } from "@/lib/utils";
 import {
   activePhaseFor,
   isPastProgramEnd,
-  RACE_DATE,
+  isAwayOn,
   HOLIDAY_GAP,
 } from "@/lib/engine/schedule";
 import { blocksForDate, composeBlockForUser } from "@/lib/engine/plan-generator";
@@ -451,8 +451,8 @@ export function TodaySession({
               primary.slug === "rowing-2k-test-prep" &&
               userTargetTestDate === activeDate;
             const variant =
-              primary.slug === "anterior-hip-rebuild" && activeDate === RACE_DATE
-                ? "race"
+              isAwayOn(userProfile, activeDate)
+                ? "away"
                 : isRowingTestDay
                   ? "test"
                   : activeDate < primary.phases[0]?.starts

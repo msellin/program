@@ -27,7 +27,7 @@ export function RestDayCard({
   firstSessionDate,
   programSlug,
 }: {
-  variant?: "rest" | "before" | "race" | "holiday" | "test";
+  variant?: "rest" | "before" | "away" | "holiday" | "test";
   programName?: string;
   firstSessionDate?: string;
   programSlug?: string;
@@ -65,12 +65,13 @@ export function RestDayCard({
       </div>
     );
   }
-  if (variant === "race") {
+  if (variant === "away") {
     return (
       <div className="rounded border border-bronze/30 border-l-4 border-l-bronze bg-bronze/10 p-4 text-sm">
-        <p className="font-semibold text-strong">Race day.</p>
+        <p className="font-semibold text-strong">Away today.</p>
         <p className="mt-1 text-muted">
-          Race day. No strength today. Reach the start line healthy.
+          No prescribed session. If you do something anyway — a ride, a run, a
+          class — log it below; the engine still reads it.
         </p>
       </div>
     );

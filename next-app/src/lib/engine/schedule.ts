@@ -31,7 +31,19 @@ const HIP_SLUG = "anterior-hip-rebuild";
  * don't inherit them. Callers that need to render a race/holiday card should
  * gate on `program.slug === HIP_SLUG` first.
  */
-const HIP_RACE_DATE = "2026-08-29";
+/**
+ * Is the user away on this date? Away days block prescribed sessions for
+ * EVERY program, not just the hip one — travel does not care which track
+ * you are on. Activity logging is deliberately unaffected.
+ */
+export function isAwayOn(
+  profile: Store["user_profile"] | undefined,
+  dateISO: string,
+): boolean {
+  return (profile?.away_periods ?? []).some(
+    (p) => dateISO >= p.start && dateISO <= p.end,
+  );
+}
 const HIP_HOLIDAY_GAP = { start: "2026-12-21", end: "2027-01-04" };
 
 const DAY_SHORT_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as const;
@@ -170,7 +182,7 @@ function isPhaseGateSkipped(
  * `ensureMaterialized` compares this against the version stored per
  * program and regenerates the FORWARD window when they differ.
  */
-export const SCHEDULE_RULES_VERSION = "2026-08-27-phase1-spacing";
+export const SCHEDULE_RULES_VERSION = "2026-08-27-away-periods";
 
 export function activePhaseFor(
   program: Program,
@@ -403,6 +415,9 @@ export function strengthBlockIdsForDate(
 ): string[] {
   const slug = (program as unknown as { slug?: string }).slug;
 
+  // Away days prescribe nothing, whatever the program.
+  if (isAwayOn(profile, dateISO)) return [];
+
   // Non-hip programs: generic path only.
   if (slug !== HIP_SLUG) {
     if (!phase) return [];
@@ -411,7 +426,6 @@ export function strengthBlockIdsForDate(
 
   // Hip program: original behavior.
   if (!phase) return [];
-  if (dateISO === HIP_RACE_DATE) return [];
 
   const dow = new Date(dateISO + "T12:00:00").getDay();
   const wt = program.weekly_template as
@@ -504,4 +518,4 @@ export function strengthBlocksForDate(
 // Kept as named exports for existing consumers; both are hip-only signals.
 // New code that needs "is this a race day" or "is this a holiday gap" should
 // gate on program.slug first.
-export { HIP_RACE_DATE as RACE_DATE, HIP_HOLIDAY_GAP as HOLIDAY_GAP };
+export { HIP_HOLIDAY_GAP as HOLIDAY_GAP };

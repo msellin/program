@@ -345,3 +345,40 @@ describe("phase 1 barbell-day spacing (anterior-hip-rebuild)", () => {
     expect(barbellDowsInWeek()).not.toContain(0);
   });
 });
+
+describe("away periods", () => {
+  // Replaces HIP_RACE_DATE, a single date hard-coded into the scheduler.
+  const program = loadProgramJson("anterior-hip-rebuild");
+  const phase = program.phases.find((p) => p.id === "phase_1_rebuild_evaluate")!;
+
+  function blocksOn(dateISO: string, profile?: Store["user_profile"]) {
+    return strengthBlocksForDate(program, phase, dateISO, profile).map((b) => b.id);
+  }
+
+  // A Monday inside phase 1 that does prescribe work.
+  const trainingDay = "2026-08-24";
+
+  it("prescribes nothing on an away day", () => {
+    expect(blocksOn(trainingDay).length).toBeGreaterThan(0);
+    const away: Store["user_profile"] = {
+      away_periods: [{ start: trainingDay, end: trainingDay, reason: "90 km ride" }],
+    };
+    expect(blocksOn(trainingDay, away)).toEqual([]);
+  });
+
+  it("covers a whole range, not just its edges", () => {
+    const away: Store["user_profile"] = {
+      away_periods: [{ start: "2026-08-20", end: "2026-08-28", reason: "Summer trip" }],
+    };
+    expect(blocksOn(trainingDay, away)).toEqual([]);
+    // And leaves days outside the range alone.
+    expect(blocksOn("2026-08-31", away).length).toBeGreaterThanOrEqual(0);
+  });
+
+  it("leaves days outside every period untouched", () => {
+    const away: Store["user_profile"] = {
+      away_periods: [{ start: "2026-09-10", end: "2026-09-12" }],
+    };
+    expect(blocksOn(trainingDay, away)).toEqual(blocksOn(trainingDay));
+  });
+});

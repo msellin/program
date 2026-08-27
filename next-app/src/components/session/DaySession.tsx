@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { loadProgram, loadExercises } from "@/lib/data-loader";
 import { useStore, entrySets } from "@/lib/useStore";
 import { today as todayISO } from "@/lib/utils";
-import { activePhaseFor, isPastProgramEnd, RACE_DATE, HOLIDAY_GAP } from "@/lib/engine/schedule";
+import { activePhaseFor, isPastProgramEnd, isAwayOn, HOLIDAY_GAP } from "@/lib/engine/schedule";
 import { blocksForDate, composeBlockForUser } from "@/lib/engine/plan-generator";
 import { getBlocksForDate, isBlockObjectOn, DAY_VISIBLE_BLOCK_STATES } from "@/lib/engine/block-selectors";
 import { migrateLegacyToBlocks, needsBlockMigration } from "@/lib/migrations/legacy-to-blocks";
@@ -148,8 +148,8 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
       userProfile?.program_states?.[program.slug ?? ""]?.intake_answers?.target_test_date;
     const isRowingTestDay = program.slug === "rowing-2k-test-prep" && userTargetTestDate === activeDate;
     const variant =
-      program.slug === "anterior-hip-rebuild" && activeDate === RACE_DATE
-        ? "race"
+      isAwayOn(userProfile, activeDate)
+        ? "away"
         : isRowingTestDay
           ? "test"
           : activeDate < program.phases[0]?.starts
