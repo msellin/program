@@ -106,6 +106,12 @@ export function BriefView({
   // through. A mixed day — strength blocks plus a run — keeps Start and
   // shows the run's prescription alongside the exercise rows.
   const isPrescriptionSession = prescriptionBlocks.length > 0 && railExercises.length === 0;
+  // Blocks that carry guidance AND exercises — the prescription-only ones
+  // already render their note as the session itself, so exclude them here
+  // to avoid printing the same text twice.
+  const guidanceBlocks = blocks.filter(
+    (b) => (b.note ?? "").trim().length > 0 && !prescriptionBlocks.includes(b),
+  );
 
   const startLabel = isPrescriptionSession
     ? "Log this session"
@@ -180,6 +186,33 @@ export function BriefView({
             ) : (
               <p className="text-[14px] text-ink">{hero.rowCount} sets</p>
             )}
+          </div>
+        ) : null}
+
+        {/* How to run today's work (2026-08-27).
+            A block's `note` only ever rendered for blocks with NO items —
+            so the evaluation session, whose note IS the protocol ("ramp in
+            fives to a clean 5RM, stop at the first grinder, set TM = 5RM x
+            0.90"), showed nothing but a list of exercises. You could open
+            the session and still not know how to run it. Any block that
+            carries guidance now shows it, exercises or not. */}
+        {guidanceBlocks.length > 0 ? (
+          <div className="mb-4">
+            <p className="font-mono text-[10px] uppercase tracking-[.16em] text-muted mb-[9px]">
+              How to run this
+            </p>
+            <div className="space-y-2">
+              {guidanceBlocks.map((b) => (
+                <div
+                  key={b.id}
+                  className="rounded border border-line-soft border-l-4 border-l-bronze bg-surface px-3.5 py-3"
+                >
+                  <p className="text-[13.5px] leading-relaxed text-ink whitespace-pre-line">
+                    {b.note}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         ) : null}
 

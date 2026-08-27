@@ -106,6 +106,14 @@ export function suggestForExercise(
   todayISO: string,
 ): Suggestion | null {
   if (!isTMExercise(exId, store)) return null;
+  // An evaluation must not prescribe from the number it exists to set
+  // (2026-08-27). The Friday squat evaluation was rendering "117.5 kg × 5
+  // — 90% of your 130 kg training max": a target derived from the very TM
+  // the session is meant to replace, and in this case a TM that is 26%
+  // above the founder's best logged 5RM. Circular, and it reinforces the
+  // wrong number at exactly the moment you are trying to correct it. The
+  // block's own note carries the ramp instead.
+  if (blockId.startsWith("block_eval")) return null;
   const tm = store.training_maxes[exId];
   if (tm == null || tm <= 0) return null;
 
