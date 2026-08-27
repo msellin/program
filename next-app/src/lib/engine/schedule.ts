@@ -182,7 +182,7 @@ function isPhaseGateSkipped(
  * `ensureMaterialized` compares this against the version stored per
  * program and regenerates the FORWARD window when they differ.
  */
-export const SCHEDULE_RULES_VERSION = "2026-08-27-away-periods";
+export const SCHEDULE_RULES_VERSION = "2026-08-27-eval-blocks";
 
 export function activePhaseFor(
   program: Program,
@@ -461,8 +461,22 @@ export function strengthBlockIdsForDate(
     // days and leaves Sunday's full-rest principle intact.
     const barbellDays = new Set<number>([1, 3, 6]);
     const evalDays = new Set<number>([2, 5]);
-    if (week === 2) {
-      return evalDays.has(dow) ? ["block_evaluate"] : barbellDays.has(dow) ? ["block_reintro"] : [];
+    // `block_evaluate` DOES NOT EXIST (2026-08-27). The program authors
+    // `block_eval_squat` and `block_eval_pull`; `strengthBlocksForDate`
+    // filters ids against real blocks, so this returned nothing and the
+    // phase-1 evaluation was never schedulable at all. That is why the
+    // founder's training maxes were still intake numbers five months in —
+    // the session that exists to set them could not appear on a calendar.
+    //
+    // Friday takes the squat, Tuesday the pull: the squat TM is the one
+    // Monday's main day needs, so testing it last leaves the freshest
+    // number going into the cycle.
+    //
+    // The `week === 2` gate is relaxed to `week >= 2` as well. An
+    // evaluation you have not done does not stop being due because the
+    // calendar moved on.
+    if (week >= 2 && evalDays.has(dow)) {
+      return dow === 5 ? ["block_eval_squat"] : ["block_eval_pull"];
     }
     return barbellDays.has(dow) ? ["block_reintro"] : [];
   }

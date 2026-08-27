@@ -382,3 +382,36 @@ describe("away periods", () => {
     expect(blocksOn(trainingDay, away)).toEqual(blocksOn(trainingDay));
   });
 });
+
+describe("phase-1 evaluation is schedulable", () => {
+  // `block_evaluate` was returned by the scheduler and does not exist in
+  // the program — strengthBlocksForDate filters ids against real blocks,
+  // so the evaluation never appeared on any calendar, and the founder's
+  // training maxes stayed at their intake values as a result.
+  const program = loadProgramJson("anterior-hip-rebuild");
+  const phase = program.phases.find((p) => p.id === "phase_1_rebuild_evaluate")!;
+
+  function idsOn(dateISO: string) {
+    return strengthBlocksForDate(program, phase, dateISO).map((b) => b.id);
+  }
+
+  it("schedules the squat evaluation on a Friday from week 2 onward", () => {
+    // 2026-08-28 is a Friday in week 3 of the phase.
+    expect(idsOn("2026-08-28")).toEqual(["block_eval_squat"]);
+  });
+
+  it("schedules the pull evaluation on a Tuesday", () => {
+    // 2026-08-25 is a Tuesday in week 2.
+    expect(idsOn("2026-08-25")).toEqual(["block_eval_pull"]);
+  });
+
+  it("never returns a block the program does not author", () => {
+    const authored = new Set(program.blocks.map((b) => b.id));
+    for (let i = 0; i < 24; i++) {
+      const d = new Date(Date.parse(phase.starts + "T12:00:00Z") + i * 864e5)
+        .toISOString()
+        .slice(0, 10);
+      for (const id of idsOn(d)) expect(authored.has(id)).toBe(true);
+    }
+  });
+});
