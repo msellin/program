@@ -578,13 +578,13 @@
   },
   {
    "id": "block_eval_squat",
-   "name": "5RM back squat evaluation",
+   "name": "Training-max validation — back squat",
    "category": "strength",
    "location": "crossfit_box",
    "frequency_per_week": 1,
    "duration_min": 60,
    "phase_gated": "phase_1_rebuild_evaluate",
-   "note": "HOW TO TEST — ramp in fives to a heavy-but-clean 5RM. Spotter required.\n\nWARM-UP (no grinding): bar x8 · 60 x5 · 80 x5 · 95 x3 · 105 x2.\n\nWORKING RAMP, 3-4 min rest between attempts: 110 x5 (should feel RPE 7) · 115 x5 · 120 x5 only if 115 was clean and unbroken · 125 x5 only if 120 moved well.\n\nSTOP at the FIRST of these — the last clean set is your number:\n1. A rep grinds. Not hard — grinds.\n2. Depth changes, or you bounce out of the bottom.\n3. You need rest between reps. A 5RM is five unbroken reps.\n4. Any groin, buttock or low-back symptom. This one outranks the others — stop and log it.\n\nAFTERWARDS: set TM = last clean 5RM x 0.90, rounded down. 115 -> 103.5 · 120 -> 108 · 125 -> 112.5. Do it before Monday; the whole 5/3/1 cycle is a percentage of that number.",
+   "note": "TM VALIDATION — not a max test.\n\nWHY NOT A 5RM RAMP: the log already answers what a 5RM ramp would ask. 115 kg ran RPE 8/9/9/9/8 on 26 Aug, and 17 Aug records \"none of the sets i managed to do 5 reps in a row\". A clean five is below 115, so a ramp would land near 105 — the same weight as an ordinary session, for a session's cost. And a 1RM is the wrong trade: maximal spinal and hip load to derive a number 5/3/1 takes from submaximal work.\n\nWHAT TO DO INSTEAD — validate one number:\nWarm up: bar x8 · 55 x5 · 70 x5 · 85 x3.\nThen ONE set: 100 kg x 5, unbroken.\n\nREAD THE RESULT:\n· Clean, five in a row, RPE 7 or less -> TM = 100. Start the cycle Monday.\n· Doable but grindy, or you paused between reps -> TM = 92.5.\n· Any groin, buttock or low-back symptom -> stop. TM = 90, and put the symptom in front of the physio.\n\nThat is the whole session. Accessories as normal if you want them; no second heavy set.\n\nWHY 100: a training max should be a weight you could still get five clean reps with on a bad day. The current 130 fails that badly — it is 26% above the best five ever logged. Week 1 of the cycle tops at 85% of TM, so at 100 that is 85 kg. It will feel light. Erring low costs one cycle; erring high is what the last month has been.\n\n5/3/1 corrects itself: the AMRAP sets in week 3 tell you if the number was too low, and the TM goes up at the end of every clean cycle.",
    "items": [
     {
      "exercise_id": "back_squat_highbar",

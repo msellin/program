@@ -238,27 +238,50 @@ export function suggestForExercise(
   const reintroCap = round(tm * 0.8);
   if (last) {
     const rpe = last.rpe ?? null;
+    // RPE 9 now BACKS OFF instead of holding (2026-08-27).
+    //
+    // The ladder targets "RPE ~7" but had no rung below zero, so an
+    // athlete who arrived at RPE 9 simply stayed there: hold, hold, hold.
+    // The founder ran phase 1 at 115 kg for weeks at RPE 8/9/9/9/8, on a
+    // block whose authored scheme reads "3-4 × 5 ramping empty bar to a
+    // moderate 5 (RPE 6-7)". Two full RPE points above prescription, in a
+    // rehab reintroduction phase, and the engine's only move was to hold.
+    // His notes across those weeks read "very heavy", "no strength at just
+    // parallel position", "had to go deep and bounce" — and then the groin
+    // and buttock symptoms started.
+    //
+    // Backing off is not losing the progressive approach. It is what makes
+    // progression possible: you cannot ramp from a weight you cannot
+    // complete.
     let bump = 5;
     if (rpe != null) {
       if (rpe <= 5) bump = 10;
       else if (rpe <= 6) bump = 7.5;
       else if (rpe <= 7) bump = 5;
       else if (rpe <= 8) bump = 2.5;
-      else bump = 0;
+      else bump = -5;
     }
     const rawNext = round(last.weight_kg + bump);
     // The 80% TM reintro cap only applies while the athlete is still UNDER it.
     // Once they've demonstrated tolerance above the cap, we no longer clamp them back down
     // (that would violate "never lose the progressive approach").
-    const alreadyAboveCap = last.weight_kg >= reintroCap;
+    // Escaping the reintro cap requires TOLERANCE, not merely having gone
+    // heavier once. The old test was `weight >= cap`, so a single hard
+    // session above 80% TM disabled the cap permanently — and the cap was
+    // 104 kg while the founder climbed to 115+. "Demonstrated tolerance"
+    // has to mean the set was actually manageable; at RPE 9 it was not,
+    // and the cap should still be doing its job.
+    const alreadyAboveCap = last.weight_kg >= reintroCap && (rpe == null || rpe <= 8);
     const beforeStateMod = alreadyAboveCap ? rawNext : Math.min(rawNext, reintroCap);
     const capApplied = !alreadyAboveCap && rawNext > reintroCap;
     const suggested = round(beforeStateMod * combinedMod);
     // Assemble reasoning as clean sentences, no awkward concat.
     const parts: string[] = [];
     parts.push(`Last ${last.date}: ${last.weight_kg} kg × ${last.reps} @ RPE ${rpe ?? "?"}.`);
-    if (bump === 0) {
-      parts.push("Hold weight (RPE 9 — no headroom).");
+    if (bump < 0) {
+      parts.push(`Back off ${Math.abs(bump)} kg — last set was RPE ${rpe}, and this block asks for 6-7.`);
+    } else if (bump === 0) {
+      parts.push("Hold weight (no headroom).");
     } else {
       parts.push(`Bump ${bump > 0 ? "+" : ""}${bump} kg to target RPE ~7.`);
     }
