@@ -144,7 +144,6 @@ export function ProgramPreviewClient({ slug }: Props) {
   };
 
   const startAlone = () => {
-    if (routeThroughIntake) return goToIntake();
     // Personal programs are authored against a specific clinical context. A
     // stranger with different findings would receive the wrong programme.
     // Require explicit ticked acknowledgement before starting.
@@ -152,13 +151,18 @@ export function ProgramPreviewClient({ slug }: Props) {
       setPersonalGate({ open: true, acknowledged: false });
       return;
     }
-    // F3 — if another primary is currently active, warn before the swap.
-    // The prior primary stays in `active_program_ids` as secondary; we
-    // just want the user to know their focus is moving.
+    // The switch confirmation runs BEFORE the intake hand-off, not after it.
+    // Every catalog program declares an intake, so the old ordering (intake
+    // first) meant the warning never fired for anything a beta user can
+    // reach: they answered the wizard and their current focus vanished from
+    // Day and Plan unasked. Under the single-main cap
+    // (MULTI_MAIN_ENABLED=false in useStore) the swap REPLACES rather than
+    // demotes, so this is the only chance to ask.
     if (isSwitchingPrimary) {
       setSwitchWarning(true);
       return;
     }
+    if (routeThroughIntake) return goToIntake();
     commitStart();
   };
 
@@ -578,34 +582,42 @@ export function ProgramPreviewClient({ slug }: Props) {
         />
       ) : null}
 
-      {/* F3 — switch-primary confirmation. Prior primary stays in the
-          active_program_ids list (multi-program is preserved); the swap
-          only moves the "today's" focus. Copy is factual, not scolding. */}
+      {/* Switch-primary confirmation. Copy describes what the code actually
+          does under the single-main cap: the current focus is REPLACED, not
+          demoted to a secondary track. It leaves active_program_ids and
+          stops appearing on Day and Plan. Its logs, tier and phase survive
+          in program_states, and re-picking it resumes the same arc
+          (ensureProgramStateEntry never overwrites an existing started_at)
+          — so this is reversible, and the copy says so rather than
+          implying both tracks keep running. */}
       <ConfirmSheet
         open={switchWarning}
-        title={`Make ${entry.name} your focus?`}
+        title={`Switch your focus to ${entry.name}?`}
         body={
           currentPrimaryName ? (
             <>
               <p>
                 <strong className="text-strong">{currentPrimaryName}</strong>{" "}
-                will move to your secondary track — your logs, phase, and history
-                stay intact. You can switch back any time from Profile.
+                stops appearing on Day and Plan. Your logs, tier and phase are
+                kept — pick it up again from Programs and it resumes where it
+                left off.
               </p>
               <p className="mt-2 text-[13px] text-muted">
-                Terav only sharpens one focus per session. The others ride
-                alongside until you promote them.
+                Terav runs one focus at a time.
               </p>
             </>
           ) : (
-            "This will make it your primary focus."
+            "This will make it your focus."
           )
         }
-        confirmLabel="Make it my focus"
+        confirmLabel="Switch focus"
         cancelLabel="Not yet"
         onCancel={() => setSwitchWarning(false)}
         onConfirm={() => {
           setSwitchWarning(false);
+          // Mirrors startAlone's tail: intake programs still get their
+          // wizard, they just get it after the user has agreed to the swap.
+          if (routeThroughIntake) return goToIntake();
           commitStart();
         }}
       />

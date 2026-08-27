@@ -16,8 +16,21 @@ import { useStore } from "@/lib/useStore";
  * purpose: an away day is usually not an empty day. The first real use of
  * this was a Saturday spent riding 90 km.
  */
+/** Stable reference for the empty case — see the selector note below. */
+const EMPTY_PERIODS: NonNullable<
+  NonNullable<ReturnType<typeof useStore.getState>["store"]["user_profile"]>["away_periods"]
+> = [];
+
 export function AwayDays() {
-  const periods = useStore((s) => s.store.user_profile?.away_periods ?? []);
+  // Select the raw (possibly undefined) value, then derive the fallback
+  // OUTSIDE the store subscription. `?? []` inside the selector returns a
+  // new array reference on every read; zustand compares with Object.is, so
+  // the subscriber refires forever — React #185, "Maximum update depth
+  // exceeded". `undefined` is always === itself; `[]` isn't. This is the
+  // same bug fixed in RetestMetricsPanel (Batch 36, 2026-08-21); it hit
+  // every user with no away period saved, i.e. every new account.
+  const periodsRaw = useStore((s) => s.store.user_profile?.away_periods);
+  const periods = periodsRaw ?? EMPTY_PERIODS;
   const addAwayPeriod = useStore((s) => s.addAwayPeriod);
   const removeAwayPeriod = useStore((s) => s.removeAwayPeriod);
 

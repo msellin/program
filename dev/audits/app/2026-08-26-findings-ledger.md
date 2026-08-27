@@ -223,3 +223,36 @@ fault of its own:
 The lesson the instrumentation encodes: **a skip and a death must never
 look the same in a report**, and a coverage number that moves has to say
 why it moved.
+
+---
+
+## J · Pre-beta program-lifecycle audit (2026-08-27)
+
+Asked before opening the app to friend testers: can they break it in the
+first week? The founder has only ever driven his own track, so the audit
+targeted the lifecycle surfaces he has never used — switching, ending,
+and finding a program at all.
+
+| # | Finding | Status |
+|---|---|---|
+| J1 | **A user mid-arc could not quit.** "End this program" lives only on the GraduationCard, which renders after the arc completes. Profile's "Remove" required `activePrograms.length > 1 && !isPrimary` — unreachable under the single-main cap, where there is exactly one row and it is always primary. The only exit was starting a different program | Fixed — every non-paused row now offers an exit, labelled "End this program" on the primary |
+| J2 | **Switching focus was silent.** `startAlone` routed into intake BEFORE the switch-warning ConfirmSheet could fire. Every catalog program declares an intake, so the warning never fired for anything a tester can reach: they answered the wizard and their current focus vanished from Day and Plan unasked | Fixed — the confirm runs before the intake hand-off; confirming continues into the wizard |
+| J3 | That sheet's copy was **false under the cap** — it promised the prior program "will move to your secondary track" and that "the others ride alongside", which describes `MULTI_MAIN_ENABLED=true`. The code replaces | Fixed — copy now says it stops appearing on Day and Plan, and that re-picking resumes the arc |
+| J4 | **`away_periods` selector re-introduced React #185.** `useStore((s) => s.store.user_profile?.away_periods ?? [])` returns a new array reference on every read; zustand compares with `Object.is`, so the subscriber refires forever. Crashed **/profile for every account with no away period saved — i.e. every new tester**. Shipped same-day in `05fe8b1`, after the last persona sweep. Identical to the RetestMetricsPanel bug fixed in Batch 36 (2026-08-21) | Fixed — raw select, fallback derived outside the subscription |
+| J5 | The single-main cap had **no test of any kind**. The one spec that touched it (`handstand-walk-flow.spec.ts`) asserted "Add alongside" was visible — written before that button moved behind the super-admin allowlist — and is in no npm script, so it never ran and never failed | Fixed — 10 unit tests in `useStore.program-lifecycle.test.ts`; the stale spec rewritten to assert the shipping contract |
+| J6 | `AuthGate` carves out `/programs` as public, but `AppShell` gates first and its own PUBLIC_ROUTES list does not include it. The carve-out is dead code and program browsing is auth-only | Open — cosmetic for beta; matters if the landing ever deep-links a logged-out visitor into a program preview |
+| J7 | Programs is not in the bottom nav (Day / Plan / Record / Profile). Reachable only via Profile rows, empty-state CTAs, and the GraduationCard. In an installed PWA there is no URL bar to fall back on | Open — founder decision, see the master task list |
+| J8 | F2 ("every rowing block has zero items") was still marked Open. Those blocks are `category: "run"`; F3 made run-modality work log as activities | Closed — resolved by F3, ledger line was stale |
+
+**What did NOT break.** The cap itself holds: all five catalog programs
+declare an intake (7-18 questions), so every switch a tester can perform
+routes through `addSecondaryProgram`, hits the `MULTI_MAIN_ENABLED=false`
+branch, and replaces. The "+ Add alongside" bypass is gated to the
+super-admin email allowlist. Switching is reversible — `program_states`
+survives the swap and `ensureProgramStateEntry` never overwrites an
+existing `started_at`, so the arc resumes rather than restarting.
+
+J4 is the one that would have hit on day one, and it was found only by
+driving the app rather than by reading it — the same lesson as the
+2026-08-26 postscript. The sweep that would have caught it ran the day
+before the commit that introduced it.

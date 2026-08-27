@@ -177,12 +177,15 @@ export default function ProfilePage() {
             // program row. Paused arcs get an inline Resume link.
             const paused = !!state?.paused_at;
             const extendedWeeks = state?.extension_weeks ?? 0;
-            // Non-primary rows in a multi-track setup get a "Remove"
-            // text-link. Deliberately quiet — the row itself is a
-            // deep-link to the program page (where the primary remove
-            // action lives). This surface only exists so multi-track
-            // users don't have to navigate two levels to drop an extra.
-            const canRemoveHere = activePrograms.length > 1 && !isPrimary;
+            // Every non-paused row gets a quiet text-link to leave the
+            // program. This used to be `activePrograms.length > 1 &&
+            // !isPrimary`, which is unreachable under the single-main cap
+            // (MULTI_MAIN_ENABLED=false) — there is only ever one row, and
+            // it is always primary. The result was that a user mid-arc had
+            // no way to quit at all: "End this program" lives on the
+            // GraduationCard, which only renders once the arc completes.
+            // Their only exit was starting a different program.
+            const canRemoveHere = !paused;
             // Resolve tier label from plan_tiers using the stored tier id.
             const tierLabel = (() => {
               if (!state?.tier || !manifest) return null;
@@ -244,14 +247,16 @@ export default function ProfilePage() {
                     Resume
                   </button>
                 ) : null}
-                {canRemoveHere && !paused ? (
-                  <button
-                    type="button"
-                    onClick={() => setRemoveOpen(p)}
-                    className="ml-auto mr-3 mb-2 -mt-1 text-[11px] text-muted hover:text-red underline decoration-line hover:decoration-red block"
-                  >
-                    Remove
-                  </button>
+                {canRemoveHere ? (
+                  <div className="flex justify-end pr-3 pb-1 -mt-1">
+                    <button
+                      type="button"
+                      onClick={() => setRemoveOpen(p)}
+                      className="min-h-11 inline-flex items-center px-1 text-[11px] text-muted hover:text-red underline decoration-line hover:decoration-red"
+                    >
+                      {isPrimary ? "End this program" : "Remove"}
+                    </button>
+                  </div>
                 ) : null}
               </li>
             );
@@ -388,9 +393,17 @@ export default function ProfilePage() {
       />
       <ConfirmSheet
         open={!!removeOpen}
-        title={removeOpen ? `Remove ${removeOpen.name}?` : ""}
-        body="Your log history stays. You can pick it up again any time from Programs."
-        confirmLabel="Remove"
+        title={
+          removeOpen
+            ? removeOpen.slug === activeProgramId
+              ? `End ${removeOpen.name}?`
+              : `Remove ${removeOpen.name}?`
+            : ""
+        }
+        body="Your log history stays. You can pick it up again any time from Programs, and it resumes where it left off."
+        confirmLabel={
+          removeOpen && removeOpen.slug === activeProgramId ? "End program" : "Remove"
+        }
         danger
         onConfirm={() => {
           if (removeOpen) removeActiveProgram(removeOpen.slug);

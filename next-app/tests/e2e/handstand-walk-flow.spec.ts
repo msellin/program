@@ -26,12 +26,17 @@ test.beforeEach(async ({ page }) => {
   });
 });
 
-test("Programs catalog loads all three programs", async ({ page }) => {
+test("Programs catalog lists the public programs and hides the personal one", async ({ page }) => {
   await page.goto("/programs/");
   await expect(page.getByRole("heading", { level: 1 })).toContainText(/programs/i);
-  await expect(page.getByText(/anterior hip rebuild/i)).toBeVisible();
-  await expect(page.getByText(/engine builder/i)).toBeVisible();
-  await expect(page.getByText(/handstand walk/i)).toBeVisible();
+  await expect(page.getByText(/engine builder/i).first()).toBeVisible();
+  await expect(page.getByText(/handstand walk/i).first()).toBeVisible();
+  // anterior-hip-rebuild is `personal: true` and DRAFT programs are
+  // unreleased — both are filtered out of browse at programs/page.tsx:109.
+  // This test used to assert the hip program WAS listed, from before that
+  // filter existed.
+  await expect(page.getByText(/anterior hip/i)).toHaveCount(0);
+  await expect(page.getByText(/muscle-up/i)).toHaveCount(0);
   await shot(page, "01-catalog");
 });
 
@@ -200,7 +205,14 @@ test("Extras page has a date bar and Extras is reachable via ⋮ overflow menu",
   await shot(page, "10-extras-with-datenav");
 });
 
-test("Adding a second program shows the amber multi-program banner on Today", async ({ page }) => {
+test("A second program replaces the first, and says so before the intake", async ({ page }) => {
+  // Rewritten 2026-08-27. This test used to assert that "Add alongside" and
+  // "Replace instead" were both offered — written before the single-main cap
+  // (MULTI_MAIN_ENABLED=false) removed the alongside path for everyone
+  // except the super-admin allowlist. It was also in no npm script, so it
+  // never ran and never failed. It now asserts the shipping contract: one
+  // focus at a time, and the swap is confirmed before it happens.
+  //
   // Prime: add anterior-hip-rebuild as primary via localStorage so we're not truly a guest.
   await page.addInitScript(() => {
     const now = Date.now();
@@ -223,9 +235,30 @@ test("Adding a second program shows the amber multi-program banner on Today", as
     localStorage.setItem("program.log.v2", JSON.stringify(store));
   });
 
-  // Now visit Handstand Walk preview → should offer "Add alongside" and "Replace instead"
   await page.goto("/programs/handstand-walk/");
-  await expect(page.getByRole("button", { name: /add alongside/i })).toBeVisible({ timeout: 5000 });
-  await expect(page.getByRole("button", { name: /replace instead/i })).toBeVisible();
-  await shot(page, "11-preview-add-alongside");
+
+  // The replace CTA is the only start affordance a non-admin gets.
+  const replaceCta = page.getByRole("button", { name: /replace current/i });
+  await expect(replaceCta).toBeVisible({ timeout: 5000 });
+  await expect(page.getByRole("button", { name: /add alongside/i })).toHaveCount(0);
+  await shot(page, "11-preview-replace-only");
+
+  // Tapping it must confirm BEFORE handing off to the intake wizard —
+  // the swap drops the current focus out of active_program_ids.
+  await replaceCta.click();
+  await expect(page.getByText(/switch your focus to/i)).toBeVisible({ timeout: 5000 });
+  await expect(page.getByText(/stops appearing on day and plan/i)).toBeVisible();
+  await expect(page).not.toHaveURL(/\/intake/);
+  await shot(page, "12-switch-confirm");
+
+  // Confirming proceeds into intake; the store is untouched until the
+  // wizard commits.
+  await page.getByRole("button", { name: /switch focus/i }).click();
+  await page.waitForURL(/\/programs\/handstand-walk\/intake/);
+  const stillHip = await page.evaluate(
+    () =>
+      JSON.parse(localStorage.getItem("program.log.v2") ?? "{}")?.user_profile
+        ?.active_program_id,
+  );
+  expect(stillHip).toBe("anterior-hip-rebuild");
 });
