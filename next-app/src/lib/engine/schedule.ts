@@ -182,7 +182,7 @@ function isPhaseGateSkipped(
  * `ensureMaterialized` compares this against the version stored per
  * program and regenerates the FORWARD window when they differ.
  */
-export const SCHEDULE_RULES_VERSION = "2026-08-27-eval-blocks";
+export const SCHEDULE_RULES_VERSION = "2026-08-27-eval-spacing";
 
 export function activePhaseFor(
   program: Program,
@@ -478,7 +478,23 @@ export function strengthBlockIdsForDate(
     if (week >= 2 && evalDays.has(dow)) {
       return dow === 5 ? ["block_eval_squat"] : ["block_eval_pull"];
     }
-    return barbellDays.has(dow) ? ["block_reintro"] : [];
+    // An evaluation is a maximal effort, so it counts as a heavy day for
+    // spacing (2026-08-27). Eval days (Tue/Fri) and barbell days
+    // (Mon/Wed/Sat) were independent sets, so Friday's 5RM test landed
+    // next to Saturday's full reintro session — squat and pull 24h after
+    // a max squat, which is the same 48h violation the phase-1 spacing
+    // fix existed to remove. The founder spotted it before the app did.
+    if (barbellDays.has(dow)) {
+      // Only the day AFTER an evaluation is cleared. Clearing both
+      // neighbours wiped the entire barbell week: with evals on Tue/Fri
+      // and barbell on Mon/Wed/Sat, every barbell day borders an eval day,
+      // so the schedule emptied itself. Recovery after a max effort is
+      // what matters; the day before one is fine.
+      const yesterdayDow = (dow + 6) % 7;
+      if (week >= 2 && evalDays.has(yesterdayDow)) return [];
+      return ["block_reintro"];
+    }
+    return [];
   }
 
   if (phase.id === "phase_5_hatch_specialise") {

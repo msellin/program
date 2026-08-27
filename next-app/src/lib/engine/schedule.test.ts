@@ -415,3 +415,26 @@ describe("phase-1 evaluation is schedulable", () => {
     }
   });
 });
+
+describe("evaluations count as heavy days for spacing", () => {
+  // Friday's 5RM squat test was landing next to Saturday's full reintro
+  // session — squat and pull 24h after a max squat. Eval days and barbell
+  // days were independent sets, so the 48h rule the phase-1 fix enforces
+  // did not see the evaluation at all.
+  const program = loadProgramJson("anterior-hip-rebuild");
+  const phase = program.phases.find((p) => p.id === "phase_1_rebuild_evaluate")!;
+  const idsOn = (d: string) => strengthBlocksForDate(program, phase, d).map((b) => b.id);
+
+  it("does not put a barbell session the day after an evaluation", () => {
+    expect(idsOn("2026-08-28")).toEqual(["block_eval_squat"]); // Friday, eval
+    expect(idsOn("2026-08-29")).toEqual([]); // Saturday, was block_reintro
+  });
+
+  it("still trains the day BEFORE an evaluation", () => {
+    // Clearing both neighbours emptied the whole barbell week — with evals
+    // on Tue/Fri and barbell on Mon/Wed/Sat, every barbell day borders one.
+    // Recovery after a max effort is what matters.
+    expect(idsOn("2026-08-25")).toEqual(["block_eval_pull"]); // Tuesday
+    expect(idsOn("2026-08-24")).toEqual(["block_reintro"]); // Monday, kept
+  });
+});
