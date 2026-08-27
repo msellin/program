@@ -951,6 +951,14 @@ const programMaterializationSchema = z.object({
   materialized_through: z.string(),
   materialized_at: z.string(),
   materialization_seed: z.string(),
+  /**
+   * Which version of the day-selection rules produced these blocks. When
+   * it no longer matches `SCHEDULE_RULES_VERSION`, the forward window is
+   * regenerated — otherwise a rules fix never reaches anyone whose blocks
+   * were already materialized. Optional: absent means "before versioning",
+   * which counts as stale.
+   */
+  rules_version: z.string().optional(),
 });
 
 const featureFlagsSchema = z.object({

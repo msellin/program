@@ -23,6 +23,7 @@
  */
 
 import { materializeLookahead } from "./materialize-blocks";
+import { SCHEDULE_RULES_VERSION } from "./schedule";
 import type { Program, ScheduledBlock, Store } from "../schemas";
 
 /** How far ahead we keep blocks materialized. */
@@ -57,8 +58,15 @@ export function activeSlugsOf(store: Store): string[] {
 export function slugsNeedingMaterialization(store: Store, todayISO: string): string[] {
   const threshold = addDays(todayISO, REFRESH_WHEN_RUNWAY_UNDER_DAYS);
   return activeSlugsOf(store).filter((slug) => {
-    const through = store.program_materialization?.[slug]?.materialized_through;
-    return !through || through < threshold;
+    const entry = store.program_materialization?.[slug];
+    const through = entry?.materialized_through;
+    if (!through || through < threshold) return true;
+    // Runway is fine but the RULES changed. Without this a schedule fix
+    // never reaches anyone whose blocks are already materialized — the
+    // phase-1 spacing fix shipped and the founder still had two heavy days
+    // back to back, because his blocks were generated three days earlier
+    // with a runway into October.
+    return entry?.rules_version !== SCHEDULE_RULES_VERSION;
   });
 }
 
@@ -84,6 +92,26 @@ export function ensureMaterialized(
     // Program JSON not loaded (offline, or a slug that no longer ships).
     // Leave the bookkeeping untouched so the next load retries.
     if (!program) continue;
+
+    // Rules change → drop this program's PLANNED blocks from today
+    // forward before regenerating. `mergeMaterialization` only adds and
+    // overwrites; it never removes, so without this the old rule's
+    // Thursday survives alongside the new rule's Saturday and the week
+    // gets both. Past dates and anything the user has touched — done,
+    // skipped, moved, amber_downshifted — are never removed.
+    const staleRules =
+      (store.program_materialization?.[slug]?.rules_version ?? null) !== SCHEDULE_RULES_VERSION;
+    if (staleRules && blocks) {
+      const kept: Record<string, ScheduledBlock> = {};
+      for (const [id, b] of Object.entries(blocks)) {
+        const isThisProgram = b.program_slug === slug;
+        const isFuture = b.actual_date >= todayISO;
+        if (isThisProgram && isFuture && b.state === "planned") continue;
+        kept[id] = b;
+      }
+      blocks = kept;
+    }
+
     const result = materializeLookahead(
       program,
       todayISO,
@@ -97,6 +125,7 @@ export function ensureMaterialized(
       materialized_at: new Date().toISOString(),
       materialization_seed:
         store.user_profile?.program_states?.[slug]?.generation_trace?.seed ?? "",
+      rules_version: SCHEDULE_RULES_VERSION,
     };
     changed = true;
   }

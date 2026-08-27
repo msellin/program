@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
+import { SCHEDULE_RULES_VERSION } from "./schedule";
 import {
   ensureMaterialized,
   slugsNeedingMaterialization,
@@ -48,6 +49,7 @@ function storeWithSecondJustAdded(): Store {
         materialized_through: addDays(TODAY, 40),
         materialized_at: TODAY,
         materialization_seed: "",
+        rules_version: SCHEDULE_RULES_VERSION,
       },
     },
     scheduled_blocks: {},
@@ -73,6 +75,7 @@ describe("slugsNeedingMaterialization", () => {
       materialized_through: addDays(TODAY, REFRESH_WHEN_RUNWAY_UNDER_DAYS - 1),
       materialized_at: TODAY,
       materialization_seed: "",
+      rules_version: SCHEDULE_RULES_VERSION,
     };
     expect(slugsNeedingMaterialization(store, TODAY)).toEqual([SECOND]);
   });
@@ -83,6 +86,7 @@ describe("slugsNeedingMaterialization", () => {
       materialized_through: addDays(TODAY, REFRESH_WHEN_RUNWAY_UNDER_DAYS + 1),
       materialized_at: TODAY,
       materialization_seed: "",
+      rules_version: SCHEDULE_RULES_VERSION,
     };
     expect(slugsNeedingMaterialization(store, TODAY)).toEqual([]);
   });
@@ -118,6 +122,7 @@ describe("ensureMaterialized", () => {
       materialized_through: addDays(TODAY, LOOKAHEAD_DAYS),
       materialized_at: TODAY,
       materialization_seed: "",
+      rules_version: SCHEDULE_RULES_VERSION,
     };
     expect(ensureMaterialized(store, programs, TODAY)).toBeNull();
   });
@@ -134,6 +139,7 @@ describe("ensureMaterialized", () => {
       materialized_through: TODAY,
       materialized_at: TODAY,
       materialization_seed: "",
+      rules_version: SCHEDULE_RULES_VERSION,
     };
 
     const second = ensureMaterialized(first, programs, TODAY)!;
@@ -155,5 +161,63 @@ describe("ensureMaterialized", () => {
     const aDate = secondBlocks[0].actual_date;
     const viaSelector = getBlocksForDate(after, aDate, { slug: SECOND });
     expect(viaSelector.length).toBeGreaterThan(0);
+  });
+});
+
+describe("rules-version invalidation", () => {
+  // The founder hit two heavy days back to back on a build that had
+  // already fixed the phase-1 spacing: his blocks were materialized on
+  // 2026-08-24 with a runway into October, so the keeper had no reason to
+  // re-run and Thursday stayed a barbell day. `scheduled_blocks` is a
+  // stored snapshot, not a live derivation — a rules change has to
+  // invalidate it explicitly.
+  function storeWithStaleRules(): Store {
+    const base = ensureMaterialized(storeWithSecondJustAdded(), programs, TODAY)!;
+    base.program_materialization![PRIMARY] = {
+      materialized_through: addDays(TODAY, 60), // plenty of runway
+      materialized_at: TODAY,
+      materialization_seed: "",
+      rules_version: "some-older-version",
+    };
+    return base;
+  }
+
+  it("flags a program whose rules_version is stale even with runway left", () => {
+    expect(slugsNeedingMaterialization(storeWithStaleRules(), TODAY)).toContain(PRIMARY);
+  });
+
+  it("removes future PLANNED blocks the new rules no longer produce", () => {
+    const stale = storeWithStaleRules();
+    const ghostId = "ghost-block-from-the-old-rules";
+    stale.scheduled_blocks![ghostId] = {
+      id: ghostId,
+      program_slug: PRIMARY,
+      block_template_id: "block_reintro",
+      planned_date: addDays(TODAY, 3),
+      actual_date: addDays(TODAY, 3),
+      state: "planned",
+    } as never;
+    const after = ensureMaterialized(stale, programs, TODAY)!;
+    // mergeMaterialization only adds and overwrites; without an explicit
+    // sweep the old rule's day survives beside the new rule's.
+    expect(after.scheduled_blocks![ghostId]).toBeUndefined();
+    expect(after.program_materialization![PRIMARY].rules_version).toBeTruthy();
+  });
+
+  it("never removes past days or anything the user has touched", () => {
+    const stale = storeWithStaleRules();
+    const pastId = "past-planned";
+    const doneId = "future-done";
+    stale.scheduled_blocks![pastId] = {
+      id: pastId, program_slug: PRIMARY, block_template_id: "block_reintro",
+      planned_date: addDays(TODAY, -5), actual_date: addDays(TODAY, -5), state: "planned",
+    } as never;
+    stale.scheduled_blocks![doneId] = {
+      id: doneId, program_slug: PRIMARY, block_template_id: "block_reintro",
+      planned_date: addDays(TODAY, 2), actual_date: addDays(TODAY, 2), state: "done",
+    } as never;
+    const after = ensureMaterialized(stale, programs, TODAY)!;
+    expect(after.scheduled_blocks![pastId]).toBeDefined();
+    expect(after.scheduled_blocks![doneId]).toBeDefined();
   });
 });

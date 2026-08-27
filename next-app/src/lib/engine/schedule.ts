@@ -155,6 +155,23 @@ function isPhaseGateSkipped(
   return false;
 }
 
+/**
+ * Bump whenever the day-selection rules change (2026-08-27).
+ *
+ * `scheduled_blocks` is a stored snapshot, not a live derivation, so a
+ * change to the rules here does NOT reach a user whose blocks were
+ * materialized under the old ones. That is exactly what happened with the
+ * phase-1 spacing fix: barbell days moved from Mon/Wed/Thu/Sat to
+ * Mon/Wed/Sat, but the founder's blocks had been materialized on
+ * 2026-08-24 with a runway to October, so the keeper had no reason to
+ * re-run and Thursday stayed a barbell day. He hit two heavy days in a row
+ * again, on a build that had supposedly fixed it.
+ *
+ * `ensureMaterialized` compares this against the version stored per
+ * program and regenerates the FORWARD window when they differ.
+ */
+export const SCHEDULE_RULES_VERSION = "2026-08-27-phase1-spacing";
+
 export function activePhaseFor(
   program: Program,
   dateISO: string,
