@@ -17,6 +17,7 @@ import { SetView } from "@/components/session/SetView";
 import { RestTakeover } from "@/components/session/RestTakeover";
 import { nextAfterSet } from "@/components/session/shared/advance";
 import { NoteSheet } from "@/components/session/NoteSheet";
+import { RunSlotCard } from "@/components/workout/RunSlotCard";
 import type { Block, Exercise, Program, Store } from "@/lib/schemas";
 
 /**
@@ -159,13 +160,29 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
                 activeDate <= HOLIDAY_GAP.end
               ? "holiday"
               : "rest";
+    // 2026-08-30 — this used to return the card alone, and BriefView (which
+    // carries the "Log a run, row, or class" footer) never rendered. So every
+    // rest day reached through /session/[slug] was a dead end: no form, no
+    // button, and copy pointing at a tab that no longer exists. Plan's own
+    // "Log a session →" link for rest days carried a comment claiming it
+    // landed "in RestDayCard + RunSlotCard mode" — that mode was never built.
+    // It is now. RunSlotCard writes to logs[activeDate], so a past rest day
+    // records correctly too. TodaySession pairs these the same way on `/`.
+    // Future days get the card only — there is nothing to log yet.
     return (
-      <RestDayCard
-        variant={variant}
-        programName={program.program_goal?.display_name}
-        firstSessionDate={program.phases[0]?.starts}
-        programSlug={program.slug}
-      />
+      <>
+        <RestDayCard
+          variant={variant}
+          programName={program.program_goal?.display_name}
+          firstSessionDate={program.phases[0]?.starts}
+          programSlug={program.slug}
+        />
+        {activeDate <= todayISO() ? (
+          <div id="log-session" className="cv-auto mt-3">
+            <RunSlotCard date={activeDate} />
+          </div>
+        ) : null}
+      </>
     );
   }
 

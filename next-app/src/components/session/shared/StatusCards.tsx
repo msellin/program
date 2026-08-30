@@ -82,7 +82,7 @@ export function RestDayCard({
         <p className="font-semibold">Holiday / light period.</p>
         <p className="mt-1 text-muted">
           Documented light window between Phase 4 (test) and Phase 5 (Hatch). No prescribed strength session.
-          Optional 60% TM movement work; see the Extras tab.
+          Optional 60% TM movement work. If you train anyway, log it below — the engine still reads it.
         </p>
       </div>
     );
@@ -90,9 +90,15 @@ export function RestDayCard({
   return (
     <div className="rounded border border-line-soft border-l-4 border-l-line bg-surface p-4 text-sm">
       <p className="font-semibold">Rest day.</p>
+      {/* 2026-08-30 — this used to point at "the Extras tab", which stopped
+          existing on 2026-08-21 when /extras became /off-plan and dropped out
+          of the bottom nav. In an installed PWA (no address bar) that made the
+          card a dead end: the founder rode 101 km on a rest Saturday and the
+          only screen for that day named a tab he could not reach. The log card
+          now renders directly beneath this one on every surface. */}
       <p className="mt-1 text-muted">
         {programName ? `${programName} has no session on the schedule today. ` : "No session on the schedule today. "}
-        Optional work (accessories, mobility, easy movement) lives on the Extras tab and still logs to today.
+        If you trained anyway — a ride, a run, a class — log it below; it still counts toward your history.
       </p>
     </div>
   );

@@ -414,6 +414,12 @@ export default function WeekPage() {
             const doneCount = dayLog
               ? Object.values(dayLog.exercises).filter((e) => e.done).length
               : 0;
+            // 2026-08-30 — the collapsed header counted logged EXERCISES only,
+            // so a day carrying nothing but activities read as a bare "rest"
+            // with no marker at all. A founder week with a CrossFit class, two
+            // 50 km rides and a paddle showed as four empty rest days until
+            // each was expanded. Activities are logged work; count them.
+            const runCount = dayLog?.runs?.length ?? 0;
             const totalPrescribed = dayLog
               ? Object.keys(dayLog.exercises).length
               : 0;
@@ -598,6 +604,11 @@ export default function WeekPage() {
                         {doneCount > 0 && !isToday ? (
                           <span className="text-[11px] text-green font-mono font-normal">
                             · {doneCount} logged
+                          </span>
+                        ) : null}
+                        {runCount > 0 && !isToday ? (
+                          <span className="text-[11px] text-green font-mono font-normal">
+                            · {runCount} {runCount === 1 ? "activity" : "activities"}
                           </span>
                         ) : null}
                         {contributingProgramCount > 1 ? (

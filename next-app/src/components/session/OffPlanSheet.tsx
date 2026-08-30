@@ -6,6 +6,7 @@ import { BottomSheet } from "@/components/session/shared/BottomSheet";
 import { RunSlotCard } from "@/components/workout/RunSlotCard";
 import { humanBlockName } from "@/lib/day-format";
 import { useStore } from "@/lib/useStore";
+import { today as todayISO } from "@/lib/utils";
 import { isOffPlanOn } from "@/lib/features";
 import type { Program } from "@/lib/schemas";
 
@@ -32,13 +33,24 @@ export function OffPlanSheet({
   onClose: () => void;
 }) {
   const [loggingActivity, setLoggingActivity] = useState(false);
+  const isToday = date === todayISO();
+  const humanDate = new Date(date + "T00:00:00").toLocaleDateString(undefined, {
+    weekday: "long",
+    month: "short",
+    day: "numeric",
+  });
   // Drill list ships dark for the public catalog — every accessory/run
   // block is already scheduled onto a day, so this was a second door into
   // prescribed work. See lib/features.ts.
   const offPlanOn = useStore((s) => isOffPlanOn(s.store));
   const drillBlocks =
     program.blocks?.filter((b) => b.category === "accessory" || b.category === "run") ?? [];
-  const drillCount = drillBlocks.reduce((n, b) => n + (b.items?.length ?? 0), 0);
+  // Slot-based programs (overhead-mobility) author no `items` at all — their
+  // exercises are composed per user from `drill_library` — so summing items
+  // rendered "0 drills available" directly above a list of four drill names.
+  // Fall back to the block count, which is what the list below shows anyway.
+  const itemCount = drillBlocks.reduce((n, b) => n + (b.items?.length ?? 0), 0);
+  const drillCount = itemCount || drillBlocks.length;
 
   return (
     <BottomSheet surface="OffPlanSheet" titleId="off-plan-title" onClose={onClose}>
@@ -50,9 +62,14 @@ export function OffPlanSheet({
           are made entirely of run-category blocks, and their retest
           metrics read `runs[]`. Calling it "anything that isn't the
           program" was wrong for half the catalog. */}
+      {/* 2026-08-30 — "Recorded against today" was hardcoded, but this sheet
+          opens from any date the Brief is showing (Plan's "Log session →"
+          lands on past days). Logging Friday's class on Sunday read as if it
+          would be filed under Sunday. Name the actual date when it isn't
+          today. */}
       <p className="text-[13.5px] leading-snug text-ink mb-[14px]">
-        A run, a row, a class. Recorded against today — the engine reads duration,
-        effort and heart rate.
+        A run, a row, a class. Recorded against {isToday ? "today" : humanDate} — the
+        engine reads duration, effort and heart rate.
       </p>
 
       {loggingActivity ? (

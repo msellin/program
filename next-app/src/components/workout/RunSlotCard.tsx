@@ -497,10 +497,16 @@ export function RunSlotCard({ date }: { date: string }) {
             );
           })()}
 
-          {/* HR — only render for cardio-relevant activities and only when a
-              GPX wasn't imported (GPX auto-fills these values). Manual entry
-              helps users who wore a chest strap but didn't have a GPX device. */}
-          {!importedMeta && activity !== "walk" && activity !== "other" ? (
+          {/* HR — rendered for every activity type, hidden only when a GPX
+              was imported (GPX auto-fills these values). Manual entry helps
+              users who wore a strap but didn't have a GPX device.
+              2026-08-30 — `walk` and `other` used to be excluded here. That
+              silently discarded the engine's own effort input: a founder
+              session logged a 63-min paddleboard (avg HR 119) and an 80-min
+              track activity (avg 100 / max 153), and both landed with no
+              machine-readable HR at all. Watch-recorded HR is the whole
+              point of these fields; the activity label doesn't change that. */}
+          {!importedMeta ? (
             <div className="grid grid-cols-2 gap-2">
               <label className="text-[12px] text-muted">
                 Avg HR (bpm)
