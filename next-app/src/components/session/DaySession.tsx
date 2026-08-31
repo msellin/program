@@ -17,6 +17,7 @@ import { SetView } from "@/components/session/SetView";
 import { RestTakeover } from "@/components/session/RestTakeover";
 import { nextAfterSet } from "@/components/session/shared/advance";
 import { NoteSheet } from "@/components/session/NoteSheet";
+import { countLoggedSets } from "@/lib/set-progress";
 import { RunSlotCard } from "@/components/workout/RunSlotCard";
 import type { Block, Exercise, Program, Store } from "@/lib/schemas";
 
@@ -199,7 +200,7 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
     const r = railExercises.find((re) => re.key === key);
     if (!r) return 0;
     const entry = store.logs[activeDate]?.exercises[key] ?? null;
-    const logged = entrySets(entry).filter((s) => s.weight_kg != null && s.reps != null).length;
+    const logged = countLoggedSets(entrySets(entry), r.isLoadable);
     return Math.min(logged, r.rowCount - 1);
   };
 
@@ -231,16 +232,19 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
     railExercises,
     activeIdx,
     active
-      ? entrySets(store.logs[activeDate]?.exercises[active.key] ?? null).filter(
-          (s) => s.weight_kg != null && s.reps != null,
-        ).length
+      ? countLoggedSets(
+          entrySets(store.logs[activeDate]?.exercises[active.key] ?? null),
+          active.isLoadable,
+        )
       : 0,
   );
 
   const proposals = selectProposals(store, program, activeDate);
   const tmBump = proposals.find((p) => p.kind === "tm_bump") ?? null;
-  const loggedSetsToday = Object.values(store.logs[activeDate]?.exercises ?? {}).some(
-    (e) => entrySets(e).some((s) => s.weight_kg != null && s.reps != null),
+  // Walk the rail rather than the raw log so each entry is judged with its
+  // own `isLoadable` — a bodyweight set carries no weight by design.
+  const loggedSetsToday = railExercises.some(
+    (r) => countLoggedSets(entrySets(store.logs[activeDate]?.exercises[r.key] ?? null), r.isLoadable) > 0,
   );
   const cycleGateActive = !!tmBump && !loggedSetsToday;
 

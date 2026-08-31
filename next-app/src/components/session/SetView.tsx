@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { countLoggedSets, isSetLogged } from "@/lib/set-progress";
 import { announce } from "@/lib/announce";
 import { playTimerComplete } from "@/lib/sound";
 import { useStore, useDayExercise, entrySets } from "@/lib/useStore";
@@ -192,11 +193,7 @@ export function SetView({
   // A set counts as logged once it carries reps (and a weight, when the
   // exercise is loadable) — the same rule DaySession/OffPlanSession use
   // to count progress, so the pips and the rail's `n/m` never disagree.
-  const loggedAt = (i: number): boolean => {
-    const s = sets[i];
-    if (!s || s.reps == null) return false;
-    return active.isLoadable ? s.weight_kg != null : true;
-  };
+  const loggedAt = (i: number): boolean => isSetLogged(sets[i], active.isLoadable);
   const isEditingLoggedSet = loggedAt(activeSetIndex);
 
   // Seconds held on THIS set: what was logged, else the authored dose.
@@ -235,7 +232,7 @@ export function SetView({
 
   const totalRemaining = railExercises.reduce((n, r) => {
     const rEntry = store.logs[date]?.exercises[r.key] ?? null;
-    const logged = entrySets(rEntry).filter((s) => s.weight_kg != null && s.reps != null).length;
+    const logged = countLoggedSets(entrySets(rEntry), r.isLoadable);
     return n + Math.max(0, r.rowCount - logged);
   }, 0);
 
@@ -291,7 +288,7 @@ export function SetView({
           <div className="flex-1 min-w-0 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
           {railExercises.map((r) => {
             const rEntry = store.logs[date]?.exercises[r.key] ?? null;
-            const logged = entrySets(rEntry).filter((s) => s.weight_kg != null && s.reps != null).length;
+            const logged = countLoggedSets(entrySets(rEntry), r.isLoadable);
             const isActive = r.key === active.key;
             return (
               <button
@@ -567,10 +564,40 @@ export function SetView({
           </>
         ) : isAmrap ? (
           <>
+            {/* 2026-08-31 — the AMRAP branch used to render the rep grid
+                ALONE: no load editor and no "Change the weight" toggle, both
+                of which live in the fixed-rep branch below. Every 5/3/1 top
+                set is an AMRAP, so the one set most likely to be run at a
+                different weight than prescribed was the only set whose weight
+                could not be changed. The founder squatted 95 kg on 31 Aug
+                against a prescribed 93.5, could only say so in a free-text
+                note, and the set logged at 93.5 — feeding the wrong number
+                straight into TM inference, which reads weight × reps. The
+                rep grid still confirms; this just lets the kg be right. */}
+            {editingLoad && active.isLoadable ? (
+              <div className="border border-line-strong rounded-[10px] bg-surface p-3 mb-2.5 flex flex-col gap-2">
+                <StepperRow label="kg" value={weight} step={2.5} onChange={setWeight} />
+                <div className="flex items-center justify-between pt-0.5">
+                  <span className="font-mono text-[10px] uppercase tracking-[.14em] text-ink">
+                    Steps of 2.5 kg
+                  </span>
+                  {prescribed ? (
+                    <button
+                      type="button"
+                      onClick={() => setWeight(prescribed.kg)}
+                      className="text-slate text-[13px]"
+                    >
+                      Back to prescription
+                    </button>
+                  ) : null}
+                </div>
+              </div>
+            ) : null}
             <p className="font-mono text-[10px] uppercase tracking-[.14em] text-muted mb-2 text-center">
               {isEditingLoggedSet
                 ? `Fix the reps on set ${activeSetIndex + 1}`
                 : `Reps you got on set ${activeSetIndex + 1}`}
+              {active.isLoadable ? ` · ${weight} kg` : ""}
             </p>
             <div className="flex flex-wrap gap-2">
               {Array.from({ length: 9 }, (_, i) => i + 1).map((n) => (
@@ -584,6 +611,15 @@ export function SetView({
                 </button>
               ))}
             </div>
+            {active.isLoadable ? (
+              <button
+                type="button"
+                onClick={() => onEditingLoad(!editingLoad)}
+                className="w-full h-10 mt-1.5 text-ink text-[14px]"
+              >
+                {editingLoad ? "Hide" : "Change the weight"}
+              </button>
+            ) : null}
           </>
         ) : (
           <>

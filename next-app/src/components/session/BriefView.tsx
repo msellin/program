@@ -5,6 +5,7 @@ import { humanPhaseName, phaseProgress, programDisplayName, humanBlockName } fro
 import { entrySets } from "@/lib/useStore";
 import { ProposalCard } from "@/components/workout/ProposalCard";
 import { CycleStartCard } from "@/components/session/CycleStartCard";
+import { countLoggedSets } from "@/lib/set-progress";
 import { OffPlanSheet } from "@/components/session/OffPlanSheet";
 import type { RailExercise, SessionSheet } from "@/components/session/DaySession";
 import type { Block, Phase, Program, Proposal, Store } from "@/lib/schemas";
@@ -78,9 +79,10 @@ export function BriefView({
   // under way. Mirrors DaySession's own resume-to-first-unfinished-set
   // logic so the label always matches where tapping it actually lands.
   const heroLoggedCount = hero
-    ? entrySets(store.logs[activeDate]?.exercises[hero.key] ?? null).filter(
-        (s) => s.weight_kg != null && s.reps != null,
-      ).length
+    ? countLoggedSets(
+        entrySets(store.logs[activeDate]?.exercises[hero.key] ?? null),
+        hero.isLoadable,
+      )
     : 0;
   // Prescription-only sessions (2026-08-26).
   //
@@ -241,9 +243,7 @@ export function BriefView({
             ))}
             {railExercises.map((r) => {
               const entry = store.logs[activeDate]?.exercises[r.key] ?? null;
-              const loggedCount = entrySets(entry).filter(
-                (s) => s.weight_kg != null && s.reps != null,
-              ).length;
+              const loggedCount = countLoggedSets(entrySets(entry), r.isLoadable);
               // Not `entry?.done` — the store flips that flag true on the
               // FIRST logged set of any exercise (existing behaviour used
               // elsewhere for a manual "mark done" checkbox), which would

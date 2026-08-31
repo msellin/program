@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { countLoggedSets } from "@/lib/set-progress";
 import { BottomSheet } from "@/components/session/shared/BottomSheet";
 import { VideoModal } from "@/components/VideoModal";
 import { ExerciseDetailsSheet } from "@/components/workout/ExerciseDetailsSheet";
@@ -33,7 +34,7 @@ export function OverflowSheet({
   const updateSet = useStore((s) => s.updateSet);
   const markDone = useStore((s) => s.markDone);
   const entry = useDayExercise(active.blockId, active.exercise.id, date);
-  const loggedCount = entrySets(entry).filter((s) => s.weight_kg != null && s.reps != null).length;
+  const loggedCount = countLoggedSets(entrySets(entry), active.isLoadable);
 
   const exercise = active.exercise;
   const hasWarning = !!(exercise.warning || exercise.avoid);
