@@ -1,8 +1,8 @@
 {
   "schema_version": "1.2.0",
   "generated": "2026-08-17",
-  "status": "DRAFT",
-  "status_note": "DRAFT — not yet in catalog. Block 2 of the 3-block Engine Builder arc. Volume expansion + threshold-dominant middle intensity. Assumes Block 1 (base) completed OR the user has an equivalent aerobic base (declared at intake). 8-12 weeks. NO ENGINE CODE required — runs on the same correlated_tier generator as Block 1. Ships when founder flips status to PROVISIONAL and adds the manifest entry.",
+  "status": "REFERENCED",
+  "status_note": "REFERENCED (2026-09-01) — shipped to the public catalog. Block 2 of the 3-block Engine Builder arc: volume expansion + threshold-dominant middle intensity. Assumes Block 1 completed OR an equivalent aerobic base declared at intake. Not yet REVIEWED: no domain-specialist audit, so `reviewed_by` / `review_evidence[]` are deliberately absent.",
   "generation_strategy": "correlated_tier",
   "goals": {
     "generated": "2026-08-17",
@@ -1574,6 +1574,12 @@
       "to": "DRAFT",
       "date": "2026-08-19",
       "note": "P0-9 · PROVISIONAL rename to DRAFT + catalog filter. Legacy alias PROVISIONAL kept in schema for back-compat."
+    },
+    {
+      "from": "DRAFT",
+      "to": "REFERENCED",
+      "date": "2026-09-01",
+      "note": "Promoted for the free-friends beta. Gates checked: 0 unresolved exercise refs, 0 dead capability slots, references[]/reference_ids[] in sync at 32/32, all citations resolve, no retracted authors. Persona added: persona-engine-block2 (consistent-average, foundation, 60d). Engine Builder's graduation CTA now resolves again — it pointed here while this was DRAFT and was suppressed on 2026-09-01."
     }
   ]
 }

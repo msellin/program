@@ -1,8 +1,8 @@
 {
   "schema_version": "1.2.0",
   "generated": "2026-08-17",
-  "status": "DRAFT",
-  "status_note": "DRAFT — not yet in catalog. Multi-dimensional skill program on top of the pull-up + handstand-adjacent drill libraries. Reuses false-grip work, transition drills, ring dip, straight-arm pull-down concepts. Sub-capabilities (false-grip pull strength, transition / turnover, ring dip strength, straight-arm shoulder integrity) train independently. NO ENGINE CODE required — runs on the same multi_dimensional generator as Handstand Walk and First Strict Pull-Up. Ships when founder flips status to PROVISIONAL, adds manifest entry, and confirms the shared drill-library references. Prerequisite gate: 3-5 strict pull-ups and 3-5 ring dips before the transition drills unlock — this is engineering choice + coaching consensus (Sommer 2008, Low 2016 coaching commentary), not RCT-derived.",
+  "status": "REFERENCED",
+  "status_note": "REFERENCED (2026-09-01) — shipped to the public catalog. Multi-dimensional skill program on the pull-up + handstand-adjacent drill libraries. Tier A (prep) → Tier C (first strict ring muscle-up). Not yet REVIEWED: no domain-specialist audit, so `reviewed_by` / `review_evidence[]` are deliberately absent.",
   "generation_strategy": "multi_dimensional",
   "drill_library": [
     "pu_dead_hang",
@@ -1398,6 +1398,12 @@
       "to": "DRAFT",
       "date": "2026-09-01",
       "note": "Fixed 4 of 5 capability_slot names that resolved to zero drills. Blocks declared mu_false_grip_pull / mu_hollow_active_shape / mu_transition_control / mu_straight_arm_lockout; the capability_domains on this program's drill_library exercises are mu_false_grip / pu_hollow_active_shape / mu_transition_mechanics / pu_scap_control. composeSlotDrills fell through to authored items silently, so the multi-dimensional composer — the program's core claim — never fired for those slots. Slot names now match the sibling first-strict-pullup convention for the same block ids."
+    },
+    {
+      "from": "DRAFT",
+      "to": "REFERENCED",
+      "date": "2026-09-01",
+      "note": "Promoted for the free-friends beta. Gates checked: 0 unresolved exercise refs, 0 dead capability slots (four of five were dead until earlier today — see the previous entry), references[]/reference_ids[] in sync at 22/22, all citations resolve, no retracted authors. Persona added: persona-muscleup (consistent-average, tier_a_prep, 60d)."
     }
   ]
 }

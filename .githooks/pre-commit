@@ -1,0 +1,24 @@
+#!/bin/sh
+# Runs the vitest suite when shipped data or app source is staged.
+#
+# Added 2026-09-01. Before this there was NO automated gate between an edit and
+# production: no husky, no active .git/hooks, the only GitHub workflow is path-
+# filtered to supabase/migrations/**.sql, and `next build` cannot see data under
+# public/ because it is copied verbatim and never imported. Three defects
+# reached main from one hand-edit in two days — a missing `used_for` that took a
+# program off the air, a citation list that drifted, and four dead capability
+# slots — each invisible to `python3 -m json.tool`.
+#
+# Versioned (unlike .git/hooks) so it survives a reclone. Enable with:
+#   git config core.hooksPath .githooks
+staged=$(git diff --cached --name-only)
+echo "$staged" | grep -qE '^next-app/(public/data/|src/)' || exit 0
+
+echo "pre-commit: verifying next-app…"
+cd "$(git rev-parse --show-toplevel)/next-app" || exit 1
+npm run verify --silent || {
+  echo ""
+  echo "pre-commit: verify FAILED — commit aborted."
+  echo "Fix the failure, or bypass deliberately with: git commit --no-verify"
+  exit 1
+}

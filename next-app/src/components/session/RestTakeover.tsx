@@ -7,10 +7,24 @@ import { playCountdownTick, playTimerComplete } from "@/lib/sound";
 import type { RailExercise } from "@/components/session/DaySession";
 import type { UpNext } from "@/components/session/shared/advance";
 
+/**
+ * The scale bottomed out at RPE 7 until 2026-09-01, and that cost real
+ * accuracy. `inferTMFromSet` derives reps-in-reserve as `10 - rpe`, so the
+ * lowest thing a lifter could say was "3 in reserve". On 31 Aug the founder ran
+ * an AMRAP top set at 95 kg × 9 with roughly five left; the honest entry did
+ * not exist, and the engine's training-max estimate came out ~5 kg low on the
+ * single number the whole strength track is built from.
+ *
+ * Labels lead with reps-in-reserve because that is the question a lifter can
+ * actually answer after an AMRAP — "how many more could you have done" — and it
+ * is exactly what the engine converts the RPE back into. Easy/Solid/Grind are
+ * kept as the familiar wording for fixed-rep sets.
+ */
 const EFFORTS = [
-  { label: "Easy", rpe: 7 },
-  { label: "Solid", rpe: 8 },
-  { label: "Grind", rpe: 9 },
+  { label: "Plenty left", rir: "4-5+ in reserve", rpe: 5 },
+  { label: "Easy", rir: "~3 in reserve", rpe: 7 },
+  { label: "Solid", rir: "~2 in reserve", rpe: 8 },
+  { label: "Grind", rir: "0-1 in reserve", rpe: 9 },
 ] as const;
 
 /**
@@ -165,7 +179,7 @@ export function RestTakeover({
         <p className="text-[104px] leading-[.9] font-semibold tracking-[-.05em] text-strong mb-2">{fmt}</p>
         {effortAnswered && selectedEffort ? (
           <p className="text-[14.5px] text-line">
-            {selectedEffort} · RPE {EFFORTS.find((e) => e.label === selectedEffort)?.rpe}+
+            {selectedEffort} · {EFFORTS.find((e) => e.label === selectedEffort)?.rir}
             {" · "}
             <button type="button" onClick={() => onEffortAnswered(false)} className="text-slate">
               change
@@ -188,10 +202,15 @@ export function RestTakeover({
         )}
       </div>
       <div className="flex-shrink-0 px-[22px] pb-[22px] flex flex-col gap-3.5">
+        {/* 2026-09-01 — the effort picker used to sit inside the
+            `upNext.kind !== "done"` branch above, so the FINAL set of a session
+            was never asked how it went. That is the set most worth asking
+            about: it is where an AMRAP lands and where fatigue shows. The
+            picker now renders independently of what comes next. */}
         {!effortAnswered ? (
           <div className="border border-line-strong rounded-xl bg-surface px-[14px] pt-[15px] pb-3.5">
             <p className="text-[15.5px] font-semibold text-strong mb-1 tracking-[-.01em]">How was that?</p>
-            <p className="text-[13px] text-ink mb-3">Tells the engine whether to push next week.</p>
+            <p className="text-[13px] text-ink mb-3">How many more could you have done? This sets your training max.</p>
             <div className="flex gap-2">
               {EFFORTS.map((effort) => (
                 <button
@@ -205,14 +224,14 @@ export function RestTakeover({
                       : "border-line-strong bg-surface-2")
                   }
                 >
-                  <span className="block text-[15px] font-semibold text-strong">{effort.label}</span>
+                  <span className="block text-[13.5px] font-semibold text-strong leading-tight">{effort.label}</span>
                   <span
                     className={
-                      "block font-mono text-[10px] mt-0.5 " +
+                      "block font-mono text-[9px] mt-0.5 leading-tight " +
                       (selectedEffort === effort.label ? "text-bronze" : "text-line")
                     }
                   >
-                    RPE {effort.rpe}
+                    {effort.rir}
                   </span>
                 </button>
               ))}

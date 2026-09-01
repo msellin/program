@@ -255,6 +255,37 @@ export const PERSONAS: Persona[] = [
       "Skill overperformer. Grip outpaces pulling strength — hang times jump early while strict reps stay at zero. Does the multi-dim generator re-target the weakest sub-capability (row/negative) rather than just advancing the tier? Does a Tier A → Tier B advance fire off hang-time retests alone, and should it?",
   },
   {
+    // muscle-up promotion coverage (2026-09-01). Tier A is the floor: no
+    // false-grip hang yet, so the arc is grip + ring-dip + transition mechanics
+    // before any muscle-up attempt exists. 10-week manifest arc; 60 days lands
+    // past the first tier gate.
+    id: "persona-muscleup",
+    displayName: "Ring muscle-up beginner",
+    archetypeId: "consistent-average",
+    programSlug: "muscle-up",
+    tier: "tier_a_prep",
+    days: 60,
+    email: "e2e-persona-muscleup@example.test",
+    password: DEFAULT_PASSWORD,
+    focus:
+      "Skill arc, 3-tier, gymnastics. Enters at Tier A with no false-grip hang. Audit target: does the composer actually rotate sub-capabilities (false grip / ring dip / transition) now that the capability_slot names resolve? Four of five were dead until 2026-09-01 and the fallback was silent, so this persona is the regression guard for that specific failure.",
+  },
+  {
+    // engine-builder-block-2 promotion coverage (2026-09-01). Block 2 assumes
+    // Block 1 is complete OR an equivalent aerobic base declared at intake —
+    // the interesting case is a user arriving mid-arc rather than at zero.
+    id: "persona-engine-block2",
+    displayName: "Engine Builder Block 2",
+    archetypeId: "consistent-average",
+    programSlug: "engine-builder-block-2",
+    tier: "foundation",
+    days: 60,
+    email: "e2e-persona-engine-block2@example.test",
+    password: DEFAULT_PASSWORD,
+    focus:
+      "Threshold-dominant middle block of the 3-block Engine arc. 60 days over a 10-week template crosses several phase transitions. Audit target: does the hand-off read correctly for someone who did NOT come from Block 1, and does the volume-expansion phase language stay honest when the retest metrics move slowly?",
+  },
+  {
     id: "persona-rowing-erratic",
     displayName: "Rowing erratic through taper",
     archetypeId: "erratic",

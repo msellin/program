@@ -5,11 +5,12 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build --webpack",
-    "deploy": "next build --webpack && wrangler pages deploy out --project-name=program-v2 --branch=main --commit-dirty=true",
+    "deploy": "npm run verify && next build --webpack && wrangler pages deploy out --project-name=program-v2 --branch=main --commit-dirty=true",
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "e2e:personas": "playwright test -c tests/e2e/playwright.config.ts personas.spec.ts"
+    "e2e:personas": "playwright test -c tests/e2e/playwright.config.ts personas.spec.ts",
+    "verify": "vitest run"
   },
   "dependencies": {
     "@sentry/nextjs": "^10.70.0",

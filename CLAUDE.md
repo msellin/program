@@ -96,12 +96,48 @@ would make the next specialist appointment productive.
 
 ## Validation
 
+**There are two data trees. Only one of them ships.**
+
+- `data/` — the author-time clinical corpus this project started from. Nothing in
+  the app loads it. `validate.py` checks this tree.
+- `next-app/public/data/` — **the runtime data the app actually serves**
+  (`data-loader.ts` fetches `/data/programs/*.json`, `/data/exercises.json`,
+  `/data/programs/manifest.json`, `/data/citations.json`). This is the tree that
+  can break production.
+
+**One command, run from `next-app`:**
+
 ```bash
-for f in data/*.json; do python3 -m json.tool "$f" > /dev/null && echo "ok $f"; done
+cd next-app && npm run verify
 ```
 
-Referential integrity between `program.json` and `exercises.json` should be checked on
-load and fail loudly.
+Any edit under `next-app/public/data/` — including a one-line citation change —
+must pass `npm run verify` before commit. **JSON that parses is not JSON that
+validates.** On 2026-09-01 a citation appended to `evidence_base.references[]`
+omitted the required `used_for`; the file was valid JSON, `programSchema.parse`
+threw at runtime, and the program rendered "Couldn't load program data" for every
+user. Two more defects from the same edit — a `reference_ids[]` that drifted out
+of sync, and four `capability_slot` values in muscle-up that resolved to zero
+drills — were invisible to JSON syntax checking by construction.
+
+Enforced at two points, both running `npm run verify`:
+
+1. **pre-commit hook** — `.githooks/pre-commit`, versioned. Enable once per clone:
+   `git config core.hooksPath .githooks`
+2. **`npm run deploy`** — verify runs before the build. This is the real gate: the
+   deploy is a manual `wrangler pages deploy` from the laptop, so CI does not sit
+   on the path to production.
+
+Referential integrity across the shipped tree — `exercise_id` and `drill_library`
+resolution, `capability_slot` satisfiability, `references[]` ↔ `reference_ids[]` ↔
+`citations.json`, manifest ↔ filesystem — is asserted in
+`next-app/src/lib/data-integrity.test.ts`, alongside the de-identification rules.
+An unresolved `exercise_id` does **not** throw: `DaySession` and `OffPlanSession`
+both `continue` past it, so the movement silently vanishes from the workout. The
+test is the only thing that catches it.
+
+Run vitest from `next-app`, not the repo root — the root sweeps in git worktrees
+under `.claude/` and inflates the run.
 
 ```bash
 cd next-app && npx vitest run src/lib/data-integrity.test.ts
