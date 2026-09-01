@@ -64,6 +64,14 @@ Remaining Phase 0 items (V0-5, V0-6) are measurements, not gates.
 - [ ] **V1-7** Unit tests over recorded landmark fixtures (JSON, not video) so
       the analyser tests run in CI without media.
 
+- [ ] **V1-8** `lib/video/detect-view.ts` — **derive the camera view from the
+      landmarks, never trust the rubric's declared view.** MediaPipe labels are
+      anatomical, so the sign of `r_hip.x - l_hip.x` separates front from rear
+      (positive = rear, camera behind); shoulder/hip x-spread collapsing toward
+      zero separates side from both. Verified 2026-09-01: correctly returned REAR
+      on both founder clips. This is the input that makes per-measure `view`
+      enforceable rather than decorative, and it costs three comparisons.
+
 ---
 
 ## Phase 2 — Rubric engine + first three movements
@@ -89,6 +97,25 @@ Remaining Phase 0 items (V0-5, V0-6) are measurements, not gates.
 - [ ] **V2-7** Fault → cue → regression binding, with `sets_rir` writing
       reps-in-reserve from velocity decay.
 
+- [ ] **V2-8** **Suppress measures the clip cannot support.** Two gates, both
+      discovered by running real clips 2026-09-01:
+      1. **View gate.** A measure declaring `view: front` must not evaluate on a
+         side clip, and vice versa. From a rear view the founder's knee-tracking
+         numbers were pure perspective artifact — both knees moved the *same*
+         direction (+0.43, +0.65 stance-widths), which is body translation, not
+         one knee caving. Shipped as-is that renders a confident valgus fault
+         from a tripod placed off-centre.
+      2. **Per-measure landmark confidence.** `min_landmark_confidence` is
+         currently one clip-wide number. Each measure must also declare the
+         landmarks it depends on and be suppressed when *those* are weak, even
+         when the clip passes overall. Concrete case: front-squat bar tilt is
+         computed from wrists, which scored **0.30 / 0.38** visibility on a clip
+         whose overall core visibility was 0.96. The measure produced a
+         plausible-looking 3.5% tilt built on the worst landmarks in the set.
+      A suppressed measure renders as "not measurable from this angle" and its
+      dependent faults do not evaluate — same degrade-don't-throw discipline as
+      `retest-evaluator.ts`.
+
 ---
 
 ## Phase 3 — Capture UX (file pick only)
@@ -108,6 +135,19 @@ Remaining Phase 0 items (V0-5, V0-6) are measurements, not gates.
       uploaded."** Never the word "uploaded" for the processing itself — it spends
       the privacy promise and the storage saving in one sentence.
 - [ ] **V3-6** Cancel / retry, and a graceful path when the worker dies.
+
+- [ ] **V3-7** **Movement-class verification in the import gate.** The user
+      picks the exercise (confirmed founder decision — classification is not the
+      app's problem), but a mis-pick must be caught rather than measured. Three
+      thresholds over signals the pipeline already computes: hip travel across
+      the rep window, whether wrists rise above the nose, and the sign of
+      `wrist.z - shoulder.z` (bar in front of vs behind the body). Measured
+      2026-09-01 — strict press: hip travel 2.1%/1.7%, wrists above nose, bar in
+      front. Front squat: hip travel 12.7%, wrists never above nose, bar in
+      front. Wholly separable. Rejects "you picked front squat, this looks like a
+      press" instead of emitting depth statistics for an overhead lift.
+      **Verification, not classification** — one rubric to check against, not 133
+      to choose between, which is why it needs no model and no training data.
 
 ---
 

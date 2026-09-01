@@ -176,17 +176,126 @@ Corrected split:
 Add a store-size assertion to the analysis writer so this cannot regress
 silently.
 
+## Run 2026-09-01 (second session) — two clips, unprompted movement ID
+
+Founder supplied two unlabelled clips and asked what could be read off them
+without being told the movement. Both 1080x1920 portrait, rear view, filmed in
+a rack. Rebuilt spike (server + page) under the session scratchpad.
+
+**Movements identified from geometry alone, both correct:**
+
+| | Clip A (23.4 s) | Clip B (21.4 s) |
+|---|---|---|
+| Movement | **barbell strict press** | **front squat** |
+| Reps | 2 | 2 |
+| `lite` detection | **100%** | **99.5%** |
+| Core visibility | 0.948 | 0.960 |
+| ms/frame | 31 | 29 |
+
+Discriminators, all cheap arithmetic over landmarks:
+- **Press vs squat**: hip travel inside the rep window — 2.1%/1.7% of frame
+  (press, no leg drive) vs 12.7% (squat). Also separates strict press from push
+  press, since a dip would show as hip travel before the drive.
+- **Overhead vs racked**: wrist mid-y rising above nose y.
+- **Front rack vs back rack**: mean `wrist.z - shoulder.z` = **+0.38** on both.
+  Camera is behind, so positive means the hands are farther away than the
+  shoulders — bar in front. This is the check that rules out a back squat.
+- **Front vs rear view**: sign of `r_hip.x - l_hip.x`. MediaPipe labels are
+  anatomical, so a rear camera puts subject-right at higher x. Free view
+  detection — became V1-8.
+
+**The escalation ladder never fired.** `lite` cleared the ~85% threshold on both
+clips at roughly half the ms/frame recorded on 2026-08-31. Reinforces the
+existing verdict that framing, not model variant, is the dominant variable:
+these were well-framed clips and the small model was sufficient.
+
+### Form findings that survived scrutiny
+
+Four, from two clips. Deliberately not more.
+
+1. Press was genuinely strict (hip travel 2%) — i.e. the movement matched what
+   would have been selected. This is the movement-class check working.
+2. Press rep 2 was **15% slower** (concentric 1.30 s -> 1.50 s) and stalled early
+   rather than mid-range. The velocity-decay RIR signal, working as intended.
+3. Front squat depth consistent and deep (hip-vs-knee 0.95, 0.97); eccentric
+   *lengthened* rep 1 -> rep 2 (0.70 -> 0.90 s) while concentric held — controlled
+   descent under fatigue, no dumping.
+4. **Repeatable mid-ascent sticking region**, same phase both reps, deeper on
+   rep 2 (velocity 0.14 -> 0.05 -> 0.13, then 0.13 -> 0.03 -> 0.15). Lasts 0.3-0.4 s
+   across 3-4 samples, so not a smoothing artifact.
+
+### Findings discarded, and why — this is the more useful half
+
+- **Knee valgus**: both knees moved the *same* direction (+0.43, +0.65
+  stance-widths). Common-mode shift is body translation or perspective, not one
+  knee caving. Rear view plus an off-centre tripod manufactures this.
+- **Lateral hip shift**: hips travel toward a rear camera during a squat, so
+  depth change amplifies any off-centre x offset. Standing-baseline correction
+  cancels the static bias but not this.
+- **Heel rise**: 3-9 px of change. Below landmark resolution.
+- **Bar tilt (front squat)**: a plausible, repeatable 3.5% tilt — computed from
+  wrists at **0.30/0.38** visibility on a clip whose core visibility was 0.96.
+  A clip-wide confidence threshold does not catch this. Became V2-8.
+- **Depth as an absolute**: geometry said hip ~ knee (0.95); the frame is clearly
+  well below parallel. Rear view foreshortens. Depth is a side-view measure.
+
+Only surviving asymmetry candidate: right shoulder lower at the bottom on both
+reps, **growing 1.25% -> 1.99%** with fatigue, on the two landmarks at 1.00
+visibility. Not a finding — a reason to ask for a squared-up rear clip.
+
+### The vision-model layer failed three times; the arithmetic never did
+
+1. Read the thumbnails, called both clips back squats. Wrong on both.
+2. Read the stall keyframes, saw a forward-pitched torso, was ready to call a
+   good-morning fault. **The measurement refuted it**: hip-rise/shoulder-rise
+   ratio stayed at 0.80-0.92 through both ascents — never above 1.0, so the
+   shoulders rose *faster* than the hips and the torso was becoming more upright
+   at the exact moment it looked like it was collapsing. Torso vertical extent
+   recovered monotonically (0.090 -> 0.119 against a 0.120 standing value). The
+   sticking point is leverage, not technique.
+3. (2026-08-31, prior session) Read the plate faces, called 95 kg as 75 kg.
+
+Same lesson as the original design argument, now with three data points. Keep
+the model out of the runtime judgement path. If an LLM is ever added to phrase
+coaching output, give it the metrics and **never the keyframes**.
+
+### Cost, since it came up
+
+Runtime marginal cost per analysis is **~EUR 0.00**: inference is on-device
+(~7 s of phone compute for a 23 s clip), the model is a one-time 5.5 MB
+service-worker-cached download, no video is uploaded, and ~2 KB of metrics goes
+to the existing store. An optional LLM phrasing pass over the metrics blob
+(~6 k in / 500 out) would be ~USD 0.002 on Haiku, ~0.02 on Sonnet, ~0.04 on
+Opus — affordable, but rejected above on correctness grounds, not cost.
+
+### Rig notes
+
+Spike lived at `<session scratchpad>/spike/` — a no-dep Node server (serves
+`~/Downloads` under `/vid/`, accepts POSTed frames and JSON under `/save`) plus
+a module page exposing `probe / thumbs / frames / runClip` to drive from the
+browser tools. Range support in the server matters; the 2026-08-31 lesson about
+`python3 -m http.server` silently redrawing one frame is why it is hand-rolled.
+`.claude/launch.json` gained a `pose-spike` entry during the run and was
+restored afterwards.
+
 ## Open / next steps
 
 1. **Phase 0 is done and passed** (see verdict above). Phase 1 is unblocked.
-2. Next real question is **bilateral occlusion**, not inversion. On the HSPU clip
+2. Three tasks added 2026-09-01 from the second run: **V1-8** (view detection),
+   **V2-8** (suppress measures the clip cannot support), **V3-7** (movement-class
+   verification). All three exist to stop the feature emitting a confident number
+   the camera angle cannot support.
+3. **Calibration (V1-3) is now the gap that blocks the feature being a product.**
+   Every velocity measured so far is in frame-relative units, so reps within one
+   clip are comparable but this week against last week is not.
+4. Next real question is **bilateral occlusion**, not inversion. On the HSPU clip
    the far-side limbs sat at 0.71-0.79 while near-side sat at 0.95-0.99 — fine
    for single-side measures, not fine for left/right asymmetry. Any rubric
    measuring asymmetry (the founder's hip case) needs `view: front` or `rear`,
    and the validation gate must check **both sides are visible**, not just mean
    confidence.
-3. Benchmark on a real phone before writing the progress copy (V0-5).
-4. Unrelated but blocking-adjacent: **the RPE floor of 7 is a live bug.** Worth
+5. Benchmark on a real phone before writing the progress copy (V0-5).
+6. Unrelated but blocking-adjacent: **the RPE floor of 7 is a live bug.** Worth
    fixing independently of this feature — see plan "Why this matters for the
    engine".
 
