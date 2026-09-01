@@ -83,10 +83,16 @@ export const en: LandingDict = {
   },
   origin: {
     eyebrow: "Where the rigor comes from",
+    // 2026-09-01 — the previous quote ("A blade gets sharper by grinding against
+    // something harder than itself") was typeset as a blockquote and signed
+    // "— Margus, founder", so it read as something the founder had said. He
+    // hadn't. It was brand copy (terav = sharp) in a person's mouth, and it put
+    // the founder at the centre of a section that works better pointed at the
+    // reader. Replaced with what actually happened, in his own words.
     quote:
-      "A blade gets sharper by grinding against something harder than itself. So does a training plan.",
+      "It started with my own hip. Then I realised everyone is working around something.",
     body:
-      "I built the engine against my own log — years of strength work fought around a stubborn hip. Every retest gate, symptom rule, and confirm-first mechanic proved itself on that log before it shipped. Terav is a focused-improvement tool, not a full training plan — it sits alongside your box, your coach, or your own week. If you have a specific medical issue, work with a clinician.",
+      "The engine was built against one real log — years of strength work fought around a stubborn hip. Every retest gate, symptom rule and confirm-first mechanic had to prove itself there before it shipped. Your weakness will be a different one. Terav is a focused-improvement tool, not a full training plan — it runs alongside your box, your coach, or your own week. If you have a specific medical issue, work with a clinician.",
   },
   beta: {
     h2_a: "One intake.",
