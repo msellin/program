@@ -263,14 +263,26 @@ export default function ProfilePage() {
           })}
         </ul>
         </div>
-      ) : (
-        <Link
-          href="/programs"
-          className="inline-flex items-center min-h-[44px] py-3 font-mono text-[11px] uppercase tracking-wider text-bronze hover:text-bronze-hover"
-        >
-          Pick your focus →
-        </Link>
-      )}
+      ) : null}
+
+      {/* BETA-1 (2026-09-01) — this link used to live in the `else` branch
+          above, so it rendered ONLY for a user with no program. The moment
+          you started one, the catalog became unreachable from anywhere in
+          the app: the list above deep-links to `/programs/{slug}`, never to
+          the index, and Programs is not in the bottom nav. In an installed
+          PWA there is no address bar to fall back on, so "swap my focus" or
+          "what else is there" had no answer.
+
+          Chose the persistent row over a fifth bottom-nav tab: a tab bar is
+          for destinations you visit daily (Day / Plan / Record), and picking
+          a program is a monthly action at most. Revisit when paid
+          multi-track makes adding a program a repeated action. */}
+      <Link
+        href="/programs"
+        className="inline-flex items-center min-h-[44px] py-3 font-mono text-[11px] uppercase tracking-wider text-bronze hover:text-bronze-hover"
+      >
+        {activePrograms.length ? "Browse all programs →" : "Pick your focus →"}
+      </Link>
 
       <AwayDays />
 
