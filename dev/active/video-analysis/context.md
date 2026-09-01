@@ -351,6 +351,80 @@ used by `concurrent-strength-maintenance`, which is catalog-public in
 on CSM sees one person's clinical notes as generic coaching copy today. This
 predates the video feature and is not fixed — a spawned task for it was deleted.
 
+## Ring muscle-up clips 2026-09-01 — sampling rate quantified, completion measure refuted
+
+Two ring-MU clips (9.3 s and 12.9 s, 1080x1920, side view, athlete on boxes).
+First ring data in the project, and first data on a *failed* attempt.
+
+| | clip A | clip B |
+|---|---|---|
+| `lite` detection | 100% | 99.2% |
+| Core visibility | 0.852 | 0.884 |
+| **Left elbow / wrist visibility** | **0.20 / 0.22** | **0.18 / 0.20** |
+
+**The far arm is unusable.** On a side-view ring muscle-up the left elbow and
+wrist sit at 0.15-0.25 across both clips while the right side runs 0.87-0.98.
+This is the muscle-up asymmetry non-goal confirmed empirically, and it now covers
+**rings as well as bar** — the non-goal was written from the bar geometry, but the
+occlusion is just as total on rings. Any per-side comparison is impossible from
+this view, at any frame rate.
+
+### Sampling rate: 10 fps under-reads the peak by 4-10 cm
+
+Ran the transition window at 60 fps and compared against the 10 fps whole-clip
+pass. Same clip, same model, same code — only the rate changed.
+
+| | 10 fps peak | 60 fps peak | Under-read |
+|---|---|---|---|
+| clip A | 0.017 torso @ 7.50 s | 0.194 torso @ 7.40 s | **0.177 torso (~9.7 cm)** |
+| clip B | 0.099 torso @ 9.10 s | 0.175 torso @ 10.12 s | **0.077 torso (~4.2 cm)** |
+
+An order of magnitude on clip A. Any threshold sitting between those two values
+flips the verdict on the rate alone — the catastrophic-flip argument for
+reporting margins instead of booleans, now demonstrated rather than asserted.
+**V0-5 as a gate and V1-9 two-rate sampling are both justified by measurement.**
+
+Cost is reassuring: 120 frames at 60 fps over a 2 s window ran at ~30 ms/frame,
+about 3.6 s of compute. Skill clips are also short (9-13 s here vs 21-59 s for
+the barbell clips), so the two-rate pass is affordable.
+
+### The completion measure was confounded by body orientation — refuted
+
+Built "did the transition complete" as `wrist_y - shoulder_y > 0` — shoulders
+above the hands, i.e. the athlete is over the rings. It reported **completed for
+both clips at both frame rates.** It is wrong.
+
+Two false positives found before the real one:
+1. Fired at the end of clip A while the athlete stood on the box with his arms
+   down. Fixed by gating on hands-still-at-ring-height.
+2. Fired during the drop off the rings in clip B. Fixed by requiring the body to
+   be elevated (shoulder rise > 0.30 torso).
+
+The third one is fatal. The frame at clip A t=7.40 — the 60 fps peak, margin
++0.194 torso — shows the athlete in a **horizontal swing**, body parallel to the
+floor, feet out, hands on the rings to one side. The shoulder is higher than the
+wrist *in image y* because the body is horizontal, not because he cleared the
+rings. Neither clip reaches a genuine support position: a ring support needs the
+shoulder roughly a full torso above the hands, and the best either clip shows is
+0.19.
+
+**So I cannot say from this data whether either attempt completed.** The measure
+has to be gravity-aligned and orientation-aware — a scalar comparison in image
+coordinates cannot distinguish "above the rings" from "lying sideways".
+
+**Fourth instance of the same failure mode**, after the plate misread, the
+back-squat thumbnails, and the forward-lean read. Every measure built from a
+single scalar comparison in raw image coordinates has been confounded. The ones
+that survived were differences normalised by an intrinsic body scale *and*
+cross-checked against a second independent condition. That is the rule, and V1-11
+should be read as enforcing it rather than as a formatting requirement.
+
+### Consequence for the plan
+
+Rings are not bar. The plan's Phase 2 lists bar muscle-up at #4 with a reduced
+fault set; ring MU needs its own rubric and its completion criterion is an open
+problem, not an authoring task. Keep it at #4 or later.
+
 ## Open / next steps
 
 1. **Phase 0 is done and passed** (see verdict above). Phase 1 is unblocked.
