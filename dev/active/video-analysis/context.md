@@ -492,6 +492,57 @@ tell a real framing problem from a false alarm.
 - Bystanders in frame are a non-issue architecturally *because* no video is
   uploaded or stored. Worth keeping in the privacy copy.
 
+## Ground truth 2026-09-01 — rep count correct on 4/4 clips
+
+Founder supplied labels: band MU A = **4 reps**, band MU B = **2 reps**. First
+labelled entries in the ground-truth set.
+
+| Clip | Time-gap merge | Structural merge | Truth |
+|---|---|---|---|
+| band MU A | 5 ✗ | **4 ✓** | 4 |
+| band MU B | 2 ✓ | **2 ✓** | 2 |
+| ring A (neg control) | 0 ✓ | **0 ✓** | 0 |
+| ring B (neg control) | 0 ✓ | **0 ✓** | 0 |
+
+### The fix: measure the physical condition, don't proxy it with time
+
+The 5-vs-4 error came from merging fragmented support periods by an **0.8 s time
+gap**. Widening the gap would have fixed this clip and broken the next one — it
+is a tuned constant standing in for a physical fact.
+
+The physical fact is: **a new rep requires the athlete to come back down.** So
+measure that directly — between two candidate supports, take the minimum
+shoulder rise. If the athlete never descended, it was one rep with a momentary
+margin dip at the top.
+
+    between 4.0 s and 4.9 s : min rise  0.85 torso  -> SAME rep
+    between 5.3 s and 7.7 s : min rise -0.71 torso  -> separate rep
+    between 10.4 s and 12.7 s: min rise -0.66 torso -> separate rep
+    between 15.2 s and 17.8 s: min rise -0.67 torso -> separate rep
+
+**0.85 against -0.71 — a 1.5-torso gap.** Any threshold between -0.5 and 0.8
+gives the same answer, so this is structural rather than tuned. Contrast the time
+gap it replaced: 0.9 s against 2.3-2.6 s, which is a factor of 2.5 and would drift
+with cadence, fatigue, and rep tempo.
+
+**The generalisable rule: never proxy a physical condition with a time heuristic
+when the condition itself is measurable.** This is the same class of fix as
+adding the torso-angle condition to the support detector — both replace a
+plausible-looking scalar with the thing actually being asked about.
+
+### Status against V1-6
+
+V1-6 requires 100% on rep count before UI work. Currently **4/4 including two
+negative controls**, on a detector whose thresholds are insensitive over a wide
+band. That is not yet the ~10-clip set the task asks for, and all four clips are
+muscle-ups — a movement whose rep boundary (return to hang) is unusually crisp.
+Pull-ups, HSPU and handstand walk are all still unlabelled and untested.
+
+Two of the four clips are the *hard* cases though: ring attempts that never
+complete, which any counter must return zero on. Getting 0 right matters as much
+as getting 4 right, and a counter tuned only on successful reps would not have
+been tested for it.
+
 ## Open / next steps
 
 1. **Phase 0 is done and passed** (see verdict above). Phase 1 is unblocked.

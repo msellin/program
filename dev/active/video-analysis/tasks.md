@@ -87,10 +87,18 @@ Remaining Phase 0 items (V0-5, V0-6) are measurements, not gates.
       Emits `{repIndex, tStart, tBottom, tEnd}`.
 - [ ] **V1-5** `lib/video/analyse.ts` — orchestrates decode → worker → calibrate
       → segment → measures. Emits `VideoAnalysis`.
-- [ ] **V1-6** **Ground-truth set: ~10 clips, reps hand-counted, depth
+- [~] **V1-6** **Ground-truth set: ~10 clips, reps hand-counted, depth
       hand-measured.** Pipeline must hit **100% on rep count** before any UI work
       starts. Rep count is the feature's credibility; get it wrong once and the
       user never trusts a number again.
+      **Progress 2026-09-01: 4/4 correct** — band bar-MU 4 and 2 (labelled by the
+      founder), ring-MU attempts 0 and 0 (negative controls, never completed).
+      Rep boundary is decided **structurally**, not by a time gap: a new rep
+      requires the shoulder to descend between supports (0.85 vs -0.71 torso — a
+      1.5-torso separation, insensitive to threshold). Still needed: strict
+      pull-up, HSPU, handstand walk, a failed-rep-mid-set case, and a clip with
+      two people overlapping. All four current clips are muscle-ups, whose rep
+      boundary is unusually crisp.
 - [ ] **V1-7** Unit tests over recorded landmark fixtures (JSON, not video) so
       the analyser tests run in CI without media.
 
