@@ -141,6 +141,14 @@ The page correctly names the weekday in its own header and then contradicts itse
 Both `persona-recover/10-report.txt` and `persona-erratic/10-report.txt`, under "Personal contraindications":
 ```
 Overhead pressing — sim: shoulder flagged during intake
+
+> **CORRECTION 2026-09-01.** `sim: shoulder flagged during intake` is **not** a
+> production string. It is written by the persona simulator at
+> `tests/e2e/harness/simulator-v2.ts:612` and occurs **zero** times in `src/`.
+> It reached the rendered report because the seeded persona store contained it.
+> Test data, not a leak — no app change made. The `Terav — Cut C · Record`
+> footer in the same finding was real and is fixed.
+
 ```
 `sim:` is a harness/simulator prefix leaking into the one document explicitly designed to be printed and handed to a physio. **Rewrite**: "Overhead pressing — flagged during intake."
 

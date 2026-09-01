@@ -102,6 +102,21 @@ Secondary and real: the landing carries no equivalent of the app's `CITED` vs `V
 
 ---
 
+> **CORRECTION 2026-09-01 (verified against the same artifacts).** The
+> "3 blocks · 0 exercises" half of this finding is **wrong**. `persona-mobility`
+> renders **"1 block · 2 exercises"**. Overhead Mobility is a slot-based program:
+> its blocks author no `items` and carry `slot_drill_count: 2`, and drills are
+> composed per user at render by `composeBlockForUser`. The count is correct.
+>
+> The "Week 7 under week 4 of 4" half is **also wrong** — they are two different
+> counters and they agree. The active phase is "Weeks 4–7", so week 4 of that
+> 4-week phase **is** programme week 7. Nothing to fix.
+>
+> The barbell-copy half of §3.6 was real and is fixed: `proposedLoadMultiplier`
+> now takes a modality noun, chosen on whether the program declares
+> `training_maxes` — true for exactly the two barbell programs. No action taken
+> on the two claims above; the code is right as written.
+
 ## 4. Cross-persona proof of the "adaptive" claim
 
 | Metric | recover (d30) | strength (d30) | erratic (d45) | pullup (d45) | pullup-fast (d60) | muscleup (d60) | engine-block2 (d35) |

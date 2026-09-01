@@ -37,10 +37,16 @@ if (DSN) {
       // once behind `enableInp: true` in v7). Keeping the note here so
       // it isn't re-flagged. If we upgrade past v10 and the API changes,
       // revisit.
-      // Session replays: sample 10% of sessions, 100% of sessions with an
-      // error. Cheap way to see reproducers without eating the free-tier
-      // event budget.
-      replaysSessionSampleRate: 0.1,
+      // Session replays: error-triggered ONLY. The 10% background sampling
+      // that used to sit here recorded full DOM replays of one session in ten,
+      // and this app's highest-traffic input is a morning symptom form —
+      // 0-10 pain scores by body region, plus free-text notes about how a hip
+      // feels. `sendDefaultPii: false` does not touch replay; masking is a
+      // separate config, and the default masks text but not the fact that a
+      // given user sat on /check/hip scoring their groin a 6. Reproducers on
+      // actual errors are worth the exposure; background surveillance of a
+      // health form is not. (2026-09-01)
+      replaysSessionSampleRate: 0,
       replaysOnErrorSampleRate: 1.0,
       // PII scrubbing: we treat symptom scores, morning-check notes, and
       // session notes as sensitive health data. Sentry's built-in

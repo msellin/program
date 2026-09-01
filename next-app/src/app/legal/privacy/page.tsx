@@ -92,7 +92,7 @@ export default function PrivacyPage() {
         <li>Account, email, session data: <strong>Supabase</strong> (Frankfurt, EU).</li>
         <li>Training logs and symptom data: <strong>Cloudflare KV</strong> (EU replication).</li>
         <li>Static hosting: <strong>Cloudflare Pages</strong> (global CDN).</li>
-        <li>Error reports (when enabled): <strong>Sentry</strong> (EU region, sentry.io).</li>
+        <li>Error reports and in-app feedback (when enabled): <strong>Sentry</strong> (US region, sentry.io), under standard contractual clauses.</li>
         <li>Payment data (when paid tier launches): handled entirely by <strong>Paddle</strong>. We never see card numbers.</li>
       </ul>
       <p className="text-[14px] text-muted">
@@ -102,10 +102,14 @@ export default function PrivacyPage() {
 
       <h2 className="text-lg font-semibold text-strong pt-2">International transfers</h2>
       <p>
-        Health data stays inside the EU. Some CDN edges (static assets, no personal data)
-        serve globally. Sentry error reports are routed to Sentry&apos;s EU cloud when
-        enabled. Payment processing (Paddle) may transfer minimal transactional data to
-        the US under standard contractual clauses.
+        Where each provider stores your data is listed above. Two of them are outside
+        the EU. Error reports and any feedback you send from inside the app go to
+        <strong>Sentry in the United States</strong> under standard contractual clauses:
+        error events are scrubbed of health content before transmission, but a screenshot
+        you choose to attach to a feedback report is sent exactly as you see it, so think
+        before attaching one from the symptom check. Payment processing (Paddle) may
+        transfer minimal transactional data to the US, also under standard contractual
+        clauses. Some CDN edges serve static assets globally; no personal data is involved.
       </p>
 
       <h2 className="text-lg font-semibold text-strong pt-2">Cookies & tracking</h2>
