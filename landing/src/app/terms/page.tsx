@@ -13,9 +13,9 @@ export default function TermsPage() {
         unclear, ask us at{" "}
         <a
           className="text-[var(--color-bronze-hi)] underline decoration-white/20 underline-offset-4"
-          href="mailto:hello@terav.fit"
+          href="mailto:sellinmargus@gmail.com"
         >
-          hello@terav.fit
+          sellinmargus@gmail.com
         </a>{" "}
         before you sign up.
       </p>

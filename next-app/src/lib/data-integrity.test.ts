@@ -454,3 +454,41 @@ describe("landing headline numbers match the app", () => {
     }
   });
 });
+
+/**
+ * Contact address, one value across two deploys.
+ *
+ * The app used `sellinmargus@gmail.com` in four places; the landing used
+ * `hello@terav.fit` in ten. Nobody had confirmed that alias was routed, and it
+ * carried more than the beta CTA: the landing's privacy page put it behind
+ * "Delete my Terav data" and the terms page behind its contact clause. An
+ * unrouted alias there is a GDPR Art. 17 request with nowhere to land — the
+ * kind of failure that is silent by construction, since a mail that vanishes
+ * generates no error for either side.
+ */
+describe("contact address does not fork between the two apps", () => {
+  const LANDING_SRC = path.resolve(__dirname, "..", "..", "..", "landing", "src");
+  const CONTACT = "sellinmargus@gmail.com";
+
+  const walk = (dir: string): string[] =>
+    fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+      const full = path.join(dir, e.name);
+      if (e.isDirectory()) return walk(full);
+      return /\.tsx?$/.test(e.name) ? [full] : [];
+    });
+
+  it("no source file offers an address other than the founder's", () => {
+    const roots = [path.resolve(__dirname, "..")];
+    if (fs.existsSync(LANDING_SRC)) roots.push(LANDING_SRC);
+    const offenders: string[] = [];
+    for (const root of roots) {
+      for (const file of walk(root)) {
+        if (file.endsWith(".test.ts") || file.endsWith(".test.tsx")) continue;
+        for (const m of fs.readFileSync(file, "utf8").matchAll(/mailto:([^"'?&\s]+)/g)) {
+          if (m[1] !== CONTACT) offenders.push(`${path.basename(file)} :: ${m[1]}`);
+        }
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
+});

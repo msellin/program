@@ -51,9 +51,9 @@ export default function PrivacyPage() {
         by writing to{" "}
         <a
           className="text-[var(--color-bronze-hi)] underline decoration-white/20 underline-offset-4 hover:decoration-[var(--color-bronze-hi)]"
-          href="mailto:hello@terav.fit?subject=Delete%20my%20Terav%20data"
+          href="mailto:sellinmargus@gmail.com?subject=Delete%20my%20Terav%20data"
         >
-          hello@terav.fit
+          sellinmargus@gmail.com
         </a>
         .
       </p>
@@ -67,8 +67,8 @@ export default function PrivacyPage() {
 
       <p className="mt-10 text-xs text-[var(--color-muted)]">
         Contact:{" "}
-        <a href="mailto:hello@terav.fit" className="underline decoration-white/20 underline-offset-4">
-          hello@terav.fit
+        <a href="mailto:sellinmargus@gmail.com" className="underline decoration-white/20 underline-offset-4">
+          sellinmargus@gmail.com
         </a>{" "}
         · Last updated {new Date().getFullYear()}.
       </p>

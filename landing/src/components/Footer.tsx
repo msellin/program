@@ -38,7 +38,7 @@ export function Footer() {
                 </li>
                 <li>
                   <a
-                    href="mailto:hello@terav.fit?subject=Terav%20beta"
+                    href="mailto:sellinmargus@gmail.com?subject=Terav%20beta"
                     className="inline-flex min-h-[44px] items-center text-white/70 transition hover:text-white"
                   >
                     Contact

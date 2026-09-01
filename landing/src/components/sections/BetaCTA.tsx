@@ -26,7 +26,7 @@ export function BetaCTA({ dict }: { dict: LandingDict }) {
           <span className="ml-2 transition-transform group-hover:translate-x-0.5">→</span>
         </a>
         <a
-          href="mailto:hello@terav.fit?subject=Terav%20beta"
+          href="mailto:sellinmargus@gmail.com?subject=Terav%20beta"
           className="inline-flex w-full items-center justify-center rounded-full border border-white/15 bg-white/[0.03] px-7 py-4 text-base font-medium text-white/85 backdrop-blur transition hover:border-white/40 hover:bg-white/[0.06] sm:w-auto"
         >
           {t.cta_secondary}
