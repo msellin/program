@@ -9,7 +9,7 @@ export default function PrivacyPage() {
     <div className="max-w-2xl mx-auto space-y-4 pt-4 text-[14px] leading-relaxed">
       <h1 className="text-2xl font-semibold text-strong">Privacy policy</h1>
       <p className="text-muted italic">
-        Last updated: 2026-08-18. Beta — this policy will be lawyer-reviewed before public launch.
+        Last updated: 2026-09-01. Beta — this policy will be lawyer-reviewed before public launch.
       </p>
 
       <h2 className="text-lg font-semibold text-strong pt-2">Who controls your data</h2>
@@ -73,9 +73,18 @@ export default function PrivacyPage() {
             <td className="py-1.5">Kept until 3 years after account deletion (audit trail)</td>
           </tr>
           <tr className="border-b border-line-soft">
-            <td className="py-1.5 pr-2">Error reports (Sentry, if enabled)</td>
+            <td className="py-1.5 pr-2">Automatic error reports (Sentry)</td>
             <td className="py-1.5 pr-2">Debugging crashes</td>
-            <td className="py-1.5">90 days, no email attached, symptom text scrubbed</td>
+            <td className="py-1.5">90 days, email stripped, symptom text scrubbed</td>
+          </tr>
+          <tr className="border-b border-line-soft">
+            <td className="py-1.5 pr-2">Bug reports you send from the app</td>
+            <td className="py-1.5 pr-2">
+              Acting on the problem you reported, and replying to you
+            </td>
+            <td className="py-1.5">
+              90 days. Includes whatever you type, plus a screenshot only if you attach one
+            </td>
           </tr>
         </tbody>
       </table>
@@ -89,8 +98,10 @@ export default function PrivacyPage() {
 
       <h2 className="text-lg font-semibold text-strong pt-2">Where it lives</h2>
       <ul className="list-disc pl-5 space-y-1">
-        <li>Account, email, session data: <strong>Supabase</strong> (Frankfurt, EU).</li>
-        <li>Training logs and symptom data: <strong>Cloudflare KV</strong> (EU replication).</li>
+        <li>
+          Account, email, training logs and symptom data: <strong>Supabase</strong>{" "}
+          (managed Postgres, Frankfurt, EU).
+        </li>
         <li>Static hosting: <strong>Cloudflare Pages</strong> (global CDN).</li>
         <li>Error reports and in-app feedback (when enabled): <strong>Sentry</strong> (US region, sentry.io), under standard contractual clauses.</li>
         <li>Payment data (when paid tier launches): handled entirely by <strong>Paddle</strong>. We never see card numbers.</li>

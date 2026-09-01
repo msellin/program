@@ -263,7 +263,7 @@ export function BriefView({
                       {r.exercise.name}
                     </span>
                     <span className="block text-[13px] text-ink">
-                      {r.rowCount} sets{r.suggestion ? ` · ${r.suggestion.top_set.kg} kg` : ""}
+                      {railScheme(r)}
                     </span>
                     {/* A7 (2026-08-26): notes were WRITE-ONLY. Two buried
                         entry points, and no screen ever showed one back —
@@ -354,6 +354,24 @@ function toneClasses(kind: Proposal["kind"]): string {
   if (kind === "day_adjustment_soften") return "border-amber/40 bg-amber/10 text-amber-strong";
   if (kind === "tier_advance" || kind === "readiness_after_layoff") return "border-slate/40 bg-slate/10 text-slate";
   return "border-line-soft bg-surface text-ink";
+}
+
+/**
+ * The rail's one-line scheme summary. BUG-29 (founder, 2026-08-30): this read
+ * "6 sets · 93.5 kg" on a 5/3/1 day, where only set 1 is at the top weight and
+ * sets 2-6 are FSL at 65-75% TM. It overstated the working load on the one
+ * screen a user scans before loading a bar, and the real FSL weight was
+ * discoverable only by stepping into set 2.
+ *
+ * `rowCount` is `fsl.sets + 1` whenever FSL exists (see `useMemoRail` in
+ * DaySession), so the split below always totals the same number of sets the
+ * old label claimed — it just stops attributing the top weight to all of them.
+ */
+export function railScheme(r: RailExercise): string {
+  if (!r.suggestion) return `${r.rowCount} sets`;
+  const { top_set, fsl } = r.suggestion;
+  if (fsl) return `1 × ${top_set.kg} kg · ${fsl.sets} × ${fsl.kg} kg`;
+  return `${r.rowCount} sets · ${top_set.kg} kg`;
 }
 
 function basisLine(r: RailExercise, store: Store): string | null {

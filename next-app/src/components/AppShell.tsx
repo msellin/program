@@ -10,21 +10,16 @@ import { ResumeLastRoute } from "@/components/ResumeLastRoute";
 import { RestTimerHost } from "@/components/workout/RestTimerHost";
 import { OnboardingRunner } from "@/components/onboarding/OnboardingRunner";
 import { createClient } from "@/lib/supabase/client";
+import { isGuestRoute, isSemiPublicRoute } from "@/lib/route-access";
 
 /**
  * App shell — the persistent chrome around every authenticated route.
  * Public routes (sign-in / sign-up / legal) render children directly without
  * the store hydrator, bottom nav, or onboarding trigger.
  */
-const PUBLIC_ROUTES = ["/sign-in", "/sign-up", "/reset-password", "/legal/privacy", "/legal/terms", "/legal/disclaimer"];
-
-function isPublic(pathname: string): boolean {
-  return PUBLIC_ROUTES.some((p) => pathname === p || pathname.startsWith(p + "/"));
-}
-
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() ?? "/";
-  const publicRoute = isPublic(pathname);
+  const publicRoute = isGuestRoute(pathname);
 
   // P2-26 (Batch 28) — focus <main> on every route change (including
   // browser back/forward via router.back()). Next.js App Router doesn't
@@ -49,7 +44,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </main>
     );
   }
-  return <AuthGatedShell pathname={pathname}>{children}</AuthGatedShell>;
+  return (
+    <AuthGatedShell pathname={pathname} authOptional={isSemiPublicRoute(pathname)}>
+      {children}
+    </AuthGatedShell>
+  );
 }
 
 /**
@@ -61,9 +60,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
  */
 function AuthGatedShell({
   pathname,
+  authOptional = false,
   children,
 }: {
   pathname: string;
+  authOptional?: boolean;
   children: React.ReactNode;
 }) {
   const router = useRouter();
@@ -101,9 +102,22 @@ function AuthGatedShell({
 
   useEffect(() => {
     if (authState !== "unauth") return;
+    // Semi-public route: a guest is allowed to be here, so don't bounce them.
+    if (authOptional) return;
     const next = pathname && pathname !== "/" ? `?next=${encodeURIComponent(pathname)}` : "";
     router.replace(`/sign-in${next}`);
-  }, [authState, pathname, router]);
+  }, [authState, pathname, router, authOptional]);
+
+  // Guest on a semi-public route — render the same bare column a public route
+  // gets. No StoreHydrator (there is no user state to hydrate) and no bottom
+  // nav (every tab behind it would redirect).
+  if (authOptional && authState === "unauth") {
+    return (
+      <main className="max-w-[760px] mx-auto w-full px-4 sm:px-6 flex-1 py-6">
+        {children}
+      </main>
+    );
+  }
 
   if (authState !== "authed") {
     return (
