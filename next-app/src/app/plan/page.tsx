@@ -516,7 +516,7 @@ export default function WeekPage() {
               moved: "bg-slate",
               "logged-full": "bg-green",
               "logged-partial": "bg-green/50",
-              missed: "bg-red/60",
+              missed: "bg-transparent border border-line",
               rest: "bg-line",
               planned: "bg-muted/60",
             }[status];

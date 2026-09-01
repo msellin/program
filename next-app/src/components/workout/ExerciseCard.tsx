@@ -119,7 +119,7 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
     >
       {/* Laterality spine — only rendered when the exercise emphasises a side. */}
       {hasLaterality ? (
-        <aside className="bg-line-soft flex flex-col items-center justify-center gap-0.5 py-2 font-mono text-[10px] font-bold text-muted uppercase">
+        <aside className="bg-line-soft flex flex-col items-center justify-center gap-0.5 py-2 font-mono text-[10px] font-semibold text-muted uppercase">
           {isLeftEmphasis ? (
             <>
               <span className="text-lat-left">L</span>

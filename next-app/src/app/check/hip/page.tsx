@@ -231,7 +231,7 @@ function QuestionPanel({
         ) : null}
       </div>
 
-      <ScoreSlider value={value} onValue={onValue} scale={q.scale} />
+      <ScoreSlider value={value} onValue={onValue} scale={q.scale} label={q.label} />
 
       {videoOpen && q.video_search ? (
         <VideoModal
@@ -267,10 +267,15 @@ function ScoreSlider({
   value,
   onValue,
   scale,
+  label,
 }: {
   value: number | undefined;
   onValue: (v: number) => void;
   scale: AssessmentQuestion["scale"];
+  /** The question this row scores. Without it a screen reader announces
+   *  "Score 4, toggle button" with no idea which body region is being rated —
+   *  and this form asks the same 0-10 question eleven times over. */
+  label: string;
 }) {
   const active = value != null;
   return (
@@ -282,7 +287,11 @@ function ScoreSlider({
         </span>
         <span>10 · {scale.high_label}</span>
       </div>
-      <div className="grid grid-cols-11 gap-1">
+      <div
+        className="grid grid-cols-11 gap-1"
+        role="radiogroup"
+        aria-label={`${label} — 0 (${scale.low_label}) to 10 (${scale.high_label})`}
+      >
         {Array.from({ length: 11 }).map((_, i) => {
           const selected = value === i;
           return (
@@ -296,8 +305,11 @@ function ScoreSlider({
                   ? "bg-bronze text-ground"
                   : "bg-line-soft text-muted hover:bg-line hover:text-ink")
               }
-              aria-label={`Score ${i}`}
-              aria-pressed={selected}
+              role="radio"
+              aria-checked={selected}
+              aria-label={`${label}: ${i}${
+                i === 0 ? ` — ${scale.low_label}` : i === 10 ? ` — ${scale.high_label}` : ""
+              }`}
             >
               {i}
             </button>

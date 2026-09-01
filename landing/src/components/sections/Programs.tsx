@@ -9,6 +9,7 @@ type Program = {
   category: string;
   tone: "bronze" | "teal" | "green" | "amber";
   status: "AVAILABLE" | "COMING" | "PERSONAL";
+  review: "cited" | "verified";
   body: string;
   evidence: string;
 };
@@ -55,6 +56,7 @@ function programsFor(dict: LandingDict): Program[] {
     category: domainLabel[p.domain],
     tone: p.toneColor,
     status: p.status,
+    review: p.review,
     // Falls back to the catalog tagline so a newly-added program still renders
     // a sentence rather than an empty card if the pitch key is not added yet.
     body: pitchBySlug[p.slug] ?? p.tagline,
@@ -142,7 +144,26 @@ function ProgramCard({ p }: { p: Program }) {
           <span className={`rounded-full border px-2 py-0.5 text-[10px] font-medium tracking-wide ${statusStyle}`}>
             {p.status}
           </span>
-        ) : null}
+        ) : (
+          /* The app distinguishes CITED from VERIFIED and the landing did not,
+             so the marketing site implied a specialist audit three programs
+             have not had. Same two tiers, same words. */
+          <span
+            className={
+              "rounded-full border px-2 py-0.5 text-[10px] font-medium tracking-wide " +
+              (p.review === "verified"
+                ? "border-[var(--color-green)]/40 bg-[var(--color-green)]/[0.08] text-[var(--color-green)]"
+                : "border-white/15 bg-white/[0.03] text-[var(--color-muted)]")
+            }
+            title={
+              p.review === "verified"
+                ? "Specialist-audited against its whitepaper."
+                : "Every claim cites a study. Specialist audit still to come."
+            }
+          >
+            {p.review === "verified" ? "VERIFIED" : "CITED"}
+          </span>
+        )}
       </div>
 
       <h3 className="mb-1 text-xl font-bold text-white sm:text-2xl">{p.name}</h3>

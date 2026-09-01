@@ -212,7 +212,7 @@ export function TodaySession({
         <p className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted">
           {todayEyebrow(activeDate, phase)}
         </p>
-        <h1 className="text-[32px] font-bold tracking-[-0.03em] text-strong leading-none">
+        <h1 className="text-[32px] font-semibold tracking-[-0.03em] text-strong leading-none">
           {primary.slug ? programDisplayName(primary, primary.slug) : "Day"}
         </h1>
       </header>

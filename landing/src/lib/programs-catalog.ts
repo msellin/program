@@ -13,6 +13,14 @@ export type LandingProgram = {
   domain: "aerobic" | "concurrent" | "skill";
   domainLabel: string;
   status: "AVAILABLE" | "COMING" | "PERSONAL";
+  /**
+   * Mirrors the app's review ladder, which the landing previously flattened —
+   * five programs are specialist-audited and three are not, and saying nothing
+   * implied all eight were. Must match the app manifest's `status`:
+   * REFERENCED → "cited", REVIEWED / VERIFIED / stable → "verified".
+   * Asserted in next-app/src/lib/data-integrity.test.ts.
+   */
+  review: "cited" | "verified";
   duration: string;
   difficulty: "beginner" | "intermediate" | "advanced" | "multi-tier";
   toneColor: "bronze" | "teal" | "green" | "amber";
@@ -33,6 +41,7 @@ export const PROGRAMS: LandingProgram[] = [
     domain: "aerobic",
     domainLabel: "Aerobic",
     status: "AVAILABLE",
+    review: "verified",
     duration: "8 weeks",
     difficulty: "beginner",
     toneColor: "teal",
@@ -78,6 +87,7 @@ export const PROGRAMS: LandingProgram[] = [
     domain: "concurrent",
     domainLabel: "Concurrent",
     status: "AVAILABLE",
+    review: "verified",
     duration: "8 weeks",
     difficulty: "intermediate",
     toneColor: "amber",
@@ -122,6 +132,7 @@ export const PROGRAMS: LandingProgram[] = [
     domain: "aerobic",
     domainLabel: "Aerobic",
     status: "AVAILABLE",
+    review: "verified",
     duration: "6 weeks",
     difficulty: "intermediate",
     toneColor: "teal",
@@ -165,6 +176,7 @@ export const PROGRAMS: LandingProgram[] = [
     domain: "skill",
     domainLabel: "Skill",
     status: "AVAILABLE",
+    review: "verified",
     duration: "Multi-tier · 8-16 weeks",
     difficulty: "multi-tier",
     toneColor: "bronze",
@@ -209,6 +221,7 @@ export const PROGRAMS: LandingProgram[] = [
     domain: "skill",
     domainLabel: "Skill",
     status: "AVAILABLE",
+    review: "verified",
     duration: "10 weeks",
     difficulty: "intermediate",
     toneColor: "bronze",
@@ -252,6 +265,7 @@ export const PROGRAMS: LandingProgram[] = [
     domain: "skill",
     domainLabel: "Skill",
     status: "AVAILABLE",
+    review: "cited",
     duration: "Multi-tier · 8 weeks",
     difficulty: "multi-tier",
     toneColor: "bronze",
@@ -297,6 +311,7 @@ export const PROGRAMS: LandingProgram[] = [
     domain: "skill",
     domainLabel: "Skill",
     status: "AVAILABLE",
+    review: "cited",
     duration: "Multi-tier · 10 weeks",
     difficulty: "multi-tier",
     toneColor: "bronze",
@@ -341,6 +356,7 @@ export const PROGRAMS: LandingProgram[] = [
     domain: "aerobic",
     domainLabel: "Aerobic",
     status: "AVAILABLE",
+    review: "cited",
     duration: "Multi-tier · 10 weeks",
     difficulty: "multi-tier",
     toneColor: "teal",

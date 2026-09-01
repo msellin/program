@@ -21,10 +21,10 @@ import type { UpNext } from "@/components/session/shared/advance";
  * kept as the familiar wording for fixed-rep sets.
  */
 const EFFORTS = [
-  { label: "Plenty left", rir: "4-5+ in reserve", rpe: 5 },
-  { label: "Easy", rir: "~3 in reserve", rpe: 7 },
-  { label: "Solid", rir: "~2 in reserve", rpe: 8 },
-  { label: "Grind", rir: "0-1 in reserve", rpe: 9 },
+  { label: "Very easy", rir: "4-5+ more", rpe: 5 },
+  { label: "Easy", rir: "~3 more", rpe: 7 },
+  { label: "Solid", rir: "~2 more", rpe: 8 },
+  { label: "Grind", rir: "0-1 more", rpe: 9 },
 ] as const;
 
 /**
@@ -150,13 +150,42 @@ export function RestTakeover({
   const pct = Math.min(1, elapsed / target) * 100;
 
   const existingNote = (store.logs[date]?.exercises[active.key]?.notes ?? "").trim();
+  // Three of the eight shipped programs are gymnastics and carry no training
+  // max at all — telling those users this "sets your training max" is simply
+  // untrue. Gate on the exercise having one.
+  const hasTrainingMax =
+    typeof store.training_maxes?.[active.exercise.id] === "number";
   const justLogged = entrySets(store.logs[date]?.exercises[active.key] ?? null)[justLoggedSetIndex];
   const summary =
     justLogged?.weight_kg != null && justLogged?.reps != null
       ? `Logged · ${justLogged.weight_kg} kg × ${justLogged.reps}`
       : null;
 
+  // 2026-09-01 — answering the picker unmounts the button that had focus, so
+  // focus fell to <body> and keyboard/SR users lost their place mid-session
+  // (WCAG 2.4.3). Move it to the "change" affordance that replaces the picker.
+  // The takeover is `fixed inset-0`, but the bottom nav underneath it stayed in
+  // the accessibility tree — a screen-reader user could tab into tabs they
+  // cannot see. Flagging the body lets one CSS rule take the nav out entirely
+  // (display:none removes it from the a11y tree; z-index alone does not).
+  useEffect(() => {
+    document.body.dataset.modalOpen = "takeover";
+    return () => {
+      delete document.body.dataset.modalOpen;
+    };
+  }, []);
+
+  const changeRef = useRef<HTMLButtonElement | null>(null);
+  const restoreFocusRef = useRef(false);
+  useEffect(() => {
+    if (effortAnswered && restoreFocusRef.current) {
+      restoreFocusRef.current = false;
+      changeRef.current?.focus();
+    }
+  }, [effortAnswered]);
+
   const selectEffort = (effort: (typeof EFFORTS)[number]) => {
+    restoreFocusRef.current = true;
     setSelectedEffort(effort.label);
     onEffortAnswered(true);
     updateSet(active.blockId, active.exercise.id, justLoggedSetIndex, { rpe: effort.rpe }, date);
@@ -168,7 +197,7 @@ export function RestTakeover({
   };
 
   return (
-    <div data-surface="RestTakeover" className="fixed inset-0 z-40 bg-ground flex flex-col">
+    <div data-surface="RestTakeover" className="fixed inset-0 z-50 bg-ground flex flex-col">
       <div className="flex-shrink-0 px-[22px] pt-1">
         <div className="h-[3px] bg-surface-2 rounded-full overflow-hidden">
           <div className="h-full bg-slate rounded-full transition-[width]" style={{ width: `${pct}%` }} />
@@ -181,7 +210,12 @@ export function RestTakeover({
           <p className="text-[14.5px] text-muted">
             {selectedEffort} · {EFFORTS.find((e) => e.label === selectedEffort)?.rir}
             {" · "}
-            <button type="button" onClick={() => onEffortAnswered(false)} className="text-slate">
+            <button
+              type="button"
+              ref={changeRef}
+              onClick={() => onEffortAnswered(false)}
+              className="text-slate"
+            >
               change
             </button>
           </p>
@@ -212,26 +246,32 @@ export function RestTakeover({
             about: it is where an AMRAP lands and where fatigue shows. The
             picker now renders independently of what comes next. */}
         {!effortAnswered ? (
-          <div className="border border-line-strong rounded-xl bg-surface px-[14px] pt-[15px] pb-3.5">
-            <p className="text-[15.5px] font-semibold text-strong mb-1 tracking-[-.01em]">How was that?</p>
-            <p className="text-[13px] text-ink mb-3">How many more could you have done? This sets your training max.</p>
-            <div className="flex gap-2">
+          <div className="border border-line-strong rounded-xl bg-surface p-4">
+            <p className="text-[16px] font-semibold text-strong mb-1 tracking-[-.01em]">How was that?</p>
+            <p className="text-[13px] text-ink mb-3">
+              How many more could you have done?{" "}
+              {hasTrainingMax ? "This sets your training max." : "It tunes what comes next."}
+            </p>
+            <div className="flex gap-2" role="radiogroup" aria-label="How hard was that set?">
               {EFFORTS.map((effort) => (
                 <button
                   key={effort.label}
                   type="button"
+                  role="radio"
+                  aria-checked={selectedEffort === effort.label}
+                  aria-label={`${effort.label} — ${effort.rir}`}
                   onClick={() => selectEffort(effort)}
                   className={
-                    "flex-1 h-[66px] rounded-[10px] border " +
+                    "flex-1 h-[66px] px-1 rounded-[10px] border " +
                     (selectedEffort === effort.label
-                      ? "border-bronze bg-[rgba(200,150,102,.14)]"
+                      ? "border-bronze bg-bronze/15"
                       : "border-line-strong bg-surface-2")
                   }
                 >
-                  <span className="block text-[13.5px] font-semibold text-strong leading-tight">{effort.label}</span>
+                  <span className="block text-[14px] font-semibold text-strong leading-snug">{effort.label}</span>
                   <span
                     className={
-                      "block font-mono text-[9px] mt-0.5 leading-tight " +
+                      "block font-mono text-[10px] mt-0.5 leading-snug " +
                       (selectedEffort === effort.label ? "text-bronze" : "text-muted")
                     }
                   >
@@ -296,7 +336,7 @@ export function RestTakeover({
         <button
           type="button"
           onClick={() => setJumpOpen(true)}
-          className="w-full h-10 text-ink text-[14px]"
+          className="w-full min-h-11 text-ink text-[14px]"
         >
           Do something else next
         </button>

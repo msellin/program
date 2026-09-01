@@ -145,7 +145,7 @@ export function WorkoutHero({
   const Heading: "h1" | "h2" = headingLevel === 1 ? "h1" : "h2";
   const titleClasses =
     scope === "today"
-      ? "text-[32px] leading-[1.05] tracking-[-0.03em] font-bold"
+      ? "text-[32px] leading-[1.05] tracking-[-0.03em] font-semibold"
       : "text-[26px] leading-[1.15] tracking-[-0.02em] font-semibold";
 
   const ctaButton = <PrimaryCtaButton primaryCta={primaryCta} />;

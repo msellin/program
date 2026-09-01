@@ -131,7 +131,7 @@ export default function RecordPage() {
       {/* Header — H1 + Export button. Phase 3 wired: JSON export downloads
           a citation-attributed payload per R-CutC-2. */}
       <header className="flex items-baseline justify-between gap-3">
-        <h1 className="text-[32px] font-bold tracking-[-0.03em] text-strong leading-none">Record</h1>
+        <h1 className="text-[32px] font-semibold tracking-[-0.03em] text-strong leading-none">Record</h1>
         <button
           type="button"
           onClick={() => downloadRecordExport(store)}

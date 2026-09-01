@@ -299,6 +299,25 @@ describe("structural drift", () => {
  * rather than imported — crossing the package boundary for a list of slugs is
  * not worth a build-tool change.
  */
+describe("display names", () => {
+  it("every manifest slug has an explicit short display name", () => {
+    // Without an entry, `programDisplayName` falls back to title-casing the
+    // slug, which produced "First Strict Pullup" for a program actually called
+    // "First Strict Pull-Up". A new program must not inherit that silently.
+    const src = fs.readFileSync(
+      path.join(process.cwd(), "src", "lib", "day-format.ts"),
+      "utf8",
+    );
+    const block = src.slice(
+      src.indexOf("const DISPLAY_NAMES"),
+      src.indexOf("export function programDisplayName"),
+    );
+    const mapped = new Set([...block.matchAll(/"([a-z0-9-]+)":/g)].map((m) => m[1]));
+    const missing = manifest.programs.map((p) => p.slug).filter((s) => !mapped.has(s));
+    expect(missing).toEqual([]);
+  });
+});
+
 describe("landing catalog matches the app manifest", () => {
   const LANDING_CATALOG = path.resolve(
     process.cwd(),
@@ -334,5 +353,34 @@ describe("landing catalog matches the app manifest", () => {
       missingFromLanding: [],
       missingFromApp: [],
     });
+  });
+
+  it("landing review badges match the app's REFERENCED/REVIEWED ladder", () => {
+    if (!fs.existsSync(LANDING_CATALOG)) return;
+    const src = fs.readFileSync(LANDING_CATALOG, "utf8");
+
+    // slug → review, read in document order from the same entry block.
+    const landingReview = new Map<string, string>();
+    for (const m of src.matchAll(
+      /slug:\s*"([^"]+)"[\s\S]{0,4000}?review:\s*"(cited|verified)"/g,
+    )) {
+      if (!landingReview.has(m[1])) landingReview.set(m[1], m[2]);
+    }
+
+    const expected = (status?: string) =>
+      status === "REVIEWED" || status === "VERIFIED" || status === "stable"
+        ? "verified"
+        : "cited";
+
+    const mismatches = manifest.programs
+      .filter((p) => !p.personal && landingReview.has(p.slug))
+      .map((p) => ({
+        slug: p.slug,
+        app: expected(p.status),
+        landing: landingReview.get(p.slug),
+      }))
+      .filter((r) => r.app !== r.landing);
+
+    expect(mismatches).toEqual([]);
   });
 });

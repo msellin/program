@@ -8,9 +8,12 @@ import { AuthGate } from "@/components/AuthGate";
 import { AppShell } from "@/components/AppShell";
 import "./globals.css";
 
-// P1-26 — 700 dropped. `font-bold` is only used on font-mono (3 sites) so
-// Inter never needs the 700 weight. Removing it drops one woff2 file per
-// subset. If a future need for Inter 700 arises, re-add here.
+// P1-26 — Inter 700 dropped; one fewer woff2 per subset.
+// 2026-09-01: the original note said `font-bold` was "only used on font-mono",
+// implying it was safe. It was not — JetBrains Mono is loaded at 400/500 too,
+// so mono `font-bold` synthesised as well. Every `font-bold` in the app has
+// been moved to `font-semibold`; there is no 700 face for either family, so
+// adding one back means adding the weight here first.
 const sans = Inter({
   variable: "--font-sans",
   subsets: ["latin"],

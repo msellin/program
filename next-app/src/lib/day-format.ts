@@ -9,12 +9,35 @@ import type { Program, Phase, Exercise } from "@/lib/schemas";
  */
 
 /**
- * Slug title-case matches the manifest name for every current program;
- * `program_goal.display_name` is often the target metric ("Loaded
- * overhead shoulder flexion") and reads as a bug. Same anti-pattern
- * reveal-copy.ts + BlockHistorySection.tsx already fix.
+ * Short, human display name per program.
+ *
+ * This used to title-case the slug, on the stated grounds that "slug title-case
+ * matches the manifest name for every current program". That was true when
+ * written; as of 2026-09-01 it is wrong for seven of nine — most visibly
+ * "First Strict Pullup" against the real "First Strict Pull-Up".
+ *
+ * It is not simply the manifest name either: those run long by design
+ * ("Muscle-Up Acquisition (strict ring)", "Engine Builder — Block 1: Base")
+ * and this string lands in card headers and single-line sentences. So: an
+ * explicit short name per slug, with slug title-case as the fallback.
+ * `data-integrity.test.ts` asserts every manifest slug has an entry, so a new
+ * program cannot quietly fall through to the bad casing.
  */
+const DISPLAY_NAMES: Record<string, string> = {
+  "anterior-hip-rebuild": "Anterior Hip Rebuild",
+  "engine-builder": "Engine Builder",
+  "engine-builder-block-2": "Engine Builder · Block 2",
+  "concurrent-strength-maintenance": "Concurrent-Strength Maintenance",
+  "rowing-2k-test-prep": "Rowing 2K Test Prep",
+  "handstand-walk": "Handstand Walk",
+  "overhead-mobility": "Overhead Mobility",
+  "first-strict-pullup": "First Strict Pull-Up",
+  "muscle-up": "Muscle-Up",
+};
+
 export function programDisplayName(_program: Program, slug: string): string {
+  const known = DISPLAY_NAMES[slug];
+  if (known) return known;
   return slug
     .split("-")
     .map((w) => (w.length ? w[0].toUpperCase() + w.slice(1) : w))

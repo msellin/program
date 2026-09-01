@@ -43,7 +43,7 @@ export default function PrimitivesStory() {
           <p className="font-mono text-[10px] uppercase tracking-widest text-bronze">
             /dev/primitives
           </p>
-          <h1 className="text-[32px] font-bold text-strong tracking-[-0.03em] leading-tight">
+          <h1 className="text-[32px] font-semibold text-strong tracking-[-0.03em] leading-tight">
             Terav primitive story
           </h1>
           <p className="text-[14px] text-muted leading-snug">

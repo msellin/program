@@ -117,7 +117,14 @@ function selectDayAdjustment(
       sig = daySignals(store.logs[iso(d)]);
     }
   }
-  const proposal = proposedLoadMultiplier(sig);
+  // What gets softened depends on the modality. Only programs that declare
+  // `training_maxes` have a top set to trim — exactly the two barbell programs
+  // (anterior-hip-rebuild, concurrent-strength-maintenance). The other six
+  // shipped programs are skill, gymnastics or aerobic, and all of them were
+  // being told to "trim 5% from the top set" on sessions that have none.
+  const hasTopSet = Object.keys(program.training_maxes ?? {}).length > 0;
+  const loadNoun = hasTopSet ? "top set" : "session";
+  const proposal = proposedLoadMultiplier(sig, loadNoun);
   if (!proposal) return null;
 
   // Bug #1 fix: if the ONLY thing today has is a life-load value AND no prior

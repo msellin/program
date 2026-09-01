@@ -330,7 +330,14 @@ export function daySignals(day: DayLog | null | undefined): NoteSignals {
  * The multiplier is a *proposal only* — the engine must not apply it without an explicit
  * user Accept. Returns `null` when signals don't warrant a proposal.
  */
-export function proposedLoadMultiplier(sig: NoteSignals): {
+/**
+ * `loadNoun` names the thing being softened. It defaults to "top set" because
+ * that is right for the barbell programs the rule was written for — but from
+ * 2026-09-01 the catalog is half gymnastics, and Handstand Walk and Overhead
+ * Mobility were both rendering "Consider trimming 5% from the top set" on
+ * programs that have no top set. Caller passes the modality-appropriate noun.
+ */
+export function proposedLoadMultiplier(sig: NoteSignals, loadNoun = "top set"): {
   multiplier: number;
   reason: string;
 } | null {
@@ -346,7 +353,7 @@ export function proposedLoadMultiplier(sig: NoteSignals): {
       : "";
     return {
       multiplier: 0.9,
-      reason: `High fatigue / outside load detected.${driftBit} Take 10% off the top set today?`,
+      reason: `High fatigue / outside load detected.${driftBit} Take 10% off the ${loadNoun} today?`,
     };
   }
   if (sig.fatigue === "elevated") {
@@ -372,7 +379,7 @@ export function proposedLoadMultiplier(sig: NoteSignals): {
     }
     return {
       multiplier: 0.95,
-      reason: `${attribution} Consider trimming 5% from the top set.`,
+      reason: `${attribution} Consider trimming 5% from the ${loadNoun}.`,
     };
   }
   return null;

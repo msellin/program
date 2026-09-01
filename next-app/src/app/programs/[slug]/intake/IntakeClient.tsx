@@ -920,9 +920,12 @@ function WizardProgress({
             switch to %) per audit + a11y warning (only one progressbar
             role per view). */}
         <span className="font-mono text-[13px] text-muted uppercase tracking-widest whitespace-nowrap">
-          {sectionLabel ? <span className="mr-1 text-strong">{sectionLabel}</span> : null}
+          {/* The gap between label and counter was a CSS margin only, so the
+              text layer read "SCREENING· Step 1 of 9" — fine on screen, wrong
+              for anything reading the DOM. Real separator character instead. */}
+          {sectionLabel ? <span className="text-strong">{sectionLabel}</span> : null}
           <span>
-            {sectionLabel ? "· " : ""}Step {currentIndex + 1} of {total}
+            {sectionLabel ? " · " : ""}Step {currentIndex + 1} of {total}
           </span>
         </span>
       </div>

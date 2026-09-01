@@ -231,8 +231,10 @@ main { animation: route-in 150ms ease-out; }
   main { animation: none; }
   .pulse-accept { animation: none; }
   .mark-done-flash { animation: none; }
-  /* Any residual transition on interactive presses — kill the scale. */
-  button:active, [role="button"]:active { transform: none; }
+  /* Any residual transition on interactive presses — kill the scale.
+     `a[href]` added 2026-09-01: it is scaled at :192 and was not in this reset,
+     so every nav tab and card link still animated under reduced-motion (2.3.3). */
+  button:active, [role="button"]:active, a[href]:active { transform: none; }
 }
 
 /* Kill iOS sticky-hover — coarse-pointer devices don't have hover, but iOS
@@ -292,5 +294,13 @@ main { animation: route-in 150ms ease-out; }
   -ms-overflow-style: none;
 }
 .no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* A full-screen takeover covers the bottom nav visually, but the nav stayed in
+   the accessibility tree behind it — reachable by tab and by screen reader,
+   pointing at tabs the user cannot see. z-index does not fix that; removing the
+   element does. Set by RestTakeover on mount. (2026-09-01 mobile-UX + a11y) */
+body[data-modal-open] nav[aria-label="Primary"] {
   display: none;
 }

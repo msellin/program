@@ -124,10 +124,10 @@ export function BriefView({
       : `Start — ${hero.exercise.name}`;
 
   return (
-    <div className="flex flex-col" style={{ minHeight: "calc(100vh - 64px - env(safe-area-inset-bottom))" }}>
+    <div className="flex flex-col" style={{ minHeight: "calc(100dvh - 64px - env(safe-area-inset-bottom))" }}>
       <div className="flex-1 space-y-5">
         <header className="flex items-baseline justify-between gap-3">
-          <h1 className="text-[32px] font-bold tracking-[-0.035em] text-strong leading-none">
+          <h1 className="text-[32px] font-semibold tracking-[-0.035em] text-strong leading-none">
             {dayName(activeDate)}
           </h1>
           {program.slug ? (
