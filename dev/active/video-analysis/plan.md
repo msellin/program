@@ -1,6 +1,7 @@
 # Video analysis — plan (2026-08-31)
 
-**Status:** PROPOSED. Nothing built. Phase 0 is a go/no-go spike.
+**Status:** Phase 0 **PASSED 2026-09-01** — see `context.md` for measured results.
+Phases 1-6 not built.
 **Positioning:** paid-tier feature. On-device only in v1. Founder account tests first.
 
 ---
@@ -305,9 +306,10 @@ still frames."**
 
 | Risk | Severity | Mitigation |
 |---|---|---|
-| BlazePose unreliable inverted | **High** — handstand is the flagship | Phase 0 decides. Fallback: feet + wall-line tracking, no skeleton |
+| ~~BlazePose unreliable inverted~~ | **CLOSED 2026-09-01** | Spike measured 100% detection and 0.91 core visibility on a real HSPU clip. Inversion is a non-issue; handstand ships in v1 |
 | Main-thread jank kills the app feel | High | Worker + WASM, non-negotiable |
-| Poor framing from an uncontrolled camera | **High** — replaces the getUserMedia risk | Framing guide before filming + hard import-validation gate. Reject rather than emit a wrong number |
+| Poor framing from an uncontrolled camera | **High — now the #1 risk, measured** | The upright squat clip scored 66% detection / 0.53 core against the inverted clip's 100% / 0.91, purely on framing. Framing guide + hard import-validation gate is the core quality mechanism, not a nicety |
+| Bilateral occlusion in side views | Medium | Far-side limbs ran 0.71-0.79 vs near-side 0.95-0.99. Fine for single-side measures; any asymmetry measure needs `view: front`/`rear` and a both-sides-visible gate |
 | `getUserMedia` flaky in iOS Home Screen PWAs | — | **Removed from v1 scope.** Only returns if in-app camera ships in v2 |
 | Occlusion (rack uprights, rings out of frame) | Medium | Framing overlay; reject clips below landmark-confidence floor rather than emit garbage |
 | Calibration error → wrong velocity | Medium | Require a plate in frame for velocity measures; degrade gracefully to tempo-only |

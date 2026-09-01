@@ -4,22 +4,23 @@ Status markers follow the master-task-list contract: `[ ]` open, `[~]` in
 progress (append ` — @agent YYYY-MM-DD`), `[x]` done (append ` — done DATE, sha`),
 `[!]` blocked (append ` — blocked: why`).
 
-**Do not start Phase 1 until Phase 0 has a recorded verdict.**
+**Phase 0 verdict recorded 2026-09-01: PASS. Phase 1 is unblocked.**
+Remaining Phase 0 items (V0-5, V0-6) are measurements, not gates.
 
 ---
 
 ## Phase 0 — Spike · GO/NO-GO (~1 day, throwaway code)
 
-- [ ] **V0-1** Stand up a bare HTML page that loads MediaPipe Pose Landmarker
+- [x] **V0-1** — done 2026-09-01. Bare page + MediaPipe tasks-vision@0.10.14. Stand up a bare HTML page that loads MediaPipe Pose Landmarker
       (WASM) and runs it over a picked video file. No framework, no app
       integration. Just keypoints to the console.
-- [ ] **V0-2** Run it over `~/Downloads/VID_20260831_161314.mp4` (back squat,
+- [x] **V0-2** — done 2026-09-01. 66.4% detection, core 0.525 — framing-limited, not model-limited. Run it over `~/Downloads/VID_20260831_161314.mp4` (back squat,
       side view, 59 s, partial occlusion from a squat-stand upright). Record mean
       visibility for hip / knee / ankle, and the % of frames where any of the
       three drops below 0.5.
-- [ ] **V0-3** Get a handstand clip from the founder. Run the same measurement.
+- [x] **V0-3** — done 2026-09-01. HSPU clip: **100% detection, core 0.912, nothing below 0.71.** Get a handstand clip from the founder. Run the same measurement.
       **This is the actual decision point.**
-- [ ] **V0-4** Record the verdict in `context.md`:
+- [x] **V0-4** — done 2026-09-01. **PASS.** Inversion closed; framing is the real risk. Record the verdict in `context.md`:
       - upright ≥0.7 mean visibility on hip/knee/ankle → proceed
       - inverted ≥0.6 → handstand ships in v1
       - inverted <0.6 → handstand needs a non-skeleton fallback (track feet +

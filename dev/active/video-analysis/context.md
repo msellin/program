@@ -64,15 +64,67 @@ objective substitute for that field.
   `physical_test` that promotes a tier without the user agreeing is exactly the
   failure the mechanic exists to prevent.
 
+## Phase 0 verdict — RUN 2026-09-01. **PASS. Inversion is not the risk.**
+
+Ran MediaPipe Pose Landmarker (`tasks-vision@0.10.14`, `pose_landmarker_full`,
+GPU delegate) over two real clips at 10 fps sampling, in Chrome.
+
+| | HSPU (fully inverted, 21.6 s) | Back squat (upright, 59.3 s) |
+|---|---|---|
+| Frames sampled | 216 | 592 |
+| **Pose detected** | **100%** | **66.4%** |
+| **Core visibility** (hip/knee/ankle) | **0.912** | **0.525** |
+| ms/frame | 82 | 53 |
+
+Per-landmark on the inverted clip: nose 1.00, shoulders 1.00/1.00, hips
+1.00/1.00, knees 0.76/0.97, ankles 0.79/0.95, elbows 0.71/0.99, wrists
+0.75/0.99. **Nothing below 0.71.**
+
+**The handstand clip beat the squat clip on every measure.** BlazePose being
+trained on upright humans did not matter — the model tracked a fully inverted
+body essentially perfectly.
+
+The squat clip underperformed for reasons that have nothing to do with pose:
+the athlete is small in a wide portrait frame, a squat-stand upright crosses his
+body for much of the set, and he is absent from ~15 s of the 59 s clip.
+
+### What this changes
+
+1. **Inversion risk: closed.** Handstand ships in v1. The "track feet + wall
+   line" fallback is not needed. Strict pull-up no longer has to go first for
+   safety reasons (it may still go first for other reasons — cleanest rep
+   definition).
+2. **Framing risk: confirmed, and it dominates.** The upright clip did worse
+   than the inverted one purely on framing. The framing guide and the import
+   validation gate move from "nice mitigation" to **the core quality mechanism**.
+3. **Timing claim in the UX copy was optimistic.** 82 ms/frame on a laptop with
+   GPU delegate means a 60 s clip at 10 fps ≈ 48 s, and a phone will be slower.
+   Either say "about a minute", sample 5-6 fps, or use `pose_landmarker_lite`.
+   Measure on a real phone before committing to copy (task V0-5).
+
+### Rig lessons worth keeping
+
+- **Decode from a Blob, not a streamed URL.** The first run reported 0% on the
+  squat clip. Cause: Python's `http.server` ignores HTTP Range requests, so the
+  browser could not seek inside a 150 MB file and silently re-drew the same early
+  frame. `fetch → blob → createObjectURL` fixed it. The real app takes a `File`
+  from an input, which is already a Blob, so this matches production.
+- `detectForVideo` requires **strictly increasing timestamps across all calls**,
+  not per-video. Analysing a second clip restarted at t=0 and threw. Use a
+  monotonic counter, or `runningMode: "IMAGE"` with `detect()` as the spike did.
+- Spike harness lived at `scratchpad/spike/index.html` with a
+  `.claude/launch.json` entry, both since removed.
+
 ## Open / next steps
 
-1. **Phase 0 spike is the gate.** Does BlazePose survive an inverted body?
-   Handstand-walk is the flagship skill track and the worst case for a model
-   trained on upright humans. Everything downstream assumes yes.
-2. Test clip already on disk: `~/Downloads/VID_20260831_161314.mp4` — 59 s,
-   1080×1920, 30 fps, back squat, side view, partial occlusion from a squat-stand
-   upright. Good hard case.
-3. Need a handstand clip from the founder for the inversion test.
+1. **Phase 0 is done and passed** (see verdict above). Phase 1 is unblocked.
+2. Next real question is **bilateral occlusion**, not inversion. On the HSPU clip
+   the far-side limbs sat at 0.71-0.79 while near-side sat at 0.95-0.99 — fine
+   for single-side measures, not fine for left/right asymmetry. Any rubric
+   measuring asymmetry (the founder's hip case) needs `view: front` or `rear`,
+   and the validation gate must check **both sides are visible**, not just mean
+   confidence.
+3. Benchmark on a real phone before writing the progress copy (V0-5).
 4. Unrelated but blocking-adjacent: **the RPE floor of 7 is a live bug.** Worth
    fixing independently of this feature — see plan "Why this matters for the
    engine".
