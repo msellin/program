@@ -4,6 +4,71 @@ Status markers follow the master-task-list contract: `[ ]` open, `[~]` in
 progress (append ` — @agent YYYY-MM-DD`), `[x]` done (append ` — done DATE, sha`),
 `[!]` blocked (append ` — blocked: why`).
 
+## NEXT ACTIONS — sequenced (2026-09-01, after merging both sessions)
+
+Ordered by *what can invalidate what*, which is not the order the blocker list
+in `HANDOVER.md` gives.
+
+**1. V0-5 — phone benchmark. Do this before anything else.**
+The handover lists it third; it should be first. It is the only open item that
+can invalidate the design rather than delay it. Two-rate sampling at 30-60 fps
+inside rep windows is 3-6x the barbell budget, and every rubric in Phase 2 is
+authored against a `sample_fps` that assumes a phone can afford it. Authoring
+~11 coaching strings and three rubrics before knowing that is work that may not
+survive. ~30 ms/frame on a laptop is encouraging and irrelevant.
+
+**2. Ask the founder for strict pull-up clips.** Movement #1 has **zero**
+validation data while muscle-up — which does not ship first — has four clips.
+That inversion is the biggest single risk in the plan. Send the two filming
+rules with the ask: film from the **side, whole body including feet** (kip lives
+in the sagittal plane), and **start recording while hanging still**, because
+every validated measure needs a stationary opening reference to derive body
+scale and hang height. Ask for the rep count and the disputed rep *after*
+analysis, never before.
+
+**3. V2-0 — author `cues_corrective[]`.** Verified 2026-09-01: `cues[]` is on
+39/133 exercises and **0/40 gymnastics**; `cues_external_focus[]` on 87;
+`cues_corrective[]` on **0**. Even `pu_video_review` / `mu_video_review` /
+`hs_video_review` carry no cues. Blocks all of Phase 2. ~11 strings for v1.
+
+**4. V1-6 — extend ground truth** beyond muscle-ups, whose rep boundary is
+unusually crisp. Needed: strict pull-up, HSPU, a failed rep *mid-set*, two
+people overlapping.
+
+**5. V1-0 / V1-9 / V1-11 / V1-12 — the measurement layer**, then the rest of
+Phase 1. V1-11 (body-scale normalisation) and V1-8 (derive view from landmarks)
+are what make the refuted-measures list impossible to re-enter.
+
+### Resolved elsewhere — do not re-open
+
+- **V-ADJ-1 (RPE floor) — shipped 2026-09-01** (92e149b). The picker now reaches
+  RIR 4-5+ and renders on the final set. Both reviewers called this the only way
+  to learn whether video beats a working picker; that comparison is now live.
+- **The de-identification leak** described in `HANDOVER.md` under "Live and
+  unowned" — **fixed and pushed 2026-09-01** (eac09a3, merged in 01d6bc7). A
+  program-scoped `exercise_overrides` layer applied at render time; the shared
+  library is de-specified and the findings-specific wording moved verbatim into
+  `anterior-hip-rebuild`. Guarded by `data-integrity.test.ts`, which asserts no
+  catalog-public program renders personal language. It is owned and closed.
+- **Enforcement gates now exist.** `npm run verify` runs inside `npm run deploy`
+  and a versioned `.githooks/pre-commit` runs it on staged data/source. Nothing
+  gated production before 2026-09-01. New video code inherits this.
+- **`data-integrity.test.ts` exists** — V2-3's validator should extend it rather
+  than start fresh. It already asserts `capability_slot` satisfiability,
+  `references[]` vs `reference_ids[]` vs `citations.json`, and manifest ↔
+  filesystem.
+
+### Changed underfoot since the handover was written
+
+The catalog went 5 → 8 programs today: **first-strict-pullup, muscle-up and
+engine-builder-block-2 all shipped at REFERENCED.** Consequences for this
+feature: the three `*_video_review` drills the demand argument rests on are now
+in *live* programs rather than drafts, so the pull-never-push rule (V4-9) is
+load-bearing immediately rather than eventually; and V2-9's bar muscle-up rubric
+now targets a shipped program.
+
+---
+
 **Phase 0 verdict recorded 2026-09-01: PASS. Phase 1 is unblocked.**
 Remaining Phase 0 items (V0-5, V0-6) are measurements, not gates.
 
@@ -56,8 +121,11 @@ Remaining Phase 0 items (V0-5, V0-6) are measurements, not gates.
       **All inference off the main thread. Non-negotiable** — main-thread
       inference freezes the bottom nav and makes the app feel broken.
 - [ ] **V1-2** `lib/video/decode.ts` — `<video>` + `canvas` +
-      `requestVideoFrameCallback`, sampling at 10 fps (not 30 — 3× cheaper and
-      ample for rep counting, depth and hold timing).
+      `requestVideoFrameCallback`. **Sampling rate is set by V1-9, not here.**
+      (The original "10 fps is ample" note was written for the barbell plan and
+      is false under skill-first: 10 fps under-read a muscle-up peak by 4-10 cm,
+      and hand cadence at 1.5-3 Hz aliases below 30 fps into a confident wrong
+      frequency rather than into noise.)
 - [x] **V1-3** ~~`lib/video/calibrate.ts` — px→m from plate diameter~~ —
       **DELETED 2026-09-01, not built.** The Hough detector carries 13-27%
       out-of-plane scale error → absolute velocity at ±15-30%, too loose for
@@ -138,12 +206,17 @@ Remaining Phase 0 items (V0-5, V0-6) are measurements, not gates.
       bar was soft"). ~11 strings covers a three-movement v1. **Blocks every
       other Phase 2 task.**
 - [ ] **V2-4** Author `video_rubric` for the **strict pull-up** — movement #1.
-      Resolve the real exercise id first (`strict_pullup` does not exist; the
-      library uses `pu_*` prefixes). 30 fps inside the rep window.
-- [ ] **V2-5** Author for the strict pull-up (gymnastics, cleanest rep
-      definition). **NOTE: `strict_pullup` is not a real exercise id** — the
-      library uses prefixed ids (`pu_negative_pullup_5s`, `pu_slow_tempo_pullup`,
-      …); resolve the target before authoring.
+      30 fps inside the rep window. **Id resolved 2026-09-01: target
+      `pu_first_strict_attempt`** ("First strict pull-up attempt", gymnastics) —
+      it is the movement the whole program is built toward and the one whose
+      retest metric is `strict_pullup_max_reps`. Adjacent candidates if the
+      rubric needs to cover more of the ladder: `pu_slow_tempo_pullup`,
+      `pu_negative_pullup_10s`, `pu_band_pullup_light`. Confirmed absent:
+      `strict_pullup`, `wall_handstand_hold`, `strict_press`.
+- [x] **V2-5** — **merged into V2-4 (duplicate).** Both tasks authored the
+      strict-pull-up rubric; V2-5 survived the pivot carrying the kip refutation,
+      V2-4 carrying "movement #1". One movement, one task. Kip content below is
+      the part worth keeping.
       **Kip detection by hip-angle variance does not work — do not build it.**
       Refuted 2026-09-01: variance confounds shape with magnitude. A linear ramp
       has std 0.289·E, a sine 0.354·E — only 1.22× apart — so an honest 50° tuck
@@ -234,8 +307,13 @@ Remaining Phase 0 items (V0-5, V0-6) are measurements, not gates.
 
 - [ ] **V4-1** Result view: per-rep table (depth, tempo, velocity), 3-4 keyframes
       (first-rep bottom, last-rep bottom, worst fault frame).
-- [ ] **V4-2** Faults render using the exercise's **own `cues[]` text**. No new
-      coaching copy anywhere in this feature.
+- [!] **V4-2** ~~Faults render using the exercise's own `cues[]` text. No new
+      coaching copy anywhere in this feature.~~ **CONTRADICTED by V2-0 — this
+      line is barbell-era and is now false.** 0 of 40 gymnastics exercises have
+      `cues[]`, and the three `*_video_review` drills have none either. Faults
+      render from `cues_corrective[]`, which V2-0 must author first. Kept struck
+      rather than deleted so the "no new copy" rule is not re-derived from the
+      plan and reintroduced.
 - [ ] **V4-7** **Margins, not verdicts**, per `plan.md` "Output contract".
       Supersedes the Good/OK/Needs-work scale drafted earlier the same day and
       rejected by both expert reviews. Report the margin with its error band
@@ -310,7 +388,7 @@ heading so nobody re-adds it without reading `plan.md` first.
 
 ## Adjacent bug, worth fixing regardless
 
-- [ ] **V-ADJ-1** RPE picker floor is 7 (`Easy/Solid/Grind` = 7/8/9) and
+- [x] **V-ADJ-1** — **done 2026-09-01, 92e149b.** RPE picker floor was 7 (`Easy/Solid/Grind` = 7/8/9) and
       `inferTMFromSet` derives `rir = 10 - rpe`. A genuinely easy top set is
       unrecordable and the engine under-reads the training max — 5 kg on the
       founder's 31 Aug set. Also: the effort buttons only render when
@@ -318,3 +396,12 @@ heading so nobody re-adds it without reading `plan.md` first.
       prompt**. Proposed fix: after an AMRAP ask reps-in-reserve directly
       (0/1/2/3/4/5+) and store `rpe = 10 - answer`; keep Easy/Solid/Grind for
       fixed-rep sets.
+      **Shipped:** added a "Plenty left" step (rpe 5) and relabelled the whole
+      scale in reps-in-reserve — "4-5+ in reserve / ~3 / ~2 / 0-1" — because RIR
+      is the question a lifter can answer after an AMRAP and is exactly what
+      `inferTMFromSet` converts back to. The picker now also renders on the final
+      set of a session; it previously sat inside the `upNext.kind !== "done"`
+      branch, so the one set most worth asking about was never asked.
+      **This matters for the video feature specifically:** both reviewers said
+      this was the only way to learn whether video beats a working picker. The
+      picker now works, so that comparison is live from the next session onward.
