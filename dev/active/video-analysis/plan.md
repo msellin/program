@@ -85,7 +85,8 @@ The founder's own 31 Aug squat clip: 59 s, 1080×1920, 30 fps, **150 MB**
 |---|---|
 | Original | 150 MB |
 | Re-encoded 720p @ 3 Mbps | ~22 MB |
-| **Metrics JSON + 4 keyframes** | **~250 KB** |
+| **Metrics JSON only (synced)** | **~2 KB** |
+| Metrics + 4 keyframes (keyframes stay on-device) | ~250 KB |
 
 At 1,000 users × 4 videos/month, storing originals in R2 is ~$9 in month one and
 ~$108/month after a year and climbing. Storing metrics + keyframes is ~$0.02/month,
@@ -120,7 +121,8 @@ Decision: **v1 uploads nothing.** Cloud storage is a documented v2 option
                           │
                           ▼
  ┌─ output ───────────────────────────────────────────────┐
- │  metrics → logs[date].exercises[key].video[]           │  durable, synced
+ │  metrics → logs[date].exercises[key].video[]  (~2 KB)  │  durable, synced
+ │  keyframes → on-device only (IndexedDB/OPFS)           │  best-effort
  │  faults  → proposals (Accept / Ignore)                 │  existing mechanic
  │  retest  → capability_profile[testId].measured_value   │  auto-fill
  │  clip    → NOT STORED. Stays in the user's camera roll │  never ours

@@ -151,6 +151,31 @@ athlete. A rubric may still pin a minimum variant when it is known to need one.
 - Spike harness lived at `scratchpad/spike/index.html` with a
   `.claude/launch.json` entry, both since removed.
 
+## CORRECTION 2026-09-01 — keyframes must NOT go in the synced store
+
+The plan originally put metrics **and 3-4 keyframes (~250 KB)** into
+`logs[date].exercises[key].video`. That is wrong and would have broken the app.
+
+`schemas.ts:839` records the hard constraint: **the store has an overall ~1 MB
+PUT limit**, which is why `raw_gpx` is capped at 600 KB and the GPX uploader
+rejects files over 500 KB. Measured on the founder's live account 2026-09-01:
+the entire store is **75 KB — 7.3% of budget** after a month of dense logging.
+
+At 250 KB per analysis, **three videos would exceed the limit** and every
+subsequent sync would fail.
+
+Corrected split:
+
+- **Metrics only in the synced store — ~2 KB per analysis.** ~500 analyses of
+  headroom, which is more than anyone will produce.
+- **Keyframes on-device (IndexedDB/OPFS), best-effort.** Lost on a device change;
+  that is acceptable, because the *measurements* survive and they are what the
+  engine reads. Consistent with the rest of the design: the video is already
+  local, so its stills can be too.
+
+Add a store-size assertion to the analysis writer so this cannot regress
+silently.
+
 ## Open / next steps
 
 1. **Phase 0 is done and passed** (see verdict above). Phase 1 is unblocked.

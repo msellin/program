@@ -122,8 +122,12 @@ Remaining Phase 0 items (V0-5, V0-6) are measurements, not gates.
       **as a proposal, never silently.** An auto-filled retest that promotes a
       tier without the user agreeing is the exact failure confirm-first exists to
       prevent.
-- [ ] **V4-5** Persist `VideoAnalysis` + keyframes to
-      `logs[date].exercises[key].video`. ~250 KB; syncs like any other log field.
+- [ ] **V4-5** Persist **metrics only** (~2 KB) to
+      `logs[date].exercises[key].video`. **Keyframes go to on-device storage, NOT
+      the synced store** — the store has a ~1 MB PUT limit (`schemas.ts:839`) and
+      the founder's whole account is 75 KB today, so 250 KB of keyframes per
+      analysis would break sync after three videos. Add a size assertion in the
+      writer so this cannot regress.
 - [ ] **V4-6** Week-over-week comparison: this analysis against the last one for
       the same exercise.
 
