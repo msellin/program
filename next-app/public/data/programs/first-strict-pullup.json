@@ -1394,7 +1394,8 @@
         "year": 2003,
         "title": "A meta-analysis to determine the dose response for strength development",
         "source": "Medicine and Science in Sports and Exercise 35(3):456-464",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/12618576/"
+        "url": "https://pubmed.ncbi.nlm.nih.gov/12618576/",
+        "used_for": "General strength dose-response anchor for the weekly hard-rep target. Replaces a retracted reference (Barbalho 2020, retracted April 2020) that previously carried this claim. Rhea establishes the dose-response shape only — the specific 40-60 hard reps/week figure remains coaching consensus and is labelled as such in the tier rationale, not presented as an RCT result."
       }
     ],
     "reference_ids": [
