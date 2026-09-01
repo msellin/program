@@ -101,7 +101,22 @@ export function ProgramPreviewClient({ slug }: Props) {
   const routeThroughIntake = hasIntake;
   const requiresTierPick = isMultiDim && hasTiers && !routeThroughIntake;
   const effectiveTier = pickedTier ?? savedTier ?? null;
-  const canStart = !requiresTierPick || !!effectiveTier;
+  // DRAFT / PROVISIONAL programs are filtered out of the catalog listing
+  // (programs/page.tsx:109,159) but `generateStaticParams` prerenders a detail
+  // page for EVERY slug in the manifest, drafts included. So /programs/
+  // first-strict-pullup was publicly reachable by URL with a fully working
+  // "Make this my focus" button — the listing filter was the only thing
+  // hiding three unfinished programs, and it does not guard the route.
+  // Found 2026-09-01 when the founder started first-strict-pullup on
+  // test@terav.fit and asked how a non-public program could be started.
+  // Super-admins keep the ability to open and start drafts, which is how
+  // they get previewed before shipping.
+  const isDraft =
+    entry.status === "DRAFT" ||
+    entry.status === "draft" ||
+    entry.status === "PROVISIONAL";
+  const draftBlocked = isDraft && !isSuperAdmin;
+  const canStart = (!requiresTierPick || !!effectiveTier) && !draftBlocked;
 
   const saveTierIfNeeded = () => {
     if (requiresTierPick && effectiveTier) setProgramTier(slug, effectiveTier);
@@ -518,6 +533,16 @@ export function ProgramPreviewClient({ slug }: Props) {
               </div>
             ) : null}
 
+            {draftBlocked ? (
+              <div className="mb-3 rounded border border-line-soft border-l-4 border-l-line bg-surface p-3 text-[13.5px]">
+                <p className="font-semibold text-strong">Not published yet.</p>
+                <p className="mt-1 text-muted">
+                  This program is still being written and isn&apos;t in the catalog.
+                  It&apos;ll appear on the Programs tab when it&apos;s ready.
+                </p>
+              </div>
+            ) : null}
+
             <div className="flex flex-wrap gap-2">
               {hasOtherActive ? (
                 <>
@@ -528,7 +553,7 @@ export function ProgramPreviewClient({ slug }: Props) {
                     className="inline-flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-wider px-4 py-3 rounded bg-bronze text-ground hover:bg-bronze/90 disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     <Play size={14} />
-                    {starting ? "Starting…" : requiresTierPick && !effectiveTier ? "Pick a tier" : "Make this my focus (replace current)"}
+                    {starting ? "Starting…" : draftBlocked ? "Not published yet" : requiresTierPick && !effectiveTier ? "Pick a tier" : "Make this my focus (replace current)"}
                   </button>
                   {isSuperAdmin ? (
                     <button
@@ -559,7 +584,7 @@ export function ProgramPreviewClient({ slug }: Props) {
                   className="inline-flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-wider px-4 py-3 rounded bg-bronze text-ground hover:bg-bronze/90 disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   <Play size={14} />
-                  {starting ? "Starting…" : requiresTierPick && !effectiveTier ? "Pick a tier to start" : "Make this my focus"}
+                  {starting ? "Starting…" : draftBlocked ? "Not published yet" : requiresTierPick && !effectiveTier ? "Pick a tier to start" : "Make this my focus"}
                 </button>
               )}
             </div>
