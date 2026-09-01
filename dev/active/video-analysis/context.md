@@ -425,6 +425,73 @@ Rings are not bar. The plan's Phase 2 lists bar muscle-up at #4 with a reduced
 fault set; ring MU needs its own rubric and its completion criterion is an open
 problem, not an authoring task. Keep it at #4 or later.
 
+## Band-assisted bar muscle-ups 2026-09-01 — a working detector, and a framing gate that is too strict
+
+Two band-assisted bar-MU clips (22.9 s, 18.6 s), a different athlete from the
+earlier clips, with a child moving in the background. First **positive controls**
+in the set — the ring clips gave only attempts.
+
+`lite` detection 99.1% / 97.3%, core visibility 0.868 / 0.895. Near arm (left)
+0.95-0.99, far arm 0.58-0.72 — better than the rings' 0.20 but still not enough
+for per-side comparison.
+
+### The support detector, rebuilt to the rule and validated against negatives
+
+The refuted ring measure used one scalar in image coordinates. Rebuilt with three
+independent conditions, all body-scale normalised:
+
+1. `(wrist_y - shoulder_y) / torso > 0.55` — shoulders above the hands
+2. **torso angle from vertical < 45°** — the condition that was missing
+3. `shoulder rise from hang > 0.3 torso` — the athlete is actually elevated
+
+| Clip | Support periods found |
+|---|---|
+| band MU A | **5** (one boundary ambiguous — likely 4) |
+| band MU B | **2** |
+| ring A (negative control) | **0** |
+| ring B (negative control) | **0** |
+
+The naive one-condition version fired on 4 ring-A frames and 26 ring-B frames.
+**Condition 2 is what rejects the horizontal swing; condition 3 rejects the
+drop-off.** Verified visually: band A t=18.70 s is a genuine full support — arms
+locked out, torso upright, athlete above the bar, band under the foot.
+
+This is the first measure in the project built to the rule derived from four
+failures — a body-scale-normalised difference plus a second and third
+*independent* condition — and the first one that survives a negative control.
+
+### Hysteresis is not optional
+
+A plain threshold split single supports into three (short / long / short,
+11 "reps" in a 22.9 s clip) because the margin dips momentarily at the top.
+Hysteresis (enter 0.55, exit 0.25) plus an 0.8 s merge gap gives 5 and 2. One
+boundary in clip A sits at a 0.9 s gap — just outside the merge window — so the
+true count is 4 or 5 and **the pipeline cannot resolve it without ground truth**.
+Exactly V1-6's point, and a reason not to tune thresholds against unlabelled
+clips: that is fitting, not validating.
+
+### The `subject_too_small` threshold is wrong
+
+`plan.md`'s capture table proposes rejecting clips whose landmark bounding box is
+under ~45% of frame height. **Both clips measure 0.28 and both analysed fine**
+(99.1% / 97.3% detection, core 0.87-0.90). The proposed gate would have refused
+two perfectly usable clips.
+
+Torso length was 0.10 of frame here against 0.19-0.21 on the ring clips — the
+subject is half the linear size — and it still worked. **Lower the threshold, and
+derive it from measured detection rather than from intuition.** A capture gate
+that rejects usable footage is worse than no gate, because the user has no way to
+tell a real framing problem from a false alarm.
+
+### Incidental
+
+- The assistance band is visible across the frame and did not disturb pose.
+- A child moves in the background throughout and the skeleton did not switch —
+  encouraging for V1-12, but this is the easy case (small, distant, never
+  overlapping the athlete).
+- Bystanders in frame are a non-issue architecturally *because* no video is
+  uploaded or stored. Worth keeping in the privacy copy.
+
 ## Open / next steps
 
 1. **Phase 0 is done and passed** (see verdict above). Phase 1 is unblocked.

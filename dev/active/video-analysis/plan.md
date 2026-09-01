@@ -302,7 +302,7 @@ without asking a model to judge a picture.
 | Issue | Detection | What the user is told |
 |---|---|---|
 | `wrong_view` | `detect-view` (V1-8) disagrees with `video_rubric.view` | "Film from the side for this one" |
-| `subject_too_small` | landmark bounding-box height < ~45% of frame | "Move closer, or turn the phone" |
+| `subject_too_small` | bounding-box height below a **measured** floor — **not 45%**: two band-MU clips at 0.28 analysed at 99.1%/97.3%, so 45% would refuse usable footage. Derive the threshold from detection rate | "Move closer, or turn the phone" |
 | `cropped` | landmarks pinned at a frame edge, or a limb group's visibility collapses while the rest stays high | "Get your whole body in — your feet are cut off" |
 | `off_centre` | bounding-box centre x far from 0.5 | "Centre the phone on you" — required before any left/right measure is trusted |
 | `occluded` | intermittent visibility drops on some landmarks while others hold | "Something is blocking the view — move the rack upright out of the line" |
