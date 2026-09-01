@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { loadProgram, loadProgramManifest, loadExercises } from "@/lib/data-loader";
+import { loadProgram, loadProgramManifest, loadExercises, applyProgramExerciseOverrides } from "@/lib/data-loader";
 import { HeroStateCard } from "@/components/workout/HeroStateCard";
 import { FirstRunBanner } from "@/components/FirstRunBanner";
 import { EmptyStateCard } from "@/components/EmptyStateCard";
@@ -100,7 +100,11 @@ export function TodaySession({
     ])
       .then(([ps, x]) => {
         setPrograms(ps);
-        setById(x.byId);
+        // Concurrent tracks share one movement library, so fold every active
+        // program's overrides in. Only `personal: true` programs carry any, and
+        // a personal program is single-user by definition — so the worst case is
+        // the owner seeing their own constraint on a lift both tracks share.
+        setById(ps.reduce((acc, p) => applyProgramExerciseOverrides(acc, p), x.byId));
       })
       .catch((e) => setError(e instanceof Error ? e.message : String(e)));
     // eslint-disable-next-line react-hooks/exhaustive-deps

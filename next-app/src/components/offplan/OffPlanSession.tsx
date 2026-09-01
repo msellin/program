@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { loadProgram, loadExercises } from "@/lib/data-loader";
+import { loadProgram, loadExercises, applyProgramExerciseOverrides } from "@/lib/data-loader";
 import { useStore, entrySets } from "@/lib/useStore";
 import { today as todayISO } from "@/lib/utils";
 import { suggestForExercise } from "@/lib/engine/suggest";
@@ -49,7 +49,7 @@ export function OffPlanSession() {
     }
     void Promise.all([loadProgram(primarySlug), loadExercises()]).then(([p, x]) => {
       setProgram(p);
-      setById(x.byId);
+      setById(applyProgramExerciseOverrides(x.byId, p));
     });
   }, [primarySlug]);
 

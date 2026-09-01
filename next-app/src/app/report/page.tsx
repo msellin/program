@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Printer, ChevronLeft } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useStore } from "@/lib/useStore";
-import { loadProgram, loadExercises, loadClinicalContext, type ClinicalContext } from "@/lib/data-loader";
+import { loadProgram, loadExercises, applyProgramExerciseOverrides, loadClinicalContext, type ClinicalContext } from "@/lib/data-loader";
 import { computeReport, type ReportData } from "@/lib/engine/report";
 import { RetestMetricsPanel } from "@/components/progress/RetestMetricsPanel";
 import { isPastProgramEnd } from "@/lib/engine/schedule";
@@ -80,7 +80,7 @@ export default function ReportPage() {
     void Promise.all([loadProgram(primarySlug), loadExercises(), loadClinicalContext()])
       .then(([p, x, c]) => {
         setProgram(p);
-        setById(x.byId);
+        setById(applyProgramExerciseOverrides(x.byId, p));
         setClinical(c);
       })
       .catch((e) => setError(e instanceof Error ? e.message : String(e)));

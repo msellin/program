@@ -61,6 +61,14 @@ session. Any advice generated here should keep saying so rather than substitutin
 - Never reintroduce a movement flagged in `clinical-context.json.provocative_positions`
   without an explicit phase gate and symptom condition.
 - Every `exercise_id` in `program.json` must resolve against `exercises.json`.
+- `exercises.json` is a **shared** library rendered to every user of every catalog
+  program. Its `cues`, `cues_external_focus`, `cues_internal_focus` and `rationale`
+  must be general coaching copy — no named side, no documented deficit, no specific
+  diagnosis, no personal training number. Constraints belonging to one person's
+  clinical record go in that program's `exercise_overrides` (see
+  `programs/anterior-hip-rebuild.json`), merged at render time by
+  `applyProgramExerciseOverrides`. `next-app/src/lib/data-integrity.test.ts` fails
+  the suite if personal language reappears in the shared library.
 - Progression rules stay machine-evaluable — conditions, not prose.
 - Keep the data de-identified. No name, isikukood, provider names or codes.
 - This is not medical advice and the files should not present it as such. The user has an
@@ -94,3 +102,11 @@ for f in data/*.json; do python3 -m json.tool "$f" > /dev/null && echo "ok $f"; 
 
 Referential integrity between `program.json` and `exercises.json` should be checked on
 load and fail loudly.
+
+```bash
+cd next-app && npx vitest run src/lib/data-integrity.test.ts
+```
+
+That suite covers referential integrity across every manifest program, checks each
+`exercise_overrides` key resolves, and guards the shared library against
+person-specific clinical copy.

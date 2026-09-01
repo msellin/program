@@ -22,7 +22,7 @@
  */
 
 import { useEffect, useMemo, useState } from "react";
-import { loadProgram, loadExercises } from "@/lib/data-loader";
+import { loadProgram, loadExercises, applyProgramExerciseOverrides } from "@/lib/data-loader";
 import { useStore } from "@/lib/useStore";
 import { WeeklyHeatmap, type WeeklyHeatmapCell, type WeeklyHeatmapCellState } from "@/components/ui/WeeklyHeatmap";
 import { WeeklyNarrativeTile } from "@/components/WeeklyNarrativeTile";
@@ -102,7 +102,7 @@ export default function RecordPage() {
     void Promise.all([loadProgram(primarySlug), loadExercises()])
       .then(([p, x]) => {
         setProgram(p);
-        setById(x.byId);
+        setById(applyProgramExerciseOverrides(x.byId, p));
       })
       .catch((e) => setError(e instanceof Error ? e.message : String(e)));
   }, [primarySlug]);
