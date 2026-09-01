@@ -291,9 +291,23 @@ export function GraduationCard({ program }: { program: Program }) {
     (program as unknown as { next_block_slug?: string }).next_block_slug ??
     (program.goals as unknown as { next_block_slug?: string })?.next_block_slug ??
     null;
-  const nextBlockEntry = nextBlockSlug
+  // 2026-09-01 — this used to resolve the next block with no status filter.
+  // `engine-builder` declares `next_block_slug: "engine-builder-block-2"`, and
+  // Block 2 is DRAFT, so every user graduating Engine Builder — one of the five
+  // shipped programs — was offered a program that is not in the catalog. That is
+  // the same promise-then-deliver-nothing pattern the founder rejected on
+  // 2026-08-17 for the empty category chips. Fall through to the generic
+  // Programs CTA until Block 2 ships.
+  const nextBlockCandidate = nextBlockSlug
     ? manifest?.programs.find((p) => p.slug === nextBlockSlug) ?? null
     : null;
+  const nextBlockEntry =
+    nextBlockCandidate &&
+    nextBlockCandidate.status !== "DRAFT" &&
+    nextBlockCandidate.status !== "draft" &&
+    nextBlockCandidate.status !== "PROVISIONAL"
+      ? nextBlockCandidate
+      : null;
 
   // Arc-verdict chip — compare current-vs-baseline against block_1_targets.
   const blockTargets =
