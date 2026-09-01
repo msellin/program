@@ -63,9 +63,11 @@ export default function PrivacyPage() {
             <td className="py-1.5">Until you delete your account</td>
           </tr>
           <tr className="border-b border-line-soft">
-            <td className="py-1.5 pr-2">Uploaded GPX files</td>
+            <td className="py-1.5 pr-2">GPX / FIT files you import</td>
             <td className="py-1.5 pr-2">Endurance-session parsing</td>
-            <td className="py-1.5">Parsed and discarded within 24 h; raw file not preserved</td>
+            <td className="py-1.5">
+              Never uploaded. Read in your browser; only the numbers you see are saved
+            </td>
           </tr>
           <tr className="border-b border-line-soft">
             <td className="py-1.5 pr-2">Consent timestamps</td>
@@ -102,6 +104,13 @@ export default function PrivacyPage() {
           Account, email, training logs and symptom data: <strong>Supabase</strong>{" "}
           (managed Postgres, Frankfurt, EU).
         </li>
+        <li>
+          <strong>Your own device.</strong> The app keeps a full copy of your training
+          log and symptom history in browser storage, so it works offline and so a
+          closed tab never loses a set you just recorded. That copy stays on the device
+          until you sign out or clear site data — worth knowing if you use Terav on a
+          shared or work computer.
+        </li>
         <li>Static hosting: <strong>Cloudflare Pages</strong> (global CDN).</li>
         <li>Error reports and in-app feedback (when enabled): <strong>Sentry</strong> (US region, sentry.io), under standard contractual clauses.</li>
         <li>Payment data (when paid tier launches): handled entirely by <strong>Paddle</strong>. We never see card numbers.</li>
@@ -128,6 +137,12 @@ export default function PrivacyPage() {
         We use one session cookie (Supabase auth) so you stay signed in. We do not use
         marketing cookies, ad networks, or cross-site trackers. No analytics tools are
         active in beta.
+      </p>
+      <p>
+        One exception worth naming: technique demonstrations are YouTube videos, and
+        opening one connects your browser to Google, which receives your IP address.
+        We use the no-cookie player and the video only loads when you tap to watch it —
+        never in the background — so if you don&apos;t open a demo, no connection is made.
       </p>
 
       <h2 className="text-lg font-semibold text-strong pt-2">Automated decisions</h2>
