@@ -1,123 +1,285 @@
 import { describe, it, expect } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
+import {
+  exercisesFileSchema,
+  programSchema,
+  programManifestSchema,
+  type Exercise,
+  type Program,
+} from "./schemas";
+import { applyProgramExerciseOverrides } from "./data-loader";
+
+const DATA = path.resolve(__dirname, "../../public/data");
+const read = (p: string) => JSON.parse(fs.readFileSync(path.join(DATA, p), "utf8"));
+
+const library = exercisesFileSchema.parse(read("exercises.json"));
+const manifest = programManifestSchema.parse(read("programs/manifest.json"));
+const byId: Record<string, Exercise> = Object.fromEntries(
+  library.exercises.map((e) => [e.id, e]),
+);
+
+const programs: Array<{ id: string; personal: boolean; program: Program }> =
+  manifest.programs.map((entry) => ({
+    id: entry.id,
+    personal: entry.personal === true,
+    program: programSchema.parse(read(`programs/${entry.slug ?? entry.id}.json`)),
+  }));
+
+function exerciseIdsIn(program: Program): string[] {
+  const ids = new Set<string>();
+  for (const b of program.blocks ?? []) {
+    for (const it of b.items ?? []) if (it.exercise_id) ids.add(it.exercise_id);
+  }
+  for (const id of program.drill_library ?? []) ids.add(id);
+  return [...ids];
+}
+
+describe("referential integrity", () => {
+  it.each(programs.map((p) => p.id))("%s resolves every exercise_id", (id) => {
+    const { program } = programs.find((p) => p.id === id)!;
+    const missing = exerciseIdsIn(program).filter((eid) => !byId[eid]);
+    expect(missing).toEqual([]);
+  });
+
+  it.each(programs.map((p) => p.id))("%s overrides target real exercises", (id) => {
+    const { program } = programs.find((p) => p.id === id)!;
+    const missing = Object.keys(program.exercise_overrides ?? {}).filter((eid) => !byId[eid]);
+    expect(missing).toEqual([]);
+  });
+});
 
 /**
- * Cross-file referential integrity for the SHIPPED data tree.
+ * The shared movement library ships to every user of every catalog-public
+ * program. Copy that only makes sense for one person's clinical record —
+ * a named side, a documented deficit, a specific diagnosis — belongs in that
+ * program's `exercise_overrides`, not here.
  *
- * Zod validates each file in isolation. It cannot catch a reference that is
- * well-typed but points at nothing, because both sides are `z.string()`. Three
- * such defects reached the repo before this existed (all found 2026-09-01):
- *
- *  1. muscle-up.json declared four `capability_slot` values that no drill in
- *     its own `drill_library` could satisfy. `composeSlotDrills` falls back to
- *     authored items SILENTLY when `candidates.length === 0`, so the
- *     multi-dimensional composer — the program's central claim — never fired
- *     and nothing said a word.
- *  2. first-strict-pullup.json had `rhea_2003_meta` in `evidence_base.
- *     references[]` but not in `reference_ids[]`. Every other program keeps the
- *     two lists exactly in sync; nothing enforced it.
- *  3. An unresolved `exercise_id` does not throw — `DaySession.tsx` and
- *     `OffPlanSession.tsx` both do `if (!exercise) continue`, so the movement
- *     just vanishes from the workout. CLAUDE.md claims this is "checked on load
- *     and fail loudly". It is not. This test is that check.
- *
- * `validate.py` does similar work against the ROOT `data/` directory, which the
- * app does not serve. This covers `next-app/public/data/`, which it does.
+ * Regression guard for the CSM leak: `back_squat_highbar` and `front_squat` are
+ * shared by `anterior-hip-rebuild` (personal) and `concurrent-strength-maintenance`
+ * (catalog-public), and carried one person's shoulder diagnosis as generic cues.
  */
-const DATA_DIR = path.join(process.cwd(), "public", "data");
-const PROGRAM_DIR = path.join(DATA_DIR, "programs");
+const PERSONAL_LANGUAGE = [
+  /\bdocumented\b/i,
+  /\bthis user\b/i,
+  /\bthe (?:right|left) (?:shoulder|hip|glute|glute-max|SI|groin|side)\b/i,
+  /\b(?:right|left) shoulder\b/i,
+  /\bretroversion\b/i,
+  /\bBertolotti\b/i,
+  /\bSLAP\b/,
+  /\blabral\b/i,
+  /\bFADIR\b/,
+  /\b(?:Left|Right) side (?:first|gets)\b/,
+  /~\d+\s*kg/i,
+];
 
-const readJson = (...segs: string[]) =>
-  JSON.parse(fs.readFileSync(path.join(...segs), "utf8"));
+describe("shared exercise library carries no person-specific clinical copy", () => {
+  const COPY_FIELDS = ["cues", "cues_external_focus", "cues_internal_focus"] as const;
 
-// `daily_log_schema` blocks declare field TYPES, not references — "string",
-// "number", "boolean" appear where an exercise_id would. Same placeholder set
-// validate.py skips.
-const PLACEHOLDERS = new Set(["string", "number", "boolean", "int", "float", "date"]);
+  it("cue arrays are general coaching copy", () => {
+    const offenders: string[] = [];
+    for (const e of library.exercises) {
+      for (const field of COPY_FIELDS) {
+        for (const [i, cue] of (e[field] ?? []).entries()) {
+          const hit = PERSONAL_LANGUAGE.find((re) => re.test(cue));
+          if (hit) offenders.push(`${e.id}.${field}[${i}] :: ${cue}`);
+        }
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
 
-type Exercise = { id: string; capability_domains?: string[] };
+  it("rationale is general coaching copy", () => {
+    const offenders = library.exercises
+      .filter((e) => e.rationale && PERSONAL_LANGUAGE.some((re) => re.test(e.rationale!)))
+      .map((e) => `${e.id}.rationale :: ${e.rationale}`);
+    expect(offenders).toEqual([]);
+  });
 
-const exercises = readJson(DATA_DIR, "exercises.json") as { exercises: Exercise[] };
-const exerciseById = new Map(exercises.exercises.map((e) => [e.id, e]));
-const citations = readJson(DATA_DIR, "citations.json") as { citations: Array<{ id: string }> };
-const citationIds = new Set(citations.citations.map((c) => c.id));
-const manifest = readJson(PROGRAM_DIR, "manifest.json") as {
-  programs: Array<{ slug: string; personal?: boolean; status?: string }>;
-};
-const programFiles = fs
-  .readdirSync(PROGRAM_DIR)
-  .filter((f) => f.endsWith(".json") && f !== "manifest.json");
+  it("laterality emphasis is program-scoped, not baked into the library", () => {
+    const offenders = library.exercises
+      .filter((e) => e.default?.extra_set_side != null)
+      .map((e) => e.id);
+    expect(offenders).toEqual([]);
+  });
+});
 
-describe("referential integrity across the shipped data tree", () => {
-  it("has no duplicate exercise ids", () => {
+describe("catalog-public programs render only general copy", () => {
+  const publicPrograms = programs.filter((p) => !p.personal);
+
+  it("no catalog-public program has any exercise_overrides", () => {
+    // Overrides exist to hold personal constraints. If a catalog-public program
+    // ever needs one, revisit this test — but it must not smuggle clinical copy.
+    expect(publicPrograms.filter((p) => p.program.exercise_overrides).map((p) => p.id)).toEqual([]);
+  });
+
+  it.each(publicPrograms.map((p) => p.id))("%s renders no personal language", (id) => {
+    const { program } = publicPrograms.find((p) => p.id === id)!;
+    const resolved = applyProgramExerciseOverrides(byId, program);
+    const offenders: string[] = [];
+    for (const eid of exerciseIdsIn(program)) {
+      const e = resolved[eid];
+      if (!e) continue;
+      for (const text of [...(e.cues ?? []), ...(e.cues_external_focus ?? []), e.rationale ?? ""]) {
+        if (PERSONAL_LANGUAGE.some((re) => re.test(text))) offenders.push(`${eid} :: ${text}`);
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
+});
+
+describe("anterior-hip-rebuild keeps its clinical constraints", () => {
+  const hip = programs.find((p) => p.id === "anterior-hip-rebuild")!.program;
+  const resolved = applyProgramExerciseOverrides(byId, hip);
+
+  it.each([
+    ["back_squat_highbar", "shoulder retroversion"],
+    ["back_squat_highbar", "the right shoulder"],
+    ["front_squat", "the right shoulder"],
+    ["block_pull_midshin", "symptom-free"],
+    ["deadlift_conventional", "150 kg"],
+    ["deadlift_conventional", "left SI"],
+    ["glute_bridge_single", "documented left gluteus maximus deficit"],
+    ["bulgarian_split_squat_db", "documented left glute-max"],
+    ["single_leg_rdl", "Left side gets the extra set"],
+    ["banded_march_standing", "clicking was documented"],
+    ["split_squat_rfe", "FADIR"],
+  ])("%s still surfaces %s", (eid, needle) => {
+    const e = resolved[eid];
+    expect(e, `${eid} missing from library`).toBeDefined();
+    expect((e.cues ?? []).join(" | ")).toContain(needle);
+  });
+
+  it.each([
+    ["back_squat_highbar", "Bertolotti"],
+    ["dead_bug", "Bertolotti"],
+    ["bulgarian_split_squat_db", "the record documents"],
+    ["single_leg_rdl", "left glute-max gap"],
+  ])("%s rationale still says %s", (eid, needle) => {
+    expect(resolved[eid].rationale ?? "").toContain(needle);
+  });
+
+  it("restores the left-side emphasis the library no longer carries", () => {
+    for (const eid of [
+      "glute_bridge_single",
+      "split_squat_rfe",
+      "bulgarian_split_squat_db",
+      "single_leg_rdl",
+    ]) {
+      expect(byId[eid].default?.extra_set_side, `${eid} library`).toBeUndefined();
+      expect(resolved[eid].default?.extra_set_side, `${eid} resolved`).toBe("left");
+    }
+  });
+
+  it("leaves the cached library untouched", () => {
+    expect(byId.back_squat_highbar.cues?.[0]).toBe("Bar sits on the traps, not the rear delts");
+  });
+
+});
+
+/**
+ * Six library entries have never carried cue copy. That predates the
+ * general/personal split and is tracked separately — pinning the set here means
+ * moving a cue out of the shared library can never silently add a seventh.
+ */
+const KNOWN_CUELESS = [
+  "back_squat",
+  "hollow_hold",
+  "nordic_curl",
+  "pallof_press",
+  "sled_push",
+  "trap_bar_dl_floor",
+];
+
+describe("no program lost its cue rendering", () => {
+  const hasCopy = (e: Exercise) =>
+    (e.cues?.length ?? 0) > 0 ||
+    (e.cues_external_focus?.length ?? 0) > 0 ||
+    (e.cues_internal_focus?.length ?? 0) > 0 ||
+    !!e.setup;
+
+  it("the set of cue-less library entries has not grown", () => {
+    expect(library.exercises.filter((e) => !hasCopy(e)).map((e) => e.id).sort()).toEqual(
+      KNOWN_CUELESS,
+    );
+  });
+
+  it.each(programs.map((p) => p.id))("%s renders cues for every exercise it uses", (id) => {
+    const { program } = programs.find((p) => p.id === id)!;
+    const resolved = applyProgramExerciseOverrides(byId, program);
+    const silent = exerciseIdsIn(program)
+      .filter((eid) => resolved[eid] && !hasCopy(resolved[eid]))
+      .filter((eid) => !KNOWN_CUELESS.includes(eid));
+    expect(silent).toEqual([]);
+  });
+});
+
+/**
+ * Structural drift checks (merged in 2026-09-01 from a parallel branch).
+ *
+ * These cover a different failure class from the de-identification rules
+ * above: references that are well-typed but point at nothing. Zod cannot see
+ * them because both sides are `z.string()`. Each one below is here because it
+ * caught a real defect on the day it was written.
+ */
+const citationIds = new Set(
+  (read("citations.json") as { citations: Array<{ id: string }> }).citations.map((c) => c.id),
+);
+const programFilesOnDisk = fs
+  .readdirSync(path.join(DATA, "programs"))
+  .filter((f) => f.endsWith(".json") && f !== "manifest.json")
+  .map((f) => f.replace(/\.json$/, ""));
+
+describe("structural drift", () => {
+  it("exercise library has no duplicate ids", () => {
     const seen = new Set<string>();
-    const dupes = exercises.exercises
+    const dupes = library.exercises
       .map((e) => e.id)
       .filter((id) => (seen.has(id) ? true : (seen.add(id), false)));
     expect(dupes).toEqual([]);
   });
 
   it("manifest slugs and program files agree in both directions", () => {
-    const fileSlugs = new Set(programFiles.map((f) => f.replace(/\.json$/, "")));
-    const manifestSlugs = new Set(manifest.programs.map((p) => p.slug));
-    const missingFile = [...manifestSlugs].filter((s) => !fileSlugs.has(s));
-    const missingManifest = [...fileSlugs].filter((s) => !manifestSlugs.has(s));
-    expect({ missingFile, missingManifest }).toEqual({
-      missingFile: [],
-      missingManifest: [],
-    });
+    const manifestSlugs = new Set(manifest.programs.map((p) => p.slug ?? p.id));
+    const missingFile = [...manifestSlugs].filter((s) => !programFilesOnDisk.includes(s));
+    const missingManifest = programFilesOnDisk.filter((s) => !manifestSlugs.has(s));
+    expect({ missingFile, missingManifest }).toEqual({ missingFile: [], missingManifest: [] });
   });
 
-  for (const file of programFiles) {
-    const slug = file.replace(/\.json$/, "");
-    const program = readJson(PROGRAM_DIR, file) as Record<string, unknown>;
+  // muscle-up shipped four capability_slot values that no drill could satisfy.
+  // composeSlotDrills falls back to authored items SILENTLY when candidates is
+  // empty, so the program renders a normal session while the multi-dimensional
+  // composer — the thing it is sold on — never fires.
+  it.each(programs.map((p) => p.id))("%s: every capability_slot can be filled", (id) => {
+    const { program } = programs.find((p) => p.id === id)!;
+    const slots = (program.blocks ?? []).filter((b) => b.capability_slot);
+    if (slots.length === 0) return;
+    const domains = new Set<string>();
+    for (const drillId of program.drill_library ?? []) {
+      for (const d of byId[drillId]?.capability_domains ?? []) domains.add(d);
+    }
+    const dead = slots
+      .filter((b) => !domains.has(b.capability_slot as string))
+      .map((b) => `${b.id} → ${b.capability_slot}`)
+      .sort();
+    expect(dead).toEqual([]);
+  });
 
-    it(`${slug}: every exercise_id and drill_library id resolves`, () => {
-      const raw = fs.readFileSync(path.join(PROGRAM_DIR, file), "utf8");
-      const referenced = new Set<string>();
-      for (const m of raw.matchAll(/"exercise_id"\s*:\s*"([^"]+)"/g)) referenced.add(m[1]);
-      for (const id of (program.drill_library as string[] | undefined) ?? []) referenced.add(id);
-      const unresolved = [...referenced]
-        .filter((id) => !PLACEHOLDERS.has(id))
-        .filter((id) => !exerciseById.has(id))
-        .sort();
-      expect(unresolved).toEqual([]);
-    });
-
-    it(`${slug}: every capability_slot has at least one drill that can fill it`, () => {
-      const blocks = (program.blocks as Array<{ id: string; capability_slot?: string }>) ?? [];
-      const slots = blocks.filter((b) => b.capability_slot);
-      if (slots.length === 0) return;
-      const domains = new Set<string>();
-      for (const id of (program.drill_library as string[] | undefined) ?? []) {
-        for (const d of exerciseById.get(id)?.capability_domains ?? []) domains.add(d);
-      }
-      // A dead slot is invisible at runtime: composeSlotDrills falls back to
-      // authored items, so the program looks fine and silently stops adapting.
-      const dead = slots
-        .filter((b) => !domains.has(b.capability_slot as string))
-        .map((b) => `${b.id} → ${b.capability_slot}`)
-        .sort();
-      expect(dead).toEqual([]);
-    });
-
-    it(`${slug}: evidence_base references[] and reference_ids[] agree, and resolve`, () => {
-      const eb = program.evidence_base as
-        | { references?: Array<{ id: string }>; reference_ids?: string[] }
-        | undefined;
-      if (!eb) return;
-      const refIds = new Set((eb.references ?? []).map((r) => r.id));
-      const listed = new Set(eb.reference_ids ?? []);
-      if (refIds.size === 0 && listed.size === 0) return;
-      const onlyInReferences = [...refIds].filter((id) => !listed.has(id)).sort();
-      const onlyInReferenceIds = [...listed].filter((id) => !refIds.has(id)).sort();
-      const unresolvable = [...listed].filter((id) => !citationIds.has(id)).sort();
-      expect({ onlyInReferences, onlyInReferenceIds, unresolvable }).toEqual({
-        onlyInReferences: [],
-        onlyInReferenceIds: [],
-        unresolvable: [],
-      });
-    });
-  }
+  // A hand-edit added a citation to references[] but not reference_ids[].
+  // Every other program keeps them in sync; nothing enforced it.
+  it.each(programs.map((p) => p.id))("%s: citation lists agree and resolve", (id) => {
+    const { program } = programs.find((p) => p.id === id)!;
+    const eb = program.evidence_base as
+      | { references?: Array<{ id: string }>; reference_ids?: string[] }
+      | undefined;
+    if (!eb) return;
+    const refIds = new Set((eb.references ?? []).map((r) => r.id));
+    const listed = new Set(eb.reference_ids ?? []);
+    if (refIds.size === 0 && listed.size === 0) return;
+    expect({
+      onlyInReferences: [...refIds].filter((r) => !listed.has(r)).sort(),
+      onlyInReferenceIds: [...listed].filter((r) => !refIds.has(r)).sort(),
+      unresolvable: [...listed].filter((r) => !citationIds.has(r)).sort(),
+    }).toEqual({ onlyInReferences: [], onlyInReferenceIds: [], unresolvable: [] });
+  });
 });

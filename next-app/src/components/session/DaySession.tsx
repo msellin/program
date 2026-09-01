@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { loadProgram, loadExercises } from "@/lib/data-loader";
+import { loadProgram, loadExercises, applyProgramExerciseOverrides } from "@/lib/data-loader";
 import { useStore, entrySets } from "@/lib/useStore";
 import { today as todayISO } from "@/lib/utils";
 import { activePhaseFor, isPastProgramEnd, isAwayOn, HOLIDAY_GAP } from "@/lib/engine/schedule";
@@ -72,7 +72,7 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
     void Promise.all([loadProgram(slug), loadExercises()])
       .then(([p, x]) => {
         setProgram(p);
-        setById(x.byId);
+        setById(applyProgramExerciseOverrides(x.byId, p));
       })
       .catch((e) => setError(e instanceof Error ? e.message : String(e)));
   }, [slug]);

@@ -290,6 +290,75 @@
   "progression_rule": "Cycle end all-green: TM +5 kg squat variants, +7.5 kg pull variants. Any amber week: hold TM. Any red week: TM -10%.",
   "reset_rule_5_3_1": "If the top set of week 3 fails to hit the required reps (1+ at 95% TM), reduce TM by 10% for the next cycle."
  },
+ "exercise_overrides_note": "Person-specific clinical constraints for this program only. The shared movement library at /data/exercises.json carries general coaching copy; these entries restore the findings-specific wording (shoulder retroversion / SLAP + posterior labrum, Bertolotti segment, documented left glute-max and hip-flexor deficits) for this program's sessions. See data/clinical-context.json.",
+ "exercise_overrides": {
+  "banded_march_standing": {
+   "cues_append": [
+    "Your clicking was documented in the lowering phase — log it if it returns"
+   ]
+  },
+  "glute_bridge_single": {
+   "cues_append": [
+    "Left side first, one extra set on the left — documented left gluteus maximus deficit"
+   ],
+   "extra_set_side": "left"
+  },
+  "dead_bug": {
+   "rationale": "Anti-extension trunk work — the single most relevant home exercise for the Bertolotti segment."
+  },
+  "split_squat_rfe": {
+   "cues_append": [
+    "Knee caving inward is the FADIR position under load — the test that was positive bilaterally"
+   ],
+   "extra_set_side": "left"
+  },
+  "front_squat": {
+   "cues": [
+    "More upright torso, smaller lumbar extension moment than back squat",
+    "Knees out",
+    "Use lifting straps in the rack if the standard front-rack aggravates the right shoulder"
+   ]
+  },
+  "back_squat_highbar": {
+   "cues": [
+    "Bar sits on the traps, not the rear delts — low-bar rack position is OFF the menu due to shoulder retroversion",
+    "Upright torso, knees out, controlled descent",
+    "If the grip aggravates the right shoulder, take a wider grip or use lifting straps around the bar"
+   ],
+   "rationale": "Primary working squat variant. High-bar produces a more vertical torso than low-bar and a smaller lumbar extension moment — safer over a Bertolotti segment. It's also the version you can rack given the posterior shoulder pathology."
+  },
+  "back_squat_ssb": {
+   "rationale": "The friendliest heavy squat variant for this shoulder. If the box has one, prefer SSB for the main squat slot until the shoulder is a solved problem."
+  },
+  "bulgarian_split_squat_db": {
+   "cues": [
+    "Dumbbells at your sides",
+    "Front shin close to vertical — knee-forward drive loads the labrum",
+    "Left side gets the extra set — documented left glute-max and left hip-flexor deficit"
+   ],
+   "rationale": "Heavier progression of the RFE split squat. Unilateral loading is the primary tool for closing the left-right strength gap the record documents.",
+   "extra_set_side": "left"
+  },
+  "single_leg_rdl": {
+   "cues_append": [
+    "Left side gets the extra set"
+   ],
+   "rationale": "Unilateral posterior-chain loading, teaches hip hinge with a stable spine, and closes the left glute-max gap. Non-negotiable in every training week.",
+   "extra_set_side": "left"
+  },
+  "block_pull_midshin": {
+   "cues_append": [
+    "This is the primary heavy pull until conventional deadlift is symptom-free"
+   ]
+  },
+  "deadlift_conventional": {
+   "cues": [
+    "Only if the block pull has been symptom-free at ~150 kg for at least 4 weeks",
+    "Brace hard, neutral spine, lats engaged, drive the floor away",
+    "Any left SI or groin symptom in the next-morning check means back to block pulls"
+   ]
+  }
+ },
  "phases": [
   {
    "id": "phase_1_rebuild_evaluate",

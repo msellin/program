@@ -78,6 +78,33 @@ export const exerciseSchema = z.object({
   evidence_refs: z.array(z.string()).optional(),
 });
 
+/**
+ * Per-program override of shared movement-library copy.
+ *
+ * `exercises.json` is shared across the whole catalog, so its `cues` and
+ * `rationale` must stay general coaching copy. Constraints that belong to one
+ * person's clinical record (shoulder retroversion, a Bertolotti segment, a
+ * documented left glute-max deficit) live here, scoped to the program that owns
+ * them, and are merged in at render time by `applyProgramExerciseOverrides`.
+ *
+ * `cues` replaces the library list; `cues_append` adds to it. Use `cues` when the
+ * personal wording is a more specific version of the same cue, `cues_append` when
+ * it is purely additive.
+ */
+export const exerciseOverrideSchema = z.object({
+  cues: z.array(z.string()).optional(),
+  cues_append: z.array(z.string()).optional(),
+  cues_external_focus: z.array(z.string()).optional(),
+  cues_internal_focus: z.array(z.string()).optional(),
+  setup: z.string().optional(),
+  rationale: z.string().optional(),
+  warning: z.string().optional(),
+  /** Merged into `exercise.default.extra_set_side` — drives the laterality badge. */
+  extra_set_side: z.string().optional(),
+});
+
+export type ExerciseOverride = z.infer<typeof exerciseOverrideSchema>;
+
 export const exercisesFileSchema = z.object({
   schema_version: z.string(),
   exercises: z.array(exerciseSchema),
@@ -534,6 +561,10 @@ export const programSchema = z.object({
   equipment_inventory: z.record(z.string(), z.unknown()).optional(),
   principles: z.array(z.record(z.string(), z.unknown())).optional(),
   training_maxes: z.record(z.string(), z.unknown()).optional(),
+  /** Prose note next to `exercise_overrides`; authored, never rendered. */
+  exercise_overrides_note: z.string().optional(),
+  /** exercise_id → per-program copy overrides. See `exerciseOverrideSchema`. */
+  exercise_overrides: z.record(z.string(), exerciseOverrideSchema).optional(),
   phases: z.array(phaseSchema),
   blocks: z.array(blockSchema),
   weekly_template: z.record(z.string(), z.unknown()).optional(),

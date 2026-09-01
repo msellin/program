@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "generated": "2026-08-01",
-  "note": "Movement library. Stable across program revisions — program.json references these by id.",
+  "note": "Movement library. Stable across program revisions — program.json references these by id. Cues here are general coaching copy: anything specific to one person's clinical findings belongs in that program's `exercise_overrides`.",
   "categories": [
     "isometric",
     "activation",
@@ -90,7 +90,7 @@
       },
       "cues": [
         "Knee to roughly 90 degrees only",
-        "Controlled lowering — the lowering phase is where clicking was documented"
+        "Controlled lowering — the lowering phase is where hip clicking usually shows up"
       ],
       "flags": [
         "monitor:click"
@@ -192,11 +192,10 @@
       "default": {
         "sets": 3,
         "reps": 10,
-        "per_side": true,
-        "extra_set_side": "left"
+        "per_side": true
       },
       "cues": [
-        "Left side first, one extra set on the left — documented left gluteus maximus deficit"
+        "Drive through the heel and squeeze the glute at the top — keep the low back out of it"
       ],
       "progression": "hip_thrust_barbell",
       "regression": "glute_bridge",
@@ -242,7 +241,7 @@
         "Lower back stays flat against the floor throughout",
         "If it lifts, shorten the range"
       ],
-      "rationale": "Anti-extension trunk work — the single most relevant home exercise for the Bertolotti segment.",
+      "rationale": "Anti-extension trunk work — teaches the trunk to resist lumbar extension while the limbs move.",
       "video_search": "dead bug exercise form",
       "video_url": "https://www.youtube.com/watch?v=GbSC02oU3To"
     },
@@ -273,13 +272,12 @@
       "default": {
         "sets": 3,
         "reps": 8,
-        "per_side": true,
-        "extra_set_side": "left"
+        "per_side": true
       },
       "cues": [
         "Dumbbells at your sides, or front-racked",
         "Front foot far enough forward that the shin stays fairly vertical",
-        "Knee tracks over the toe — knee caving inward is FADIR under load"
+        "Knee tracks over the toe — knee caving inward puts the hip into flexion, adduction and internal rotation under load"
       ],
       "flags": [
         "monitor:knee_valgus"
@@ -338,7 +336,7 @@
       "cues": [
         "More upright torso, smaller lumbar extension moment than back squat",
         "Knees out",
-        "Use lifting straps in the rack if the standard front-rack aggravates the right shoulder"
+        "Use lifting straps in the rack if the standard front-rack position aggravates your shoulder or wrist"
       ],
       "flags": [
         "shoulder_load:front_rack"
@@ -360,11 +358,11 @@
         "progression_model": "tm_based"
       },
       "cues": [
-        "Bar sits on the traps, not the rear delts — low-bar rack position is OFF the menu due to shoulder retroversion",
+        "Bar sits on the traps, not the rear delts",
         "Upright torso, knees out, controlled descent",
-        "If the grip aggravates the right shoulder, take a wider grip or use lifting straps around the bar"
+        "If the grip aggravates your shoulder, take a wider grip or use lifting straps around the bar"
       ],
-      "rationale": "Primary working squat variant. High-bar produces a more vertical torso than low-bar and a smaller lumbar extension moment — safer over a Bertolotti segment. It's also the version this user can rack given the posterior shoulder pathology.",
+      "rationale": "Primary working squat variant. High-bar produces a more vertical torso than low-bar and a smaller lumbar extension moment, which keeps the extension demand on the lower back down.",
       "flags": [
         "historical_provocateur",
         "shoulder_load:grip"
@@ -390,7 +388,7 @@
         "SSB handles in front — no shoulder external rotation required to rack the bar",
         "The camber pushes you forward, so brace hard and stay upright"
       ],
-      "rationale": "The friendliest heavy squat variant for this shoulder. If the box has one, prefer SSB for the main squat slot until the shoulder is a solved problem.",
+      "rationale": "The friendliest heavy squat variant when the shoulder will not tolerate a bar rack position — the handles sit in front, so no external rotation is required.",
       "video_search": "safety squat bar squat technique",
       "video_url": "https://www.youtube.com/watch?v=B3LpibMixF0"
     },
@@ -406,19 +404,18 @@
       "default": {
         "sets": 3,
         "reps": 8,
-        "per_side": true,
-        "extra_set_side": "left"
+        "per_side": true
       },
       "cues": [
         "Dumbbells at your sides",
-        "Front shin close to vertical — knee-forward drive loads the labrum",
-        "Left side gets the extra set — documented left glute-max and left hip-flexor deficit"
+        "Front shin close to vertical — knee-forward drive loads the front of the hip",
+        "Even reps and load both sides unless your program says otherwise"
       ],
       "prerequisite": "split_squat_rfe",
       "flags": [
         "monitor:knee_valgus"
       ],
-      "rationale": "Heavier progression of the RFE split squat. Unilateral loading is the primary tool for closing the left-right strength gap the record documents.",
+      "rationale": "Heavier progression of the RFE split squat. Unilateral loading is the primary tool for closing a left-right strength gap.",
       "video_search": "bulgarian split squat dumbbell",
       "video_url": "https://www.youtube.com/watch?v=Ozv-OPuVw6A"
     },
@@ -434,15 +431,13 @@
       "default": {
         "sets": 3,
         "reps": 8,
-        "per_side": true,
-        "extra_set_side": "left"
+        "per_side": true
       },
       "cues": [
         "Kettlebell or dumbbell in the opposite hand to the working leg",
-        "Hinge at the hip, keep the spine long, do not round the low back",
-        "Left side gets the extra set"
+        "Hinge at the hip, keep the spine long, do not round the low back"
       ],
-      "rationale": "Unilateral posterior-chain loading, teaches hip hinge with a stable spine, and closes the left glute-max gap. Non-negotiable in every training week.",
+      "rationale": "Unilateral posterior-chain loading — teaches the hip hinge with a stable spine and closes left-right glute-max gaps.",
       "video_search": "single leg romanian deadlift form",
       "video_url": "https://www.youtube.com/watch?v=Zfr6wizR8rs"
     },
@@ -462,8 +457,7 @@
       },
       "cues": [
         "Shortens the range of motion, reduces the flexion demand at the pull start",
-        "Neutral spine, brace before you lift, drive with the legs",
-        "This is the primary heavy pull until conventional deadlift is symptom-free"
+        "Neutral spine, brace before you lift, drive with the legs"
       ],
       "flags": [
         "historical_provocateur:deadlift"
@@ -487,9 +481,9 @@
         "progression_model": "tm_based"
       },
       "cues": [
-        "Only if the block pull has been symptom-free at ~150 kg for at least 4 weeks",
+        "Only once the block pull has been symptom-free at working load for at least 4 weeks",
         "Brace hard, neutral spine, lats engaged, drive the floor away",
-        "Any left SI or groin symptom in the next-morning check means back to block pulls"
+        "Any SI or groin symptom in the next-morning check means back to block pulls"
       ],
       "phase_gated": true,
       "flags": [
