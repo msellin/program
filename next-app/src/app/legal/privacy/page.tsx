@@ -102,7 +102,7 @@ export default function PrivacyPage() {
       <ul className="list-disc pl-5 space-y-1">
         <li>
           Account, email, training logs and symptom data: <strong>Supabase</strong>{" "}
-          (managed Postgres, Frankfurt, EU).
+          (managed Postgres, AWS <span className="whitespace-nowrap">eu-west-1</span> — Ireland, EU).
         </li>
         <li>
           <strong>Your own device.</strong> The app keeps a full copy of your training
