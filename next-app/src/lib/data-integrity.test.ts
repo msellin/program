@@ -283,3 +283,56 @@ describe("structural drift", () => {
     }).toEqual({ onlyInReferences: [], onlyInReferenceIds: [], unresolvable: [] });
   });
 });
+
+/**
+ * Landing ↔ app catalog agreement (added 2026-09-01).
+ *
+ * The landing is a separate Next app with its own deploy, and it keeps its own
+ * editorial catalog in `landing/src/lib/programs-catalog.ts` — marketing copy
+ * the app has no use for. Nothing connected the two, so on 2026-09-01 three
+ * programs were promoted in the app manifest and shipped, while
+ * `terav.fit/programs/<slug>` 404'd for all three: `PUBLIC_PROGRAMS` and
+ * `generateStaticParams` both derive from that file and it still held five.
+ *
+ * This runs in the app's suite, not the landing's, because the app's suite is
+ * the one wired into the pre-commit hook and `npm run deploy`. Parsed by regex
+ * rather than imported — crossing the package boundary for a list of slugs is
+ * not worth a build-tool change.
+ */
+describe("landing catalog matches the app manifest", () => {
+  const LANDING_CATALOG = path.resolve(
+    process.cwd(),
+    "..",
+    "landing",
+    "src",
+    "lib",
+    "programs-catalog.ts",
+  );
+
+  it("every public app program has a landing entry, and vice versa", () => {
+    if (!fs.existsSync(LANDING_CATALOG)) return; // landing not checked out
+
+    const src = fs.readFileSync(LANDING_CATALOG, "utf8");
+    const landingSlugs = new Set(
+      [...src.matchAll(/^\s{4}slug:\s*"([^"]+)"/gm)].map((m) => m[1]),
+    );
+    // `personal: true` entries are deliberately excluded from PUBLIC_PROGRAMS
+    // on both sides — anterior-hip-rebuild carries one person's clinical record.
+    const landingPersonal = new Set(
+      [...src.matchAll(/slug:\s*"([^"]+)"[\s\S]{0,4000}?personal:\s*true/g)].map((m) => m[1]),
+    );
+    const landingPublic = [...landingSlugs].filter((s) => !landingPersonal.has(s));
+
+    const appPublic = manifest.programs
+      .filter((p) => !p.personal && p.status !== "DRAFT" && p.status !== "draft" && p.status !== "PROVISIONAL")
+      .map((p) => p.slug);
+
+    const missingFromLanding = appPublic.filter((s) => !landingPublic.includes(s)).sort();
+    const missingFromApp = landingPublic.filter((s) => !appPublic.includes(s)).sort();
+
+    expect({ missingFromLanding, missingFromApp }).toEqual({
+      missingFromLanding: [],
+      missingFromApp: [],
+    });
+  });
+});

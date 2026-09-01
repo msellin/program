@@ -376,7 +376,7 @@ function SkipSheet({
               <span className={`w-4 h-4 rounded-full border flex-shrink-0 flex items-center justify-center ${shift ? "border-bronze bg-bronze" : "border-line"}`}>
                 {shift ? <span className="w-1.5 h-1.5 rounded-full bg-ground" /> : null}
               </span>
-              <p className="font-semibold text-sm text-strong">Skip &amp; shift the week</p>
+              <p className="font-semibold text-sm text-strong">Skip & shift the week</p>
             </div>
             <p className="text-[12px] text-muted pl-6 leading-snug">
               This session takes over the next scheduled strength day. Everything cascades one slot forward.

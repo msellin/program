@@ -65,6 +65,9 @@ export type LandingDict = {
     rowing_pitch: string;
     handstand_pitch: string;
     overhead_pitch: string;
+    pullup_pitch: string;
+    muscleup_pitch: string;
+    engine_block2_pitch: string;
     roadmap_link: string;
     domain_aerobic: string;
     domain_concurrent: string;

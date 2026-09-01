@@ -1,5 +1,6 @@
 import { SectionHead } from "./ThreeWayContrast";
 import type { LandingDict } from "@/i18n/dictionaries/types";
+import { PUBLIC_PROGRAMS, type LandingProgram } from "@/lib/programs-catalog";
 
 type Program = {
   slug: string;
@@ -12,60 +13,56 @@ type Program = {
   evidence: string;
 };
 
+/**
+ * Single source of truth (2026-09-01).
+ *
+ * This section used to carry its own hardcoded array of five programs, parallel
+ * to `programs-catalog.ts` which backs `/programs` and every detail page. When
+ * the catalog went to eight, the detail pages followed and this list did not —
+ * so the home page rendered "Eight programs live." above five cards, with a
+ * "Three more in build" link underneath. Two lists, one of them wrong.
+ *
+ * Now derived from `PUBLIC_PROGRAMS`. Adding a program to the catalog adds it
+ * here for free, and the two can no longer disagree. The dictionary keeps only
+ * the marketing pitch per slug, because that is genuinely landing-owned copy
+ * and is the part that gets translated.
+ */
 function programsFor(dict: LandingDict): Program[] {
   const t = dict.programs;
-  return [
-    {
-      slug: "engine-builder",
-      name: "Engine Builder",
-      duration: "8 weeks",
-      category: t.domain_aerobic,
-      tone: "teal",
-      status: "AVAILABLE",
-      body: t.engine_builder_pitch,
-      evidence: "Helgerud 2007 · Seiler 2010",
-    },
-    {
-      slug: "concurrent-strength-maintenance",
-      name: "Concurrent-Strength Maintenance",
-      duration: "8 weeks",
-      category: t.domain_concurrent,
-      tone: "bronze",
-      status: "AVAILABLE",
-      body: t.csm_pitch,
-      evidence: "Schumann 2022 · Robineau 2016",
-    },
-    {
-      slug: "rowing-2k-test-prep",
-      name: "Rowing 2K Test Prep",
-      duration: "6 weeks",
-      category: t.domain_aerobic,
-      tone: "teal",
-      status: "AVAILABLE",
-      body: t.rowing_pitch,
-      evidence: "Bosquet 2007 · Mujika 2000",
-    },
-    {
-      slug: "handstand-walk",
-      name: "Handstand Walk",
-      duration: "Multi-tier",
-      category: t.domain_skill,
-      tone: "bronze",
-      status: "AVAILABLE",
-      body: t.handstand_pitch,
-      evidence: "Wulf 1998 · Shea &amp; Morgan 1979",
-    },
-    {
-      slug: "overhead-mobility",
-      name: "Overhead Mobility",
-      duration: "10 weeks",
-      category: t.domain_skill,
-      tone: "bronze",
-      status: "AVAILABLE",
-      body: t.overhead_pitch,
-      evidence: "Ludewig &amp; Cook 2000 · Karni 1998",
-    },
-  ];
+  const pitchBySlug: Record<string, string | undefined> = {
+    "engine-builder": t.engine_builder_pitch,
+    "concurrent-strength-maintenance": t.csm_pitch,
+    "rowing-2k-test-prep": t.rowing_pitch,
+    "handstand-walk": t.handstand_pitch,
+    "overhead-mobility": t.overhead_pitch,
+    "first-strict-pullup": t.pullup_pitch,
+    "muscle-up": t.muscleup_pitch,
+    "engine-builder-block-2": t.engine_block2_pitch,
+  };
+  const domainLabel: Record<LandingProgram["domain"], string> = {
+    aerobic: t.domain_aerobic,
+    concurrent: t.domain_concurrent,
+    skill: t.domain_skill,
+  };
+  return PUBLIC_PROGRAMS.map((p) => ({
+    slug: p.slug,
+    name: p.name,
+    // The catalog carries "Multi-tier · 8 weeks"; the card has room for the
+    // short form only.
+    duration: p.duration.includes("·")
+      ? p.duration.split("·")[0].trim()
+      : p.duration,
+    category: domainLabel[p.domain],
+    tone: p.toneColor,
+    status: p.status,
+    // Falls back to the catalog tagline so a newly-added program still renders
+    // a sentence rather than an empty card if the pitch key is not added yet.
+    body: pitchBySlug[p.slug] ?? p.tagline,
+    evidence: p.evidence
+      .slice(0, 2)
+      .map((e) => e.label.split("·")[0].trim())
+      .join(" · "),
+  }));
 }
 
 export function Programs({ dict }: { dict: LandingDict }) {
@@ -81,7 +78,7 @@ export function Programs({ dict }: { dict: LandingDict }) {
           no JS library. Cards are 82vw so the next card peeks in ~12vw at the
           right edge, teaching the swipe affordance without dots. */}
       <div className="mt-10 sm:hidden">
-        <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 pb-2 [scrollbar-width:none] [&amp;::-webkit-scrollbar]:hidden">
+        <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {programs.map((p) => (
             <div key={p.slug} className="snap-center shrink-0 basis-[82vw]">
               <ProgramCard p={p} />

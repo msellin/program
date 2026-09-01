@@ -80,7 +80,7 @@ export default function PrivacyPage() {
         </tbody>
       </table>
 
-      <h2 className="text-lg font-semibold text-strong pt-2">Lawful basis (GDPR Art. 6 &amp; 9)</h2>
+      <h2 className="text-lg font-semibold text-strong pt-2">Lawful basis (GDPR Art. 6 & 9)</h2>
       <ul className="list-disc pl-5 space-y-1">
         <li><strong>Account + training log:</strong> contract with you (Art. 6(1)(b)).</li>
         <li><strong>Symptom scores, pain ratings, self-assessments:</strong> your explicit consent (Art. 9(2)(a)) — health data is a &quot;special category&quot; and we store it only because you ticked the box at sign-up.</li>
@@ -108,7 +108,7 @@ export default function PrivacyPage() {
         the US under standard contractual clauses.
       </p>
 
-      <h2 className="text-lg font-semibold text-strong pt-2">Cookies &amp; tracking</h2>
+      <h2 className="text-lg font-semibold text-strong pt-2">Cookies & tracking</h2>
       <p>
         We use one session cookie (Supabase auth) so you stay signed in. We do not use
         marketing cookies, ad networks, or cross-site trackers. No analytics tools are

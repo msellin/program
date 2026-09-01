@@ -382,7 +382,7 @@ export function TodaySession({
           const mode = week <= 2 ? "blocked practice — drills in the composed order" : "random practice — order shuffled by the seed";
           return (
             <p className="text-[11px] text-muted font-mono">
-              Week {week} · {mode}. <span className="text-muted">Shea &amp; Morgan 1979.</span>
+              Week {week} · {mode}. <span className="text-muted">Shea & Morgan 1979.</span>
             </p>
           );
         })()

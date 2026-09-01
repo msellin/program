@@ -40,7 +40,7 @@ export function HipProgressTile() {
   return (
     <section className="space-y-3">
       <div className="flex items-baseline justify-between gap-3">
-        <h2 className="font-mono text-[14px] uppercase tracking-widest">Hip flexor &amp; balance</h2>
+        <h2 className="font-mono text-[14px] uppercase tracking-widest">Hip flexor & balance</h2>
         {dueStatus.due ? (
           <Link
             href="/check/hip"
