@@ -1,0 +1,72 @@
+<!doctype html><html><head><meta charset="utf-8"><title>pose spike</title></head>
+<body style="font:14px monospace;background:#111;color:#eee">
+<div id="log">loading…</div>
+<script type="module">
+import {FilesetResolver, PoseLandmarker} from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs";
+const log = (m)=>{document.getElementById('log').textContent += "\n"+m; console.log(m);};
+const MODELS = {
+  lite:  "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task",
+  full:  "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_full/float16/1/pose_landmarker_full.task",
+  heavy: "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_heavy/float16/1/pose_landmarker_heavy.task",
+};
+let fileset = await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm");
+const cache = {};
+async function getLm(variant){
+  if(!cache[variant]) cache[variant] = await PoseLandmarker.createFromOptions(fileset,{
+    baseOptions:{modelAssetPath:MODELS[variant], delegate:"GPU"},
+    runningMode:"IMAGE", numPoses:1});
+  return cache[variant];
+}
+const blobs = {};
+async function loadVideo(url){
+  if(!blobs[url]){ const r = await fetch(url); const b = await r.blob(); blobs[url] = URL.createObjectURL(b); }
+  const v = document.createElement('video');
+  v.src = blobs[url]; v.muted = true; v.playsInline = true;
+  await new Promise((res,rej)=>{v.onloadedmetadata=res; v.onerror=rej;});
+  return v;
+}
+async function seek(v,t){ return new Promise(res=>{ v.onseeked=()=>res(); v.currentTime=t; }); }
+async function post(name, body){ await fetch('/save?name='+encodeURIComponent(name),{method:'POST',body}); }
+
+window.probe = async (url)=>{ const v = await loadVideo(url); return {duration:v.duration, w:v.videoWidth, h:v.videoHeight}; };
+
+window.thumbs = async (url, tag, n=9)=>{
+  const v = await loadVideo(url); const c=document.createElement('canvas'); const g=c.getContext('2d');
+  const W=640; c.width=W; c.height=Math.round(W*v.videoHeight/v.videoWidth);
+  for(let i=0;i<n;i++){ const t = v.duration*(i+0.5)/n; await seek(v,t);
+    g.drawImage(v,0,0,c.width,c.height);
+    await post(`${tag}_t${t.toFixed(1)}.jpg`, c.toDataURL('image/jpeg',0.7)); }
+  return 'ok';
+};
+
+window.runClip = async (url, tag, variant, fps=10, t0=0, t1=null)=>{
+  const lm = await getLm(variant);
+  const v = await loadVideo(url);
+  const end = t1==null? v.duration : t1;
+  const c=document.createElement('canvas'); const g=c.getContext('2d');
+  const W = 720; c.width=W; c.height=Math.round(W*v.videoHeight/v.videoWidth);
+  const step = 1/fps; const frames=[]; let detected=0, ms=0, n=0;
+  for(let t=t0; t<end; t+=step){
+    await seek(v,t); g.drawImage(v,0,0,c.width,c.height);
+    const s=performance.now(); const r = lm.detect(c); ms += performance.now()-s; n++;
+    if(r.landmarks && r.landmarks.length){ detected++;
+      frames.push({t:+t.toFixed(3), lm:r.landmarks[0].map(p=>[+p.x.toFixed(4),+p.y.toFixed(4),+p.z.toFixed(4),+p.visibility.toFixed(3)])});
+    } else frames.push({t:+t.toFixed(3), lm:null});
+  }
+  const IDX={nose:0,l_sh:11,r_sh:12,l_el:13,r_el:14,l_wr:15,r_wr:16,l_hip:23,r_hip:24,l_kn:25,r_kn:26,l_an:27,r_an:28};
+  const vis={}; for(const k in IDX){ let s=0,c2=0; for(const f of frames) if(f.lm){s+=f.lm[IDX[k]][3];c2++;} vis[k]= c2? +(s/c2).toFixed(3):0; }
+  const core = +(([ 'l_hip','r_hip','l_kn','r_kn','l_an','r_an'].reduce((a,k)=>a+vis[k],0))/6).toFixed(3);
+  const summary = {tag,variant,fps,frames:n,detectedPct:+(100*detected/n).toFixed(1),msPerFrame:+(ms/n).toFixed(1),core,vis,duration:v.duration,w:v.videoWidth,h:v.videoHeight};
+  await post(`${tag}_${variant}_landmarks.json`, JSON.stringify({summary,frames}));
+  return summary;
+};
+
+window.frames = async (url, tag, times)=>{
+  const v = await loadVideo(url); const c=document.createElement('canvas'); const g=c.getContext('2d');
+  const W=720; c.width=W; c.height=Math.round(W*v.videoHeight/v.videoWidth);
+  for(const t of times){ await seek(v,t); g.drawImage(v,0,0,c.width,c.height);
+    await post(`${tag}_${t.toFixed(1)}.jpg`, c.toDataURL('image/jpeg',0.85)); }
+  return 'ok';
+};
+log('ready');
+</script></body></html>
