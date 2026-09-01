@@ -183,6 +183,97 @@ Notes:
 
 ---
 
+## Output contract — what the user actually sees
+
+Decided 2026-09-01. The schema above says how a fault is *detected*; this says
+what is *rendered*. Both halves are produced with no LLM: a verdict is a filter
+over fired faults, and the improvement text is the exercise's own `cues[]`.
+
+```jsonc
+{
+  "status": "analysed" | "refused",
+  "capture":  { "blocking": [...], "advisory": [...] },   // how to film better
+  "set":  { "verdict": "ok", "faults": [...], "rir": 2 }, // across-rep faults
+  "reps": [ { "index": 1, "verdict": "good", "faults": [], "measures": {...} } ]
+}
+```
+
+### The verdict scale — derived, never authored
+
+There is no per-movement quality scale, and there must not be one. `depth_ratio
+0.95` and `hold_seconds 42` share no units, so nothing can rank them against each
+other. What *is* comparable across every movement is **which faults fired and at
+what severity** — and `severity` already exists on the fault object.
+
+| Verdict | Rule |
+|---|---|
+| **Good** | No faults fired |
+| **OK** | Only `hint`-severity faults fired |
+| **Needs work** | One or more `warning`-severity faults fired |
+| **Not measurable** | The rep exists but its measures were suppressed (see V2-8) |
+
+Movement-agnostic by construction: a handstand hold and a front squat both land
+on it, because each rubric declares its own faults and the scale only reads
+severity. Adding a movement adds faults, never a new scale.
+
+Two rules that fall out and are easy to get wrong:
+
+- **Per-rep and per-set verdicts are separate.** Depth is a property of one rep.
+  Velocity decay only exists as a comparison *across* reps and has no per-rep
+  value. Do not project set-level faults onto individual reps — the 2026-09-01
+  front squat should read *rep 1 good, rep 2 good, set-level hint: slowed 15%
+  through the same point both reps*, not *rep 2 needs work*.
+- **The verdict must know how heavy the set was.** A grinding final rep at 95%
+  is what a maximal rep looks like, not a technique failure. Labelling it "needs
+  work" is wrong and it punishes the user for training hard — the opposite of
+  what a focused-improvement app should do. Either gate `warning` severity on set
+  intensity, or carry it in the copy ("form held to the last rep — expected at
+  this load"). **This is a correctness requirement, not a tone preference.**
+
+`"Not measurable"` is a first-class verdict, not an error state. The 2026-09-01
+run showed it will be common: a rear-view clip cannot support depth or torso
+angle no matter how good the lift was.
+
+### Capture feedback — telling the user how to film better
+
+Measured 2026-09-01: framing is the dominant quality variable, and it is fully
+diagnosable from the landmarks themselves. Every issue below is detectable
+without asking a model to judge a picture.
+
+| Issue | Detection | What the user is told |
+|---|---|---|
+| `wrong_view` | `detect-view` (V1-8) disagrees with `video_rubric.view` | "Film from the side for this one" |
+| `subject_too_small` | landmark bounding-box height < ~45% of frame | "Move closer, or turn the phone" |
+| `cropped` | landmarks pinned at a frame edge, or a limb group's visibility collapses while the rest stays high | "Get your whole body in — your feet are cut off" |
+| `off_centre` | bounding-box centre x far from 0.5 | "Centre the phone on you" — required before any left/right measure is trusted |
+| `occluded` | intermittent visibility drops on some landmarks while others hold | "Something is blocking the view — move the rack upright out of the line" |
+| `absent` | frames with no pose inside the set window | "You stepped out of frame partway through" |
+| `too_short` | fewer than one full rep segmented | "Start filming before the first rep" |
+
+Two tiers, and the second tier is the one that makes this a feature rather than
+an error dialog:
+
+- **Blocking** — the clip cannot be analysed. Refuse with the specific reason.
+  Never a generic "couldn't analyse this video".
+- **Advisory** — the analysis succeeded, but something was suppressed. Say what
+  was lost and what fixing it would unlock: *"We measured tempo and rep count.
+  Film from the side next time and you'll also get depth and torso angle."*
+  A suppressed measure (V2-8) should always produce an advisory, so the user
+  learns why a number is missing instead of assuming the feature is broken.
+
+**Capture messages are a closed enum owned by the app, not per-rubric prose.**
+The rubric authors no copy — that rule holds here too. A finite list is
+translatable, testable, and cannot drift per movement. The rubric contributes
+only its `view` and `framing` string; the diagnosis and the wording are the
+app's.
+
+Advisories are also the honest answer to a limitation this project cannot
+engineer away: with one phone and one angle, some measures are simply
+unavailable. Saying so — and saying what would fix it — is better than silently
+returning a shorter list of faults.
+
+---
+
 ## Why this matters for the engine (not just for the user)
 
 On 2026-08-31 the founder ran the top set at 95 kg × 9 with roughly five reps in

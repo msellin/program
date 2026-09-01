@@ -157,6 +157,21 @@ Remaining Phase 0 items (V0-5, V0-6) are measurements, not gates.
       (first-rep bottom, last-rep bottom, worst fault frame).
 - [ ] **V4-2** Faults render using the exercise's **own `cues[]` text**. No new
       coaching copy anywhere in this feature.
+- [ ] **V4-7** **Verdict scale**, per `plan.md` "Output contract". Derived from
+      fired-fault severity, never authored per movement: no faults = good, only
+      `hint` = ok, any `warning` = needs work, suppressed measures = not
+      measurable. Per-rep and per-set verdicts stay separate — velocity decay has
+      no per-rep value and must not be projected onto one rep. **Gate `warning`
+      severity on set intensity**: a grinding rep at 95% is not a technique
+      failure, and marking it one punishes the user for training hard.
+- [ ] **V4-8** **Capture feedback**, per `plan.md` "Output contract". Closed enum
+      owned by the app (`wrong_view`, `subject_too_small`, `cropped`,
+      `off_centre`, `occluded`, `absent`, `too_short`), each detected from
+      landmark geometry, each with app-owned i18n copy — the rubric contributes
+      only `view` and `framing`. Two tiers: **blocking** (refuse with the specific
+      reason, never a generic failure) and **advisory** (analysis succeeded, say
+      what was suppressed and what fixing the framing would unlock). Every
+      measure suppressed by V2-8 must emit an advisory.
 - [ ] **V4-3** Faults → proposals via `selectProposals`; Accept / Ignore.
 - [ ] **V4-4** `retest_fills` → `capability_profile[testId].measured_value`
       **as a proposal, never silently.** An auto-filled retest that promotes a
