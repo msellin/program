@@ -48,8 +48,18 @@ test("harness coverage: every shipped program has a persona", async () => {
       personal?: boolean;
     }>;
   };
+  // 2026-09-01 — this filter excluded PROVISIONAL but not DRAFT. P0-9
+  // (2026-08-19) renamed PROVISIONAL to DRAFT and updated the catalog filter
+  // in programs/page.tsx, but missed this one. Result: the coverage check
+  // counted unshipped drafts as shipped and warned about them every run —
+  // noise that trains you to ignore the warning, which is the one thing a
+  // coverage gate must not become. Mirrors the catalog filter exactly.
   const shipped = manifest.programs.filter(
-    (p) => !p.personal && p.status !== "PROVISIONAL",
+    (p) =>
+      !p.personal &&
+      p.status !== "DRAFT" &&
+      p.status !== "draft" &&
+      p.status !== "PROVISIONAL",
   );
   const coveredSlugs = new Set<string>();
   for (const persona of PERSONAS) {

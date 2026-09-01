@@ -11,7 +11,7 @@ export const en: LandingDict = {
     cta_primary: "Start free — pick my focus",
     cta_secondary: "See how it works ↓",
     browse_link: "Browse programs — no signup",
-    stat_programs_value: "5 programs",
+    stat_programs_value: "6 programs",
     stat_programs_label: "strength, skill, engine, mobility",
     stat_studies_value: "126",
     stat_studies_label: "cited studies",

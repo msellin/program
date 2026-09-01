@@ -1,8 +1,8 @@
 {
   "schema_version": "1.2.0",
   "generated": "2026-08-17",
-  "status": "DRAFT",
-  "status_note": "DRAFT — not yet in catalog. Multi-dimensional skill program on the shared pull drill library. Tier A (no hang) → Tier D (first strict pull-up + adding volume). Reuses grip-strength, scap-control, and row-strength sub-capabilities. NO ENGINE CODE required — runs on the same multi_dimensional generator as Handstand Walk. Dates in phases[] are template anchors from Mon 2026-01-05; the generator remaps to the user's real start date on activation. Ships when founder flips status to PROVISIONAL and adds the manifest entry.",
+  "status": "REFERENCED",
+  "status_note": "REFERENCED (2026-09-01) — shipped to the public catalog. Multi-dimensional skill program on the shared pull drill library. Tier A (no hang) → Tier D (first strict pull-up + adding volume). Reuses grip-strength, scap-control and row-strength sub-capabilities. NO ENGINE CODE required — runs on the same multi_dimensional generator as Handstand Walk. Dates in phases[] are template anchors; the generator remaps to the user's real start date on activation. Not yet REVIEWED: no domain-specialist audit has been run, so `reviewed_by` / `review_evidence[]` are deliberately absent.",
   "generation_strategy": "multi_dimensional",
   "drill_library": [
     "pu_dead_hang",
@@ -1517,6 +1517,12 @@
       "to": "DRAFT",
       "date": "2026-08-19",
       "note": "P0-9 · PROVISIONAL rename to DRAFT + catalog filter. Legacy alias PROVISIONAL kept in schema for back-compat."
+    },
+    {
+      "from": "DRAFT",
+      "to": "REFERENCED",
+      "date": "2026-09-01",
+      "note": "Promoted for the free-friends beta. Citation audit found and removed a retracted reference (Barbalho 2020, retracted April 2020) that was supporting the 40-60 hard-reps/week dose; re-anchored on Rhea 2003 with the rep range relabelled as coaching consensus. Fixed a first-author misattribution (Zourdos 2019 → Ormsbee et al. 2019, PMID 28301439). Personas added: persona-pullup (consistent-average, tier_a_hang, 45d) and persona-pullup-fast (overperformer, 60d), satisfying the coverage rule. Referential integrity clean: 21 exercise/drill refs, 0 unresolved. REFERENCED not REVIEWED — no specialist audit yet."
     }
   ]
 }

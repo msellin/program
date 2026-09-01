@@ -139,6 +139,23 @@ export const PERSONAS: Persona[] = [
       "Skill arc, multi-tier. Persona picks Tier A wall-hold entry. 45 days covers phase_0 bail-out prep + first tier-gate + wall-to-free transition window. Audit target: does the tier selection surface tell the user why? Do wall-hold retests fire? Bail-out prep gating.",
   },
   {
+    // Promotion coverage for first-strict-pullup (2026-09-01). Mirrors
+    // persona-handstand: same multi_dimensional generator, same tier-gated
+    // shape, so the audit surface is comparable across the two skill arcs.
+    // Tier A is the true floor here — the user cannot yet hold a dead hang,
+    // so phase_1_hang_and_row_base is all grip + scap work with no bar reps.
+    id: "persona-pullup",
+    displayName: "First strict pull-up beginner",
+    archetypeId: "consistent-average",
+    programSlug: "first-strict-pullup",
+    tier: "tier_a_hang",
+    days: 45,
+    email: "e2e-persona-pullup@example.test",
+    password: DEFAULT_PASSWORD,
+    focus:
+      "Skill arc, 4-tier. Persona enters at Tier A (no dead hang yet). 45 days covers the 8-week manifest arc plus the weekly hang-time retest and the 4-week full assessment. Audit target: does a user with zero pull-ups understand why they are doing scap pulls and ring rows? Does the hang-time retest read as progress when the headline metric (strict reps) is still zero?",
+  },
+  {
     id: "persona-mobility",
     displayName: "Overhead mobility user",
     archetypeId: "consistent-average",
@@ -219,6 +236,23 @@ export const PERSONAS: Persona[] = [
     password: DEFAULT_PASSWORD,
     focus:
       "Skill overperformer. Long wall holds early, freestand attempts push past drilled instructions. Does a tier-advance proposal (Tier A → Tier B) fire from retest readings? Does the multi-dim generator start blending Tier B blocks?",
+  },
+  {
+    // Second half of the first-strict-pullup coverage rule: one archetype
+    // variant, required once the program leaves DRAFT. Overperformer chosen
+    // over erratic because the interesting failure here is tier progression,
+    // not adherence — this program's whole thesis is that it re-tiers you as
+    // sub-capabilities improve at different rates.
+    id: "persona-pullup-fast",
+    displayName: "Pull-up overperformer",
+    archetypeId: "overperformer",
+    programSlug: "first-strict-pullup",
+    tier: "tier_a_hang",
+    days: 60,
+    email: "e2e-persona-pullup-fast@example.test",
+    password: DEFAULT_PASSWORD,
+    focus:
+      "Skill overperformer. Grip outpaces pulling strength — hang times jump early while strict reps stay at zero. Does the multi-dim generator re-target the weakest sub-capability (row/negative) rather than just advancing the tier? Does a Tier A → Tier B advance fire off hang-time retests alone, and should it?",
   },
   {
     id: "persona-rowing-erratic",

@@ -199,7 +199,7 @@
         "calisthenics",
         "multi_dimensional"
       ],
-      "status": "DRAFT",
+      "status": "REFERENCED",
       "featured": false,
       "positioning": "main_track",
       "load_hint": "~1.5 hr/week (3-4 sessions/wk, 15-30 min each)"
