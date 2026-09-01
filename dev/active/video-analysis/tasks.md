@@ -27,13 +27,21 @@ Remaining Phase 0 items (V0-5, V0-6) are measurements, not gates.
         wall line), and **strict pull-up becomes movement #1**
 - [ ] **V0-5** Time a full 59 s clip at 10 fps sampling on a real phone, not a
       laptop. Confirms the "about 30 seconds" claim in the UX copy is honest.
-- [ ] **V0-6** Check model download size and whether it caches cleanly in the
-      existing service worker.
+- [x] **V0-6** — done 2026-09-01. float16 sizes: **lite 5.5 MB, full 9.0 MB,
+      heavy 29.2 MB.** Service-worker caching still to verify.
+- [ ] **V0-7** Verify each model variant caches cleanly in the existing service
+      worker, and that a 29 MB `heavy` fetch is not triggered on first run.
 
 ---
 
 ## Phase 1 — Headless pipeline (no UI)
 
+- [ ] **V1-0** **Model escalation ladder.** Run `lite` first; if detection over
+      the clip < ~85%, re-run with `heavy` and keep the better result. Measured
+      2026-09-01: on the founder's squat clip `full` got 60-66% while `heavy` got
+      99%, and on the HSPU clip `full` beat `heavy` on visibility. No single
+      variant wins everywhere, so the variant must be chosen at runtime from
+      measured detection rate — not hard-coded, and not keyed to orientation.
 - [ ] **V1-1** `lib/video/worker.ts` — Web Worker hosting the WASM runtime.
       Message protocol: `{frames} → {landmarks[]}` plus progress events.
       **All inference off the main thread. Non-negotiable** — main-thread

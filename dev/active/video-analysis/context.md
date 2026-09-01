@@ -97,10 +97,46 @@ body for much of the set, and he is absent from ~15 s of the 59 s clip.
 2. **Framing risk: confirmed, and it dominates.** The upright clip did worse
    than the inverted one purely on framing. The framing guide and the import
    validation gate move from "nice mitigation" to **the core quality mechanism**.
-3. **Timing claim in the UX copy was optimistic.** 82 ms/frame on a laptop with
-   GPU delegate means a 60 s clip at 10 fps ≈ 48 s, and a phone will be slower.
-   Either say "about a minute", sample 5-6 fps, or use `pose_landmarker_lite`.
-   Measure on a real phone before committing to copy (task V0-5).
+3. **Timing claim in the UX copy was optimistic.** 51-109 ms/frame on a laptop
+   with GPU delegate. A 60 s clip at 10 fps is roughly 35 s on `lite` and 75 s on
+   `heavy`, and a phone will be slower. Say "about a minute", and only escalate
+   to `heavy` when `lite` underperforms. Measure on a real phone (V0-5).
+
+### Follow-up run 2026-09-01 — model variant is the lever, not orientation
+
+The 66% on the squat clip was not a floor. Same clip, same code, only the model
+variant and input width changed. Squat, set window only (t=17-48), 310 frames:
+
+| Config | Detected | Core visibility | ms/frame |
+|---|---|---|---|
+| `full` @ 480 | 60.3% | 0.486 | 51 |
+| `full` @ 720 | 65.5% | 0.522 | 60 |
+| `full` @ 1080 | 62.6% | 0.473 | 69 |
+| `lite` @ 720 | 78.7% | 0.608 | 57 |
+| **`heavy` @ 720** | **99.0%** | **0.640** | 75 |
+
+Three things fall out:
+
+1. **`heavy` fixes the hard clip.** 60% → 99% detection for ~25% more compute.
+   The squat clip is not unusable; it was under-modelled.
+2. **Resolution barely matters.** 480 → 1080 moved nothing, and 1080 was worse
+   than 720. Do not pay for pixels; pay for model.
+3. **The ranking is clip-dependent, not monotonic.** `lite` (78.7%) beat `full`
+   (65.5%) on this clip. And on the HSPU clip `full` @480 scored core 0.912 while
+   `heavy` @720 scored 0.739. **No single config wins everywhere.**
+
+Model download sizes (float16): **lite 5.5 MB · full 9.0 MB · heavy 29.2 MB.**
+
+### Design consequence: escalation ladder, not a fixed model
+
+Do not hard-code one variant. Run `lite` first — small download, fast. If
+detection rate over the clip falls below a threshold (~85%), re-run with
+`heavy` and keep the better result. Cache each variant in the service worker on
+first use, so most users never download the 29 MB one.
+
+This also answers "different models for different movement types" — the right
+axis is **difficulty of the clip, measured at runtime**, not orientation of the
+athlete. A rubric may still pin a minimum variant when it is known to need one.
 
 ### Rig lessons worth keeping
 
