@@ -156,9 +156,14 @@ function ProgramCard({ p }: { p: Program }) {
                 : "border-white/15 bg-white/[0.03] text-[var(--color-muted)]")
             }
             title={
+              /* "Specialist-audited" claimed a credential nobody holds: the
+                 audits are Terav's own documented review pass, not an outside
+                 clinician's sign-off. Wording now matches the app's ladder
+                 note, which states plainly what the badge does and does not
+                 mean. (2026-09-01) */
               p.review === "verified"
-                ? "Specialist-audited against its whitepaper."
-                : "Every claim cites a study. Specialist audit still to come."
+                ? "Citations re-audited against the literature in a documented second pass."
+                : "Every claim cites a study. The second audit pass is still to come."
             }
           >
             {p.review === "verified" ? "VERIFIED" : "CITED"}

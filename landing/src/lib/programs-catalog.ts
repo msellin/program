@@ -15,7 +15,7 @@ export type LandingProgram = {
   status: "AVAILABLE" | "COMING" | "PERSONAL";
   /**
    * Mirrors the app's review ladder, which the landing previously flattened —
-   * five programs are specialist-audited and three are not, and saying nothing
+   * five programs have had the second audit pass and three have not, and saying nothing
    * implied all eight were. Must match the app manifest's `status`:
    * REFERENCED → "cited", REVIEWED / VERIFIED / stable → "verified".
    * Asserted in next-app/src/lib/data-integrity.test.ts.

@@ -206,13 +206,16 @@ export default function ProgramCatalogPage() {
           >
             verified
           </button>{" "}
-          = specialist-audited AND ≥5 users completed the arc with subjective success.
+          = the citations have been audited against the literature in a documented review,
+          with reviewer, date and scope on record.
         </p>
         <p className="text-[12px] text-muted pt-1 leading-relaxed italic">
-          Every program ships at least CITED. VERIFIED unlocks as
-          specialists audit and as users complete arcs — that&apos;s the ladder,
-          not a marketing gradient. Personal programs (author&apos;s own
-          clinical context) sit outside this ladder — see the &ldquo;personal&rdquo; badge instead.
+          Every program ships at least CITED. VERIFIED means a second, documented
+          pass over the citations — currently Terav&apos;s own audit process, not an
+          outside clinician. No program has yet been signed off by an independent
+          specialist, and none has five completed field arcs. When one does, we
+          will say so and name them. Personal programs (author&apos;s own clinical
+          context) sit outside this ladder — see the &ldquo;personal&rdquo; badge instead.
         </p>
       </header>
 
@@ -371,8 +374,8 @@ export default function ProgramCatalogPage() {
           onClose={() => setLadderSheetOpen(false)}
         >
           <section className="space-y-2">
-            <p className="font-mono text-[11px] uppercase tracking-widest text-amber">
-              Referenced — default state
+            <p className="font-mono text-[11px] uppercase tracking-widest text-slate">
+              Cited — the floor. Nothing ships below it.
             </p>
             <ul className="list-disc pl-5 space-y-1 text-[14px]">
               <li>Every claim in the program cites a peer-reviewed paper.</li>
@@ -380,37 +383,50 @@ export default function ProgramCatalogPage() {
                 The adaptive engine passes the simulator harness across
                 archetypes (novice, intermediate, advanced) without stalling.
               </li>
-              <li>Written by Terav; not reviewed by an outside specialist.</li>
-            </ul>
-          </section>
-          <section className="space-y-2">
-            <p className="font-mono text-[11px] uppercase tracking-widest text-slate">
-              Reviewed — external audit complete
-            </p>
-            <ul className="list-disc pl-5 space-y-1 text-[14px]">
-              <li>
-                A named domain specialist (physiotherapist, coach, or sport
-                scientist) has audited the citations against current literature.
-              </li>
-              <li>They record which references they checked and on what date.</li>
-              <li>Not endorsed — audited. They flag anything they&apos;d change.</li>
+              <li>Written by Terav, reviewed once.</li>
             </ul>
           </section>
           <section className="space-y-2">
             <p className="font-mono text-[11px] uppercase tracking-widest text-green">
-              Verified — 5+ users completed the arc
+              Verified — audited a second time, on the record
             </p>
             <ul className="list-disc pl-5 space-y-1 text-[14px]">
-              <li>Five or more real users have completed the full arc.</li>
-              <li>Each rated the outcome vs. what the program promised.</li>
-              <li>This is field evidence, not endorsement.</li>
+              <li>
+                Every citation re-checked against the current literature in a
+                separate, structured pass — not by the person who wrote the program.
+              </li>
+              <li>
+                The reviewer, the date, the scope, and the audit documents are
+                recorded in the program file itself.
+              </li>
+              <li>Not endorsement — audit. It flags anything it would change.</li>
+            </ul>
+          </section>
+          <section className="space-y-2 rounded border border-line-soft bg-surface p-3">
+            <p className="font-mono text-[11px] uppercase tracking-widest text-muted">
+              What verified does not mean
+            </p>
+            <ul className="list-disc pl-5 space-y-1 text-[14px]">
+              <li>
+                <strong>Not an outside clinician.</strong> Terav&apos;s audits are run
+                by its own review process, working from published literature. No
+                physiotherapist, coach or sport scientist has independently signed
+                off any program in this catalog.
+              </li>
+              <li>
+                <strong>Not field-proven.</strong> No program has yet been completed
+                start-to-finish by five users reporting the outcome. That evidence
+                takes a full arc to gather, and Terav is early.
+              </li>
+              <li>
+                Both are bars we intend to clear, and we will name the specialist and
+                publish the completion count when we do. Until then this badge means
+                what is written above it and nothing more.
+              </li>
             </ul>
           </section>
           <p className="text-[13px] text-muted italic pt-1 border-t border-line-soft">
-            Every program starts at Referenced. We don&apos;t ship anything
-            below that. Some programs will never leave Referenced (small
-            user base = no Verified) and that&apos;s honest. Personal
-            programs (author&apos;s own clinical context) sit outside this
+            Personal programs (author&apos;s own clinical context) sit outside this
             ladder entirely — see the &ldquo;personal&rdquo; badge instead.
           </p>
         </InfoSheet>
@@ -450,12 +466,12 @@ function StatusChip({ status, personal }: { status?: string; personal?: boolean 
     REVIEWED: {
       label: "verified",
       dotClass: "bg-green",
-      title: "Verified: domain-specialist audit complete + field completions confirm the arc works.",
+      title: "Verified: citations re-audited against the literature in a documented second pass — reviewer, date and scope on record. Not an outside clinician; not yet field-proven.",
     },
     VERIFIED: {
       label: "verified",
       dotClass: "bg-green",
-      title: "Verified: ≥5 beta users completed the arc with subjective success + specialist-audited citations.",
+      title: "Verified: citations re-audited against the literature in a documented second pass. See the ladder note for what this does and does not mean.",
     },
     stable: {
       label: "verified",
