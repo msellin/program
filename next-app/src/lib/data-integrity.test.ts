@@ -384,3 +384,73 @@ describe("landing catalog matches the app manifest", () => {
     expect(mismatches).toEqual([]);
   });
 });
+
+/**
+ * The landing's headline numbers.
+ *
+ * `dev/scripts/check-landing-sync.py` used to assert these. It was manual —
+ * QA-2 shipped it with a note to "wire to pre-commit or CI later", and later
+ * never came — so when its own rule went stale nobody found out. On 2026-09-01
+ * it was reporting three failures, all of them wrong: it counted only REVIEWED
+ * programs and demanded the landing say "Five programs live", a rule from
+ * before the catalog shipped CITED programs publicly. A drift checker that
+ * drifts, and cries wolf where nobody hears it, is worse than none.
+ *
+ * These assertions now live in the suite that runs on every commit and every
+ * deploy, and the script is gone.
+ */
+const NUMBER_WORDS = [
+  "zero", "one", "two", "three", "four", "five", "six", "seven", "eight",
+  "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen",
+];
+
+describe("landing headline numbers match the app", () => {
+  const DICT = path.resolve(
+    __dirname, "..", "..", "..", "landing", "src", "i18n", "dictionaries", "en.ts",
+  );
+  const pick = (src: string, key: string) => {
+    const m = src.match(new RegExp(`${key}:\\s*"([^"]*)"`));
+    return m ? m[1] : null;
+  };
+
+  it("program counts on the landing equal the public catalog", () => {
+    if (!fs.existsSync(DICT)) return; // landing not checked out
+    const src = fs.readFileSync(DICT, "utf8");
+    // Every non-personal manifest program ships publicly, CITED or VERIFIED.
+    // The ladder is a confidence label, not a gate on being listed.
+    const publicCount = manifest.programs.filter((p) => p.personal !== true).length;
+
+    const statDigit = Number((pick(src, "stat_programs_value") ?? "").match(/\d+/)?.[0]);
+    expect(statDigit, "hero.stat_programs_value").toBe(publicCount);
+
+    // Match the sentence, not the key: `pick` would return contrast.title,
+    // which is the first `title:` in the file.
+    const titleWord = src.match(/title:\s*"([A-Za-z]+) programs live/)?.[1]?.toLowerCase();
+    expect(titleWord, "programs.title spells the count").toBe(NUMBER_WORDS[publicCount]);
+  });
+
+  it("citation counts on the landing equal citations.json", () => {
+    if (!fs.existsSync(DICT)) return;
+    const src = fs.readFileSync(DICT, "utf8");
+    const cites = read("citations.json");
+    const total = (cites.citations ?? cites.references ?? []).length;
+
+    expect(Number(pick(src, "stat_studies_value")), "hero.stat_studies_value").toBe(total);
+    const evidenceNum = Number((src.match(/(\d+) primary studies/) ?? [])[1]);
+    expect(evidenceNum, "evidence.title").toBe(total);
+  });
+
+  /**
+   * The product contract is "every change cites a study OR names its log
+   * signal" (CLAUDE.md). The landing said only the first half, which promises
+   * a citation behind changes that are driven by the user's own log instead.
+   */
+  it("the hero does not promise a citation behind every single change", () => {
+    if (!fs.existsSync(DICT)) return;
+    const src = fs.readFileSync(DICT, "utf8");
+    const sub = pick(src, "sub") ?? "";
+    if (/cites a study/.test(sub)) {
+      expect(sub, "hero.sub must carry the log-signal half of the claim").toMatch(/log/i);
+    }
+  });
+});

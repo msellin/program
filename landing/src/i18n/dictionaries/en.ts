@@ -7,7 +7,7 @@ export const en: LandingDict = {
     h1_a: "Pick one thing",
     h1_b: "you want stronger.",
     h1_c: "Sharpen it every session.",
-    sub: "An engine, a skill, a lift, a stubborn joint. Terav writes that focus arc — the rest of your week is still yours. Every change cites a study.",
+    sub: "An engine, a skill, a lift, a stubborn joint. Terav writes that focus arc — the rest of your week is still yours. Every change cites a study, or names the signal in your log.",
     cta_primary: "Start free — pick my focus",
     cta_secondary: "See how it works ↓",
     browse_link: "Browse programs — no signup",
