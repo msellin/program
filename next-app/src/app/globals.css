@@ -274,15 +274,28 @@ main { animation: route-in 150ms ease-out; }
   contain-intrinsic-size: 0 400px;
 }
 
-/* P1-23 — Sentry Feedback trigger widget sits at bottom-right and by
-   default collides with the 60-px BottomNav on iPhone. Sentry's Feedback
-   integration exposes CSS custom properties for positioning; override
-   them at :root so the widget rides above the nav (and its safe-area). */
-:root {
-  --sentry-feedback-widget-bottom: calc(60px + env(safe-area-inset-bottom) + 12px);
-  --sentry-feedback-widget-right: 12px;
-  --bottom: var(--sentry-feedback-widget-bottom);
-  --right: var(--sentry-feedback-widget-right);
+/* P1-23 — the Sentry Feedback trigger sits bottom-right by default, on top
+   of the BottomNav's rightmost tab (Profile). Founder hit it mid-session
+   2026-09-01: the widget was covering the Profile button.
+
+   This override existed already and did nothing. It set `--bottom` and
+   `--right`, which were the variable names in Sentry SDK v7. The SDK is now
+   v10 and positions the trigger with `--actor-inset` (a four-value
+   top/right/bottom/left shorthand) plus `--page-margin`. The old names read
+   as ordinary custom properties nobody consumes — and, being declared on
+   :root, leaked two names as generic as `--bottom` into every stylesheet in
+   the app.
+
+   It went unnoticed because the widget only rendered for the first time on
+   2026-09-01, when the DSN finally reached production. A fix for a widget
+   nobody could see had nothing to be wrong against.
+
+   Set on the widget's own host rather than :root — custom properties
+   inherit into shadow DOM, so this reaches the trigger without publishing
+   anything globally. */
+#sentry-feedback {
+  --actor-inset: auto 0 calc(60px + env(safe-area-inset-bottom)) auto;
+  --page-margin: 12px;
 }
 
 /* Horizontal rails (the session exercise rail) scroll, but a visible

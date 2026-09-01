@@ -205,7 +205,21 @@ export function SetView({
   // between-sets rest and lives in a different component; two countdowns
   // sharing a store is how the old RestTimerHost double-fired.
   const [running, setRunning] = useState(false);
+  /**
+   * `per_side` work is two efforts inside one set — 90/90 switches, most hip
+   * stretches. The clock only ever ran once: at zero the single action was
+   * "Done", which logs the set and advances, so there was no route back to the
+   * start for the second side short of logging the first and hoping another
+   * set row existed. `per_side` was read in one place (the summary string) and
+   * the timer UI was otherwise side-blind. Founder hit it mid-session on a hip
+   * stretch, 2026-09-01.
+   *
+   * SetView remounts per set (`key={active.key + activeSetIndex}`), so this
+   * resets between sets without an effect.
+   */
+  const [sideIndex, setSideIndex] = useState(0);
   const [remaining, setRemaining] = useState<number>(() => seconds);
+  const awaitingOtherSide = perSide && remaining === 0 && sideIndex === 0;
   useEffect(() => {
     if (!running) return;
     const id = setInterval(() => {
@@ -437,8 +451,11 @@ export function SetView({
                   ? "holding"
                   : "running"
                 : remaining === 0
-                  ? "done"
+                  ? awaitingOtherSide
+                    ? "first side done"
+                    : "done"
                   : durationLabel}
+              {perSide ? ` · side ${sideIndex + 1} of 2` : ""}
             </p>
           </>
         ) : (
@@ -517,6 +534,14 @@ export function SetView({
                   setRunning(false);
                   return;
                 }
+                if (awaitingOtherSide) {
+                  // Reset the clock rather than logging. Not auto-started —
+                  // you need a moment to actually switch sides.
+                  setSideIndex(1);
+                  setRemaining(seconds);
+                  announce(`First side done. Switch sides, then start ${seconds} seconds.`);
+                  return;
+                }
                 if (remaining === 0) {
                   // Finished — log it.
                   confirm(1);
@@ -529,7 +554,9 @@ export function SetView({
             >
               {running
                 ? "Pause"
-                : remaining === 0
+                : awaitingOtherSide
+                  ? `Other side · ${isHoldShaped ? `${seconds}s` : `${Math.round(seconds / 60)} min`}`
+                  : remaining === 0
                   ? `${isEditingLoggedSet ? "Save" : "Done"} — set ${activeSetIndex + 1} · ${
                       isHoldShaped ? `${seconds}s` : `${Math.round(seconds / 60)} min`
                     }`

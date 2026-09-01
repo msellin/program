@@ -227,6 +227,30 @@ Strikethrough preserves history; these items are OUT of the open list.
 - [x] **BUG-32** — Graduating Engine Builder offered a DRAFT program, shipped 2026-09-01. `engine-builder.json` declares `next_block_slug: "engine-builder-block-2"`, and Block 2 is DRAFT — not in the catalog. `StatusCards.tsx` resolved the next block straight out of the manifest with **no status filter**, so every user finishing Engine Builder (one of the five shipped programs) was shown a graduation CTA for a program that does not exist yet. Same promise-then-deliver-nothing pattern the founder rejected on 2026-08-17 for empty category chips. Now falls through to the generic Programs CTA until Block 2 ships. Second draft-leak surface found while tracing BUG-30 — the catalog grids were clean, this one was not. Files: `StatusCards.tsx`. Size: XS
 - [x] **BUG-31** — NOT A BUG, recorded so it isn't re-investigated. Founder could add a second program alongside on test@terav.fit. That address is in `SUPER_ADMIN_EMAILS` (`super-admin.ts:9`) and the "+ Add alongside (admin)" button is already gated on `isSuperAdmin`, calling `addSecondaryProgramForce`. Normal users hit the launch cap in `useStore.ts:928` (`MULTI_MAIN_ENABLED = false`), which makes a second start **replace** the first. Working as designed. Note for the paid tier: multi-track is fully implemented in store + Today + Plan and sits behind that one boolean, so "multiple parallel plans" is an entitlement check away, not a build.
 
+**Live-session bug report (founder, 2026-09-01) — Batch 46:**
+
+- [x] **BUG-30** — Per-side hold timers could only ever run once, shipped 2026-09-01. `per_side` work is
+  two efforts inside one set (90/90 switches, most hip stretches), but the countdown in `SetView` had no
+  reset: at zero the sole action was "Done", which logs the set and advances. Reaching the second side
+  meant logging the first and hoping another set row existed. `per_side` was read in exactly one place —
+  a summary string — and the timer UI was otherwise side-blind, showing neither which side you were on
+  nor that there was another. Now: the status line reads "side 1 of 2", and at zero the primary button
+  becomes "Other side · Ns" (reset, not auto-started — you need a moment to switch), demoting "Done"
+  until both sides are done. "Log it now" still logs early if only one side was done. `SetView` remounts
+  per set via `key={active.key + activeSetIndex}`, so the counter resets without an effect. Founder hit
+  it mid-session on a hip stretch. Files: `SetView.tsx`. Size: S
+
+- [x] **BUG-31** — The Sentry feedback trigger covered the Profile tab, shipped 2026-09-01. The widget
+  sits bottom-right by default, on top of BottomNav's rightmost tab. **A fix for this already existed
+  and had never worked:** `globals.css` set `--bottom` and `--right`, the positioning variables from
+  Sentry SDK v7. The SDK is v10 and uses `--actor-inset` (top/right/bottom/left shorthand) plus
+  `--page-margin`, so the override set two properties nothing consumes — and, declared on `:root`,
+  leaked names as generic as `--bottom` into every stylesheet. It went unnoticed because the widget
+  rendered for the first time on 2026-09-01, when the DSN finally reached production: a fix for a widget
+  nobody could see had nothing to be wrong against. Now set on the `#sentry-feedback` host (custom
+  properties inherit into shadow DOM) so nothing is published globally. Files: `globals.css`,
+  `sentry.client.config.ts` (stale comment). Size: XS
+
 **Live-session bug report (founder, 2026-08-31) — Batch 45:**
 
 - [x] **BUG-27** — Bodyweight sets were invisible to every progress counter, shipped 2026-08-31. `SetView.confirm` writes `weight_kg: null` on purpose when an exercise isn't loadable (a dead bug has no weight), but seven call sites open-coded `s.weight_kg != null && s.reps != null` to decide whether a set was logged. So a correctly saved bodyweight set scored zero: `firstUnfinishedSetIndex` returned 0 and resume always landed on set 1, the rail's `n/m` and the Brief's "Done" tag never advanced, and `totalRemaining` overcounted. Founder hit it on dead bug + Pallof press on 31 Aug — "after saving second and third set, it takes back to first set and doesn't save it". Data was never lost; only the counters lied. `SetView.loggedAt` already had the rule right and its comment claimed the other surfaces shared it — they didn't, so the rule now has exactly one implementation in `lib/set-progress.ts`. Files: `set-progress.ts` (new), `DaySession.tsx`, `BriefView.tsx`, `SetView.tsx`, `OverflowSheet.tsx`. Tests: `set-progress.test.ts`, 7 cases. Size: S

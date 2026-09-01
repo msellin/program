@@ -63,8 +63,10 @@ if (DSN) {
           showBranding: false,
           formTitle: "Send feedback",
           submitButtonLabel: "Send",
-          // P1-23 — widget positioning nudged above BottomNav via CSS
-          // custom properties in globals.css (--sentry-feedback-*).
+          // P1-23 — the trigger is lifted clear of BottomNav by
+          // `#sentry-feedback { --actor-inset: ... }` in globals.css.
+          // Those are SDK v10 variable names; v7's `--bottom`/`--right`
+          // are inert and were silently doing nothing until 2026-09-01.
           useSentryUser: {
             email: "email",
             name: "name",
