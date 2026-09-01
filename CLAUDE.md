@@ -120,13 +120,44 @@ user. Two more defects from the same edit — a `reference_ids[]` that drifted o
 of sync, and four `capability_slot` values in muscle-up that resolved to zero
 drills — were invisible to JSON syntax checking by construction.
 
-Enforced at two points, both running `npm run verify`:
+Enforced at three points, all running `npm run verify`:
 
 1. **pre-commit hook** — `.githooks/pre-commit`, versioned. Enable once per clone:
    `git config core.hooksPath .githooks`
-2. **`npm run deploy`** — verify runs before the build. This is the real gate: the
-   deploy is a manual `wrangler pages deploy` from the laptop, so CI does not sit
-   on the path to production.
+2. **`npm run deploy`** — verify runs before the build. Still available as a
+   manual fallback from the laptop.
+3. **CI — `.github/workflows/deploy.yml`** (since 2026-09-01). Push to main
+   builds and deploys BOTH Pages projects. This is now the real gate; the
+   laptop deploy is the fallback, not the path to production.
+
+**CI gates on three separate things, and they are not the same thing.** Tests
+passing does not mean the artifact is correct, and a correct artifact does not
+mean production received it:
+
+1. `verify` — the suite. Also the landing's only gate: the landing has no suite
+   of its own, and `data-integrity.test.ts` is what asserts its catalog agrees
+   with the app manifest.
+2. **The built artifact carries its build-time env.** `output: "export"` inlines
+   `NEXT_PUBLIC_*` at build time, so a build made without secrets compiles and
+   deploys perfectly happily and then nobody can sign in. CI greps `out/` for
+   the Supabase host, the `sb_publishable_` key prefix and the Sentry ingest
+   host, and refuses to deploy without all three.
+3. **The live site serves that exact artifact.** CI records the built
+   `main-app-<hash>.js` filename and polls `app.terav.fit` until the live HTML
+   asks for that same file.
+
+Gate 3 exists because of a specific failure. On 2026-09-01 a Sentry DSN was
+added to a gitignored `.env.local`, verified by grepping the local `out/`
+directory, and reported as live. Production had never received the build —
+`out/` is what your laptop built, not what Cloudflare serves. Nothing in the
+system could tell those two apart, so "I verified it" and "it works" had come
+apart with no way to notice.
+
+**Secrets live in GitHub Actions secrets**, not just `.env.local`. A new
+`NEXT_PUBLIC_*` var must be added in BOTH places or CI ships a build without
+it. Currently: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
+`NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT`,
+`CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`.
 
 Referential integrity across the shipped tree — `exercise_id` and `drill_library`
 resolution, `capability_slot` satisfiability, `references[]` ↔ `reference_ids[]` ↔

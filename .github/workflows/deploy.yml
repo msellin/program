@@ -1,0 +1,185 @@
+# Build, gate, and deploy both Cloudflare Pages projects on every push to main.
+#
+# Why this exists: deploys were a manual `npm run deploy` from one laptop, and
+# `output: "export"` inlines every NEXT_PUBLIC_* at BUILD time. On 2026-09-01 a
+# Sentry DSN was added to a gitignored .env.local, verified against the local
+# `out/` directory, and reported as live — production had never received the
+# build. Nothing in the system could tell "deployed" from "built on my machine".
+#
+# So this workflow gates on three separate things, in order:
+#   1. the test suite passes                        (verify)
+#   2. the BUILT ARTIFACT contains the env it needs (pre-deploy assertion)
+#   3. the LIVE SITE serves that exact artifact     (post-deploy smoke)
+#
+# (2) is the one that would have caught a build made without secrets — an app
+# built without NEXT_PUBLIC_SUPABASE_* compiles and deploys perfectly happily,
+# and then nobody can sign in. (3) is the one that would have caught today's
+# failure, where a good artifact simply never left the laptop.
+
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+    # Docs-only commits don't touch what ships. A commit touching BOTH docs and
+    # code still runs — paths-ignore only skips when every changed file matches.
+    paths-ignore:
+      - "dev/**"
+      - "**/*.md"
+  workflow_dispatch:
+
+# Never let two deploys of the same branch overlap. Not cancel-in-progress: a
+# half-cancelled `wrangler pages deploy` is worse than a slow queue.
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: "20"
+
+jobs:
+  verify:
+    name: Verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: next-app/package-lock.json
+      - run: npm ci
+        working-directory: next-app
+      # The app's suite is the gate for BOTH projects: data-integrity.test.ts
+      # reads landing/src/lib/programs-catalog.ts to assert the landing catalog
+      # agrees with the app manifest. The landing has no suite of its own, and
+      # its manual deploy script has never had a gate at all.
+      - run: npm run verify
+        working-directory: next-app
+
+  deploy-app:
+    name: Deploy app.terav.fit
+    needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: next-app/package-lock.json
+      - run: npm ci
+        working-directory: next-app
+
+      - name: Build
+        working-directory: next-app
+        env:
+          # Inlined into the client bundle at build time. Absent = an app that
+          # builds, deploys, and cannot authenticate.
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
+          # Source-map upload. Without these every production stack trace is
+          # minified and close to unreadable.
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+        run: npm run build
+
+      # Gate 2 — prove the artifact carries its build-time config BEFORE it can
+      # reach production. Greps for the marker, never echoes the value.
+      - name: Assert build-time env reached the bundle
+        working-directory: next-app
+        env:
+          # Passed as env rather than interpolated into the script body —
+          # ${{ }} expansion happens before the shell sees the line, so a
+          # secret spliced into `run:` becomes part of the command text.
+          SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+        run: |
+          set -euo pipefail
+          fail=0
+          check() {
+            if grep -rqF "$2" out/_next/static/chunks/ 2>/dev/null; then
+              echo "  ok       $1"
+            else
+              echo "  MISSING  $1 — not inlined into the bundle"
+              fail=1
+            fi
+          }
+          check "Supabase URL"  "${SUPABASE_URL#https://}"
+          check "Supabase key"  "sb_publishable_"
+          check "Sentry DSN"    "ingest.us.sentry.io"
+          [ "$fail" -eq 0 ] || { echo "Refusing to deploy a bundle built without its env."; exit 1; }
+
+      - name: Record built artifact hash
+        id: built
+        working-directory: next-app
+        run: |
+          set -euo pipefail
+          name=$(basename "$(ls out/_next/static/chunks/main-app-*.js | head -1)")
+          echo "chunk=$name" >> "$GITHUB_OUTPUT"
+          echo "built main-app chunk: $name"
+
+      # wrangler is installed globally on the founder's laptop, not as a project
+      # dependency, so CI has nothing to pin it to. `wrangler@4` pins the major:
+      # unpinned `npx wrangler` would silently adopt a future 5.x mid-release and
+      # break the deploy with no commit to blame.
+      - name: Deploy to Cloudflare Pages
+        working-directory: next-app
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx --yes wrangler@4 pages deploy out --project-name=program-v2 --branch=main
+
+      # Gate 3 — the check whose absence let a good build sit on a laptop while
+      # everyone believed it was live. Compares the chunk the live HTML asks for
+      # against the chunk this run actually built.
+      - name: Smoke — live site serves THIS build
+        run: |
+          set -euo pipefail
+          expected='${{ steps.built.outputs.chunk }}'
+          for attempt in 1 2 3 4 5 6; do
+            live=$(curl -sf https://app.terav.fit/ \
+              | grep -o '/_next/static/chunks/main-app-[a-f0-9]*\.js' | head -1 | xargs -r basename || true)
+            echo "attempt $attempt — live: ${live:-none} · expected: $expected"
+            [ "$live" = "$expected" ] && { echo "Live site is serving this build."; exit 0; }
+            sleep 10
+          done
+          echo "Live site never began serving $expected — the deploy did not land."
+          exit 1
+
+  deploy-landing:
+    name: Deploy terav.fit
+    needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: landing/package-lock.json
+      - run: npm ci
+        working-directory: landing
+      - run: npm run build
+        working-directory: landing
+      - name: Deploy to Cloudflare Pages
+        working-directory: landing
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx --yes wrangler@4 pages deploy out --project-name=terav-landing --branch=main
+      - name: Smoke — landing responds
+        run: |
+          set -euo pipefail
+          for attempt in 1 2 3 4 5 6; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' https://terav.fit/ || true)
+            echo "attempt $attempt — HTTP $code"
+            [ "$code" = "200" ] && exit 0
+            sleep 10
+          done
+          echo "terav.fit did not return 200 after deploy."
+          exit 1
