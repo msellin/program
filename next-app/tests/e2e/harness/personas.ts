@@ -279,7 +279,10 @@ export const PERSONAS: Persona[] = [
     archetypeId: "consistent-average",
     programSlug: "engine-builder-block-2",
     tier: "foundation",
-    days: 60,
+    // 35 days = week 5, mid-block. 60 landed inside the weeks 9-10 taper, which
+    // is deliberately almost all rest, so eleven interaction flows had no
+    // session to exercise. A persona parked in a taper audits nothing.
+    days: 35,
     email: "e2e-persona-engine-block2@example.test",
     password: DEFAULT_PASSWORD,
     focus:
