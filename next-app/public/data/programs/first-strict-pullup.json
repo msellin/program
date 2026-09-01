@@ -1387,6 +1387,14 @@
         "title": "Injury prevention in women's gymnastics",
         "source": "Sports Medicine 30(5):359-373",
         "used_for": "Skill-readiness assessment and prerequisite gating as an injury-mitigation heuristic. Supports the Tier A → B → C → D gating."
+      },
+      {
+        "id": "rhea_2003_meta",
+        "authors": "Rhea MR, Alvar BA, Burkett LN, Ball SD",
+        "year": 2003,
+        "title": "A meta-analysis to determine the dose response for strength development",
+        "source": "Medicine and Science in Sports and Exercise 35(3):456-464",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/12618576/"
       }
     ],
     "reference_ids": [
