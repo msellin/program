@@ -46,6 +46,11 @@ Remaining Phase 0 items (V0-5, V0-6) are measurements, not gates.
       99%, and on the HSPU clip `full` beat `heavy` on visibility. No single
       variant wins everywhere, so the variant must be chosen at runtime from
       measured detection rate — not hard-coded, and not keyed to orientation.
+      **Compute the detection rate over the measurement window, not the whole
+      clip.** A handstand-walk clip measured 88% overall — near the trigger — but
+      the misses were all in the kick-up and the dismount, while the inverted
+      phase it actually measures was near-perfect. Whole-clip rate would download
+      29 MB to improve frames nobody reads.
 - [ ] **V1-1** `lib/video/worker.ts` — Web Worker hosting the WASM runtime.
       Message protocol: `{frames} → {landmarks[]}` plus progress events.
       **All inference off the main thread. Non-negotiable** — main-thread
@@ -152,8 +157,16 @@ Remaining Phase 0 items (V0-5, V0-6) are measurements, not gates.
       so the rep segmenter does not apply. Proves the schema generalises across
       kinds. Measures: cadence, steps, time inverted, hip-over-shoulder
       alignment, lateral drift; distance via the calibration-free construction.
-      **Do not transfer the Phase 0 numbers here** — that 100% / 0.912 clip was a
-      *stationary* handstand push-up, not a walk. Locomotion is untested.
+      **Locomotion tested 2026-09-01**: detection 88-97%, core 0.92-0.95, and the
+      best bilateral visibility in the project (both wrists 0.78-0.92) — nothing
+      occludes a limb in a handstand walk, so this is the one movement where a
+      left/right measure may be honest.
+      **Fill `wall_hold_max_seconds` and `freestand_hold_max_seconds` only.
+      `walk_distance_max_metres` must NOT be auto-filled** — accumulated path
+      length is 69% landmark jitter, and camera pan cannot be told from subject
+      stillness without background optical flow. Distance stays self-reported.
+      Best measure found: body-line straightness (shoulder-hip-ankle angle),
+      median 8 deg vs 31-32 deg across three clips. Use the median, not the max.
 - [ ] **V2-9** Author the **bar muscle-up** with a **reduced fault set**: pull
       height and turnover timing, side view, 60 fps in the turnover window.
       Chicken-wing / arm asymmetry is in the non-goals — geometrically impossible

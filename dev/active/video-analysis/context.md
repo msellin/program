@@ -543,6 +543,72 @@ complete, which any counter must return zero on. Getting 0 right matters as much
 as getting 4 right, and a counter tuned only on successful reps would not have
 been tested for it.
 
+## Handstand walks 2026-09-01 — locomotion works, distance does not
+
+Three handstand-walk clips (14.2 s, 17.8 s, 13.9 s). First locomotion data; the
+Phase 0 inverted result was a *stationary* handstand push-up, and I had twice
+over-read it onto walking. Now measured.
+
+| | HW 1 | HW 2 | HW 3 |
+|---|---|---|---|
+| `lite` detection | **88.0%** | 97.2% | 94.3% |
+| Core visibility | 0.949 | 0.929 | 0.923 |
+| Time inverted | 6.7 s | 14.7 s | 9.9 s |
+| Median body bend | **8°** | **31°** | **32°** |
+
+**Inversion plus locomotion is fine, and bilateral visibility is the best in the
+project** — both wrists 0.78-0.92, both ankles 0.85-0.91, versus 0.20 on the far
+arm in the ring muscle-ups. Nothing occludes a limb in a handstand walk. This is
+the one movement so far where a left/right asymmetry measure might be honest.
+
+### What is measurable
+
+- **Time inverted**, from strict landmark ordering `ankle < hip < shoulder <
+  wrist`. Structural, pan-invariant, no thresholds to tune. Fills the program's
+  `wall_hold_max_seconds` and `freestand_hold_max_seconds` retest metrics.
+- **Body-line straightness** — the angle between shoulder→hip and hip→ankle.
+  Median 8° on HW 1 against 31-32° on HW 2 and HW 3: a **4× separation**, the most
+  discriminating measure found in this project. Fully body-internal, so
+  pan-invariant and scale-invariant. Use the median, never the max — HW 3's max is
+  129°, which is a landmark glitch, while its p90 is 53°.
+
+### What is not: distance
+
+`walk_distance_max_metres` is one of the handstand-walk program's three
+`retest_metrics`, it is the headline number a user wants, and **it cannot be
+derived from pose alone.** Two independent failures:
+
+1. **Accumulated path length is mostly jitter.** Summing per-frame |Δx| gave 4.95
+   body-heights on HW 2 against a noise floor of **3.41** — 69% of the "distance"
+   was landmark tremor. Net displacement is 1.40 body-heights (~2.5 m). The first
+   number would have been reported as ~12 m. Caught before it left the harness,
+   unlike the four earlier traps.
+2. **Camera pan is indistinguishable from subject stillness.** HW 1's hands stay
+   within x = 0.39-0.52 for 6.7 s. That is either a panning camera following a
+   walk, or an athlete holding nearly still. **Pose landmarks cannot separate
+   those** — it needs background optical flow, a different and much heavier
+   computation.
+
+So the handstand rubric may fill two of the program's three retest metrics and
+must refuse the third. That refusal is the `retest_fills` validator earning its
+place: the alternative is auto-filling a distance PR from a number built out of
+tremor.
+
+Product consequence: the movement ranked most likely to earn a subscription
+cannot auto-measure its own headline metric. Seconds inverted and body-line
+straightness are what video actually offers here; distance stays a self-reported
+`physical_test`.
+
+### Escalation should be measured over the window, not the clip
+
+HW 1 detected at **88%** — the lowest in the project and closest to the ~85%
+escalation trigger — but the misses cluster at kick-up (2.1-4.6 s) and exit
+(13.4 s). Through the inverted phase, detection is near-perfect. A whole-clip
+detection rate would escalate to a 29 MB model because of frames nobody measures.
+**V1-0 should compute detection over the measurement window**, which is what
+`heavy` would be paying to improve. Confirms the round-2 review's call for
+window-scoped escalation, now with a clip that demonstrates it.
+
 ## Open / next steps
 
 1. **Phase 0 is done and passed** (see verdict above). Phase 1 is unblocked.
