@@ -1,7 +1,12 @@
 import { describe, it, expect } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
-import { programSchema } from "./schemas";
+import {
+  programSchema,
+  exercisesFileSchema,
+  programManifestSchema,
+  storeSchema,
+} from "./schemas";
 
 /**
  * Every shipped program JSON must satisfy `programSchema`.
@@ -17,11 +22,48 @@ import { programSchema } from "./schemas";
  * the class of error a hand-edit introduces. The persona harness did catch it,
  * but only after a six-minute browser run; this catches it in milliseconds.
  */
-const PROGRAM_DIR = path.join(process.cwd(), "public", "data", "programs");
+const DATA_DIR = path.join(process.cwd(), "public", "data");
+const PROGRAM_DIR = path.join(DATA_DIR, "programs");
+
+function readJson(...segs: string[]): unknown {
+  return JSON.parse(fs.readFileSync(path.join(...segs), "utf8"));
+}
+
+function expectParses(schema: { safeParse: (v: unknown) => { success: boolean; error?: { issues: Array<{ path: PropertyKey[]; message: string; code: string }> } } }, label: string, value: unknown) {
+  const result = schema.safeParse(value);
+  if (!result.success) {
+    const issues = (result.error?.issues ?? [])
+      .slice(0, 8)
+      .map((i) => `  ${i.path.join(".")}: ${i.message} (${i.code})`)
+      .join("\n");
+    throw new Error(`${label} failed schema validation:\n${issues}`);
+  }
+  expect(result.success).toBe(true);
+}
 
 const programFiles = fs
   .readdirSync(PROGRAM_DIR)
   .filter((f) => f.endsWith(".json") && f !== "manifest.json");
+
+/**
+ * These three have a LARGER blast radius than any single program: a bad edit to
+ * exercises.json or manifest.json breaks every program at once, not one. Both
+ * are loaded with `.parse()` (throws) in data-loader.ts. Neither had a test
+ * until 2026-09-01.
+ */
+describe("shared runtime data validates", () => {
+  it("exercises.json", () => {
+    expectParses(exercisesFileSchema, "exercises.json", readJson(DATA_DIR, "exercises.json"));
+  });
+
+  it("programs/manifest.json", () => {
+    expectParses(programManifestSchema, "programs/manifest.json", readJson(PROGRAM_DIR, "manifest.json"));
+  });
+
+  it("log.json seed", () => {
+    expectParses(storeSchema, "log.json", readJson(DATA_DIR, "log.json"));
+  });
+});
 
 describe("program data validates against programSchema", () => {
   it("finds program files to check", () => {

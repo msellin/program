@@ -524,7 +524,7 @@
           "reps": 12
         }
       ],
-      "capability_slot": "mu_straight_arm_lockout",
+      "capability_slot": "pu_scap_control",
       "slot_drill_count": 1
     },
     {
@@ -611,7 +611,7 @@
           "condition": "mu_false_grip_pull_level >= 3"
         }
       ],
-      "capability_slot": "mu_false_grip_pull",
+      "capability_slot": "mu_false_grip",
       "slot_drill_count": 2
     },
     {
@@ -633,7 +633,7 @@
           "reps": 3
         }
       ],
-      "capability_slot": "mu_false_grip_pull",
+      "capability_slot": "mu_false_grip",
       "slot_drill_count": 1
     },
     {
@@ -673,7 +673,7 @@
           "condition": "mu_transition_control_level >= 3"
         }
       ],
-      "capability_slot": "mu_transition_control",
+      "capability_slot": "mu_transition_mechanics",
       "slot_drill_count": 2
     },
     {
@@ -714,7 +714,7 @@
           "note": "First strict rep test — cold, first movement in the session."
         }
       ],
-      "capability_slot": "mu_transition_control",
+      "capability_slot": "mu_transition_mechanics",
       "slot_drill_count": 2
     },
     {
@@ -736,7 +736,7 @@
           "reps": 2
         }
       ],
-      "capability_slot": "mu_false_grip_pull",
+      "capability_slot": "mu_false_grip",
       "slot_drill_count": 1
     },
     {
@@ -758,7 +758,7 @@
           "reps": 2
         }
       ],
-      "capability_slot": "mu_false_grip_pull",
+      "capability_slot": "mu_false_grip",
       "slot_drill_count": 1
     },
     {
@@ -788,7 +788,7 @@
           "optional": true
         }
       ],
-      "capability_slot": "mu_hollow_active_shape",
+      "capability_slot": "pu_hollow_active_shape",
       "slot_drill_count": 2
     }
   ],
@@ -1392,6 +1392,12 @@
       "to": "DRAFT",
       "date": "2026-08-19",
       "note": "P0-9 · PROVISIONAL rename to DRAFT + catalog filter. Legacy alias PROVISIONAL kept in schema for back-compat."
+    },
+    {
+      "from": "DRAFT",
+      "to": "DRAFT",
+      "date": "2026-09-01",
+      "note": "Fixed 4 of 5 capability_slot names that resolved to zero drills. Blocks declared mu_false_grip_pull / mu_hollow_active_shape / mu_transition_control / mu_straight_arm_lockout; the capability_domains on this program's drill_library exercises are mu_false_grip / pu_hollow_active_shape / mu_transition_mechanics / pu_scap_control. composeSlotDrills fell through to authored items silently, so the multi-dimensional composer — the program's core claim — never fired for those slots. Slot names now match the sibling first-strict-pullup convention for the same block ids."
     }
   ]
 }

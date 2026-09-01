@@ -314,21 +314,71 @@ to a non-skeleton method (track the feet and the wall line) or ships later, and
 
 ### Phase 1 — Headless pipeline (no UI)
 
-- Worker + WASM harness, 10 fps sampling.
-- Calibration: detect the largest circle → 450 mm; fallback to body height.
-- Rep segmentation from a 1-D signal, with hysteresis so a shuffle is not a rep.
-- Emit `VideoAnalysis` JSON.
-- **Ground truth set**: ~10 clips, hand-counted reps and hand-measured depth.
-  Pipeline must hit 100% on rep count before any UI is built.
+**Gated by V0-5.** The phone benchmark is now a gate, not a measurement. Skill
+measures need 30 fps inside event windows (60 fps for a muscle-up turnover),
+which is 3-6× the compute the barbell plan assumed. If a real phone cannot
+afford that, the rubrics cannot be authored as specified.
 
-### Phase 2 — Rubric engine + first three movements
+- Worker + WASM harness. **Two-rate sampling**: 10 fps across the clip to find
+  the rep windows, then re-sample *inside* those windows at the rate the rubric
+  demands. Whole-clip 30 fps is unaffordable and unnecessary.
+- **Real frame timestamps** from `requestVideoFrameCallback`'s `mediaTime`, plus
+  the rotation matrix. Never assume uniform spacing. Detect and flag variable
+  frame rate and slow-motion capture — skill users deliberately shoot slo-mo, and
+  an unnoticed 8× factor makes every tempo silently wrong with no symptom.
+- **Body-scale normalisation for every positional measure.** No measure may be a
+  raw normalised-image-coordinate ratio; each declares `normalize_by` (femur,
+  shoulder-to-ankle, hip width) and the validator enforces it.
+- Subject tracking across frames — a spotter, a mirror, or a partner walking
+  through must not switch the skeleton mid-clip.
+- Rep segmentation from a 1-D signal, with hysteresis so a shuffle is not a rep.
+- View detection from landmark geometry (never trust the declared view).
+- Emit `VideoAnalysis` JSON.
+- **Ground truth set**: ~10 clips, hand-labelled. **Chosen to break the pipeline,
+  not to demonstrate it** — borderline reps, failed reps, bad framing, two people
+  in frame, slow-motion capture. 100% on rep count over a friendly set is not
+  validation.
+
+**Not in Phase 1: calibration.** Deleted outright (was V1-3). The plate-diameter
+Hough detector carries a 13-27% out-of-plane scale error, putting absolute
+velocity at ±15-30% — too loose for load-velocity anchors. And the RIR claim that
+motivated it is a *within-clip ratio*, so the scale factor cancels exactly and
+never needed calibrating. Handstand-walk distance has a calibration-free
+construction (cadence × stride-in-body-lengths × user height, ±10-15%). The
+budget goes to the native-frame-rate pass instead.
+
+### Phase 2 — Rubric engine + first movements (skill-first)
 
 - `video_rubric` added to schema + validator.
 - Expression evaluator for `when` (closed grammar, unit-tested, no eval).
-- Author rubrics for **`back_squat_highbar`**, **`strict_pullup`**,
-  **`wall_handstand_hold`** — one strength, one gymnastics, one isometric hold,
-  to prove the schema generalises.
+- **Author `cues_corrective[]` first.** It does not exist, and neither does its
+  content: 0 of 40 gymnastics exercises have `cues[]`, 87 of 133 exercises use
+  `cues_external_focus[]` instead. The "no new coaching copy" rule is false under
+  skill-first and must be retired honestly rather than worked around. Roughly 11
+  strings covers a three-movement v1.
+- Author rubrics in this order: **strict pull-up → handstand push-up → handstand
+  walk**. Then bar muscle-up with a reduced fault set. Never double unders.
 - Fault → cue → regression binding.
+
+**Build order and why:**
+
+| # | Movement | Event-window rate | Note |
+|---|---|---|---|
+| 1 | Strict pull-up | 30 fps | Cleanest rep definition, cleanest capture. Earns the sign-up |
+| 2 | Handstand push-up | 30 fps | Inverted tracking is the project's best measured case |
+| 3 | Handstand walk | 30 fps | Locomotion, not reps — proves the schema generalises. Biggest information asymmetry: you cannot see yourself inverted |
+| 4 | Bar muscle-up | 60 fps | Reduced fault set only — pull height and turnover timing |
+| 5 | Double unders | — | Not with pose. Separate feature, separate sensor |
+
+**Exercise ids must be resolved before authoring.** `strict_pullup`,
+`wall_handstand_hold` and `strict_press` do not exist in the library; the real
+ids are prefixed (`pu_negative_pullup_5s`, `mu_false_grip_pullup`, …).
+
+**Kip detection by hip-angle variance does not work.** Variance confounds shape
+with magnitude — a ramp is 0.289·E, a sine 0.354·E, only 1.22× apart, so an
+honest 50° tuck (14.44°) and a real 40° kip (14.14°) are 2% apart. Use phase and
+shape measures at 30 fps instead: pre-pull hang oscillation, sign of hip-angle
+change, hip-vs-vertical lead-lag, ankle horizontal excursion.
 
 ### Phase 3 — Capture UX (file pick only)
 
@@ -423,6 +473,21 @@ still frames."**
 - No LLM per video.
 - No real-time coaching *during* a rep (rep counter on screen is fine).
 - No sharing / social.
+- **No muscle-up chicken-wing / arm-asymmetry detection.** Geometrically
+  impossible with one camera: a side view resolves the turnover but shows one
+  arm; a front or rear view shows both but the bar occludes the shoulder line and
+  the arms foreshorten along the optical axis at exactly that instant. No frame
+  rate fixes this. Author the muscle-up side-view with pull height and turnover
+  timing only.
+- **No double-unders analysis.** There is a pose-only discriminator in principle
+  (wrist oscillation frequency: singles ≈1 Hz, doubles ≈2 Hz) but it fails three
+  ways: the hand travels 3-8 cm against 5-15 px of landmark noise, so SNR ≈ 1;
+  hand oscillation at 3-5 Hz aliases below 30 fps into a *confident wrong*
+  frequency; and low-contrast hands pinned to the torso are the worst case for
+  hallucinated landmarks at high `visibility`. Audio onset detection is the
+  correct and cheaper sensor. Different subsystem, different feature.
+- **No boolean pass/fail written into `capability_profile`.** See the output
+  contract.
 
 ---
 
@@ -445,13 +510,15 @@ side-by-side week-over-week comparison view; coach/physio share link.
 
 ## Open questions
 
-1. **Does BlazePose survive inversion?** Phase 0. Everything downstream assumes yes.
-2. Which movement ships first — squat (founder can test daily) or strict pull-up
-   (cleanest rep definition, best framing, and it feeds a `physical_test` metric)?
-   Leaning **pull-up** for the shipped feature, **squat** for the spike.
+1. ~~Does BlazePose survive inversion?~~ **CLOSED** — Phase 0, 100% detection.
+2. ~~Which movement ships first?~~ **CLOSED 2026-09-01: strict pull-up**, under a
+   skill-first direction. Both expert reviews converged on it independently.
 3. Does velocity-derived RIR replace the RPE picker on AMRAP sets, or sit
-   alongside it? Related: the RPE floor of 7 is a live bug regardless of this
-   feature.
+   alongside it? **Now a barbell-only, later question** — it is not what this
+   feature is for. Related and unblocked: the RPE floor of 7 is a live bug that
+   should be fixed on its own merits, first and alone. It recovers most of the
+   engine value for a fraction of the effort, and it is the only way to learn
+   whether video actually beats a working picker.
 4. Per-video or per-set? A set has one video; does a session with 6 sets get 6?
    Storage is no longer the constraint (we keep ~250 KB either way), so this is
    now a UX question. Proposal: **one analysis per exercise per day**, the top
