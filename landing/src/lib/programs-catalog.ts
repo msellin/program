@@ -245,6 +245,139 @@ export const PROGRAMS: LandingProgram[] = [
       "Any sharp shoulder pain during test — pause and see physio.",
     ],
   },
+  {
+    slug: "first-strict-pullup",
+    name: "First Strict Pull-Up",
+    tagline: "From no hang to a rep you own.",
+    domain: "skill",
+    domainLabel: "Skill",
+    status: "AVAILABLE",
+    duration: "Multi-tier · 8 weeks",
+    difficulty: "multi-tier",
+    toneColor: "bronze",
+    fitFor: [
+      "You want a strict pull-up — not a kipping one. That's a different skill.",
+      "You can't dead-hang 15 seconds yet, or you get 1-2 and want 5.",
+      "You'd rather train the weakest link than just do more pull-ups.",
+      "You have a bar and a band, and 15-30 minutes, three or four times a week.",
+    ],
+    arcSummary:
+      "Four tiers — Hang, Assisted, First Rep, Volume. Intake places you, then each week targets whichever sub-capability is furthest behind: grip, scapular control, row strength, or negative control. A beginner spends weeks on hangs and scap pulls before touching a full rep; a first-repper goes straight to volume work.",
+    evidence: [
+      {
+        label: "Youdas 2010 · EMG across pull-up variants",
+        source: "Scapular phase precedes the concentric pull — the reason scap work comes before rep attempts.",
+      },
+      {
+        label: "Roig 2009 · eccentric vs concentric",
+        source: "Eccentric training produces greater strength gains at matched work. Negatives are the main driver in the assisted tier.",
+      },
+      {
+        label: "Sinnett 2019 · band-assisted pull-up",
+        source: "Band assistance transfers to unassisted performance — the evidence behind the assisted ladder.",
+      },
+    ],
+    retest:
+      "Hang time retested weekly at the lower tiers, max reps weekly at the upper. Full assessment every 4 weeks — dead hang, scap pull, ring row, negative control.",
+    outcomes: [
+      { tier: "Hang", expected: "25-45 second dead hang. Clean scap pulls. First ring rows." },
+      { tier: "Assisted", expected: "First strict rep, off a 10-second negative." },
+      { tier: "First Rep", expected: "3-5 unbroken." },
+      { tier: "Volume", expected: "8-10 unbroken, wide-grip variety unlocked." },
+    ],
+    contraindications: [
+      "Active shoulder or elbow pain under load — see a clinician before hanging.",
+      "This is not a kipping pull-up programme and won't prepare you for one.",
+    ],
+  },
+  {
+    slug: "muscle-up",
+    name: "Muscle-Up Acquisition",
+    tagline: "The transition is the bottleneck. Train it directly.",
+    domain: "skill",
+    domainLabel: "Skill",
+    status: "AVAILABLE",
+    duration: "Multi-tier · 10 weeks",
+    difficulty: "multi-tier",
+    toneColor: "bronze",
+    fitFor: [
+      "You have strict pull-ups and ring dips, and the muscle-up still isn't there.",
+      "You've worked out it's not the pull and not the dip — it's the bit between.",
+      "You want the strict ring version, built deliberately.",
+      "You have rings and 20-35 minutes, three or four times a week.",
+    ],
+    arcSummary:
+      "Three tiers — Prep, Transition, First Rep. The transition gets isolated and drilled on its own: seated-band, low-ring negatives, then full attempts, while false-grip strength and ring-dip capacity are built alongside so the rep isn't gated on them.",
+    evidence: [
+      {
+        label: "Roig 2009 · eccentric vs concentric",
+        source: "Why the transition is trained through negatives before it is attempted at full speed.",
+      },
+      {
+        label: "Reinold 2007 · shoulder loading",
+        source: "The rationale for the false-grip and ring-dip prep tier rather than straight to attempts.",
+      },
+      {
+        label: "Kibler 2013 · scapular dyskinesis",
+        source: "Scapular control precedes overhead load — the basis for the non-optional prep block.",
+      },
+    ],
+    retest:
+      "False-grip hang and ring-dip capacity retested weekly at the lower tiers, max reps at the top. Full assessment battery every 4 weeks.",
+    outcomes: [
+      { tier: "Prep", expected: "3-5 strict ring dips. 15-second false-grip hang." },
+      { tier: "Transition", expected: "Seated-band mastered, first low-ring muscle-up, first strict attempt." },
+      { tier: "First Rep", expected: "2-3 strict ring muscle-ups unbroken." },
+    ],
+    contraindications: [
+      "Requires an existing strict pull-up and ring dip — start with First Strict Pull-Up if you don't have them.",
+      "Active shoulder or elbow pain under load — see a clinician first.",
+    ],
+  },
+  {
+    slug: "engine-builder-block-2",
+    name: "Engine Builder · Block 2",
+    tagline: "Where the threshold gains actually land.",
+    domain: "aerobic",
+    domainLabel: "Aerobic",
+    status: "AVAILABLE",
+    duration: "Multi-tier · 10 weeks",
+    difficulty: "multi-tier",
+    toneColor: "teal",
+    fitFor: [
+      "You finished Block 1, or you already have the aerobic base it builds.",
+      "You want the sharp end — threshold work and VO2max intervals, not more Z2.",
+      "You can give it 5-6 hours a week across four or five sessions.",
+      "You'll swap rowing / cycling / ski-erg / running as your machine.",
+    ],
+    arcSummary:
+      "Volume expansion with a threshold-dominant middle. Cruise intervals expand toward 3×12 minutes and Norwegian 4×4 returns on top. Declare an equivalent base at intake if you're arriving without Block 1 — the block assumes the base is already in and doesn't rebuild it.",
+    evidence: [
+      {
+        label: "Seiler 2010 · intensity distribution",
+        source: "The polarised distribution this block's easy/hard split is built on.",
+      },
+      {
+        label: "Helgerud 2007 · 4×4 intervals",
+        source: "The specific interval protocol behind the VO2max sessions.",
+      },
+      {
+        label: "Rønnestad 2020 · threshold work",
+        source: "Evidence for the cruise-interval structure that dominates the middle weeks.",
+      },
+    ],
+    retest:
+      "20-minute time trial plus submax HR at a fixed pace, at week 4 and again at week 8-10. Modality-specific TT (2K row / 5K run) at the end if it applies.",
+    outcomes: [
+      { tier: "Foundation", expected: "Threshold pace/power +2%. Submax HR -3 bpm at fixed pace." },
+      { tier: "Progression", expected: "Threshold +3-4%. VO2max gains on top of Block 1." },
+      { tier: "Push", expected: "Threshold +5%. Submax HR -8 bpm." },
+    ],
+    contraindications: [
+      "Not a starting point — do Block 1 first, or declare an equivalent base at intake.",
+      "Cardiac or respiratory conditions: clear the intensity work with a clinician.",
+    ],
+  },
 ];
 
 export function findProgram(slug: string): LandingProgram | undefined {

@@ -47,7 +47,7 @@ export function SetRow({ index, set, prev, prescribed, isPR, restSeconds, onChan
             {prev.weight_kg}×{prev.reps}
           </span>
         ) : (
-          <span className="text-line">—</span>
+          <span className="text-muted">—</span>
         )}
       </div>
       {/* P1-2 — placeholder doubles as the prescription hint, so it also

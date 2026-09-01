@@ -50,7 +50,7 @@ export const en: LandingDict = {
   },
   programs: {
     eyebrow: "Pick one program",
-    title: "Five programs live. Three more in build.",
+    title: "Eight programs live.",
     sub: "Each program targets one capability — an engine, a skill, a lift, a joint. Runs alongside your other training. Cited before shipped.",
     engine_builder_pitch: "For lifters who can't yet run 5k.",
     csm_pitch: "Add cardio without losing the squat.",

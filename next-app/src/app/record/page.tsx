@@ -239,7 +239,10 @@ export default function RecordPage() {
           infra decision. Founder-durable email per user_founder-email
           memory. */}
       <footer className="pt-6 border-t border-line-soft flex items-center justify-between gap-3 text-[12px] text-muted">
-        <span>Terav — Cut C · Record</span>
+        {/* "Cut C" is the internal name of the redesign that produced this
+            surface, not something a user should ever read. Caught by the
+            2026-09-01 copy audit. */}
+        <span>Terav — Record</span>
         <a
           href="mailto:sellinmargus@gmail.com?subject=Terav%20feedback"
           className="inline-flex items-center gap-1 font-mono text-[11px] uppercase tracking-widest text-slate hover:text-ink motion-reduce:transition-none transition-colors min-h-[44px] py-2"

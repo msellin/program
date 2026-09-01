@@ -114,11 +114,11 @@ export default function GuidePage() {
         </Row>
         <Row label="Profile">Signed-in identity, active plan(s), and a compact menu.</Row>
         <p className="text-[14px] text-muted italic pt-2">
-          These are the bottom-nav tabs. The rest live behind the ⋮ menu in the top right:
+          These are the bottom-nav tabs. The rest live under Profile:
         </p>
         <Row label="Programs">The catalog. Browse, preview, start a program.</Row>
         <Row label="Check">Morning symptom scoring. Save it and today&apos;s prescription auto-adjusts (amber −5%, red −10%).</Row>
-        <Row label="Extras">Accessories, home rehab, cardio / conditioning blocks — no calendar pressure.</Row>
+        <Row label="Off-plan">Accessories, home rehab, cardio / conditioning blocks — no calendar pressure.</Row>
         <Row label="Report">Specialist-facing summary. Print / save as PDF for a clinician or coach.</Row>
         <Row label="Data">Manage data — import, export, wipe local.</Row>
         <Row label="Evidence">

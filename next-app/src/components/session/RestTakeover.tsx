@@ -178,7 +178,7 @@ export function RestTakeover({
         <p className="font-mono text-[11px] uppercase tracking-[.18em] text-slate mb-[18px]">Rest</p>
         <p className="text-[104px] leading-[.9] font-semibold tracking-[-.05em] text-strong mb-2">{fmt}</p>
         {effortAnswered && selectedEffort ? (
-          <p className="text-[14.5px] text-line">
+          <p className="text-[14.5px] text-muted">
             {selectedEffort} · {EFFORTS.find((e) => e.label === selectedEffort)?.rir}
             {" · "}
             <button type="button" onClick={() => onEffortAnswered(false)} className="text-slate">
@@ -187,7 +187,7 @@ export function RestTakeover({
           </p>
         ) : upNext.kind !== "done" ? (
           <>
-            <p className="font-mono text-[10px] uppercase tracking-[.16em] text-line mb-2">Next up</p>
+            <p className="font-mono text-[10px] uppercase tracking-[.16em] text-muted mb-2">Next up</p>
             <p className="text-[20px] font-semibold text-strong mb-1 tracking-[-.02em]">
               {upNext.kind === "set"
                 ? `Set ${upNext.setIndex + 1} of ${upNext.rail.rowCount}`
@@ -198,10 +198,14 @@ export function RestTakeover({
             <p className="text-[14.5px] text-ink">{upNext.rail.exercise.name}</p>
           </>
         ) : (
-          <p className="text-[14.5px] text-line">{summary ?? ""}</p>
+          <p className="text-[14.5px] text-muted">{summary ?? ""}</p>
         )}
       </div>
-      <div className="flex-shrink-0 px-[22px] pb-[22px] flex flex-col gap-3.5">
+      {/* pb honours the home indicator. Without the inset the bottom control of
+          a full-screen takeover lands inside the 34px indicator band on an
+          iPhone 15 Pro — the same calc already used twelve lines down and in
+          BottomSheet.tsx. Found by the 2026-09-01 mobile-UX audit. */}
+      <div className="flex-shrink-0 px-[22px] pb-[calc(22px+env(safe-area-inset-bottom))] flex flex-col gap-3.5">
         {/* 2026-09-01 — the effort picker used to sit inside the
             `upNext.kind !== "done"` branch above, so the FINAL set of a session
             was never asked how it went. That is the set most worth asking
@@ -228,7 +232,7 @@ export function RestTakeover({
                   <span
                     className={
                       "block font-mono text-[9px] mt-0.5 leading-tight " +
-                      (selectedEffort === effort.label ? "text-bronze" : "text-line")
+                      (selectedEffort === effort.label ? "text-bronze" : "text-muted")
                     }
                   >
                     {effort.rir}
@@ -253,7 +257,7 @@ export function RestTakeover({
           >
             +30s
             {extra > 0 ? (
-              <span className="block font-mono text-[9.5px] text-line leading-none mt-0.5">
+              <span className="block font-mono text-[9.5px] text-muted leading-none mt-0.5">
                 +{extra}s added
               </span>
             ) : null}
@@ -287,7 +291,7 @@ export function RestTakeover({
               </span>
             ) : null}
           </span>
-          <span className="flex-shrink-0 text-[14px] text-line">›</span>
+          <span className="flex-shrink-0 text-[14px] text-muted">›</span>
         </button>
         <button
           type="button"

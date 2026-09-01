@@ -469,7 +469,8 @@ export function TodaySession({
             return (
               <RestDayCard
                 variant={variant}
-                programName={primary.program_goal?.display_name}
+                programName={programDisplayName(primary, primary.slug ?? "")}
+                dateISO={activeDate}
                 firstSessionDate={primary.phases[0]?.starts}
                 programSlug={primary.slug}
               />

@@ -26,16 +26,27 @@ export function RestDayCard({
   programName,
   firstSessionDate,
   programSlug,
+  dateISO,
 }: {
   variant?: "rest" | "before" | "away" | "holiday" | "test";
   programName?: string;
   firstSessionDate?: string;
   programSlug?: string;
+  /** The day being viewed. Omit for today. */
+  dateISO?: string;
 }) {
+  const whenLabel =
+    !dateISO || dateISO === todayISO()
+      ? "today"
+      : `on ${new Date(dateISO + "T00:00:00").toLocaleDateString(undefined, {
+          weekday: "long",
+          month: "short",
+          day: "numeric",
+        })}`;
   if (variant === "test") {
     return (
       <div className="rounded border border-bronze/30 border-l-4 border-l-bronze bg-bronze/10 p-4 text-sm">
-        <p className="font-semibold text-strong">Test day.</p>
+        <h1 className="text-[17px] font-semibold text-strong">Test day.</h1>
         <p className="mt-1 text-muted">
           The 2K test is on. Warm-up 15-20 min including 2-3 short race-pace pieces.
           Log the result via the session card below — the retest metric picks it up.
@@ -54,9 +65,9 @@ export function RestDayCard({
     const isRowing = programSlug === "rowing-2k-test-prep";
     return (
       <div className="rounded border border-line-soft border-l-4 border-l-bronze bg-surface p-4 text-sm">
-        <p className="font-semibold text-strong">
+        <h1 className="text-[17px] font-semibold text-strong">
           {humanDate ? `First session on ${humanDate}.` : "Before the program starts."}
-        </p>
+        </h1>
         <p className="mt-1 text-muted">
           {isRowing
             ? "You've scheduled your test date further out than the program's 6-week arc. Use the intervening weeks to keep easy Z2 volume — log any sessions via the card below and they'll anchor your baseline."
@@ -68,7 +79,7 @@ export function RestDayCard({
   if (variant === "away") {
     return (
       <div className="rounded border border-bronze/30 border-l-4 border-l-bronze bg-bronze/10 p-4 text-sm">
-        <p className="font-semibold text-strong">Away today.</p>
+        <h1 className="text-[17px] font-semibold text-strong">Away today.</h1>
         <p className="mt-1 text-muted">
           No prescribed session. If you do something anyway — a ride, a run, a
           class — log it below; the engine still reads it.
@@ -79,7 +90,7 @@ export function RestDayCard({
   if (variant === "holiday") {
     return (
       <div className="rounded border border-line-soft border-l-4 border-l-line bg-surface p-4 text-sm">
-        <p className="font-semibold">Holiday / light period.</p>
+        <h1 className="text-[17px] font-semibold text-strong">Holiday / light period.</h1>
         <p className="mt-1 text-muted">
           Documented light window between Phase 4 (test) and Phase 5 (Hatch). No prescribed strength session.
           Optional 60% TM movement work. If you train anyway, log it below — the engine still reads it.
@@ -89,15 +100,24 @@ export function RestDayCard({
   }
   return (
     <div className="rounded border border-line-soft border-l-4 border-l-line bg-surface p-4 text-sm">
-      <p className="font-semibold">Rest day.</p>
+      <h1 className="text-[17px] font-semibold text-strong">Rest day.</h1>
       {/* 2026-08-30 — this used to point at "the Extras tab", which stopped
           existing on 2026-08-21 when /extras became /off-plan and dropped out
           of the bottom nav. In an installed PWA (no address bar) that made the
           card a dead end: the founder rode 101 km on a rest Saturday and the
           only screen for that day named a tab he could not reach. The log card
           now renders directly beneath this one on every surface. */}
+      {/* 2026-09-01 — two fixes from the copy audit. `programName` was fed
+          `program_goal.display_name`, which is the target METRIC, so this read
+          "Strict pull-up max reps has no session on the schedule today" on five
+          of eight programs. `day-format.ts` already exports `programDisplayName`
+          for exactly this anti-pattern and documents it. And the sentence said
+          "today" regardless of the date being viewed — the same bug fixed in
+          OffPlanSheet on 2026-08-31 that never reached here. */}
       <p className="mt-1 text-muted">
-        {programName ? `${programName} has no session on the schedule today. ` : "No session on the schedule today. "}
+        {programName
+          ? `${programName} has no session scheduled ${whenLabel}. `
+          : `No session scheduled ${whenLabel}. `}
         If you trained anyway — a ride, a run, a class — log it below; it still counts toward your history.
       </p>
     </div>
@@ -393,7 +413,7 @@ export function GraduationCard({ program }: { program: Program }) {
           </div>
         ) : (
           <p className="text-[14px] text-muted italic">
-            No retest metrics recorded — head to Progress to log your final numbers.
+            No retest metrics recorded — head to Record to log your final numbers.
           </p>
         )}
         {nextBlockEntry ? (

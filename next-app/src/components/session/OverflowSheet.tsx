@@ -135,7 +135,7 @@ function Row({
       className="flex items-center justify-between gap-3 w-full text-left border-none bg-surface-2 px-3.5 py-[15px]"
     >
       <span className="text-[15px] font-medium text-strong">{label}</span>
-      <span className="font-mono text-[11px] text-line">{hint}</span>
+      <span className="font-mono text-[11px] text-muted">{hint}</span>
     </button>
   );
 }

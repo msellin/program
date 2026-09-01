@@ -124,25 +124,25 @@ const items: Item[] = [
   },
   {
     title: "First Strict Pull-Up",
-    status: "in_build",
+    status: "shipped",
     kind: "new_program",
     detail:
       "Multi-dim skill program on the shared drill library. Scap → hang → negative → band → unassisted.",
-    evidence: "Wulf 1998/2013, Shea & Morgan 1979 · pending Youdas 2010 authoring",
+    evidence: "Youdas 2010, Roig 2009, Sinnett 2019, Vigouroux 2007",
   },
   {
     title: "Muscle-Up Acquisition",
-    status: "in_build",
+    status: "shipped",
     kind: "new_program",
     detail: "Reuses handstand + pull-up drill libraries. False-grip base, transition, dip.",
-    evidence: "Motor learning · specificity of practice",
+    evidence: "Roig 2009, Youdas 2010, Reinold 2007, Kibler 2013",
   },
   {
     title: "Engine Builder · Block 2 (Volume)",
-    status: "in_build",
+    status: "shipped",
     kind: "program_upgrade",
     detail: "Threshold-dominant continuation of Block 1.",
-    evidence: "Seiler 2010, Astorino 2013, Joyner & Coyle 2008",
+    evidence: "Seiler 2010, Helgerud 2007, Rønnestad 2020",
   },
   {
     title: "First Strict HSPU",

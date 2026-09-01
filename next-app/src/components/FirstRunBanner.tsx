@@ -48,12 +48,12 @@ export function FirstRunBanner() {
     >
       <div className="flex items-start justify-between gap-3">
         <p id="firstrun-title" className="font-semibold text-strong text-[14px]">
-          Five tabs, one flow
+          Four tabs, one flow
         </p>
         <button
           type="button"
           onClick={dismiss}
-          aria-label="Dismiss five-tab tour"
+          aria-label="Dismiss four-tab tour"
           className="text-muted hover:text-ink w-11 h-11 -m-2 flex items-center justify-center"
         >
           <X size={16} />
@@ -66,7 +66,8 @@ export function FirstRunBanner() {
         <li><span className="text-ink">Profile</span> — account, active plans, menu.</li>
       </ul>
       <p className="text-[12px] text-muted pt-1">
-        More lives behind the <span className="font-mono">⋮</span> menu (top right): Programs, Check, Extras, Report, Guide, Evidence.
+        More lives under <span className="text-ink">Profile</span>: Programs, Off-plan, Report, Guide and Evidence. The daily check is
+        reached from Day when one is due.
       </p>
       <div className="pt-1">
         <button

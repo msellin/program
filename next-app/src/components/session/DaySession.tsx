@@ -10,7 +10,7 @@ import { getBlocksForDate, isBlockObjectOn, DAY_VISIBLE_BLOCK_STATES } from "@/l
 import { migrateLegacyToBlocks, needsBlockMigration } from "@/lib/migrations/legacy-to-blocks";
 import { suggestForExercise, type Suggestion } from "@/lib/engine/suggest";
 import { selectProposals } from "@/lib/proposals/select";
-import { dedupeItems, humanBlockName } from "@/lib/day-format";
+import { dedupeItems, humanBlockName, programDisplayName } from "@/lib/day-format";
 import { RestDayCard, GraduationCard } from "@/components/session/shared/StatusCards";
 import { BriefView } from "@/components/session/BriefView";
 import { SetView } from "@/components/session/SetView";
@@ -174,7 +174,8 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
       <>
         <RestDayCard
           variant={variant}
-          programName={program.program_goal?.display_name}
+          programName={programDisplayName(program, slug)}
+          dateISO={activeDate}
           firstSessionDate={program.phases[0]?.starts}
           programSlug={program.slug}
         />

@@ -302,7 +302,7 @@ export function OffPlanSession() {
                         <span
                           className={
                             "flex-shrink-0 font-mono text-[10px] uppercase tracking-[.1em] " +
-                            (isDone ? "text-line" : loggedCount > 0 ? "text-bronze" : "text-muted")
+                            (isDone ? "text-muted" : loggedCount > 0 ? "text-bronze" : "text-muted")
                           }
                         >
                           {isDone ? "Done" : loggedCount > 0 ? "Held" : ""}

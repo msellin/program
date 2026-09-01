@@ -176,7 +176,7 @@ export function BriefView({
                     {hero.suggestion.top_set.kg}
                   </span>
                   <span className="text-[16px] font-medium text-muted">kg</span>
-                  <span className="text-[18px] text-line">×</span>
+                  <span className="text-[18px] text-muted">×</span>
                   <span className="text-[24px] leading-none font-semibold text-strong">
                     {hero.suggestion.top_set.reps}
                   </span>
@@ -232,7 +232,7 @@ export function BriefView({
                   {humanBlockName(b.name)}
                 </p>
                 {b.duration_min ? (
-                  <p className="font-mono text-[10px] uppercase tracking-[.14em] text-line mb-1">
+                  <p className="font-mono text-[10px] uppercase tracking-[.14em] text-muted mb-1">
                     {Array.isArray(b.duration_min)
                       ? `${b.duration_min[0]}–${b.duration_min[1]} min`
                       : `${b.duration_min} min`}
@@ -282,7 +282,7 @@ export function BriefView({
                   <span
                     className={
                       "flex-shrink-0 font-mono text-[10px] uppercase tracking-[.1em] " +
-                      (isDone ? "text-line" : isMain ? "text-bronze" : "text-muted")
+                      (isDone ? "text-muted" : isMain ? "text-bronze" : "text-muted")
                     }
                   >
                     {isDone ? "Done" : loggedCount > 0 ? "Held" : isMain ? "Main" : ""}
@@ -307,7 +307,7 @@ export function BriefView({
               four programs. Only the second survives here, so the line
               names it. */}
           <span className="text-[13.5px] text-muted">Log a run, row, or class</span>
-          <span className="flex-shrink-0 text-[14px] text-line">›</span>
+          <span className="flex-shrink-0 text-[14px] text-muted">›</span>
         </button>
         {progressLabel ? (
           <p className="font-mono text-[10px] uppercase tracking-[.14em] text-muted">
@@ -335,7 +335,7 @@ export function BriefView({
           className={
             "w-full h-[60px] rounded-[10px] text-[17px] font-semibold tracking-[-.01em] " +
             (gateUnresolved
-              ? "bg-surface-2 text-line cursor-not-allowed"
+              ? "bg-surface-2 text-muted cursor-not-allowed"
               : "bg-bronze text-ground hover:bg-bronze-hover")
           }
         >

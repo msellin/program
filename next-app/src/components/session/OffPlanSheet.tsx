@@ -90,13 +90,13 @@ export function OffPlanSheet({
             </span>
             <span className="block text-[13px] text-ink">Time, effort, heart rate</span>
           </span>
-          <span className="flex-shrink-0 text-[15px] text-line">›</span>
+          <span className="flex-shrink-0 text-[15px] text-muted">›</span>
         </button>
       )}
 
       {offPlanOn && drillBlocks.length ? (
         <>
-          <p className="font-mono text-[10px] uppercase tracking-[.16em] text-line mb-2.5">
+          <p className="font-mono text-[10px] uppercase tracking-[.16em] text-muted mb-2.5">
             Or pick a drill
           </p>
           <Link
@@ -106,7 +106,7 @@ export function OffPlanSheet({
             <span className="text-[14.5px] font-semibold text-strong tracking-[-.01em]">
               {drillCount} drill{drillCount === 1 ? "" : "s"} available
             </span>
-            <span className="flex-shrink-0 text-[15px] text-line">›</span>
+            <span className="flex-shrink-0 text-[15px] text-muted">›</span>
           </Link>
           <ul className="text-[13px] text-ink space-y-0.5 mb-3">
             {drillBlocks.slice(0, 4).map((b) => (

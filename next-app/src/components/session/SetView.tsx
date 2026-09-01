@@ -311,7 +311,7 @@ export function SetView({
                   {r.exercise.name}
                 </span>
                 <span
-                  className={"block font-mono text-[9px] mt-0.5 " + (isActive ? "text-bronze" : "text-line")}
+                  className={"block font-mono text-[9px] mt-0.5 " + (isActive ? "text-bronze" : "text-muted")}
                 >
                   {logged}/{r.rowCount}
                 </span>
@@ -379,7 +379,7 @@ export function SetView({
                   <span
                     className={
                       "block font-mono text-[10px] leading-none " +
-                      (isCurrent ? "text-bronze" : done ? "text-ink" : "text-line")
+                      (isCurrent ? "text-bronze" : done ? "text-ink" : "text-muted")
                     }
                   >
                     {i + 1}
@@ -387,7 +387,7 @@ export function SetView({
                   <span
                     className={
                       "block font-mono text-[9px] leading-none mt-0.5 truncate " +
-                      (isCurrent ? "text-strong" : done ? "text-ink" : "text-line")
+                      (isCurrent ? "text-strong" : done ? "text-ink" : "text-muted")
                     }
                   >
                     {done && logged
@@ -431,7 +431,7 @@ export function SetView({
             <p className="text-[92px] leading-[.9] font-semibold tracking-[-.05em] text-strong mb-1">
               {Math.floor(remaining / 60)}:{String(remaining % 60).padStart(2, "0")}
             </p>
-            <p className="font-mono text-[11px] uppercase tracking-[.16em] text-line mb-3">
+            <p className="font-mono text-[11px] uppercase tracking-[.16em] text-muted mb-3">
               {running
                 ? isHoldShaped
                   ? "holding"
@@ -455,7 +455,7 @@ export function SetView({
         {!prev && !prescribed && authoredDose ? (
           <div className="border border-line-soft rounded-[8px] overflow-hidden mb-3">
             <div className="px-4 py-2.5 bg-surface">
-              <p className="font-mono text-[9.5px] uppercase tracking-[.14em] text-line mb-0.5">
+              <p className="font-mono text-[9.5px] uppercase tracking-[.14em] text-muted mb-0.5">
                 Programme asks for
               </p>
               <p className="text-[15px] font-semibold text-ink">{authoredDose}</p>
@@ -466,7 +466,7 @@ export function SetView({
           <div className="flex items-stretch border border-line-soft rounded-[8px] overflow-hidden mb-3">
             {prev ? (
               <div className="px-4 py-2.5 bg-surface">
-                <p className="font-mono text-[9.5px] uppercase tracking-[.14em] text-line mb-0.5">
+                <p className="font-mono text-[9.5px] uppercase tracking-[.14em] text-muted mb-0.5">
                   Last time
                 </p>
                 <p className="text-[15px] font-semibold text-ink">
@@ -477,7 +477,7 @@ export function SetView({
             {prev && prescribed ? <div className="w-px bg-line-soft" /> : null}
             {prescribed ? (
               <div className="px-4 py-2.5 bg-surface">
-                <p className="font-mono text-[9.5px] uppercase tracking-[.14em] text-line mb-0.5">
+                <p className="font-mono text-[9.5px] uppercase tracking-[.14em] text-muted mb-0.5">
                   Prescribed
                 </p>
                 <p className="text-[15px] font-semibold text-ink">
@@ -487,7 +487,7 @@ export function SetView({
             ) : null}
           </div>
         ) : null}
-        {plates ? <p className="font-mono text-[11px] text-line">{plates}</p> : null}
+        {plates ? <p className="font-mono text-[11px] text-muted">{plates}</p> : null}
       </div>
 
       <div className="flex-shrink-0 px-[22px] pb-[22px]">
