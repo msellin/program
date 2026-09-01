@@ -601,3 +601,507 @@ different model or a different vendor.
 Fix C1-C5 and C10 before writing V1-4. Do not start UI work — and do not treat V1-6's 100% as
 meaningful — until the ground-truth set contains clips that were chosen to break the pipeline rather
 than to demonstrate it.
+
+
+---
+---
+
+# Round 2 — skill-first
+
+**Reviewer:** Dr. Nadia Okonkwo-Reinhardt. Appended 2026-09-01, second pass.
+**Prompt:** the product direction has moved from barbell-first to skill-first (strict pull-up, bar
+muscle-up, handstand walk, HSPU, double unders). Round 1's measurement findings are being adopted;
+what is in dispute is movement order, and whether skill-first is measurably easier or harder.
+
+**Scope note:** Round 1 reviewed a barbell feature — Phase 2 opened with `back_squat_highbar`
+(`tasks.md:90-92`) and the plan's strongest internal argument was training-max inference
+(`plan.md:277-293`). That was the right review of the wrong document. Round 2 re-runs the same
+adversarial pass against the skill catalog.
+
+**Headline.** The coordinator is substantially right, and right for better reasons than the ones
+given. Skill-first **removes three of the four ways Round 1 found to ship a confidently wrong
+number.** But it is not a free win: it **raises the required sampling rate by 3-6× across the board**,
+which converts M9 from Major to Critical and makes C2 (timebase) a hard blocking dependency rather
+than a defect. One named movement (bar muscle-up asymmetry) is **geometrically impossible** with one
+camera and should be dropped from its own rubric. One (double unders) belongs to a different
+subsystem and should not be in this plan at all.
+
+Net: **skill-first is measurably easier to be correct and measurably harder to be fast.** That is a
+good trade, because correctness was what was failing.
+
+---
+
+## Concessions first — where the coordinator is right, and where the argument is stronger than stated
+
+### Argument 4 is the strongest one and it is undersold.
+
+*"Re-filming is cheap in skill practice (20 attempts per session) in a way it is not for a heavy
+double."*
+
+This is the most important sentence in the pushback and it is buried at position 4. It is not a
+convenience argument, it is a **precision/recall argument at the import gate**, and it changes the
+whole risk profile.
+
+Round 1's dominant risk was confidently-wrong output. The cheapest defence against that is a strict
+refusal gate — but a strict gate is only affordable when refusal is cheap. Refusing a heavy double
+costs the user a session they cannot repeat; you are therefore forced to a permissive gate and a
+large "advisory / degraded" surface, which is exactly where wrong numbers leak out. Refusing a
+handstand attempt costs 30 seconds.
+
+**Concrete consequence to bank:** under skill-first you can set the gate to refuse ~20-25% of clips
+and still have a good product. Under barbell-first you could not have refused 5%. That single fact
+does more to reduce confidently-wrong risk than any measurement fix in Round 1. Design for it
+explicitly: **shrink the advisory tier, widen the blocking tier**, and stop treating a refusal as a
+product failure. `plan.md:254-262`'s two-tier design was tuned for the expensive-refilm case and
+should be re-tuned.
+
+### Argument 2 is right but needs one correction, and the correction is in his favour.
+
+Load-awareness in its hard form — "the verdict must know how heavy the set was" (`plan.md:227-231`)
+— does disappear. There is no training max, no `inferTMFromSet` coupling, no %1RM.
+
+But it does not vanish entirely; it **changes into a form the app can already satisfy**. Rep 8 of a
+max-effort strict pull-up set looks like a technique failure and is not — the same correctness
+requirement, restated as *proximity to failure* rather than *load*. The difference is that the app
+**already holds the denominator**: `strict_pullup_max_reps` and friends live in `capability_profile`
+(`plan.md:31-36`). So the gate becomes `rep_index / known_max`, computable, no user input, no
+inference. Under barbell-first that denominator was the thing being inferred and was the source of
+the 5 kg error. Under skill-first it is a stored number.
+
+So: requirement survives, satisfaction gets *easier*. Concede and sharpen.
+
+One thing that does need carrying: skills have a load analog that varies — **band assistance, foot
+assistance, incline, box height**. A band-assisted pull-up and a strict pull-up are not comparable
+and must not share a rep history. That is a metadata problem, not a vision problem, but it must be
+in the log key or the week-over-week comparison (V4-6) will silently mix conditions.
+
+### Argument 3 is right and stronger than stated. Delete V1-3, do not defer it.
+
+Round 1 (C10) recommended cutting plate calibration from Phase 1. Under skill-first, cut it
+permanently. Every measure I would specify for pull-up, HSPU and muscle-up is a body-internal ratio;
+scale cancels identically. There is exactly one survivor — `walk_distance_max_metres`
+(`plan.md:34`) — and section C below gives a calibration-free construction for it. **C10 drops from
+Critical to Minor under skill-first, and `tasks.md:52-54` (V1-3) should be deleted rather than
+deferred.** That is the largest single engineering saving in this review.
+
+---
+
+## Where the coordinator is hand-waving
+
+### R2-1 (Major) — "discrete vs continuous" is the wrong axis, and discrete measures carry a new failure mode.
+
+*"2D pose is bad at continuous, anthropometry-confounded judgements and good at discrete geometric
+ones. Is that actually true, or am I hand-waving?"*
+
+Half hand-waving. The conclusion is right; the stated mechanism is not, and the wrong mechanism will
+lead to wrong rubric authoring.
+
+**The real axis is body-internal vs world-referenced.** Squat depth is hard because it needs a
+sagittal-plane comparison confounded by femur/tibia proportion and by camera obliquity — not because
+it is continuous. Chin-over-bar is easy because it compares two landmarks on the same body in the
+same image, and the reference object (the bar) is inferable from a high-visibility landmark
+(`bar_y ≈ mean(wrist_y)` — the hands are on it). Discreteness is incidental. Plenty of continuous
+skill measures are easy (hip-over-shoulder offset / torso length), and plenty of discrete ones are
+hard (any *contact* event — head-touches-floor, hand-leaves-ground).
+
+**And discreteness introduces a risk continuous measures do not have: catastrophic failure at the
+threshold.** A boolean flips on ±1 landmark-noise unit. Concretely, chin-over-bar: MediaPipe has no
+chin landmark. It has nose (0), eyes, ears, and mouth corners (9, 10). Chin must be extrapolated as
+`mouth_y + k·head_scale`, where head scale comes from ear-to-ear or nose-to-ear. That extrapolation
+carries roughly **±2-3 cm** of anthropometric error, plus landmark noise. The disputed range on a
+pull-up *is* the last 2-3 cm. So the measure is better than squat depth but **not free**, and a naive
+boolean will be wrong on precisely the reps that are argued about.
+
+**Change — and this applies to every skill rubric:**
+1. **Report the margin, not the boolean.** "Chin cleared the bar by 4 cm" / "by 1 cm". Carry the
+   error band with it.
+2. **Refuse to adjudicate inside the band.** If the margin is within the measurement uncertainty, the
+   rep is `not measurable` (`plan.md:213` already has this verdict — use it here), not "failed".
+3. This matters most where a boolean feeds `capability_profile` through V4-4 (`tasks.md:176-179`).
+   Telling someone their strict pull-up did not count, on a 1 cm margin, is the single worst output
+   this feature can produce.
+
+### R2-2 (Critical) — kip detection by hip-angle *variance* is not clean, and it false-positives on exactly the reps that matter.
+
+*"Is kip detection via hip-angle variance as clean as the plan claims, and what is the false-positive
+rate on a slow grindy strict rep that involves some hip flexion?"*
+
+**Where:** `tasks.md:92-94` (V2-5), which also says this "makes the 'strict' retest gate honest for
+the first time".
+
+**The choice of variance over absolute angle is correct** — many people do strict pull-ups with knees
+bent and ankles crossed, hip angle ~140° and static, so any absolute-angle threshold breaks
+immediately. Credit for that. The problem is that variance does not distinguish the two things you
+need to distinguish.
+
+Run the numbers. Take hip-angle excursion `E` over a rep.
+
+- A **monotonic** change (the involuntary tuck-and-crunch on a grindy honest rep) is approximately
+  uniform over the rep: `std = E/√12 = 0.289·E`.
+- An **oscillation** (a kip) over a cycle: `std = E/(2√2) = 0.354·E`.
+
+The two statistics differ by a factor of only **1.22**. So:
+
+| Rep | Excursion | std |
+|---|---|---|
+| Grindy strict rep, 30° monotonic tuck | 30° | **8.7°** |
+| Small "body english" half-kip, 25-35° oscillation | 30° | **10.6°** |
+| Obvious kipping pull-up, 60-90° swing | 75° | 26.5° |
+| Grindy strict rep with a big 50° tuck | 50° | **14.4°** |
+| Modest kip, 40° swing | 40° | **14.1°** |
+
+Two conclusions, both bad:
+
+1. **The borderline cheat and the honest hard rep are not separable by variance.** 8.7° vs 10.6° is
+   inside the noise. And the borderline half-kip is *precisely* the cheat the strict gate exists to
+   catch — the obvious kip was never in doubt.
+2. **A big honest tuck (14.4°) is indistinguishable from a real kip (14.1°).** Wherever you place the
+   threshold, you either miss the cheat or fail an honest rep — and failing an honest rep is worse,
+   because it writes into `capability_profile`.
+
+Add: hip angle requires the **knee**, which is the weakest of the relevant landmarks (0.76/0.97 on
+the Phase 0 clip, `context.md:80`), and in a front-view pull-up the legs are together so one knee
+occludes the other. You are computing a marginal statistic from the worst available landmark.
+
+**Change — replace the statistic, not the threshold.** Three signals, all stronger and two of them
+cheaper:
+
+1. **Pre-pull hip oscillation in the hang.** A kip is *initiated* from a swing: hip angle and ankle
+   position oscillate during the bottom dwell, before the pull starts. A strict rep does not oscillate
+   at all before the pull. Near-zero false-positive rate, and it needs no knee — use ankle x. **This
+   is the cleanest single discriminator and it is nearly free.**
+2. **Sign of hip-angle change during the concentric.** A kip *extends* the hip to drive the rise; a
+   grindy strict rep *flexes* it. Opposite signs. Variance throws this away by squaring.
+3. **Hip/vertical lead-lag.** In a kip, peak hip extension velocity **precedes** peak vertical
+   shoulder velocity by ~100-200 ms (that lead *is* the energy transfer). In a strict rep hip motion
+   is concurrent or lagging. Cross-correlate the two velocity traces and threshold on the lag.
+   **Note: at 10 fps a 150 ms lead is 1.5 samples. This measure requires 30 fps.** It is one of the
+   several skill measures that force M9.
+4. Also use **ankle horizontal excursion normalized by body length** as a bulk kip magnitude — in a
+   kip the feet swing 0.5-1 m horizontally; in a strict rep they hang. Large, robust, avoids the knee
+   entirely.
+
+**And tune for precision on "kip", not recall.** Default to strict unless clearly kipping, report the
+margin, and let a borderline rep be `not measurable` rather than "kipped".
+
+---
+
+## A. Tractability ranking, with required sampling rates
+
+Ranked with the pipeline as specified post-C1-C5 (body-scale normalization, real timestamps,
+composite quality gate, stability-based confidence, no `z`, no calibration).
+
+| # | Movement | Tractability | Whole-clip | Rep/event windows | Why |
+|---|---|---|---|---|---|
+| **1** | **Strict pull-up** | **High** | 10 fps | **30 fps** | Cleanest rep definition in the catalog. Every measure body-internal. Highest-visibility landmarks. Feeds two `physical_test` metrics. Only hard part is the kip discriminator (R2-2) |
+| **2** | **Handstand push-up** | **High** | 10 fps | **30 fps** | Best empirical numbers in the project (100% / 0.912). Body-internal rep signal. Weakness: ROM is a near-contact judgement with a ~2 cm tolerance |
+| **3** | **Handstand walk** | **Medium** (split) | 10 fps | **30 fps** (cadence) | Two of its measures are the easiest in the whole feature; its own catalog retest metric (distance in m) is the hardest. Scope carefully — see C |
+| **4** | **Bar muscle-up** | **Low-Medium** | 10 fps | **60 fps** for turnover; **120 fps** for asymmetry (i.e. not shippable) | Transition is 150-300 ms. One named fault is geometrically impossible with one camera. 1-3 reps per clip means no across-rep signal |
+| **5** | **Double unders** | **Not with pose** | n/a | n/a — **audio, ≥30 fps pose only for cadence** | Different subsystem. Defer. See D |
+
+**Read the sampling column carefully — this is the cost of the pivot.** Under barbell-first, 10 fps
+was adequate for everything except velocity (Round 1, M9). Under skill-first, **10 fps is inadequate
+for the majority of the measures**: kip lead-lag needs 30, HSPU concentric (~0.4-0.6 s) needs 30,
+handstand-walk hand cadence at 1.5-3 Hz needs 30 (10 fps gives 3-6 samples/cycle — Nyquist-adjacent,
+and aliasing produces a *confident wrong frequency*), muscle-up turnover needs 60.
+
+Per-movement notes:
+
+**1. Strict pull-up.** Rep signal `(nose_y − mean(wrist_y)) / torso_length` — body-internal, so
+camera motion and zoom cancel for free (Round 1 M7 solved by construction). Measures: rep count;
+chin-over-bar **margin** with error band (R2-1); bottom extension (elbow angle, or
+`shoulder_y − wrist_y` at maximum); kip via the four signals in R2-2; concentric-duration decay
+across reps as the proximity-to-failure signal. Dominant framing failure: **the head leaves the top
+of frame** — universal in pull-up footage, and it destroys the chin measure specifically. Caught by
+Round 1's corrected `cropped` test (M10: MediaPipe extrapolates outside [0,1], it does not pin to the
+edge). **This ships first.**
+
+**2. Handstand push-up.** Rep signal `(nose_y − mean(wrist_y)) / arm_length`; the hands are on the
+floor, so `wrist_y` conveniently *is* the floor line — no ground-plane estimation needed. Measures:
+rep count; ROM margin; lockout (elbow angle, but far elbow ran 0.71 on the Phase 0 clip — apply the
+C4 stability gate per-side and report from the better side only); kipping vs strict (HSPU kip is a
+large hip flex/extend, far bigger signal than the pull-up case); tempo. The weakness is that "head
+touches floor" is a **contact event at ~0 cm with ±2 cm measurement error** — tighter than
+chin-over-bar. Report margin, refuse inside the band, and expect a meaningful `not measurable` rate.
+
+**3. Handstand walk.** See section C. Rank depends entirely on scope: time-inverted and alignment are
+trivial and high-value; distance in metres is the hard one and it is the metric the catalog already
+promises.
+
+**4. Bar muscle-up.** See section B. Also: 1-3 reps per clip means no across-rep decay signal, so the
+proximity-to-failure mechanism that carries pull-up and HSPU does not exist here — and the population
+that can perform them is the smallest of the five. Least product value per unit of engineering.
+**Ship it fourth, with a reduced fault set.**
+
+**5. Double unders.** See D.
+
+---
+
+## B. Bar muscle-up — timing, faults, and the one that cannot be seen
+
+### Timing
+
+The full transition (peak pull → press-out) is roughly **150-300 ms**; the fast part, the wrist
+rotation and elbow-under, is **100-150 ms**.
+
+| Rate | Samples across the fast turnover | What you can do |
+|---|---|---|
+| 10 fps | 1-2 | Nothing. Not even "did a turnover happen" reliably |
+| 30 fps | 3-5 | Detect turnover, locate it in time to ±33 ms, measure pull height at initiation |
+| 60 fps | 6-9 | Quantify turnover duration; detect gross (>100 ms) left/right asymmetry |
+| 120 fps | 12-18 | Quantify asymmetry at the 30-80 ms scale where it actually lives |
+
+Subtle chicken-wing asymmetry is a **30-80 ms** inter-arm difference. At 30 fps that is 1-2 samples —
+you can see a gross one and cannot quantify anything. **60 fps is the floor for a boolean; 120 fps for
+a number.** 60 fps is a standard phone mode; 120/240 is slo-mo mode, which the user must deliberately
+select — and which is exactly the case that Round 1's C2 (real per-frame timestamps) must handle or
+every duration is wrong by 4×. **C2 is a hard prerequisite for muscle-up, not a nice-to-have.**
+
+Also motion blur: hands move at 2-3 m/s during turnover. Indoor gym lighting pushes phones to raise
+ISO rather than shorten exposure, so hands smear 15-30 px at the exact instant of interest. Landmark
+accuracy on wrists/elbows is worst precisely where the measurement is taken. Round 1's missing blur
+detection (M10 item 5) has its worst case here.
+
+### The faults, honestly assessed
+
+| Fault | Measurable? | View | Rate |
+|---|---|---|---|
+| **Insufficient pull height before transition** | **Yes — and this is the highest-value one.** `(sternum_y − wrist_y) / torso_length` at turnover initiation. Body-internal, no calibration. It is also the #1 reason people fail muscle-ups | Side | 30 fps |
+| **Early / late turnover** | **Yes.** Same measure, read at the moment elbow angle starts closing under. Ratio, no calibration | Side | 30 fps |
+| **Excessive swing / kip magnitude** | Yes. Ankle horizontal excursion / body length. Trivial | Side | 10 fps |
+| **Failure to reach lockout** | Yes, low value. Elbow angle at top | Any | 10 fps |
+| **Chicken-wing / turnover asymmetry** | **No. Not with one camera.** | — | — |
+
+### Why asymmetry is not merely hard but impossible
+
+**The view that resolves the fault is the view that occludes half of it.**
+
+- **From the side**, turnover is beautifully visible — but you see **one arm**. The other is directly
+  behind it. Asymmetry is by definition a two-arm comparison.
+- **From front or rear**, you see both arms — but during turnover the torso is rotating over the bar,
+  both arms are severely foreshortened along the optical axis, and **the bar itself occludes the
+  shoulder line at the moment of interest.** Foreshortening means the elbow-crossing event you are
+  timing is compressed into a few pixels of vertical motion, on landmarks that C4's stability check
+  will (correctly) suppress.
+
+This is not a resolution problem or a model problem. It is a projective geometry problem, and no
+frame rate or model variant fixes it. Two cameras would; the plan has one, from a camera roll.
+
+**Change:** author the `bar_muscle_up` rubric as **side view, 30 fps, pull-height + turnover-timing +
+swing**, and put chicken-wing asymmetry in the non-goals with the reason written down, so nobody
+re-adds it in six months. This is more defensible than shipping the fault everyone names and
+computing it from suppressed landmarks — which is the exact pattern that produced the phantom knee
+valgus (`context.md:230-232`) and the phantom bar tilt (`context.md:236-239`).
+
+---
+
+## C. Handstand walk — which measures survive an uncalibrated single 2D camera
+
+First, a correction the coordinator needs before anything else.
+
+### R2-3 (Major) — the Phase 0 numbers are being transferred to a movement that was not tested.
+
+The prompt cites "100% detection / 0.912 core visibility inverted — best numbers in the project" as
+support for handstand walk. `context.md:69-71` records that clip as **HSPU** — *stationary*, inverted,
+against a wall, in frame throughout, 21.6 s.
+
+A handstand **walk** adds: subject translation, a camera that must pan, motion blur on the hands
+(which are the fastest-moving landmarks and the ones that carry the step signal), and repeated
+transits of the frame edges. None of those were present in the tested clip.
+
+This is the same over-read pattern flagged in Round 1 (m15): a good number from one setup being
+carried onto a different problem. The evidence supports **HSPU**, which is why I ranked HSPU second
+and handstand walk third. It does not yet support handstand walk. Film one and measure it before
+authoring the rubric.
+
+### The measures, one at a time
+
+| Measure | Survives? | Construction | Rate |
+|---|---|---|---|
+| **Time inverted** | **Yes — trivially, exactly** | Inverted state from `sign(shoulder_y − hip_y)` with hysteresis; sum duration. View-independent, scale-independent, pan-independent. ±1 sample | 10 fps |
+| **Hip-over-shoulder alignment** | **Yes — the single most defensible form measure in this whole feature** | `(hip_x − shoulder_x) / torso_length` from front/rear. Uses the two 1.00-visibility landmark groups. Body-internal ratio | 10 fps |
+| **Banana / arch** (side view) | Yes | Shoulder-hip-ankle angle. Different fault, different view — the rubric must declare which | 10 fps |
+| **Lateral drift — hips relative to hands** | **Yes.** This is the real balance measure | `(hip_x − wrist_mid_x) / torso_length`. Body-internal | 10 fps |
+| **Lateral drift — off a straight line across the floor** | **No.** Needs a ground plane and a static camera; unrecoverable once the phone pans | — | — |
+| **Step count / cadence** | **Yes, via cadence — not via contact detection** | Do **not** try to detect hand contact (a ~0 cm event near an inferred floor plane — worst case for 2D pose). Instead take wrist y-oscillation and wrist x-alternation, get frequency by zero-crossing or FFT. Cadence × time = count. You never need to know *which* step is which | **30 fps** — cadence is 1.5-3 Hz; 10 fps gives 3-6 samples/cycle and aliases |
+| **Distance in metres** (`walk_distance_max_metres`) | **Not by px→m. Yes by a different route** | See below | 30 fps |
+
+### Distance without calibration
+
+`walk_distance_max_metres` (`plan.md:34`) is the one skill measure with a physical unit, and it is the
+worst possible case for px→m: the subject translates (so scale changes with depth), the camera pans
+(so image position is meaningless), and every objection in Round 1's C10 applies with an extra term.
+
+Construct it body-relatively instead:
+
+```
+distance ≈ steps × stride_length
+steps    = cadence × time_inverted                        (above, 30 fps)
+stride   = hand-to-hand separation at contact / body_length   → stride in body-lengths
+metres   = stride_in_body_lengths × user_height            (one-time entry, already plausible app data)
+```
+
+Everything except the final multiply is a body-internal ratio, so it is **pan-invariant,
+zoom-invariant and depth-invariant**. Error is dominated by the user's entered height and by stride
+estimation: realistically **±10-15%**. For a "how far did you walk" retest metric that is honest and
+useful — report it as "about 6 m", never "6.2 m". It is far better than anything a plate detector
+would give on a translating subject, and it costs nothing to build.
+
+**Note the shape of the result:** everything body-internal survives; nothing world-referenced does.
+That is a clean, statable rule for the whole skill rubric set, and it is also why the panning camera
+— Round 1's M7 — stops being a defect and becomes a design constraint you have already satisfied.
+
+Segmentation: the rep segmenter (V1-4) genuinely does not apply. Handstand walk needs a **state
+machine** (upright → inverted → walking → exit), not rep boundaries. That is *less* work than
+segmentation, not more, and V2-6 (`wall_handstand_hold`, `tasks.md:95-96`) already establishes the
+no-rep-segmentation path. Reuse it.
+
+---
+
+## D. Double unders — the coordinator is right to defer, for a sharper reason than the one he gave
+
+*"I told the founder this one needs audio, not pose. Am I right?"*
+
+**Yes. Defer it.** But "the pose model cannot see the rope" is not quite the reason, and the real
+reason is more useful.
+
+**There is a pose-only discriminator, and it is theoretically sound.** You do not need the rope. The
+rope passes twice per jump, so the hands must spin at 2× the jump frequency. Discriminator:
+
+```
+ratio = wrist_oscillation_frequency / jump_frequency      singles ≈ 1.0, doubles ≈ 2.0
+```
+
+Jump frequency from hip or ankle y. Wrist frequency from wrist position relative to hip. Clean in
+principle. It fails on three practical grounds, and each one alone is fatal:
+
+1. **SNR ≈ 1.** The hand in a double under travels a **3-8 cm** arc — it is mostly forearm
+   pronation. At a typical framing (athlete ~60% of a 1080-tall frame) that is **15-25 px**. Landmark
+   noise on wrists in that framing is **5-15 px**. Meanwhile the jump itself is 15-25 cm, 60-100 px.
+   **The numerator of the ratio is measured on the weakest signal in the frame and the denominator on
+   one of the strongest.**
+2. **Nyquist.** Hand oscillation in double unders is **3-5 Hz**. You need >10 Hz sampling, practically
+   **≥30 fps and preferably 60**. At 10 fps this aliases — and aliasing does not produce noise, it
+   produces a **confident wrong frequency**. That is precisely the failure class this whole feature
+   exists to avoid, arriving through the front door.
+3. **This is Round 1's C4 hallucination case in its purest form.** Elbows are pinned to the sides, the
+   hands are low-contrast against torso and shorts, and the arms barely move. The model has almost no
+   evidence and will emit a smooth, plausible, low-amplitude wrist track that is largely pose prior —
+   at high `visibility`. Every reason C4 says visibility is the wrong gate applies maximally here.
+
+**Audio is not a fallback, it is the correct sensor.** The rope strike is a sharp, loud, strongly
+periodic floor transient. An energy-envelope onset detector over `decodeAudioData` on the same `File`
+gives rope passes directly, on-device, with no model, in roughly 50 lines. Two strikes per jump =
+double under. It is **cheaper than the pose path as well as better** — which is unusual and worth
+noticing.
+
+Refinements when it is eventually built:
+- **Fuse, don't choose.** Constrain audio onset periodicity by the pose-derived jump cadence
+  (which is a strong, easy signal). Audio alone will pick up gym music, other people's ropes and
+  floor variation; audio phase-locked to a measured jump cadence will not. Same fusion argument as
+  IMU+video, and it works for the same reason.
+- **The most useful double-under measure may not be "was that a double" at all.** It is
+  **unbroken-set length and rhythm consistency** — a trip shows as a broken inter-jump interval and a
+  long ground contact, both detectable from pose at 30 fps without any rope information.
+- Audio adds a privacy surface (voices in a gym). It is processed on-device and never stored, same as
+  the video, but it needs one line in the privacy copy (`tasks.md:202-204`, V5-4) and it should not be
+  slipped in silently.
+
+**Verdict: defer, and do not put it in the same phase as the other four.** It is a different sensor,
+a different subsystem, and a different privacy statement. Treat it as its own feature.
+
+---
+
+## E. Does skill-first reorder C1-C5 + C10?
+
+Yes, substantially. Revised priority:
+
+| Round 1 finding | Barbell-first | **Skill-first** | Why it moved |
+|---|---|---|---|
+| **C1** — dimensional normalization | Critical | **Critical, now #1** | Skills are *entirely* body-internal ratios. The `normalize_by` schema rule is no longer a fix for one bad example — it **is** the measurement layer. Highest-leverage single change in the plan |
+| **C2** — real frame timestamps | Critical | **Critical, now #2** | Skill measures depend on frame rate (30-60 fps). And skill practice is **far more likely to be shot in slo-mo** — people deliberately film handstands and muscle-ups that way. Barbell users shoot normal speed. This is a specific, predictable escalation |
+| **M9** — 10 fps too coarse | Major | **Promoted to Critical** | The biggest implication of the pivot, and it goes against the coordinator. 10 fps was adequate for barbell except velocity; under skill-first it is inadequate for the *majority* of measures |
+| **C4** — visibility is the wrong gate | Critical | **Critical, rising** | Skills put limbs behind bars, rings and each other, inverted or hanging, where the model leans hardest on prior. The Phase 0 clip's own far-side limbs sat at 0.71-0.79 (`context.md:80`) — and that was the *good* clip |
+| **C5** — escalation trigger | Critical | **Critical, unchanged rank** | The "no single variant wins" evidence came from the *inverted* clip (`context.md:126`), so it is the skill case specifically. And higher fps doubles the escalation cost — **rep-window-only escalation moves from recommendation to near-mandatory** |
+| **M6** — no subject tracking | Major | **Major, rising** | Skill practice happens in classes and open gyms; walks cross the room past other athletes; a rig has several people on it. Barbell in a rack is comparatively solitary |
+| **M7** — camera motion | Major | **Retired as a defect** | The recommended fix (body-internal signals) is now mandatory for other reasons, and every surviving skill measure is pan-invariant by construction. Converts from a bug to a design rule |
+| **C3** — the `z` discriminator | Critical | **Specific case retired; general rule kept** | Front-rack vs back-rack is a barbell question. But the *rule* (never branch on MediaPipe `z`; every discriminator needs negative controls) now applies to the harder skill verification problem — see below |
+| **C10** — calibration | Critical | **Demoted to Minor. Delete V1-3** | Nothing in skills needs px→m, including handstand-walk distance (section C). Largest engineering saving in the review |
+
+### One thing that gets *harder* that the coordinator has not raised
+
+**V3-7 movement verification (`tasks.md:139-150`) is a nastier problem for skills than for barbell.**
+
+Press vs squat were "wholly separable" — different limbs, different planes. But strict pull-up,
+kipping pull-up, chest-to-bar, and bar muscle-up are **the same movement family with the same
+landmark signature**, differing only in the details you are trying to measure. Verifying "you picked
+strict pull-up and this is a strict pull-up" means using the kip discriminator as a gate — which
+Round 2 has just shown is marginal (R2-2).
+
+The good news: verification and measurement collapse into the same computation, so it costs nothing
+extra. The bad news: **a marginal discriminator used as a gate produces a marginal gate**, and a
+mis-verified clip yields a `capability_profile` write for the wrong movement.
+
+**Change:** for movement families, verification must be **three-way** — `matches` / `does not match` /
+`cannot tell`. `cannot tell` refuses the analysis (cheap under skill-first, per argument 4). Do not
+force a binary on a signal that does not support one.
+
+---
+
+## F. Occlusion and view — better for two, worse for two, and the framing problem is unchanged
+
+Not a yes/no. It splits cleanly:
+
+**Better than the barbell case:**
+- **No rack uprights.** The founder's squat clip failed at 66% detection largely because a squat-stand
+  upright crossed his body (`context.md:88`). Pull-up bars and gymnastics rigs are *thin* and
+  *horizontal at the top* — they occlude far less body area than a vertical upright at torso height.
+- **No barbell across the shoulders** obscuring the shoulder landmarks, which are the highest-value
+  landmarks in almost every skill measure.
+- **Limbs are separated**, not pressed against the torso. Hanging and inverted positions give better
+  limb-background separation and less self-occlusion than a squat with the arms against the body.
+- The Phase 0 pair points this way (100%/0.912 inverted vs 66%/0.525 racked barbell). Two clips, so
+  weak evidence — but it is his direction.
+
+**Worse:**
+- **The bar occludes the shoulder line at exactly the moment of muscle-up turnover** (section B). Not
+  a framing problem, a geometry problem.
+- **Rings**: straps occlude the forearms and, worse, create strong vertical line features across the
+  frame that affect the person detector's bbox, not just landmarks.
+- **HSPU against a wall**: the wall behind is *good* (clean background), but the athlete's own body
+  occludes the hands and head from most angles, and a low camera puts the floor line through them.
+
+**Unchanged or slightly worse — framing, which Round 1 identified as the dominant quality variable
+(`plan.md:404`):**
+- Skills go **higher** (head out of the top of frame on pull-ups and muscle-ups — the single most
+  common error in pull-up footage, and it kills the chin measure specifically) and **wider**
+  (handstand walk transiting the frame). A squat stays in one place at one height.
+
+**Net:** occlusion is **net-better for pull-up and HSPU, clearly worse for muscle-up and rings,
+neutral for handstand walk**. Framing is **no better and slightly worse**. So the coordinator gets a
+real but partial win here — and the mitigation is unchanged: the framing guide plus a strict import
+gate, which skill-first makes affordable (argument 4).
+
+---
+
+## Round 2 verdict
+
+**Skill-first is the right call, and I would make the same call.** It removes three of the four ways
+Round 1 found to ship a confidently wrong number: calibration error (gone entirely), anthropometry-
+confounded continuous depth (replaced by body-internal ratios), and the hard form of load-awareness
+(replaced by a denominator the app already stores). The fourth — hallucinated landmarks passing a
+`visibility` gate (C4) — gets *worse*, not better, and remains the top measurement risk.
+
+But it is not cheaper. **It costs 3-6× the sampling rate**, which promotes M9 to Critical, makes C2
+(real frame timestamps) a blocking prerequisite rather than a defect, worsens phone thermals and the
+"about a minute" claim, and turns **V0-5 (phone benchmark, `tasks.md:28-29`) from a measurement into a
+gate**. Run V0-5 before authoring any skill rubric; if a 30 fps rep-window pass on a phone is
+prohibitive, the skill measure set shrinks and you need to know that first, not in Phase 4.
+
+**One-line verdict: skill-first is measurably easier to be *correct* and measurably harder to be
+*fast* — and since Round 1 found four correctness defects and zero speed defects, that is the right
+trade.**
+
+Order I would build: **strict pull-up → HSPU → handstand walk (time + alignment + drift first,
+distance second) → bar muscle-up (side view, reduced fault set, asymmetry explicitly out of scope) →
+double unders never, or as a separate audio-primary feature.**

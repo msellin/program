@@ -89,9 +89,19 @@ Remaining Phase 0 items (V0-5, V0-6) are measurements, not gates.
       Joins the existing referential-integrity check that fails loudly on load.
 - [ ] **V2-4** Author `video_rubric` for **`back_squat_highbar`** (strength,
       side view, plate calibration — founder can test daily).
-- [ ] **V2-5** Author for **`strict_pullup`** (gymnastics, front view, cleanest
-      rep definition; kip detection = hip-angle variance, which also makes the
-      "strict" retest gate honest for the first time).
+- [ ] **V2-5** Author for the strict pull-up (gymnastics, cleanest rep
+      definition). **NOTE: `strict_pullup` is not a real exercise id** — the
+      library uses prefixed ids (`pu_negative_pullup_5s`, `pu_slow_tempo_pullup`,
+      …); resolve the target before authoring.
+      **Kip detection by hip-angle variance does not work — do not build it.**
+      Refuted 2026-09-01: variance confounds shape with magnitude. A linear ramp
+      has std 0.289·E, a sine 0.354·E — only 1.22× apart — so an honest 50° tuck
+      (14.44°) and a genuine 40° kip (14.14°) are 2% apart and inseparable. It
+      catches the obvious kip nobody disputes and misses the borderline cheat the
+      strict gate exists for, while occasionally failing an honest hard rep.
+      Replace with phase/shape measures at 30 fps inside the rep window: pre-pull
+      hang oscillation, sign of hip-angle change, hip-vs-vertical lead-lag, and
+      ankle horizontal excursion.
 - [ ] **V2-6** Author for **`wall_handstand_hold`** (isometric hold, timer only,
       no rep segmentation) — proves the schema generalises across kinds.
 - [ ] **V2-7** Fault → cue → regression binding, with `sets_rir` writing

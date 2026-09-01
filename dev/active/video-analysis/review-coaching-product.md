@@ -518,3 +518,537 @@ best evidence in the file. Then:
 
 The pipeline you have specified supports all of that. It just doesn't need to have
 an opinion about anybody's squat.
+
+---
+---
+
+# Round 2 — skill-first
+
+**Tomás Lindqvist-Bahri, 2026-09-01 (second pass).**
+Responding to the founder's skill-first direction and to the plan author's rebuttal.
+
+## Before anything else: the thing that settles most of this
+
+I went looking through the skill catalog to argue with the rebuttal, and found
+this already shipping in `first-strict-pullup.json`'s `drill_library`:
+
+```jsonc
+{
+  "id": "pu_video_review",
+  "name": "Self-record + review one working set",
+  "category": "gymnastics",
+  "level": 1,
+  "setup": "Record one full working set from the side. Watch it back.
+            Note ONE thing you'd change for the next set. Log the note.",
+  "cues_external_focus": ["Watch the video like you're coaching a friend"],
+  "feedback_type": "self_controlled",
+  "evidence_refs": ["chiviacowsky_wulf_2002"]
+}
+```
+
+`mu_video_review` is its twin in `muscle-up.json`: *"Record every attempt from the
+side. Watch it back. Identify the sticking point (pull, transition, or dip)."*
+
+**Terav already prescribes this feature as a drill.** It is level 1, it is in two
+shipping programs, and it cites the canonical self-controlled-feedback paper.
+That reframes the whole argument, and it reframes it in the founder's favour:
+
+- The app is not *introducing* video analysis to skill training. It is
+  **instrumenting a drill it already assigns and currently expects the user to do
+  unaided.** That is as focused-improvement as a feature gets, and it collapses
+  most of my M6 positioning objection. I withdraw M6 for skills. It stands only for
+  the barbell catalogue.
+- The drill's own instruction is **"Note ONE thing you'd change."** One. Not four.
+  The library already settled the insight-density question (my M3, question D) and
+  it agrees with me, and it is now binding on the feature: **if the human drill's
+  output is one note, the automated version's output cannot be a table of
+  verdicts.** Any design that emits more than the drill it replaces is worse than
+  the drill it replaces.
+- The drill's framing is **"like you're coaching a friend"** — generous, specific,
+  forward-looking, one thing. That is the voice spec, already written, already
+  cited. Use it.
+- `feedback_type: self_controlled` on both. My M4 was right and is now load-bearing
+  rather than pedantic: the correct interaction is the user asking, not the app
+  telling.
+
+Build the feature as **"the review drill, measured"**. Not as analysis, not as a
+grade, not as a check. It has a name in the product already.
+
+---
+
+## Where the skill-first framing genuinely defuses my objections
+
+Clean concessions. The rebuttal is right on all four of these, and I was
+barbell-shaped because the plan I reviewed was barbell-shaped — Phase 2 opened
+with `back_squat_highbar`, and I reviewed the plan in front of me. **The founder's
+direction is better than the plan I criticised.** Specifically:
+
+- **C3's load-gating problem dissolves.** I flagged "gate `warning` on set
+  intensity" as unimplementable for bodyweight movements. Correct — but under
+  skill-first that is not a gap, it is a non-requirement. There is no load to
+  confound the reading. A failed strict pull-up attempt is not "a fault caused by
+  going heavy"; it is the thing being trained. **Concede fully.**
+
+- **C5's "nobody re-films a set" collapses.** This was my strongest objection and
+  it is barbell physics: a 95 kg top set is not repeatable, so a capture failure
+  costs a week. Skill practice is 3 sets × 5 negatives, or 20 kick-up attempts, or
+  grease-the-groove singles all day. The camera stays where it is; attempt 6 is 40
+  seconds away. **Concede fully — with one carve-out in R2-C1 below.**
+
+- **"The lifter already knew the rep was shallow" inverts completely.** This is the
+  founder's best point and it is the real thesis. A 20-year lifter has proprioceptive
+  ground truth and the app is competing with it. **Someone learning a handstand has
+  none** — you cannot see your own line, you cannot feel 15° of banana, and the
+  vestibular input is actively lying to you. The information asymmetry is not
+  incidental to skill work, it *is* the skill work. And Phase 0 measured that the
+  tech is at its **best** exactly there: 100% detection, 0.912 core visibility on
+  the inverted clip versus 66% on the upright squat. The technology and the product
+  value peak on the same movement class. That is a real alignment and I did not
+  give it enough weight.
+
+- **My M1 headline was partly wrong, and the rebuttal's point 2 lands.** VBT
+  hardware does beat a phone on accuracy, the audience is small and already served,
+  and "Terav is a bar-speed app" is a worse and *broader* pitch than "Terav gets you
+  your first pull-up." I overweighted the engine argument because it was the
+  cleanest thing in the plan, not because it was the biggest thing. **Withdraw M1 as
+  a headline recommendation.** M2 survives intact and unchanged: the RPE floor bug
+  is a live 5 kg error, it is cheap, and it should ship regardless of anything here.
+  Velocity→RIR survives as a *later, separate, barbell-only* item that needs no cue
+  copy — not as the flagship.
+
+- **C4 mostly dissolves for skills.** I argued the set is the unit and per-rep
+  grading is working-out shown on screen. For a lifter doing 5×5 that holds. For
+  someone on `pu_first_strict_attempt` — `default_dose: {sets: 3, reps: 1}` — **one
+  attempt is the set**, and per-attempt is therefore the natural unit, not an
+  artefact. Concede. The residue that survives is narrow and I keep it: on
+  multi-rep skill sets (a 5-rep negative set, a 10-rep DU set) do not print five
+  rows of verdict. Print the set, plus the one attempt that differed.
+
+That is five substantial concessions. The rebuttal moved me.
+
+## Has the plan author just renamed the thing I rejected?
+
+Direct answer to the rebuttal's question 3: **no, it is genuinely a different
+product — but the change increases the trust exposure rather than reducing it, and
+the author appears to believe the opposite.** That is the crux of Round 2 and it is
+question A, so I will answer them together.
+
+---
+
+## A. Is "did it count" a different product from "here is your grade"?
+
+**Yes, materially — and it is the more dangerous of the two, not the safer one.**
+
+The distinction is real and it is not one only the author can see. A grade is an
+*opinion*: "Needs work." A verification is a *ruling*: "That one was kipped." These
+land differently in a user's head, and every difference runs the wrong way:
+
+| | Grade ("Needs work") | Verification ("Kipped — doesn't count") |
+|---|---|---|
+| Register | Opinion, arguable | Fact, adjudicated |
+| Being wrong costs | Mild irritation, easy to shrug off | The user's rep. A thing they earned. |
+| User's recourse | Ignore it | Argue with it — and they cannot |
+| Product consequence | None | Writes `capability_profile`, gates a tier, moves a retest |
+| Emotional register on the goal rep | Neutral | **Maximum** — this is the rep they have chased for four months |
+
+A grade is low-stakes wrong. A verification is high-stakes wrong. And the founder's
+target movement is the single worst place to be high-stakes wrong: `first-strict-
+pullup` tier C is literally named `tier_c_first_rep`, and its retest metric
+`strict_pullup_max_reps` has `target: 3` at week 8. The app is not judging a warm-up.
+It is standing between a person and the rep they joined for.
+
+**What happens the first time it calls a strict rep kipped.** I have watched this
+exact thing, in the review tool I built, when we shipped an automated kip detector
+for a CrossFit affiliate. Sequence, and it is always the same:
+
+1. They do not conclude "the detector has a threshold problem." They conclude
+   **the app is calling them a liar.** That is the emotional content of a false
+   negative on a verification, and no amount of "we may occasionally..." disclaimer
+   copy touches it.
+2. They re-film to prove it. Best case they win — and now they have learned that the
+   app is beatable and that its rulings are negotiable, which destroys the
+   verification's value even when it is right. Worst case it calls it kipped again,
+   and they are now in an argument with software about their own body.
+3. They stop trusting the *numbers*, not just the verdict. Dead-hang seconds, ROM,
+   everything. This is the contagion I flagged in C2 and it is worse here, because
+   verification is the feature's central claim rather than a side output.
+4. They do not complain. They stop uploading. You see it in the funnel three weeks
+   later with no ticket attached.
+
+**And here is the technical honesty problem underneath it.** "Chin over bar" sounds
+geometric and binary. It is neither. BlazePose has **no chin landmark** — you have
+nose, eyes, ears, mouth corners — and **no bar landmark at all**; the bar's height
+must be inferred from wrist position, which is itself the landmark group that scored
+**0.30/0.38 visibility** on the founder's own front-squat clip while core visibility
+was 0.96 (this is exactly the case that produced V2-8). So the "binary and geometric"
+verification is: an inferred chin, relative to an inferred bar, from a landmark
+group with known confidence collapse, thresholded at a number somebody picked.
+
+That is a measurement with error bars being rendered as a ruling. **The error bars
+are the product risk.**
+
+**Recommendation — and this is the one that makes skill-first shippable:**
+
+**Never let the app be the arbiter. Make verification a proposal.** Confirm-first
+already exists, is the core mechanic, and fits this natively — the plan applies it
+to `retest_fills` (V4-4) and then fails to apply it to the verification that feeds
+them, which is the more consequential of the two.
+
+- **Report the margin, never the boolean.** "Chin cleared the bar by about 3 cm"
+  and "chin finished about 2 cm below the bar" are both honest and both let the
+  user adjudicate. "Kipped: yes" is not honest, because the app does not know that.
+- **Asymmetric thresholds.** A *confirming* verification (it counted) may be
+  written on the app's own authority — the failure mode is generous, and generosity
+  toward a learner is a survivable error. A *disconfirming* one (it did not count)
+  must **always** go through Accept/Ignore and must never write
+  `capability_profile` unaided. Copy:
+
+  > **Rep 3 — hips moved 14 cm during the pull.**
+  > That's more swing than your other two reps. Count it as strict?
+  > **[ It was strict ]   [ Fair — that was a kip ]**
+
+  Note what that does: it is still verification, it still feeds the retest gate, it
+  still makes the `strict_pullup_max_reps` metric honest for the first time — and
+  it cannot call the user a liar, because the user has the last word. The founder's
+  goal is fully preserved. Only the adjudication moves.
+- **Never disconfirm on a low-confidence measurement.** If the landmarks the
+  verification depends on are weak, the correct output is "couldn't see the bar well
+  enough on this one" — V2-8's discipline applied to verification, which is where it
+  matters most.
+
+So: the author's reframe is genuinely better product design *and* it raises the
+trust burden. Both are true. It ships if — and only if — verification is a proposal.
+
+---
+
+## B. Novices: more valuable, more dangerous, and the resolution is counterintuitive
+
+**Both, and they do not cancel.**
+
+*More valuable*, decisively. A novice's faults are large, real, and consequential —
+15° of banana in a handstand, a chin 8 cm short, elbows flaring at 90°. Signal-to-
+noise is far better than on the experienced lifters I spent 40,000 videos on, where
+most of what a detector fires on is normal variation or a consequence of load. My
+"most detected faults are not worth mentioning" heuristic is an *expert-population*
+heuristic and I should say so plainly: it weakens considerably here. The novice
+genuinely cannot see what they did, and the thing they did is genuinely wrong.
+
+*More dangerous*, equally decisively, and for a reason the rebuttal did not raise.
+It is not mainly that novices cannot sanity-check a wrong call — though they cannot.
+It is that **novices cannot triage a correct one.** Give an experienced lifter three
+true observations and they instantly know which one matters; that filtering is most
+of what experience *is*. Give a novice three true observations and they will either
+try to fix all three at once (which makes them worse — competing attentional demands
+are how you build a stuttering, over-thought movement pattern) or fix the easiest
+one, which is rarely the limiting one.
+
+**The resolution, and it is the opposite of what "bigger information gap" suggests:**
+a less experienced audience means the app must say **fewer things, with higher
+confidence, in a fixed priority order** — not more things because there is more to
+say. The bar for surfacing goes *up* with novice audiences, not down.
+
+Concretely:
+1. **One thing per upload. Hard cap, enforced in code, not in authoring guidance.**
+   The library already says this (`pu_video_review`: "Note ONE thing").
+2. **A fixed priority ladder per movement**, authored once, so that when three
+   faults fire the app says the one that is upstream. For a pull-up: *scapular
+   initiation → ROM at the bottom → hollow/swing → ROM at the top*. Never surface
+   #3 while #1 is live. A cue given at the wrong moment makes lifters worse, and
+   for a novice "the wrong moment" mostly means "before the thing underneath it is
+   fixed."
+3. **Never contradict the program.** The user is mid-`phase_2_negatives_and_assist`;
+   the app must not tell them their swing is bad on a drill where swing is expected.
+   The fault set must be filtered by the tier they are in.
+
+---
+
+## C. Ranking the five by product value
+
+Ranked on subscription value, not difficulty. Two of the five have **no catalog at
+all** — I found no `hspu_*` or double-under exercises in `exercises.json` — so those
+are program-authoring projects before they are video projects.
+
+**1. Handstand walk / handstand hold — this is the one that earns the subscription.**
+Four things line up and they do not line up anywhere else:
+- **Maximum information asymmetry.** You have no idea what your body did upside
+  down. This is the founder's thesis in its purest form and it is unanswerable.
+- **The tech is best here, measured.** Phase 0: 100% detection, 0.912 core
+  visibility inverted, versus 66% upright. Nothing below 0.71.
+- **No natural end.** Hold seconds and walk metres are unbounded, and the catalog
+  already tiers them (`tier_a_foundation` 15 s → `tier_c_freestand` 60 s; walk
+  distance open-ended). See E — this is the only one of the five without a
+  graduation cliff.
+- **Attempts are cheap and numerous**, so C5 is fully defused.
+The one thing it lacks is a clean binary. That is fine, and it is why *measurement*
+(seconds, metres, line angle) rather than *verification* is the right output here —
+which is also the lower-risk half of the feature. Ship the measurement version here.
+
+**2. Strict pull-up — earns the trial, and it is the right movement to ship first.**
+Largest addressable population by a wide margin; cleanest rep definition; forgiving
+capture (fixed bar, indoors, subject stays in one place, camera can sit still);
+`first-strict-pullup` is a shipping program with a real tier ladder; and the
+verification makes `strict_pullup_max_reps` honest for the first time, which is a
+genuine engine win. Its weaknesses: it has a hard end (E), and it is where the
+false-kip trust bomb detonates (A). Ship it first *because* it is the best-understood
+capture problem, and ship it with the proposal mechanic from A.
+
+**3. Bar / ring muscle-up.** High emotional value, and the diagnosis is unusually
+well-posed — `mu_video_review` already names the three-way split (pull, transition,
+dip) and each is separable from landmark geometry. But the population is small, it
+requires a pull-up first, and the transition is fast and self-occluding. Best
+positioned as the **graduation destination** from #2 rather than a standalone entry.
+
+**4. Double unders.** More interesting than it looks: hundreds of attempts per
+session (capture is free), trip detection is trivial, and the real diagnosis — jump
+height vs. rope speed vs. elbow position — is straightforwardly measurable. But it
+is a three-week problem with low status; nobody subscribes for months to get it, and
+the rope may not be trackable at 10 fps anyway. **A good retention toy, not a
+product.** No catalog exists.
+
+**5. Handstand push-up.** Smallest population, already advanced, wall-dependent
+capture with heavy self-occlusion, and no catalog. ROM/deficit is measurable but the
+audience that wants it is the audience least in need of a camera. Last.
+
+**Which earns a subscription:** *handstand walk*, on unboundedness and asymmetry.
+*Strict pull-up* earns the sign-up. Build pull-up first, but do not let the roadmap
+forget that pull-up is the acquisition movement and handstand is the retention one.
+
+---
+
+## D. Attempt 40. Is "not yet — you're 4 cm short at the top, same as last week" enough?
+
+**No. And that specific sentence is the single worst thing this feature could say.**
+Three defects, and the third is the important one.
+
+1. **It is a repeated no.** Attempt 40 means they have been told "not yet" thirty-
+   nine times. The fortieth from a machine, with a number attached, is not neutral
+   information — it is a plateau report, delivered without a human to soften it, to
+   someone who is already the most likely person in your funnel to quit this week.
+2. **"Same as last week" is the quit trigger.** It is the app volunteering the
+   conclusion that the training is not working. Even when true, that is a coach's
+   sentence, delivered in person, with a plan attached. Never a notification.
+3. **It measures the wrong thing, and this is the actual coaching error.** Progress
+   toward a first strict pull-up does not appear at the top of the rep. The last
+   4 cm is the last thing to arrive; it can sit unchanged for six weeks while real
+   adaptation is happening everywhere else. What is *actually* moving at attempt 40
+   is: dead-hang time, time-under-tension in the 90° sticking zone, eccentric
+   control on the 5 s and 10 s negatives, scapular initiation depth, rep 1-to-5
+   consistency. The library knows this — it is why `first-strict-pullup` tracks
+   `dead_hang_max_seconds` as a **separate retest metric with its own tier targets**
+   and why the drill library carries `pu_isometric_mid_hold` at level 4.
+
+**The rule: surface the measure that is moving, not the measure that defines the
+goal.** The goal measure is a binary that stays 0 for months and then becomes 1.
+A binary that reads 0 for four months is not feedback, it is a countdown to churn.
+
+**Minimum useful output for attempt 40, and it is two lines:**
+
+> **Attempt 40 · not yet — closest one yet.**
+> You held the hardest part (elbows near 90°) for **1.9 s** before it stalled.
+> Four weeks ago that was 0.8 s. That's the number that turns into the rep.
+
+That is: one verified count, one number that moved, one sentence saying why it
+matters. It is honest — it does not pretend they got it. It is specific. It is
+falsifiable. And critically it gives a *reason to film attempt 41*, which the "4 cm
+short, same as last week" version does not.
+
+**Answering the density question generally:** minimum viable insight density for
+skill work is **one verified count plus one moving number, per upload**, with a
+qualitative observation at most once a week. If nothing moved, say nothing about
+progress — report the count and stop. Silence is a legitimate and underused output.
+The feature dies from over-reporting long before it dies from under-reporting, and
+the library's own drill spec ("Note ONE thing") is the ceiling.
+
+---
+
+## E. Does a skill feature have a natural end? Churn or graduation?
+
+**It has an end, it is a graduation, and the graduation is where the churn actually
+happens — not at the end itself.**
+
+Four of the five movements terminate. `first-strict-pullup` explicitly does: the
+program is 8 weeks with four tiers, and `tier_d_volume` targets 8 reps. Someone who
+gets their pull-up and then gets to 8 has finished. That is a *success*, and Terav's
+positioning — pick ONE focus, runs alongside your existing week — is inherently
+serial. A program that ends is on-brand. The full-plan competitors are the ones that
+must never end.
+
+The risk is not the ending. **It is the gap after it.** The dangerous moment is the
+session where the app says "you did it" and then has nothing queued. That is a
+natural cancellation point, it arrives at peak goodwill, and peak goodwill is
+exactly when people tidy up their subscriptions.
+
+**Recommendations:**
+1. **The confirming retest must carry the next program as a proposal, in the same
+   moment.** Existing mechanic, no new surface: *"Strict pull-up confirmed — 3 reps.
+   That's tier C cleared. Ring muscle-up starts from here. Start it?"*
+   Accept / Ignore. The catalog already supports it — `pu_full_pullup_volume` at
+   level 3 is a prerequisite for `mu_false_grip_pullup`, so pull-up → muscle-up is a
+   real, data-backed path and not a marketing pivot.
+2. **Do not let the celebration be a page they navigate away from.** The graduation
+   proposal and the achievement are the same screen.
+3. **Handstand is the anti-churn track** precisely because it does not end — hold
+   seconds and walk distance keep going. Weight it accordingly in the roadmap (C).
+4. Video history compounds across programs: the pull-up clips from month one are the
+   comparison material for month six. That is a retention asset the feature creates
+   for free, and V4-6 already anticipates it.
+
+---
+
+## F. `cues_corrective[]` — what it must contain, and four strings for the strict pull-up
+
+**What the field must contain that the other two do not.** Recapping the structural
+problem for gymnastics specifically: `cues[]` is empty on **0 of 40** gymnastics
+exercises, so under skill-first the binding problem from C1 is not 70% — it is
+**total**. Every string will be new. That is the authoring cost, stated honestly.
+
+`cues_external_focus[]` cannot be repurposed, and the pull-up strings prove it as
+well as any I found:
+
+- *"Pull your chin toward the top corner of the ceiling"* (`pu_band_pullup_heavy`)
+- *"Pretend two ropes attach to your elbows and pull the elbows down to your ribs"*
+  (`pu_isometric_mid_hold`)
+- *"Move like the bar is soft and you don't want to break it"* (`pu_slow_tempo_pullup`)
+
+These are good cues. Their mechanism is *anticipatory attention* — they work by
+giving attention somewhere to go **during** the rep. Played back afterwards they
+become either nonsense ("you did not move like the bar was soft") or an accusation.
+They are also load-bearing in the live session and must not be edited to serve video.
+
+A corrective string is a different object with five requirements:
+1. **States what the body did**, in the past tense, as an observation not a judgement.
+2. **Is tied to the measure that fired it**, so the number and the sentence agree.
+3. **Carries an action for the next attempt**, not for the one already filmed —
+   otherwise it is entertainment, per my original brief.
+4. **Contains no imagery.** Imagery is for before; observation is for after.
+5. **Names one thing.** Never a compound.
+
+Voice spec is already in the repo: *"like you're coaching a friend."*
+
+**Four `cues_corrective[]` strings for the strict pull-up, scoped for authoring:**
+
+```jsonc
+"cues_corrective": [
+  // fault: no_scap_initiation — shoulder depression < threshold before elbow flexion
+  "The arms started pulling before the shoulders did. Next attempt, get the
+   shoulder blades down first — the arms have more to give once they do.",
+
+  // fault: partial_bottom — elbow angle at start < full extension
+  "You started from a slightly bent arm, so this was a shorter rep than the
+   last one. Next set, settle into a full hang and pause a beat before you go.",
+
+  // fault: swing / kip — hip horizontal travel above threshold
+  "Your hips swung about 14 cm on the way up. Some of that pull came from the
+   swing. Squeeze the glutes and hold the legs still before the next one.",
+
+  // fault: top_rom_short — chin margin below bar at peak
+  "Chin finished about 3 cm under the bar. That's the closest of the set —
+   the last bit comes from the elbows finishing, not from pulling harder."
+]
+```
+
+Four strings, one movement, roughly twenty minutes of authoring. Note what none of
+them do: none assign a quality, none say "needs work", none say "wrong", none stack
+two corrections, and the fourth **delivers a miss as progress** without lying about
+it. That fourth one is the template for the D problem.
+
+Scope estimate for a skill-first v1: strict pull-up (4), wall handstand hold (3-4:
+line angle, shoulder opening, rib flare), handstand walk (3: step length, hip pike,
+drift). **Roughly 11 strings.** That is an afternoon, and it is the entire coaching
+deliverable. Add `cues_corrective[]` to the schema and to the referential-integrity
+validator alongside `cue_ref`, and make a `video_rubric` illegal on an exercise that
+lacks it — same fail-loudly discipline as CLAUDE.md requires elsewhere.
+
+---
+
+## G. What still blocks, independent of movement class
+
+Ranked. Two are new to Round 2 and both come from the verification reframe.
+
+### R2-C1 (Critical, NEW) — verification must be a proposal, not a ruling
+Full argument in A. The app must not write a *disconfirming* verification to
+`capability_profile`, a retest metric, or a tier gate on its own authority. Report
+margins, not booleans; asymmetric thresholds (generous confirmations may auto-write,
+disconfirmations always Accept/Ignore); never disconfirm on low-confidence
+landmarks. **This is the single condition on which I would ship or not ship the
+feature.** Everything else is fixable after launch.
+
+### R2-C2 (Critical, carried and worsened) — zero corrective copy exists for gymnastics
+C1 from Round 1, restated for the new direction: `cues[]` is empty on all 40
+gymnastics exercises and 21 of 25 skill exercises. Under skill-first, 100% of the
+feedback copy is new. This is not a blocker on the *idea* — it is ~11 strings for a
+three-movement v1 (F) — but it is a blocker on the plan's central cost claim, and
+the plan and tasks still assert "no new coaching copy anywhere in this feature"
+(V4-2). Update the documents before Phase 2, or the authoring work will be
+discovered mid-build and cut.
+
+### R2-C3 (Critical, carried) — the verdict scale still has to go
+C3/C4 from Round 1 survive the reframe, softened. "Needs work" has no place in a
+skill product — telling someone on attempt 40 that their failed attempt Needs Work
+is the most demoralising sentence the app could construct. The rebuttal's own
+reframe removes it, which I read as agreement. Two residues to watch:
+- **"Not yet" is still a verdict on the person.** Pair it with the moving number
+  every single time (D) or drop it.
+- **Rename "Not measurable" → "Not visible from this angle."** Unchanged from R1.
+
+### R2-M1 (Major, carried, downgraded) — capture still fails, just less expensively
+The rebuttal defuses the *cost* of a bad capture, not its *frequency*. The founder
+filmed the wrong angle on two of three clips, and handstand capture is objectively
+harder than squat capture: wide frame, camera low, full body inverted, moving
+laterally across a gym floor, often with other people in shot. Cheap retries mean
+the failure mode changes from "user quits" to "user gets annoyed on attempt 3" —
+better, not solved. Keep the R1 recommendations: **never fully block** (always
+return whatever was measurable — a rep count from a bad clip still builds trust),
+and **degrade after two consecutive failures** rather than issuing a third tip.
+
+### R2-M2 (Major, NEW) — threshold honesty in the data model
+There is no chin landmark and no bar landmark. Every "did it count" threshold is an
+inference with an error term, and the plan's schema currently has no place to put
+one — `when: "depth_ratio > 1.02"` is a bare comparison. Add a **confidence band**
+to any measure feeding a verification, and require the rubric to declare the
+landmark group each verification depends on (V2-8 already does this for suppression;
+verification needs it more). A verification computed from wrists at 0.30 visibility
+must not render at all.
+
+### R2-M3 (Major, carried, now strengthened by the repo) — honour `feedback_type`
+M4 from Round 1, and `pu_video_review` / `mu_video_review` settle it: both are
+`self_controlled`, both cite `chiviacowsky_wulf_2002`. On self-controlled movements
+the analysis completes and shows measurements; the interpretation sits behind an
+explicit tap. This is now supported by the library's own citations, so it costs a
+conditional and buys a defensible coaching stance.
+
+### R2-M4 (Major, carried) — ship the RPE fix (V-ADJ-1) regardless
+Unaffected by any of this. Live bug, 5 kg error, cheap.
+
+### Withdrawn from Round 1
+- **M1 headline** ("build VBT, never say form") — withdrawn as the headline; the
+  rebuttal's competitive point is correct. Velocity survives as a later barbell-only
+  item.
+- **M6 positioning** — withdrawn for skills. `pu_video_review` already ships as a
+  prescribed drill; instrumenting it is focused-improvement, not scope creep. Stands
+  for the barbell catalogue.
+- **C4 per-rep unit** — largely withdrawn for skills, where one attempt is the set.
+  Narrow residue kept for multi-rep skill sets.
+
+---
+
+## Verdict
+
+**Ship it, skill-first, with one hard condition.**
+
+The founder is right and I was reviewing the wrong plan. The barbell framing made
+this look like a form-check feature competing with a saturated category on a movement
+class where the user already has ground truth. Skill-first inverts every one of those:
+maximum information asymmetry, cheap retries, no load to confound the reading, the
+technology measurably at its best on inverted bodies, and — decisively — a drill the
+catalog **already prescribes and cites**, which the app currently expects the user to
+perform unaided.
+
+The condition is R2-C1. **Verification is a proposal, never a ruling.** Confirm-first
+is already the mechanic, it already applies to the retest write, and it must apply one
+step earlier to the count that feeds it. Get that wrong and the failure is not a bad
+review — it is a user who was told the rep they had chased for four months did not
+count, by software, with no appeal. That user does not complain. They stop uploading,
+and the feature dies quietly with a good accuracy number.
+
+Get it right and this is the best thing in the roadmap.
