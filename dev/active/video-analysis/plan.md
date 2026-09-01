@@ -151,11 +151,14 @@ support for that movement, and the capture entry point does not render.
     "min_amplitude_frac": 0.12          // of standing height, rejects fidget
   },
   "measures": [
-    { "id": "depth_ratio",       "kind": "ratio",    "of": ["hip_y","knee_y"], "at": "bottom" },
+    { "id": "rom_deficit",       "kind": "distance", "of": ["chin_proxy","bar_proxy"], "at": "top",
+      "normalize_by": "forearm", "sample_fps": 30,
+      "needs_landmarks": ["nose","l_wrist","r_wrist"] },
     { "id": "torso_angle_min",   "kind": "angle",    "of": ["shoulder","hip","vertical"], "unit": "deg" },
     { "id": "concentric_ms",     "kind": "duration", "phase": "concentric" },
     { "id": "concentric_vel",    "kind": "velocity", "unit": "m/s", "needs": "calibration" },
-    { "id": "knee_valgus_max",   "kind": "angle",    "view": "front", "optional": true }
+    { "id": "hip_swing_max",     "kind": "distance", "normalize_by": "shoulder_to_ankle",
+      "sample_fps": 30, "view": "side", "optional": true }
   ],
   "faults": [
     { "id": "shallow",       "when": "depth_ratio > 1.02",              "severity": "warning", "cue_ref": 0 },
@@ -174,7 +177,26 @@ Notes:
 - `when` expressions stay **machine-evaluable — conditions, not prose**, per
   CLAUDE.md. Same narrow-parser discipline as `retest-evaluator.ts`'s
   `source_ref`: a small closed grammar, no arbitrary code from data.
-- `cue_ref` is an **index into that exercise's existing `cues[]`**. No new copy.
+- `normalize_by` is **mandatory on every positional measure.** A raw ratio of two
+  normalised image coordinates is neither translation- nor scale-invariant:
+  `hip_y/knee_y` scores 0.714 or 0.750 for the identical posture depending on
+  where the athlete sits in frame. The validator rejects a positional measure
+  without it.
+- `sample_fps` is the rate required **inside the rep window**, not across the
+  clip. The clip is scanned at 10 fps to find windows; only the windows are
+  re-sampled. Whole-clip 30 fps is unaffordable and unnecessary.
+- `needs_landmarks` drives per-measure suppression (V2-8). A clip-wide confidence
+  floor cannot catch a measure built on the two weakest landmarks in an otherwise
+  excellent clip.
+- **No measure may use MediaPipe's `z`.** It is a regressed pose prior, not
+  depth. The front-rack check that appeared to work measured +0.38, which is 3.1×
+  the athlete's shoulder width — an implied 124 cm bar-to-shoulder offset. Right
+  answer, wrong mechanism, and never run against a negative control.
+- `cue_ref` indexes the exercise's **`cues_corrective[]`** — a field that does not
+  yet exist and whose content must be authored. `cues[]` is populated on only 39
+  of 133 exercises and on **0 of 40 gymnastics**, and its strings are pre-lift
+  instructions, some of them one person's clinical constraints. Binding to it
+  would have told a user with a shallow squat about shoulder retroversion.
 - `sets_rir` lets a velocity fault write the reps-in-reserve the RPE picker
   currently cannot express (see "Why this matters for the engine").
 - `retest_fills` is what closes the loop with `physical_test` metrics.
@@ -198,41 +220,78 @@ over fired faults, and the improvement text is the exercise's own `cues[]`.
 }
 ```
 
-### The verdict scale — derived, never authored
+### Margins, not verdicts — revised 2026-09-01
 
-There is no per-movement quality scale, and there must not be one. `depth_ratio
-0.95` and `hold_seconds 42` share no units, so nothing can rank them against each
-other. What *is* comparable across every movement is **which faults fired and at
-what severity** — and `severity` already exists on the fault object.
+The first draft of this section specified a Good / OK / Needs work scale. **Two
+independent expert reviews rejected it, from different directions, and they were
+right.** What replaces it:
 
-| Verdict | Rule |
+**Report the margin with its error band. Never the boolean.**
+
+Not *"kipped ✗"* but *"hips swung about 14 cm — some of that pull came from the
+swing."* Not *"chin over bar ✓"* but *"chin finished about 3 cm under the bar.
+That's the closest of the set."*
+
+Three reasons, all of which have to hold at once:
+
+1. **A boolean flips catastrophically at the threshold.** A margin degrades
+   gracefully; a verdict inverts on a millimetre. Every skill fault worth
+   reporting sits on a continuum, and the borderline case is exactly the one the
+   user will dispute.
+2. **A verification is a ruling, not an opinion.** A grade is low-stakes wrong —
+   the user shrugs. A verification writes `capability_profile`, gates a tier, and
+   lands on the rep they have chased for four months. When it calls a strict rep
+   kipped, the user does not conclude "threshold problem", they conclude the app
+   is calling them a liar — and trust contagion takes the numbers down with it.
+3. **The landmarks cannot support the boolean anyway.** BlazePose has 33
+   landmarks and **no chin and no bar**: head coverage is nose, eyes, ears and
+   mouth corners. "Chin over bar" is an inferred chin measured against an
+   inferred bar derived from wrists — the landmark group that scored 0.30/0.38
+   visibility on the founder's own clip. The most consequential call the feature
+   could make would rest on its weakest measurement.
+
+**Asymmetric confidence.** A generous confirmation may auto-write. A
+disconfirmation must go through Accept / Ignore. The app is allowed to say "that
+counted" on its own; it is not allowed to say "that didn't" without the user
+agreeing. This is confirm-first applied where it matters most.
+
+**The three questions the output answers**, none of which needs a quality scale:
+
+| Question | Skill answer |
 |---|---|
-| **Good** | No faults fired |
-| **OK** | Only `hint`-severity faults fired |
-| **Needs work** | One or more `warning`-severity faults fired |
-| **Not measurable** | The rep exists but its measures were suppressed (see V2-8) |
+| Did it count? | Margin against the standard, with its band — never a bare ✓/✗ |
+| How close was I? | ROM deficit on the failed attempt, seconds held, distance walked |
+| Better than last week? | The same measure over time |
 
-Movement-agnostic by construction: a handstand hold and a front squat both land
-on it, because each rubric declares its own faults and the scale only reads
-severity. Adding a movement adds faults, never a new scale.
+That is verification and tracking, not grading. It also means adding a movement
+adds measures, never a new scale.
 
-Two rules that fall out and are easy to get wrong:
+**"Not measurable" stays a first-class outcome** — a rear-view clip cannot
+support depth no matter how good the lift was.
 
-- **Per-rep and per-set verdicts are separate.** Depth is a property of one rep.
-  Velocity decay only exists as a comparison *across* reps and has no per-rep
-  value. Do not project set-level faults onto individual reps — the 2026-09-01
-  front squat should read *rep 1 good, rep 2 good, set-level hint: slowed 15%
-  through the same point both reps*, not *rep 2 needs work*.
-- **The verdict must know how heavy the set was.** A grinding final rep at 95%
-  is what a maximal rep looks like, not a technique failure. Labelling it "needs
-  work" is wrong and it punishes the user for training hard — the opposite of
-  what a focused-improvement app should do. Either gate `warning` severity on set
-  intensity, or carry it in the copy ("form held to the last rep — expected at
-  this load"). **This is a correctness requirement, not a tone preference.**
+**The unit is the attempt, not the rep.** For skills, one attempt usually *is*
+the set. Per-rep grading created five chances to be wrong where one was needed.
 
-`"Not measurable"` is a first-class verdict, not an error state. The 2026-09-01
-run showed it will be common: a rear-view clip cannot support depth or torso
-angle no matter how good the lift was.
+**Load-gating is retired.** It was written as a correctness requirement for
+barbell — a grinding rep at 95% is not a technique failure. Bodyweight skills
+have no intensity to gate on, so the problem disappears with the movement class.
+
+### The app must never push an analysis
+
+`hs_video_review` in `handstand-walk.json` is annotated *"User taps to review a
+recorded attempt. Never auto-shown."* `pu_video_review`, `mu_video_review` and
+`hs_video_review` all carry `feedback_type: self_controlled` and cite
+`chiviacowsky_wulf_2002`: self-controlled feedback schedules outperform forced
+ones. `hs_video_review` even has a retest metric —
+`video_review_self_select_frequency`, reviews per week, higher is better.
+
+**The app already prescribes this feature as a manual drill and already decided
+the user must be the one to ask for it.** Auto-surfacing an analysis after every
+set would contradict the citation the drill rests on. Pull, never push.
+
+That the drills exist at all is the demand evidence: three shipping programs tell
+the user to record and review themselves, unaided. This feature automates a drill
+the catalog already asks for.
 
 ### Capture feedback — telling the user how to film better
 
@@ -455,10 +514,15 @@ still frames."**
 | Bilateral occlusion in side views | Medium | Far-side limbs ran 0.71-0.79 vs near-side 0.95-0.99. Fine for single-side measures; any asymmetry measure needs `view: front`/`rear` and a both-sides-visible gate |
 | `getUserMedia` flaky in iOS Home Screen PWAs | — | **Removed from v1 scope.** Only returns if in-app camera ships in v2 |
 | Occlusion (rack uprights, rings out of frame) | Medium | Framing overlay; reject clips below landmark-confidence floor rather than emit garbage |
-| Calibration error → wrong velocity | Medium | Require a plate in frame for velocity measures; degrade gracefully to tempo-only |
+| ~~Calibration error → wrong velocity~~ | **RETIRED** | Calibration deleted. The RIR claim is a within-clip ratio, so scale cancels; absolute velocity is not a skill-first measure |
+| Sampling rate: 10 fps aliases skill measures | **High — the price of the pivot** | Two-rate sampling (10 fps scan, 30-60 fps inside windows). V0-5 phone benchmark is now a **gate** on Phase 1 |
+| Hallucinated landmarks at high `visibility` | **High** | `visibility` scores presence, not positional accuracy. Gate on rigid-segment-length CV, jerk outliers and bilateral disagreement; `visibility` is the weakest of three filters. Bars, rings and inversion maximise reliance on the model prior |
+| A wrong verification is read as an accusation | **High** | Margins with error bands, never booleans. Disconfirmations go through Accept/Ignore; only generous confirmations auto-write |
+| No corrective copy exists for gymnastics | **High** | 0 of 40 gymnastics exercises have `cues[]`. `cues_corrective[]` must be authored before Phase 2 can bind anything |
+| Founder-personal clinical notes in shared cues | **Live, unowned** | `back_squat_highbar.cues[0]` names shoulder retroversion and is used by the catalog-public `concurrent-strength-maintenance`. Predates this feature; still shipping |
 | Scope creep into "AI coach" | **High** | One video = one exercise. No movement classification. No LLM in the hot path |
 | Model download (~6-9 MB) on mobile data | Low | Service-worker cache, fetch on first use behind a prompt |
-| Battery / thermals | Low | 10 fps sampling, not 30 |
+| Battery / thermals | **Medium, raised** | Two-rate sampling keeps the 30-60 fps pass inside rep windows only |
 
 ---
 

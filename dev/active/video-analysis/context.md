@@ -278,6 +278,79 @@ browser tools. Range support in the server matters; the 2026-08-31 lesson about
 `.claude/launch.json` gained a `pose-spike` entry during the run and was
 restored afterwards.
 
+## Direction change 2026-09-01 — skill-first, margins not verdicts
+
+Two expert reviews (`review-cv-biomech.md`, `review-coaching-product.md`, two
+rounds each) plus a founder decision. `plan.md` and `tasks.md` rewritten to match.
+
+**The pivot: skill-first, not barbell-first.** Founder: *"most things why people
+want personal trainer is to have someone look how they perform some movements and
+then correct them."* Both reviewers, working independently, endorsed it — most of
+their hardest round-1 objections were barbell-specific and invert on skills (no
+load to gate on, skill retries are free so re-filming is cheap, and the user
+genuinely cannot see what their body did upside down).
+
+**The demand evidence was already in the repo and nobody had looked.**
+`pu_video_review`, `mu_video_review` and `hs_video_review` ship in the
+first-strict-pullup, muscle-up and handstand-walk programs. All three are
+`feedback_type: self_controlled` citing `chiviacowsky_wulf_2002`;
+`hs_video_review` is annotated *"Never auto-shown"* and carries the retest metric
+`video_review_self_select_frequency`. The catalog already prescribes this feature
+as a manual drill **and already decided the user must ask for it.** Pull, never
+push — see V4-9.
+
+**Build order:** strict pull-up → HSPU → handstand walk → bar muscle-up (reduced
+fault set) → double unders separately or never.
+
+### What was refuted, with the arithmetic
+
+- **Kip detection by hip-angle variance does not work.** Verified: a ramp has
+  std 0.289·E, a sine 0.354·E — 1.22× apart — so an honest 50° tuck (14.44°) and
+  a real 40° kip (14.14°) are 2% apart. It catches the obvious kip nobody
+  disputes and misses the borderline cheat the strict gate exists for. This was
+  the single technical claim the pull-up-first argument rested on.
+- **`depth_ratio` as `hip_y/knee_y` is dimensionally invalid.** The identical
+  posture scores 0.714 or 0.750 depending on frame position. Same error ran
+  through the "% of frame" hip-travel discriminator above. Normalised against
+  shoulder-to-ankle the press/squat separation *widens*: 5-6.5% vs 44.4%.
+- **The `wrist.z - shoulder.z` front-rack check was right by the wrong
+  mechanism.** +0.38 is 3.1× shoulder width — an implied 124 cm bar-to-shoulder
+  offset, physically absurd. MediaPipe `z` is a regressed pose prior, not depth,
+  and no back-squat negative control was ever run. `z` is now banned from rubrics.
+- **"Rep 2 was 15% slower" was over-precise.** At 10 fps each boundary is ±0.1 s,
+  so 1.30 s and 1.50 s put the ratio anywhere in 1.00-1.33.
+- **The Phase 0 numbers were over-read twice.** 100% / 0.912 was a *stationary*
+  handstand push-up. Transferring it to the handstand **walk** is unjustified —
+  locomotion is untested.
+- **`visibility` is the wrong confidence signal.** It scores presence and
+  occlusion, not positional accuracy. The failure that matters is an
+  occluded-but-hallucinated landmark at visibility 0.9.
+
+### What changed structurally
+
+- **Calibration (V1-3) deleted.** The RIR claim is a within-clip ratio, so scale
+  cancels exactly. Budget moved to two-rate sampling (V1-9).
+- **V0-5 promoted from measurement to gate.** Skill measures need 30 fps inside
+  rep windows, 60 for a muscle-up turnover — 3-6× the barbell assumption.
+- **Verdict scale replaced by margins with error bands.** Both reviewers landed
+  there independently: a boolean flips catastrophically at threshold, a
+  verification is a *ruling* not an opinion, and BlazePose has no chin and no bar
+  landmark, so "chin over bar" would rest on the weakest landmarks in the frame.
+  Nothing boolean is written into `capability_profile`.
+- **"No new coaching copy" is retired as false.** 0 of 40 gymnastics exercises
+  have `cues[]`. `cues_corrective[]` must be authored (V2-0) and blocks Phase 2.
+- **Muscle-up asymmetry and double unders moved to non-goals**, each with the
+  geometric or signal-processing reason recorded so nobody re-adds them.
+
+### Unowned and still live
+
+`back_squat_highbar.cues[0]` names the founder's shoulder retroversion and
+`cues[2]` his right shoulder; `front_squat.cues[2]` likewise. Both exercises are
+used by `concurrent-strength-maintenance`, which is catalog-public in
+`manifest.json` (only `anterior-hip-rebuild` is `personal: true`). Any beta user
+on CSM sees one person's clinical notes as generic coaching copy today. This
+predates the video feature and is not fixed — a spawned task for it was deleted.
+
 ## Open / next steps
 
 1. **Phase 0 is done and passed** (see verdict above). Phase 1 is unblocked.

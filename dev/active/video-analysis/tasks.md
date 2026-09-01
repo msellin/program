@@ -25,8 +25,12 @@ Remaining Phase 0 items (V0-5, V0-6) are measurements, not gates.
       - inverted ≥0.6 → handstand ships in v1
       - inverted <0.6 → handstand needs a non-skeleton fallback (track feet +
         wall line), and **strict pull-up becomes movement #1**
-- [ ] **V0-5** Time a full 59 s clip at 10 fps sampling on a real phone, not a
-      laptop. Confirms the "about 30 seconds" claim in the UX copy is honest.
+- [!] **V0-5** **GATE on Phase 1 — do this before authoring any rubric.** Time a
+      full clip on a real phone, not a laptop, at **both** rates: 10 fps across
+      the clip, and 30 fps inside rep windows (60 fps for a muscle-up turnover).
+      Skill measures need 3-6× the barbell plan's compute; if a phone cannot
+      afford it, the rubrics cannot be authored as written. Was a measurement,
+      promoted to a gate 2026-09-01.
 - [x] **V0-6** — done 2026-09-01. float16 sizes: **lite 5.5 MB, full 9.0 MB,
       heavy 29.2 MB.** Service-worker caching still to verify.
 - [ ] **V0-7** Verify each model variant caches cleanly in the existing service
@@ -49,9 +53,35 @@ Remaining Phase 0 items (V0-5, V0-6) are measurements, not gates.
 - [ ] **V1-2** `lib/video/decode.ts` — `<video>` + `canvas` +
       `requestVideoFrameCallback`, sampling at 10 fps (not 30 — 3× cheaper and
       ample for rep counting, depth and hold timing).
-- [ ] **V1-3** `lib/video/calibrate.ts` — px→m. Largest detected circle = 450 mm
-      bumper; fallback to body height from landmarks; else `null` and velocity
-      measures degrade out rather than lying.
+- [x] **V1-3** ~~`lib/video/calibrate.ts` — px→m from plate diameter~~ —
+      **DELETED 2026-09-01, not built.** The Hough detector carries 13-27%
+      out-of-plane scale error → absolute velocity at ±15-30%, too loose for
+      load-velocity anchors. And the RIR claim that justified it is a *within-clip
+      ratio*, so the scale factor cancels exactly and never needed calibrating.
+      Handstand-walk distance has a calibration-free construction (cadence ×
+      stride-in-body-lengths × user height, ±10-15%). Budget moved to V1-9.
+- [ ] **V1-9** **Two-rate sampling.** Scan the clip at 10 fps to locate rep
+      windows, then re-sample *inside* those windows at the rate the rubric's
+      `sample_fps` demands (30 fps for pull-up/HSPU/handstand-walk cadence, 60
+      for muscle-up turnover). Whole-clip 30 fps is unaffordable and unnecessary.
+      Hand cadence at 1.5-3 Hz aliases below 30 fps into a **confident wrong**
+      frequency, not into noise.
+- [ ] **V1-10** **Real frame timestamps.** Take time from
+      `requestVideoFrameCallback`'s `mediaTime` and honour the rotation matrix;
+      never assume uniform frame spacing. Detect and flag variable frame rate and
+      slow-motion capture — skill users deliberately shoot slo-mo, and an
+      unnoticed 8× factor makes every tempo and cadence silently wrong with no
+      visible symptom.
+- [ ] **V1-11** **Body-scale normalisation, enforced by the validator.** No
+      positional measure may be a raw ratio of normalised image coordinates:
+      `hip_y/knee_y` gives 0.714 or 0.750 for the identical posture depending on
+      where the athlete sits in frame. Every positional measure declares
+      `normalize_by` (femur, shoulder-to-ankle, hip width) and is rejected
+      without it. Skill measures are almost entirely body-internal ratios, so
+      this is the measurement layer, not a fix for one bad example.
+- [ ] **V1-12** **Subject tracking across frames.** A spotter, a mirror
+      reflection, or someone walking through must not switch the skeleton
+      mid-clip. Both founder clips had a second person in frame.
 - [ ] **V1-4** `lib/video/segment.ts` — rep segmentation from a 1-D signal, with
       hysteresis and a minimum amplitude so a shuffle or a re-grip is not a rep.
       Emits `{repIndex, tStart, tBottom, tEnd}`.
@@ -87,8 +117,16 @@ Remaining Phase 0 items (V0-5, V0-6) are measurements, not gates.
 - [ ] **V2-3** Validator: `cue_ref` in range of that exercise's `cues[]`;
       `retest_fills.metric_id` resolves against the program's `retest_metrics`.
       Joins the existing referential-integrity check that fails loudly on load.
-- [ ] **V2-4** Author `video_rubric` for **`back_squat_highbar`** (strength,
-      side view, plate calibration — founder can test daily).
+- [ ] **V2-0** **Author `cues_corrective[]`.** The field does not exist and
+      neither does its content. `cues[]` is populated on 39 of 133 exercises and
+      **0 of 40 gymnastics**; 87 exercises use `cues_external_focus[]`. Existing
+      strings are pre-lift instructions and do not survive repurposing as
+      post-hoc feedback ("Move like the bar is soft" → "You did not move like the
+      bar was soft"). ~11 strings covers a three-movement v1. **Blocks every
+      other Phase 2 task.**
+- [ ] **V2-4** Author `video_rubric` for the **strict pull-up** — movement #1.
+      Resolve the real exercise id first (`strict_pullup` does not exist; the
+      library uses `pu_*` prefixes). 30 fps inside the rep window.
 - [ ] **V2-5** Author for the strict pull-up (gymnastics, cleanest rep
       definition). **NOTE: `strict_pullup` is not a real exercise id** — the
       library uses prefixed ids (`pu_negative_pullup_5s`, `pu_slow_tempo_pullup`,
@@ -102,8 +140,18 @@ Remaining Phase 0 items (V0-5, V0-6) are measurements, not gates.
       Replace with phase/shape measures at 30 fps inside the rep window: pre-pull
       hang oscillation, sign of hip-angle change, hip-vs-vertical lead-lag, and
       ankle horizontal excursion.
-- [ ] **V2-6** Author for **`wall_handstand_hold`** (isometric hold, timer only,
-      no rep segmentation) — proves the schema generalises across kinds.
+- [ ] **V2-6** Author for the **handstand walk** (`hs_*`) — locomotion, not reps,
+      so the rep segmenter does not apply. Proves the schema generalises across
+      kinds. Measures: cadence, steps, time inverted, hip-over-shoulder
+      alignment, lateral drift; distance via the calibration-free construction.
+      **Do not transfer the Phase 0 numbers here** — that 100% / 0.912 clip was a
+      *stationary* handstand push-up, not a walk. Locomotion is untested.
+- [ ] **V2-9** Author the **bar muscle-up** with a **reduced fault set**: pull
+      height and turnover timing, side view, 60 fps in the turnover window.
+      Chicken-wing / arm asymmetry is in the non-goals — geometrically impossible
+      with one camera (side view resolves the turnover but shows one arm; front
+      or rear shows both but the bar occludes the shoulder line and the arms
+      foreshorten along the optical axis at that exact instant).
 - [ ] **V2-7** Fault → cue → regression binding, with `sets_rir` writing
       reps-in-reserve from velocity decay.
 
@@ -167,13 +215,23 @@ Remaining Phase 0 items (V0-5, V0-6) are measurements, not gates.
       (first-rep bottom, last-rep bottom, worst fault frame).
 - [ ] **V4-2** Faults render using the exercise's **own `cues[]` text**. No new
       coaching copy anywhere in this feature.
-- [ ] **V4-7** **Verdict scale**, per `plan.md` "Output contract". Derived from
-      fired-fault severity, never authored per movement: no faults = good, only
-      `hint` = ok, any `warning` = needs work, suppressed measures = not
-      measurable. Per-rep and per-set verdicts stay separate — velocity decay has
-      no per-rep value and must not be projected onto one rep. **Gate `warning`
-      severity on set intensity**: a grinding rep at 95% is not a technique
-      failure, and marking it one punishes the user for training hard.
+- [ ] **V4-7** **Margins, not verdicts**, per `plan.md` "Output contract".
+      Supersedes the Good/OK/Needs-work scale drafted earlier the same day and
+      rejected by both expert reviews. Report the margin with its error band
+      ("chin finished about 3 cm under the bar — closest of the set"), never a
+      bare pass/fail. **No boolean is ever written into `capability_profile`.**
+      Asymmetric confidence: a generous confirmation may auto-write, a
+      disconfirmation must go through Accept/Ignore — the app may say "that
+      counted" on its own, never "that didn't". The unit is the **attempt**, not
+      the rep. Load-gating is retired with the barbell framing.
+- [ ] **V4-9** **Pull, never push.** The analysis is only ever shown when the
+      user taps for it. `hs_video_review` is annotated "Never auto-shown";
+      `pu_video_review` / `mu_video_review` / `hs_video_review` all carry
+      `feedback_type: self_controlled` and cite `chiviacowsky_wulf_2002` —
+      self-controlled feedback schedules outperform forced ones, and
+      `hs_video_review` tracks `video_review_self_select_frequency` as a retest
+      metric. Auto-surfacing after every set contradicts the evidence the drill
+      rests on.
 - [ ] **V4-8** **Capture feedback**, per `plan.md` "Output contract". Closed enum
       owned by the app (`wrong_view`, `subject_too_small`, `cropped`,
       `off_centre`, `occluded`, `absent`, `too_short`), each detected from
