@@ -578,6 +578,34 @@ export const programSchema = z.object({
    * lenient the gate is — thresholds stay central and audited in `deriveState`.
    */
   symptom_regions: z.array(z.string()).optional(),
+  /**
+   * Per-phase skip rules driven by an intake answer. `handstand-walk` uses one
+   * to skip `phase_0_bail_out_prep` for users who can already exit reliably.
+   *
+   * This field's absence was a live bug, not an oversight in authoring. The
+   * gate is fully implemented — `isPhaseSkipped` in `engine/schedule.ts` reads
+   * `phase_gates`, resolves the intake answer and returns true — but it reads
+   * through a cast, and zod strips unknown keys, so `programSchema.parse`
+   * deleted the input before the implementation ever saw it. `gates?.length`
+   * was always undefined and the function always returned false.
+   *
+   * The 2026-08-18 handstand audit reported this as P0-5 "dead phase_gates[],
+   * nothing reads it". Half right: something did read it, and the schema was
+   * eating the data. A cast is invisible to the compiler, which is why nothing
+   * flagged the mismatch for three weeks.
+   */
+  phase_gates: z
+    .array(
+      z.object({
+        phase_id: z.string(),
+        gate_type: z.string(),
+        question_id: z.string(),
+        run_if_value_in: z.array(z.string()).optional(),
+        skip_if_value_in: z.array(z.string()).optional(),
+        note: z.string().optional(),
+      }),
+    )
+    .optional(),
   progression_rules: z.record(z.string(), z.unknown()).optional(),
   daily_log_schema: z.record(z.string(), z.unknown()).optional(),
   immediate_actions: z.array(z.record(z.string(), z.unknown())).optional(),

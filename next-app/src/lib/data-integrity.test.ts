@@ -585,12 +585,6 @@ describe("programs do not author top-level keys the runtime discards", () => {
       "DEAD — per-program green/amber/red ladder that no code evaluates. " +
       "Thresholds are central and audited in lib/symptom-state.ts by design: " +
       "a program declares what feeds the gate, not how lenient it is",
-    phase_gates:
-      "DEAD — handstand-walk declares a skip rule for phase_0_bail_out_prep " +
-      "when bail_out_readiness == can_exit_reliably. Nothing reads it, so a " +
-      "user who can already cartwheel out still gets Phase 0. Reported as P0-5 " +
-      "in the 2026-08-18 handstand audit and still unimplemented; tracked as " +
-      "PROG-1. Listed here so it is knowingly dead rather than silently dead",
     capability_domains:
       "DEAD at program level — overhead-mobility declares six domains that " +
       "duplicate what the drill library already carries per-drill " +
