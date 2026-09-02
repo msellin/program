@@ -9,6 +9,7 @@ import { countLoggedSets } from "@/lib/set-progress";
 import { OffPlanSheet } from "@/components/session/OffPlanSheet";
 import type { RailExercise, SessionSheet } from "@/components/session/DaySession";
 import type { Block, Phase, Program, Proposal, Store } from "@/lib/schemas";
+import { activeExclusions, exclusionNotices } from "@/lib/engine/intake-exclusions";
 
 /**
  * Screen 4a (single track) from the Day redesign. Never scrolls past one
@@ -239,6 +240,24 @@ export function BriefView({
                   </p>
                 ) : null}
                 <p className="text-[13.5px] leading-snug text-ink">{b.note}</p>
+              </div>
+            ))}
+            {/* Movements deferred because of an intake answer.
+                The intake told the user this would happen ("we defer ring dip
+                work and use band-assisted dip only"), so the session has to
+                show it happening. A substitution the user cannot account for
+                reads as the plan being wrong rather than the plan listening,
+                and confirm-first only means anything if the user can see why
+                the plan looks the way it does. (2026-09-02) */}
+            {exclusionNotices(activeExclusions(program, store.user_profile)).map((note) => (
+              <div
+                key={note}
+                className="rounded border border-line-soft bg-surface px-3.5 py-3"
+              >
+                <p className="font-mono text-[10px] uppercase tracking-widest text-slate mb-1">
+                  Adjusted for you
+                </p>
+                <p className="text-[13.5px] leading-snug text-ink">{note}</p>
               </div>
             ))}
             {railExercises.map((r) => {

@@ -1,5 +1,6 @@
 import type { Block, Exercise, Phase, Program, Store } from "../schemas";
 import { activePhaseFor, strengthBlocksForDate } from "./schedule";
+import { activeExclusions, applyIntakeExclusions } from "./intake-exclusions";
 
 type Levels = Partial<Record<string, 1 | 2 | 3 | 4 | 5>>;
 type DrillsById = Record<string, Exercise>;
@@ -259,15 +260,27 @@ export function composeBlockForUser(
   // a drill_library, REPLACE authored items with drills composed from the
   // library targeting that slot at the user's estimated level. If no slot,
   // fall through to Milestone 1's prerequisite-filter behavior.
+  // Deferrals from the user's intake answers are applied LAST, to whatever
+  // either path produced. Filtering earlier would let slot composition
+  // reintroduce a movement the user was told would be deferred — the drill
+  // library is selected by capability, and has no idea a rule excluded one.
+  const exclusions = activeExclusions(program, profile);
+
   if (block.capability_slot && program.drill_library?.length) {
     const composed = composeSlotDrills(program, block, drillsById, levels);
     if (composed) {
       const weekNumber = weekNumberFromProgramStart(profile, dateISO);
       const seedKey = ciSeedKey(profile, program, dateISO, block.id);
-      return applyContextualInterference(composed, weekNumber, seedKey);
+      return applyIntakeExclusions(
+        applyContextualInterference(composed, weekNumber, seedKey),
+        exclusions,
+      );
     }
   }
-  return filterBlockItemsByPrerequisites(block, drillsById, levels);
+  return applyIntakeExclusions(
+    filterBlockItemsByPrerequisites(block, drillsById, levels),
+    exclusions,
+  );
 }
 
 /**

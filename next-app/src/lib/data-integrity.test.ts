@@ -602,3 +602,122 @@ describe("programs do not author top-level keys the runtime discards", () => {
     expect(dropped).toEqual([]);
   });
 });
+
+/**
+ * Intake-driven deferrals.
+ *
+ * These exist because `elbow_tendon_pain` and `shoulder_pain_overhead` were
+ * required intake questions whose help text promised specific programming
+ * changes — "we defer heavy negatives", "we defer ring dip work and use
+ * band-assisted dip only" — and nothing read the answers.
+ *
+ * Every assertion here guards a way the rule could silently never fire, which
+ * is the failure mode this codebase produces over and over: a `question_id`
+ * that matches no question, a value that is not one of that question's options,
+ * an exercise id that resolves to nothing.
+ */
+describe("intake exclusions", () => {
+  type Rule = {
+    id: string;
+    question_id: string;
+    when_value_in: string[];
+    exclude_exercise_ids: string[];
+    substitute_with?: string;
+    reason: string;
+  };
+  const withRules = programs
+    .map((p) => ({
+      id: p.id,
+      rules: ((p.program as { intake_exclusions?: Rule[] }).intake_exclusions ?? []),
+      program: p.program,
+    }))
+    .filter((p) => p.rules.length);
+
+  it("at least one program declares them (otherwise this suite is vacuous)", () => {
+    expect(withRules.length).toBeGreaterThan(0);
+  });
+
+  it("every excluded and substituted exercise id resolves", () => {
+    const offenders: string[] = [];
+    for (const { id, rules } of withRules) {
+      for (const r of rules) {
+        for (const eid of r.exclude_exercise_ids) {
+          if (!byId[eid]) offenders.push(`${id}/${r.id} excludes unknown ${eid}`);
+        }
+        if (r.substitute_with && !byId[r.substitute_with]) {
+          offenders.push(`${id}/${r.id} substitutes unknown ${r.substitute_with}`);
+        }
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
+
+  it("every rule names a question the program actually asks", () => {
+    const offenders: string[] = [];
+    for (const { id, rules, program } of withRules) {
+      const qs = (program as { intake?: { questions?: Array<{ id: string }> } }).intake?.questions ?? [];
+      const qids = new Set(qs.map((q) => q.id));
+      for (const r of rules) {
+        if (!qids.has(r.question_id)) offenders.push(`${id}/${r.id} → ${r.question_id}`);
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
+
+  it("every trigger value is one the question can actually produce", () => {
+    // The subtlest way a rule dies: a valid question, a value it never returns.
+    // Booleans are stored as the strings "true"/"false" (IntakeClient), selects
+    // as their declared option values.
+    const offenders: string[] = [];
+    for (const { id, rules, program } of withRules) {
+      const qs =
+        (program as {
+          intake?: { questions?: Array<{ id: string; type?: string; options?: Array<{ value: string }> }> };
+        }).intake?.questions ?? [];
+      for (const r of rules) {
+        const q = qs.find((x) => x.id === r.question_id);
+        if (!q) continue;
+        const allowed =
+          q.type === "boolean"
+            ? new Set(["true", "false"])
+            : new Set((q.options ?? []).map((o) => o.value));
+        if (!allowed.size) continue;
+        for (const v of r.when_value_in) {
+          if (!allowed.has(v)) {
+            offenders.push(`${id}/${r.id}: "${v}" not in {${[...allowed].join(", ")}}`);
+          }
+        }
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
+
+  it("a substitute is not itself excluded by the same rule", () => {
+    const offenders = withRules.flatMap(({ id, rules }) =>
+      rules
+        .filter((r) => r.substitute_with && r.exclude_exercise_ids.includes(r.substitute_with))
+        .map((r) => `${id}/${r.id}`),
+    );
+    expect(offenders).toEqual([]);
+  });
+
+  it("carries a user-facing reason — a silent deferral reads as a bug", () => {
+    for (const { id, rules } of withRules) {
+      for (const r of rules) {
+        expect(r.reason?.length ?? 0, `${id}/${r.id}`).toBeGreaterThan(20);
+      }
+    }
+  });
+
+  it("the promises the intake copy makes are the ones the rules keep", () => {
+    // Regression guard with teeth: these three help texts are why the feature
+    // exists. If a rule is dropped, the copy starts lying again.
+    const pull = withRules.find((p) => p.id === "first-strict-pullup")!;
+    expect(pull.rules.map((r) => r.question_id).sort()).toEqual([
+      "elbow_tendon_pain",
+      "shoulder_pain_overhead",
+    ]);
+    const mu = withRules.find((p) => p.id === "muscle-up")!;
+    expect(mu.rules[0].substitute_with).toBe("mu_band_assisted_ring_dip");
+  });
+});

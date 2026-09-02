@@ -3939,6 +3939,37 @@
       "video_search": "deep ring dip full depth"
     },
     {
+      "id": "mu_band_assisted_ring_dip",
+      "name": "Band-assisted ring dip",
+      "category": "gymnastics",
+      "targets": [
+        "general"
+      ],
+      "setup": "Loop a band across the rings and kneel or stand in it. Support at the top, lower under control to 90° elbow or a depth that stays comfortable, then press back to lockout. Drop to a lighter band as the press gets easier.",
+      "capability_domains": [
+        "mu_ring_dip_strength"
+      ],
+      "level": 1,
+      "prerequisites": [],
+      "cues_external_focus": [
+        "Press the rings down to the floor rather than pushing yourself up",
+        "Keep the rings close enough to brush your ribs on the way down"
+      ],
+      "cues_internal_focus": [],
+      "feedback_type": "KP",
+      "default_dose": {
+        "sets": 3,
+        "reps": 6
+      },
+      "rest_between_s": 90,
+      "evidence_refs": [
+        "roig_2009",
+        "reinold_2007"
+      ],
+      "video_search": "band assisted ring dip progression",
+      "rationale": "Band assistance removes a share of bodyweight at the bottom, where the dip is hardest and where elbow and shoulder load peak. It keeps the full movement pattern and its range while lowering peak tissue load, which is what makes it the substitute when dip work has to be scaled back rather than stopped."
+    },
+    {
       "id": "mu_rto_dip",
       "name": "RTO (rings-turned-out) dip",
       "category": "gymnastics",

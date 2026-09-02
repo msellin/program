@@ -1410,5 +1410,22 @@
     "shoulder",
     "elbow",
     "wrist"
+  ],
+  "intake_exclusions": [
+    {
+      "id": "elbow_current_band_dip_only",
+      "question_id": "elbow_tendon_pain",
+      "when_value_in": [
+        "current"
+      ],
+      "exclude_exercise_ids": [
+        "mu_ring_dip_full",
+        "mu_ring_dip_deep",
+        "mu_ring_dip_negative",
+        "mu_rto_dip"
+      ],
+      "substitute_with": "mu_band_assisted_ring_dip",
+      "reason": "Ring dip work is band-assisted only while your elbow is symptomatic — the support position loads the medial elbow. You told us at intake."
+    }
   ]
 }

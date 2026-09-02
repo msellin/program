@@ -125,3 +125,73 @@ three already use.
 artifact rather than in a unit test because the defect is two independent
 branches each independently deciding to render — only visible once the page is
 assembled.
+
+---
+
+# Intake dimension (2026-09-02)
+
+## I-1 · The intake promised programming changes it never made — P0, fixed
+
+Three required questions carried help text written in the first person, present
+tense, read by the user while signing up:
+
+- `first-strict-pullup` / `shoulder_pain_overhead`: *"If yes, we bias the plan
+  toward closed-chain scap work and defer heavy dead hangs."*
+- `first-strict-pullup` / `elbow_tendon_pain`: *"If current, we defer heavy
+  negatives and use scap-focused work first."*
+- `muscle-up` / `elbow_tendon_pain`: *"If current, we defer ring dip work and
+  use band-assisted dip only."*
+
+Nothing read the answers. The single occurrence of `shoulder_pain_overhead` in
+the source is a set deciding which visual section of the intake form it renders
+in. So a user with current medial epicondylitis — the injury a pull-up program
+is most likely to aggravate — answered "currently symptomatic", was told the
+loading would be deferred, and was then scheduled it.
+
+`contraindications` exists on the store but only feeds the report and the data
+export; nothing filters exercises by it. There was no mechanism at all.
+
+**A false-methodology note on my own first pass:** I initially grepped `src/`
+for each question id, found zero references for the cardiac screening questions
+in `engine-builder-block-2`, and nearly reported them as ignored. They are not —
+`intake.safety_gates[]` is a generic, data-driven hard block, so ids correctly
+never appear in source. Block-2 gates all three of its cardiac questions
+properly. Checking the mechanism before believing the grep is what stopped a
+false P0.
+
+### Fix
+
+- **`intake_exclusions[]`** on the program, applied as the final pass in
+  `composeBlockForUser` — after both the slot-composed and authored-item paths,
+  because the drill library selects by capability and would happily reintroduce
+  a movement the user was told would be deferred.
+- **Substitution, not deletion.** Each rule names what takes the deferred
+  movement's place, inserted once at the position of the first item it replaces.
+  "Defer ring dip work" that merely removes three items hands the user a thinner
+  session with no explanation.
+- **`mu_band_assisted_ring_dip` authored** in the shared library. The muscle-up
+  copy promised a movement that did not exist in `exercises.json` — the deferral
+  could not have been honoured even with a mechanism. Written with general
+  coaching copy per the shared-library rule.
+- **The reason is shown**, as an "Adjusted for you" note on the session brief. A
+  substitution the user cannot account for reads as the plan being wrong rather
+  than the plan listening, and confirm-first only means something if the user can
+  see why the plan looks the way it does.
+
+### Guards
+
+- `intake-exclusions.test.ts` — 10 cases: fires on the right answer, silent on
+  the others and on a user who never completed intake, substitutes once, keeps
+  position, does not duplicate a movement already programmed, drops cleanly with
+  no substitute.
+- `data-integrity.test.ts` — 7 cases, each closing a way a rule could silently
+  never fire: an unresolvable exercise id, a `question_id` matching no question,
+  and — the subtlest — a `when_value_in` value the question can never produce.
+  Booleans are stored as `"true"`/`"false"`; a rule written against `"yes"`
+  would parse, validate, and never once match.
+- **Harness** — `Persona.intakeAnswers` now seeds `program_states[].intake_answers`,
+  and `persona-pullup-elbow` answers `elbow_tendon_pain: "current"`. Before this
+  no persona supplied intake answers at all, so `activeExclusions` always
+  returned empty and a broken rule was indistinguishable from a working one. The
+  spec asserts the deferred movements are absent from the captured session, the
+  substitute is present, and the reason is on screen.

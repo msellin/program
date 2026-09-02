@@ -261,6 +261,8 @@ export async function runSimulationV2(
     programSlug: string;
     additionalProgramSlugs?: string[];
     tier?: string;
+    /** Seeded into program_states[slug].intake_answers — see Persona.intakeAnswers. */
+    intakeAnswers?: Record<string, string>;
     startDate: string;
     days: number;
     snapshotDays: number[];
@@ -278,6 +280,7 @@ export async function runSimulationV2(
     programSlug,
     additionalProgramSlugs = [],
     tier,
+    intakeAnswers,
     startDate,
     days,
     snapshotDays,
@@ -330,7 +333,7 @@ export async function runSimulationV2(
   const capabilitySeed = CAPABILITY_SEEDS[programSlug] ?? {};
 
   await page.evaluate(
-    ({ slug, extras, tier, tms, uid, capabilitySeed }) => {
+    ({ slug, extras, tier, tms, uid, capabilitySeed, intakeAnswers }) => {
       const raw = localStorage.getItem("program.log.v2");
       const store = raw ? JSON.parse(raw) : {
         version: 2,
@@ -384,6 +387,9 @@ export async function runSimulationV2(
             ...(Object.keys(capabilitySeed).length
               ? { baseline_capabilities: { ...capabilitySeed } }
               : {}),
+            ...(Object.keys(intakeAnswers).length
+              ? { intake_answers: { ...intakeAnswers } }
+              : {}),
           },
         };
       }
@@ -414,7 +420,7 @@ export async function runSimulationV2(
       // one green matrix run confirms every persona seed uses the new key.
       localStorage.setItem("program.onboarding.done", "1");
     },
-    { slug: programSlug, extras: additionalProgramSlugs, tier: tier ?? null, tms: INITIAL_TMS, uid: sessionUid, capabilitySeed },
+    { slug: programSlug, extras: additionalProgramSlugs, tier: tier ?? null, tms: INITIAL_TMS, uid: sessionUid, capabilitySeed, intakeAnswers: intakeAnswers ?? {} },
   );
 
   await page.goto("/");

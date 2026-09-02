@@ -143,6 +143,7 @@ for (const persona of PERSONAS) {
       programSlug: persona.programSlug,
       additionalProgramSlugs: persona.additionalProgramSlugs,
       tier: persona.tier,
+      intakeAnswers: persona.intakeAnswers,
       startDate: computeStartDate(persona.days),
       days: persona.days,
       snapshotDays: [],
@@ -300,6 +301,62 @@ for (const persona of PERSONAS) {
      * two independent branches both choosing to render, which is only visible
      * once the page is assembled.
      */
+    /**
+     * Intake-driven deferrals actually reach the session.
+     *
+     * `elbow_tendon_pain` and `shoulder_pain_overhead` were required questions
+     * whose help text promised programming changes — "we defer heavy
+     * negatives", "we defer ring dip work and use band-assisted dip only" — and
+     * nothing read the answers. A user with current medial epicondylitis was
+     * told ring dips would be deferred and then given ring dips.
+     *
+     * Unit tests cover the rule engine. This asserts the end-to-end result on a
+     * real signed-in persona: the deferred movement is absent from the session,
+     * the substitute is present, and the user is told why. The last part
+     * matters most — a silent substitution is indistinguishable from a bug.
+     */
+    if (persona.intakeAnswers) {
+      const sessionCapture = path.join(outDir, "text", "16-session-today.txt");
+      const programFile = path.join(
+        __dirname, "..", "..", "public", "data", "programs", `${persona.programSlug}.json`,
+      );
+      const prog = JSON.parse(fs.readFileSync(programFile, "utf8")) as {
+        intake_exclusions?: Array<{
+          question_id: string; when_value_in: string[];
+          exclude_exercise_ids: string[]; substitute_with?: string; reason: string;
+        }>;
+      };
+      const fired = (prog.intake_exclusions ?? []).filter((r) => {
+        const answer = persona.intakeAnswers?.[r.question_id];
+        return answer != null && r.when_value_in.includes(answer);
+      });
+      expect(fired.length, `${persona.id} answers should trigger at least one rule`)
+        .toBeGreaterThan(0);
+
+      if (fs.existsSync(sessionCapture)) {
+        const library = JSON.parse(
+          fs.readFileSync(
+            path.join(__dirname, "..", "..", "public", "data", "exercises.json"), "utf8",
+          ),
+        ) as { exercises: Array<{ id: string; name: string }> };
+        const nameOf = (id: string) => library.exercises.find((e) => e.id === id)?.name;
+        const captured = fs.readFileSync(sessionCapture, "utf8");
+
+        for (const rule of fired) {
+          // The reason is user-facing and must be on the screen.
+          expect(captured, `${persona.id}: deferral reason not shown`).toContain(rule.reason);
+          // And the deferred movements must actually be gone.
+          for (const eid of rule.exclude_exercise_ids) {
+            const name = nameOf(eid);
+            if (name) {
+              expect(captured, `${persona.id}: deferred "${name}" still in session`)
+                .not.toContain(name);
+            }
+          }
+        }
+      }
+    }
+
     const dayCapture = path.join(outDir, "text", "01-day.txt");
     if (fs.existsSync(dayCapture)) {
       const day = fs.readFileSync(dayCapture, "utf8");

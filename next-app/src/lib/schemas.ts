@@ -594,6 +594,32 @@ export const programSchema = z.object({
    * eating the data. A cast is invisible to the compiler, which is why nothing
    * flagged the mismatch for three weeks.
    */
+  /**
+   * Movements deferred because of an intake answer.
+   *
+   * The intake already told users this happens. `first-strict-pullup` says "if
+   * current, we defer heavy negatives and use scap-focused work first" under
+   * `elbow_tendon_pain`; `muscle-up` says "we defer ring dip work and use
+   * band-assisted dip only". Those answers were stored and never read, so a
+   * user with current medial epicondylitis was told ring dips would be deferred
+   * and then given ring dips. This field is what makes the promise true.
+   *
+   * `reason` is user-facing — a deferral the user cannot see reads as the plan
+   * being wrong rather than the plan listening.
+   */
+  intake_exclusions: z
+    .array(
+      z.object({
+        id: z.string(),
+        question_id: z.string(),
+        when_value_in: z.array(z.string()),
+        exclude_exercise_ids: z.array(z.string()),
+        /** Kept in the session in place of what was removed, so the block does not just get thinner. */
+        substitute_with: z.string().optional(),
+        reason: z.string(),
+      }),
+    )
+    .optional(),
   phase_gates: z
     .array(
       z.object({

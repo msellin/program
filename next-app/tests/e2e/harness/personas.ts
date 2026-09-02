@@ -44,6 +44,16 @@ export type Persona = {
    * 2026-08-18 P0-M: adaptation verification broke without this.
    */
   tier?: string;
+  /**
+   * Answers written to `program_states[slug].intake_answers`, so personas can
+   * exercise behaviour that keys off the intake — chiefly `intake_exclusions`,
+   * the deferrals the intake help text promises ("we defer ring dip work and
+   * use band-assisted dip only"). Without this the rules are unreachable from
+   * the harness: every persona activated its program with no answers at all,
+   * so `activeExclusions` always returned empty and a broken rule would have
+   * looked identical to a working one.
+   */
+  intakeAnswers?: Record<string, string>;
   days: number;
   email: string;
   password: string;
@@ -53,6 +63,33 @@ export type Persona = {
 const DEFAULT_PASSWORD = "TestPassword123!";
 
 export const PERSONAS: Persona[] = [
+  {
+    /**
+     * The only persona that answers an intake question in a way that changes
+     * programming. `elbow_tendon_pain: "current"` triggers
+     * first-strict-pullup's `intake_exclusions`: heavy negatives deferred,
+     * scap-focused work substituted.
+     *
+     * It exists because the deferral rules were unreachable from the harness —
+     * no persona supplied intake answers at all, so `activeExclusions` always
+     * returned empty and a rule that never fired looked exactly like a rule
+     * that worked. That is the failure this whole audit keeps turning up.
+     */
+    id: "persona-pullup-elbow",
+    displayName: "Pull-up user with current elbow tendon pain",
+    archetypeId: "consistent-average",
+    programSlug: "first-strict-pullup",
+    intakeAnswers: {
+      elbow_tendon_pain: "current",
+      shoulder_pain_overhead: "false",
+      days_per_week: "3",
+    },
+    days: 21,
+    email: "e2e-persona-pullup-elbow@example.test",
+    password: DEFAULT_PASSWORD,
+    focus:
+      "Intake-driven deferral: heavy negatives excluded, scap work substituted, and the reason shown on the session",
+  },
   {
     id: "persona-recover",
     displayName: "Recovering rehab user",

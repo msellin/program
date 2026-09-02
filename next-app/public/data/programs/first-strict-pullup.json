@@ -1531,5 +1531,32 @@
     "shoulder",
     "elbow",
     "low_back"
+  ],
+  "intake_exclusions": [
+    {
+      "id": "elbow_current_defer_negatives",
+      "question_id": "elbow_tendon_pain",
+      "when_value_in": [
+        "current"
+      ],
+      "exclude_exercise_ids": [
+        "pu_negative_pullup_5s",
+        "pu_negative_pullup_10s"
+      ],
+      "substitute_with": "pu_scap_pull",
+      "reason": "Heavy negatives are deferred while your elbow is symptomatic — scap-focused work first. You told us at intake."
+    },
+    {
+      "id": "shoulder_overhead_defer_dead_hang",
+      "question_id": "shoulder_pain_overhead",
+      "when_value_in": [
+        "true"
+      ],
+      "exclude_exercise_ids": [
+        "pu_dead_hang"
+      ],
+      "substitute_with": "pu_ring_row_incline",
+      "reason": "Heavy dead hangs are deferred and the plan leans on closed-chain scap work, because you reported overhead shoulder pain at intake."
+    }
   ]
 }
