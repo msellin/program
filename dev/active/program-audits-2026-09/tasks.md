@@ -1,18 +1,26 @@
 # Tasks
 
 ## first-strict-pullup
+- [x] Citation dimension — `2026-09-02-citation-dimension.md`. C-1 beattie_2014
+      mismatch (P1), C-2 vigouroux_2007 overreach (P2), C-3 sinnett_2019 needs
+      verification (P2).
 - [ ] Comprehensive audit doc
 - [ ] P0 fixes
 - [ ] Delta until clean
 - [ ] Promote to REVIEWED + landing badge
 
 ## muscle-up
+- [x] Citation dimension — clean apart from shared C-3.
+- [ ] Screen coherence: "Week 9 · random practice" renders directly above
+      "YOU FINISHED" on Day (persona-muscleup/text/01-day.txt). Same class as
+      handstand's "Week NaN".
 - [ ] Comprehensive audit doc
 - [ ] P0 fixes
 - [ ] Delta until clean
 - [ ] Promote to REVIEWED + landing badge
 
 ## engine-builder-block-2
+- [x] Citation dimension — clean. Strongest evidence base in the catalog.
 - [ ] Comprehensive audit doc
 - [ ] P0 fixes
 - [ ] Delta until clean
