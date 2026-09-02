@@ -236,7 +236,12 @@ export default function ProgramCatalogPage() {
               id="live-now-eyebrow"
               className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted"
             >
-              {publicPrograms.length} cited · live now
+              {/* Was "{n} cited · live now", using "cited" as the floor label —
+                  true while some programs sat at that tier. As of 2026-09-02 all
+                  eight are VERIFIED, so it understated every card beneath it. A
+                  tier word in a count label drifts every time the ladder moves;
+                  the count alone cannot. */}
+              {publicPrograms.length} programs · live now
             </p>
           </div>
           <ul
