@@ -144,10 +144,10 @@ export default function ReportPage() {
     minute: "2-digit",
   });
 
-  const daysWithLogs =
-    report.symptomSeries.groin_left.length +
-    report.symptomSeries.buttock_left.length +
-    report.symptomSeries.low_back.length;
+  const daysWithLogs = Object.values(report.symptomSeries.regions).reduce(
+    (n, series) => n + series.length,
+    0,
+  );
 
   const chartDays = Object.values(store.logs)
     .filter((d) => d.date >= range.start && d.date <= range.end)

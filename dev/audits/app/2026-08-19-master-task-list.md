@@ -62,6 +62,18 @@ Keep the convention terse — the four markers cover every state. Don't invent n
 - [x] **BUG-13** — Plan rest-day can't log any session shipped 2026-08-22. On rest days, `WeekDayActions` returned null so there was zero path to record an off-plan CrossFit class or evening run — user had to skip via other means. Rest days now render a single "Log a session →" verb (today + past only; future rest days stay silent) linking to `/session/[primarySlug]?date=<dateISO>`, which renders `RestDayCard` + `RunSlotCard` for ad-hoc logging. Files: `next-app/src/app/plan/page.tsx:718-737`. Size: XS
 - [x] **BUG-14** — Sound settings toggle was a placeholder shipped 2026-08-22. Settings/Sound comment literally said "no Audio() calls exist yet." Added `lib/sound.ts` (Web Audio API — synthesized tones, no assets, offline-safe): `playConfirm()` (short 880 Hz blip) + `playTimerComplete()` (E5-A5-E6 3-note ding). Wired into `ConfirmSheet` confirm button, `useProposalActions` Accept path, `RestTimer` on-hit effect, and preview-on-toggle-ON in Settings. Both functions gated by `readSoundPref()` — flip the Settings toggle and audio actually stops. Files: `next-app/src/lib/sound.ts`, `next-app/src/components/ConfirmSheet.tsx`, `next-app/src/lib/proposals/useProposalActions.ts`, `next-app/src/components/workout/RestTimer.tsx`, `next-app/src/app/settings/page.tsx`. Size: S
 
+- [ ] **PROG-1** — `handstand-walk.phase_gates[]` is authored and read by nothing. It declares that a
+  user answering `bail_out_readiness == "can_exit_reliably"` skips `phase_0_bail_out_prep`; no code
+  consumes it, so someone who can already cartwheel out still gets Phase 0 scheduled. Reported as P0-5
+  in the 2026-08-18 handstand audit, never fixed, and still shipping. Now caught by the dead-key test in
+  `data-integrity.test.ts` and listed as knowingly-dead there. **Decide: implement the gate, or delete
+  the key and the intake question that feeds it.** Size: M
+
+- [ ] **PROG-2** — `overhead-mobility.capability_domains[]` is dead at program level. It declares six
+  domains that duplicate what the drill library already carries per-drill (`plan-generator` reads
+  `drill.capability_domains`, never the program's). Found by the dead-key test on its first run,
+  2026-09-02 — nobody knew it was there. Almost certainly just delete. Size: XS
+
 - [ ] **EVID-1** — **Get a real specialist audit for the catalog.** Every program's `reviewed_by.name`
   is "Terav specialist audit agent" — Terav's own review process. As of 2026-09-01 the public copy no
   longer claims otherwise (the ladder note now states plainly that no outside clinician has signed off

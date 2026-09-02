@@ -41,88 +41,23 @@ import { CheckRegionRow, BUCKET_TO_VALUE } from "@/components/check/CheckRegionR
 import { CheckFlagChip } from "@/components/check/CheckFlagChip";
 import { CheckSelectorRow } from "@/components/check/CheckSelectorRow";
 import { CheckLiveVerdict, type CheckState } from "@/components/check/CheckLiveVerdict";
-
-// Program-variant region label maps. Store keys remain the same
-// (backward compatible with the /check/hip subroute and every
-// downstream consumer of Symptoms).
-const HIP_REGIONS: { key: keyof Symptoms; label: string; lat?: "L" | "R" }[] = [
-  { key: "groin_left", label: "Groin", lat: "L" },
-  { key: "low_back", label: "Low back" },
-  { key: "buttock_left", label: "Buttock", lat: "L" },
-  { key: "shoulder_right", label: "Shoulder", lat: "R" },
-];
-const SKILL_REGIONS: { key: keyof Symptoms; label: string; lat?: "L" | "R" }[] = [
-  { key: "shoulder_right", label: "Shoulder" },
-  { key: "groin_left", label: "Wrist" },
-  { key: "buttock_left", label: "Muscle soreness" },
-  { key: "low_back", label: "Low back" },
-];
-const GENERIC_REGIONS: { key: keyof Symptoms; label: string; lat?: "L" | "R" }[] = [
-  { key: "low_back", label: "Low back" },
-  { key: "groin_left", label: "Any joint pain" },
-  { key: "buttock_left", label: "Muscle soreness" },
-  { key: "shoulder_right", label: "Shoulder / upper body" },
-];
-const SKILL_PROGRAMS = new Set(["handstand-walk", "muscle-up-first-rep", "overhead-mobility"]);
+import { regionsForProgram, type SymptomRegion } from "@/lib/symptom-regions";
+import { deriveState, reasonForState } from "@/lib/symptom-state";
+import { loadProgram } from "@/lib/data-loader";
 
 /**
- * Derive green/amber/red state from a symptoms snapshot. Unchanged from
- * pre-Cut-D logic — every Cut D bucket resolves to the same numeric
- * field so downstream engine consumers see no schema difference.
+ * Regions come from the active program's `symptom_regions[]` (see
+ * `lib/symptom-regions.ts`). What stood here were three hardcoded label maps —
+ * HIP_REGIONS, SKILL_REGIONS, GENERIC_REGIONS — all writing to the SAME four
+ * storage keys, chosen by a `SKILL_PROGRAMS` set.
+ *
+ * Two things were wrong with that. `SKILL_PROGRAMS` contained
+ * "muscle-up-first-rep", a slug that does not exist (the real one is
+ * "muscle-up"), so muscle-up never got the skill labels at all. And
+ * SKILL_REGIONS relabelled `groin_left` as "Wrist" — a wrist score written into
+ * the groin key. The label was remapped; the storage was not. That silently
+ * poisons the multi-year symptom record the History view exists to build.
  */
-function derive(s: Symptoms): CheckState {
-  const peak = Math.max(
-    s.groin_left ?? 0,
-    s.low_back ?? 0,
-    s.buttock_left ?? 0,
-    s.shoulder_right ?? 0,
-  );
-  const life = s.life_load ?? 0;
-  if (
-    s.night_pain ||
-    s.gait_change ||
-    (s.click_present && s.click_painful) ||
-    peak > 5 ||
-    life >= 8
-  ) {
-    return "red";
-  }
-  if (peak >= 4 || (s.morning_stiffness_min ?? 0) > 30 || life >= 5) {
-    return "amber";
-  }
-  return "green";
-}
-
-/**
- * Human-readable "why" line for the verdict card. Names the specific
- * threshold that fired so the user understands the state — matches R7
- * (rehab-safe: no fragility tone, no diagnosis language).
- */
-function reasonFor(s: Symptoms, state: CheckState): string {
-  const peak = Math.max(
-    s.groin_left ?? 0,
-    s.low_back ?? 0,
-    s.buttock_left ?? 0,
-    s.shoulder_right ?? 0,
-  );
-  const life = s.life_load ?? 0;
-  const stiff = s.morning_stiffness_min ?? 0;
-  if (state === "red") {
-    if (s.night_pain) return "Red flag: night pain woke you.";
-    if (s.gait_change) return "Red flag: gait change (shortened stride).";
-    if (s.click_present && s.click_painful) return "Red flag: painful clicking.";
-    if (peak > 5) return `A symptom score is above 5/10.`;
-    if (life >= 8) return `Life load is at the ceiling — cooked.`;
-    return "A red-flag signal fired.";
-  }
-  if (state === "amber") {
-    if (peak >= 4) return `A symptom score is between 4-5/10.`;
-    if (stiff > 30) return `Morning stiffness over 30 minutes.`;
-    if (life >= 5) return `Life load in the middle-high range.`;
-    return "A threshold crossed to amber.";
-  }
-  return "Progress load — nothing above 3/10 and no flags.";
-}
 
 const DEFAULT_VALUES: Symptoms = {
   groin_left: 0,
@@ -198,9 +133,22 @@ export default function CheckPage() {
   const logs = useStore((s) => s.store.logs);
   const activeSlug = useStore((s) => s.store.user_profile?.active_program_id);
 
+  // The two hip-labral red flags (shortened stride, painful click) stay
+  // program-scoped rather than universal: asking a pull-up user about gait
+  // change is the same category error the region maps made. Flags are not yet
+  // program-declared the way regions now are — tracked in the audit doc.
   const isHip = activeSlug === "anterior-hip-rebuild";
-  const isSkill = activeSlug ? SKILL_PROGRAMS.has(activeSlug) : false;
-  const REGIONS = isHip ? HIP_REGIONS : isSkill ? SKILL_REGIONS : GENERIC_REGIONS;
+  const [REGIONS, setRegions] = useState<SymptomRegion[]>(() => regionsForProgram(null));
+  useEffect(() => {
+    if (!activeSlug) return;
+    let live = true;
+    void loadProgram(activeSlug)
+      .then((p) => { if (live) setRegions(regionsForProgram(p)); })
+      // A failed program load must not blank the check — fall back to the
+      // historical four rather than rendering a form with no regions.
+      .catch(() => { if (live) setRegions(regionsForProgram(null)); });
+    return () => { live = false; };
+  }, [activeSlug]);
 
   const [values, setValues] = useState<Symptoms>({ ...DEFAULT_VALUES });
   const [initialised, setInitialised] = useState(false);
@@ -225,8 +173,8 @@ export default function CheckPage() {
     setInitialised(true);
   }, [hydrated, storedSymptomsRaw, logs, today, initialised]);
 
-  const state: CheckState = useMemo(() => derive(values), [values]);
-  const reason = useMemo(() => reasonFor(values, state), [values, state]);
+  const state: CheckState = useMemo(() => deriveState(values), [values]);
+  const reason = useMemo(() => reasonForState(values, state), [values, state]);
 
   if (!hydrated) return <div className="mt-8 text-sm text-muted">Loading…</div>;
 
@@ -239,7 +187,7 @@ export default function CheckPage() {
   // thumb. The `saved` state below still matters for re-entering /check
   // later the same day.
   const save = () => {
-    const derived = derive(values);
+    const derived = deriveState(values);
     saveDay(today, values, derived);
     setSaved(true);
     setPrefilledFrom(null);
@@ -306,11 +254,10 @@ export default function CheckPage() {
         <div className="rounded-md border border-line-soft bg-surface px-3">
           {REGIONS.map((r) => (
             <CheckRegionRow
-              key={r.key}
+              key={r.id}
               label={r.label}
-              lat={r.lat}
-              value={(values[r.key] as number) ?? 0}
-              onChange={(v) => updateNumber(r.key, v)}
+              value={(values[r.id as keyof Symptoms] as number) ?? 0}
+              onChange={(v) => updateNumber(r.id as keyof Symptoms, v)}
             />
           ))}
         </div>

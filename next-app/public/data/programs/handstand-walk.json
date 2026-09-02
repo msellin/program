@@ -2076,5 +2076,10 @@
       "date": "2026-08-19",
       "note": "H-1 through H-6 shipped; Q6 layers 1-3 present. Ferrari 2021 drop + sci_reports specifics strip executed in HOLD-fix pass 2026-08-19. Kinoshita block note stale claim fixed."
     }
+  ],
+  "symptom_regions": [
+    "wrist",
+    "shoulder",
+    "neck"
   ]
 }

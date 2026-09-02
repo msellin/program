@@ -1,0 +1,105 @@
+/**
+ * The symptom region library.
+ *
+ * Before this existed, the morning check rendered four hardcoded fields —
+ * `groin_left`, `low_back`, `buttock_left`, `shoulder_right` — and derived
+ * green/amber/red from their peak. That is `anterior-hip-rebuild`'s clinical
+ * map: the one program in the manifest marked `personal: true`. Every other
+ * program got asked about someone else's hip.
+ *
+ * The cost was not cosmetic. `first-strict-pullup` authors
+ * `elbow_symptom_score`, because medial epicondylitis is the classic pull-up
+ * injury; there was no elbow field, so a user at 7/10 had nowhere to report it
+ * and the engine saw green. `muscle-up` authors `wrist_symptom_score` — false
+ * grip is notorious for wrist strain — with no wrist field. And only
+ * `shoulder_right` existed, so a left shoulder had nowhere to go at all.
+ *
+ * Regions are a shared library and programs select from it, exactly as they do
+ * with `exercises.json`. Two consequences worth stating:
+ *
+ *   - **Storage stays flat and unmigrated.** Region ids are the same top-level
+ *     keys `symptoms` always used, so multi-year history recorded under
+ *     `groin_left` keeps validating and keeps rendering. Nothing is orphaned.
+ *   - **Ids are curated, not free-form.** A program cannot invent a region;
+ *     `data-integrity.test.ts` fails if it names one that isn't here. That is
+ *     what stops this becoming another authored-JSON key nothing reads.
+ *
+ * Programs declare their set in `symptom_regions[]`. Thresholds are NOT
+ * program-authored: a program says what feeds the safety gate, never how
+ * lenient the gate is. See `deriveState`.
+ */
+
+export type SymptomRegion = {
+  id: string;
+  /** Full label, used in the check form. */
+  label: string;
+  /** Compact label for dense surfaces — log lists, chart legends. */
+  short: string;
+};
+
+export const SYMPTOM_REGIONS: SymptomRegion[] = [
+  // Hip / trunk — the original four. Ids unchanged so history survives.
+  { id: "groin_left", label: "Left groin", short: "Groin L" },
+  { id: "groin_right", label: "Right groin", short: "Groin R" },
+  { id: "low_back", label: "Low back", short: "Low back" },
+  { id: "buttock_left", label: "Left buttock", short: "Buttock L" },
+  { id: "buttock_right", label: "Right buttock", short: "Buttock R" },
+  // Unsided variants. The hip program needs laterality because its record is
+  // explicitly left-vs-right; a pull-up user reporting elbow pain does not, and
+  // a six-row sided form answered every morning is friction that trains people
+  // to tap through without reading. Programs pick whichever fits.
+  { id: "shoulder", label: "Shoulder", short: "Shoulder" },
+  { id: "elbow", label: "Elbow", short: "Elbow" },
+  { id: "wrist", label: "Wrist", short: "Wrist" },
+  { id: "knee", label: "Knee", short: "Knee" },
+  { id: "achilles", label: "Achilles", short: "Achilles" },
+  // Upper body — sided.
+  { id: "shoulder_left", label: "Left shoulder", short: "Shoulder L" },
+  { id: "shoulder_right", label: "Right shoulder", short: "Shoulder R" },
+  { id: "elbow_left", label: "Left elbow", short: "Elbow L" },
+  { id: "elbow_right", label: "Right elbow", short: "Elbow R" },
+  { id: "wrist_left", label: "Left wrist", short: "Wrist L" },
+  { id: "wrist_right", label: "Right wrist", short: "Wrist R" },
+  { id: "neck", label: "Neck", short: "Neck" },
+  // Lower body — endurance and concurrent programs.
+  { id: "knee_left", label: "Left knee", short: "Knee L" },
+  { id: "knee_right", label: "Right knee", short: "Knee R" },
+  { id: "hamstring_left", label: "Left hamstring", short: "Ham L" },
+  { id: "hamstring_right", label: "Right hamstring", short: "Ham R" },
+  { id: "achilles_left", label: "Left Achilles", short: "Achilles L" },
+  { id: "achilles_right", label: "Right Achilles", short: "Achilles R" },
+  { id: "shin", label: "Shins", short: "Shin" },
+];
+
+export const REGION_BY_ID: Record<string, SymptomRegion> = Object.fromEntries(
+  SYMPTOM_REGIONS.map((r) => [r.id, r]),
+);
+
+/**
+ * What the check asked before programs could declare anything. Used when a
+ * program declares no `symptom_regions[]`, so an un-migrated program keeps
+ * exactly its previous behaviour rather than silently asking nothing.
+ */
+export const LEGACY_REGIONS = [
+  "groin_left",
+  "low_back",
+  "buttock_left",
+  "shoulder_right",
+] as const;
+
+/** Region ids a program asks about, falling back to the historical four. */
+export function regionsForProgram(
+  program?: { symptom_regions?: string[] } | null,
+): SymptomRegion[] {
+  const ids = program?.symptom_regions?.length
+    ? program.symptom_regions
+    : [...LEGACY_REGIONS];
+  return ids.map((id) => REGION_BY_ID[id]).filter((r): r is SymptomRegion => !!r);
+}
+
+/** Every region id that carries a score on this day's check. */
+export function scoredRegionIds(symptoms: Record<string, unknown>): string[] {
+  return SYMPTOM_REGIONS.map((r) => r.id).filter(
+    (id) => typeof symptoms[id] === "number",
+  );
+}

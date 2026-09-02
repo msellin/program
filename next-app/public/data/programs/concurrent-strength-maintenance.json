@@ -1029,5 +1029,10 @@
       "date": "2026-08-19",
       "note": "C-1/C-2/C-3 closed; Berryman engineering-choice entry added 2026-08-19. Path A Tier 1+2 fixes clean. Amber-week schedule swap (F12) tracked separately as authoring feature, not blocker."
     }
+  ],
+  "symptom_regions": [
+    "low_back",
+    "knee",
+    "shoulder"
   ]
 }

@@ -568,6 +568,16 @@ export const programSchema = z.object({
   phases: z.array(phaseSchema),
   blocks: z.array(blockSchema),
   weekly_template: z.record(z.string(), z.unknown()).optional(),
+  /**
+   * Region ids this program asks about in the morning check. Ids must resolve
+   * against `SYMPTOM_REGIONS`; `data-integrity.test.ts` fails otherwise, which
+   * is what keeps this from becoming another authored key nothing reads.
+   * Absent → the historical four (see `regionsForProgram`).
+   *
+   * A program declares WHAT feeds the safety gate. It does not declare how
+   * lenient the gate is — thresholds stay central and audited in `deriveState`.
+   */
+  symptom_regions: z.array(z.string()).optional(),
   progression_rules: z.record(z.string(), z.unknown()).optional(),
   daily_log_schema: z.record(z.string(), z.unknown()).optional(),
   immediate_actions: z.array(z.record(z.string(), z.unknown())).optional(),
@@ -816,11 +826,42 @@ export const exerciseLogSchema = z.object({
   sets: z.array(setLogSchema).optional(),
 });
 
+/**
+ * Scored regions are flat top-level keys, one per `SYMPTOM_REGIONS` entry in
+ * `lib/symptom-regions.ts`. Flat and unmigrated on purpose: the original four
+ * keep their exact key names, so multi-year history recorded against them still
+ * validates and still renders. Which of these a user is actually asked about is
+ * the active program's `symptom_regions[]`, not this list.
+ */
 export const symptomsSchema = z.object({
+  // Hip / trunk — the original four, ids frozen for history.
   groin_left: z.number().optional(),
+  groin_right: z.number().optional(),
   low_back: z.number().optional(),
   buttock_left: z.number().optional(),
+  buttock_right: z.number().optional(),
+  // Unsided variants for programs where laterality is not the clinical point.
+  shoulder: z.number().optional(),
+  elbow: z.number().optional(),
+  wrist: z.number().optional(),
+  knee: z.number().optional(),
+  achilles: z.number().optional(),
+  // Upper body — sided.
+  shoulder_left: z.number().optional(),
   shoulder_right: z.number().optional(),
+  elbow_left: z.number().optional(),
+  elbow_right: z.number().optional(),
+  wrist_left: z.number().optional(),
+  wrist_right: z.number().optional(),
+  neck: z.number().optional(),
+  // Lower body.
+  knee_left: z.number().optional(),
+  knee_right: z.number().optional(),
+  hamstring_left: z.number().optional(),
+  hamstring_right: z.number().optional(),
+  achilles_left: z.number().optional(),
+  achilles_right: z.number().optional(),
+  shin: z.number().optional(),
   click_present: z.boolean().optional(),
   click_painful: z.boolean().nullable().optional(),
   morning_stiffness_min: z.number().optional(),

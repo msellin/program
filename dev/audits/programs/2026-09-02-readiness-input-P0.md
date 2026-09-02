@@ -105,3 +105,79 @@ that matters.
    actually cause.
 
 Option 3 unblocks promotion to REVIEWED; 1 and 2 are product decisions.
+
+
+---
+
+# Resolution — shipped 2026-09-02
+
+Founder chose the program-driven data model (option 1) over the generic-core
+compromise, correctly: my option 2 capped programs at "2-3 extras" for no
+principled reason, and I over-stated the fragmentation risk — every program
+already authors `sleep_hours` and `subjective_readiness_0_10`, so the shared
+spine was achievable under either.
+
+Built as option 1 for the data model, with the safety gate kept central.
+
+## What shipped
+
+- **`lib/symptom-regions.ts`** — a curated region library. Programs select from
+  it via `symptom_regions[]`, exactly as they select from `exercises.json`.
+  Sided ids for programs whose record is explicitly left-vs-right, unsided for
+  those where laterality is not the clinical point and a six-row daily form
+  would just train people to tap through.
+- **No migration.** Region ids are the same flat top-level keys `symptoms`
+  always used, so multi-year history under `groin_left` still validates and
+  still renders. Nothing orphaned.
+- **`lib/symptom-state.ts`** — `deriveState` / `reasonForState` / `peakRegionScore`,
+  the single audited gate. Peak runs over every scored region. The "why" line
+  now names the region that fired ("Elbow R is above 5/10") instead of "a
+  symptom score".
+- **Check page** — renders the active program's regions, loaded from the program
+  JSON, falling back to the historical four if the load fails rather than
+  rendering an empty form.
+- **Downstream** — `SymptomLoadChart`, `CutCLogList` and the specialist report
+  all enumerate the region library instead of four hip keys, so a logged elbow
+  is actually shown back. `report.symptomSeries.regions` is keyed by region id.
+- **Per-program declarations** — all nine programs, e.g. pull-up
+  `[shoulder, elbow, low_back]`, muscle-up `[shoulder, elbow, wrist]`, hip keeps
+  its original four.
+
+## Two further defects found while fixing this
+
+- **`SKILL_PROGRAMS` contained `muscle-up-first-rep`**, a slug that does not
+  exist — the real one is `muscle-up`. So muscle-up never received the skill
+  labels and fell through to the generic bucket set. A dead identifier matching
+  nothing, invisible because the fallback looked plausible.
+- **`SKILL_REGIONS` relabelled `groin_left` as "Wrist".** The label was remapped;
+  the storage key was not. Skill users' wrist scores were being written into the
+  groin series — actively corrupting the longitudinal record the History view
+  exists to build, not merely failing to record.
+
+## Guards added
+
+- `symptom-state.test.ts` — 10 cases. Elbow at 7 reds a pull-up user; wrist at 4
+  ambers a muscle-up user; a left shoulder is visible at all; the hip program's
+  four behave exactly as before.
+- `data-integrity.test.ts` — every program declares regions; every id resolves;
+  1-5 regions each; pull-up contains `elbow` and muscle-up contains `wrist`;
+  the personal program keeps its own map.
+- **Dead-key test** — fails on any top-level program key the runtime discards.
+  This is the durable fix for the class, and it found two more on its first run:
+  `handstand-walk.phase_gates` (reported P0-5 in the 2026-08-18 audit and never
+  removed) and `overhead-mobility.capability_domains` (previously unknown). Both
+  now listed as knowingly dead with reasons; tracked as PROG-1 and PROG-2.
+- **Harness** — the simulator projects archetype severities onto each program's
+  declared regions, so gymnastics personas stop writing `groin_left`; its
+  `computeDerivedState` mirrors the app over all scored regions; and
+  `personas.spec.ts` asserts each persona's captured check contains the labels
+  its program declares.
+
+## Still open
+
+- Red flags (`gait_change`, `click_painful`) remain hip-scoped via an `isHip`
+  check rather than program-declared. Same category error as the regions, much
+  smaller blast radius — an aerobic user is not asked about them.
+- `progression_rules` and `daily_log_schema` remain in the program files as
+  authoring documentation. They are now explicitly marked dead in the test's
+  allowlist rather than silently ignored.

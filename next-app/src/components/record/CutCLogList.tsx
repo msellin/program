@@ -21,6 +21,7 @@ import { ChevronDown, ChevronRight } from "lucide-react";
 import { loadExercises } from "@/lib/data-loader";
 import type { DayLog, Exercise, ExerciseLog, Store } from "@/lib/schemas";
 import { cn } from "@/lib/utils";
+import { SYMPTOM_REGIONS } from "@/lib/symptom-regions";
 
 const PAGE_SIZE = 30;
 
@@ -239,11 +240,13 @@ function RunRow({ run }: { run: NonNullable<DayLog["runs"]>[number] }) {
 
 function SymptomsSummary({ symptoms }: { symptoms: NonNullable<DayLog["symptoms"]> }) {
   const items: string[] = [];
-  if (symptoms.groin_left != null && symptoms.groin_left > 0) items.push(`Groin L ${symptoms.groin_left}`);
-  if (symptoms.low_back != null && symptoms.low_back > 0) items.push(`Low back ${symptoms.low_back}`);
-  if (symptoms.buttock_left != null && symptoms.buttock_left > 0) items.push(`Buttock L ${symptoms.buttock_left}`);
-  if (symptoms.shoulder_right != null && symptoms.shoulder_right > 0)
-    items.push(`Shoulder R ${symptoms.shoulder_right}`);
+  // Enumerated from the region library rather than four hardcoded hip keys, so
+  // a logged elbow or wrist actually appears in the record instead of being
+  // written and never shown back.
+  for (const r of SYMPTOM_REGIONS) {
+    const v = (symptoms as Record<string, unknown>)[r.id];
+    if (typeof v === "number" && v > 0) items.push(`${r.short} ${v}`);
+  }
   if (symptoms.night_pain) items.push("night pain");
   if (symptoms.gait_change) items.push("gait change");
   if (symptoms.click_present) items.push(symptoms.click_painful ? "painful click" : "click (painless)");

@@ -1013,5 +1013,10 @@
       "date": "2026-08-19",
       "note": "R-1/R-2/R-4 shipped; R-3 Das drop + Proteau inline fix executed in HOLD-fix pass 2026-08-19. Split references[] schema drift merged into evidence_base. HERITAGE data flow now works via BUG-7 sibling-inheritance fix."
     }
+  ],
+  "symptom_regions": [
+    "low_back",
+    "knee",
+    "wrist"
   ]
 }

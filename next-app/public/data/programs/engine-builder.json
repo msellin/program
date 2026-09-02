@@ -1750,5 +1750,10 @@
       "date": "2026-08-19",
       "note": "Rønnestad restated + HERITAGE gate shipped + population caveats added. 3 caveats resolved: mid-block source_ref (fixed via BUG-7), display_name overclaim (fixed Batch 38 2026-08-21 · dropped pace anchor to match runs[] schema reality), GraduationCard collision (already resolved)."
     }
+  ],
+  "symptom_regions": [
+    "low_back",
+    "knee",
+    "achilles"
   ]
 }

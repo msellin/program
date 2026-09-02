@@ -1581,5 +1581,10 @@
       "date": "2026-09-01",
       "note": "Promoted for the free-friends beta. Gates checked: 0 unresolved exercise refs, 0 dead capability slots, references[]/reference_ids[] in sync at 32/32, all citations resolve, no retracted authors. Persona added: persona-engine-block2 (consistent-average, foundation, 60d). Engine Builder's graduation CTA now resolves again — it pointed here while this was DRAFT and was suppressed on 2026-09-01."
     }
+  ],
+  "symptom_regions": [
+    "low_back",
+    "knee",
+    "achilles"
   ]
 }

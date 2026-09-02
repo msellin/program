@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { peakRegionScore } from "@/lib/symptom-state";
 import {
   ComposedChart,
   Line,
@@ -46,12 +47,10 @@ function heaviestFor(day: DayLog, lifts: string[]): number | null {
 function peakSymptom(day: DayLog): number | null {
   const s = day.symptoms;
   if (!s) return null;
-  return Math.max(
-    s.groin_left ?? 0,
-    s.low_back ?? 0,
-    s.buttock_left ?? 0,
-    s.shoulder_right ?? 0,
-  );
+  // Was a Math.max over four hardcoded hip regions, so a pull-up user's elbow
+  // or a muscle-up user's wrist never reached this chart at all — the symptom
+  // line read flat while they were hurting.
+  return peakRegionScore(s).value;
 }
 
 export function SymptomLoadChart({ days }: { days: DayLog[] }) {

@@ -3,6 +3,7 @@ import { iso } from "../utils";
 import { daySignals } from "./note-signals";
 import { HIP_FLEXOR_PACK, scoreKeysFor } from "../assessments-data";
 import { packScoreSeries } from "./assessment-engine";
+import { SYMPTOM_REGIONS } from "../symptom-regions";
 
 /**
  * Aggregator for the specialist-ready training report.
@@ -44,10 +45,14 @@ export type ReportData = {
     stateDistribution: { green: number; amber: number; red: number; unchecked: number };
   };
   symptomSeries: {
-    groin_left: Array<{ date: string; value: number }>;
-    buttock_left: Array<{ date: string; value: number }>;
-    low_back: Array<{ date: string; value: number }>;
-    shoulder_right: Array<{ date: string; value: number }>;
+    /**
+     * One series per region that actually carries a score, keyed by region id.
+     * Was four fixed keys — the hip program's map — so a pull-up user's elbow
+     * or a muscle-up user's wrist never reached the specialist report at all.
+     * That report is the artifact this project considers its most valuable
+     * output; it has to carry the region the user was actually hurting in.
+     */
+    regions: Record<string, Array<{ date: string; value: number }>>;
     click_days: string[]; // dates where click_present was true
     night_pain_days: string[];
     gait_change_days: string[];
@@ -111,10 +116,7 @@ export function computeReport(
   };
 
   const symptomSeries: ReportData["symptomSeries"] = {
-    groin_left: [],
-    buttock_left: [],
-    low_back: [],
-    shoulder_right: [],
+    regions: {},
     click_days: [],
     night_pain_days: [],
     gait_change_days: [],
@@ -139,10 +141,12 @@ export function computeReport(
     // Symptom series (only for days the user actually entered something)
     if (day.symptoms) {
       const s = day.symptoms;
-      if (typeof s.groin_left === "number") symptomSeries.groin_left.push({ date: d, value: s.groin_left });
-      if (typeof s.buttock_left === "number") symptomSeries.buttock_left.push({ date: d, value: s.buttock_left });
-      if (typeof s.low_back === "number") symptomSeries.low_back.push({ date: d, value: s.low_back });
-      if (typeof s.shoulder_right === "number") symptomSeries.shoulder_right.push({ date: d, value: s.shoulder_right });
+      for (const r of SYMPTOM_REGIONS) {
+        const v = (s as Record<string, unknown>)[r.id];
+        if (typeof v === "number") {
+          (symptomSeries.regions[r.id] ??= []).push({ date: d, value: v });
+        }
+      }
       if (s.click_present) symptomSeries.click_days.push(d);
       if (s.night_pain) symptomSeries.night_pain_days.push(d);
       if (s.gait_change) symptomSeries.gait_change_days.push(d);

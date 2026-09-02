@@ -9,6 +9,7 @@ import {
   type Program,
 } from "./schemas";
 import { applyProgramExerciseOverrides } from "./data-loader";
+import { REGION_BY_ID } from "./symptom-regions";
 
 const DATA = path.resolve(__dirname, "../../public/data");
 const read = (p: string) => JSON.parse(fs.readFileSync(path.join(DATA, p), "utf8"));
@@ -490,5 +491,120 @@ describe("contact address does not fork between the two apps", () => {
       }
     }
     expect(offenders).toEqual([]);
+  });
+});
+
+/**
+ * Symptom regions: declared by programs, resolved against the shared library.
+ *
+ * This is the pair of rules that keeps `symptom_regions[]` from becoming what
+ * `progression_rules.states[]` was — authored in every program file, read by
+ * nothing, and wrong for years without a single failing test.
+ */
+describe("symptom regions", () => {
+  it("every program declares the regions its users will be asked about", () => {
+    const undeclared = programs
+      .filter((p) => !(p.program as { symptom_regions?: string[] }).symptom_regions?.length)
+      .map((p) => p.id);
+    expect(undeclared).toEqual([]);
+  });
+
+  it("every declared region id resolves against the shared library", () => {
+    const offenders: string[] = [];
+    for (const { id, program } of programs) {
+      for (const rid of (program as { symptom_regions?: string[] }).symptom_regions ?? []) {
+        if (!REGION_BY_ID[rid]) offenders.push(`${id} :: ${rid}`);
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
+
+  it("a program asks about something, and not so much that nobody reads it", () => {
+    // The morning check is answered daily; its cost is attention. Four was the
+    // historical count and is the hip program's clinical map.
+    for (const { id, program } of programs) {
+      const n = ((program as { symptom_regions?: string[] }).symptom_regions ?? []).length;
+      expect(n, `${id} region count`).toBeGreaterThanOrEqual(1);
+      expect(n, `${id} region count`).toBeLessThanOrEqual(5);
+    }
+  });
+
+  it("the gymnastics programs can see the injuries they actually cause", () => {
+    // The whole point of the change. Regression guard with teeth: medial
+    // epicondylitis for pull-ups, false-grip wrist strain for muscle-ups.
+    const regionsOf = (slug: string) =>
+      (programs.find((p) => p.id === slug)!.program as { symptom_regions?: string[] })
+        .symptom_regions ?? [];
+    expect(regionsOf("first-strict-pullup")).toContain("elbow");
+    expect(regionsOf("muscle-up")).toContain("wrist");
+  });
+
+  it("the personal program keeps its own clinical map", () => {
+    expect(
+      (programs.find((p) => p.id === "anterior-hip-rebuild")!.program as {
+        symptom_regions?: string[];
+      }).symptom_regions,
+    ).toEqual(["groin_left", "low_back", "buttock_left", "shoulder_right"]);
+  });
+});
+
+/**
+ * Authored keys the runtime throws away.
+ *
+ * Zod strips unknown keys by default, so a program can declare anything and it
+ * simply vanishes at `programSchema.parse` with no error, no warning and no
+ * failing test. That is the shared mechanism behind a run of bugs found on
+ * 2026-08-18 and 2026-09-02:
+ *
+ *   - `phase_gates[]` — a documented skip rule, read by nothing
+ *   - `progression_rules.states[]` — every program's green/amber/red ladder,
+ *     read by nothing, while a hardcoded ladder ran instead
+ *   - `daily_log_schema` — every program's symptom inputs, read by nothing
+ *
+ * Each was authored in good faith by someone who believed it took effect. This
+ * test is the thing that would have said otherwise on day one.
+ */
+describe("programs do not author top-level keys the runtime discards", () => {
+  /**
+   * Keys that are deliberately documentation for humans rather than input to
+   * code. Each needs a reason; an entry here is a claim that nothing is
+   * supposed to read it.
+   */
+  const DOCUMENTED_ONLY: Record<string, string> = {
+    status_note: "prose shown in audits and the program file header",
+    status_history: "provenance trail for status transitions",
+    review_evidence: "paths to audit documents",
+    reviewed_by: "who audited, surfaced in the ladder disclosure",
+    reviewed_at: "when",
+    evidence_base: "citation bundle; consumed via references[]",
+    daily_log_schema:
+      "DEAD as of 2026-09-02 — describes the log shape but nothing reads it. " +
+      "Superseded for symptoms by symptom_regions[]. Kept only as authoring " +
+      "documentation; see 2026-09-02-readiness-input-P0.md",
+    progression_rules:
+      "DEAD — per-program green/amber/red ladder that no code evaluates. " +
+      "Thresholds are central and audited in lib/symptom-state.ts by design: " +
+      "a program declares what feeds the gate, not how lenient it is",
+    phase_gates:
+      "DEAD — handstand-walk declares a skip rule for phase_0_bail_out_prep " +
+      "when bail_out_readiness == can_exit_reliably. Nothing reads it, so a " +
+      "user who can already cartwheel out still gets Phase 0. Reported as P0-5 " +
+      "in the 2026-08-18 handstand audit and still unimplemented; tracked as " +
+      "PROG-1. Listed here so it is knowingly dead rather than silently dead",
+    capability_domains:
+      "DEAD at program level — overhead-mobility declares six domains that " +
+      "duplicate what the drill library already carries per-drill " +
+      "(plan-generator reads drill.capability_domains, never program's). " +
+      "Found by this test on 2026-09-02; tracked as PROG-2",
+  };
+
+  it.each(programs.map((p) => p.id))("%s authors nothing that is silently dropped", (id) => {
+    const entry = manifest.programs.find((p) => p.id === id)!;
+    const raw = read(`programs/${entry.slug ?? entry.id}.json`) as Record<string, unknown>;
+    const known = new Set(Object.keys(programSchema.shape));
+    const dropped = Object.keys(raw).filter(
+      (k) => !known.has(k) && !(k in DOCUMENTED_ONLY),
+    );
+    expect(dropped).toEqual([]);
   });
 });

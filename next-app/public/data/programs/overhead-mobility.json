@@ -1093,5 +1093,10 @@
       "date": "2026-08-19",
       "note": "Motor-learning wire shipped structurally (Q4 Phase 1+3). O-1/O-2/O-3 closed. Caveat: DrillCard UI Phase 2 (self-controlled feedback + KR-bandwidth + variability rotation) deferred; explicit scope cut per ship commit."
     }
+  ],
+  "symptom_regions": [
+    "shoulder",
+    "neck",
+    "elbow"
   ]
 }

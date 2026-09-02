@@ -1405,5 +1405,10 @@
       "date": "2026-09-01",
       "note": "Promoted for the free-friends beta. Gates checked: 0 unresolved exercise refs, 0 dead capability slots (four of five were dead until earlier today — see the previous entry), references[]/reference_ids[] in sync at 22/22, all citations resolve, no retracted authors. Persona added: persona-muscleup (consistent-average, tier_a_prep, 60d)."
     }
+  ],
+  "symptom_regions": [
+    "shoulder",
+    "elbow",
+    "wrist"
   ]
 }

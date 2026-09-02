@@ -87,8 +87,35 @@ session. Any advice generated here should keep saying so rather than substitutin
 
 ## App notes
 
-`program.json.daily_log_schema` is the logging input shape. `progression_rules.states[]`
-derives `green|amber|red` from a logged symptom score.
+**Both of the claims that used to sit here were false, and had been for a long
+time.** `daily_log_schema` is *not* the logging input shape — nothing reads it.
+`progression_rules.states[]` does *not* derive `green|amber|red` — nothing reads
+that either, and a hardcoded ladder ran instead. Zod strips unknown keys
+silently, so every program authored both in good faith and neither ever took
+effect. `data-integrity.test.ts` now fails on any top-level key the runtime
+discards; both are listed there as knowingly-dead with reasons.
+
+What is actually live (2026-09-02):
+
+- **`symptom_regions[]`** — the region ids a program asks about in the morning
+  check. Ids resolve against `lib/symptom-regions.ts`, a shared library programs
+  select from the way they select from `exercises.json`. A test fails on an
+  unknown id, and on a program that declares none.
+- **`lib/symptom-state.ts`** — the one place `green|amber|red` is derived, over
+  every scored region rather than four hardcoded ones.
+
+The split is deliberate: **a program declares what feeds the safety gate; it does
+not declare how lenient the gate is.** Every program had authored its own
+thresholds (`first-strict-pullup` reds at >6 where the app reds at >5). Making
+those live would put nine unreviewed threshold sets on the decision that tells
+someone not to train, several laxer than the audited default. Same reasoning as
+confirm-first: the engine proposes, it does not quietly decide.
+
+Before this, the check rendered `groin_left` / `low_back` / `buttock_left` /
+`shoulder_right` — `anterior-hip-rebuild`'s clinical map, the one program marked
+`personal: true` — to every user of every program. A pull-up user with medial
+epicondylitis had no elbow field and the engine saw green. Storage stayed flat
+and unmigrated, so history under the original four still validates and renders.
 
 Suggested MVP is in `README.md`. The history view matters most: a multi-year symptom
 record with load context is something none of the clinical notes contain, and it is what

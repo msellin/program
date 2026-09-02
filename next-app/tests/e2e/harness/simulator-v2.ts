@@ -31,6 +31,8 @@ const INITIAL_TMS: Record<string, number> = {
 
 type ProgramShape = {
   slug: string;
+  /** Region ids this program asks about in the morning check. */
+  symptom_regions?: string[];
   phases: Array<{ id: string; starts: string; ends?: string | null; blocks: string[] }>;
   blocks: Array<{
     id: string;
@@ -196,15 +198,56 @@ function itemsForBlock(program: ProgramShape, blockId: string): string[] {
 }
 
 /**
+ * Archetypes are program-agnostic: they emit severities against the four hip
+ * region keys, because those were the only keys that existed. Programs now
+ * declare their own regions, so a gymnastics persona writing `groin_left` would
+ * exercise nothing — the check would ask about shoulder and elbow and the
+ * simulated history would answer about a groin.
+ *
+ * Project the archetype's scores positionally onto whatever the program
+ * declares, preserving severity (that is what the archetype actually encodes)
+ * and dropping keys the program does not ask about. Non-region keys —
+ * life_load, morning_stiffness_min, the flags — pass through untouched.
+ */
+const REGION_KEYS_EMITTED_BY_ARCHETYPES = [
+  "low_back",
+  "groin_left",
+  "buttock_left",
+  "shoulder_right",
+];
+
+function projectSymptomsOntoProgram(
+  symptoms: Record<string, unknown>,
+  regions: string[] | undefined,
+): Record<string, unknown> {
+  if (!regions?.length) return symptoms;
+  const out: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(symptoms)) {
+    if (!REGION_KEYS_EMITTED_BY_ARCHETYPES.includes(k)) out[k] = v;
+  }
+  const severities = REGION_KEYS_EMITTED_BY_ARCHETYPES.map((k) => symptoms[k]).filter(
+    (v) => typeof v === "number",
+  ) as number[];
+  regions.forEach((id, i) => {
+    if (severities[i] != null) out[id] = severities[i];
+  });
+  return out;
+}
+
+/**
  * Compute derived_state from symptoms. Mirrors the app's rules:
  * - Any symptom ≥ 6 or life_load ≥ 8 → "red"
  * - Any symptom ≥ 4 or life_load ≥ 5 → "amber"
  * - Otherwise → "green"
  */
 function computeDerivedState(sym: Record<string, number | undefined>): "red" | "amber" | "green" {
-  const scores = ["low_back", "groin_left", "buttock_left", "shoulder_right"]
-    .map((k) => sym[k] ?? 0)
-    .filter((n) => n > 0);
+  // Every numeric key that is not one of the non-region metrics. Was four
+  // hardcoded hip keys, which stopped mirroring the app the moment programs
+  // could declare their own regions.
+  const NON_REGION = new Set(["life_load", "morning_stiffness_min"]);
+  const scores = Object.entries(sym)
+    .filter(([k, v]) => !NON_REGION.has(k) && typeof v === "number" && (v as number) > 0)
+    .map(([, v]) => v as number);
   const lifeLoad = sym.life_load ?? 0;
   if (scores.some((s) => s >= 6) || lifeLoad >= 8) return "red";
   if (scores.some((s) => s >= 4) || lifeLoad >= 5) return "amber";
@@ -386,7 +429,10 @@ export async function runSimulationV2(
     const dateISO = target.toISOString().slice(0, 10);
     const dow = target.getUTCDay();
     const decision = archetype.logDecision(day, dow);
-    const symptoms = archetype.symptoms(day);
+    const symptoms = projectSymptomsOntoProgram(
+      archetype.symptoms(day) as Record<string, unknown>,
+      program.symptom_regions,
+    );
     const derivedState = computeDerivedState(symptoms as Record<string, number | undefined>);
 
     const blockIds = pickBlocksForDate(program, dateISO);
