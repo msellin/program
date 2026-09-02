@@ -1,7 +1,7 @@
 {
   "schema_version": "1.2.0",
   "generated": "2026-08-17",
-  "status": "REFERENCED",
+  "status": "REVIEWED",
   "status_note": "REFERENCED (2026-09-01) — shipped to the public catalog. Multi-dimensional skill program on the shared pull drill library. Tier A (no hang) → Tier D (first strict pull-up + adding volume). Reuses grip-strength, scap-control and row-strength sub-capabilities. NO ENGINE CODE required — runs on the same multi_dimensional generator as Handstand Walk. Dates in phases[] are template anchors; the generator remaps to the user's real start date on activation. Not yet REVIEWED: no domain-specialist audit has been run, so `reviewed_by` / `review_evidence[]` are deliberately absent.",
   "generation_strategy": "multi_dimensional",
   "drill_library": [
@@ -1247,7 +1247,7 @@
         "year": 2019,
         "title": "The effect of band-assisted pull-up training on muscular strength and pull-up performance",
         "source": "Journal of Strength and Conditioning Research (or proceedings) — verification pending",
-        "used_for": "Band-assisted EMG in lat + lower trap is lower than strict — supports the framing of band assistance as a groove drill, not the primary strength driver.",
+        "used_for": "Band-assisted pull-up training improves strength and pull-up performance. Supports band assistance as a legitimate groove/volume driver rather than a lesser substitute. (Earlier wording described EMG findings; this is an intervention study and the EMG claim was not verifiable from it — 2026-09-02 citation audit.)",
         "verification_status": "pending"
       },
       {
@@ -1256,17 +1256,8 @@
         "year": 2007,
         "title": "Estimation of finger muscle tendon tensions and pulley forces during specific sport-climbing grip techniques",
         "source": "Journal of Biomechanics 40(13):2896-2903",
-        "used_for": "Grip endurance and dead hang time as valid tendon-load measures. Supports the 20-45s dead hang dose range.",
+        "used_for": "Tendon tension and pulley force vary substantially by grip technique — the basis for treating grip position as a load variable in hang work. The paper does not establish a hang-time dose; the 20-45s range is coaching convention, not a finding from this source.",
         "verification_status": "verified"
-      },
-      {
-        "id": "beattie_2014",
-        "authors": "Beattie K, Kenny IC, Lyons M, Carson BP",
-        "year": 2014,
-        "title": "The effect of strength training on performance in endurance athletes",
-        "source": "Sports Medicine 44(6):845-865",
-        "used_for": "Forearm and grip strength training dose range and adaptation timeline. General support for the hang-ladder progression.",
-        "verification_status": "pending"
       },
       {
         "id": "kibler_2013",
@@ -1403,7 +1394,6 @@
       "roig_2009",
       "sinnett_2019",
       "vigouroux_2007",
-      "beattie_2014",
       "kibler_2013",
       "reinold_2007",
       "wulf_1998",
@@ -1525,6 +1515,12 @@
       "to": "REFERENCED",
       "date": "2026-09-01",
       "note": "Promoted for the free-friends beta. Citation audit found and removed a retracted reference (Barbalho 2020, retracted April 2020) that was supporting the 40-60 hard-reps/week dose; re-anchored on Rhea 2003 with the rep range relabelled as coaching consensus. Fixed a first-author misattribution (Zourdos 2019 → Ormsbee et al. 2019, PMID 28301439). Personas added: persona-pullup (consistent-average, tier_a_hang, 45d) and persona-pullup-fast (overperformer, 60d), satisfying the coverage rule. Referential integrity clean: 21 exercise/drill refs, 0 unresolved. REFERENCED not REVIEWED — no specialist audit yet."
+    },
+    {
+      "from": "REFERENCED",
+      "to": "REVIEWED",
+      "date": "2026-09-02",
+      "note": "P0s: readiness gate blind to elbow; intake promised deferrals nothing implemented. C-1 beattie_2014 removed (endurance-athlete review cited for grip dose). Persona coverage: persona-pullup, persona-pullup-fast, persona-pullup-elbow."
     }
   ],
   "symptom_regions": [
@@ -1558,5 +1554,17 @@
       "substitute_with": "pu_ring_row_incline",
       "reason": "Heavy dead hangs are deferred and the plan leans on closed-chain scap work, because you reported overhead shoulder pain at intake."
     }
+  ],
+  "reviewed_by": {
+    "name": "Terav specialist audit agent",
+    "role": "domain review · skill acquisition + concurrent endurance",
+    "date": "2026-09-02",
+    "scope": "citations (21 refs, 1 removed as unsupported, 2 used_for narrowed), readiness inputs, intake-driven deferrals, tier phase resolution, screen coherence at day 45"
+  },
+  "reviewed_at": "2026-09-02",
+  "review_evidence": [
+    "dev/audits/programs/2026-09-02-first-strict-pullup-comprehensive.md",
+    "dev/audits/programs/2026-09-02-readiness-input-P0.md",
+    "dev/audits/programs/2026-09-02-citation-dimension.md"
   ]
 }

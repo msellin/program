@@ -199,7 +199,7 @@
         "calisthenics",
         "multi_dimensional"
       ],
-      "status": "REFERENCED",
+      "status": "REVIEWED",
       "featured": false,
       "positioning": "main_track",
       "load_hint": "~1.5 hr/week (3-4 sessions/wk, 15-30 min each)"
@@ -235,7 +235,7 @@
         "calisthenics",
         "multi_dimensional"
       ],
-      "status": "REFERENCED",
+      "status": "REVIEWED",
       "featured": false,
       "positioning": "main_track",
       "load_hint": "~2-2.5 hr/week (3-4 sessions/wk, 20-35 min each)"
@@ -271,7 +271,7 @@
         "concurrent-training",
         "block-2"
       ],
-      "status": "REFERENCED",
+      "status": "REVIEWED",
       "featured": false,
       "positioning": "main_track",
       "load_hint": "~5-6 hr/week (4-5 sessions/wk, 35-105 min each)"

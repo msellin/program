@@ -1,7 +1,7 @@
 {
   "schema_version": "1.2.0",
   "generated": "2026-08-17",
-  "status": "REFERENCED",
+  "status": "REVIEWED",
   "status_note": "REFERENCED (2026-09-01) — shipped to the public catalog. Block 2 of the 3-block Engine Builder arc: volume expansion + threshold-dominant middle intensity. Assumes Block 1 completed OR an equivalent aerobic base declared at intake. Not yet REVIEWED: no domain-specialist audit, so `reviewed_by` / `review_evidence[]` are deliberately absent.",
   "generation_strategy": "correlated_tier",
   "goals": {
@@ -1580,11 +1580,29 @@
       "to": "REFERENCED",
       "date": "2026-09-01",
       "note": "Promoted for the free-friends beta. Gates checked: 0 unresolved exercise refs, 0 dead capability slots, references[]/reference_ids[] in sync at 32/32, all citations resolve, no retracted authors. Persona added: persona-engine-block2 (consistent-average, foundation, 60d). Engine Builder's graduation CTA now resolves again — it pointed here while this was DRAFT and was suppressed on 2026-09-01."
+    },
+    {
+      "from": "REFERENCED",
+      "to": "REVIEWED",
+      "date": "2026-09-02",
+      "note": "One P0 (readiness inputs), shared across the catalog. Cleanest of the three: no citation, intake or coherence defects. Persona coverage: persona-engine-block2."
     }
   ],
   "symptom_regions": [
     "low_back",
     "knee",
     "achilles"
+  ],
+  "reviewed_by": {
+    "name": "Terav specialist audit agent",
+    "role": "domain review · skill acquisition + concurrent endurance",
+    "date": "2026-09-02",
+    "scope": "citations (32 refs, no defects), readiness inputs, safety-gate coverage, tier phase resolution, aerobic session composition at day 35"
+  },
+  "reviewed_at": "2026-09-02",
+  "review_evidence": [
+    "dev/audits/programs/2026-09-02-engine-builder-block-2-comprehensive.md",
+    "dev/audits/programs/2026-09-02-readiness-input-P0.md",
+    "dev/audits/programs/2026-09-02-citation-dimension.md"
   ]
 }

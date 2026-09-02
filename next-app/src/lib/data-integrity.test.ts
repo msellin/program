@@ -721,3 +721,58 @@ describe("intake exclusions", () => {
     expect(mu.rules[0].substitute_with).toBe("mu_band_assisted_ring_dip");
   });
 });
+
+/**
+ * Tier-aware phase selection.
+ *
+ * Multi-tier skill programs author one phase per tier at the same start date,
+ * so `activePhaseFor` cannot use dates to choose — it matches `for_tier_ids`
+ * against the user's tier and falls back to the first match otherwise. The
+ * 2026-08-18 audit found that fallback silently handing Tier B/C/D users Tier
+ * A's programming (P0-6, since fixed).
+ *
+ * Both failure modes left are silent in the same way: a `for_tier_ids` naming a
+ * tier that does not exist, or a declared tier with no phase of its own. Either
+ * one drops the user back to Tier A with nothing logged and nothing rendered
+ * differently enough to notice.
+ */
+describe("tier-aware phase selection cannot fall back silently", () => {
+  const tiered = programs
+    .map((p) => ({
+      id: p.id,
+      tiers: ((p.program as { plan_tiers?: Array<{ id: string }> }).plan_tiers ?? []).map((t) => t.id),
+      phases: (p.program.phases ?? []) as Array<{ id: string; for_tier_ids?: string[] }>,
+    }))
+    .filter((p) => p.tiers.length > 0);
+
+  it("there are tiered programs to check", () => {
+    expect(tiered.length).toBeGreaterThan(0);
+  });
+
+  it("every for_tier_ids entry names a declared tier", () => {
+    const offenders: string[] = [];
+    for (const { id, tiers, phases } of tiered) {
+      const known = new Set(tiers);
+      for (const ph of phases) {
+        for (const t of ph.for_tier_ids ?? []) {
+          if (!known.has(t)) offenders.push(`${id}/${ph.id} → ${t}`);
+        }
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
+
+  it("every declared tier has a phase, or an untagged one to inherit", () => {
+    const offenders: string[] = [];
+    for (const { id, tiers, phases } of tiered) {
+      const hasUntagged = phases.some((ph) => !ph.for_tier_ids?.length);
+      if (hasUntagged) continue; // shared phases cover every tier
+      for (const t of tiers) {
+        if (!phases.some((ph) => ph.for_tier_ids?.includes(t))) {
+          offenders.push(`${id}: tier "${t}" has no phase`);
+        }
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
+});

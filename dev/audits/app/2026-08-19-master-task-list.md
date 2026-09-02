@@ -69,6 +69,15 @@ Keep the convention terse — the four markers cover every state. Don't invent n
   `drill.capability_domains`, never the program's). Found by the dead-key test on its first run,
   2026-09-02 — nobody knew it was there. Almost certainly just delete. Size: XS
 
+- [x] **AUDIT-PROGRAMS-3** — The three CITED programs promoted to REVIEWED, 2026-09-02. Five dimensions
+  audited (readiness inputs, citations, screen coherence, intake gating, tier phase resolution) against
+  regenerated persona artifacts. Four P0s, all shared-mechanism rather than authoring errors: the
+  readiness gate read one person's hip body map for every program; the intake promised deferrals nothing
+  implemented; `phase_gates` was implemented while the schema stripped its input; and the harness itself
+  had been capturing graduation screens because `started_at` was never persisted. Docs:
+  `dev/audits/programs/2026-09-02-*`. Guards added: dead-key test, symptom-region resolution,
+  intake-exclusion firing conditions, tier-phase resolution, plus three harness assertions.
+
 - [ ] **EVID-1** — **Get a real specialist audit for the catalog.** Every program's `reviewed_by.name`
   is "Terav specialist audit agent" — Terav's own review process. As of 2026-09-01 the public copy no
   longer claims otherwise (the ladder note now states plainly that no outside clinician has signed off

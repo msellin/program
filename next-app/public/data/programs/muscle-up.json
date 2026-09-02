@@ -1,7 +1,7 @@
 {
   "schema_version": "1.2.0",
   "generated": "2026-08-17",
-  "status": "REFERENCED",
+  "status": "REVIEWED",
   "status_note": "REFERENCED (2026-09-01) — shipped to the public catalog. Multi-dimensional skill program on the pull-up + handstand-adjacent drill libraries. Tier A (prep) → Tier C (first strict ring muscle-up). Not yet REVIEWED: no domain-specialist audit, so `reviewed_by` / `review_evidence[]` are deliberately absent.",
   "generation_strategy": "multi_dimensional",
   "drill_library": [
@@ -1234,7 +1234,7 @@
         "year": 2019,
         "title": "The effect of band-assisted pull-up training on muscular strength and pull-up performance",
         "source": "Journal of Strength and Conditioning Research (or proceedings) — verification pending",
-        "used_for": "Band-assisted EMG is lower than strict — reinforces the framing that band assistance is a groove drill, not a strength driver. Applies to any band-assisted work referenced in this program.",
+        "used_for": "Band-assisted pull-up training improves strength and pull-up performance. Supports band assistance as a groove/volume driver, and underwrites band-assisted ring dip as the deferral substitute. (Earlier wording described EMG findings; this is an intervention study and the EMG claim was not verifiable from it — 2026-09-02.)",
         "verification_status": "pending"
       },
       {
@@ -1404,6 +1404,12 @@
       "to": "REFERENCED",
       "date": "2026-09-01",
       "note": "Promoted for the free-friends beta. Gates checked: 0 unresolved exercise refs, 0 dead capability slots (four of five were dead until earlier today — see the previous entry), references[]/reference_ids[] in sync at 22/22, all citations resolve, no retracted authors. Persona added: persona-muscleup (consistent-average, tier_a_prep, 60d)."
+    },
+    {
+      "from": "REFERENCED",
+      "to": "REVIEWED",
+      "date": "2026-09-02",
+      "note": "P0s: readiness gate blind to wrist; intake promised a band-assisted dip that did not exist in the library. mu_band_assisted_ring_dip authored. Persona coverage: persona-muscleup."
     }
   ],
   "symptom_regions": [
@@ -1427,5 +1433,17 @@
       "substitute_with": "mu_band_assisted_ring_dip",
       "reason": "Ring dip work is band-assisted only while your elbow is symptomatic — the support position loads the medial elbow. You told us at intake."
     }
+  ],
+  "reviewed_by": {
+    "name": "Terav specialist audit agent",
+    "role": "domain review · skill acquisition + concurrent endurance",
+    "date": "2026-09-02",
+    "scope": "citations (22 refs, 1 used_for corrected), readiness inputs, intake-driven deferrals incl. authoring the substitute movement, tier phase resolution, graduation-screen coherence at day 60"
+  },
+  "reviewed_at": "2026-09-02",
+  "review_evidence": [
+    "dev/audits/programs/2026-09-02-muscle-up-comprehensive.md",
+    "dev/audits/programs/2026-09-02-readiness-input-P0.md",
+    "dev/audits/programs/2026-09-02-citation-dimension.md"
   ]
 }

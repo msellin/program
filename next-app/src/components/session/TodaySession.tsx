@@ -391,7 +391,13 @@ export function TodaySession({
           const mode = week <= 2 ? "blocked practice — drills in the composed order" : "random practice — order shuffled by the seed";
           return (
             <p className="text-[11px] text-muted font-mono">
-              Week {week} · {mode}. <span className="text-muted">Shea & Morgan 1979.</span>
+              {/* "Program week" not "Week": the header above already reads
+                  "WEEK 3 OF 4" (position within the current phase) and the
+                  phase line repeats it. An unqualified "Week 7" next to those
+                  left three different week numbers on one screen with nothing
+                  saying they count different things — persona-pullup, day 45,
+                  2026-09-02. */}
+              Program week {week} · {mode}. <span className="text-muted">Shea & Morgan 1979.</span>
             </p>
           );
         })()
