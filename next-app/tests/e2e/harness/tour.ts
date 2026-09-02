@@ -131,11 +131,17 @@ export async function runTour(
    * thumb; a retry loop just makes every run slower and hides genuine
    * interception bugs in the noise.
    */
-  await page.addStyleTag({
-    content: "#sentry-feedback { display: none !important; }",
-  }).catch(() => {
-    // Page may not be ready on the first call; the per-route navigation below
-    // re-applies it. A failure here must not fail the tour.
+  await page.addInitScript(() => {
+    // addStyleTag was the first attempt and does not survive navigation — it
+    // attaches to the current document, so only the first route was covered
+    // and the run still logged pages of interception retries. addInitScript
+    // re-runs on every navigation, before page scripts, so the rule is in
+    // place before Sentry mounts its trigger.
+    const style = document.createElement("style");
+    style.textContent = "#sentry-feedback { display: none !important; }";
+    const attach = () => document.head?.appendChild(style);
+    if (document.head) attach();
+    else document.addEventListener("DOMContentLoaded", attach, { once: true });
   });
 
   const consoleLines: string[] = [];
@@ -188,7 +194,6 @@ export async function runTour(
 
         try {
           await page.goto(route.path, { waitUntil: "domcontentloaded", timeout: 20_000 });
-          await page.addStyleTag({ content: "#sentry-feedback { display: none !important; }" }).catch(() => {});
           await page.waitForLoadState("networkidle", { timeout: 15_000 }).catch(() => {
             // networkidle can hang on SW / polling — treat as best-effort.
           });
