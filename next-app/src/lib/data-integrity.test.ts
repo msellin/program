@@ -869,3 +869,63 @@ describe("specialist review and the claim that there isn't one", () => {
     }
   });
 });
+
+/**
+ * Citation bylines must look like bylines.
+ *
+ * `sci_reports_2026_handstand_shoulder` shipped in a REVIEWED programme with
+ * `authors: "Sci Reports handstand-walk shoulder pain team"` and
+ * `display_short: "Sci et al. 2026"` — a description where a byline belongs,
+ * rendering "Sci" to users as a surname. Its own `used_for` carried
+ * "paper existence at claimed URL unconfirmed", which one HTTP request
+ * disproved: the paper is real (Angioi et al., Sci Rep, doi 10.1038/
+ * s41598-026-51612-w).
+ *
+ * So the defect was never the paper. It was placeholder metadata that survived
+ * authoring, an internal audit, and a REVIEWED badge whose whole meaning is
+ * that the citations were re-checked. A caveat saying "we did not verify this"
+ * is not a substitute for verifying it, and it is worse than nothing: it makes
+ * shipping the unverified thing feel accounted for.
+ */
+describe("citations carry real bylines", () => {
+  const cites = (read("citations.json").citations ?? read("citations.json").references ?? []) as Array<{
+    id: string; authors?: string; display_short?: string; used_for?: string;
+  }>;
+
+  it("no byline is a prose description of a research group", () => {
+    const offenders = cites
+      .filter((c) => /\b(team|group|study authors|collaborat)\b/i.test(c.authors ?? ""))
+      .map((c) => `${c.id}: ${c.authors}`);
+    expect(offenders).toEqual([]);
+  });
+
+  it("every citation has authors at all", () => {
+    expect(cites.filter((c) => !c.authors?.trim()).map((c) => c.id)).toEqual([]);
+  });
+
+  it("display_short starts with a surname, not a journal or a word", () => {
+    // "Sci et al. 2026" rendered a journal name as an author to users.
+    const offenders = cites
+      .filter((c) => c.display_short)
+      .filter((c) => /^(sci|nature|the|journal|report)\b/i.test(c.display_short!))
+      .map((c) => `${c.id}: ${c.display_short}`);
+    expect(offenders).toEqual([]);
+  });
+});
+
+describe("no programme ships a citation it has not verified", () => {
+  it("no used_for admits the source is unconfirmed", () => {
+    // Shipping a citation whose own note says nobody checked it exists, inside a
+    // programme badged as having had its citations re-checked, is the badge
+    // overclaiming in the most literal way available.
+    const offenders: string[] = [];
+    for (const { id, program } of programs) {
+      for (const r of (program.evidence_base?.references ?? []) as Array<{ id: string; used_for?: string }>) {
+        if (/\b(unconfirmed|unverified|existence not|could not (?:be )?verif)/i.test(r.used_for ?? "")) {
+          offenders.push(`${id} :: ${r.id}`);
+        }
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
+});
