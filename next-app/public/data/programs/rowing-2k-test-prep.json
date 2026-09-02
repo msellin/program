@@ -1018,5 +1018,8 @@
     "low_back",
     "knee",
     "wrist"
+  ],
+  "symptom_flags": [
+    "night_pain"
   ]
 }

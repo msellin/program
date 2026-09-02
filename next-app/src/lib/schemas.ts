@@ -579,6 +579,12 @@ export const programSchema = z.object({
    */
   symptom_regions: z.array(z.string()).optional(),
   /**
+   * Red-flag chip ids for the morning check, resolved against `SYMPTOM_FLAGS`.
+   * Absent → night pain only. Same contract as `symptom_regions`: a program
+   * declares what it asks, never how the gate treats the answer.
+   */
+  symptom_flags: z.array(z.string()).optional(),
+  /**
    * Per-phase skip rules driven by an intake answer. `handstand-walk` uses one
    * to skip `phase_0_bail_out_prep` for users who can already exit reliably.
    *

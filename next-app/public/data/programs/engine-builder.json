@@ -1755,5 +1755,8 @@
     "low_back",
     "knee",
     "achilles"
+  ],
+  "symptom_flags": [
+    "night_pain"
   ]
 }

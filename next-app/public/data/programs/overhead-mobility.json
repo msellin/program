@@ -1052,14 +1052,6 @@
       }
     ]
   },
-  "capability_domains": [
-    "thoracic_extension_mobility",
-    "scap_upward_rotation",
-    "shoulder_flexion_passive",
-    "shoulder_flexion_active",
-    "shoulder_flexion_loaded",
-    "overhead_endurance"
-  ],
   "drill_library": [
     "om_foam_roller_thoracic_ext",
     "om_quadruped_thoracic_rotation",
@@ -1098,5 +1090,8 @@
     "shoulder",
     "neck",
     "elbow"
+  ],
+  "symptom_flags": [
+    "night_pain"
   ]
 }

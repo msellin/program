@@ -1309,5 +1309,10 @@
     "low_back",
     "buttock_left",
     "shoulder_right"
+  ],
+  "symptom_flags": [
+    "night_pain",
+    "gait_change",
+    "painful_click"
   ]
 }

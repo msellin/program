@@ -41,7 +41,7 @@ import { CheckRegionRow, BUCKET_TO_VALUE } from "@/components/check/CheckRegionR
 import { CheckFlagChip } from "@/components/check/CheckFlagChip";
 import { CheckSelectorRow } from "@/components/check/CheckSelectorRow";
 import { CheckLiveVerdict, type CheckState } from "@/components/check/CheckLiveVerdict";
-import { regionsForProgram, type SymptomRegion } from "@/lib/symptom-regions";
+import { regionsForProgram, flagsForProgram, type SymptomRegion, type SymptomFlag } from "@/lib/symptom-regions";
 import { deriveState, reasonForState } from "@/lib/symptom-state";
 import { loadProgram } from "@/lib/data-loader";
 
@@ -133,20 +133,16 @@ export default function CheckPage() {
   const logs = useStore((s) => s.store.logs);
   const activeSlug = useStore((s) => s.store.user_profile?.active_program_id);
 
-  // The two hip-labral red flags (shortened stride, painful click) stay
-  // program-scoped rather than universal: asking a pull-up user about gait
-  // change is the same category error the region maps made. Flags are not yet
-  // program-declared the way regions now are — tracked in the audit doc.
-  const isHip = activeSlug === "anterior-hip-rebuild";
   const [REGIONS, setRegions] = useState<SymptomRegion[]>(() => regionsForProgram(null));
+  const [FLAGS, setFlags] = useState<SymptomFlag[]>(() => flagsForProgram(null));
   useEffect(() => {
     if (!activeSlug) return;
     let live = true;
     void loadProgram(activeSlug)
-      .then((p) => { if (live) setRegions(regionsForProgram(p)); })
+      .then((p) => { if (live) { setRegions(regionsForProgram(p)); setFlags(flagsForProgram(p)); } })
       // A failed program load must not blank the check — fall back to the
       // historical four rather than rendering a form with no regions.
-      .catch(() => { if (live) setRegions(regionsForProgram(null)); });
+      .catch(() => { if (live) { setRegions(regionsForProgram(null)); setFlags(flagsForProgram(null)); } });
     return () => { live = false; };
   }, [activeSlug]);
 
@@ -271,29 +267,28 @@ export default function CheckPage() {
           <span aria-hidden className="h-px flex-1" style={{ background: "linear-gradient(to right, var(--color-line-soft), transparent)" }} />
         </div>
         <div className="flex flex-wrap gap-2">
-          <CheckFlagChip
-            label="Woke me at night"
-            on={values.night_pain ?? false}
-            onToggle={() => toggleBool("night_pain")}
-          />
-          {isHip ? (
-            <CheckFlagChip
-              label="Shortened stride"
-              on={values.gait_change ?? false}
-              onToggle={() => toggleBool("gait_change")}
-            />
-          ) : null}
-          {isHip ? (
-            <CheckFlagChip
-              label="Painful click"
-              on={(values.click_present && values.click_painful) ?? false}
-              onToggle={() => {
-                const on = !((values.click_present ?? false) && (values.click_painful ?? false));
-                setValues({ ...values, click_present: on, click_painful: on });
-                setSaved(false);
-              }}
-            />
-          ) : null}
+          {/* Driven by the program's `symptom_flags[]`, not a slug comparison.
+              "Shortened stride" and a painful click are hip-labral red flags
+              from one clinical record, and were gated by `isHip` — right
+              answer, wrong mechanism. The next program needing its own flag
+              would have added a second slug check, which is precisely how
+              SKILL_PROGRAMS came to hold a slug that does not exist. */}
+          {FLAGS.map((f) => {
+            const on = f.keys.every((k) => values[k as keyof Symptoms] === true);
+            return (
+              <CheckFlagChip
+                key={f.id}
+                label={f.label}
+                on={on}
+                onToggle={() => {
+                  const next = { ...values };
+                  for (const k of f.keys) (next as Record<string, unknown>)[k] = !on;
+                  setValues(next);
+                  setSaved(false);
+                }}
+              />
+            );
+          })}
         </div>
       </section>
 

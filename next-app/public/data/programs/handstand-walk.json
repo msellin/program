@@ -2081,5 +2081,8 @@
     "wrist",
     "shoulder",
     "neck"
+  ],
+  "symptom_flags": [
+    "night_pain"
   ]
 }

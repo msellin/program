@@ -103,3 +103,47 @@ export function scoredRegionIds(symptoms: Record<string, unknown>): string[] {
     (id) => typeof symptoms[id] === "number",
   );
 }
+
+/**
+ * Red-flag chips.
+ *
+ * Same story as the regions, one layer along. `gait_change` (shortened stride)
+ * and a painful hip click are labral red flags — they came from
+ * `anterior-hip-rebuild`'s clinical record and were shown to that program only,
+ * via a hardcoded `isHip` check in the check page. Correct in effect, wrong in
+ * mechanism: the next program needing a flag of its own would have had to add a
+ * second slug comparison, which is exactly how `SKILL_PROGRAMS` ended up
+ * holding a slug that did not exist.
+ *
+ * `night_pain` stays the default for every program. Pain that wakes you is a
+ * red flag whatever you are training for, and it is the one flag a program
+ * should not be able to opt out of by omission.
+ */
+export type SymptomFlag = {
+  id: string;
+  label: string;
+  /**
+   * Store keys the chip writes. `painful_click` sets two — the record
+   * distinguishes a click that hurts from one that does not, and only the
+   * painful kind is a flag.
+   */
+  keys: string[];
+};
+
+export const SYMPTOM_FLAGS: SymptomFlag[] = [
+  { id: "night_pain", label: "Woke me at night", keys: ["night_pain"] },
+  { id: "gait_change", label: "Shortened stride", keys: ["gait_change"] },
+  { id: "painful_click", label: "Painful click", keys: ["click_present", "click_painful"] },
+];
+
+export const FLAG_BY_ID: Record<string, SymptomFlag> = Object.fromEntries(
+  SYMPTOM_FLAGS.map((f) => [f.id, f]),
+);
+
+/** Flags a program asks about. Undeclared → night pain only, as before. */
+export function flagsForProgram(
+  program?: { symptom_flags?: string[] } | null,
+): SymptomFlag[] {
+  const ids = program?.symptom_flags?.length ? program.symptom_flags : ["night_pain"];
+  return ids.map((id) => FLAG_BY_ID[id]).filter((f): f is SymptomFlag => !!f);
+}

@@ -175,9 +175,14 @@ Built as option 1 for the data model, with the safety gate kept central.
 
 ## Still open
 
-- Red flags (`gait_change`, `click_painful`) remain hip-scoped via an `isHip`
-  check rather than program-declared. Same category error as the regions, much
-  smaller blast radius — an aerobic user is not asked about them.
+- ~~Red flags remain hip-scoped via an `isHip` check~~ — **closed 2026-09-02.**
+  `symptom_flags[]` now works exactly as `symptom_regions[]` does: declared per
+  program, resolved against a shared `SYMPTOM_FLAGS` library, guarded by tests.
+  `night_pain` is asserted present on every program (pain that wakes you is a
+  red flag whatever you train for, and it is the one flag a program must not be
+  able to drop by omission), and the two hip-labral flags are asserted to appear
+  on `anterior-hip-rebuild` and nowhere else. The check page now contains no
+  slug comparisons at all.
 - `progression_rules` and `daily_log_schema` remain in the program files as
   authoring documentation. They are now explicitly marked dead in the test's
   allowlist rather than silently ignored.

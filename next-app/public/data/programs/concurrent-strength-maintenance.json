@@ -1034,5 +1034,8 @@
     "low_back",
     "knee",
     "shoulder"
+  ],
+  "symptom_flags": [
+    "night_pain"
   ]
 }

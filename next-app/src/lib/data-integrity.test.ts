@@ -9,7 +9,7 @@ import {
   type Program,
 } from "./schemas";
 import { applyProgramExerciseOverrides } from "./data-loader";
-import { REGION_BY_ID } from "./symptom-regions";
+import { REGION_BY_ID, FLAG_BY_ID } from "./symptom-regions";
 
 const DATA = path.resolve(__dirname, "../../public/data");
 const read = (p: string) => JSON.parse(fs.readFileSync(path.join(DATA, p), "utf8"));
@@ -585,11 +585,6 @@ describe("programs do not author top-level keys the runtime discards", () => {
       "DEAD — per-program green/amber/red ladder that no code evaluates. " +
       "Thresholds are central and audited in lib/symptom-state.ts by design: " +
       "a program declares what feeds the gate, not how lenient it is",
-    capability_domains:
-      "DEAD at program level — overhead-mobility declares six domains that " +
-      "duplicate what the drill library already carries per-drill " +
-      "(plan-generator reads drill.capability_domains, never program's). " +
-      "Found by this test on 2026-09-02; tracked as PROG-2",
   };
 
   it.each(programs.map((p) => p.id))("%s authors nothing that is silently dropped", (id) => {
@@ -774,5 +769,46 @@ describe("tier-aware phase selection cannot fall back silently", () => {
       }
     }
     expect(offenders).toEqual([]);
+  });
+});
+
+describe("symptom flags", () => {
+  it("every program declares its red-flag chips", () => {
+    const undeclared = programs
+      .filter((p) => !(p.program as { symptom_flags?: string[] }).symptom_flags?.length)
+      .map((p) => p.id);
+    expect(undeclared).toEqual([]);
+  });
+
+  it("every declared flag id resolves against the shared library", () => {
+    const offenders: string[] = [];
+    for (const { id, program } of programs) {
+      for (const fid of (program as { symptom_flags?: string[] }).symptom_flags ?? []) {
+        if (!FLAG_BY_ID[fid]) offenders.push(`${id} :: ${fid}`);
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
+
+  it("night pain is asked on every program", () => {
+    // The one flag a program must not be able to drop by omission: pain that
+    // wakes you is a red flag whatever you are training for.
+    for (const { id, program } of programs) {
+      expect(
+        (program as { symptom_flags?: string[] }).symptom_flags,
+        `${id} must ask about night pain`,
+      ).toContain("night_pain");
+    }
+  });
+
+  it("the hip-labral flags stay on the hip program and nowhere else", () => {
+    // These came from one person's clinical record. A pull-up user being asked
+    // about gait change is the same category error the region maps made.
+    for (const { id, program } of programs) {
+      const flags = (program as { symptom_flags?: string[] }).symptom_flags ?? [];
+      const hipOnly = flags.filter((f) => f === "gait_change" || f === "painful_click");
+      if (id === "anterior-hip-rebuild") expect(hipOnly.sort()).toEqual(["gait_change", "painful_click"]);
+      else expect(hipOnly, `${id} should not ask hip-labral flags`).toEqual([]);
+    }
   });
 });

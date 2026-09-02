@@ -1445,5 +1445,8 @@
     "dev/audits/programs/2026-09-02-muscle-up-comprehensive.md",
     "dev/audits/programs/2026-09-02-readiness-input-P0.md",
     "dev/audits/programs/2026-09-02-citation-dimension.md"
+  ],
+  "symptom_flags": [
+    "night_pain"
   ]
 }
