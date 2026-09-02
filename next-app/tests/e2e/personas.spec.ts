@@ -32,51 +32,6 @@ test.describe.configure({ mode: "parallel" });
 // Reads the manifest directly so no test-time server call needed.
 // Matches the `feedback_harness-persona-coverage.md` rule: every
 // shipped program must have at least one persona.
-/**
- * The morning check must ask what the program declares.
- *
- * Until 2026-09-02 it rendered four hardcoded fields — the hip program's
- * clinical map — for every program, under three label maps that all wrote to
- * the same four keys. `first-strict-pullup` authors `elbow_symptom_score`
- * because medial epicondylitis is the classic pull-up injury; there was no
- * elbow field, so the engine could not see it. One of those label maps also
- * relabelled `groin_left` as "Wrist", writing wrist scores into the groin key
- * and poisoning the multi-year record.
- *
- * Unit tests cover `regionsForProgram`. This asserts the labels actually reach
- * the rendered check for a real signed-in persona, which is the part a unit
- * test cannot see. Skips when artifacts are absent so a targeted run does not
- * fail on a missing capture.
- */
-test("harness coverage: the check asks each program's declared regions", async () => {
-  const dataDir = path.join(__dirname, "..", "..", "public", "data", "programs");
-  const missing: string[] = [];
-
-  for (const persona of PERSONAS) {
-    const checkFile = path.join(ARTIFACT_ROOT, persona.id, "text", "13-check.txt");
-    if (!fs.existsSync(checkFile)) continue;
-    const programFile = path.join(dataDir, `${persona.programSlug}.json`);
-    if (!fs.existsSync(programFile)) continue;
-
-    const program = JSON.parse(fs.readFileSync(programFile, "utf8")) as {
-      symptom_regions?: string[];
-    };
-    const captured = fs.readFileSync(checkFile, "utf8");
-    for (const id of program.symptom_regions ?? []) {
-      const region = REGION_BY_ID[id];
-      if (!region) {
-        missing.push(`${persona.id}: unknown region id "${id}"`);
-        continue;
-      }
-      if (!captured.includes(region.label)) {
-        missing.push(`${persona.id} (${persona.programSlug}): check is missing "${region.label}"`);
-      }
-    }
-  }
-
-  expect(missing, missing.join("\n")).toEqual([]);
-});
-
 test("harness coverage: every shipped program has a persona", async () => {
   const manifestPath = path.join(
     __dirname,
@@ -296,6 +251,39 @@ for (const persona of PERSONAS) {
       outDir,
       personaId: persona.id,
     });
+
+    /**
+     * The morning check must ask what THIS program declares.
+     *
+     * Until 2026-09-02 it rendered four hardcoded fields — the hip program's
+     * clinical map — for every program, behind three label maps that all wrote
+     * to the same four keys. `first-strict-pullup` authors
+     * `elbow_symptom_score` because medial epicondylitis is the classic pull-up
+     * injury; there was no elbow field, so the engine could not see it. One of
+     * those maps also relabelled `groin_left` as "Wrist", writing wrist scores
+     * into the groin key.
+     *
+     * Asserted here rather than in a standalone test on purpose: the first
+     * version read artifacts while 22 personas were concurrently rewriting
+     * them, so it failed on the PREVIOUS run's captures and reported a
+     * product defect that did not exist. A persona owns its own artifact;
+     * nothing else is writing this file.
+     */
+    const checkCapture = path.join(outDir, "text", "13-check.txt");
+    if (fs.existsSync(checkCapture)) {
+      const programFile = path.join(
+        __dirname, "..", "..", "public", "data", "programs", `${persona.programSlug}.json`,
+      );
+      const declared = (
+        JSON.parse(fs.readFileSync(programFile, "utf8")) as { symptom_regions?: string[] }
+      ).symptom_regions ?? [];
+      const captured = fs.readFileSync(checkCapture, "utf8");
+      const absent = declared
+        .map((id) => REGION_BY_ID[id])
+        .filter((r) => r && !captured.includes(r.label))
+        .map((r) => r.label);
+      expect(absent, `${persona.programSlug} check is missing: ${absent.join(", ")}`).toEqual([]);
+    }
 
     fs.writeFileSync(
       path.join(outDir, "persona.json"),
