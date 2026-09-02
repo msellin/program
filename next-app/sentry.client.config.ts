@@ -61,6 +61,16 @@ if (DSN) {
         Sentry.feedbackIntegration({
           colorScheme: "system",
           showBranding: false,
+          // Icon-only trigger. The default "Report a Bug" pill is 145x50 and
+          // sits on top of everything: on a 393px phone that is over a third
+          // of the width permanently covering the bottom-right of every
+          // screen. Lifting it clear of BottomNav stopped it eating the
+          // Profile tab, but it still swallowed taps on whatever content sat
+          // under it — the persona harness hit this on 2026-09-02, logging
+          // "<div id=\"sentry-feedback\"></div> intercepts pointer events"
+          // and retrying clicks across multiple personas. The harness retries;
+          // a thumb does not.
+          triggerLabel: "",
           formTitle: "Send feedback",
           submitButtonLabel: "Send",
           // P1-23 — the trigger is lifted clear of BottomNav by
