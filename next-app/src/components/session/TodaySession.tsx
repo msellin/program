@@ -368,7 +368,16 @@ export function TodaySession({
       {/* Contextual interference legend — for multi_dim programs, skill users
           who know the CI literature would otherwise read the deterministic
           shuffle in weeks 3+ as a bug. */}
-      {primary.generation_strategy === "multi_dimensional" && userProfile?.active_program_started_at ? (
+      {primary.generation_strategy === "multi_dimensional" &&
+      userProfile?.active_program_started_at &&
+      /* Suppress after graduation, matching the three guards above. The legend
+         explains how TODAY's drills were ordered; on a finished arc there are
+         no drills, and the week counter runs past the end — persona-muscleup
+         at day 60 rendered "Week 9 · random practice" directly above
+         "YOU FINISHED · 8 weeks logged" (2026-09-02 audit). Same defect class
+         as the August finding of three contradictory state summaries on one
+         screen; this branch was just missed when the others were fixed. */
+      !isPastProgramEnd(primary, activeDate, userProfile) ? (
         (() => {
           // `active_program_started_at` is a full ISO string ending in Z.
           // Concatenating "T00:00:00" without stripping first produced

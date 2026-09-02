@@ -285,6 +285,38 @@ for (const persona of PERSONAS) {
       expect(absent, `${persona.programSlug} check is missing: ${absent.join(", ")}`).toEqual([]);
     }
 
+    /**
+     * A finished arc must not also narrate an in-progress one.
+     *
+     * The August handstand audit named this class — three contradictory "where
+     * am I" summaries rendering on one screen — and three guards were added to
+     * TodaySession for it. The contextual-interference legend was missed, so at
+     * day 60 persona-muscleup and persona-pullup-fast rendered "Week 9 · random
+     * practice — order shuffled by the seed" directly above "YOU FINISHED · 8
+     * weeks logged": a week counter past the end of an 8-week program,
+     * explaining the ordering of drills that no longer exist.
+     *
+     * Asserted on the artifact rather than in a unit test because the defect is
+     * two independent branches both choosing to render, which is only visible
+     * once the page is assembled.
+     */
+    const dayCapture = path.join(outDir, "text", "01-day.txt");
+    if (fs.existsSync(dayCapture)) {
+      const day = fs.readFileSync(dayCapture, "utf8");
+      if (day.includes("YOU FINISHED")) {
+        const contradictions = [
+          /Week \d+ · (?:random|blocked) practice/,
+          /week \d+ of \d+/i,
+        ]
+          .map((re) => day.match(re)?.[0])
+          .filter(Boolean) as string[];
+        expect(
+          contradictions,
+          `${persona.id} shows a graduation card and an in-progress readout together`,
+        ).toEqual([]);
+      }
+    }
+
     fs.writeFileSync(
       path.join(outDir, "persona.json"),
       JSON.stringify(

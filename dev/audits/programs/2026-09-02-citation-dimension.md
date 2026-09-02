@@ -85,3 +85,43 @@ carries "small sample, flagged for founder science-advisory review" in its own
 `first-strict-pullup`'s motor-learning block (Wulf, Shea & Morgan, Karni, Walker,
 Shea 2000, Henry, Proteau, Newell, Schmidt) is a standard, correctly-applied set,
 including `wulf_shea_2002` cited *against* the program's own default as a caveat.
+
+---
+
+# Screen coherence dimension (2026-09-02)
+
+## S-1 · A finished arc narrates an in-progress one — P1, fixed
+
+`persona-muscleup` (day 60) and `persona-pullup-fast` (day 60) both render, in
+this order, on Day:
+
+```
+Week 9 · random practice — order shuffled by the seed. Shea & Morgan 1979.
+YOU FINISHED
+Muscle-Up
+8 weeks logged. Nice.
+```
+
+A week counter nine weeks into an eight-week program, explaining how today's
+drills were ordered, above a card saying there are no more drills.
+
+This is the class the 2026-08-18 handstand audit named as P0-2 — three
+contradictory "where am I" summaries on one screen. Three guards were added to
+`TodaySession` at the time, each suppressing a readout once
+`isPastProgramEnd()` is true; one comment records the same symptom ("Today
+showed 'Taper + test · week 1 of 3' alongside the graduation card"). The
+contextual-interference legend was simply missed. It renders on
+`generation_strategy === "multi_dimensional"` plus a start date, and nothing
+else — so every multi-dimensional program shows it forever.
+
+Scope is exactly the multi-dimensional programs: 10 personas reach a graduation
+state, and only these two carry the legend.
+
+**Fixed** by adding the same `!isPastProgramEnd(...)` guard the neighbouring
+three already use.
+
+**Guarded** in `personas.spec.ts`: any persona whose Day capture contains
+"YOU FINISHED" must not also contain a week/phase readout. Asserted on the
+artifact rather than in a unit test because the defect is two independent
+branches each independently deciding to render — only visible once the page is
+assembled.
