@@ -72,11 +72,7 @@ Keep the convention terse — the four markers cover every state. Don't invent n
   the AMRAP path keeps being built as though it were the fixed-rep path. Grid keeps its nine fast tiles
   and gains a "10+" tile that opens a stepper. Files: `SetView.tsx`. Size: XS
 
-- [ ] **QA-3** — No component tests exist. `@testing-library/react` and `happy-dom` are both installed
-  and there is not a single `.test.tsx` in `src/`. So every UI affordance — the AMRAP grid ceiling, the
-  per-side timer reset, the "Adjusted for you" notice — ships guarded only by the persona harness, which
-  is a 30-minute run against production and cannot exercise a specific interaction cheaply. BUG-28,
-  BUG-30 and BUG-32 were all in this gap. Size: M (harness setup, then the affordances above).
+- [x] **QA-3** — First component tests, 2026-09-02. `@testing-library/react` and `happy-dom` were both installed and neither had ever been used, so every UI affordance shipped guarded only by the persona harness — a 30-minute run against production that cannot cheaply exercise one interaction. Three bugs came through that gap in a week, all in `SetView`'s AMRAP branch: BUG-28 (top set's weight locked), BUG-30 (per-side hold timer could only run once), BUG-32 (rep grid stopped at 9). Each was found by the founder mid-session; each is a handful of lines to assert. `SetView.test.tsx` covers all three, 7 cases. Mutation-tested: deleting the 10+ tile and short-circuiting the other-side branch each fail the suite. No config was needed — `vitest.config.ts` already included `.test.tsx` under happy-dom, which means the barrier was never technical. **Remaining surface is still large** — this is one component; `BriefView`, `RestTakeover` and the check page have none.
 
 - [ ] **PROG-2** — `overhead-mobility.capability_domains[]` is dead at program level. It declares six
   domains that duplicate what the drill library already carries per-drill (`plan-generator` reads
