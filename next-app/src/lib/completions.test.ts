@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { tallyCompletions } from "../../functions/api/admin/completions";
+import { tallyCompletions } from "./completions";
 
 /**
  * EVID-2. The ladder says VERIFIED depends partly on "≥5 users completed the

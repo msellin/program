@@ -69,51 +69,7 @@ async function requireAdmin(request: Request, env: Env): Promise<Response | null
   return null;
 }
 
-type ProgramState = {
-  graduated_at?: string;
-  graduation_feedback?: { rating?: string | number };
-};
-
-export type CompletionRow = {
-  slug: string;
-  completed: number;
-  graduated_with_feedback: number;
-  first_completion: string | null;
-  latest_completion: string | null;
-};
-
-/**
- * Pure aggregation, exported so it can be tested without a database. Takes the
- * raw `state` blobs and returns one row per program that anyone has finished.
- */
-export function tallyCompletions(states: unknown[]): CompletionRow[] {
-  const rows = new Map<string, CompletionRow>();
-  for (const raw of states) {
-    const profile = (raw as { user_profile?: { program_states?: Record<string, ProgramState> } })
-      ?.user_profile;
-    const programStates = profile?.program_states;
-    if (!programStates) continue;
-    for (const [slug, st] of Object.entries(programStates)) {
-      const at = st?.graduated_at;
-      if (typeof at !== "string" || !at) continue;
-      const row = rows.get(slug) ?? {
-        slug,
-        completed: 0,
-        graduated_with_feedback: 0,
-        first_completion: null,
-        latest_completion: null,
-      };
-      row.completed += 1;
-      if (st.graduation_feedback?.rating != null) row.graduated_with_feedback += 1;
-      const day = at.slice(0, 10);
-      if (!row.first_completion || day < row.first_completion) row.first_completion = day;
-      if (!row.latest_completion || day > row.latest_completion) row.latest_completion = day;
-      rows.set(slug, row);
-    }
-  }
-  // Most-completed first — the promotion question is "which is closest to 5".
-  return [...rows.values()].sort((a, b) => b.completed - a.completed || a.slug.localeCompare(b.slug));
-}
+import { tallyCompletions } from "../../../src/lib/completions";
 
 export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
   const denied = await requireAdmin(request, env);
