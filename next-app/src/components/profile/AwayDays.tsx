@@ -75,7 +75,7 @@ export function AwayDays() {
                   aria-label={`Remove away period ${p.start} to ${p.end}`}
                   className="flex-shrink-0 text-muted hover:text-ink min-h-[44px] min-w-[44px] inline-flex items-center justify-center"
                 >
-                  <X size={15} aria-hidden />
+                  <X size={16} aria-hidden />
                 </button>
               </li>
             ))}

@@ -182,7 +182,7 @@ export function DashboardBlock({
                     className="inline-flex items-center gap-1.5 rounded-lg border border-bronze bg-bronze text-ground px-3.5 py-2 text-[14px] font-semibold hover:bg-bronze-hover active:bg-bronze-active min-h-[44px] shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_1px_2px_rgba(0,0,0,0.4)]"
                   >
                     {primaryCta.label}
-                    <ChevronRight size={14} strokeWidth={2} />
+                    <ChevronRight size={14} />
                   </Link>
                 ) : (
                   <button
@@ -191,7 +191,7 @@ export function DashboardBlock({
                     className="inline-flex items-center gap-1.5 rounded-lg border border-bronze bg-bronze text-ground px-3.5 py-2 text-[14px] font-semibold hover:bg-bronze-hover active:bg-bronze-active min-h-[44px] shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_1px_2px_rgba(0,0,0,0.4)]"
                   >
                     {primaryCta.label}
-                    <ChevronRight size={14} strokeWidth={2} />
+                    <ChevronRight size={14} />
                   </button>
                 )
               ) : null}

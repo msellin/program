@@ -273,7 +273,7 @@ function PrimaryCtaButton({ primaryCta }: { primaryCta: WorkoutHeroPrimaryCta })
   const inner: ReactNode = (
     <>
       <span>{primaryCta.label}</span>
-      <ChevronRight size={16} strokeWidth={2.25} aria-hidden />
+      <ChevronRight size={16} aria-hidden />
     </>
   );
   if (primaryCta.href) {
