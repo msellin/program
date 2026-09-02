@@ -9,7 +9,7 @@ export default function PrivacyPage() {
     <div className="max-w-2xl mx-auto space-y-4 pt-4 text-[14px] leading-relaxed">
       <h1 className="text-2xl font-semibold text-strong">Privacy policy</h1>
       <p className="text-muted italic">
-        Last updated: 2026-09-01. Beta — this policy will be lawyer-reviewed before public launch.
+        Last updated: 2026-09-02. Beta — this policy will be lawyer-reviewed before public launch.
       </p>
 
       <h2 className="text-lg font-semibold text-strong pt-2">Who controls your data</h2>
@@ -113,6 +113,11 @@ export default function PrivacyPage() {
         </li>
         <li>Static hosting: <strong>Cloudflare Pages</strong> (global CDN).</li>
         <li>Error reports and in-app feedback (when enabled): <strong>Sentry</strong> (US region, sentry.io), under standard contractual clauses.</li>
+        <li>
+          Notification email (breach notices, sub-processor changes):{" "}
+          <strong>Resend</strong> (EU region, eu-west-1). Your address is sent only
+          at the moment a notice goes out — we do not keep a mailing list there.
+        </li>
         <li>Payment data (when paid tier launches): handled entirely by <strong>Paddle</strong>. We never see card numbers.</li>
       </ul>
       <p className="text-[14px] text-muted">
@@ -178,6 +183,8 @@ export default function PrivacyPage() {
       <p>
         If a personal-data breach happens and it&apos;s likely to affect you, we&apos;ll
         notify you by email within 72 hours of becoming aware, per GDPR Art. 34.
+        Notices are sent by a person deciding to send one — nothing in the app
+        emails you on its own, and there is no marketing list.
       </p>
 
       <h2 className="text-lg font-semibold text-strong pt-2">Children</h2>
