@@ -64,6 +64,20 @@ Keep the convention terse — the four markers cover every state. Don't invent n
 
 - [x] **PROG-1** — `phase_gates` was implemented all along and the schema was eating its input, fixed 2026-09-02. `isPhaseSkipped` (`engine/schedule.ts:150-168`) reads `program.phase_gates`, resolves the user's intake answer and returns true — but it reads through an `as unknown as` cast, and `programSchema` had no such field, so `programSchema.parse` (`data-loader.ts:46`) stripped it before the implementation ever saw it. `gates?.length` was always undefined; the function always returned false. The 2026-08-18 audit reported it as "dead, nothing reads it" — half right, and the wrong half is the one that mattered: the cast made the mismatch invisible to the compiler, so nothing flagged it for three weeks. Fix is the missing schema field. Tests: `phase-gates.test.ts`, 3 cases, including one asserting the gate's `phase_id` and `question_id` resolve — a gate naming a phase that does not exist would parse fine and silently never fire, the same failure one level along.
 
+- [x] **BUG-32** — The AMRAP rep grid stopped at 9, shipped 2026-09-02. An AMRAP is unbounded by
+  definition — that is what the "+" in 5+/3+/1+ means — but the grid rendered exactly nine tiles and
+  nothing else. Founder hit 11 on a 125 kg block pull and had to record it as free text: the set logged
+  as `125kg x9` with the real count only in a note, so TM inference read 9 reps and under-estimated the
+  1RM by roughly 8 kg (Epley: 162.5 vs 170.8). Third defect in this branch after BUG-28's locked weight —
+  the AMRAP path keeps being built as though it were the fixed-rep path. Grid keeps its nine fast tiles
+  and gains a "10+" tile that opens a stepper. Files: `SetView.tsx`. Size: XS
+
+- [ ] **QA-3** — No component tests exist. `@testing-library/react` and `happy-dom` are both installed
+  and there is not a single `.test.tsx` in `src/`. So every UI affordance — the AMRAP grid ceiling, the
+  per-side timer reset, the "Adjusted for you" notice — ships guarded only by the persona harness, which
+  is a 30-minute run against production and cannot exercise a specific interaction cheaply. BUG-28,
+  BUG-30 and BUG-32 were all in this gap. Size: M (harness setup, then the affordances above).
+
 - [ ] **PROG-2** — `overhead-mobility.capability_domains[]` is dead at program level. It declares six
   domains that duplicate what the drill library already carries per-drill (`plan-generator` reads
   `drill.capability_domains`, never the program's). Found by the dead-key test on its first run,

@@ -205,6 +205,10 @@ export function SetView({
   // between-sets rest and lives in a different component; two countdowns
   // sharing a store is how the old RestTimerHost double-fired.
   const [running, setRunning] = useState(false);
+  // AMRAP reps above the 9-tile grid. Separate from `reps` (the fixed-rep
+  // stepper) so stepping here cannot alter a non-AMRAP set's prescription.
+  const [repsOverflow, setRepsOverflow] = useState(false);
+  const [overflowReps, setOverflowReps] = useState(10);
   /**
    * `per_side` work is two efforts inside one set — 90/90 switches, most hip
    * stretches. The clock only ever ran once: at zero the single action was
@@ -626,18 +630,61 @@ export function SetView({
                 : `Reps you got on set ${activeSetIndex + 1}`}
               {active.isLoadable ? ` · ${weight} kg` : ""}
             </p>
-            <div className="flex flex-wrap gap-2">
-              {Array.from({ length: 9 }, (_, i) => i + 1).map((n) => (
+            {/* BUG-32 (founder, 2026-09-02): this grid ran 1-9 and stopped.
+                An AMRAP is unbounded by definition — that is the whole point of
+                the "+" in 5+/3+/1+ — so a good day was unloggable. Founder hit
+                11 and had to record it in a free-text note, which means the set
+                lands with the wrong reps and TM inference reads it wrong, the
+                same downstream cost as BUG-28's locked weight. Third defect
+                found in this branch: the AMRAP path keeps being built as though
+                it were the fixed-rep path.
+                Grid keeps the fast taps; "10+" opens a stepper rather than
+                adding twenty tiles nobody scans. */}
+            {repsOverflow ? (
+              <div className="border border-line-strong rounded-[10px] bg-surface p-3 flex flex-col gap-2">
+                <StepperRow label="reps" value={overflowReps} step={1} onChange={setOverflowReps} />
+                <div className="flex gap-2 pt-0.5">
+                  <button
+                    type="button"
+                    onClick={() => setRepsOverflow(false)}
+                    className="flex-1 h-11 text-ink text-[14px]"
+                  >
+                    Back to the grid
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => confirm(overflowReps)}
+                    className="flex-1 h-11 rounded-[10px] bg-bronze text-ground text-[15px] font-semibold"
+                  >
+                    Log {overflowReps} reps
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-wrap gap-2">
+                {Array.from({ length: 9 }, (_, i) => i + 1).map((n) => (
+                  <button
+                    key={n}
+                    type="button"
+                    onClick={() => confirm(n)}
+                    className="flex-1 basis-[60px] h-[62px] rounded-[10px] border border-line-soft bg-surface text-strong text-[22px] font-semibold tracking-[-.02em]"
+                  >
+                    {n}
+                  </button>
+                ))}
                 <button
-                  key={n}
                   type="button"
-                  onClick={() => confirm(n)}
-                  className="flex-1 basis-[60px] h-[62px] rounded-[10px] border border-line-soft bg-surface text-strong text-[22px] font-semibold tracking-[-.02em]"
+                  onClick={() => {
+                    setOverflowReps((r) => (r >= 10 ? r : 10));
+                    setRepsOverflow(true);
+                  }}
+                  className="flex-1 basis-[60px] h-[62px] rounded-[10px] border border-line-strong bg-surface text-strong text-[18px] font-semibold tracking-[-.02em]"
+                  aria-label="Ten or more reps"
                 >
-                  {n}
+                  10+
                 </button>
-              ))}
-            </div>
+              </div>
+            )}
             {active.isLoadable ? (
               <button
                 type="button"
