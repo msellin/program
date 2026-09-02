@@ -195,3 +195,45 @@ false P0.
   returned empty and a broken rule was indistinguishable from a working one. The
   spec asserts the deferred movements are absent from the captured session, the
   substitute is present, and the reason is on screen.
+
+## H-1 · The harness was auditing graduation screens — P0, fixed
+
+Found while verifying I-1: `persona-pullup-elbow` reached "YOU FINISHED · 8
+weeks logged" on **day 21 of an eight-week arc**, and every persona's
+`final-store.json` showed `program_states[slug]` holding exactly `tier` and
+`graduated_at` — no `started_at`, on any persona, ever.
+
+`simulator-v2`'s daily loop re-stamps `user_profile` each simulated day because
+the periodic reset can wipe localStorage. That re-stamp restored `tier` and
+nothing else, so `started_at` was lost the first time a reset fired and never
+came back.
+
+`started_at` is what `shiftedPhases` uses to remap authored phase anchors onto
+the user's real start. Five of the nine programs carry anchors already in the
+past — `first-strict-pullup`, `muscle-up` and `engine-builder-block-2` among
+them — so without it `isPastProgramEnd()` returned true almost immediately and
+the persona graduated.
+
+**The consequence is bigger than the bug.** Persona artifacts for the
+multi-dimensional programs have been capturing graduation cards where a real
+user at that point sees a session. Every audit reading those artifacts —
+including this one, two hours ago — has been reading the wrong screen. It also
+reframes S-1 above: the contextual-interference legend rendering over
+"YOU FINISHED" was reachable in the harness far more easily than in production,
+though the guard added for it remains correct, since a real user does eventually
+graduate.
+
+Fixed by re-stamping `started_at` and `intake_answers` alongside `tier`. After
+the fix the same persona's Day screen reads "TODAY · WEEK 4 OF 4 · ENDS 7 SEPT".
+
+## H-2 · The feedback widget was intercepting harness clicks — fixed
+
+`<div id="sentry-feedback">` is `position: fixed` above everything, so
+Playwright's actionability check resolved `elementFromPoint` to it for anything
+underneath and retried. Runs logged pages of "intercepts pointer events" on both
+the original 145x50 pill and the 50x50 icon it was reduced to earlier today.
+
+Suppressed with a stylesheet injection in `runTour` rather than shrunk further
+in the product: the personas exist to audit the app's own surfaces, and a
+support widget on top of them is measurement noise that also hides genuine
+interception bugs.

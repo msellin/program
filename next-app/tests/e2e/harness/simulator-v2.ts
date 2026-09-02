@@ -516,7 +516,7 @@ export async function runSimulationV2(
     });
 
     await page.evaluate(
-      ({ dateISO, decision, blockIds, aerobicRuns, symptoms, derivedState, note, tms, factor, baseRpe, jitter, itemsByBlock, slug, extras, uid, tier, partialSession, dismissToday, acceptRate, retestToday, retestMetricIds, moveToday }) => {
+      ({ dateISO, decision, blockIds, aerobicRuns, symptoms, derivedState, note, tms, factor, baseRpe, jitter, itemsByBlock, slug, extras, uid, tier, intakeAnswers, partialSession, dismissToday, acceptRate, retestToday, retestMetricIds, moveToday }) => {
         // Read local, or start from a valid baseline if StoreHydrator wiped
         // us during the initial page.goto (see: reset-on-fresh-mount bug).
         const raw = localStorage.getItem("program.log.v2");
@@ -545,10 +545,33 @@ export async function runSimulationV2(
             store.user_profile?.active_program_started_at ?? new Date().toISOString(),
           tier: "beta_forever",
         };
-        if (tier) {
+        // Re-stamp the per-program state too. This restored `tier` ONLY, so
+        // whenever the reset above wiped localStorage, `started_at` and
+        // `intake_answers` were gone for good — the daily loop rebuilt
+        // user_profile from defaults and never put them back. Every persona's
+        // final store holds exactly `tier` and `graduated_at` under
+        // program_states[slug] and nothing else, which is the fingerprint of
+        // this line.
+        //
+        // `started_at` is what `shiftedPhases` uses to remap authored phase
+        // anchors onto the user's real start date. Five programs carry anchors
+        // that are already in the past, so losing it graduated personas early:
+        // persona-pullup-elbow reached "YOU FINISHED" on day 21 of an
+        // eight-week arc. The audits have been reading graduation screens where
+        // they should have been reading mid-program sessions.
+        {
+          const priorState = store.user_profile.program_states?.[slug] ?? {};
           store.user_profile.program_states = {
             ...(store.user_profile.program_states ?? {}),
-            [slug]: { ...(store.user_profile.program_states?.[slug] ?? {}), tier },
+            [slug]: {
+              ...priorState,
+              started_at:
+                priorState.started_at ?? store.user_profile.active_program_started_at,
+              ...(tier ? { tier } : {}),
+              ...(Object.keys(intakeAnswers ?? {}).length && !priorState.intake_answers
+                ? { intake_answers: { ...intakeAnswers } }
+                : {}),
+            },
           };
         }
         store.training_maxes = { ...tms, ...store.training_maxes };
@@ -748,6 +771,7 @@ export async function runSimulationV2(
         extras: additionalProgramSlugs,
         uid: sessionUid,
         tier: tier ?? null,
+        intakeAnswers: intakeAnswers ?? {},
         // ~1 logging day in 5 stops mid-session. Seeded off the day index
         // rather than Math.random so a persona's partial days are stable
         // across re-runs and an auditor comparing two sweeps isn't reading

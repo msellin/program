@@ -115,6 +115,29 @@ export async function runTour(
   const { routes, viewports, outDir, personaId } = opts;
   const results: TourResult[] = [];
 
+  /**
+   * Hide the Sentry feedback trigger for the duration of the tour.
+   *
+   * It is `position: fixed` above everything, so Playwright's actionability
+   * check resolves `elementFromPoint` to `<div id="sentry-feedback">` for
+   * anything underneath and retries the click. Runs logged pages of
+   * "intercepts pointer events — retrying click action" across several
+   * personas, on both the 145x50 pill and the 50x50 icon it was reduced to on
+   * 2026-09-02.
+   *
+   * Suppressed in the harness rather than shrunk further in the product: the
+   * personas exist to audit the app's own surfaces, and a support widget
+   * sitting on top of them is measurement noise. Real users can move their
+   * thumb; a retry loop just makes every run slower and hides genuine
+   * interception bugs in the noise.
+   */
+  await page.addStyleTag({
+    content: "#sentry-feedback { display: none !important; }",
+  }).catch(() => {
+    // Page may not be ready on the first call; the per-route navigation below
+    // re-applies it. A failure here must not fail the tour.
+  });
+
   const consoleLines: string[] = [];
   const networkLines: string[] = [];
 
@@ -165,6 +188,7 @@ export async function runTour(
 
         try {
           await page.goto(route.path, { waitUntil: "domcontentloaded", timeout: 20_000 });
+          await page.addStyleTag({ content: "#sentry-feedback { display: none !important; }" }).catch(() => {});
           await page.waitForLoadState("networkidle", { timeout: 15_000 }).catch(() => {
             // networkidle can hang on SW / polling — treat as best-effort.
           });
