@@ -812,3 +812,60 @@ describe("symptom flags", () => {
     }
   });
 });
+
+/**
+ * Specialist review (EVID-1).
+ *
+ * The ladder disclosure on /programs states plainly that no outside clinician
+ * has signed off any program in the catalog. That sentence is currently true.
+ * The day it stops being true, it has to come off the page — and the failure
+ * mode of this codebase is exactly that: copy which was accurate when written
+ * and which nobody re-checked. So the two are pinned to each other.
+ */
+describe("specialist review and the claim that there isn't one", () => {
+  const LADDER = path.resolve(__dirname, "..", "app", "programs", "page.tsx");
+  const reviewed = programs.filter(
+    (p) => (p.program as { specialist_review?: unknown }).specialist_review,
+  );
+
+  it("a recorded review carries who, what and when — no anonymous sign-off", () => {
+    for (const { id, program } of reviewed) {
+      const r = (program as { specialist_review?: Record<string, unknown> }).specialist_review!;
+      for (const field of ["name", "credential", "date", "scope", "verdict"]) {
+        expect(r[field], `${id}.specialist_review.${field}`).toBeTruthy();
+      }
+    }
+  });
+
+  it("publishes what the reviewer asked for, including anything we declined", () => {
+    // A review that only records the findings we agreed with is marketing.
+    for (const { id, program } of reviewed) {
+      const r = (program as {
+        specialist_review?: { verdict?: string; changes?: Array<{ finding: string; our_response: string }> };
+      }).specialist_review!;
+      if (r.verdict === "ships_with_changes") {
+        expect(r.changes?.length, `${id} says "ships with changes" but lists none`).toBeGreaterThan(0);
+      }
+      for (const c of r.changes ?? []) {
+        expect(c.our_response?.length ?? 0, `${id}: a finding with no response`).toBeGreaterThan(10);
+      }
+    }
+  });
+
+  it("the ladder stops saying 'no outside clinician' once one has signed off", () => {
+    if (!fs.existsSync(LADDER)) return;
+    const copy = fs.readFileSync(LADDER, "utf8");
+    const claimsNone = /No\s*\{?"?\s*\}?\s*physiotherapist, coach or sport\s*\n?\s*scientist has independently/.test(
+      copy.replace(/&apos;/g, "'"),
+    );
+    if (reviewed.length > 0) {
+      expect(
+        claimsNone,
+        `${reviewed.length} program(s) now carry a specialist review — the ladder disclosure must be updated`,
+      ).toBe(false);
+    } else {
+      // Nothing reviewed yet, so the disclosure must still be there and honest.
+      expect(claimsNone, "the ladder must disclose that no specialist has reviewed").toBe(true);
+    }
+  });
+});

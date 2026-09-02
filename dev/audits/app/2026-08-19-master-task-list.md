@@ -85,19 +85,7 @@ Keep the convention terse — the four markers cover every state. Don't invent n
   `dev/audits/programs/2026-09-02-*`. Guards added: dead-key test, symptom-region resolution,
   intake-exclusion firing conditions, tier-phase resolution, plus three harness assertions.
 
-- [ ] **EVID-1** — **Get a real specialist audit for the catalog.** Every program's `reviewed_by.name`
-  is "Terav specialist audit agent" — Terav's own review process. As of 2026-09-01 the public copy no
-  longer claims otherwise (the ladder note now states plainly that no outside clinician has signed off
-  any program and none is field-proven), so this is no longer an integrity defect — it is the bar the
-  copy openly says Terav intends to clear. **What it needs:** a named physiotherapist, coach or sport
-  scientist per domain, who re-checks citations against current literature and records what they
-  checked and when. Domains needed: endurance (engine-builder, engine-builder-block-2,
-  rowing-2k-test-prep), gymnastics/skill (handstand-walk, first-strict-pullup, muscle-up), concurrent
-  (concurrent-strength-maintenance), mobility (overhead-mobility). Founder already has an orthopaedist
-  and a physiatrist — those cover hip/mobility, not endurance or gymnastics. On completion: set
-  `reviewed_by` to the named human, and add a third tier to the ladder rather than overwriting the
-  existing internal-audit tier — the agent pass is real work and should keep its own name. Size: L
-  (mostly outreach, not code). Blocks nothing; unlocks the strongest trust claim the product can make.
+- [~] **EVID-1** — Apparatus built 2026-09-02; **the outreach itself is the remaining work and it is the founder's.** Four self-contained reviewer packets generated from the shipping data (`dev/scripts/build-reviewer-packet.py` → `dev/audits/reviewer-packets/`): gymnastics-skill (41 unique papers, ~90 min), endurance-engine (43, ~90 min), endurance-race-concurrent (51, ~60 min), mobility (19, ~40 min). Citations are deduplicated per domain — a reviewer meets Wulf 1998 once rather than three times, with every claim any program hangs on it grouped underneath, which is also the cheapest way to spot a paper stretched across two claims. Generated rather than written so a packet cannot describe a program that no longer ships, and stale packets are deleted on regeneration. `specialist_review` added to the schema with `changes[]` recording what we did about each finding **including where we declined** — a review publishing only the findings we agreed with is marketing. Guards: an anonymous sign-off fails the suite, a "ships_with_changes" verdict listing no changes fails, and — the important one — **the ladder copy claiming no outside specialist has reviewed anything is pinned to the data**: the moment any program carries a review, the suite fails until that sentence is removed. Draft outreach email in `reviewer-packets/outreach-email.md`. Closest to hand: the founder's existing physiatrist plausibly covers the mobility packet.
 
 - [x] **EVID-2** — Completed arcs are countable, shipped 2026-09-02. `GET /api/admin/completions` returns per-program `completed`, `graduated_with_feedback`, and first/latest completion dates, ordered most-completed first so "which program is closest to five" is answerable at a glance. Counts only — no user ids, no emails, no per-user rows; admin-gated on `ADMIN_EMAILS` and returning 404 rather than 403 so the surface does not confirm it exists. `graduated_with_feedback` is tracked separately because the ladder's wording is "completed the arc WITH SUBJECTIVE SUCCESS", and a bare completion count is not that criterion. Aggregation is a pure exported function; tests cover 7 cases including malformed jsonb. Size: S
 

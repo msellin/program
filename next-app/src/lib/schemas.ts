@@ -585,6 +585,39 @@ export const programSchema = z.object({
    */
   symptom_flags: z.array(z.string()).optional(),
   /**
+   * A named outside specialist's review (EVID-1).
+   *
+   * Distinct from `reviewed_by`, which records Terav's own audit pass. Every
+   * program's `reviewed_by` is "Terav specialist audit agent", and the ladder
+   * disclosure says so in as many words — that no physiotherapist, coach or
+   * sport scientist has independently signed off anything in the catalog. This
+   * field is what makes that sentence false, one program at a time.
+   *
+   * `changes[]` records what the reviewer asked for AND what we did about it,
+   * including where we declined. A review that only publishes the findings we
+   * agreed with is marketing.
+   */
+  specialist_review: z
+    .object({
+      name: z.string(),
+      credential: z.string(),
+      date: z.string(),
+      scope: z.string(),
+      /** Anything outside their domain that they explicitly did not assess. */
+      not_reviewed: z.string().optional(),
+      verdict: z.enum(["ships_as_is", "ships_with_changes", "do_not_ship"]),
+      changes: z
+        .array(
+          z.object({
+            finding: z.string(),
+            our_response: z.string(),
+            applied: z.boolean(),
+          }),
+        )
+        .optional(),
+    })
+    .optional(),
+  /**
    * Per-phase skip rules driven by an intake answer. `handstand-walk` uses one
    * to skip `phase_0_bail_out_prep` for users who can already exit reliably.
    *
