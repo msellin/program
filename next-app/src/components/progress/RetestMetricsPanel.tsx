@@ -8,6 +8,7 @@ import {
   formatMetric,
   type RetestValue,
 } from "@/lib/engine/retest-evaluator";
+import { readingsForMetric } from "@/lib/engine/retest-readings";
 import { dueRetestMetrics } from "@/lib/engine/tier-promotion";
 import { useStore } from "@/lib/useStore";
 import { today as todayISO } from "@/lib/utils";
@@ -61,6 +62,7 @@ export function RetestMetricsPanel({
             m={m}
             due={dueIds.has(m.metric_id)}
             canRetest={isPhysicalTest(m.metric_id)}
+            program={program}
           />
         ))}
       </ul>
@@ -76,10 +78,12 @@ function RetestCard({
   m,
   due,
   canRetest,
+  program,
 }: {
   m: RetestValue;
   due: boolean;
   canRetest: boolean;
+  program: Program;
 }) {
   const delta = deltaFromBaseline(m);
   const deltaColor = !delta
@@ -102,12 +106,15 @@ function RetestCard({
   // Fix: select the raw (possibly undefined) value with stable reference, then
   // derive the fallback outside the store subscription. `undefined` is always
   // === itself; `[]` isn't.
-  const readingsRaw = useStore((s) => s.store.retest_readings);
-  const readings = readingsRaw ?? [];
-  const trendValues = readings
-    .filter((r) => r.metric_id === m.metric_id)
-    .sort((a, b) => a.observed_at.localeCompare(b.observed_at))
-    .map((r) => r.value);
+  // Readings derived from the log count for the sparkline too — a user who
+  // rowed the prescribed 2K inside the session, rather than typing it into
+  // the retest sheet, used to get a real current value above a blank trend.
+  // `s.store` is a stable reference, so this does not reintroduce the Batch
+  // 36 render loop that `?? []` on a selector caused.
+  const storeForSeries = useStore((s) => s.store);
+  const trendValues = readingsForMetric(storeForSeries, program, m.metric_id).map(
+    (r) => r.value,
+  );
   if (
     trendValues.length &&
     m.baseline != null &&

@@ -12,7 +12,8 @@
  * Direction is respected downstream — this file just computes values.
  */
 
-import type { Store } from "../schemas";
+import type { Program, Store } from "../schemas";
+import { readingsForMetric } from "./retest-readings";
 
 export type CurvePoint = {
   /** ISO date (YYYY-MM-DD) */
@@ -24,7 +25,11 @@ export type CurvePoint = {
 };
 
 /**
- * Build the rolling-avg curve from `retest_readings` for one metric.
+ * Build the rolling-avg curve for one metric from every reading available —
+ * hand-logged and derived from the run log alike (`resolveRetestReadings`).
+ * It read `store.retest_readings` directly until 2026-09-03, so a rowing
+ * user who logged their 2K inside the session saw a current value on the
+ * card and no curve underneath it.
  * Rolling window is in days. When a retest has multiple readings within
  * the window, they average together.
  *
@@ -36,10 +41,9 @@ export function computeRollingAvg(
   store: Store,
   metricId: string,
   windowDays: number,
+  program?: Program | null,
 ): CurvePoint[] {
-  const readings = (store.retest_readings ?? [])
-    .filter((r) => r.metric_id === metricId)
-    .sort((a, b) => a.observed_at.localeCompare(b.observed_at));
+  const readings = readingsForMetric(store, program, metricId);
   if (readings.length === 0) return [];
 
   const points: CurvePoint[] = [];

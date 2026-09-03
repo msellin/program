@@ -29,6 +29,7 @@ import {
   type RetestValue,
 } from "@/lib/engine/retest-evaluator";
 import { computeRollingAvg, capToWindow, type CurvePoint } from "@/lib/engine/rolling-avg";
+import { resolveRetestReadings } from "@/lib/engine/retest-readings";
 import type { WindowTier } from "./CutCWindowTierControl";
 import { cn } from "@/lib/utils";
 
@@ -62,7 +63,7 @@ function pickPrimaryMetric(program: Program, store: Store): RetestValue | null {
 
   // Primary = most-readings metric (matches RetestTimeline choice for
   // consistency across the two Trend components).
-  const readings = store.retest_readings ?? [];
+  const readings = resolveRetestReadings(store, program);
   let primary = withData[0];
   let count = 0;
   for (const v of withData) {
@@ -105,10 +106,10 @@ export function CutCProgramCurveCard({
     if (!metric) return { points: [], allInWindow: [] as CurvePoint[] };
     const windowDays = WINDOW_DAYS[zoomTier];
     const rollingWindow = ROLLING_WINDOW_DAYS[zoomTier];
-    const raw = computeRollingAvg(store, metric.metric_id, rollingWindow);
+    const raw = computeRollingAvg(store, metric.metric_id, rollingWindow, program);
     const capped = capToWindow(raw, windowDays);
     return { points: capped, allInWindow: capped };
-  }, [metric, store, zoomTier]);
+  }, [metric, store, zoomTier, program]);
 
   if (!metric || points.length === 0) {
     return (

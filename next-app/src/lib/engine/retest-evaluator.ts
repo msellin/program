@@ -336,6 +336,67 @@ export function evaluateRetestMetrics(
 }
 
 /**
+ * Every dated observation a metric can claim from the log — not just the
+ * current/baseline pair `evaluateRetestMetrics` reduces them to.
+ *
+ * This exists because the two halves of a retest metric were reading
+ * different sources. `current` and `baseline` came from `source_ref` here;
+ * the *history* — timeline pins, sparkline, rolling curve, and the
+ * non-responder classifier's baselines — came only from
+ * `store.retest_readings`, which is populated exclusively by hand through
+ * the retest sheet. So a rowing user's 2K card showed a current time
+ * derived from the row they actually did, above an empty timeline, and the
+ * classifier stayed silent until they typed the same number a second time.
+ *
+ * Only run-backed metrics produce a series. `training_maxes` and
+ * `physical_test` keep a current value and a baseline snapshot in the
+ * store, not dated observations, so there is nothing honest to plot — they
+ * stay logged-only. Returns [] rather than inventing two points.
+ *
+ * Consumed by `retest-readings.ts`, which merges this with what the user
+ * logged by hand. Parsing lives here because this file owns `source_ref`.
+ */
+export function deriveMetricSeries(
+  store: Store,
+  metric: { metric_id?: string; source?: string; source_ref?: string },
+  slug?: string,
+): Array<{ observed_at: string; value: number }> {
+  const ref = typeof metric.source_ref === "string" ? metric.source_ref : "";
+  if (!ref) return [];
+  const parsed = parseSource(ref, typeof metric.source === "string" ? metric.source : undefined);
+  if (parsed.kind !== "runs") return [];
+
+  // Same program-start cutoff `evaluateSource` applies: a returning user's
+  // years-old sessions are not observations of this arc.
+  const startedAt = slug
+    ? store.user_profile?.program_states?.[slug]?.started_at?.slice(0, 10)
+    : undefined;
+
+  const out: Array<{ observed_at: string; value: number }> = [];
+  for (const { date, run } of runsAcrossDates(store)) {
+    if (startedAt && date < startedAt) continue;
+    if (!runMatchesFilters(run, parsed.filters)) continue;
+    const v = readRunNumericField(run, parsed.field);
+    if (v == null) continue;
+    out.push({ observed_at: date, value: v });
+  }
+  return out;
+}
+
+/** True when a metric's declared source can yield a dated series at all. */
+export function metricHasDerivableSeries(metric: {
+  source?: string;
+  source_ref?: string;
+}): boolean {
+  const ref = typeof metric.source_ref === "string" ? metric.source_ref : "";
+  if (!ref) return false;
+  return (
+    parseSource(ref, typeof metric.source === "string" ? metric.source : undefined).kind ===
+    "runs"
+  );
+}
+
+/**
  * Human-format a metric value for display. Seconds are rendered as mm:ss.
  */
 export function formatMetric(value: number | null, unit: string): string {

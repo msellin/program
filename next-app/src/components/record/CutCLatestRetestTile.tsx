@@ -31,6 +31,7 @@ import {
   formatMetric,
   type RetestValue,
 } from "@/lib/engine/retest-evaluator";
+import { resolveRetestReadings, readingsForMetric } from "@/lib/engine/retest-readings";
 import type { Program, Store } from "@/lib/schemas";
 import { CitationRef } from "@/components/citations/CitationRef";
 import { cn } from "@/lib/utils";
@@ -59,9 +60,9 @@ function pickLatestRetest(
   const withData = values.filter((v) => v.current != null && v.baseline != null);
   if (withData.length === 0) return null;
 
-  // Prefer the metric whose most-recent reading in retest_readings is
-  // most recent (matches the mockup's "latest retest" concept).
-  const readings = store.retest_readings ?? [];
+  // Prefer the metric whose most-recent reading is most recent (matches
+  // the mockup's "latest retest" concept).
+  const readings = resolveRetestReadings(store, program);
   let bestMetric: RetestValue = withData[0];
   let bestDate = "";
   for (const v of withData) {
@@ -104,9 +105,8 @@ function formatSinceBaseline(m: RetestValue, retestCount: number): string {
  * Falls back to a program-agnostic default when the metric doesn't
  * carry an explicit signal name.
  */
-function basisLine(m: RetestValue, store: Store): string {
-  const readings = store.retest_readings ?? [];
-  const count = readings.filter((r) => r.metric_id === m.metric_id).length;
+function basisLine(m: RetestValue, store: Store, program: Program): string {
+  const count = readingsForMetric(store, program, m.metric_id).length;
   if (count === 0) return `Basis · first reading`;
   // Prefer explicit signal name from the metric config if the program
   // schema carries it (extended per program in Cut A retest-cadence work).
@@ -141,9 +141,7 @@ export function CutCLatestRetestTile({ program, store, className }: CutCLatestRe
 
   const { metric, nextRetestInDays } = picked;
   const delta = deltaFromBaseline(metric);
-  const retestCount = (store.retest_readings ?? []).filter(
-    (r) => r.metric_id === metric.metric_id,
-  ).length;
+  const retestCount = readingsForMetric(store, program, metric.metric_id).length;
 
   const deltaColor = !delta
     ? "text-muted"
@@ -152,9 +150,7 @@ export function CutCLatestRetestTile({ program, store, className }: CutCLatestRe
       : "text-amber";
 
   // Prev reading for the "vs" line — sort readings, pick the second-latest.
-  const readings = (store.retest_readings ?? [])
-    .filter((r) => r.metric_id === metric.metric_id)
-    .sort((a, b) => b.observed_at.localeCompare(a.observed_at));
+  const readings = readingsForMetric(store, program, metric.metric_id).slice().reverse();
   const prev = readings[1];
 
   // Citation ID from program.retest_metrics config (if present).
@@ -206,7 +202,7 @@ export function CutCLatestRetestTile({ program, store, className }: CutCLatestRe
       <hr className="my-2.5 border-0 h-px bg-line-soft" />
 
       {/* Basis + citation — inline body content, NOT a footnote (matrix rec #4). */}
-      <p className="text-[12px] text-ink leading-relaxed">{basisLine(metric, store)}</p>
+      <p className="text-[12px] text-ink leading-relaxed">{basisLine(metric, store, program)}</p>
 
       {citationId ? (
         <div className="mt-1">

@@ -10,6 +10,7 @@ import {
 } from "./schemas";
 import { applyProgramExerciseOverrides } from "./data-loader";
 import { REGION_BY_ID, FLAG_BY_ID } from "./symptom-regions";
+import { metricHasDerivableSeries } from "./engine/retest-evaluator";
 
 const DATA = path.resolve(__dirname, "../../public/data");
 const read = (p: string) => JSON.parse(fs.readFileSync(path.join(DATA, p), "utf8"));
@@ -993,6 +994,77 @@ describe("citation display strings follow citation convention", () => {
     const offenders = cites
       .filter((c) => typeof c.url === "string" && /[?&]term=/.test(c.url))
       .map((c) => `${c.id}: ${c.url}`);
+    expect(offenders).toEqual([]);
+  });
+});
+
+describe("retest metrics can actually reach their data", () => {
+  // A metric whose `source_ref` doesn't parse resolves to nothing forever and
+  // renders as "this metric will land once its data source is wired" — which
+  // reads like a roadmap note, not a defect, so nobody investigates. Three
+  // separate parsers of this grammar existed before 2026-09-03; consolidating
+  // them made it worth asserting that every shipped ref is understood by the
+  // one that remains.
+  const declared: Array<{ slug: string; metric: Record<string, unknown> }> = [];
+  for (const { id, program } of programs) {
+    const p = program as unknown as {
+      retest_metrics?: Array<Record<string, unknown>>;
+      retest_metrics_mid_block?: Array<Record<string, unknown>>;
+    };
+    for (const m of [...(p.retest_metrics ?? []), ...(p.retest_metrics_mid_block ?? [])]) {
+      declared.push({ slug: id, metric: m });
+    }
+  }
+
+  it("every declared source_ref either parses or is a manual physical test", () => {
+    const offenders: string[] = [];
+    for (const { slug, metric } of declared) {
+      const source = typeof metric.source === "string" ? metric.source : undefined;
+      const ref = typeof metric.source_ref === "string" ? metric.source_ref : undefined;
+      // Mid-block entries legitimately omit source metadata and inherit it
+      // from their end-of-block sibling (see evaluateRetestMetrics).
+      if (!source && !ref) continue;
+      if (source === "physical_test" || source === "assessment_pack" || source === "capability_level") continue;
+      if (!ref) {
+        offenders.push(`${slug}/${metric.metric_id}: declares source "${source}" with no source_ref`);
+        continue;
+      }
+      if (/^training_maxes\.[a-z0-9_]+$/i.test(ref)) continue;
+      if (metricHasDerivableSeries({ source, source_ref: ref })) continue;
+      offenders.push(`${slug}/${metric.metric_id}: unparsed source_ref "${ref}"`);
+    }
+    expect(offenders).toEqual([]);
+  });
+
+  it("every metric a classifier reads is one the program declares", () => {
+    // The classifier gates the Cluster chip on readings for its own metric
+    // ids. An id it names that no metric declares can never accumulate a
+    // reading, so the chip would stay silent with no way to tell why.
+    const offenders: string[] = [];
+    for (const { id, program } of programs) {
+      const c = (program as unknown as {
+        non_responder_classifier?: {
+          primary_signal_metric_id?: string;
+          secondary_signal_metric_ids?: string[];
+        };
+      }).non_responder_classifier;
+      if (!c) continue;
+      const p = program as unknown as {
+        retest_metrics?: Array<{ metric_id?: string }>;
+        retest_metrics_mid_block?: Array<{ metric_id?: string }>;
+      };
+      const ids = new Set(
+        [...(p.retest_metrics ?? []), ...(p.retest_metrics_mid_block ?? [])]
+          .map((m) => m.metric_id)
+          .filter(Boolean) as string[],
+      );
+      for (const wanted of [
+        c.primary_signal_metric_id,
+        ...(c.secondary_signal_metric_ids ?? []),
+      ].filter(Boolean) as string[]) {
+        if (!ids.has(wanted)) offenders.push(`${id}: classifier reads "${wanted}", no such retest metric`);
+      }
+    }
     expect(offenders).toEqual([]);
   });
 });

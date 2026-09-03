@@ -173,6 +173,24 @@ From roadmap sync + product-concerns-2026-08-17 + design-lead brief `2026-08-19-
     - **REV-2 · overhead-mobility** — VERDICT: **PROMOTE-WITH-CAVEATS.** Q4 motor-learning wire shipped structurally (blocked→random in generator, external-focus cues on 12 drills, banner user-visible). O-1/O-2/O-3 all closed. 3 caveats: (a) DrillCard "Show me the position" self-controlled feedback UI never shipped; (b) KR-bandwidth rating input absent; (c) variability rotation (KB→DB→PVC) absent. All explicitly scope-cut per ship commit; not regressions.
     - **REV-3 · handstand-walk** — VERDICT: **HOLD.** H-3 Ferrari 2021 drop NOT ACTUALLY EXECUTED (still in references[] + reference_ids[] + prose at :685 + :1507). H-4 sci_reports specifics still in 4 places (:82, :1541, :1719, :1720). Kinoshita block `note` at :783 contradicts render phase. `phase_gates` field authored but not consumed by engine. **Fix scope: ~2h of JSON edits closes to PROMOTE.**
     - **REV-4 · concurrent-strength-maintenance** — VERDICT: **HOLD.** C-2/C-3 landed cleanly. But: (a) **P0** PerProgramAdherenceCard reports 0/25 despite 23 logged sessions (`legacy-to-blocks.ts:75-86` — blocks never flip `planned`→`done`); (b) SignalsStrip `csm-amber-week` signal computed but no expanded body render branch; (c) amber-week schedule swap authored at line 541 but `schedule.ts` never consumes `derived_state === "amber"`; (d) C-1 Berryman engineering-choice line never actually added to `engineering_choices_flagged[]`. **Fix scope: 4 items across engine + JSON.**
+    - **REV-5 (d) closed 2026-09-03** — the `retest_readings` / `runs[]` gap.
+      Recorded twice (here and as the 2026-08-24 follow-up below) and both
+      records were imprecise: `source_ref` WAS resolved, by
+      `retest-evaluator.ts`, which is why the current value on a retest card
+      was real. What was not resolved was the *series* — timeline pins,
+      sparkline, rolling curve and classifier baselines read
+      `store.retest_readings`, which only the hand-entry sheet writes. So the
+      2K you rowed in the session showed up as a current value above an empty
+      trend, and had to be typed a second time to count as history. Fixed by
+      `lib/engine/retest-readings.ts` (merge: logged ∪ derived, logged wins on
+      the same date), `deriveMetricSeries` in the evaluator, and deleting
+      `HeritageClusterChip.collectBaselines` — a private second parser that
+      fired only when `retest_readings` was entirely empty, so the first
+      hand-logged reading of any metric switched derivation off for all of
+      them. Three parsers of the grammar became one. Two guards added; one
+      caught `rowing-2k-test-prep` naming a classifier secondary signal
+      (`submax_hr_at_threshold`) that no metric declares. See
+      `dev/active/retest-derivation/`.
     - **REV-5 · rowing-2k-test-prep** — VERDICT: **HOLD.** R-1/R-2 (citations.json) + R-4 (schema) landed. But: (a) R-3 Das 2019 drop NOT EXECUTED — still in `references[]:846` + `reference_ids[]:893`; (b) split `references[]` schema drift (Steinacker 1998 + Bosquet 2007 in orphan top-level array, not in evidence_base); (c) Proteau 1992 title updated in citations.json but inline `references[]:784` still stale; (d) HERITAGE classifier reads `store.retest_readings` which is never dual-written from `runs[]` — schema gate landed, data flow gap open; (e) P0-1 Today four-way contradiction (YourPlanCard + phase header + retest window + graduation card all render simultaneously).
     - **REV-6 · anterior-hip-rebuild** — VERDICT: **HOLD.** Clinical logic + provocative-position honoring + persona harness all clean. Blockers: (a) **HIGH** manifest still `REFERENCED` while JSON declares `ACTIVE` — persona renders BOTH badges on preview (`persona-recover/text/07-programs-active.txt:5-6`); (b) definitional gap — the readiness ladder defines REVIEWED as "domain specialist audited citations against literature" but anterior-hip ships with **zero** citation structures (was correctly excluded from the 2026-08-17 review). Needs either an F10 policy call ("for personal programs, REVIEWED means author's clinical record audited against clinical-context.json") or block promotion until a physio actually signs off. (c) LOW: `HIP_HOLIDAY_GAP` hardcoded in `schedule.ts:91` — JSON date shifts silently invalidated.
 

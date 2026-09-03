@@ -31,6 +31,7 @@ import {
   formatMetric,
   type RetestValue,
 } from "@/lib/engine/retest-evaluator";
+import { resolveRetestReadings } from "@/lib/engine/retest-readings";
 import { cn } from "@/lib/utils";
 
 export type CutCRetestTimelineProps = {
@@ -81,7 +82,7 @@ function buildEvents(
   const withData = values.filter((v) => v.current != null);
   if (withData.length === 0) return { metric: null, events: [] };
 
-  const readings = store.retest_readings ?? [];
+  const readings = resolveRetestReadings(store, program);
   // Pick the metric with the most readings — that's the "primary"
   // tenure metric for the current program. Multi-metric programs
   // (Rowing 2K has both threshold pace + weekly volume) would need

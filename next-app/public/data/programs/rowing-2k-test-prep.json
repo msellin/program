@@ -966,9 +966,7 @@
     },
     "requires_baselines": 2,
     "primary_signal_metric_id": "threshold_pace_500m_seconds",
-    "secondary_signal_metric_ids": [
-      "submax_hr_at_threshold"
-    ],
+    "secondary_signal_metric_ids": [],
     "patterns": {
       "under_dosing": {
         "rule": "progress_ratio_at_mid_block < 0.4 AND session_compliance_pct < 80",
