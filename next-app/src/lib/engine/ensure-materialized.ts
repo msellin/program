@@ -73,7 +73,7 @@ export function slugsNeedingMaterialization(store: Store, todayISO: string): str
 /**
  * Extend materialization for every program that needs it. Returns a new
  * store, or `null` when there was nothing to do — so callers can avoid a
- * pointless `replaceStore` (and the KV write behind it) on every load.
+ * pointless `replaceStore` (and the server write behind it) on every load.
  */
 export function ensureMaterialized(
   store: Store,

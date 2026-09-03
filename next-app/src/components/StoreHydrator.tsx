@@ -41,11 +41,11 @@ function storedUidFromLocal(): string | null {
  *
  * The bug this fixes: without this, localStorage survives sign-out/sign-in.
  * If user A signs out and user B signs in on the same browser, B would see
- * A's training data until the KV pull races. That's a real privacy leak on
+ * A's training data until the remote pull races. That's a real privacy leak on
  * shared devices (family iPad, gym computer).
  *
  * The rule: `store.user_profile.uid` must match the current session's uid.
- * When they diverge, we local-reset (no KV push — we don't want to clobber
+ * When they diverge, we local-reset (no remote push — we don't want to clobber
  * either user's server data) and re-hydrate for the new session.
  */
 export function StoreHydrator() {

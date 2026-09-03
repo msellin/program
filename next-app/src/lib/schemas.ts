@@ -1366,7 +1366,7 @@ export const storeSchema = z.object({
    * User account / program profile. Optional so existing single-user localStorage
    * keeps working; populated on onboarding for new (multi-user) signups. Auth-
    * layer state (uid, email, tier) lives here so the client can render tier-gated
-   * UI without a network hop, and so we can migrate a user's KV blob when they
+   * UI without a network hop, and so we can migrate a user's stored state when they
    * sign up under a real uid.
    *
    * `active_program_id` is the slug of the program template loaded on Today. If
@@ -1543,7 +1543,7 @@ export const storeSchema = z.object({
        *
        * Store-based (rather than localStorage-only) so it survives origin
        * mismatches (preview URL ↔ prod), incognito, cache clears, and
-       * device switches through KV sync.
+       * device switches through server sync.
        */
       intake_drafts: z
         .record(

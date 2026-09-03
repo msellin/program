@@ -17,8 +17,8 @@ export type PullResult =
 
 export interface PersistenceAdapter {
   /**
-   * Read the local snapshot. Synchronous — reads localStorage on the KV
-   * adapter, in-memory cache on future adapters. Never blocks the render.
+   * Read the local snapshot. Synchronous — reads localStorage on the
+   * Postgres adapter, in-memory cache on future adapters. Never blocks the render.
    */
   loadLocal(): Store;
 

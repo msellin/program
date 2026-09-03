@@ -20,7 +20,7 @@ import type { Program } from "@/lib/schemas";
 export function ProposalStack({ program, date }: { program: Program | null | undefined; date: string }) {
   const store = useStore((s) => s.store);
   // CLS mitigation (P0 B4 fix, 2026-08-17): the store hydrates locally
-  // synchronously but the remote KV blob lands ~200-500ms later. Rendering
+  // synchronously but the remote row lands ~200-500ms later. Rendering
   // proposals before the remote sync lands causes content below to shift
   // when the first real proposal mounts. Gate on `updated_at > 0` — either
   // the user has local data (any real store has updated_at) or sync landed.

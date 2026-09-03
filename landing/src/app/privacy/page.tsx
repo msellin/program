@@ -62,7 +62,7 @@ export default function PrivacyPage() {
       <p>
         Terav is in beta. Data-handling practices are honest as of now, but
         infrastructure and policies may evolve. Material changes will be
-        announced in-app before they take effect.
+        announced by email to your account address before they take effect.
       </p>
 
       <p className="mt-10 text-xs text-[var(--color-muted)]">
@@ -70,7 +70,7 @@ export default function PrivacyPage() {
         <a href="mailto:sellinmargus@gmail.com" className="underline decoration-white/20 underline-offset-4">
           sellinmargus@gmail.com
         </a>{" "}
-        · Last updated {new Date().getFullYear()}.
+        · Last updated: 2026-09-03.
       </p>
     </LegalLayout>
   );

@@ -23,7 +23,7 @@ function commit(s: Store): Store {
 }
 
 /**
- * Same as `commit` but fires an immediate (non-debounced) KV push. Use for
+ * Same as `commit` but fires an immediate (non-debounced) server push. Use for
  * rare, high-value state changes where losing the write to a race — a refresh
  * or deploy inside the 2s debounce window — is unacceptable. Program pick,
  * intake completion, phase advance all qualify. Regular log entries stay on
@@ -269,7 +269,7 @@ type StoreState = {
   ) => void;
   /**
    * Write / merge an in-progress intake draft for a program. Persisted via
-   * the standard KV push, so the user can leave the intake mid-way and
+   * the standard server push, so the user can leave the intake mid-way and
    * resume from another device / origin. Cleared by `clearIntakeDraft`
    * after a successful commit.
    */
@@ -344,9 +344,9 @@ type StoreState = {
     notes?: string;
   }) => void;
   /**
-   * Clear local state without pushing to the remote KV. Used when auth state
+   * Clear local state without pushing to the server. Used when auth state
    * changes on the same browser — the previous user's data should not touch
-   * the new user's KV blob. Hydrate will fetch fresh from KV afterwards.
+   * the new user's row. Hydrate will fetch fresh from the server afterwards.
    */
   resetForNewSession: () => void;
   /**
@@ -443,7 +443,7 @@ export const useStore = create<StoreState>((set, get) => ({
     // when comparing against remote. Otherwise a bogus local timestamp (from
     // a wipe race or a stale session-binding reset) can trick pullRemote into
     // returning `keep_local` — leaving the user staring at "pick a program"
-    // even though their real state is safe in KV.
+    // even though their real state is safe on the server.
     const s = get().store;
     const localIsEmpty =
       Object.keys(s.logs ?? {}).length === 0 &&
@@ -910,7 +910,7 @@ export const useStore = create<StoreState>((set, get) => ({
     s.user_profile = profile;
     // Immediate push — losing a program-pick to a refresh inside the 2s
     // debounce window was the founder-reported "loses program on refresh"
-    // pattern. Commit + KV land in the same beat.
+    // pattern. Commit + server push land in the same beat.
     commitImmediate(s);
     set({ store: s });
   },
@@ -1398,7 +1398,7 @@ export const useStore = create<StoreState>((set, get) => ({
     profile.intake_drafts = drafts;
     s.user_profile = profile;
     // Fires once at intake commit — worth the immediate push so the "done"
-    // state lands in KV before any refresh drops the debounce.
+    // state lands on the server before any refresh drops the debounce.
     commitImmediate(s);
     set({ store: s });
   },
@@ -1492,7 +1492,7 @@ export const useStore = create<StoreState>((set, get) => ({
   },
 
   resetForNewSession: () => {
-    // Reset in-memory + localStorage only. NEVER push to KV — we don't want to
+    // Reset in-memory + localStorage only. NEVER push to the server — we don't want to
     // clobber either the previous user's or the new user's server data during
     // a session transition.
     const empty: Store = { ...initial, updated_at: Date.now() };

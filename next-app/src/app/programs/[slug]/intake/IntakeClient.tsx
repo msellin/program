@@ -110,14 +110,14 @@ export function IntakeClient({ slug }: Props) {
 
   // Draft persistence: intake state was pure useState, so refresh, redeploy,
   // or navigating away wiped everything. v2 (2026-08-18) moves the draft
-  // into the Zustand store → KV sync so it survives origin mismatches
+  // into the Zustand store → server sync so it survives origin mismatches
   // (preview URL vs. app.terav.fit), cache clears, device switches, and
   // incognito close-and-reopen. Cleared in `commit()` after the tier is
   // committed. Also keeps a localStorage fallback for anonymous / cache-only
   // paths.
   //
   // Hydration order (first non-empty wins):
-  //   1. user_profile.intake_drafts[slug]  ← store-backed, KV-synced
+  //   1. user_profile.intake_drafts[slug]  ← store-backed, server-synced
   //   2. localStorage draft                ← legacy fallback
   //   3. user_profile.program_states[slug].intake_answers  ← returning-user edit
   const draftKey = `terav.intake.draft.${slug}`;
@@ -169,7 +169,7 @@ export function IntakeClient({ slug }: Props) {
     }
     setHydrated(true);
     // Hydrate once per slug; state on remount is snapshot at mount. If the
-    // KV push races, that's fine — we re-hydrate on next mount.
+    // remote push races, that's fine — we re-hydrate on next mount.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [draftKey, slug]);
   useEffect(() => {
