@@ -73,6 +73,26 @@ export type Suggestion = {
    * see TAPER_BLOCKS below. The top set stays required either way.
    */
   fsl?: { kg: number; sets: number; reps: number; optional?: boolean } | null;
+  /**
+   * True when the prescription is straight sets — every set at the same
+   * weight — rather than a heavier top set followed by lighter back-offs.
+   *
+   * The `top_set` + `fsl` shape can only describe 5/3/1. The Saturday volume
+   * day and the Thursday front-squat variant are authored as plain 5×5, and
+   * the only way to express that here was to put the same weight in both
+   * fields — which made the session render SIX sets for a five-set
+   * prescription, all at the same number. The founder hit it on 2026-09-03:
+   * "the front squat weights for all 1 + 5 sets showed the same, 77kg".
+   *
+   * The comment above `VOLUME_BLOCKS` already said "No top-set / FSL
+   * structure" while the code returned exactly that structure, so the intent
+   * was never in doubt — only unsayable.
+   *
+   * `top_set` still carries the working weight, because that is what every
+   * summary surface wants to show. This flag only says: do not add a row for
+   * it on top of the FSL rows.
+   */
+  straight_sets?: boolean;
   state?: "green" | "amber" | "red" | null;
   reasoning: string;
   cap_applied?: boolean;
@@ -206,6 +226,7 @@ export function suggestForExercise(
     return {
       top_set: { kg, reps: "5" },
       fsl: { kg, sets: 5, reps: 5 },
+      straight_sets: true,
       state: todayState,
       reasoning: `Moderate volume day: 5×5 @ 65% TM${stateNote}${adjNote}`,
     };
@@ -216,6 +237,7 @@ export function suggestForExercise(
     return {
       top_set: { kg, reps: "5" },
       fsl: { kg, sets: 5, reps: 5 },
+      straight_sets: true,
       state: todayState,
       reasoning: `Variant day: 5×5 @ 70% TM${stateNote}${adjNote}`,
     };

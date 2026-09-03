@@ -400,7 +400,13 @@ function useMemoRail(
           (typeof item.sets === "number" ? item.sets : undefined) ??
           (typeof exercise.default?.sets === "number" ? (exercise.default.sets as number) : undefined) ??
           3;
-        const schemeRowCount = suggestion?.fsl ? suggestion.fsl.sets + 1 : defaultSets;
+        // A straight-set day is `fsl.sets` rows, not `fsl.sets + 1`. The
+        // extra row existed because `top_set` + `fsl` can only describe
+        // 5/3/1, so a plain 5×5 was encoded as 1 + 5×5 and rendered six
+        // identical sets for a five-set prescription.
+        const schemeRowCount = suggestion?.fsl
+          ? suggestion.fsl.sets + (suggestion.straight_sets ? 0 : 1)
+          : defaultSets;
         out.push({
           key: `${block.id}:${exercise.id}`,
           blockId: block.id,

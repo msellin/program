@@ -140,7 +140,7 @@ export function SetView({
     return parts.length ? parts.join(" · ") : null;
   })();
   const prescribed = active.suggestion?.fsl
-    ? activeSetIndex === 0
+    ? activeSetIndex === 0 && !active.suggestion.straight_sets
       ? active.suggestion.top_set
       : { kg: active.suggestion.fsl.kg, reps: String(active.suggestion.fsl.reps) }
     : activeSetIndex === active.rowCount - 1 && active.suggestion
