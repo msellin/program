@@ -11,13 +11,18 @@
  * The tell was that both squats sat at exactly 110: one had been copied from
  * the other, and it happened to be wrong in both directions at once.
  *
- * Two checks, deliberately narrow:
+ * Three checks, deliberately narrow:
  *
  *   1. **Against the user's own log.** A TM is a working number, not a max —
  *      convention puts it at 85-90% of a true 1RM. A TM above the best single
  *      the log can evidence is unusable; one far below it silently caps every
  *      prescription.
- *   2. **Against a sibling lift.** Front squat is not back squat. A pair at
+ *   2. **Against a failed attempt.** Added 2026-09-03. Every other signal in
+ *      the log is a lower bound — evidence of what someone CAN do, silent
+ *      about what they cannot. A miss is the only upper bound there is, and
+ *      until sets could carry `failed` this function had to guess a ceiling
+ *      it could not see. The founder's missed 122 sat in a free-text note.
+ *   3. **Against a sibling lift.** Front squat is not back squat. A pair at
  *      an identical number is the signature of a copied value.
  *
  * This does NOT propose a new TM and does not change anything. It says "this
@@ -32,7 +37,11 @@ import type { Store, DayLog } from "../schemas";
 
 export type TMFinding = {
   liftId: string;
-  kind: "above_demonstrated" | "far_below_demonstrated" | "sibling_identical";
+  kind:
+    | "above_demonstrated"
+    | "far_below_demonstrated"
+    | "sibling_identical"
+    | "above_failed_attempt";
   /** One sentence, in the app's voice, naming the arithmetic. */
   message: string;
   currentTM: number;
@@ -132,6 +141,56 @@ export function bestEstimatedOneRM(
   return bestEstimate;
 }
 
+/**
+ * The lightest load this lift has been FAILED at, and when.
+ *
+ * A failed attempt is the only entry in the log that bounds a one-rep max
+ * from above. Everything else — a made single, an Epley estimate off a set
+ * of five — is a lower bound: evidence of what someone can do, silent about
+ * what they cannot. The founder's ladder is the canonical case. He made 115
+ * and missed 122, so his true single sits in [115, 122). Before this, the
+ * log could see the 115 and had no idea the 122 existed.
+ *
+ * `since` is the date of the best MADE lift, and only failures on or after
+ * it count. Without that, a miss on a bad day two years ago would cap every
+ * estimate forever — the ceiling has to be able to move when the person
+ * does. Ties (failed and made on the same day) count: that is precisely the
+ * ladder case, where both numbers come from one session.
+ *
+ * The LIGHTEST failure is the binding one. Missing 122 and later missing
+ * 130 does not raise the ceiling to 130; you still have not lifted 122.
+ */
+export function bestFailedAttempt(
+  logs: Record<string, DayLog>,
+  liftId: string,
+  since?: string,
+): { weightKg: number; date: string } | null {
+  let lightest: { weightKg: number; date: string } | null = null;
+  for (const [date, day] of Object.entries(logs ?? {})) {
+    if (since && date < since) continue;
+    for (const [key, entry] of Object.entries(day?.exercises ?? {})) {
+      if (key.split(":")[1] !== liftId || !entry) continue;
+      for (const s of entry.sets ?? []) {
+        if (s.failed !== true || s.weight_kg == null || s.weight_kg <= 0) continue;
+        if (!lightest || s.weight_kg < lightest.weightKg) {
+          lightest = { weightKg: s.weight_kg, date };
+        }
+      }
+    }
+  }
+  return lightest;
+}
+
+/**
+ * How far under a failed load the true max is assumed to sit.
+ *
+ * Missing 122 means the max is below 122, not at 121.9. A single increment
+ * of the smallest plate pair is the least-assuming gap that is still
+ * strictly below the failure, and it keeps the arithmetic in numbers the
+ * user recognises from their own bar.
+ */
+const FAILURE_MARGIN_KG = 2.5;
+
 const round = (n: number) => Math.round(n * 2) / 2;
 
 export function checkTrainingMaxes(store: Store): TMFinding[] {
@@ -142,31 +201,66 @@ export function checkTrainingMaxes(store: Store): TMFinding[] {
   for (const [liftId, tm] of Object.entries(tms)) {
     if (typeof tm !== "number" || tm <= 0) continue;
     const best = bestEstimatedOneRM(logs, liftId);
-    if (!best) continue;
+    // Only failures at or after the best made lift bound anything — see
+    // `bestFailedAttempt`. With no made lift to date from, every failure
+    // counts, because there is nothing for a stale one to be stale against.
+    const failed = bestFailedAttempt(logs, liftId, best?.date);
 
-    if (tm > best.e1rm * TM_OF_1RM_HIGH) {
+    // A training max at or above a load the user could not lift once needs
+    // no estimate and no convention to be wrong, so it is checked before
+    // anything Epley has an opinion about. A TM is a working weight meant
+    // for repeated sets; if a single at that load did not go up, every
+    // prescription derived from it is fiction.
+    if (failed && tm >= failed.weightKg) {
       out.push({
         liftId,
-        kind: "above_demonstrated",
+        kind: "above_failed_attempt",
         currentTM: tm,
-        suggestedTM: round(best.e1rm * TM_TARGET),
+        suggestedTM: round((failed.weightKg - FAILURE_MARGIN_KG) * TM_TARGET),
         message:
-          `Your training max is ${tm} kg, but the heaviest set in your log — ` +
-          `${best.weightKg} kg × ${best.reps} on ${best.date} — points to a single ` +
-          `around ${round(best.e1rm)} kg. A training max is meant to sit near 90% of that.`,
+          `Your training max is ${tm} kg, and you missed ${failed.weightKg} kg on ` +
+          `${failed.date}. A training max is a weight you work with, not one you ` +
+          `are reaching for — it should sit near 90% of a single you can actually make.`,
       });
       continue;
     }
 
-    if (tm < best.e1rm * TM_OF_1RM_LOW) {
+    if (!best) continue;
+
+    // The failed load caps what the log can be read as evidence FOR. Epley
+    // off a high-rep set overshoots badly — 100 kg × 10 reads as 133 — and
+    // an overshoot here is silence, not a false alarm: it raises the number
+    // a TM has to clear before the check says anything. A miss is the one
+    // entry that can pull it back down.
+    const ceiling = failed ? failed.weightKg - FAILURE_MARGIN_KG : null;
+    const e1rm = ceiling != null ? Math.min(best.e1rm, ceiling) : best.e1rm;
+    const cappedByFailure = ceiling != null && ceiling < best.e1rm;
+
+    if (tm > e1rm * TM_OF_1RM_HIGH) {
+      out.push({
+        liftId,
+        kind: "above_demonstrated",
+        currentTM: tm,
+        suggestedTM: round(e1rm * TM_TARGET),
+        message:
+          `Your training max is ${tm} kg, but the heaviest set in your log — ` +
+          `${best.weightKg} kg × ${best.reps} on ${best.date} — points to a single ` +
+          `around ${round(e1rm)} kg` +
+          (cappedByFailure ? `, and you missed ${failed!.weightKg} kg on ${failed!.date}` : "") +
+          `. A training max is meant to sit near 90% of that.`,
+      });
+      continue;
+    }
+
+    if (tm < e1rm * TM_OF_1RM_LOW) {
       out.push({
         liftId,
         kind: "far_below_demonstrated",
         currentTM: tm,
-        suggestedTM: round(best.e1rm * TM_TARGET),
+        suggestedTM: round(e1rm * TM_TARGET),
         message:
           `Your training max is ${tm} kg, but ${best.weightKg} kg × ${best.reps} on ` +
-          `${best.date} points to a single around ${round(best.e1rm)} kg. Every ` +
+          `${best.date} points to a single around ${round(e1rm)} kg. Every ` +
           `prescription is being calculated from a number well under what you have shown.`,
       });
     }

@@ -1,4 +1,5 @@
 import type { Store, SetLog } from "../schemas";
+import { isFailedAttempt } from "../set-progress";
 
 /**
  * The last session's set array for a given exercise, if any.
@@ -25,10 +26,16 @@ export function lastSessionSetsFor(
     for (const [key, entry] of Object.entries(day.exercises)) {
       if (!key.endsWith(":" + exerciseId)) continue;
       const sets = entry.sets ?? [];
-      const anyLogged = sets.some(
+      // A failed attempt is not a "last time" (2026-09-03). This feeds
+      // SetView's prefill chain, so a missed 122 would seed the next front
+      // squat session's weight at 122 and print "Last time 122 × 0" under
+      // it. Returning the made sets only keeps the seed at a load the user
+      // has actually lifted, which is the whole point of showing it.
+      const madeSets = sets.filter((s) => !isFailedAttempt(s));
+      const anyLogged = madeSets.some(
         (s) => s.weight_kg != null && s.weight_kg > 0 && s.reps != null && s.reps > 0,
       );
-      if (anyLogged) return sets;
+      if (anyLogged) return madeSets;
       // Legacy single-value entry (pre-sets migration) — synthesise a single set.
       if (
         entry.weight_kg != null &&

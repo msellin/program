@@ -28,6 +28,33 @@ export function isSetLogged(set: SetLog | undefined | null, isLoadable: boolean)
   return isLoadable ? set.weight_kg != null : true;
 }
 
+/**
+ * A load that was attempted and not lifted (2026-09-03).
+ *
+ * One predicate, exported, because "exclude the misses" is needed in six
+ * places and six open-coded `s.failed === true` checks is precisely how the
+ * `isSetLogged` bug happened — seven call sites, one of them subtly
+ * different, and a correctly logged set that no counter could see.
+ *
+ * Note what this is NOT used for: `isSetLogged` still counts a failed
+ * attempt as logged. You did the set, the row is spent, the session moved
+ * on. What a miss must not do is masquerade as a LIFT — as a top set, a PR,
+ * a "last time" to seed from, or a point on the clinical report's load
+ * chart. That is the distinction every call site below is drawing.
+ */
+export function isFailedAttempt(set: SetLog | undefined | null): boolean {
+  return set?.failed === true;
+}
+
+/**
+ * A set that was logged AND actually lifted — the predicate for anything
+ * that treats a set as evidence of capability rather than as work done.
+ */
+export function isMadeSet(set: SetLog | undefined | null, isLoadable: boolean): boolean {
+  if (!isSetLogged(set, isLoadable)) return false;
+  return !isFailedAttempt(set) && (set!.reps ?? 0) > 0;
+}
+
 export function countLoggedSets(sets: SetLog[], isLoadable: boolean): number {
   return sets.filter((s) => isSetLogged(s, isLoadable)).length;
 }

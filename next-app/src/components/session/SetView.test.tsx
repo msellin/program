@@ -221,3 +221,76 @@ describe("\"sets left\" counts required work only (2026-09-03)", () => {
     expect(screen.queryByText(/· optional/i)).toBeNull();
   });
 });
+
+describe("recording a missed attempt", () => {
+  /**
+   * Task A from the 2026-09-03 handover. The founder made 115×1 on front
+   * squat and failed 122. The 122 is the only number in that session that
+   * bounds his one-rep max from above — it is what settles his training max —
+   * and it lived in a free-text note nothing read.
+   */
+  const seed = (tms: Record<string, number>) =>
+    useStore.getState().replaceStore({ version: 2, logs: {}, training_maxes: tms } as Store);
+
+  const frontSquat = (over: Partial<RailExercise> = {}) =>
+    rail({
+      key: "b:front_squat",
+      blockId: "b",
+      exercise: exercise({ id: "front_squat", name: "Front squat" }),
+      item: { exercise_id: "front_squat", sets: 1 },
+      rowCount: 1,
+      ...over,
+    });
+
+  it("offers the miss on a lift that has a training max", () => {
+    seed({ front_squat: 110 });
+    renderSet(frontSquat());
+    expect(screen.getByRole("button", { name: /missed 125 kg/i })).toBeDefined();
+  });
+
+  it("writes weight, zero reps and the flag", () => {
+    seed({ front_squat: 110 });
+    renderSet(frontSquat());
+    fireEvent.click(screen.getByRole("button", { name: /missed 125 kg/i }));
+    const set = useStore.getState().store.logs["2026-09-02"].exercises["b:front_squat"].sets![0];
+    expect(set).toMatchObject({ weight_kg: 125, reps: 0, failed: true });
+  });
+
+  it("clears the flag when a miss is corrected back to a made set", () => {
+    // `updateSet` MERGES, so writing `failed` only on the miss path would
+    // leave a stale `true` on a set the user has just fixed — and the engine
+    // would go on treating a made lift as a ceiling.
+    seed({ front_squat: 110 });
+    renderSet(frontSquat());
+    fireEvent.click(screen.getByRole("button", { name: /missed 125 kg/i }));
+    cleanup();
+    renderSet(frontSquat());
+    // This rail's top set is an AMRAP, so the confirm is a rep tile.
+    fireEvent.click(screen.getAllByRole("button").find((b) => b.textContent?.trim() === "5")!);
+    const set = useStore.getState().store.logs["2026-09-02"].exercises["b:front_squat"].sets![0];
+    expect(set.failed).toBe(false);
+    expect(set.reps).toBeGreaterThan(0);
+  });
+
+  it("does NOT offer the miss on a lift with no training max", () => {
+    // The gate that keeps this off the off-plan rail. `SetView` is shared
+    // with `OffPlanSession`, whose rail runs to 34 items of accessory and
+    // cardio work; a miss is only worth capturing where it moves a
+    // prescription. Founder's objection, 2026-09-03.
+    seed({});
+    renderSet(frontSquat());
+    expect(screen.queryByRole("button", { name: /missed/i })).toBeNull();
+  });
+
+  it("does NOT offer the miss on non-loadable work", () => {
+    seed({ single_leg_rdl: 40 });
+    renderSet(
+      frontSquat({
+        exercise: exercise({ id: "single_leg_rdl", name: "Single-leg RDL", category: "unilateral" }),
+        isLoadable: false,
+        suggestion: null,
+      }),
+    );
+    expect(screen.queryByRole("button", { name: /missed/i })).toBeNull();
+  });
+});

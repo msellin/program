@@ -181,7 +181,13 @@ export function SetView({
   // was missing the same treatment.
   const [reps, setReps] = useState<number>(
     () =>
-      setForRow.reps ??
+      // A missed set holds `reps: 0`. Seeding the stepper from it would mean
+      // tapping back into a miss to correct it offers zero as the starting
+      // rep count — the same "0 is never a correct starting value" trap the
+      // `defaultReps` fallback below exists to close. Fall through to the
+      // normal chain instead; the set is still marked missed until Done is
+      // pressed, which is what clears the flag.
+      (setForRow.failed === true ? null : setForRow.reps) ??
       (parseInt(prescribed?.reps ?? "", 10) || prev?.reps || defaultReps || 0),
   );
   // No resync-effect: DaySession mounts this component with
@@ -258,13 +264,36 @@ export function SetView({
     return n + Math.max(0, requiredRowCount(r) - logged);
   }, 0);
 
-  const confirm = (finalReps: number) => {
+  /**
+   * Can this set record a missed attempt (2026-09-03)?
+   *
+   * Gated to loadable lifts that carry a TRAINING MAX, not to loadable lifts
+   * generally. A miss is only worth capturing where it changes something:
+   * a training max is the number every prescription for that lift is
+   * computed from, and a failed load is the only entry in the log that
+   * bounds it from above (see `tm-plausibility`).
+   *
+   * The gate is also what keeps this off-plan-safe. `SetView` is shared —
+   * `DaySession` renders it for programme days, `OffPlanSession` for a rail
+   * that can run to 34 items of accessory and cardio work. Without the TM
+   * condition every one of those rows would grow a button, which is exactly
+   * the "off-plan should not become a detailed logging surface" objection
+   * the founder raised when this was specced.
+   */
+  const canRecordMiss =
+    active.isLoadable && typeof store.training_maxes?.[active.exercise.id] === "number";
+
+  const confirm = (finalReps: number, failed = false) => {
     updateSet(
       active.blockId,
       active.exercise.id,
       activeSetIndex,
       {
         weight_kg: active.isLoadable ? weight : null,
+        // `failed` is written explicitly either way. Undefined would leave a
+        // stale `true` in place when a mis-tapped miss is corrected back to
+        // a made set through the pips — `updateSet` merges.
+        failed,
         // A hold still records `reps` — one completed hold — because
         // `reps != null` is what marks a set logged everywhere else.
         // `seconds` is the dose that actually means something.
@@ -387,11 +416,13 @@ export function SetView({
                   aria-current={isCurrent ? "step" : undefined}
                   aria-label={
                     done && logged
-                      ? logged.seconds != null
-                        ? `Set ${i + 1}, held ${logged.seconds} seconds. Edit.`
-                        : active.isLoadable
-                          ? `Set ${i + 1}, logged ${logged.weight_kg} kilos by ${logged.reps} reps. Edit.`
-                          : `Set ${i + 1}, logged ${logged.reps} reps. Edit.`
+                      ? logged.failed === true
+                        ? `Set ${i + 1}, missed ${logged.weight_kg} kilos. Edit.`
+                        : logged.seconds != null
+                          ? `Set ${i + 1}, held ${logged.seconds} seconds. Edit.`
+                          : active.isLoadable
+                            ? `Set ${i + 1}, logged ${logged.weight_kg} kilos by ${logged.reps} reps. Edit.`
+                            : `Set ${i + 1}, logged ${logged.reps} reps. Edit.`
                       : `Set ${i + 1}${optionalRow ? ", optional" : ""}, not logged yet`
                   }
                   className={
@@ -419,11 +450,17 @@ export function SetView({
                     }
                   >
                     {done && logged
-                      ? logged.seconds != null
-                        ? `${logged.seconds}s`
-                        : active.isLoadable
-                          ? `${logged.weight_kg}×${logged.reps}`
-                          : `${logged.reps}`
+                      ? logged.failed === true
+                        ? // "122×0" reads as a logging mistake. The pip is
+                          // ~40px wide, so the weight is dropped rather than
+                          // truncated — the number is still on the screen the
+                          // pip navigates to.
+                          "miss"
+                        : logged.seconds != null
+                          ? `${logged.seconds}s`
+                          : active.isLoadable
+                            ? `${logged.weight_kg}×${logged.reps}`
+                            : `${logged.reps}`
                       : "·"}
                   </span>
                 </button>
@@ -440,6 +477,11 @@ export function SetView({
             : activeSetIndex === active.rowCount - 1
               ? "Top set"
               : "Set"}
+          {setForRow.failed === true ? (
+            <span className="font-mono text-[9.5px] font-semibold uppercase tracking-[.12em] text-strong border border-line-strong rounded px-1.5 py-0.5">
+              Missed
+            </span>
+          ) : null}
           {wouldBePR ? (
             <span className="font-mono text-[9.5px] font-semibold uppercase tracking-[.12em] text-ground bg-green rounded px-1.5 py-0.5">
               Rep PR
@@ -696,13 +738,26 @@ export function SetView({
               </div>
             )}
             {active.isLoadable ? (
-              <button
+              <div className="flex gap-2 mt-1.5">
+                <button
+                  type="button"
+                  onClick={() => onEditingLoad(!editingLoad)}
+                  className="flex-1 h-10 text-ink text-[14px]"
+                >
+                  {editingLoad ? "Hide" : "Change the weight"}
+                </button>
+                {/* Every 5/3/1 top set is an AMRAP, so the heavy single a
+                    person actually misses lands in THIS branch, not the
+                    fixed-rep one below. Shipping the miss button only there
+                    would have missed the case it was written for. */}
+                {canRecordMiss && !repsOverflow ? <button
                 type="button"
-                onClick={() => onEditingLoad(!editingLoad)}
-                className="w-full h-10 mt-1.5 text-ink text-[14px]"
+                onClick={() => confirm(0, true)}
+                className="flex-1 h-10 text-ink text-[14px]"
               >
-                {editingLoad ? "Hide" : "Change the weight"}
-              </button>
+                Missed {weight} kg
+              </button> : null}
+              </div>
             ) : null}
           </>
         ) : (
@@ -746,13 +801,22 @@ export function SetView({
                 ? `${isEditingLoggedSet ? "Save" : "Done"} — set ${activeSetIndex + 1} · ${weight} kg`
                 : `${isEditingLoggedSet ? "Save" : "Done"} — set ${activeSetIndex + 1}`}
             </button>
-            <button
-              type="button"
-              onClick={() => onEditingLoad(!editingLoad)}
-              className="w-full h-10 mt-1.5 text-ink text-[14px]"
-            >
-              {editingLoad ? "Hide" : active.isLoadable ? "Change the weight" : "Change the reps"}
-            </button>
+            <div className="flex gap-2 mt-1.5">
+              <button
+                type="button"
+                onClick={() => onEditingLoad(!editingLoad)}
+                className="flex-1 h-10 text-ink text-[14px]"
+              >
+                {editingLoad ? "Hide" : active.isLoadable ? "Change the weight" : "Change the reps"}
+              </button>
+              {canRecordMiss ? <button
+                type="button"
+                onClick={() => confirm(0, true)}
+                className="flex-1 h-10 text-ink text-[14px]"
+              >
+                Missed {weight} kg
+              </button> : null}
+            </div>
           </>
         )}
       </div>

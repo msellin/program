@@ -4,6 +4,7 @@ import { daySignals } from "./note-signals";
 import { HIP_FLEXOR_PACK, scoreKeysFor } from "../assessments-data";
 import { packScoreSeries } from "./assessment-engine";
 import { SYMPTOM_REGIONS } from "../symptom-regions";
+import { isFailedAttempt } from "../set-progress";
 
 /**
  * Aggregator for the specialist-ready training report.
@@ -195,8 +196,12 @@ export function computeReport(
       // Notes containing symptom keywords → flag as incident
       if (ex.notes && SYMPTOM_NOTE_RE.test(ex.notes)) {
         // Attach heaviest logged set on this exercise this day, if any.
+        // Same exclusion, same reason: this reports the load that was on the
+        // bar for work the user completed. "122 kg × 0 reps" next to a pain
+        // note reads either as nonsense or as a 122 kg lift; neither is true.
+        // The note's own text is still reported verbatim.
         const heaviest = (ex.sets ?? [])
-          .filter((st) => st.weight_kg != null && st.reps != null)
+          .filter((st) => st.weight_kg != null && st.reps != null && !isFailedAttempt(st))
           .sort((a, b) => (b.weight_kg ?? 0) - (a.weight_kg ?? 0))[0];
         provocateurIncidents.push({
           date: d,
@@ -268,8 +273,12 @@ export function computeReport(
     for (const [key, ex] of Object.entries(day.exercises)) {
       const exId = key.split(":")[1];
       if (!TM_LIFT_IDS.has(exId)) continue;
+      // Failed attempts excluded (2026-09-03). This sorts by weight and takes
+      // the top, so a missed 122 would outrank every set actually lifted that
+      // day and land on the clinical report as the day's top set — a lift the
+      // user never made, at 0 reps, shown to a clinician.
       const heaviest = (ex.sets ?? [])
-        .filter((s) => s.weight_kg != null && s.reps != null)
+        .filter((s) => s.weight_kg != null && s.reps != null && !isFailedAttempt(s))
         .sort((a, b) => (b.weight_kg ?? 0) - (a.weight_kg ?? 0))[0];
       if (!heaviest || heaviest.weight_kg == null || heaviest.reps == null) continue;
       if (!loadByLift.has(exId)) loadByLift.set(exId, []);

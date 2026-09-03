@@ -205,10 +205,15 @@ function ExerciseRow({
               {/* A held set reads as its duration, not as "— × 1".
                   Isometrics and stretches carry `seconds`; see
                   setLogSchema. */}
+              {/* A missed attempt reads as a miss, not as "122 kg × 0" —
+                  which looks like a data-entry error rather than the most
+                  informative number in the session. */}
               <span className="tabular-nums">
-                {s.seconds != null
-                  ? `${s.seconds}s hold`
-                  : `${s.weight_kg != null ? `${s.weight_kg} kg` : "—"} × ${s.reps != null ? s.reps : "—"}`}
+                {s.failed === true
+                  ? `${s.weight_kg != null ? `${s.weight_kg} kg` : "—"} — missed`
+                  : s.seconds != null
+                    ? `${s.seconds}s hold`
+                    : `${s.weight_kg != null ? `${s.weight_kg} kg` : "—"} × ${s.reps != null ? s.reps : "—"}`}
                 {s.rpe != null ? ` @ RPE ${s.rpe}` : ""}
               </span>
               {s.notes ? (

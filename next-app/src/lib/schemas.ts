@@ -951,6 +951,36 @@ export const setLogSchema = z.object({
    * unlogged everywhere at once.
    */
   seconds: z.number().nullable().optional(),
+  /**
+   * A load that was attempted and not lifted (2026-09-03).
+   *
+   * The founder worked a front squat ladder to 115x1 and missed 122. The 122
+   * is the most informative number in that session — it is the only thing in
+   * the log that bounds his one-rep max from ABOVE — and it lived in a
+   * free-text note nothing read. `tm-plausibility` had to guess a ceiling it
+   * could not see; its own source comment admitted "the log has no idea what
+   * they failed afterwards".
+   *
+   * INVARIANT: `failed: true` implies `reps: 0`. It means "you loaded it and
+   * did not lift it", nothing else. A miss partway through a set is not this
+   * — you got 3 of a prescribed 5, you log 3. One flag, one meaning; the
+   * alternative was a second sense of `failed` that every consumer would
+   * have had to disambiguate.
+   *
+   * `reps: 0` is deliberate rather than `reps: null`. `reps != null` is the
+   * "this set is logged" predicate in 42 places (see `seconds` above), and a
+   * failed attempt IS logged work — you did it, the row is spent, the
+   * session progressed. Writing `null` would make the set read as untouched
+   * everywhere at once, which is the exact trap the `seconds` field was
+   * shaped to avoid.
+   *
+   * The `reps > 0` guards already in `pickHeaviest`, `isSetPR`,
+   * `estimateOneRM` and `weekly-narrative` mean a miss cannot be read as
+   * headroom, a PR, or a top lift. The consumers that lacked that guard —
+   * `report.ts`, `lastSessionSetsFor`'s seeding, the log list — are fixed in
+   * the same commit as this field.
+   */
+  failed: z.boolean().optional(),
   notes: z.string().optional(),
 });
 

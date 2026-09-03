@@ -1,5 +1,10 @@
 import { describe, it, expect } from "vitest";
-import { checkTrainingMaxes, bestEstimatedOneRM, estimateOneRM } from "./tm-plausibility";
+import {
+  checkTrainingMaxes,
+  bestEstimatedOneRM,
+  bestFailedAttempt,
+  estimateOneRM,
+} from "./tm-plausibility";
 import type { Store, DayLog } from "../schemas";
 
 /**
@@ -15,6 +20,25 @@ function log(date: string, key: string, sets: Array<[number, number]>): DayLog {
       sets: sets.map(([weight_kg, reps]) => ({ weight_kg, reps, rpe: null })) } },
   } as unknown as DayLog;
 }
+/**
+ * Same shape, but each set carries a `failed` flag. Separate helper rather
+ * than a third tuple slot on `log` so the twenty existing cases stay
+ * readable — a miss is the unusual case, not the default.
+ */
+function logWithMisses(
+  date: string,
+  key: string,
+  sets: Array<[number, number, boolean?]>,
+): DayLog {
+  return {
+    date, notes: "", symptoms: null, derived_state: null,
+    exercises: { [key]: { done: true, weight_kg: null, reps: null, notes: "",
+      sets: sets.map(([weight_kg, reps, failed]) => ({
+        weight_kg, reps, rpe: null, ...(failed ? { failed: true } : {}),
+      })) } },
+  } as unknown as DayLog;
+}
+
 const store = (tms: Record<string, number>, days: DayLog[]) =>
   ({ version: 2, training_maxes: tms, cycle: {},
      logs: Object.fromEntries(days.map((d) => [d.date, d])) } as unknown as Store);
@@ -151,5 +175,120 @@ describe("checkTrainingMaxes", () => {
       log("2026-08-20", "b:back_squat_highbar", [[115, 5]]),
     ]);
     expect(checkTrainingMaxes(s)).toEqual([]);
+  });
+});
+
+describe("bestFailedAttempt", () => {
+  it("finds the missed load the founder's note used to hold", () => {
+    // The whole point of the field. He worked to 115×1 and missed 122; before
+    // this the log could see the 115 and had no idea the 122 existed.
+    const s = store({}, [
+      logWithMisses("2026-09-01", "b:front_squat", [[110, 2], [115, 1], [122, 0, true]]),
+    ]);
+    expect(bestFailedAttempt(s.logs, "front_squat")).toEqual({
+      weightKg: 122,
+      date: "2026-09-01",
+    });
+  });
+
+  it("binds on the LIGHTEST miss, not the most recent or the heaviest", () => {
+    // Missing 122 and later missing 130 does not raise the ceiling to 130.
+    // You still have not lifted 122.
+    const s = store({}, [
+      logWithMisses("2026-09-01", "b:front_squat", [[122, 0, true]]),
+      logWithMisses("2026-09-08", "b:front_squat", [[130, 0, true]]),
+    ]);
+    expect(bestFailedAttempt(s.logs, "front_squat")!.weightKg).toBe(122);
+  });
+
+  it("ignores misses older than the best made lift", () => {
+    // A bad day two years ago must not cap every estimate forever. The
+    // ceiling has to be able to move when the person does.
+    const s = store({}, [
+      logWithMisses("2024-01-01", "b:front_squat", [[100, 0, true]]),
+      logWithMisses("2026-09-01", "b:front_squat", [[115, 1]]),
+    ]);
+    expect(bestFailedAttempt(s.logs, "front_squat", "2026-09-01")).toBeNull();
+  });
+
+  it("counts a miss from the same session as the made lift", () => {
+    // This is the ladder case — both numbers come out of one session, so a
+    // strict `>` on the date would discard exactly the pairing this exists
+    // to read.
+    const s = store({}, [
+      logWithMisses("2026-09-01", "b:front_squat", [[115, 1], [122, 0, true]]),
+    ]);
+    expect(bestFailedAttempt(s.logs, "front_squat", "2026-09-01")!.weightKg).toBe(122);
+  });
+
+  it("does not mistake a plain 0-rep set for a miss", () => {
+    // `failed` is the flag, not the rep count. A zero-rep row with no flag is
+    // a logging artefact (SetView seeded 0 before 2026-08-25), not evidence.
+    const s = store({}, [logWithMisses("2026-09-01", "b:front_squat", [[122, 0]])]);
+    expect(bestFailedAttempt(s.logs, "front_squat")).toBeNull();
+  });
+});
+
+describe("checkTrainingMaxes — against failed attempts", () => {
+  it("flags a training max at or above a load the user could not lift once", () => {
+    // Needs no estimate and no convention to be wrong. A TM is a working
+    // weight for repeated sets; if a single at that load did not go up,
+    // every prescription derived from it is fiction.
+    const s = store({ front_squat: 125 }, [
+      logWithMisses("2026-09-01", "b:front_squat", [[110, 5], [125, 0, true]]),
+    ]);
+    const f = checkTrainingMaxes(s).find((x) => x.liftId === "front_squat")!;
+    expect(f.kind).toBe("above_failed_attempt");
+    expect(f.message).toContain("missed 125 kg");
+    // 90% of (125 − 2.5), rounded to the half kilo.
+    expect(f.suggestedTM).toBe(110.5);
+  });
+
+  it("caps an Epley over-read so the check does not go silent", () => {
+    // THE case the ceiling exists for. 100×10 reads as 133.3 through Epley,
+    // so a 118 TM sits well under the 95% line (126.7) and nothing is said —
+    // even though the user has demonstrably failed 120. Capped to 117.5 the
+    // TM is above the estimate outright and the check speaks.
+    //
+    // 118 is deliberately BELOW the failed 120, so the certain
+    // `above_failed_attempt` branch cannot fire and this proves the capping
+    // path specifically.
+    const s = store({ front_squat: 118 }, [
+      logWithMisses("2026-09-01", "b:front_squat", [[100, 10], [120, 0, true]]),
+    ]);
+    const f = checkTrainingMaxes(s).find((x) => x.liftId === "front_squat")!;
+    expect(f.kind).toBe("above_demonstrated");
+    expect(f.message).toContain("missed 120 kg");
+  });
+
+  it("stays silent on the founder's real front squat", () => {
+    // Regression guard on the handover's claim that this check is correctly
+    // silent on all three of his lifts. 110×2 → Epley 117.3; the missed 122
+    // caps at 119.5, which is above it, so the estimate is untouched and a
+    // 110 TM sits at 94% — inside the band. If adding a ceiling had made
+    // this fire, the ceiling would be wrong.
+    const s = store({ front_squat: 110 }, [
+      logWithMisses("2026-09-01", "b:front_squat", [[110, 2], [115, 1], [122, 0, true]]),
+    ]);
+    expect(checkTrainingMaxes(s).filter((x) => x.liftId === "front_squat")).toEqual([]);
+  });
+
+  it("does not read the missed load as a lift", () => {
+    // The failure mode that would make this whole feature worse than the
+    // free-text note: 122 flowing into the estimate as evidence of strength.
+    // If it did, a 110 TM would look far BELOW a 122 max and the check would
+    // tell him to add weight he has just proved he cannot lift.
+    const s = store({ front_squat: 110 }, [
+      logWithMisses("2026-09-01", "b:front_squat", [[115, 1], [122, 0, true]]),
+    ]);
+    expect(bestEstimatedOneRM(s.logs, "front_squat")!.e1rm).toBe(115);
+    expect(checkTrainingMaxes(s).map((x) => x.kind)).not.toContain("far_below_demonstrated");
+  });
+
+  it("fires on a miss even with no made lift to estimate from", () => {
+    const s = store({ front_squat: 130 }, [
+      logWithMisses("2026-09-01", "b:front_squat", [[130, 0, true]]),
+    ]);
+    expect(checkTrainingMaxes(s)[0].kind).toBe("above_failed_attempt");
   });
 });
