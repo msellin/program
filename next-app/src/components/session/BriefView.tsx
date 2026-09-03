@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { RacePlanCard } from "@/components/session/RacePlanCard";
 import { humanPhaseName, phaseProgress, programDisplayName, humanBlockName } from "@/lib/day-format";
 import { entrySets } from "@/lib/useStore";
 import { ProposalCard } from "@/components/workout/ProposalCard";
@@ -206,6 +207,16 @@ export function BriefView({
             0.90"), showed nothing but a list of exercises. You could open
             the session and still not know how to run it. Any block that
             carries guidance now shows it, exercises or not. */}
+        {/* Test-day pacing. Rendered above "how to run this" because on the
+            day the user opens this screen to find four numbers, not prose.
+            The card returns null unless the session actually contains the 2K
+            test AND the user has a baseline to compute against. */}
+        {blocks.some((b) => b.id === "block_open_2k") ? (
+          <div className="mb-4">
+            <RacePlanCard program={program} store={store} />
+          </div>
+        ) : null}
+
         {guidanceBlocks.length > 0 ? (
           <div className="mb-4">
             <p className="font-mono text-[10px] uppercase tracking-[.16em] text-muted mb-[9px]">

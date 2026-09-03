@@ -385,10 +385,14 @@
       "blocks": [
         "block_z2_row",
         "block_threshold_row",
-        "block_race_pace_row"
+        "block_race_pace_row",
+        "block_race_plan_rehearsal"
       ],
       "goal": "Push threshold pace up 3-6%. Add one race-pace session per week.",
-      "rationale": "Joyner & Coyle 2008 — threshold rises predictably at trained-athlete level with focused work; VO2max plateaus much earlier."
+      "rationale": "Joyner & Coyle 2008 — threshold rises predictably at trained-athlete level with focused work; VO2max plateaus much earlier.",
+      "block_replacements": {
+        "block_race_pace_row": "block_race_plan_rehearsal"
+      }
     },
     {
       "id": "phase_3_taper_test",
@@ -453,8 +457,8 @@
       "name": "Open 2K test",
       "category": "run",
       "frequency": "1×/wk (base weeks + test week)",
-      "duration_min": 25,
-      "note": "Full 2K. Warm-up + all-out effort + cool-down. Record split, HR, RPE. This IS the retest metric."
+      "duration_min": 40,
+      "note": "Full 2K to a plan, not to feel. The app computes your four 500m splits and stroke rates from your own baseline — follow them. Warm-up: 10-12 min build, then 3×20 strokes at race rate with 90s between, finishing 5-8 min before you start. Record the drag factor BEFORE the first stroke and log all four splits, not just the total — split consistency is what this program claims to improve and it cannot be measured from a total alone."
     },
     {
       "id": "block_easy_recovery",
@@ -463,6 +467,14 @@
       "frequency": "1×/wk (taper week)",
       "duration_min": 20,
       "note": "20 min light rowing / bike / walk. Grease the groove, nothing more."
+    },
+    {
+      "id": "block_race_plan_rehearsal",
+      "name": "Race-plan rehearsal · Row",
+      "category": "run",
+      "frequency": "1× in weeks 3-4",
+      "duration_min": 35,
+      "note": "4×500m at your TARGET splits and TARGET rates, 3 min rest — the plan, in order, at the numbers you will actually see on test day. This is not a fitness session. If you cannot hold piece 3 at target, the target is wrong and it is far better to find that out now than at 1200m on test day."
     }
   ],
   "weekly_template": {

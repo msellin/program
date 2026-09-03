@@ -54,6 +54,11 @@ export function RunSlotCard({ date }: { date: string }) {
   const [sessionType, setSessionType] = useState<string>("");
   const [twoKTime, setTwoKTime] = useState<string>(""); // mm:ss for 2K tests
   const [watts, setWatts] = useState<string>("");
+  // Drag factor makes a retest comparable to the baseline it is measured
+  // against. Without it a user who moves the damper between the week-1
+  // baseline and the week-6 test reads a setting change as an adaptation —
+  // a measurement-validity defect in the programme's primary outcome.
+  const [dragFactor, setDragFactor] = useState<string>("");
   const [importedMeta, setImportedMeta] = useState<{
     // "fit" added 2026-08-27. A FIT export carries no track, so elevation,
     // device name and the raw document are absent rather than zero — the
@@ -105,6 +110,7 @@ export function RunSlotCard({ date }: { date: string }) {
     setSessionType("");
     setTwoKTime("");
     setWatts("");
+    setDragFactor("");
     setImportedMeta(null);
     setImportError(null);
     setOpen(false);
@@ -173,6 +179,9 @@ export function RunSlotCard({ date }: { date: string }) {
     if (sessionType) entry.session_type = sessionType as RunLog["session_type"];
     if (wattsNum != null && Number.isFinite(wattsNum) && wattsNum > 0)
       entry.avg_watts = wattsNum;
+    const dragNum = dragFactor.trim() === "" ? null : Number(dragFactor);
+    if (dragNum != null && Number.isFinite(dragNum) && dragNum >= 50 && dragNum <= 250)
+      entry.drag_factor = dragNum;
     if (twoK != null) {
       entry.total_seconds = twoK;
       // Derive 500m split ONLY for a genuine 2K test. Dividing a 32-min
@@ -608,6 +617,24 @@ export function RunSlotCard({ date }: { date: string }) {
                     placeholder="optional"
                     className="mt-0.5 block w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
                   />
+                </label>
+                <label className="text-[12px] text-muted">
+                  Drag factor
+                  <input
+                    type="number"
+                    inputMode="numeric"
+                    step={1}
+                    min={50}
+                    max={250}
+                    value={dragFactor}
+                    onChange={(e) => setDragFactor(e.target.value)}
+                    placeholder="e.g. 120"
+                    className="mt-0.5 block w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+                  />
+                  <span className="mt-0.5 block text-[11px] text-muted leading-snug">
+                    Menu &rarr; More Options &rarr; Display Drag Factor. Record it so your
+                    retest is comparable to this one.
+                  </span>
                 </label>
               </div>
               {twoKTime && parseTimeToSeconds(twoKTime) ? (

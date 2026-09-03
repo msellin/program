@@ -303,6 +303,18 @@ function blockIdsFromWeeklyTemplate(
     // blocks (race pace) for low-CNS blocks (recovery) in the last 7 days
     // before the test. Fresh legs on test day.
     let out = ids;
+    // Phase-wide replacements. `block_replacements_final_week` already existed
+    // but only fires on a taper phase in its last 7 days, so a phase that
+    // wants to substitute a block for its whole duration had no way to say
+    // so. Rowing's threshold build needs its weekly race-pace session to
+    // become a race-PLAN rehearsal — same slot, same cost, different intent —
+    // and expressing that by editing the weekly_template would change every
+    // phase at once. Applied before the phase-scope filter below so the
+    // substitute only needs to be listed in the phase's own `blocks[]`.
+    const phaseRep = (phase as unknown as { block_replacements?: Record<string, string> })
+      ?.block_replacements;
+    if (phaseRep) out = out.map((id) => phaseRep[id] ?? id);
+
     if (phase && (phase as unknown as { is_taper?: boolean }).is_taper && phase.ends) {
       const endD = new Date(phase.ends + "T00:00:00").getTime();
       const nowD = new Date(dateISO + "T00:00:00").getTime();
@@ -310,7 +322,7 @@ function blockIdsFromWeeklyTemplate(
       if (daysToEnd <= 7) {
         const rep = (phase as unknown as { block_replacements_final_week?: Record<string, string> })
           .block_replacements_final_week;
-        if (rep) out = ids.map((id) => rep[id] ?? id);
+        if (rep) out = out.map((id) => rep[id] ?? id);
       }
     }
     // Phase-block-scope filter — the weekly_template can reference blocks

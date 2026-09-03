@@ -288,6 +288,24 @@ Not tasks — calls to make.
   now exists so each answer can be warn-and-record rather than
   block-or-silence. **Every severity assignment is a clinical decision and the
   founder's.** See `dev/audits/programs/2026-09-03-SR-panel-findings.md`.
+- [x] **RACE-1 — rowing test-day pacing, shipped 2026-09-03.** SR-4 called
+  the absence "larger than any citation problem": six weeks of fitness, then
+  "Full 2K. Warm-up + all-out effort + cool-down", while the progression tier
+  sold "split consistency across all four 500s" that nothing programmed and
+  nothing measured. Now: `lib/engine/race-plan.ts` DERIVES four 500m splits
+  and stroke rates from the user's own baseline and tier target (an authored
+  pacing table would show a 6:30 rower and an 8:30 rower the same numbers),
+  rendered by `RacePlanCard` in the Brief on test day only, with a
+  pre-decided failure branch because nobody makes that call well at 1200m.
+  A `block_race_plan_rehearsal` runs the plan at target numbers in the
+  threshold build, so test day is not the first attempt — delivered via a new
+  phase-wide `block_replacements`, generalising the taper-only
+  `block_replacements_final_week`. `drag_factor` added to the run log and its
+  form: without it the retest is not comparable to the baseline it is measured
+  against. `splitConsistencySpread` measures the tier's promise and returns
+  null on a total logged without splits rather than reporting missing data as
+  perfect consistency. Guards run against the real shipped JSON on real dates,
+  matching `taper-week.test.ts`. Size: L
 - [ ] **CONTENT-1** — verified content defects from the same panel:
   `engine-builder` promises a "Block 3 (polarised)" that does not ship, in
   user-facing outcome copy; `rowing-2k-test-prep` has no test-day pacing plan

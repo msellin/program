@@ -196,6 +196,20 @@ export const phaseSchema = z.object({
    */
   for_tier_ids: z.array(z.string()).optional(),
   rationale: z.string().optional(),
+  /**
+   * Substitute one block for another for this phase's whole duration, keyed
+   * old_id → new_id. Applied in `strengthBlockIdsForDate` BEFORE the
+   * phase-scope filter, so the substitute only has to appear in this phase's
+   * `blocks[]`.
+   *
+   * `block_replacements_final_week` already existed but fires only on a taper
+   * phase in its last 7 days, so a phase wanting a substitution for its whole
+   * length had no way to express it and would have had to edit the shared
+   * `weekly_template`, changing every phase at once. Added 2026-09-03 so
+   * rowing's threshold build can turn its weekly race-pace session into a
+   * race-PLAN rehearsal — same slot, different intent.
+   */
+  block_replacements: z.record(z.string(), z.string()).optional(),
   goal: z.string().optional(),
   template: z.string().optional(),
   template_note: z.string().optional(),
@@ -1084,6 +1098,18 @@ export const runLogSchema = z.object({
     ])
     .optional(),
   avg_pace_500m_seconds: z.number().min(60).max(600).optional(),
+  /**
+   * Erg drag factor (Concept2 display, menu → More Options → Display Drag
+   * Factor). Recorded so a retest is comparable to the baseline it is
+   * measured against.
+   *
+   * Without it `row_2k_time_seconds` is not a comparable measure across a
+   * block: a user who moves the damper between the week-1 baseline and the
+   * week-6 test reads a setting change as an adaptation. That is a
+   * measurement-validity defect in the programme's primary outcome, not a
+   * nicety — flagged by the 2026-09-03 review.
+   */
+  drag_factor: z.number().min(50).max(250).optional(),
   avg_watts: z.number().min(20).max(2000).optional(),
   total_seconds: z.number().min(1).max(36_000).optional(),
   interval_splits: z
