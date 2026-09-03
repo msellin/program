@@ -78,19 +78,25 @@ const SIBLINGS: Array<{ a: string; b: string; ratio: number; label: string }> = 
 /**
  * Best evidence of a one-rep max in the log, and the set that produced it.
  *
- * Prefers a MEASURED single over an extrapolated one. Epley is a regression
- * fitted to multi-rep sets; when someone has actually worked up to a top
- * single, that number is a measurement and the formula is a guess about it.
+ * Takes the HIGHER of a measured top single and the best multi-rep estimate,
+ * because both are lower bounds on capability and the least-wrong answer is
+ * the larger one.
  *
- * The founder's ladder is the case: 100×3, 110×2, 115×1, then a failed 120.
- * Epley reads the 110 double as a 117.3 max — above the 115 he demonstrated,
- * and just under the 120 he could not lift. Reasoning from 117.3 put his
- * 110 kg training max at 94% and said nothing. Against the 115 he actually
- * lifted it is 96%, which is the finding.
+ * This was briefly "a measured single always wins", on the reasoning that a
+ * single is a measurement and Epley is a guess about it. The founder's own
+ * ladder disproved it within the hour. He worked to 115×1 and then attempted
+ * 122 — so 115 was not his max, it was the last rung he made, and his true
+ * single sits somewhere in [115, 122). Epley reads his 110×2 as 117.3, right
+ * inside that window. Treating the 115 as a measured ceiling understated him
+ * and made the check fire on a training max that is defensible.
  *
- * A single only counts as a max attempt when it is heavier than every
- * multi-rep set for that lift — otherwise a 60 kg warm-up single would cap
- * the estimate below a working double.
+ * A top single is still worth preferring over a LOWER estimate — someone who
+ * works up to a real single has given you a number better than an
+ * extrapolation from fives. It just cannot be treated as a ceiling, because
+ * the log has no idea what they failed afterwards.
+ *
+ * A single only counts at all when it is heavier than every multi-rep set for
+ * that lift; otherwise a 60 kg warm-up opener would drag the estimate down.
  */
 export function bestEstimatedOneRM(
   logs: Record<string, DayLog>,
@@ -119,8 +125,9 @@ export function bestEstimatedOneRM(
     }
   }
 
-  if (topSingle && topSingle.weightKg >= heaviestMultiRep) {
-    return { e1rm: topSingle.weightKg, weightKg: topSingle.weightKg, reps: 1, date: topSingle.date };
+  const singleCounts = topSingle && topSingle.weightKg >= heaviestMultiRep;
+  if (singleCounts && (!bestEstimate || topSingle!.weightKg > bestEstimate.e1rm)) {
+    return { e1rm: topSingle!.weightKg, weightKg: topSingle!.weightKg, reps: 1, date: topSingle!.date };
   }
   return bestEstimate;
 }

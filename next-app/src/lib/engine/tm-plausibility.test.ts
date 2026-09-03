@@ -37,12 +37,19 @@ describe("estimateOneRM", () => {
 });
 
 describe("bestEstimatedOneRM", () => {
-  it("prefers a measured top single over an extrapolated double", () => {
-    // The founder's ladder. Epley reads 110×2 as 117.3 — above the 115 he
-    // lifted and below the 120 he missed. The measurement wins.
+  it("does not treat a mid-ladder single as a ceiling", () => {
+    // The founder made 115×1 and then attempted 122, so 115 was the last rung
+    // he made rather than his max. Epley reads his 110×2 as 117.3, inside the
+    // real [115, 122) window. Taking the lower number understated him and
+    // fired the check on a defensible training max.
     const s = store({}, [log("2026-09-01", "b:front_squat", [[110, 2], [115, 1]])]);
+    expect(bestEstimatedOneRM(s.logs, "front_squat")!.e1rm).toBeCloseTo(117.3, 1);
+  });
+
+  it("still uses a top single when it beats every estimate", () => {
+    const s = store({}, [log("2026-09-01", "b:front_squat", [[100, 3], [125, 1]])]);
     const best = bestEstimatedOneRM(s.logs, "front_squat")!;
-    expect(best.e1rm).toBe(115);
+    expect(best.e1rm).toBe(125);
     expect(best.reps).toBe(1);
   });
 
@@ -67,16 +74,15 @@ describe("bestEstimatedOneRM", () => {
 });
 
 describe("checkTrainingMaxes", () => {
-  it("flags the founder's real front squat ladder", () => {
-    // 80×3 90×3 100×3 105×2 110×2 115×1, 120 failed. The single is the max.
-    // TM 110 is 95.7% of it; convention puts a training max near 103.5.
+  it("stays silent on the founder's real front squat ladder", () => {
+    // 80×3 ... 110×2 115×1, then a failed 122. Best evidence is ~117.3, and
+    // a 110 training max is 94% of it — high, inside the band, and not worth
+    // a warning. The first version of this test asserted the opposite, from
+    // a wrong number.
     const s = store({ front_squat: 110 }, [
       log("2026-09-01", "b:front_squat", [[100, 3], [110, 2], [115, 1]]),
     ]);
-    const f = checkTrainingMaxes(s);
-    expect(f).toHaveLength(1);
-    expect(f[0].kind).toBe("above_demonstrated");
-    expect(f[0].suggestedTM).toBe(103.5);
+    expect(checkTrainingMaxes(s)).toEqual([]);
   });
 
   it("flags a TM above what a volume day can evidence", () => {
