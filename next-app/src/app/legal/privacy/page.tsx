@@ -9,7 +9,7 @@ export default function PrivacyPage() {
     <div className="max-w-2xl mx-auto space-y-4 pt-4 text-[14px] leading-relaxed">
       <h1 className="text-2xl font-semibold text-strong">Privacy policy</h1>
       <p className="text-muted italic">
-        Last updated: 2026-09-02. Beta — this policy will be lawyer-reviewed before public launch.
+        Last updated: 2026-09-03. Beta — this policy will be lawyer-reviewed before public launch.
       </p>
 
       <h2 className="text-lg font-semibold text-strong pt-2">Who controls your data</h2>
@@ -102,7 +102,7 @@ export default function PrivacyPage() {
       <ul className="list-disc pl-5 space-y-1">
         <li>
           Account, email, training logs and symptom data: <strong>Supabase</strong>{" "}
-          (managed Postgres, AWS <span className="whitespace-nowrap">eu-west-1</span> — Ireland, EU).
+          (managed Postgres, AWS <span className="whitespace-nowrap">eu-west-3</span> — Paris, EU).
         </li>
         <li>
           <strong>Your own device.</strong> The app keeps a full copy of your training
