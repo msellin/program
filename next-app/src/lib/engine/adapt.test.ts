@@ -396,15 +396,47 @@ describe("evaluateOverperformer", () => {
   });
 
   it("does not fire without an easy signal", () => {
+    // Sets must be genuinely hard for this to mean "no signal". The default
+    // fixture logs RPE 6, which since 2026-09-03 IS an easy signal on its own
+    // — `performanceSignals` reads the numbers rather than waiting for the
+    // user to also type "felt easy" underneath them.
+    const hard: number[][] = [[100, 5, 9]];
     const s = overStore({
       days: [
-        { date: "2026-08-15", state: "green" },
-        { date: "2026-08-16", state: "green" },
-        { date: "2026-08-17", state: "green" },
+        { date: "2026-08-15", state: "green", sets: hard },
+        { date: "2026-08-16", state: "green", sets: hard },
+        { date: "2026-08-17", state: "green", sets: hard },
       ],
     });
     const out = evaluateOverperformer(trainingProgram, s, evalDay);
     expect(out).toBeNull();
+  });
+
+  it("fires on an easy top-set RPE with no note at all", () => {
+    // The founder's case: three sessions of deliberate overperformance and
+    // empty notes produced nothing, because the only detector read prose.
+    const s = overStore({
+      days: [
+        { date: "2026-08-15", state: "green", sets: [[100, 5, 6]] },
+        { date: "2026-08-16", state: "green", sets: [[100, 5, 6]] },
+        { date: "2026-08-17", state: "green", sets: [[100, 5, 6]] },
+      ],
+    });
+    const out = evaluateOverperformer(trainingProgram, s, evalDay);
+    expect(out).not.toBeNull();
+    expect(out!.triggers.join(" ")).toMatch(/RPE 6/);
+  });
+
+  it("cites the numbers that fired, not a note that does not exist", () => {
+    const s = overStore({
+      days: [
+        { date: "2026-08-15", state: "green", sets: [[100, 5, 6]] },
+        { date: "2026-08-16", state: "green", sets: [[100, 5, 6]] },
+        { date: "2026-08-17", state: "green", sets: [[100, 5, 6]] },
+      ],
+    });
+    const out = evaluateOverperformer(trainingProgram, s, evalDay);
+    expect(out!.reason).not.toMatch(/felt strong/);
   });
 
   it("does not fire when any of the last 3 stated days is not green", () => {

@@ -1,5 +1,5 @@
 import type { Store, Program, DayLog, Milestone } from "../schemas";
-import { inferTMFromSet } from "./suggest";
+import { inferTMFromSet, suggestForExercise } from "./suggest";
 import { iso } from "../utils";
 import { daySignals } from "./note-signals";
 
@@ -383,6 +383,110 @@ function bumpFor(exerciseId: string): number {
   return exerciseId.includes("squat") ? 2.5 : 5;
 }
 
+
+/**
+ * Did the user's own numbers say the weight was easy?
+ *
+ * `evaluateOverperformer` used to require a written cue — "felt strong",
+ * "felt easy", "grooved" — folded out of notes by `daySignals`. The founder
+ * spent three sessions demonstrating that his training maxes were wrong, by
+ * going heavier than prescribed and taking extra reps on every top set, and
+ * the engine proposed nothing, because his notes were empty:
+ *
+ *   Aug 31  back squat   prescribed  93.5×5+   logged  95×9
+ *   Sep 02  block pull   prescribed ~123×5+    logged 125×9
+ *   Sep 03  front squat  prescribed   77×5     logged  80×9  @ RPE 7
+ *
+ * The AMRAP result is the single most informative number in 5/3/1 — it is
+ * the mechanism the system self-corrects with — and nothing read it. Asking
+ * a user to type "that felt easy" underneath nine reps at RPE 7 is asking
+ * them to restate, in prose, what they already entered as data.
+ *
+ * Three signals, any one of which counts:
+ *
+ *   - **Reps.** A top set carried well past its prescribed minimum. `5+`
+ *     means five is the floor; nine is not a good day, it is a wrong number.
+ *   - **RPE.** A top set at 7 or below. The whole point of a top set is that
+ *     it is hard; a 7 means the load was not the limiter.
+ *   - **Load.** The user chose more weight than was prescribed and completed
+ *     the prescribed reps — the most deliberate signal of the three, because
+ *     it takes an act of disagreement to produce.
+ *
+ * Deliberately NOT a TM calculation. This answers "is there headroom worth
+ * proposing", and the proposal still goes through Accept like every other
+ * change. `bumpFor` decides the size.
+ */
+export type PerformanceSignal = {
+  liftId: string;
+  reason: string;
+};
+
+/** A top set at or below this RPE was not limited by the load. */
+const EASY_TOP_SET_RPE = 7;
+/** Reps beyond the prescribed floor before we read it as headroom. */
+const REP_SURPLUS = 3;
+
+export function performanceSignals(
+  program: Program,
+  store: Store,
+  days: DayLog[],
+): PerformanceSignal[] {
+  const tms = store.training_maxes ?? {};
+  const out = new Map<string, PerformanceSignal>();
+
+  for (const day of days) {
+    for (const [key, entry] of Object.entries(day.exercises)) {
+      if (!entry?.done) continue;
+      const [blockId, exId] = key.split(":");
+      if (!exId || !tms[exId]) continue;
+      const top = pickHeaviest(entry);
+      if (!top) continue;
+
+      const prescribed = suggestForExercise(exId, blockId, program, store, day.date);
+      if (!prescribed) continue;
+
+      // The prescribed floor for the heaviest set. "5+" is an AMRAP whose
+      // floor is 5; a plain "5" is not an invitation to do nine.
+      const repFloor = parseInt(String(prescribed.top_set.reps).replace(/\D/g, ""), 10);
+      const isAmrap = String(prescribed.top_set.reps).includes("+");
+
+      if (Number.isFinite(repFloor) && top.reps >= repFloor + REP_SURPLUS) {
+        out.set(exId, {
+          liftId: exId,
+          reason: `${top.weight_kg} kg × ${top.reps} where ${prescribed.top_set.reps} was prescribed`,
+        });
+        continue;
+      }
+      if (top.rpe != null && top.rpe <= EASY_TOP_SET_RPE && top.reps >= repFloor) {
+        out.set(exId, {
+          liftId: exId,
+          reason: `top set at RPE ${top.rpe} — the load was not the limiter`,
+        });
+        continue;
+      }
+      // Load above prescription, reps still met. Two exclusions:
+      //   - AMRAPs, where more weight for fewer reps is a normal trade.
+      //   - Suggestions with no `fsl`, which is how `suggestForExercise`
+      //     returns its cold-start ramp ("No prior log. Start moderate:
+      //     ~55% TM"). Beating a number the engine picked BECAUSE it had no
+      //     information is not evidence of headroom; it is the user knowing
+      //     something the engine does not yet.
+      if (
+        !isAmrap &&
+        prescribed.fsl &&
+        top.weight_kg > prescribed.top_set.kg &&
+        top.reps >= repFloor
+      ) {
+        out.set(exId, {
+          liftId: exId,
+          reason: `${top.weight_kg} kg used where ${prescribed.top_set.kg} kg was prescribed`,
+        });
+      }
+    }
+  }
+  return [...out.values()];
+}
+
 /**
  * Does this program declare a strength-progression surface? Checked by shape
  * (program JSON has `training_maxes.starting_values_kg`) rather than by
@@ -429,11 +533,15 @@ export function evaluateOverperformer(
   const last3 = stated.slice(-3);
   if (!last3.every((d) => d.derived_state === "green")) return null;
 
-  // Easy-signal check — at least one recent day carries a "felt strong" /
-  // "felt easy" / "grooved" cue. daySignals already folds day.notes +
-  // exercise notes + set notes into `.easy`.
+  // Easy-signal check. Two ways to say the same thing, and the numbers are
+  // the better one: a written cue ("felt strong", folded out of notes by
+  // daySignals), OR the user's own logged performance against what was
+  // prescribed. Requiring the note meant three sessions of deliberate
+  // overperformance — 95×9 on a 93.5×5+, 125×9, 80×9 at RPE 7 — produced no
+  // proposal at all, because the notes were empty. See `performanceSignals`.
   const easyDays = recent.filter((d) => daySignals(d).easy);
-  if (easyDays.length === 0) return null;
+  const perf = performanceSignals(program, store, recent);
+  if (easyDays.length === 0 && perf.length === 0) return null;
 
   // Which lifts to bump? Ones the user actually trained in the last 7 days
   // with logged working sets AND has a TM for.
@@ -451,11 +559,16 @@ export function evaluateOverperformer(
   }
   if (trainedTMLifts.size === 0) return null;
 
-  // Cap the bump surface to the two heaviest-loaded lifts. Bumping every TM
-  // on the same day is high-commitment and reads as pushy.
+  // Prefer the lifts whose own numbers asked for this. A performance signal
+  // names a specific lift; a written cue does not, so notes-only runs keep
+  // the previous heaviest-two behaviour.
+  const signalled = new Set(perf.map((p) => p.liftId));
   const ranked = Array.from(trainedTMLifts)
     .map((id) => ({ id, tm: tms[id] }))
-    .sort((a, b) => b.tm - a.tm)
+    .sort((a, b) => {
+      const bySignal = Number(signalled.has(b.id)) - Number(signalled.has(a.id));
+      return bySignal !== 0 ? bySignal : b.tm - a.tm;
+    })
     .slice(0, 2);
 
   const lifts = ranked.map(({ id, tm }) => {
@@ -463,15 +576,28 @@ export function evaluateOverperformer(
     return { exerciseId: id, currentTM: tm, newTM: round(tm + delta), delta };
   });
 
-  const triggers = [
-    "3 straight green days",
-    easyDays.length > 1 ? `${easyDays.length} "felt strong" notes` : "'felt strong' in a recent note",
-  ];
+  // Cite what actually fired. A proposal that says "'felt strong' in a recent
+  // note" when there was no note is the kind of claim this project keeps
+  // finding — true when the code was written, false ever since.
+  const perfForRanked = perf.filter((p) => ranked.some((r) => r.id === p.liftId));
+  const triggers = ["3 straight green days"];
+  if (perfForRanked.length > 0) {
+    triggers.push(perfForRanked.map((p) => p.reason).join("; "));
+  } else if (easyDays.length > 0) {
+    triggers.push(
+      easyDays.length > 1
+        ? `${easyDays.length} "felt strong" notes`
+        : "'felt strong' in a recent note",
+    );
+  }
 
   // Reason is intentionally short — the delta list beneath (rendered by
   // ProposalCard) shows the exact numbers, and the Ignore button on the
   // same card provides the reversibility affordance.
-  const reason = `${triggers[0]} plus ${triggers[1]}. The engine reads that as headroom.`;
+  const reason =
+    triggers.length > 1
+      ? `${triggers[0]} plus ${triggers[1]}. The engine reads that as headroom.`
+      : `${triggers[0]}. The engine reads that as headroom.`;
 
   return {
     kind: "tm_bump",
