@@ -9,8 +9,8 @@
       "title": "Maximal fat oxidation during exercise in trained men",
       "source": "International Journal of Sports Medicine 24(8):603-608",
       "url": "https://pubmed.ncbi.nlm.nih.gov/14598198/",
-      "display_short": "Achten et al. 2003",
-      "display_line": "Achten et al. (2003), International Journal of Sports Medicine 24(8)"
+      "display_short": "Achten & Jeukendrup 2003",
+      "display_line": "Achten & Jeukendrup (2003), International Journal of Sports Medicine 24(8)"
     },
     {
       "id": "ackerman_1988",
@@ -28,8 +28,8 @@
       "title": "Capillary supply of the quadriceps femoris muscle of man: adaptive response to exercise",
       "source": "Journal of Physiology 270(3):677-690",
       "url": "https://pubmed.ncbi.nlm.nih.gov/198532/",
-      "display_short": "Andersen et al. 1977",
-      "display_line": "Andersen et al. (1977), Journal of Physiology 270(3)"
+      "display_short": "Andersen & Henriksson 1977",
+      "display_line": "Andersen & Henriksson (1977), Journal of Physiology 270(3)"
     },
     {
       "id": "aragon_schoenfeld_2013",
@@ -37,8 +37,8 @@
       "year": 2013,
       "title": "Nutrient timing revisited: is there a post-exercise anabolic window?",
       "source": "J Int Soc Sports Nutr 10:5",
-      "display_short": "Aragon et al. 2013",
-      "display_line": "Aragon et al. (2013), J Int Soc Sports Nutr 10"
+      "display_short": "Aragon & Schoenfeld 2013",
+      "display_line": "Aragon & Schoenfeld (2013), J Int Soc Sports Nutr 10"
     },
     {
       "id": "astorino_2013",
@@ -74,8 +74,8 @@
       "title": "Athlete's heart and cardiovascular care of the athlete: scientific and clinical update",
       "source": "Circulation 123(23):2723-2735",
       "url": "https://www.ahajournals.org/doi/10.1161/CIRCULATIONAHA.110.981571",
-      "display_short": "Baggish et al. 2011",
-      "display_line": "Baggish et al. (2011), Circulation 123(23)"
+      "display_short": "Baggish & Wood 2011",
+      "display_line": "Baggish & Wood (2011), Circulation 123(23)"
     },
     {
       "id": "baker_2025_review",
@@ -216,8 +216,8 @@
       "year": 2013,
       "title": "High-intensity interval training, solutions to the programming puzzle. Part I",
       "source": "Sports Med 43(5):313-338",
-      "display_short": "Buchheit et al. 2013",
-      "display_line": "Buchheit et al. (2013), Sports Med 43(5)"
+      "display_short": "Buchheit & Laursen 2013",
+      "display_line": "Buchheit & Laursen (2013), Sports Med 43(5)"
     },
     {
       "id": "buchheit_laursen_2013_b",
@@ -225,8 +225,8 @@
       "year": 2013,
       "title": "High-intensity interval training, solutions to the programming puzzle. Part II",
       "source": "Sports Med 43(10):927-954",
-      "display_short": "Buchheit et al. 2013",
-      "display_line": "Buchheit et al. (2013), Sports Med 43(10)"
+      "display_short": "Buchheit & Laursen 2013",
+      "display_line": "Buchheit & Laursen (2013), Sports Med 43(10)"
     },
     {
       "id": "bullock_2019",
@@ -234,7 +234,6 @@
       "year": 2019,
       "title": "Shoulder range of motion and baseball throwing performance",
       "source": "J Athl Train 54(6):679-687",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/?term=Bullock+shoulder+range+of+motion+baseball+throwing+2019",
       "display_short": "Bullock et al. 2019",
       "display_line": "Bullock et al. (2019), J Athl Train 54(6)"
     },
@@ -263,8 +262,8 @@
       "year": 2002,
       "title": "Self-controlled feedback: does it enhance learning because performers get feedback when they need it?",
       "source": "Research Quarterly for Exercise and Sport 73:408-415",
-      "display_short": "Chiviacowsky et al. 2002",
-      "display_line": "Chiviacowsky et al. (2002), Research Quarterly for Exercise and Sport 73"
+      "display_short": "Chiviacowsky & Wulf 2002",
+      "display_line": "Chiviacowsky & Wulf (2002), Research Quarterly for Exercise and Sport 73"
     },
     {
       "id": "cocks_2013",
@@ -282,8 +281,8 @@
       "year": 2007,
       "title": "The molecular bases of training adaptation",
       "source": "Sports Med 37(9):737-763",
-      "display_short": "Coffey et al. 2007",
-      "display_line": "Coffey et al. (2007), Sports Med 37(9)"
+      "display_short": "Coffey & Hawley 2007",
+      "display_line": "Coffey & Hawley (2007), Sports Med 37(9)"
     },
     {
       "id": "coyle_1984",
@@ -321,8 +320,8 @@
       "title": "A proposed model for examining the interference phenomenon between concurrent aerobic and strength training",
       "source": "Sports Medicine 30(6):385-394",
       "url": "https://pubmed.ncbi.nlm.nih.gov/11132122/",
-      "display_short": "Docherty et al. 2000",
-      "display_line": "Docherty et al. (2000), Sports Medicine 30(6)"
+      "display_short": "Docherty & Sporer 2000",
+      "display_line": "Docherty & Sporer (2000), Sports Medicine 30(6)"
     },
     {
       "id": "doma_2019",
@@ -482,8 +481,8 @@
       "year": 2008,
       "title": "Endurance exercise performance: the physiology of champions",
       "source": "J Physiol 586(1):35-44",
-      "display_short": "Joyner et al. 2008",
-      "display_line": "Joyner et al. (2008), J Physiol 586(1)"
+      "display_short": "Joyner & Coyle 2008",
+      "display_line": "Joyner & Coyle (2008), J Physiol 586(1)"
     },
     {
       "id": "karni_1998",
@@ -500,8 +499,8 @@
       "year": 2001,
       "title": "Strategies for maintaining a handstand in the anterior-posterior direction",
       "source": "Medicine and Science in Sports and Exercise 33(7):1182-1188",
-      "display_short": "Kerwin et al. 2001",
-      "display_line": "Kerwin et al. (2001), Medicine and Science in Sports and Exercise 33(7)"
+      "display_short": "Kerwin & Trewartha 2001",
+      "display_line": "Kerwin & Trewartha (2001), Medicine and Science in Sports and Exercise 33(7)"
     },
     {
       "id": "kibler_2013",
@@ -509,7 +508,6 @@
       "year": 2010,
       "title": "Current concepts: scapular dyskinesis",
       "source": "BJSM 44(5):300-305",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/?term=Kibler+Sciascia+scapular+dyskinesis+current+concepts",
       "display_short": "Kibler & Sciascia 2010",
       "display_line": "Kibler & Sciascia (2010), BJSM 44(5)",
       "review_note": "Year corrected 2013 → 2010 per overhead-mobility review 2026-08-17. BJSM 44(5) is the 2010 current-concepts paper. `id` kept as `kibler_2013` for stability of downstream references."
@@ -520,7 +518,6 @@
       "year": 2012,
       "title": "Investigation of the maximal lactate steady state (MLSS) in trained runners",
       "source": "Int J Sports Med 33(1):11-16",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/?term=Kilding+Winter+maximal+lactate+steady+state+trained+runners+2012",
       "display_short": "Kilding et al. 2012",
       "display_line": "Kilding et al. (2012), Int J Sports Med 33(1)"
     },
@@ -530,7 +527,6 @@
       "year": 2013,
       "title": "Reliability of shoulder ROM measurement in supine position",
       "source": "J Phys Ther Sci 25(11):1435-1438",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/?term=Kim+shoulder+ROM+supine+position+reliability+2013",
       "display_short": "Kim et al. 2013",
       "display_line": "Kim et al. (2013), J Phys Ther Sci 25(11)"
     },
@@ -569,8 +565,8 @@
       "year": 2002,
       "title": "The scientific basis for high-intensity interval training",
       "source": "Sports Med 32(1):53-73",
-      "display_short": "Laursen et al. 2002",
-      "display_line": "Laursen et al. (2002), Sports Med 32(1)"
+      "display_short": "Laursen & Jenkins 2002",
+      "display_line": "Laursen & Jenkins (2002), Sports Med 32(1)"
     },
     {
       "id": "little_2010",
@@ -588,8 +584,8 @@
       "year": 2000,
       "title": "Alterations in shoulder kinematics and associated muscle activity in people with symptoms of shoulder impingement",
       "source": "Physical Therapy 80(3):276-291",
-      "display_short": "Ludewig et al. 2000",
-      "display_line": "Ludewig et al. (2000), Physical Therapy 80(3)"
+      "display_short": "Ludewig & Cook 2000",
+      "display_line": "Ludewig & Cook (2000), Physical Therapy 80(3)"
     },
     {
       "id": "ludewig_reynolds_2009",
@@ -597,8 +593,8 @@
       "year": 2009,
       "title": "The association of scapular kinematics and glenohumeral joint pathologies",
       "source": "JOSPT 39(2):90-104",
-      "display_short": "Ludewig et al. 2009",
-      "display_line": "Ludewig et al. (2009), JOSPT 39(2)"
+      "display_short": "Ludewig & Reynolds 2009",
+      "display_line": "Ludewig & Reynolds (2009), JOSPT 39(2)"
     },
     {
       "id": "manske_2010",
@@ -606,7 +602,6 @@
       "year": 2010,
       "title": "A randomized controlled single-blinded comparison of stretching versus stretching and joint mobilization for posterior shoulder tightness",
       "source": "Sports Health 2(2):94-100",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/?term=Manske+stretching+joint+mobilization+posterior+shoulder+tightness",
       "display_short": "Manske et al. 2010",
       "display_line": "Manske et al. (2010), Sports Health 2(2)"
     },
@@ -634,7 +629,6 @@
       "year": 2011,
       "title": "Maturation to elite status: a six-year physiological case study of a world champion rowing crew",
       "source": "Eur J Appl Physiol 111(9):2363-2368",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/?term=Mikulic+maturation+elite+rowing+crew+2011",
       "display_short": "Mikulic 2011",
       "display_line": "Mikulic (2011), Eur J Appl Physiol 111(9)"
     },
@@ -655,8 +649,8 @@
       "title": "Detraining: loss of training-induced physiological and performance adaptations. Part I & II",
       "source": "Sports Medicine 30(2):79-87 and 30(3):145-154",
       "url": "https://pubmed.ncbi.nlm.nih.gov/10999418/",
-      "display_short": "Mujika et al. 2000",
-      "display_line": "Mujika et al. (2000), Sports Medicine 30(2)"
+      "display_short": "Mujika & Padilla 2000",
+      "display_line": "Mujika & Padilla (2000), Sports Medicine 30(2)"
     },
     {
       "id": "mujika_padilla_2000_a",
@@ -664,8 +658,8 @@
       "year": 2000,
       "title": "Detraining: loss of training-induced physiological and performance adaptations. Part I",
       "source": "Sports Med 30(2):79-87",
-      "display_short": "Mujika et al. 2000",
-      "display_line": "Mujika et al. (2000), Sports Med 30(2)"
+      "display_short": "Mujika & Padilla 2000",
+      "display_line": "Mujika & Padilla (2000), Sports Med 30(2)"
     },
     {
       "id": "mujika_padilla_2000_b",
@@ -673,8 +667,8 @@
       "year": 2000,
       "title": "Detraining: loss of training-induced physiological and performance adaptations. Part II",
       "source": "Sports Med 30(3):145-154",
-      "display_short": "Mujika et al. 2000",
-      "display_line": "Mujika et al. (2000), Sports Med 30(3)"
+      "display_short": "Mujika & Padilla 2000",
+      "display_line": "Mujika & Padilla (2000), Sports Med 30(3)"
     },
     {
       "id": "murach_bagley_2016",
@@ -682,8 +676,8 @@
       "year": 2016,
       "title": "Skeletal muscle hypertrophy with concurrent exercise training",
       "source": "Sports Med 46(8):1029-1039",
-      "display_short": "Murach et al. 2016",
-      "display_line": "Murach et al. (2016), Sports Med 46(8)"
+      "display_short": "Murach & Bagley 2016",
+      "display_line": "Murach & Bagley (2016), Sports Med 46(8)"
     },
     {
       "id": "nes_2013_hunt",
@@ -807,8 +801,8 @@
       "year": 2018,
       "title": "Combined tactile-verbal and visual feedback in gymnastics skill acquisition",
       "source": "Science of Gymnastics Journal / International Journal of Performance Analysis in Sport 18(1)",
-      "display_short": "Rohleder et al. 2018",
-      "display_line": "Rohleder et al. (2018), Science of Gymnastics Journal / International Journal of"
+      "display_short": "Rohleder & Vogt 2018",
+      "display_line": "Rohleder & Vogt (2018), Science of Gymnastics Journal / International Journal of"
     },
     {
       "id": "ronnestad_hansen_2020",
@@ -856,8 +850,8 @@
       "title": "Assessment of metabolic flexibility by means of measuring blood lactate, fat and carbohydrate oxidation responses",
       "source": "Sports Medicine 48(2):467-479",
       "url": "https://link.springer.com/article/10.1007/s40279-017-0751-x",
-      "display_short": "San-Millán et al. 2018",
-      "display_line": "San-Millán et al. (2018), Sports Medicine 48(2)"
+      "display_short": "San-Millán & Brooks 2018",
+      "display_line": "San-Millán & Brooks (2018), Sports Medicine 48(2)"
     },
     {
       "id": "sands_2000",
@@ -923,8 +917,8 @@
       "year": 1979,
       "title": "Contextual interference effects on the acquisition, retention, and transfer of a motor skill",
       "source": "Journal of Experimental Psychology: Human Learning and Memory 5:179-187",
-      "display_short": "Shea et al. 1979",
-      "display_line": "Shea et al. (1979), Journal of Experimental Psychology"
+      "display_short": "Shea & Morgan 1979",
+      "display_line": "Shea & Morgan (1979), Journal of Experimental Psychology"
     },
     {
       "id": "simunkova_2024",
@@ -950,7 +944,6 @@
       "year": 1993,
       "title": "Physiological aspects of training in rowing",
       "source": "Int J Sports Med 14(S1):S3-S10",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/?term=Steinacker+physiological+aspects+training+rowing+1993",
       "display_short": "Steinacker 1993",
       "display_line": "Steinacker (1993), Int J Sports Med 14(S1)"
     },
@@ -961,8 +954,8 @@
       "title": "Polarized training has greater impact on key endurance variables than threshold, high intensity, or high volume training",
       "source": "Frontiers in Physiology 5:33",
       "url": "https://www.frontiersin.org/articles/10.3389/fphys.2014.00033/full",
-      "display_short": "Stöggl et al. 2014",
-      "display_line": "Stöggl et al. (2014), Frontiers in Physiology 5"
+      "display_short": "Stöggl & Sperlich 2014",
+      "display_line": "Stöggl & Sperlich (2014), Frontiers in Physiology 5"
     },
     {
       "id": "tanaka_2001",
@@ -1064,8 +1057,8 @@
       "year": 2002,
       "title": "Principles derived from the study of simple skills do not generalize to complex skill learning",
       "source": "Psychonomic Bulletin & Review 9:185-211",
-      "display_short": "Wulf et al. 2002",
-      "display_line": "Wulf et al. (2002), Psychonomic Bulletin & Review 9"
+      "display_short": "Wulf & Shea 2002",
+      "display_line": "Wulf & Shea (2002), Psychonomic Bulletin & Review 9"
     },
     {
       "id": "adkin_frank_2000",

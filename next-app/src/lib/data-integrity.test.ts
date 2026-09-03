@@ -929,3 +929,70 @@ describe("no programme ships a citation it has not verified", () => {
     expect(offenders).toEqual([]);
   });
 });
+
+/**
+ * The shared exercise library's citation pointers.
+ *
+ * `exercises.json` drills carry `evidence_refs[]`. Nothing renders them — the
+ * field is in the schema and read by no source file — so eight ids pointing at
+ * citations that do not exist went unnoticed across eighteen drills. Three were
+ * id drift (`ludewig_2000` for `ludewig_cook_2000`, `ronnestad_2020` for
+ * `ronnestad_hansen_2020`); five named sources never added to citations.json at
+ * all, two of them books rather than papers.
+ *
+ * Harmless while unrendered, and a landmine the moment anyone builds the
+ * obvious feature — "show me the papers behind this drill" — on top of it.
+ * Found by the 2026-09-03 mobility panel; the referential-integrity suite had
+ * covered `reference_ids` but never this second pointer set.
+ */
+describe("exercise evidence_refs resolve", () => {
+  const cites = read("citations.json");
+  const known = new Set(
+    ((cites.citations ?? cites.references ?? []) as Array<{ id: string }>).map((c) => c.id),
+  );
+
+  it("every evidence_ref names a citation that exists", () => {
+    const offenders: string[] = [];
+    for (const e of library.exercises) {
+      for (const r of ((e as { evidence_refs?: string[] }).evidence_refs) ?? []) {
+        if (!known.has(r)) offenders.push(`${e.id} → ${r}`);
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
+});
+
+/**
+ * Citation display strings are shown to users on the evidence page, so the
+ * conventions matter the way they would in any published reference list.
+ */
+describe("citation display strings follow citation convention", () => {
+  const cites = (read("citations.json").citations ?? read("citations.json").references ?? []) as Array<{
+    id: string; authors?: string; url?: string; display_short?: string; display_line?: string;
+  }>;
+
+  it("a two-author paper is 'A & B', never 'A et al.'", () => {
+    // 46 display strings across 24 entries had this wrong — Achten &
+    // Jeukendrup rendered as "Achten et al.".
+    const offenders: string[] = [];
+    for (const c of cites) {
+      const a = c.authors ?? "";
+      if (/et al/i.test(a)) continue; // byline itself is truncated
+      const names = a.split(/,(?![^()]*\))/).map((n) => n.trim()).filter(Boolean);
+      if (names.length !== 2) continue;
+      for (const key of ["display_short", "display_line"] as const) {
+        if (/et al\./i.test(c[key] ?? "")) offenders.push(`${c.id}.${key}: ${c[key]}`);
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
+
+  it("no url is a search query instead of the article", () => {
+    // Seven pointed at PubMed search pages. A link that tells the reader to go
+    // and find the paper is not a citation to it.
+    const offenders = cites
+      .filter((c) => typeof c.url === "string" && /[?&]term=/.test(c.url))
+      .map((c) => `${c.id}: ${c.url}`);
+    expect(offenders).toEqual([]);
+  });
+});
