@@ -260,6 +260,28 @@ From roadmap sync + product-concerns-2026-08-17 + design-lead brief `2026-08-19-
 
 Not tasks — calls to make.
 
+- [ ] **SCREEN-2** — **11 documented contraindications across 7 programmes have
+  no intake question that could detect them**, verified by script 2026-09-03
+  after the SR-1..SR-4 simulated panel. Worst two: `first-strict-pullup` says
+  a cervical-radiculopathy user must "avoid dead hangs entirely" and dead hang
+  is its Tier A backbone; `handstand-walk` opens with a week of deliberate
+  falling from inversion and never asks about concussion. Also verified:
+  `engine-builder.joint_issue_severity` offers "Limits all cardio — see a
+  clinician before starting" and does not block; **no programme asks about
+  beta-blockers** while four prescribe HR targets up to 90-95% HRmax, which
+  those drugs invalidate along with both HR retest metrics. `severity: "warn"`
+  now exists so each answer can be warn-and-record rather than
+  block-or-silence. **Every severity assignment is a clinical decision and the
+  founder's.** See `dev/audits/programs/2026-09-03-SR-panel-findings.md`.
+- [ ] **CONTENT-1** — verified content defects from the same panel:
+  `engine-builder` promises a "Block 3 (polarised)" that does not ship, in
+  user-facing outcome copy; `rowing-2k-test-prep` has no test-day pacing plan
+  at all while selling "split consistency across all four 500s"; its taper
+  replaces race-pace with easy recovery in the final week while claiming
+  "intensity held"; the Sadowski citation is forbidden in `handstand-walk` and
+  cited in `muscle-up`; and `engine-builder`'s primary retest metric
+  `submax_hr_pace5_bpm` has no pace anchor, so it measures the average HR of
+  whatever the user labelled easy. Size: M
 - [ ] **SCREEN-1** — **Seven of eight programmes collect a risk answer that
   nothing acts on.** Found 2026-09-03 by simulated reviewer SR-1 on
   overhead-mobility, verified against shipped JSON, and it generalises.
