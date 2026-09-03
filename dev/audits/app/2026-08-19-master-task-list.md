@@ -258,6 +258,21 @@ Not tasks — calls to make.
   `lib/symptom-regions.ts`. Found by the S4 panel's adversarial agent while
   checking whether F5's deliverable already existed. See
   `dev/active/retest-derivation/load-axis.md`. Size: M
+- [x] **PROV-1** — **Log provenance + the readiness meter**, shipped 2026-09-03
+  from the S4 panel's findings. Three things that were cheap now and
+  impossible later: (a) `first_written_at` on every day log — `date` is the
+  day an entry is ABOUT and nothing recorded when it was WRITTEN, so
+  same-day entry and Sunday-night backfill were indistinguishable once the
+  14-day server snapshots pruned; not repairable for existing history, which
+  is why it went in before more accrued. (b) `symptoms.scale_version` — the
+  check moved from continuous sliders to a four-bucket tap scale on
+  2026-08-21 and nothing recorded which instrument produced a row, so a
+  multi-year chart shows a step belonging to the FORM rather than the person.
+  (c) `GET /api/admin/readiness` — a counts-only threshold table making the
+  data gates measurable; its variance row (users with N days at a NON-ZERO
+  symptom score) is the one that matters, since a day-only trigger can fire
+  on a dataset with no variance in the thing being explained. See
+  `dev/active/retest-derivation/provenance-and-readiness.md`. Size: S
 - [ ] **S4** F5 correlation view is chicken-and-egg with beta data volume. **Decision:** set explicit "N users × 90 days" trigger, or defer indefinitely? Source: `2026-08-19-open-task-list.md` (F4).
 - [x] **S5** Readiness-ladder promotion pipeline. **RESOLVED 2026-08-19** via 6-agent rerun. Outcome: 2 PROMOTE-WITH-CAVEATS (engine-builder, overhead-mobility), 4 HOLD (HSW, CSM, rowing, anterior-hip). Pipeline exists; the 2026-08-17 review needs a delta pass before promotion. See F10 breakdown for per-program outcomes + cross-program meta-findings (BUG-7 through BUG-11 + QA-1).
 - [x] **S6** Personal programs sit outside the readiness ladder — resolved 2026-08-19 (`9174961`, Option C). Founder pick: personal programs excluded entirely. StatusChip returns null when personal=true; legend gets a one-line addendum; attribution row suppressed. Anterior-hip-rebuild stays REFERENCED under the hood for schema conformance but the chip is hidden — the "personal" badge is its sole trust signal.

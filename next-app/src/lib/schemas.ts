@@ -983,6 +983,23 @@ export const symptomsSchema = z.object({
    * 0 = fresh, 10 = wrecked. Optional; fed into fatigue detection.
    */
   life_load: z.number().min(0).max(10).optional(),
+  /**
+   * Which instrument produced these numbers.
+   *
+   * The fields above are all typed `z.number()` on a 0-10 range, but the UI
+   * that fills them has changed shape. Until 2026-08-21 the check used
+   * continuous sliders and any value 0-10 could appear. Cut D replaced them
+   * with a four-option tap scale writing exactly {0, 2, 5, 8}
+   * (`CheckRegionRow.BUCKET_TO_VALUE`), plus three-option life load and
+   * four-option stiffness.
+   *
+   * Nothing recorded which produced a given row, so a multi-year chart shows
+   * a step change at that date that belongs to the FORM, not the person —
+   * and no consumer could tell the difference. Stamped on write from
+   * `SYMPTOM_SCALE_VERSION`; absent means a pre-Cut-D slider entry, which is
+   * the honest reading of the history that already exists.
+   */
+  scale_version: z.string().optional(),
 });
 
 /**
@@ -1067,6 +1084,23 @@ export const runLogSchema = z.object({
 
 export const dayLogSchema = z.object({
   date: z.string(),
+  /**
+   * When this day's row was first created, as an ISO datetime.
+   *
+   * `date` is the day the entry is ABOUT; this is when the user actually
+   * wrote it. Logging Tuesday's session on Tuesday morning and backfilling
+   * the whole week on Sunday night are different measurement processes with
+   * different recall error, and until now they were indistinguishable —
+   * server snapshots prune at 14 days (`SNAPSHOT_RETENTION_DAYS`), so after
+   * two weeks nothing anywhere recorded which had happened.
+   *
+   * Stamped once by `ensureDay` when the row is created and never rewritten;
+   * every caller of `ensureDay` is a write path. Absent on rows created
+   * before 2026-09-03, and that absence cannot be repaired — which is why it
+   * was added before more history accrued rather than when a consumer needed
+   * it.
+   */
+  first_written_at: z.string().optional(),
   exercises: z.record(z.string(), exerciseLogSchema),
   symptoms: symptomsSchema.nullable(),
   derived_state: z.enum(["green", "amber", "red"]).nullable(),

@@ -163,6 +163,13 @@ export function ensureDay(store: Store, date = today()): DayLog {
   if (!store.logs[date]) {
     store.logs[date] = {
       date,
+      // Stamped once, here, because every caller of ensureDay is a write
+      // path — the row exists only because the user just recorded something.
+      // Distinguishes a same-day entry from a Sunday-night backfill of the
+      // whole week, which nothing could tell apart once the 14-day server
+      // snapshots pruned. Never rewritten: a later edit to the same day does
+      // not change when the day was first written.
+      first_written_at: new Date().toISOString(),
       exercises: {},
       symptoms: null,
       derived_state: null,

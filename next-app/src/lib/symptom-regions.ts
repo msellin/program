@@ -147,3 +147,23 @@ export function flagsForProgram(
   const ids = program?.symptom_flags?.length ? program.symptom_flags : ["night_pain"];
   return ids.map((id) => FLAG_BY_ID[id]).filter((f): f is SymptomFlag => !!f);
 }
+
+/**
+ * Identifies the instrument that produced a stored symptom row, stamped onto
+ * `symptoms.scale_version` on every write.
+ *
+ * The stored fields are all `z.number()` on a 0-10 range, but the UI filling
+ * them changed shape: until 2026-08-21 the check used continuous sliders and
+ * any value could appear; Cut D replaced them with a four-option tap scale
+ * writing exactly {0, 2, 5, 8}, three-option life load and four-option
+ * stiffness. Nothing recorded which instrument produced a given row, so a
+ * multi-year chart shows a step at that date belonging to the FORM rather
+ * than to the person, and no consumer could tell the two apart.
+ *
+ * Bump this whenever the values the check can WRITE change — a new bucket, a
+ * different numeric mapping, a return to a continuous scale. Do NOT bump it
+ * for wording, layout or colour: it identifies the measurement, not the
+ * design. Absent means a pre-Cut-D slider entry, which is the honest reading
+ * of the history that already exists and cannot be repaired.
+ */
+export const SYMPTOM_SCALE_VERSION = "bucket4.2026-08-21";

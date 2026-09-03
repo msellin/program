@@ -2,6 +2,7 @@
 
 import { create } from "zustand";
 import { ensureDay, ensureExercise, seedFromRepoLogIfEmpty } from "./storage";
+import { SYMPTOM_SCALE_VERSION } from "./symptom-regions";
 import { getAdapter } from "./persistence/adapter";
 import type { Store, DayLog, ExerciseLog, SetLog, Program, RunLog, Proposal } from "./schemas";
 import { today, iso } from "./utils";
@@ -512,7 +513,15 @@ export const useStore = create<StoreState>((set, get) => ({
   setDaySymptoms: (date, symptoms, derived) => {
     const s = { ...get().store };
     const day = ensureDay(s, date);
-    day.symptoms = symptoms;
+    // Stamp the instrument, not just the numbers. The stored fields are all
+    // 0-10, but the check wrote continuous slider values before 2026-08-21
+    // and four fixed buckets after it — indistinguishable in the data, and a
+    // long-range chart would show that change as if the user's symptoms had
+    // stepped. Every symptom write funnels through here, so this is the one
+    // place it can be recorded.
+    day.symptoms = symptoms
+      ? { ...symptoms, scale_version: SYMPTOM_SCALE_VERSION }
+      : symptoms;
     day.derived_state = derived;
     commit(s);
     set({ store: s });
