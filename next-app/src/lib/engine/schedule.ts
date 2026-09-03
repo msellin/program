@@ -284,30 +284,6 @@ function blockIdsFromWeeklyTemplate(
   const dow = new Date(dateISO + "T12:00:00").getDay();
   const dayShort = DAY_SHORT_NAMES[dow];
 
-  // User-added events (races, competitions, travel). Events supersede
-  // everything below — a race day = no session, no matter what the program
-  // scheduled. pre_deload_days extends the rest window BEFORE the event;
-  // rest_days_after extends it AFTER. Applies to strength blocks only —
-  // rehab / home blocks (`block_a_home`) survive the event window so daily
-  // consistency doesn't break.
-  if (profile?.events?.length) {
-    const nowMs = new Date(dateISO + "T00:00:00").getTime();
-    for (const ev of profile.events) {
-      const evMs = new Date(ev.date + "T00:00:00").getTime();
-      if (!Number.isFinite(evMs)) continue;
-      const daysToEvent = Math.floor((evMs - nowMs) / 864e5);
-      const preDeload = ev.pre_deload_days ?? 0;
-      const restAfter = ev.rest_days_after ?? 0;
-      const withinWindow =
-        daysToEvent === 0 ||
-        (daysToEvent > 0 && daysToEvent <= preDeload) ||
-        (daysToEvent < 0 && -daysToEvent <= restAfter);
-      if (withinWindow) {
-        return []; // strength scheduled today is displaced by the event window
-      }
-    }
-  }
-
   // Per-week overrides. See `weeklyOverrideIdsFor`.
   const overridden = weeklyOverrideIdsFor(program, phase, dateISO);
   if (overridden) return overridden;

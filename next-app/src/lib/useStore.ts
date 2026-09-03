@@ -139,20 +139,6 @@ type StoreState = {
   /** Append a personal contraindication (movement / position that hurts). */
   addContraindication: (label: string, reason?: string) => void;
   removeContraindication: (id: string) => void;
-  /**
-   * Add a race / competition / event date. The plan generator treats the event
-   * date as a forced rest day, and if pre_deload_days / rest_days_after are
-   * set, extends the rest window either side.
-   */
-  addEvent: (event: {
-    date: string;
-    name: string;
-    kind?: "race" | "competition" | "travel" | "other";
-    pre_deload_days?: number;
-    rest_days_after?: number;
-    note?: string;
-  }) => void;
-  removeEvent: (id: string) => void;
   /** Set the currently-active program slug (from catalog). */
   setActiveProgram: (slug: string | null) => void;
   /**
@@ -840,41 +826,6 @@ export const useStore = create<StoreState>((set, get) => ({
     const s = { ...get().store };
     if (!s.contraindications) return;
     s.contraindications = s.contraindications.filter((c) => c.id !== id);
-    commit(s);
-    set({ store: s });
-  },
-
-  addEvent: (event) => {
-    const s = { ...get().store };
-    if (!event.date || !event.name?.trim()) return;
-    const profile = { ...(s.user_profile ?? {}) };
-    const list = [...(profile.events ?? [])];
-    const id = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
-    list.push({
-      id,
-      date: event.date,
-      name: event.name.trim(),
-      kind: event.kind,
-      pre_deload_days: event.pre_deload_days,
-      rest_days_after: event.rest_days_after,
-      note: event.note?.trim() || undefined,
-      added_at: Date.now(),
-    });
-    // Keep sorted by date so plan generator lookups are predictable.
-    list.sort((a, b) => a.date.localeCompare(b.date));
-    profile.events = list;
-    s.user_profile = profile;
-    commit(s);
-    set({ store: s });
-  },
-
-  removeEvent: (id) => {
-    const s = { ...get().store };
-    const existing = s.user_profile?.events;
-    if (!existing) return;
-    const profile = { ...s.user_profile };
-    profile.events = existing.filter((e) => e.id !== id);
-    s.user_profile = profile;
     commit(s);
     set({ store: s });
   },

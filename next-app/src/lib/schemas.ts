@@ -1591,26 +1591,6 @@ export const storeSchema = z.object({
           }),
         )
         .optional(),
-      /**
-       * User-added events (races, competitions, travel, weddings, etc.) that
-       * the plan should schedule around. Each event's `date` becomes a
-       * forced rest day. Optional `pre_deload_days` + `rest_days_after`
-       * extend the rest window either side. Kept simple on purpose.
-       */
-      events: z
-        .array(
-          z.object({
-            id: z.string(),
-            date: z.string(),
-            name: z.string(),
-            kind: z.enum(["race", "competition", "travel", "other"]).optional(),
-            pre_deload_days: z.number().min(0).max(14).optional(),
-            rest_days_after: z.number().min(0).max(14).optional(),
-            note: z.string().optional(),
-            added_at: z.number().optional(),
-          }),
-        )
-        .optional(),
     })
     .optional(),
   /**
