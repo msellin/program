@@ -1542,6 +1542,12 @@ export const storeSchema = z.object({
              */
             baseline_capabilities: z.record(z.string(), z.number()).optional(),
             /**
+             * Consents the user gave at intake, keyed by consent id. Recorded
+             * at commit because the draft that held them is deleted then.
+             */
+            consents: z.record(z.string(), z.boolean()).optional(),
+            consents_at: z.number().optional(),
+            /**
              * Multi-tier programs: history of tier changes for this program.
              * Written by `promoteTier`. Populated when the user advances via
              * the confirm-first proposal on Progress → Retest.
@@ -1624,6 +1630,18 @@ export const storeSchema = z.object({
           }),
         )
         .optional(),
+      /**
+       * When the user gave explicit consent to store symptom / health data,
+       * as an epoch ms. Article 9(2)(a) is the lawful basis the privacy page
+       * names for symptom scores, and demonstrating consent means being able
+       * to say when it was given.
+       *
+       * Authored long ago and written by NOTHING until 2026-09-03: the
+       * consent tick lived only in `intake_drafts[slug].consents`, and
+       * `clearIntakeDraft` deletes that on a successful commit. So after
+       * enrolment there was no record anywhere that consent had been given —
+       * the app collected the tick, relied on it, and discarded it.
+       */
       consent_symptom_data_at: z.number().optional(),
       /**
        * In-progress intake drafts, keyed by program slug. Persists answers,
@@ -1647,6 +1665,25 @@ export const storeSchema = z.object({
           }),
         )
         .optional(),
+      /**
+       * ACCOUNT tier — NOT the programme tier. Read by nothing, deliberately.
+       *
+       * Do not confuse with `program_states[slug].tier`
+       * (foundation/progression/push), which is live and read in several
+       * places; the name collision is why this one looked functional.
+       *
+       * It stays declared rather than deleted because billing (S3) is
+       * deferred, not cancelled, and the shape is settled. What it was going
+       * to gate — one active programme on free — is ALREADY enforced, by the
+       * `MULTI_MAIN_ENABLED` launch flag in `useStore.addSecondaryProgram`,
+       * which makes adding a second programme replace the first for everyone
+       * except super-admins. Wiring tier to a cap that already exists would
+       * be a second mechanism for one rule.
+       *
+       * `data-integrity.test.ts` lists both fields as knowingly-inert, so
+       * this comment cannot quietly become false the way the last four dead
+       * keys did.
+       */
       tier: z.enum(["free", "trial", "paid", "beta_forever"]).optional(),
       trial_ends_at: z.string().optional(),
       /**

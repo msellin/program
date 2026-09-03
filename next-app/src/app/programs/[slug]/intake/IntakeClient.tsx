@@ -357,6 +357,12 @@ export function IntakeClient({ slug }: Props) {
     states[slug] = {
       ...(states[slug] ?? {}),
       tier: chosenTierId,
+      // The consent tick is the lawful basis the privacy page names for
+      // symptom data (Article 9(2)(a)), and it lived only in the intake
+      // draft — which `clearIntakeDraft` deletes a few lines below. Record it
+      // where it survives, with the moment it was given.
+      consents: { ...consents },
+      consents_at: Date.now(),
       intake_answers: {
         ...answers,
         ...acknowledgementsToPersist(gateEval.warnings, safetyAcks),
@@ -366,6 +372,13 @@ export function IntakeClient({ slug }: Props) {
       ...(Object.keys(baselineCaps).length ? { baseline_capabilities: baselineCaps } : {}),
       ...(phaseShiftDays != null ? { phase_shift_days: phaseShiftDays } : {}),
     };
+    // The profile-level stamp the schema has carried unused since it was
+    // authored. Set once, on first consent — it answers "when did this user
+    // agree to health-data storage", which is a different question from
+    // "what did they agree to for this programme".
+    if (consents.consent_symptom_data && profile.consent_symptom_data_at == null) {
+      profile.consent_symptom_data_at = Date.now();
+    }
     profile.program_states = states;
 
     // Populate capability_profile from physical test results so downstream

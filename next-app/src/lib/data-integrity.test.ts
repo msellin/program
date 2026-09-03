@@ -1289,3 +1289,57 @@ describe("intake screening reaches the answers it collects", () => {
     expect(offenders).toEqual([]);
   });
 });
+
+describe("user_profile fields nothing reads are declared, not discovered", () => {
+  /**
+   * The catalog's dead-key test covers program JSON. The store's own profile
+   * had the same problem and no equivalent guard, which is how
+   * `consent_symptom_data_at` sat unwritten while the privacy page named the
+   * consent it records as a lawful basis.
+   *
+   * An entry here is a claim that nothing is SUPPOSED to read the field. It
+   * needs a reason, and the sibling test fails if the field turns out to be
+   * live after all — so this cannot become a parking space.
+   */
+  const KNOWN_INERT: Record<string, string> = {
+    tier:
+      "ACCOUNT tier (free/trial/paid/beta_forever) — NOT program_states[].tier, " +
+      "which is live. Billing (S3) is deferred, not cancelled, and the cap it " +
+      "would gate is already enforced by MULTI_MAIN_ENABLED in " +
+      "useStore.addSecondaryProgram. Wiring it would give one rule two mechanisms.",
+    trial_ends_at: "Same deferral as `tier`; meaningless without it.",
+  };
+
+  const SRC = path.resolve(__dirname, "..");
+  /**
+   * Matches a PROFILE-qualified read only. A bare `tier` substring matches
+   * `program_states[slug].tier` and `tier_id` in dozens of places, which
+   * would report the account tier as live and defeat the point.
+   */
+  function isReadOutsideSchemas(field: string): boolean {
+    const re = new RegExp(String.raw`(user_)?profile\??\.${field}\b`);
+    const hits: string[] = [];
+    const walk = (dir: string) => {
+      for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+        const p = path.join(dir, e.name);
+        if (e.isDirectory()) walk(p);
+        else if (/\.tsx?$/.test(e.name) && !e.name.includes(".test.") && e.name !== "schemas.ts") {
+          if (re.test(fs.readFileSync(p, "utf8"))) hits.push(p);
+        }
+      }
+    };
+    walk(SRC);
+    return hits.length > 0;
+  }
+
+  it("every field listed as inert really is inert", () => {
+    // A stale entry is worse than none: it tells the next reader a live field
+    // is dead, which is exactly how the last four dead keys survived.
+    const stale = Object.keys(KNOWN_INERT).filter((f) => isReadOutsideSchemas(f));
+    expect(stale).toEqual([]);
+  });
+
+  it("consent_symptom_data_at is written, because a lawful basis depends on it", () => {
+    expect(isReadOutsideSchemas("consent_symptom_data_at")).toBe(true);
+  });
+});

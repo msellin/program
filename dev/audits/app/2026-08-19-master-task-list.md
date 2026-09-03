@@ -306,6 +306,23 @@ Not tasks — calls to make.
   null on a total logged without splits rather than reporting missing data as
   perfect consistency. Guards run against the real shipped JSON on real dates,
   matching `taper-week.test.ts`. Size: L
+- [x] **TIER-1 — answered by NOT building it, 2026-09-03.** The premise was
+  wrong: I had said no cap on concurrent programmes existed. It does —
+  `MULTI_MAIN_ENABLED = false` in `useStore.addSecondaryProgram` makes adding
+  a second programme REPLACE the first for everyone but super-admins. So the
+  account `tier` enum is genuinely dead, but the rule it would enforce is
+  already enforced, and with S3 deferred, wiring it would give one rule two
+  mechanisms. Both fields are now documented as knowingly-inert and pinned by
+  a new guard that fails if either turns out to be live.
+  **Auditing for that turned up something worse.** `consent_symptom_data_at`
+  was authored, never written, and the consent it records is the Article
+  9(2)(a) lawful basis the privacy page names for symptom data. The tick lived
+  only in `intake_drafts[slug].consents` — which `clearIntakeDraft` deletes on
+  a successful commit. **After enrolment there was no record anywhere that
+  consent had been given.** The app collected it, relied on it in a legal
+  disclosure, and discarded it. Now persisted onto the programme state with
+  its timestamp, plus the profile-level stamp set once on first consent.
+  Size: M
 - [ ] **CONTENT-1** — verified content defects from the same panel:
   `engine-builder` promises a "Block 3 (polarised)" that does not ship, in
   user-facing outcome copy; `rowing-2k-test-prep` has no test-day pacing plan
