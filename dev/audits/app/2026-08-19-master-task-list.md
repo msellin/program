@@ -244,6 +244,20 @@ From roadmap sync + product-concerns-2026-08-17 + design-lead brief `2026-08-19-
 Not tasks — calls to make.
 
 - [ ] **S3** SaaS Phase 3 (billing/Paddle) is 0% done — gates F6 paid-gating, F4 monetization, F2 Phase C, F3 turn-on. Real critical-path item for anything labeled "Paid." **Decision:** when does this become top-of-stack? Source: `2026-08-19-open-task-list.md` (F3), `product-concerns-2026-08-17/roadmap.md`.
+- [x] **CHART-1** — **Seven of nine programs drew a symptom line against an
+  empty load line**, shipped 2026-09-03. `SymptomLoadChart` renders on
+  `/record` and on `/report` — the page framed as the one to hand a
+  specialist — and its load axis hardcoded three squat and four deadlift
+  exercise ids. Only `anterior-hip-rebuild` and
+  `concurrent-strength-maintenance` prescribe any of them. The same file
+  documents the identical bug being fixed on the *symptom* axis twelve lines
+  below the hardcoding; the load axis was left alone. Third occurrence of the
+  hip program's shape being rendered to every user. Nothing caught it because
+  an empty chart series looks exactly like a user who has not trained yet.
+  Fixed with `lib/load-signals.ts`, the load-side twin of
+  `lib/symptom-regions.ts`. Found by the S4 panel's adversarial agent while
+  checking whether F5's deliverable already existed. See
+  `dev/active/retest-derivation/load-axis.md`. Size: M
 - [ ] **S4** F5 correlation view is chicken-and-egg with beta data volume. **Decision:** set explicit "N users × 90 days" trigger, or defer indefinitely? Source: `2026-08-19-open-task-list.md` (F4).
 - [x] **S5** Readiness-ladder promotion pipeline. **RESOLVED 2026-08-19** via 6-agent rerun. Outcome: 2 PROMOTE-WITH-CAVEATS (engine-builder, overhead-mobility), 4 HOLD (HSW, CSM, rowing, anterior-hip). Pipeline exists; the 2026-08-17 review needs a delta pass before promotion. See F10 breakdown for per-program outcomes + cross-program meta-findings (BUG-7 through BUG-11 + QA-1).
 - [x] **S6** Personal programs sit outside the readiness ladder — resolved 2026-08-19 (`9174961`, Option C). Founder pick: personal programs excluded entirely. StatusChip returns null when personal=true; legend gets a one-line addendum; attribution row suppressed. Anterior-hip-rebuild stays REFERENCED under the hood for schema conformance but the chip is hidden — the "personal" badge is its sole trust signal.

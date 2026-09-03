@@ -1387,5 +1387,9 @@
     "night_pain",
     "gait_change",
     "painful_click"
+  ],
+  "load_signals": [
+    "squat_top_kg",
+    "pull_top_kg"
   ]
 }

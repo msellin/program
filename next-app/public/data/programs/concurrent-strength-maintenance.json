@@ -1037,5 +1037,9 @@
   ],
   "symptom_flags": [
     "night_pain"
+  ],
+  "load_signals": [
+    "squat_top_kg",
+    "pull_top_kg"
   ]
 }

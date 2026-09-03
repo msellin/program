@@ -211,7 +211,7 @@ export default function RecordPage() {
                 <HipProgressTile />
               </ErrorBoundary>
               <ErrorBoundary fallback={<p className="text-[12px] text-muted italic">Symptom chart unavailable.</p>}>
-                <SymptomLoadChart days={Object.values(store.logs ?? {})} />
+                <SymptomLoadChart days={Object.values(store.logs ?? {})} program={program} />
               </ErrorBoundary>
             </div>
           ) : null}

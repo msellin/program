@@ -302,11 +302,11 @@ export default function ReportPage() {
       {isHipProgram ? (
       <ReportSection
         title="Symptom vs load"
-        subtitle="Peak morning symptom score alongside heaviest daily top-set weight."
+        subtitle="Peak morning symptom score alongside this program's daily training load."
       >
         {daysWithLogs > 0 ? (
           <div className="rounded border border-line bg-surface p-3">
-            <SymptomLoadChart days={chartDays} />
+            <SymptomLoadChart days={chartDays} program={program} />
           </div>
         ) : (
           <p className="text-[14px] text-muted italic">

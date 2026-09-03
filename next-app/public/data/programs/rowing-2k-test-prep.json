@@ -1019,5 +1019,8 @@
   ],
   "symptom_flags": [
     "night_pain"
+  ],
+  "load_signals": [
+    "aerobic_minutes"
   ]
 }

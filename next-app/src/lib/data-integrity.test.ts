@@ -11,6 +11,7 @@ import {
 import { applyProgramExerciseOverrides } from "./data-loader";
 import { REGION_BY_ID, FLAG_BY_ID } from "./symptom-regions";
 import { metricHasDerivableSeries } from "./engine/retest-evaluator";
+import { LOAD_SIGNALS, loadSignalsForProgram, axisUnitFor } from "./load-signals";
 
 const DATA = path.resolve(__dirname, "../../public/data");
 const read = (p: string) => JSON.parse(fs.readFileSync(path.join(DATA, p), "utf8"));
@@ -1063,6 +1064,110 @@ describe("retest metrics can actually reach their data", () => {
         ...(c.secondary_signal_metric_ids ?? []),
       ].filter(Boolean) as string[]) {
         if (!ids.has(wanted)) offenders.push(`${id}: classifier reads "${wanted}", no such retest metric`);
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
+});
+
+describe("every program's load axis can actually draw", () => {
+  // The original defect: `SymptomLoadChart` hardcoded three squat and four
+  // deadlift exercise ids, which only two of nine programs prescribe. The
+  // other seven rendered a symptom line against an empty load line on both
+  // /record and /report. Nothing failed, because an empty chart series is
+  // indistinguishable from a user who hasn't trained yet.
+  //
+  // Same contract as symptom_regions: declare or fail. The legacy fallback in
+  // loadSignalsForProgram exists so a bad deploy degrades to the old
+  // behaviour rather than to nothing — it is not somewhere a shipped program
+  // is allowed to live.
+  it("every program declares load_signals", () => {
+    const missing = programs
+      .filter(({ program }) => {
+        const ids = (program as unknown as { load_signals?: string[] }).load_signals;
+        return !ids?.length;
+      })
+      .map(({ id }) => id);
+    expect(missing).toEqual([]);
+  });
+
+  it("every declared load signal id resolves", () => {
+    const known = new Set(LOAD_SIGNALS.map((s) => s.id));
+    const offenders: string[] = [];
+    for (const { id, program } of programs) {
+      for (const sig of (program as unknown as { load_signals?: string[] }).load_signals ?? []) {
+        if (!known.has(sig)) offenders.push(`${id}: unknown load signal "${sig}"`);
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
+
+  it("a program's load signals share one unit", () => {
+    // The chart has a single load axis with a single label. Kilograms and
+    // minutes plotted on one scale is a chart that lies about both.
+    const offenders: string[] = [];
+    for (const { id, program } of programs) {
+      const sigs = loadSignalsForProgram(program as unknown as { load_signals?: string[] });
+      if (sigs.length && axisUnitFor(sigs) == null) {
+        offenders.push(`${id}: mixed units — ${sigs.map((s) => `${s.id}:${s.unit}`).join(", ")}`);
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
+
+  it("a program's load signal matches the kind of work it prescribes", () => {
+    // The specific way the original bug hid: a kg signal on a program that
+    // prescribes no barbell work resolves fine and extracts nothing forever.
+    // Block `category` is what decides where the work gets logged —
+    // DaySession skips `category: "run"` blocks, so run programs never write
+    // to exercises[] and a set-based signal can never see them.
+    const SET_BASED = new Set(["squat_top_kg", "pull_top_kg", "working_reps", "hold_seconds"]);
+    const offenders: string[] = [];
+    for (const { id, program } of programs) {
+      const cats = new Set(
+        (program.blocks ?? []).map(
+          (b) => (b as unknown as { category?: string }).category ?? "strength",
+        ),
+      );
+      const hasNonRun = [...cats].some((c) => c !== "run");
+      const ids = (program as unknown as { load_signals?: string[] }).load_signals ?? [];
+      for (const sig of ids) {
+        if (sig === "aerobic_minutes" && !cats.has("run")) {
+          offenders.push(`${id}: declares aerobic_minutes but has no run-category block`);
+        }
+        if (SET_BASED.has(sig) && !hasNonRun) {
+          offenders.push(`${id}: declares "${sig}" but every block is run-category`);
+        }
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
+
+  it("a kg load signal is only declared by a program that prescribes those lifts", () => {
+    // This is the assertion that would have caught the original defect.
+    const KG_LIFTS: Record<string, string[]> = {
+      squat_top_kg: ["back_squat_highbar", "back_squat_ssb", "front_squat"],
+      pull_top_kg: [
+        "block_pull_midshin",
+        "deadlift_conventional",
+        "trap_bar_dl_blocks",
+        "trap_bar_dl_floor",
+      ],
+    };
+    const offenders: string[] = [];
+    for (const { id, program } of programs) {
+      const prescribed = new Set<string>();
+      for (const b of program.blocks ?? []) {
+        for (const item of b.items ?? []) {
+          if (item.exercise_id) prescribed.add(item.exercise_id);
+        }
+      }
+      for (const sig of (program as unknown as { load_signals?: string[] }).load_signals ?? []) {
+        const lifts = KG_LIFTS[sig];
+        if (!lifts) continue;
+        if (!lifts.some((l) => prescribed.has(l))) {
+          offenders.push(`${id}: declares "${sig}" but prescribes none of ${lifts.join(", ")}`);
+        }
       }
     }
     expect(offenders).toEqual([]);

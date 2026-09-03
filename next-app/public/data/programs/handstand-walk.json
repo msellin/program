@@ -2084,5 +2084,8 @@
   ],
   "symptom_flags": [
     "night_pain"
+  ],
+  "load_signals": [
+    "hold_seconds"
   ]
 }

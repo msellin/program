@@ -585,6 +585,18 @@ export const programSchema = z.object({
    */
   symptom_flags: z.array(z.string()).optional(),
   /**
+   * What "load" means for this program on the symptom-vs-load chart. Ids
+   * resolve against `LOAD_SIGNALS` in `lib/load-signals.ts`; every id a
+   * program declares must share a unit, since the chart has one load axis.
+   *
+   * The load-side twin of `symptom_regions`, and it exists for the same
+   * reason: the chart hardcoded three squat and four deadlift ids, which only
+   * two of nine programs prescribe, so everyone else saw an empty load line.
+   * Absent → the historical squat/pull pair, and the data test fails a
+   * program that leaves it absent.
+   */
+  load_signals: z.array(z.string()).optional(),
+  /**
    * A named outside specialist's review (EVID-1).
    *
    * Distinct from `reviewed_by`, which records Terav's own audit pass. Every
