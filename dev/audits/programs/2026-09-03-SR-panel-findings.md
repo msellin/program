@@ -141,3 +141,43 @@ Partly fixed the same day — the packet now prints every intake question, what
 each answer does, and the documented contraindications. **Still missing: the
 drill library with actual sets and reps.** SR-2 could not answer "would you
 prescribe this?" without opening the JSON, and neither could a human.
+
+
+---
+
+## F. Fixed 2026-09-03 (the ones that were not clinical decisions)
+
+1. **`engine-builder`'s Block 3 promise removed.** Four references, two of
+   them user-facing outcome copy. `status_note` now records that a third
+   block was planned, does not exist, and the promise must not return before
+   the programme does.
+2. **The Sadowski contradiction resolved by propagation.** `handstand-walk`
+   had already flagged the attribution and instructed that the 3× bodyweight
+   figure not be cited; `muscle-up` cited it anyway. The existing decision was
+   applied to the second programme. The qualitative point survives without the
+   number.
+3. **Two dishonest metric names.** Three programmes shared one `source_ref`
+   (`runs[].avg_hr where intensity == 'easy'`) under three different names.
+   `engine-builder` had already corrected itself to "Submax HR — easy-effort
+   avg"; block-2 still said "at Block 2 anchor pace" and CSM said "at pace-5",
+   both claiming an anchor the log cannot express. Aligned on the honest name.
+   **SR-3's underlying objection stands and is NOT fixed** — the metric is
+   still noisier than the effect it claims to detect, and no citation supports
+   it. That is a programming decision.
+4. **`parseSource` no longer drops filters it cannot parse.** Found while
+   checking SR-3's metric claim: block-2 declared `... and week_in_program in
+   [1, 4, 8]` and the parser silently discarded that conjunct, so the metric
+   sampled every easy session instead of three. A reading that honours half
+   its filter is wrong and looks right. The parser now fails the whole ref,
+   `data-integrity.test.ts` catches any shipped ref that lands there, and
+   block-2's declaration was corrected to match what it actually does — a
+   runtime no-op that stops the file lying.
+
+## G. One reviewer claim that was FALSE
+
+SR-4 reported that `rowing-2k-test-prep` offers `days_per_week: 2` against a
+minimum of 4 and that "nothing acts on the mismatch". **The capacity gate in
+`IntakeClient` does block below the minimum**, with the honest refusal the
+help text promises. The reviewer had only the JSON; the behaviour lives in the
+component. Checking cost a minute and would otherwise have produced a fix for
+a working feature.

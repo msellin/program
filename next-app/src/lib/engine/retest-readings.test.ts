@@ -186,6 +186,29 @@ describe("deriveMetricSeries", () => {
     ).toEqual([428]);
   });
 
+  it("refuses a where-clause it cannot fully honour", () => {
+    // `parseSource` used to drop unparseable conjuncts silently, so
+    // engine-builder-block-2's metric declared `... and week_in_program in
+    // [1, 4, 8]` and sampled every easy session instead of three. A reading
+    // that honours half its filter is wrong AND looks right, which is worse
+    // than no reading — the metric should read as untrackable instead.
+    expect(
+      metricHasDerivableSeries({
+        source: "run_field",
+        source_ref: "runs[].avg_hr where intensity == 'easy' and week_in_program in [1, 4, 8]",
+      }),
+    ).toBe(false);
+  });
+
+  it("still accepts a where-clause made only of equalities", () => {
+    expect(
+      metricHasDerivableSeries({
+        source: "run_field",
+        source_ref: "runs[].avg_hr where intensity == 'easy' and activity_type == 'row'",
+      }),
+    ).toBe(true);
+  });
+
   it("reports which declared sources can yield a series", () => {
     expect(
       metricHasDerivableSeries({

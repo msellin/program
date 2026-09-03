@@ -933,7 +933,7 @@
     },
     {
       "metric_id": "submax_hr_pace5_bpm",
-      "display_name": "Submax HR at pace-5",
+      "display_name": "Submax HR — easy-effort avg",
       "unit": "bpm",
       "direction": "lower_is_better",
       "source": "run_field",

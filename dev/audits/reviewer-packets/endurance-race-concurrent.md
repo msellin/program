@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: ba471edb31904d54 -->
+<!-- source-fingerprint: e825cfb9f83f5a8e -->
 
 ## What we are asking
 
@@ -143,7 +143,7 @@ Printed against the questions above so you can see which are actually detectable
 ### What it retests, and how often
 
 - **back_squat_5rm_kg** — Back squat 5RM (8-weekly)
-- **submax_hr_pace5_bpm** — Submax HR at pace-5 (4-weekly)
+- **submax_hr_pace5_bpm** — Submax HR — easy-effort avg (4-weekly)
 
 ### What it asks, and what each answer does
 

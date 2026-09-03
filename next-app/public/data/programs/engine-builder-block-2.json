@@ -1516,11 +1516,11 @@
     },
     {
       "metric_id": "submax_hr_pace5_bpm",
-      "display_name": "Submax HR at Block 2 anchor pace",
+      "display_name": "Submax HR — easy-effort avg",
       "unit": "bpm",
       "direction": "lower_is_better",
       "source": "run_field",
-      "source_ref": "runs[].avg_hr where intensity == 'easy' and week_in_program in [1, 4, 8]",
+      "source_ref": "runs[].avg_hr where intensity == 'easy'",
       "cadence_weeks": 4,
       "trigger": "phase_end",
       "targets": [

@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: 7a3c622cfbe73990 -->
+<!-- source-fingerprint: 1fac91c253521c17 -->
 
 ## What we are asking
 
@@ -188,7 +188,7 @@ Printed against the questions above so you can see which are actually detectable
 ### What it retests, and how often
 
 - **threshold_20min_shift_pct** — 20-min threshold shift (4-weekly)
-- **submax_hr_pace5_bpm** — Submax HR at Block 2 anchor pace (4-weekly)
+- **submax_hr_pace5_bpm** — Submax HR — easy-effort avg (4-weekly)
 - **resting_hr_bpm** — Resting HR (Block 2) (2-weekly)
 
 ### What it asks, and what each answer does

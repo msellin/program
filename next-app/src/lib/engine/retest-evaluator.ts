@@ -66,7 +66,15 @@ function parseSource(raw: string, sourceKind?: string): ParsedSource {
     if (whereClause) {
       for (const part of whereClause.split(/\s+and\s+/i)) {
         const eq = /^([a-z0-9_]+)\s*==\s*'([^']*)'$/i.exec(part.trim());
-        if (eq) filters.push({ field: eq[1], op: "eq", value: eq[2] });
+        // An unparseable conjunct used to be dropped silently, so a metric
+        // declaring `... and week_in_program in [1, 4, 8]` quietly sampled
+        // every session instead of three. A reading that honours half its
+        // `where` clause is worse than no reading: it is wrong and looks
+        // right. Fail the whole ref instead — `evaluateRetestMetrics` then
+        // renders "not yet trackable", and data-integrity.test.ts fails on
+        // any shipped ref that lands here.
+        if (!eq) return { kind: "unsupported", raw };
+        filters.push({ field: eq[1], op: "eq", value: eq[2] });
       }
     }
     return { kind: "runs", field, filters };
