@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: 8a40b3201554a774 -->
+<!-- source-fingerprint: dd58939d20b4d0db -->
 
 ## What we are asking
 
@@ -104,6 +104,14 @@ is published too, not quietly dropped.
   - BLOCKS on ['true'] → "Wait for the acute injury to resolve"
 - **Approximate bodyweight (kg) — used to shape band-tension progression**  
   `bodyweight_kg`
+- **Persistent neck pain with numbness, tingling or weakness into the arm?**  
+  `cervical_radiculopathy` — answers: no, unsure, yes
+  - BLOCKS on ['yes'] → "Get the neck looked at first"
+  - warns, then continues on ['unsure'] → "Worth finding out which it is"
+- **Diagnosed high blood pressure that isn't currently controlled?**  
+  `hypertension_valsalva` — answers: no, unsure, yes
+  - BLOCKS on ['yes'] → "Get your blood pressure managed first"
+  - warns, then continues on ['unsure'] → "Worth getting a blood-pressure reading"
 - **I understand this program is a training template and not medical advice. I'll stop and see a clinician if shoulder or elbow pain persists after a session.**  
   `consent_symptom_data`
 
@@ -175,6 +183,18 @@ Printed against the questions above so you can see which are actually detectable
 - **Do you have an acute shoulder injury (rotator cuff tear, labral tear, dislocation) in the last 6 months?**  
   `acute_shoulder_injury`
   - BLOCKS on ['true'] → "Wait for the acute injury to resolve"
+- **Persistent neck pain with numbness, tingling or weakness into the arm?**  
+  `cervical_radiculopathy` — answers: no, unsure, yes
+  - BLOCKS on ['yes'] → "Get the neck looked at first"
+  - warns, then continues on ['unsure'] → "Worth finding out which it is"
+- **Wrist injury in the last 6 weeks — TFCC tear, ligament instability, or a sprain still settling?**  
+  `acute_wrist_injury` — answers: no, unsure, yes
+  - BLOCKS on ['yes'] → "Let the wrist settle first"
+  - warns, then continues on ['unsure'] → "Ramp the false grip, don't rush it"
+- **Diagnosed high blood pressure that isn't currently controlled?**  
+  `hypertension_valsalva` — answers: no, unsure, yes
+  - BLOCKS on ['yes'] → "Get your blood pressure managed first"
+  - warns, then continues on ['unsure'] → "Worth getting a blood-pressure reading"
 - **I understand this program is a training template and not medical advice. I'll stop and see a clinician if shoulder or elbow pain persists after a session.**  
   `consent_symptom_data`
 
@@ -245,7 +265,7 @@ Printed against the questions above so you can see which are actually detectable
   `walk_distance_selfreport` — answers: never, few_steps, 5m_plus, 10m_plus, 20m_plus
 - **Have you had wrist pain in the last 12 months during handstand or upper-body weight-bearing work?**  
   `wrist_pain_12mo` — answers: no, occasional, yes
-  - **no gate at all** — answering ['yes'] changes nothing. Is that right?
+  - warns, then continues on ['yes'] → "Ramp the wrists, don't chase the calendar"
 - **Have you had shoulder pain during any overhead pressing or overhead hold in the last 12 months?**  
   `shoulder_pain_overhead`
 - **Age band**  
@@ -253,16 +273,23 @@ Printed against the questions above so you can see which are actually detectable
 - **Have you been diagnosed with low bone density (osteoporosis or low BMD)?**  
   `osteoporosis_dx` — answers: no, unsure, yes
   - BLOCKS on ['yes'] → "See your clinician first"
-  - **nothing happens on ['unsure']** — is that right?
+  - warns, then continues on ['unsure'] → "Worth knowing before you load the wrists"
 - **Do you have high blood pressure that isn't under control? (Over 160/100 at rest, or diagnosed but not on medication — uncontrolled hypertension.)**  
   `hypertension_uncontrolled` — answers: no, unsure, yes
   - BLOCKS on ['yes'] → "See your clinician first"
-  - **nothing happens on ['unsure']** — is that right?
+  - warns, then continues on ['unsure'] → "Worth getting a blood-pressure reading"
 - **Do you have an acute wrist injury (sprain, TFCC, ligament tear) in the last 6 weeks?**  
   `acute_wrist_injury`
   - BLOCKS on ['true'] → "Wait for the acute injury to resolve"
 - **If your handstand tips past vertical, what happens?**  
   `bail_out_readiness` — answers: never_inverted, would_fall, can_step_out, can_exit_reliably
+- **Concussion, or any dizziness / vertigo / balance disorder, in the last 3 months?**  
+  `concussion_vestibular_recent` — answers: no, unsure, yes
+  - BLOCKS on ['yes'] → "Not while that's settling"
+  - warns, then continues on ['unsure'] → "Worth being certain before you go upside down"
+- **Are you pregnant?**  
+  `pregnancy_current` — answers: no, yes
+  - warns, then continues on ['yes'] → "Talk to your clinician about inversion work"
 - **I understand this program is a training template and not medical advice. I'll stop and see a clinician if wrist or shoulder pain persists after a session or if any bail results in a fall injury.**  
   `consent_symptom_data`
 

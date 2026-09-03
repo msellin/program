@@ -187,6 +187,44 @@
         "required": true
       },
       {
+        "id": "rate_limiting_medication",
+        "label": "Do you take a beta-blocker or other heart-rate-lowering medication?",
+        "type": "select",
+        "required": true,
+        "options": [
+          {
+            "value": "no",
+            "label": "No"
+          },
+          {
+            "value": "unsure",
+            "label": "Unsure"
+          },
+          {
+            "value": "yes",
+            "label": "Yes"
+          }
+        ],
+        "help": "These lower your heart rate at every effort. They don't make training unsafe — but they make heart-rate targets unreachable and heart-rate retests unreadable, so we need to know."
+      },
+      {
+        "id": "pregnancy_current",
+        "label": "Are you pregnant?",
+        "type": "select",
+        "required": true,
+        "options": [
+          {
+            "value": "no",
+            "label": "No"
+          },
+          {
+            "value": "yes",
+            "label": "Yes"
+          }
+        ],
+        "help": "We ask because heart-rate zones stop being reliable in pregnancy — the guidance in this program is built on them."
+      },
+      {
         "id": "consent_symptom_data",
         "label": "I consent to storing training log and symptom scores.",
         "type": "boolean",
@@ -224,6 +262,37 @@
         ],
         "block_title": "Resolve the flare first",
         "block_body": "Running-based intervals will amplify a flaring tendon. Consider deferring, or the strength-only variant while it settles."
+      },
+      {
+        "question_id": "rate_limiting_medication",
+        "unsafe_values": [
+          "yes",
+          "unsure"
+        ],
+        "severity": "warn",
+        "block_title": "Heart-rate targets won't apply to you",
+        "block_body": "Beta-blockers and similar medications lower your heart rate at every effort level. The HR zones and the 90-95%-of-max targets in this program will be unreachable, and the heart-rate retest will read as no progress even when you're improving. Train by perceived effort and pace instead, and treat the HR numbers as decoration.",
+        "acknowledge_label": "Understood — I'll go by effort and pace, not heart rate."
+      },
+      {
+        "question_id": "hypertension_unmanaged",
+        "unsafe_values": [
+          "unsure"
+        ],
+        "severity": "warn",
+        "block_title": "Worth getting a blood-pressure reading",
+        "block_body": "You said you're not sure. The easy work here is fine either way — the concern is the weekly 4x4 at 90-95% of max heart rate. A pharmacy cuff takes two minutes. Get a reading before then, and see a clinician if it's high.",
+        "acknowledge_label": "I'll get a reading before the hard sessions start."
+      },
+      {
+        "question_id": "pregnancy_current",
+        "unsafe_values": [
+          "yes"
+        ],
+        "severity": "warn",
+        "block_title": "Heart-rate zones won't be reliable for you",
+        "block_body": "Resting and working heart rate both shift in pregnancy, so the 4x4 targets and the submax-HR retest won't mean what they normally mean. Train by perceived effort, and take the programming to your midwife or clinician rather than to an app.",
+        "acknowledge_label": "Understood — I'll go by effort and talk to my clinician."
       }
     ]
   },

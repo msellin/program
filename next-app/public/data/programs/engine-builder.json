@@ -242,6 +242,27 @@
         "step": 1
       },
       {
+        "id": "rate_limiting_medication",
+        "label": "Do you take a beta-blocker or other heart-rate-lowering medication?",
+        "type": "select",
+        "required": true,
+        "options": [
+          {
+            "value": "no",
+            "label": "No"
+          },
+          {
+            "value": "unsure",
+            "label": "Unsure"
+          },
+          {
+            "value": "yes",
+            "label": "Yes"
+          }
+        ],
+        "help": "These lower your heart rate at every effort. They don't make training unsafe — but they make heart-rate targets unreachable and heart-rate retests unreadable, so we need to know."
+      },
+      {
         "id": "consent_symptom_data",
         "label": "I understand this program is not medical advice. I'll stop and seek a clinician if I develop chest pain, unexplained dizziness, or a joint issue worsens under load.",
         "type": "boolean",
@@ -392,6 +413,36 @@
         ],
         "block_title": "Stay on low-impact modality",
         "block_body": "A flaring joint or tendon condition means don't add the running variant of intervals in week 5. Consider the cycling/rowing/erg version — or wait until the flare is resolved."
+      },
+      {
+        "question_id": "rate_limiting_medication",
+        "unsafe_values": [
+          "yes",
+          "unsure"
+        ],
+        "severity": "warn",
+        "block_title": "Heart-rate targets won't apply to you",
+        "block_body": "Beta-blockers and similar medications lower your heart rate at every effort level. The HR zones and the 90-95%-of-max targets in this program will be unreachable, and the heart-rate retest will read as no progress even when you're improving. Train by perceived effort and pace instead, and treat the HR numbers as decoration.",
+        "acknowledge_label": "Understood — I'll go by effort and pace, not heart rate."
+      },
+      {
+        "question_id": "hypertension_unmanaged",
+        "unsafe_values": [
+          "unsure"
+        ],
+        "severity": "warn",
+        "block_title": "Worth getting a blood-pressure reading",
+        "block_body": "You said you're not sure. The easy work here is fine either way — the concern is the 4x4 intervals from week 4. A pharmacy cuff takes two minutes. Get a reading before then, and see a clinician if it's high.",
+        "acknowledge_label": "I'll get a reading before the hard sessions start."
+      },
+      {
+        "question_id": "joint_issue_severity",
+        "unsafe_values": [
+          "limits_all_cardio"
+        ],
+        "severity": "block",
+        "block_title": "See a clinician first",
+        "block_body": "You told us the issue limits all cardio — that's what this option says. A programme that prescribes 90-minute Z1 sessions isn't the right next step until someone has looked at it."
       }
     ]
   },

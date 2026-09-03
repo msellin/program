@@ -358,6 +358,44 @@
         ]
       },
       {
+        "id": "concussion_vestibular_recent",
+        "label": "Concussion, or any dizziness / vertigo / balance disorder, in the last 3 months?",
+        "type": "select",
+        "required": true,
+        "options": [
+          {
+            "value": "no",
+            "label": "No"
+          },
+          {
+            "value": "unsure",
+            "label": "Unsure / never checked"
+          },
+          {
+            "value": "yes",
+            "label": "Yes"
+          }
+        ],
+        "help": "This program trains inverted balance and opens with deliberate exits from a handstand."
+      },
+      {
+        "id": "pregnancy_current",
+        "label": "Are you pregnant?",
+        "type": "select",
+        "required": true,
+        "options": [
+          {
+            "value": "no",
+            "label": "No"
+          },
+          {
+            "value": "yes",
+            "label": "Yes"
+          }
+        ],
+        "help": "HR and BP responses shift in pregnancy, and inversion work is a conversation for your own clinician."
+      },
+      {
         "id": "consent_symptom_data",
         "label": "I understand this program is a training template and not medical advice. I'll stop and see a clinician if wrist or shoulder pain persists after a session or if any bail results in a fall injury.",
         "type": "boolean",
@@ -488,6 +526,65 @@
         ],
         "block_title": "Wait for the acute injury to resolve",
         "block_body": "An acute wrist injury needs healing time and clinical assessment. Come back once you're cleared to load the wrist."
+      },
+      {
+        "question_id": "concussion_vestibular_recent",
+        "unsafe_values": [
+          "yes"
+        ],
+        "severity": "block",
+        "block_title": "Not while that's settling",
+        "block_body": "Inverted balance training makes post-concussive and vestibular symptoms worse — that's our own guidance — and this program opens with deliberate falls. Come back once you've been cleared."
+      },
+      {
+        "question_id": "pregnancy_current",
+        "unsafe_values": [
+          "yes"
+        ],
+        "severity": "warn",
+        "block_title": "Talk to your clinician about inversion work",
+        "block_body": "HR and BP responses shift in pregnancy, so heart-rate guidance here won't be reliable for you, and inverted work is a conversation to have with your midwife or clinician rather than with an app.",
+        "acknowledge_label": "I've read this and I'll raise it with my clinician."
+      },
+      {
+        "question_id": "osteoporosis_dx",
+        "unsafe_values": [
+          "unsure"
+        ],
+        "severity": "warn",
+        "block_title": "Worth knowing before you load the wrists",
+        "block_body": "Most adults have never had a bone-density scan, so 'unsure' is the normal answer and we're not going to stop you. But weight-bearing on the hands is a wrist-loading programme — if you're post-menopausal, on long-term steroids, or have had a low-trauma fracture, ask your GP before Phase 1.",
+        "acknowledge_label": "Understood."
+      },
+      {
+        "question_id": "hypertension_uncontrolled",
+        "unsafe_values": [
+          "unsure"
+        ],
+        "severity": "warn",
+        "block_title": "Worth getting a blood-pressure reading",
+        "block_body": "Being inverted raises blood pressure in the head and neck. A pharmacy cuff takes two minutes — get a reading before you start kicking up.",
+        "acknowledge_label": "I'll get a reading before Phase 1."
+      },
+      {
+        "question_id": "wrist_pain_12mo",
+        "unsafe_values": [
+          "yes"
+        ],
+        "severity": "warn",
+        "block_title": "Ramp the wrists, don't chase the calendar",
+        "block_body": "Chronic wrist pain is common in this population — the survey we cite reports 56.7%. It's not a reason to stop you, but it is a reason to build wrist tolerance slowly, use parallettes or fists when the floor bites, and stop the session on sharp pain rather than working through it.",
+        "acknowledge_label": "Understood — I'll ramp and stop on sharp pain."
+      },
+      {
+        "question_id": "concussion_vestibular_recent",
+        "unsafe_values": [
+          "unsure"
+        ],
+        "severity": "warn",
+        "block_title": "Worth being certain before you go upside down",
+        "block_body": "If you've had a head knock and aren't sure whether it settled, find out before training inverted balance. Lingering dizziness or visual disturbance in an inversion is how people land badly.",
+        "acknowledge_label": "Understood — I'll stop and get checked if anything spins."
       }
     ]
   },

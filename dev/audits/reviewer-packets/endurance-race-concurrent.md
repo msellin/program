@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: e825cfb9f83f5a8e -->
+<!-- source-fingerprint: 0607662ae40d971e -->
 
 ## What we are asking
 
@@ -89,7 +89,7 @@ is published too, not quietly dropped.
 - **Do you have high blood pressure that isn't under control? (Over 160/100 at rest, or diagnosed but not on medication — uncontrolled hypertension.)**  
   `hypertension_unmanaged` — answers: no, unsure, yes
   - BLOCKS on ['yes'] → "See your clinician first"
-  - **nothing happens on ['unsure']** — is that right?
+  - warns, then continues on ['unsure'] → "Worth getting a blood-pressure reading"
 - **History of fainting or unexplained cardiac symptoms during hard effort?**  
   `exertional_syncope_history`
   - BLOCKS on ['true'] → "Get cardiac clearance first"
@@ -99,6 +99,12 @@ is published too, not quietly dropped.
 - **Currently flaring low back?**  
   `flaring_low_back`
   - BLOCKS on ['true'] → "Resolve the flare first"
+- **Do you take a beta-blocker or other heart-rate-lowering medication?**  
+  `rate_limiting_medication` — answers: no, unsure, yes
+  - warns, then continues on ['yes', 'unsure'] → "Heart-rate targets won't apply to you"
+- **Are you pregnant?**  
+  `pregnancy_current` — answers: no, yes
+  - warns, then continues on ['yes'] → "Heart-rate zones won't be reliable for you"
 - **I consent to storing training log + symptom scores.**  
   `consent_symptom_data`
 
@@ -156,13 +162,19 @@ Printed against the questions above so you can see which are actually detectable
 - **Do you have high blood pressure that isn't under control? (Over 160/100 at rest, or diagnosed but not on medication — uncontrolled hypertension.)**  
   `hypertension_unmanaged` — answers: no, unsure, yes
   - BLOCKS on ['yes'] → "See your clinician first"
-  - **nothing happens on ['unsure']** — is that right?
+  - warns, then continues on ['unsure'] → "Worth getting a blood-pressure reading"
 - **Ever fainted or had unexplained cardiac symptoms during exertion?**  
   `exertional_syncope_history`
   - BLOCKS on ['true'] → "Get full cardiac clearance first"
 - **Currently flaring tendon (Achilles, patellar, elbow)?**  
   `flaring_tendon`
   - BLOCKS on ['true'] → "Resolve the flare first"
+- **Do you take a beta-blocker or other heart-rate-lowering medication?**  
+  `rate_limiting_medication` — answers: no, unsure, yes
+  - warns, then continues on ['yes', 'unsure'] → "Heart-rate targets won't apply to you"
+- **Are you pregnant?**  
+  `pregnancy_current` — answers: no, yes
+  - warns, then continues on ['yes'] → "Heart-rate zones won't be reliable for you"
 - **I consent to storing training log and symptom scores.**  
   `consent_symptom_data`
 

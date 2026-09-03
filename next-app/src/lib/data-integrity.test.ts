@@ -1203,18 +1203,15 @@ describe("intake screening reaches the answers it collects", () => {
    */
   const RISK_VALUES = new Set(["yes", "unsure"]);
 
-  /** Ungated risk options as of 2026-09-03, awaiting a founder decision. */
-  const KNOWN_UNGATED = [
-    "concurrent-strength-maintenance: hypertension_unmanaged=unsure",
-    "engine-builder: hypertension_unmanaged=unsure",
-    "engine-builder-block-2: hypertension_unmanaged=unsure",
-    "handstand-walk: osteoporosis_dx=unsure",
-    "handstand-walk: hypertension_uncontrolled=unsure",
-    "handstand-walk: wrist_pain_12mo=<no gate>",
-    "overhead-mobility: rotator_cuff_dx=unsure",
-    "overhead-mobility: shoulder_pain_flexion=<no gate>",
-    "rowing-2k-test-prep: hypertension_unmanaged=unsure",
-  ];
+  /**
+   * Empty, as of the 2026-09-03 screening pass. Every question in the catalog
+   * that offers "yes" or "unsure" now has a gate that acts on it.
+   *
+   * It is empty because the gaps were closed, NOT because the list is
+   * decorative — the sibling test below fails on a stale entry, so this
+   * cannot quietly become a place to park new gaps.
+   */
+  const KNOWN_UNGATED: string[] = [];
 
   /** Programmes whose documented contraindications outnumber their gates. */
   const KNOWN_UNDER_GATED: Record<string, { contraindications: number; gates: number }> = {
@@ -1244,12 +1241,17 @@ describe("intake screening reaches the answers it collects", () => {
       );
       const risky = [...values].filter((v) => RISK_VALUES.has(v)).sort();
       if (risky.length === 0) continue;
-      const gate = gates.find((g) => g.question_id === q.id);
-      if (!gate) {
+      // Union across EVERY gate on this question, not just the first. Once
+      // `severity` existed, a question routinely carries two — block on
+      // "yes", warn on "unsure" — and a `find()` here silently reported the
+      // warned value as ungated. Caught by this test disagreeing with a
+      // hand-run survey of the same data.
+      const forQuestion = gates.filter((g) => g.question_id === q.id);
+      if (forQuestion.length === 0) {
         out.push(`${id}: ${q.id}=<no gate>`);
         continue;
       }
-      const covered = new Set(gate.unsafe_values ?? []);
+      const covered = new Set(forQuestion.flatMap((g) => g.unsafe_values ?? []));
       for (const v of risky) if (!covered.has(v)) out.push(`${id}: ${q.id}=${v}`);
     }
     return out;

@@ -261,6 +261,69 @@
         "required": true
       },
       {
+        "id": "cervical_radiculopathy",
+        "label": "Persistent neck pain with numbness, tingling or weakness into the arm?",
+        "type": "select",
+        "required": true,
+        "options": [
+          {
+            "value": "no",
+            "label": "No"
+          },
+          {
+            "value": "unsure",
+            "label": "Unsure / never checked"
+          },
+          {
+            "value": "yes",
+            "label": "Yes"
+          }
+        ],
+        "help": "Radicular symptoms need their own workup. This program loads dead hangs and false grip heavily."
+      },
+      {
+        "id": "acute_wrist_injury",
+        "label": "Wrist injury in the last 6 weeks — TFCC tear, ligament instability, or a sprain still settling?",
+        "type": "select",
+        "required": true,
+        "options": [
+          {
+            "value": "no",
+            "label": "No"
+          },
+          {
+            "value": "unsure",
+            "label": "Unsure / never checked"
+          },
+          {
+            "value": "yes",
+            "label": "Yes"
+          }
+        ],
+        "help": "False grip puts the wrist in loaded end-range extension. It's the most wrist-punishing element here."
+      },
+      {
+        "id": "hypertension_valsalva",
+        "label": "Diagnosed high blood pressure that isn't currently controlled?",
+        "type": "select",
+        "required": true,
+        "options": [
+          {
+            "value": "no",
+            "label": "No"
+          },
+          {
+            "value": "unsure",
+            "label": "Unsure / never checked"
+          },
+          {
+            "value": "yes",
+            "label": "Yes"
+          }
+        ],
+        "help": "The transition and ring support are sustained braced efforts, which raise blood pressure sharply."
+      },
+      {
         "id": "consent_symptom_data",
         "label": "I understand this program is a training template and not medical advice. I'll stop and see a clinician if shoulder or elbow pain persists after a session.",
         "type": "boolean",
@@ -345,6 +408,63 @@
         ],
         "block_title": "Build the ring-dip base first",
         "block_body": "Under 3 strict ring dips, the top-half of the muscle-up will collapse. The Tier A phase of this program is a ring-dip build — it's a legitimate use of your time here — but you may prefer to run a dedicated dip program first. If you continue, the Tier A phase becomes your ring-dip build."
+      },
+      {
+        "question_id": "cervical_radiculopathy",
+        "unsafe_values": [
+          "yes"
+        ],
+        "severity": "block",
+        "block_title": "Get the neck looked at first",
+        "block_body": "Our own guidance is to avoid dead hangs and false-grip work entirely with persistent radicular symptoms, and both are foundations here."
+      },
+      {
+        "question_id": "acute_wrist_injury",
+        "unsafe_values": [
+          "yes"
+        ],
+        "severity": "block",
+        "block_title": "Let the wrist settle first",
+        "block_body": "False grip loads the wrist at end range under bodyweight, and this program is built on it. Our own guidance prohibits false-grip work with an acute wrist injury."
+      },
+      {
+        "question_id": "hypertension_valsalva",
+        "unsafe_values": [
+          "yes"
+        ],
+        "severity": "block",
+        "block_title": "Get your blood pressure managed first",
+        "block_body": "The transition and the ring support are sustained Valsalva efforts. With uncontrolled hypertension that's the wrong first exposure."
+      },
+      {
+        "question_id": "cervical_radiculopathy",
+        "unsafe_values": [
+          "unsure"
+        ],
+        "severity": "warn",
+        "block_title": "Worth finding out which it is",
+        "block_body": "'Unsure' usually means there are symptoms and nobody has looked. Dead hangs and false grip both load the neck and shoulder directly — stop and get assessed if you get numbness or tingling into the arm.",
+        "acknowledge_label": "Understood — I'll stop on numbness or tingling."
+      },
+      {
+        "question_id": "acute_wrist_injury",
+        "unsafe_values": [
+          "unsure"
+        ],
+        "severity": "warn",
+        "block_title": "Ramp the false grip, don't rush it",
+        "block_body": "If you're not sure whether a wrist niggle has settled, treat it as if it hasn't. Build false-grip time from supported positions — feet down, ring rows — before you hang from it, and stop on sharp pain rather than working through.",
+        "acknowledge_label": "Understood — I'll build from supported positions."
+      },
+      {
+        "question_id": "hypertension_valsalva",
+        "unsafe_values": [
+          "unsure"
+        ],
+        "severity": "warn",
+        "block_title": "Worth getting a blood-pressure reading",
+        "block_body": "You said you're not sure. The transition and ring support are sustained braced efforts that raise blood pressure sharply. Get a reading before the support holds.",
+        "acknowledge_label": "I'll get a reading before the support holds."
       }
     ]
   },

@@ -255,6 +255,48 @@
         "unit": "kg"
       },
       {
+        "id": "cervical_radiculopathy",
+        "label": "Persistent neck pain with numbness, tingling or weakness into the arm?",
+        "type": "select",
+        "required": true,
+        "options": [
+          {
+            "value": "no",
+            "label": "No"
+          },
+          {
+            "value": "unsure",
+            "label": "Unsure / never checked"
+          },
+          {
+            "value": "yes",
+            "label": "Yes"
+          }
+        ],
+        "help": "Radicular symptoms need their own workup. This program's foundation is the dead hang, which loads exactly that."
+      },
+      {
+        "id": "hypertension_valsalva",
+        "label": "Diagnosed high blood pressure that isn't currently controlled?",
+        "type": "select",
+        "required": true,
+        "options": [
+          {
+            "value": "no",
+            "label": "No"
+          },
+          {
+            "value": "unsure",
+            "label": "Unsure / never checked"
+          },
+          {
+            "value": "yes",
+            "label": "Yes"
+          }
+        ],
+        "help": "The top of a pull-up is a sustained braced effort, which raises blood pressure sharply."
+      },
+      {
         "id": "consent_symptom_data",
         "label": "I understand this program is a training template and not medical advice. I'll stop and see a clinician if shoulder or elbow pain persists after a session.",
         "type": "boolean",
@@ -325,6 +367,44 @@
         ],
         "block_title": "Wait for the acute injury to resolve",
         "block_body": "An acute shoulder injury needs healing time and clinical assessment. Come back once you're cleared to load the shoulder in a hang position."
+      },
+      {
+        "question_id": "cervical_radiculopathy",
+        "unsafe_values": [
+          "yes"
+        ],
+        "severity": "block",
+        "block_title": "Get the neck looked at first",
+        "block_body": "This program is built on the dead hang, and our own guidance is to avoid dead hangs entirely with persistent radicular symptoms. Come back once you've been assessed."
+      },
+      {
+        "question_id": "hypertension_valsalva",
+        "unsafe_values": [
+          "yes"
+        ],
+        "severity": "block",
+        "block_title": "Get your blood pressure managed first",
+        "block_body": "The top-hold of a pull-up is a sustained Valsalva effort. With uncontrolled hypertension that's the wrong first exposure."
+      },
+      {
+        "question_id": "cervical_radiculopathy",
+        "unsafe_values": [
+          "unsure"
+        ],
+        "severity": "warn",
+        "block_title": "Worth finding out which it is",
+        "block_body": "'Unsure' usually means there are symptoms and nobody has looked. Dead hangs load the neck and shoulder directly — if you get numbness or tingling into the arm during a hang, stop and get it assessed rather than training through it.",
+        "acknowledge_label": "Understood — I'll stop on numbness or tingling."
+      },
+      {
+        "question_id": "hypertension_valsalva",
+        "unsafe_values": [
+          "unsure"
+        ],
+        "severity": "warn",
+        "block_title": "Worth getting a blood-pressure reading",
+        "block_body": "You said you're not sure. The top-hold of a pull-up raises blood pressure sharply. A pharmacy cuff takes two minutes — get a reading before the week-3 isometric holds.",
+        "acknowledge_label": "I'll get a reading before the week-3 holds."
       }
     ]
   },

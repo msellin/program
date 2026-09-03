@@ -165,7 +165,13 @@ def program_section(slug: str) -> str:
     # every one. So print the whole intake and mark what each answer does.
     intake = d.get("intake") or {}
     questions = intake.get("questions") or []
-    gated = {g.get("question_id"): g for g in gates}
+    # A question routinely carries more than one gate now — block on "yes",
+    # warn on "unsure" — so a dict keyed by question_id silently kept only the
+    # last and reported the blocked value as ungated. Same bug appeared in
+    # data-integrity.test.ts the same day, from the same assumption.
+    gated: dict = {}
+    for g in gates:
+        gated.setdefault(g.get("question_id"), []).append(g)
 
     out.append("### What it asks, and what each answer does\n")
     if not questions:
@@ -175,13 +181,16 @@ def program_section(slug: str) -> str:
         label = q.get("label") or qid
         values = [o.get("value") for o in (q.get("options") or []) if isinstance(o, dict)]
         out.append(f"- **{label}**  \n  `{qid}`" + (f" — answers: {', '.join(str(v) for v in values)}" if values else ""))
-        g = gated.get(qid)
-        if g:
-            unsafe = g.get("unsafe_values") or []
-            sev = g.get("severity") or "block"
-            verb = "BLOCKS" if sev == "block" else "warns, then continues"
-            out.append(f"  - {verb} on {unsafe} → \"{g.get('block_title') or ''}\"")
-            unhandled = [v for v in values if v not in unsafe and v in ("yes", "unsure", "occasionally")]
+        gs = gated.get(qid) or []
+        if gs:
+            covered = set()
+            for g in gs:
+                unsafe = g.get("unsafe_values") or []
+                covered |= set(unsafe)
+                sev = g.get("severity") or "block"
+                verb = "BLOCKS" if sev == "block" else "warns, then continues"
+                out.append(f"  - {verb} on {unsafe} → \"{g.get('block_title') or ''}\"")
+            unhandled = [v for v in values if v not in covered and v in ("yes", "unsure")]
             if unhandled:
                 out.append(f"  - **nothing happens on {unhandled}** — is that right?")
         elif values:

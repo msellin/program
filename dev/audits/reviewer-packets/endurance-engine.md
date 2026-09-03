@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: 1fac91c253521c17 -->
+<!-- source-fingerprint: 9b3a1b7aa34b8cb3 -->
 
 ## What we are asking
 
@@ -105,12 +105,16 @@ is published too, not quietly dropped.
   `joint_issues`
 - **If you have a joint issue, how limiting is it right now?**  
   `joint_issue_severity` — answers: none, niggle, limits_running, limits_all_cardio
+  - BLOCKS on ['limits_all_cardio'] → "See a clinician first"
 - **How many strength sessions per week are you doing / planning to do during Block 1?**  
   `strength_sessions_per_week`
 - **Do you know your resting HR (morning, before caffeine, before getting out of bed)?**  
   `resting_hr_known`
 - **Estimated max HR (bpm). If unknown, leave blank — we'll use 208 − 0.7 × age.**  
   `max_hr_estimate`
+- **Do you take a beta-blocker or other heart-rate-lowering medication?**  
+  `rate_limiting_medication` — answers: no, unsure, yes
+  - warns, then continues on ['yes', 'unsure'] → "Heart-rate targets won't apply to you"
 - **I understand this program is not medical advice. I'll stop and seek a clinician if I develop chest pain, unexplained dizziness, or a joint issue worsens under load.**  
   `consent_symptom_data`
 - **Morning resting HR (bpm) — measured first thing after waking, before coffee. If unknown, we'll ask you to measure it for a week and enter it later.**  
@@ -120,7 +124,7 @@ is published too, not quietly dropped.
 - **Do you have high blood pressure that isn't under control? (Over 160/100 at rest, or diagnosed but not on medication — uncontrolled hypertension.)**  
   `hypertension_unmanaged` — answers: no, unsure, yes
   - BLOCKS on ['yes'] → "See your clinician first"
-  - **nothing happens on ['unsure']** — is that right?
+  - warns, then continues on ['unsure'] → "Worth getting a blood-pressure reading"
 - **Are you currently in the first trimester of pregnancy?**  
   `pregnancy_first_trimester`
   - BLOCKS on ['true'] → "Work with a specialist"
@@ -215,13 +219,19 @@ Printed against the questions above so you can see which are actually detectable
 - **Unmanaged high blood pressure (resting > 160/100, not currently treated)?**  
   `hypertension_unmanaged` — answers: no, unsure, yes
   - BLOCKS on ['yes'] → "See your clinician first"
-  - **nothing happens on ['unsure']** — is that right?
+  - warns, then continues on ['unsure'] → "Worth getting a blood-pressure reading"
 - **Are you recovering from COVID and still have elevated resting HR or exercise intolerance?**  
   `post_covid_hr_elevated`
   - BLOCKS on ['true'] → "Wait for baseline HR to normalise"
 - **Have you ever fainted, blacked out, or had unexplained cardiac symptoms during exertion?**  
   `exertional_syncope_history`
   - BLOCKS on ['true'] → "Get full cardiac clearance first"
+- **Do you take a beta-blocker or other heart-rate-lowering medication?**  
+  `rate_limiting_medication` — answers: no, unsure, yes
+  - warns, then continues on ['yes', 'unsure'] → "Heart-rate targets won't apply to you"
+- **Are you pregnant?**  
+  `pregnancy_current` — answers: no, yes
+  - warns, then continues on ['yes'] → "Heart-rate zones won't be reliable for you"
 - **I understand this program is not medical advice. I'll stop and seek a clinician if I develop chest pain, unexplained dizziness, or a joint issue worsens under load.**  
   `consent_symptom_data`
 

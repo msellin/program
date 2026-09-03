@@ -257,6 +257,48 @@
         "required": true
       },
       {
+        "id": "frozen_shoulder",
+        "label": "Has one shoulder lost range in ALL directions over weeks or months — including when someone else moves it for you?",
+        "type": "select",
+        "required": true,
+        "options": [
+          {
+            "value": "no",
+            "label": "No"
+          },
+          {
+            "value": "unsure",
+            "label": "Unsure / never checked"
+          },
+          {
+            "value": "yes",
+            "label": "Yes"
+          }
+        ],
+        "help": "That pattern suggests adhesive capsulitis (frozen shoulder), which needs its own rehab protocol."
+      },
+      {
+        "id": "ac_joint_pain",
+        "label": "Sharp, well-localised pain right on top of the shoulder, where the collarbone meets the shoulder blade?",
+        "type": "select",
+        "required": true,
+        "options": [
+          {
+            "value": "no",
+            "label": "No"
+          },
+          {
+            "value": "unsure",
+            "label": "Unsure / never checked"
+          },
+          {
+            "value": "yes",
+            "label": "Yes"
+          }
+        ],
+        "help": "That's the AC joint. End-range overhead flexion can amplify an irritated one."
+      },
+      {
         "id": "consent_symptom_data",
         "label": "I consent to storing training log + symptom scores.",
         "type": "boolean",
@@ -325,6 +367,74 @@
         ],
         "block_title": "Settle the neck first",
         "block_body": "Cervical radicular symptoms need their own workup. Overhead ROM work can amplify a nerve-root irritation."
+      },
+      {
+        "question_id": "frozen_shoulder",
+        "unsafe_values": [
+          "yes"
+        ],
+        "severity": "block",
+        "block_title": "That needs its own protocol",
+        "block_body": "Loss of range in every direction, including passively, is the pattern of adhesive capsulitis. Our own guidance is that it needs a separate rehab protocol — this program isn't it."
+      },
+      {
+        "question_id": "ac_joint_pain",
+        "unsafe_values": [
+          "yes"
+        ],
+        "severity": "warn",
+        "block_title": "End-range work can stir that up",
+        "block_body": "That location suggests the AC joint, and end-range overhead flexion can amplify it. You can still run this — but stop the session if that spot sharpens, and get it looked at if it doesn't settle.",
+        "acknowledge_label": "Understood — I'll stop the session if that spot sharpens."
+      },
+      {
+        "question_id": "rotator_cuff_dx",
+        "unsafe_values": [
+          "unsure"
+        ],
+        "severity": "warn",
+        "block_title": "Worth finding out which it is",
+        "block_body": "'Unsure' usually means there's pain and nobody has looked at it. This programme is mobility work, not rehab — run it if you like, but if the pain is reproducible in the same position every time, get it assessed rather than stretching into it.",
+        "acknowledge_label": "Understood — I'll get it assessed if it's reproducible."
+      },
+      {
+        "question_id": "shoulder_pain_flexion",
+        "unsafe_values": [
+          "yes"
+        ],
+        "severity": "block",
+        "block_title": "This programme loads the range that hurts",
+        "block_body": "You told us the last 30 degrees of overhead reach is painful. Every phase of this programme works exactly that range — passive, then active, then loaded. Get the shoulder assessed first; that's a better use of the next four weeks than training into it."
+      },
+      {
+        "question_id": "shoulder_pain_flexion",
+        "unsafe_values": [
+          "occasionally"
+        ],
+        "severity": "warn",
+        "block_title": "Watch that range as you load it",
+        "block_body": "Occasional end-range discomfort is common and isn't a reason to stop you. It is a reason to hold the loaded progressions until the passive range is comfortable, and to stop a session on sharp pain rather than working through it.",
+        "acknowledge_label": "Understood — I'll hold the loaded work if it sharpens."
+      },
+      {
+        "question_id": "frozen_shoulder",
+        "unsafe_values": [
+          "unsure"
+        ],
+        "severity": "warn",
+        "block_title": "Worth having that pattern checked",
+        "block_body": "If range is dropping in every direction and you're not sure why, that is worth a proper look before you start a mobility programme — adhesive capsulitis follows its own timeline and stretching into it does not shorten it.",
+        "acknowledge_label": "Understood — I'll get it looked at if range keeps dropping."
+      },
+      {
+        "question_id": "ac_joint_pain",
+        "unsafe_values": [
+          "unsure"
+        ],
+        "severity": "warn",
+        "block_title": "Watch that spot as you load overhead",
+        "block_body": "If you're not sure whether the pain is at the AC joint, note where it is next time it appears. End-range overhead flexion can amplify an irritated AC joint — stop the session if that exact spot sharpens.",
+        "acknowledge_label": "Understood — I'll stop if that spot sharpens."
       }
     ]
   },

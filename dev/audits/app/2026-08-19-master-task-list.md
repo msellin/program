@@ -260,7 +260,22 @@ From roadmap sync + product-concerns-2026-08-17 + design-lead brief `2026-08-19-
 
 Not tasks — calls to make.
 
-- [ ] **SCREEN-2** — **11 documented contraindications across 7 programmes have
+- [x] **SCREEN-1 + SCREEN-2 closed 2026-09-03.** 14 new screening questions
+  and 27 gates across 7 programmes. **Undetectable contraindications: 11 → 0.
+  Ungated risk answers: 9 → 0.** Every decision's rationale is recorded in
+  `dev/audits/programs/2026-09-03-screening-decisions.md`, traced to either the
+  programme's own `contraindications` (the founder's prior decision) or a named
+  SR-panel argument. No clinical threshold was invented — questions ask about
+  the diagnosis or symptom the programme already named. Blocks where the file
+  says "avoid entirely" or the hazard is acute; warns where the user can
+  resolve it, on SR-3's reasoning that bouncing people teaches them to answer
+  "no" next time. New: a beta-blocker question on all four HR-prescribing
+  programmes, warning rather than blocking because the training is safe and it
+  is the *measurement* that is invalid. Two same-day bugs of the same shape
+  found and fixed: the integrity test and the packet generator both kept only
+  ONE gate per question, so a question with a block AND a warn reported its
+  blocked value as ungated.
+- [x] **SCREEN-2** — **11 documented contraindications across 7 programmes have
   no intake question that could detect them**, verified by script 2026-09-03
   after the SR-1..SR-4 simulated panel. Worst two: `first-strict-pullup` says
   a cervical-radiculopathy user must "avoid dead hangs entirely" and dead hang
@@ -282,7 +297,7 @@ Not tasks — calls to make.
   cited in `muscle-up`; and `engine-builder`'s primary retest metric
   `submax_hr_pace5_bpm` has no pace anchor, so it measures the average HR of
   whatever the user labelled easy. Size: M
-- [ ] **SCREEN-1** — **Seven of eight programmes collect a risk answer that
+- [x] **SCREEN-1** — **Seven of eight programmes collect a risk answer that
   nothing acts on.** Found 2026-09-03 by simulated reviewer SR-1 on
   overhead-mobility, verified against shipped JSON, and it generalises.
   `shoulder_pain_flexion` ("does anything hurt in the last 30 degrees of

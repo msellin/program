@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: 763b144e7b2e020b -->
+<!-- source-fingerprint: 42e1a13a3029a9ed -->
 
 ## What we are asking
 
@@ -87,17 +87,26 @@ is published too, not quietly dropped.
   `current_overhead_lifts` — answers: none, occasional, regular
 - **Does anything hurt in the last 30 degrees of overhead reach?**  
   `shoulder_pain_flexion` — answers: no, occasionally, yes
-  - **no gate at all** — answering ['occasionally', 'yes'] changes nothing. Is that right?
+  - BLOCKS on ['yes'] → "This programme loads the range that hurts"
+  - warns, then continues on ['occasionally'] → "Watch that range as you load it"
 - **Diagnosed rotator-cuff tear or persistent impingement (partial or full)?**  
   `rotator_cuff_dx` — answers: no, unsure, yes
   - BLOCKS on ['yes'] → "See your physio first"
-  - **nothing happens on ['unsure']** — is that right?
+  - warns, then continues on ['unsure'] → "Worth finding out which it is"
 - **Shoulder dislocation or subluxation in the last 12 months?**  
   `post_dislocation_recent`
   - BLOCKS on ['true'] → "Get clinician clearance first"
 - **Recent neck flare or radicular pain into the arm?**  
   `cervical_flare_recent`
   - BLOCKS on ['true'] → "Settle the neck first"
+- **Has one shoulder lost range in ALL directions over weeks or months — including when someone else moves it for you?**  
+  `frozen_shoulder` — answers: no, unsure, yes
+  - BLOCKS on ['yes'] → "That needs its own protocol"
+  - warns, then continues on ['unsure'] → "Worth having that pattern checked"
+- **Sharp, well-localised pain right on top of the shoulder, where the collarbone meets the shoulder blade?**  
+  `ac_joint_pain` — answers: no, unsure, yes
+  - warns, then continues on ['yes'] → "End-range work can stir that up"
+  - warns, then continues on ['unsure'] → "Watch that spot as you load overhead"
 - **I consent to storing training log + symptom scores.**  
   `consent_symptom_data`
 
