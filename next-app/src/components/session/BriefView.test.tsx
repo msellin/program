@@ -162,3 +162,63 @@ describe("optional work reads as offered, not owed (2026-09-03)", () => {
     expect(screen.queryByText(/optional/)).toBeNull();
   });
 });
+
+describe("optional work is visible as optional (comp-week taper)", () => {
+  /**
+   * Monday 2026-09-07 is the first session that renders optional FSL
+   * back-offs: `block_squat_taper` holds the 5/3/1 top set and demotes the
+   * five back-offs to optional. The treatment shipped with render tests on
+   * SetView and NONE on BriefView, and the handover that shipped it said
+   * plainly it had never been looked at in a browser.
+   *
+   * The founder then asked where the optional marks were on a day that had
+   * none, which is how we learned the answer had never been checked on a day
+   * that did.
+   */
+  const taperRail = () =>
+    rail({
+      rowCount: 6,
+      suggestion: {
+        top_set: { kg: 93.5, reps: "5+" },
+        fsl: { kg: 71.5, sets: 5, reps: 5, optional: true },
+        reasoning: "Comp week. Top set holds; the back-off is yours to take.",
+      },
+      optionalRows: 5,
+    });
+
+  it("says how many of the sets are optional", () => {
+    renderBrief({ rails: [taperRail()] });
+    expect(screen.getByText(/last 5 optional/i)).toBeTruthy();
+  });
+
+  it("does not say it on a normal day", () => {
+    renderBrief({ rails: [rail()] });
+    expect(screen.queryByText(/optional/i)).toBeNull();
+  });
+
+  it("marks a wholly-optional exercise Optional rather than Main", () => {
+    // `requiredRowCount === 0` — every row optional. This is the goblet squat
+    // and 90/90 hip switch case the founder did without knowing they were
+    // optional.
+    renderBrief({
+      rails: [
+        rail({
+          exercise: exercise("goblet_squat", "Goblet squat"),
+          key: "block_daily_skill:goblet_squat",
+          rowCount: 3,
+          optionalRows: 3,
+          suggestion: undefined,
+          item: { exercise_id: "goblet_squat", optional: true },
+          isLoadable: true,
+        }),
+      ],
+    });
+    expect(screen.getByText("Optional")).toBeTruthy();
+    expect(screen.queryByText("Main")).toBeNull();
+  });
+
+  it("still calls required work Main", () => {
+    renderBrief({ rails: [rail()] });
+    expect(screen.getByText("Main")).toBeTruthy();
+  });
+});

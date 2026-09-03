@@ -75,6 +75,23 @@ export function OffPlanSession() {
     return [
       { cat: "accessory" as const, title: "Accessories & home rehab", note: "Do these when you can — no calendar constraint." },
       { cat: "run" as const, title: runTitle, note: runNote },
+      // Barbell work done somewhere else — a class, another gym, a friend's
+      // garage. This group did not exist until 2026-09-03, so off-plan
+      // offered accessories and cardio and NO lifts: there was literally no
+      // way to record a front squat you did outside your own session.
+      //
+      // The founder front-squatted to a 115 single in a CrossFit class on a
+      // Tuesday. Nothing about it reached the app, so his front-squat
+      // training max stayed wrong, the engine prescribed front squats two
+      // days later knowing nothing about it, and the number that would have
+      // fixed it only surfaced because he mentioned it in conversation.
+      // "Runs alongside your existing week" is the product's own claim; the
+      // existing week is mostly barbell work in a class.
+      {
+        cat: "strength" as const,
+        title: "Lifts you did elsewhere",
+        note: "Class, another gym, a session that wasn't on the plan. Log the weights — the engine reads them for your training maxes.",
+      },
     ];
   }, [primarySlug]);
 
