@@ -77,13 +77,41 @@ is published too, not quietly dropped.
 - **ohs_depth_ratio** — Overhead squat depth (hip crease vs top of knee) (5-weekly)
 - **tgu_hold_max_seconds** — Turkish get-up hold time (best of L / R) (5-weekly)
 
-### Who it refuses to take
+### What it asks, and what each answer does
 
-- `rotator_cuff_dx` in ['yes'] → blocked: "See your physio first"
-- `post_dislocation_recent` in ['true'] → blocked: "Get clinician clearance first"
-- `cervical_flare_recent` in ['true'] → blocked: "Settle the neck first"
+- **Realistically, how many days per week can you commit?**  
+  `days_per_week` — answers: 2, 3, 4, 5, 6, 7
+- **Lie flat, arms overhead — how close can you get elbows to the floor?**  
+  `shoulder_flexion_baseline` — answers: far, mid, near, vertical
+- **Do you currently snatch, OHS, or press overhead?**  
+  `current_overhead_lifts` — answers: none, occasional, regular
+- **Does anything hurt in the last 30 degrees of overhead reach?**  
+  `shoulder_pain_flexion` — answers: no, occasionally, yes
+  - **no gate at all** — answering ['occasionally', 'yes'] changes nothing. Is that right?
+- **Diagnosed rotator-cuff tear or persistent impingement (partial or full)?**  
+  `rotator_cuff_dx` — answers: no, unsure, yes
+  - BLOCKS on ['yes'] → "See your physio first"
+  - **nothing happens on ['unsure']** — is that right?
+- **Shoulder dislocation or subluxation in the last 12 months?**  
+  `post_dislocation_recent`
+  - BLOCKS on ['true'] → "Get clinician clearance first"
+- **Recent neck flare or radicular pain into the arm?**  
+  `cervical_flare_recent`
+  - BLOCKS on ['true'] → "Settle the neck first"
+- **I consent to storing training log + symptom scores.**  
+  `consent_symptom_data`
 
-**Is anything missing from that list? ☐ no ☐ yes —**
+### Conditions the program says it should exclude
+
+Printed against the questions above so you can see which are actually detectable.
+
+- Diagnosed rotator-cuff tear (partial or full) — needs physio pathway
+- Recent shoulder dislocation / subluxation — capsule stability first
+- Cervical radicular symptoms into the arm — needs workup
+- Adhesive capsulitis (frozen shoulder) — separate rehab protocol
+- Active AC-joint irritation — end-range flexion can amplify
+
+**Is anything missing — who should this refuse to take that it currently accepts? ☐ no ☐ yes —**
 
 
 ---

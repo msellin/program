@@ -76,14 +76,43 @@ is published too, not quietly dropped.
 - **row_2k_time_seconds** — 2K row time (2-weekly)
 - **threshold_pace_500m_seconds** — Threshold pace / 500m (2-weekly)
 
-### Who it refuses to take
+### What it asks, and what each answer does
 
-- `hypertension_unmanaged` in ['yes'] → blocked: "See your clinician first"
-- `exertional_syncope_history` in ['true'] → blocked: "Get cardiac clearance first"
-- `chest_pain_recent` in ['true'] → blocked: "See your clinician first"
-- `flaring_low_back` in ['true'] → blocked: "Resolve the flare first"
+- **Realistically, how many days per week can you commit?**  
+  `days_per_week` — answers: 2, 3, 4, 5, 6, 7
+- **What's your current or estimated 2K row time? (mm:ss)**  
+  `current_2k_time`
+- **How familiar are you with the Concept2 erg?**  
+  `erg_familiar` — answers: novice, occasional, regular
+- **Do you have a target test date? (approximate is fine)**  
+  `target_test_date`
+- **Do you have high blood pressure that isn't under control? (Over 160/100 at rest, or diagnosed but not on medication — uncontrolled hypertension.)**  
+  `hypertension_unmanaged` — answers: no, unsure, yes
+  - BLOCKS on ['yes'] → "See your clinician first"
+  - **nothing happens on ['unsure']** — is that right?
+- **History of fainting or unexplained cardiac symptoms during hard effort?**  
+  `exertional_syncope_history`
+  - BLOCKS on ['true'] → "Get cardiac clearance first"
+- **Chest pain or shortness of breath outside normal exertion in the last 6 months?**  
+  `chest_pain_recent`
+  - BLOCKS on ['true'] → "See your clinician first"
+- **Currently flaring low back?**  
+  `flaring_low_back`
+  - BLOCKS on ['true'] → "Resolve the flare first"
+- **I consent to storing training log + symptom scores.**  
+  `consent_symptom_data`
 
-**Is anything missing from that list? ☐ no ☐ yes —**
+### Conditions the program says it should exclude
+
+Printed against the questions above so you can see which are actually detectable.
+
+- Unmanaged hypertension — 2K test pushes HR to max
+- History of exertional syncope — requires cardiac clearance
+- Recent chest pain / shortness of breath — workup first
+- Flaring low back — rowing loads the lumbar spine
+- First-trimester pregnancy — HR-based zones unreliable
+
+**Is anything missing — who should this refuse to take that it currently accepts? ☐ no ☐ yes —**
 
 
 ---
@@ -116,13 +145,38 @@ is published too, not quietly dropped.
 - **back_squat_5rm_kg** — Back squat 5RM (8-weekly)
 - **submax_hr_pace5_bpm** — Submax HR at pace-5 (4-weekly)
 
-### Who it refuses to take
+### What it asks, and what each answer does
 
-- `hypertension_unmanaged` in ['yes'] → blocked: "See your clinician first"
-- `exertional_syncope_history` in ['true'] → blocked: "Get full cardiac clearance first"
-- `flaring_tendon` in ['true'] → blocked: "Resolve the flare first"
+- **Realistically, how many days per week can you commit?**  
+  `days_per_week` — answers: 2, 3, 4, 5, 6, 7
+- **Current weekly cardio hours (Z1/Z2 combined)?**  
+  `cardio_hours_per_week` — answers: under_1, 1_3, 3_6, over_6
+- **Do you have a current back-squat 5RM you'd rather not lose?**  
+  `has_squat_prs`
+- **Do you have high blood pressure that isn't under control? (Over 160/100 at rest, or diagnosed but not on medication — uncontrolled hypertension.)**  
+  `hypertension_unmanaged` — answers: no, unsure, yes
+  - BLOCKS on ['yes'] → "See your clinician first"
+  - **nothing happens on ['unsure']** — is that right?
+- **Ever fainted or had unexplained cardiac symptoms during exertion?**  
+  `exertional_syncope_history`
+  - BLOCKS on ['true'] → "Get full cardiac clearance first"
+- **Currently flaring tendon (Achilles, patellar, elbow)?**  
+  `flaring_tendon`
+  - BLOCKS on ['true'] → "Resolve the flare first"
+- **I consent to storing training log and symptom scores.**  
+  `consent_symptom_data`
 
-**Is anything missing from that list? ☐ no ☐ yes —**
+### Conditions the program says it should exclude
+
+Printed against the questions above so you can see which are actually detectable.
+
+- Unmanaged hypertension (BP > 160/100 at rest) — see clinician before Norwegian 4×4 sessions.
+- History of exertional syncope or unexplained cardiac symptoms — full clearance first.
+- First-trimester pregnancy — HR zones are unreliable; work with a specialist.
+- Flaring lower-limb tendinopathy (Achilles, patellar) — no running variant of intervals.
+- Post-COVID convalescence with elevated resting HR — defer intervals until baseline HR normalises.
+
+**Is anything missing — who should this refuse to take that it currently accepts? ☐ no ☐ yes —**
 
 
 ---

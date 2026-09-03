@@ -156,15 +156,49 @@ def program_section(slug: str) -> str:
         out.append("")
 
     gates = (d.get("intake") or {}).get("safety_gates") or []
-    out.append("### Who it refuses to take\n")
-    if gates:
-        for g in gates:
-            out.append(f"- `{g.get('question_id')}` in {g.get('unsafe_values')} → blocked: "
-                       f"\"{(g.get('block_title') or '')}\"")
-    else:
-        out.append("- **Nothing. This program screens nobody out.** Is that right for this population?")
+    # Was: the block rules alone. SR-1 (2026-09-03) had to open the program
+    # JSON to find the screening gaps, and said so — "the packet describes the
+    # program at a level of abstraction that hides the errors most worth
+    # catching". It was right: the three most consequential findings in that
+    # review were questions the program ASKS and then ignores, which a list of
+    # blocks cannot show. A reviewer sent only the packet would have missed
+    # every one. So print the whole intake and mark what each answer does.
+    intake = d.get("intake") or {}
+    questions = intake.get("questions") or []
+    gated = {g.get("question_id"): g for g in gates}
+
+    out.append("### What it asks, and what each answer does\n")
+    if not questions:
+        out.append("- **Nothing. This program has no intake.**\n")
+    for q in questions:
+        qid = q.get("id")
+        label = q.get("label") or qid
+        values = [o.get("value") for o in (q.get("options") or []) if isinstance(o, dict)]
+        out.append(f"- **{label}**  \n  `{qid}`" + (f" — answers: {', '.join(str(v) for v in values)}" if values else ""))
+        g = gated.get(qid)
+        if g:
+            unsafe = g.get("unsafe_values") or []
+            sev = g.get("severity") or "block"
+            verb = "BLOCKS" if sev == "block" else "warns, then continues"
+            out.append(f"  - {verb} on {unsafe} → \"{g.get('block_title') or ''}\"")
+            unhandled = [v for v in values if v not in unsafe and v in ("yes", "unsure", "occasionally")]
+            if unhandled:
+                out.append(f"  - **nothing happens on {unhandled}** — is that right?")
+        elif values:
+            risky = [v for v in values if v in ("yes", "unsure", "occasionally")]
+            if risky:
+                out.append(f"  - **no gate at all** — answering {risky} changes nothing. Is that right?")
     out.append("")
-    out.append("**Is anything missing from that list? ☐ no ☐ yes —**\n")
+
+    contra = (d.get("evidence_base") or {}).get("contraindications") or []
+    if contra:
+        out.append("### Conditions the program says it should exclude\n")
+        out.append("Printed against the questions above so you can see which are actually detectable.\n")
+        for c in contra:
+            out.append(f"- {c}")
+        out.append("")
+
+    out.append("**Is anything missing — who should this refuse to take that it currently accepts? ☐ no ☐ yes —**\n")
 
     return "\n".join(out)
 

@@ -458,6 +458,24 @@ export const programIntakeSchema = z.object({
         unsafe_values: z.array(z.string()),
         block_title: z.string(),
         block_body: z.string(),
+        /**
+         * How hard the gate holds. Absent → "block", so silence can never
+         * loosen an existing refusal.
+         *
+         * Added 2026-09-03. A gate could only hard-block, so an author facing
+         * a question where refusal was too blunt and silence too permissive
+         * chose silence — seven of eight programs have at least one risky
+         * answer that reaches no gate. "warn" is the middle: the user is told
+         * what their answer means, must acknowledge it, and the
+         * acknowledgement is persisted as `safety_ack.<question_id>`.
+         *
+         * Evaluated only in `lib/engine/safety-gates.ts`. Which gate gets
+         * which severity is a clinical decision for the program's author; how
+         * a severity behaves is not.
+         */
+        severity: z.enum(["block", "warn"]).optional(),
+        /** Warn-only: what the user is ticking. Defaults to a generic line. */
+        acknowledge_label: z.string().optional(),
       }),
     )
     .optional(),

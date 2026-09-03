@@ -85,11 +85,39 @@ is published too, not quietly dropped.
 - **strict_pullup_max_reps** — Strict pull-up max reps (4-weekly)
 - **dead_hang_max_seconds** — Dead hang (max seconds) (4-weekly)
 
-### Who it refuses to take
+### What it asks, and what each answer does
 
-- `acute_shoulder_injury` in ['true'] → blocked: "Wait for the acute injury to resolve"
+- **Realistically, how many days per week can you commit?**  
+  `days_per_week` — answers: 2, 3, 4, 5
+- **How many strict pull-ups can you do right now — no kip, no swing, full range from dead hang to chin over the bar?**  
+  `current_strict_pullups` — answers: zero_no_hang, zero_can_hang, assisted_only, one_partial, one_two, three_five
+- **How long can you passively dead hang from a pull-up bar (arms straight, no scap engagement, just hanging)?**  
+  `dead_hang_seconds_selfreport` — answers: under_10s, 10_20s, 20_45s, 45_60s, over_60s
+- **How many strict feet-elevated ring rows can you do (feet on a box, body horizontal, pull chest to rings)?**  
+  `ring_row_reps_selfreport` — answers: under_5, 5_10, 10_15, over_15
+- **Have you had shoulder pain during any overhead pressing, pull-down, or hanging work in the last 12 months?**  
+  `shoulder_pain_overhead`
+- **Any elbow tendon pain (medial or lateral) currently or in the last 3 months?**  
+  `elbow_tendon_pain` — answers: no, resolved, current
+- **Do you have an acute shoulder injury (rotator cuff tear, labral tear, dislocation) in the last 6 months?**  
+  `acute_shoulder_injury`
+  - BLOCKS on ['true'] → "Wait for the acute injury to resolve"
+- **Approximate bodyweight (kg) — used to shape band-tension progression**  
+  `bodyweight_kg`
+- **I understand this program is a training template and not medical advice. I'll stop and see a clinician if shoulder or elbow pain persists after a session.**  
+  `consent_symptom_data`
 
-**Is anything missing from that list? ☐ no ☐ yes —**
+### Conditions the program says it should exclude
+
+Printed against the questions above so you can see which are actually detectable.
+
+- Shoulder pain during a hang or pull attempt — session ends immediately. Do not train through it. Reinold 2007 supraspinatus / rotator-cuff load data supports the caution: hang position loads the long head of biceps + supraspinatus tendon.
+- Acute rotator-cuff injury, labral tear, or shoulder dislocation in the last 6 months — dead hangs and pull-up attempts contraindicated until cleared by a clinician.
+- Currently symptomatic medial or lateral elbow tendinopathy — defer heavy negatives and chinup variants. Use scap and row work only, and clear with a clinician for eccentric work.
+- Persistent cervical radiculopathy — avoid dead hangs entirely; the traction can inflame nerve root symptoms.
+- Uncontrolled hypertension with Valsalva concern — the top-position isometric hold provokes Valsalva. Use exhale-on-effort breathing or defer until controlled.
+
+**Is anything missing — who should this refuse to take that it currently accepts? ☐ no ☐ yes —**
 
 
 ---
@@ -126,13 +154,42 @@ is published too, not quietly dropped.
 - **false_grip_hang_max_seconds** — False-grip hang (max seconds) (4-weekly)
 - **ring_dip_max_reps** — Strict ring dip (max reps) (4-weekly)
 
-### Who it refuses to take
+### What it asks, and what each answer does
 
-- `acute_shoulder_injury` in ['true'] → blocked: "Wait for the acute injury to resolve"
-- `strict_pullup_count` in ['under_3'] → blocked: "Build the pull-up base first"
-- `ring_dip_count` in ['under_3'] → blocked: "Build the ring-dip base first"
+- **Realistically, how many days per week can you commit?**  
+  `days_per_week` — answers: 3, 4, 5
+- **How many strict pull-ups can you do right now (no kip, no swing, dead hang to chin over bar)?**  
+  `strict_pullup_count` — answers: under_3, 3_5, 6_10, over_10
+  - BLOCKS on ['under_3'] → "Build the pull-up base first"
+- **How many strict ring dips can you do (support position → full lockout → depth at 90° elbow → lockout)?**  
+  `ring_dip_count` — answers: under_3, 3_5, 6_10, over_10
+  - BLOCKS on ['under_3'] → "Build the ring-dip base first"
+- **How long can you hold a false-grip dead hang (wrist on top of the ring, no thumb over)?**  
+  `false_grip_hang_seconds_selfreport` — answers: never, under_5s, 5_15s, 15_30s, over_30s
+- **Have you ever done a strict ring muscle-up?**  
+  `muscle_up_experience` — answers: never, one_sometimes, one_reliable, multiple
+- **Have you had shoulder pain during any overhead pressing, dip, or hanging work in the last 12 months?**  
+  `shoulder_pain_overhead`
+- **Any elbow tendon pain (medial or lateral) currently or in the last 3 months?**  
+  `elbow_tendon_pain` — answers: no, resolved, current
+- **Do you have an acute shoulder injury (rotator cuff tear, labral tear, dislocation) in the last 6 months?**  
+  `acute_shoulder_injury`
+  - BLOCKS on ['true'] → "Wait for the acute injury to resolve"
+- **I understand this program is a training template and not medical advice. I'll stop and see a clinician if shoulder or elbow pain persists after a session.**  
+  `consent_symptom_data`
 
-**Is anything missing from that list? ☐ no ☐ yes —**
+### Conditions the program says it should exclude
+
+Printed against the questions above so you can see which are actually detectable.
+
+- Shoulder pain during a hang, transition, or support hold — session ends immediately. Do not train through it. Reinold 2007 supraspinatus load data + Sadowski 2021 straight-arm shoulder moment analog support the caution.
+- Acute rotator-cuff injury, labral tear, or shoulder dislocation in the last 6 months — dead hangs, ring support, and transition attempts contraindicated until cleared.
+- Currently symptomatic medial or lateral elbow tendinopathy — defer ring dip work and transition negatives. Use scap and hollow work only until cleared.
+- Acute wrist injury (TFCC tear, ligament instability) in the last 6 weeks — false-grip work is prohibited; hollow + hang-only substitutes.
+- Persistent cervical radiculopathy — avoid dead hangs and false-grip hangs entirely; the traction can inflame nerve root symptoms.
+- Uncontrolled hypertension with Valsalva concern — the transition and support hold provoke Valsalva. Use exhale-on-effort breathing or defer until controlled.
+
+**Is anything missing — who should this refuse to take that it currently accepts? ☐ no ☐ yes —**
 
 
 ---
@@ -176,13 +233,52 @@ is published too, not quietly dropped.
 - **freestand_hold_max_seconds** — Freestand handstand hold (max) (4-weekly)
 - **walk_distance_max_metres** — Handstand walk (max continuous) (4-weekly)
 
-### Who it refuses to take
+### What it asks, and what each answer does
 
-- `osteoporosis_dx` in ['yes'] → blocked: "See your clinician first"
-- `hypertension_uncontrolled` in ['yes'] → blocked: "See your clinician first"
-- `acute_wrist_injury` in ['true'] → blocked: "Wait for the acute injury to resolve"
+- **Realistically, how many days per week can you commit?**  
+  `days_per_week` — answers: 2, 3, 4, 5, 6, 7
+- **How long can you hold a wall handstand (chest to wall or back to wall)?**  
+  `wall_hold_seconds_selfreport` — answers: never, under_15s, 15_30s, 30_60s, over_60s
+- **How long can you freestand (no wall)?**  
+  `freestand_hold_seconds_selfreport` — answers: never, brief, 2_5s, 5_15s, 15_30s, over_30s
+- **How far can you handstand walk continuously?**  
+  `walk_distance_selfreport` — answers: never, few_steps, 5m_plus, 10m_plus, 20m_plus
+- **Have you had wrist pain in the last 12 months during handstand or upper-body weight-bearing work?**  
+  `wrist_pain_12mo` — answers: no, occasional, yes
+  - **no gate at all** — answering ['yes'] changes nothing. Is that right?
+- **Have you had shoulder pain during any overhead pressing or overhead hold in the last 12 months?**  
+  `shoulder_pain_overhead`
+- **Age band**  
+  `age_band` — answers: 18_30, 31_45, 46_60, 60_plus
+- **Have you been diagnosed with low bone density (osteoporosis or low BMD)?**  
+  `osteoporosis_dx` — answers: no, unsure, yes
+  - BLOCKS on ['yes'] → "See your clinician first"
+  - **nothing happens on ['unsure']** — is that right?
+- **Do you have high blood pressure that isn't under control? (Over 160/100 at rest, or diagnosed but not on medication — uncontrolled hypertension.)**  
+  `hypertension_uncontrolled` — answers: no, unsure, yes
+  - BLOCKS on ['yes'] → "See your clinician first"
+  - **nothing happens on ['unsure']** — is that right?
+- **Do you have an acute wrist injury (sprain, TFCC, ligament tear) in the last 6 weeks?**  
+  `acute_wrist_injury`
+  - BLOCKS on ['true'] → "Wait for the acute injury to resolve"
+- **If your handstand tips past vertical, what happens?**  
+  `bail_out_readiness` — answers: never_inverted, would_fall, can_step_out, can_exit_reliably
+- **I understand this program is a training template and not medical advice. I'll stop and see a clinician if wrist or shoulder pain persists after a session or if any bail results in a fall injury.**  
+  `consent_symptom_data`
 
-**Is anything missing from that list? ☐ no ☐ yes —**
+### Conditions the program says it should exclude
+
+Printed against the questions above so you can see which are actually detectable.
+
+- Shoulder pain during a handstand attempt — session ends immediately. Do not train through it. Pain-during-load motor-learning principle: continued exposure with pain reinforces a compensation pattern.
+- Osteoporosis diagnosis (or low-BMD DEXA) — freestanding and any bail-risk attempts contraindicated. DiFiori 2006 catalogued distal radius as a common fracture site under this mechanism; vertebral and hip fractures follow. Tier A wall walks + Kinoshita positions with a spotter and soft floor are permitted only after clinician clearance.
+- Uncontrolled hypertension (BP > 160/100 at rest or unmedicated) — defer all inversions until BP is controlled. Yoga-inversion literature documents transient systolic increases that stack with Valsalva during a kick-up attempt.
+- Acute wrist injury (sprain, TFCC tear, ligament instability) in the last 6 weeks — wrist-load drills prohibited until cleared by a clinician. Program will offer hollow-body and shoulder-endurance drills only during this window.
+- Persistent shoulder impingement or rotator-cuff pathology — sustained overhead position at ≥170° is not safe. Ludewig & Cook 2000, Reinold 2007: modified overhead loading and scapular retraining first, defer this program.
+- First-trimester pregnancy — HR and BP responses shift; inversion literature is unclear. Defer.
+- Recent concussion or vestibular disorder — inverted balance training exacerbates symptoms.
+
+**Is anything missing — who should this refuse to take that it currently accepts? ☐ no ☐ yes —**
 
 
 ---

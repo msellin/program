@@ -89,15 +89,62 @@ is published too, not quietly dropped.
 - **submax_hr_pace5_bpm** — Submax HR — easy-effort avg (4-weekly)
 - **resting_hr_bpm** — Resting HR (2-weekly)
 
-### Who it refuses to take
+### What it asks, and what each answer does
 
-- `hypertension_unmanaged` in ['yes'] → blocked: "See your clinician first"
-- `pregnancy_first_trimester` in ['true'] → blocked: "Work with a specialist"
-- `exertional_syncope_history` in ['true'] → blocked: "Get full cardiac clearance first"
-- `post_covid_hr_elevated` in ['true'] → blocked: "Wait for baseline HR to normalise"
-- `flaring_joint_tendon` in ['true'] → blocked: "Stay on low-impact modality"
+- **Realistically, how many days per week can you commit?**  
+  `days_per_week` — answers: 2, 3, 4, 5, 6, 7
+- **How many hours of cardio (running, rowing, cycling, ski-erg, hiking that raised HR meaningfully) have you done per week, averaged over the last 3 months?**  
+  `cardio_hours_per_week`
+- **Which modality do you most want to improve?**  
+  `goal_modality` — answers: row, bike, ski_erg, run
+- **Can you currently sustain 20 minutes of continuous easy cardio without stopping and without HR runaway?**  
+  `can_sustain_20min_easy`
+- **What's the longest continuous easy-effort cardio session you've done in the last 4 weeks?**  
+  `recent_z1_max_minutes`
+- **Any joint or tendon issues that flare with cardio? Describe briefly.**  
+  `joint_issues`
+- **If you have a joint issue, how limiting is it right now?**  
+  `joint_issue_severity` — answers: none, niggle, limits_running, limits_all_cardio
+- **How many strength sessions per week are you doing / planning to do during Block 1?**  
+  `strength_sessions_per_week`
+- **Do you know your resting HR (morning, before caffeine, before getting out of bed)?**  
+  `resting_hr_known`
+- **Estimated max HR (bpm). If unknown, leave blank — we'll use 208 − 0.7 × age.**  
+  `max_hr_estimate`
+- **I understand this program is not medical advice. I'll stop and seek a clinician if I develop chest pain, unexplained dizziness, or a joint issue worsens under load.**  
+  `consent_symptom_data`
+- **Morning resting HR (bpm) — measured first thing after waking, before coffee. If unknown, we'll ask you to measure it for a week and enter it later.**  
+  `baseline_resting_hr`
+- **Optional submax HR baseline — if you did a 10-minute steady effort in the last week, enter the average HR you saw.**  
+  `baseline_submax_hr_at_pace`
+- **Do you have high blood pressure that isn't under control? (Over 160/100 at rest, or diagnosed but not on medication — uncontrolled hypertension.)**  
+  `hypertension_unmanaged` — answers: no, unsure, yes
+  - BLOCKS on ['yes'] → "See your clinician first"
+  - **nothing happens on ['unsure']** — is that right?
+- **Are you currently in the first trimester of pregnancy?**  
+  `pregnancy_first_trimester`
+  - BLOCKS on ['true'] → "Work with a specialist"
+- **Have you ever fainted, blacked out, or had unexplained cardiac symptoms during exertion?**  
+  `exertional_syncope_history`
+  - BLOCKS on ['true'] → "Get full cardiac clearance first"
+- **Are you recovering from COVID and still have elevated resting HR or exercise intolerance?**  
+  `post_covid_hr_elevated`
+  - BLOCKS on ['true'] → "Wait for baseline HR to normalise"
+- **Do you currently have a joint or tendon condition that flares under load (Achilles, patellar, hip)?**  
+  `flaring_joint_tendon`
+  - BLOCKS on ['true'] → "Stay on low-impact modality"
 
-**Is anything missing from that list? ☐ no ☐ yes —**
+### Conditions the program says it should exclude
+
+Printed against the questions above so you can see which are actually detectable.
+
+- Unmanaged hypertension (BP > 160/100 at rest) — see a clinician before starting the Norwegian 4x4 sessions. Z1 work is generally safe but check.
+- First-trimester pregnancy — HR-based zones are unreliable during pregnancy; work with a specialist.
+- Any joint or tendon condition that flares under load (Achilles, patellar tendinopathy, hip labral tear on the run variant) — stay on low-impact modality; do not switch to running in week 5.
+- Post-COVID convalescence with persistent resting HR elevation or exercise intolerance — do not begin intervals until baseline HR normalises.
+- History of exertional syncope or unexplained cardiac symptoms — full clearance first.
+
+**Is anything missing — who should this refuse to take that it currently accepts? ☐ no ☐ yes —**
 
 
 ---
@@ -144,14 +191,52 @@ is published too, not quietly dropped.
 - **submax_hr_pace5_bpm** — Submax HR at Block 2 anchor pace (4-weekly)
 - **resting_hr_bpm** — Resting HR (Block 2) (2-weekly)
 
-### Who it refuses to take
+### What it asks, and what each answer does
 
-- `block_1_completed` in ['no'] → blocked: "Build the base first"
-- `hypertension_unmanaged` in ['yes'] → blocked: "See your clinician first"
-- `exertional_syncope_history` in ['true'] → blocked: "Get full cardiac clearance first"
-- `post_covid_hr_elevated` in ['true'] → blocked: "Wait for baseline HR to normalise"
+- **Did you complete Engine Builder Block 1 (or a comparable 8-week aerobic base) within the last 4 weeks?**  
+  `block_1_completed` — answers: yes_recent, yes_lapsed, no_but_equivalent, no
+  - BLOCKS on ['no'] → "Build the base first"
+- **Realistically, how many days per week can you commit?**  
+  `days_per_week` — answers: 3, 4, 5, 6
+- **How many hours of cardio per week are you doing right now?**  
+  `current_cardio_hours_per_week`
+- **Which modality do you want to sharpen in Block 2?**  
+  `goal_modality` — answers: row, bike, ski_erg, run
+- **Peak HR you saw during Block 1's Norwegian 4×4 (approximate, from a chest strap if you had one).**  
+  `block_1_hard_session_hr_peak`
+- **Submax HR at fixed pace: how much did it drop from Block 1 intake to Block 1 retest?**  
+  `block_1_submax_hr_delta`
+- **Best 20-minute effort in the last 4 weeks — pace (min/km), power (W), or split (min:sec /500m).**  
+  `current_20min_threshold_pace_or_power`
+- **Any joint or tendon issues flaring right now?**  
+  `joint_issues`
+- **How many strength sessions per week are you doing / planning to do during Block 2?**  
+  `strength_sessions_per_week`
+- **Unmanaged high blood pressure (resting > 160/100, not currently treated)?**  
+  `hypertension_unmanaged` — answers: no, unsure, yes
+  - BLOCKS on ['yes'] → "See your clinician first"
+  - **nothing happens on ['unsure']** — is that right?
+- **Are you recovering from COVID and still have elevated resting HR or exercise intolerance?**  
+  `post_covid_hr_elevated`
+  - BLOCKS on ['true'] → "Wait for baseline HR to normalise"
+- **Have you ever fainted, blacked out, or had unexplained cardiac symptoms during exertion?**  
+  `exertional_syncope_history`
+  - BLOCKS on ['true'] → "Get full cardiac clearance first"
+- **I understand this program is not medical advice. I'll stop and seek a clinician if I develop chest pain, unexplained dizziness, or a joint issue worsens under load.**  
+  `consent_symptom_data`
 
-**Is anything missing from that list? ☐ no ☐ yes —**
+### Conditions the program says it should exclude
+
+Printed against the questions above so you can see which are actually detectable.
+
+- Unmanaged hypertension (BP > 160/100 at rest) — Block 2's hard sessions are more frequent than Block 1's. Get BP treated before starting.
+- First-trimester pregnancy — HR-based zones are unreliable during pregnancy; work with a specialist.
+- Any joint or tendon condition that flares under load — reconsider the running variant if applicable.
+- Post-COVID convalescence with persistent resting HR elevation — do not begin. Return when baseline HR is back.
+- History of exertional syncope or unexplained cardiac symptoms — full clearance first.
+- Insufficient aerobic base (< 4 hrs/week for the last 4 weeks AND no Block 1 completion) — the intake gate fires; run Block 1 first.
+
+**Is anything missing — who should this refuse to take that it currently accepts? ☐ no ☐ yes —**
 
 
 ---

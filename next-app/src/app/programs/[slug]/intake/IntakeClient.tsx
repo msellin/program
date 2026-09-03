@@ -6,6 +6,12 @@ import { useRouter } from "next/navigation";
 import { ChevronLeft, ShieldAlert, Check } from "lucide-react";
 import { loadProgram, loadProgramManifest } from "@/lib/data-loader";
 import { useStore } from "@/lib/useStore";
+import {
+  evaluateSafetyGates,
+  warningsAcknowledged,
+  acknowledgementsToPersist,
+  type GateNotice,
+} from "@/lib/engine/safety-gates";
 import { cn } from "@/lib/utils";
 import { inferTier } from "@/lib/engine/intake-tier";
 import { DashboardBlock } from "@/components/DashboardBlock";
@@ -86,6 +92,11 @@ export function IntakeClient({ slug }: Props) {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [testResults, setTestResults] = useState<Record<string, number>>({});
   const [consents, setConsents] = useState<Record<string, boolean>>({});
+  // Acknowledgements of warn-severity safety gates, keyed by question_id.
+  // Persisted with the intake as `safety_ack.<id>` — "they were told and said
+  // yes" is a different fact from "nobody asked", and after the fact the two
+  // are otherwise indistinguishable.
+  const [safetyAcks, setSafetyAcks] = useState<Record<string, boolean>>({});
   const [reviewing, setReviewing] = useState(false);
   const [overrideTier, setOverrideTier] = useState<string | null>(null);
   const [committing, setCommitting] = useState(false);
@@ -198,13 +209,17 @@ export function IntakeClient({ slug }: Props) {
   // Hard-block screening — driven by program.intake.safety_gates. Fixes F-103:
   // each program declares its own gate questions + unsafe values, rather than
   // relying on a hardcoded list that only knew Handstand Walk's fields.
+  // Gate evaluation lives in lib/engine/safety-gates.ts — one definition,
+  // testable without React. `warn`-severity gates surface below as an
+  // advisory the user must tick; `block` stays fatal and is the default.
+  const gateEval = useMemo(
+    () => evaluateSafetyGates(intake?.safety_gates ?? [], answers),
+    [intake?.safety_gates, answers],
+  );
+
   const blocker = useMemo(() => {
-    const gates = intake?.safety_gates ?? [];
-    for (const g of gates) {
-      const answer = answers[g.question_id];
-      if (answer && g.unsafe_values.includes(answer)) {
-        return { title: g.block_title, body: g.block_body };
-      }
+    if (gateEval.blocker) {
+      return { title: gateEval.blocker.title, body: gateEval.blocker.body };
     }
     // Capacity gate: if the user answered days_per_week AND the program declares
     // a schedule_constraints range AND their answer is below the program's min,
@@ -222,7 +237,7 @@ export function IntakeClient({ slug }: Props) {
       }
     }
     return null;
-  }, [answers, intake?.safety_gates, program?.schedule_constraints, program?.goals]);
+  }, [gateEval, answers, program?.schedule_constraints, program?.goals]);
 
   // consent_symptom_data is authored as a required question but rendered as
   // a consent checkbox (see CONSENT_IDS below). Its "answer" lives in
@@ -248,7 +263,12 @@ export function IntakeClient({ slug }: Props) {
     return consentItems.every((c) => (c.required ? consents[c.id] === true : true));
   }, [consentItems, consents]);
 
-  const canProceed = requiredQuestionsAnswered && requiredConsentsGiven && !blocker;
+  // A raised warning holds the intake exactly as a missing required consent
+  // does. The point of the tier is an explicit decision, not a banner the
+  // user scrolls past.
+  const warningsOk = warningsAcknowledged(gateEval.warnings, safetyAcks);
+  const canProceed =
+    requiredQuestionsAnswered && requiredConsentsGiven && !blocker && warningsOk;
 
   const inferred = useMemo(() => {
     if (!program) return null;
@@ -337,7 +357,10 @@ export function IntakeClient({ slug }: Props) {
     states[slug] = {
       ...(states[slug] ?? {}),
       tier: chosenTierId,
-      intake_answers: answers,
+      intake_answers: {
+        ...answers,
+        ...acknowledgementsToPersist(gateEval.warnings, safetyAcks),
+      },
       started_at: new Date().toISOString(),
       baseline_training_maxes: { ...(s.training_maxes ?? {}) },
       ...(Object.keys(baselineCaps).length ? { baseline_capabilities: baselineCaps } : {}),
@@ -817,6 +840,9 @@ export function IntakeClient({ slug }: Props) {
             answers={answers}
             setAnswer={(qid, v) => setAnswers((a) => ({ ...a, [qid]: v }))}
             safetyGates={intake?.safety_gates ?? []}
+            warnings={gateEval.warnings}
+            safetyAcks={safetyAcks}
+            setSafetyAck={(qid, v) => setSafetyAcks((prev) => ({ ...prev, [qid]: v }))}
             showGateBlock={showGateBlockInline}
             blocker={blocker}
           />
@@ -940,6 +966,9 @@ function WizardQuestionScreen({
   safetyGates,
   showGateBlock,
   blocker,
+  warnings,
+  safetyAcks,
+  setSafetyAck,
 }: {
   step: {
     kind: "question";
@@ -953,6 +982,9 @@ function WizardQuestionScreen({
   safetyGates: NonNullable<Program["intake"]>["safety_gates"];
   showGateBlock: boolean;
   blocker: { title: string; body: string } | null;
+  warnings: GateNotice[];
+  safetyAcks: Record<string, boolean>;
+  setSafetyAck: (qid: string, v: boolean) => void;
 }) {
   const q = step.q;
   const pictogram = PICTOGRAM_BY_QID[q.id];
@@ -1221,6 +1253,35 @@ function WizardQuestionScreen({
           </p>
         </div>
       ) : null}
+
+      {/* Warn-severity gates. Amber, not red: this is not a refusal. The
+          checkbox is required to continue — a warning nobody has to answer is
+          a banner, and the whole reason this tier exists is that authors were
+          choosing silence over a block that was too blunt. */}
+      {warnings
+        .filter((w) => w.question_id === q.id)
+        .map((w) => (
+          <div
+            key={w.question_id}
+            className="mt-3 rounded border border-amber/40 bg-amber/10 p-4 space-y-2"
+            role="status"
+          >
+            <p className="font-semibold text-amber flex items-center gap-2">
+              <ShieldAlert size={16} />
+              {w.title}
+            </p>
+            <p className="text-[14px] text-strong">{w.body}</p>
+            <label className="flex items-start gap-3 pt-1 min-h-[44px] cursor-pointer">
+              <input
+                type="checkbox"
+                checked={safetyAcks[w.question_id] === true}
+                onChange={(e) => setSafetyAck(w.question_id, e.target.checked)}
+                className="mt-1 h-5 w-5 shrink-0 accent-amber"
+              />
+              <span className="text-[14px] text-strong">{w.acknowledge_label}</span>
+            </label>
+          </div>
+        ))}
     </section>
   );
 }
