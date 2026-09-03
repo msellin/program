@@ -48,6 +48,16 @@ export type TMFinding = {
  */
 export function estimateOneRM(weightKg: number, reps: number): number | null {
   if (!(weightKg > 0) || !(reps > 0) || reps > 12) return null;
+  // A single IS the one-rep max. Epley's formula gives w × (1 + 1/30) at one
+  // rep, inflating it by 3.3%, and that error runs the wrong way for this
+  // check: it raises the bar a TM has to clear before anything is said.
+  //
+  // Found on real data. The founder's front squat ladder tops at a 115 single
+  // with a failed 120. Epley called that 118.8, which put his 110 kg TM at
+  // 92.6% of "1RM" — inside the band, silent. Against the actual 115 it is
+  // 95.7%, which is the flag. The bug hid the very case the check was written
+  // for.
+  if (reps === 1) return weightKg;
   return weightKg * (1 + reps / 30);
 }
 
@@ -65,12 +75,31 @@ const SIBLINGS: Array<{ a: string; b: string; ratio: number; label: string }> = 
   { a: "back_squat_highbar", b: "front_squat", ratio: 0.85, label: "front squat is typically ~85% of back squat" },
 ];
 
-/** Best e1RM the log can evidence for a lift, and the set that produced it. */
+/**
+ * Best evidence of a one-rep max in the log, and the set that produced it.
+ *
+ * Prefers a MEASURED single over an extrapolated one. Epley is a regression
+ * fitted to multi-rep sets; when someone has actually worked up to a top
+ * single, that number is a measurement and the formula is a guess about it.
+ *
+ * The founder's ladder is the case: 100×3, 110×2, 115×1, then a failed 120.
+ * Epley reads the 110 double as a 117.3 max — above the 115 he demonstrated,
+ * and just under the 120 he could not lift. Reasoning from 117.3 put his
+ * 110 kg training max at 94% and said nothing. Against the 115 he actually
+ * lifted it is 96%, which is the finding.
+ *
+ * A single only counts as a max attempt when it is heavier than every
+ * multi-rep set for that lift — otherwise a 60 kg warm-up single would cap
+ * the estimate below a working double.
+ */
 export function bestEstimatedOneRM(
   logs: Record<string, DayLog>,
   liftId: string,
 ): { e1rm: number; weightKg: number; reps: number; date: string } | null {
-  let best: { e1rm: number; weightKg: number; reps: number; date: string } | null = null;
+  let bestEstimate: { e1rm: number; weightKg: number; reps: number; date: string } | null = null;
+  let topSingle: { weightKg: number; date: string } | null = null;
+  let heaviestMultiRep = 0;
+
   for (const [date, day] of Object.entries(logs ?? {})) {
     for (const [key, entry] of Object.entries(day?.exercises ?? {})) {
       if (key.split(":")[1] !== liftId || !entry) continue;
@@ -78,11 +107,22 @@ export function bestEstimatedOneRM(
         if (s.weight_kg == null || s.reps == null) continue;
         const e = estimateOneRM(s.weight_kg, s.reps);
         if (e == null) continue;
-        if (!best || e > best.e1rm) best = { e1rm: e, weightKg: s.weight_kg, reps: s.reps, date };
+        if (s.reps === 1) {
+          if (!topSingle || s.weight_kg > topSingle.weightKg) topSingle = { weightKg: s.weight_kg, date };
+        } else if (s.weight_kg > heaviestMultiRep) {
+          heaviestMultiRep = s.weight_kg;
+        }
+        if (!bestEstimate || e > bestEstimate.e1rm) {
+          bestEstimate = { e1rm: e, weightKg: s.weight_kg, reps: s.reps, date };
+        }
       }
     }
   }
-  return best;
+
+  if (topSingle && topSingle.weightKg >= heaviestMultiRep) {
+    return { e1rm: topSingle.weightKg, weightKg: topSingle.weightKg, reps: 1, date: topSingle.date };
+  }
+  return bestEstimate;
 }
 
 const round = (n: number) => Math.round(n * 2) / 2;

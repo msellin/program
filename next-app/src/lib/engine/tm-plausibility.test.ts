@@ -27,9 +27,32 @@ describe("estimateOneRM", () => {
     expect(estimateOneRM(0, 5)).toBeNull();
     expect(estimateOneRM(100, 5)).toBeCloseTo(116.7, 1);
   });
+
+  it("treats a single as the max itself, not Epley's inflated version", () => {
+    // Epley returns w × (1 + 1/30) at one rep — 3.3% high. That error runs
+    // the wrong way here: it raises the bar a TM must clear before the check
+    // says anything, and it hid the founder's own front squat.
+    expect(estimateOneRM(115, 1)).toBe(115);
+  });
 });
 
 describe("bestEstimatedOneRM", () => {
+  it("prefers a measured top single over an extrapolated double", () => {
+    // The founder's ladder. Epley reads 110×2 as 117.3 — above the 115 he
+    // lifted and below the 120 he missed. The measurement wins.
+    const s = store({}, [log("2026-09-01", "b:front_squat", [[110, 2], [115, 1]])]);
+    const best = bestEstimatedOneRM(s.logs, "front_squat")!;
+    expect(best.e1rm).toBe(115);
+    expect(best.reps).toBe(1);
+  });
+
+  it("ignores a warm-up single lighter than the working sets", () => {
+    // Otherwise a 60 kg opener would cap the estimate under a 110 double and
+    // the check would go quiet on exactly the lifts it exists for.
+    const s = store({}, [log("2026-09-01", "b:front_squat", [[60, 1], [110, 2]])]);
+    expect(bestEstimatedOneRM(s.logs, "front_squat")!.reps).toBe(2);
+  });
+
   it("takes the best set across the whole log, not the most recent", () => {
     const s = store({}, [
       log("2026-08-20", "b:back_squat_highbar", [[115, 5]]),
@@ -44,7 +67,19 @@ describe("bestEstimatedOneRM", () => {
 });
 
 describe("checkTrainingMaxes", () => {
-  it("flags a TM above what the log can evidence — the front squat case", () => {
+  it("flags the founder's real front squat ladder", () => {
+    // 80×3 90×3 100×3 105×2 110×2 115×1, 120 failed. The single is the max.
+    // TM 110 is 95.7% of it; convention puts a training max near 103.5.
+    const s = store({ front_squat: 110 }, [
+      log("2026-09-01", "b:front_squat", [[100, 3], [110, 2], [115, 1]]),
+    ]);
+    const f = checkTrainingMaxes(s);
+    expect(f).toHaveLength(1);
+    expect(f[0].kind).toBe("above_demonstrated");
+    expect(f[0].suggestedTM).toBe(103.5);
+  });
+
+  it("flags a TM above what a volume day can evidence", () => {
     const s = store({ front_squat: 110 }, [log("2026-09-03", "b:front_squat", [[80, 9]])]);
     const f = checkTrainingMaxes(s);
     expect(f).toHaveLength(1);
