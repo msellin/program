@@ -1,3 +1,26 @@
+> ## ⚠ SUPERSEDED IN PART — read this first (added 2026-09-03)
+>
+> This is a **pre-build planning document from before the SaaS work shipped.**
+> Several of its "locked-in decisions" were changed during implementation and
+> the file was never updated, so it has been quoted as current and been wrong.
+> Two of its four stack choices are false today, which is why the Paddle line
+> should not be treated as a settled evaluation either.
+>
+> | claim in this file | actually |
+> |---|---|
+> | Auth: **Clerk** | **Supabase Auth.** No Clerk anywhere in the repo. |
+> | DB: **Cloudflare KV**, migrate to D1 | **Supabase Postgres `user_states`** since 2026-08-18. `PostgresAdapter` is the only implementation. |
+> | Analytics: **PostHog EU** | **None.** The live privacy page states no analytics tools are active in beta. |
+> | Billing: **Paddle** | Still the intention, still **one line of rationale** ("merchant-of-record, handles EU VAT") and no comparison against Stripe or anyone else. S3 is deferred. |
+> | Email: **Resend** | **True** — shipped, `POST /api/admin/notify`. |
+> | Error tracking: **Sentry** | **True** — shipped, with session replay. |
+> | Free tier: **1 active programme** | **Effectively true**, but enforced by the `MULTI_MAIN_ENABLED` launch flag in `useStore.addSecondaryProgram`, NOT by the account `tier` field, which is inert. |
+> | Pricing €9.99 / €89, 14-day trial | **Unbuilt.** No billing exists. |
+> | **No marketing site for beta** | **False** — terav.fit ships. |
+>
+> Everything below is preserved as the record of what was planned. Do not plan
+> from it without checking the table above.
+
 # SaaS Launch — Context
 
 ## State right now

@@ -62,7 +62,7 @@ export function CutCRechartsInner({ points, showRaw, unit, direction }: CutCRech
         margin={{ top: 8, right: 8, left: -8, bottom: 4 }}
       >
         <CartesianGrid
-          stroke="#2a2e37"
+          stroke="#24272f"
           strokeWidth={1}
           horizontal
           vertical={false}
@@ -119,7 +119,7 @@ export function CutCRechartsInner({ points, showRaw, unit, direction }: CutCRech
           <Scatter
             dataKey="raw"
             fill="#6b717d"
-            stroke="#F0F1F3"
+            stroke="#f4f5f7"
             strokeWidth={1}
             r={3}
             isAnimationActive={false}

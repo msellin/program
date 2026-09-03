@@ -30,7 +30,14 @@ const mono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://app.terav.fit"),
-  title: "Terav — Pick your focus. Sharpen it every session.",
+  title: {
+    // Per-route layouts set their own `title`; this template appends the
+    // product name so a tab reads "Record · Terav" rather than just "Record".
+    // Before 2026-09-03 every screen shared the root title, so tabs, history
+    // entries and the PWA app switcher were indistinguishable.
+    default: "Terav — Pick your focus. Sharpen it every session.",
+    template: "%s · Terav",
+  },
   description:
     "A focused-improvement training tool. Pick one capability — an engine, a skill, a lift, a stubborn joint — and Terav sharpens it against your log. The rest of your week is still yours. Every change cites a study.",
   manifest: "/manifest.json",

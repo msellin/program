@@ -323,6 +323,35 @@ Not tasks — calls to make.
   disclosure, and discarded it. Now persisted onto the programme state with
   its timestamp, plus the profile-level stamp set once on first consent.
   Size: M
+- [x] **GROUP-C closed 2026-09-03, and it was three items not four.**
+  (a) **Per-route titles** — every screen shared the root title, so browser
+  tabs, history entries and the installed PWA's app switcher were
+  indistinguishable. 24 server `layout.tsx` wrappers (the pages are client
+  components and cannot export `metadata`) plus a `"%s · Terav"` template.
+  Verified in the built `out/`, not just the source. `route-titles.test.ts`
+  fails on a new route without one — and found 12 routes I had missed on the
+  first pass.
+  (b) **`hover:` without a touch twin was never a defect.** Tailwind 4 gates
+  every `hover:` utility behind `@media (hover: hover)` by default, and
+  `globals.css` has documented that since Batch 36. The task list carried a
+  stale item across three sessions; ~13h of proposed churn was a
+  misunderstanding, not work.
+  (c) **Chart palette drift** — P2-13 replaced a rogue `#2A2E37` grid stroke
+  with the `--color-line-soft` value in `SymptomLoadChart` and left the same
+  literal in `_CutCRechartsInner` and `BarVisualizer`, so two charts drew
+  their grid a shade off the third and off every non-chart divider. Plus a
+  `#F0F1F3` that is not `--color-strong`. `chart-palette.test.ts` now fails on
+  any painted hex globals.css does not define, ignoring hexes in comments
+  because several of these files document the colour they replaced.
+  (d) Wall-clock rest timer: not attempted, and not carried — it needs a
+  design decision about what the timer does when the app is backgrounded.
+- [x] **DOC-1** — `dev/active/saas-launch/context.md` corrected 2026-09-03. It
+  is a pre-build planning doc that has been quoted as current: Clerk (it is
+  Supabase), Cloudflare KV (it is Postgres), PostHog (there is no analytics,
+  and the privacy page says so), "no marketing site" (terav.fit ships). A
+  header table now states what is false, what is true, and that with two of
+  four stack choices wrong the Paddle line is an intention rather than an
+  evaluation.
 - [ ] **CONTENT-1** — verified content defects from the same panel:
   `engine-builder` promises a "Block 3 (polarised)" that does not ship, in
   user-facing outcome copy; `rowing-2k-test-prep` has no test-day pacing plan

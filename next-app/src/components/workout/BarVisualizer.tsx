@@ -73,7 +73,7 @@ function renderPlates(
           height={h}
           rx={1.5}
           fill={plateColour(p)}
-          stroke="#2A2E37"
+          stroke="#24272f"
           strokeWidth={1.5}
         />,
       );
@@ -96,7 +96,7 @@ function renderPlates(
           height={h}
           rx={1.5}
           fill={plateColour(p)}
-          stroke="#2A2E37"
+          stroke="#24272f"
           strokeWidth={1.5}
         />,
       );
