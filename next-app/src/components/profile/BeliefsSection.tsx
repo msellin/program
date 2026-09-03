@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
-import { ChevronDown } from "lucide-react";
+import { AlertTriangle, ChevronDown } from "lucide-react";
 import { useStore } from "@/lib/useStore";
 import { humanizeExerciseId } from "@/lib/humanize-metrics";
+import { checkTrainingMaxes } from "@/lib/engine/tm-plausibility";
 
 /**
  * Design package turn t2, screen 2b ("what Terav believes about you") —
@@ -30,6 +31,15 @@ export function BeliefsSection() {
   const tmEntries = Object.entries(store.training_maxes ?? {}).filter(
     (entry): entry is [string, number] => typeof entry[1] === "number" && entry[1] > 0,
   );
+
+  // Does each training max agree with what the user has actually lifted?
+  // Nothing checked until 2026-09-03: the founder's front-squat TM sat at
+  // 110 — identical to his back squat, and above the single his log could
+  // evidence — and the way it surfaced was him working to a 115 in a gym.
+  // Surfaced here because this is the one screen where a TM is looked at and
+  // edited. It proposes nothing and changes nothing.
+  const tmFindings = useMemo(() => checkTrainingMaxes(store), [store]);
+  const findingFor = (exId: string) => tmFindings.find((f) => f.liftId === exId);
 
   const activeSlug = store.user_profile?.active_program_id ?? null;
   const tierState = activeSlug ? store.user_profile?.program_states?.[activeSlug] : undefined;
@@ -81,6 +91,14 @@ export function BeliefsSection() {
                   {humanizeExerciseId(exId)}
                 </span>
                 <span className="text-[15px] font-semibold text-strong flex-shrink-0">{kg} kg</span>
+                {findingFor(exId) ? (
+                  <span
+                    aria-label="This training max may not match your log"
+                    className="flex-shrink-0 text-amber"
+                  >
+                    <AlertTriangle size={14} aria-hidden />
+                  </span>
+                ) : null}
                 <ChevronDown
                   size={14}
                   aria-hidden
@@ -90,6 +108,22 @@ export function BeliefsSection() {
               {isOpen ? (
                 <div className="px-3 pb-3 -mt-1">
                   <p className="text-[13.5px] text-ink leading-snug mb-2.5">{tmWhy(exId)}</p>
+                  {(() => {
+                    const f = findingFor(exId);
+                    if (!f) return null;
+                    return (
+                      <div className="mb-2.5 rounded border border-amber/40 bg-amber/10 px-3 py-2">
+                        <p className="text-[13.5px] text-strong leading-snug">{f.message}</p>
+                        {f.suggestedTM != null ? (
+                          <p className="mt-1 text-[12.5px] text-muted">
+                            Convention would put it near{" "}
+                            <span className="font-mono text-ink">{f.suggestedTM} kg</span>. Edit
+                            below if you agree — nothing changes on its own.
+                          </p>
+                        ) : null}
+                      </div>
+                    );
+                  })()}
                   {isEditing ? (
                     <div className="flex items-center gap-2">
                       <button
