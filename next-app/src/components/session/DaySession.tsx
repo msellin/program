@@ -50,6 +50,21 @@ export type RailExercise = {
   // ever selects strength blocks); OffPlanSession's accessory/run rail
   // is where this actually varies.
   isLoadable: boolean;
+  /**
+   * Whole-exercise opt-out — mirrors the block item's `optional: true`
+   * (schemas.ts). Optional work still renders and still logs; it is
+   * excluded from "sets left" and from the Brief's exercise count, and
+   * `nextAfterSet` will not auto-advance into it. Undefined on
+   * OffPlanSession's rail, which has no optional concept.
+   */
+  optional?: boolean;
+  /**
+   * How many of this exercise's TRAILING rows are optional. Set when the
+   * suggestion carries `fsl.optional` — a taper day keeps the top set
+   * required and demotes the 5×5 backoff. Rows [rowCount - optionalRows,
+   * rowCount) are the optional ones.
+   */
+  optionalRows?: number;
 };
 
 export type SessionSheet = "off-plan" | "overflow" | "note" | "jump" | "details" | null;
@@ -402,6 +417,11 @@ function useMemoRail(
           // loaded. Founder hit it on 2026-08-26. Same rule OffPlanSession
           // has always used.
           isLoadable: ["strength", "unilateral"].includes(exercise.category),
+          optional: item.optional === true,
+          // FSL rows sit AFTER the top set (SetView's `prescribed` maps
+          // index 0 → top_set, the rest → fsl), so the optional rows are
+          // exactly the trailing `fsl.sets`.
+          optionalRows: suggestion?.fsl?.optional ? suggestion.fsl.sets : 0,
         });
       }
     }

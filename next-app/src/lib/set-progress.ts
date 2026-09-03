@@ -31,3 +31,33 @@ export function isSetLogged(set: SetLog | undefined | null, isLoadable: boolean)
 export function countLoggedSets(sets: SetLog[], isLoadable: boolean): number {
   return sets.filter((s) => isSetLogged(s, isLoadable)).length;
 }
+
+/**
+ * How many of an exercise's rows count as REQUIRED work (2026-09-03).
+ *
+ * Optional work is real work — it renders, it logs, it counts once you do
+ * it. What it must not do is make a finished session read as unfinished.
+ * Three call sites need that number (the Brief's summary, SetView's "sets
+ * left", `nextAfterSet`), and the set-progress bug above is what happens
+ * when three call sites each open-code the same rule. So: one function.
+ *
+ * - Whole-exercise optional (`item.optional`) → 0 required rows.
+ * - Trailing optional rows (taper FSL) → `rowCount - optionalRows`.
+ */
+export function requiredRowCount(r: {
+  rowCount: number;
+  optional?: boolean;
+  optionalRows?: number;
+}): number {
+  if (r.optional) return 0;
+  return Math.max(0, r.rowCount - (r.optionalRows ?? 0));
+}
+
+/** True when this row index falls in the exercise's optional tail. */
+export function isOptionalRow(
+  r: { rowCount: number; optional?: boolean; optionalRows?: number },
+  rowIndex: number,
+): boolean {
+  if (r.optional) return true;
+  return rowIndex >= requiredRowCount(r);
+}

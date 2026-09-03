@@ -67,7 +67,12 @@ const round = (v: number, step = 0.5) => {
 export type Suggestion = {
   warmups?: { kg: number; reps: string }[];
   top_set: { kg: number; reps: string };
-  fsl?: { kg: number; sets: number; reps: number } | null;
+  /**
+   * First-Set-Last volume. `optional: true` marks these trailing sets as
+   * work the user may skip without the session reading as unfinished —
+   * see TAPER_BLOCKS below. The top set stays required either way.
+   */
+  fsl?: { kg: number; sets: number; reps: number; optional?: boolean } | null;
   state?: "green" | "amber" | "red" | null;
   reasoning: string;
   cap_applied?: boolean;
@@ -84,6 +89,14 @@ export type Suggestion = {
 const VOLUME_BLOCKS = new Set(["block_squat_volume"]);
 // Blocks whose scheme is a moderate variant day (65-75% TM).
 const VARIANT_BLOCKS = new Set(["block_squat_variant"]);
+
+// Taper blocks — same 5/3/1 top set as the heavy day they mirror, but the
+// FSL 5×5 is marked OPTIONAL rather than removed (2026-09-03). Volume is
+// what costs you freshness; intensity is what maintains strength, so a
+// competition week keeps the top set and lets the user decide about the
+// backoff sets at the rack. Removing them outright would take the choice
+// away, which is the opposite of confirm-first.
+const TAPER_BLOCKS = new Set(["block_squat_taper", "block_pull_taper"]);
 
 // Concurrent Strength Maintenance uses fixed-percentage maintenance
 // prescriptions rather than 5/3/1 cycles. Before this map, CSM strength
@@ -157,6 +170,13 @@ export function suggestForExercise(
   const dayAdj = store.day_adjustments?.[todayISO]?.load_multiplier;
   const adjMod = typeof dayAdj === "number" && dayAdj > 0 ? dayAdj : 1.0;
   const combinedMod = stateMod * adjMod;
+
+  // Taper weeks keep the top set and demote the backoff volume. Said out
+  // loud in the reasoning so the user knows it is a deliberate choice
+  // offered to them, not a rendering glitch or a missing prescription.
+  const taperNote = TAPER_BLOCKS.has(blockId)
+    ? " Taper week: the top set is the required work — the 5×5 backoff is optional, take it only if you feel good."
+    : "";
   const adjNote = adjMod !== 1
     ? ` User-confirmed adjustment: ×${adjMod.toFixed(2)} (${store.day_adjustments?.[todayISO]?.reason ?? "manual"}).`
     : "";
@@ -210,10 +230,15 @@ export function suggestForExercise(
       warmups: kg.slice(0, 2).map((w, i) => ({ kg: w, reps: pcts.topReps[i] })),
       top_set: { kg: kg[2], reps: pcts.topReps[2] },
       fsl: pcts.fsl
-        ? { kg: round((tm * pcts.fsl) / 100 * combinedMod), sets: 5, reps: 5 }
+        ? {
+            kg: round((tm * pcts.fsl) / 100 * combinedMod),
+            sets: 5,
+            reps: 5,
+            optional: TAPER_BLOCKS.has(blockId),
+          }
         : null,
       state: todayState,
-      reasoning: `${cycleLabelForPhase(phase.id)}, week ${(week % 4) + 1}. Top set: ${pcts.top[2]}% TM × ${pcts.topReps[2]}.${stateNote}${adjNote}`,
+      reasoning: `${cycleLabelForPhase(phase.id)}, week ${(week % 4) + 1}. Top set: ${pcts.top[2]}% TM × ${pcts.topReps[2]}.${taperNote}${stateNote}${adjNote}`,
     };
   }
 
@@ -226,7 +251,12 @@ export function suggestForExercise(
       warmups: kg.slice(0, 2).map((w, i) => ({ kg: w, reps: pcts.topReps[i] })),
       top_set: { kg: kg[2], reps: pcts.topReps[2] },
       fsl: pcts.fsl
-        ? { kg: round((tm * pcts.fsl) / 100 * combinedMod), sets: 5, reps: 5 }
+        ? {
+            kg: round((tm * pcts.fsl) / 100 * combinedMod),
+            sets: 5,
+            reps: 5,
+            optional: TAPER_BLOCKS.has(blockId),
+          }
         : null,
       state: todayState,
       reasoning: `Peak phase — ${pcts.label}. Top set: ${pcts.top[2]}% TM × ${pcts.topReps[2]}.${stateNote}${adjNote}`,

@@ -5,7 +5,7 @@ import { humanPhaseName, phaseProgress, programDisplayName, humanBlockName } fro
 import { entrySets } from "@/lib/useStore";
 import { ProposalCard } from "@/components/workout/ProposalCard";
 import { CycleStartCard } from "@/components/session/CycleStartCard";
-import { countLoggedSets } from "@/lib/set-progress";
+import { countLoggedSets, requiredRowCount } from "@/lib/set-progress";
 import { OffPlanSheet } from "@/components/session/OffPlanSheet";
 import type { RailExercise, SessionSheet } from "@/components/session/DaySession";
 import type { Block, Phase, Program, Proposal, Store } from "@/lib/schemas";
@@ -59,7 +59,14 @@ export function BriefView({
     const d = Array.isArray(b.duration_min) ? b.duration_min[1] : b.duration_min;
     return sum + d;
   }, 0);
-  const exWord = railExercises.length === 1 ? "exercise" : "exercises";
+  // Count REQUIRED exercises (2026-09-03). "5 exercises" when two of them
+  // are a taper week's optional backoff overstates the session and makes
+  // the day look heavier than it is — the exact thing the taper is for.
+  // Optional work is named separately rather than hidden from the count.
+  const requiredRail = railExercises.filter((r) => requiredRowCount(r) > 0);
+  const optionalCount = railExercises.length - requiredRail.length;
+  const optionalSuffix = optionalCount ? ` · +${optionalCount} optional` : "";
+  const exWord = requiredRail.length === 1 ? "exercise" : "exercises";
   // "0 exercises · about 40 min" for a threshold row is a count of the
   // wrong thing. When a session prescribes in prose rather than sets, the
   // duration IS the summary.
@@ -67,8 +74,8 @@ export function BriefView({
     railExercises.length === 0 && totalMinutes
       ? `About ${totalMinutes} min`
       : totalMinutes
-        ? `${railExercises.length} ${exWord} · about ${totalMinutes} min`
-        : `${railExercises.length} ${exWord}`;
+        ? `${requiredRail.length} ${exWord} · about ${totalMinutes} min${optionalSuffix}`
+        : `${requiredRail.length} ${exWord}${optionalSuffix}`;
 
   const progressLabel = phase ? humanPhaseName(phase.name) : null;
   const progressDetail = phase ? phaseProgress(phase, activeDate) : null;
@@ -270,12 +277,20 @@ export function BriefView({
               // the honest signal for this row's tag.
               const isDone = loggedCount >= r.rowCount;
               const isMain = r === hero;
+              // A fully-optional exercise is offered, not owed. Dashed
+              // border and a tag instead of removal, so a good day can
+              // still opt in — see dev/active/optional-items/plan.md.
+              const isOptional = requiredRowCount(r) === 0;
+              const hasOptionalTail = !isOptional && (r.optionalRows ?? 0) > 0;
               return (
                 <button
                   key={r.key}
                   type="button"
                   onClick={() => onSelectExercise(r.key)}
-                  className="w-full flex items-center justify-between gap-3 rounded border border-line-soft bg-surface px-3.5 py-[13px] text-left"
+                  className={
+                    "w-full flex items-center justify-between gap-3 rounded bg-surface px-3.5 py-[13px] text-left " +
+                    (isOptional ? "border border-dashed border-line-soft" : "border border-line-soft")
+                  }
                 >
                   <span className="min-w-0">
                     <span className="block text-[15px] font-semibold text-strong tracking-[-.01em] mb-0.5">
@@ -283,6 +298,12 @@ export function BriefView({
                     </span>
                     <span className="block text-[13px] text-ink">
                       {railScheme(r)}
+                      {hasOptionalTail ? (
+                        <span className="text-muted">
+                          {" "}
+                          · last {r.optionalRows} optional
+                        </span>
+                      ) : null}
                     </span>
                     {/* A7 (2026-08-26): notes were WRITE-ONLY. Two buried
                         entry points, and no screen ever showed one back —
@@ -304,7 +325,15 @@ export function BriefView({
                       (isDone ? "text-muted" : isMain ? "text-bronze" : "text-muted")
                     }
                   >
-                    {isDone ? "Done" : loggedCount > 0 ? "Held" : isMain ? "Main" : ""}
+                    {isDone
+                      ? "Done"
+                      : loggedCount > 0
+                        ? "Held"
+                        : isOptional
+                          ? "Optional"
+                          : isMain
+                            ? "Main"
+                            : ""}
                   </span>
                 </button>
               );

@@ -383,22 +383,7 @@
         "week_2_aug_17_23": "Same as week 1 (repeated). Extra week of moderate load before the eval — protective when there are any hip / groin flags.",
         "week_3_aug_24_29_EVAL": "Tue: 5RM high-bar back squat (spotter). Wed: light recovery 3×5 @ 60%. Fri: 5RM block pull. Sat: light recovery 3×5 @ 60%. Mon + Thu = rest. Sun = home block."
       },
-      "weekly_overrides": [
-        {
-          "starts": "2026-08-24",
-          "ends": "2026-08-29",
-          "note": "Eval week. Tue + Fri are the 5RM anchor sessions that set real TMs for Phase 2. Wed = light recovery between the two evals. Sat = race day (rest). Mon + Thu = rest before evals.",
-          "days": {
-            "Mon": "",
-            "Tue": "block_eval_squat",
-            "Wed": "block_reintro_light",
-            "Thu": "",
-            "Fri": "block_eval_pull",
-            "Sat": "",
-            "Sun": "block_a_home"
-          }
-        }
-      ]
+      "weekly_overrides_removed_2026_09_03": "Phase 1 authored a weekly_overrides entry for the 2026-08-24 eval week. It was never read: the hip program has its own branch in schedule.ts:strengthBlockIdsForDate that hardcodes the eval days, and the generic weekly_overrides path was unreachable for this slug. Making overrides live for the hip program (2026-09-03) revealed that the dead entry CONTRADICTED the code that actually ran: the JSON assigned Tue=5RM squat / Fri=5RM block pull (matching week_by_week above), while shipped code schedules Tue=pull / Fri=squat. Removed rather than activated — the window is in the past, and silently re-ordering a historical eval week is not a side effect a competition-taper change should have. The disagreement is real and unresolved: see dev/active/optional-items/context.md."
     },
     {
       "id": "phase_2_cycle_1",
@@ -412,7 +397,9 @@
         "block_pull_heavy",
         "block_squat_variant",
         "block_squat_volume",
-        "block_daily_skill"
+        "block_daily_skill",
+        "block_squat_taper",
+        "block_pull_taper"
       ],
       "template": "5/3/1 with First Set Last 5×5",
       "template_note": "Main-lift top sets ramp 65/75/85 → 70/80/90 → 75/85/95% TM. Every top set is an AMRAP. FSL 5×5 = 5 sets of 5 at the first working weight of the day.",
@@ -422,7 +409,23 @@
         "week_3_sep_13_19": "5/3/1 top set. 75/85/95% TM. AMRAP at 95% is the first real strength-jump moment.",
         "week_4_sep_20_27_DELOAD": "40/50/60% TM 5 reps each. Recovery week. Cycle end review."
       },
-      "runs_cycle_end_eval": true
+      "runs_cycle_end_eval": true,
+      "weekly_overrides": [
+        {
+          "starts": "2026-09-06",
+          "ends": "2026-09-12",
+          "note": "Competition week. Local box comp Sat 2026-09-12 — two cardio/stamina WODs (1 km run / 500 m row / 25 DU / 500 m row / 1 km run, and 5 rounds of 7 pull-ups / 10 DB snatch / 13 box jumps). Volume cut, intensity kept: taper blocks Mon+Wed hold the 5/3/1 top set and demote the FSL backoff to optional. Thu/Fri are home-block only — competition prep cardio is logged off-plan. Sat is the comp itself. Week 3 (Sep 13-19) resumes the full template with the 95% AMRAP, arrived at fresher.",
+          "days": {
+            "Sun": "block_a_home",
+            "Mon": "block_squat_taper",
+            "Tue": "block_a_home",
+            "Wed": "block_pull_taper",
+            "Thu": "block_a_home",
+            "Fri": "block_a_home",
+            "Sat": ""
+          }
+        }
+      ]
     },
     {
       "id": "phase_3_cycle_2",
@@ -1103,6 +1106,76 @@
           "order": "A2",
           "role": "peak",
           "scheme": "week -3: 5RM at 87.5%; week -2: 3RM at 92%; week -1: 1RM opener at 96%"
+        }
+      ]
+    },
+    {
+      "id": "block_squat_taper",
+      "name": "Mon — squat, taper week",
+      "category": "strength",
+      "location": "crossfit_box",
+      "frequency_per_week": 1,
+      "duration_min": 30,
+      "note": "Competition-week mirror of block_squat_heavy. Same 5/3/1 top set at full intensity — intensity is what maintains strength. The FSL 5×5 backoff is marked OPTIONAL by suggest.ts (TAPER_BLOCKS), and the accessories are optional items: volume is what costs freshness, so it is offered rather than prescribed. Take the backoff only if the top set moved fast and the legs feel fresh.",
+      "items": [
+        {
+          "exercise_id": "back_squat_highbar",
+          "order": "A1",
+          "role": "main",
+          "scheme": "5/3/1 top set (comp week: 70/80/90% TM). FSL 5×5 backoff optional."
+        },
+        {
+          "exercise_id": "dead_bug",
+          "order": "B1",
+          "role": "trunk"
+        },
+        {
+          "exercise_id": "bulgarian_split_squat_db",
+          "order": "B2",
+          "role": "unilateral",
+          "scheme": "2×8 per side, light",
+          "optional": true
+        },
+        {
+          "exercise_id": "pallof_press",
+          "order": "B3",
+          "role": "trunk_anti_rotation",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "id": "block_pull_taper",
+      "name": "Wed — pull, taper week",
+      "category": "strength",
+      "location": "crossfit_box",
+      "frequency_per_week": 1,
+      "duration_min": 30,
+      "note": "Competition-week mirror of block_pull_heavy. Top set at full intensity; FSL 5×5 optional via TAPER_BLOCKS; hip thrust and single-leg RDL optional. Posterior-chain volume three days before a competition with 2 km of running in it is the first thing to go.",
+      "items": [
+        {
+          "exercise_id": "block_pull_midshin",
+          "order": "A1",
+          "role": "main",
+          "scheme": "5/3/1 top set (comp week: 70/80/90% TM). FSL 5×5 backoff optional."
+        },
+        {
+          "exercise_id": "hollow_hold",
+          "order": "B1",
+          "role": "trunk"
+        },
+        {
+          "exercise_id": "hip_thrust_barbell",
+          "order": "B2",
+          "role": "glute_max",
+          "scheme": "2×8, light",
+          "optional": true
+        },
+        {
+          "exercise_id": "single_leg_rdl",
+          "order": "B3",
+          "role": "unilateral",
+          "optional": true
         }
       ]
     }

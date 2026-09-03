@@ -123,3 +123,42 @@ describe("intake-driven deferrals are shown, not applied silently", () => {
     expect(screen.queryByText(/adjusted for you/i)).toBeNull();
   });
 });
+
+describe("optional work reads as offered, not owed (2026-09-03)", () => {
+  const squat = () => rail();
+  const optionalAccessory = () =>
+    rail({
+      key: "b:bulgarian_split_squat_db",
+      exercise: exercise("bulgarian_split_squat_db", "Bulgarian split squat"),
+      item: { exercise_id: "bulgarian_split_squat_db", optional: true },
+      rowCount: 3,
+      suggestion: null,
+      optional: true,
+    });
+
+  it("tags a wholly-optional exercise", () => {
+    renderBrief({ rails: [squat(), optionalAccessory()] });
+    expect(screen.getByText("Optional")).toBeTruthy();
+  });
+
+  it("still RENDERS it — soft hide, not removal", () => {
+    renderBrief({ rails: [squat(), optionalAccessory()] });
+    expect(screen.getByText("Bulgarian split squat")).toBeTruthy();
+  });
+
+  it("counts only required exercises, and names the optional ones", () => {
+    renderBrief({ rails: [squat(), optionalAccessory()] });
+    expect(screen.getByText(/1 exercise · \+1 optional/)).toBeTruthy();
+  });
+
+  it("says how many trailing sets of a taper lift are optional", () => {
+    renderBrief({ rails: [rail({ optionalRows: 5 })] });
+    expect(screen.getByText(/last 5 optional/)).toBeTruthy();
+  });
+
+  it("a normal session is unchanged — no optional language anywhere", () => {
+    renderBrief({ rails: [squat()] });
+    expect(screen.queryByText("Optional")).toBeNull();
+    expect(screen.queryByText(/optional/)).toBeNull();
+  });
+});

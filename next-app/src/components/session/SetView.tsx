@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { countLoggedSets, isSetLogged } from "@/lib/set-progress";
+import { countLoggedSets, isSetLogged, requiredRowCount, isOptionalRow } from "@/lib/set-progress";
 import { announce } from "@/lib/announce";
 import { playTimerComplete } from "@/lib/sound";
 import { useStore, useDayExercise, entrySets } from "@/lib/useStore";
@@ -248,10 +248,14 @@ export function SetView({
     active.isLoadable && weight > 0 && reps > 0 && isSetPR(store, active.exercise.id, weight, reps, date);
   const plates = active.isLoadable ? platesLabel(weight) : null;
 
+  // "Sets left" means REQUIRED sets left (2026-09-03). Optional work — a
+  // taper week's FSL backoff, an optional accessory — must not make a
+  // finished session read as unfinished, or the counter stops meaning
+  // anything and the user learns to ignore it.
   const totalRemaining = railExercises.reduce((n, r) => {
     const rEntry = store.logs[date]?.exercises[r.key] ?? null;
     const logged = countLoggedSets(entrySets(rEntry), r.isLoadable);
-    return n + Math.max(0, r.rowCount - logged);
+    return n + Math.max(0, requiredRowCount(r) - logged);
   }, 0);
 
   const confirm = (finalReps: number) => {
@@ -353,9 +357,10 @@ export function SetView({
         <div className="flex items-baseline justify-between gap-3 mt-2.5 px-1.5">
           <span className="min-w-0 truncate font-mono text-[10px] uppercase tracking-[.14em] text-ink">
             {active.exercise.name} · set {activeSetIndex + 1} of {active.rowCount}
+            {isOptionalRow(active, activeSetIndex) ? " · optional" : ""}
           </span>
           <span className="flex-shrink-0 font-mono text-[10px] uppercase tracking-[.14em] text-ink">
-            {totalRemaining} sets left
+            {totalRemaining} {totalRemaining === 1 ? "set" : "sets"} left
           </span>
         </div>
         {/* Set pips (2026-08-24). The set counter above used to be the
@@ -370,6 +375,10 @@ export function SetView({
               const done = loggedAt(i);
               const isCurrent = i === activeSetIndex;
               const logged = sets[i];
+              // Optional rows read as offered, not owed: dashed edge, and
+              // the screen reader is told so rather than left to infer it
+              // from a border style it cannot see.
+              const optionalRow = isOptionalRow(active, i);
               return (
                 <button
                   key={i}
@@ -383,10 +392,11 @@ export function SetView({
                         : active.isLoadable
                           ? `Set ${i + 1}, logged ${logged.weight_kg} kilos by ${logged.reps} reps. Edit.`
                           : `Set ${i + 1}, logged ${logged.reps} reps. Edit.`
-                      : `Set ${i + 1}, not logged yet`
+                      : `Set ${i + 1}${optionalRow ? ", optional" : ""}, not logged yet`
                   }
                   className={
-                    "flex-1 min-w-0 h-[34px] rounded-[7px] border text-center " +
+                    "flex-1 min-w-0 h-[34px] rounded-[7px] text-center " +
+                    (optionalRow && !done && !isCurrent ? "border border-dashed " : "border ") +
                     (isCurrent
                       ? "border-bronze bg-[rgba(200,150,102,.14)]"
                       : done

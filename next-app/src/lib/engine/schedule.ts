@@ -228,6 +228,47 @@ type LayoutEntry = { day?: string; session?: string };
 type WeekObject = { week?: LayoutEntry[] } & Record<string, unknown>;
 
 /**
+ * Per-week schedule overrides — a phase can declare `weekly_overrides` for
+ * specific date ranges (eval week: Tue 5RM squat + Fri 5RM pull; competition
+ * week: taper blocks Mon+Wed, rest Sat). Overrides supersede the default
+ * template for days present in the `days` map; unnamed days fall through.
+ * Empty string = explicit rest.
+ *
+ * Returns `null` when no override governs this date, which is NOT the same
+ * as `[]` (an override that says "rest today"). Callers must distinguish.
+ *
+ * Extracted 2026-09-03. This lived inline in `blockIdsFromWeeklyTemplate`,
+ * which `anterior-hip-rebuild` never reaches — the hip program has its own
+ * branch in `strengthBlockIdsForDate`. So every `weekly_overrides` entry
+ * authored on the hip program was dead data: phase 1's eval week appeared to
+ * work only because `strengthBlockIdsForDate` separately hardcodes Tue/Fri
+ * eval days. Same failure shape as `daily_log_schema` and
+ * `progression_rules.states[]` in CLAUDE.md — authored in good faith, read by
+ * nothing. One implementation now, reached by both paths.
+ */
+function weeklyOverrideIdsFor(
+  program: Program,
+  phase: Phase | undefined,
+  dateISO: string,
+): string[] | null {
+  if (!phase) return null;
+  const overrides = (phase as unknown as {
+    weekly_overrides?: Array<{
+      starts: string;
+      ends: string;
+      days: Partial<Record<(typeof DAY_SHORT_NAMES)[number], string>>;
+    }>;
+  }).weekly_overrides;
+  if (!overrides?.length) return null;
+  const match = overrides.find((o) => dateISO >= o.starts && dateISO <= o.ends);
+  if (!match) return null;
+  const dow = new Date(dateISO + "T12:00:00").getDay();
+  const session = match.days[DAY_SHORT_NAMES[dow]];
+  if (session === undefined) return null;
+  return extractBlockIds(session, program);
+}
+
+/**
  * Generic path: extract block IDs referenced for a given DOW from a
  * program's weekly_template. Returns [] if the template doesn't cover
  * that day, which the caller renders as a rest day.
@@ -267,31 +308,9 @@ function blockIdsFromWeeklyTemplate(
     }
   }
 
-  // Per-week overrides — a phase can declare `weekly_overrides` for specific
-  // date ranges (e.g. eval week: Tue 5RM squat + Fri 5RM pull; taper week:
-  // light Mon+Wed + rest Thu/Fri). Overrides supersede the default template
-  // for days present in the override's `days` map; unnamed days fall through
-  // to the default. Empty string = explicit rest (no session).
-  if (phase) {
-    const overrides = (phase as unknown as {
-      weekly_overrides?: Array<{
-        starts: string;
-        ends: string;
-        days: Partial<Record<(typeof DAY_SHORT_NAMES)[number], string>>;
-      }>;
-    }).weekly_overrides;
-    if (overrides?.length) {
-      const match = overrides.find(
-        (o) => dateISO >= o.starts && dateISO <= o.ends,
-      );
-      if (match) {
-        const session = match.days[dayShort];
-        if (session !== undefined) {
-          return extractBlockIds(session, program);
-        }
-      }
-    }
-  }
+  // Per-week overrides. See `weeklyOverrideIdsFor`.
+  const overridden = weeklyOverrideIdsFor(program, phase, dateISO);
+  if (overridden) return overridden;
 
   // Shape A: weekly_template.week[] — one layout, every week. Push-tier users
   // get `push_tier_override` when present (Rowing 2K's Push adds a Sunday Z2).
@@ -424,8 +443,13 @@ export function strengthBlockIdsForDate(
     return blockIdsFromWeeklyTemplate(program, phase, dateISO, profile);
   }
 
-  // Hip program: original behavior.
+  // Hip program: original behavior — but overrides first. Without this the
+  // program's own `weekly_overrides` are silently ignored (see
+  // `weeklyOverrideIdsFor`), which is how a comp-week taper authored in JSON
+  // could render a full heavy day and nothing would report an error.
   if (!phase) return [];
+  const hipOverride = weeklyOverrideIdsFor(program, phase, dateISO);
+  if (hipOverride) return hipOverride;
 
   const dow = new Date(dateISO + "T12:00:00").getDay();
   const wt = program.weekly_template as

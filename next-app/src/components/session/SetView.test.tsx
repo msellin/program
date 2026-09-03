@@ -2,7 +2,8 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, cleanup, fireEvent, act } from "@testing-library/react";
 import { SetView } from "./SetView";
 import type { RailExercise } from "./DaySession";
-import type { Exercise } from "@/lib/schemas";
+import type { Exercise, Store } from "@/lib/schemas";
+import { useStore } from "@/lib/useStore";
 
 /**
  * The first component tests in this codebase.
@@ -172,5 +173,51 @@ describe("per-side hold timer (BUG-30)", () => {
     } finally {
       vi.useRealTimers();
     }
+  });
+});
+
+// The counter renders as several text nodes ("6", " sets left"), so match on
+// the element's normalised text rather than an exact-string query.
+function setsLeftText(): string {
+  const el = screen.getByText((_content, node) => {
+    const t = node?.textContent?.replace(/\s+/g, " ").trim() ?? "";
+    return /^\d+ sets? left$/.test(t) && !node?.querySelector("*");
+  });
+  return el.textContent!.replace(/\s+/g, " ").trim();
+}
+
+describe("\"sets left\" counts required work only (2026-09-03)", () => {
+  // Earlier tests in this file log sets against the same rail key and date,
+  // and the zustand store is module state that outlives `cleanup()`. Reset
+  // it so these assert absolute counts rather than whatever ran before.
+  beforeEach(() => {
+    useStore.getState().replaceStore({ version: 2, logs: {}, training_maxes: {} } as Store);
+  });
+
+  it("an ordinary heavy day counts every set", () => {
+    renderSet();
+    expect(setsLeftText()).toBe("6 sets left");
+  });
+
+  it("a taper day counts the top set, not the optional backoff", () => {
+    // rowCount 6 = top set + 5 FSL. On a taper day the five are optional,
+    // so one set stands between the user and a finished session.
+    renderSet({ optionalRows: 5 });
+    expect(setsLeftText()).toBe("1 set left");
+  });
+
+  it("the optional rows are still THERE — reachable, loggable, six pips", () => {
+    renderSet({ optionalRows: 5 });
+    expect(screen.getByRole("button", { name: /Set 6, optional, not logged yet/i })).toBeTruthy();
+  });
+
+  it("labels the current row optional when you opt into it", () => {
+    renderSet({ optionalRows: 5 }, 3);
+    expect(screen.getByText(/set 4 of 6 · optional/i)).toBeTruthy();
+  });
+
+  it("does not label the required top set optional", () => {
+    renderSet({ optionalRows: 5 }, 0);
+    expect(screen.queryByText(/· optional/i)).toBeNull();
   });
 });
