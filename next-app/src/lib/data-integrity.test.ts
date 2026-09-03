@@ -1173,3 +1173,117 @@ describe("every program's load axis can actually draw", () => {
     expect(offenders).toEqual([]);
   });
 });
+
+describe("intake screening reaches the answers it collects", () => {
+  /**
+   * Found 2026-09-03 by the simulated shoulder reviewer (SR-1) and verified
+   * against the shipped JSON. Two distinct gaps, both systemic:
+   *
+   * 1. A question offers a risk-valued option that no safety gate reads.
+   *    `overhead-mobility` asks "does anything hurt in the last 30 degrees of
+   *    overhead reach?" and has no gate on it at all — someone answering yes
+   *    is describing painful end-range flexion and is enrolled in a programme
+   *    whose entire content is end-range flexion. `rotator_cuff_dx` offers
+   *    "unsure", the honest answer of someone with pain and no diagnosis, and
+   *    only "yes" blocks. Five other programmes let `hypertension_unmanaged:
+   *    "unsure"` through the same way.
+   *
+   * 2. `evidence_base.contraindications` names more conditions than the gates
+   *    can detect. The authors already decided those people should not be
+   *    here; nothing asks. first-strict-pullup lists five and gates one.
+   *
+   * What to do about each gap is a clinical decision and the founder's — an
+   * "unsure" might warrant a block, a warning, or nothing depending on the
+   * question. What is NOT a decision is whether the set may grow silently.
+   * The baseline below is every gap that existed when this test was written,
+   * each one visible; anything new fails. Same contract as KNOWN_CUELESS.
+   *
+   * Do not add to these lists to make a failing build pass. A new entry means
+   * a new way for someone to answer honestly and be enrolled anyway.
+   */
+  const RISK_VALUES = new Set(["yes", "unsure"]);
+
+  /** Ungated risk options as of 2026-09-03, awaiting a founder decision. */
+  const KNOWN_UNGATED = [
+    "concurrent-strength-maintenance: hypertension_unmanaged=unsure",
+    "engine-builder: hypertension_unmanaged=unsure",
+    "engine-builder-block-2: hypertension_unmanaged=unsure",
+    "handstand-walk: osteoporosis_dx=unsure",
+    "handstand-walk: hypertension_uncontrolled=unsure",
+    "handstand-walk: wrist_pain_12mo=<no gate>",
+    "overhead-mobility: rotator_cuff_dx=unsure",
+    "overhead-mobility: shoulder_pain_flexion=<no gate>",
+    "rowing-2k-test-prep: hypertension_unmanaged=unsure",
+  ];
+
+  /** Programmes whose documented contraindications outnumber their gates. */
+  const KNOWN_UNDER_GATED: Record<string, { contraindications: number; gates: number }> = {
+    "concurrent-strength-maintenance": { contraindications: 5, gates: 3 },
+    "engine-builder-block-2": { contraindications: 6, gates: 4 },
+    "first-strict-pullup": { contraindications: 5, gates: 1 },
+    "handstand-walk": { contraindications: 7, gates: 3 },
+    "muscle-up": { contraindications: 6, gates: 3 },
+    "overhead-mobility": { contraindications: 5, gates: 3 },
+    "rowing-2k-test-prep": { contraindications: 5, gates: 4 },
+  };
+
+  type Q = { id?: string; options?: Array<{ value?: string }> };
+  type Gate = { question_id?: string; unsafe_values?: string[] };
+
+  function ungatedFor(id: string, program: Program): string[] {
+    const intake = (program as unknown as {
+      intake?: { questions?: Q[]; safety_gates?: Gate[] };
+    }).intake;
+    if (!intake) return [];
+    const gates = intake.safety_gates ?? [];
+    const out: string[] = [];
+    for (const q of intake.questions ?? []) {
+      if (!q.id) continue;
+      const values = new Set(
+        (q.options ?? []).map((o) => o?.value).filter((v): v is string => !!v),
+      );
+      const risky = [...values].filter((v) => RISK_VALUES.has(v)).sort();
+      if (risky.length === 0) continue;
+      const gate = gates.find((g) => g.question_id === q.id);
+      if (!gate) {
+        out.push(`${id}: ${q.id}=<no gate>`);
+        continue;
+      }
+      const covered = new Set(gate.unsafe_values ?? []);
+      for (const v of risky) if (!covered.has(v)) out.push(`${id}: ${q.id}=${v}`);
+    }
+    return out;
+  }
+
+  it("no NEW question collects a risk answer that nothing acts on", () => {
+    const found = programs.flatMap(({ id, program }) => ungatedFor(id, program));
+    const unexpected = found.filter((f) => !KNOWN_UNGATED.includes(f));
+    expect(unexpected).toEqual([]);
+  });
+
+  it("the known-ungated list has no stale entries", () => {
+    // A gap that was fixed must leave this list, or the list stops describing
+    // the app and starts being decoration — the failure mode this whole suite
+    // exists to catch.
+    const found = new Set(programs.flatMap(({ id, program }) => ungatedFor(id, program)));
+    const stale = KNOWN_UNGATED.filter((k) => !found.has(k));
+    expect(stale).toEqual([]);
+  });
+
+  it("no NEW programme documents a contraindication it cannot detect", () => {
+    const offenders: string[] = [];
+    for (const { id, program } of programs) {
+      const contra =
+        ((program as unknown as { evidence_base?: { contraindications?: string[] } })
+          .evidence_base?.contraindications ?? []).length;
+      const gates =
+        ((program as unknown as { intake?: { safety_gates?: Gate[] } }).intake
+          ?.safety_gates ?? []).length;
+      if (contra <= gates) continue;
+      const known = KNOWN_UNDER_GATED[id];
+      if (known && known.contraindications === contra && known.gates === gates) continue;
+      offenders.push(`${id}: ${contra} contraindications, ${gates} gates`);
+    }
+    expect(offenders).toEqual([]);
+  });
+});

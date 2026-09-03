@@ -260,6 +260,21 @@ From roadmap sync + product-concerns-2026-08-17 + design-lead brief `2026-08-19-
 
 Not tasks — calls to make.
 
+- [ ] **SCREEN-1** — **Seven of eight programmes collect a risk answer that
+  nothing acts on.** Found 2026-09-03 by simulated reviewer SR-1 on
+  overhead-mobility, verified against shipped JSON, and it generalises.
+  `shoulder_pain_flexion` ("does anything hurt in the last 30 degrees of
+  overhead reach?") is required, answerable "yes", and has **no safety gate** —
+  that user is enrolled in an end-range-flexion programme. `rotator_cuff_dx`
+  offers "unsure" and only "yes" blocks. Five programmes pass
+  `hypertension_unmanaged: "unsure"`; handstand-walk has an ungated
+  `wrist_pain_12mo`. Contraindications outnumber gates almost everywhere —
+  first-strict-pullup documents five and gates one, including two
+  (adhesive capsulitis, AC-joint irritation) with no question able to detect
+  them. **Guard shipped**, baselining every existing gap so new ones fail and
+  fixed ones must be delisted; the baseline is visibility, not approval.
+  **What each "unsure" should DO is a clinical decision and the founder's.**
+  See `dev/audits/programs/2026-09-03-SR1-overhead-mobility.md`. Size: M
 - [ ] **S3** SaaS Phase 3 (billing/Paddle) is 0% done — gates F6 paid-gating, F4 monetization, F2 Phase C, F3 turn-on. Real critical-path item for anything labeled "Paid." **Decision:** when does this become top-of-stack? Source: `2026-08-19-open-task-list.md` (F3), `product-concerns-2026-08-17/roadmap.md`.
 - [x] **CHART-1** — **Seven of nine programs drew a symptom line against an
   empty load line**, shipped 2026-09-03. `SymptomLoadChart` renders on
