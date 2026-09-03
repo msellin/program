@@ -1,4 +1,4 @@
-# Outreach — draft
+# Outreach — drafts
 
 Short, specific, and honest about what it is. Adapt per person; do not send the
 same paragraph to four people.
@@ -33,6 +33,53 @@ published too.
 
 If it's not your area, no reply needed. If you know someone better placed, I'd
 take the introduction.
+
+Margus
+sellinmargus@gmail.com
+
+---
+
+## Variant B — mobility packet, to a clinician you already see
+
+**Send this one first.** It is the shortest packet (19 papers, ~40 minutes) and
+the only one where you are not writing to a stranger. Do NOT reuse Variant A's
+numbers here — they describe the gymnastics packet.
+
+**Recipient check before sending.** The packet asks for "a physiotherapist
+working in shoulder rehabilitation or overhead sport." Your physiatrist treats
+the hip; rehabilitation medicine plausibly covers a shoulder-mobility
+programme, but that is your call to make, not an assumption to send on. If it
+is outside their scope the last line invites a hand-off, which is the point:
+the physiotherapy referral has been open since 2021 and this is a low-stakes
+reason to reopen it.
+
+**Subject:** A shoulder-mobility programme I built — would you check 19 papers? ~40 min
+
+Hi [name],
+
+Outside of the hip work, I've built a training app. Each programme targets one
+capability and every claim it makes cites a paper. One of them is a 10-week
+overhead shoulder-mobility arc — passive range, then active, then loaded.
+
+The citations have been checked, but only by me. The app says so in as many
+words: it tells users no outside clinician has signed off anything. I would
+like to stop having to say that, and this is the shortest programme to start
+with.
+
+Would you read it? About 40 minutes. It is one self-contained document — the
+progression, the entry tiers, the screening questions, and 19 papers each
+printed next to the specific claim I have attached to it. Three questions:
+
+1. Does each paper support the claim I have hung on it?
+2. Is anything prescribed here you would not prescribe?
+3. Is anything missing from the screening — who should this refuse to take?
+
+**I am not asking you to endorse it**, and I will not describe it that way. The
+app would record what you checked, on what date, and what you flagged —
+including anything I disagree with and do not change. That gets published too.
+
+If shoulders are not your area, no reply needed — though if you can point me at
+a physio who does overhead work, I would take the introduction.
 
 Margus
 sellinmargus@gmail.com

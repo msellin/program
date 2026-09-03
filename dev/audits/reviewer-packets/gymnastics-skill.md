@@ -1,8 +1,10 @@
 # Reviewer packet — Gymnastics & upper-body skill
 
-**Generated 2026-09-02 from the shipping program data.** Regenerate with
+**Generated 2026-09-03 from the shipping program data.** Regenerate with
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
+
+<!-- source-fingerprint: 4ad006b11ccbc26a -->
 
 ## What we are asking
 
@@ -50,7 +52,9 @@ is published too, not quietly dropped.
 
 **Goal the program sells:** Strict pull-up max reps — target 1 reps, stretch 5.
 
-**In its own words:** REFERENCED (2026-09-01) — shipped to the public catalog. Multi-dimensional skill program on the shared pull drill library. Tier A (no hang) → Tier D (first strict pull-up + adding volume). Reuses grip-strength, scap-control and row-strength sub-capabilities. NO ENGINE CODE required — runs on the same multi_dimensional generator as Handstand Walk. Dates in phases[] are template anchors; the generat
+**What it tells users it does:** Multi-tier skill program on the shared pull drill library. Grip → scap → negative → band → unassisted, then volume. Personalised sessions target your weakest sub-capability first.
+
+**What it promises by the end:** Beginners: 25-45 second dead hang, clean scap pulls, first ring rows. Assisted-only lifters: first strict rep from a 10-second negative. First-repper: 3-5 unbroken. Volume tier: 8-10 unbroken with wide-grip variety unlocked.
 
 ### Entry tiers
 
@@ -94,7 +98,9 @@ is published too, not quietly dropped.
 
 **Goal the program sells:** Strict ring muscle-up (reps) — target 1 reps, stretch 3.
 
-**In its own words:** REFERENCED (2026-09-01) — shipped to the public catalog. Multi-dimensional skill program on the pull-up + handstand-adjacent drill libraries. Tier A (prep) → Tier C (first strict ring muscle-up). Not yet REVIEWED: no domain-specialist audit, so `reviewed_by` / `review_evidence[]` are deliberately absent.
+**What it tells users it does:** Multi-tier strict ring muscle-up program. False-grip base, transition mechanics, ring dip strength. Not for kipping muscle-ups — different skill, different program.
+
+**What it promises by the end:** Prep tier: 3-5 strict ring dips, 15s false-grip hang. Transition tier: seated-band mastered, first low-ring muscle-up, first strict attempt week 8-10. First Rep tier: 2-3 strict ring muscle-ups unbroken with weighted-preview singles.
 
 ### Entry tiers
 
@@ -135,7 +141,9 @@ is published too, not quietly dropped.
 
 **Goal the program sells:** Handstand composite (Block 1) — target 1 z-score composite of hold + walk + wrist tolerance, stretch 1.5.
 
-**In its own words:** Block 1 of a multi-block handstand-walk arc. Tier A (never handstanded) through Tier D (walks 10m+, wants turns and obstacles). Multi-dimensional generation strategy: per-capability drill selection each session rather than a fixed weekly template. Dates in phases[] are template anchors from Mon 2026-01-05; the generator remaps to the user's real start date on activation.
+**What it tells users it does:** Multi-tiered handstand walk program from wall-supported beginner to advanced turns and obstacles. Personalised sessions target your specific weak capabilities.
+
+**What it promises by the end:** Block 1 of a multi-block arc. Beginners: consistent wall handstand + brief freestand attempts. Wall-holders: first freestand hold + first walk step. Freestanders: 3-5 continuous walk steps. Advanced: first pirouette or obstacle traverse.
 
 ### Entry tiers
 
@@ -323,9 +331,9 @@ is published too, not quietly dropped.
 - *handstand-walk says it supports:* Schema theory — variability builds recall + recognition schemas. Underpins the variability-of-practice at Tier D (line, markers, precision lane).
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
-**sci_reports_2026_handstand_shoulder** — Handstand walking biomechanics and shoulder pain association · Sci Reports handstand-walk shoulder pain team · 2026
+**sci_reports_2026_handstand_shoulder** — Exploring handstand walking biomechanics and shoulder pain · Angioi M, Hinds N, Twycross-Lewis R, Farmer C, Birn-Jeffery AV · 2026
 
-- *handstand-walk says it supports:* Pain-associated practitioners show a technique-driven compensation pattern. Underpins the non-negotiable 'shoulder pain stops session' rule. Flagged for founder review: paper existence at claimed URL unconfirmed. The stop-session rule survives on general principle regardless of the specific biomechanical figures.
+- *handstand-walk says it supports:* Pain-associated practitioners show a technique-driven compensation pattern. Underpins the non-negotiable 'shoulder pain stops session' rule. Byline and DOI checked against the publisher record on 2026-09-02.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **shea_2000** — Practice spacing effects on motor skill acquisition and retention · Shea CH, et al. · 2000

@@ -1,8 +1,10 @@
 # Reviewer packet — Race prep & concurrent training
 
-**Generated 2026-09-02 from the shipping program data.** Regenerate with
+**Generated 2026-09-03 from the shipping program data.** Regenerate with
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
+
+<!-- source-fingerprint: ba471edb31904d54 -->
 
 ## What we are asking
 
@@ -50,7 +52,9 @@ is published too, not quietly dropped.
 
 **Goal the program sells:** 2K row time reduction — target -15 seconds, stretch -30.
 
-**In its own words:** First-authored 6-week race-prep block for the Concept2 2K row test. Evidence base fully sourced from whitepaper 01_aerobic_physiology.md — 28 primary citations, with 3 rowing-specific studies flagged for pre-launch URL verification.
+**What it tells users it does:** For rowers chasing the 2K PR. Six weeks, cited, tapered — no more than that.
+
+**What it promises by the end:** 2K down 3-30 seconds by tier. Threshold pace shifted 3-6%. Race-day taper baked in.
 
 ### Entry tiers
 
@@ -88,7 +92,9 @@ is published too, not quietly dropped.
 
 **Goal the program sells:** Submax HR reduction at fixed pace — target -10 bpm, stretch -15.
 
-**In its own words:** First-authored draft. Evidence base is fully sourced from whitepaper 02_concurrent_training.md — 32 primary citations. Weekly template + block structure are the initial engineering proposal; will refine after beta feedback.
+**What it tells users it does:** For lifters adding cardio without losing the squat. Explosive-strength cost bounded, cited, PR-banned.
+
+**What it promises by the end:** Submax HR down 8-15 bpm at fixed pace, back squat / block pull / front squat maintained within 2.5 kg of pre-block TM, RPE ceiling 7 throughout (Schumann 2022 explosive-strength discipline).
 
 ### Entry tiers
 

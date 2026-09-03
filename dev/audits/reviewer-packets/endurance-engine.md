@@ -1,8 +1,10 @@
 # Reviewer packet — Endurance — the Engine Builder arc
 
-**Generated 2026-09-02 from the shipping program data.** Regenerate with
+**Generated 2026-09-03 from the shipping program data.** Regenerate with
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
+
+<!-- source-fingerprint: 7a3c622cfbe73990 -->
 
 ## What we are asking
 
@@ -50,7 +52,9 @@ is published too, not quietly dropped.
 
 **Goal the program sells:** Engine composite (Block 1) — target 1 z-score composite, stretch 1.5.
 
-**In its own words:** Block 1 of a 3-block engine transformation arc. Block 2 (volume expansion, 8-12 weeks) and Block 3 (polarised, 12-16 weeks) ship as separate program.json files. Block 1 covers weeks 1-8: build a base you can actually train on top of. Dates in phases[] are template anchors starting from a canonical Mon 2026-01-05; the generator remaps them to the user's real start date on activation.
+**What it tells users it does:** Block 1 of a 3-block, ~6-month engine transformation. Eight weeks of Zone 1/2 base with a single weekly hard session added in week 4. Row, bike, ski-erg, or run.
+
+**What it promises by the end:** Block 1 of a 6-month engine transformation. In these 8 weeks: 5-8% VO2max improvement, a measurable resting HR drop (5-10 bpm typical), and — most importantly — the aerobic base that lets Block 2 (volume) and Block 3 (polarised) actually work. Modality is your choice at intake: row, bike, ski-erg, or run. Weeks 1-4 are low-impact regardless; running introduces at week 5 if that's your goal.
 
 ### Entry tiers
 
@@ -102,7 +106,9 @@ is published too, not quietly dropped.
 
 **Goal the program sells:** Threshold pace / power shift — target 3 % improvement vs Block 2 baseline, stretch 5.
 
-**In its own words:** REFERENCED (2026-09-01) — shipped to the public catalog. Block 2 of the 3-block Engine Builder arc: volume expansion + threshold-dominant middle intensity. Assumes Block 1 completed OR an equivalent aerobic base declared at intake. Not yet REVIEWED: no domain-specialist audit, so `reviewed_by` / `review_evidence[]` are deliberately absent.
+**What it tells users it does:** Block 2 of the 3-block engine transformation. Two hard sessions per week on top of a rising Z1 volume floor. Threshold pace shift is the headline metric.
+
+**What it promises by the end:** Threshold pace / power shift 2-5% by tier. Additional VO2max +4-9% on top of Block 1. Submax HR at fixed pace additional -3 to -8 bpm. Retest at week 4 (mid-block check) and week 8-10 (end-of-block).
 
 ### Entry tiers
 

@@ -85,6 +85,23 @@ Keep the convention terse — the four markers cover every state. Don't invent n
   `dev/audits/programs/2026-09-02-*`. Guards added: dead-key test, symptom-region resolution,
   intake-exclusion firing conditions, tier-phase resolution, plus three harness assertions.
 
+- [~] **EVID-1 · packets made sendable 2026-09-03.** The apparatus was declared
+  ready on 2026-09-02 and was stale within a day — regeneration is manual, and
+  the citation fixes of 2026-09-03 (the corrected Angioi byline among them)
+  never reached the files. The document waiting to be emailed still opened
+  that citation by telling a reviewer we could not confirm the paper existed.
+  Three fixes: regenerated; the generator now opens each program with the
+  manifest's user-facing copy instead of `status_note`, an authoring field
+  nothing in the app reads and which three of nine programs use for internal
+  scaffolding — overhead-mobility's told the reviewer its citations "need
+  pre-launch URL verification", in the document asking them to verify the
+  citations; and each packet now embeds a SHA-256 fingerprint of the exact
+  data files it was built from, recomputed in `packet-freshness.test.ts`, so
+  editing a citation without regenerating fails the suite. Mutation-tested
+  against the drift that actually occurred. Outreach email gained a Variant B
+  for the mobility packet — 19 papers, ~40 min, written for a clinician the
+  founder already sees rather than a stranger, with a recipient-scope check
+  the founder must make. **The send itself remains the founder's.**
 - [~] **EVID-1** — Apparatus built 2026-09-02; **the outreach itself is the remaining work and it is the founder's.** Four self-contained reviewer packets generated from the shipping data (`dev/scripts/build-reviewer-packet.py` → `dev/audits/reviewer-packets/`): gymnastics-skill (41 unique papers, ~90 min), endurance-engine (43, ~90 min), endurance-race-concurrent (51, ~60 min), mobility (19, ~40 min). Citations are deduplicated per domain — a reviewer meets Wulf 1998 once rather than three times, with every claim any program hangs on it grouped underneath, which is also the cheapest way to spot a paper stretched across two claims. Generated rather than written so a packet cannot describe a program that no longer ships, and stale packets are deleted on regeneration. `specialist_review` added to the schema with `changes[]` recording what we did about each finding **including where we declined** — a review publishing only the findings we agreed with is marketing. Guards: an anonymous sign-off fails the suite, a "ships_with_changes" verdict listing no changes fails, and — the important one — **the ladder copy claiming no outside specialist has reviewed anything is pinned to the data**: the moment any program carries a review, the suite fails until that sentence is removed. Draft outreach email in `reviewer-packets/outreach-email.md`. Closest to hand: the founder's existing physiatrist plausibly covers the mobility packet.
 
 - [x] **EVID-2** — Completed arcs are countable, shipped 2026-09-02. `GET /api/admin/completions` returns per-program `completed`, `graduated_with_feedback`, and first/latest completion dates, ordered most-completed first so "which program is closest to five" is answerable at a glance. Counts only — no user ids, no emails, no per-user rows; admin-gated on `ADMIN_EMAILS` and returning 404 rather than 403 so the surface does not confirm it exists. `graduated_with_feedback` is tracked separately because the ladder's wording is "completed the arc WITH SUBJECTIVE SUCCESS", and a bare completion count is not that criterion. Aggregation is a pure exported function; tests cover 7 cases including malformed jsonb. Size: S

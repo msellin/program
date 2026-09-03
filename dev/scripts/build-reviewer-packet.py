@@ -20,7 +20,7 @@ asks closed questions — not "what do you think of this programme".
 Run:  python3 dev/scripts/build-reviewer-packet.py
 Out:  dev/audits/reviewer-packets/<domain>.md
 """
-import json, pathlib, textwrap, datetime
+import json, pathlib, textwrap, datetime, hashlib
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 DATA = ROOT / "next-app" / "public" / "data"
@@ -60,6 +60,40 @@ CITATIONS = json.loads((DATA / "citations.json").read_text())
 CITE_BY_ID = {c["id"]: c for c in (CITATIONS.get("citations") or CITATIONS.get("references") or [])
               if isinstance(c, dict) and "id" in c}
 
+_MANIFEST_RAW = json.loads((DATA / "programs" / "manifest.json").read_text())
+_MANIFEST_ENTRIES = (
+    _MANIFEST_RAW if isinstance(_MANIFEST_RAW, list) else _MANIFEST_RAW.get("programs") or []
+)
+MANIFEST_BY_SLUG = {
+    e["slug"]: e for e in _MANIFEST_ENTRIES if isinstance(e, dict) and e.get("slug")
+}
+
+
+def source_fingerprint(slugs: list) -> str:
+    """SHA-256 over the exact data files a packet is built from.
+
+    A packet is only trustworthy if it describes what currently ships, and the
+    regeneration is manual — so a packet generated on Wednesday and a citation
+    edited on Thursday leaves a document that quietly lies to a reviewer. That
+    happened: the 2026-09-02 packets were sent-ready and by 2026-09-03 the
+    gymnastics one still told a reviewer that a real paper's existence was
+    "unconfirmed", after the citation had been corrected.
+
+    `packet-freshness.test.ts` recomputes this from the same files and fails
+    when it drifts. Kept in JS-recomputable form — sorted paths, raw bytes, no
+    Python-specific serialisation — so the check does not need a Python
+    runtime in CI.
+    """
+    h = hashlib.sha256()
+    paths = [DATA / "citations.json", DATA / "programs" / "manifest.json"]
+    paths += [DATA / "programs" / f"{slug}.json" for slug in sorted(slugs)]
+    for path in paths:
+        h.update(path.name.encode("utf-8"))
+        h.update(b"\0")
+        h.update(path.read_bytes())
+        h.update(b"\0")
+    return h.hexdigest()[:16]
+
 
 def cite_block(cid: str, uses: list) -> str:
     c = CITE_BY_ID.get(cid, {})
@@ -83,8 +117,20 @@ def program_section(slug: str) -> str:
     out.append(f"**Goal the program sells:** {goal.get('display_name','—')} — "
                f"target {goal.get('target_value','—')} {goal.get('unit','')}, "
                f"stretch {goal.get('stretch_value','—')}.\n")
-    if d.get("status_note"):
-        out.append(f"**In its own words:** {d['status_note'][:400]}\n")
+    # Was `status_note`, which is an AUTHORING note — nothing in the app reads
+    # it, and three of nine programs use it to record internal scaffolding:
+    # whitepaper filenames a reviewer cannot see, "will refine", and in
+    # overhead-mobility's case "4 shoulder-specific citations that need
+    # pre-launch URL verification". Opening a request for external review by
+    # telling the reviewer our citations are unverified, in a document whose
+    # whole purpose is to have them verified, is the wrong first paragraph.
+    # The manifest carries the copy real users are shown; use that.
+    entry = MANIFEST_BY_SLUG.get(slug, {})
+    blurb = entry.get("short_description") or entry.get("who_this_is_for")
+    if blurb:
+        out.append(f"**What it tells users it does:** {blurb}\n")
+    if entry.get("what_youll_achieve"):
+        out.append(f"**What it promises by the end:** {entry['what_youll_achieve']}\n")
 
     tiers = d.get("plan_tiers") or []
     if tiers:
@@ -143,12 +189,15 @@ def dedup_citations(slugs: list[str]) -> dict[str, list[tuple[str, str]]]:
 
 def build(domain_key: str, meta: dict) -> str:
     today = datetime.date.today().isoformat()
+    fingerprint = source_fingerprint(meta["programs"])
     head = textwrap.dedent(f"""\
     # Reviewer packet — {meta['title']}
 
     **Generated {today} from the shipping program data.** Regenerate with
     `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
     will start describing a program that no longer ships.
+
+    <!-- source-fingerprint: {fingerprint} -->
 
     ## What we are asking
 

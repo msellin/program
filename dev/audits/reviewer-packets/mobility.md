@@ -1,8 +1,10 @@
 # Reviewer packet — Shoulder mobility
 
-**Generated 2026-09-02 from the shipping program data.** Regenerate with
+**Generated 2026-09-03 from the shipping program data.** Regenerate with
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
+
+<!-- source-fingerprint: 763b144e7b2e020b -->
 
 ## What we are asking
 
@@ -50,7 +52,9 @@ is published too, not quietly dropped.
 
 **Goal the program sells:** Loaded overhead shoulder flexion — target 180 degrees, stretch 190.
 
-**In its own words:** First-authored 10-week overhead-mobility arc — the shoulder / thoracic / scap coordination needed to snatch, OHS, and press without impingement. Evidence base drawn from whitepaper 04_handstand_walk.md and motor-learning literature (whitepaper 03), plus 4 shoulder-specific citations that need pre-launch URL verification.
+**What it tells users it does:** Shoulder + thoracic + scap sequence for stronger snatch, OHS, and press. Kinematic base before load.
+
+**What it promises by the end:** By week 10: loaded shoulder flexion at 180°, empty-bar OHS to parallel or better, first snatch-grip Sotts press. Retest via goniometer + OHS depth.
 
 ### Entry tiers
 
