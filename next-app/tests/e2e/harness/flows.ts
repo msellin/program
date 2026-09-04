@@ -843,16 +843,18 @@ export const FLOWS: Flow[] = [
       }
       if (await ctx.tap("OverflowSheet", /^Form cues and warnings/)) {
         await ctx.page.waitForTimeout(500);
-        // Scoped to the dialog WITHOUT a data-surface, so Close resolves
-        // to the details sheet rather than the overflow sheet beneath it.
-        await ctx.probe("ExerciseDetailsSheet", '[role="dialog"]:not([data-surface])');
+        await ctx.probe("ExerciseDetailsSheet", '[data-surface="ExerciseDetailsSheet"]');
         await ctx.capture("05-form-cues");
-        const detailsClose = ctx.page
-          .locator('[role="dialog"]:not([data-surface]) button')
-          .filter({ hasText: /^Close$/ });
+        // `hasText: /^Close$/` matched NOTHING (2026-09-04): this button
+        // renders "×" and carries `aria-label="Close"`, so filtering on
+        // text could never find it. It never clicked and never filed its
+        // note, the sheet stayed up, and the overflow sheet's own Close at
+        // the end of this flow was then scrimmed into a second 15s
+        // timeout. Address it the way the accessibility tree does.
+        const detailsClose = ctx.page.getByRole("button", { name: /^Close$/ });
         if (await detailsClose.count()) {
           await detailsClose.first().click({ timeout: CLICK_TIMEOUT_MS }).catch(() => {});
-          ctx.note("ExerciseDetailsSheet", "Close", "driven via a scoped locator");
+          ctx.record("ExerciseDetailsSheet", "Close");
         }
         await ctx.page.waitForTimeout(300);
         await reopenOverflow();
@@ -928,10 +930,14 @@ export const FLOWS: Flow[] = [
       if ((await cues.count()) === 0) throw new SkipFlow("no form-cues row");
       await cues.click({ timeout: CLICK_TIMEOUT_MS });
       await ctx.page.waitForTimeout(400);
-      // Scoped away from `data-surface` dialogs: every sheet shares
-      // `role="dialog"`, so an unscoped probe here reads back the
-      // overflow sheet still mounted underneath (G3).
-      await ctx.probe("ExerciseDetailsSheet", '[role="dialog"]:not([data-surface])');
+      // Scoped to this sheet's own root. It used to be
+      // `[role="dialog"]:not([data-surface])` — correct for the probe,
+      // because every sheet shares `role="dialog"` and an unscoped probe
+      // read back the overflow sheet underneath (G3) — but `tap` derives
+      // its scope from `data-surface` alone, so the two disagreed and the
+      // tap fell through to the whole page. Giving the sheet a real root
+      // makes both agree.
+      await ctx.probe("ExerciseDetailsSheet", '[data-surface="ExerciseDetailsSheet"]');
       await ctx.capture("01-exercise-details");
       // Close was the sheet's only control and sat at 0 of 1 across the
       // whole fleet: the flow opened the sheet, photographed it, and left

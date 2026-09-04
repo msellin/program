@@ -41,6 +41,18 @@ export function ExerciseDetailsSheet({
       role="dialog"
       aria-modal="true"
       aria-labelledby={titleId}
+      /**
+       * Surface root for the persona harness (2026-09-04).
+       *
+       * Without it, `tap` had no root to scope to and fell back to the
+       * whole PAGE — and this sheet is opened from OverflowSheet, which is
+       * still mounted underneath and has a "Close" of its own. So
+       * `/^Close/` matched two buttons, `.first()` took the one beneath the
+       * scrim, and every persona burned a 15-second actionability timeout.
+       * The sheet then never closed, scrimming the overflow sheet's Close
+       * too: one cause, three symptoms, ~11 minutes of every sweep.
+       */
+      data-surface="ExerciseDetailsSheet"
       onClick={onClose}
       className="fixed inset-0 z-50 bg-ground/85 flex items-end sm:items-center justify-center p-2 sm:p-4"
     >
