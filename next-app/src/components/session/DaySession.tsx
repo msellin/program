@@ -14,6 +14,7 @@ import { dedupeItems, humanBlockName, programDisplayName } from "@/lib/day-forma
 import { RestDayCard, GraduationCard } from "@/components/session/shared/StatusCards";
 import { BriefView } from "@/components/session/BriefView";
 import { SetView } from "@/components/session/SetView";
+import { useSessionCursor, reconcileCursor } from "@/lib/session-cursor";
 import { RestTakeover } from "@/components/session/RestTakeover";
 import { nextAfterSet } from "@/components/session/shared/advance";
 import { NoteSheet } from "@/components/session/NoteSheet";
@@ -143,6 +144,30 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
         return blocksForDate(program, userProfile, phase, activeDate, byId, store);
       })();
   const railExercises: RailExercise[] = useMemoRail(blocks, byId, program, store, activeDate);
+
+  /**
+   * Put you back on the set you were on after the OS discards the app
+   * (2026-09-04). `ResumeLastRoute` restores the route; this restores what
+   * was on it. See `lib/session-cursor.ts` for why derivation is not
+   * enough on its own.
+   *
+   * A stored key is only honoured if it still resolves against today's
+   * rail — a six-hour-old cursor can outlive a programme change, and
+   * restoring onto an exercise that no longer exists would strand the user
+   * on a blank Set screen with no way back but the nav.
+   */
+  useSessionCursor(
+    `day:${slug}`,
+    activeDate,
+    { mode, activeKey, activeSetIndex },
+    (c) => {
+      const next = reconcileCursor(c, (k) => railExercises.some((r) => r.key === k));
+      setActiveKey(next.activeKey);
+      setActiveSetIndex(next.activeSetIndex);
+      setMode(next.mode);
+    },
+    Boolean(program) && hydrated && railExercises.length > 0,
+  );
 
   if (error) {
     return (

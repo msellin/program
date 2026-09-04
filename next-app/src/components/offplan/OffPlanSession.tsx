@@ -11,6 +11,7 @@ import { DateNav } from "@/components/workout/DateNav";
 import { EmptyStateCard } from "@/components/EmptyStateCard";
 import { isOffPlanOn } from "@/lib/features";
 import { SetView } from "@/components/session/SetView";
+import { useSessionCursor, reconcileCursor } from "@/lib/session-cursor";
 import { RestTakeover } from "@/components/session/RestTakeover";
 import { nextAfterSet } from "@/components/session/shared/advance";
 import { NoteSheet } from "@/components/session/NoteSheet";
@@ -138,6 +139,28 @@ export function OffPlanSession() {
     return out;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [program, byId, groupDefs, userProfile, store.logs, store.training_maxes, activeDate]);
+
+  /**
+   * Same cursor restore as DaySession — see `lib/session-cursor.ts`. Off-plan
+   * needs it at least as much: its rail can run to 34 items, so "first
+   * unfinished in rail order" after a cold load is more likely to be
+   * somewhere you have never been than the drill you were actually on.
+   *
+   * Scoped separately from the day cursor, so backgrounding out of off-plan
+   * cannot drop you into a programme session or the reverse.
+   */
+  useSessionCursor(
+    "offplan",
+    activeDate,
+    { mode, activeKey, activeSetIndex },
+    (c) => {
+      const next = reconcileCursor(c, (k) => railExercises.some((r) => r.key === k));
+      setActiveKey(next.activeKey);
+      setActiveSetIndex(next.activeSetIndex);
+      setMode(next.mode);
+    },
+    Boolean(program) && hydrated && railExercises.length > 0,
+  );
 
   if (!hydrated) return <div className="mt-8 text-sm text-muted">Loading…</div>;
   // Off-plan ships dark for the public catalog (2026-08-24). The route
