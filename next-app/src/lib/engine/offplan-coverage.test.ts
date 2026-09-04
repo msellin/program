@@ -53,11 +53,20 @@ describe("off-plan reaches every lift the engine reads", () => {
    */
   const TM_WITHOUT_A_BLOCK: Record<string, string> = {
     "anterior-hip-rebuild: deadlift_conventional":
-      "Seeds a starting training max for a lift no block prescribes. Harmless " +
-      "at runtime, but it puts a number in the user's store for work the " +
-      "programme never asks for, and tm-plausibility will happily reason about " +
-      "it. Left for the programme's author: deleting a training max is a " +
-      "programming decision, not a cleanup.",
+      "KEPT ON PURPOSE, resolved 2026-09-04. This entry previously read as a " +
+      "loose end awaiting deletion, on the claim that it 'puts a number in the " +
+      "user's store'. It does not, on two counts: the starting value is null, " +
+      "and nothing reads starting_values_kg to seed a TM anyway — the only " +
+      "runtime read of that object is Boolean(tms.starting_values_kg), a shape " +
+      "check in adapt.ts's hasStrengthProgression. Training maxes reach a store " +
+      "from intake and setTM, nowhere else. So there is no number and nothing " +
+      "for tm-plausibility to reason about. " +
+      "What the entry actually is: the programme's goal state. It carries an " +
+      "exercise_overrides gate — 'Only if the block pull has been symptom-free " +
+      "at ~150 kg for at least 4 weeks' — and block_pull_midshin is cued as " +
+      "'the primary heavy pull until conventional deadlift is symptom-free'. " +
+      "Deleting it would delete a documented clinical reintroduction gate to " +
+      "tidy up a field that does nothing.",
   };
 
   it("every TM lift a block prescribes can be logged off-plan", () => {
