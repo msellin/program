@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "generated": "2026-08-13",
   "status": "REVIEWED",
-  "status_note": "First-authored 10-week overhead-mobility arc — the shoulder / thoracic / scap coordination needed to snatch, OHS, and press without impingement. Evidence base drawn from whitepaper 04_handstand_walk.md and motor-learning literature (whitepaper 03), plus 4 shoulder-specific citations that need pre-launch URL verification.",
+  "status_note": "First-authored 10-week overhead-mobility arc — the shoulder / thoracic / scap coordination needed to snatch, OHS, and press without shoulder pain. Evidence base drawn from whitepaper 04_handstand_walk.md and motor-learning literature (whitepaper 03), plus 4 shoulder-specific citations that need pre-launch URL verification.",
   "generation_strategy": "multi_dimensional",
   "positioning": "main_track",
   "goals": {
@@ -18,7 +18,7 @@
     {
       "id": "kinematics_before_load",
       "rule": "Passive ROM before active ROM before loaded ROM.",
-      "detail": "Ludewig & Cook 2000 documented that impingement risk rises when scap upward rotation lags shoulder flexion under load. We build the kinematic pattern before we add weight."
+      "detail": "Ludewig & Cook 2000 documented altered shoulder kinematics — scap upward rotation lagging shoulder flexion under load — in people with symptomatic shoulders. We build the kinematic pattern before we add weight."
     },
     {
       "id": "external_focus_cues",
@@ -28,12 +28,12 @@
     {
       "id": "scap_first_shoulder_second",
       "rule": "Scap upward-rotation drills come before shoulder-flexion drills in every session.",
-      "detail": "Ludewig & Reynolds 2009 — scap dyskinesis (upper-trap dominance) is the most consistently documented kinematic association with symptomatic impingement in athletes. Fix the sequence, not just the range."
+      "detail": "Ludewig & Reynolds 2009 — scap dyskinesis (upper-trap dominance) is the most consistently documented kinematic association with symptomatic shoulders in athletes — an association, and a contested one as a cause. Fix the sequence, not just the range."
     },
     {
       "id": "no_ballistic_end_range",
       "rule": "No bouncing / rebound stretches at end-range shoulder flexion.",
-      "detail": "Reinold 2007 — active rotator-cuff engagement should precede end-range positioning. Ballistic end-range invites impingement."
+      "detail": "Reinold 2007 — active rotator-cuff engagement should precede end-range positioning. Ballistic end-range loading is what that cuff activation is there to protect against."
     },
     {
       "id": "daily_short_over_long",
@@ -229,7 +229,7 @@
       },
       {
         "id": "rotator_cuff_dx",
-        "label": "Diagnosed rotator-cuff tear or persistent impingement (partial or full)?",
+        "label": "Diagnosed rotator-cuff tear, or persistent rotator cuff-related shoulder pain (also called impingement)?",
         "type": "select",
         "required": true,
         "options": [
@@ -452,7 +452,7 @@
         "block_daily_reset"
       ],
       "goal": "Build passive ROM + scap sequencing before we add load.",
-      "rationale": "Ludewig 2000/2009 — impingement is scap dyskinesis + upward-rotation lag, not raw shoulder joint tightness. Base = fix the sequence."
+      "rationale": "Ludewig 2000/2009 — scap upward-rotation lag is the kinematic pattern most consistently ASSOCIATED with rotator cuff-related shoulder pain (the condition older sources call 'impingement'); joint tightness alone explains it poorly. Association, not cause: the sequencing is what the evidence supports, and it is what this base phase trains."
     },
     {
       "id": "phase_2_active_loaded",
@@ -468,7 +468,7 @@
         "block_daily_reset"
       ],
       "goal": "Add active ROM + light loaded overhead. Sotts press, TGU, empty bar OHS.",
-      "rationale": "Reinold 2007 — rotator-cuff activation precedes end-range loading. Adding load builds the pattern under stress without impingement."
+      "rationale": "Reinold 2007 — rotator-cuff activation precedes end-range loading. Adding load builds the pattern under stress rather than reaching end-range cold."
     },
     {
       "id": "phase_3_load_and_retest",
@@ -942,7 +942,7 @@
         "year": 2000,
         "title": "Alterations in shoulder kinematics and associated muscle activity in people with symptoms of shoulder impingement",
         "source": "Phys Ther 80(3):276-291",
-        "used_for": "Scap dyskinesis → impingement pathway; foundational rationale for scap-first sequencing"
+        "used_for": "Altered scap kinematics observed alongside impingement symptoms (the paper's own term); foundational rationale for scap-first sequencing. Association, not a demonstrated pathway."
       },
       {
         "id": "ludewig_reynolds_2009",

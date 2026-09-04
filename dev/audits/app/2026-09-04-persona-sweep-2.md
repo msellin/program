@@ -79,3 +79,38 @@ control the flow had put out of its own reach:
 The `data-control` alias and the jump-row drive have NOT been observed
 working — they need a deploy and a third sweep. The RestTakeover
 denominator should fall from 14 once the alias lands.
+
+---
+
+## Follow-up, same day: the three "never driven" controls
+
+All three turned out to be measurement faults, not untested paths. Naming
+the gap paid for itself immediately.
+
+**`RetestLoggingSheet` — LOG READING.** Not untested. The flow deliberately
+abstains (committing a reading closes the retest window and the next sweep
+would find no proposal), and files a held-back note for it — under the name
+`"Save reading"`. The button says "Log reading", and the probe reads
+`innerText`, which returns the CSS-uppercased "LOG READING". Two
+mismatches, so the abstention never cancelled the miss.
+
+This is fault #1 of that same flow, already documented in its own comment —
+`/^Log reading$/` vs rendered "LOG READING" — fixed for the tap and not for
+the note. **Fixed.**
+
+**`ExerciseDetailsSheet` — Close** and **`OverflowSheet` — Close.** Real
+failures, and not naming: both record
+`click failed: locator.click: Timeout 15000ms exceeded` on EVERY persona.
+The details sheet's Close is a proper `aria-label="Close"` and the flow does
+tap it, so the locator resolves and then never becomes actionable — most
+likely a stacked sheet or a scrim, since ExerciseDetailsSheet is opened
+FROM OverflowSheet.
+
+**Not fixed — deliberately.** Two wrong guesses earlier today each cost a
+30-minute run, and this needs the trace rather than a hypothesis. Worth
+doing: 2 controls × 15s × 22 personas is roughly ELEVEN MINUTES of a
+thirty-minute sweep spent on two clicks that cannot succeed.
+
+Next session: `npx playwright show-trace` on
+`persona-strength/…session-exercise-details`, find what is over the button,
+then fix. Do not shorten the timeout to hide it.

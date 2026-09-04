@@ -1,10 +1,10 @@
 # Reviewer packet — Endurance — the Engine Builder arc
 
-**Generated 2026-09-03 from the shipping program data.** Regenerate with
+**Generated 2026-09-04 from the shipping program data.** Regenerate with
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: 9b3a1b7aa34b8cb3 -->
+<!-- source-fingerprint: 54f517201c22684b -->
 
 ## What we are asking
 

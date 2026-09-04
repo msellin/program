@@ -1191,7 +1191,16 @@ export const FLOWS: Flow[] = [
       );
       // Dismissed, not submitted: committing a reading would close the
       // window and the next sweep would find no proposal to open.
-      ctx.note("RetestLoggingSheet", "Save reading", "mutating — would close the retest window");
+      // The name MUST match what the probe recorded, or the held-back entry
+      // does not cancel the miss and the control reads as never-driven
+      // forever (2026-09-04). Two mismatches here: the button says "Log
+      // reading", not "Save reading", and the probe reads `innerText`, which
+      // returns the CSS-uppercased "LOG READING" — the same case trap
+      // already documented as fault #1 above, fixed for the tap and not for
+      // the note. It surfaced the moment the coverage report started NAMING
+      // never-driven controls: "RetestLoggingSheet — LOG READING" read as an
+      // entire untested path when it is a deliberate abstention.
+      ctx.note("RetestLoggingSheet", "LOG READING", "mutating — would close the retest window");
       if (!(await ctx.tap("RetestLoggingSheet", /^(Close|Cancel|Not now)/))) {
         await ctx.page.keyboard.press("Escape").catch(() => {});
       }

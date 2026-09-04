@@ -1387,6 +1387,59 @@ describe("training_maxes.starting_values_kg is decorative, and says so", () => {
     return hits.sort();
   }
 
+  it("is LOAD-BEARING as a marker — deleting it disables TM bumps", () => {
+    /**
+     * The trap. The values are inert, so `starting_values_kg` reads as
+     * decorative and the obvious cleanup is to delete it. Doing that would
+     * silently switch off `evaluateOverperformer` — no TM-bump proposal
+     * would ever fire again for the affected programme — because
+     * `hasStrengthProgression` uses the key's PRESENCE as its capability
+     * marker.
+     *
+     * `concurrent-strength-maintenance` is the sharp case: its
+     * `training_maxes` holds only `note` and `starting_values_kg`, so that
+     * one key is the entire signal. Nothing else in the object would keep
+     * the feature alive.
+     *
+     * Founder asked directly, 2026-09-04: "do we need it? will program be
+     * worse without it?" Yes, and yes.
+     */
+    for (const slug of ["anterior-hip-rebuild", "concurrent-strength-maintenance"]) {
+      const entry = programs.find((p) => p.id === slug);
+      expect(entry, slug).toBeDefined();
+      const tms = (entry!.program as unknown as {
+        training_maxes?: Record<string, unknown>;
+      }).training_maxes;
+      expect(Boolean(tms && tms.starting_values_kg), `${slug} would lose TM bumps`).toBe(true);
+    }
+  });
+
+  it("must NOT be wired up to seed a user's training maxes", () => {
+    /**
+     * The other half of the founder's question, and the reason "just make
+     * it work" is the wrong fix.
+     *
+     * `concurrent-strength-maintenance` is catalog-public and authors
+     * 100 / 85 / 120. Seeding those into every enrolling user's store would
+     * hand a stranger someone else's training maxes as fact — which is
+     * exactly the failure the founder already lived: his front squat sat at
+     * a copied 110 for as long as it existed, and every prescription ran
+     * ~7% heavy off it. See `tm-plausibility.ts`.
+     *
+     * Training maxes must come from the person — intake or `setTM`. This
+     * test fails if a public programme's authored values ever become a
+     * seeding source.
+     */
+    const csm = programs.find((p) => p.id === "concurrent-strength-maintenance")!;
+    expect(csm.personal).toBe(false);
+    const values = (csm.program as unknown as {
+      training_maxes?: { starting_values_kg?: Record<string, unknown> };
+    }).training_maxes?.starting_values_kg;
+    expect(Object.values(values ?? {}).some((v) => typeof v === "number")).toBe(true);
+    // The guard: nothing outside adapt.ts's shape check may read them.
+    expect(readsOf("starting_values_kg")).toEqual(["lib/engine/adapt.ts"]);
+  });
+
   it("is read in exactly one place, and only for its presence", () => {
     // If this list grows, either someone wired the values up — in which
     // case this whole block is obsolete — or a second shape check appeared

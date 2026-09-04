@@ -132,6 +132,37 @@ describe("the countdown survives a backgrounded app", () => {
     expect(onDone).toHaveBeenCalled();
   });
 
+  it("snaps to the true time on Android's `resume` event", async () => {
+    /**
+     * Android Chrome FREEZES a backgrounded tab rather than merely hiding
+     * it, then fires the Page Lifecycle `resume` event when it comes back.
+     * Frozen means no interval runs at all, so `resume` is the earliest
+     * moment the app can learn how much time has passed — and it is the
+     * founder's actual platform. Safari fires nothing here, which is why
+     * the 250ms poll stays as the floor.
+     *
+     * The listener was missing until 2026-09-04 because the whole family of
+     * backgrounding fixes had been written against an iOS diagnosis
+     * inherited from `ResumeLastRoute`.
+     *
+     * NOTE ON WHAT THIS DOES AND DOES NOT PROVE. It asserts the app's
+     * WIRING: that a `resume` event recomputes from the wall clock. It does
+     * not prove Chrome freezes, because Chromium cannot be made to freeze a
+     * page under Playwright here — `Emulation.setPageVisibilityState` is
+     * gone from CDP and `Page.setWebLifecycleState` silently no-ops on a
+     * page the browser still considers visible. Chrome's freezing is
+     * Chrome's documented behaviour; this is the half that is ours.
+     */
+    renderRest();
+    // Clock moves while no interval runs — exactly a frozen tab.
+    vi.setSystemTime(new Date(Date.now() + 45_000));
+    await act(async () => {
+      document.dispatchEvent(new Event("resume"));
+    });
+    // 120s rest, 45s frozen → 1:15 left.
+    expect(screen.getByText("1:15")).toBeDefined();
+  });
+
   it("does not run past zero into negative time", async () => {
     renderRest();
     await advanceWallClockOnly(600_000);

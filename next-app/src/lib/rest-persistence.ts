@@ -4,7 +4,7 @@
  * A rest timer that survives the OS discarding the app (2026-09-04).
  *
  * The companion to `session-cursor.ts`. That one puts you back on the set
- * you were on after iOS evicts a backgrounded web view; this one puts back
+ * you were on after the OS discards a backgrounded app; this one puts back
  * the rest you were in the middle of, which is otherwise the last piece of
  * the session state that simply vanishes.
  *

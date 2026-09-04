@@ -10,7 +10,7 @@ import { useEffect, useRef } from "react";
  * other.
  *
  * `ResumeLastRoute` (2026-08-26, same founder, same symptom) already
- * restores the ROUTE after iOS evicts a backgrounded web view and relaunches
+ * restores the ROUTE after the OS discards a backgrounded app and relaunches
  * cold at the manifest `start_url`. What it cannot restore is what was ON
  * that route. Its own comment claimed restoring the route was enough,
  * because "DaySession lands on the first unfinished set" — true, and still

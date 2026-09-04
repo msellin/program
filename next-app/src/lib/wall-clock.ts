@@ -15,10 +15,19 @@ import { useEffect, useState } from "react";
  *   - `RestTimer`      — the older bottom-fixed widget, still live on /off-plan
  *   - `SetView`        — the hold / duration countdown
  *
- * Browsers throttle background timers hard and iOS suspends them outright
- * in a backgrounded web view, so all three drifted low or stalled. A
- * three-minute rest taken with the phone in a pocket came back reading
- * ninety seconds, and the completion chime never fired.
+ * Every browser throttles background timers hard, and both mobile engines
+ * go further: Android Chrome FREEZES a backgrounded tab (Page Lifecycle
+ * API) after a few minutes, and iOS suspends the web view outright. Either
+ * way all three timers drifted low or stalled — a three-minute rest taken
+ * with the phone in a pocket came back reading ninety seconds, and the
+ * completion chime never fired.
+ *
+ * Platform note, corrected 2026-09-04: the original diagnosis of this
+ * family of bugs (`ResumeLastRoute`, 2026-08-26) attributed it to iOS.
+ * The founder is on ANDROID and always has been. The fix is the same on
+ * both — a wall clock does not care what suspended you — but the
+ * attribution was wrong, and it was wrong in a way that shaped what got
+ * tested.
  *
  * The wall clock is the only correct source of elapsed time. The interval
  * survives here purely to trigger a repaint; if it misses a hundred ticks
@@ -72,17 +81,28 @@ export function useElapsedSeconds(
     sync();
     // Sub-second polling is deliberate. On returning to the app the display
     // must be right immediately, and `visibilitychange` alone is not enough:
-    // it does not fire when a web view is throttled rather than hidden, and
-    // Safari's firing on PWA resume is not something to depend on. The
-    // events are wired up as well so the common case snaps instantly, and
-    // `pageshow` covers a bfcache restore, which fires no visibilitychange.
+    // it does not fire when a page is throttled rather than hidden, and
+    // Safari's firing on PWA resume is not something to depend on.
+    //
+    // The events are wired up as well so the common case snaps instantly:
+    //   - `resume`   — Page Lifecycle API. ANDROID CHROME fires this when it
+    //                  un-freezes a backgrounded tab, and freezing is
+    //                  precisely the state in which this interval has not
+    //                  been running. It is the most on-point signal there is
+    //                  for the founder's actual platform, and it was missing
+    //                  until 2026-09-04 because the whole family of fixes had
+    //                  been written against an iOS diagnosis. Safari fires
+    //                  nothing here, which is why the poll stays.
+    //   - `pageshow` — a bfcache restore, which fires no visibilitychange.
     const id = setInterval(sync, 250);
     document.addEventListener("visibilitychange", sync);
+    document.addEventListener("resume", sync);
     window.addEventListener("pageshow", sync);
     window.addEventListener("focus", sync);
     return () => {
       clearInterval(id);
       document.removeEventListener("visibilitychange", sync);
+      document.removeEventListener("resume", sync);
       window.removeEventListener("pageshow", sync);
       window.removeEventListener("focus", sync);
     };

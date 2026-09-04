@@ -1,10 +1,10 @@
 # Reviewer packet — Shoulder mobility
 
-**Generated 2026-09-03 from the shipping program data.** Regenerate with
+**Generated 2026-09-04 from the shipping program data.** Regenerate with
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: 42e1a13a3029a9ed -->
+<!-- source-fingerprint: ec7db72bea3ebd55 -->
 
 ## What we are asking
 
@@ -89,7 +89,7 @@ is published too, not quietly dropped.
   `shoulder_pain_flexion` — answers: no, occasionally, yes
   - BLOCKS on ['yes'] → "This programme loads the range that hurts"
   - warns, then continues on ['occasionally'] → "Watch that range as you load it"
-- **Diagnosed rotator-cuff tear or persistent impingement (partial or full)?**  
+- **Diagnosed rotator-cuff tear, or persistent rotator cuff-related shoulder pain (also called impingement)?**  
   `rotator_cuff_dx` — answers: no, unsure, yes
   - BLOCKS on ['yes'] → "See your physio first"
   - warns, then continues on ['unsure'] → "Worth finding out which it is"
@@ -166,7 +166,7 @@ Printed against the questions above so you can see which are actually detectable
 
 **ludewig_cook_2000** — Alterations in shoulder kinematics and associated muscle activity in people with symptoms of shoulder impingement · Ludewig PM, Cook TM · 2000
 
-- *overhead-mobility says it supports:* Scap dyskinesis → impingement pathway; foundational rationale for scap-first sequencing
+- *overhead-mobility says it supports:* Altered scap kinematics observed alongside impingement symptoms (the paper's own term); foundational rationale for scap-first sequencing. Association, not a demonstrated pathway.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **ludewig_reynolds_2009** — The association of scapular kinematics and glenohumeral joint pathologies · Ludewig PM, Reynolds JF · 2009

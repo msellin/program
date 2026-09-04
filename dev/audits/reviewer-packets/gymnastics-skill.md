@@ -1,10 +1,10 @@
 # Reviewer packet — Gymnastics & upper-body skill
 
-**Generated 2026-09-03 from the shipping program data.** Regenerate with
+**Generated 2026-09-04 from the shipping program data.** Regenerate with
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: dd58939d20b4d0db -->
+<!-- source-fingerprint: 43d719869ee70652 -->
 
 ## What we are asking
 
@@ -301,7 +301,7 @@ Printed against the questions above so you can see which are actually detectable
 - Osteoporosis diagnosis (or low-BMD DEXA) — freestanding and any bail-risk attempts contraindicated. DiFiori 2006 catalogued distal radius as a common fracture site under this mechanism; vertebral and hip fractures follow. Tier A wall walks + Kinoshita positions with a spotter and soft floor are permitted only after clinician clearance.
 - Uncontrolled hypertension (BP > 160/100 at rest or unmedicated) — defer all inversions until BP is controlled. Yoga-inversion literature documents transient systolic increases that stack with Valsalva during a kick-up attempt.
 - Acute wrist injury (sprain, TFCC tear, ligament instability) in the last 6 weeks — wrist-load drills prohibited until cleared by a clinician. Program will offer hollow-body and shoulder-endurance drills only during this window.
-- Persistent shoulder impingement or rotator-cuff pathology — sustained overhead position at ≥170° is not safe. Ludewig & Cook 2000, Reinold 2007: modified overhead loading and scapular retraining first, defer this program.
+- Persistent rotator cuff-related shoulder pain (also called impingement) or rotator-cuff pathology — sustained overhead position at ≥170° is not safe. Ludewig & Cook 2000, Reinold 2007: modified overhead loading and scapular retraining first, defer this program.
 - First-trimester pregnancy — HR and BP responses shift; inversion literature is unclear. Defer.
 - Recent concussion or vestibular disorder — inverted balance training exacerbates symptoms.
 
