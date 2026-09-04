@@ -1343,3 +1343,69 @@ describe("user_profile fields nothing reads are declared, not discovered", () =>
     expect(isReadOutsideSchemas("consent_symptom_data_at")).toBe(true);
   });
 });
+
+describe("training_maxes.starting_values_kg is decorative, and says so", () => {
+  /**
+   * Found 2026-09-04 while closing out `deadlift_conventional`.
+   *
+   * Nine programmes author `training_maxes.starting_values_kg` with real
+   * numbers — anterior-hip-rebuild carries 110 / 90 / 130, with a
+   * `starting_values_note` explaining how they were arrived at. Nothing
+   * reads the values. The ONLY runtime read of the object is
+   * `Boolean(tms.starting_values_kg)` in adapt.ts's `hasStrengthProgression`,
+   * which uses its mere presence as a shape check for "does this programme
+   * have a strength surface at all".
+   *
+   * Training maxes reach a store from intake and `setTM`, nowhere else.
+   *
+   * This is not the top-level dead-key case the test above covers — the key
+   * is nested, and it is not fully dead, which is worse: it is a field that
+   * demonstrably does something, so nobody checks whether it does the thing
+   * its contents imply. The founder's front squat sat at a copied 110 while
+   * the programme he was running authored 90.
+   *
+   * The test pins the current reality. Wiring the values up is a
+   * programming decision (it changes what every new user is seeded with);
+   * whoever makes it should delete this block, not edit around it.
+   */
+  const SRC_DIR = path.resolve(__dirname, "..");
+
+  function readsOf(needle: string): string[] {
+    const hits: string[] = [];
+    const walk = (dir: string) => {
+      for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+        const p = path.join(dir, e.name);
+        if (e.isDirectory()) walk(p);
+        else if (/\.tsx?$/.test(e.name) && !e.name.includes(".test.")) {
+          if (fs.readFileSync(p, "utf8").includes(needle)) {
+            hits.push(path.relative(SRC_DIR, p));
+          }
+        }
+      }
+    };
+    walk(SRC_DIR);
+    return hits.sort();
+  }
+
+  it("is read in exactly one place, and only for its presence", () => {
+    // If this list grows, either someone wired the values up — in which
+    // case this whole block is obsolete — or a second shape check appeared
+    // and the two can disagree.
+    expect(readsOf("starting_values_kg")).toEqual(["lib/engine/adapt.ts"]);
+    const adapt = fs.readFileSync(path.join(SRC_DIR, "lib/engine/adapt.ts"), "utf8");
+    expect(adapt).toContain("Boolean(tms && tms.starting_values_kg)");
+  });
+
+  it("authors real numbers that nothing consumes", () => {
+    // The reason this is worth a test rather than a comment: the values
+    // look authoritative in the JSON and a reader has no way to tell they
+    // are inert.
+    const withValues = programs.filter(({ program }) => {
+      const tms = (program as unknown as {
+        training_maxes?: { starting_values_kg?: Record<string, unknown> };
+      }).training_maxes;
+      return Object.values(tms?.starting_values_kg ?? {}).some((v) => typeof v === "number");
+    });
+    expect(withValues.length).toBeGreaterThan(0);
+  });
+});

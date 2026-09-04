@@ -50,13 +50,29 @@ the suite red.
 
 717 tests, up from 706.
 
+## Commit 3 — the running rest
+
+`lib/rest-persistence.ts`. Deferred once as "needs a product answer"; it did
+not. "Rest finished N min ago" IS the answer, and deferring it was the
+second time in this session I mistook a determined call for a decision.
+
+A rest is two numbers, so it restores exactly off the wall clock. Thirty
+minute cap — much shorter than the cursor's six hours, because past that it
+is not a rest, it is a note that you stopped training.
+
+**The bug the tests caught.** `restoredExpired` was first DERIVED inside
+`RestTakeover` from the current clock. That flips to true the moment a
+legitimately-running restored rest reaches its target, which suppressed the
+very completion it was supposed to fire. `restoreRest` now decides it once,
+at the moment of restore, and passes it down. Worth remembering: the
+component test found this, the unit tests could not have.
+
+An expired rest does NOT fire the chime, the vibration or `onDone` — the
+last would close the screen before the user saw why it was there. The
+effort question, not the clock, is the content of that takeover.
+
 ## Not done
 
-- **Persisting a RUNNING timer across a cold load.** Deliberately deferred.
-  It needs a product answer that has not been given: rest that EXPIRED
-  while the app was evicted must not resurrect as a live countdown, so it
-  needs a "rest finished N min ago" state, which is new UI rather than a
-  restore. The cursor lands you on the right set; you tap on.
 - **Push notification on rest expiry.** Out for MVP — needs a permission
   prompt, and mid-session is the wrong moment to ask.
 

@@ -52,6 +52,8 @@ export function RestTakeover({
   active,
   justLoggedSetIndex,
   targetSeconds,
+  restoredStartedAt,
+  restoredExpired = false,
   railExercises,
   upNext,
   effortAnswered,
@@ -64,6 +66,22 @@ export function RestTakeover({
   active: RailExercise;
   justLoggedSetIndex: number;
   targetSeconds: number;
+  /**
+   * A rest already under way when the app was discarded (2026-09-04).
+   * Anchors the countdown to when the rest ACTUALLY started rather than to
+   * this mount, so a restored rest shows the true remaining time. Absent
+   * for a rest starting now. See `lib/rest-persistence.ts`.
+   */
+  restoredStartedAt?: number;
+  /**
+   * Whether that restored rest had ALREADY run out when the app came back.
+   * Passed in rather than derived here: deriving it from the current clock
+   * made it flip to true the moment a legitimately-running restored rest
+   * reached its target, which suppressed the completion it was supposed to
+   * fire. `restoreRest` decides this once, at the moment of restore, and
+   * it is the only place that should.
+   */
+  restoredExpired?: boolean;
   railExercises: RailExercise[];
   /** Where the timer will actually land. Drives the "Next up" copy. */
   upNext: UpNext;
@@ -96,7 +114,12 @@ export function RestTakeover({
    * not rewind the start. See the `extra` comment above for why that
    * distinction has bitten before.
    */
-  const elapsed = useElapsedSeconds(true);
+  const elapsed = useElapsedSeconds(true, restoredStartedAt ?? null);
+  // A rest restored AFTER it had already run out must not fire the
+  // completion chime, the vibration or `onDone` — those announce a moment
+  // that passed while the phone was in a pocket, and `onDone` would close
+  // this screen before the user saw why it was here. The effort question is
+  // the real content of the takeover; the clock is not.
   const [selectedEffort, setSelectedEffort] = useState<(typeof EFFORTS)[number]["label"] | null>(null);
   const [jumpOpen, setJumpOpen] = useState(false);
   // The countdown effect runs once, so `target` inside it would be the
@@ -136,6 +159,13 @@ export function RestTakeover({
    * the condition is `elapsed >= target`, not `elapsed === target`.
    */
   useEffect(() => {
+    if (restoredExpired) {
+      // Nothing to announce and nothing to count. Mark the cues spent so a
+      // later +30s does not replay them for a rest that already ended.
+      doneFiredRef.current = true;
+      announced30sRef.current = true;
+      return;
+    }
     const t = targetRef.current;
     const remaining = Math.max(0, t - elapsed);
     if (!announced30sRef.current && remaining <= 30 && remaining > 0) {
@@ -161,13 +191,14 @@ export function RestTakeover({
       onDone();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [elapsed]);
+  }, [elapsed, restoredExpired]);
 
   const remaining = Math.max(0, target - elapsed);
   const mins = Math.floor(remaining / 60);
   const secs = remaining % 60;
   const fmt = `${mins}:${String(secs).padStart(2, "0")}`;
   const pct = Math.min(1, elapsed / target) * 100;
+  const overdueSeconds = Math.max(0, elapsed - target);
 
   const existingNote = (store.logs[date]?.exercises[active.key]?.notes ?? "").trim();
   // Three of the eight shipped programs are gymnastics and carry no training
@@ -225,7 +256,19 @@ export function RestTakeover({
       </div>
       <div className="flex-1 flex flex-col items-center justify-center px-6 text-center min-h-0">
         <p className="font-mono text-[11px] uppercase tracking-[.18em] text-slate mb-[18px]">Rest</p>
-        <p className="text-[104px] leading-[.9] font-semibold tracking-[-.05em] text-strong mb-2">{fmt}</p>
+        {restoredExpired ? (
+          /* Honest about a rest that ended while the app was gone. A
+             resurrected countdown would be the app inventing time the user
+             then acts on. */
+          <p className="text-[34px] leading-[1.1] font-semibold tracking-[-.02em] text-strong mb-2">
+            Rest finished{" "}
+            {overdueSeconds < 60
+              ? "just now"
+              : `${Math.round(overdueSeconds / 60)} min ago`}
+          </p>
+        ) : (
+          <p className="text-[104px] leading-[.9] font-semibold tracking-[-.05em] text-strong mb-2">{fmt}</p>
+        )}
         {effortAnswered && selectedEffort ? (
           <p className="text-[14.5px] text-muted">
             {selectedEffort} · {EFFORTS.find((e) => e.label === selectedEffort)?.rir}

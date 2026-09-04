@@ -12,6 +12,7 @@ import { EmptyStateCard } from "@/components/EmptyStateCard";
 import { isOffPlanOn } from "@/lib/features";
 import { SetView } from "@/components/session/SetView";
 import { useSessionCursor, reconcileCursor } from "@/lib/session-cursor";
+import { writeRest, clearRest, restoreRest } from "@/lib/rest-persistence";
 import { RestTakeover } from "@/components/session/RestTakeover";
 import { nextAfterSet } from "@/components/session/shared/advance";
 import { NoteSheet } from "@/components/session/NoteSheet";
@@ -61,6 +62,14 @@ export function OffPlanSession() {
   const [sheet, setSheet] = useState<SessionSheet>(null);
   const [resting, setResting] = useState(false);
   const [restSeconds, setRestSeconds] = useState(90);
+  /**
+   * A rest that was already running when the OS discarded the app
+   * (2026-09-04). Anchors the restored takeover to when the rest actually
+   * started. Null for a rest starting now. See `lib/rest-persistence.ts`.
+   */
+  const [restStartedAt, setRestStartedAt] = useState<number | null>(null);
+  /** Whether that restored rest had already run out. See `RestTakeover`. */
+  const [restExpired, setRestExpired] = useState(false);
   const [effortAnswered, setEffortAnswered] = useState(false);
 
   // Same category → group labels the pre-redesign page used. Run-category
@@ -158,6 +167,15 @@ export function OffPlanSession() {
       setActiveKey(next.activeKey);
       setActiveSetIndex(next.activeSetIndex);
       setMode(next.mode);
+      // A rest only makes sense on top of a set, so it is restored with
+      // the cursor and only when the cursor actually landed on one.
+      if (next.mode !== "set") return;
+      const rest = restoreRest("offplan", activeDate);
+      if (!rest) return;
+      setRestSeconds(rest.targetSeconds);
+      setRestStartedAt(rest.startedAt);
+      setRestExpired(rest.kind === "expired");
+      setResting(true);
     },
     Boolean(program) && hydrated && railExercises.length > 0,
   );
@@ -207,6 +225,7 @@ export function OffPlanSession() {
     setActiveSetIndex(firstUnfinishedSetIndex(key));
     setEditingLoad(false);
     setResting(false);
+    clearRest();
     setSheet(null);
     setMode("set");
   };
@@ -239,7 +258,15 @@ export function OffPlanSession() {
           onBackToBrief={() => setMode("brief")}
           onConfirmed={(secs) => {
             setRestSeconds(secs);
+            setRestStartedAt(null);
+            setRestExpired(false);
             setResting(true);
+            writeRest({
+              scope: "offplan",
+              date: activeDate,
+              startedAt: Date.now(),
+              targetSeconds: secs,
+            });
           }}
           onEdited={() => {
             setEditingLoad(false);
@@ -255,6 +282,8 @@ export function OffPlanSession() {
             active={active}
             justLoggedSetIndex={activeSetIndex}
             targetSeconds={restSeconds}
+            restoredStartedAt={restStartedAt ?? undefined}
+          restoredExpired={restExpired}
             railExercises={railExercises}
             upNext={upNext}
             effortAnswered={effortAnswered}
@@ -262,6 +291,7 @@ export function OffPlanSession() {
             date={activeDate}
             onDone={() => {
               setResting(false);
+              clearRest();
               setEffortAnswered(false);
               setEditingLoad(false);
               // Same `upNext` the rest screen just showed.
@@ -287,6 +317,7 @@ export function OffPlanSession() {
             onStopSession={() => {
               setSheet(null);
               setResting(false);
+              clearRest();
               setMode("brief");
             }}
           />

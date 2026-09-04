@@ -15,6 +15,7 @@ import { RestDayCard, GraduationCard } from "@/components/session/shared/StatusC
 import { BriefView } from "@/components/session/BriefView";
 import { SetView } from "@/components/session/SetView";
 import { useSessionCursor, reconcileCursor } from "@/lib/session-cursor";
+import { writeRest, clearRest, restoreRest } from "@/lib/rest-persistence";
 import { RestTakeover } from "@/components/session/RestTakeover";
 import { nextAfterSet } from "@/components/session/shared/advance";
 import { NoteSheet } from "@/components/session/NoteSheet";
@@ -110,6 +111,14 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
   const [sheet, setSheet] = useState<SessionSheet>(null);
   const [resting, setResting] = useState(false);
   const [restSeconds, setRestSeconds] = useState(120);
+  /**
+   * A rest that was already running when the OS discarded the app
+   * (2026-09-04). Anchors the restored takeover to when the rest actually
+   * started. Null for a rest starting now. See `lib/rest-persistence.ts`.
+   */
+  const [restStartedAt, setRestStartedAt] = useState<number | null>(null);
+  /** Whether that restored rest had already run out. See `RestTakeover`. */
+  const [restExpired, setRestExpired] = useState(false);
   const [effortAnswered, setEffortAnswered] = useState(false);
 
   // Hooks must run unconditionally on every render, so `phase`/`blocks`
@@ -165,6 +174,15 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
       setActiveKey(next.activeKey);
       setActiveSetIndex(next.activeSetIndex);
       setMode(next.mode);
+      // A rest only makes sense on top of a set, so it is restored with
+      // the cursor and only when the cursor actually landed on one.
+      if (next.mode !== "set") return;
+      const rest = restoreRest(`day:${slug}`, activeDate);
+      if (!rest) return;
+      setRestSeconds(rest.targetSeconds);
+      setRestStartedAt(rest.startedAt);
+      setRestExpired(rest.kind === "expired");
+      setResting(true);
     },
     Boolean(program) && hydrated && railExercises.length > 0,
   );
@@ -263,6 +281,7 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
     setActiveSetIndex(firstUnfinishedSetIndex(key));
     setEditingLoad(false);
     setResting(false);
+    clearRest();
     setSheet(null);
     setMode("set");
   };
@@ -330,7 +349,15 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
         onBackToBrief={() => setMode("brief")}
         onConfirmed={(secs) => {
           setRestSeconds(secs);
+          setRestStartedAt(null);
+            setRestExpired(false);
           setResting(true);
+          writeRest({
+            scope: `day:${slug}`,
+            date: activeDate,
+            startedAt: Date.now(),
+            targetSeconds: secs,
+          });
         }}
         onEdited={() => {
           // A correction, not a set — no rest. Put the user back where
@@ -349,6 +376,8 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
           active={active}
           justLoggedSetIndex={activeSetIndex}
           targetSeconds={restSeconds}
+          restoredStartedAt={restStartedAt ?? undefined}
+          restoredExpired={restExpired}
           railExercises={railExercises}
           upNext={upNext}
           effortAnswered={effortAnswered}
@@ -356,6 +385,7 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
           date={activeDate}
           onDone={() => {
             setResting(false);
+            clearRest();
             setEffortAnswered(false);
             setEditingLoad(false);
             // Same `upNext` the rest screen just showed — label and
@@ -371,6 +401,7 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
           }}
           onJump={(key) => {
             setResting(false);
+            clearRest();
             setEffortAnswered(false);
             jumpTo(key);
           }}
@@ -386,6 +417,7 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
           onStopSession={() => {
             setSheet(null);
             setResting(false);
+            clearRest();
             setMode("brief");
           }}
         />

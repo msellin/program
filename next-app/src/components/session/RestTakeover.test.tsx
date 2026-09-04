@@ -20,7 +20,7 @@ const rail = (over: Partial<RailExercise> = {}): RailExercise =>
     ...over,
   }) as RailExercise;
 
-function renderRest(over: { upNext?: Parameters<typeof RestTakeover>[0]["upNext"]; effortAnswered?: boolean; onDone?: () => void } = {}) {
+function renderRest(over: { upNext?: Parameters<typeof RestTakeover>[0]["upNext"]; effortAnswered?: boolean; onDone?: () => void; restoredStartedAt?: number; restoredExpired?: boolean } = {}) {
   const active = rail();
   const onEffortAnswered = vi.fn();
   render(
@@ -28,6 +28,8 @@ function renderRest(over: { upNext?: Parameters<typeof RestTakeover>[0]["upNext"
       active={active}
       justLoggedSetIndex={0}
       targetSeconds={120}
+      restoredStartedAt={over.restoredStartedAt}
+      restoredExpired={over.restoredExpired}
       railExercises={[active]}
       upNext={over.upNext ?? { kind: "set", setIndex: 1, rail: active }}
       effortAnswered={over.effortAnswered ?? false}
@@ -134,5 +136,54 @@ describe("the countdown survives a backgrounded app", () => {
     renderRest();
     await advanceWallClockOnly(600_000);
     expect(screen.getByText("0:00")).toBeDefined();
+  });
+});
+
+describe("a rest restored after the app was discarded", () => {
+  /**
+   * The last piece of session state that vanished on an iOS eviction. The
+   * countdown is anchored to when the rest ACTUALLY started, so it resumes
+   * at the true remaining time rather than restarting.
+   */
+  beforeEach(() => {
+    vi.useFakeTimers({ shouldAdvanceTime: false });
+    vi.setSystemTime(new Date("2026-09-04T10:05:00.000Z"));
+  });
+  afterEach(() => vi.useRealTimers());
+
+  it("resumes at the true remaining time, not from the top", () => {
+    // 120s rest that started 90s ago. Restarting the clock would hand the
+    // user an extra minute and a half of rest they did not take.
+    renderRest({ restoredStartedAt: Date.now() - 90_000 });
+    expect(screen.getByText("0:30")).toBeDefined();
+  });
+
+  it("says a rest is over rather than resurrecting a countdown", () => {
+    // Inventing time that has already passed is worse than losing the
+    // timer, because the user acts on it.
+    renderRest({ restoredStartedAt: Date.now() - 300_000, restoredExpired: true });
+    expect(screen.getByText(/rest finished 3 min ago/i)).toBeDefined();
+    expect(screen.queryByText("0:00")).toBeNull();
+  });
+
+  it("does not fire completion for a rest that ended while away", () => {
+    // `onDone` closes the takeover. Firing it on mount would shut the
+    // screen before the user saw why it was there — and the effort
+    // question, not the clock, is the content of this screen.
+    const onDone = vi.fn();
+    renderRest({ restoredStartedAt: Date.now() - 300_000, restoredExpired: true, onDone });
+    expect(onDone).not.toHaveBeenCalled();
+    expect(screen.getByRole("radiogroup")).toBeDefined();
+  });
+
+  it("still completes normally for a rest restored while running", () => {
+    const onDone = vi.fn();
+    renderRest({ restoredStartedAt: Date.now() - 90_000, onDone });
+    expect(onDone).not.toHaveBeenCalled();
+    act(() => {
+      vi.setSystemTime(new Date(Date.now() + 31_000));
+      vi.advanceTimersByTime(250);
+    });
+    expect(onDone).toHaveBeenCalled();
   });
 });
