@@ -700,14 +700,50 @@ export const FLOWS: Flow[] = [
         await ctx.page.waitForTimeout(450);
         await ctx.probe("RestTakeover", '[data-surface="RestTakeover"] [role="dialog"]');
         await ctx.capture("02c-jump-sheet");
-        if (!(await ctx.tap("RestTakeover", /^Cancel/))) {
+        // The rows themselves were never driven — only Cancel. Every row
+        // is named after a drill, so before `data-control` they also each
+        // counted as a separate control, which is most of why this surface
+        // read as 8/14. Drive one under its alias, then come back.
+        //
+        // Jumping closes the takeover and switches exercise, so this has
+        // to restore the state the rest of the flow needs: log a set on
+        // the exercise we landed on, which reopens a rest.
+        const row = ctx.page
+          .locator('[data-surface="RestTakeover"] [data-control="jump row"]')
+          .first();
+        if (await row.count()) {
+          await row.click({ timeout: CLICK_TIMEOUT_MS }).catch(() => {});
+          ctx.record("RestTakeover", "jump row");
+          await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
+          await ctx.capture("02d-after-jump");
+          await ctx.check(
+            "jumping from the rest sheet leaves the rest and opens a set",
+            async () => (await ctx.page.locator('[data-surface="SetView"]').count()) > 0,
+          );
+          await logCurrentSet(ctx);
+          await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
+          if ((await ctx.page.locator('[data-surface="RestTakeover"]').count()) === 0) {
+            throw new SkipFlow("jumped exercise did not reopen a rest — nothing left to drive");
+          }
+        } else if (!(await ctx.tap("RestTakeover", /^Cancel/))) {
           await ctx.page.keyboard.press("Escape").catch(() => {});
         }
         await ctx.page.waitForTimeout(300);
       }
 
       // Every rung of the effort scale — each writes a different RPE.
-      for (const effort of [/^Easy/, /^Grind/, /^Solid/]) {
+      // All four rungs (2026-09-04 — "Very easy" was missing, and each
+      // writes a different RPE). Re-opened via `change` between each,
+      // because picking one commits the RPE and takes the takeover down.
+      // Grind LAST (2026-09-04). It is the one rung that opens the note
+      // sheet over the top of the takeover, and the note sheet's scrim
+      // swallows the `change` tap that re-opens the picker — so the run of
+      // 2026-09-04 recorded "clicked change but probe never saw it", then a
+      // 15s click timeout, then "/^Solid/ no element matched". Solid read
+      // as an uncovered control when it was really a control the flow had
+      // scrimmed itself out of reaching. Same class as the ordering note on
+      // +30s above.
+      for (const effort of [/^Very easy/, /^Easy/, /^Solid/, /^Grind/]) {
         if (await ctx.tap("RestTakeover", effort)) {
           await ctx.page.waitForTimeout(350);
           await ctx.tap("RestTakeover", /^change/);
@@ -1565,12 +1601,25 @@ export async function runFlows(
           .evaluateAll((els, sfc) =>
             els
               .map((el) => {
-                // The exercise rail is a horizontal scroller of tabs
-                // named after the session's drills. Those names are
-                // content, not app strings — see the `as` note on `tap`.
-                // Both sides must agree on the alias or the control
-                // reads as seen-but-never-driven forever. Scoped to
-                // SetView so other surfaces keep their real labels.
+                // Content-named controls alias to one stable name.
+                //
+                // A control labelled with session CONTENT — a drill name —
+                // is not one control per drill. Counted individually the
+                // denominator grows with the catalog and can never
+                // converge, and the surface reads as permanently
+                // under-covered. See the `as` note on `tap`; both sides
+                // must agree on the alias or the control is
+                // seen-but-never-driven forever.
+                //
+                // `data-control` is the general mechanism (2026-09-04).
+                // Before it, the rule was hardcoded to SetView's rail, so
+                // RestTakeover's jump sheet — one button per exercise,
+                // every one named after a drill — counted each row as a
+                // distinct control. That alone was most of why that
+                // surface sat at 8/14: not a coverage gap, a denominator
+                // inflated by the session's own exercise list.
+                const declared = el.getAttribute("data-control");
+                if (declared) return declared;
                 if (sfc === "SetView" && el.closest("div.overflow-x-auto")) return "rail tab";
                 const label =
                   el.getAttribute("aria-label") ??

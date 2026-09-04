@@ -173,7 +173,14 @@ export type CoverageReport = {
     exercised: number;
     heldBack: number;
     pct: number;
-    bySurface: Array<{ surface: string; seen: number; exercised: number; heldBack: number }>;
+    bySurface: Array<{
+      surface: string;
+      seen: number;
+      exercised: number;
+      heldBack: number;
+      /** Control names no flow drove — see the rollup comment. */
+      neverDriven?: string[];
+    }>;
   };
   store: { populated: string[]; empty: string[]; pct: number };
   states: {
@@ -261,6 +268,22 @@ export function buildCoverage(opts: {
     seen: e.seen.size,
     exercised: e.exercised.size,
     heldBack: e.held.size,
+    /**
+     * WHICH controls were never driven (2026-09-04).
+     *
+     * Only counts were kept before, and "RestTakeover 8/14" turned out to
+     * be undiagnosable from the artifacts — closing it meant reading the
+     * component and the flow side by side and inferring the difference.
+     * That is the same critique the probe itself was built on: a number
+     * that says a gap exists but not what is in it flatters the harness.
+     *
+     * It also hid the actual cause. Six of that surface's "misses" were
+     * one control — the jump sheet's per-exercise rows, counted once per
+     * drill.
+     */
+    neverDriven: Array.from(e.seen)
+      .filter((n) => !e.exercised.has(n) && !e.held.has(n))
+      .sort(),
   }));
   const controlsSeen = controlRows.reduce((n, r) => n + r.seen, 0);
   const controlsExercised = controlRows.reduce((n, r) => n + r.exercised, 0);
@@ -403,14 +426,26 @@ export function writeFleetSummary(rootDir: string, reports: CoverageReport[]): v
     );
   }
   // Per-surface control detail, unioned across the fleet.
-  const merged = new Map<string, { seen: number; exercised: number; held: number }>();
+  const merged = new Map<
+    string,
+    { seen: number; exercised: number; held: number; never: Set<string> }
+  >();
   for (const r of reports) {
     for (const row of r.controls.bySurface) {
-      const cur = merged.get(row.surface) ?? { seen: 0, exercised: 0, held: 0 };
+      const cur = merged.get(row.surface) ?? { seen: 0, exercised: 0, held: 0, never: new Set<string>() };
+      // A control counts as never driven only if NO persona drove it.
+      // Intersecting rather than unioning: a control one persona could not
+      // reach but another did is covered, and listing it would send the
+      // next reader chasing a gap that is not there.
+      const never: Set<string> =
+        merged.has(row.surface)
+          ? new Set([...cur.never].filter((n) => (row.neverDriven ?? []).includes(n)))
+          : new Set(row.neverDriven ?? []);
       merged.set(row.surface, {
         seen: Math.max(cur.seen, row.seen),
         exercised: Math.max(cur.exercised, row.exercised),
         held: Math.max(cur.held, row.heldBack),
+        never,
       });
     }
   }
@@ -432,6 +467,18 @@ export function writeFleetSummary(rootDir: string, reports: CoverageReport[]): v
       "| Surface | Exercised | Found | Held back (mutating) |", "|---|---|---|---|");
     for (const [surface, v] of Array.from(merged.entries()).sort()) {
       lines.push(`| ${surface} | ${v.exercised} | ${v.seen} | ${v.held} |`);
+    }
+    // NAME the gap. A count says a hole exists; only the names say what is
+    // in it, and without them closing one means reading the component and
+    // the flow side by side and inferring the difference.
+    const withGaps = Array.from(merged.entries())
+      .filter(([, v]) => v.never.size > 0)
+      .sort();
+    if (withGaps.length) {
+      lines.push("", "### Controls no persona ever drove", "");
+      for (const [surface, v] of withGaps) {
+        lines.push(`- **${surface}** — ${Array.from(v.never).sort().join(", ")}`);
+      }
     }
   }
   const everMissedRoute = reports[0].routes.missing.filter((route) =>

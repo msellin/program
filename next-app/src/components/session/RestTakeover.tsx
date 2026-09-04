@@ -426,6 +426,12 @@ export function RestTakeover({
                 <button
                   key={r.key}
                   type="button"
+                  /* Content-named control: the label is whichever drill the
+                     programme authored. The persona harness aliases these to
+                     one stable name so the coverage denominator does not grow
+                     with the catalog and never converge. See `data-control`
+                     in tests/e2e/harness/flows.ts. */
+                  data-control="jump row"
                   onClick={() => {
                     setJumpOpen(false);
                     onJump(r.key);
