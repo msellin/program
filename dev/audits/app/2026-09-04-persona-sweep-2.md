@@ -114,3 +114,39 @@ thirty-minute sweep spent on two clicks that cannot succeed.
 Next session: `npx playwright show-trace` on
 `persona-strength/…session-exercise-details`, find what is over the button,
 then fix. Do not shorten the timeout to hide it.
+
+---
+
+## Sweep #3 (post-fix) — and a regression I caused
+
+23 runs, 31.1 min, 0 failures.
+
+| | #1 | #2 | #3 |
+|---|---|---|---|
+| ExerciseDetailsSheet | 0/1 | 0/1 | **1/1** |
+| RestTakeover | 8/14 | 9/14 | **10/11** |
+| RetestLoggingSheet | 1/3 | 1/3 | **1/2 +1 held** |
+| Never-driven controls | (not reported) | 3 | **1** |
+| Behavioural checks | 246 | 246 | **229** |
+
+**The three fixes landed.** `data-control` cut RestTakeover's denominator
+14 → 11 once deployed, confirming the alias. The details sheet's Close now
+works. The `LOG READING` abstention now files correctly, so it shows as
+held-back rather than never-driven.
+
+**And I broke something.** Checks fell 246 → 229. Cause: the jump-row drive
+I inlined into `session-rest-extend`. Jumping closes the takeover, so the
+flow had to log another set to recover one — and on five personas the
+exercise it landed on had nothing left to log, so it aborted and took the
++30s, effort and skip-rest checks with it.
+
+Seventeen behavioural checks lost fleet-wide, to add one control. **A
+coverage addition must not be able to cost coverage.** Moved to its own
+terminal flow, `session-rest-jump`, where ending early costs nothing.
+
+## Still open
+
+`OverflowSheet — Close` and `NoteSheet — Close` still record
+`locator.click: Timeout 15000ms` on 12 personas each. The
+ExerciseDetailsSheet fix did not reach them, so the layering problem has at
+least one more instance. Same investigation, not yet done.

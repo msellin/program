@@ -97,6 +97,7 @@ const FLOW_SURFACES: Record<string, string[]> = {
   "session-controls": ["SetView"],
   "session-log-missed-attempt": ["SetView"],
   "session-cold-reload": ["SetView", "RestTakeover"],
+  "session-rest-jump": ["SetView", "RestTakeover"],
   "session-rest-extend": ["RestTakeover"],
   "session-overflow-sheet": ["OverflowSheet"],
   "activity-log-sheet": ["OffPlanSheet"],

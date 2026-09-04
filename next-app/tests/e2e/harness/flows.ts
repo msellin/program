@@ -640,6 +640,46 @@ export const FLOWS: Flow[] = [
     },
   },
   {
+    id: "session-rest-jump",
+    desc: "Rest takeover → Do something else next → jump to another exercise",
+    async run(ctx) {
+      /**
+       * Split out of `session-rest-extend` on 2026-09-04.
+       *
+       * The jump rows had never been driven — the flow only ever cancelled
+       * out of the sheet. Driving one is terminal by nature: it closes the
+       * takeover and switches exercise, so nothing that needs the takeover
+       * can follow it. That is exactly why it belongs in its own flow
+       * rather than in the middle of one with three assertions after it.
+       */
+      await enterSetFlow(ctx);
+      await logCurrentSet(ctx);
+      await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
+      if ((await ctx.page.locator('[data-surface="RestTakeover"]').count()) === 0) {
+        throw new SkipFlow("rest takeover did not open");
+      }
+      if (!(await ctx.tap("RestTakeover", /do something else next/i))) {
+        throw new SkipFlow("no jump affordance on this rest");
+      }
+      await ctx.page.waitForTimeout(450);
+      await ctx.capture("01-jump-sheet");
+      const row = ctx.page
+        .locator('[data-surface="RestTakeover"] [data-control="jump row"]')
+        .first();
+      if ((await row.count()) === 0) throw new SkipFlow("jump sheet lists no exercises");
+      await row.click({ timeout: CLICK_TIMEOUT_MS });
+      ctx.record("RestTakeover", "jump row");
+      await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
+      await ctx.capture("02-after-jump");
+      await ctx.check(
+        "jumping from the rest sheet leaves the rest and opens a set",
+        async () =>
+          (await ctx.page.locator('[data-surface="SetView"]').count()) > 0 &&
+          (await ctx.page.locator('[data-surface="RestTakeover"]').count()) === 0,
+      );
+    },
+  },
+  {
     id: "session-rest-extend",
     desc: "The rest takeover — timer, effort scale, jump sheet",
     async run(ctx) {
@@ -700,32 +740,17 @@ export const FLOWS: Flow[] = [
         await ctx.page.waitForTimeout(450);
         await ctx.probe("RestTakeover", '[data-surface="RestTakeover"] [role="dialog"]');
         await ctx.capture("02c-jump-sheet");
-        // The rows themselves were never driven — only Cancel. Every row
-        // is named after a drill, so before `data-control` they also each
-        // counted as a separate control, which is most of why this surface
-        // read as 8/14. Drive one under its alias, then come back.
+        // Cancel, not a row. Driving a row is `session-rest-jump`'s job.
         //
-        // Jumping closes the takeover and switches exercise, so this has
-        // to restore the state the rest of the flow needs: log a set on
-        // the exercise we landed on, which reopens a rest.
-        const row = ctx.page
-          .locator('[data-surface="RestTakeover"] [data-control="jump row"]')
-          .first();
-        if (await row.count()) {
-          await row.click({ timeout: CLICK_TIMEOUT_MS }).catch(() => {});
-          ctx.record("RestTakeover", "jump row");
-          await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
-          await ctx.capture("02d-after-jump");
-          await ctx.check(
-            "jumping from the rest sheet leaves the rest and opens a set",
-            async () => (await ctx.page.locator('[data-surface="SetView"]').count()) > 0,
-          );
-          await logCurrentSet(ctx);
-          await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
-          if ((await ctx.page.locator('[data-surface="RestTakeover"]').count()) === 0) {
-            throw new SkipFlow("jumped exercise did not reopen a rest — nothing left to drive");
-          }
-        } else if (!(await ctx.tap("RestTakeover", /^Cancel/))) {
+        // It was inlined here first, and that was a mistake worth
+        // recording: jumping closes the takeover, so the flow had to log
+        // another set to get a rest back, and on five personas it could not
+        // — the exercise it landed on had nothing left to log. The flow
+        // then aborted and took the +30s, effort and skip-rest checks with
+        // it. Seventeen behavioural checks lost fleet-wide, to add one
+        // control. A coverage addition must not be able to cost coverage.
+        ctx.note("RestTakeover", "jump row", "driven by session-rest-jump — jumping ends this flow");
+        if (!(await ctx.tap("RestTakeover", /^Cancel/))) {
           await ctx.page.keyboard.press("Escape").catch(() => {});
         }
         await ctx.page.waitForTimeout(300);
