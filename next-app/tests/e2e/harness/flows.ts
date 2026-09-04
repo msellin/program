@@ -285,6 +285,23 @@ async function enterSetFlow(ctx: FlowContext): Promise<void> {
 }
 
 /** Log the currently-shown set, whatever its shape. */
+/**
+ * The rest takeover's countdown in whole seconds, or null when it is not
+ * showing one — which is the case for a rest restored AFTER it had already
+ * run out, where the takeover says "Rest finished N min ago" instead of
+ * resurrecting a countdown.
+ */
+async function readRestClockSeconds(ctx: FlowContext): Promise<number | null> {
+  const t = await ctx.page
+    .locator('[data-surface="RestTakeover"] p')
+    .filter({ hasText: /^\d+:\d\d$/ })
+    .first()
+    .textContent()
+    .catch(() => null);
+  const m = (t ?? "").trim().match(/^(\d+):(\d\d)$/);
+  return m ? Number(m[1]) * 60 + Number(m[2]) : null;
+}
+
 async function logCurrentSet(ctx: FlowContext): Promise<void> {
   const done = ctx.page.getByRole("button", { name: /^(Done|Save) — set \d+/ });
   if (await done.count()) {
@@ -500,6 +517,126 @@ export const FLOWS: Flow[] = [
       await ctx.tap("SetView", /back to brief/i);
       await ctx.page.waitForTimeout(300);
       await ctx.capture("05-back-to-brief");
+    },
+  },
+  {
+    id: "session-log-missed-attempt",
+    desc: "Record a lift that was loaded and not lifted",
+    async run(ctx) {
+      // Added 2026-09-04 with the `failed` flag. The founder made 115x1 on
+      // front squat and missed 122; the 122 was the only number in that
+      // session that bounds his one-rep max from ABOVE, and it lived in a
+      // free-text note nothing read.
+      //
+      // The control is gated to loadable lifts that carry a TRAINING MAX,
+      // so most personas legitimately never see it — cardio, skill and
+      // mobility arcs have no TMs at all. That is a skip, not a gap.
+      await enterSetFlow(ctx);
+      await ctx.probe("SetView", '[data-surface="SetView"]');
+      const miss = ctx.page.getByRole("button", { name: /^Missed [\d.]+ kg$/ });
+      if ((await miss.count()) === 0) {
+        throw new SkipFlow("no training max on this lift — the miss control is gated to TM lifts");
+      }
+      await ctx.capture("01-before-miss");
+      await ctx.tap("SetView", /^Missed [\d.]+ kg$/, "Missed <n> kg");
+      await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
+      await ctx.capture("02-after-miss");
+      // Logging a miss starts a rest like any other set, and the takeover
+      // covers SetView. Inspecting the pip underneath it reads whatever
+      // the accessibility tree happens to expose through an overlay,
+      // which is not a test of anything. Take it down first.
+      await ctx.tap("RestTakeover", /skip rest/i);
+      await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
+
+      await ctx.check(
+        "a missed attempt is written as a failed set at zero reps",
+        async () => {
+          const store = await ctx.store();
+          const logs = (store.logs ?? {}) as Record<string, { exercises?: Record<string, { sets?: Array<Record<string, unknown>> }> }>;
+          for (const day of Object.values(logs)) {
+            for (const entry of Object.values(day?.exercises ?? {})) {
+              for (const set of entry?.sets ?? []) {
+                if (set.failed === true) return set.reps === 0 && typeof set.weight_kg === "number";
+              }
+            }
+          }
+          return false;
+        },
+      );
+      await ctx.check(
+        "a miss reads as a miss, not as a set of zero",
+        // "122x0" on the pip looks like a data-entry error rather than the
+        // most informative number in the session.
+        async () =>
+          (await ctx.page.getByRole("button", { name: /^Set \d+, missed [\d.]+ kilos\. Edit\.$/ }).count()) > 0,
+      );
+    },
+  },
+  {
+    id: "session-cold-reload",
+    desc: "Survive the OS discarding the app mid-set",
+    async run(ctx) {
+      /**
+       * The founder's own report, 2026-09-04: "backgrounding app seems to
+       * mess up things, timers, page views reset etc."
+       *
+       * iOS evicts a backgrounded web view under memory pressure and
+       * relaunches COLD at the manifest start_url. A full page reload is
+       * the closest a headless browser gets to that, and it is close
+       * enough to catch what was actually broken: nothing persisted the
+       * set you were on or the rest you were in.
+       *
+       * There was ZERO coverage of this before today, which is why three
+       * separate fixes for it have now shipped on founder reports rather
+       * than on a sweep.
+       */
+      await enterSetFlow(ctx);
+      await ctx.capture("01-mid-set");
+      const before = await ctx.page
+        .locator('[data-surface="SetView"] span')
+        .filter({ hasText: /· set \d+ of \d+/ })
+        .first()
+        .textContent()
+        .catch(() => null);
+
+      await logCurrentSet(ctx);
+      await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
+      const restOpened =
+        (await ctx.page.locator('[data-surface="RestTakeover"]').count()) > 0;
+      const clockBeforeReload = restOpened ? await readRestClockSeconds(ctx) : null;
+
+      await ctx.page.reload({ waitUntil: "domcontentloaded" });
+      await ctx.page.waitForTimeout(SESSION_SETTLE_MS * 2);
+      await ctx.capture("02-after-cold-reload");
+
+      await ctx.check(
+        "a cold reload lands back in the session, not on Day",
+        async () =>
+          (await ctx.page.locator('[data-surface="SetView"]').count()) > 0 ||
+          (await ctx.page.locator('[data-surface="RestTakeover"]').count()) > 0,
+        `before="${before ?? "?"}" restOpened=${restOpened}`,
+      );
+
+      if (restOpened) {
+        await ctx.check(
+          "a rest that was running comes back rather than vanishing",
+          async () => (await ctx.page.locator('[data-surface="RestTakeover"]').count()) > 0,
+        );
+        // A restored rest either counts down from where it truly is, or —
+        // if it ran out while the app was gone — says so. What it must
+        // never do is restart from the top, which hands the user rest
+        // they did not take.
+        const after = await readRestClockSeconds(ctx);
+        await ctx.check(
+          "a restored rest resumes where it was, not from the top",
+          async () => {
+            if (clockBeforeReload == null || after == null) return true; // expired copy, or no clock
+            // Time only moves forward. A restart would read HIGHER.
+            return after <= clockBeforeReload;
+          },
+          `before=${clockBeforeReload ?? "none"}s after=${after ?? "none"}s`,
+        );
+      }
     },
   },
   {
