@@ -51,14 +51,17 @@ is exactly how `daily_log_schema` and `progression_rules.states[]` shipped.
 
 ## Next steps
 
-1. Founder logs his own 122 through the new UI. Nothing was written to his
-   Supabase row; he chose "ship the code first".
-2. Once logged, `checkTrainingMaxes` should still be SILENT on front squat
-   — 110 TM against a 117.3 estimate capped at 119.5 is 94%, inside the
-   band. There is a regression test pinning exactly this. If it starts
-   firing after he logs, the ceiling is wrong, not his TM.
-3. `deadlift_conventional` (handover item C) is still open and still needs
+1. `deadlift_conventional` (handover item C) is still open and still needs
    him.
+
+**Backfilling the historical 122 is CLOSED — do not reopen it.** Founder
+declined on 2026-09-04 and he is right: it would change no output. His
+front squat is already silent (110 TM vs a 117.3 estimate = 94%, inside
+the band) and stays silent with the 122 in — `tm-plausibility.test.ts`
+pins exactly that. Nothing was ever written to his Supabase row.
+
+The feature is prospective. It pays off on the next miss, logged in the
+moment through `SetView`, not on reconstructing this one from a note.
 
 ## Not done, deliberately
 

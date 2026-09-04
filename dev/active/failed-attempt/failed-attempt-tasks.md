@@ -16,4 +16,8 @@
 - [x] eslint + tsc clean
 - [x] Production build check
 - [ ] Commit and push
-- [ ] Founder logs the 122 through the UI
+- [~] ~~Founder logs the 122 through the UI~~ — **dropped 2026-09-04, founder's
+  call.** Do not raise it again. Backfilling it would change no output: the
+  check is already silent on front squat and stays silent with the 122 in
+  (regression test pins this). The feature is prospective — it earns its keep
+  on the NEXT miss, not this one.
