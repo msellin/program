@@ -107,7 +107,7 @@ describe("selectProposals — non_responder_recommendation", () => {
     expect(out.find((p) => p.kind === "non_responder_recommendation")).toBeUndefined();
   });
 
-  it("fires a true_non_response proposal when the classifier flags it", () => {
+  it("does NOT surface a proposal when the true_non_response rule fires", () => {
     const program = baseProgram({
       non_responder_classifier: CLASSIFIER,
       retest_metrics: [
@@ -123,8 +123,21 @@ describe("selectProposals — non_responder_recommendation", () => {
       ],
     } as unknown as Partial<Program>);
 
-    // Two baselines with essentially no improvement (progress_ratio = 0)
-    // → true_non_response rule fires (< 0.1).
+    // Two baselines with essentially no improvement (progress_ratio = 0),
+    // so the true_non_response rule fires (< 0.1). This is the exact input
+    // that used to produce a RED proposal card headed "Not responding to
+    // current dose", offering the user three options — one of which was to
+    // accept a genetic ceiling and move to maintenance.
+    //
+    // Suppressed 2026-09-04 (founder decision). The rule still evaluates;
+    // the conclusion is no longer published, because the instrument under
+    // it cannot support it — see the long comment on `classify`'s return
+    // and dev/audits/programs/2026-09-04-submax-hr-evidence-check.md.
+    //
+    // This is the assertion that matters most: the classifier could be
+    // suppressed correctly and a proposal still reach the user, because
+    // `select.ts` reads recommendation_key off per-metric rows
+    // independently of the composite verdict.
     const store = baseStore({
       retest_readings: [
         { metric_id: "submax_hr_bpm", value: 150, observed_at: "2026-01-01" },
@@ -132,15 +145,7 @@ describe("selectProposals — non_responder_recommendation", () => {
       ],
     });
     const out = selectProposals(store, program, date);
-    const proposal = out.find((p) => p.kind === "non_responder_recommendation");
-    expect(proposal).toBeDefined();
-    if (proposal?.kind === "non_responder_recommendation") {
-      expect(proposal.verdict).toBe("true_non_response");
-      expect(proposal.programSlug).toBe("test-program");
-      expect(proposal.recommendationKey).toBe("punt_to_next_arc_or_swap_program");
-      expect(proposal.perMetric.length).toBeGreaterThan(0);
-      expect(proposal.priority).toBe(50);
-    }
+    expect(out.find((p) => p.kind === "non_responder_recommendation")).toBeUndefined();
   });
 
   it("HERITAGE Phase 5 — fires a retest_due proposal when the mid-block window opens", () => {

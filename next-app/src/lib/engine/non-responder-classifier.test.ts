@@ -99,6 +99,19 @@ describe("classify · Engine Builder", () => {
 
   it("returns under_dosing when signal is flat AND compliance is low", () => {
     // Signal barely moved (delta = -1, but target expects -5-ish).
+    //
+    // KEPT DELIBERATELY while `true_non_response` is suppressed
+    // (2026-09-04). This half is the better-evidenced one: its rule also
+    // requires `intensity_compliance_pct < 80`, measured from the user's
+    // own logs rather than inferred from noisy heart rate, and Ross 2015 —
+    // cited in engine-builder — says under-dosing is the likelier
+    // explanation for apparent non-response at Foundation intensities. It
+    // is also near-harmless if wrong: someone trains a little harder than
+    // they needed to.
+    //
+    // If this is ever suppressed too, the classifier has nothing left to
+    // say and should be removed rather than left telling everyone they are
+    // responding.
     const baselines: MetricBaseline[] = [
       { metric_id: "submax_hr_pace5_bpm", value: 150, observed_at: "2026-01-05" },
       { metric_id: "submax_hr_pace5_bpm", value: 149, observed_at: "2026-02-01" },
@@ -115,20 +128,49 @@ describe("classify · Engine Builder", () => {
     expect(result.composite_copy).toMatch(/under-dosed|under-training/i);
   });
 
-  it("returns true_non_response when signal is flat, compliance high, resting HR unchanged", () => {
-    const baselines: MetricBaseline[] = [
-      { metric_id: "submax_hr_pace5_bpm", value: 150, observed_at: "2026-01-05" },
-      { metric_id: "submax_hr_pace5_bpm", value: 149, observed_at: "2026-02-01" },
-      { metric_id: "resting_hr_bpm", value: 62, observed_at: "2026-01-05" },
-      { metric_id: "resting_hr_bpm", value: 62, observed_at: "2026-02-01" },
-    ];
+  /**
+   * `true_non_response` is SUPPRESSED (2026-09-04, founder decision).
+   *
+   * The rule below still fires — this is the exact input that used to
+   * produce a red proposal card offering the user a genetic ceiling. What
+   * changed is that the classifier no longer publishes that conclusion,
+   * because the instrument under it cannot support it: `submax_hr_pace5_bpm`
+   * is average HR on runs the user LABELLED easy, with no workload anchor,
+   * read as two raw points against a -5 bpm target.
+   *
+   * See the long comment on `classify`'s return, and
+   * `dev/audits/programs/2026-09-04-submax-hr-evidence-check.md`.
+   */
+  const FLAT_SIGNAL_HIGH_COMPLIANCE: MetricBaseline[] = [
+    { metric_id: "submax_hr_pace5_bpm", value: 150, observed_at: "2026-01-05" },
+    { metric_id: "submax_hr_pace5_bpm", value: 149, observed_at: "2026-02-01" },
+    { metric_id: "resting_hr_bpm", value: 62, observed_at: "2026-01-05" },
+    { metric_id: "resting_hr_bpm", value: 62, observed_at: "2026-02-01" },
+  ];
+
+  it("does not tell the user their training may be genetically capped", () => {
     const result = classify(program, emptyStore(), {
-      baselines,
+      baselines: FLAT_SIGNAL_HIGH_COMPLIANCE,
       targets: { submax_hr_pace5_bpm: -12 },
       intensity_compliance_pct: 90,
     });
-    expect(result.composite_verdict).toBe("true_non_response");
-    expect(result.per_metric[0].recommendation_key).toBe(
+    expect(result.composite_verdict).toBe("insufficient_data");
+    expect(result.composite_copy).not.toMatch(/genetic|ceiling|non-respon/i);
+  });
+
+  it("suppresses the claim in the per-metric detail too, not just the headline", () => {
+    // `HeritageClusterChip` renders the per-metric list under the chip, so
+    // downgrading only the composite would remove the claim from where it
+    // is noticed and keep it where it would be believed.
+    const result = classify(program, emptyStore(), {
+      baselines: FLAT_SIGNAL_HIGH_COMPLIANCE,
+      targets: { submax_hr_pace5_bpm: -12 },
+      intensity_compliance_pct: 90,
+    });
+    expect(result.per_metric.map((m) => m.verdict)).not.toContain("true_non_response");
+    // `select.ts` reads recommendation_key off per-metric rows independently
+    // of the composite, so a surviving key could still steer a proposal.
+    expect(result.per_metric.map((m) => m.recommendation_key)).not.toContain(
       "punt_to_next_arc_or_swap_program",
     );
   });

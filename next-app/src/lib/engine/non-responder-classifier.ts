@@ -344,10 +344,77 @@ export function classify(
 
   const composite = combineVerdicts(perMetric, classifier);
 
+  /**
+   * `true_non_response` is suppressed (2026-09-04, founder decision).
+   *
+   * It rendered a RED proposal card — "Not responding to current dose" —
+   * offering the user three options, one of which was to accept a genetic
+   * ceiling and move to maintenance. That is the most discouraging thing
+   * this app can say to anyone, and the evidence under it does not hold:
+   *
+   *   - the primary signal is `submax_hr_pace5_bpm`, average HR on runs the
+   *     user LABELLED easy. Submax HR is a real marker of aerobic
+   *     adaptation, but only at a FIXED external workload — and RunLog has
+   *     no pace field, so there is no anchor. A fitter runner runs their
+   *     easy faster at the same HR.
+   *   - the delta is two raw readings (`buildMetricCtx`), not the
+   *     `trend_slope` over 28 days the programme declares. The Foundation
+   *     target is -5 bpm; day-to-day submax HR moves several bpm on sleep,
+   *     heat, hydration and caffeine.
+   *   - HERITAGE, the citation behind the construct, was a supervised lab
+   *     study with standardised ergometer testing. It establishes that
+   *     non-response EXISTS. It does not license detecting it this way.
+   *
+   * The costs are asymmetric, which is what decides it. `under_dosing`
+   * wrong means someone trains slightly harder than they needed to.
+   * `true_non_response` wrong means someone abandons an arc that was
+   * working. There is no symmetric upside: a person wrongly told to keep
+   * going loses nothing.
+   *
+   * Downgraded to `insufficient_data` rather than `responding`, because
+   * that is the honest reading — with this instrument we cannot tell the
+   * two apart. `under_dosing` is untouched: its rule also requires
+   * `intensity_compliance_pct < 80`, which is measured from the user's own
+   * logs rather than inferred from noisy HR, and Ross 2015 (already cited
+   * in engine-builder) says under-dosing is the likelier explanation
+   * anyway.
+   *
+   * To re-enable: this needs a measurement with a real workload anchor —
+   * block-2's 20-minute threshold test is the obvious candidate — and
+   * review by someone qualified to sign off on telling a user their
+   * training may be capped. Removing a discouraging claim needs no
+   * expertise; restoring one does. Full working:
+   * `dev/audits/programs/2026-09-04-submax-hr-evidence-check.md`.
+   */
+  const suppressed = composite.verdict === "true_non_response";
+  const verdict: ClassificationVerdict = suppressed ? "insufficient_data" : composite.verdict;
+  const copy = suppressed
+    ? "Your aerobic signals aren't moving much yet — but easy-run heart rate on its own can't tell us whether that's the dose or the plan. Keep going, and let the next threshold test answer it."
+    : composite.copy;
+
+  /**
+   * The PER-METRIC verdicts are suppressed too, not just the composite.
+   *
+   * `HeritageClusterChip` renders the per-metric list underneath the chip
+   * (`humanizeVerdict(m.verdict)`), so downgrading only the headline would
+   * have left "not responding" sitting one tap down — the claim removed
+   * from the place it was noticed and kept in the place it would be
+   * believed. `recommendation_key` goes with it: it is
+   * `punt_to_next_arc_or_swap_program`, and `select.ts` reads the key off
+   * per-metric rows independently of the composite.
+   */
+  const publishedMetrics = suppressed
+    ? perMetric.map((m) =>
+        m.verdict === "true_non_response"
+          ? { ...m, verdict: "insufficient_data" as const, copy: undefined, recommendation_key: undefined }
+          : m,
+      )
+    : perMetric;
+
   return {
-    composite_verdict: composite.verdict,
-    composite_copy: composite.copy,
-    per_metric: perMetric,
+    composite_verdict: verdict,
+    composite_copy: copy,
+    per_metric: publishedMetrics,
     requires_baselines: classifier.requires_baselines,
     variance_source_citation_id: classifier.variance_source.citation_id,
   };

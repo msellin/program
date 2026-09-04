@@ -7,9 +7,23 @@ them.
 
 **All three hold. A fourth problem is worse than any of them.**
 
-Nothing here has been changed. The signal still runs.
+**RESOLVED 2026-09-04 (founder decision): `true_non_response` is
+suppressed; `under_dosing` and the metric itself are kept.** See "What was
+done" at the foot of this document. The rest of the analysis stands as
+written and is what the decision rests on.
 
 ---
+
+## 0. A correction to my own framing
+
+An earlier draft of this said "no evidence supports this metric". Too
+strong, and worth fixing so nobody discards a legitimate future measurement
+on the back of it.
+
+Submaximal heart rate at a **fixed external workload** is a real,
+well-established marker of aerobic adaptation. The concept is sound. What
+is missing here is the method's PRECONDITION — there is no fixed workload.
+That distinction is the whole finding.
 
 ## 1. Citations: zero support it
 
@@ -117,4 +131,48 @@ Removing a primary signal from three shipped programmes
 (`engine-builder`, `engine-builder-block-2`,
 `concurrent-strength-maintenance`) is a programming decision. What this
 document removes is the excuse that the evidence question was unresolved.
-It is resolved: there is none.
+
+---
+
+## What was done, 2026-09-04
+
+**`true_non_response` is suppressed. `under_dosing` and the metric stay.**
+
+The deciding argument was not the evidence, it was the asymmetry. Getting
+`under_dosing` wrong means someone trains slightly harder than they needed
+to. Getting `true_non_response` wrong means someone abandons an arc that
+was working. There is no symmetric upside: a person wrongly told to keep
+going loses nothing.
+
+`under_dosing` is also the better-supported half. Its rule additionally
+requires `intensity_compliance_pct < 80` — measured from the user's own
+logs, not inferred from noisy HR — and Ross 2015, already cited in
+`engine-builder`, says under-dosing is the likelier explanation for
+apparent non-response at Foundation intensities.
+
+Downgraded to `insufficient_data`, not `responding`, because that is the
+honest reading: with this instrument the two cannot be told apart.
+
+**Suppressed in the per-metric rows as well as the composite.**
+`HeritageClusterChip` renders the per-metric list beneath the chip, and
+`select.ts` reads `recommendation_key` off those rows independently of the
+composite verdict. Downgrading only the headline would have removed the
+claim from where it is noticed and kept it where it would be believed.
+
+**The rule still evaluates.** Nothing was deleted from the programme JSON.
+Re-enabling is one condition in `classify`.
+
+### What re-enabling would require
+
+Not a code change — a measurement. Specifically:
+
+1. A workload anchor. Block-2's 20-minute threshold test already exists and
+   has one; easy-run HR does not and cannot get one until `RunLog` carries
+   pace.
+2. The declared `trend_slope` / `window_days` actually implemented, instead
+   of two raw readings.
+3. Sign-off from someone qualified to approve telling a user their training
+   may be capped.
+
+**The decision rule that made this safe for a non-specialist to take:
+removing a discouraging claim requires no expertise; restoring one does.**
