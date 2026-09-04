@@ -150,3 +150,57 @@ terminal flow, `session-rest-jump`, where ending early costs nothing.
 `locator.click: Timeout 15000ms` on 12 personas each. The
 ExerciseDetailsSheet fix did not reach them, so the layering problem has at
 least one more instance. Same investigation, not yet done.
+
+---
+
+## Sweep #4 — regression recovered, two predictions wrong
+
+23 runs, 32.4 min, 0 failures.
+
+| | #1 | #2 | #3 | #4 |
+|---|---|---|---|---|
+| Controls exercised | 90.2% | 90.9% | 91.2% | **94.9%** |
+| Behavioural checks | 246 | 246 | 229 | **259** |
+| ExerciseDetailsSheet | 0/1 | 0/1 | 1/1 | 1/1 |
+| RestTakeover | 8/14 | 9/14 | 10/11 | **11/11 +1 held** |
+| NoteSheet | 4/5 | 4/5 | 4/5 | **5/7** |
+| Never-driven | — | 3 | 1 | 2 |
+
+The regression is recovered — 229 → 259, past the 246 baseline, with
+`session-rest-jump` added on top. NoteSheet's denominator GREW 5 → 7
+because it is now correctly scoped and sees its own controls instead of
+misattributing them.
+
+**Two predictions I made and got wrong. Both stated in advance, so both
+count.**
+
+1. *"Never-driven will be zero."* It is 2. `OverflowSheet — Close` survived
+   and `NoteSheet — Not now` appeared (a real, newly-visible gap: the flow
+   saves the note rather than dismissing it).
+2. *"Runtime drops ~11 minutes."* It rose, 31.1 → 32.4. Twelve NoteSheet
+   timeouts did go, worth about three minutes — and `session-rest-jump`
+   plus a fourth effort rung more than spent it. The prediction ignored
+   what I was adding while subtracting.
+
+## The OverflowSheet Close was my own doing
+
+Timeouts left: `OverflowSheet /^Close/` ×13, `RestTakeover /^change/` ×9.
+
+In fixing the details sheet I replaced a `hasText` locator that matched
+NOTHING with an unscoped `getByRole("button", {name: /^Close$/})` that
+matched TOO MUCH — the overflow sheet underneath has a Close with the same
+accessible name — and then called `ctx.record()` unconditionally, filing a
+success whichever button it hit.
+
+So the details sheet read as covered while the overflow sheet's Close kept
+timing out: the flow was closing the wrong sheet and reporting it in the
+wrong place. Both errors were mine, on the same line, hours apart.
+
+Now just `ctx.tap`, which scopes to the `data-surface` the sheet finally
+has.
+
+`/^change/` was the effort loop reaching for the picker after the LAST
+rung, where nothing needed it and Grind's note sheet was over the takeover.
+Guarded.
+
+Neither is verified. That needs sweep #5.

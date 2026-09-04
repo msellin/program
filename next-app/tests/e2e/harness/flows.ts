@@ -768,11 +768,19 @@ export const FLOWS: Flow[] = [
       // as an uncovered control when it was really a control the flow had
       // scrimmed itself out of reaching. Same class as the ordering note on
       // +30s above.
-      for (const effort of [/^Very easy/, /^Easy/, /^Solid/, /^Grind/]) {
+      const efforts = [/^Very easy/, /^Easy/, /^Solid/, /^Grind/];
+      for (const [i, effort] of efforts.entries()) {
         if (await ctx.tap("RestTakeover", effort)) {
           await ctx.page.waitForTimeout(350);
-          await ctx.tap("RestTakeover", /^change/);
-          await ctx.page.waitForTimeout(300);
+          // Re-open the picker only when another rung still needs it.
+          // Tapping `change` after the LAST one burned a 15-second timeout
+          // on nine personas: Grind leaves the note sheet over the
+          // takeover, and there was nothing after it that needed the
+          // picker back anyway.
+          if (i < efforts.length - 1) {
+            await ctx.tap("RestTakeover", /^change/);
+            await ctx.page.waitForTimeout(300);
+          }
         }
       }
       await ctx.capture("03-effort-logged");
@@ -870,17 +878,20 @@ export const FLOWS: Flow[] = [
         await ctx.page.waitForTimeout(500);
         await ctx.probe("ExerciseDetailsSheet", '[data-surface="ExerciseDetailsSheet"]');
         await ctx.capture("05-form-cues");
-        // `hasText: /^Close$/` matched NOTHING (2026-09-04): this button
-        // renders "×" and carries `aria-label="Close"`, so filtering on
-        // text could never find it. It never clicked and never filed its
-        // note, the sheet stayed up, and the overflow sheet's own Close at
-        // the end of this flow was then scrimmed into a second 15s
-        // timeout. Address it the way the accessibility tree does.
-        const detailsClose = ctx.page.getByRole("button", { name: /^Close$/ });
-        if (await detailsClose.count()) {
-          await detailsClose.first().click({ timeout: CLICK_TIMEOUT_MS }).catch(() => {});
-          ctx.record("ExerciseDetailsSheet", "Close");
-        }
+        // Just `tap`. It scopes to `[data-surface="ExerciseDetailsSheet"]`,
+        // which this sheet now has.
+        //
+        // Two earlier attempts here were both wrong, in opposite ways.
+        // First `hasText: /^Close$/`, which matched nothing: the button
+        // renders "×" and carries `aria-label="Close"`. Then an UNSCOPED
+        // `getByRole("button", {name: /^Close$/})`, which matched too much
+        // — the overflow sheet underneath has a Close with the same
+        // accessible name — followed by an unconditional `record`, so it
+        // filed a success whichever button it hit. That is how the details
+        // sheet read as covered while the overflow sheet's own Close went
+        // on timing out: the flow was closing the wrong sheet and saying so
+        // in the wrong place.
+        await ctx.tap("ExerciseDetailsSheet", /^Close$/);
         await ctx.page.waitForTimeout(300);
         await reopenOverflow();
       }
