@@ -87,7 +87,7 @@ export function NoteSheet({
   }
 
   return (
-    <BottomSheet titleId="note-title" onClose={onClose}>
+    <BottomSheet surface="NoteSheet" titleId="note-title" onClose={onClose}>
       <p id="note-title" className="text-[16px] font-semibold text-strong mb-1 tracking-[-.015em]">
         Anything worth knowing?
       </p>
