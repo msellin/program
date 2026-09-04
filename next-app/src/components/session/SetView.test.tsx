@@ -294,3 +294,45 @@ describe("recording a missed attempt", () => {
     expect(screen.queryByRole("button", { name: /missed/i })).toBeNull();
   });
 });
+
+describe("the hold timer survives a backgrounded app", () => {
+  /**
+   * Third of the three timers. The rest takeover has the fuller set of
+   * backgrounding tests; this one exists so the hold timer cannot quietly
+   * regress to counting ticks while its siblings stay correct — which is
+   * exactly how all three came to ship the same bug.
+   */
+  const holdRail = () =>
+    rail({
+      exercise: exercise({
+        id: "hip_flexor_iso_seated",
+        name: "Seated hip flexor iso",
+        category: "mobility",
+        default: { sets: 5, hold_seconds: 30 },
+      } as Partial<Exercise>),
+      rowCount: 5,
+      suggestion: null,
+      isLoadable: false,
+    });
+
+  it("completes a hold that expired while the app was away", () => {
+    vi.useFakeTimers({ shouldAdvanceTime: false });
+    vi.setSystemTime(new Date("2026-09-04T10:00:00.000Z"));
+    try {
+      renderSet(holdRail());
+      act(() => {
+        fireEvent.click(screen.getByRole("button", { name: /start the hold/i }));
+      });
+      // Wall clock moves; the interval does not run in between. A
+      // tick-counting timer comes back still holding at 0:30.
+      act(() => {
+        vi.setSystemTime(new Date(Date.now() + 45_000));
+        vi.advanceTimersByTime(250);
+      });
+      expect(screen.getByText("0:00")).toBeDefined();
+      expect(screen.getByRole("button", { name: /done — set 1/i })).toBeDefined();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+});

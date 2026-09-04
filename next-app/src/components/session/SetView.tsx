@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useElapsedSeconds } from "@/lib/wall-clock";
 import { countLoggedSets, isSetLogged, requiredRowCount, isOptionalRow } from "@/lib/set-progress";
 import { announce } from "@/lib/announce";
 import { playTimerComplete } from "@/lib/sound";
@@ -228,27 +229,40 @@ export function SetView({
    * resets between sets without an effect.
    */
   const [sideIndex, setSideIndex] = useState(0);
-  const [remaining, setRemaining] = useState<number>(() => seconds);
+  /**
+   * Wall-clock hold timer (2026-09-04). This counted DOWN by one per
+   * interval tick, so a backgrounded web view — where iOS suspends
+   * intervals — froze the hold mid-count. Third of the three timers to be
+   * converted; fixing one and leaving its siblings is this repo's
+   * signature defect, and all three shipped the same bug.
+   *
+   * `banked` carries elapsed time across a pause, because the anchor is
+   * re-taken on resume.
+   */
+  const [banked, setBanked] = useState(0);
+  const held = useElapsedSeconds(running, null, banked);
+  const remaining = Math.max(0, seconds - held);
   const awaitingOtherSide = perSide && remaining === 0 && sideIndex === 0;
+  // Completion, fired once per run. `<= 0` rather than `=== 0`: returning
+  // from a backgrounded app jumps straight past the exact second, so exact
+  // equality would leave a finished hold running forever.
+  const holdDoneRef = useRef(false);
   useEffect(() => {
     if (!running) return;
-    const id = setInterval(() => {
-      setRemaining((r) => {
-        if (r <= 1) {
-          clearInterval(id);
-          setRunning(false);
-          if (typeof navigator !== "undefined" && "vibrate" in navigator) {
-            navigator.vibrate?.([80, 60, 80]);
-          }
-          playTimerComplete();
-          announce("Hold complete.");
-          return 0;
-        }
-        return r - 1;
-      });
-    }, 1000);
-    return () => clearInterval(id);
-  }, [running]);
+    if (remaining > 0) {
+      holdDoneRef.current = false;
+      return;
+    }
+    if (holdDoneRef.current) return;
+    holdDoneRef.current = true;
+    setBanked(seconds);
+    setRunning(false);
+    if (typeof navigator !== "undefined" && "vibrate" in navigator) {
+      navigator.vibrate?.([80, 60, 80]);
+    }
+    playTimerComplete();
+    announce("Hold complete.");
+  }, [running, remaining, seconds]);
 
   const wouldBePR =
     active.isLoadable && weight > 0 && reps > 0 && isSetPR(store, active.exercise.id, weight, reps, date);
@@ -577,7 +591,7 @@ export function SetView({
                     // hundred taps; minutes-based work steps in minutes.
                     const next = isHoldShaped ? v : Math.max(1, v) * 60;
                     setSeconds(next);
-                    if (!running) setRemaining(next);
+                    if (!running) setBanked(0);
                   }}
                 />
               </div>
@@ -587,6 +601,7 @@ export function SetView({
               onClick={() => {
                 if (running) {
                   // Pause and bank what was held.
+                  setBanked(held);
                   setRunning(false);
                   return;
                 }
@@ -594,7 +609,8 @@ export function SetView({
                   // Reset the clock rather than logging. Not auto-started —
                   // you need a moment to actually switch sides.
                   setSideIndex(1);
-                  setRemaining(seconds);
+                  setBanked(0);
+                  holdDoneRef.current = false;
                   announce(`First side done. Switch sides, then start ${seconds} seconds.`);
                   return;
                 }

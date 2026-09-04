@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
-import { render, screen, cleanup, fireEvent } from "@testing-library/react";
+import { render, screen, cleanup, fireEvent, act } from "@testing-library/react";
 import { RestTakeover } from "./RestTakeover";
 import type { RailExercise } from "./DaySession";
 import type { Exercise } from "@/lib/schemas";
@@ -20,7 +20,7 @@ const rail = (over: Partial<RailExercise> = {}): RailExercise =>
     ...over,
   }) as RailExercise;
 
-function renderRest(over: { upNext?: Parameters<typeof RestTakeover>[0]["upNext"]; effortAnswered?: boolean } = {}) {
+function renderRest(over: { upNext?: Parameters<typeof RestTakeover>[0]["upNext"]; effortAnswered?: boolean; onDone?: () => void } = {}) {
   const active = rail();
   const onEffortAnswered = vi.fn();
   render(
@@ -33,7 +33,7 @@ function renderRest(over: { upNext?: Parameters<typeof RestTakeover>[0]["upNext"
       effortAnswered={over.effortAnswered ?? false}
       onEffortAnswered={onEffortAnswered}
       date="2026-09-02"
-      onDone={() => {}}
+      onDone={over.onDone ?? (() => {})}
       onJump={() => {}}
       onOpenNoteSheet={() => {}}
     />,
@@ -79,5 +79,60 @@ describe("the effort picker", () => {
     const { onEffortAnswered } = renderRest();
     fireEvent.click(screen.getByRole("radio", { name: /grind/i }));
     expect(onEffortAnswered).toHaveBeenCalledWith(true);
+  });
+});
+
+describe("the countdown survives a backgrounded app", () => {
+  /**
+   * Founder, 2026-09-04: "backgrounding app seems to mess up things,
+   * timers, page views reset etc."
+   *
+   * `elapsed` used to be a counter the interval incremented, which made
+   * the interval the clock. iOS suspends intervals in a backgrounded web
+   * view, so a three-minute rest taken with the phone in a pocket came
+   * back reading a fraction of what had passed and the completion chime
+   * never fired.
+   *
+   * These tests advance the SYSTEM CLOCK without running the intervals in
+   * between — which is precisely what a suspended web view does — and then
+   * let a single tick through. A tick-counting timer fails all of them.
+   */
+  const advanceWallClockOnly = async (ms: number) => {
+    vi.setSystemTime(new Date(Date.now() + ms));
+    // One tick to let the poll observe the new wall clock.
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(250);
+    });
+  };
+
+  beforeEach(() => {
+    vi.useFakeTimers({ shouldAdvanceTime: false });
+    vi.setSystemTime(new Date("2026-09-04T10:00:00.000Z"));
+  });
+  afterEach(() => vi.useRealTimers());
+
+  it("reads the true remaining time after two minutes away", async () => {
+    // 120s target, gone for 90s. A tick-counting timer would still read
+    // near 2:00 because its interval never ran.
+    renderRest();
+    await advanceWallClockOnly(90_000);
+    expect(screen.getByText("0:30")).toBeDefined();
+  });
+
+  it("fires completion for a rest that expired while the app was away", async () => {
+    // The condition is `elapsed >= target`, not `=== target`. Exact
+    // equality is unreachable across a jump, and this is the effect the
+    // whole session flow hangs off — miss it and the app sits on a dead
+    // rest screen until tapped.
+    const onDone = vi.fn();
+    renderRest({ onDone });
+    await advanceWallClockOnly(300_000);
+    expect(onDone).toHaveBeenCalled();
+  });
+
+  it("does not run past zero into negative time", async () => {
+    renderRest();
+    await advanceWallClockOnly(600_000);
+    expect(screen.getByText("0:00")).toBeDefined();
   });
 });

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useStore, entrySets } from "@/lib/useStore";
+import { useElapsedSeconds } from "@/lib/wall-clock";
 import { announce } from "@/lib/announce";
 import { playCountdownTick, playTimerComplete } from "@/lib/sound";
 import type { RailExercise } from "@/components/session/DaySession";
@@ -84,7 +85,18 @@ export function RestTakeover({
   // could never exceed the original target at all.
   const [extra, setExtra] = useState(0);
   const target = targetSeconds + extra;
-  const [elapsed, setElapsed] = useState(0);
+  /**
+   * Wall-clock anchor (2026-09-04). `elapsed` used to be a counter the
+   * interval incremented, which made the interval the clock — and iOS
+   * suspends intervals in a backgrounded web view, so a rest taken with
+   * the phone in a pocket came back reading far less than had passed and
+   * the completion chime never fired. Founder-reported.
+   *
+   * Set once, on mount, and never reset: +30s extends `target`, it does
+   * not rewind the start. See the `extra` comment above for why that
+   * distinction has bitten before.
+   */
+  const elapsed = useElapsedSeconds(true);
   const [selectedEffort, setSelectedEffort] = useState<(typeof EFFORTS)[number]["label"] | null>(null);
   const [jumpOpen, setJumpOpen] = useState(false);
   // The countdown effect runs once, so `target` inside it would be the
@@ -94,7 +106,6 @@ export function RestTakeover({
   useEffect(() => {
     targetRef.current = target;
   }, [target]);
-  const tick = useRef<ReturnType<typeof setInterval> | null>(null);
   const announced30sRef = useRef(false);
   // Which of the 3-2-1 ticks have already fired. A Set rather than a
   // counter because +30s can push `remaining` back above 3, and the
@@ -107,41 +118,50 @@ export function RestTakeover({
 
   useEffect(() => {
     announce(`Rest timer started, ${target} seconds.`);
-    tick.current = setInterval(() => {
-      setElapsed((e) => {
-        const next = e + 1;
-        const t = targetRef.current;
-        const remaining = Math.max(0, t - next);
-        if (!announced30sRef.current && remaining === 30) {
-          announce("30 seconds remaining.");
-          announced30sRef.current = true;
-        }
-        // Audible 3-2-1. The chime alone was easy to miss mid-workout;
-        // this gives you a beat to put the bar down and look up.
-        if (remaining > 0 && remaining <= 3 && !tickedRef.current.has(remaining)) {
-          tickedRef.current.add(remaining);
-          playCountdownTick();
-          if (typeof navigator !== "undefined" && "vibrate" in navigator) {
-            navigator.vibrate?.(25);
-          }
-        }
-        if (next >= t && !doneFiredRef.current) {
-          doneFiredRef.current = true;
-          if (typeof navigator !== "undefined" && "vibrate" in navigator) {
-            navigator.vibrate?.([80, 60, 80]);
-          }
-          playTimerComplete();
-          announce("Rest complete.");
-          onDone();
-        }
-        return next;
-      });
-    }, 1000);
-    return () => {
-      if (tick.current) clearInterval(tick.current);
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  /**
+   * Cues and completion, driven by the wall clock rather than by tick
+   * count. `elapsed` can JUMP — background the app for two minutes and it
+   * arrives two minutes larger — so every side effect here has to be
+   * correct across a gap, not just across a +1.
+   *
+   * The audible cues are all guarded by "have I already fired this", and
+   * a jump simply skips the ones it flew past. That is the honest
+   * behaviour: a 3-2-1 lead-in replayed on return would be counting down
+   * to a moment that has already gone.
+   *
+   * Completion is the one that MUST still fire after a gap, and it does —
+   * the condition is `elapsed >= target`, not `elapsed === target`.
+   */
+  useEffect(() => {
+    const t = targetRef.current;
+    const remaining = Math.max(0, t - elapsed);
+    if (!announced30sRef.current && remaining <= 30 && remaining > 0) {
+      announce(`${remaining} seconds remaining.`);
+      announced30sRef.current = true;
+    }
+    // Audible 3-2-1. The chime alone was easy to miss mid-workout;
+    // this gives you a beat to put the bar down and look up.
+    if (remaining > 0 && remaining <= 3 && !tickedRef.current.has(remaining)) {
+      tickedRef.current.add(remaining);
+      playCountdownTick();
+      if (typeof navigator !== "undefined" && "vibrate" in navigator) {
+        navigator.vibrate?.(25);
+      }
+    }
+    if (elapsed >= t && !doneFiredRef.current) {
+      doneFiredRef.current = true;
+      if (typeof navigator !== "undefined" && "vibrate" in navigator) {
+        navigator.vibrate?.([80, 60, 80]);
+      }
+      playTimerComplete();
+      announce("Rest complete.");
+      onDone();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [elapsed]);
 
   const remaining = Math.max(0, target - elapsed);
   const mins = Math.floor(remaining / 60);

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useElapsedSeconds } from "@/lib/wall-clock";
 import { Play, Pause, RotateCcw, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { announce } from "@/lib/announce";
@@ -21,27 +22,29 @@ type Props = {
 
 export function RestTimer({ autoStartSeconds, onClose }: Props) {
   const [target, setTarget] = useState<number>(autoStartSeconds ?? 120);
-  const [elapsed, setElapsed] = useState<number>(0);
+  /**
+   * Wall-clock elapsed (2026-09-04). This used to be a counter the
+   * interval incremented, so a backgrounded web view — where iOS suspends
+   * intervals — froze the count. Same bug, same fix, same commit as
+   * `RestTakeover`: fixing one of the three timers and not its siblings is
+   * this repo's signature defect.
+   *
+   * `banked` carries the total across a pause, because the anchor is
+   * re-taken on resume.
+   */
+  const [banked, setBanked] = useState<number>(0);
   const [running, setRunning] = useState<boolean>(autoStartSeconds != null);
+  const elapsed = useElapsedSeconds(running, null, banked);
   const [hit, setHit] = useState<boolean>(false);
-  const tick = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     if (autoStartSeconds != null) {
       setTarget(autoStartSeconds);
-      setElapsed(0);
+      setBanked(0);
       setRunning(true);
       setHit(false);
     }
   }, [autoStartSeconds]);
-
-  useEffect(() => {
-    if (!running) return;
-    tick.current = setInterval(() => setElapsed((e) => e + 1), 1000);
-    return () => {
-      if (tick.current) clearInterval(tick.current);
-    };
-  }, [running]);
 
   useEffect(() => {
     if (elapsed >= target && !hit) {
@@ -62,8 +65,11 @@ export function RestTimer({ autoStartSeconds, onClose }: Props) {
   useEffect(() => {
     if (announced30sRef.current) return;
     const remainingNow = Math.max(0, target - elapsed);
-    if (remainingNow === 30) {
-      announce("30 seconds remaining.");
+    // `=== 30` was unreachable across a gap: with the clock now driving
+    // this, returning from a backgrounded app jumps straight past the
+    // exact second. Same class of bug as the completion condition.
+    if (remainingNow <= 30 && remainingNow > 0) {
+      announce(`${remainingNow} seconds remaining.`);
       announced30sRef.current = true;
     }
   }, [elapsed, target]);
@@ -104,7 +110,7 @@ export function RestTimer({ autoStartSeconds, onClose }: Props) {
             type="button"
             onClick={() => {
               setRunning(false);
-              setElapsed(0);
+              setBanked(0);
               setHit(false);
             }}
             aria-label="Reset timer"
@@ -123,7 +129,12 @@ export function RestTimer({ autoStartSeconds, onClose }: Props) {
           </div>
           <button
             type="button"
-            onClick={() => setRunning((r) => !r)}
+            onClick={() => {
+              // Bank the running total before dropping the anchor,
+              // otherwise resuming restarts from zero.
+              if (running) setBanked(elapsed);
+              setRunning((r) => !r);
+            }}
             aria-label={running ? "Pause timer" : "Start timer"}
             className={cn(
               "w-11 h-11 flex items-center justify-center rounded-full border",
@@ -150,7 +161,7 @@ export function RestTimer({ autoStartSeconds, onClose }: Props) {
               type="button"
               onClick={() => {
                 setTarget(p.seconds);
-                setElapsed(0);
+                setBanked(0);
                 setHit(false);
                 setRunning(true);
               }}
