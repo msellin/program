@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: 6a2fe2e603200ea0 -->
+<!-- source-fingerprint: aafea7f4e86a5b4c -->
 
 ## What we are asking
 
@@ -280,7 +280,7 @@ Printed against the questions above so you can see which are actually detectable
 
 **butcher_2015** — Do physiological measures predict selected CrossFit benchmark performance? · Butcher SJ, Neyedly TJ, Horvey KJ, Benko CR · 2015
 
-- *concurrent-strength-maintenance says it supports:* CrossFit Total = strongest Fran/Grace predictor — strength floor matters
+- *concurrent-strength-maintenance says it supports:* CrossFit Total = strongest Fran/Grace predictor — strength floor matters. (Note: this paper is ALSO in citations.json as butcher_2015_crossfit; one paper, two ids.)
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **coffey_hawley_2007** — The molecular bases of training adaptation · Coffey VG, Hawley JA · 2007

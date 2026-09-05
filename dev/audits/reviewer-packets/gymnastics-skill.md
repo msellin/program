@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: 8f78e974053ef030 -->
+<!-- source-fingerprint: 0eba1374dedf4730 -->
 
 ## What we are asking
 
@@ -499,7 +499,7 @@ Printed against the questions above so you can see which are actually detectable
 - *handstand-walk says it supports:* 56.7% chronic wrist pain but NO association with weekly training hours, frequency, warm-up, or brace use. Reframes wrist risk as technique-driven, not volume-driven — but supports the volume cap as a conservative upper bound. Attribution flagged for founder review: PMC12550924 resolves to Martonovich et al. (same underlying data). The claim itself survives; the author byline may need to be swapped.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
-**vigouroux_2007** — Estimation of finger muscle tendon tensions and pulley forces during specific sport-climbing grip techniques · Vigouroux L, Quaine F, Labarre-Vila A, Moutet F · 2007
+**vigouroux_2007** — Estimation of finger muscle tendon tensions and pulley forces during specific sport-climbing grip techniques · Vigouroux L, Quaine F, Labarre-Vila A, Moutet F · 2006
 
 - *first-strict-pullup says it supports:* Tendon tension and pulley force vary substantially by grip technique — the basis for treating grip position as a load variable in hang work. The paper does not establish a hang-time dose; the 20-45s range is coaching convention, not a finding from this source.
 - **Does it? ☐ yes ☐ partly ☐ no —**

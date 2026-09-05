@@ -830,7 +830,7 @@
         "year": 2015,
         "title": "Do physiological measures predict selected CrossFit benchmark performance?",
         "source": "Open Access J Sports Med 6:241-247",
-        "used_for": "CrossFit Total = strongest Fran/Grace predictor — strength floor matters"
+        "used_for": "CrossFit Total = strongest Fran/Grace predictor — strength floor matters. (Note: this paper is ALSO in citations.json as butcher_2015_crossfit; one paper, two ids.)"
       },
       {
         "id": "meyer_morrison_zuniga_2017",

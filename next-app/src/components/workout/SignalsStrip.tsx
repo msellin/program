@@ -375,6 +375,21 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
               Advisory copy updated to reflect the swap is automatic —
               was "coming, substitute manually" which is now stale. */}
           {signals.some((s) => s.id === "csm-amber-week") ? (
+            /* The citation that used to close this paragraph was withdrawn on
+               2026-09-05. It read: "Bouchard 1999 HERITAGE variance says a hard
+               aerobic stimulus on top of amber symptoms doesn't pay back."
+               HERITAGE is a 20-week heritability study of VO2max trainability in
+               481 sedentary adults. It contains no symptom finding and no
+               session-withholding finding, so the sentence attributed a
+               conclusion to a paper that does not reach it.
+
+               The RULE is real and implemented (plan-generator.ts) and the
+               programme declares it. Only the justification was invented — which
+               is the worse half to get wrong, because a cited reason is what the
+               user is being asked to trust. Confirm-first means the engine
+               explains itself; it does not mean the explanation may be
+               decorative. Better to say what we do than to say why on a
+               borrowed authority. */
             <div className="rounded border border-amber/40 border-l-4 border-l-amber bg-amber/10 p-3 text-sm">
               <p className="font-semibold text-strong">Amber week — 4×4 dropped</p>
               <p className="text-[14px] text-muted mt-1">
@@ -385,9 +400,7 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
                 <span className="font-mono text-[12px]">
                   concurrent-strength-maintenance.json:435
                 </span>
-                . Bouchard 1999 HERITAGE variance says a hard aerobic
-                stimulus on top of amber symptoms doesn&apos;t pay back;
-                the strength work stays.
+                . The strength work stays.
               </p>
             </div>
           ) : null}

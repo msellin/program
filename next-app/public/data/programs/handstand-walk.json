@@ -271,7 +271,7 @@
           {
             "value": "46_60",
             "label": "46-60",
-            "hint": "Barlow 2020: wrist WB tolerance drops from age 45 — extra ramp built in"
+            "hint": "Wrist loading tolerance tends to decline from mid-forties. Ramp your wrist volume deliberately and stop the set on wrist pain rather than working through it."
           },
           {
             "value": "60_plus",
@@ -711,7 +711,7 @@
           ]
         }
       },
-      "rationale": "Fear-of-falling literature: Adkin & Frank 2000/2002 (postural threat alters muscle activation before the fall); Carpenter 2001 (anxiety degrades balance strategy); Hardy 1996 catastrophe model (anxiety above threshold causes performance collapse, not linear degradation); Bandura (mastery experiences on bail-outs reduce threat perception on the primary skill — you don't reduce fear by walking more). Gymnastics/circus pedagogy (USA Gymnastics, NICA, Emmet Louis, Yuval Ayalon) treats cartwheel exit / pirouette / tuck forward roll as pre-requisite to freestanding, not optional. Phase 0 is deliberately short — one week of exit drills, not a rehab arc.",
+      "rationale": "Fear-of-falling literature: Adkin & Frank 2000/2002 (postural threat alters muscle activation before the fall); Carpenter 2001 (anxiety degrades balance strategy); Hardy 1996 was cited here for a catastrophe effect and was WITHDRAWN 2026-09-05 — that study is a null result in eight golfers putting, concluding it offers no clear evidence for either model; Bandura (mastery experiences on bail-outs reduce threat perception on the primary skill — you don't reduce fear by walking more). Gymnastics/circus pedagogy (USA Gymnastics, NICA, Emmet Louis, Yuval Ayalon) treats cartwheel exit / pirouette / tuck forward roll as pre-requisite to freestanding, not optional. Phase 0 is deliberately short — one week of exit drills, not a rehab arc.",
       "blocks": [
         "block_bail_wall_cartwheel_exit",
         "block_bail_quarter_pirouette",

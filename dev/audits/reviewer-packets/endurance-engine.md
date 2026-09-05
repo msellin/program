@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: ef8130ec0eb32884 -->
+<!-- source-fingerprint: 667b95153e6d350f -->
 
 ## What we are asking
 
@@ -325,7 +325,7 @@ Printed against the questions above so you can see which are actually detectable
 
 **butcher_2015_crossfit** — Do physiological measures predict selected CrossFit benchmark performance? · Butcher SJ, Neyedly TJ, Horvey KJ, Benko CR · 2015
 
-- *engine-builder says it supports:* CrossFit Total predicts Fran/Grace performance most strongly, but VO2max still contributes. Anchors the 'aerobic base protects your CrossFit performance' claim.
+- *engine-builder says it supports:* CrossFit Total predicts Fran/Grace performance most strongly. CORRECTED 2026-09-05: this citation previously also carried 'but VO2max still contributes', which reverses the paper — its conclusion is that CrossFit benchmark WOD performance CANNOT be predicted by VO2max. The strength-floor half is supported; the aerobic-base half is not, and is no longer claimed here.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **cocks_2013** — Sprint interval and endurance training are equally effective in increasing muscle microvascular density and eNOS content in sedentary males · Cocks M, Shaw CS, Shepherd SO, Fisher JP, Ranasinghe AM, Barker TA, Tipton KD, Wagenmakers AJM · 2013
@@ -386,7 +386,7 @@ Printed against the questions above so you can see which are actually detectable
 
 **joyner_coyle_2008** — Endurance exercise performance: the physiology of champions · Joyner MJ, Coyle EF · 2008
 
-- *engine-builder-block-2 says it supports:* VO2max plateaus; threshold and running economy keep improving. Anchors why Block 2's headline metric is threshold shift, not VO2max.
+- *engine-builder-block-2 says it supports:* Models endurance performance as VO2max x threshold x economy, interacting rather than ranked. Anchors why threshold is a headline metric. CORRECTED 2026-09-05: this previously read 'VO2max plateaus' — the word plateau does not appear in the paper, and it ranks no determinant above another.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **konopka_2014** — Markers of human skeletal muscle mitochondrial biogenesis and quality control: effects of age and aerobic exercise training · Konopka AR, Suer MK, Wolff CA, Harber MP · 2014
@@ -443,8 +443,8 @@ Printed against the questions above so you can see which are actually detectable
 
 **ronnestad_hansen_2020** — Short intervals induce superior training adaptations compared with long intervals in cyclists · Rønnestad BR, Hansen J, et al. · 2020
 
-- *engine-builder says it supports:* Short intervals were SUPERIOR to long intervals for VO2max in trained cyclists. Informs the decision to keep 4×4 as the VO2max stimulus and NOT chase VO2max with the threshold cruise block — the cruise trains LT2 sustainable output (Joyner & Coyle 2008), a different adaptation than VO2max.
-- *engine-builder-block-2 says it supports:* Short intervals (5×3, 8×2) accumulate more time-at-VO2max per session for well-trained users. Anchors the block_short_intervals alternation.
+- *engine-builder says it supports:* CORRECTED 2026-09-05. This previously read 'Short intervals were SUPERIOR to long intervals for VO2max in trained cyclists'. The paper reports the opposite on that outcome: 'there was no group difference in change of VO2max.' Keeping 4x4 as the VO2max stimulus is an engineering choice this citation does not decide either way.
+- *engine-builder-block-2 says it supports:* CORRECTED 2026-09-05. The '5x3, 8x2' time-at-VO2max claim belongs to a DIFFERENT paper (Almquist et al. 2020, PMID 32267032), which is not in citations.json. Ronnestad & Hansen 2020 found no group difference in VO2max change. block_short_intervals alternation stands as an engineering choice, not as this paper's finding.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **ross_2015** — Separate effects of intensity and amount of exercise on interindividual cardiorespiratory fitness response · Ross R, Goodpaster BH, Koch LG, et al. · 2015

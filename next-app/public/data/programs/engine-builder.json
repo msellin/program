@@ -1309,7 +1309,7 @@
         "title": "Short intervals induce superior training adaptations compared with long intervals in cyclists",
         "source": "Journal of Science and Medicine in Sport / European Journal of Applied Physiology",
         "url": "https://pubmed.ncbi.nlm.nih.gov/31977120/",
-        "used_for": "Short intervals were SUPERIOR to long intervals for VO2max in trained cyclists. Informs the decision to keep 4×4 as the VO2max stimulus and NOT chase VO2max with the threshold cruise block — the cruise trains LT2 sustainable output (Joyner & Coyle 2008), a different adaptation than VO2max."
+        "used_for": "CORRECTED 2026-09-05. This previously read 'Short intervals were SUPERIOR to long intervals for VO2max in trained cyclists'. The paper reports the opposite on that outcome: 'there was no group difference in change of VO2max.' Keeping 4x4 as the VO2max stimulus is an engineering choice this citation does not decide either way."
       },
       {
         "id": "hickson_1980",
@@ -1588,7 +1588,7 @@
         "title": "Do physiological measures predict selected CrossFit benchmark performance?",
         "source": "Open Access Journal of Sports Medicine 6:241-247",
         "url": "https://www.dovepress.com/do-physiological-measures-predict-selected-crossfitreg-benchmark-perfo-peer-reviewed-fulltext-article-OAJSM",
-        "used_for": "CrossFit Total predicts Fran/Grace performance most strongly, but VO2max still contributes. Anchors the 'aerobic base protects your CrossFit performance' claim."
+        "used_for": "CrossFit Total predicts Fran/Grace performance most strongly. CORRECTED 2026-09-05: this citation previously also carried 'but VO2max still contributes', which reverses the paper — its conclusion is that CrossFit benchmark WOD performance CANNOT be predicted by VO2max. The strength-floor half is supported; the aerobic-base half is not, and is no longer claimed here."
       }
     ],
     "reference_ids": [

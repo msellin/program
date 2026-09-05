@@ -149,10 +149,12 @@
       "authors": "Bishop DJ, Botella J, Granata C",
       "year": 2019,
       "title": "CrossTalk opposing view: exercise training volume is more important than training intensity to promote increases in mitochondrial content",
-      "source": "Physiology 34(1):56-70",
-      "url": "https://journals.physiology.org/doi/full/10.1152/physiol.00038.2018",
+      "source": "J Physiol 597(16):4115-4118",
+      "url": "https://doi.org/10.1113/JP277634",
       "display_short": "Bishop et al. 2019",
-      "display_line": "Bishop et al. (2019), Physiology 34(1)"
+      "display_line": "Bishop et al. (2019), Physiology 34(1)",
+      "doi": "10.1113/JP277634",
+      "id_note": "Identifier corrected 2026-09-05 — the previous url resolved to an unrelated paper and was rendered as a live link on /evidence. The record was a chimera: this title is the J Physiol CrossTalk piece, while source and url pointed at a different Bishop paper in Physiology 34(1):56-70."
     },
     {
       "id": "blenkinsop_2017",
@@ -322,9 +324,11 @@
       "year": 2000,
       "title": "A proposed model for examining the interference phenomenon between concurrent aerobic and strength training",
       "source": "Sports Medicine 30(6):385-394",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/11132122/",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11132121/",
       "display_short": "Docherty & Sporer 2000",
-      "display_line": "Docherty & Sporer (2000), Sports Medicine 30(6)"
+      "display_line": "Docherty & Sporer (2000), Sports Medicine 30(6)",
+      "pmid": "11132121",
+      "id_note": "Identifier corrected 2026-09-05 — the previous url resolved to an unrelated paper and was rendered as a live link on /evidence. It pointed at PMID 11132122, 'The role of hyperbaric oxygen therapy in sports medicine' (Babul S) — off by one."
     },
     {
       "id": "doma_2019",
@@ -707,10 +711,12 @@
       "authors": "Perry CGR, Lally J, Holloway GP, Heigenhauser GJF, Bonen A, Spriet LL",
       "year": 2010,
       "title": "Repeated transient mRNA bursts precede increases in transcriptional and mitochondrial proteins during training in human skeletal muscle",
-      "source": "Applied Physiology, Nutrition, and Metabolism 35(6):837-844",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/20555380/",
+      "source": "J Physiol 588(23):4795-4810",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20921196/",
       "display_short": "Perry et al. 2010",
-      "display_line": "Perry et al. (2010), Applied Physiology"
+      "display_line": "Perry et al. (2010), Applied Physiology",
+      "pmid": "20921196",
+      "id_note": "Identifier corrected 2026-09-05 — the previous url resolved to an unrelated paper and was rendered as a live link on /evidence. It pointed at PMID 20555380, a different study by an overlapping group."
     },
     {
       "id": "petre_2018",
@@ -823,10 +829,12 @@
       "authors": "Ross R, Goodpaster BH, Koch LG, et al.",
       "year": 2015,
       "title": "Separate effects of intensity and amount of exercise on interindividual cardiorespiratory fitness response",
-      "source": "Mayo Clinic Proceedings 90(11):1506-1514",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/26586576/",
+      "source": "Mayo Clin Proc 90(11):1506-1514",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26455890/",
       "display_short": "Ross et al. 2015",
-      "display_line": "Ross et al. (2015), Mayo Clinic Proceedings 90(11)"
+      "display_line": "Ross et al. (2015), Mayo Clinic Proceedings 90(11)",
+      "pmid": "26455890",
+      "id_note": "Identifier corrected 2026-09-05 — the previous url resolved to an unrelated paper and was rendered as a live link on /evidence. It pointed at PMID 26586576, 'Resequencing of the common marmoset genome'."
     },
     {
       "id": "sadowski_2021",
@@ -1119,9 +1127,11 @@
       "year": 1998,
       "title": "Training of rowers before world championships",
       "source": "Medicine & Science in Sports & Exercise 30(7):1158-1163",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/9662688/",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9662689/",
       "display_short": "Steinacker et al. 1998",
-      "display_line": "Steinacker et al. (1998), MSSE 30(7)"
+      "display_line": "Steinacker et al. (1998), MSSE 30(7)",
+      "pmid": "9662689",
+      "id_note": "Identifier corrected 2026-09-05 — the previous url resolved to an unrelated paper and was rendered as a live link on /evidence. It pointed at PMID 9662688 — off by one."
     },
     {
       "id": "yiou_2017",
@@ -1169,13 +1179,15 @@
     {
       "id": "vigouroux_2007",
       "authors": "Vigouroux L, Quaine F, Labarre-Vila A, Moutet F",
-      "year": 2007,
+      "year": 2006,
       "title": "Estimation of finger muscle tendon tensions and pulley forces during specific sport-climbing grip techniques",
-      "source": "Journal of Biomechanics 40(13):2896-2903",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/17442324/",
+      "source": "J Biomech 39(14):2583-2592",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16225880/",
       "display_short": "Vigouroux et al. 2007",
       "display_line": "Vigouroux et al. (2007), J Biomech 40(13)",
-      "verification_status": "verified"
+      "verification_status": "verified",
+      "pmid": "16225880",
+      "id_note": "Identifier corrected 2026-09-05 — the previous url resolved to an unrelated paper and was rendered as a live link on /evidence. It pointed at a pesticide-residue paper. The real work is Vigouroux 2006, not 2007 — the id is kept for stability, the year is corrected."
     },
     {
       "id": "beattie_2014",

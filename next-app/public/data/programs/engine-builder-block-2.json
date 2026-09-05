@@ -437,7 +437,7 @@
       "id": "foundation",
       "label": "Foundation",
       "condition": "block_1_completed == 'yes_lapsed' || block_1_completed == 'no_but_equivalent' && current_cardio_hours_per_week < 4",
-      "typical_outcome": "By week 8-12: threshold pace shifts 2-4%, submax HR at intake pace drops 3-6 bpm, VO2max +4-7%. If you re-entered after a lapse, the 2-week ramp catches you up.",
+      "typical_outcome": "By week 8-12: submax HR at intake pace drops 3-6 bpm, VO2max +4-7%. Threshold pace should move; no percentage is promised, because no citation in this programme measures one. If you re-entered after a lapse, the 2-week ramp catches you up.",
       "outcome_confidence": "realistic",
       "full_goal_weeks_estimate": 12,
       "starting_phase_id": "phase_0_re_entry_ramp",
@@ -449,7 +449,7 @@
       "id": "progression",
       "label": "Progression",
       "condition": "block_1_completed == 'yes_recent' && current_cardio_hours_per_week >= 3 && current_cardio_hours_per_week < 6",
-      "typical_outcome": "By week 8-10: threshold pace shifts 3-5%, submax HR drops 5-8 bpm, VO2max +6-9%. This is the reference tier — Block 1 into Block 2 is the assumed path.",
+      "typical_outcome": "By week 8-10: submax HR drops 5-8 bpm, VO2max +6-9%. Threshold pace should move; no percentage is promised, because no citation in this programme measures one. This is the reference tier — Block 1 into Block 2 is the assumed path.",
       "outcome_confidence": "realistic",
       "full_goal_weeks_estimate": 10,
       "starting_phase_id": "phase_1_intro_week",
@@ -461,7 +461,7 @@
       "id": "push",
       "label": "Push",
       "condition": "block_1_completed == 'yes_recent' && (current_cardio_hours_per_week >= 6 || block_1_submax_hr_delta <= -8)",
-      "typical_outcome": "By week 8-10: threshold pace shifts 4-6%, submax HR drops 5-10 bpm, VO2max +4-8% (ceiling effect for well-adapted users). Adds a third weekly hard session as an optional Z3/threshold cruise from week 5.",
+      "typical_outcome": "By week 8-10: submax HR drops 5-10 bpm, VO2max +4-8% (ceiling effect for well-adapted users). Threshold pace should move; no percentage is promised, because no citation in this programme measures one. Adds a third weekly hard session as an optional Z3/threshold cruise from week 5.",
       "outcome_confidence": "fair",
       "full_goal_weeks_estimate": 10,
       "starting_phase_id": "phase_1_intro_week",
@@ -1175,7 +1175,7 @@
   ],
   "evidence_base": {
     "physiological_targets": [
-      "Threshold (LT2 / MLSS) pace / power shift +2-5% over 8-12 weeks — the biggest single lever for 20-90 min endurance performance (Joyner & Coyle 2008). Driven by MCT1 upregulation (Pilegaard 2000), mitochondrial density in Type I fibres (Bishop 2019), and crossover-point shift (Brooks & Mercier 1994).",
+      "Threshold (LT2 / MLSS) pace / power is the biggest single lever for 20-90 min endurance performance (Joyner & Coyle 2008). NO MAGNITUDE is claimed: the '+2-5% over 8-12 weeks' carried here until 2026-09-05 is not in that paper, which models the determinants multiplicatively and gives no threshold-change figure. Same correction as rowing-2k's. Driven by MCT1 upregulation (Pilegaard 2000), mitochondrial density in Type I fibres (Bishop 2019), and crossover-point shift (Brooks & Mercier 1994).",
       "VO2max +4-9% additional gain on top of Block 1 outcomes — decreasing marginal returns; the base delivered most, Block 2 adds more. Astorino 2013 short-HIIT data + Helgerud 2007 Norwegian 4×4 data anchor the range.",
       "Time-at-VO2max per week +50-100% vs Block 1 — Block 2's two hard sessions accumulate more time-at-VO2max than Block 1's one. Buchheit & Laursen 2013 (parts A + B) frame time-at-VO2max as the primary driver of the peak-capacity end of the aerobic system.",
       "Mitochondrial content plateaus but oxidative-enzyme activity keeps climbing — Konopka 2014 12-week data shows β-HAD +397-435% at week 12 (already showing at week 8 in Block 1). Additional gains here compound.",
@@ -1192,7 +1192,7 @@
       "block_20min_tt_or_confirm": "20-min TT as threshold anchor. Coggan's FTP protocol convention (widely used in cycling; adapted for row / ski / run). Rest HR + submax HR are equipment-independent baselines; the 20-min TT is the modality-specific one."
     },
     "progression_rationale": "Block 2 leans on Block 1's base. Week 1 confirms or sets the 20-min threshold anchor. Weeks 2-3 layer the first Norwegian 4×4 on top of one threshold session per week (Rønnestad 2020 style: two hard sessions/wk is the well-supported dose). Week 4 swaps in short-interval format (Rønnestad & Hansen 2020) plus mid-block retest. Weeks 5-6 expand threshold to 3×12 and return to 4×4. Week 7 alternates short-interval again (variety avoids staleness — Buchheit & Laursen 2013). Week 8 hits the ceiling (3×15 threshold + last 4×4). Weeks 9-10 taper + retest (Mujika & Padilla 2000 taper literature: intensity preserved, volume down 40-60%). Concurrent-strength policy tightens in weeks 5-7 as volume peaks (Fyfe 2016 endurance-volume-driven interference). Foundation tier adds a 2-week re-entry ramp before the main progression, delaying the first 4×4 to week 5.",
-    "outcome_evidence": "Effect-size expectations synthesised for a user who completed Block 1 (or has an equivalent base). Threshold pace / power +2-5% (Progression tier), +3-6% (Push), +2-4% (Foundation). Submax HR at fixed pace additional -3 to -8 bpm on top of Block 1 gains. VO2max additional +5-10% (Progression), +4-8% (Push, ceiling effect), +4-7% (Foundation). 2K row TT: additional 3-8s improvement. 5K run TT: 2-4% improvement. Individual variation is large — HERITAGE (Bouchard 1999) ~10× range in gains under identical prescription. Non-response usually resolves at higher intensity (Ross 2015 — but Block 2 is already at the intensity cap; if the response is thin here, Block 3's polarised shift is the next lever). Direct RCT precedent for a Block-2-shaped protocol: Ronnestad & Hansen 2020 (12 weeks, two hard sessions/wk); Astorino 2013 (VO2max HIIT dose-response); Helgerud 2007 (Norwegian 4×4).",
+    "outcome_evidence": "Effect-size expectations synthesised for a user who completed Block 1 (or has an equivalent base). Threshold pace / power: NO FIGURE. The +2-5% / +3-6% / +2-4% carried here until 2026-09-05 had no source — all eight threshold-related citations in this programme establish WHICH metric or WHY, and none measures a magnitude. Submax HR at fixed pace additional -3 to -8 bpm on top of Block 1 gains. VO2max additional +5-10% (Progression), +4-8% (Push, ceiling effect), +4-7% (Foundation). 2K row TT: additional 3-8s improvement. 5K run TT: 2-4% improvement. Individual variation is large — HERITAGE (Bouchard 1999) ~10× range in gains under identical prescription. Non-response usually resolves at higher intensity (Ross 2015 — but Block 2 is already at the intensity cap; if the response is thin here, Block 3's polarised shift is the next lever). Direct RCT precedent for a Block-2-shaped protocol: Ronnestad & Hansen 2020 (12 weeks, two hard sessions/wk); Astorino 2013 (VO2max HIIT dose-response); Helgerud 2007 (Norwegian 4×4).",
     "outcome_by_tier": {
       "foundation": {
         "threshold_shift_pct": "+2-4%",
@@ -1266,7 +1266,7 @@
         "year": 2020,
         "title": "Short intervals induce superior training adaptations compared with long intervals in cyclists",
         "source": "Journal of Science and Medicine in Sport / European Journal of Applied Physiology",
-        "used_for": "Short intervals (5×3, 8×2) accumulate more time-at-VO2max per session for well-trained users. Anchors the block_short_intervals alternation."
+        "used_for": "CORRECTED 2026-09-05. The '5x3, 8x2' time-at-VO2max claim belongs to a DIFFERENT paper (Almquist et al. 2020, PMID 32267032), which is not in citations.json. Ronnestad & Hansen 2020 found no group difference in VO2max change. block_short_intervals alternation stands as an engineering choice, not as this paper's finding."
       },
       {
         "id": "astorino_2013",
@@ -1282,7 +1282,7 @@
         "year": 2008,
         "title": "Endurance exercise performance: the physiology of champions",
         "source": "Journal of Physiology 586(1):35-44",
-        "used_for": "VO2max plateaus; threshold and running economy keep improving. Anchors why Block 2's headline metric is threshold shift, not VO2max."
+        "used_for": "Models endurance performance as VO2max x threshold x economy, interacting rather than ranked. Anchors why threshold is a headline metric. CORRECTED 2026-09-05: this previously read 'VO2max plateaus' — the word plateau does not appear in the paper, and it ranks no determinant above another."
       },
       {
         "id": "buchheit_laursen_2013_a",
