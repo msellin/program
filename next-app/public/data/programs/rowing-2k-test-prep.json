@@ -458,7 +458,7 @@
       "category": "run",
       "frequency": "1×/wk (base weeks + test week)",
       "duration_min": 40,
-      "note": "Full 2K to a plan, not to feel. The app computes your four 500m splits and stroke rates from your own baseline — follow them. Warm-up: 10-12 min build, then 3×20 strokes at race rate with 90s between, finishing 5-8 min before you start. Record the drag factor BEFORE the first stroke and log all four splits, not just the total — split consistency is what this program claims to improve and it cannot be measured from a total alone."
+      "note": "If you are new to the erg, do at least two technique sessions BEFORE this test. A maximal 2K is the worst place to learn the stroke: it is where a novice sequence breaks down under fatigue, and low-back pain on the erg is technique-driven. The baseline is worth more taken a week late than taken wrong. Full 2K to a plan, not to feel. The app computes your four 500m splits and stroke rates from your own baseline — follow them. Warm-up: 10-12 min build, then 3×20 strokes at race rate with 90s between, finishing 5-8 min before you start. Record the drag factor BEFORE the first stroke and log all four splits, not just the total — split consistency is what this program claims to improve and it cannot be measured from a total alone."
     },
     {
       "id": "block_easy_recovery",

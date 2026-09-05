@@ -215,6 +215,22 @@ export function suggestForExercise(
     return {
       top_set: { kg, reps: repsStr },
       fsl: { kg, sets: 5, reps: repsNum },
+      /**
+       * STRAIGHT SETS (2026-09-05). Missing until now, and the omission was
+       * visible to every CSM user.
+       *
+       * `rowCount` is `fsl.sets + (straight_sets ? 0 : 1)`, so a 5×5
+       * prescription rendered SIX identical rows — the exact defect the
+       * founder hit on his own front squat day on 2026-09-03. That fix added
+       * the flag to `VOLUME_BLOCKS` and `VARIANT_BLOCKS`, both of which hold
+       * `anterior-hip-rebuild` block ids only. This branch, ten lines above
+       * them and serving the other programme with a straight-set scheme, did
+       * not get it.
+       *
+       * A correct decision applied to one file and not its siblings, again —
+       * this time within one function.
+       */
+      straight_sets: true,
       state: todayState,
       reasoning: `Maintenance day: 5×${repsStr} @ ${Math.round(pct * 100)}% TM, RPE cap 7.${stateNote}${adjNote}`,
     };
