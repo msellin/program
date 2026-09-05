@@ -8,7 +8,15 @@
 .wrangler/
 .idea/
 .vscode/
-.claude/
+.claude/*
+# Agent role definitions are project assets, not local state (2026-09-05).
+# All fourteen — the six app auditors, five landing auditors, the design lead
+# and the two evidence agents — lived only on one laptop. `run-app-audit.sh`
+# dispatches them by name, so the script was in the repo and the things it
+# dispatches were not: a fresh clone could not run the audit system this
+# project depends on.
+# settings.local.json, launch.json and worktrees stay ignored.
+!.claude/agents/
 
 # Node
 node_modules/
