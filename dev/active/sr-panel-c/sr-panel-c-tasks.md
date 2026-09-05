@@ -9,5 +9,5 @@
 - [x] rowing — novice technique-first instruction
 - [x] Regenerate reviewer packets
 - [x] `npm run verify` — 739
-- [ ] Commit, push, CI
+- [x] Commit, push, CI
 - [ ] Founder: CSM note vs items; block-level gate; pull-up volume; muscle-up tier
