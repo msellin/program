@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: f8ae58a4af48e4a2 -->
+<!-- source-fingerprint: 42cb7561efdd3fd1 -->
 
 ## What we are asking
 
@@ -312,7 +312,7 @@ Printed against the questions above so you can see which are actually detectable
 
 # Citations for this domain
 
-41 unique papers across 3 programs. Where a paper backs more than one claim, every claim is listed under it — a paper stretched across two claims is worth a second look.
+42 unique papers across 3 programs. Where a paper backs more than one claim, every claim is listed under it — a paper stretched across two claims is worth a second look.
 
 **ackerman_1988** — Determinants of individual differences during skill acquisition · Ackerman PL · 1988
 
@@ -430,8 +430,8 @@ Printed against the questions above so you can see which are actually detectable
 
 **roig_2009** — The effects of eccentric versus concentric resistance training on muscle strength and mass in healthy adults: a systematic review with meta-analysis · Roig M, O'Brien K, Kirk G, Murray R, McKinnon P, Shadgan B, Reid WD · 2009
 
-- *first-strict-pullup says it supports:* Meta-analytic evidence: eccentric training produces greater strength gains than concentric-only for matched work (ES 1.02 vs 0.94). Anchors the negatives-as-primary-Tier-B-driver decision.
-- *muscle-up says it supports:* Eccentric training produces greater strength gains than concentric-only. Anchors the transition-negative-from-support drill as the highest-transfer analog for the muscle-up transition.
+- *first-strict-pullup says it supports:* SUPERSEDED 2026-09-05. This read: 'Meta-analytic evidence: eccentric training produces greater strength gains than concentric-only for matched work (ES 1.02 vs 0.94).' Neither effect size appears in Roig's full text, and the paper states that at comparable intensity 'no significant differences in the improvement of total strength after training were observed'. Spudic & Nosaka 2025 (spudic_nosaka_2025, 27 studies, GRADE) settles it: eccentric-only beats concentric-only for ECCENTRIC strength (g=1.51) and is statistically indistinguishable for CONCENTRIC (g=-0.10, p=.726). A first strict pull-up is a CONCENTRIC task — so on the outcome this programme exists to produce, the pooled evidence shows no advantage. Negatives are retained: they build position tolerance and are a reasonable entry for someone with no concentric rep. But they are an ENGINEERING CHOICE, not an evidence-backed shortcut, and the programme should not imply otherwise.
+- *muscle-up says it supports:* SUPERSEDED 2026-09-05 — see spudic_nosaka_2025. Eccentric-only is indistinguishable from concentric-only for concentric strength (g=-0.10, p=.726), so 'produces greater strength gains' is not supportable. The transition negative is retained as the closest available POSITION rehearsal for the muscle-up transition, which is a specificity argument, not a strength-gain one. Roig's own text also declines the transfer claim, leaving open 'transferability of strength gains to more complex human movements'.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **sadowski_2021** — Kinematics and joint moments during the press to handstand · Mizutori H, et al. · 2021
@@ -487,6 +487,12 @@ Printed against the questions above so you can see which are actually detectable
 **sobera_2019** — Postural control strategies of handstand-trained subjects · Sobera M, Serafin R, Rutkowska-Kucharska A · 2019
 
 - *handstand-walk says it supports:* Elite vs novice difference — medial-lateral CoP control + stiffening strategy. Used in outcome_evidence and freestand hold rationale.
+- **Does it? ☐ yes ☐ partly ☐ no —**
+
+**spudic_nosaka_2025** — Eccentric-only versus concentric-only isokinetic strength training effects on maximal voluntary eccentric, concentric and isometric contraction strength: a systematic review and meta-analysis · Spudić D, Nosaka K · 2025
+
+- *first-strict-pullup says it supports:* Eccentric-only training improves ECCENTRIC strength more than concentric-only (g=1.51) but is statistically indistinguishable for CONCENTRIC strength (g=-0.10, p=.726). Added 2026-09-05 to replace roig_2009, and it narrows rather than supports this programme's use of negatives.
+- *muscle-up says it supports:* Eccentric-only training improves ECCENTRIC strength more than concentric-only (g=1.51) but is statistically indistinguishable for CONCENTRIC strength (g=-0.10, p=.726). Added 2026-09-05 to replace roig_2009, and it narrows rather than supports this programme's use of negatives.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **vidal_rovira_2024** — Forearm activation patterns in false-grip vs standard grip on gymnastic rings · Vidal-Rovira R, et al. · 2024

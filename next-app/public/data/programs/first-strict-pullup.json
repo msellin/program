@@ -1319,7 +1319,7 @@
         "title": "The effects of eccentric versus concentric resistance training on muscle strength and mass in healthy adults: a systematic review with meta-analysis",
         "source": "British Journal of Sports Medicine 43(8):556-568",
         "url": "https://pubmed.ncbi.nlm.nih.gov/18981046/",
-        "used_for": "Meta-analytic evidence: eccentric training produces greater strength gains than concentric-only for matched work (ES 1.02 vs 0.94). Anchors the negatives-as-primary-Tier-B-driver decision."
+        "used_for": "SUPERSEDED 2026-09-05. This read: 'Meta-analytic evidence: eccentric training produces greater strength gains than concentric-only for matched work (ES 1.02 vs 0.94).' Neither effect size appears in Roig's full text, and the paper states that at comparable intensity 'no significant differences in the improvement of total strength after training were observed'. Spudic & Nosaka 2025 (spudic_nosaka_2025, 27 studies, GRADE) settles it: eccentric-only beats concentric-only for ECCENTRIC strength (g=1.51) and is statistically indistinguishable for CONCENTRIC (g=-0.10, p=.726). A first strict pull-up is a CONCENTRIC task — so on the outcome this programme exists to produce, the pooled evidence shows no advantage. Negatives are retained: they build position tolerance and are a reasonable entry for someone with no concentric rep. But they are an ENGINEERING CHOICE, not an evidence-backed shortcut, and the programme should not imply otherwise."
       },
       {
         "id": "sinnett_2019",
@@ -1467,6 +1467,14 @@
         "source": "Medicine and Science in Sports and Exercise 35(3):456-464",
         "url": "https://pubmed.ncbi.nlm.nih.gov/12618576/",
         "used_for": "General strength dose-response anchor for the weekly hard-rep target. Replaces a retracted reference (Barbalho 2020, retracted April 2020) that previously carried this claim. Rhea establishes the dose-response shape only — the specific 40-60 hard reps/week figure remains coaching consensus and is labelled as such in the tier rationale, not presented as an RCT result."
+      },
+      {
+        "id": "spudic_nosaka_2025",
+        "authors": "Spudić D, Nosaka K",
+        "year": 2025,
+        "title": "Eccentric-only versus concentric-only isokinetic strength training effects on maximal voluntary eccentric, concentric and isometric contraction strength: a systematic review and meta-analysis",
+        "source": "Sports Med Open 11",
+        "used_for": "Eccentric-only training improves ECCENTRIC strength more than concentric-only (g=1.51) but is statistically indistinguishable for CONCENTRIC strength (g=-0.10, p=.726). Added 2026-09-05 to replace roig_2009, and it narrows rather than supports this programme's use of negatives."
       }
     ],
     "reference_ids": [
@@ -1489,7 +1497,8 @@
       "chiviacowsky_wulf_2002",
       "schmidt_1975",
       "sands_2000",
-      "rhea_2003_meta"
+      "rhea_2003_meta",
+      "spudic_nosaka_2025"
     ]
   },
   "onboarding_steps": [

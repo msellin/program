@@ -1201,7 +1201,7 @@
         "title": "The effects of eccentric versus concentric resistance training on muscle strength and mass in healthy adults: a systematic review with meta-analysis",
         "source": "British Journal of Sports Medicine 43(8):556-568",
         "url": "https://pubmed.ncbi.nlm.nih.gov/18981046/",
-        "used_for": "Eccentric training produces greater strength gains than concentric-only. Anchors the transition-negative-from-support drill as the highest-transfer analog for the muscle-up transition."
+        "used_for": "SUPERSEDED 2026-09-05 — see spudic_nosaka_2025. Eccentric-only is indistinguishable from concentric-only for concentric strength (g=-0.10, p=.726), so 'produces greater strength gains' is not supportable. The transition negative is retained as the closest available POSITION rehearsal for the muscle-up transition, which is a specificity argument, not a strength-gain one. Roig's own text also declines the transfer claim, leaving open 'transferability of strength gains to more complex human movements'."
       },
       {
         "id": "youdas_2010",
@@ -1374,6 +1374,14 @@
         "source": "Journal of Electromyography and Kinesiology 32:30-36",
         "used_for": "EMG data on pull-up variants — supports the drill-library ordering and the false-grip pull-up as its own capability.",
         "verification_status": "pending"
+      },
+      {
+        "id": "spudic_nosaka_2025",
+        "authors": "Spudić D, Nosaka K",
+        "year": 2025,
+        "title": "Eccentric-only versus concentric-only isokinetic strength training effects on maximal voluntary eccentric, concentric and isometric contraction strength: a systematic review and meta-analysis",
+        "source": "Sports Med Open 11",
+        "used_for": "Eccentric-only training improves ECCENTRIC strength more than concentric-only (g=1.51) but is statistically indistinguishable for CONCENTRIC strength (g=-0.10, p=.726). Added 2026-09-05 to replace roig_2009, and it narrows rather than supports this programme's use of negatives."
       }
     ],
     "reference_ids": [
@@ -1398,7 +1406,8 @@
       "schmidt_1975",
       "sinnett_2019",
       "vidal_rovira_2024",
-      "dickie_2017"
+      "dickie_2017",
+      "spudic_nosaka_2025"
     ]
   },
   "onboarding_steps": [
