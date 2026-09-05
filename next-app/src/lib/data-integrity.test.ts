@@ -1486,6 +1486,13 @@ describe("a programme reference and its citations.json entry are the same paper"
    * strings: "et al." truncation and punctuation differences are normal and
    * not what this is looking for.
    */
+  /**
+   * `< 0.5` let a real collision through by ONE WORD: kibler_2013's two
+   * titles share exactly 2 of a 4-word minimum = 0.500. 0.6 is still
+   * permissive for legitimate abbreviation.
+   */
+  const TITLE_OVERLAP_MIN = 0.6;
+
   const citationsById = new Map<string, Record<string, unknown>>();
   {
     const raw = read("citations.json") as unknown;
@@ -1502,6 +1509,47 @@ describe("a programme reference and its citations.json entry are the same paper"
       .trim()
       .split(/\s+/)[0]
       .toLowerCase();
+
+  /**
+   * Every surname in a byline, lowercased. See the byline check below.
+   */
+  const surnames = (authors: unknown): Set<string> =>
+    new Set(
+      String(authors ?? "")
+        .split(/[,;]/)
+        .map((x) => x.trim().split(/\s+/)[0].toLowerCase())
+        .filter((x) => x.length > 2 && x !== "et" && x !== "al"),
+    );
+
+  /**
+   * THE comparison. Both tests below call this.
+   *
+   * It existed twice for about five minutes — once in the conflict test and
+   * once in the staleness test — and raising the threshold in one left the
+   * other at the old value, so a newly-caught conflict immediately read as
+   * "stale". Two copies of one rule, inside a test whose subject is two
+   * copies of one paper.
+   */
+  const isConflict = (
+    ref: Record<string, unknown>,
+    cit: Record<string, unknown>,
+  ): boolean => {
+    if (ref.authors && cit.authors && firstSurname(ref.authors) !== firstSurname(cit.authors)) {
+      return true;
+    }
+    if (ref.authors && cit.authors) {
+      const sa = surnames(ref.authors);
+      const sb = surnames(cit.authors);
+      if ([...sa].some((n) => !sb.has(n)) && [...sb].some((n) => !sa.has(n))) return true;
+    }
+    if (ref.title && cit.title) {
+      const a2 = titleWords(ref.title);
+      const b2 = titleWords(cit.title);
+      const shared = [...a2].filter((w) => b2.has(w)).length;
+      if (shared / Math.max(1, Math.min(a2.size, b2.size)) < TITLE_OVERLAP_MIN) return true;
+    }
+    return false;
+  };
 
   /** Content words of a title, for overlap comparison. */
   const titleWords = (t: unknown): Set<string> =>
@@ -1559,6 +1607,13 @@ describe("a programme reference and its citations.json entry are the same paper"
       "Unlike the others this reads like a PARAPHRASE rather than a second paper — but a " +
       "citations entry holding a description where a title belongs is still wrong, because a " +
       "reader cannot look it up.",
+    kibler_2013:
+      "One id, two different real Kibler papers: the 2013 consensus statement " +
+      "('Clinical implications of scapular dyskinesis in shoulder injury: the 2013 consensus') " +
+      "in first-strict-pullup and muscle-up, versus the 2010 current-concepts piece " +
+      "('Current concepts: scapular dyskinesis') in citations.json, which is what /evidence " +
+      "serves. Slipped past the original guard by ONE WORD: the two titles score exactly 0.500 " +
+      "against a `< 0.5` threshold, which is why that threshold is now 0.6.",
     sci_reports_2026_handstand_shoulder:
       "The programme's `authors` is a PLACEHOLDER — 'Sci Reports handstand-walk shoulder pain " +
       "team' — where citations.json carries real authors (Angioi M, Hinds N, Twycross-Lewis R, " +
@@ -1574,23 +1629,11 @@ describe("a programme reference and its citations.json entry are the same paper"
       for (const ref of refs) {
         const cit = citationsById.get(String(ref.id));
         if (!cit) continue; // resolution is a different test's job
-        if (ref.authors && cit.authors) {
-          const a = firstSurname(ref.authors);
-          const b = firstSurname(cit.authors);
-          if (a && b && a !== b) {
-            conflicts.push(`${slug}/${ref.id}: first author "${a}" vs citations.json "${b}"`);
-          }
-        }
-        if (ref.title && cit.title) {
-          const a = titleWords(ref.title);
-          const b = titleWords(cit.title);
-          const shared = [...a].filter((w) => b.has(w)).length;
-          const overlap = shared / Math.max(1, Math.min(a.size, b.size));
-          if (overlap < 0.5) {
-            conflicts.push(
-              `${slug}/${ref.id}: title mismatch — "${String(ref.title).slice(0, 60)}" vs "${String(cit.title).slice(0, 60)}"`,
-            );
-          }
+        if (isConflict(ref, cit)) {
+          conflicts.push(
+            `${slug}/${ref.id}: "${String(ref.authors ?? "?").slice(0, 34)}" / "${String(ref.title ?? "?").slice(0, 46)}" ` +
+              `vs citations.json "${String(cit.authors ?? "?").slice(0, 34)}" / "${String(cit.title ?? "?").slice(0, 46)}"`,
+          );
         }
       }
     }
@@ -1610,17 +1653,7 @@ describe("a programme reference and its citations.json entry are the same paper"
           .evidence_base?.references ?? []);
       for (const ref of refs) {
         const cit = citationsById.get(String(ref.id));
-        if (!cit) continue;
-        const authorsDiffer =
-          Boolean(ref.authors && cit.authors) &&
-          firstSurname(ref.authors) !== firstSurname(cit.authors);
-        const a = titleWords(ref.title);
-        const b = titleWords(cit.title);
-        const shared = [...a].filter((w) => b.has(w)).length;
-        const titleDiffers =
-          Boolean(ref.title && cit.title) &&
-          shared / Math.max(1, Math.min(a.size, b.size)) < 0.5;
-        if (authorsDiffer || titleDiffers) live.add(String(ref.id));
+        if (cit && isConflict(ref, cit)) live.add(String(ref.id));
       }
     }
     const stale = Object.keys(KNOWN_REFERENCE_CONFLICTS).filter((id) => !live.has(id));
