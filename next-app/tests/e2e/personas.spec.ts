@@ -342,15 +342,40 @@ for (const persona of PERSONAS) {
         const nameOf = (id: string) => library.exercises.find((e) => e.id === id)?.name;
         const captured = fs.readFileSync(sessionCapture, "utf8");
 
-        for (const rule of fired) {
-          // The reason is user-facing and must be on the screen.
-          expect(captured, `${persona.id}: deferral reason not shown`).toContain(rule.reason);
-          // And the deferred movements must actually be gone.
-          for (const eid of rule.exclude_exercise_ids) {
-            const name = nameOf(eid);
-            if (name) {
-              expect(captured, `${persona.id}: deferred "${name}" still in session`)
-                .not.toContain(name);
+        /**
+         * Rest days carry no session, and therefore no deferral copy
+         * (2026-09-05).
+         *
+         * This assertion was date-fragile and nobody noticed for as long as
+         * every sweep happened to run on a weekday that gave
+         * `persona-pullup-elbow` a session. Run the identical, unchanged
+         * suite on a Saturday and its day-21 lands on a rest day: the page
+         * reads "First Strict Pull-Up has no session scheduled today", there
+         * are no exercises to defer, and a passing suite turned red with
+         * nothing about the app having changed.
+         *
+         * A test whose result depends on the day of the week you run it is
+         * not measuring the app. The deferral rules still have to hold when
+         * a session EXISTS — that is what the check is for — so this skips
+         * rather than weakens.
+         */
+        //
+        // Scoped to this loop, NOT an early return from the test. A `return`
+        // here would also skip the graduation-card check below and the
+        // `persona.json` write that every downstream artifact reads — a
+        // rest-day persona would silently produce no manifest at all.
+        const noSessionToday = /no session scheduled today|Rest day\./i.test(captured);
+        if (!noSessionToday) {
+          for (const rule of fired) {
+            // The reason is user-facing and must be on the screen.
+            expect(captured, `${persona.id}: deferral reason not shown`).toContain(rule.reason);
+            // And the deferred movements must actually be gone.
+            for (const eid of rule.exclude_exercise_ids) {
+              const name = nameOf(eid);
+              if (name) {
+                expect(captured, `${persona.id}: deferred "${name}" still in session`)
+                  .not.toContain(name);
+              }
             }
           }
         }

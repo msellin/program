@@ -204,3 +204,55 @@ rung, where nothing needed it and Grind's note sheet was over the takeover.
 Guarded.
 
 Neither is verified. That needs sweep #5.
+
+---
+
+## Sweep #5 (2026-09-05) — predictions stated in advance, scored
+
+22 passed, **1 failed**, 30.4 min. Predictions were written down before the
+run this time, so they can be scored rather than reinterpreted.
+
+| Metric | #4 | predicted | actual | |
+|---|---|---|---|---|
+| `OverflowSheet /^Close/` timeouts | 13 | 0 | **1** | near |
+| `RestTakeover /^change/` timeouts | 9 | 0 | **1** | near |
+| OverflowSheet controls | 6/7 | 7/7 | **7/7** | hit |
+| Never-driven | 2 | 1 (`NoteSheet — Not now`) | **1, exactly that** | hit |
+| Behavioural checks | 259 | ≥259 | **269** | hit |
+| Runtime | 32.4 min | ~27 min | **30.4 min** | miss |
+
+Both residual timeouts are on the ONE persona that failed; the other 21 are
+clean. Controls 94.9% → **95.5%**.
+
+**Runtime: right direction, wrong size, and I cannot fully account for it.**
+Removing 22 × 15s should be ~5.5 minutes and the observed drop is 2. The
+failing persona also aborted early, which cuts the other way. Rather than
+invent a reason: the number moved as predicted in sign and not in
+magnitude, and the residual is unexplained.
+
+## The failure was date fragility, not a regression
+
+`persona-pullup-elbow` — *"deferral reason not shown"*. Its day-21 landed on
+a REST day, so the session page read "First Strict Pull-Up has no session
+scheduled today", no exercises rendered, and an assertion that intake
+deferrals appear in the session had nothing to find.
+
+Nothing about the app changed. The identical suite passed on 2026-09-04 and
+failed on 2026-09-05 because the weekday moved. **A test whose result
+depends on which day you run it is not measuring the app.** Guarded: the
+deferral rules still have to hold when a session exists, which is the point
+of the check, so it skips rather than weakens.
+
+**A `return` was the wrong guard and nearly shipped.** The first version
+returned early from the test — which would also have skipped the
+graduation-card contradiction check and the `persona.json` write that every
+downstream artifact reads. A rest-day persona would have silently produced
+no manifest. Scoped to the loop instead.
+
+## Where the harness now stands
+
+One never-driven control fleet-wide: `NoteSheet — Not now`, and it is
+genuine — the flow saves a note rather than dismissing one. Everything else
+that looked like a coverage gap this week turned out to be a measurement
+fault: an inflated denominator, a mis-filed abstention, two scrims, and a
+date.
