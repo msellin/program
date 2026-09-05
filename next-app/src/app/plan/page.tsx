@@ -74,6 +74,12 @@ type Wt = {
   note?: string;
 };
 
+/**
+ * A programme's standing rules — top-level `principles[]`, distinct from
+ * `weekly_template.principles` (scheduling guidance, a plain string[]).
+ */
+type ProgramRule = { id?: string; rule: string; detail?: string };
+
 export default function WeekPage() {
   const [programs, setPrograms] = useState<Program[]>([]);
   const [offset, setOffset] = useState(0);
@@ -139,6 +145,8 @@ export default function WeekPage() {
   if (!program) return <div className="mt-8 text-sm text-muted">Loading…</div>;
 
   const wt = program.weekly_template as Wt | undefined;
+  const programRules = ((program as unknown as { principles?: ProgramRule[] }).principles ?? [])
+    .filter((p) => typeof p?.rule === "string" && p.rule.trim().length > 0);
 
   const now = new Date(todayISO() + "T00:00:00");
   const jsDow = now.getDay();
@@ -705,7 +713,35 @@ export default function WeekPage() {
           })}
         </div>
 
-      {wt?.principles?.length ? <RulesAccordion principles={wt.principles} /> : null}
+      {/* Programme rules — BOTH arrays (2026-09-05).
+          `weekly_template.principles` is scheduling guidance ("48h between
+          heavy squat days") and is a plain string[]. Top-level `principles`
+          is the programme's standing rules — objects with a `rule` and a
+          `detail` — and it was rendered NOWHERE.
+
+          Six of the nine shipped programmes have an EMPTY
+          weekly_template.principles, so this whole panel simply never
+          appeared for them, while every one of the nine authors five to
+          seven top-level rules. Roughly fifty authored rules were invisible.
+
+          Two of them are safety rules: handstand-walk's
+          `shoulder_pain_stops_session` ("any shoulder pain during a
+          handstand attempt ends the session") and `wrist_volume_capped`.
+          Neither is enforced in code, and until now neither was shown
+          either — so a rule the programme states as a hard stop reached the
+          user through no channel at all.
+
+          Found by the citation sweep, which went looking for what a shaky
+          citation underwrote and discovered the claim it underwrote was
+          never displayed. */}
+      {programRules.length || wt?.principles?.length ? (
+        <RulesAccordion
+          principles={[
+            ...programRules.map((p) => (p.detail ? `${p.rule} — ${p.detail}` : p.rule)),
+            ...(wt?.principles ?? []),
+          ]}
+        />
+      ) : null}
     </div>
   );
 }

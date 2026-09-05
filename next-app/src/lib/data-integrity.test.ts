@@ -1660,3 +1660,72 @@ describe("a programme reference and its citations.json entry are the same paper"
     expect(stale).toEqual([]);
   });
 });
+
+describe("a programme's standing rules reach the user", () => {
+  /**
+   * Found 2026-09-05 by the citation sweep, sideways.
+   *
+   * An agent went looking for what a shaky citation underwrote, and found
+   * the claim it underwrote was never displayed at all. `plan/page.tsx`
+   * rendered `weekly_template.principles` only — and SIX of the nine shipped
+   * programmes have that array empty, while every one of the nine authors
+   * five to seven top-level `principles`. Roughly fifty authored rules were
+   * invisible.
+   *
+   * Two of them are safety rules. handstand-walk's
+   * `shoulder_pain_stops_session` states "any shoulder pain during a
+   * handstand attempt ends the session — no working through it", and
+   * `wrist_volume_capped` caps wrist load. Neither is enforced in code. Until
+   * this fix neither was shown either, so a rule the programme states as a
+   * hard stop reached the user through no channel whatsoever.
+   *
+   * This does not test that they are ENFORCED — they are not, and making
+   * them so is a programming decision. It tests that the data a programme
+   * authors as its rules is on a rendering path, which is the difference
+   * between "we decided not to enforce it" and "nobody knew it was there".
+   */
+  const SRC = path.resolve(__dirname, "..");
+  const planPage = fs.readFileSync(path.join(SRC, "app/plan/page.tsx"), "utf8");
+
+  it("renders top-level principles, not only weekly_template's", () => {
+    /**
+     * Asserts the rules are PASSED to the accordion, not merely computed.
+     *
+     * The first version of this grepped for `programRules` anywhere in the
+     * file — and passed against a deliberate revert to weekly-template-only
+     * rendering, because the unused `const programRules` declaration
+     * survived. A test that cannot fail is decoration; mutation-testing it
+     * is what showed that.
+     */
+    const call = planPage.slice(planPage.indexOf("<RulesAccordion"));
+    const accordion = call.slice(0, call.indexOf("/>") + 2);
+    expect(accordion, "top-level principles must reach RulesAccordion").toMatch(
+      /programRules\.map/,
+    );
+    expect(accordion, "weekly_template principles must too").toMatch(/wt\?\.principles/);
+  });
+
+  it("every programme authors rules that are now reachable", () => {
+    const empty = programs
+      .filter(({ program }) => {
+        const top = (program as unknown as { principles?: unknown[] }).principles ?? [];
+        const wt =
+          ((program as unknown as { weekly_template?: { principles?: unknown[] } }).weekly_template
+            ?.principles ?? []);
+        return top.length === 0 && wt.length === 0;
+      })
+      .map(({ id }) => id);
+    expect(empty).toEqual([]);
+  });
+
+  it("handstand-walk's two safety rules are among them", () => {
+    // Named explicitly because these are the ones with a hard-stop framing.
+    // If a future edit moves or renames them, this should fail loudly rather
+    // than let them slip back out of view.
+    const hw = programs.find((p) => p.id === "handstand-walk")!;
+    const ids = ((hw.program as unknown as { principles?: Array<{ id?: string }> }).principles ?? [])
+      .map((r) => r.id);
+    expect(ids).toContain("shoulder_pain_stops_session");
+    expect(ids).toContain("wrist_volume_capped");
+  });
+});
