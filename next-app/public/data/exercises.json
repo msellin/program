@@ -942,8 +942,9 @@
           "capability_domain": "wrist_extension_mobility",
           "minimum_level": 1,
           "rationale": "load_tolerance",
-          "source": "literature",
-          "evidence_ref": "wiesinger_2019"
+          "source": "coaching_consensus",
+          "evidence_ref": "wiesinger_2019",
+          "source_note": "Relabelled 2026-09-05. Was `literature`, citing wiesinger_2019. Sourcing review found that none of the referenced papers establishes a capability-level THRESHOLD for any drill — they measure shoulder moments, centre-of-pressure, tendon stiffness or interference windows. The gate may well be sensible, but it is coaching judgement, and `plan-generator.ts` drops a drill on an unmet prerequisite, so this is exactly where the label has to be honest."
         }
       ],
       "cues_external_focus": [
@@ -1173,8 +1174,9 @@
           "capability_domain": "wrist_load_tolerance",
           "minimum_level": 1,
           "rationale": "load_tolerance",
-          "source": "literature",
-          "evidence_ref": "wiesinger_2019"
+          "source": "coaching_consensus",
+          "evidence_ref": "wiesinger_2019",
+          "source_note": "Relabelled 2026-09-05. Was `literature`, citing wiesinger_2019. Sourcing review found that none of the referenced papers establishes a capability-level THRESHOLD for any drill — they measure shoulder moments, centre-of-pressure, tendon stiffness or interference windows. The gate may well be sensible, but it is coaching judgement, and `plan-generator.ts` drops a drill on an unmet prerequisite, so this is exactly where the label has to be honest."
         }
       ],
       "cues_external_focus": [
@@ -1219,15 +1221,17 @@
           "capability_domain": "shoulder_overhead_endurance",
           "minimum_level": 1,
           "rationale": "load_tolerance",
-          "source": "literature",
-          "evidence_ref": "ludewig_cook_2000"
+          "source": "coaching_consensus",
+          "evidence_ref": "ludewig_cook_2000",
+          "source_note": "Relabelled 2026-09-05. Was `literature`, citing ludewig_cook_2000. Sourcing review found that none of the referenced papers establishes a capability-level THRESHOLD for any drill — they measure shoulder moments, centre-of-pressure, tendon stiffness or interference windows. The gate may well be sensible, but it is coaching judgement, and `plan-generator.ts` drops a drill on an unmet prerequisite, so this is exactly where the label has to be honest."
         },
         {
           "capability_domain": "wrist_load_tolerance",
           "minimum_level": 2,
           "rationale": "load_tolerance",
-          "source": "literature",
-          "evidence_ref": "wiesinger_2019"
+          "source": "coaching_consensus",
+          "evidence_ref": "wiesinger_2019",
+          "source_note": "Relabelled 2026-09-05. Was `literature`, citing wiesinger_2019. Sourcing review found that none of the referenced papers establishes a capability-level THRESHOLD for any drill — they measure shoulder moments, centre-of-pressure, tendon stiffness or interference windows. The gate may well be sensible, but it is coaching judgement, and `plan-generator.ts` drops a drill on an unmet prerequisite, so this is exactly where the label has to be honest."
         }
       ],
       "cues_external_focus": [
@@ -1273,8 +1277,9 @@
           "capability_domain": "shoulder_overhead_endurance",
           "minimum_level": 2,
           "rationale": "load_tolerance",
-          "source": "literature",
-          "evidence_ref": "sadowski_2021"
+          "source": "coaching_consensus",
+          "evidence_ref": "sadowski_2021",
+          "source_note": "Relabelled 2026-09-05. Was `literature`, citing sadowski_2021. Sourcing review found that none of the referenced papers establishes a capability-level THRESHOLD for any drill — they measure shoulder moments, centre-of-pressure, tendon stiffness or interference windows. The gate may well be sensible, but it is coaching judgement, and `plan-generator.ts` drops a drill on an unmet prerequisite, so this is exactly where the label has to be honest."
         },
         {
           "capability_domain": "hollow_body_shape",
@@ -1324,8 +1329,9 @@
           "capability_domain": "wrist_load_tolerance",
           "minimum_level": 1,
           "rationale": "load_tolerance",
-          "source": "literature",
-          "evidence_ref": "wiesinger_2019"
+          "source": "coaching_consensus",
+          "evidence_ref": "wiesinger_2019",
+          "source_note": "Relabelled 2026-09-05. Was `literature`, citing wiesinger_2019. Sourcing review found that none of the referenced papers establishes a capability-level THRESHOLD for any drill — they measure shoulder moments, centre-of-pressure, tendon stiffness or interference windows. The gate may well be sensible, but it is coaching judgement, and `plan-generator.ts` drops a drill on an unmet prerequisite, so this is exactly where the label has to be honest."
         }
       ],
       "cues_external_focus": [
@@ -1371,8 +1377,9 @@
           "capability_domain": "shoulder_overhead_endurance",
           "minimum_level": 2,
           "rationale": "load_tolerance",
-          "source": "literature",
-          "evidence_ref": "sadowski_2021"
+          "source": "coaching_consensus",
+          "evidence_ref": "sadowski_2021",
+          "source_note": "Relabelled 2026-09-05. Was `literature`, citing sadowski_2021. Sourcing review found that none of the referenced papers establishes a capability-level THRESHOLD for any drill — they measure shoulder moments, centre-of-pressure, tendon stiffness or interference windows. The gate may well be sensible, but it is coaching judgement, and `plan-generator.ts` drops a drill on an unmet prerequisite, so this is exactly where the label has to be honest."
         },
         {
           "capability_domain": "hollow_body_shape",
@@ -1384,8 +1391,9 @@
           "capability_domain": "wrist_load_tolerance",
           "minimum_level": 2,
           "rationale": "load_tolerance",
-          "source": "literature",
-          "evidence_ref": "wiesinger_2019"
+          "source": "coaching_consensus",
+          "evidence_ref": "wiesinger_2019",
+          "source_note": "Relabelled 2026-09-05. Was `literature`, citing wiesinger_2019. Sourcing review found that none of the referenced papers establishes a capability-level THRESHOLD for any drill — they measure shoulder moments, centre-of-pressure, tendon stiffness or interference windows. The gate may well be sensible, but it is coaching judgement, and `plan-generator.ts` drops a drill on an unmet prerequisite, so this is exactly where the label has to be honest."
         }
       ],
       "cues_external_focus": [
@@ -1522,8 +1530,9 @@
           "capability_domain": "handstand_hold_static",
           "minimum_level": 3,
           "rationale": "coordination_prerequisite",
-          "source": "literature",
-          "evidence_ref": "kinoshita_2022"
+          "source": "coaching_consensus",
+          "evidence_ref": "kinoshita_2022",
+          "source_note": "Relabelled 2026-09-05. Was `literature`, citing kinoshita_2022. Sourcing review found that none of the referenced papers establishes a capability-level THRESHOLD for any drill — they measure shoulder moments, centre-of-pressure, tendon stiffness or interference windows. The gate may well be sensible, but it is coaching judgement, and `plan-generator.ts` drops a drill on an unmet prerequisite, so this is exactly where the label has to be honest."
         }
       ],
       "cues_external_focus": [
@@ -1545,7 +1554,7 @@
       "rest_between_s": 90,
       "evidence_refs": [
         "kinoshita_2022",
-        "ferrari_2021"
+        "grabowiecki_2021"
       ],
       "video_search": "handstand shoulder taps wall"
     },
@@ -1699,8 +1708,9 @@
           "capability_domain": "handstand_hold_static",
           "minimum_level": 3,
           "rationale": "coordination_prerequisite",
-          "source": "literature",
-          "evidence_ref": "ferrari_2021"
+          "source": "coaching_consensus",
+          "evidence_ref": "grabowiecki_2021",
+          "source_note": "Relabelled 2026-09-05. Was `literature`, citing ferrari_2021. Sourcing review found that none of the referenced papers establishes a capability-level THRESHOLD for any drill — they measure shoulder moments, centre-of-pressure, tendon stiffness or interference windows. The gate may well be sensible, but it is coaching judgement, and `plan-generator.ts` drops a drill on an unmet prerequisite, so this is exactly where the label has to be honest."
         }
       ],
       "cues_external_focus": [
@@ -1721,7 +1731,7 @@
       },
       "rest_between_s": 60,
       "evidence_refs": [
-        "ferrari_2021",
+        "grabowiecki_2021",
         "kinoshita_2022"
       ],
       "video_search": "handstand walk first step drill"
@@ -1744,8 +1754,9 @@
           "capability_domain": "handstand_walk_dynamic",
           "minimum_level": 3,
           "rationale": "coordination_prerequisite",
-          "source": "literature",
-          "evidence_ref": "shea_morgan_1979"
+          "source": "coaching_consensus",
+          "evidence_ref": "shea_morgan_1979",
+          "source_note": "Relabelled 2026-09-05. Was `literature`, citing shea_morgan_1979. Sourcing review found that none of the referenced papers establishes a capability-level THRESHOLD for any drill — they measure shoulder moments, centre-of-pressure, tendon stiffness or interference windows. The gate may well be sensible, but it is coaching judgement, and `plan-generator.ts` drops a drill on an unmet prerequisite, so this is exactly where the label has to be honest."
         }
       ],
       "cues_external_focus": [
@@ -1767,7 +1778,7 @@
       "rest_between_s": 60,
       "evidence_refs": [
         "shea_morgan_1979",
-        "ferrari_2021",
+        "grabowiecki_2021",
         "kinoshita_2022"
       ],
       "video_search": "handstand walk short shuttle"
@@ -1810,7 +1821,7 @@
       },
       "rest_between_s": 90,
       "evidence_refs": [
-        "ferrari_2021",
+        "grabowiecki_2021",
         "sci_reports_2026_handstand_shoulder"
       ],
       "video_search": "handstand walk on line"
@@ -1854,7 +1865,7 @@
       },
       "rest_between_s": 90,
       "evidence_refs": [
-        "ferrari_2021",
+        "grabowiecki_2021",
         "shea_morgan_1979",
         "potdevin_2018"
       ],
@@ -2042,7 +2053,7 @@
       },
       "rest_between_s": 90,
       "evidence_refs": [
-        "ferrari_2021",
+        "grabowiecki_2021",
         "simunkova_2024"
       ],
       "video_search": "handstand walk over plate crossfit"
@@ -2088,7 +2099,7 @@
       },
       "rest_between_s": 90,
       "evidence_refs": [
-        "ferrari_2021",
+        "grabowiecki_2021",
         "shea_morgan_1979",
         "simunkova_2024"
       ],
@@ -2134,7 +2145,7 @@
       },
       "rest_between_s": 90,
       "evidence_refs": [
-        "ferrari_2021",
+        "grabowiecki_2021",
         "kerwin_trewartha_2001",
         "blenkinsop_2017"
       ],

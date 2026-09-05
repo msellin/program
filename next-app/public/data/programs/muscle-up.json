@@ -1230,11 +1230,11 @@
       },
       {
         "id": "sadowski_2021",
-        "authors": "Sadowski J, et al.",
+        "authors": "Mizutori H, et al.",
         "year": 2021,
-        "title": "Kinematic and kinetic analysis of the straight-arm press to handstand",
-        "source": "PLOS One 16(7):e0253951",
-        "used_for": "Press-to-handstand shoulder-moment analysis, cited as the closest available analog for ring-support end-range shoulder load. ATTRIBUTION UNRESOLVED — the DOI resolves to a Mizutori-authored parallel-bars paper; handstand-walk carries the same flag and instructs that the 3x bodyweight figure not be cited. The specific number is therefore withdrawn here too (2026-09-03): the two programmes were shipping opposite instructions about the same citation. The qualitative point — straight-arm press is a high end-range shoulder load — stands without it."
+        "title": "Kinematics and joint moments during the press to handstand",
+        "source": "PLoS One 16(7):e0253951",
+        "used_for": "Press-to-handstand shoulder-moment analysis, cited as the closest available analog for ring-support end-range shoulder load. ATTRIBUTION UNRESOLVED — the DOI resolves to a Mizutori-authored parallel-bars paper; handstand-walk carries the same flag and instructs that the 3x bodyweight figure not be cited. The specific number is therefore withdrawn here too (2026-09-03): the two programmes were shipping opposite instructions about the same citation. The qualitative point — straight-arm press is a high end-range shoulder load — stands without it. CORRECTED 2026-09-05: the byline said Sadowski and no such paper exists, but the DOI was always right and resolves to Mizutori et al. It is a FLOOR study, not parallel bars, and the 3x bodyweight figure lived in its introduction quoting someone else. Its real finding — less-skilled performers produced LARGER shoulder flexion moments — supports this rule better than the withdrawn number."
       },
       {
         "id": "wulf_1998",

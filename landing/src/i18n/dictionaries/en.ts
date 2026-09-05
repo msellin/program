@@ -13,7 +13,7 @@ export const en: LandingDict = {
     browse_link: "Browse programs — no signup",
     stat_programs_value: "8 programs",
     stat_programs_label: "strength, skill, engine, mobility",
-    stat_studies_value: "123",
+    stat_studies_value: "125",
     stat_studies_label: "cited studies",
     stat_adapts_value: "Your focus",
     stat_adapts_label: "adapts every session",
@@ -67,7 +67,7 @@ export const en: LandingDict = {
   },
   evidence: {
     eyebrow: "The evidence claim",
-    title: "123 primary studies. Every session cites its research.",
+    title: "125 primary studies. Every session cites its research.",
     read_link: "Read",
   },
   wontdo: {

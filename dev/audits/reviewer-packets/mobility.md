@@ -1,10 +1,10 @@
 # Reviewer packet — Shoulder mobility
 
-**Generated 2026-09-05 from the shipping program data.** Regenerate with
+**Generated 2026-09-06 from the shipping program data.** Regenerate with
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: 2254d9a569182d0d -->
+<!-- source-fingerprint: 9ba5ad50da1b257a -->
 
 ## What we are asking
 
@@ -184,9 +184,9 @@ Printed against the questions above so you can see which are actually detectable
 - *overhead-mobility says it supports:* Rotator-cuff activation levels across drill variants; informs light-load rationale in Phase 2
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
-**sadowski_2021** — Kinematic and kinetic analysis of the straight-arm press to handstand · Sadowski J, Mastalerz A, Niznikowska E, et al. · 2021
+**sadowski_2021** — Kinematics and joint moments during the press to handstand · Mizutori H, et al. · 2021
 
-- *overhead-mobility says it supports:* Shoulder-moment analysis for the straight-arm press to handstand — informs the no-heavy-load-early rule. Attribution flagged for founder review (see citations.json review_note): DOI resolves to a Mizutori-authored parallel-bars study; the 3× BW figure is a parallel-bars finding, not a floor finding. Terav uses this only for the general 'heavy shoulder moment early is unsafe' principle, not for a specific numeric threshold.
+- *overhead-mobility says it supports:* Shoulder-moment analysis for the straight-arm press to handstand — informs the no-heavy-load-early rule. Attribution flagged for founder review (see citations.json review_note): DOI resolves to a Mizutori-authored floor study; the 3× BW figure is a parallel-bars finding, not a floor finding. Terav uses this only for the general 'heavy shoulder moment early is unsafe' principle, not for a specific numeric threshold. CORRECTED 2026-09-05: the byline said Sadowski and no such paper exists, but the DOI was always right and resolves to Mizutori et al. It is a FLOOR study, not parallel bars, and the 3x bodyweight figure lived in its introduction quoting someone else. Its real finding — less-skilled performers produced LARGER shoulder flexion moments — supports this rule better than the withdrawn number.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **salmoni_schmidt_walter_1984** — Knowledge of results and motor learning: a review and critical reappraisal · Salmoni AW, Schmidt RA, Walter CB · 1984

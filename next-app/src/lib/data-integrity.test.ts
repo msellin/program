@@ -1729,3 +1729,49 @@ describe("a programme's standing rules reach the user", () => {
     expect(ids).toContain("wrist_volume_capped");
   });
 });
+
+describe("a citation url points at a record, not a search", () => {
+  /**
+   * The cheapest signal in the whole citation layer, found 2026-09-05 by the
+   * sourcing agents and mechanically checkable.
+   *
+   * All three phantom citations they identified — kim_2013, kilding_2012,
+   * das_2019 — carried a url that was a SEARCH QUERY rather than a record
+   * link. That is what "I could not find this paper, so I linked a search
+   * for it" looks like in data, and it is exactly the shape a fabricated
+   * citation takes: nobody can dereference it, and the link still appears to
+   * work because a search page always renders.
+   *
+   * `/evidence` (app/evidence/page.tsx) renders `url` as a live anchor, so a
+   * user clicking "Read the paper" on one of these lands in a search box.
+   *
+   * Two of the three phantoms also paired a REAL author with a REAL journal
+   * and an invented paper, so author plausibility catches nothing. This
+   * does.
+   */
+  const SEARCH_URL = /[?&](q|term|query)=|scholar\.google\.[a-z.]+\/scholar\?|\/search\b/i;
+
+  /**
+   * Known search-links, kept only where the work is a book chapter or older
+   * offline item with no stable record. A phantom must never be parked here
+   * to silence the test — the point is that a search link is the signature
+   * of "not found".
+   */
+  const KNOWN_SEARCH_URLS: Record<string, string> = {
+    hagerman_1994:
+      "Book chapter (Endurance in Sport, Blackwell) with no DOI or PubMed record. " +
+      "A search link is the honest best available, and the record says so.",
+  };
+
+  it("no citation links to a search page", () => {
+    const raw = read("citations.json") as unknown;
+    const rows = (Array.isArray(raw) ? raw : (raw as { citations?: unknown[] }).citations ?? []) as Array<
+      Record<string, unknown>
+    >;
+    const offenders = rows
+      .filter((r) => typeof r.url === "string" && SEARCH_URL.test(r.url as string))
+      .map((r) => String(r.id))
+      .filter((id) => !(id in KNOWN_SEARCH_URLS));
+    expect(offenders).toEqual([]);
+  });
+});

@@ -1,10 +1,10 @@
 # Reviewer packet — Gymnastics & upper-body skill
 
-**Generated 2026-09-05 from the shipping program data.** Regenerate with
+**Generated 2026-09-06 from the shipping program data.** Regenerate with
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: bb0d3fe14f37aff1 -->
+<!-- source-fingerprint: f8ae58a4af48e4a2 -->
 
 ## What we are asking
 
@@ -434,10 +434,10 @@ Printed against the questions above so you can see which are actually detectable
 - *muscle-up says it supports:* Eccentric training produces greater strength gains than concentric-only. Anchors the transition-negative-from-support drill as the highest-transfer analog for the muscle-up transition.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
-**sadowski_2021** — Kinematic and kinetic analysis of the straight-arm press to handstand · Sadowski J, Mastalerz A, Niznikowska E, et al. · 2021
+**sadowski_2021** — Kinematics and joint moments during the press to handstand · Mizutori H, et al. · 2021
 
-- *muscle-up says it supports:* Press-to-handstand shoulder-moment analysis, cited as the closest available analog for ring-support end-range shoulder load. ATTRIBUTION UNRESOLVED — the DOI resolves to a Mizutori-authored parallel-bars paper; handstand-walk carries the same flag and instructs that the 3x bodyweight figure not be cited. The specific number is therefore withdrawn here too (2026-09-03): the two programmes were shipping opposite instructions about the same citation. The qualitative point — straight-arm press is a high end-range shoulder load — stands without it.
-- *handstand-walk says it supports:* Shoulder-moment analysis of the press to handstand. Directly informs the choice NOT to program straight-arm press early, and the Tier A entry at Kinoshita 90°. Attribution flagged for founder review (see citations.json review_note): DOI 10.1371/journal.pone.0253951 resolves to a Mizutori-authored parallel-bars paper. The heavy-shoulder-moment principle survives on general grounds; the specific 3× BW figure was a parallel-bars finding, not a floor finding — do not cite that number.
+- *muscle-up says it supports:* Press-to-handstand shoulder-moment analysis, cited as the closest available analog for ring-support end-range shoulder load. ATTRIBUTION UNRESOLVED — the DOI resolves to a Mizutori-authored parallel-bars paper; handstand-walk carries the same flag and instructs that the 3x bodyweight figure not be cited. The specific number is therefore withdrawn here too (2026-09-03): the two programmes were shipping opposite instructions about the same citation. The qualitative point — straight-arm press is a high end-range shoulder load — stands without it. CORRECTED 2026-09-05: the byline said Sadowski and no such paper exists, but the DOI was always right and resolves to Mizutori et al. It is a FLOOR study, not parallel bars, and the 3x bodyweight figure lived in its introduction quoting someone else. Its real finding — less-skilled performers produced LARGER shoulder flexion moments — supports this rule better than the withdrawn number.
+- *handstand-walk says it supports:* Shoulder-moment analysis of the press to handstand. Directly informs the choice NOT to program straight-arm press early, and the Tier A entry at Kinoshita 90°. Attribution flagged for founder review (see citations.json review_note): DOI 10.1371/journal.pone.0253951 resolves to a Mizutori-authored parallel-bars paper. The heavy-shoulder-moment principle survives on general grounds; the specific 3× BW figure was a parallel-bars finding, not a floor finding — do not cite that number. CORRECTED 2026-09-05: the byline said Sadowski and no such paper exists, but the DOI was always right and resolves to Mizutori et al. It is a FLOOR study, not parallel bars, and the 3x bodyweight figure lived in its introduction quoting someone else. Its real finding — less-skilled performers produced LARGER shoulder flexion moments — supports this rule better than the withdrawn number.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **sands_2000** — Injury prevention in women's gymnastics · Sands WA · 2000

@@ -1,10 +1,10 @@
 # Reviewer packet — Race prep & concurrent training
 
-**Generated 2026-09-05 from the shipping program data.** Regenerate with
+**Generated 2026-09-06 from the shipping program data.** Regenerate with
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: e0be8c4f52f020b1 -->
+<!-- source-fingerprint: 4ffd399f06f429af -->
 
 ## What we are asking
 
@@ -447,7 +447,7 @@ Printed against the questions above so you can see which are actually detectable
 
 **steinacker_1998** — Training of rowers before world championships · Steinacker JM, Lormes W, Lehmann M, Altenburg D · 1998
 
-- *rowing-2k-test-prep says it supports:* Rowing-specific physiological profile in elite rowers preparing for world championships. Replaced das_2019 as a stronger anchor for the metabolic-profile claims (Path A Q5).
+- *rowing-2k-test-prep says it supports:* Rowing-specific physiological profile in elite rowers preparing for world championships. Replaced das_2019 as a stronger anchor for the metabolic-profile claims (Path A Q5). das_2019 was deleted from citations.json on 2026-09-05 — sourcing review found no such paper, and its url was a Google Scholar search rather than a record.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **wilson_2012** — Concurrent training: a meta-analysis examining interference of aerobic and resistance exercises · Wilson JM, Marin PJ, Rhea MR, et al. · 2012

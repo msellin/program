@@ -929,7 +929,7 @@
         "year": 1998,
         "title": "Training of rowers before world championships",
         "source": "Medicine & Science in Sports & Exercise 30(7):1158-1163",
-        "used_for": "Rowing-specific physiological profile in elite rowers preparing for world championships. Replaced das_2019 as a stronger anchor for the metabolic-profile claims (Path A Q5).",
+        "used_for": "Rowing-specific physiological profile in elite rowers preparing for world championships. Replaced das_2019 as a stronger anchor for the metabolic-profile claims (Path A Q5). das_2019 was deleted from citations.json on 2026-09-05 — sourcing review found no such paper, and its url was a Google Scholar search rather than a record.",
         "url": "https://pubmed.ncbi.nlm.nih.gov/9662688/",
         "verification_status": "unverified"
       },

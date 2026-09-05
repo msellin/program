@@ -292,16 +292,6 @@
       "display_line": "Coyle et al. (1984), Journal of Applied Physiology 57(6)"
     },
     {
-      "id": "das_2019",
-      "authors": "Das A, Kumar S, Guha S, Chatterjee S",
-      "year": 2019,
-      "title": "Physiological demands of rowing sport",
-      "source": "J Phys Ed Sports Manage 6(1):5-11",
-      "url": "https://scholar.google.com/scholar?q=Das+Kumar+physiological+demands+rowing+sport+2019",
-      "display_short": "Das et al. 2019",
-      "display_line": "Das et al. (2019), J Phys Ed Sports Manage 6(1)"
-    },
-    {
       "id": "difiori_2006",
       "authors": "DiFiori JP, Caine DJ, Malina RM",
       "year": 2006,
@@ -822,13 +812,16 @@
     },
     {
       "id": "sadowski_2021",
-      "authors": "Sadowski J, Mastalerz A, Niznikowska E, et al.",
+      "authors": "Mizutori H, et al.",
       "year": 2021,
-      "title": "Kinematic and kinetic analysis of the straight-arm press to handstand",
-      "source": "PLOS One 16(7):e0253951",
-      "display_short": "Sadowski et al. 2021",
-      "display_line": "Sadowski et al. (2021), PLOS One 16(7)",
-      "review_note": "FLAGGED for founder review 2026-08-17: WebFetch of DOI 10.1371/journal.pone.0253951 returned Mizutori et al. — a parallel-bars study. Downstream `used_for` on handstand-walk + overhead-mobility over-claims 3× BW shoulder moment on the FLOOR press-to-handstand. Author/paper verification unresolved. See dev/active/citations-under-review-2026-08-17.md."
+      "title": "Kinematics and joint moments during the press to handstand",
+      "source": "PLoS One 16(7):e0253951",
+      "display_short": "Mizutori et al. 2021",
+      "display_line": "Mizutori et al. (2021), PLoS One 16(7)",
+      "review_note": "FLAGGED for founder review 2026-08-17: WebFetch of DOI 10.1371/journal.pone.0253951 returned Mizutori et al. — a parallel-bars study. Downstream `used_for` on handstand-walk + overhead-mobility over-claims 3× BW shoulder moment on the FLOOR press-to-handstand. Author/paper verification unresolved. See dev/active/citations-under-review-2026-08-17.md.",
+      "pmid": "34260632",
+      "url": "https://doi.org/10.1371/journal.pone.0253951",
+      "id_note": "Corrected 2026-09-05. The id and byline said 'Sadowski', and no such paper exists — but the DOI was right all along and resolves to Mizutori et al. The repo was wrong in its own favour twice: it described this as a PARALLEL-BARS study when participants placed their hands on a force platform with feet on the floor, and it cited a 3x bodyweight figure that lives in the paper's INTRODUCTION quoting someone else. The paper's actual finding supports the no-heavy-press-early rule BETTER than the withdrawn number did: less-skilled performers produced LARGER shoulder flexion moments. Id kept for stability."
     },
     {
       "id": "salmoni_schmidt_walter_1984",
@@ -989,7 +982,8 @@
       "title": "Tendon adaptation to mechanical loading",
       "source": "German Journal of Sports Medicine",
       "display_short": "Wiesinger et al. 2019",
-      "display_line": "Wiesinger et al. (2019), German Journal of Sports Medicine"
+      "display_line": "Wiesinger et al. (2019), German Journal of Sports Medicine",
+      "id_note": "NO REFERENT, and the claim is CONTRADICTED, 2026-09-05. The real 2019 DZSM tendon-adaptation paper is Bohm/Mersmann/Arampatzis, which carries no collagen-turnover figure; the turnover source it cites (Heinemeier 2013) found the adult tendon core is essentially not renewed after ~17 years of age. So '8-12 weeks for collagen turnover' is not merely unsourced. Bohm 2015 supports an 8-week MECHANICAL adaptation timeframe but points at loading MAGNITUDE, so it cannot underwrite a volume cap either. The cap is retained as an engineering choice."
     },
     {
       "id": "wilson_2012",
@@ -1139,7 +1133,8 @@
       "url": "https://pubmed.ncbi.nlm.nih.gov/18981046/",
       "display_short": "Roig et al. 2009",
       "display_line": "Roig et al. (2009), BJSM 43(8)",
-      "verification_status": "verified"
+      "verification_status": "verified",
+      "id_note": "SUPERSEDED 2026-09-05 by spudic_nosaka_2025. The quoted effect sizes are absent from Roig's full text, and it states that at comparable intensity 'no significant differences in the improvement of total strength after training were observed'. The 2025 meta-analysis settles it: eccentric-only beats concentric-only for ECCENTRIC strength and is indistinguishable for CONCENTRIC. A first strict pull-up is a concentric task."
     },
     {
       "id": "sinnett_2019",
@@ -1150,7 +1145,8 @@
       "url": null,
       "display_short": "Sinnett et al. 2019",
       "display_line": "Sinnett et al. (2019), JSCR",
-      "verification_status": "pending"
+      "verification_status": "pending",
+      "id_note": "NO REFERENT, 2026-09-05. Exhaustive search of Europe PMC, Crossref and full-text found no such paper; a web search returned a confident FABRICATED summary of it, and the page it was built from names none of these authors. This was the sole warrant for band assistance, including the muscle-up deferral substitute. The practice is retained as an ENGINEERING CHOICE and labelled so; deliberately NOT substituted with Lopes 2019, whose band RESISTANCE is the mechanical opposite of assistance."
     },
     {
       "id": "vigouroux_2007",
@@ -1196,7 +1192,47 @@
       "url": null,
       "display_short": "Vidal-Rovira et al. 2024",
       "display_line": "Vidal-Rovira et al. (2024), preprint (verification pending)",
-      "verification_status": "pending"
+      "verification_status": "pending",
+      "id_note": "NO REFERENT, 2026-09-05. Europe PMC returns one record for 'false grip' in the entire indexed literature and it is not this. Superseded by walker_2023_muscleup, which is real — and which points mildly AGAINST the current design, suggesting a bar-before-rings progression."
+    },
+    {
+      "id": "grabowiecki_2021",
+      "authors": "Grabowiecki M, et al.",
+      "year": 2021,
+      "title": "Biomechanical characteristics of handstand walking initiation",
+      "source": "Gait Posture 86:311-318",
+      "doi": "10.1016/j.gaitpost.2021.03.036",
+      "pmid": "33839425",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33839425/",
+      "display_short": "Grabowiecki et al. 2021",
+      "display_line": "Grabowiecki et al. (2021), Gait Posture 86",
+      "id_note": "Added 2026-09-05, verified against Europe PMC. Replaces ferrari_2021, which has no referent. Its finding states the repo's own cue rationale almost verbatim: 'A shift of the CoM forward and towards the stance hand is required as a result of a lateral and posterior CoP shift.'"
+    },
+    {
+      "id": "spudic_nosaka_2025",
+      "authors": "Spudić D, Nosaka K",
+      "year": 2025,
+      "title": "Eccentric-only versus concentric-only isokinetic strength training effects on maximal voluntary eccentric, concentric and isometric contraction strength: a systematic review and meta-analysis",
+      "source": "Sports Med Open 11",
+      "doi": "10.1186/s40798-025-00887-w",
+      "pmid": "40839186",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40839186/",
+      "display_short": "Spudić & Nosaka 2025",
+      "display_line": "Spudić & Nosaka (2025), Sports Med Open 11",
+      "id_note": "Added 2026-09-05, verified against Europe PMC. Supersedes roig_2009 for the eccentric-superiority claim: 'Eccentric-only strength training is more effective for improving MVC_ECC, but both concentric-only and eccentric-only training provide similar effects on improving MVC_CON and MVC_ISO.'"
+    },
+    {
+      "id": "walker_2023_muscleup",
+      "authors": "Walker CW, et al.",
+      "year": 2023,
+      "title": "Comparison of muscle activity during a ring muscle up and a bar muscle up",
+      "source": "Int J Exerc Sci 16(x)",
+      "doi": "10.70252/fjql7859",
+      "pmid": "38288256",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38288256/",
+      "display_short": "Walker et al. 2023",
+      "display_line": "Walker et al. (2023), Int J Exerc Sci",
+      "id_note": "Added 2026-09-05, verified against Europe PMC. The real false-grip/ring paper, replacing vidal_rovira_2024 which has no referent. n=10 EMG; note it points MILDLY AGAINST the current design, suggesting bar-before-rings progression."
     }
   ]
 }

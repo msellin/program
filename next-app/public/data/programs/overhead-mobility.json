@@ -962,11 +962,11 @@
       },
       {
         "id": "sadowski_2021",
-        "authors": "Sadowski J, Mastalerz A, Niznikowska E, et al.",
+        "authors": "Mizutori H, et al.",
         "year": 2021,
-        "title": "Straight-arm press to handstand: shoulder joint moment analysis",
-        "source": "PLOS One 16(7):e0253951",
-        "used_for": "Shoulder-moment analysis for the straight-arm press to handstand — informs the no-heavy-load-early rule. Attribution flagged for founder review (see citations.json review_note): DOI resolves to a Mizutori-authored parallel-bars study; the 3× BW figure is a parallel-bars finding, not a floor finding. Terav uses this only for the general 'heavy shoulder moment early is unsafe' principle, not for a specific numeric threshold.",
+        "title": "Kinematics and joint moments during the press to handstand",
+        "source": "PLoS One 16(7):e0253951",
+        "used_for": "Shoulder-moment analysis for the straight-arm press to handstand — informs the no-heavy-load-early rule. Attribution flagged for founder review (see citations.json review_note): DOI resolves to a Mizutori-authored floor study; the 3× BW figure is a parallel-bars finding, not a floor finding. Terav uses this only for the general 'heavy shoulder moment early is unsafe' principle, not for a specific numeric threshold. CORRECTED 2026-09-05: the byline said Sadowski and no such paper exists, but the DOI was always right and resolves to Mizutori et al. It is a FLOOR study, not parallel bars, and the 3x bodyweight figure lived in its introduction quoting someone else. Its real finding — less-skilled performers produced LARGER shoulder flexion moments — supports this rule better than the withdrawn number.",
         "verification_status": "unverified"
       },
       {
