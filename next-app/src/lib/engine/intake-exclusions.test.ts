@@ -1,6 +1,9 @@
 import { describe, it, expect } from "vitest";
 import { activeExclusions, applyIntakeExclusions, exclusionNotices } from "./intake-exclusions";
 import type { Program, Block, Store } from "../schemas";
+import fs from "node:fs";
+import path from "node:path";
+import { composeBlockForUser } from "./plan-generator";
 
 const RULE = {
   id: "elbow_current",
@@ -77,5 +80,89 @@ describe("applyIntakeExclusions", () => {
 describe("exclusionNotices", () => {
   it("deduplicates so one reason is not shown twice", () => {
     expect(exclusionNotices([RULE, { ...RULE, id: "other" }])).toEqual([RULE.reason]);
+  });
+});
+
+describe("deferrals reach the session the user actually sees", () => {
+  /**
+   * The unit above works. It was never REACHED (2026-09-06).
+   *
+   * `composeBlockForUser` short-circuits on `onlyIfEmpty` for any block with
+   * authored items, and all three production callers pass that flag —
+   * TodaySession, DaySession, OffPlanSession. Every slot block in muscle-up
+   * (9/9) and first-strict-pullup (11/11) has authored items, so
+   * `applyIntakeExclusions` sat below an early return and never ran in
+   * production.
+   *
+   * Meanwhile BriefView renders the deferral notice unconditionally. A user
+   * who answered `elbow_tendon_pain: "current"` saw "we defer ring dip work"
+   * printed above a session containing ring dips — the exact scenario the
+   * feature's own schema doc gives as its reason to exist.
+   *
+   * Ten unit tests passed throughout. The gap was never in the function; it
+   * was in whether anything called it. That is what this asserts.
+   */
+  const program = JSON.parse(
+    fs.readFileSync(
+      path.resolve(__dirname, "../../../public/data/programs/muscle-up.json"),
+      "utf8",
+    ),
+  ) as Program;
+  program.slug = "muscle-up"; // activeExclusions keys off program.slug
+  const exercises = (
+    JSON.parse(
+      fs.readFileSync(path.resolve(__dirname, "../../../public/data/exercises.json"), "utf8"),
+    ) as { exercises: Array<{ id: string }> }
+  ).exercises;
+  const drillsById = Object.fromEntries(exercises.map((e) => [e.id, e])) as never;
+
+  const symptomaticElbow = {
+    active_program_id: "muscle-up",
+    program_states: { "muscle-up": { intake_answers: { elbow_tendon_pain: "current" } } },
+  } as unknown as Store["user_profile"];
+
+  const DEFERRED = ["mu_ring_dip_full", "mu_ring_dip_deep", "mu_ring_dip_negative", "mu_rto_dip"];
+
+  it("removes the deferred movements on the PRODUCTION path (onlyIfEmpty)", () => {
+    const offenders: string[] = [];
+    for (const block of program.blocks) {
+      const composed = composeBlockForUser(
+        program,
+        block,
+        symptomaticElbow,
+        "2026-09-06",
+        drillsById,
+        { onlyIfEmpty: true }, // exactly what TodaySession/DaySession/OffPlanSession pass
+      );
+      const ids = [
+        ...(composed.items ?? []),
+        ...(composed.segments ?? []).flatMap((sg) => sg.items ?? []),
+      ].map((i) => i.exercise_id);
+      for (const id of ids) {
+        if (DEFERRED.includes(id as string)) offenders.push(`${block.id}: ${id}`);
+      }
+    }
+    expect(
+      offenders,
+      "a movement the user was TOLD would be deferred is still in the session",
+    ).toEqual([]);
+  });
+
+  it("leaves the session alone for a user who reported no elbow pain", () => {
+    // The deferral must be caused by the ANSWER, not by the code path.
+    const healthy = {
+      active_program_id: "muscle-up",
+      program_states: { "muscle-up": { intake_answers: { elbow_tendon_pain: "no" } } },
+    } as unknown as Store["user_profile"];
+    const withDips = program.blocks.some((block) => {
+      const composed = composeBlockForUser(program, block, healthy, "2026-09-06", drillsById, {
+        onlyIfEmpty: true,
+      });
+      return [
+        ...(composed.items ?? []),
+        ...(composed.segments ?? []).flatMap((sg) => sg.items ?? []),
+      ].some((i) => DEFERRED.includes(i.exercise_id as string));
+    });
+    expect(withDips, "ring dip work should still be programmed for an asymptomatic user").toBe(true);
   });
 });

@@ -251,11 +251,36 @@ export function composeBlockForUser(
   const authoredCount =
     (block.items?.length ?? 0) +
     (block.segments ?? []).reduce((n, seg) => n + (seg.items?.length ?? 0), 0);
-  // Strictly additive under onlyIfEmpty: a block with authored items is
-  // returned untouched, prerequisite pruning included. That pruning never
-  // ran on the block-object path either, and switching it on would silently
-  // drop drills out of sessions people are mid-way through.
-  if (opts?.onlyIfEmpty && authoredCount > 0) return block;
+  /**
+   * Intake deferrals are applied on EVERY path, including the additive one
+   * (2026-09-06).
+   *
+   * `onlyIfEmpty` returns an authored block untouched, and all three
+   * production callers pass it — `TodaySession.tsx:187`,
+   * `DaySession.tsx:147`, `OffPlanSession.tsx:122`. Since every slot block
+   * in muscle-up (9/9) and first-strict-pullup (11/11) has authored items,
+   * `applyIntakeExclusions` below was unreachable in production.
+   *
+   * Meanwhile `BriefView.tsx:270` renders the deferral notice on an
+   * unguarded path. So a user who answered `elbow_tendon_pain: "current"`
+   * was shown "Adjusted for you — we defer heavy negatives / ring dip work"
+   * directly above a session still containing those movements. The intake's
+   * help text made the same promise before they enrolled.
+   *
+   * That is verbatim the failure `intake_exclusions` was introduced to
+   * prevent: "A user with current medial epicondylitis was told ring dips
+   * would be deferred and then given ring dips."
+   *
+   * The original caution stands and is preserved: PREREQUISITE pruning still
+   * does not run here, because switching it on would silently drop drills
+   * from sessions people are mid-way through. An intake deferral is a
+   * different thing — the user answered a question, consented to the
+   * consequence, and is being told it happened. Withholding it is not
+   * conservative; it is the notice lying.
+   */
+  if (opts?.onlyIfEmpty && authoredCount > 0) {
+    return applyIntakeExclusions(block, activeExclusions(program, profile));
+  }
   // Milestone 2: if the block declares a capability_slot AND the program has
   // a drill_library, REPLACE authored items with drills composed from the
   // library targeting that slot at the user's estimated level. If no slot,
