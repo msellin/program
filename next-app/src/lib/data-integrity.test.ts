@@ -1462,3 +1462,168 @@ describe("training_maxes.starting_values_kg is decorative, and says so", () => {
     expect(withValues.length).toBeGreaterThan(0);
   });
 });
+
+describe("a programme reference and its citations.json entry are the same paper", () => {
+  /**
+   * Found 2026-09-05 by `evidence-verifier` on its first run.
+   *
+   * `brandt_2025` exists twice with different contents:
+   *   citations.json  — "Brandt N, Ebel K, Lebahn K, Schmidt A",
+   *                     "Acute physiological responses and performance
+   *                      determinants in Hyrox..."
+   *   CSM programme   — "Brandt K, Krieger K, Kerner J, et al.",
+   *                     "First physiological profiling of HYROX athletes"
+   *
+   * Different authors AND a different title under one id. Referential
+   * integrity was already asserted in both directions — every
+   * `reference_ids[]` resolves, every reference has a citations entry — but
+   * nothing compared the CONTENT of the two records, so a programme could
+   * cite one paper while the citation layer described another. Whichever is
+   * right, a reader following the id lands somewhere the programme did not
+   * mean.
+   *
+   * Compares author surnames and a title fingerprint rather than exact
+   * strings: "et al." truncation and punctuation differences are normal and
+   * not what this is looking for.
+   */
+  const citationsById = new Map<string, Record<string, unknown>>();
+  {
+    const raw = read("citations.json") as unknown;
+    const rows = (Array.isArray(raw) ? raw : (raw as { citations?: unknown[] }).citations ?? []) as Array<
+      Record<string, unknown>
+    >;
+    for (const r of rows) citationsById.set(String(r.id), r);
+  }
+
+  /** First author's surname, lowercased. */
+  const firstSurname = (authors: unknown): string =>
+    String(authors ?? "")
+      .split(/[,;]/)[0]
+      .trim()
+      .split(/\s+/)[0]
+      .toLowerCase();
+
+  /** Content words of a title, for overlap comparison. */
+  const titleWords = (t: unknown): Set<string> =>
+    new Set(
+      String(t ?? "")
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, " ")
+        .split(/\s+/)
+        .filter((w) => w.length > 3),
+    );
+
+  /**
+   * Conflicts already present when this test was written (2026-09-05).
+   *
+   * Every one is real — two genuinely different papers sharing one id, not a
+   * formatting difference. Resolving them requires establishing WHICH paper
+   * each programme meant, which is `evidence-verifier`'s job and a separate
+   * run. Declared here so the test guards against a SEVENTH rather than
+   * sitting red, in the same spirit as KNOWN_CUELESS above.
+   *
+   * Do not add to this list to make a failure go away. A new entry means a
+   * new citation now points at a different paper than the programme
+   * describes, and a reader following the id lands somewhere unintended.
+   */
+  const KNOWN_REFERENCE_CONFLICTS: Record<string, string> = {
+    brandt_2025:
+      "citations.json has Brandt N et al., 'Acute physiological responses...in Hyrox'; CSM has " +
+      "Brandt K et al., 'First physiological profiling of HYROX athletes'. Verified 2026-09-05: " +
+      "the real paper is Brandt T, Ebel C, Lebahn C, Schmidt A — so BOTH bylines are wrong.",
+    fyfe_2016:
+      "Two different Fyfe 2016 papers: 'Concurrent exercise incorporating HIIT...modulates mTOR' " +
+      "(programme) vs 'Endurance training intensity does not mediate interference to maximal " +
+      "lower-body strength gain' (citations.json). Different studies, different findings.",
+    ross_2015:
+      "Two different Ross 2015 papers: 'Precision exercise medicine' (programme) vs 'Separate " +
+      "effects of intensity and amount of exercise on interindividual cardiorespiratory fitness' " +
+      "(citations.json). Cited in engine-builder AND engine-builder-block-2.",
+    proteau_1992:
+      "Two different Proteau papers: 'A sensorimotor basis for motor learning' vs 'Specificity of " +
+      "practice: the case of the goal-directed aiming task'. Underwrites specificity-of-practice " +
+      "reasoning in three gymnastics programmes.",
+    reinold_2007:
+      "Two different Reinold 2007 papers: 'EMG analysis of the supraspinatus and deltoid during 3 " +
+      "common rehabilitation exercises' vs 'Current concepts...behind exercises for glenohumeral " +
+      "and scapular musculature'. The cuff-activation-before-end-range claim rests on this id.",
+    petre_2018:
+      "Two different papers with OPPOSITE populations: 'Development of maximal dynamic strength " +
+      "during concurrent resistance and endurance training in UNTRAINED...' (programme) vs 'The " +
+      "Effect of Two Different Concurrent Training Programs on Strength and Power Gains in " +
+      "HIGHLY-TRAINED...' (citations.json). Which one is meant decides whether the claim reaches " +
+      "CSM's users at all.",
+    shea_2000:
+      "'Spacing practice sessions across days benefits the learning of motor skills' (programme) " +
+      "vs 'Practice spacing effects on motor skill acquisition and retention' (citations.json). " +
+      "Unlike the others this reads like a PARAPHRASE rather than a second paper — but a " +
+      "citations entry holding a description where a title belongs is still wrong, because a " +
+      "reader cannot look it up.",
+    sci_reports_2026_handstand_shoulder:
+      "The programme's `authors` is a PLACEHOLDER — 'Sci Reports handstand-walk shoulder pain " +
+      "team' — where citations.json carries real authors (Angioi M, Hinds N, Twycross-Lewis R, " +
+      "Farmer C, Birn-Jeffery AV).",
+  };
+
+  it("agrees on first author and title for every shared reference", () => {
+    const conflicts: string[] = [];
+    for (const { id: slug, program } of programs) {
+      const refs =
+        ((program as unknown as { evidence_base?: { references?: Array<Record<string, unknown>> } })
+          .evidence_base?.references ?? []);
+      for (const ref of refs) {
+        const cit = citationsById.get(String(ref.id));
+        if (!cit) continue; // resolution is a different test's job
+        if (ref.authors && cit.authors) {
+          const a = firstSurname(ref.authors);
+          const b = firstSurname(cit.authors);
+          if (a && b && a !== b) {
+            conflicts.push(`${slug}/${ref.id}: first author "${a}" vs citations.json "${b}"`);
+          }
+        }
+        if (ref.title && cit.title) {
+          const a = titleWords(ref.title);
+          const b = titleWords(cit.title);
+          const shared = [...a].filter((w) => b.has(w)).length;
+          const overlap = shared / Math.max(1, Math.min(a.size, b.size));
+          if (overlap < 0.5) {
+            conflicts.push(
+              `${slug}/${ref.id}: title mismatch — "${String(ref.title).slice(0, 60)}" vs "${String(cit.title).slice(0, 60)}"`,
+            );
+          }
+        }
+      }
+    }
+    const undeclared = conflicts.filter(
+      (c) => !Object.keys(KNOWN_REFERENCE_CONFLICTS).some((id) => c.includes(`/${id}:`)),
+    );
+    expect(undeclared).toEqual([]);
+  });
+
+  it("every declared conflict is still a real conflict", () => {
+    // A stale entry is worse than none: it tells the next reader a resolved
+    // citation is still broken, and it silently suppresses a real failure.
+    const live = new Set<string>();
+    for (const { program } of programs) {
+      const refs =
+        ((program as unknown as { evidence_base?: { references?: Array<Record<string, unknown>> } })
+          .evidence_base?.references ?? []);
+      for (const ref of refs) {
+        const cit = citationsById.get(String(ref.id));
+        if (!cit) continue;
+        const authorsDiffer =
+          Boolean(ref.authors && cit.authors) &&
+          firstSurname(ref.authors) !== firstSurname(cit.authors);
+        const a = titleWords(ref.title);
+        const b = titleWords(cit.title);
+        const shared = [...a].filter((w) => b.has(w)).length;
+        const titleDiffers =
+          Boolean(ref.title && cit.title) &&
+          shared / Math.max(1, Math.min(a.size, b.size)) < 0.5;
+        if (authorsDiffer || titleDiffers) live.add(String(ref.id));
+      }
+    }
+    const stale = Object.keys(KNOWN_REFERENCE_CONFLICTS).filter((id) => !live.has(id));
+    expect(stale).toEqual([]);
+  });
+});

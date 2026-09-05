@@ -43,11 +43,14 @@
     {
       "id": "astorino_2013",
       "authors": "Astorino TA, Allen RP, Roberson DW, Jurancich M",
-      "year": 2013,
+      "year": 2012,
       "title": "Effect of high-intensity interval training on cardiovascular function, VO2max, and muscular force",
-      "source": "JSCR 27(1):138-145",
-      "display_short": "Astorino et al. 2013",
-      "display_line": "Astorino et al. (2013), JSCR 27(1)"
+      "source": "JSCR 26(1):138-145",
+      "display_short": "Astorino et al. 2012",
+      "display_line": "Astorino et al. (2012), JSCR 26(1)",
+      "doi": "10.1519/JSC.0b013e318218dd77",
+      "pmid": "22201691",
+      "id_note": "Corrected 2026-09-05. The record said 2013, JSCR 27(1) — a different journal issue entirely. Verified against PubMed 22201691."
     },
     {
       "id": "atherton_2005",
@@ -537,7 +540,8 @@
       "title": "Progressive four-position handstand EMG activity",
       "source": "Isokinetics and Exercise Science 30:127-133",
       "display_short": "Kinoshita et al. 2022",
-      "display_line": "Kinoshita et al. (2022), Isokinetics and Exercise Science 30"
+      "display_line": "Kinoshita et al. (2022), Isokinetics and Exercise Science 30",
+      "doi": "10.3233/IES-210169"
     },
     {
       "id": "konopka_2014",

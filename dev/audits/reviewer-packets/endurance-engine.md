@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: 54f517201c22684b -->
+<!-- source-fingerprint: ef8130ec0eb32884 -->
 
 ## What we are asking
 
@@ -265,7 +265,7 @@ Printed against the questions above so you can see which are actually detectable
 - *engine-builder says it supports:* Foundational study showing +20% capillary density after 8 weeks of 40 min/day, 4×/wk continuous work. Cited in physiological_targets.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
-**astorino_2013** — Effect of high-intensity interval training on cardiovascular function, VO2max, and muscular force · Astorino TA, Allen RP, Roberson DW, Jurancich M · 2013
+**astorino_2013** — Effect of high-intensity interval training on cardiovascular function, VO2max, and muscular force · Astorino TA, Allen RP, Roberson DW, Jurancich M · 2012
 
 - *engine-builder-block-2 says it supports:* HIIT dose-response for VO2max. Supports the block's expected 5-10% VO2max additional gain range.
 - **Does it? ☐ yes ☐ partly ☐ no —**

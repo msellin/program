@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: 683e82a725fafeae -->
+<!-- source-fingerprint: 6a2fe2e603200ea0 -->
 
 ## What we are asking
 
@@ -68,7 +68,7 @@ is published too, not quietly dropped.
 ### Phases and what each is for
 
 - **Base check · Weeks 1–2** (2 wks) — Establish current 2K + submax HR baseline. Sharpen technique before overloading.
-- **Threshold build · Weeks 3–4** (2 wks) — Push threshold pace up 3-6%. Add one race-pace session per week.
+- **Threshold build · Weeks 3–4** (2 wks) — Push threshold pace up. Add one race-pace session per week.
 - **Taper + test · Weeks 5–6** (2 wks) — Volume down 40-50%, intensity held. Test at week 6.
 
 ### What it retests, and how often
@@ -207,9 +207,9 @@ Printed against the questions above so you can see which are actually detectable
 - *concurrent-strength-maintenance says it supports:* Anabolic window is 4-6h, not 30 min — supports 6h separation compatibility
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
-**astorino_2013** — Effect of high-intensity interval training on cardiovascular function, VO2max, and muscular force · Astorino TA, Allen RP, Roberson DW, Jurancich M · 2013
+**astorino_2013** — Effect of high-intensity interval training on cardiovascular function, VO2max, and muscular force · Astorino TA, Allen RP, Roberson DW, Jurancich M · 2012
 
-- *rowing-2k-test-prep says it supports:* Threshold-pace shift of 3-6% in 4-8 wk measured in trained cyclists — extrapolated to rowing as an engineering read, not directly studied. See engineering_choices_flagged.
+- *rowing-2k-test-prep says it supports:* HIIT (six sessions of repeated Wingate tests over 2-3 weeks) raised VO2max, O2 pulse and power output in 20 active young men and women. Cited here only for the general responsiveness of aerobic capacity to short high-intensity work. Corrected 2026-09-05 — it previously claimed a 3-6% threshold-pace shift in trained cyclists, which this study does not contain.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **atherton_2005** — Selective activation of AMPK-PGC-1α or PKB-TSC2-mTOR signalling by low- vs high-frequency stimulation · Atherton PJ, Babraj J, Smith K, et al. · 2005
