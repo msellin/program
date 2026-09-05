@@ -1429,7 +1429,7 @@
         "used_for": "Original interference-effect data. Same rules as Block 1, tighter monitoring."
       },
       {
-        "id": "wilson_loenneke_2012",
+        "id": "wilson_2012",
         "authors": "Wilson JM, Marin PJ, Rhea MR, Wilson SMC, Loenneke JP, Anderson JC",
         "year": 2012,
         "title": "Concurrent training: a meta-analysis examining interference of aerobic and resistance exercises",
@@ -1518,7 +1518,7 @@
       "ross_2015",
       "bouchard_1999_heritage",
       "hickson_1980",
-      "wilson_loenneke_2012",
+      "wilson_2012",
       "fyfe_2016",
       "schumann_2022",
       "robineau_2016",

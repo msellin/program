@@ -1321,7 +1321,7 @@
         "used_for": "The concurrent-training interference effect — foundation for the strength maintenance-only recommendation."
       },
       {
-        "id": "wilson_loenneke_2012",
+        "id": "wilson_2012",
         "authors": "Wilson JM, Marin PJ, Rhea MR, Wilson SMC, Loenneke JP, Anderson JC",
         "year": 2012,
         "title": "Concurrent training: a meta-analysis examining interference of aerobic and resistance exercises",
@@ -1582,7 +1582,7 @@
         "used_for": "First direct HYROX physiological profiling: VO2max is the strongest predictor; grip strength and muscle mass are NOT reliable predictors. Anchors the recommendation for HYROX-goal users to prioritise aerobic development over strength during Block 1."
       },
       {
-        "id": "butcher_2015_crossfit",
+        "id": "butcher_2015",
         "authors": "Butcher SJ, Neyedly TJ, Horvey KJ, Benko CR",
         "year": 2015,
         "title": "Do physiological measures predict selected CrossFit benchmark performance?",
@@ -1597,7 +1597,7 @@
       "helgerud_2007",
       "ronnestad_hansen_2020",
       "hickson_1980",
-      "wilson_loenneke_2012",
+      "wilson_2012",
       "docherty_sporer_2000",
       "little_2010",
       "perry_2010",
@@ -1626,7 +1626,7 @@
       "morton_2018",
       "impey_2018",
       "brandt_2025_hyrox",
-      "butcher_2015_crossfit"
+      "butcher_2015"
     ]
   },
   "retest_metrics": [

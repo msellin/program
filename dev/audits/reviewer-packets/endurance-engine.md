@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: 667b95153e6d350f -->
+<!-- source-fingerprint: cc2ffca077f4ec67 -->
 
 ## What we are asking
 
@@ -323,7 +323,7 @@ Printed against the questions above so you can see which are actually detectable
 - *engine-builder-block-2 says it supports:* Practical HIIT programming. Supports the two-hard-sessions/wk dose and the Z3 optional session for Push tier.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
-**butcher_2015_crossfit** — Do physiological measures predict selected CrossFit benchmark performance? · Butcher SJ, Neyedly TJ, Horvey KJ, Benko CR · 2015
+**butcher_2015** — Do physiological measures predict selected CrossFit benchmark performance? · Butcher SJ, Neyedly TJ, Horvey KJ, Benko CR · 2015
 
 - *engine-builder says it supports:* CrossFit Total predicts Fran/Grace performance most strongly. CORRECTED 2026-09-05: this citation previously also carried 'but VO2max still contributes', which reverses the paper — its conclusion is that CrossFit benchmark WOD performance CANNOT be predicted by VO2max. The strength-floor half is supported; the aerobic-base half is not, and is no longer claimed here.
 - **Does it? ☐ yes ☐ partly ☐ no —**
@@ -482,7 +482,7 @@ Printed against the questions above so you can see which are actually detectable
 - *engine-builder-block-2 says it supports:* HRmax formula fallback.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
-**wilson_loenneke_2012** — Concurrent training: a meta-analysis examining interference of aerobic and resistance exercises · Wilson JM, Marin PJ, Rhea MR, Wilson SMC, Loenneke JP, Anderson JC · 2012
+**wilson_2012** — Concurrent training: a meta-analysis examining interference of aerobic and resistance exercises · Wilson JM, Marin PJ, Rhea MR, et al. · 2012
 
 - *engine-builder says it supports:* Meta-analytic evidence that interference is proportional to endurance volume and intensity — informs the RPE cap and session-count cap on concurrent strength.
 - *engine-builder-block-2 says it supports:* Concurrent-training meta. Anchors the concurrent-strength policy tightening in Block 2 peak-volume weeks.

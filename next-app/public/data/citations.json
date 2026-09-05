@@ -249,17 +249,9 @@
       "title": "Do physiological measures predict selected CrossFit benchmark performance?",
       "source": "Open Access J Sports Med 6:241-247",
       "display_short": "Butcher et al. 2015",
-      "display_line": "Butcher et al. (2015), Open Access J Sports Med 6"
-    },
-    {
-      "id": "butcher_2015_crossfit",
-      "authors": "Butcher SJ, Neyedly TJ, Horvey KJ, Benko CR",
-      "year": 2015,
-      "title": "Do physiological measures predict selected CrossFit benchmark performance?",
-      "source": "Open Access Journal of Sports Medicine 6:241-247",
+      "display_line": "Butcher et al. (2015), Open Access J Sports Med 6",
       "url": "https://www.dovepress.com/do-physiological-measures-predict-selected-crossfitreg-benchmark-perfo-peer-reviewed-fulltext-article-OAJSM",
-      "display_short": "Butcher et al. 2015",
-      "display_line": "Butcher et al. (2015), Open Access Journal of Sports Medicine 6"
+      "id_note": "Merged 2026-09-05. `butcher_2015_crossfit` was a second id for this same paper, so /evidence listed it twice and the study count overstated by one. Fields carried over: url."
     },
     {
       "id": "chiviacowsky_wulf_2002",
@@ -393,7 +385,8 @@
       "source": "Sports Medicine 44:743-762",
       "url": "https://link.springer.com/article/10.1007/s40279-014-0162-1",
       "display_short": "Fyfe et al. 2014",
-      "display_line": "Fyfe et al. (2014), Sports Medicine 44"
+      "display_line": "Fyfe et al. (2014), Sports Medicine 44",
+      "id_note": "Merged 2026-09-05. `fyfe_bishop_stepto_2014` was a second id for this same paper, so /evidence listed it twice and the study count overstated by one."
     },
     {
       "id": "fyfe_2016",
@@ -404,15 +397,6 @@
       "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5093324/",
       "display_short": "Fyfe et al. 2016",
       "display_line": "Fyfe et al. (2016), Frontiers in Physiology 7"
-    },
-    {
-      "id": "fyfe_bishop_stepto_2014",
-      "authors": "Fyfe JJ, Bishop DJ, Stepto NK",
-      "year": 2014,
-      "title": "Interference between concurrent resistance and endurance exercise",
-      "source": "Sports Med 44(6):743-762",
-      "display_short": "Fyfe et al. 2014",
-      "display_line": "Fyfe et al. (2014), Sports Med 44(6)"
     },
     {
       "id": "hagerman_1994",
@@ -1014,17 +998,9 @@
       "title": "Concurrent training: a meta-analysis examining interference of aerobic and resistance exercises",
       "source": "J Strength Cond Res 26(8):2293-2307",
       "display_short": "Wilson et al. 2012",
-      "display_line": "Wilson et al. (2012), J Strength Cond Res 26(8)"
-    },
-    {
-      "id": "wilson_loenneke_2012",
-      "authors": "Wilson JM, Marin PJ, Rhea MR, Wilson SMC, Loenneke JP, Anderson JC",
-      "year": 2012,
-      "title": "Concurrent training: a meta-analysis examining interference of aerobic and resistance exercises",
-      "source": "Journal of Strength and Conditioning Research 26(8):2293-2307",
+      "display_line": "Wilson et al. (2012), J Strength Cond Res 26(8)",
       "url": "https://pubmed.ncbi.nlm.nih.gov/22002517/",
-      "display_short": "Wilson et al. 2012",
-      "display_line": "Wilson et al. (2012), Journal of Strength and Conditioning Research 26(8)"
+      "id_note": "Merged 2026-09-05. `wilson_loenneke_2012` was a second id for this same paper, so /evidence listed it twice and the study count overstated by one. Fields carried over: url."
     },
     {
       "id": "wisloff_2007",

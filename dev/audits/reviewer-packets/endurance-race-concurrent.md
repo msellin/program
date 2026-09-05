@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: aafea7f4e86a5b4c -->
+<!-- source-fingerprint: e0be8c4f52f020b1 -->
 
 ## What we are asking
 
@@ -315,14 +315,14 @@ Printed against the questions above so you can see which are actually detectable
 - *concurrent-strength-maintenance says it supports:* 16 wk HIFT — strength AND VO2max improved concurrently
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
+**fyfe_2014** — Interference between concurrent resistance and endurance exercise: molecular bases and the role of individual training variables · Fyfe JJ, Bishop DJ, Stepto NK · 2014
+
+- *concurrent-strength-maintenance says it supports:* Definitive mechanism review + modulators
+- **Does it? ☐ yes ☐ partly ☐ no —**
+
 **fyfe_2016** — Endurance training intensity does not mediate interference to maximal lower-body strength gain during short-term concurrent training · Fyfe JJ, Bishop DJ, Zacharewicz E, et al. · 2016
 
 - *concurrent-strength-maintenance says it supports:* Endurance INTENSITY does not mediate interference — VOLUME does
-- **Does it? ☐ yes ☐ partly ☐ no —**
-
-**fyfe_bishop_stepto_2014** — Interference between concurrent resistance and endurance exercise · Fyfe JJ, Bishop DJ, Stepto NK · 2014
-
-- *concurrent-strength-maintenance says it supports:* Definitive mechanism review + modulators
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **hagerman_1994** — Physiology of competitive rowing · Hagerman FC · 1994
