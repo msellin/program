@@ -195,6 +195,31 @@ export const phaseSchema = z.object({
    * get Tier A drills. Comprehensive audit 2026-08-18 P0-6.
    */
   for_tier_ids: z.array(z.string()).optional(),
+  /**
+   * Marks a phase as a competition taper (2026-09-06).
+   *
+   * Authored by rowing-2k's `phase_3_taper_test` and stripped by Zod, because
+   * it was never in this schema. Two consumers read it through
+   * `as unknown as` casts — `schedule.ts:318`, which swaps in
+   * `block_replacements_final_week` inside the last seven days, and
+   * `TodaySession.tsx:310`, which renders the taper banner. Both read
+   * `undefined` on a parsed programme, so the final-week block swap never
+   * fired and the banner never appeared.
+   *
+   * The cast is what hid it. `phase.is_taper` would not have compiled;
+   * `(phase as unknown as { is_taper?: boolean }).is_taper` compiles and
+   * silently yields undefined forever. Same family as `daily_log_schema`.
+   *
+   * NOTE this is NOT the mechanism anterior-hip-rebuild's competition week
+   * uses — that runs on `TAPER_BLOCKS` in `suggest.ts` and is unaffected.
+   */
+  is_taper: z.boolean().optional(),
+  /**
+   * Scales session duration for the phase. Authored by rowing-2k's taper
+   * phase, stripped for the same reason. Kept because the phase declares it;
+   * no consumer reads it yet, and a test records that.
+   */
+  duration_multiplier: z.number().positive().max(2).optional(),
   rationale: z.string().optional(),
   /**
    * Substitute one block for another for this phase's whole duration, keyed
@@ -210,6 +235,19 @@ export const phaseSchema = z.object({
    * race-PLAN rehearsal — same slot, different intent.
    */
   block_replacements: z.record(z.string(), z.string()).optional(),
+  /**
+   * Block swaps that apply only in the FINAL SEVEN DAYS of a taper phase,
+   * keyed old_id -> new_id. Read by `schedule.ts:318` behind the `is_taper`
+   * gate.
+   *
+   * Added 2026-09-06 alongside `is_taper`. I checked for this one first and
+   * concluded it was already present, because grep matched a COMMENT
+   * mentioning it — including a comment I had just written two lines above.
+   * The test is what caught it: the parse assertion failed while the grep
+   * said fine. Reading for a schema field means reading the field, not the
+   * prose about it.
+   */
+  block_replacements_final_week: z.record(z.string(), z.string()).optional(),
   goal: z.string().optional(),
   template: z.string().optional(),
   template_note: z.string().optional(),
