@@ -90,3 +90,51 @@ export function applyIntakeExclusions(block: Block, rules: Exclusion[]): Block {
 export function exclusionNotices(rules: Exclusion[]): string[] {
   return [...new Set(rules.map((r) => r.reason))];
 }
+
+/**
+ * Narrow a set of active rules to the ones that actually changed TODAY.
+ *
+ * `activeExclusions` answers "which rules does this user's intake trigger?",
+ * which is a property of the user and true every day of the programme.
+ * `BriefView` was rendering the notice straight off that, so a muscle-up user
+ * with current elbow pain saw "Adjusted for you — ring dip work is
+ * band-assisted only…" on a session containing no dip work of any kind. The
+ * app claimed an adjustment it had not made.
+ *
+ * That is the same defect as the one this notice was built to fix, pointed the
+ * other way. The original was a promise with nothing behind it (the deferral
+ * never ran); this is a report of something that did not happen. Both leave
+ * the user unable to trust the screen, which is the only thing confirm-first
+ * rests on.
+ *
+ * Resolved against the AUTHORED items in `program.blocks`, because the blocks
+ * the view receives have already had the exclusions applied — the deferred
+ * movement is gone by then, so there is nothing left to detect.
+ *
+ * A block that authors no items (rowing's note-only blocks; slot-based
+ * programmes that compose from `drill_library` at render time) cannot be
+ * checked this way, and those rules are KEPT. Between telling a user about an
+ * adjustment that did not affect today and silently withholding one that did,
+ * the first is the cheaper error.
+ */
+export function exclusionsAffectingDay(
+  program: Program,
+  blockIds: string[],
+  rules: Exclusion[],
+): Exclusion[] {
+  if (!rules.length) return [];
+  // No blocks, or none that resolve against the programme, is the same
+  // undecidable case as a block that authors no items: there is nothing to
+  // check the rule against. Keep, per the note above — withholding an
+  // adjustment the user was promised is the more expensive mistake.
+  if (!blockIds.length) return rules;
+  const authored = (program.blocks ?? []).filter((b) => blockIds.includes(b.id));
+  if (!authored.length) return rules;
+  const undecidable = authored.some((b) => !b.items?.length);
+  const present = new Set(
+    authored.flatMap((b) => (b.items ?? []).map((it) => it.exercise_id)).filter(Boolean),
+  );
+  return rules.filter(
+    (r) => undecidable || r.exclude_exercise_ids.some((id) => present.has(id)),
+  );
+}

@@ -325,7 +325,31 @@ for (const persona of PERSONAS) {
     let deferralCheck: "verified" | "skipped-rest-day" | "no-capture" | null = null;
 
     if (persona.intakeAnswers) {
-      const sessionCapture = path.join(outDir, "text", "16-session-today.txt");
+      /**
+       * Any captured session, not specifically today's.
+       *
+       * The first version read only `16-session-today.txt`, which made the
+       * assertion a bet on the weekday. It skipped on sweep #5, #6 and #7 —
+       * three in a row — and the second deferral persona added before #7 to
+       * decorrelate the calendar did not help at all, because "a different
+       * programme" is not "a different rest day": first-strict-pullup and
+       * muscle-up both rest on Sunday, so both personas were idle together
+       * on exactly the sweep meant to prove they would not be.
+       *
+       * The tour already captures a past and a future session alongside
+       * today's. Deferral rules are not date-dependent — a rule that fires
+       * fires on every day the programme prescribes work — so any captured
+       * session answers the question, and one of the three is essentially
+       * always a training day.
+       */
+      const sessionCapture = ["16-session-today", "17-session-past", "18-session-future"]
+        .map((slug) => path.join(outDir, "text", `${slug}.txt`))
+        .find(
+          (f) =>
+            fs.existsSync(f) &&
+            !/no session scheduled today|Rest day\./i.test(fs.readFileSync(f, "utf8")),
+        )
+        ?? path.join(outDir, "text", "16-session-today.txt");
       const programFile = path.join(
         __dirname, "..", "..", "public", "data", "programs", `${persona.programSlug}.json`,
       );
@@ -378,20 +402,66 @@ for (const persona of PERSONAS) {
         if (noSessionToday) {
           deferralCheck = "skipped-rest-day";
           console.warn(
-            `[${persona.id}] DEFERRAL CHECK SKIPPED — rest day, no session to assert against. ` +
+            `[${persona.id}] DEFERRAL CHECK SKIPPED — no captured session on today, ` +
+              `the past day or the future day. ` +
               `Rules that would have been checked: ${fired.map((r) => r.id).join(", ")}`,
           );
         }
         if (!noSessionToday) {
           deferralCheck = "verified";
           for (const rule of fired) {
-            // The reason is user-facing and must be on the screen.
-            expect(captured, `${persona.id}: deferral reason not shown`).toContain(rule.reason);
-            // And the deferred movements must actually be gone.
+            const subName = rule.substitute_with ? nameOf(rule.substitute_with) : undefined;
+            /**
+             * The reason is required WHEN the substitution happened on this
+             * day, and the substitute appearing is how we know it did.
+             *
+             * Unconditionally was wrong in both directions. The notice used to
+             * render off the rule set alone, so it appeared on sessions with
+             * nothing deferred (`exclusionsAffectingDay`, 2026-09-06); now that
+             * it is scoped to the day, demanding it on every captured session
+             * would fail on a legitimately unaffected one. A silent
+             * substitution is still the thing being guarded against — that is
+             * exactly the case this covers.
+             */
+            if (subName && captured.includes(subName)) {
+              expect(captured, `${persona.id}: substituted "${subName}" without saying why`)
+                .toContain(rule.reason);
+            }
+
+            /**
+             * Check the exclusions against a haystack with the SUBSTITUTE's
+             * name removed first.
+             *
+             * `mu_ring_dip_full` is named exactly "Ring dip" and its
+             * substitute is "Band-assisted ring dip". A bare `not.toContain`
+             * passes today only because the substitute's copy happens to
+             * lowercase the r — one capitalisation away from a test that
+             * fails on a correct app. Strip the substitute, then look.
+             */
+            /**
+             * Strip the substitute's name AND the notice's own text before
+             * looking for the deferred movements.
+             *
+             * Both contain the deferred exercise's name as a substring —
+             * `mu_ring_dip_full` is named exactly "Ring dip", the substitute
+             * is "Band-assisted ring dip", and the reason copy opens with
+             * "Ring dip work is band-assisted only…". Searching the raw
+             * capture finds the notice and reports the deferral as failed on
+             * a session where it plainly worked.
+             *
+             * The substitute is NOT asserted present. It only appears on days
+             * that authored the deferred movement in the first place, and the
+             * captures are whatever days the tour happened to land on. An
+             * assertion that holds on some days and not others is the date
+             * fragility this whole check has been fighting.
+             */
+            const haystack = [subName, rule.reason]
+              .filter((t): t is string => !!t)
+              .reduce((acc, t) => acc.split(t).join(" "), captured);
             for (const eid of rule.exclude_exercise_ids) {
               const name = nameOf(eid);
               if (name) {
-                expect(captured, `${persona.id}: deferred "${name}" still in session`)
+                expect(haystack, `${persona.id}: deferred "${name}" still in session`)
                   .not.toContain(name);
               }
             }
