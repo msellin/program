@@ -86,8 +86,31 @@ function tokenize(expr: string): Token[] | null {
       i = j + 1;
       continue;
     }
-    if (/[0-9]/.test(c)) {
-      let j = i;
+    /**
+     * A number, optionally NEGATIVE (2026-09-06).
+     *
+     * There was no branch for `-` at all, so `<= -8` matched nothing,
+     * `tokenize` returned null, and `evaluateCondition` returned false for
+     * the ENTIRE expression — not just the comparison containing it.
+     *
+     * engine-builder-block-2's Push tier is
+     *   `block_1_completed == 'yes_recent' && (current_cardio_hours_per_week
+     *    >= 6 || block_1_submax_hr_delta <= -8)`
+     * so Push was unreachable: a user who qualified on the HR delta fell
+     * through to Foundation, two tiers down. And a negative delta is the
+     * GOOD direction here — the intake help text says so ("Negative number =
+     * drop = good") — so this specifically demoted the users who had
+     * responded best to Block 1.
+     *
+     * Unary only where a value is expected: after an operator, an open
+     * paren, or at the start. `a - b` is not arithmetic this DSL supports,
+     * and treating a trailing `-` as a sign would silently change meaning
+     * rather than fail.
+     */
+    const prev = out[out.length - 1];
+    const valueExpected = !prev || prev.type === "op" || prev.type === "lparen";
+    if (/[0-9]/.test(c) || (c === "-" && valueExpected && /[0-9.]/.test(expr[i + 1] ?? ""))) {
+      let j = c === "-" ? i + 1 : i;
       while (j < expr.length && /[0-9.]/.test(expr[j])) j++;
       const n = Number(expr.slice(i, j));
       if (!isFinite(n)) return null;
