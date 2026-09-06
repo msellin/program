@@ -534,6 +534,46 @@ export function deriveLevelsFromProfile(
   tierId: string,
 ): Levels {
   const declared: Levels = {};
+
+  /**
+   * The tier's authored per-domain starting levels (2026-09-06).
+   *
+   * `plan_tiers[].program_adjustments.starting_capability_levels` is keyed by
+   * CAPABILITY DOMAIN — `pu_dead_hang_grip`, `pu_row_strength` — which is the
+   * namespace `arePrerequisitesMet` looks up. It is the correct data, it has
+   * been in all three skill programmes the whole time, and it had ZERO
+   * readers.
+   *
+   * Without it every domain resolved to the tier baseline through the Proxy
+   * below, so `multi_dimensional` — the stated premise of these programmes,
+   * that a user who wall-holds 60s but cannot take a step needs different
+   * drills from one who walks 8m but cannot turn — did not exist. Every
+   * capability moved together.
+   *
+   * Read BEFORE `capability_profile` so a real measurement still wins.
+   */
+  const tier = (program.plan_tiers ?? []).find(
+    (t) => (t as unknown as { id?: string }).id === tierId,
+  ) as unknown as
+    | { program_adjustments?: { starting_capability_levels?: Record<string, number> } }
+    | undefined;
+  for (const [domain, lvl] of Object.entries(
+    tier?.program_adjustments?.starting_capability_levels ?? {},
+  )) {
+    if (typeof lvl === "number" && lvl >= 1 && lvl <= 5) declared[domain] = lvl as Levels[string];
+  }
+
+  /**
+   * A measured capability overrides the tier default.
+   *
+   * NOTE this map is currently keyed by PHYSICAL TEST ID
+   * (`dead_hang_max_seconds`) while everything reading it expects a
+   * capability domain (`pu_dead_hang_grip`), so in practice it contributes
+   * nothing — the keys never collide. Left in place and read second because
+   * it is where a real measurement is meant to land; making it work needs a
+   * test-id-to-domain mapping that no programme authors yet, which is
+   * authoring work rather than a code fix.
+   */
   const capProfile = profile?.capability_profile;
   if (capProfile) {
     for (const [domain, entry] of Object.entries(capProfile)) {
