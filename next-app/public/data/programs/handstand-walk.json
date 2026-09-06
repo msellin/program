@@ -252,7 +252,7 @@
         "label": "Have you had shoulder pain during any overhead pressing or overhead hold in the last 12 months?",
         "type": "boolean",
         "required": true,
-        "help": "Includes press, jerk, snatch, overhead squat, or any handstand attempt. If yes, we defer inversions this block and route the plan to shoulder-safe positions first."
+        "help": "Includes press, jerk, snatch, overhead squat, or any handstand attempt. If yes we will flag it before you start — this arc loads the shoulder overhead in every position, so it cannot route around one."
       },
       {
         "id": "age_band",
@@ -585,6 +585,16 @@
         "block_title": "Worth being certain before you go upside down",
         "block_body": "If you've had a head knock and aren't sure whether it settled, find out before training inverted balance. Lingering dizziness or visual disturbance in an inversion is how people land badly.",
         "acknowledge_label": "Understood — I'll stop and get checked if anything spins."
+      },
+      {
+        "question_id": "shoulder_pain_overhead",
+        "unsafe_values": [
+          "true"
+        ],
+        "severity": "warn",
+        "block_title": "This programme cannot route around your shoulder",
+        "block_body": "You told us you have had shoulder pain overhead in the last 12 months. Every position in this arc — wall hold, freestanding hold, walk — loads the shoulder overhead, so there is no shoulder-safe substitute to give you inside it. The honest options are to build overhead tolerance first (the Overhead Mobility arc exists for that) or to work with a clinician alongside this one. If you continue: stop the set on pain rather than working through it, and log the shoulder in your morning check so the engine can see it.",
+        "acknowledge_label": "Understood — I'll stop on pain and log it."
       }
     ]
   },

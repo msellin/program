@@ -105,3 +105,62 @@ the reason the output contract demands a quoted retrieval per claim.
 Eval implication: add a case for it. An agent must not assert a field value
 without reading it, and the eval should score fabricated specifics as
 FALSE POSITIVES, not as harmless noise.
+
+---
+
+## Integrity agent, first run — 2026-09-06
+
+Two runs across all nine programmes. ~28 declared surfaces dead, unenforced,
+invisible or mislabelled against ~28 live, plus 21 findings in the skill arcs
+against 25 live mechanisms.
+
+Acted on, worst first:
+
+1. **Intake deferrals never ran in production** (`ee1dbc3`). The single worst
+   defect of the whole exercise.
+2. **Two blocks composed zero exercises for everyone, always** (`2660e2a`).
+3. **A promise handstand-walk cannot keep.** Its required shoulder question
+   said "we defer inversions this block and route the plan to shoulder-safe
+   positions first". The programme has ZERO `intake_exclusions`, and
+   `shoulder_pain_overhead` appears exactly once in the whole file — the
+   question itself. Meanwhile first-strict-pullup gates the SAME question id
+   properly, so this is the sibling pattern again.
+
+   Fixed the honest way rather than the flattering one. A handstand arc
+   cannot route around a shoulder: wall hold, freestanding hold and walk all
+   load it overhead, so there is no substitute to give. Added a `warn` gate
+   matching the wrist one already in that file, which names the two real
+   options (build overhead tolerance first, or work with a clinician
+   alongside) and asks for an acknowledgement. Help text corrected to say
+   what actually happens.
+4. **Escalation rules were dead AND invisible.** Six programmes author
+   back-off and stop conditions in `progression_rules.escalation` — "two red
+   days in a week, skip the heavy session", "persistent shoulder or elbow
+   pain over three days, stop, see a clinician". Nothing read them, and the
+   /plan panel renders `principles[]`, not this. Now displayed.
+
+## The asymmetry worth naming
+
+The engine counts **three green days in a row** to propose ADDING load. That
+is implemented, tested and shipping. It counts **nothing** to propose backing
+off — there is no consecutive-red mechanism anywhere in `src`; the only
+"consecutive" in the engine is the green streak.
+
+So the app has a mechanism for optimism and none for caution, while six
+programmes declare exactly what caution should look like.
+
+## Still open, and why
+
+**Enforcing the escalation rules** is the obvious next step and is NOT mine.
+It means the app telling someone to stop training and consult a clinician on
+a counter it computed. The thresholds are already authored by the founder, so
+implementing them invents nothing — but automating that sentence is a
+decision about what the product says to a person having a bad week. Showing
+him the rule he wrote is not the same act as acting on it for him.
+
+Remaining from the reports: rowing's `is_taper` stripped by Zod (taper banner
+never renders, taper swap never fires), EB2's Push tier unreachable via the
+condition tokenizer's missing `-` case, EB2's overlapping phase dates,
+`plan_tiers[].program_adjustments` dead in every programme, the HERITAGE
+classifier unable to emit a verdict, and muscle-up's `ring_dip_count`
+hard-blocking users its own copy invites to continue.

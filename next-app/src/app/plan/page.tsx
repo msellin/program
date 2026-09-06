@@ -147,6 +147,25 @@ export default function WeekPage() {
   const wt = program.weekly_template as Wt | undefined;
   const programRules = ((program as unknown as { principles?: ProgramRule[] }).principles ?? [])
     .filter((p) => typeof p?.rule === "string" && p.rule.trim().length > 0);
+  /**
+   * The programme's escalation rule (2026-09-06).
+   *
+   * `progression_rules.escalation` is where six of the nine programmes put
+   * their back-off and stop conditions — "two red days in a week, skip the
+   * heavy session", "persistent shoulder pain over three days, stop and see
+   * a clinician". Nothing read it and nothing rendered it, so those rules
+   * reached the user through no channel at all.
+   *
+   * It is NOT enforced. There is no consecutive-red counter anywhere in the
+   * app: the engine counts three GREEN days in a row to propose adding load
+   * and counts nothing at all to propose backing off. Automating a "take a
+   * week off and consult a clinician" recommendation is a decision about
+   * what the app tells people, and it stays with the founder. Showing him
+   * the rule he already wrote does not.
+   */
+  const escalation = (
+    program as unknown as { progression_rules?: { escalation?: string } }
+  ).progression_rules?.escalation;
 
   const now = new Date(todayISO() + "T00:00:00");
   const jsDow = now.getDay();
@@ -734,9 +753,10 @@ export default function WeekPage() {
           Found by the citation sweep, which went looking for what a shaky
           citation underwrote and discovered the claim it underwrote was
           never displayed. */}
-      {programRules.length || wt?.principles?.length ? (
+      {escalation || programRules.length || wt?.principles?.length ? (
         <RulesAccordion
           principles={[
+            ...(escalation ? [`When to back off — ${escalation}`] : []),
             ...programRules.map((p) => (p.detail ? `${p.rule} — ${p.detail}` : p.rule)),
             ...(wt?.principles ?? []),
           ]}

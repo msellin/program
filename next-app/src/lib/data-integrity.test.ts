@@ -1717,6 +1717,41 @@ describe("a programme's standing rules reach the user", () => {
     expect(empty).toEqual([]);
   });
 
+  it("the escalation rule reaches the user", () => {
+    /**
+     * `progression_rules.escalation` is where six of the nine programmes put
+     * their BACK-OFF and STOP conditions: "two red days in a week, skip the
+     * heavy session"; "persistent shoulder or elbow pain over three days,
+     * stop, see a clinician". Nothing read it and nothing rendered it.
+     *
+     * Worth stating the asymmetry it sat inside. The engine counts three
+     * GREEN days in a row to propose ADDING load — that is implemented and
+     * tested. It counts nothing to propose backing off. There is no
+     * consecutive-red mechanism anywhere in `src`; the only "consecutive" in
+     * the engine is the green streak.
+     *
+     * This asserts the rule is DISPLAYED, not that it is enforced. Enforcing
+     * it means the app telling someone to stop training and see a clinician,
+     * which is a founder decision. Showing him the rule he already wrote is
+     * not.
+     */
+    const planPage = fs.readFileSync(path.join(SRC, "app/plan/page.tsx"), "utf8");
+    expect(planPage).toMatch(/progression_rules\??\.\s*escalation|escalation\b/);
+    const call = planPage.slice(planPage.indexOf("<RulesAccordion"));
+    expect(call.slice(0, call.indexOf("/>") + 2)).toMatch(/escalation/);
+  });
+
+  it("every programme that declares an escalation rule still has one", () => {
+    // Six do. If one loses it, the back-off guidance for that arc silently
+    // disappears from the only surface that shows it.
+    const withEscalation = programs.filter(
+      ({ program }) =>
+        typeof (program as unknown as { progression_rules?: { escalation?: string } })
+          .progression_rules?.escalation === "string",
+    );
+    expect(withEscalation.length).toBeGreaterThanOrEqual(6);
+  });
+
   it("handstand-walk's two safety rules are among them", () => {
     // Named explicitly because these are the ones with a hard-stop framing.
     // If a future edit moves or renames them, this should fail loudly rather

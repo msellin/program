@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: fa4a375b82e74491 -->
+<!-- source-fingerprint: 3d32fa60c8754f69 -->
 
 ## What we are asking
 
@@ -268,6 +268,7 @@ Printed against the questions above so you can see which are actually detectable
   - warns, then continues on ['yes'] → "Ramp the wrists, don't chase the calendar"
 - **Have you had shoulder pain during any overhead pressing or overhead hold in the last 12 months?**  
   `shoulder_pain_overhead`
+  - warns, then continues on ['true'] → "This programme cannot route around your shoulder"
 - **Age band**  
   `age_band` — answers: 18_30, 31_45, 46_60, 60_plus
 - **Have you been diagnosed with low bone density (osteoporosis or low BMD)?**  
