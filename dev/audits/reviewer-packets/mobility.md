@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: 9ba5ad50da1b257a -->
+<!-- source-fingerprint: 89304a9bd9196f24 -->
 
 ## What we are asking
 
@@ -129,9 +129,9 @@ Printed against the questions above so you can see which are actually detectable
 
 19 unique papers across 1 programs. Where a paper backs more than one claim, every claim is listed under it — a paper stretched across two claims is worth a second look.
 
-**bullock_2019** — Shoulder range of motion and baseball throwing performance · Bullock GS, Faherty MS, Ledbetter L, Thigpen CA, Sell TC · 2019
+**bullock_2019** — Shoulder range of motion and baseball arm injuries: a systematic review and meta-analysis · Bullock GS, Faherty MS, Ledbetter L, Thigpen CA, Sell TC · 2018
 
-- *overhead-mobility says it supports:* Shoulder rotational ROM (IR + total arc) in throwers — supports the retest choice to include a rotational component alongside supine flexion. Does NOT directly support the thoracic→shoulder pathway; the thoracic-prep rationale rests on Kim 2013 + coaching consensus.
+- *overhead-mobility says it supports:* Systematic review and meta-analysis in prospectively followed baseball players: high-quality evidence that deficits in throwing-arm total rotational arc and internal rotation are associated with upper-extremity injury. Cited for the rotational-ROM construct, and it establishes that construct only as an injury-risk marker in throwers. Engineering choice: including a rotational component alongside supine flexion in the retest for a general, non-throwing overhead-mobility population is a coaching judgement; an injury association in throwers does not by itself establish that the retest is informative here. Does NOT support the thoracic-to-shoulder pathway; that rationale rests on Kim 2013 plus coaching consensus. Corrected 2026-09-05: the record described a 2019 paper on baseball throwing PERFORMANCE that does not exist; the real paper is the 2018 meta-analysis on arm INJURY, and the programme's url was a PubMed search query rather than a record.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **chiviacowsky_wulf_2002** — Self-controlled feedback: does it enhance learning because performers get feedback when they need it? · Chiviacowsky S, Wulf G · 2002

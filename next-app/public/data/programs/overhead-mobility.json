@@ -1056,10 +1056,10 @@
       {
         "id": "bullock_2019",
         "authors": "Bullock GS, Faherty MS, Ledbetter L, Thigpen CA, Sell TC",
-        "year": 2019,
-        "title": "Shoulder range of motion and baseball throwing performance",
-        "source": "J Athl Train 54(6):679-687",
-        "used_for": "Shoulder rotational ROM (IR + total arc) in throwers — supports the retest choice to include a rotational component alongside supine flexion. Does NOT directly support the thoracic→shoulder pathway; the thoracic-prep rationale rests on Kim 2013 + coaching consensus.",
+        "year": 2018,
+        "title": "Shoulder range of motion and baseball arm injuries: a systematic review and meta-analysis",
+        "source": "J Athl Train 53(12):1190-1199",
+        "used_for": "Systematic review and meta-analysis in prospectively followed baseball players: high-quality evidence that deficits in throwing-arm total rotational arc and internal rotation are associated with upper-extremity injury. Cited for the rotational-ROM construct, and it establishes that construct only as an injury-risk marker in throwers. Engineering choice: including a rotational component alongside supine flexion in the retest for a general, non-throwing overhead-mobility population is a coaching judgement; an injury association in throwers does not by itself establish that the retest is informative here. Does NOT support the thoracic-to-shoulder pathway; that rationale rests on Kim 2013 plus coaching consensus. Corrected 2026-09-05: the record described a 2019 paper on baseball throwing PERFORMANCE that does not exist; the real paper is the 2018 meta-analysis on arm INJURY, and the programme's url was a PubMed search query rather than a record.",
         "url": "https://pubmed.ncbi.nlm.nih.gov/?term=Bullock+shoulder+range+of+motion+baseball+throwing+2019",
         "verification_status": "unverified"
       },

@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: 42cb7561efdd3fd1 -->
+<!-- source-fingerprint: fd2775a575881ec0 -->
 
 ## What we are asking
 
@@ -348,7 +348,7 @@ Printed against the questions above so you can see which are actually detectable
 
 **difiori_2006** — Wrist pain, distal radial physeal injury, and ulnar variance in the young gymnast · DiFiori JP, Caine DJ, Malina RM · 2006
 
-- *handstand-walk says it supports:* Fracture-site data at distal radius under load-through-hand mechanism. Cohort is young gymnasts (open physes); Terav uses this as a mechanism analog for the adult low-BMD osteoporosis contraindication, not as direct evidence in adult practitioners.
+- *handstand-walk says it supports:* Narrative review of wrist pain in young gymnasts under repetitive weight-bearing load through the hand: it documents chronic wrist pain as common in this cohort and identifies injury to the distal radial PHYSIS and the development of positive ulnar variance. It reports no fracture-site data and its abstract does not mention fracture. Cohort is skeletally immature gymnasts with open physes. Engineering choice: Terav uses the load-through-hand mechanism as an analog for the adult low-BMD osteoporosis contraindication; physeal injury in a growing wrist and fragility fracture in an osteoporotic adult are different pathologies that share only a loading direction, so the contraindication is a conservative clinical judgement this paper cannot settle, not a finding it reports. Corrected 2026-09-05: the previous string called this 'fracture-site data at distal radius'. It is a narrative review of physeal injury and ulnar variance. The same misdescription appears in user-visible copy at intake.questions[7].help, immediate_actions[3].reason and evidence_base.contraindications[1] (which additionally asserts 'vertebral and hip fractures follow' with no source at all); those three strings need the same correction and are outside the scope of this reference entry.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **henry_1968** — Specificity vs generality in learning motor skill · Henry FM · 1968

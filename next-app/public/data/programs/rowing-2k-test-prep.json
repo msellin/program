@@ -779,7 +779,7 @@
         "year": 1984,
         "title": "Time course of loss of adaptations after stopping prolonged intense endurance training",
         "source": "J Appl Physiol 57(6):1857-1864",
-        "used_for": "Detraining timeline informs taper depth"
+        "used_for": "Detraining timeline after complete cessation of training in 7 endurance-trained subjects: VO2max declined 7% over the first 21 days of inactivity and stabilised after 56 days at 16% below the trained value. Engineering choice: taper depth is a reduced-training decision and this paper measures cessation, so it bounds how much can be lost during an unplanned break rather than telling you how far to taper. Corrected 2026-09-05: the previous string, 'Detraining timeline informs taper depth', implied the paper speaks to tapering; it does not, and the sibling programmes' '-7% at 12 days' figure was also wrong (7% is at 21 days; 12 days is the oxidative-enzyme decline half-time)."
       },
       {
         "id": "astorino_2013",

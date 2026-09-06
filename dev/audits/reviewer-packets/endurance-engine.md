@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: 10ed8a2af8ffe9d2 -->
+<!-- source-fingerprint: 2e6865cd260cd3cb -->
 
 ## What we are asking
 
@@ -335,8 +335,8 @@ Printed against the questions above so you can see which are actually detectable
 
 **coyle_1984** — Time course of loss of adaptations after stopping prolonged intense endurance training · Coyle EF, Martin WH, Sinacore DR, Joyner MJ, Hagberg JM, Holloszy JO · 1984
 
-- *engine-builder says it supports:* Detraining timecourse: VO2max −7% at 12 days, −16% at 12 weeks. Informs the post-block maintenance dose.
-- *engine-builder-block-2 says it supports:* Detraining timecourse. Informs the Foundation-tier 2-week re-entry ramp for users lapsed 4+ weeks from Block 1.
+- *engine-builder says it supports:* Detraining timecourse after complete cessation of training in 7 endurance-trained subjects: VO2max declined 7% over the first 21 days of inactivity and stabilised after 56 days at 16% below the trained value, with the final measurement at 84 days. Engineering choice: the post-block maintenance dose is set to keep a user away from that curve; the paper measures loss under cessation and prescribes no maintenance dose. Corrected 2026-09-05: the previous string read 'VO2max -7% at 12 days, -16% at 12 weeks'. The -16% half is defensible (stabilised at 56 days, still measured at 84 days = 12 weeks) but the 7% figure is at 21 days, not 12; 12 days is this paper's half-time for the oxidative-enzyme decline.
+- *engine-builder-block-2 says it supports:* Detraining timecourse after complete cessation of training in 7 endurance-trained subjects: VO2max declined 7% over the first 21 days and stabilised after 56 days at 16% below the trained value. Informs the concept behind the Foundation-tier 2-week re-entry ramp for users lapsed 4+ weeks from Block 1. Engineering choice, already disclosed in engineering_choices_flagged: the paper informs the concept but not the exact protocol, and a lapse is not necessarily complete cessation. Corrected 2026-09-05: no claim in this string was wrong, but the numbers are stated explicitly here so the '-7% at 12 days' error corrected in the sibling programmes cannot be re-derived from this entry.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **docherty_sporer_2000** — A proposed model for examining the interference phenomenon between concurrent aerobic and strength training · Docherty D, Sporer B · 2000

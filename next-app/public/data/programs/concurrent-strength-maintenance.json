@@ -730,19 +730,19 @@
       },
       {
         "id": "doma_2019",
-        "authors": "Doma K, Deakin GB, Bentley DJ",
+        "authors": "Doma K, Deakin GB, Schumann M, Bentley DJ",
         "year": 2019,
-        "title": "Implications of impaired endurance performance following single bouts of resistance training",
+        "title": "Training considerations for optimising endurance development: an alternate concurrent training perspective",
         "source": "Sports Med 49(5):669-682",
-        "used_for": "Bidirectional damage — running-induced damage impairs squat/deadlift 24-48h"
+        "used_for": "Resistance-to-endurance interference: there is a growing body of research indicating that typical resistance exercises impair neuromuscular function and endurance performance during periods of resistance-training-induced muscle damage. That is the direction this paper establishes, and the only direction cited here. Engineering choice: the row-not-run modality preference is a programming judgement; neither this paper nor its 2017 companion establishes that endurance-induced damage impairs subsequent squat or deadlift force, and neither states a 24-48h window for that direction. Wilson 2012 carries the modality-interference evidence. Corrected 2026-09-05: the previous string read 'Bidirectional damage - running-induced damage impairs squat/deadlift 24-48h', which runs the opposite causal direction to the paper. The record was also a chimera of two Doma papers and has been repointed to Sports Med 2019;49(5):669-682, whose title and four-author byline differ from what was shipped. The same reversed claim appears in principles[3].detail, session_rationale.why_row_not_run and engineering_choices_flagged[5].rationale and needs the same correction there."
       },
       {
         "id": "berryman_2018",
         "authors": "Berryman N, Mujika I, Bosquet L",
-        "year": 2018,
-        "title": "Effects of short-term concurrent training cessation on the energy cost of running and neuromuscular performances",
-        "source": "Int J Sports Physiol Perform 13(1):57-64",
-        "used_for": "Short-term cessation effects on running energy cost + neuromuscular performance. Terav extrapolates this running-side sensitivity to a modality-preference read (cycling as the safer concurrent partner) — see engineering_choices_flagged. Wilson 2012 + Doma 2019 carry the direct concurrent-interference evidence."
+        "year": 2020,
+        "title": "Effects of short-term concurrent training cessation on the energy cost of running and neuromuscular performances in middle-distance runners",
+        "source": "Sports (Basel) 9(1):1",
+        "used_for": "Short-term cessation of explosive strength training in middle-distance runners (n=8): the improvement in the energy cost of running achieved during the intervention (-5.75%) was maintained after the strength work was interrupted (-6.31%). The authors themselves caution that the low sample size and the very limited literature in this area mean the result should be interpreted cautiously. Engineering choice: Terav reads a running-side sensitivity out of this and prefers cycling and rowing as the concurrent partner modality; the paper compares no modalities and does not support that preference - see engineering_choices_flagged. Wilson 2012 carries the direct concurrent-interference evidence. Corrected 2026-09-05: the citation record was a chimera of two Berryman papers and has been repointed to the cessation study (Sports 2020;9(1):1); the previous string also cited Doma 2019 as carrying direct interference evidence, which it does not - see that entry."
       },
       {
         "id": "fyfe_2016",
@@ -766,7 +766,7 @@
         "year": 2013,
         "title": "Nutrient timing revisited: is there a post-exercise anabolic window?",
         "source": "J Int Soc Sports Nutr 10:5",
-        "used_for": "Anabolic window is 4-6h, not 30 min — supports 6h separation compatibility"
+        "used_for": "Nutrient timing around a single resistance bout: the review argues the post-exercise anabolic window is not universally narrow and urgent, and recommends that pre- and post-exercise meals not be separated by more than roughly 3-4 hours, extendable to 5-6 hours when protein arrives in large mixed meals. Cited here only for that feeding-interval finding. Engineering choice: the paper says nothing about spacing an endurance session from a strength session, so it does not license the 6h session-separation rule; that rule rests on Robineau 2016. Corrected 2026-09-05: the previous string read 'Anabolic window is 4-6h, not 30 min - supports 6h separation compatibility', which misstated the paper's number (3-4h default, 5-6h only with large mixed meals) and borrowed a meal-timing finding for a session-spacing construct the paper never addresses."
       },
       {
         "id": "morton_2018",
@@ -870,7 +870,7 @@
         "year": 1984,
         "title": "Time course of loss of adaptations after stopping prolonged intense endurance training",
         "source": "J Appl Physiol 57(6):1857-1864",
-        "used_for": "Detraining timeline — VO2max −7% at 12 days, informs deload week planning"
+        "used_for": "Detraining timeline after COMPLETE cessation of training in 7 endurance-trained subjects: VO2max declined 7% over the first 21 days of inactivity and stabilised after 56 days at 16% below the trained value. Engineering choice: a deload week is reduced training, not cessation, so this curve informs the concept of how fast aerobic adaptation is lost but does not set a deload dose. Corrected 2026-09-05: the previous string read 'VO2max -7% at 12 days'. The 7% figure is at 21 days; 12 days is this paper's half-time for the decline in citrate synthase and succinate dehydrogenase activity, a different quantity."
       }
     ],
     "reference_ids": [

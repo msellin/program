@@ -1402,7 +1402,7 @@
         "year": 1984,
         "title": "Time course of loss of adaptations after stopping prolonged intense endurance training",
         "source": "Journal of Applied Physiology 57(6):1857-1864",
-        "used_for": "Detraining timecourse. Informs the Foundation-tier 2-week re-entry ramp for users lapsed 4+ weeks from Block 1."
+        "used_for": "Detraining timecourse after complete cessation of training in 7 endurance-trained subjects: VO2max declined 7% over the first 21 days and stabilised after 56 days at 16% below the trained value. Informs the concept behind the Foundation-tier 2-week re-entry ramp for users lapsed 4+ weeks from Block 1. Engineering choice, already disclosed in engineering_choices_flagged: the paper informs the concept but not the exact protocol, and a lapse is not necessarily complete cessation. Corrected 2026-09-05: no claim in this string was wrong, but the numbers are stated explicitly here so the '-7% at 12 days' error corrected in the sibling programmes cannot be re-derived from this entry."
       },
       {
         "id": "ross_2015",

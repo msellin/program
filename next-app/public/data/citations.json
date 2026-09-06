@@ -38,7 +38,10 @@
       "title": "Nutrient timing revisited: is there a post-exercise anabolic window?",
       "source": "J Int Soc Sports Nutr 10:5",
       "display_short": "Aragon & Schoenfeld 2013",
-      "display_line": "Aragon & Schoenfeld (2013), J Int Soc Sports Nutr 10"
+      "display_line": "Aragon & Schoenfeld (2013), J Int Soc Sports Nutr 10",
+      "pmid": "23360586",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23360586/",
+      "id_note": "Verified 2026-09-05 (citation sweep batch 1): authors, year, title and source were all correct; the record simply carried no identifier, so /evidence rendered it unlinked. PMID 23360586 (PMC3577439) added. The defect in this entry was in the programme used_for, not in the record."
     },
     {
       "id": "astorino_2013",
@@ -111,11 +114,15 @@
     {
       "id": "berryman_2018",
       "authors": "Berryman N, Mujika I, Bosquet L",
-      "year": 2018,
-      "title": "Effects of short-term concurrent training cessation on the energy cost of running and neuromuscular performances",
-      "source": "Int J Sports Physiol Perform 13(1):57-64",
-      "display_short": "Berryman et al. 2018",
-      "display_line": "Berryman et al. (2018), Int J Sports Physiol Perform 13(1)"
+      "year": 2020,
+      "title": "Effects of short-term concurrent training cessation on the energy cost of running and neuromuscular performances in middle-distance runners",
+      "source": "Sports (Basel) 9(1):1",
+      "display_short": "Berryman et al. 2020",
+      "display_line": "Berryman et al. (2020), Sports (Basel) 9(1):1",
+      "doi": "10.3390/sports9010001",
+      "pmid": "33374897",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33374897/",
+      "id_note": "Corrected 2026-09-05 (citation sweep batch 1): the record was a chimera of two real papers. Title and the three-author byline (Berryman N, Mujika I, Bosquet L) belong to the cessation study, Sports (Basel) 2020;9(1):1, PMID 33374897. The year, venue, volume, issue and pages (2018, Int J Sports Physiol Perform 13(1):57-64) belonged to a different work by an overlapping team, the strength-training meta-analysis by Berryman, Mujika, Arvisais and Roubeix. The record has been repointed to the cessation study, which is the paper the used_for actually describes. The id string still reads 2018 and is now a misleading slug; renaming the id is a separate migration because it touches every programme reference_ids[] entry and any persisted citation snapshot."
     },
     {
       "id": "billat_2000",
@@ -236,11 +243,15 @@
     {
       "id": "bullock_2019",
       "authors": "Bullock GS, Faherty MS, Ledbetter L, Thigpen CA, Sell TC",
-      "year": 2019,
-      "title": "Shoulder range of motion and baseball throwing performance",
-      "source": "J Athl Train 54(6):679-687",
-      "display_short": "Bullock et al. 2019",
-      "display_line": "Bullock et al. (2019), J Athl Train 54(6)"
+      "year": 2018,
+      "title": "Shoulder range of motion and baseball arm injuries: a systematic review and meta-analysis",
+      "source": "J Athl Train 53(12):1190-1199",
+      "display_short": "Bullock et al. 2018",
+      "display_line": "Bullock et al. (2018), J Athl Train 53(12):1190-1199",
+      "doi": "10.4085/1062-6050-439-17",
+      "pmid": "30525937",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30525937/",
+      "id_note": "Corrected 2026-09-05 (citation sweep batch 2): no paper matching the shipped record exists. A Crossref scan of J Athl Train volume 54 (2019) returned no article at page 679, and PubMed returned zero hits for that journal/volume/page. The paper by these five authors is J Athl Train 2018;53(12):1190-1199, PMID 30525937, and its subject is arm INJURY risk, not throwing PERFORMANCE, so the title change is substantive and not cosmetic. The programme copy in overhead-mobility.json also carried a PubMed search-query string in url; that must be replaced with the record URL above and the verification_status 'unverified' flag re-evaluated. The id string still reads 2019; renaming it is a separate migration."
     },
     {
       "id": "butcher_2015",
@@ -289,7 +300,9 @@
       "source": "Journal of Applied Physiology 57(6):1857-1864",
       "url": "https://pubmed.ncbi.nlm.nih.gov/6511559/",
       "display_short": "Coyle et al. 1984",
-      "display_line": "Coyle et al. (1984), Journal of Applied Physiology 57(6)"
+      "display_line": "Coyle et al. (1984), Journal of Applied Physiology 57(6)",
+      "pmid": "6511559",
+      "id_note": "Verified 2026-09-05 (citation sweep batch 2): authors, year, title, journal, volume, issue, pages and url are all correct and the url resolves to the right paper. PMID field added for completeness. The defect was in the programme used_for strings, which reported the 7% VO2max decline at 12 days; the paper reports it over the first 21 days, and 12 days is the half-time of the oxidative-enzyme decline, a different quantity."
     },
     {
       "id": "difiori_2006",
@@ -298,7 +311,11 @@
       "title": "Wrist pain, distal radial physeal injury, and ulnar variance in the young gymnast",
       "source": "American Journal of Sports Medicine 34(5):840-849",
       "display_short": "DiFiori et al. 2006",
-      "display_line": "DiFiori et al. (2006), American Journal of Sports Medicine 34(5)"
+      "display_line": "DiFiori et al. (2006), American Journal of Sports Medicine 34(5)",
+      "doi": "10.1177/0363546505284848",
+      "pmid": "16493174",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16493174/",
+      "id_note": "Verified 2026-09-05 (citation sweep batch 2): authors, year, title and source are all correct, and the title as recorded already describes the paper accurately as being about wrist pain, distal radial physeal injury and ulnar variance. DOI, PMID and url added; the record previously rendered unlinked on /evidence. The defect was in handstand-walk's used_for and prose, which described the paper as fracture-site data."
     },
     {
       "id": "docherty_sporer_2000",
@@ -314,12 +331,15 @@
     },
     {
       "id": "doma_2019",
-      "authors": "Doma K, Deakin GB, Bentley DJ",
+      "authors": "Doma K, Deakin GB, Schumann M, Bentley DJ",
       "year": 2019,
-      "title": "Implications of impaired endurance performance following single bouts of resistance training",
+      "title": "Training considerations for optimising endurance development: an alternate concurrent training perspective",
       "source": "Sports Med 49(5):669-682",
       "display_short": "Doma et al. 2019",
-      "display_line": "Doma et al. (2019), Sports Med 49(5)"
+      "display_line": "Doma et al. (2019), Sports Med 49(5)",
+      "pmid": "30847824",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30847824/",
+      "id_note": "Corrected 2026-09-05 (citation sweep batch 2): the record was a chimera of two real Doma papers. The shipped title and three-author byline belong to Sports Med 2017;47(11):2187-2200 (PMID 28702901, which also carries an erratum, PMID 28752468). The shipped year, volume and pages belong to Sports Med 2019;49(5):669-682 (PMID 30847824), a different paper with a different title and a fourth author, Schumann M. The record has been repointed to the 2019 paper, so that the year/volume/pages already shipped stay correct and only the title and byline change. No DOI is recorded because none was retrieved during the sweep; do not add one that has not been checked against the live record. Both candidate papers run resistance training to endurance performance, which is the opposite of the direction the used_for claimed."
     },
     {
       "id": "eddens_2018",

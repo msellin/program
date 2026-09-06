@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: 4ffd399f06f429af -->
+<!-- source-fingerprint: f4033d5baa3459f9 -->
 
 ## What we are asking
 
@@ -204,7 +204,7 @@ Printed against the questions above so you can see which are actually detectable
 
 **aragon_schoenfeld_2013** — Nutrient timing revisited: is there a post-exercise anabolic window? · Aragon AA, Schoenfeld BJ · 2013
 
-- *concurrent-strength-maintenance says it supports:* Anabolic window is 4-6h, not 30 min — supports 6h separation compatibility
+- *concurrent-strength-maintenance says it supports:* Nutrient timing around a single resistance bout: the review argues the post-exercise anabolic window is not universally narrow and urgent, and recommends that pre- and post-exercise meals not be separated by more than roughly 3-4 hours, extendable to 5-6 hours when protein arrives in large mixed meals. Cited here only for that feeding-interval finding. Engineering choice: the paper says nothing about spacing an endurance session from a strength session, so it does not license the 6h session-separation rule; that rule rests on Robineau 2016. Corrected 2026-09-05: the previous string read 'Anabolic window is 4-6h, not 30 min - supports 6h separation compatibility', which misstated the paper's number (3-4h default, 5-6h only with large mixed meals) and borrowed a meal-timing finding for a session-spacing construct the paper never addresses.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **astorino_2013** — Effect of high-intensity interval training on cardiovascular function, VO2max, and muscular force · Astorino TA, Allen RP, Roberson DW, Jurancich M · 2012
@@ -227,9 +227,9 @@ Printed against the questions above so you can see which are actually detectable
 - *concurrent-strength-maintenance says it supports:* Train-low framework — low CHO amplifies AMPK/PGC-1α/p53
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
-**berryman_2018** — Effects of short-term concurrent training cessation on the energy cost of running and neuromuscular performances · Berryman N, Mujika I, Bosquet L · 2018
+**berryman_2018** — Effects of short-term concurrent training cessation on the energy cost of running and neuromuscular performances in middle-distance runners · Berryman N, Mujika I, Bosquet L · 2020
 
-- *concurrent-strength-maintenance says it supports:* Short-term cessation effects on running energy cost + neuromuscular performance. Terav extrapolates this running-side sensitivity to a modality-preference read (cycling as the safer concurrent partner) — see engineering_choices_flagged. Wilson 2012 + Doma 2019 carry the direct concurrent-interference evidence.
+- *concurrent-strength-maintenance says it supports:* Short-term cessation of explosive strength training in middle-distance runners (n=8): the improvement in the energy cost of running achieved during the intervention (-5.75%) was maintained after the strength work was interrupted (-6.31%). The authors themselves caution that the low sample size and the very limited literature in this area mean the result should be interpreted cautiously. Engineering choice: Terav reads a running-side sensitivity out of this and prefers cycling and rowing as the concurrent partner modality; the paper compares no modalities and does not support that preference - see engineering_choices_flagged. Wilson 2012 carries the direct concurrent-interference evidence. Corrected 2026-09-05: the citation record was a chimera of two Berryman papers and has been repointed to the cessation study (Sports 2020;9(1):1); the previous string also cited Doma 2019 as carrying direct interference evidence, which it does not - see that entry.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **billat_2000** — Interval training for performance: a scientific and empirical practice. Special recommendations for middle- and long-distance running. Part I: aerobic interval training · Billat V · 2000
@@ -290,13 +290,13 @@ Printed against the questions above so you can see which are actually detectable
 
 **coyle_1984** — Time course of loss of adaptations after stopping prolonged intense endurance training · Coyle EF, Martin WH, Sinacore DR, Joyner MJ, Hagberg JM, Holloszy JO · 1984
 
-- *rowing-2k-test-prep says it supports:* Detraining timeline informs taper depth
-- *concurrent-strength-maintenance says it supports:* Detraining timeline — VO2max −7% at 12 days, informs deload week planning
+- *rowing-2k-test-prep says it supports:* Detraining timeline after complete cessation of training in 7 endurance-trained subjects: VO2max declined 7% over the first 21 days of inactivity and stabilised after 56 days at 16% below the trained value. Engineering choice: taper depth is a reduced-training decision and this paper measures cessation, so it bounds how much can be lost during an unplanned break rather than telling you how far to taper. Corrected 2026-09-05: the previous string, 'Detraining timeline informs taper depth', implied the paper speaks to tapering; it does not, and the sibling programmes' '-7% at 12 days' figure was also wrong (7% is at 21 days; 12 days is the oxidative-enzyme decline half-time).
+- *concurrent-strength-maintenance says it supports:* Detraining timeline after COMPLETE cessation of training in 7 endurance-trained subjects: VO2max declined 7% over the first 21 days of inactivity and stabilised after 56 days at 16% below the trained value. Engineering choice: a deload week is reduced training, not cessation, so this curve informs the concept of how fast aerobic adaptation is lost but does not set a deload dose. Corrected 2026-09-05: the previous string read 'VO2max -7% at 12 days'. The 7% figure is at 21 days; 12 days is this paper's half-time for the decline in citrate synthase and succinate dehydrogenase activity, a different quantity.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
-**doma_2019** — Implications of impaired endurance performance following single bouts of resistance training · Doma K, Deakin GB, Bentley DJ · 2019
+**doma_2019** — Training considerations for optimising endurance development: an alternate concurrent training perspective · Doma K, Deakin GB, Schumann M, Bentley DJ · 2019
 
-- *concurrent-strength-maintenance says it supports:* Bidirectional damage — running-induced damage impairs squat/deadlift 24-48h
+- *concurrent-strength-maintenance says it supports:* Resistance-to-endurance interference: there is a growing body of research indicating that typical resistance exercises impair neuromuscular function and endurance performance during periods of resistance-training-induced muscle damage. That is the direction this paper establishes, and the only direction cited here. Engineering choice: the row-not-run modality preference is a programming judgement; neither this paper nor its 2017 companion establishes that endurance-induced damage impairs subsequent squat or deadlift force, and neither states a 24-48h window for that direction. Wilson 2012 carries the modality-interference evidence. Corrected 2026-09-05: the previous string read 'Bidirectional damage - running-induced damage impairs squat/deadlift 24-48h', which runs the opposite causal direction to the paper. The record was also a chimera of two Doma papers and has been repointed to Sports Med 2019;49(5):669-682, whose title and four-author byline differ from what was shipped. The same reversed claim appears in principles[3].detail, session_rationale.why_row_not_run and engineering_choices_flagged[5].rationale and needs the same correction there.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **eddens_2018** — The role of intra-session exercise sequence in the interference effect: a systematic review with meta-analysis · Eddens L, van Someren K, Howatson G · 2018
