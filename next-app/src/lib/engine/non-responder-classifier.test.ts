@@ -129,6 +129,59 @@ describe("classify · Engine Builder", () => {
   });
 
   /**
+   * A stall on the first retest must not outlive the retests that follow.
+   *
+   * `buildMetricCtx` computed its delta as `sorted[1] - sorted[0]` — the
+   * SECOND reading, not the latest. At exactly two baselines, which is the
+   * only shape the classifier had ever been tested with, that is the same
+   * number. At three or more it silently discards everything after the
+   * second, so a user who stalled once and then improved steadily was still
+   * being told they were under-dosed on the strength of the stall.
+   *
+   * Below: submax HR 150 -> 149 (flat) -> 143 -> 137 against a -12 target.
+   * The old delta was -1, a progress ratio of 0.08, and `under_dosing` fired.
+   * The real delta is -13 — target beaten — and the verdict is `responding`.
+   */
+  it("judges progress on the latest retest, not the first one after baseline", () => {
+    const result = classify(program, emptyStore(), {
+      baselines: [
+        { metric_id: "submax_hr_pace5_bpm", value: 150, observed_at: "2026-01-05" },
+        { metric_id: "submax_hr_pace5_bpm", value: 149, observed_at: "2026-02-01" },
+        { metric_id: "submax_hr_pace5_bpm", value: 143, observed_at: "2026-03-01" },
+        { metric_id: "submax_hr_pace5_bpm", value: 137, observed_at: "2026-04-01" },
+      ],
+      targets: { submax_hr_pace5_bpm: -12 },
+      // Low compliance, so `under_dosing` is available to fire. The only
+      // thing keeping it from firing is that the user is plainly responding.
+      intensity_compliance_pct: 60,
+    });
+    expect(result.per_metric[0].verdict).toBe("responding");
+    expect(result.composite_verdict).not.toBe("under_dosing");
+  });
+
+  /**
+   * ...and the reverse, so the fix is not just "always say responding".
+   *
+   * Same four readings, but the user gives the gain back: 150 -> 143 -> 148
+   * -> 150. Judging on `sorted[1]` would have called this a -7 improvement.
+   * The latest reading says nothing changed, and with compliance under the
+   * floor that is under-dosing.
+   */
+  it("still catches a user who improved early and gave it back", () => {
+    const result = classify(program, emptyStore(), {
+      baselines: [
+        { metric_id: "submax_hr_pace5_bpm", value: 150, observed_at: "2026-01-05" },
+        { metric_id: "submax_hr_pace5_bpm", value: 143, observed_at: "2026-02-01" },
+        { metric_id: "submax_hr_pace5_bpm", value: 148, observed_at: "2026-03-01" },
+        { metric_id: "submax_hr_pace5_bpm", value: 150, observed_at: "2026-04-01" },
+      ],
+      targets: { submax_hr_pace5_bpm: -12 },
+      intensity_compliance_pct: 60,
+    });
+    expect(result.per_metric[0].verdict).toBe("under_dosing");
+  });
+
+  /**
    * `true_non_response` is SUPPRESSED (2026-09-04, founder decision).
    *
    * The rule below still fires — this is the exact input that used to

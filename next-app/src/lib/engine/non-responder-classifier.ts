@@ -200,9 +200,28 @@ function buildMetricCtx(opts: {
     a.observed_at.localeCompare(b.observed_at),
   );
   const first = sorted[0];
-  const midOrLatest = sorted[1] ?? sorted[0];
-  const delta =
-    first && midOrLatest ? midOrLatest.value - first.value : undefined;
+  /**
+   * LATEST minus first — not `sorted[1]` minus first.
+   *
+   * These two are the same number at exactly two readings, which is the only
+   * case the classifier was ever exercised with, and different at three or
+   * more. `sorted[1]` froze the verdict on the first retest forever: a user
+   * who stalled early and then improved over the next three retests was still
+   * being judged on the stall, because every reading after the second was
+   * dropped on the floor.
+   *
+   * The resting-HR delta ninety lines below has always used last-minus-first.
+   * Two definitions of the same quantity in one function, feeding the same
+   * rule context, is how a metric ends up disagreeing with itself.
+   *
+   * The `_at_mid_block` in the exposed key names is now a misnomer, and it
+   * stays: those identifiers appear in programme-authored rule expressions
+   * (`progress_ratio_at_mid_block < 0.15 AND ...`), so renaming them silently
+   * breaks every rule that reads one. A misleading name is cheaper than a
+   * rule that stops evaluating.
+   */
+  const latest = sorted[sorted.length - 1];
+  const delta = first && latest ? latest.value - first.value : undefined;
   const progressRatio =
     delta !== undefined && target !== undefined && target !== 0
       ? delta / target
@@ -276,8 +295,17 @@ export function classify(
     })),
   ];
 
-  // Precompute resting HR delta once (needed by Engine Builder's
-  // true_non_response rule).
+  // Precompute resting HR delta once.
+  //
+  // The comment here used to say "needed by Engine Builder's
+  // true_non_response rule". It is not: that rule reads
+  // `progress_ratio_at_mid_block` and `intensity_compliance_pct`, and grep
+  // finds no programme rule referencing `resting_hr_delta_at_mid_block` or
+  // `resting_hr_progress_ratio` at all. Both are exposed on the context and
+  // nothing consumes them. Left in place rather than removed — deleting an
+  // exposed rule input is a decision about what programmes may author, not a
+  // cleanup — but recorded as dead so the next reader is not misled the way
+  // this comment misled.
   const restingHrBaselines = opts.baselines.filter(
     (b) => b.metric_id === "resting_hr_bpm",
   );
