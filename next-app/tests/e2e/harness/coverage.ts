@@ -1,5 +1,6 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
+import { PERSONAS } from "./personas";
 import type { FlowResult } from "./flows";
 
 /**
@@ -151,6 +152,12 @@ export const STORE_KEYS = [
 
 export type CoverageReport = {
   personaId: string;
+  /**
+   * Which sweep wrote this report. Set from `SWEEP_ID`, stamped once per run
+   * in `playwright.config.ts`. See `collectReports` for why a report without
+   * one, or with a foreign one, must not be counted.
+   */
+  sweepId: string;
   capturedAt: string;
   routes: { toured: string[]; missing: string[]; pct: number };
   surfaces: {
@@ -292,6 +299,7 @@ export function buildCoverage(opts: {
 
   return {
     personaId: opts.personaId,
+    sweepId: process.env.SWEEP_ID ?? "unstamped",
     capturedAt: new Date().toISOString(),
     routes: {
       toured: routesToured as unknown as string[],
@@ -392,6 +400,41 @@ export function collectReports(rootDir: string): CoverageReport[] {
       // A half-written file from a worker still in flight — skip it.
     }
   }
+  /**
+   * Keep only THIS sweep's reports.
+   *
+   * Artifacts are never cleaned between runs, so every directory a persona
+   * has ever produced is still on disk. A persona that fails mid-test never
+   * writes a fresh `coverage.json` — and before this filter, the summary
+   * happily read the one from the last sweep it passed and folded those
+   * numbers into the new fleet total.
+   *
+   * That is not hypothetical. Sweep #5 (2026-09-05) reported 269 behavioural
+   * checks with `persona-pullup-elbow` FAILED; sweep #6 reported 263 with all
+   * 22 personas passing and one new flow's worth of checks added on top. The
+   * missing six were never a regression in the app — the earlier number
+   * counted a persona that had not run.
+   *
+   * A summary that silently substitutes yesterday's data for a persona that
+   * failed today is worse than one that reports a smaller fleet: it hides
+   * exactly the persona you most need to look at.
+   *
+   * Reports with no `sweepId` are from a harness older than this filter and
+   * are dropped for the same reason as a missing `controls` block.
+   */
+  const sweepId = process.env.SWEEP_ID;
+  if (sweepId) {
+    const fresh = out.filter((r) => r.sweepId === sweepId);
+    const dropped = out.length - fresh.length;
+    if (dropped > 0) {
+      console.warn(
+        `[coverage] ignored ${dropped} stale persona report(s) from a previous sweep: ` +
+          out.filter((r) => r.sweepId !== sweepId).map((r) => r.personaId).join(", "),
+      );
+    }
+    out.length = 0;
+    out.push(...fresh);
+  }
   return out.sort((a, b) => a.personaId.localeCompare(b.personaId));
 }
 
@@ -404,7 +447,16 @@ export function writeFleetSummary(rootDir: string, reports: CoverageReport[]): v
   const lines: string[] = [
     `# Persona sweep — coverage (${new Date().toISOString().slice(0, 10)})`,
     "",
-    `Personas: ${reports.length}`,
+    `Personas: ${reports.length} of ${PERSONAS.length} defined`,
+    ...(reports.length < PERSONAS.length
+      ? [
+          "",
+          `> **${PERSONAS.length - reports.length} persona(s) produced no report this sweep** — ` +
+            `${PERSONAS.filter((p) => !reports.some((r) => r.personaId === p.id)).map((p) => p.id).join(", ")}. ` +
+            "A persona that fails aborts before writing coverage, so it is absent here rather than " +
+            "showing as a failure. Read the run output, not just this table.",
+        ]
+      : []),
     "",
     "| Dimension | Mean coverage |",
     "|---|---|",
