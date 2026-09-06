@@ -541,7 +541,7 @@ export function deriveLevelsFromProfile(
     }
   }
 
-  const tierLevel = tierIdToBaseLevel(tierId);
+  const tierLevel = tierIdToBaseLevel(tierId, program);
   // Capability domains this program touches. Union of every drill in the
   // library's `capability_domains`. We fall back to the domain names declared
   // on plan_tiers[].program_adjustments if drill_library is unavailable.
@@ -569,15 +569,38 @@ export function deriveLevelsFromProfile(
  * capability level 1-5. Programs that use different tier naming get their
  * base level from the position in `plan_tiers`.
  */
-function tierIdToBaseLevel(tierId: string): 1 | 2 | 3 | 4 | 5 {
+function tierIdToBaseLevel(tierId: string, program?: Program): 1 | 2 | 3 | 4 | 5 {
   const m = tierId.match(/^tier_([a-z0-9]+)/i);
-  if (!m) return 1;
-  const letter = m[1].toLowerCase();
-  if (letter === "a") return 1;
-  if (letter === "b") return 2;
-  if (letter === "c") return 3;
-  if (letter === "d") return 4;
-  if (letter === "e") return 5;
+  if (m) {
+    const letter = m[1].toLowerCase();
+    if (letter === "a") return 1;
+    if (letter === "b") return 2;
+    if (letter === "c") return 3;
+    if (letter === "d") return 4;
+    if (letter === "e") return 5;
+  }
+  /**
+   * Position fallback (2026-09-06). The docstring above has promised this
+   * since it was written; the code returned 1 for anything not matching
+   * `^tier_`.
+   *
+   * FIVE of the nine shipped programmes name their tiers
+   * `foundation` / `progression` / `push`, so every one of their users was
+   * level 1 regardless of tier. For overhead-mobility — the only programme
+   * that actually reaches the composer, since it is the only one with no
+   * authored items — that meant `block_loaded_overhead` and
+   * `block_overhead_endurance` rendered ZERO exercises for every user,
+   * always: no level-3 drill survives the `|level - userLevel| <= 1` window
+   * at level 1.
+   *
+   * Deliberately conservative: index+1 capped at 5, so a three-tier
+   * programme spans 1-3 and the ±1 window reaches level 4 at the top. A
+   * wider spread would hand beginners advanced drills to fix a bug about
+   * advanced users seeing none.
+   */
+  const tiers = (program?.plan_tiers ?? []) as Array<{ id?: string }>;
+  const idx = tiers.findIndex((t) => t?.id === tierId);
+  if (idx >= 0) return Math.min(5, idx + 1) as 1 | 2 | 3 | 4 | 5;
   return 1;
 }
 
