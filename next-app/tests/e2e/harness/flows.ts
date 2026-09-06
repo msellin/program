@@ -927,6 +927,62 @@ export const FLOWS: Flow[] = [
     },
   },
   {
+    /**
+     * The drill-library link inside the activity sheet.
+     *
+     * `OffPlanSheet` read 4 of 6 controls for four sweeps, with "N drills
+     * available" listed as never driven on the five personas that can see it
+     * — it renders only behind the off-plan flag. Five of the previous six
+     * "coverage gaps" this week turned out to be measurement faults, so this
+     * one was assumed to be another. It is not: the element is a real
+     * `<Link href="/off-plan/">` and the only route into the drill library
+     * from a session, and nothing had ever followed it.
+     *
+     * Terminal on purpose. Following it leaves the session, and a flow that
+     * navigates away mid-suite is how `session-rest-extend` lost seventeen
+     * checks fleet-wide in sweep #3. This one ends where it lands.
+     */
+    id: "offplan-drill-library",
+    desc: "Activity sheet → N drills available → the off-plan drill library",
+    async run(ctx) {
+      await openBrief(ctx);
+      const footer = ctx.page.getByRole("button", { name: /log a run, row, or class/i });
+      if ((await footer.count()) === 0) throw new SkipFlow("no activity footer on the Brief");
+      await footer.click({ timeout: CLICK_TIMEOUT_MS });
+      await ctx.page.waitForTimeout(400);
+      await ctx.probe("OffPlanSheet", '[data-surface="OffPlanSheet"]');
+
+      const drills = ctx.page.getByRole("link", { name: /\d+ drills? available/i });
+      if ((await drills.count()) === 0) {
+        // Expected on 17 of 22 personas: the drill list ships dark for the
+        // public catalog, so the link is absent rather than unreachable.
+        throw new SkipFlow("drill library is not enabled for this persona");
+      }
+      const label = ((await drills.first().textContent()) ?? "").trim();
+      await drills.first().click({ timeout: CLICK_TIMEOUT_MS });
+      await ctx.page.waitForURL(/\/off-plan\/?$/, { timeout: 15_000 }).catch(() => {});
+      await ctx.page.waitForTimeout(600);
+      ctx.record("OffPlanSheet", "N drills available");
+      await ctx.capture("01-drill-library");
+
+      await ctx.check(
+        "the drills link lands on the off-plan library",
+        async () => /\/off-plan/.test(new URL(ctx.page.url()).pathname),
+        ctx.page.url(),
+      );
+      await ctx.check(
+        "the library is not empty when the sheet advertised drills",
+        async () => {
+          const n = Number((label.match(/\d+/) ?? ["0"])[0]);
+          if (n === 0) return true; // nothing was promised
+          const body = (await ctx.page.locator("main, body").first().innerText()) ?? "";
+          return body.trim().length > 0 && !/no drills|nothing here/i.test(body);
+        },
+        label,
+      );
+    },
+  },
+  {
     id: "session-note-sheet",
     desc: "⋯ → Note for this exercise — the only place notes still live",
     async run(ctx) {
@@ -950,7 +1006,76 @@ export const FLOWS: Flow[] = [
         await ctx.capture("02-note-typed");
       }
       ctx.note("NoteSheet", "Stop session", "mutating — ends the workout the other flows need");
-      await ctx.tap("NoteSheet", /^(Close|Save|Done)/);
+
+      /**
+       * "Not now" — the last control in the fleet no persona had ever driven.
+       *
+       * It was reported as a coverage gap for four sweeps running and treated
+       * as a measurement fault like the five before it. It is not one: the
+       * flow always finished by tapping Save, so the dismiss path had simply
+       * never been walked. Driving it is worth doing for its own sake, but
+       * the reason it is worth doing FIRST is that dismiss is the destructive
+       * one — the user has typed something and the button throws it away.
+       * Nothing verified that it throws away rather than saves.
+       */
+      const marker = "harness: DISCARD ME " + Date.now();
+      if (await field.count()) {
+        await field.first().fill(marker);
+        await ctx.page.waitForTimeout(200);
+      }
+      const dismissed = await ctx.tap("NoteSheet", /^Not now/);
+      await ctx.page.waitForTimeout(400);
+      if (dismissed) {
+        await ctx.capture("03-after-not-now");
+        await ctx.check(
+          "Not now discards the typed note instead of saving it",
+          async () => {
+            const st = (await ctx.store()) as {
+              logs?: Record<string, { exercises?: Record<string, { notes?: string }> }>;
+            };
+            return !Object.values(st.logs ?? {}).some((d) =>
+              Object.values(d.exercises ?? {}).some((e) => (e.notes ?? "").includes(marker)),
+            );
+          },
+          marker,
+        );
+
+        // Reopen and take the Save path, so the flow still covers what it
+        // covered before. A coverage addition must not cost coverage — the
+        // lesson from `session-rest-jump`.
+        if ((await more.count()) > 0) {
+          await more.click({ timeout: CLICK_TIMEOUT_MS });
+          await ctx.page.waitForTimeout(400);
+          if ((await note.count()) > 0) {
+            await note.click({ timeout: CLICK_TIMEOUT_MS });
+            await ctx.page.waitForTimeout(400);
+          }
+        }
+      }
+
+      const kept = "harness: felt solid, no groin pain";
+      const reopened = ctx.page.locator('[role="dialog"] textarea, [role="dialog"] input[type="text"]');
+      if (await reopened.count()) {
+        await reopened.first().fill(kept);
+        await ctx.page.waitForTimeout(200);
+      }
+      const saved = await ctx.tap("NoteSheet", /^(Save|Done)/);
+      await ctx.page.waitForTimeout(500);
+      if (saved) {
+        await ctx.check(
+          "Save writes the note onto the exercise",
+          async () => {
+            const st = (await ctx.store()) as {
+              logs?: Record<string, { exercises?: Record<string, { notes?: string }> }>;
+            };
+            return Object.values(st.logs ?? {}).some((d) =>
+              Object.values(d.exercises ?? {}).some((e) => (e.notes ?? "").includes(kept)),
+            );
+          },
+        );
+      } else {
+        await ctx.tap("NoteSheet", /^Close/);
+      }
     },
   },
   {

@@ -92,7 +92,7 @@ const SET_FLOW_SURFACES = [
 ] as const;
 
 /** Which surfaces each flow reaches when it completes. */
-const FLOW_SURFACES: Record<string, string[]> = {
+export const FLOW_SURFACES: Record<string, string[]> = {
   "session-log-set": ["SetView", "RestTakeover"],
   "session-edit-past-set": ["SetView"],
   "session-controls": ["SetView"],
@@ -102,6 +102,7 @@ const FLOW_SURFACES: Record<string, string[]> = {
   "session-rest-extend": ["RestTakeover"],
   "session-overflow-sheet": ["OverflowSheet"],
   "activity-log-sheet": ["OffPlanSheet"],
+  "offplan-drill-library": ["OffPlanSheet"],
   "plan-expand-day": ["PerProgramActions", "SessionActions"],
   "session-note-sheet": ["NoteSheet"],
   "session-exercise-details": ["ExerciseDetailsSheet"],
@@ -117,6 +118,19 @@ const FLOW_SURFACES: Record<string, string[]> = {
   "session-stop": ["NoteSheet", "OverflowSheet"],
   "plan-skip-commit": ["ConfirmSheet"],
   "plan-move-commit": ["MoveSheet"],
+  /**
+   * Flows that reach no INTERACTIVE_SURFACES entry, listed explicitly.
+   *
+   * An absent key and a key mapped to `[]` looked identical here and meant
+   * two different things: "reaches nothing" and "someone added a flow and
+   * forgot". A flow in the second category silently loses its surface credit
+   * and the coverage percentage quietly understates. `flow-surface-map.test`
+   * fails on any flow id missing from this object, so the distinction now
+   * has to be made deliberately.
+   */
+  "hip-check": [],
+  "session-hold": [],
+  "cold-load-resume": [],
 };
 
 /** Store keys the schema declares, for the fidelity denominator. */
