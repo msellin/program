@@ -1,0 +1,154 @@
+{
+  "citations": {
+    "adkin_frank_2000": {
+      "review_note": "Verified 2026-09-05 against PMID 10998604: authors, title, journal, volume, issue, pages and year are all correct. What the paper found: 62 healthy young adults (20.3 +/- 1.3 y) stood quietly on a force plate at 40, 100 and 160 cm above ground; centre-of-pressure amplitude fell and its frequency rose linearly as postural threat increased, i.e. the nervous system progressively tightened postural control under threat. It recorded centre-of-pressure kinematics only. Corrected 2026-09-05: the record is sound, but the claim attached to it in handstand-walk prose ('postural threat alters muscle activation before the fall') is not this paper's finding, because no EMG was recorded here; that result belongs to carpenter_frank_2001. The 'Adkin & Frank 2002' companion cited alongside it in the same sentence has no entry in this library and was not located.",
+      "id_note": "Identifier, byline and bibliographic fields all correct. The defect was the claim attached to it in prose: this study measured centre-of-pressure only, contains no EMG, and was credited with a muscle-activation finding that belongs to Carpenter 2001. The paired 'Adkin & Frank 2002' has no record here."
+    },
+    "carpenter_frank_2001": {
+      "review_note": "Verified 2026-09-05 against PMID 11417462: authors, title, journal, volume, issue, pages and year are all correct. What the paper found: eight young healthy adults in quiet upright stance under three levels of postural threat (up to 81 cm elevation) adopted a stiffening strategy under high threat, with significant changes in kinematic, kinetic and EMG variables and an anterior-posterior stiffness constant 27.5% higher than at low threat. This is the correct source for the claim that postural threat changes muscle activation. Corrected 2026-09-05: the record is sound, but 'anxiety degrades balance strategy' overstates it two ways. The paper reports a different strategy (stiffening), not a demonstrated decrement, and anxiety was not the manipulated variable - elevation was. n = 8, quiet bipedal stance, no inversion and no hand support.",
+      "id_note": "Identifier and byline correct. The defect was interpretive: a change of postural strategy under threat was reported as a degradation of balance, and threat was read as anxiety."
+    },
+    "kinoshita_2022": {
+      "title": "Stepwise increase of upper limb muscle activity induced by progressive 4 positions of a handstand training",
+      "url": "https://doi.org/10.3233/IES-210169",
+      "review_note": "Verified 2026-09-05 via Crossref DOI 10.3233/IES-210169: Isokinetics and Exercise Science 30:127-133, issued 2022-05, six authors (Kinoshita, Hoshino, Yokota, Hashimoto, Nishizawa, Kida). What the paper found: surface EMG of eight shoulder-girdle and upper-limb muscles (upper, middle and lower trapezius; serratus anterior; anterior and middle deltoid; infraspinatus; latissimus dorsi) across four static positions - 90 degrees, 135 degrees, elbow stand, handstand - showed muscle activity around the shoulder rising gradually across the progression, with the scapular stabilisers already reaching handstand-like levels in the earlier positions. Acute cross-sectional design: no training arm, no follow-up, no outcome measure, and participant count not given in the deposited abstract. Corrected 2026-09-05: the title stored here was a paraphrase, not the published title, and the record carried no link. The byline remains abbreviated as 'Kinoshita T, et al.' because per-author initials for the other five were not retrievable from the deposited record; a human with journal access should complete it.",
+      "id_note": "Paper is real and the DOI is correct. Stored title was a paraphrase ('Progressive four-position handstand EMG activity') rather than the published one; no URL was carried; the byline is still truncated for a six-author paper."
+    },
+    "konopka_2014": {
+      "review_note": "Verified 2026-09-05 against PMID 23873965 / PMCID PMC3968823: authors, title, journal, volume, pages and year are all correct. The article is not open access and full text was not reachable through PubMed Central, Europe PMC or the Europe PMC PDF renderer. What the retrievable abstract says: proteins regulating mitochondrial biogenesis, fusion and fission were measured before and after aerobic exercise training in young men (20 +/- 1 y) and older men (74 +/- 3 y); those proteins increased independent of age, skeletal muscle hypertrophy occurred independent of age, and the VO2peak improvement was more pronounced in the young men. Direction only - no percentages, no duration, and protein content rather than enzyme activity. Corrected 2026-09-05: the magnitudes this library and the programmes attributed to this paper (beta-HAD +397-435%, CS +65-102%, PGC-1alpha +55-62% in 12 weeks) have no retrievable source. A Europe PMC full-text search for beta-HAD with this author returns zero hits, and the same lab's 2010 companion (PMID 20566734, 12 weeks of cycle-ergometer training in nine older women) reported PGC-1alpha protein content 20 +/- 5% LOWER after training. This is not a claim of fabrication; it is a record that nothing in the public record substantiates the figures, and they should not be restated until someone with journal access checks the tables.",
+      "id_note": "Identifier and bibliographic fields correct. The defect is downstream: three effect sizes were stated as measured facts of this paper, are absent from everything retrievable, describe enzyme activities the abstract does not report, and are contradicted in sign on one marker by the same lab's companion study."
+    },
+    "sands_2000": {
+      "doi": "10.2165/00007256-200030050-00004",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11103849/",
+      "review_note": "Verified 2026-09-05 against PMID 11103849: Sands WA, Sports Med 2000 Nov;30(5):359-73. Author, year, journal, volume and pages all correct; DOI and link added, both of which were missing. What the paper is: a narrative bridging article on injury prevention in women's artistic gymnastics, arguing that prevention must combine scientific and medical knowledge with intimate practical knowledge of the sport, and noting that most gymnastics research to date has been descriptive. It reports no effect size, no comparison and no readiness-screening protocol in its abstract; the full text is paywalled with no PMC deposit, so if a screening framework appears in the body, nobody citing it here has read it. Corrected 2026-09-05: four programmes cite it as the anchor for prerequisite gating in adult recreational users. It concerns young elite female artistic gymnasts in 2000 and licenses a general principle at most, not any specific gate.",
+      "id_note": "Record accurate; DOI and URL were absent and are now supplied. The defect is reach: a narrative review of women's artistic gymnastics, reporting no finding, was used to anchor prerequisite gates for adult recreational users in four programmes."
+    },
+    "yiou_2017": {
+      "review_note": "Verified 2026-09-05 against PMID 29184756: authors, title, journal, volume, issue, pages and year all correct. What the paper is: a state-of-the-art review of balance control during bipedal gait initiation from quiet standing, covering anticipatory postural adjustments, stance-leg stiffness, foot placement, lateral ankle strategy, swing-foot strike pattern and vertical centre-of-mass braking, framed for aging, neurological and orthopedic conditions and aimed at rehabilitation targeting. Corrected 2026-09-05: it is cited in handstand-walk for initiating locomotion on the hands while inverted. The general point it does license - a postural shift precedes the first step rather than following it - is real; nothing in the paper addresses inversion, hand support, or a base of support at the hands. Note also that it entered the record as a replacement for an unlocatable citation (ferrari_2021), which is the situation in which a near-enough substitution is easiest to make.",
+      "id_note": "Identifier and byline correct. The defect is population and task: a review of able-bodied and frail bipedal gait initiation applied to handstand walking."
+    },
+    "youdas_2010": {
+      "authors": "Youdas JW, Amundson CL, Cicero KS, Hahn JJ, Harezlak DT, Hollman JH",
+      "review_note": "Byline corrected 2026-09-05 against PMID 21068680. The record previously read 'Youdas JW, Amundson CL, Cicirello KS, Hellmers CJ, Hollman JH': Cicirello KS and Hellmers CJ are not on the paper, and Hahn JJ and Harezlak DT were missing. Journal, volume, issue, pages, year and PMID were all correct. What the paper found: surface EMG in 21 men and 4 women across three conditions - conventional pull-up, chin-up, and a rotating-handle (Perfect-Pullup) variant - with a sequential activation pattern in which lower trapezius and pectoralis major initiate the repetition and biceps brachii and latissimus dorsi complete it. No wide-grip condition, no neutral-grip condition, no false grip, and brachialis was not one of the eight recorded muscles. Corrected 2026-09-05: the same wrong byline was carried identically in first-strict-pullup and muscle-up reference blocks, which is why the cross-record consistency test passed over it; apply this corrected byline in all three places.",
+      "id_note": "Two authors invented and two omitted, identically here and in both programme reference blocks, so no cross-record test could see it. Two of the claims built on this paper describe conditions it never ran."
+    },
+    "beattie_2014": {
+      "verification_status": "verified",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24532151/",
+      "review_note": "Verified 2026-09-05 via Crossref 10.1007/s40279-014-0157-y and PMID 24532151: authors, title, journal, volume, issue, pages and year all exact; link added, having been null. What the paper found: a systematic review of 26 studies asking whether strength training improves economy, VO2max and muscle power in well-trained endurance athletes (at least 6 months of endurance training, at least 6 h/week or VO2max at least 50 mL/min/kg); it concluded that strength training improved time-trial performance, economy, VO2max and vMART in competitive endurance athletes. Corrected 2026-09-05: the record was flagged pending and is now verified, because the defect was never the paper. It was withdrawn from first-strict-pullup's references for being an endurance-athlete review cited for grip dose, and that judgement stands: it says nothing about grip endurance, isometric hang dose or loaded carries. The withdrawal was incomplete - pointers survived in two drills in exercises.json and are removed by this patch.",
+      "id_note": "Record was correct but unlinked and marked pending. The real defect was attachment, not attribution: the programme reference was withdrawn while two exercises.json evidence_refs pointers were left behind."
+    },
+    "dickie_2017": {
+      "verification_status": "verified",
+      "doi": "10.1016/j.jelekin.2016.11.004",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28011412/",
+      "review_note": "Verified 2026-09-05 via Crossref 10.1016/j.jelekin.2016.11.004 and PMID 28011412: authors, title, journal, volume, pages and year all exact; DOI and link added, both previously absent. What the paper found: peak and average rectified EMG of the shoulder-arm-forearm complex in 19 strength-trained males across four conditions - supinated, pronated, neutral and rope pull-ups. Its conclusion is that activation is SIMILAR across hand orientations despite the differing grips, with the exception of middle trapezius in pronated versus neutral; the clear difference it does report is between concentric and eccentric phases, with brachioradialis, biceps brachii and pectoralis major significantly more active concentrically. Corrected 2026-09-05: cited in muscle-up for 'the false-grip pull-up as its own capability'. False grip was not one of the four conditions, and the paper's headline finding runs the opposite way to the framing it was used to support.",
+      "id_note": "Record correct but unlinked and marked pending. The defect is claim-fit: false grip was never studied, and the paper concludes hand orientation largely does NOT differentiate activation, which is the reverse of what it was cited for."
+    },
+    "bosquet_2007": {
+      "review_note": "Verified 2026-09-05 against PMID 17762369: authors, title, journal, volume, issue, pages and year all exact. Full text is closed (Unpaywall reports oa_status closed, no OA locations), so only the abstract was retrievable. What the paper found: 27 of 182 screened studies met inclusion; the optimal strategy is a 2-week taper (overall effect 0.59 +/- 0.33, p < 0.001) in which training volume is exponentially decreased by 41-60% (overall effect 0.72 +/- 0.36, p < 0.001) without modifying training intensity or frequency. Corrected 2026-09-05: it was described in rowing-2k-test-prep as the stronger single-source anchor for a ~3% performance uplift. The retrievable record reports standardised effect sizes, not percentages, and no 3% figure appears in it; the same 3% is attributed elsewhere in that programme to Mujika & Padilla 2000. The structural prescription this paper supports verbatim; the quantified promise it does not, and full text would be needed to close the question.",
+      "id_note": "Identifier and bibliographic fields correct. The defect is the number: a percentage uplift was credited to a meta-analysis that reports standardised effect sizes, with full text unavailable to check."
+    }
+  },
+  "programme_used_for": [
+    {
+      "slug": "engine-builder",
+      "id": "konopka_2014",
+      "used_for": "Aerobic training in young men (20 +/- 1 y) and older men (74 +/- 3 y) raised the protein content of mitochondrial biogenesis, fusion and fission markers, and did so independent of age; skeletal muscle hypertrophy was likewise age-independent, while the VO2peak improvement was larger in the young men. Cited here for that directional point only: an aerobic block raises mitochondrial-biogenesis markers, and an older trainee is not excluded from the response. How large an oxidative adaptation an 8-week block should expect is an engineering choice in Terav's own progression logic, not a figure from this paper. Corrected 2026-09-05: this reference previously supplied effect sizes (beta-HAD +397-435%, CS +65-102%, PGC-1alpha +55-62% in 12 weeks) that have no retrievable source, that describe enzyme activities rather than the protein content the paper reports, and that the same lab's 2010 companion contradicts in sign on one marker (PGC-1alpha protein 20 +/- 5% lower after 12 weeks). The figures are withdrawn rather than restated; the full text is paywalled, so a human with journal access would have to settle what the tables actually say."
+    },
+    {
+      "slug": "engine-builder-block-2",
+      "id": "konopka_2014",
+      "used_for": "Directional support only: aerobic training raised mitochondrial-biogenesis protein markers in both young and older men, so continuing aerobic work into a second block is not running into a demonstrated biological ceiling. What Block 2 adds on top of Block 1, and how much, is an engineering choice from Terav's own progression logic. Corrected 2026-09-05: this reference previously described the paper as '12-week enzyme-activity data' anchoring the incremental Block 2 gains. The paper reports protein content rather than enzyme activity, its abstract states no duration, and the enzyme percentages it was said to supply are not retrievable from it or from any full-text search."
+    },
+    {
+      "slug": "first-strict-pullup",
+      "id": "youdas_2010",
+      "used_for": "Surface EMG in 21 men and 4 women (mean age ~25 y) across three conditions: conventional pull-up, chin-up, and a rotating-handle (Perfect-Pullup) variant. One finding is used here: a sequential activation pattern in which lower trapezius and pectoralis major initiate the repetition and biceps brachii and latissimus dorsi complete it. That is the evidence behind teaching a scapular phase before the concentric pull. Corrected 2026-09-05: this reference also claimed 'wide-grip biases lat, neutral biases brachialis'. No wide-grip and no neutral-grip condition was run, and brachialis was not among the eight recorded muscles, so that half described a study that did not happen and is withdrawn. The grip-width rotation in Tier D is an engineering choice about varying the stimulus and now carries no citation. The byline was also wrong in this reference block and must be corrected to Youdas JW, Amundson CL, Cicero KS, Hahn JJ, Harezlak DT, Hollman JH."
+    },
+    {
+      "slug": "muscle-up",
+      "id": "youdas_2010",
+      "used_for": "Surface EMG in 25 recreationally active adults across pull-up, chin-up and a rotating-handle variant, showing a sequential activation order: lower trapezius and pectoralis major initiate the repetition, biceps brachii and latissimus dorsi complete it. Cited here only for that ordering, which is why the shared pull drill library trains the scapular phase before the pull. Corrected 2026-09-05: this reference previously said the paper supports 'the false-grip-as-separate-capability framing'. False grip was not one of the three conditions, so it cannot. Treating false grip as its own capability is an engineering choice drawn from gymnastics coaching practice and currently has no citation behind it in this library. The byline was also wrong in this reference block and must be corrected to Youdas JW, Amundson CL, Cicero KS, Hahn JJ, Harezlak DT, Hollman JH."
+    },
+    {
+      "slug": "muscle-up",
+      "id": "dickie_2017",
+      "used_for": "Peak and average rectified EMG of the shoulder-arm-forearm complex in 19 strength-trained males (~25 y) across four bar conditions: supinated, pronated, neutral and rope. Its conclusion is that activation is SIMILAR across hand orientations, with middle trapezius in pronated versus neutral the one exception; the difference it does report clearly is between phases, with brachioradialis, biceps brachii and pectoralis major significantly more active concentrically than eccentrically. Cited here for that phase difference, which supports treating pulls and negatives as distinct stimuli rather than the same drill at two speeds. Corrected 2026-09-05: this reference previously cited the paper for 'the false-grip pull-up as its own capability'. False grip was not among the four conditions, and the paper's headline finding runs the other way - hand orientation largely did not differentiate activation. Ordering the drill library by grip is an engineering choice, not a result from this study, and the population is bar work in trained males applied here to ring work in a mixed-ability programme."
+    },
+    {
+      "slug": "first-strict-pullup",
+      "id": "sands_2000",
+      "used_for": "Narrative review of injury prevention in women's artistic gymnastics, arguing that prevention has to be grounded in science and medicine while making pragmatic links to how the sport is actually practised, and observing that most gymnastics research to that point had been descriptive. It reports no effect size, no comparison and no readiness-screening protocol; the full text is paywalled. Cited here only for the general principle that skill demands should be matched to demonstrated readiness rather than to ambition. Corrected 2026-09-05: this reference previously said the paper 'supports the Tier A to B to C to D gating'. It supports no specific gate. The tier ladder for adult recreational users is a deliberately conservative engineering choice and is not licensed by a 2000 review of young elite female gymnasts."
+    },
+    {
+      "slug": "muscle-up",
+      "id": "sands_2000",
+      "used_for": "Narrative review of injury prevention in women's artistic gymnastics; reports no effect size, no comparison and no readiness-screening protocol in its abstract, and the full text is paywalled. Cited here only for the general principle that a high-demand skill should be attempted from demonstrated readiness rather than from ambition. Corrected 2026-09-05: this reference previously said the paper 'anchors the strict-pull-up + ring-dip prerequisite gate'. It anchors no gate. That prerequisite is an engineering choice made by Terav, and because it is a gate that withholds a movement from a user, it should be presented as our judgement rather than borrow authority from a paper about young elite female gymnasts."
+    },
+    {
+      "slug": "handstand-walk",
+      "id": "sands_2000",
+      "used_for": "Narrative review of injury prevention in women's artistic gymnastics: a bridging article, reporting no finding and offering no screening protocol in its abstract, with the full text paywalled. Cited here only for the general principle that readiness should gate exposure to a high-demand skill. Corrected 2026-09-05: previously read as support for prerequisite gating on advanced drills. The gating in this programme is an engineering choice; the population in the paper is young elite female gymnasts in 2000, not self-taught adults learning to invert."
+    },
+    {
+      "slug": "overhead-mobility",
+      "id": "sands_2000",
+      "used_for": "Narrative review of injury prevention in women's artistic gymnastics. It offers a framework of thinking - prevention grounded in science and medicine plus intimate knowledge of the demands of the movement - and no protocol, no effect size and no comparison; the full text is paywalled. Corrected 2026-09-05: previously described as a 'skill-readiness assessment framework' informing prerequisite gating. It is not an assessment framework. The prerequisite gating in this programme is an engineering choice, and the paper's population (young elite female gymnasts) is far from adult users working on overhead position."
+    },
+    {
+      "slug": "handstand-walk",
+      "id": "kinoshita_2022",
+      "used_for": "Acute surface EMG of eight shoulder-girdle and upper-limb muscles (upper, middle and lower trapezius; serratus anterior; anterior and middle deltoid; infraspinatus; latissimus dorsi) across four static handstand-training positions: 90 degrees, 135 degrees, elbow stand, and full handstand. Muscle activity around the shoulder increased gradually across the four positions, and the scapular stabilisers (upper and middle trapezius, serratus anterior) reached handstand-like levels in the earlier positions. That stepwise shoulder loading is what the position ladder in block_skill_A_kinoshita is built on: it is a defensible way to expose a beginner to handstand-like scapular demand before the handstand. Corrected 2026-09-05: three overreaches removed. (1) No core or trunk musculature was measured - all eight electrodes were on the shoulder girdle and upper limb - so 'EMG activity of shoulder / core musculature' is wrong, and hs_hollow_body_hold sits in this block as a coaching addition, not as something this paper measured. (2) The third position is an elbow stand; 'elbow / straddle-L' is wrong, as straddle-L appears nowhere in the study. (3) This is an acute cross-sectional comparison with no training arm, no follow-up and no outcome measure, so it cannot 'validate' a progression - that training through the ladder produces a handstand is an engineering choice. The paper frames the positions as preferred for young beginners and recovering gymnasts, and the participant count is not in the deposited abstract. DOI 10.3233/IES-210169 has been added to the library record, so the 'DOI missing' flag can come off."
+    },
+    {
+      "slug": "handstand-walk",
+      "id": "yiou_2017",
+      "used_for": "State-of-the-art review of balance control during bipedal gait initiation from quiet standing, covering anticipatory postural adjustments, stance-leg stiffness, foot placement, lateral ankle strategy, swing-foot strike pattern and vertical centre-of-mass braking; written for aging, neurological and orthopedic conditions and aimed at rehabilitation. The one point borrowed here is general and real: a postural shift precedes the first step rather than following it, which is why single_step_attempt trains the weight shift before the step rather than the step alone. Corrected 2026-09-05: previously read as direct support for the drill design and the 'lean the shape toward the far wall' cue. The paper addresses neither inversion nor hand support, and nothing in it concerns a base of support at the hands, so carrying anticipatory postural adjustment across to initiating locomotion while inverted is an engineering choice. Worth remembering that this citation itself replaced an unlocatable one (ferrari_2021) on 2026-08-18, which is exactly the setting in which a near-enough substitution slips through."
+    },
+    {
+      "slug": "rowing-2k-test-prep",
+      "id": "bosquet_2007",
+      "used_for": "Meta-analysis of 27 tapering studies (from 182 screened). It supports the structure of the taper week as prescribed here, verbatim: a 2-week taper (overall effect 0.59 +/- 0.33, p < 0.001) in which training volume is decreased exponentially by 41-60% (overall effect 0.72 +/- 0.36, p < 0.001) with no change to training intensity or frequency. Corrected 2026-09-05: this reference previously called the paper 'the stronger single-source anchor' for a ~3% performance uplift. The paper reports standardised effect sizes, not percentages, and no 3% figure appears anywhere in its retrievable record; the same 3% is attributed elsewhere in this programme to Mujika & Padilla 2000, so the anchor claim was circular. Full text is closed and could not be checked, so the number is unconfirmed rather than disproved. What is cited is the taper structure; any percentage shown to a user should read as Terav's own expectation, not as a measured meta-analytic result."
+    }
+  ],
+  "programme_text": [
+    {
+      "slug": "handstand-walk",
+      "find": "Adkin & Frank 2000/2002 (postural threat alters muscle activation before the fall); Carpenter 2001 (anxiety degrades balance strategy)",
+      "replace": "Adkin & Frank 2000 (as postural threat rises, the nervous system tightens postural control - centre-of-pressure amplitude down and frequency up in 62 healthy young adults standing quietly on a raised platform; this study recorded centre-of-pressure only, no muscle activity, and there is no 2002 companion paper in this library); Carpenter 2001 (under postural threat, eight quiet standers adopted a stiffening strategy, with significant changes in kinematic, kinetic and EMG variables and anterior-posterior stiffness 27.5% higher than at low threat - a different balance strategy, not a measured decrement, and elevation rather than anxiety was the manipulated variable). Corrected 2026-09-05: the muscle-activation claim had been attributed to Adkin, which measured none, and Carpenter had been read as showing that anxiety degrades balance; both studied quiet bipedal standing, so treating them as evidence about falling out of an inverted handstand is an engineering choice, not a licensed transfer"
+    },
+    {
+      "slug": "engine-builder",
+      "find": "Konopka 2014 measured \u03b2-HAD +397-435%, CS +65-102%, PGC-1\u03b1 +55-62% in 12 weeks in older adults \u2014 no age blunting of relative response.",
+      "replace": "Konopka 2014 measured the protein content of mitochondrial biogenesis, fusion and fission markers before and after aerobic training in young men (20 +/- 1 y) and older men (74 +/- 3 y): those markers rose independent of age, as did muscle hypertrophy, while the VO2peak improvement was larger in the young men. Corrected 2026-09-05: the enzyme percentages previously stated here as measured fact (beta-HAD +397-435%, CS +65-102%, PGC-1alpha +55-62%) have no retrievable source, describe enzyme activity rather than the protein content this paper reports, and are contradicted in sign on one marker by the same lab's 2010 companion, which found PGC-1alpha protein 20 +/- 5% lower after 12 weeks. Direction is cited; magnitude is not."
+    },
+    {
+      "slug": "engine-builder",
+      "find": "Konopka 2014: 12 weeks of 3-4\u00d7/week cycling at 60-80% HRR produced PGC-1\u03b1 +55-62%, CS +65-102%, \u03b2-HAD +397-435%.",
+      "replace": "Konopka 2014: aerobic training raised mitochondrial-biogenesis protein markers in both young and older men, independent of age. Corrected 2026-09-05: the percentages previously quoted here are not retrievable from that paper and are withdrawn rather than restated; the case for Z1 steady work as the base-load session rests on the sources below and on Terav's own progression logic."
+    },
+    {
+      "slug": "engine-builder-block-2",
+      "find": "Konopka 2014 12-week data shows \u03b2-HAD +397-435% at week 12 (already showing at week 8 in Block 1). Additional gains here compound.",
+      "replace": "Konopka 2014 reports higher mitochondrial-biogenesis protein content after aerobic training in young and older men, with no age blunting - direction, not a percentage. Corrected 2026-09-05: the beta-HAD +397-435% figure attributed to it here is not retrievable from the paper, which measured protein content rather than enzyme activity. That oxidative adaptation keeps accruing into a second block is an engineering choice, and Block 2 should be described that way rather than as a quantified continuation."
+    }
+  ],
+  "landing_text": [
+    {
+      "find": "12 wks progressive cycling: PGC-1\u03b1 +55-62%, CS +65-102%, COXIV +80-126%; no age difference",
+      "replace": "12 wks aerobic training in young and older men: mitochondrial biogenesis protein markers up, independent of age (VO2peak gain larger in the young). Corrected 2026-09-05: the enzyme percentages printed here previously are not retrievable from this paper, which reports direction only"
+    }
+  ],
+  "exercises_evidence_refs": [
+    {
+      "exercise_id": "pu_dead_hang",
+      "remove_ref": "beattie_2014"
+    },
+    {
+      "exercise_id": "pu_farmers_carry",
+      "remove_ref": "beattie_2014"
+    }
+  ]
+}

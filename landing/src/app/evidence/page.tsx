@@ -45,7 +45,7 @@ const groups: Group[] = [
     citations: [
       { cite: "Little JP et al. 2010, J Physiol 588(6):1011-1022", claim: "HIIT drives PGC-1α +25% and mitochondrial protein content in 2 weeks (n=7)" },
       { cite: "Perry CG et al. 2010, Appl Physiol Nutr Metab 35(6):837-844", claim: "7 weeks 3×/wk HIIT: citrate synthase / β-HAD / COXIV +28-36%" },
-      { cite: "Konopka AR et al. 2014, J Gerontol A 69(4):371-378", claim: "12 wks progressive cycling: PGC-1α +55-62%, CS +65-102%, COXIV +80-126%; no age difference" },
+      { cite: "Konopka AR et al. 2014, J Gerontol A 69(4):371-378", claim: "12 wks aerobic training in young and older men: mitochondrial biogenesis protein markers up, independent of age (VO2peak gain larger in the young). Corrected 2026-09-05: the enzyme percentages printed here previously are not retrievable from this paper, which reports direction only" },
       { cite: "Bishop DJ et al. 2019, Physiology 34(1):56-70", claim: "Molecular pathway synthesis for mitochondrial biogenesis (AMPK, Ca²⁺/CaMKII, p38 MAPK)" },
       { cite: "Egan B, Zierath JR 2013, Cell Metab 17(2):162-184", claim: "Molecular exercise-adaptation review — the definitive reference for the pathway map" },
       { cite: "Andersen P, Henriksson J 1977, J Physiol 270(3):677-690", claim: "Foundational: capillary density +20%, VO2max +16% in 8 weeks of endurance training" },

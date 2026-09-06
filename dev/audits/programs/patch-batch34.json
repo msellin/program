@@ -1,0 +1,231 @@
+{
+  "citations": {
+    "feito_2018": {
+      "id_note": "Corrected 2026-09-05: bibliography is right, the use was not. This is a definitional review of high-intensity functional training, not a 16-week trial. Its own 16-week sentence reports VO2max (~12%), body fat (~8%) and bone mineral content (~1%); it reports no strength outcome. The strength half of the claim it was cited for traces to a different 2018 paper by the same first author (Feito Y, Hoffstetter W, Serafini P, Mangine G, PLoS ONE 13:e0198324), which measured 5RM strength and WOD performance but not VO2max. No single cited paper shows strength and VO2max improving concurrently. Verified via Europe PMC PMID 30087252, DOI 10.3390/sports6030076."
+    },
+    "fyfe_2016": {
+      "authors": "Fyfe JJ, Bartlett JD, Hanson ED, Stepto NK, Bishop DJ",
+      "doi": "10.3389/fphys.2016.00487",
+      "pmid": "27857692",
+      "id_note": "Byline corrected 2026-09-05. Frontiers in Physiology 7:487 is 'Endurance Training Intensity Does Not Mediate Interference to Maximal Lower-Body Strength Gain during Short-Term Concurrent Training', by Fyfe JJ, Bartlett JD, Hanson ED, Stepto NK, Bishop DJ (Crossref 10.3389/fphys.2016.00487, PMID 27857692). The record previously carried the byline of a different Fyfe 2016 paper (the mTORC1 / microRNA study, Am J Physiol Regul Integr Comp Physiol 310:R1297-R1311, Fyfe JJ, Bishop DJ, Zacharewicz E, Russell AP, Stepto NK). Two programme records carried a third byline naming 'Hamilton DL', who is on neither paper. Substantively: the trial work-matched its two endurance arms, so endurance volume was held constant and never manipulated. It supports only the negative finding that endurance intensity is not a critical mediator of interference; it cannot support 'volume drives interference'. data-integrity.test.ts compares first surname only, which is why three different wrong bylines passed."
+    },
+    "impey_2018": {
+      "id_note": "Corrected 2026-09-05: bibliography is right, the reach is not. Every train-low model this framework reviews (twice-daily, fasted, post-exercise CHO restriction, sleep-low) is an ENDURANCE protocol and the outcomes are oxidative enzymes and endurance performance. Resistance training and concurrent programming are outside the paper's scope, so 'fuel resistance sessions fully' is an extrapolation rather than a finding. The paper's own performance caveat is not carried in programme copy: of 11 studies, 37% showed performance improvement and 63% showed no change, which is why the authors frame it as a hypothesis. Verified via Europe PMC PMID 29453741."
+    },
+    "joyner_coyle_2008": {
+      "doi": "10.1113/jphysiol.2007.143834",
+      "pmid": "17901124",
+      "id_note": "Corrected 2026-09-05: bibliography is right, several uses were not. Full text was retrieved and read. The paper models endurance performance as VO2max, lactate threshold and efficiency INTERACTING multiplicatively; it ranks no determinant above another and frames none as a metric to track. The word 'plateau' does not occur anywhere in it. It contains no trainability magnitude for lactate threshold of any kind: the only numeric change figures are efficiency case reports (about 1-3% per year; 14% over 5 years; 8% over 7 years) and a greater-than-twofold figure for skeletal-muscle oxidative capacity. 'Specificity of adaptation' is not a concept this paper addresses. What it does support is that the oxidative capacity underlying the lactate threshold is highly plastic."
+    },
+    "kibler_2013": {
+      "authors": "Kibler WB, Ludewig PM, McClure PW, Michener LA, Bak K, Sciascia AD",
+      "year": 2013,
+      "title": "Clinical implications of scapular dyskinesis in shoulder injury: the 2013 consensus statement from the Scapular Summit",
+      "source": "British Journal of Sports Medicine 47(14):877-885",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23580420/",
+      "display_short": "Kibler et al. 2013",
+      "display_line": "Kibler et al. (2013), British Journal of Sports Medicine 47(14)",
+      "doi": "10.1136/bjsports-2013-092425",
+      "pmid": "23580420",
+      "review_note": "Supersedes the 2026-08-17 note, which changed this record to the 2010 Kibler & Sciascia current-concepts paper while keeping the id kibler_2013 'for stability of downstream references'. That choice left one id resolving to two different real papers: first-strict-pullup and muscle-up describe the 2013 consensus, overhead-mobility describes the 2010 paper, and /evidence served the 2010 record to all three.",
+      "id_note": "Corrected 2026-09-05: one id, two different real papers. The id now serves the paper two of its three programmes actually mean, the 2013 Scapular Summit consensus (PMID 23580420, DOI 10.1136/bjsports-2013-092425), which is also the paper the id's year claims. The other paper is real and separate: Kibler WB, Sciascia A (2010), 'Current concepts: scapular dyskinesis', BJSM 44(5):300-305, PMID 19996329, DOI 10.1136/bjsm.2009.058834 - it needs its own id before overhead-mobility's reference can resolve correctly. Substantive limits on the 2013 consensus: it states the exact role of dyskinesis in creating or exacerbating shoulder dysfunction 'is not clearly defined', calls dyskinesis a 'potential impairment', and endorses scapular rehabilitation only 'within a more comprehensive shoulder rehabilitation programme'. Both papers concern injured shoulders; neither studies hang loading. data-integrity.test.ts's title-overlap guard does not catch this pair: overlap is exactly 0.50 and the threshold is < 0.5."
+    },
+    "kraemer_2002_acsm_position_stand": {
+      "id_note": "Corrected 2026-09-05: record is bibliographically right (PubMed 11828249; byline 'Kraemer WJ, Adams K, Cafarelli E, et al.; American College of Sports Medicine'), but it is SUPERSEDED and its reach is wrong. An identically titled ACSM position stand exists at Med Sci Sports Exerc 2009;41(3):687-708, PMID 19204579. The 2002 stand is a within-programme load-progression document for HEALTHY ADULTS ('2-10% increase in load when the individual can perform the current workload for one to two repetitions over the desired number'); it says nothing about readiness to graduate out of a post-layoff or rehabilitation re-introduction phase. This id is wired in code, not programme data: src/lib/engine/proposal-citations.ts maps readiness_after_layoff to it, and ProposalCard prints 'Source: ACSM 2002' under the proposal that moves a user out of the rehab re-intro phase in anterior-hip-rebuild. Whether any progression-model stand can warrant that transition is a clinical judgement and is not resolved here."
+    },
+    "little_2010": {
+      "title": "A practical model of low-volume high-intensity interval training induces mitochondrial biogenesis in human skeletal muscle: potential mechanisms",
+      "pmid": "20100740",
+      "id_note": "Corrected 2026-09-05: title restored to include the subtitle ': potential mechanisms', which the record dropped. Identifier resolves correctly (PubMed 20100740, J Physiol 588 Pt 6:1011-22). Substantively the study is six HIIT sessions over two weeks in 7 young men (VO2peak 46 ml/kg/min), with no low-intensity arm and no base phase, so it cannot evidence a Z1-first sequencing decision. The '5-10 sessions' figure attributed to it in engine-builder's progression_rationale and physiological_targets is not in this paper."
+    },
+    "ludewig_cook_2000": {
+      "pmid": "10696154",
+      "id_note": "Corrected 2026-09-05: record is bibliographically right (PubMed 10696154) and the association framing overhead-mobility uses is faithful. Two uses exceeded it. (1) The paper measured EMG amplitude during RAMPED humeral elevation across phases of 31-60, 61-90 and 91-120 degrees under 0 / 2.3 / 4.6 kg handheld loads, in 52 construction workers, cross-sectionally. It measured no endurance, no sustained holds, and nothing at or near 170 degrees, so it cannot underpin handstand-walk's wall-supported-shrugs drill or its 170-degree prerequisite. (2) It does not support 'scap upward-rotation timing is the dominant driver of subacromial space' (overhead-mobility session_rationale.why_scap_first); that is a causal-magnitude claim in neither this abstract nor Ludewig & Reynolds 2009."
+    },
+    "manske_2010": {
+      "title": "A randomized controlled single-blinded comparison of stretching versus stretching and joint mobilization for posterior shoulder tightness measured by internal rotation motion loss",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23015927/",
+      "doi": "10.1177/1941738109347775",
+      "pmid": "23015927",
+      "id_note": "Corrected 2026-09-05: title restored to include the operative half the record dropped ('measured by internal rotation motion loss'), and a real identifier added in place of the PubMed search string the programme record carried. The citation was MISATTRIBUTED in use: the trial tested the CROSS-BODY stretch (alone, versus cross-body stretch plus posterior joint mobilisation), not the sleeper stretch, in 39 asymptomatic college-age participants (7 men, 32 women), and the between-group difference in internal-rotation gain was not statistically significant. Choosing between the sleeper and cross-body stretch is exactly the question this citation was meant to settle, and it cannot."
+    },
+    "meyer_morrison_zuniga_2017": {
+      "pmid": "28363035",
+      "id_note": "Corrected 2026-09-05: record is bibliographically right (PubMed 28363035, DOI 10.1177/2165079916685568). The whole substantive abstract is that this systematic review of 13 studies (N = 2,326 adults) found CrossFit 'comparable to other exercise programs with similar injury rates and health outcomes', with a recommendation that occupational health nurses assess previous injuries first. It contains no 10-week trial, no VO2max figure, no body-composition figure and no strength figure. Full text was not retrievable (paywalled), so the claim cannot be excluded from the body - only that nothing retrievable supports it. Any such result belongs to a primary study inside the review, and that study is what would have to be cited."
+    },
+    "midgley_2007": {
+      "authors": "Midgley AW, McNaughton LR, Jones AM",
+      "title": "Training to enhance the physiological determinants of long-distance running performance",
+      "source": "Sports Med 37(10):857-880",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17887811/",
+      "display_short": "Midgley et al. 2007",
+      "display_line": "Midgley et al. (2007), Sports Med 37(10)",
+      "pmid": "17887811",
+      "id_note": "Corrected 2026-09-05: the record fused two different real papers and identified neither. The title and the Wilkinson byline belong to Midgley AW, McNaughton LR, Wilkinson M (2006), 'Is there an optimal training intensity for enhancing the maximal oxygen uptake of distance runners?', Sports Med 36(2):117-132, PMID 16464121. The year, volume and pages belong to Midgley AW, McNaughton LR, Jones AM (2007), Sports Med 37(10):857-880, PMID 17887811, which carries an erratum at Sports Med 2007;37(11):1000. The record now serves the 2007 paper that matches the locator the id claims. Note for whoever uses it: NEITHER candidate is a meta-analysis or an intensity-distribution pooling, and the 2007 paper concludes there is 'insufficient direct scientific evidence to formulate training recommendations' and that scientists should be cautious prescribing from it - so it points against, not toward, an intensity prescription."
+    },
+    "mujika_padilla_2000_b": {
+      "title": "Detraining: loss of training-induced physiological and performance adaptations. Part II: long term insufficient training stimulus",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10999420/",
+      "pmid": "10999420",
+      "id_note": "Corrected 2026-09-05: title restored to include the Part II subtitle, and a real identifier added (PubMed 10999420). Bibliographically exact otherwise. Substantively this is a DETRAINING review, not a taper trial or meta-analysis: what it supports is the qualitative rule that losses 'can be avoided or limited by reduced training strategies, as long as training intensity is maintained and frequency reduced only moderately' while 'training volume can be markedly reduced'. Neither the '40-60%' volume figure nor the '~3% performance uplift' attributed to it appears in the retrieved abstract. The 41-60% volume figure belongs to Bosquet et al. 2007 (PMID 17762369), which reports the taper benefit as a standardised mean difference (overall about 0.59 for a two-week taper), not as a percentage; no retrieved source supports ~3%. Full text of Part II is paywalled; abstract only was checked."
+    },
+    "newell_1985": {
+      "year": 1986,
+      "title": "Constraints on the development of coordination",
+      "source": "Motor Development in Children: Aspects of Coordination and Control (Wade MG & Whiting HTA, eds), Martinus Nijhoff Publishers, chapter beginning p. 341",
+      "url": "https://grants.hhp.uh.edu/clayne/HistoryofMC/Newell1986.pdf",
+      "display_short": "Newell 1986",
+      "display_line": "Newell (1986), Motor Development in Children: Aspects of Coordination and Control",
+      "id_note": "Corrected 2026-09-05: the record described no real work. It paired the title of Newell's separate 1985 chapter ('Coordination, control and skill', in Goodman, Wilberg & Franks eds, Differing Perspectives in Motor Learning, Memory and Control, North-Holland, pp 295-317) with a book title, 'Advances in Motor Development Research', that matches neither work. The chapter the programmes actually use is 'Constraints on the development of coordination' in Wade & Whiting (eds), Motor Development in Children: Aspects of Coordination and Control, whose title page reads 1986 Martinus Nijhoff Publishers; the chapter opens at p. 341. Original scan retrieved and read. Substantive limit, verified at p. 348: the three categories 'INTERACT to determine for a given organism the optimal pattern of coordination and control for any activity'. The chapter is about the development of coordination in children and says nothing about the statistical independence of trained sub-skills, so first-strict-pullup's and muscle-up's 'independent state variables' reading is unsupported and arguably runs against the source. Note the data-integrity.test.ts same-paper guard does not catch the handstand-walk-vs-muscle-up title divergence: shared title words are 0.67, above the 0.5 threshold. The id string newell_1985 is left alone; only the record's year is corrected."
+    }
+  },
+  "programme_used_for": [
+    {
+      "slug": "concurrent-strength-maintenance",
+      "id": "feito_2018",
+      "used_for": "Definitional review of high-intensity functional training. Its 16-week sentence reports VO2max up about 12%, body fat down about 8% and bone mineral content up about 1%; it reports no strength outcome, and it is a review rather than a trial. Corrected 2026-09-05: this read '16 wk HIFT - strength AND VO2max improved concurrently'. That is not in this paper, and no single cited paper shows both: the strength result comes from a different 2018 paper by the same first author (Feito Y, Hoffstetter W, Serafini P, Mangine G, PLoS ONE 13:e0198324), which measured 5RM strength and WOD performance but not VO2max. This programme's headline premise - strength held while aerobic capacity rises - is currently an engineering choice supported by two separate half-results, not a demonstrated concurrent outcome."
+    },
+    {
+      "slug": "engine-builder",
+      "id": "fyfe_2016",
+      "used_for": "Eight weeks of concurrent training in 23 recreationally active men: HIT+RT and WORK-MATCHED MICT+RT attenuated maximal lower-body strength gain similarly relative to resistance training alone (7.4% vs 8.2%), so endurance INTENSITY is not a critical mediator of interference to maximal strength gain over the short term. Corrected 2026-09-05: this read 'endurance VOLUME (not intensity) drives interference'. The two endurance arms were work-matched by design, so volume was held constant and never manipulated; the volume half is an inference from the absence of an intensity effect, and this trial cannot license it. Tightening the strength cap during peak-volume weeks stays as an engineering choice. Byline also corrected - 'Hamilton DL' is on neither candidate Fyfe 2016 paper; the correct byline is Fyfe JJ, Bartlett JD, Hanson ED, Stepto NK, Bishop DJ."
+    },
+    {
+      "slug": "engine-builder-block-2",
+      "id": "fyfe_2016",
+      "used_for": "Eight weeks of concurrent training in 23 recreationally active men: HIT+RT and WORK-MATCHED MICT+RT attenuated maximal lower-body strength gain similarly relative to resistance training alone (7.4% vs 8.2%), so endurance INTENSITY is not a critical mediator of interference to maximal strength gain over the short term. Corrected 2026-09-05: this read 'endurance VOLUME (not intensity) drives interference'. The endurance arms were work-matched, so volume was constant and untested. Block 2's tightening of the concurrent-strength cap across peak-volume weeks 5-7, and the phase note that lowers the RPE cap to 6.5, are engineering choices rather than findings of this trial; what the trial licenses is not fearing per-session endurance intensity. Byline also corrected - 'Hamilton DL' is on neither candidate Fyfe 2016 paper; the correct byline is Fyfe JJ, Bartlett JD, Hanson ED, Stepto NK, Bishop DJ."
+    },
+    {
+      "slug": "concurrent-strength-maintenance",
+      "id": "fyfe_2016",
+      "used_for": "Eight weeks of concurrent training in 23 recreationally active men: HIT+RT and WORK-MATCHED MICT+RT attenuated maximal lower-body strength gain similarly relative to resistance training alone (7.4% vs 8.2%, a difference of about 0.8 points), so endurance INTENSITY is not a critical mediator of interference to maximal strength gain over the short term. Corrected 2026-09-05: three things were wrong here. The title was that of a DIFFERENT Fyfe 2016 paper (the mTORC1 / microRNA study, which is in Am J Physiol Regul Integr Comp Physiol 310:R1297-R1311, not Front Physiol 7:487), pinned onto this paper's journal, volume and page. The byline was that same other paper's (Bishop DJ, Zacharewicz E); the correct byline is Fyfe JJ, Bartlett JD, Hanson ED, Stepto NK, Bishop DJ. And 'VOLUME does' is not supported: the endurance arms were work-matched, so volume was held constant and never varied. Of the pair 'cap total endurance minutes; don't fear intensity per session', the second half is the finding and the first is an engineering choice."
+    },
+    {
+      "slug": "engine-builder",
+      "id": "impey_2018",
+      "used_for": "Theoretical framework for carbohydrate periodisation - the 'fuel for the work required' paradigm, in which CHO availability is adjusted to the demands of the upcoming session - developed for ENDURANCE training. Corrected 2026-09-05: every train-low model the paper reviews (twice-daily, fasted, post-exercise CHO restriction, sleep-low) is an endurance protocol and the outcomes are oxidative enzymes and endurance performance, so resistance training is outside its scope; 'fuel resistance sessions fully' is a sensible engineering choice extrapolated from the framework, not a finding of it. The paper's own caveat also belongs in the copy: of 11 studies, 37% showed a performance improvement and 63% showed no change, which is why the authors frame this as a hypothesis. The easy-sessions-can-be-lower-carb half is directly supported."
+    },
+    {
+      "slug": "engine-builder-block-2",
+      "id": "impey_2018",
+      "used_for": "Theoretical framework for carbohydrate periodisation - the 'fuel for the work required' paradigm - developed for ENDURANCE training. Corrected 2026-09-05: resistance training is outside the paper's scope (every train-low model it reviews is an endurance protocol, with oxidative enzymes and endurance performance as outcomes), so 'fuel resistance sessions fully' in Block 2's higher-volume weeks is an engineering choice extrapolated from the framework rather than a finding of it. The paper's own performance caveat should travel with it: 37% of 11 studies showed improvement, 63% showed no change."
+    },
+    {
+      "slug": "concurrent-strength-maintenance",
+      "id": "impey_2018",
+      "used_for": "Theoretical framework for carbohydrate periodisation - the 'fuel for the work required' paradigm - developed for ENDURANCE training. Corrected 2026-09-05: this read 'fuel-for-work framework for concurrent programming'. The paper makes no concurrent-training application: every train-low model it reviews is an endurance protocol and its outcomes are oxidative enzymes and endurance performance. Applying the framework to a concurrent week is an engineering choice. The paper's own caveat, unrecorded until now, is that 37% of 11 studies showed a performance improvement and 63% showed no change."
+    },
+    {
+      "slug": "concurrent-strength-maintenance",
+      "id": "joyner_coyle_2008",
+      "used_for": "Models endurance performance as VO2max, lactate threshold and efficiency INTERACTING multiplicatively (marathon speed 'essentially predicted by' VO2max x lactate threshold percentage x running economy), and states that the oxidative capacity underlying the lactate threshold is 'highly plastic' and can more than double with training. Corrected 2026-09-05: this read 'Threshold > VO2max as primary metric to track'. The paper ranks no determinant above another and frames none of the three as a metric to track; it also contains no threshold-change magnitude, and the word 'plateau' does not occur in it. Using pre/post submaximal HR at fixed pace as a threshold-shift proxy remains a defensible engineering choice; this paper establishes that the threshold is trainable, not that it should be the primary metric."
+    },
+    {
+      "slug": "rowing-2k-test-prep",
+      "id": "joyner_coyle_2008",
+      "used_for": "Models endurance performance as VO2max, lactate threshold and efficiency INTERACTING multiplicatively, and states that the oxidative capacity underlying the lactate threshold is 'highly plastic' and can more than double with appropriate training. Corrected 2026-09-05: this read 'Threshold > VO2max as primary metric to track'. The paper ranks no determinant above another and does not frame any as a metric to track; the word 'plateau' does not occur in it, so the 'post-VO2max ceiling' and 'VO2max plateaus much earlier' framings elsewhere in this file are not its language. It also contains no threshold-shift magnitude of any kind - the only numeric change figures in it are efficiency case reports (about 1-3% per year) and a greater-than-twofold oxidative-capacity figure - which is consistent with this file's existing decision on 2026-09-05 to attach no numeric target to threshold. Training threshold first is an engineering choice; this paper supports that threshold is highly trainable."
+    },
+    {
+      "slug": "first-strict-pullup",
+      "id": "kibler_2013",
+      "used_for": "The 2013 Scapular Summit consensus statement: scapular dyskinesis is present in a high percentage of shoulder injuries, its exact role in creating or exacerbating shoulder dysfunction 'is not clearly defined', it is 'most aptly viewed as a potential impairment' to shoulder function, and rehabilitation to restore scapular position and motion can be effective 'within a more comprehensive shoulder rehabilitation programme'. Corrected 2026-09-05: the id kibler_2013 resolved in citations.json, and therefore on /evidence, to a different real paper - Kibler WB & Sciascia A (2010), 'Current concepts: scapular dyskinesis', BJSM 44(5):300-305 - while this programme's own record described the 2013 consensus. The canonical record has been corrected to the 2013 consensus, which is what this programme means. Substantively the reach is still wider than the source: the consensus concerns INJURED shoulders, declines to establish a causal role, and studies no hang loading, so mandatory shoulder prep before every session for asymptomatic trainees is an engineering choice, not something either Kibler paper licenses."
+    },
+    {
+      "slug": "muscle-up",
+      "id": "kibler_2013",
+      "used_for": "The 2013 Scapular Summit consensus statement: scapular dyskinesis is present in a high percentage of shoulder injuries, its exact role in creating or exacerbating shoulder dysfunction 'is not clearly defined', it is 'most aptly viewed as a potential impairment', and scapular rehabilitation is endorsed only 'within a more comprehensive shoulder rehabilitation programme'. Corrected 2026-09-05: the id resolved in citations.json to a different real paper (Kibler WB & Sciascia A 2010, 'Current concepts: scapular dyskinesis', BJSM 44(5):300-305) while this programme described the 2013 consensus; the canonical record has been corrected to the 2013 consensus, which is what this programme means. The consensus concerns injured shoulders and studies no hang loading, so the shoulder-prep-before-every-session rule for asymptomatic trainees is an engineering choice rather than a finding of it."
+    },
+    {
+      "slug": "overhead-mobility",
+      "id": "kibler_2013",
+      "used_for": "This programme means Kibler WB & Sciascia A (2010), 'Current concepts: scapular dyskinesis', BJSM 44(5):300-305 (PMID 19996329, DOI 10.1136/bjsm.2009.058834) - a DIFFERENT paper from the one the id kibler_2013 now serves. That paper describes a scapular examination consisting of visual inspection of scapular position at rest and during dynamic humeral movement, objective posture measurement and scapular corrective manoeuvres, and concludes that scapular dyskinesis 'appears to be a non-specific response to a painful condition in the shoulder rather than a specific response to certain glenohumeral pathology'. Corrected 2026-09-05: two things. (1) The id collision: kibler_2013 was resolving to the 2010 paper in citations.json while first-strict-pullup and muscle-up described the 2013 Scapular Summit consensus. The canonical record now serves the 2013 consensus; the 2010 paper needs its own id before this reference resolves correctly, and this reference should keep verification_status 'unverified' until it does. (2) 'SICK scapula screening pattern' is withdrawn: that term does not appear in the retrieved 2010 abstract, and the full text was unreachable (BMJ interstitial, not in PMC), so it can be neither confirmed nor excluded. SICK scapula is a separately named syndrome from a different paper. The screen this programme runs stands as an engineering choice built on the 2010 examination description."
+    },
+    {
+      "slug": "engine-builder",
+      "id": "little_2010",
+      "used_for": "Six sessions of low-volume high-intensity interval training over 2 weeks increased skeletal muscle mitochondrial capacity and improved exercise performance in 7 young men (VO2peak about 46 ml/kg/min) - so the mitochondrial biogenesis signal is detectable within two weeks. Corrected 2026-09-05: the second half of this read 'cited in physiological_targets and progression_rationale for why weeks 1-2 focus on Z1 accumulation'. That does not follow from this study: it is a HIIT intervention with no low-intensity arm and no base phase, and if anything it shows the mitochondrial adaptation arrives within two weeks OF INTERVALS, without a preceding base. The '5-10 sessions' figure this file attributes jointly to Little and Perry is in neither paper (Little: six sessions over two weeks). Z1-first sequencing in weeks 1-2 is an engineering choice."
+    },
+    {
+      "slug": "handstand-walk",
+      "id": "ludewig_cook_2000",
+      "used_for": "Cross-sectional comparison of 52 construction workers with routine overhead exposure, with and without shoulder impingement symptoms: the symptomatic group showed decreased scapular upward rotation, increased anterior tipping, increased medial rotation under load, and decreased serratus anterior activity across all loads and phases. Corrected 2026-09-05: this read 'serratus + trapezius ENDURANCE in SUSTAINED overhead flexion, underpins the wall_supported_shrugs drill and the 170 degree prerequisite'. The paper measured EMG amplitude during RAMPED humeral elevation across phases of 31-60, 61-90 and 91-120 degrees under 0 / 2.3 / 4.6 kg handheld loads. It measured no endurance, no sustained holds, and nothing at or near 170 degrees, and it is a symptomatic-population comparison rather than a training study - so it cannot underpin a drill or a prerequisite threshold. Both remain engineering choices, which is what this file already says of the 170 degree cutoff in engineering_choices_flagged."
+    },
+    {
+      "slug": "overhead-mobility",
+      "id": "manske_2010",
+      "used_for": "Randomised single-blinded trial in 39 ASYMPTOMATIC college-age participants (7 men, 32 women) comparing a CROSS-BODY stretch alone against cross-body stretch plus posterior joint mobilisation, with internal-rotation motion loss as the outcome. The combined group gained more internal rotation, but the between-group difference was not statistically significant. Corrected 2026-09-05: this read 'sleeper stretch effectiveness for posterior capsule tightness'. The trial tested the cross-body stretch, not the sleeper stretch, and choosing between those two is precisely what the citation was meant to settle; the participants were asymptomatic rather than people with symptomatic posterior capsule tightness; and the difference it did find was not significant. Prescribing the sleeper stretch is an engineering choice with no trial behind it here. The verification_status 'verified' flag on this reference was wrong for this use and should read 'unverified' - note it is stripped by Zod and has no runtime meaning either way. The record's PubMed search-string url is replaced by PMID 23015927."
+    },
+    {
+      "slug": "concurrent-strength-maintenance",
+      "id": "meyer_morrison_zuniga_2017",
+      "used_for": "Systematic review of 13 studies (N = 2,326 adults) concluding that CrossFit 'is comparable to other exercise programs with similar injury rates and health outcomes', and that previous injuries should be assessed before recommending it. Corrected 2026-09-05: this read '10-week CrossFit - VO2max + body comp + strength all improve concurrently'. The retrieved record contains no 10-week trial and no VO2max, body-composition or strength figure; the full text is paywalled, so the sentence cannot be excluded from the body, only shown to be unsupported by anything retrievable. Any such result belongs to one of the thirteen primary studies inside the review, and that primary study is what would have to be cited. Nothing rendered in this programme currently rests on the withdrawn claim."
+    },
+    {
+      "slug": "rowing-2k-test-prep",
+      "id": "midgley_2007",
+      "used_for": "Narrative review of training to enhance the physiological determinants of long-distance running performance, concluding that 'there is insufficient direct scientific evidence to formulate training recommendations based on the limited research' and that scientists should be cautious giving training recommendations from it. Corrected 2026-09-05: this read 'intensity distribution meta for endurance', and the record identified no single real work. The title and the Wilkinson byline belong to Midgley AW, McNaughton LR, Wilkinson M (2006), Sports Med 36(2):117-132 (PMID 16464121); the year, volume and pages belong to Midgley AW, McNaughton LR, Jones AM (2007), Sports Med 37(10):857-880 (PMID 17887811, erratum Sports Med 2007;37(11):1000). The canonical record now serves the 2007 paper matching the locator. Neither candidate is a meta-analysis and neither pools effect sizes, so there is no intensity-distribution meta here; the 2007 paper argues the evidence base is too thin to prescribe from, which points against using it as a warrant for an intensity distribution. This programme's intensity distribution is currently an engineering choice."
+    },
+    {
+      "slug": "rowing-2k-test-prep",
+      "id": "mujika_padilla_2000_b",
+      "used_for": "Detraining review, Part II (long term insufficient training stimulus): the losses it catalogues 'can be avoided or limited by reduced training strategies, as long as training intensity is maintained and frequency reduced only moderately', while 'training volume can be markedly reduced'. Corrected 2026-09-05: this read 'taper effect - ~3% performance uplift from volume down 40-60%'. Neither number is in the retrieved abstract, and this is a detraining review rather than a taper trial or meta-analysis. The 41-60% volume-reduction figure belongs to Bosquet et al. 2007 (PMID 17762369), which this file already credits correctly at the taper_last_week rule, and Bosquet reports the taper benefit as a standardised mean difference (overall about 0.59 for a two-week taper), not as a percentage - so no retrieved source supports '~3%'. What survives is the qualitative rule: hold intensity, reduce frequency only moderately, cut volume markedly. The magnitudes are withdrawn. Full text of Part II is paywalled; the abstract only was checked."
+    },
+    {
+      "slug": "handstand-walk",
+      "id": "newell_1985",
+      "used_for": "Newell's constraints framework: three categories of constraint - organismic, environmental and task - that 'INTERACT to determine for a given organism the optimal pattern of coordination and control for any activity' (verified at p. 348 of the original chapter scan). Corrected 2026-09-05: the bibliography, not the substance. The chapter is 'Constraints on the development of coordination', in Wade MG & Whiting HTA (eds), Motor Development in Children: Aspects of Coordination and Control, whose title page reads 1986 Martinus Nijhoff Publishers; it opens at p. 341. citations.json named a different Newell chapter's title ('Coordination, control and skill', 1985, in Differing Perspectives in Motor Learning, Memory and Control) against a book, 'Advances in Motor Development Research', that matches neither work. The three-category decomposition this programme uses for capability_domains is genuinely in the 1986 chapter; note that the chapter frames the categories as interacting, and is about the development of coordination in children."
+    },
+    {
+      "slug": "first-strict-pullup",
+      "id": "newell_1985",
+      "used_for": "Newell's constraints framework: organismic, environmental and task constraints that 'INTERACT to determine for a given organism the optimal pattern of coordination and control for any activity' (verified at p. 348 of the original chapter scan). Corrected 2026-09-05: two problems. Bibliography: the chapter's own title page dates it 1986, not 1985 (Wade MG & Whiting HTA eds, Motor Development in Children: Aspects of Coordination and Control, Martinus Nijhoff, chapter beginning p. 341), and the citations.json record named a third, non-existent book. Substance: the chapter says the three categories INTERACT, is about the development of coordination in children, and offers nothing about the statistical independence of trained sub-skills - so treating sub-skills as independent state variables is an engineering choice this chapter does not license and arguably argues against. What it does support is decomposing a skill by constraint category."
+    },
+    {
+      "slug": "muscle-up",
+      "id": "newell_1985",
+      "used_for": "Newell's constraints framework: organismic, environmental and task constraints that 'INTERACT to determine for a given organism the optimal pattern of coordination and control for any activity' (verified at p. 348 of the original chapter scan). Corrected 2026-09-05: two problems. Bibliography: the chapter is dated 1986 on its own title page (Wade MG & Whiting HTA eds, Motor Development in Children: Aspects of Coordination and Control, Martinus Nijhoff, chapter beginning p. 341); the citations.json record named a book that matches no Newell work. Substance: the chapter describes the three constraint categories as interacting and concerns the development of coordination in children; it says nothing about the statistical independence of trained sub-skills, so 'treat sub-skills as independent state variables' is an engineering choice rather than a finding of this source."
+    }
+  ],
+  "programme_text": [
+    {
+      "slug": "overhead-mobility",
+      "find": "scap upward-rotation timing is the dominant driver of subacromial space. Fix sequence before adding load.",
+      "replace": "altered scapular upward-rotation timing is observed alongside impingement symptoms; how much of the subacromial space it drives is established by neither paper. Corrected 2026-09-05: this read \"the dominant driver of subacromial space\", a causal-magnitude claim in neither abstract, and one that contradicts the association-only framing this same file uses in its scap_first_shoulder_second rule and its phase 1 rationale. Sequencing scapular work before load is an engineering choice consistent with that association."
+    },
+    {
+      "slug": "rowing-2k-test-prep",
+      "find": "the ~3% performance uplift is bought by the taper, not by more work.",
+      "replace": "the taper is bought by cutting volume while holding intensity, not by more work. Corrected 2026-09-05: the ~3% uplift figure was credited here to Mujika & Padilla 2000, which contains no such number; Part II supports only the qualitative rule, and the 41-60% volume-reduction figure belongs to Bosquet 2007."
+    },
+    {
+      "slug": "rowing-2k-test-prep",
+      "find": "reducing volume 40-60% while holding intensity produces a ~3% performance uplift on race day, mostly via neuromuscular / hematological restoration.",
+      "replace": "holding intensity while cutting volume markedly and reducing frequency only moderately is what preserves adaptation, mostly via neuromuscular / hematological restoration. Corrected 2026-09-05: neither the 40-60% figure nor the ~3% uplift is in Mujika & Padilla. The 41-60% volume reduction is Bosquet 2007 (PMID 17762369), which reports the taper benefit as a standardised mean difference of about 0.59 for a two-week taper rather than as a percentage; no retrieved source gives ~3%. The 2-week taper length remains the engineering choice this file already flags."
+    },
+    {
+      "slug": "rowing-2k-test-prep",
+      "find": "threshold rises predictably at trained-athlete level with focused work; VO2max plateaus much earlier.",
+      "replace": "VO2max, lactate threshold and efficiency interact rather than rank, and the oxidative capacity underlying the threshold is highly plastic. Corrected 2026-09-05: the word plateau does not occur in that paper and it ranks no determinant above another; pushing threshold in this phase is an engineering choice, not their finding."
+    },
+    {
+      "slug": "engine-builder",
+      "find": "\"authors\": \"Fyfe JJ, Bartlett JD, Hamilton DL, et al.\"",
+      "replace": "\"authors\": \"Fyfe JJ, Bartlett JD, Hanson ED, Stepto NK, Bishop DJ\""
+    },
+    {
+      "slug": "engine-builder-block-2",
+      "find": "\"authors\": \"Fyfe JJ, Bartlett JD, Hamilton DL, et al.\"",
+      "replace": "\"authors\": \"Fyfe JJ, Bartlett JD, Hanson ED, Stepto NK, Bishop DJ\""
+    },
+    {
+      "slug": "concurrent-strength-maintenance",
+      "find": "\"authors\": \"Fyfe JJ, Bishop DJ, Zacharewicz E, et al.\"",
+      "replace": "\"authors\": \"Fyfe JJ, Bartlett JD, Hanson ED, Stepto NK, Bishop DJ\""
+    },
+    {
+      "slug": "concurrent-strength-maintenance",
+      "find": "\"title\": \"Concurrent exercise incorporating high-intensity interval or continuous training modulates mTORC1 signaling and microRNA expression\"",
+      "replace": "\"title\": \"Endurance training intensity does not mediate interference to maximal lower-body strength gain during short-term concurrent training\""
+    }
+  ]
+}

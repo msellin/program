@@ -2820,7 +2820,6 @@
       },
       "rest_between_s": 60,
       "evidence_refs": [
-        "beattie_2014",
         "vigouroux_2007"
       ],
       "video_search": "dead hang pull up bar tutorial"
@@ -3629,8 +3628,7 @@
       },
       "rest_between_s": 90,
       "evidence_refs": [
-        "vigouroux_2007",
-        "beattie_2014"
+        "vigouroux_2007"
       ],
       "video_search": "farmers walk grip endurance"
     },

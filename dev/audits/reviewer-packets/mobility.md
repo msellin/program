@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: 89304a9bd9196f24 -->
+<!-- source-fingerprint: bcd6e18c70eaffb3 -->
 
 ## What we are asking
 
@@ -154,9 +154,9 @@ Printed against the questions above so you can see which are actually detectable
 - *overhead-mobility says it supports:* Fast vs slow motor learning; consolidation window
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
-**kibler_2013** — Current concepts: scapular dyskinesis · Kibler WB, Sciascia A · 2010
+**kibler_2013** — Clinical implications of scapular dyskinesis in shoulder injury: the 2013 consensus statement from the Scapular Summit · Kibler WB, Ludewig PM, McClure PW, Michener LA, Bak K, Sciascia AD · 2013
 
-- *overhead-mobility says it supports:* SICK scapula screening pattern. Year corrected from 2013 → 2010 per review — BJSM 44(5) is the 2010 current-concepts paper. Keeping the citation `id: kibler_2013` for stability of downstream references.
+- *overhead-mobility says it supports:* This programme means Kibler WB & Sciascia A (2010), 'Current concepts: scapular dyskinesis', BJSM 44(5):300-305 (PMID 19996329, DOI 10.1136/bjsm.2009.058834) - a DIFFERENT paper from the one the id kibler_2013 now serves. That paper describes a scapular examination consisting of visual inspection of scapular position at rest and during dynamic humeral movement, objective posture measurement and scapular corrective manoeuvres, and concludes that scapular dyskinesis 'appears to be a non-specific response to a painful condition in the shoulder rather than a specific response to certain glenohumeral pathology'. Corrected 2026-09-05: two things. (1) The id collision: kibler_2013 was resolving to the 2010 paper in citations.json while first-strict-pullup and muscle-up described the 2013 Scapular Summit consensus. The canonical record now serves the 2013 consensus; the 2010 paper needs its own id before this reference resolves correctly, and this reference should keep verification_status 'unverified' until it does. (2) 'SICK scapula screening pattern' is withdrawn: that term does not appear in the retrieved 2010 abstract, and the full text was unreachable (BMJ interstitial, not in PMC), so it can be neither confirmed nor excluded. SICK scapula is a separately named syndrome from a different paper. The screen this programme runs stands as an engineering choice built on the 2010 examination description.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **kim_2013** — Reliability of shoulder ROM measurement in supine position · Kim SH, Kim HK, Kim MY · 2013
@@ -174,14 +174,14 @@ Printed against the questions above so you can see which are actually detectable
 - *overhead-mobility says it supports:* Scap upward-rotation lag correlates with symptomatic impingement; drives phase-1 emphasis
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
-**manske_2010** — A randomized controlled single-blinded comparison of stretching versus stretching and joint mobilization for posterior shoulder tightness · Manske RC, Meschke M, Porter A, Smith B, Reiman M · 2010
+**manske_2010** — A randomized controlled single-blinded comparison of stretching versus stretching and joint mobilization for posterior shoulder tightness measured by internal rotation motion loss · Manske RC, Meschke M, Porter A, Smith B, Reiman M · 2010
 
-- *overhead-mobility says it supports:* Sleeper stretch effectiveness for posterior capsule tightness — engineering choice reference
+- *overhead-mobility says it supports:* Randomised single-blinded trial in 39 ASYMPTOMATIC college-age participants (7 men, 32 women) comparing a CROSS-BODY stretch alone against cross-body stretch plus posterior joint mobilisation, with internal-rotation motion loss as the outcome. The combined group gained more internal rotation, but the between-group difference was not statistically significant. Corrected 2026-09-05: this read 'sleeper stretch effectiveness for posterior capsule tightness'. The trial tested the cross-body stretch, not the sleeper stretch, and choosing between those two is precisely what the citation was meant to settle; the participants were asymptomatic rather than people with symptomatic posterior capsule tightness; and the difference it did find was not significant. Prescribing the sleeper stretch is an engineering choice with no trial behind it here. The verification_status 'verified' flag on this reference was wrong for this use and should read 'unverified' - note it is stripped by Zod and has no runtime meaning either way. The record's PubMed search-string url is replaced by PMID 23015927.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
-**reinold_2007** — Current concepts in the scientific and clinical rationale behind exercises for glenohumeral and scapulothoracic musculature · Reinold MM, Escamilla RF, Wilk KE · 2007
+**reinold_2007** — Electromyographic analysis of the supraspinatus and deltoid muscles during 3 common rehabilitation exercises · Reinold MM, Macrina LC, Wilk KE, Fleisig GS, Dun S, Barrentine SW, Ellerbusch MT, Andrews JR · 2007
 
-- *overhead-mobility says it supports:* Rotator-cuff activation levels across drill variants; informs light-load rationale in Phase 2
+- *overhead-mobility says it supports:* This id now resolves to the EMG study, J Athl Train 42(4):464-469, PMID 18174934: 22 asymptomatic subjects, three isolated cuff exercises, no difference among them for supraspinatus. The cross-drill activation catalogue this programme actually described is a different work, Reinold, Escamilla and Wilk, JOSPT 2009;39(2):105-117, PMID 19194023, a narrative review the authors grade Level of Evidence 5; it needs its own citation id before Phase 2 copy can cite it. Neither paper states that cuff activation must precede end-range loading, so the light-load bias is an engineering choice, as this programme's own engineering_choices_flagged block already says. Corrected 2026-09-05: the record was dated 2007 at JOSPT 37(11):659-670, a locator with zero results, for a paper published in 2009, and a hard rule was attributed to text that is in neither abstract.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **sadowski_2021** — Kinematics and joint moments during the press to handstand · Mizutori H, et al. · 2021
@@ -196,7 +196,7 @@ Printed against the questions above so you can see which are actually detectable
 
 **sands_2000** — Injury prevention in women's gymnastics · Sands WA · 2000
 
-- *overhead-mobility says it supports:* Skill-readiness assessment framework — informs prerequisite gating
+- *overhead-mobility says it supports:* Narrative review of injury prevention in women's artistic gymnastics. It offers a framework of thinking - prevention grounded in science and medicine plus intimate knowledge of the demands of the movement - and no protocol, no effect size and no comparison; the full text is paywalled. Corrected 2026-09-05: previously described as a 'skill-readiness assessment framework' informing prerequisite gating. It is not an assessment framework. The prerequisite gating in this programme is an engineering choice, and the paper's population (young elite female gymnasts) is far from adult users working on overhead position.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **shea_morgan_1979** — Contextual interference effects on the acquisition, retention, and transfer of a motor skill · Shea JB, Morgan RL · 1979
@@ -204,9 +204,9 @@ Printed against the questions above so you can see which are actually detectable
 - *overhead-mobility says it supports:* Contextual interference in motor learning — blocked-first, random after
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
-**walker_2003** — Dissociable stages of human memory consolidation and reconsolidation · Walker MP, Brakefield T, Hobson JA, Stickgold R · 2003
+**walker_2003** — Sleep and the time course of motor skill learning · Walker MP, Brakefield T, Seidman J, Morgan A, Hobson JA, Stickgold R · 2003
 
-- *overhead-mobility says it supports:* Sleep-dependent consolidation of motor patterns — the daily-short rationale relies on the sleep-consolidation finding. Journal + byline corrected from Neuroscience 133(4):911-917 per review of whitepaper 04.
+- *overhead-mobility says it supports:* Sleep-dependent consolidation of a motor pattern: doubling the amount of initial finger-tapping training did not increase the overnight gain, which is what the daily-short rationale leans on. A laboratory keypress task, so its application to mobility drills is an engineering choice. Corrected 2026-09-05: the record kept the Nature paper's title and byline over this Learning & Memory locator; the correct record is Walker MP, Brakefield T, Seidman J, Morgan A, Hobson JA, Stickgold R, 'Sleep and the time course of motor skill learning', Learn Mem 10(4):275-284, PMID 12888546.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **wulf_1998** — Instructions for motor learning: differential effects of internal versus external focus of attention · Wulf G, Höß M, Prinz W · 1998

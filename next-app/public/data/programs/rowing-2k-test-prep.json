@@ -389,7 +389,7 @@
         "block_race_plan_rehearsal"
       ],
       "goal": "Push threshold pace up. Add one race-pace session per week.",
-      "rationale": "Joyner & Coyle 2008 — threshold rises predictably at trained-athlete level with focused work; VO2max plateaus much earlier.",
+      "rationale": "Joyner & Coyle 2008 — VO2max, lactate threshold and efficiency interact rather than rank, and the oxidative capacity underlying the threshold is highly plastic. Corrected 2026-09-05: the word plateau does not occur in that paper and it ranks no determinant above another; pushing threshold in this phase is an engineering choice, not their finding.",
       "block_replacements": {
         "block_race_pace_row": "block_race_plan_rehearsal"
       }
@@ -407,7 +407,7 @@
         "block_easy_recovery"
       ],
       "goal": "Volume down 40-50%, intensity held. Test at week 6.",
-      "rationale": "Mujika & Padilla 2000 — the ~3% performance uplift is bought by the taper, not by more work.",
+      "rationale": "Mujika & Padilla 2000 — the taper is bought by cutting volume while holding intensity, not by more work. Corrected 2026-09-05: the ~3% uplift figure was credited here to Mujika & Padilla 2000, which contains no such number; Part II supports only the qualitative rule, and the 41-60% volume-reduction figure belongs to Bosquet 2007.",
       "is_taper": true,
       "duration_multiplier": 0.55,
       "block_replacements_final_week": {
@@ -662,7 +662,7 @@
       "why_polarised": "Seiler 2010 — polarised 80/20 distribution outperforms threshold-dominant in trained endurance athletes over 12 weeks. Race prep respects the distribution but concentrates the 20% in threshold + race-pace work rather than VO2max.",
       "why_threshold": "Joyner & Coyle 2008 — post-VO2max ceiling, running / cycling / rowing threshold IS the primary trainable metric. The ~3-6% shift previously attributed here to Astorino was withdrawn on 2026-09-05: that study measured cardiovascular function, VO2max and muscular force in 20 active adults over 2-3 weeks of repeated Wingate tests, and no threshold. The reason to train threshold stands; the magnitude claim did not.",
       "why_race_pace_specificity": "Proteau 1992 specificity + Henry 1968 — the coordination of the row stroke at 2K pace is task-specific. Only 2K-pace work develops it.",
-      "why_taper": "Mujika & Padilla 2000 (I+II): reducing volume 40-60% while holding intensity produces a ~3% performance uplift on race day, mostly via neuromuscular / hematological restoration."
+      "why_taper": "Mujika & Padilla 2000 (I+II): holding intensity while cutting volume markedly and reducing frequency only moderately is what preserves adaptation, mostly via neuromuscular / hematological restoration. Corrected 2026-09-05: neither the 40-60% figure nor the ~3% uplift is in Mujika & Padilla. The 41-60% volume reduction is Bosquet 2007 (PMID 17762369), which reports the taper benefit as a standardised mean difference of about 0.59 for a two-week taper rather than as a percentage; no retrieved source gives ~3%. The 2-week taper length remains the engineering choice this file already flags."
     },
     "engineering_choices_flagged": [
       {
@@ -731,7 +731,7 @@
         "year": 2008,
         "title": "Endurance exercise performance: the physiology of champions",
         "source": "J Physiol 586(1):35-44",
-        "used_for": "Threshold > VO2max as primary metric to track"
+        "used_for": "Models endurance performance as VO2max, lactate threshold and efficiency INTERACTING multiplicatively, and states that the oxidative capacity underlying the lactate threshold is 'highly plastic' and can more than double with appropriate training. Corrected 2026-09-05: this read 'Threshold > VO2max as primary metric to track'. The paper ranks no determinant above another and does not frame any as a metric to track; the word 'plateau' does not occur in it, so the 'post-VO2max ceiling' and 'VO2max plateaus much earlier' framings elsewhere in this file are not its language. It also contains no threshold-shift magnitude of any kind - the only numeric change figures in it are efficiency case reports (about 1-3% per year) and a greater-than-twofold oxidative-capacity figure - which is consistent with this file's existing decision on 2026-09-05 to attach no numeric target to threshold. Training threshold first is an engineering choice; this paper supports that threshold is highly trainable."
       },
       {
         "id": "san_millan_brooks_2018",
@@ -739,7 +739,7 @@
         "year": 2018,
         "title": "Assessment of metabolic flexibility by means of measuring blood lactate",
         "source": "Sports Med 48:467-479",
-        "used_for": "Zone 2 anchor (blood lactate < 2 mmol/L)"
+        "used_for": "Substrate-oxidation basis for an easy-effort zone: fat oxidation and blood lactate move inversely across professional athletes, moderately active individuals and metabolic-syndrome patients. The under-2 mmol/L figure is coaching convention for placing that zone, not a boundary defined in this paper, and no user of this programme measures lactate. Corrected 2026-09-05: the used_for presented a numeric lactate cut-point as this paper's Zone 2 definition; nothing retrieved from the paper contains it."
       },
       {
         "id": "mujika_padilla_2000_a",
@@ -753,9 +753,9 @@
         "id": "mujika_padilla_2000_b",
         "authors": "Mujika I, Padilla S",
         "year": 2000,
-        "title": "Detraining: loss of training-induced physiological and performance adaptations. Part II",
+        "title": "Detraining: loss of training-induced physiological and performance adaptations. Part II: long term insufficient training stimulus",
         "source": "Sports Med 30(3):145-154",
-        "used_for": "Taper effect — ~3% performance uplift from volume down 40-60%"
+        "used_for": "Detraining review, Part II (long term insufficient training stimulus): the losses it catalogues 'can be avoided or limited by reduced training strategies, as long as training intensity is maintained and frequency reduced only moderately', while 'training volume can be markedly reduced'. Corrected 2026-09-05: this read 'taper effect - ~3% performance uplift from volume down 40-60%'. Neither number is in the retrieved abstract, and this is a detraining review rather than a taper trial or meta-analysis. The 41-60% volume-reduction figure belongs to Bosquet et al. 2007 (PMID 17762369), which this file already credits correctly at the taper_last_week rule, and Bosquet reports the taper benefit as a standardised mean difference (overall about 0.59 for a two-week taper), not as a percentage - so no retrieved source supports '~3%'. What survives is the qualitative rule: hold intensity, reduce frequency only moderately, cut volume markedly. The magnitudes are withdrawn. Full text of Part II is paywalled; the abstract only was checked."
       },
       {
         "id": "wilson_2012",
@@ -815,11 +815,11 @@
       },
       {
         "id": "midgley_2007",
-        "authors": "Midgley AW, McNaughton LR, Wilkinson M",
+        "authors": "Midgley AW, McNaughton LR, Jones AM",
         "year": 2007,
-        "title": "Is there an optimal training intensity for enhancing the maximal oxygen uptake of distance runners?",
+        "title": "Training to enhance the physiological determinants of long-distance running performance",
         "source": "Sports Med 37(10):857-880",
-        "used_for": "Intensity distribution meta for endurance"
+        "used_for": "Narrative review of training to enhance the physiological determinants of long-distance running performance, concluding that 'there is insufficient direct scientific evidence to formulate training recommendations based on the limited research' and that scientists should be cautious giving training recommendations from it. Corrected 2026-09-05: this read 'intensity distribution meta for endurance', and the record identified no single real work. The title and the Wilkinson byline belong to Midgley AW, McNaughton LR, Wilkinson M (2006), Sports Med 36(2):117-132 (PMID 16464121); the year, volume and pages belong to Midgley AW, McNaughton LR, Jones AM (2007), Sports Med 37(10):857-880 (PMID 17887811, erratum Sports Med 2007;37(11):1000). The canonical record now serves the 2007 paper matching the locator. Neither candidate is a meta-analysis and neither pools effect sizes, so there is no intensity-distribution meta here; the 2007 paper argues the evidence base is too thin to prescribe from, which points against using it as a warrant for an intensity distribution. This programme's intensity distribution is currently an engineering choice."
       },
       {
         "id": "laursen_jenkins_2002",
@@ -865,9 +865,9 @@
         "id": "proteau_1992",
         "authors": "Proteau L, Marteniuk RG, Lévesque L",
         "year": 1992,
-        "title": "Specificity of practice: the case of the goal-directed aiming task",
-        "source": "J Motor Behav 24(1):81-104",
-        "used_for": "Specificity of practice — race-pace work rationale. Title/source corrected 2026-08-18 (Path A Q2)."
+        "title": "A sensorimotor basis for motor learning: evidence indicating specificity of practice",
+        "source": "Quarterly Journal of Experimental Psychology Section A 44(3):557-575",
+        "used_for": "Laboratory manual-aiming task with and without vision of the limb; the authors conclude that learning is specific to the conditions that prevail during skill acquisition. Race-pace work is a reasonable application of that principle and an engineering choice: nothing in this paper concerns rowing, pacing or endurance. Corrected 2026-09-05: the 2026-08-18 correction this record recorded moved it from the real Q J Exp Psychol A 44(3):557-575 paper (PMID 1631322) onto Journal of Motor Behavior 24(1):81-104, which four search routes could not find to exist, and this programme copied that fabricated locator."
       },
       {
         "id": "henry_1968",
@@ -909,8 +909,8 @@
         "year": 1993,
         "title": "Physiological aspects of training in rowing",
         "source": "Int J Sports Med 14(S1):S3-S10",
-        "used_for": "Rowing-specific interval + volume prescription",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/?term=Steinacker+physiological+aspects+training+rowing+1993",
+        "used_for": "Descriptive review of international-level rowing practice: anaerobic threshold at 80-85 percent of maximal performance in highly trained rowers, 70-90 percent of training time below that threshold, and annual loads reaching 1000 hours or 5000-7000 km, with work above 4.0 mmol/L blood lactate plus sprint and athletics training completing the schedule. It describes what elite oarsmen do; it prescribes nothing, and a test-prep user is not an elite oarsman, so applying the distribution here is a coaching judgement. Corrected 2026-09-05: the used_for called a descriptive review a rowing-specific interval and volume prescription, and the record's only locator was a PubMed search query; it is PMID 8262704, Int J Sports Med 14 Suppl 1:S3-10, and verification_status can now be cleared.",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/8262704/",
         "verification_status": "unverified"
       },
       {
@@ -939,7 +939,7 @@
         "year": 2007,
         "title": "Effects of tapering on performance: a meta-analysis",
         "source": "MSSE 39(8):1358-1365",
-        "used_for": "Meta-analysis anchor for the ~3% performance uplift claim on the taper. Stronger single-source anchor than Mujika & Padilla 2000 alone; both are now cited.",
+        "used_for": "Meta-analysis of 27 tapering studies (from 182 screened). It supports the structure of the taper week as prescribed here, verbatim: a 2-week taper (overall effect 0.59 +/- 0.33, p < 0.001) in which training volume is decreased exponentially by 41-60% (overall effect 0.72 +/- 0.36, p < 0.001) with no change to training intensity or frequency. Corrected 2026-09-05: this reference previously called the paper 'the stronger single-source anchor' for a ~3% performance uplift. The paper reports standardised effect sizes, not percentages, and no 3% figure appears anywhere in its retrievable record; the same 3% is attributed elsewhere in this programme to Mujika & Padilla 2000, so the anchor claim was circular. Full text is closed and could not be checked, so the number is unconfirmed rather than disproved. What is cited is the taper structure; any percentage shown to a user should read as Terav's own expectation, not as a measured meta-analytic result.",
         "url": "https://pubmed.ncbi.nlm.nih.gov/17762369/",
         "verification_status": "verified"
       },

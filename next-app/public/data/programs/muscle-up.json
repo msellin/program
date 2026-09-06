@@ -1205,28 +1205,28 @@
       },
       {
         "id": "youdas_2010",
-        "authors": "Youdas JW, Amundson CL, Cicirello KS, Hellmers CJ, Hollman JH",
+        "authors": "Youdas JW, Amundson CL, Cicero KS, Hahn JJ, Harezlak DT, Hollman JH",
         "year": 2010,
         "title": "Surface electromyographic activation patterns and elbow joint motion during a pull-up, chin-up, or perfect-pullup rotational exercise",
         "source": "Journal of Strength and Conditioning Research 24(12):3404-3414",
         "url": "https://pubmed.ncbi.nlm.nih.gov/21068680/",
-        "used_for": "Pull-variant EMG hierarchy. Supports the false-grip-as-separate-capability framing and the grip-position-matters logic. Referenced by the shared drill library."
+        "used_for": "Surface EMG in 25 recreationally active adults across pull-up, chin-up and a rotating-handle variant, showing a sequential activation order: lower trapezius and pectoralis major initiate the repetition, biceps brachii and latissimus dorsi complete it. Cited here only for that ordering, which is why the shared pull drill library trains the scapular phase before the pull. Corrected 2026-09-05: this reference previously said the paper supports 'the false-grip-as-separate-capability framing'. False grip was not one of the three conditions, so it cannot. Treating false grip as its own capability is an engineering choice drawn from gymnastics coaching practice and currently has no citation behind it in this library. The byline was also wrong in this reference block and must be corrected to Youdas JW, Amundson CL, Cicero KS, Hahn JJ, Harezlak DT, Hollman JH."
       },
       {
         "id": "reinold_2007",
-        "authors": "Reinold MM, Wilk KE, Fleisig GS, et al.",
+        "authors": "Reinold MM, Macrina LC, Wilk KE, Fleisig GS, Dun S, Barrentine SW, Ellerbusch MT, Andrews JR",
         "year": 2007,
         "title": "Electromyographic analysis of the supraspinatus and deltoid muscles during 3 common rehabilitation exercises",
-        "source": "Journal of Orthopaedic and Sports Physical Therapy 37(9):519-527",
-        "used_for": "Supraspinatus EMG data — informs the shoulder-pain-stops-session rule and the pre-session prep dose."
+        "source": "Journal of Athletic Training 42(4):464-469",
+        "used_for": "EMG in 22 asymptomatic subjects across three isolated cuff exercises: supraspinatus activity did not differ among them, and the full-can position produced significantly less deltoid activity. It supports choosing a cuff-prep position; it says nothing about symptomatic shoulders or about ending a session, so the stop-the-session rule is a safety choice and the pre-session prep dose is an engineering choice. Corrected 2026-09-05: the source read JOSPT 37(9):519-527, which does not exist; the paper is J Athl Train 42(4):464-469, PMID 18174934, and the byline was truncated."
       },
       {
         "id": "kibler_2013",
         "authors": "Kibler WB, Ludewig PM, McClure PW, Michener LA, Bak K, Sciascia AD",
         "year": 2013,
-        "title": "Clinical implications of scapular dyskinesis in shoulder injury: the 2013 consensus statement",
+        "title": "Clinical implications of scapular dyskinesis in shoulder injury: the 2013 consensus statement from the Scapular Summit",
         "source": "British Journal of Sports Medicine 47(14):877-885",
-        "used_for": "Scapular dyskinesis pattern in overhead / hang loading. Anchors the shoulder-prep-before-every-session rule."
+        "used_for": "The 2013 Scapular Summit consensus statement: scapular dyskinesis is present in a high percentage of shoulder injuries, its exact role in creating or exacerbating shoulder dysfunction 'is not clearly defined', it is 'most aptly viewed as a potential impairment', and scapular rehabilitation is endorsed only 'within a more comprehensive shoulder rehabilitation programme'. Corrected 2026-09-05: the id resolved in citations.json to a different real paper (Kibler WB & Sciascia A 2010, 'Current concepts: scapular dyskinesis', BJSM 44(5):300-305) while this programme described the 2013 consensus; the canonical record has been corrected to the 2013 consensus, which is what this programme means. The consensus concerns injured shoulders and studies no hang loading, so the shoulder-prep-before-every-session rule for asymptomatic trainees is an engineering choice rather than a finding of it."
       },
       {
         "id": "sadowski_2021",
@@ -1278,19 +1278,19 @@
       },
       {
         "id": "walker_2003",
-        "authors": "Walker MP, Brakefield T, Hobson JA, Stickgold R",
+        "authors": "Walker MP, Brakefield T, Seidman J, Morgan A, Hobson JA, Stickgold R",
         "year": 2003,
-        "title": "Dissociable stages of human memory consolidation and reconsolidation",
-        "source": "Nature 425(6958):616-620",
-        "used_for": "Dissociable consolidation stages. Supports daily short skill exposure."
+        "title": "Sleep and the time course of motor skill learning",
+        "source": "Learning & Memory 10(4):275-284",
+        "used_for": "Finger-tapping motor-skill learning across sleep: doubling initial training volume did not increase the overnight sleep-dependent gain, which is the case for daily short exposure rather than occasional long sessions. Laboratory keypress task; the transfer to ring skills is an engineering choice. Corrected 2026-09-05: the record spliced the Nature paper's title and byline onto the Learning & Memory locator, and this programme's source field said Nature 425(6958):616-620 while two other programmes said Learning & Memory; the id is resolved onto Learn Mem 10(4):275-284, PMID 12888546, whose byline includes Seidman J and Morgan A."
       },
       {
         "id": "shea_2000",
-        "authors": "Shea CH, Lai Q, Black C, Park JH",
+        "authors": "Shea CH, Lai Q, Black CB, Park JH",
         "year": 2000,
         "title": "Spacing practice sessions across days benefits the learning of motor skills",
         "source": "Human Movement Science 19(5):737-760",
-        "used_for": "Spacing effect: spread practice across days beats massed practice. Anchors multi-session weekly template."
+        "used_for": "Sessions spaced 24 hours apart beat sessions spaced 20 minutes apart for later practice performance and delayed retention, on laboratory balance and timing tasks. The multi-session weekly template applies that to ring work by extrapolation. Corrected 2026-09-05: the record's title was a description, the byline was truncated and there was no identifier."
       },
       {
         "id": "henry_1968",
@@ -1305,16 +1305,16 @@
         "authors": "Proteau L, Marteniuk RG, Lévesque L",
         "year": 1992,
         "title": "A sensorimotor basis for motor learning: evidence indicating specificity of practice",
-        "source": "Quarterly Journal of Experimental Psychology 44A(4):557-575",
-        "used_for": "Learning is specific to sensory conditions of practice. Supports multi-dimensional per-capability approach."
+        "source": "Quarterly Journal of Experimental Psychology Section A 44(3):557-575",
+        "used_for": "Laboratory manual-aiming task with and without vision of the limb; the authors conclude that learning is specific to the conditions that prevail during skill acquisition. The per-capability split is a design inference from that principle rather than a finding about ring skills. Corrected 2026-09-05: the canonical record had been moved to a Journal of Motor Behavior reference that does not exist; the real paper is Q J Exp Psychol A 44(3):557-575, PMID 1631322, and the issue should read 44(3), not 44A(4)."
       },
       {
         "id": "newell_1985",
         "authors": "Newell KM",
-        "year": 1985,
+        "year": 1986,
         "title": "Constraints on the development of coordination",
-        "source": "Motor Development in Children: Aspects of Coordination and Control",
-        "used_for": "Constraints-led framework. Anchors treat-sub-skills-as-independent-state-variables."
+        "source": "Motor Development in Children: Aspects of Coordination and Control (Wade MG & Whiting HTA, eds), Martinus Nijhoff Publishers, chapter beginning p. 341",
+        "used_for": "Newell's constraints framework: organismic, environmental and task constraints that 'INTERACT to determine for a given organism the optimal pattern of coordination and control for any activity' (verified at p. 348 of the original chapter scan). Corrected 2026-09-05: two problems. Bibliography: the chapter is dated 1986 on its own title page (Wade MG & Whiting HTA eds, Motor Development in Children: Aspects of Coordination and Control, Martinus Nijhoff, chapter beginning p. 341); the citations.json record named a book that matches no Newell work. Substance: the chapter describes the three constraint categories as interacting and concerns the development of coordination in children; it says nothing about the statistical independence of trained sub-skills, so 'treat sub-skills as independent state variables' is an engineering choice rather than a finding of this source."
       },
       {
         "id": "chiviacowsky_wulf_2002",
@@ -1326,11 +1326,11 @@
       },
       {
         "id": "potdevin_2018",
-        "authors": "Potdevin F, et al.",
+        "authors": "Potdevin F, Vors O, Huchez A, Lamour M, Davids K, Schnitzler C",
         "year": 2018,
-        "title": "Video feedback and self-assessment in gymnastics learning",
-        "source": "Physical Education and Sport Pedagogy 23(6)",
-        "used_for": "n=18 gymnastics children, 8 weeks: KP after ~5 reps improved skill and self-assessment. Anchors the KP-not-every-rep video review dose."
+        "title": "How can video feedback be used in physical education to support novice learning in gymnastics? Effects on motor learning, self-assessment and motivation",
+        "source": "Physical Education and Sport Pedagogy 23(6):559-574",
+        "used_for": "n=18 in the video-feedback arm, PE beginners aged about 12, five weekly lessons on a front handstand to flat-back landing: knowledge-of-performance after every five attempts improved both skill and self-assessment. Reused here as the reason video review is dosed rather than given every rep; transferring a school-class gymnastics dose to adult self-coached ring work is an engineering choice. Corrected 2026-09-05: the study is five weeks and five lessons, not eight weeks, and the record's title was a stub."
       },
       {
         "id": "sands_2000",
@@ -1338,7 +1338,7 @@
         "year": 2000,
         "title": "Injury prevention in women's gymnastics",
         "source": "Sports Medicine 30(5):359-373",
-        "used_for": "Skill-readiness assessment and prerequisite gating as injury-mitigation heuristic. Anchors the strict-pull-up + ring-dip prerequisite gate."
+        "used_for": "Narrative review of injury prevention in women's artistic gymnastics; reports no effect size, no comparison and no readiness-screening protocol in its abstract, and the full text is paywalled. Cited here only for the general principle that a high-demand skill should be attempted from demonstrated readiness rather than from ambition. Corrected 2026-09-05: this reference previously said the paper 'anchors the strict-pull-up + ring-dip prerequisite gate'. It anchors no gate. That prerequisite is an engineering choice made by Terav, and because it is a gate that withholds a movement from a user, it should be presented as our judgement rather than borrow authority from a paper about young elite female gymnasts."
       },
       {
         "id": "schmidt_1975",
@@ -1372,7 +1372,7 @@
         "year": 2017,
         "title": "Electromyographic analysis of muscle activation during pull-up variations",
         "source": "Journal of Electromyography and Kinesiology 32:30-36",
-        "used_for": "EMG data on pull-up variants — supports the drill-library ordering and the false-grip pull-up as its own capability.",
+        "used_for": "Peak and average rectified EMG of the shoulder-arm-forearm complex in 19 strength-trained males (~25 y) across four bar conditions: supinated, pronated, neutral and rope. Its conclusion is that activation is SIMILAR across hand orientations, with middle trapezius in pronated versus neutral the one exception; the difference it does report clearly is between phases, with brachioradialis, biceps brachii and pectoralis major significantly more active concentrically than eccentrically. Cited here for that phase difference, which supports treating pulls and negatives as distinct stimuli rather than the same drill at two speeds. Corrected 2026-09-05: this reference previously cited the paper for 'the false-grip pull-up as its own capability'. False grip was not among the four conditions, and the paper's headline finding runs the other way - hand orientation largely did not differentiate activation. Ordering the drill library by grip is an engineering choice, not a result from this study, and the population is bar work in trained males applied here to ring work in a mixed-ability programme.",
         "verification_status": "pending"
       },
       {

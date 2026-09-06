@@ -711,7 +711,7 @@
           ]
         }
       },
-      "rationale": "Fear-of-falling literature: Adkin & Frank 2000/2002 (postural threat alters muscle activation before the fall); Carpenter 2001 (anxiety degrades balance strategy); Hardy 1996 was cited here for a catastrophe effect and was WITHDRAWN 2026-09-05 — that study is a null result in eight golfers putting, concluding it offers no clear evidence for either model; Bandura (mastery experiences on bail-outs reduce threat perception on the primary skill — you don't reduce fear by walking more). Gymnastics/circus pedagogy (USA Gymnastics, NICA, Emmet Louis, Yuval Ayalon) treats cartwheel exit / pirouette / tuck forward roll as pre-requisite to freestanding, not optional. Phase 0 is deliberately short — one week of exit drills, not a rehab arc.",
+      "rationale": "Fear-of-falling literature: Adkin & Frank 2000 (as postural threat rises, the nervous system tightens postural control - centre-of-pressure amplitude down and frequency up in 62 healthy young adults standing quietly on a raised platform; this study recorded centre-of-pressure only, no muscle activity, and there is no 2002 companion paper in this library); Carpenter 2001 (under postural threat, eight quiet standers adopted a stiffening strategy, with significant changes in kinematic, kinetic and EMG variables and anterior-posterior stiffness 27.5% higher than at low threat - a different balance strategy, not a measured decrement, and elevation rather than anxiety was the manipulated variable). Corrected 2026-09-05: the muscle-activation claim had been attributed to Adkin, which measured none, and Carpenter had been read as showing that anxiety degrades balance; both studied quiet bipedal standing, so treating them as evidence about falling out of an inverted handstand is an engineering choice, not a licensed transfer; Hardy 1996 was cited here for a catastrophe effect and was WITHDRAWN 2026-09-05 — that study is a null result in eight golfers putting, concluding it offers no clear evidence for either model; Bandura (mastery experiences on bail-outs reduce threat perception on the primary skill — you don't reduce fear by walking more). Gymnastics/circus pedagogy (USA Gymnastics, NICA, Emmet Louis, Yuval Ayalon) treats cartwheel exit / pirouette / tuck forward roll as pre-requisite to freestanding, not optional. Phase 0 is deliberately short — one week of exit drills, not a rehab arc.",
       "blocks": [
         "block_bail_wall_cartwheel_exit",
         "block_bail_quarter_pirouette",
@@ -1670,9 +1670,9 @@
         "id": "kinoshita_2022",
         "authors": "Kinoshita T, et al.",
         "year": 2022,
-        "title": "Progressive four-position handstand EMG activity",
+        "title": "Stepwise increase of upper limb muscle activity induced by progressive 4 positions of a handstand training",
         "source": "Isokinetics and Exercise Science 30:127-133",
-        "used_for": "The 4-position progression ladder (90° incline → 135° → elbow / straddle-L → full wall handstand). Validated by EMG activity of shoulder / core musculature. Underpins block_skill_A_kinoshita and the Tier A entry. Flagged for founder review: DOI missing.",
+        "used_for": "Acute surface EMG of eight shoulder-girdle and upper-limb muscles (upper, middle and lower trapezius; serratus anterior; anterior and middle deltoid; infraspinatus; latissimus dorsi) across four static handstand-training positions: 90 degrees, 135 degrees, elbow stand, and full handstand. Muscle activity around the shoulder increased gradually across the four positions, and the scapular stabilisers (upper and middle trapezius, serratus anterior) reached handstand-like levels in the earlier positions. That stepwise shoulder loading is what the position ladder in block_skill_A_kinoshita is built on: it is a defensible way to expose a beginner to handstand-like scapular demand before the handstand. Corrected 2026-09-05: three overreaches removed. (1) No core or trunk musculature was measured - all eight electrodes were on the shoulder girdle and upper limb - so 'EMG activity of shoulder / core musculature' is wrong, and hs_hollow_body_hold sits in this block as a coaching addition, not as something this paper measured. (2) The third position is an elbow stand; 'elbow / straddle-L' is wrong, as straddle-L appears nowhere in the study. (3) This is an acute cross-sectional comparison with no training arm, no follow-up and no outcome measure, so it cannot 'validate' a progression - that training through the ladder produces a handstand is an engineering choice. The paper frames the positions as preferred for young beginners and recovering gymnasts, and the participant count is not in the deposited abstract. DOI 10.3233/IES-210169 has been added to the library record, so the 'DOI missing' flag can come off.",
         "verification_status": "unverified"
       },
       {
@@ -1695,9 +1695,9 @@
         "id": "sobera_2019",
         "authors": "Sobera M, Serafin R, Rutkowska-Kucharska A",
         "year": 2019,
-        "title": "Postural control strategies of handstand-trained subjects",
-        "source": "Acta of Bioengineering and Biomechanics",
-        "used_for": "Elite vs novice difference — medial-lateral CoP control + stiffening strategy. Used in outcome_evidence and freestand hold rationale."
+        "title": "Stabilometric profile of handstand technique in male gymnasts",
+        "source": "Acta of Bioengineering and Biomechanics 21(1):63-71",
+        "used_for": "Eight male acrobatic gymnasts, four more and four less experienced, in a static handstand on a force platform: the more experienced minimised anterior-posterior sway while keeping medial-lateral sway small, and the less experienced showed irregular medial-lateral pressure, with the sway reduction paid for by exerting more force into the floor. The mechanism contrast is real; with four per group it will not carry an outcome claim, and the study is static, so nothing here speaks to walking. Corrected 2026-09-05: the used_for called this an elite-versus-novice difference and used it as outcome evidence, and the record carried a description in place of the published title 'Stabilometric profile of handstand technique in male gymnasts', Acta Bioeng Biomech 21(1):63-71, with no identifier."
       },
       {
         "id": "baker_2025_review",
@@ -1713,17 +1713,17 @@
         "id": "rohleder_vogt_2018",
         "authors": "Rohleder J, Vogt T",
         "year": 2018,
-        "title": "Combined tactile-verbal and visual feedback in gymnastics skill acquisition",
-        "source": "Science of Gymnastics Journal / International Journal of Performance Analysis in Sport 18(1)",
-        "used_for": "Combined tactile-verbal + visual feedback outperforms either alone. Used in feedback_type rationale and video_review drill design."
+        "title": "Teaching novices the handstand: a practical approach of different sport-specific feedback concepts on movement learning",
+        "source": "Science of Gymnastics Journal 10(1):29-42",
+        "used_for": "26 university students in a single pre-post session, randomised to tactile-verbal feedback (n=13) or visual-comparative feedback (n=13): shoulder positioning improved after tactile-verbal (p<0.01) and shoulder-angle motor imagery improved after visual-comparative (p<0.05). No combined arm was run; combining the two is the authors' suggestion in their conclusion, not a measured result, so the mixed feedback design is an engineering choice supported by two modalities moving different variables. Corrected 2026-09-05: the used_for claimed combined feedback outperformed either alone, which the study never tested, and the record carried an invented title and a hedged double venue with the wrong volume (correct: Science of Gymnastics Journal 10(1):29-42)."
       },
       {
         "id": "potdevin_2018",
-        "authors": "Potdevin F, et al.",
+        "authors": "Potdevin F, Vors O, Huchez A, Lamour M, Davids K, Schnitzler C",
         "year": 2018,
-        "title": "Video feedback and self-assessment in gymnastics learning",
-        "source": "Physical Education and Sport Pedagogy 23(6)",
-        "used_for": "n=18 children, 8-week gymnastics: video KP after ~5 reps improved skill and self-assessment. Used in block_skill_B_freestand_search rationale and video_review dosing (not every rep)."
+        "title": "How can video feedback be used in physical education to support novice learning in gymnastics? Effects on motor learning, self-assessment and motivation",
+        "source": "Physical Education and Sport Pedagogy 23(6):559-574",
+        "used_for": "n=18 in the video-feedback arm, French PE beginners aged 12.4 +/- 0.5, five weekly lessons learning a front handstand to flat-back landing with a teacher present: video knowledge-of-performance after every five attempts improved arm-trunk angle by lesson 5 and improved self-assessment scores. The every-five-reps number is carried across to adult self-coached freestand search as a heuristic; it is an engineering choice, not a dose validated in this population. Corrected 2026-09-05: the study is five weeks and five lessons, not eight weeks, and the record's title was a stub that could not be looked up."
       },
       {
         "id": "chiviacowsky_wulf_2002",
@@ -1752,11 +1752,11 @@
       },
       {
         "id": "vidal_torija_2025",
-        "authors": "Vidal-Torija A, et al.",
+        "authors": "Martonovich N, Maman D, Mahamid A, Alfandari L, Behrbalk E",
         "year": 2025,
-        "title": "Wrist symptoms in adult handstand practitioners: a cross-sectional survey",
-        "source": "Frontiers (PMC12550924), n=321",
-        "used_for": "56.7% chronic wrist pain but NO association with weekly training hours, frequency, warm-up, or brace use. Reframes wrist risk as technique-driven, not volume-driven — but supports the volume cap as a conservative upper bound. Attribution flagged for founder review: PMC12550924 resolves to Martonovich et al. (same underlying data). The claim itself survives; the author byline may need to be swapped.",
+        "title": "The Wrist as a Weightbearing Joint in Adult Handstand Practitioners: A Cross-Sectional Survey of Chronic Pain and Training-Related Factors",
+        "source": "Journal of Functional Morphology and Kinesiology 10(4):372",
+        "used_for": "Cross-sectional survey of 321 adult handstand practitioners: 182 (56.7 percent) reported chronic wrist pain, with no significant association between that pain and weekly training hours, training frequency, training duration, warm-up routine or brace use. The authors read it as multifactorial rather than volume-driven. Note the direction: this is evidence against volume being the driver, so it is not evidence for the wrist volume cap. The cap is a conservative engineering choice and should be labelled as one. Corrected 2026-09-05: the byline, title and venue were all wrong on both the programme record and citations.json; the paper is Martonovich N, Maman D, Mahamid A, Alfandari L, Behrbalk E, 'The Wrist as a Weightbearing Joint in Adult Handstand Practitioners', J Funct Morphol Kinesiol 10(4):372, doi 10.3390/jfmk10040372 - not Frontiers, and no author named Vidal-Torija exists on it.",
         "verification_status": "unverified"
       },
       {
@@ -1782,15 +1782,15 @@
         "year": 2000,
         "title": "Alterations in shoulder kinematics and associated muscle activity in people with symptoms of shoulder impingement",
         "source": "Physical Therapy 80(3):276-291",
-        "used_for": "Serratus + trapezius endurance in sustained overhead flexion. Underpins the wall_supported_shrugs drill and the 170° prerequisite."
+        "used_for": "Cross-sectional comparison of 52 construction workers with routine overhead exposure, with and without shoulder impingement symptoms: the symptomatic group showed decreased scapular upward rotation, increased anterior tipping, increased medial rotation under load, and decreased serratus anterior activity across all loads and phases. Corrected 2026-09-05: this read 'serratus + trapezius ENDURANCE in SUSTAINED overhead flexion, underpins the wall_supported_shrugs drill and the 170 degree prerequisite'. The paper measured EMG amplitude during RAMPED humeral elevation across phases of 31-60, 61-90 and 91-120 degrees under 0 / 2.3 / 4.6 kg handheld loads. It measured no endurance, no sustained holds, and nothing at or near 170 degrees, and it is a symptomatic-population comparison rather than a training study - so it cannot underpin a drill or a prerequisite threshold. Both remain engineering choices, which is what this file already says of the 170 degree cutoff in engineering_choices_flagged."
       },
       {
         "id": "reinold_2007",
-        "authors": "Reinold MM, et al.",
+        "authors": "Reinold MM, Macrina LC, Wilk KE, Fleisig GS, Dun S, Barrentine SW, Ellerbusch MT, Andrews JR",
         "year": 2007,
         "title": "Electromyographic analysis of the supraspinatus and deltoid muscles during 3 common rehabilitation exercises",
-        "source": "Journal of Orthopaedic & Sports Physical Therapy",
-        "used_for": "Rotator cuff / deltoid activation patterns in overhead loading. Cited in shoulder-endurance contraindication and belly-to-wall hold rationale."
+        "source": "Journal of Athletic Training 42(4):464-469",
+        "used_for": "EMG in 22 asymptomatic subjects across three isolated cuff exercises, with no difference among them for supraspinatus and less deltoid activity in the full-can position. It is not a study of sustained overhead or inverted loading, so the shoulder-endurance contraindication and the belly-to-wall rationale rest on clinical caution rather than on this measurement. Corrected 2026-09-05: the record named the wrong journal with no volume or pages; the paper is J Athl Train 42(4):464-469, PMID 18174934, and this id had been serving two different Reinold papers at once."
       },
       {
         "id": "karni_1998",
@@ -1802,11 +1802,11 @@
       },
       {
         "id": "walker_2003",
-        "authors": "Walker MP, Brakefield T, Hobson JA, Stickgold R",
+        "authors": "Walker MP, Brakefield T, Seidman J, Morgan A, Hobson JA, Stickgold R",
         "year": 2003,
-        "title": "Dissociable stages of human memory consolidation and reconsolidation",
+        "title": "Sleep and the time course of motor skill learning",
         "source": "Learning & Memory 10(4):275-284",
-        "used_for": "Sleep-dependent motor consolidation. Reinforces daily-short skill exposure over infrequent long sessions. Journal + byline corrected 2026-08-17 — canonical entry in citations.json is now Learning & Memory 10(4):275-284 (matches whitepaper 04)."
+        "used_for": "Sleep-dependent motor consolidation: in finger-tapping learning, doubling the quantity of initial training did not alter the overnight sleep-dependent gain, which is the reason daily short exposure is preferred to infrequent long sessions. Laboratory keypress task, not a balance or inversion skill. Corrected 2026-09-05: the 2026-08-17 correction left the record internally spliced, keeping the Nature paper's title and its four-author byline over this Learning & Memory locator; the byline is Walker MP, Brakefield T, Seidman J, Morgan A, Hobson JA, Stickgold R and the title is 'Sleep and the time course of motor skill learning', PMID 12888546."
       },
       {
         "id": "shea_morgan_1979",
@@ -1822,7 +1822,7 @@
         "year": 2026,
         "title": "Handstand walking biomechanics and shoulder pain association",
         "source": "Scientific Reports (s41598-026-51612-w)",
-        "used_for": "Pain-associated practitioners show a technique-driven compensation pattern. Underpins the non-negotiable 'shoulder pain stops session' rule. Byline and DOI checked against the publisher record on 2026-09-02.",
+        "used_for": "Cross-sectional comparison of ten practitioners who could handstand walk six steps: those reporting shoulder pain moved significantly slower (p=0.005), showed shorter arm lengths (p=0.013) and greater net torsional work (p=0.002), a more flexed arm position associated with higher joint loading. With n=10 and no time order, it cannot say whether the pattern causes the pain or follows from it, and it reports nothing about managing a session. The shoulder-pain-stops-session rule is a conservative safety choice; this paper describes a compensation pattern consistent with it. The authors name discipline, training volume and gender as unaddressed confounders. Corrected 2026-09-05: this record's authors field was the placeholder 'Sci Reports handstand-walk shoulder pain team' rather than a byline, and the used_for asserted that byline and DOI had been checked against the publisher record on 2026-09-02, a check the same record falsified; the real byline is Angioi M, Hinds N, Twycross-Lewis R, Farmer C, Birn-Jeffery AV, Scientific Reports 16:22766, doi 10.1038/s41598-026-51612-w.",
         "url": "https://www.nature.com/articles/s41598-026-51612-w",
         "verification_status": "unverified"
       },
@@ -1832,17 +1832,17 @@
         "year": 2017,
         "title": "Balance control during gait initiation: State-of-the-art and research perspectives",
         "source": "World J Orthop 8(11):815-828",
-        "used_for": "Walking initiation biomechanics — CoP shift precedes step. Informs the single_step_attempt drill design and the 'lean the shape toward the far wall' external-focus cue. Replaced ferrari_2021 (unlocatable) 2026-08-18 per founder-approved plan.",
+        "used_for": "State-of-the-art review of balance control during bipedal gait initiation from quiet standing, covering anticipatory postural adjustments, stance-leg stiffness, foot placement, lateral ankle strategy, swing-foot strike pattern and vertical centre-of-mass braking; written for aging, neurological and orthopedic conditions and aimed at rehabilitation. The one point borrowed here is general and real: a postural shift precedes the first step rather than following it, which is why single_step_attempt trains the weight shift before the step rather than the step alone. Corrected 2026-09-05: previously read as direct support for the drill design and the 'lean the shape toward the far wall' cue. The paper addresses neither inversion nor hand support, and nothing in it concerns a base of support at the hands, so carrying anticipatory postural adjustment across to initiating locomotion while inverted is an engineering choice. Worth remembering that this citation itself replaced an unlocatable one (ferrari_2021) on 2026-08-18, which is exactly the setting in which a near-enough substitution slips through.",
         "url": "https://pubmed.ncbi.nlm.nih.gov/29184756/",
         "verification_status": "verified"
       },
       {
         "id": "simunkova_2024",
-        "authors": "Šimůnková K, et al.",
+        "authors": "Malir R, Chrudimsky J, Provaznik A, Trebicky V",
         "year": 2024,
-        "title": "Upper-quadrant Y-balance and CKCUEST vs handstand E-score",
+        "title": "Are the shoulder joint function, stability, and mobility tests predictive of handstand execution?",
         "source": "PLOS One 19(5):e0302922",
-        "used_for": "UQYBT/CKCUEST show NO predictive relationship with handstand E-score. Used to justify NOT gating obstacles / turns on generic upper-quadrant screens, and to reinforce sub-skill-independence principle."
+        "used_for": "111 novice college athletes aged 19-23: no relationship between handstand execution quality (E-score) and Upper Quarter Y Balance Test or Closed Kinetic Chain Upper Extremity Stability Test scores. That is a good reason not to gate entry on generic upper-quadrant screens. It is weaker support for not gating obstacles and turns, because nobody in a novice sample could perform those sub-skills, and the authors themselves attribute the null partly to design (testing at 90 versus 180 degrees of shoulder flexion) and to insufficient skill variability. Corrected 2026-09-05: the byline is wrong on both the programme record and citations.json: the paper is Malir R, Chrudimsky J, Provaznik A, Trebicky V, 'Are the shoulder joint function, stability, and mobility tests predictive of handstand execution?', PLOS One 19(5):e0302922 - Simunkova K is not an author, and the title here was a description."
       },
       {
         "id": "wulf_1998",
@@ -1880,25 +1880,25 @@
         "id": "proteau_1992",
         "authors": "Proteau L, Marteniuk RG, Lévesque L",
         "year": 1992,
-        "title": "Learning is specific to the sensory conditions of practice",
-        "source": "Quarterly Journal of Experimental Psychology 44A:557-575",
-        "used_for": "Specificity of practice — learning is bound to the sensory context. Underpins the choice to train wall hold + freestand + walk as separate state variables."
+        "title": "A sensorimotor basis for motor learning: evidence indicating specificity of practice",
+        "source": "Quarterly Journal of Experimental Psychology Section A 44(3):557-575",
+        "used_for": "Laboratory manual-aiming task with and without vision of the limb; the authors conclude that learning is specific to the conditions that prevail during skill acquisition. Training wall hold, freestand and walk as separate state variables follows that principle by extrapolation; the paper tests neither handstands nor locomotion. Corrected 2026-09-05: the canonical record had been moved to a Journal of Motor Behavior reference that does not exist, the title here was a description rather than the published title, and the issue should read 44(3)."
       },
       {
         "id": "newell_1985",
         "authors": "Newell KM",
-        "year": 1985,
-        "title": "Coordination, control, and skill: constraints-led framework",
-        "source": "Advances in Motor Development Research",
-        "used_for": "Organismic, task, environmental constraints. Underpins the multi-dimensional decomposition into capability_domains."
+        "year": 1986,
+        "title": "Constraints on the development of coordination",
+        "source": "Motor Development in Children: Aspects of Coordination and Control (Wade MG & Whiting HTA, eds), Martinus Nijhoff Publishers, chapter beginning p. 341",
+        "used_for": "Newell's constraints framework: three categories of constraint - organismic, environmental and task - that 'INTERACT to determine for a given organism the optimal pattern of coordination and control for any activity' (verified at p. 348 of the original chapter scan). Corrected 2026-09-05: the bibliography, not the substance. The chapter is 'Constraints on the development of coordination', in Wade MG & Whiting HTA (eds), Motor Development in Children: Aspects of Coordination and Control, whose title page reads 1986 Martinus Nijhoff Publishers; it opens at p. 341. citations.json named a different Newell chapter's title ('Coordination, control and skill', 1985, in Differing Perspectives in Motor Learning, Memory and Control) against a book, 'Advances in Motor Development Research', that matches neither work. The three-category decomposition this programme uses for capability_domains is genuinely in the 1986 chapter; note that the chapter frames the categories as interacting, and is about the development of coordination in children."
       },
       {
         "id": "shea_2000",
-        "authors": "Shea CH, et al.",
+        "authors": "Shea CH, Lai Q, Black CB, Park JH",
         "year": 2000,
-        "title": "Practice spacing effects on motor skill acquisition and retention",
-        "source": "Human Movement Science 19:737-760",
-        "used_for": "Spacing across days > massing within a day. Underpins daily-short design and the 'don't double up if you miss a session' rule."
+        "title": "Spacing practice sessions across days benefits the learning of motor skills",
+        "source": "Human Movement Science 19(5):737-760",
+        "used_for": "Sessions spaced across days beat sessions massed within a day, measured on a laboratory dynamic-balance task and a key-press timing task with a delayed retention test. The daily-short design and the do-not-double-up rule follow that principle; neither the task nor the population is a handstand, so the transfer is an engineering choice. Corrected 2026-09-05: the record's title was a description rather than the published title, with a truncated byline and no identifier."
       },
       {
         "id": "robertson_2004",
@@ -1922,7 +1922,7 @@
         "year": 2000,
         "title": "Injury prevention in women's gymnastics",
         "source": "Sports Medicine 30:359-373",
-        "used_for": "Skill-readiness assessment as injury mitigation. Cited in prerequisite gating on advanced drills."
+        "used_for": "Narrative review of injury prevention in women's artistic gymnastics: a bridging article, reporting no finding and offering no screening protocol in its abstract, with the full text paywalled. Cited here only for the general principle that readiness should gate exposure to a high-demand skill. Corrected 2026-09-05: previously read as support for prerequisite gating on advanced drills. The gating in this programme is an engineering choice; the population in the paper is young elite female gymnasts in 2000, not self-taught adults learning to invert."
       },
       {
         "id": "ackerman_1988",
@@ -1938,7 +1938,7 @@
         "year": 2014,
         "title": "Temporal structure of motor variability is dynamically regulated and predicts motor learning ability",
         "source": "Nature Neuroscience 17:312-321",
-        "used_for": "3× variance in visuomotor rotation learning correlates with baseline motor variability. Reinforces individual-variance framing."
+        "used_for": "Planar reaching in a manipulandum: participants whose task-relevant motor variability was one standard deviation above average learned more than twice as fast as those one standard deviation below (p=0.0021), across reward-based trajectory learning and error-based force-field adaptation. It supports the individual-variance framing - people arrive with different learning rates - and nothing more specific than that for handstand acquisition. Corrected 2026-09-05: the figure is more than twofold, not 3x, and visuomotor rotation is not a paradigm in this study; the string appears in the paper only in its reference list. The same wrong phrasing remains in muscle-up.json outcome_evidence and must be fixed by hand."
       }
     ],
     "reference_ids": [

@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: 2e6865cd260cd3cb -->
+<!-- source-fingerprint: 06135836a04e55f2 -->
 
 ## What we are asking
 
@@ -360,10 +360,10 @@ Printed against the questions above so you can see which are actually detectable
 - *engine-builder says it supports:* The definitive interference-mechanism review. Anchors concurrent_strength_prescription.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
-**fyfe_2016** — Endurance training intensity does not mediate interference to maximal lower-body strength gain during short-term concurrent training · Fyfe JJ, Bishop DJ, Zacharewicz E, et al. · 2016
+**fyfe_2016** — Endurance training intensity does not mediate interference to maximal lower-body strength gain during short-term concurrent training · Fyfe JJ, Bartlett JD, Hanson ED, Stepto NK, Bishop DJ · 2016
 
-- *engine-builder says it supports:* Endurance VOLUME (not intensity) drives interference — HIIT and MICT produce the same strength decrement at matched work. Cited in progression_rationale for why peak-volume weeks tighten the strength cap.
-- *engine-builder-block-2 says it supports:* Endurance VOLUME (not intensity) drives interference. Anchors why concurrent-strength cap tightens in Block 2's peak-volume weeks 5-7.
+- *engine-builder says it supports:* Eight weeks of concurrent training in 23 recreationally active men: HIT+RT and WORK-MATCHED MICT+RT attenuated maximal lower-body strength gain similarly relative to resistance training alone (7.4% vs 8.2%), so endurance INTENSITY is not a critical mediator of interference to maximal strength gain over the short term. Corrected 2026-09-05: this read 'endurance VOLUME (not intensity) drives interference'. The two endurance arms were work-matched by design, so volume was held constant and never manipulated; the volume half is an inference from the absence of an intensity effect, and this trial cannot license it. Tightening the strength cap during peak-volume weeks stays as an engineering choice. Byline also corrected - 'Hamilton DL' is on neither candidate Fyfe 2016 paper; the correct byline is Fyfe JJ, Bartlett JD, Hanson ED, Stepto NK, Bishop DJ.
+- *engine-builder-block-2 says it supports:* Eight weeks of concurrent training in 23 recreationally active men: HIT+RT and WORK-MATCHED MICT+RT attenuated maximal lower-body strength gain similarly relative to resistance training alone (7.4% vs 8.2%), so endurance INTENSITY is not a critical mediator of interference to maximal strength gain over the short term. Corrected 2026-09-05: this read 'endurance VOLUME (not intensity) drives interference'. The endurance arms were work-matched, so volume was constant and untested. Block 2's tightening of the concurrent-strength cap across peak-volume weeks 5-7, and the phase note that lowers the RPE cap to 6.5, are engineering choices rather than findings of this trial; what the trial licenses is not fearing per-session endurance intensity. Byline also corrected - 'Hamilton DL' is on neither candidate Fyfe 2016 paper; the correct byline is Fyfe JJ, Bartlett JD, Hanson ED, Stepto NK, Bishop DJ.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **helgerud_2007** — Aerobic high-intensity intervals improve VO2max more than moderate training · Helgerud J, Høydal K, Wang E, et al. · 2007
@@ -380,8 +380,8 @@ Printed against the questions above so you can see which are actually detectable
 
 **impey_2018** — Fuel for the work required: a theoretical framework for carbohydrate periodization and the glycogen threshold hypothesis · Impey SG, Hearris MA, Hammond KM, et al. · 2018
 
-- *engine-builder says it supports:* Carbohydrate periodisation — fuel resistance and hard interval sessions fully; easy Z2 can be lower-carb. Cited in concurrent_strength_prescription.
-- *engine-builder-block-2 says it supports:* Fuel resistance sessions fully — Block 2's higher volume tightens the fuel-for-work-required framework.
+- *engine-builder says it supports:* Theoretical framework for carbohydrate periodisation - the 'fuel for the work required' paradigm, in which CHO availability is adjusted to the demands of the upcoming session - developed for ENDURANCE training. Corrected 2026-09-05: every train-low model the paper reviews (twice-daily, fasted, post-exercise CHO restriction, sleep-low) is an endurance protocol and the outcomes are oxidative enzymes and endurance performance, so resistance training is outside its scope; 'fuel resistance sessions fully' is a sensible engineering choice extrapolated from the framework, not a finding of it. The paper's own caveat also belongs in the copy: of 11 studies, 37% showed a performance improvement and 63% showed no change, which is why the authors frame this as a hypothesis. The easy-sessions-can-be-lower-carb half is directly supported.
+- *engine-builder-block-2 says it supports:* Theoretical framework for carbohydrate periodisation - the 'fuel for the work required' paradigm - developed for ENDURANCE training. Corrected 2026-09-05: resistance training is outside the paper's scope (every train-low model it reviews is an endurance protocol, with oxidative enzymes and endurance performance as outcomes), so 'fuel resistance sessions fully' in Block 2's higher-volume weeks is an engineering choice extrapolated from the framework rather than a finding of it. The paper's own performance caveat should travel with it: 37% of 11 studies showed improvement, 63% showed no change.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **joyner_coyle_2008** — Endurance exercise performance: the physiology of champions · Joyner MJ, Coyle EF · 2008
@@ -391,13 +391,13 @@ Printed against the questions above so you can see which are actually detectable
 
 **konopka_2014** — Markers of human skeletal muscle mitochondrial biogenesis and quality control: effects of age and aerobic exercise training · Konopka AR, Suer MK, Wolff CA, Harber MP · 2014
 
-- *engine-builder says it supports:* Effect sizes for oxidative enzyme changes (β-HAD +397-435%, CS +65-102%, PGC-1α +55-62% in 12 weeks) — cited in physiological_targets and block_z1_steady rationale. Also: no age blunting of relative response. Population caveat: cohort was older adults over 12 weeks; healthy strength-trained users on an 8-week block should not treat the top of these ranges as their ceiling.
-- *engine-builder-block-2 says it supports:* 12-week enzyme-activity data anchors the additional Block 2 gains on top of Block 1.
+- *engine-builder says it supports:* Aerobic training in young men (20 +/- 1 y) and older men (74 +/- 3 y) raised the protein content of mitochondrial biogenesis, fusion and fission markers, and did so independent of age; skeletal muscle hypertrophy was likewise age-independent, while the VO2peak improvement was larger in the young men. Cited here for that directional point only: an aerobic block raises mitochondrial-biogenesis markers, and an older trainee is not excluded from the response. How large an oxidative adaptation an 8-week block should expect is an engineering choice in Terav's own progression logic, not a figure from this paper. Corrected 2026-09-05: this reference previously supplied effect sizes (beta-HAD +397-435%, CS +65-102%, PGC-1alpha +55-62% in 12 weeks) that have no retrievable source, that describe enzyme activities rather than the protein content the paper reports, and that the same lab's 2010 companion contradicts in sign on one marker (PGC-1alpha protein 20 +/- 5% lower after 12 weeks). The figures are withdrawn rather than restated; the full text is paywalled, so a human with journal access would have to settle what the tables actually say.
+- *engine-builder-block-2 says it supports:* Directional support only: aerobic training raised mitochondrial-biogenesis protein markers in both young and older men, so continuing aerobic work into a second block is not running into a demonstrated biological ceiling. What Block 2 adds on top of Block 1, and how much, is an engineering choice from Terav's own progression logic. Corrected 2026-09-05: this reference previously described the paper as '12-week enzyme-activity data' anchoring the incremental Block 2 gains. The paper reports protein content rather than enzyme activity, its abstract states no duration, and the enzyme percentages it was said to supply are not retrievable from it or from any full-text search.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
-**little_2010** — A practical model of low-volume high-intensity interval training induces mitochondrial biogenesis in human skeletal muscle · Little JP, Safdar A, Wilkin GP, Tarnopolsky MA, Gibala MJ · 2010
+**little_2010** — A practical model of low-volume high-intensity interval training induces mitochondrial biogenesis in human skeletal muscle: potential mechanisms · Little JP, Safdar A, Wilkin GP, Tarnopolsky MA, Gibala MJ · 2010
 
-- *engine-builder says it supports:* Mitochondrial biogenesis signal detectable within 2 weeks of HIIT — cited in physiological_targets and progression_rationale for why weeks 1-2 focus on Z1 accumulation.
+- *engine-builder says it supports:* Six sessions of low-volume high-intensity interval training over 2 weeks increased skeletal muscle mitochondrial capacity and improved exercise performance in 7 young men (VO2peak about 46 ml/kg/min) - so the mitochondrial biogenesis signal is detectable within two weeks. Corrected 2026-09-05: the second half of this read 'cited in physiological_targets and progression_rationale for why weeks 1-2 focus on Z1 accumulation'. That does not follow from this study: it is a HIIT intervention with no low-intensity arm and no base phase, and if anything it shows the mitochondrial adaptation arrives within two weeks OF INTERVALS, without a preceding base. The '5-10 sessions' figure this file attributes jointly to Little and Perry is in neither paper (Little: six sessions over two weeks). Z1-first sequencing in weeks 1-2 is an engineering choice.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **morton_2018** — A systematic review, meta-analysis and meta-regression of the effect of protein supplementation on resistance training-induced gains in muscle mass and strength in healthy adults · Morton RW, Murphy KT, McKellar SR, et al. · 2018
@@ -423,10 +423,10 @@ Printed against the questions above so you can see which are actually detectable
 - *engine-builder says it supports:* mRNA-precedes-protein pattern — informs the choice to accumulate volume before adding interval intensity.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
-**pilegaard_2000** — Effect of high-intensity exercise training on lactate/H+ transport capacity in human skeletal muscle · Pilegaard H, Domino K, Noland T, et al. · 2000
+**pilegaard_2000** — Effect of high-intensity exercise training on lactate/H+ transport capacity in human skeletal muscle · Pilegaard H, Domino K, Noland T, Juel C, Hellsten Y, Halestrap AP, Bangsbo J · 1999
 
-- *engine-builder says it supports:* MCT1 upregulation with endurance training. Cited in physiological_targets and block_sustained_tempo rationale.
-- *engine-builder-block-2 says it supports:* MCT1 upregulation from threshold-and-above work. Anchors why threshold cruise is Block 2's primary driver.
+- *engine-builder says it supports:* Molecular evidence that trained muscle carries more lactate/H+ transport capacity: 12 percent higher transport in sarcolemmal giant vesicles (n=7) and 76 percent more MCT1 protein (n=4) after one-legged knee-extensor high-intensity training. It is a tissue measurement, not a performance outcome, and it says nothing about which session type belongs in a block, so treat the sustained-tempo prescription as an engineering choice this mechanism is consistent with rather than one it licenses. Corrected 2026-09-05: the record's endurance-training framing came from a different paper (Dubouchaud et al. 2000, PMID 10751188, MCT1 up 60-90 percent after nine weeks cycling at 75 percent VO2peak), whose volume, pages, year and URL had been pasted onto Pilegaard's byline and title; the real Pilegaard paper is Am J Physiol 1999;276(2):E255-61, PMID 9950784, and is a high-intensity training study.
+- *engine-builder-block-2 says it supports:* Molecular evidence that high-intensity training raises lactate/H+ transport capacity: 12 percent higher transport (n=7) and 76 percent more MCT1 protein (n=4) after one-legged knee-extensor training. The threshold-and-above gloss fits this paper, but n=7 in an artificial single-limb model measures tissue, not performance; calling threshold cruise Block 2's primary driver is a programming decision, not a result reported here. Corrected 2026-09-05: the record's volume, pages, year and URL belonged to Dubouchaud et al. 2000 (PMID 10751188), not to Pilegaard; the real paper is Am J Physiol 1999;276(2):E255-61, PMID 9950784.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **robineau_2016** — Specific training effects of concurrent aerobic and strength exercises depend on recovery duration · Robineau J, Babault N, Piscione J, Lacome M, Bigard AX · 2016
@@ -455,7 +455,7 @@ Printed against the questions above so you can see which are actually detectable
 
 **san_millan_brooks_2018** — Assessment of metabolic flexibility by means of measuring blood lactate, fat and carbohydrate oxidation responses · San-Millán I, Brooks GA · 2018
 
-- *engine-builder says it supports:* Metabolic flexibility framework and Zone 2 lactate-clamp methodology. Anchors the block_z1_steady prescription.
+- *engine-builder says it supports:* Metabolic-flexibility framework: fat oxidation and blood lactate are inversely correlated across professional athletes, moderately active individuals and metabolic-syndrome patients, measured by indirect calorimetry with blood draws. It anchors why a low-lactate steady effort is the substrate-oxidation stimulus. It sets no zone boundary and no lactate clamp target, and the app prescribes the zone by heart rate or RPE, so the field translation is an engineering choice. Corrected 2026-09-05: no bibliographic error; the lactate-clamp methodology wording implied a prescribed numeric target this paper does not set.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **schumann_2022** — Compatibility of concurrent aerobic and strength training for skeletal muscle size and function: an updated systematic review and meta-analysis · Schumann M, Feuerbacher JF, Sünkeler M, et al. · 2022

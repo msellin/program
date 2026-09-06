@@ -646,7 +646,7 @@
         "year": 2008,
         "title": "Endurance exercise performance: the physiology of champions",
         "source": "J Physiol 586(1):35-44",
-        "used_for": "Threshold > VO2max as primary metric to track"
+        "used_for": "Models endurance performance as VO2max, lactate threshold and efficiency INTERACTING multiplicatively (marathon speed 'essentially predicted by' VO2max x lactate threshold percentage x running economy), and states that the oxidative capacity underlying the lactate threshold is 'highly plastic' and can more than double with training. Corrected 2026-09-05: this read 'Threshold > VO2max as primary metric to track'. The paper ranks no determinant above another and frames none of the three as a metric to track; it also contains no threshold-change magnitude, and the word 'plateau' does not occur in it. Using pre/post submaximal HR at fixed pace as a threshold-shift proxy remains a defensible engineering choice; this paper establishes that the threshold is trainable, not that it should be the primary metric."
       },
       {
         "id": "san_millan_brooks_2018",
@@ -654,7 +654,7 @@
         "year": 2018,
         "title": "Assessment of metabolic flexibility by means of measuring blood lactate",
         "source": "Sports Med 48:467-479",
-        "used_for": "Zone 2 = lactate <2 mmol/L; substrate oxidation"
+        "used_for": "Indirect calorimetry and blood lactate in professional endurance athletes, moderately active individuals and metabolic-syndrome patients: fat oxidation was higher and lactate lower in the athletes, and the two were inversely correlated within every group (professionals r=-0.97). That is the substrate-oxidation basis for an easy-effort zone. The 2 mmol/L number is coaching convention used to place the zone in practice, not a boundary this paper defines. Corrected 2026-09-05: the used_for stated Zone 2 = lactate under 2 mmol/L as this paper's definition; nothing retrieved from it contains that cut-point, and app users train the zone by heart rate or RPE with no lactate measurement at all."
       },
       {
         "id": "atherton_2005",
@@ -746,11 +746,11 @@
       },
       {
         "id": "fyfe_2016",
-        "authors": "Fyfe JJ, Bishop DJ, Zacharewicz E, et al.",
+        "authors": "Fyfe JJ, Bartlett JD, Hanson ED, Stepto NK, Bishop DJ",
         "year": 2016,
         "title": "Concurrent exercise incorporating high-intensity interval or continuous training modulates mTORC1 signaling and microRNA expression",
         "source": "Front Physiol 7:487",
-        "used_for": "Endurance INTENSITY does not mediate interference — VOLUME does"
+        "used_for": "Eight weeks of concurrent training in 23 recreationally active men: HIT+RT and WORK-MATCHED MICT+RT attenuated maximal lower-body strength gain similarly relative to resistance training alone (7.4% vs 8.2%, a difference of about 0.8 points), so endurance INTENSITY is not a critical mediator of interference to maximal strength gain over the short term. Corrected 2026-09-05: three things were wrong here. The title was that of a DIFFERENT Fyfe 2016 paper (the mTORC1 / microRNA study, which is in Am J Physiol Regul Integr Comp Physiol 310:R1297-R1311, not Front Physiol 7:487), pinned onto this paper's journal, volume and page. The byline was that same other paper's (Bishop DJ, Zacharewicz E); the correct byline is Fyfe JJ, Bartlett JD, Hanson ED, Stepto NK, Bishop DJ. And 'VOLUME does' is not supported: the endurance arms were work-matched, so volume was held constant and never varied. Of the pair 'cap total endurance minutes; don't fear intensity per session', the second half is the finding and the first is an engineering choice."
       },
       {
         "id": "petre_2018",
@@ -758,7 +758,7 @@
         "year": 2018,
         "title": "Development of maximal dynamic strength during concurrent resistance and endurance training in untrained, moderately trained and trained individuals",
         "source": "J Sports Sci Med 17(2):167-173",
-        "used_for": "Trained lifters: HIIT vs continuous produced same squat gains"
+        "used_for": "n=16 highly-trained ice-hockey and rugby players, 6 weeks, endurance performed after resistance: parallel squat improved in both arms (RT+continuous 12 +/- 8 percent, RT+HIIT 14 +/- 10 percent, both p<0.01) with no difference between them. Read narrowly this says the choice between HIIT and continuous cardio did not cost squat gains in that cohort over that window; it does not say concurrent training is free. Applying it to CSM users, who are not necessarily at that training level and who run longer blocks, is an engineering choice. Corrected 2026-09-05: the record's authors and title belonged to Petre 2021, Sports Med 51(5):991-1010 (PMID 33751469), a meta-analysis whose trained subgroup reports the opposite direction (leg press and squat 1RM negatively affected, ES -0.35); the locator and this claim belong to Petre, Lofving and Psilander 2018, JSSM 17(2):167-173, PMID 29769816."
       },
       {
         "id": "aragon_schoenfeld_2013",
@@ -798,7 +798,7 @@
         "year": 2018,
         "title": "Fuel for the work required",
         "source": "Sports Med 48(5):1031-1048",
-        "used_for": "Fuel-for-work framework for concurrent programming"
+        "used_for": "Theoretical framework for carbohydrate periodisation - the 'fuel for the work required' paradigm - developed for ENDURANCE training. Corrected 2026-09-05: this read 'fuel-for-work framework for concurrent programming'. The paper makes no concurrent-training application: every train-low model it reviews is an endurance protocol and its outcomes are oxidative enzymes and endurance performance. Applying the framework to a concurrent week is an engineering choice. The paper's own caveat, unrecorded until now, is that 37% of 11 studies showed a performance improvement and 63% showed no change."
       },
       {
         "id": "bouchard_1999_heritage",
@@ -838,7 +838,7 @@
         "year": 2017,
         "title": "The benefits and risks of CrossFit: a systematic review",
         "source": "Workplace Health Saf 65(12):612-618",
-        "used_for": "10-week CrossFit — VO2max + body comp + strength all improve concurrently"
+        "used_for": "Systematic review of 13 studies (N = 2,326 adults) concluding that CrossFit 'is comparable to other exercise programs with similar injury rates and health outcomes', and that previous injuries should be assessed before recommending it. Corrected 2026-09-05: this read '10-week CrossFit - VO2max + body comp + strength all improve concurrently'. The retrieved record contains no 10-week trial and no VO2max, body-composition or strength figure; the full text is paywalled, so the sentence cannot be excluded from the body, only shown to be unsupported by anything retrievable. Any such result belongs to one of the thirteen primary studies inside the review, and that primary study is what would have to be cited. Nothing rendered in this programme currently rests on the withdrawn claim."
       },
       {
         "id": "feito_2018",
@@ -846,7 +846,7 @@
         "year": 2018,
         "title": "High-Intensity Functional Training (HIFT): definition and research implications for improved fitness",
         "source": "Sports 6(3):76",
-        "used_for": "16 wk HIFT — strength AND VO2max improved concurrently"
+        "used_for": "Definitional review of high-intensity functional training. Its 16-week sentence reports VO2max up about 12%, body fat down about 8% and bone mineral content up about 1%; it reports no strength outcome, and it is a review rather than a trial. Corrected 2026-09-05: this read '16 wk HIFT - strength AND VO2max improved concurrently'. That is not in this paper, and no single cited paper shows both: the strength result comes from a different 2018 paper by the same first author (Feito Y, Hoffstetter W, Serafini P, Mangine G, PLoS ONE 13:e0198324), which measured 5RM strength and WOD performance but not VO2max. This programme's headline premise - strength held while aerobic capacity rises - is currently an engineering choice supported by two separate half-results, not a demonstrated concurrent outcome."
       },
       {
         "id": "brandt_2025",

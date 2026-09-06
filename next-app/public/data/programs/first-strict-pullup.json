@@ -1284,7 +1284,7 @@
       }
     },
     "contraindications": [
-      "Shoulder pain during a hang or pull attempt — session ends immediately. Do not train through it. Reinold 2007 supraspinatus / rotator-cuff load data supports the caution: hang position loads the long head of biceps + supraspinatus tendon.",
+      "Shoulder pain during a hang or pull attempt — session ends immediately. Do not train through it. Conservative safety choice, not a cited finding: Reinold et al. 2007 (J Athl Train 42(4):464-469) is EMG in 22 asymptomatic subjects and reports no supraspinatus difference among the three exercises tested, so it describes cuff recruitment rather than licensing a stop rule.",
       "Acute rotator-cuff injury, labral tear, or shoulder dislocation in the last 6 months — dead hangs and pull-up attempts contraindicated until cleared by a clinician.",
       "Currently symptomatic medial or lateral elbow tendinopathy — defer heavy negatives and chinup variants. Use scap and row work only, and clear with a clinician for eccentric work.",
       "Persistent cervical radiculopathy — avoid dead hangs entirely; the traction can inflame nerve root symptoms.",
@@ -1305,12 +1305,12 @@
     "references": [
       {
         "id": "youdas_2010",
-        "authors": "Youdas JW, Amundson CL, Cicirello KS, Hellmers CJ, Hollman JH",
+        "authors": "Youdas JW, Amundson CL, Cicero KS, Hahn JJ, Harezlak DT, Hollman JH",
         "year": 2010,
         "title": "Surface electromyographic activation patterns and elbow joint motion during a pull-up, chin-up, or perfect-pullup rotational exercise",
         "source": "Journal of Strength and Conditioning Research 24(12):3404-3414",
         "url": "https://pubmed.ncbi.nlm.nih.gov/21068680/",
-        "used_for": "EMG hierarchy across pull-up variants — scap phase precedes concentric pull; wide-grip biases lat, neutral biases brachialis. Anchors the scap-first progression and grip-width rotation in Tier D."
+        "used_for": "Surface EMG in 21 men and 4 women (mean age ~25 y) across three conditions: conventional pull-up, chin-up, and a rotating-handle (Perfect-Pullup) variant. One finding is used here: a sequential activation pattern in which lower trapezius and pectoralis major initiate the repetition and biceps brachii and latissimus dorsi complete it. That is the evidence behind teaching a scapular phase before the concentric pull. Corrected 2026-09-05: this reference also claimed 'wide-grip biases lat, neutral biases brachialis'. No wide-grip and no neutral-grip condition was run, and brachialis was not among the eight recorded muscles, so that half described a study that did not happen and is withdrawn. The grip-width rotation in Tier D is an engineering choice about varying the stimulus and now carries no citation. The byline was also wrong in this reference block and must be corrected to Youdas JW, Amundson CL, Cicero KS, Hahn JJ, Harezlak DT, Hollman JH."
       },
       {
         "id": "roig_2009",
@@ -1343,17 +1343,17 @@
         "id": "kibler_2013",
         "authors": "Kibler WB, Ludewig PM, McClure PW, Michener LA, Bak K, Sciascia AD",
         "year": 2013,
-        "title": "Clinical implications of scapular dyskinesis in shoulder injury: the 2013 consensus statement",
+        "title": "Clinical implications of scapular dyskinesis in shoulder injury: the 2013 consensus statement from the Scapular Summit",
         "source": "British Journal of Sports Medicine 47(14):877-885",
-        "used_for": "Scapular dyskinesis and its role in overhead / hang loading. Supports the shoulder-prep-before-every-session rule."
+        "used_for": "The 2013 Scapular Summit consensus statement: scapular dyskinesis is present in a high percentage of shoulder injuries, its exact role in creating or exacerbating shoulder dysfunction 'is not clearly defined', it is 'most aptly viewed as a potential impairment' to shoulder function, and rehabilitation to restore scapular position and motion can be effective 'within a more comprehensive shoulder rehabilitation programme'. Corrected 2026-09-05: the id kibler_2013 resolved in citations.json, and therefore on /evidence, to a different real paper - Kibler WB & Sciascia A (2010), 'Current concepts: scapular dyskinesis', BJSM 44(5):300-305 - while this programme's own record described the 2013 consensus. The canonical record has been corrected to the 2013 consensus, which is what this programme means. Substantively the reach is still wider than the source: the consensus concerns INJURED shoulders, declines to establish a causal role, and studies no hang loading, so mandatory shoulder prep before every session for asymptomatic trainees is an engineering choice, not something either Kibler paper licenses."
       },
       {
         "id": "reinold_2007",
-        "authors": "Reinold MM, Wilk KE, Fleisig GS, et al.",
+        "authors": "Reinold MM, Macrina LC, Wilk KE, Fleisig GS, Dun S, Barrentine SW, Ellerbusch MT, Andrews JR",
         "year": 2007,
         "title": "Electromyographic analysis of the supraspinatus and deltoid muscles during 3 common rehabilitation exercises",
-        "source": "Journal of Orthopaedic and Sports Physical Therapy 37(9):519-527",
-        "used_for": "Supraspinatus EMG load data — informs the shoulder-pain-stops-session rule for hang and pull work."
+        "source": "Journal of Athletic Training 42(4):464-469",
+        "used_for": "EMG in 22 asymptomatic subjects across three isolated cuff exercises: no statistical difference among the exercises for supraspinatus activity, with the full-can position producing significantly less deltoid activity. That is a muscle-recruitment comparison in people without symptoms; it carries no information about training through pain. The stop-the-session rule for hangs and pulls stays, but as a conservative safety choice, not as a finding of this paper. Corrected 2026-09-05: the source read JOSPT 37(9):519-527, a locator that returns zero results; the paper is J Athl Train 42(4):464-469, PMID 18174934, and the byline was truncated."
       },
       {
         "id": "wulf_1998",
@@ -1397,19 +1397,19 @@
       },
       {
         "id": "walker_2003",
-        "authors": "Walker MP, Brakefield T, Hobson JA, Stickgold R",
+        "authors": "Walker MP, Brakefield T, Seidman J, Morgan A, Hobson JA, Stickgold R",
         "year": 2003,
-        "title": "Dissociable stages of human memory consolidation and reconsolidation",
-        "source": "Nature 425(6958):616-620",
-        "used_for": "Dissociable consolidation stages. Supports daily short skill exposure over infrequent long sessions."
+        "title": "Sleep and the time course of motor skill learning",
+        "source": "Learning & Memory 10(4):275-284",
+        "used_for": "Finger-tapping motor-skill learning across sleep: doubling the quantity of initial training did not change the amount of sleep-dependent improvement that developed overnight. That is the argument for short, frequent exposure over infrequent long sessions. It is a laboratory keypress task, so applying it to pull-up practice is an engineering choice. Corrected 2026-09-05: this id was a splice of two real papers, carrying the Nature paper's title and four-author byline over the Learning & Memory paper's locator; it is resolved onto Walker MP, Brakefield T, Seidman J, Morgan A, Hobson JA, Stickgold R, 'Sleep and the time course of motor skill learning', Learn Mem 10(4):275-284, PMID 12888546. The dissociable-stages claim this record previously made belongs to Nature 425(6958):616-620, PMID 14534587, which says nothing about session length or frequency."
       },
       {
         "id": "shea_2000",
-        "authors": "Shea CH, Lai Q, Black C, Park JH",
+        "authors": "Shea CH, Lai Q, Black CB, Park JH",
         "year": 2000,
         "title": "Spacing practice sessions across days benefits the learning of motor skills",
         "source": "Human Movement Science 19(5):737-760",
-        "used_for": "Spacing effect: spread practice across days beats massed practice on the same day. Anchors the multi-session weekly template and the GtG spacing rule."
+        "used_for": "Two practice sessions separated by 24 hours produced better performance in later practice and better delayed retention than the same sessions separated by 20 minutes, on a laboratory dynamic-balance task and a key-press timing task. The multi-session weekly template and the greasing-the-groove spacing rule apply that result to pulling strength by extrapolation, which is an engineering choice. Corrected 2026-09-05: the record's title was a description rather than the published title, its byline was truncated and it had no identifier, so the /evidence row could not be looked up."
       },
       {
         "id": "henry_1968",
@@ -1424,16 +1424,16 @@
         "authors": "Proteau L, Marteniuk RG, Lévesque L",
         "year": 1992,
         "title": "A sensorimotor basis for motor learning: evidence indicating specificity of practice",
-        "source": "Quarterly Journal of Experimental Psychology 44A(4):557-575",
-        "used_for": "Learning is specific to the sensory conditions of practice. Supports the multi-dimensional per-capability approach."
+        "source": "Quarterly Journal of Experimental Psychology Section A 44(3):557-575",
+        "used_for": "Laboratory manual-aiming task with and without vision of the limb; the authors conclude that learning is specific to the conditions that prevail during skill acquisition. Treating each capability as its own state variable is a design inference from that principle, not a result this paper reports for strength skills. Corrected 2026-09-05: the canonical record had been moved on 2026-08-18 to Journal of Motor Behavior 24(1):81-104, a reference that could not be found to exist; the real paper is Q J Exp Psychol A 44(3):557-575, PMID 1631322, and this programme's issue number should read 44(3), not 44A(4)."
       },
       {
         "id": "newell_1985",
         "authors": "Newell KM",
-        "year": 1985,
+        "year": 1986,
         "title": "Constraints on the development of coordination",
-        "source": "Motor Development in Children: Aspects of Coordination and Control (M.G. Wade & H.T.A. Whiting, eds.)",
-        "used_for": "Constraints-led framework for skill acquisition. Anchors the treat-sub-skills-as-independent-state-variables approach."
+        "source": "Motor Development in Children: Aspects of Coordination and Control (Wade MG & Whiting HTA, eds), Martinus Nijhoff Publishers, chapter beginning p. 341",
+        "used_for": "Newell's constraints framework: organismic, environmental and task constraints that 'INTERACT to determine for a given organism the optimal pattern of coordination and control for any activity' (verified at p. 348 of the original chapter scan). Corrected 2026-09-05: two problems. Bibliography: the chapter's own title page dates it 1986, not 1985 (Wade MG & Whiting HTA eds, Motor Development in Children: Aspects of Coordination and Control, Martinus Nijhoff, chapter beginning p. 341), and the citations.json record named a third, non-existent book. Substance: the chapter says the three categories INTERACT, is about the development of coordination in children, and offers nothing about the statistical independence of trained sub-skills - so treating sub-skills as independent state variables is an engineering choice this chapter does not license and arguably argues against. What it does support is decomposing a skill by constraint category."
       },
       {
         "id": "chiviacowsky_wulf_2002",
@@ -1457,7 +1457,7 @@
         "year": 2000,
         "title": "Injury prevention in women's gymnastics",
         "source": "Sports Medicine 30(5):359-373",
-        "used_for": "Skill-readiness assessment and prerequisite gating as an injury-mitigation heuristic. Supports the Tier A → B → C → D gating."
+        "used_for": "Narrative review of injury prevention in women's artistic gymnastics, arguing that prevention has to be grounded in science and medicine while making pragmatic links to how the sport is actually practised, and observing that most gymnastics research to that point had been descriptive. It reports no effect size, no comparison and no readiness-screening protocol; the full text is paywalled. Cited here only for the general principle that skill demands should be matched to demonstrated readiness rather than to ambition. Corrected 2026-09-05: this reference previously said the paper 'supports the Tier A to B to C to D gating'. It supports no specific gate. The tier ladder for adult recreational users is a deliberately conservative engineering choice and is not licensed by a 2000 review of young elite female gymnasts."
       },
       {
         "id": "rhea_2003_meta",

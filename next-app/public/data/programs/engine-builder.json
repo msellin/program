@@ -1211,7 +1211,7 @@
   ],
   "evidence_base": {
     "physiological_targets": [
-      "Mitochondrial biogenesis via PGC-1α signalling — detectable at 5-10 training sessions, functional adaptation by 2-4 weeks, near-maximal for the given stimulus by 6-8 weeks (Little 2010, Perry 2010, Konopka 2014, Bishop 2019). Konopka 2014 measured β-HAD +397-435%, CS +65-102%, PGC-1α +55-62% in 12 weeks in older adults — no age blunting of relative response.",
+      "Mitochondrial biogenesis via PGC-1α signalling — detectable at 5-10 training sessions, functional adaptation by 2-4 weeks, near-maximal for the given stimulus by 6-8 weeks (Little 2010, Perry 2010, Konopka 2014, Bishop 2019). Konopka 2014 measured the protein content of mitochondrial biogenesis, fusion and fission markers before and after aerobic training in young men (20 +/- 1 y) and older men (74 +/- 3 y): those markers rose independent of age, as did muscle hypertrophy, while the VO2peak improvement was larger in the young men. Corrected 2026-09-05: the enzyme percentages previously stated here as measured fact (beta-HAD +397-435%, CS +65-102%, PGC-1alpha +55-62%) have no retrievable source, describe enzyme activity rather than the protein content this paper reports, and are contradicted in sign on one marker by the same lab's 2010 companion, which found PGC-1alpha protein 20 +/- 5% lower after 12 weeks. Direction is cited; magnitude is not.",
       "Capillary-to-fibre ratio +10-20% in 8 weeks; capillary density (per unit area) responds most reliably to endurance/continuous work (+13±3%), less to sprint-interval training (Andersen & Henriksson 1977; Cocks 2013; 2025 mito+cap meta-regression PMC11787188).",
       "Left-ventricular stroke volume +5-10% in 8 weeks — REQUIRES interval intensity ≥90% HRmax. Z1 alone does not move SV meaningfully (Helgerud 2007: only the 4×4 and 15/15 groups showed SV gains, LSD and threshold groups did not). Cardiac remodelling is eccentric with endurance training (Baggish & Wood 2011).",
       "Lactate clearance via MCT1 upregulation — training raises sarcolemmal MCT1 in oxidative tissue more reliably than MCT4. Endurance-trained subjects have higher MCT1 vs untrained (Pilegaard 2000; Brooks 2018 lactate shuttle theory). This is the specific adaptation that shortens between-interval recovery in metcons.",
@@ -1220,7 +1220,7 @@
       "Fat oxidation rate at Fatmax (~63% VO2max in trained men, range 45-75%; Achten & Jeukendrup 2003). Z1 volume drives β-HAD and CPT1 upregulation — the enzymatic machinery for fat oxidation."
     ],
     "session_rationale": {
-      "block_z1_steady": "The single largest driver of mitochondrial + capillary adaptation across a 6-month arc. Konopka 2014: 12 weeks of 3-4×/week cycling at 60-80% HRR produced PGC-1α +55-62%, CS +65-102%, β-HAD +397-435%. Andersen & Henriksson 1977: 40 min/day × 4/wk × 8 wk at 80% VO2max drove capillary density +20% and VO2max +16%. San-Millán & Brooks 2018 identify Zone 2 as the intensity that recruits Type I fibres preferentially via the lactate-clamp methodology — the largest mitochondrial signal per unit of fatigue. Confidently the base-load session of the program.",
+      "block_z1_steady": "The single largest driver of mitochondrial + capillary adaptation across a 6-month arc. Konopka 2014: aerobic training raised mitochondrial-biogenesis protein markers in both young and older men, independent of age. Corrected 2026-09-05: the percentages previously quoted here are not retrievable from that paper and are withdrawn rather than restated; the case for Z1 steady work as the base-load session rests on the sources below and on Terav's own progression logic. Andersen & Henriksson 1977: 40 min/day × 4/wk × 8 wk at 80% VO2max drove capillary density +20% and VO2max +16%. San-Millán & Brooks 2018 identify Zone 2 as the intensity that recruits Type I fibres preferentially via the lactate-clamp methodology — the largest mitochondrial signal per unit of fatigue. Confidently the base-load session of the program.",
       "block_sustained_tempo": "Sub-threshold sustained work drives MCT1 upregulation (Pilegaard 2000) and shifts the crossover point toward higher intensities (Brooks & Mercier 1994). Jack Daniels' T-pace (~83-88% VDOT). Fills the missing middle: harder than Z1, easier than 4×4. The bridge session in weeks 3-5.",
       "block_threshold_cruise": "Longer intervals at ~85-90% HRmax. Rønnestad & Hansen 2020 comparison found SHORT intervals superior to long intervals for VO2max in trained cyclists — so we don't use threshold cruise to chase VO2max. What long intervals actually train is LT2 sustainable output: the pace/power that keeps improving after VO2max plateaus (Joyner & Coyle 2008). That's the specific job of this block.",
       "block_norwegian_4x4": "Helgerud 2007 (n=40): 4×4 min at 90-95% HRmax produced VO2max +7.2% and stroke volume +10% over 8 weeks — the only session type in that four-arm study that moved SV meaningfully. Wisløff 2007 (post-MI HF patients, 12 weeks): VO2peak +46%, LV ejection fraction +35% with the same 4×4 protocol. Time-at-VO2max is the specific driver of cardiac stroke-volume adaptation.",
@@ -1342,10 +1342,10 @@
         "id": "little_2010",
         "authors": "Little JP, Safdar A, Wilkin GP, Tarnopolsky MA, Gibala MJ",
         "year": 2010,
-        "title": "A practical model of low-volume high-intensity interval training induces mitochondrial biogenesis in human skeletal muscle",
+        "title": "A practical model of low-volume high-intensity interval training induces mitochondrial biogenesis in human skeletal muscle: potential mechanisms",
         "source": "Journal of Physiology 588(6):1011-1022",
         "url": "https://pubmed.ncbi.nlm.nih.gov/20100740/",
-        "used_for": "Mitochondrial biogenesis signal detectable within 2 weeks of HIIT — cited in physiological_targets and progression_rationale for why weeks 1-2 focus on Z1 accumulation."
+        "used_for": "Six sessions of low-volume high-intensity interval training over 2 weeks increased skeletal muscle mitochondrial capacity and improved exercise performance in 7 young men (VO2peak about 46 ml/kg/min) - so the mitochondrial biogenesis signal is detectable within two weeks. Corrected 2026-09-05: the second half of this read 'cited in physiological_targets and progression_rationale for why weeks 1-2 focus on Z1 accumulation'. That does not follow from this study: it is a HIIT intervention with no low-intensity arm and no base phase, and if anything it shows the mitochondrial adaptation arrives within two weeks OF INTERVALS, without a preceding base. The '5-10 sessions' figure this file attributes jointly to Little and Perry is in neither paper (Little: six sessions over two weeks). Z1-first sequencing in weeks 1-2 is an engineering choice."
       },
       {
         "id": "perry_2010",
@@ -1363,7 +1363,7 @@
         "title": "Markers of human skeletal muscle mitochondrial biogenesis and quality control: effects of age and aerobic exercise training",
         "source": "Journal of Gerontology A 69(4):371-378",
         "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3968823/",
-        "used_for": "Effect sizes for oxidative enzyme changes (β-HAD +397-435%, CS +65-102%, PGC-1α +55-62% in 12 weeks) — cited in physiological_targets and block_z1_steady rationale. Also: no age blunting of relative response. Population caveat: cohort was older adults over 12 weeks; healthy strength-trained users on an 8-week block should not treat the top of these ranges as their ceiling."
+        "used_for": "Aerobic training in young men (20 +/- 1 y) and older men (74 +/- 3 y) raised the protein content of mitochondrial biogenesis, fusion and fission markers, and did so independent of age; skeletal muscle hypertrophy was likewise age-independent, while the VO2peak improvement was larger in the young men. Cited here for that directional point only: an aerobic block raises mitochondrial-biogenesis markers, and an older trainee is not excluded from the response. How large an oxidative adaptation an 8-week block should expect is an engineering choice in Terav's own progression logic, not a figure from this paper. Corrected 2026-09-05: this reference previously supplied effect sizes (beta-HAD +397-435%, CS +65-102%, PGC-1alpha +55-62% in 12 weeks) that have no retrievable source, that describe enzyme activities rather than the protein content the paper reports, and that the same lab's 2010 companion contradicts in sign on one marker (PGC-1alpha protein 20 +/- 5% lower after 12 weeks). The figures are withdrawn rather than restated; the full text is paywalled, so a human with journal access would have to settle what the tables actually say."
       },
       {
         "id": "bishop_2019",
@@ -1421,12 +1421,12 @@
       },
       {
         "id": "pilegaard_2000",
-        "authors": "Pilegaard H, Domino K, Noland T, et al.",
-        "year": 2000,
+        "authors": "Pilegaard H, Domino K, Noland T, Juel C, Hellsten Y, Halestrap AP, Bangsbo J",
+        "year": 1999,
         "title": "Effect of high-intensity exercise training on lactate/H+ transport capacity in human skeletal muscle",
-        "source": "American Journal of Physiology - Endocrinology and Metabolism 278(4):E571-E579",
-        "url": "https://journals.physiology.org/doi/full/10.1152/ajpendo.2000.278.4.E571",
-        "used_for": "MCT1 upregulation with endurance training. Cited in physiological_targets and block_sustained_tempo rationale."
+        "source": "American Journal of Physiology 276(2):E255-E261",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/9950784/",
+        "used_for": "Molecular evidence that trained muscle carries more lactate/H+ transport capacity: 12 percent higher transport in sarcolemmal giant vesicles (n=7) and 76 percent more MCT1 protein (n=4) after one-legged knee-extensor high-intensity training. It is a tissue measurement, not a performance outcome, and it says nothing about which session type belongs in a block, so treat the sustained-tempo prescription as an engineering choice this mechanism is consistent with rather than one it licenses. Corrected 2026-09-05: the record's endurance-training framing came from a different paper (Dubouchaud et al. 2000, PMID 10751188, MCT1 up 60-90 percent after nine weeks cycling at 75 percent VO2peak), whose volume, pages, year and URL had been pasted onto Pilegaard's byline and title; the real Pilegaard paper is Am J Physiol 1999;276(2):E255-61, PMID 9950784, and is a high-intensity training study."
       },
       {
         "id": "san_millan_brooks_2018",
@@ -1435,7 +1435,7 @@
         "title": "Assessment of metabolic flexibility by means of measuring blood lactate, fat and carbohydrate oxidation responses",
         "source": "Sports Medicine 48(2):467-479",
         "url": "https://link.springer.com/article/10.1007/s40279-017-0751-x",
-        "used_for": "Metabolic flexibility framework and Zone 2 lactate-clamp methodology. Anchors the block_z1_steady prescription."
+        "used_for": "Metabolic-flexibility framework: fat oxidation and blood lactate are inversely correlated across professional athletes, moderately active individuals and metabolic-syndrome patients, measured by indirect calorimetry with blood draws. It anchors why a low-lactate steady effort is the substrate-oxidation stimulus. It sets no zone boundary and no lactate clamp target, and the app prescribes the zone by heart rate or RPE, so the field translation is an engineering choice. Corrected 2026-09-05: no bibliographic error; the lactate-clamp methodology wording implied a prescribed numeric target this paper does not set."
       },
       {
         "id": "achten_jeukendrup_2003",
@@ -1520,12 +1520,12 @@
       },
       {
         "id": "fyfe_2016",
-        "authors": "Fyfe JJ, Bartlett JD, Hamilton DL, et al.",
+        "authors": "Fyfe JJ, Bartlett JD, Hanson ED, Stepto NK, Bishop DJ",
         "year": 2016,
         "title": "Endurance training intensity does not mediate interference to maximal lower-body strength gain during short-term concurrent training",
         "source": "Frontiers in Physiology 7:487",
         "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5093324/",
-        "used_for": "Endurance VOLUME (not intensity) drives interference — HIIT and MICT produce the same strength decrement at matched work. Cited in progression_rationale for why peak-volume weeks tighten the strength cap."
+        "used_for": "Eight weeks of concurrent training in 23 recreationally active men: HIT+RT and WORK-MATCHED MICT+RT attenuated maximal lower-body strength gain similarly relative to resistance training alone (7.4% vs 8.2%), so endurance INTENSITY is not a critical mediator of interference to maximal strength gain over the short term. Corrected 2026-09-05: this read 'endurance VOLUME (not intensity) drives interference'. The two endurance arms were work-matched by design, so volume was held constant and never manipulated; the volume half is an inference from the absence of an intensity effect, and this trial cannot license it. Tightening the strength cap during peak-volume weeks stays as an engineering choice. Byline also corrected - 'Hamilton DL' is on neither candidate Fyfe 2016 paper; the correct byline is Fyfe JJ, Bartlett JD, Hanson ED, Stepto NK, Bishop DJ."
       },
       {
         "id": "schumann_2022",
@@ -1570,7 +1570,7 @@
         "title": "Fuel for the work required: a theoretical framework for carbohydrate periodization and the glycogen threshold hypothesis",
         "source": "Sports Medicine 48:1031-1048",
         "url": "https://link.springer.com/article/10.1007/s40279-018-0867-7",
-        "used_for": "Carbohydrate periodisation — fuel resistance and hard interval sessions fully; easy Z2 can be lower-carb. Cited in concurrent_strength_prescription."
+        "used_for": "Theoretical framework for carbohydrate periodisation - the 'fuel for the work required' paradigm, in which CHO availability is adjusted to the demands of the upcoming session - developed for ENDURANCE training. Corrected 2026-09-05: every train-low model the paper reviews (twice-daily, fasted, post-exercise CHO restriction, sleep-low) is an endurance protocol and the outcomes are oxidative enzymes and endurance performance, so resistance training is outside its scope; 'fuel resistance sessions fully' is a sensible engineering choice extrapolated from the framework, not a finding of it. The paper's own caveat also belongs in the copy: of 11 studies, 37% showed a performance improvement and 63% showed no change, which is why the authors frame this as a hypothesis. The easy-sessions-can-be-lower-carb half is directly supported."
       },
       {
         "id": "brandt_2025_hyrox",

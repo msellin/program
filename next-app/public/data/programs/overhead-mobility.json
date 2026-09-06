@@ -33,7 +33,7 @@
     {
       "id": "no_ballistic_end_range",
       "rule": "No bouncing / rebound stretches at end-range shoulder flexion.",
-      "detail": "Reinold 2007 — active rotator-cuff engagement should precede end-range positioning. Ballistic end-range loading is what that cuff activation is there to protect against."
+      "detail": "Engineering choice, not a cited finding — we ask for active rotator-cuff engagement before end-range positioning, because ballistic end-range loading is what that engagement is there to protect against. No retrieved text in Reinold et al. 2007 (J Athl Train 42(4):464-469, EMG in 22 asymptomatic subjects) or in the Reinold, Escamilla and Wilk 2009 review (JOSPT 39(2):105-117, Level of Evidence 5) states that activation must precede end-range loading."
     },
     {
       "id": "daily_short_over_long",
@@ -468,7 +468,7 @@
         "block_daily_reset"
       ],
       "goal": "Add active ROM + light loaded overhead. Sotts press, TGU, empty bar OHS.",
-      "rationale": "Reinold 2007 — rotator-cuff activation precedes end-range loading. Adding load builds the pattern under stress rather than reaching end-range cold."
+      "rationale": "Engineering choice, not a cited finding — we sequence cuff activation before end-range loading so the pattern is built under stress rather than reaching end-range cold. No cited paper establishes that ordering: Reinold et al. 2007 is an EMG comparison of three cuff exercises in asymptomatic subjects and reports nothing about loading order."
     },
     {
       "id": "phase_3_load_and_retest",
@@ -886,9 +886,9 @@
       }
     },
     "session_rationale": {
-      "why_scap_first": "Ludewig & Cook 2000, Ludewig & Reynolds 2009 — scap upward-rotation timing is the dominant driver of subacromial space. Fix sequence before adding load.",
+      "why_scap_first": "Ludewig & Cook 2000, Ludewig & Reynolds 2009 — altered scapular upward-rotation timing is observed alongside impingement symptoms; how much of the subacromial space it drives is established by neither paper. Corrected 2026-09-05: this read \"the dominant driver of subacromial space\", a causal-magnitude claim in neither abstract, and one that contradicts the association-only framing this same file uses in its scap_first_shoulder_second rule and its phase 1 rationale. Sequencing scapular work before load is an engineering choice consistent with that association.",
       "why_daily_short": "Karni 1998, Walker 2003 consolidation — motor patterns require inter-session sleep for stabilisation. 10 min daily > 45 min biweekly.",
-      "why_load_early": "Reinold 2007 catalogued rotator-cuff EMG activation across a wide range of common drills; many light-load and banded variants produced cuff activation greater than typical bodyweight drills at comparable positions. Light load in Phase 2 leverages that catalogue to bias cuff engagement earlier. This is an engineering read of an EMG review, not an RCT of light-load vs bodyweight for shoulder-mobility outcome — see engineering_choices_flagged.",
+      "why_load_early": "Reinold, Escamilla and Wilk 2009 (JOSPT 39(2):105-117, PMID 19194023, a narrative review the authors grade Level of Evidence 5, and a different paper from the reinold_2007 EMG record cited in this programme) catalogued rotator-cuff EMG activation across a wide range of common drills; many light-load and banded variants produced cuff activation greater than typical bodyweight drills at comparable positions. Light load in Phase 2 leverages that catalogue to bias cuff engagement earlier. This is an engineering read of an EMG review, not an RCT of light-load vs bodyweight for shoulder-mobility outcome — see engineering_choices_flagged.",
       "why_external_focus_cues": "Wulf 1998, 2013 — external-focus cues (reach the ceiling) outperform internal (contract your lats) for motor retention."
     },
     "engineering_choices_flagged": [
@@ -919,7 +919,7 @@
       },
       {
         "choice": "Light external load in Phase 2 to bias cuff activation early",
-        "rationale": "Reinold 2007 is a cross-drill EMG catalogue, not an RCT of light-load vs bodyweight for shoulder-mobility outcome. We treat the earlier-load bias as an engineering read of that catalogue.",
+        "rationale": "The cross-drill EMG catalogue is Reinold, Escamilla and Wilk 2009 (JOSPT 39(2):105-117), a Level-5 narrative review and not an RCT of light-load vs bodyweight for shoulder-mobility outcome; the reinold_2007 id in this programme resolves to a different paper, the 2007 J Athl Train EMG study. We treat the earlier-load bias as an engineering read of that catalogue.",
         "flag": "engineering"
       }
     ],
@@ -954,11 +954,11 @@
       },
       {
         "id": "reinold_2007",
-        "authors": "Reinold MM, Escamilla RF, Wilk KE",
+        "authors": "Reinold MM, Macrina LC, Wilk KE, Fleisig GS, Dun S, Barrentine SW, Ellerbusch MT, Andrews JR",
         "year": 2007,
-        "title": "Current concepts in the scientific and clinical rationale behind exercises for glenohumeral and scapulothoracic musculature",
-        "source": "JOSPT 37(11):659-670",
-        "used_for": "Rotator-cuff activation levels across drill variants; informs light-load rationale in Phase 2"
+        "title": "Electromyographic analysis of the supraspinatus and deltoid muscles during 3 common rehabilitation exercises",
+        "source": "Journal of Athletic Training 42(4):464-469",
+        "used_for": "This id now resolves to the EMG study, J Athl Train 42(4):464-469, PMID 18174934: 22 asymptomatic subjects, three isolated cuff exercises, no difference among them for supraspinatus. The cross-drill activation catalogue this programme actually described is a different work, Reinold, Escamilla and Wilk, JOSPT 2009;39(2):105-117, PMID 19194023, a narrative review the authors grade Level of Evidence 5; it needs its own citation id before Phase 2 copy can cite it. Neither paper states that cuff activation must precede end-range loading, so the light-load bias is an engineering choice, as this programme's own engineering_choices_flagged block already says. Corrected 2026-09-05: the record was dated 2007 at JOSPT 37(11):659-670, a locator with zero results, for a paper published in 2009, and a hard rule was attributed to text that is in neither abstract."
       },
       {
         "id": "sadowski_2021",
@@ -995,11 +995,11 @@
       },
       {
         "id": "walker_2003",
-        "authors": "Walker MP, Brakefield T, Hobson JA, Stickgold R",
+        "authors": "Walker MP, Brakefield T, Seidman J, Morgan A, Hobson JA, Stickgold R",
         "year": 2003,
-        "title": "Dissociable stages of human memory consolidation and reconsolidation",
+        "title": "Sleep and the time course of motor skill learning",
         "source": "Learning & Memory 10(4):275-284",
-        "used_for": "Sleep-dependent consolidation of motor patterns — the daily-short rationale relies on the sleep-consolidation finding. Journal + byline corrected from Neuroscience 133(4):911-917 per review of whitepaper 04."
+        "used_for": "Sleep-dependent consolidation of a motor pattern: doubling the amount of initial finger-tapping training did not increase the overnight gain, which is what the daily-short rationale leans on. A laboratory keypress task, so its application to mobility drills is an engineering choice. Corrected 2026-09-05: the record kept the Nature paper's title and byline over this Learning & Memory locator; the correct record is Walker MP, Brakefield T, Seidman J, Morgan A, Hobson JA, Stickgold R, 'Sleep and the time course of motor skill learning', Learn Mem 10(4):275-284, PMID 12888546."
       },
       {
         "id": "chiviacowsky_wulf_2002",
@@ -1027,11 +1027,11 @@
       },
       {
         "id": "kibler_2013",
-        "authors": "Kibler WB, Sciascia A",
-        "year": 2010,
-        "title": "Current concepts: scapular dyskinesis",
-        "source": "BJSM 44(5):300-305",
-        "used_for": "SICK scapula screening pattern. Year corrected from 2013 → 2010 per review — BJSM 44(5) is the 2010 current-concepts paper. Keeping the citation `id: kibler_2013` for stability of downstream references.",
+        "authors": "Kibler WB, Ludewig PM, McClure PW, Michener LA, Bak K, Sciascia AD",
+        "year": 2013,
+        "title": "Clinical implications of scapular dyskinesis in shoulder injury: the 2013 consensus statement from the Scapular Summit",
+        "source": "British Journal of Sports Medicine 47(14):877-885",
+        "used_for": "This programme means Kibler WB & Sciascia A (2010), 'Current concepts: scapular dyskinesis', BJSM 44(5):300-305 (PMID 19996329, DOI 10.1136/bjsm.2009.058834) - a DIFFERENT paper from the one the id kibler_2013 now serves. That paper describes a scapular examination consisting of visual inspection of scapular position at rest and during dynamic humeral movement, objective posture measurement and scapular corrective manoeuvres, and concludes that scapular dyskinesis 'appears to be a non-specific response to a painful condition in the shoulder rather than a specific response to certain glenohumeral pathology'. Corrected 2026-09-05: two things. (1) The id collision: kibler_2013 was resolving to the 2010 paper in citations.json while first-strict-pullup and muscle-up described the 2013 Scapular Summit consensus. The canonical record now serves the 2013 consensus; the 2010 paper needs its own id before this reference resolves correctly, and this reference should keep verification_status 'unverified' until it does. (2) 'SICK scapula screening pattern' is withdrawn: that term does not appear in the retrieved 2010 abstract, and the full text was unreachable (BMJ interstitial, not in PMC), so it can be neither confirmed nor excluded. SICK scapula is a separately named syndrome from a different paper. The screen this programme runs stands as an engineering choice built on the 2010 examination description.",
         "url": "https://pubmed.ncbi.nlm.nih.gov/?term=Kibler+Sciascia+scapular+dyskinesis+current+concepts",
         "verification_status": "unverified"
       },
@@ -1067,9 +1067,9 @@
         "id": "manske_2010",
         "authors": "Manske RC, Meschke M, Porter A, Smith B, Reiman M",
         "year": 2010,
-        "title": "A randomized controlled single-blinded comparison of stretching versus stretching and joint mobilization for posterior shoulder tightness",
+        "title": "A randomized controlled single-blinded comparison of stretching versus stretching and joint mobilization for posterior shoulder tightness measured by internal rotation motion loss",
         "source": "Sports Health 2(2):94-100",
-        "used_for": "Sleeper stretch effectiveness for posterior capsule tightness — engineering choice reference",
+        "used_for": "Randomised single-blinded trial in 39 ASYMPTOMATIC college-age participants (7 men, 32 women) comparing a CROSS-BODY stretch alone against cross-body stretch plus posterior joint mobilisation, with internal-rotation motion loss as the outcome. The combined group gained more internal rotation, but the between-group difference was not statistically significant. Corrected 2026-09-05: this read 'sleeper stretch effectiveness for posterior capsule tightness'. The trial tested the cross-body stretch, not the sleeper stretch, and choosing between those two is precisely what the citation was meant to settle; the participants were asymptomatic rather than people with symptomatic posterior capsule tightness; and the difference it did find was not significant. Prescribing the sleeper stretch is an engineering choice with no trial behind it here. The verification_status 'verified' flag on this reference was wrong for this use and should read 'unverified' - note it is stripped by Zod and has no runtime meaning either way. The record's PubMed search-string url is replaced by PMID 23015927.",
         "url": "https://pubmed.ncbi.nlm.nih.gov/?term=Manske+stretching+joint+mobilization+posterior+shoulder+tightness",
         "verification_status": "verified"
       },
@@ -1087,7 +1087,7 @@
         "year": 2000,
         "title": "Injury prevention in women's gymnastics",
         "source": "Sports Med 30(5):359-373",
-        "used_for": "Skill-readiness assessment framework — informs prerequisite gating"
+        "used_for": "Narrative review of injury prevention in women's artistic gymnastics. It offers a framework of thinking - prevention grounded in science and medicine plus intimate knowledge of the demands of the movement - and no protocol, no effect size and no comparison; the full text is paywalled. Corrected 2026-09-05: previously described as a 'skill-readiness assessment framework' informing prerequisite gating. It is not an assessment framework. The prerequisite gating in this programme is an engineering choice, and the paper's population (young elite female gymnasts) is far from adult users working on overhead position."
       },
       {
         "id": "salmoni_schmidt_walter_1984",

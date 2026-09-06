@@ -916,19 +916,39 @@ describe("citations carry real bylines", () => {
 });
 
 describe("no programme ships a citation it has not verified", () => {
-  it("no used_for admits the source is unconfirmed", () => {
-    // Shipping a citation whose own note says nobody checked it exists, inside a
-    // programme badged as having had its citations re-checked, is the badge
-    // overclaiming in the most literal way available.
+  it("an admission of uncertainty comes with evidence that someone looked", () => {
+    /**
+     * Rewritten 2026-09-06, after the full 126-citation sweep.
+     *
+     * This used to fail on ANY `used_for` admitting a source was unconfirmed,
+     * reasoning that shipping such a note inside a programme badged as
+     * citation-checked is the badge overclaiming. That was right when nobody
+     * had checked. It is backwards now.
+     *
+     * Post-sweep, "the full text is closed and the number could not be
+     * confirmed, so it is unconfirmed rather than disproved" is the most
+     * honest thing a citation can say. Banning the sentence does not make the
+     * citation better; it makes the uncertainty invisible, which is the
+     * defect this file exists to prevent.
+     *
+     * So the rule is now about PROVENANCE, not vocabulary. Admitting doubt is
+     * allowed when the note also shows a check happened — a correction date,
+     * or a statement of what was retrieved. What is still banned is bare
+     * ignorance shipped as a citation.
+     */
+    const ADMITS = /\b(unconfirmed|unverified|existence not|could not (?:be )?verif)/i;
+    const SHOWS_WORK = /\b(corrected|withdrawn|superseded|retrieved|checked)\b|\b20\d\d-\d\d-\d\d\b/i;
     const offenders: string[] = [];
     for (const { id, program } of programs) {
       for (const r of (program.evidence_base?.references ?? []) as Array<{ id: string; used_for?: string }>) {
-        if (/\b(unconfirmed|unverified|existence not|could not (?:be )?verif)/i.test(r.used_for ?? "")) {
-          offenders.push(`${id} :: ${r.id}`);
-        }
+        const u = r.used_for ?? "";
+        if (ADMITS.test(u) && !SHOWS_WORK.test(u)) offenders.push(`${id} :: ${r.id}`);
       }
     }
-    expect(offenders).toEqual([]);
+    expect(
+      offenders,
+      "a used_for may admit doubt, but must show that someone actually looked",
+    ).toEqual([]);
   });
 });
 
@@ -1587,33 +1607,12 @@ describe("a programme reference and its citations.json entry are the same paper"
       "Two different Ross 2015 papers: 'Precision exercise medicine' (programme) vs 'Separate " +
       "effects of intensity and amount of exercise on interindividual cardiorespiratory fitness' " +
       "(citations.json). Cited in engine-builder AND engine-builder-block-2.",
-    proteau_1992:
-      "Two different Proteau papers: 'A sensorimotor basis for motor learning' vs 'Specificity of " +
-      "practice: the case of the goal-directed aiming task'. Underwrites specificity-of-practice " +
-      "reasoning in three gymnastics programmes.",
-    reinold_2007:
-      "Two different Reinold 2007 papers: 'EMG analysis of the supraspinatus and deltoid during 3 " +
-      "common rehabilitation exercises' vs 'Current concepts...behind exercises for glenohumeral " +
-      "and scapular musculature'. The cuff-activation-before-end-range claim rests on this id.",
     petre_2018:
       "Two different papers with OPPOSITE populations: 'Development of maximal dynamic strength " +
       "during concurrent resistance and endurance training in UNTRAINED...' (programme) vs 'The " +
       "Effect of Two Different Concurrent Training Programs on Strength and Power Gains in " +
       "HIGHLY-TRAINED...' (citations.json). Which one is meant decides whether the claim reaches " +
       "CSM's users at all.",
-    shea_2000:
-      "'Spacing practice sessions across days benefits the learning of motor skills' (programme) " +
-      "vs 'Practice spacing effects on motor skill acquisition and retention' (citations.json). " +
-      "Unlike the others this reads like a PARAPHRASE rather than a second paper — but a " +
-      "citations entry holding a description where a title belongs is still wrong, because a " +
-      "reader cannot look it up.",
-    kibler_2013:
-      "One id, two different real Kibler papers: the 2013 consensus statement " +
-      "('Clinical implications of scapular dyskinesis in shoulder injury: the 2013 consensus') " +
-      "in first-strict-pullup and muscle-up, versus the 2010 current-concepts piece " +
-      "('Current concepts: scapular dyskinesis') in citations.json, which is what /evidence " +
-      "serves. Slipped past the original guard by ONE WORD: the two titles score exactly 0.500 " +
-      "against a `< 0.5` threshold, which is why that threshold is now 0.6.",
     sci_reports_2026_handstand_shoulder:
       "The programme's `authors` is a PLACEHOLDER — 'Sci Reports handstand-walk shoulder pain " +
       "team' — where citations.json carries real authors (Angioi M, Hinds N, Twycross-Lewis R, " +

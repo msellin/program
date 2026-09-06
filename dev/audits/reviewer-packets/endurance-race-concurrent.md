@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: f4033d5baa3459f9 -->
+<!-- source-fingerprint: 6e27680ce8bc0c8f -->
 
 ## What we are asking
 
@@ -249,7 +249,7 @@ Printed against the questions above so you can see which are actually detectable
 
 **bosquet_2007** — Effects of tapering on performance: a meta-analysis · Bosquet L, Montpetit J, Arvisais D, Mujika I · 2007
 
-- *rowing-2k-test-prep says it supports:* Meta-analysis anchor for the ~3% performance uplift claim on the taper. Stronger single-source anchor than Mujika & Padilla 2000 alone; both are now cited.
+- *rowing-2k-test-prep says it supports:* Meta-analysis of 27 tapering studies (from 182 screened). It supports the structure of the taper week as prescribed here, verbatim: a 2-week taper (overall effect 0.59 +/- 0.33, p < 0.001) in which training volume is decreased exponentially by 41-60% (overall effect 0.72 +/- 0.36, p < 0.001) with no change to training intensity or frequency. Corrected 2026-09-05: this reference previously called the paper 'the stronger single-source anchor' for a ~3% performance uplift. The paper reports standardised effect sizes, not percentages, and no 3% figure appears anywhere in its retrievable record; the same 3% is attributed elsewhere in this programme to Mujika & Padilla 2000, so the anchor claim was circular. Full text is closed and could not be checked, so the number is unconfirmed rather than disproved. What is cited is the taper structure; any percentage shown to a user should read as Terav's own expectation, not as a measured meta-analytic result.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **bouchard_1999_heritage** — Familial aggregation of VO2max response to exercise training: results from the HERITAGE Family Study · Bouchard C, An P, Rice T, et al. · 1999
@@ -312,7 +312,7 @@ Printed against the questions above so you can see which are actually detectable
 
 **feito_2018** — High-Intensity Functional Training (HIFT): definition and research implications for improved fitness · Feito Y, Heinrich KM, Butcher SJ, Poston WSC · 2018
 
-- *concurrent-strength-maintenance says it supports:* 16 wk HIFT — strength AND VO2max improved concurrently
+- *concurrent-strength-maintenance says it supports:* Definitional review of high-intensity functional training. Its 16-week sentence reports VO2max up about 12%, body fat down about 8% and bone mineral content up about 1%; it reports no strength outcome, and it is a review rather than a trial. Corrected 2026-09-05: this read '16 wk HIFT - strength AND VO2max improved concurrently'. That is not in this paper, and no single cited paper shows both: the strength result comes from a different 2018 paper by the same first author (Feito Y, Hoffstetter W, Serafini P, Mangine G, PLoS ONE 13:e0198324), which measured 5RM strength and WOD performance but not VO2max. This programme's headline premise - strength held while aerobic capacity rises - is currently an engineering choice supported by two separate half-results, not a demonstrated concurrent outcome.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **fyfe_2014** — Interference between concurrent resistance and endurance exercise: molecular bases and the role of individual training variables · Fyfe JJ, Bishop DJ, Stepto NK · 2014
@@ -320,9 +320,9 @@ Printed against the questions above so you can see which are actually detectable
 - *concurrent-strength-maintenance says it supports:* Definitive mechanism review + modulators
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
-**fyfe_2016** — Endurance training intensity does not mediate interference to maximal lower-body strength gain during short-term concurrent training · Fyfe JJ, Bishop DJ, Zacharewicz E, et al. · 2016
+**fyfe_2016** — Endurance training intensity does not mediate interference to maximal lower-body strength gain during short-term concurrent training · Fyfe JJ, Bartlett JD, Hanson ED, Stepto NK, Bishop DJ · 2016
 
-- *concurrent-strength-maintenance says it supports:* Endurance INTENSITY does not mediate interference — VOLUME does
+- *concurrent-strength-maintenance says it supports:* Eight weeks of concurrent training in 23 recreationally active men: HIT+RT and WORK-MATCHED MICT+RT attenuated maximal lower-body strength gain similarly relative to resistance training alone (7.4% vs 8.2%, a difference of about 0.8 points), so endurance INTENSITY is not a critical mediator of interference to maximal strength gain over the short term. Corrected 2026-09-05: three things were wrong here. The title was that of a DIFFERENT Fyfe 2016 paper (the mTORC1 / microRNA study, which is in Am J Physiol Regul Integr Comp Physiol 310:R1297-R1311, not Front Physiol 7:487), pinned onto this paper's journal, volume and page. The byline was that same other paper's (Bishop DJ, Zacharewicz E); the correct byline is Fyfe JJ, Bartlett JD, Hanson ED, Stepto NK, Bishop DJ. And 'VOLUME does' is not supported: the endurance arms were work-matched, so volume was held constant and never varied. Of the pair 'cap total endurance minutes; don't fear intensity per session', the second half is the finding and the first is an engineering choice.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **hagerman_1994** — Physiology of competitive rowing · Hagerman FC · 1994
@@ -343,7 +343,7 @@ Printed against the questions above so you can see which are actually detectable
 
 **impey_2018** — Fuel for the work required: a theoretical framework for carbohydrate periodization and the glycogen threshold hypothesis · Impey SG, Hearris MA, Hammond KM, et al. · 2018
 
-- *concurrent-strength-maintenance says it supports:* Fuel-for-work framework for concurrent programming
+- *concurrent-strength-maintenance says it supports:* Theoretical framework for carbohydrate periodisation - the 'fuel for the work required' paradigm - developed for ENDURANCE training. Corrected 2026-09-05: this read 'fuel-for-work framework for concurrent programming'. The paper makes no concurrent-training application: every train-low model it reviews is an endurance protocol and its outcomes are oxidative enzymes and endurance performance. Applying the framework to a concurrent week is an engineering choice. The paper's own caveat, unrecorded until now, is that 37% of 11 studies showed a performance improvement and 63% showed no change.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **jager_2017** — International Society of Sports Nutrition position stand: protein and exercise · Jäger R, Kerksick CM, Campbell BI, et al. · 2017
@@ -353,8 +353,8 @@ Printed against the questions above so you can see which are actually detectable
 
 **joyner_coyle_2008** — Endurance exercise performance: the physiology of champions · Joyner MJ, Coyle EF · 2008
 
-- *rowing-2k-test-prep says it supports:* Threshold > VO2max as primary metric to track
-- *concurrent-strength-maintenance says it supports:* Threshold > VO2max as primary metric to track
+- *rowing-2k-test-prep says it supports:* Models endurance performance as VO2max, lactate threshold and efficiency INTERACTING multiplicatively, and states that the oxidative capacity underlying the lactate threshold is 'highly plastic' and can more than double with appropriate training. Corrected 2026-09-05: this read 'Threshold > VO2max as primary metric to track'. The paper ranks no determinant above another and does not frame any as a metric to track; the word 'plateau' does not occur in it, so the 'post-VO2max ceiling' and 'VO2max plateaus much earlier' framings elsewhere in this file are not its language. It also contains no threshold-shift magnitude of any kind - the only numeric change figures in it are efficiency case reports (about 1-3% per year) and a greater-than-twofold oxidative-capacity figure - which is consistent with this file's existing decision on 2026-09-05 to attach no numeric target to threshold. Training threshold first is an engineering choice; this paper supports that threshold is highly trainable.
+- *concurrent-strength-maintenance says it supports:* Models endurance performance as VO2max, lactate threshold and efficiency INTERACTING multiplicatively (marathon speed 'essentially predicted by' VO2max x lactate threshold percentage x running economy), and states that the oxidative capacity underlying the lactate threshold is 'highly plastic' and can more than double with training. Corrected 2026-09-05: this read 'Threshold > VO2max as primary metric to track'. The paper ranks no determinant above another and frames none of the three as a metric to track; it also contains no threshold-change magnitude, and the word 'plateau' does not occur in it. Using pre/post submaximal HR at fixed pace as a threshold-shift proxy remains a defensible engineering choice; this paper establishes that the threshold is trainable, not that it should be the primary metric.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **kilding_2012** — Investigation of the maximal lactate steady state (MLSS) in trained runners · Kilding AE, Winter EM, Fysh M · 2012
@@ -369,12 +369,12 @@ Printed against the questions above so you can see which are actually detectable
 
 **meyer_morrison_zuniga_2017** — The benefits and risks of CrossFit: a systematic review · Meyer J, Morrison J, Zuniga J · 2017
 
-- *concurrent-strength-maintenance says it supports:* 10-week CrossFit — VO2max + body comp + strength all improve concurrently
+- *concurrent-strength-maintenance says it supports:* Systematic review of 13 studies (N = 2,326 adults) concluding that CrossFit 'is comparable to other exercise programs with similar injury rates and health outcomes', and that previous injuries should be assessed before recommending it. Corrected 2026-09-05: this read '10-week CrossFit - VO2max + body comp + strength all improve concurrently'. The retrieved record contains no 10-week trial and no VO2max, body-composition or strength figure; the full text is paywalled, so the sentence cannot be excluded from the body, only shown to be unsupported by anything retrievable. Any such result belongs to one of the thirteen primary studies inside the review, and that primary study is what would have to be cited. Nothing rendered in this programme currently rests on the withdrawn claim.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
-**midgley_2007** — Is there an optimal training intensity for enhancing the maximal oxygen uptake of distance runners? · Midgley AW, McNaughton LR, Wilkinson M · 2007
+**midgley_2007** — Training to enhance the physiological determinants of long-distance running performance · Midgley AW, McNaughton LR, Jones AM · 2007
 
-- *rowing-2k-test-prep says it supports:* Intensity distribution meta for endurance
+- *rowing-2k-test-prep says it supports:* Narrative review of training to enhance the physiological determinants of long-distance running performance, concluding that 'there is insufficient direct scientific evidence to formulate training recommendations based on the limited research' and that scientists should be cautious giving training recommendations from it. Corrected 2026-09-05: this read 'intensity distribution meta for endurance', and the record identified no single real work. The title and the Wilkinson byline belong to Midgley AW, McNaughton LR, Wilkinson M (2006), Sports Med 36(2):117-132 (PMID 16464121); the year, volume and pages belong to Midgley AW, McNaughton LR, Jones AM (2007), Sports Med 37(10):857-880 (PMID 17887811, erratum Sports Med 2007;37(11):1000). The canonical record now serves the 2007 paper matching the locator. Neither candidate is a meta-analysis and neither pools effect sizes, so there is no intensity-distribution meta here; the 2007 paper argues the evidence base is too thin to prescribe from, which points against using it as a warrant for an intensity distribution. This programme's intensity distribution is currently an engineering choice.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **mikulic_2011** — Maturation to elite status: a six-year physiological case study of a world champion rowing crew · Mikulic P · 2011
@@ -392,9 +392,9 @@ Printed against the questions above so you can see which are actually detectable
 - *rowing-2k-test-prep says it supports:* Detraining timeline — informs taper design
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
-**mujika_padilla_2000_b** — Detraining: loss of training-induced physiological and performance adaptations. Part II · Mujika I, Padilla S · 2000
+**mujika_padilla_2000_b** — Detraining: loss of training-induced physiological and performance adaptations. Part II: long term insufficient training stimulus · Mujika I, Padilla S · 2000
 
-- *rowing-2k-test-prep says it supports:* Taper effect — ~3% performance uplift from volume down 40-60%
+- *rowing-2k-test-prep says it supports:* Detraining review, Part II (long term insufficient training stimulus): the losses it catalogues 'can be avoided or limited by reduced training strategies, as long as training intensity is maintained and frequency reduced only moderately', while 'training volume can be markedly reduced'. Corrected 2026-09-05: this read 'taper effect - ~3% performance uplift from volume down 40-60%'. Neither number is in the retrieved abstract, and this is a detraining review rather than a taper trial or meta-analysis. The 41-60% volume-reduction figure belongs to Bosquet et al. 2007 (PMID 17762369), which this file already credits correctly at the taper_last_week rule, and Bosquet reports the taper benefit as a standardised mean difference (overall about 0.59 for a two-week taper), not as a percentage - so no retrieved source supports '~3%'. What survives is the qualitative rule: hold intensity, reduce frequency only moderately, cut volume markedly. The magnitudes are withdrawn. Full text of Part II is paywalled; the abstract only was checked.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **murach_bagley_2016** — Skeletal muscle hypertrophy with concurrent exercise training · Murach KA, Bagley JR · 2016
@@ -404,12 +404,12 @@ Printed against the questions above so you can see which are actually detectable
 
 **petre_2018** — The Effect of Two Different Concurrent Training Programs on Strength and Power Gains in Highly-Trained Individuals · Petré H, Löfving P, Psilander N · 2018
 
-- *concurrent-strength-maintenance says it supports:* Trained lifters: HIIT vs continuous produced same squat gains
+- *concurrent-strength-maintenance says it supports:* n=16 highly-trained ice-hockey and rugby players, 6 weeks, endurance performed after resistance: parallel squat improved in both arms (RT+continuous 12 +/- 8 percent, RT+HIIT 14 +/- 10 percent, both p<0.01) with no difference between them. Read narrowly this says the choice between HIIT and continuous cardio did not cost squat gains in that cohort over that window; it does not say concurrent training is free. Applying it to CSM users, who are not necessarily at that training level and who run longer blocks, is an engineering choice. Corrected 2026-09-05: the record's authors and title belonged to Petre 2021, Sports Med 51(5):991-1010 (PMID 33751469), a meta-analysis whose trained subgroup reports the opposite direction (leg press and squat 1RM negatively affected, ES -0.35); the locator and this claim belong to Petre, Lofving and Psilander 2018, JSSM 17(2):167-173, PMID 29769816.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
-**proteau_1992** — Specificity of practice: the case of the goal-directed aiming task · Proteau L, Marteniuk RG, Lévesque L · 1992
+**proteau_1992** — A sensorimotor basis for motor learning: evidence indicating specificity of practice · Proteau L, Marteniuk RG, Lévesque L · 1992
 
-- *rowing-2k-test-prep says it supports:* Specificity of practice — race-pace work rationale. Title/source corrected 2026-08-18 (Path A Q2).
+- *rowing-2k-test-prep says it supports:* Laboratory manual-aiming task with and without vision of the limb; the authors conclude that learning is specific to the conditions that prevail during skill acquisition. Race-pace work is a reasonable application of that principle and an engineering choice: nothing in this paper concerns rowing, pacing or endurance. Corrected 2026-09-05: the 2026-08-18 correction this record recorded moved it from the real Q J Exp Psychol A 44(3):557-575 paper (PMID 1631322) onto Journal of Motor Behavior 24(1):81-104, which four search routes could not find to exist, and this programme copied that fabricated locator.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **robineau_2016** — Specific training effects of concurrent aerobic and strength exercises depend on recovery duration · Robineau J, Babault N, Piscione J, Lacome M, Bigard AX · 2016
@@ -425,8 +425,8 @@ Printed against the questions above so you can see which are actually detectable
 
 **san_millan_brooks_2018** — Assessment of metabolic flexibility by means of measuring blood lactate, fat and carbohydrate oxidation responses · San-Millán I, Brooks GA · 2018
 
-- *rowing-2k-test-prep says it supports:* Zone 2 anchor (blood lactate < 2 mmol/L)
-- *concurrent-strength-maintenance says it supports:* Zone 2 = lactate <2 mmol/L; substrate oxidation
+- *rowing-2k-test-prep says it supports:* Substrate-oxidation basis for an easy-effort zone: fat oxidation and blood lactate move inversely across professional athletes, moderately active individuals and metabolic-syndrome patients. The under-2 mmol/L figure is coaching convention for placing that zone, not a boundary defined in this paper, and no user of this programme measures lactate. Corrected 2026-09-05: the used_for presented a numeric lactate cut-point as this paper's Zone 2 definition; nothing retrieved from the paper contains it.
+- *concurrent-strength-maintenance says it supports:* Indirect calorimetry and blood lactate in professional endurance athletes, moderately active individuals and metabolic-syndrome patients: fat oxidation was higher and lactate lower in the athletes, and the two were inversely correlated within every group (professionals r=-0.97). That is the substrate-oxidation basis for an easy-effort zone. The 2 mmol/L number is coaching convention used to place the zone in practice, not a boundary this paper defines. Corrected 2026-09-05: the used_for stated Zone 2 = lactate under 2 mmol/L as this paper's definition; nothing retrieved from it contains that cut-point, and app users train the zone by heart rate or RPE with no lactate measurement at all.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **schumann_2022** — Compatibility of concurrent aerobic and strength training for skeletal muscle size and function: an updated systematic review and meta-analysis · Schumann M, Feuerbacher JF, Sünkeler M, et al. · 2022
@@ -442,7 +442,7 @@ Printed against the questions above so you can see which are actually detectable
 
 **steinacker_1993** — Physiological aspects of training in rowing · Steinacker JM · 1993
 
-- *rowing-2k-test-prep says it supports:* Rowing-specific interval + volume prescription
+- *rowing-2k-test-prep says it supports:* Descriptive review of international-level rowing practice: anaerobic threshold at 80-85 percent of maximal performance in highly trained rowers, 70-90 percent of training time below that threshold, and annual loads reaching 1000 hours or 5000-7000 km, with work above 4.0 mmol/L blood lactate plus sprint and athletics training completing the schedule. It describes what elite oarsmen do; it prescribes nothing, and a test-prep user is not an elite oarsman, so applying the distribution here is a coaching judgement. Corrected 2026-09-05: the used_for called a descriptive review a rowing-specific interval and volume prescription, and the record's only locator was a PubMed search query; it is PMID 8262704, Int J Sports Med 14 Suppl 1:S3-10, and verification_status can now be cleared.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **steinacker_1998** — Training of rowers before world championships · Steinacker JM, Lormes W, Lehmann M, Altenburg D · 1998

@@ -1178,7 +1178,7 @@
       "Threshold (LT2 / MLSS) pace / power is the biggest single lever for 20-90 min endurance performance (Joyner & Coyle 2008). NO MAGNITUDE is claimed: the '+2-5% over 8-12 weeks' carried here until 2026-09-05 is not in that paper, which models the determinants multiplicatively and gives no threshold-change figure. Same correction as rowing-2k's. Driven by MCT1 upregulation (Pilegaard 2000), mitochondrial density in Type I fibres (Bishop 2019), and crossover-point shift (Brooks & Mercier 1994).",
       "VO2max +4-9% additional gain on top of Block 1 outcomes — decreasing marginal returns; the base delivered most, Block 2 adds more. Astorino 2013 short-HIIT data + Helgerud 2007 Norwegian 4×4 data anchor the range.",
       "Time-at-VO2max per week +50-100% vs Block 1 — Block 2's two hard sessions accumulate more time-at-VO2max than Block 1's one. Buchheit & Laursen 2013 (parts A + B) frame time-at-VO2max as the primary driver of the peak-capacity end of the aerobic system.",
-      "Mitochondrial content plateaus but oxidative-enzyme activity keeps climbing — Konopka 2014 12-week data shows β-HAD +397-435% at week 12 (already showing at week 8 in Block 1). Additional gains here compound.",
+      "Mitochondrial content plateaus but oxidative-enzyme activity keeps climbing — Konopka 2014 reports higher mitochondrial-biogenesis protein content after aerobic training in young and older men, with no age blunting - direction, not a percentage. Corrected 2026-09-05: the beta-HAD +397-435% figure attributed to it here is not retrievable from the paper, which measured protein content rather than enzyme activity. That oxidative adaptation keeps accruing into a second block is an engineering choice, and Block 2 should be described that way rather than as a quantified continuation.",
       "Stroke volume adaptation continues — Helgerud 2007 (+10% SV) + Wisløff 2007 (+35% LV EF in HF patients) anchor. Block 2's two hard sessions sustain the cardiac remodelling stimulus."
     ],
     "session_rationale": {
@@ -1302,11 +1302,12 @@
       },
       {
         "id": "pilegaard_2000",
-        "authors": "Pilegaard H, Domino K, Noland T, et al.",
-        "year": 2000,
+        "authors": "Pilegaard H, Domino K, Noland T, Juel C, Hellsten Y, Halestrap AP, Bangsbo J",
+        "year": 1999,
         "title": "Effect of high-intensity exercise training on lactate/H+ transport capacity in human skeletal muscle",
-        "source": "American Journal of Physiology - Endocrinology and Metabolism 278(4):E571-E579",
-        "used_for": "MCT1 upregulation from threshold-and-above work. Anchors why threshold cruise is Block 2's primary driver."
+        "source": "American Journal of Physiology 276(2):E255-E261",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/9950784/",
+        "used_for": "Molecular evidence that high-intensity training raises lactate/H+ transport capacity: 12 percent higher transport (n=7) and 76 percent more MCT1 protein (n=4) after one-legged knee-extensor training. The threshold-and-above gloss fits this paper, but n=7 in an artificial single-limb model measures tissue, not performance; calling threshold cruise Block 2's primary driver is a programming decision, not a result reported here. Corrected 2026-09-05: the record's volume, pages, year and URL belonged to Dubouchaud et al. 2000 (PMID 10751188), not to Pilegaard; the real paper is Am J Physiol 1999;276(2):E255-61, PMID 9950784."
       },
       {
         "id": "brooks_2018",
@@ -1330,7 +1331,7 @@
         "year": 2014,
         "title": "Markers of human skeletal muscle mitochondrial biogenesis and quality control",
         "source": "Journal of Gerontology A 69(4):371-378",
-        "used_for": "12-week enzyme-activity data anchors the additional Block 2 gains on top of Block 1."
+        "used_for": "Directional support only: aerobic training raised mitochondrial-biogenesis protein markers in both young and older men, so continuing aerobic work into a second block is not running into a demonstrated biological ceiling. What Block 2 adds on top of Block 1, and how much, is an engineering choice from Terav's own progression logic. Corrected 2026-09-05: this reference previously described the paper as '12-week enzyme-activity data' anchoring the incremental Block 2 gains. The paper reports protein content rather than enzyme activity, its abstract states no duration, and the enzyme percentages it was said to supply are not retrievable from it or from any full-text search."
       },
       {
         "id": "wisloff_2007",
@@ -1438,11 +1439,11 @@
       },
       {
         "id": "fyfe_2016",
-        "authors": "Fyfe JJ, Bartlett JD, Hamilton DL, et al.",
+        "authors": "Fyfe JJ, Bartlett JD, Hanson ED, Stepto NK, Bishop DJ",
         "year": 2016,
         "title": "Endurance training intensity does not mediate interference to maximal lower-body strength gain during short-term concurrent training",
         "source": "Frontiers in Physiology 7:487",
-        "used_for": "Endurance VOLUME (not intensity) drives interference. Anchors why concurrent-strength cap tightens in Block 2's peak-volume weeks 5-7."
+        "used_for": "Eight weeks of concurrent training in 23 recreationally active men: HIT+RT and WORK-MATCHED MICT+RT attenuated maximal lower-body strength gain similarly relative to resistance training alone (7.4% vs 8.2%), so endurance INTENSITY is not a critical mediator of interference to maximal strength gain over the short term. Corrected 2026-09-05: this read 'endurance VOLUME (not intensity) drives interference'. The endurance arms were work-matched, so volume was constant and untested. Block 2's tightening of the concurrent-strength cap across peak-volume weeks 5-7, and the phase note that lowers the RPE cap to 6.5, are engineering choices rather than findings of this trial; what the trial licenses is not fearing per-session endurance intensity. Byline also corrected - 'Hamilton DL' is on neither candidate Fyfe 2016 paper; the correct byline is Fyfe JJ, Bartlett JD, Hanson ED, Stepto NK, Bishop DJ."
       },
       {
         "id": "schumann_2022",
@@ -1482,7 +1483,7 @@
         "year": 2018,
         "title": "Fuel for the work required: a theoretical framework for carbohydrate periodization and the glycogen threshold hypothesis",
         "source": "Sports Medicine 48(5):1031-1048",
-        "used_for": "Fuel resistance sessions fully — Block 2's higher volume tightens the fuel-for-work-required framework."
+        "used_for": "Theoretical framework for carbohydrate periodisation - the 'fuel for the work required' paradigm - developed for ENDURANCE training. Corrected 2026-09-05: resistance training is outside the paper's scope (every train-low model it reviews is an endurance protocol, with oxidative enzymes and endurance performance as outcomes), so 'fuel resistance sessions fully' in Block 2's higher-volume weeks is an engineering choice extrapolated from the framework rather than a finding of it. The paper's own performance caveat should travel with it: 37% of 11 studies showed improvement, 63% showed no change."
       },
       {
         "id": "bishop_2008",

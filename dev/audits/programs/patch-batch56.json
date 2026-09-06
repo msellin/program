@@ -1,0 +1,427 @@
+{
+  "citations": {
+    "petre_2018": {
+      "review_note": "Verified 2026-09-05 against PMID 29769816. This record is correct as written: Petre H, Lofving P, Psilander N (2018), J Sports Sci Med 17(2):167-173, n=16 highly-trained ice-hockey and rugby players, 6 weeks, endurance performed after resistance; parallel squat improved 12 +/- 8 percent after RT+continuous and 14 +/- 10 percent after RT+HIIT, with no difference between groups. The defect was in the programme record, not here.",
+      "id_note": "The programme record in concurrent-strength-maintenance carried the authors and title of a different, real paper: Petre H, Hemmingsson E, Rosdahl H, Psilander N (2021), Development of Maximal Dynamic Strength During Concurrent Resistance and Endurance Training in Untrained, Moderately Trained, and Trained Individuals, Sports Med 51(5):991-1010, PMID 33751469. That 2021 meta-analysis runs the other way for trained people (1RM leg press and squat negatively affected by concurrent training in trained individuals, ES -0.35, p<0.01), so a reader following the pasted title landed on a finding that argues against the sentence it was attached to. Corrected 2026-09-05: the programme record's byline and title belonged to the 2021 Sports Med meta-analysis while its locator and used_for belonged to the 2018 JSSM paper."
+    },
+    "pilegaard_2000": {
+      "authors": "Pilegaard H, Domino K, Noland T, Juel C, Hellsten Y, Halestrap AP, Bangsbo J",
+      "year": 1999,
+      "title": "Effect of high-intensity exercise training on lactate/H+ transport capacity in human skeletal muscle",
+      "source": "American Journal of Physiology 276(2):E255-E261",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9950784/",
+      "doi": "10.1152/ajpendo.1999.276.2.E255",
+      "display_short": "Pilegaard et al. 1999",
+      "display_line": "Pilegaard et al. (1999), Am J Physiol 276(2):E255-E261",
+      "id_note": "This record spliced one paper's byline and title onto another paper's locator. Pilegaard et al. is Am J Physiol 1999 Feb;276(2):E255-61, PMID 9950784: lactate/H+ transport 12 percent higher in trained than untrained muscle (n=7), MCT1 and MCT4 protein 76 percent and 32 percent higher (n=4), one-legged knee-extensor training. The locator and URL the record carried, Am J Physiol Endocrinol Metab 2000;278(4):E571-9, PMID 10751188, is a different paper by different authors: Dubouchaud H, Butterfield GE, Wolfel EE, Bergman BC, Brooks GA, Endurance training, expression, and physiology of LDH, MCT1, and MCT4 in human skeletal muscle, which reports MCT1 up 60-90 percent after nine weeks of cycling at 75 percent VO2peak. The URL resolved, so the record looked verified. The id should be renamed pilegaard_1999 when a human applies this. If the endurance-training framing engine-builder used is wanted, Dubouchaud 2000 is the real paper for it and needs its own id; it is not added here. Corrected 2026-09-05: byline and title from Pilegaard 1999, volume, pages, year and URL from Dubouchaud 2000."
+    },
+    "potdevin_2018": {
+      "authors": "Potdevin F, Vors O, Huchez A, Lamour M, Davids K, Schnitzler C",
+      "title": "How can video feedback be used in physical education to support novice learning in gymnastics? Effects on motor learning, self-assessment and motivation",
+      "source": "Physical Education and Sport Pedagogy 23(6):559-574",
+      "doi": "10.1080/17408989.2018.1485138",
+      "url": "https://doi.org/10.1080/17408989.2018.1485138",
+      "display_line": "Potdevin et al. (2018), Physical Education and Sport Pedagogy 23(6):559-574",
+      "id_note": "The title was a description, not the published title, the byline was truncated to one name, and there were no pages and no identifier, so the /evidence row could not be looked up. The study is five weekly lessons, not eight weeks: n=18 in the video-feedback arm (10 girls, 8 boys, 12.4 +/- 0.5 years), French PE beginners learning a front handstand to flat-back landing, video knowledge-of-performance after every five attempts. Corrected 2026-09-05: stub title, truncated byline, no pages, no identifier; and both programmes recited an eight-week duration the paper does not have."
+    },
+    "proteau_1992": {
+      "title": "A sensorimotor basis for motor learning: evidence indicating specificity of practice",
+      "source": "Quarterly Journal of Experimental Psychology Section A 44(3):557-575",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1631322/",
+      "doi": "10.1080/14640749208401298",
+      "display_short": "Proteau et al. 1992",
+      "display_line": "Proteau et al. (1992), Q J Exp Psychol A 44(3):557-575",
+      "review_note": "Re-verified 2026-09-05 against PMID 1631322. The Quarterly Journal of Experimental Psychology paper the three gymnastics programmes carried is the real one, and its own concluding sentence is the claim the programmes attach to it: learning is specific to the conditions that prevail during skill acquisition. The 2026-08-18 correction replaced that real record with Journal of Motor Behavior 24(1):81-104, which could not be found to exist, and rowing-2k-test-prep copied the replacement. That correction is reverted here.",
+      "id_note": "The record pointed at Specificity of practice: the case of the goal-directed aiming task, Journal of Motor Behavior 24(1):81-104. Four search routes found no such work: PubMed by author and year, PubMed by journal and year, a Crossref bibliographic query on the exact title, and a complete Crossref listing of Journal of Motor Behavior volume 24 (1992), all 37 items, in which pages 81-104 are not occupied by any Proteau article. Minor: the gymnastics programmes give the issue as 44A(4); it is 44(3). Corrected 2026-09-05: the 2026-08-18 correction moved this id off a real paper onto a reference that does not exist, and rowing-2k-test-prep copied it."
+    },
+    "reinold_2007": {
+      "authors": "Reinold MM, Macrina LC, Wilk KE, Fleisig GS, Dun S, Barrentine SW, Ellerbusch MT, Andrews JR",
+      "title": "Electromyographic analysis of the supraspinatus and deltoid muscles during 3 common rehabilitation exercises",
+      "source": "Journal of Athletic Training 42(4):464-469",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18174934/",
+      "display_short": "Reinold et al. 2007",
+      "display_line": "Reinold et al. (2007), J Athl Train 42(4):464-469",
+      "review_note": "One id was serving two different real papers and neither locator resolved. It is repointed here to the paper three of the four citing programmes meant: the EMG study, PMID 18174934, J Athl Train 2007 Oct-Dec;42(4):464-9, 22 asymptomatic subjects, no statistical difference among the three exercises for supraspinatus activity, full-can produced significantly less deltoid activity. The other paper, which overhead-mobility meant, is Reinold MM, Escamilla RF, Wilk KE, Current concepts in the scientific and clinical rationale behind exercises for glenohumeral and scapulothoracic musculature, J Orthop Sports Phys Ther 2009 Feb;39(2):105-17, PMID 19194023, a narrative review the authors themselves grade Level of Evidence 5. It needs its own id (suggest reinold_2009_review) if overhead-mobility is to keep citing a cross-drill EMG catalogue; it is not added here.",
+      "id_note": "The record held the 2009 review's title under the year 2007 with no volume, pages or URL, so it matched neither of the two things the id was used for and could not be followed. Three programmes carried the EMG paper's title over JOSPT 37(9):519-527, a locator that does not exist (PubMed returns zero for JOSPT 2007 volume 37 page 519); overhead-mobility carried the review under 2007 at JOSPT 37(11):659-670, also zero results. Separately, the sentence cuff activation precedes end-range loading, stated as a hard rule twice in overhead-mobility, is in neither retrieved abstract. Corrected 2026-09-05: one id for two papers, wrong journal on one, wrong year on the other, and a sequencing rule attributed to a paper not shown to contain it."
+    },
+    "rohleder_vogt_2018": {
+      "title": "Teaching novices the handstand: a practical approach of different sport-specific feedback concepts on movement learning",
+      "source": "Science of Gymnastics Journal 10(1):29-42",
+      "url": "https://www.fsp.uni-lj.si/mma/SCGYM-10-1-2018-article-3/20180228215325/",
+      "display_line": "Rohleder & Vogt (2018), Science of Gymnastics Journal 10(1):29-42",
+      "id_note": "The title in the record is not the paper's title, and the venue was a hedged either/or with the wrong volume, so the /evidence row was unfollowable. The paper is Science of Gymnastics Journal 10(1):29-42, 26 university students in a single pre-post session, randomised to tactile-verbal feedback (n=13) or visual-comparative feedback (n=13). Programme and citations.json agreed with each other on the wrong title and venue, so no cross-record test could see it. Corrected 2026-09-05: invented title, hedged double venue, wrong volume; and the used_for claimed a combined-feedback superiority from a study with no combined arm."
+    },
+    "san_millan_brooks_2018": {
+      "review_note": "Verified 2026-09-05 against PMID 28623613. Byline, year, venue, volume, pages and URL are all correct and the metabolic-flexibility framework is the paper's own. What is not in any retrieved text is a Zone 2 boundary at 2 mmol/L: the abstract reports a continuous inverse correlation between blood lactate and fat oxidation across professional athletes, moderately active individuals and metabolic-syndrome patients, and defines no zone. Full text sits behind a Springer identity redirect and was not retrieved, so the number is unsupported rather than shown absent. Programmes that state the cut-point should label it coaching convention, not a finding of this paper.",
+      "id_note": "No bibliographic defect. Corrected 2026-09-05: concurrent-strength-maintenance and rowing-2k-test-prep stated a numeric Zone 2 cut-point as this paper's definition when nothing retrieved from it contains that number."
+    },
+    "sci_reports_2026_handstand_shoulder": {
+      "review_note": "Verified 2026-09-05 against the publisher record at nature.com. The paper is real, the byline in this record is exactly right, and the 2026 date is correct (published 2026-07-21, volume 16, article 22766). It is a cross-sectional comparison of ten practitioners who could handstand walk six steps: those with shoulder pain moved slower (p=0.005), had shorter arm lengths (p=0.013) and greater net torsional work (p=0.002). It reports no session-management outcome and, being cross-sectional, cannot establish direction; the authors name discipline, training volume and gender as unaddressed confounders.",
+      "id_note": "No bibliographic defect in this record. Corrected 2026-09-05: the programme record in handstand-walk carried a placeholder byline instead of authors, and its used_for asserted a byline check against the publisher record that the same record falsified, while attaching a non-negotiable stop-the-session rule to an n=10 cross-sectional association."
+    },
+    "shea_2000": {
+      "authors": "Shea CH, Lai Q, Black CB, Park JH",
+      "title": "Spacing practice sessions across days benefits the learning of motor skills",
+      "source": "Human Movement Science 19(5):737-760",
+      "doi": "10.1016/S0167-9457(00)00021-X",
+      "url": "https://doi.org/10.1016/S0167-9457(00)00021-X",
+      "display_line": "Shea et al. (2000), Human Movement Science 19(5):737-760",
+      "id_note": "The title was a description rather than the published title, the byline was truncated, and there was no identifier, so /evidence showed a row no reader could look up. The finding itself is as cited: sessions separated by 24 hours produced better performance in later practice and better delayed retention than sessions separated by 20 minutes. Corrected 2026-09-05: description-as-title, truncated byline, no DOI or URL."
+    },
+    "simunkova_2024": {
+      "authors": "Malir R, Chrudimsky J, Provaznik A, Trebicky V",
+      "title": "Are the shoulder joint function, stability, and mobility tests predictive of handstand execution?",
+      "source": "PLOS One 19(5):e0302922",
+      "doi": "10.1371/journal.pone.0302922",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11090318/",
+      "display_short": "Malir et al. 2024",
+      "display_line": "Malir et al. (2024), PLOS One 19(5):e0302922",
+      "id_note": "The DOI, journal, volume, issue and article number were right and the finding is exactly as cited, but Simunkova K is not an author of this paper; the first author is Malir R. Programme and citations.json agreed with each other, so the cross-record test in data-integrity.test.ts is blind to it by construction. The id itself is now a misnomer and should be renamed malir_2024 by whoever applies this. Diacritics are dropped in this patch for ASCII transport; the applier may restore Malir as Malir with the hacek and Trebicky with its diacritics. The same wrong byline is still in handstand-walk.json's reference record and must be replaced by hand: the line \"authors\": \"Simunkova K, et al.\" (written there with diacritics) has no ASCII-only exact match, so it is not in programme_text. Corrected 2026-09-05: wrong first author and a description in place of the published title, on both sides of the record at once."
+    },
+    "sobera_2019": {
+      "title": "Stabilometric profile of handstand technique in male gymnasts",
+      "source": "Acta of Bioengineering and Biomechanics 21(1):63-71",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31197281/",
+      "display_line": "Sobera et al. (2019), Acta Bioeng Biomech 21(1):63-71",
+      "id_note": "The title was a description, the source carried no volume or pages, and there was no URL, so the row could not be looked up. The study is eight acrobatic gymnasts, four more and four less experienced, in a static handstand on a force platform. Corrected 2026-09-05: description-as-title, no volume, pages or identifier; and the used_for called a four-versus-four experience contrast an elite-versus-novice difference and used it as outcome evidence for a walking programme."
+    },
+    "steinacker_1993": {
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8262704/",
+      "review_note": "Verified 2026-09-05 against PMID 8262704, Int J Sports Med 1993 Sep;14 Suppl 1:S3-10. The paper exists exactly as claimed. It is a descriptive review of what successful international rowers do: anaerobic threshold at 80-85 percent of maximal performance in highly trained rowers, 70-90 percent of training time below that threshold, annual volumes reaching 1000 hours or 5000-7000 km. Its only interval content is one clause about work eliciting blood lactate above 4.0 mmol/L plus sprint and athletics training.",
+      "id_note": "The record's only locator was a PubMed search query rather than a record, and rowing-2k-test-prep marked it unverified on that basis. It now has a real identifier, PMID 8262704, and the verification_status flag on the programme record can be cleared. Corrected 2026-09-05: a search URL in place of an identifier, and a descriptive review of elite practice described as a prescription."
+    },
+    "vidal_torija_2025": {
+      "authors": "Martonovich N, Maman D, Mahamid A, Alfandari L, Behrbalk E",
+      "title": "The Wrist as a Weightbearing Joint in Adult Handstand Practitioners: A Cross-Sectional Survey of Chronic Pain and Training-Related Factors",
+      "source": "Journal of Functional Morphology and Kinesiology 10(4):372",
+      "doi": "10.3390/jfmk10040372",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12550924/",
+      "display_short": "Martonovich et al. 2025",
+      "display_line": "Martonovich et al. (2025), J Funct Morphol Kinesiol 10(4):372",
+      "id_note": "The findings were exact (n=321, chronic wrist pain in 182 or 56.7 percent, no significant association with weekly training hours, training frequency, training duration, warm-up routines or brace use) but the byline, the title and the venue all belonged to no paper: Vidal-Torija A appears nowhere in the record, and it is MDPI's Journal of Functional Morphology and Kinesiology, not Frontiers. Programme and citations.json agreed with each other. The id is now a misnomer and should be renamed martonovich_2025 by whoever applies this. Corrected 2026-09-05: invented byline, invented title and wrong publisher on the one row a user can see, with no URL to fall back on."
+    },
+    "walker_2003": {
+      "authors": "Walker MP, Brakefield T, Seidman J, Morgan A, Hobson JA, Stickgold R",
+      "title": "Sleep and the time course of motor skill learning",
+      "source": "Learning & Memory 10(4):275-284",
+      "doi": "10.1101/lm.58503",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12888546/",
+      "display_line": "Walker et al. (2003), Learn Mem 10(4):275-284",
+      "review_note": "Re-verified 2026-09-05. The record was a splice of two real Walker 2003 papers: it carried the Nature paper's title and four-author byline over the Learning & Memory paper's journal, volume, issue and pages, so following either half landed the reader where the other half did not mean. It is resolved here onto the Learning & Memory paper, PMID 12888546, Learn Mem 2003 Jul-Aug;10(4):275-84, six authors, whose retrieved finding (doubling the quantity of initial training does not alter the amount of subsequent sleep-dependent learning that develops overnight) is the one all four citing programmes actually argue from. The other paper, Walker MP, Brakefield T, Hobson JA, Stickgold R, Dissociable stages of human memory consolidation and reconsolidation, Nature 2003 Oct 9;425(6958):616-20, PMID 14534587, is real and unretracted but says nothing about session length or frequency; if the dissociable-stages claim is wanted it needs its own id (suggest walker_2003_nature). It is not added here.",
+      "id_note": "One id, two papers, fields spliced, and the four programme files disagreed with each other about source (first-strict-pullup and muscle-up said Nature 425(6958):616-620; handstand-walk and overhead-mobility said Learning & Memory 10(4):275-284). data-integrity.test.ts compares authors and title but never source, so the disagreement was invisible to the suite. The prior review_note claiming the record had been corrected made it internally inconsistent instead: it kept Nature's byline and omitted Seidman J and Morgan A, who are authors of the Learning & Memory paper. Corrected 2026-09-05: a bibliography row spliced from two different papers, resolving to neither."
+    },
+    "wu_2014": {
+      "review_note": "Verified 2026-09-05 against PMID 24413700, Crossref 10.1038/nn.3616 and the full text at PMC4442489. Byline, year, venue and pages are correct and the general finding stands: higher task-relevant motor variability predicted faster learning across individuals and across tasks. The magnitude in the full text is more than twofold, not threefold (individuals one SD above average variability had more than twofold higher learning rates than those one SD below, p=0.0021), and the paradigms are reward-based trajectory learning and error-based velocity-dependent force-field adaptation. The string visuomotor rotation appears in the paper only in its reference list, as other authors' work.",
+      "id_note": "No bibliographic defect in this record. Corrected 2026-09-05: handstand-walk's used_for recited a 3x figure the paper does not report and a visuomotor-rotation paradigm the paper does not use. The same wrong phrasing also sits in muscle-up.json outcome_evidence, in the clause reading Wu 2014 (3x variance in visuomotor rotation learning); it is not in programme_text because the multiplication sign in that line makes an ASCII-only exact match impossible, so a human must edit that clause to read more than twofold difference in learning rate predicted by baseline motor variability, in force-field adaptation."
+    }
+  },
+  "programme_used_for": [
+    {
+      "slug": "concurrent-strength-maintenance",
+      "id": "petre_2018",
+      "used_for": "n=16 highly-trained ice-hockey and rugby players, 6 weeks, endurance performed after resistance: parallel squat improved in both arms (RT+continuous 12 +/- 8 percent, RT+HIIT 14 +/- 10 percent, both p<0.01) with no difference between them. Read narrowly this says the choice between HIIT and continuous cardio did not cost squat gains in that cohort over that window; it does not say concurrent training is free. Applying it to CSM users, who are not necessarily at that training level and who run longer blocks, is an engineering choice. Corrected 2026-09-05: the record's authors and title belonged to Petre 2021, Sports Med 51(5):991-1010 (PMID 33751469), a meta-analysis whose trained subgroup reports the opposite direction (leg press and squat 1RM negatively affected, ES -0.35); the locator and this claim belong to Petre, Lofving and Psilander 2018, JSSM 17(2):167-173, PMID 29769816."
+    },
+    {
+      "slug": "engine-builder",
+      "id": "pilegaard_2000",
+      "used_for": "Molecular evidence that trained muscle carries more lactate/H+ transport capacity: 12 percent higher transport in sarcolemmal giant vesicles (n=7) and 76 percent more MCT1 protein (n=4) after one-legged knee-extensor high-intensity training. It is a tissue measurement, not a performance outcome, and it says nothing about which session type belongs in a block, so treat the sustained-tempo prescription as an engineering choice this mechanism is consistent with rather than one it licenses. Corrected 2026-09-05: the record's endurance-training framing came from a different paper (Dubouchaud et al. 2000, PMID 10751188, MCT1 up 60-90 percent after nine weeks cycling at 75 percent VO2peak), whose volume, pages, year and URL had been pasted onto Pilegaard's byline and title; the real Pilegaard paper is Am J Physiol 1999;276(2):E255-61, PMID 9950784, and is a high-intensity training study."
+    },
+    {
+      "slug": "engine-builder-block-2",
+      "id": "pilegaard_2000",
+      "used_for": "Molecular evidence that high-intensity training raises lactate/H+ transport capacity: 12 percent higher transport (n=7) and 76 percent more MCT1 protein (n=4) after one-legged knee-extensor training. The threshold-and-above gloss fits this paper, but n=7 in an artificial single-limb model measures tissue, not performance; calling threshold cruise Block 2's primary driver is a programming decision, not a result reported here. Corrected 2026-09-05: the record's volume, pages, year and URL belonged to Dubouchaud et al. 2000 (PMID 10751188), not to Pilegaard; the real paper is Am J Physiol 1999;276(2):E255-61, PMID 9950784."
+    },
+    {
+      "slug": "handstand-walk",
+      "id": "potdevin_2018",
+      "used_for": "n=18 in the video-feedback arm, French PE beginners aged 12.4 +/- 0.5, five weekly lessons learning a front handstand to flat-back landing with a teacher present: video knowledge-of-performance after every five attempts improved arm-trunk angle by lesson 5 and improved self-assessment scores. The every-five-reps number is carried across to adult self-coached freestand search as a heuristic; it is an engineering choice, not a dose validated in this population. Corrected 2026-09-05: the study is five weeks and five lessons, not eight weeks, and the record's title was a stub that could not be looked up."
+    },
+    {
+      "slug": "muscle-up",
+      "id": "potdevin_2018",
+      "used_for": "n=18 in the video-feedback arm, PE beginners aged about 12, five weekly lessons on a front handstand to flat-back landing: knowledge-of-performance after every five attempts improved both skill and self-assessment. Reused here as the reason video review is dosed rather than given every rep; transferring a school-class gymnastics dose to adult self-coached ring work is an engineering choice. Corrected 2026-09-05: the study is five weeks and five lessons, not eight weeks, and the record's title was a stub."
+    },
+    {
+      "slug": "first-strict-pullup",
+      "id": "proteau_1992",
+      "used_for": "Laboratory manual-aiming task with and without vision of the limb; the authors conclude that learning is specific to the conditions that prevail during skill acquisition. Treating each capability as its own state variable is a design inference from that principle, not a result this paper reports for strength skills. Corrected 2026-09-05: the canonical record had been moved on 2026-08-18 to Journal of Motor Behavior 24(1):81-104, a reference that could not be found to exist; the real paper is Q J Exp Psychol A 44(3):557-575, PMID 1631322, and this programme's issue number should read 44(3), not 44A(4)."
+    },
+    {
+      "slug": "muscle-up",
+      "id": "proteau_1992",
+      "used_for": "Laboratory manual-aiming task with and without vision of the limb; the authors conclude that learning is specific to the conditions that prevail during skill acquisition. The per-capability split is a design inference from that principle rather than a finding about ring skills. Corrected 2026-09-05: the canonical record had been moved to a Journal of Motor Behavior reference that does not exist; the real paper is Q J Exp Psychol A 44(3):557-575, PMID 1631322, and the issue should read 44(3), not 44A(4)."
+    },
+    {
+      "slug": "handstand-walk",
+      "id": "proteau_1992",
+      "used_for": "Laboratory manual-aiming task with and without vision of the limb; the authors conclude that learning is specific to the conditions that prevail during skill acquisition. Training wall hold, freestand and walk as separate state variables follows that principle by extrapolation; the paper tests neither handstands nor locomotion. Corrected 2026-09-05: the canonical record had been moved to a Journal of Motor Behavior reference that does not exist, the title here was a description rather than the published title, and the issue should read 44(3)."
+    },
+    {
+      "slug": "rowing-2k-test-prep",
+      "id": "proteau_1992",
+      "used_for": "Laboratory manual-aiming task with and without vision of the limb; the authors conclude that learning is specific to the conditions that prevail during skill acquisition. Race-pace work is a reasonable application of that principle and an engineering choice: nothing in this paper concerns rowing, pacing or endurance. Corrected 2026-09-05: the 2026-08-18 correction this record recorded moved it from the real Q J Exp Psychol A 44(3):557-575 paper (PMID 1631322) onto Journal of Motor Behavior 24(1):81-104, which four search routes could not find to exist, and this programme copied that fabricated locator."
+    },
+    {
+      "slug": "first-strict-pullup",
+      "id": "reinold_2007",
+      "used_for": "EMG in 22 asymptomatic subjects across three isolated cuff exercises: no statistical difference among the exercises for supraspinatus activity, with the full-can position producing significantly less deltoid activity. That is a muscle-recruitment comparison in people without symptoms; it carries no information about training through pain. The stop-the-session rule for hangs and pulls stays, but as a conservative safety choice, not as a finding of this paper. Corrected 2026-09-05: the source read JOSPT 37(9):519-527, a locator that returns zero results; the paper is J Athl Train 42(4):464-469, PMID 18174934, and the byline was truncated."
+    },
+    {
+      "slug": "muscle-up",
+      "id": "reinold_2007",
+      "used_for": "EMG in 22 asymptomatic subjects across three isolated cuff exercises: supraspinatus activity did not differ among them, and the full-can position produced significantly less deltoid activity. It supports choosing a cuff-prep position; it says nothing about symptomatic shoulders or about ending a session, so the stop-the-session rule is a safety choice and the pre-session prep dose is an engineering choice. Corrected 2026-09-05: the source read JOSPT 37(9):519-527, which does not exist; the paper is J Athl Train 42(4):464-469, PMID 18174934, and the byline was truncated."
+    },
+    {
+      "slug": "handstand-walk",
+      "id": "reinold_2007",
+      "used_for": "EMG in 22 asymptomatic subjects across three isolated cuff exercises, with no difference among them for supraspinatus and less deltoid activity in the full-can position. It is not a study of sustained overhead or inverted loading, so the shoulder-endurance contraindication and the belly-to-wall rationale rest on clinical caution rather than on this measurement. Corrected 2026-09-05: the record named the wrong journal with no volume or pages; the paper is J Athl Train 42(4):464-469, PMID 18174934, and this id had been serving two different Reinold papers at once."
+    },
+    {
+      "slug": "overhead-mobility",
+      "id": "reinold_2007",
+      "used_for": "This id now resolves to the EMG study, J Athl Train 42(4):464-469, PMID 18174934: 22 asymptomatic subjects, three isolated cuff exercises, no difference among them for supraspinatus. The cross-drill activation catalogue this programme actually described is a different work, Reinold, Escamilla and Wilk, JOSPT 2009;39(2):105-117, PMID 19194023, a narrative review the authors grade Level of Evidence 5; it needs its own citation id before Phase 2 copy can cite it. Neither paper states that cuff activation must precede end-range loading, so the light-load bias is an engineering choice, as this programme's own engineering_choices_flagged block already says. Corrected 2026-09-05: the record was dated 2007 at JOSPT 37(11):659-670, a locator with zero results, for a paper published in 2009, and a hard rule was attributed to text that is in neither abstract."
+    },
+    {
+      "slug": "handstand-walk",
+      "id": "rohleder_vogt_2018",
+      "used_for": "26 university students in a single pre-post session, randomised to tactile-verbal feedback (n=13) or visual-comparative feedback (n=13): shoulder positioning improved after tactile-verbal (p<0.01) and shoulder-angle motor imagery improved after visual-comparative (p<0.05). No combined arm was run; combining the two is the authors' suggestion in their conclusion, not a measured result, so the mixed feedback design is an engineering choice supported by two modalities moving different variables. Corrected 2026-09-05: the used_for claimed combined feedback outperformed either alone, which the study never tested, and the record carried an invented title and a hedged double venue with the wrong volume (correct: Science of Gymnastics Journal 10(1):29-42)."
+    },
+    {
+      "slug": "concurrent-strength-maintenance",
+      "id": "san_millan_brooks_2018",
+      "used_for": "Indirect calorimetry and blood lactate in professional endurance athletes, moderately active individuals and metabolic-syndrome patients: fat oxidation was higher and lactate lower in the athletes, and the two were inversely correlated within every group (professionals r=-0.97). That is the substrate-oxidation basis for an easy-effort zone. The 2 mmol/L number is coaching convention used to place the zone in practice, not a boundary this paper defines. Corrected 2026-09-05: the used_for stated Zone 2 = lactate under 2 mmol/L as this paper's definition; nothing retrieved from it contains that cut-point, and app users train the zone by heart rate or RPE with no lactate measurement at all."
+    },
+    {
+      "slug": "engine-builder",
+      "id": "san_millan_brooks_2018",
+      "used_for": "Metabolic-flexibility framework: fat oxidation and blood lactate are inversely correlated across professional athletes, moderately active individuals and metabolic-syndrome patients, measured by indirect calorimetry with blood draws. It anchors why a low-lactate steady effort is the substrate-oxidation stimulus. It sets no zone boundary and no lactate clamp target, and the app prescribes the zone by heart rate or RPE, so the field translation is an engineering choice. Corrected 2026-09-05: no bibliographic error; the lactate-clamp methodology wording implied a prescribed numeric target this paper does not set."
+    },
+    {
+      "slug": "rowing-2k-test-prep",
+      "id": "san_millan_brooks_2018",
+      "used_for": "Substrate-oxidation basis for an easy-effort zone: fat oxidation and blood lactate move inversely across professional athletes, moderately active individuals and metabolic-syndrome patients. The under-2 mmol/L figure is coaching convention for placing that zone, not a boundary defined in this paper, and no user of this programme measures lactate. Corrected 2026-09-05: the used_for presented a numeric lactate cut-point as this paper's Zone 2 definition; nothing retrieved from the paper contains it."
+    },
+    {
+      "slug": "handstand-walk",
+      "id": "sci_reports_2026_handstand_shoulder",
+      "used_for": "Cross-sectional comparison of ten practitioners who could handstand walk six steps: those reporting shoulder pain moved significantly slower (p=0.005), showed shorter arm lengths (p=0.013) and greater net torsional work (p=0.002), a more flexed arm position associated with higher joint loading. With n=10 and no time order, it cannot say whether the pattern causes the pain or follows from it, and it reports nothing about managing a session. The shoulder-pain-stops-session rule is a conservative safety choice; this paper describes a compensation pattern consistent with it. The authors name discipline, training volume and gender as unaddressed confounders. Corrected 2026-09-05: this record's authors field was the placeholder 'Sci Reports handstand-walk shoulder pain team' rather than a byline, and the used_for asserted that byline and DOI had been checked against the publisher record on 2026-09-02, a check the same record falsified; the real byline is Angioi M, Hinds N, Twycross-Lewis R, Farmer C, Birn-Jeffery AV, Scientific Reports 16:22766, doi 10.1038/s41598-026-51612-w."
+    },
+    {
+      "slug": "first-strict-pullup",
+      "id": "shea_2000",
+      "used_for": "Two practice sessions separated by 24 hours produced better performance in later practice and better delayed retention than the same sessions separated by 20 minutes, on a laboratory dynamic-balance task and a key-press timing task. The multi-session weekly template and the greasing-the-groove spacing rule apply that result to pulling strength by extrapolation, which is an engineering choice. Corrected 2026-09-05: the record's title was a description rather than the published title, its byline was truncated and it had no identifier, so the /evidence row could not be looked up."
+    },
+    {
+      "slug": "muscle-up",
+      "id": "shea_2000",
+      "used_for": "Sessions spaced 24 hours apart beat sessions spaced 20 minutes apart for later practice performance and delayed retention, on laboratory balance and timing tasks. The multi-session weekly template applies that to ring work by extrapolation. Corrected 2026-09-05: the record's title was a description, the byline was truncated and there was no identifier."
+    },
+    {
+      "slug": "handstand-walk",
+      "id": "shea_2000",
+      "used_for": "Sessions spaced across days beat sessions massed within a day, measured on a laboratory dynamic-balance task and a key-press timing task with a delayed retention test. The daily-short design and the do-not-double-up rule follow that principle; neither the task nor the population is a handstand, so the transfer is an engineering choice. Corrected 2026-09-05: the record's title was a description rather than the published title, with a truncated byline and no identifier."
+    },
+    {
+      "slug": "handstand-walk",
+      "id": "simunkova_2024",
+      "used_for": "111 novice college athletes aged 19-23: no relationship between handstand execution quality (E-score) and Upper Quarter Y Balance Test or Closed Kinetic Chain Upper Extremity Stability Test scores. That is a good reason not to gate entry on generic upper-quadrant screens. It is weaker support for not gating obstacles and turns, because nobody in a novice sample could perform those sub-skills, and the authors themselves attribute the null partly to design (testing at 90 versus 180 degrees of shoulder flexion) and to insufficient skill variability. Corrected 2026-09-05: the byline is wrong on both the programme record and citations.json: the paper is Malir R, Chrudimsky J, Provaznik A, Trebicky V, 'Are the shoulder joint function, stability, and mobility tests predictive of handstand execution?', PLOS One 19(5):e0302922 - Simunkova K is not an author, and the title here was a description."
+    },
+    {
+      "slug": "handstand-walk",
+      "id": "sobera_2019",
+      "used_for": "Eight male acrobatic gymnasts, four more and four less experienced, in a static handstand on a force platform: the more experienced minimised anterior-posterior sway while keeping medial-lateral sway small, and the less experienced showed irregular medial-lateral pressure, with the sway reduction paid for by exerting more force into the floor. The mechanism contrast is real; with four per group it will not carry an outcome claim, and the study is static, so nothing here speaks to walking. Corrected 2026-09-05: the used_for called this an elite-versus-novice difference and used it as outcome evidence, and the record carried a description in place of the published title 'Stabilometric profile of handstand technique in male gymnasts', Acta Bioeng Biomech 21(1):63-71, with no identifier."
+    },
+    {
+      "slug": "rowing-2k-test-prep",
+      "id": "steinacker_1993",
+      "used_for": "Descriptive review of international-level rowing practice: anaerobic threshold at 80-85 percent of maximal performance in highly trained rowers, 70-90 percent of training time below that threshold, and annual loads reaching 1000 hours or 5000-7000 km, with work above 4.0 mmol/L blood lactate plus sprint and athletics training completing the schedule. It describes what elite oarsmen do; it prescribes nothing, and a test-prep user is not an elite oarsman, so applying the distribution here is a coaching judgement. Corrected 2026-09-05: the used_for called a descriptive review a rowing-specific interval and volume prescription, and the record's only locator was a PubMed search query; it is PMID 8262704, Int J Sports Med 14 Suppl 1:S3-10, and verification_status can now be cleared."
+    },
+    {
+      "slug": "handstand-walk",
+      "id": "vidal_torija_2025",
+      "used_for": "Cross-sectional survey of 321 adult handstand practitioners: 182 (56.7 percent) reported chronic wrist pain, with no significant association between that pain and weekly training hours, training frequency, training duration, warm-up routine or brace use. The authors read it as multifactorial rather than volume-driven. Note the direction: this is evidence against volume being the driver, so it is not evidence for the wrist volume cap. The cap is a conservative engineering choice and should be labelled as one. Corrected 2026-09-05: the byline, title and venue were all wrong on both the programme record and citations.json; the paper is Martonovich N, Maman D, Mahamid A, Alfandari L, Behrbalk E, 'The Wrist as a Weightbearing Joint in Adult Handstand Practitioners', J Funct Morphol Kinesiol 10(4):372, doi 10.3390/jfmk10040372 - not Frontiers, and no author named Vidal-Torija exists on it."
+    },
+    {
+      "slug": "first-strict-pullup",
+      "id": "walker_2003",
+      "used_for": "Finger-tapping motor-skill learning across sleep: doubling the quantity of initial training did not change the amount of sleep-dependent improvement that developed overnight. That is the argument for short, frequent exposure over infrequent long sessions. It is a laboratory keypress task, so applying it to pull-up practice is an engineering choice. Corrected 2026-09-05: this id was a splice of two real papers, carrying the Nature paper's title and four-author byline over the Learning & Memory paper's locator; it is resolved onto Walker MP, Brakefield T, Seidman J, Morgan A, Hobson JA, Stickgold R, 'Sleep and the time course of motor skill learning', Learn Mem 10(4):275-284, PMID 12888546. The dissociable-stages claim this record previously made belongs to Nature 425(6958):616-620, PMID 14534587, which says nothing about session length or frequency."
+    },
+    {
+      "slug": "muscle-up",
+      "id": "walker_2003",
+      "used_for": "Finger-tapping motor-skill learning across sleep: doubling initial training volume did not increase the overnight sleep-dependent gain, which is the case for daily short exposure rather than occasional long sessions. Laboratory keypress task; the transfer to ring skills is an engineering choice. Corrected 2026-09-05: the record spliced the Nature paper's title and byline onto the Learning & Memory locator, and this programme's source field said Nature 425(6958):616-620 while two other programmes said Learning & Memory; the id is resolved onto Learn Mem 10(4):275-284, PMID 12888546, whose byline includes Seidman J and Morgan A."
+    },
+    {
+      "slug": "handstand-walk",
+      "id": "walker_2003",
+      "used_for": "Sleep-dependent motor consolidation: in finger-tapping learning, doubling the quantity of initial training did not alter the overnight sleep-dependent gain, which is the reason daily short exposure is preferred to infrequent long sessions. Laboratory keypress task, not a balance or inversion skill. Corrected 2026-09-05: the 2026-08-17 correction left the record internally spliced, keeping the Nature paper's title and its four-author byline over this Learning & Memory locator; the byline is Walker MP, Brakefield T, Seidman J, Morgan A, Hobson JA, Stickgold R and the title is 'Sleep and the time course of motor skill learning', PMID 12888546."
+    },
+    {
+      "slug": "overhead-mobility",
+      "id": "walker_2003",
+      "used_for": "Sleep-dependent consolidation of a motor pattern: doubling the amount of initial finger-tapping training did not increase the overnight gain, which is what the daily-short rationale leans on. A laboratory keypress task, so its application to mobility drills is an engineering choice. Corrected 2026-09-05: the record kept the Nature paper's title and byline over this Learning & Memory locator; the correct record is Walker MP, Brakefield T, Seidman J, Morgan A, Hobson JA, Stickgold R, 'Sleep and the time course of motor skill learning', Learn Mem 10(4):275-284, PMID 12888546."
+    },
+    {
+      "slug": "handstand-walk",
+      "id": "wu_2014",
+      "used_for": "Planar reaching in a manipulandum: participants whose task-relevant motor variability was one standard deviation above average learned more than twice as fast as those one standard deviation below (p=0.0021), across reward-based trajectory learning and error-based force-field adaptation. It supports the individual-variance framing - people arrive with different learning rates - and nothing more specific than that for handstand acquisition. Corrected 2026-09-05: the figure is more than twofold, not 3x, and visuomotor rotation is not a paradigm in this study; the string appears in the paper only in its reference list. The same wrong phrasing remains in muscle-up.json outcome_evidence and must be fixed by hand."
+    }
+  ],
+  "programme_text": [
+    {
+      "slug": "concurrent-strength-maintenance",
+      "find": "H, Hemmingsson E, Rosdahl H, Psilander N\",",
+      "replace": "H, Lofving P, Psilander N\","
+    },
+    {
+      "slug": "concurrent-strength-maintenance",
+      "find": "\"Development of maximal dynamic strength during concurrent resistance and endurance training in untrained, moderately trained and trained individuals\"",
+      "replace": "\"The Effect of Two Different Concurrent Training Programs on Strength and Power Gains in Highly-Trained Individuals\""
+    },
+    {
+      "slug": "engine-builder",
+      "find": "\"year\": 2000,\n        \"title\": \"Effect of high-intensity exercise training on lactate/H+ transport capacity in human skeletal muscle\",\n        \"source\": \"American Journal of Physiology - Endocrinology and Metabolism 278(4):E571-E579\",\n        \"url\": \"https://journals.physiology.org/doi/full/10.1152/ajpendo.2000.278.4.E571\",",
+      "replace": "\"year\": 1999,\n        \"title\": \"Effect of high-intensity exercise training on lactate/H+ transport capacity in human skeletal muscle\",\n        \"source\": \"American Journal of Physiology 276(2):E255-E261\",\n        \"url\": \"https://pubmed.ncbi.nlm.nih.gov/9950784/\","
+    },
+    {
+      "slug": "engine-builder-block-2",
+      "find": "\"year\": 2000,\n        \"title\": \"Effect of high-intensity exercise training on lactate/H+ transport capacity in human skeletal muscle\",\n        \"source\": \"American Journal of Physiology - Endocrinology and Metabolism 278(4):E571-E579\",",
+      "replace": "\"year\": 1999,\n        \"title\": \"Effect of high-intensity exercise training on lactate/H+ transport capacity in human skeletal muscle\",\n        \"source\": \"American Journal of Physiology 276(2):E255-E261\",\n        \"url\": \"https://pubmed.ncbi.nlm.nih.gov/9950784/\","
+    },
+    {
+      "slug": "handstand-walk",
+      "find": "\"authors\": \"Potdevin F, et al.\",\n        \"year\": 2018,\n        \"title\": \"Video feedback and self-assessment in gymnastics learning\",\n        \"source\": \"Physical Education and Sport Pedagogy 23(6)\",",
+      "replace": "\"authors\": \"Potdevin F, Vors O, Huchez A, Lamour M, Davids K, Schnitzler C\",\n        \"year\": 2018,\n        \"title\": \"How can video feedback be used in physical education to support novice learning in gymnastics? Effects on motor learning, self-assessment and motivation\",\n        \"source\": \"Physical Education and Sport Pedagogy 23(6):559-574\","
+    },
+    {
+      "slug": "muscle-up",
+      "find": "\"authors\": \"Potdevin F, et al.\",\n        \"year\": 2018,\n        \"title\": \"Video feedback and self-assessment in gymnastics learning\",\n        \"source\": \"Physical Education and Sport Pedagogy 23(6)\",",
+      "replace": "\"authors\": \"Potdevin F, Vors O, Huchez A, Lamour M, Davids K, Schnitzler C\",\n        \"year\": 2018,\n        \"title\": \"How can video feedback be used in physical education to support novice learning in gymnastics? Effects on motor learning, self-assessment and motivation\",\n        \"source\": \"Physical Education and Sport Pedagogy 23(6):559-574\","
+    },
+    {
+      "slug": "first-strict-pullup",
+      "find": "\"source\": \"Quarterly Journal of Experimental Psychology 44A(4):557-575\",",
+      "replace": "\"source\": \"Quarterly Journal of Experimental Psychology Section A 44(3):557-575\","
+    },
+    {
+      "slug": "muscle-up",
+      "find": "\"source\": \"Quarterly Journal of Experimental Psychology 44A(4):557-575\",",
+      "replace": "\"source\": \"Quarterly Journal of Experimental Psychology Section A 44(3):557-575\","
+    },
+    {
+      "slug": "handstand-walk",
+      "find": "\"title\": \"Learning is specific to the sensory conditions of practice\",\n        \"source\": \"Quarterly Journal of Experimental Psychology 44A:557-575\",",
+      "replace": "\"title\": \"A sensorimotor basis for motor learning: evidence indicating specificity of practice\",\n        \"source\": \"Quarterly Journal of Experimental Psychology Section A 44(3):557-575\","
+    },
+    {
+      "slug": "rowing-2k-test-prep",
+      "find": "\"title\": \"Specificity of practice: the case of the goal-directed aiming task\",\n        \"source\": \"J Motor Behav 24(1):81-104\",",
+      "replace": "\"title\": \"A sensorimotor basis for motor learning: evidence indicating specificity of practice\",\n        \"source\": \"Quarterly Journal of Experimental Psychology Section A 44(3):557-575\","
+    },
+    {
+      "slug": "first-strict-pullup",
+      "find": "\"authors\": \"Reinold MM, Wilk KE, Fleisig GS, et al.\",\n        \"year\": 2007,\n        \"title\": \"Electromyographic analysis of the supraspinatus and deltoid muscles during 3 common rehabilitation exercises\",\n        \"source\": \"Journal of Orthopaedic and Sports Physical Therapy 37(9):519-527\",",
+      "replace": "\"authors\": \"Reinold MM, Macrina LC, Wilk KE, Fleisig GS, Dun S, Barrentine SW, Ellerbusch MT, Andrews JR\",\n        \"year\": 2007,\n        \"title\": \"Electromyographic analysis of the supraspinatus and deltoid muscles during 3 common rehabilitation exercises\",\n        \"source\": \"Journal of Athletic Training 42(4):464-469\","
+    },
+    {
+      "slug": "muscle-up",
+      "find": "\"authors\": \"Reinold MM, Wilk KE, Fleisig GS, et al.\",\n        \"year\": 2007,\n        \"title\": \"Electromyographic analysis of the supraspinatus and deltoid muscles during 3 common rehabilitation exercises\",\n        \"source\": \"Journal of Orthopaedic and Sports Physical Therapy 37(9):519-527\",",
+      "replace": "\"authors\": \"Reinold MM, Macrina LC, Wilk KE, Fleisig GS, Dun S, Barrentine SW, Ellerbusch MT, Andrews JR\",\n        \"year\": 2007,\n        \"title\": \"Electromyographic analysis of the supraspinatus and deltoid muscles during 3 common rehabilitation exercises\",\n        \"source\": \"Journal of Athletic Training 42(4):464-469\","
+    },
+    {
+      "slug": "handstand-walk",
+      "find": "\"authors\": \"Reinold MM, et al.\",\n        \"year\": 2007,\n        \"title\": \"Electromyographic analysis of the supraspinatus and deltoid muscles during 3 common rehabilitation exercises\",\n        \"source\": \"Journal of Orthopaedic & Sports Physical Therapy\",",
+      "replace": "\"authors\": \"Reinold MM, Macrina LC, Wilk KE, Fleisig GS, Dun S, Barrentine SW, Ellerbusch MT, Andrews JR\",\n        \"year\": 2007,\n        \"title\": \"Electromyographic analysis of the supraspinatus and deltoid muscles during 3 common rehabilitation exercises\",\n        \"source\": \"Journal of Athletic Training 42(4):464-469\","
+    },
+    {
+      "slug": "overhead-mobility",
+      "find": "\"authors\": \"Reinold MM, Escamilla RF, Wilk KE\",\n        \"year\": 2007,\n        \"title\": \"Current concepts in the scientific and clinical rationale behind exercises for glenohumeral and scapulothoracic musculature\",\n        \"source\": \"JOSPT 37(11):659-670\",",
+      "replace": "\"authors\": \"Reinold MM, Macrina LC, Wilk KE, Fleisig GS, Dun S, Barrentine SW, Ellerbusch MT, Andrews JR\",\n        \"year\": 2007,\n        \"title\": \"Electromyographic analysis of the supraspinatus and deltoid muscles during 3 common rehabilitation exercises\",\n        \"source\": \"Journal of Athletic Training 42(4):464-469\","
+    },
+    {
+      "slug": "overhead-mobility",
+      "find": "\"detail\": \"Reinold 2007 ",
+      "replace": "\"detail\": \"Engineering choice, not a cited finding "
+    },
+    {
+      "slug": "overhead-mobility",
+      "find": "active rotator-cuff engagement should precede end-range positioning. Ballistic end-range loading is what that cuff activation is there to protect against.",
+      "replace": "we ask for active rotator-cuff engagement before end-range positioning, because ballistic end-range loading is what that engagement is there to protect against. No retrieved text in Reinold et al. 2007 (J Athl Train 42(4):464-469, EMG in 22 asymptomatic subjects) or in the Reinold, Escamilla and Wilk 2009 review (JOSPT 39(2):105-117, Level of Evidence 5) states that activation must precede end-range loading."
+    },
+    {
+      "slug": "overhead-mobility",
+      "find": "\"goal\": \"Add active ROM + light loaded overhead. Sotts press, TGU, empty bar OHS.\",\n      \"rationale\": \"Reinold 2007 ",
+      "replace": "\"goal\": \"Add active ROM + light loaded overhead. Sotts press, TGU, empty bar OHS.\",\n      \"rationale\": \"Engineering choice, not a cited finding "
+    },
+    {
+      "slug": "overhead-mobility",
+      "find": "rotator-cuff activation precedes end-range loading. Adding load builds the pattern under stress rather than reaching end-range cold.",
+      "replace": "we sequence cuff activation before end-range loading so the pattern is built under stress rather than reaching end-range cold. No cited paper establishes that ordering: Reinold et al. 2007 is an EMG comparison of three cuff exercises in asymptomatic subjects and reports nothing about loading order."
+    },
+    {
+      "slug": "overhead-mobility",
+      "find": "Reinold 2007 catalogued rotator-cuff EMG activation across a wide range of common drills;",
+      "replace": "Reinold, Escamilla and Wilk 2009 (JOSPT 39(2):105-117, PMID 19194023, a narrative review the authors grade Level of Evidence 5, and a different paper from the reinold_2007 EMG record cited in this programme) catalogued rotator-cuff EMG activation across a wide range of common drills;"
+    },
+    {
+      "slug": "overhead-mobility",
+      "find": "Reinold 2007 is a cross-drill EMG catalogue, not an RCT of light-load vs bodyweight for shoulder-mobility outcome.",
+      "replace": "The cross-drill EMG catalogue is Reinold, Escamilla and Wilk 2009 (JOSPT 39(2):105-117), a Level-5 narrative review and not an RCT of light-load vs bodyweight for shoulder-mobility outcome; the reinold_2007 id in this programme resolves to a different paper, the 2007 J Athl Train EMG study."
+    },
+    {
+      "slug": "first-strict-pullup",
+      "find": "Reinold 2007 supraspinatus / rotator-cuff load data supports the caution: hang position loads the long head of biceps + supraspinatus tendon.",
+      "replace": "Conservative safety choice, not a cited finding: Reinold et al. 2007 (J Athl Train 42(4):464-469) is EMG in 22 asymptomatic subjects and reports no supraspinatus difference among the three exercises tested, so it describes cuff recruitment rather than licensing a stop rule."
+    },
+    {
+      "slug": "handstand-walk",
+      "find": "\"title\": \"Combined tactile-verbal and visual feedback in gymnastics skill acquisition\",\n        \"source\": \"Science of Gymnastics Journal / International Journal of Performance Analysis in Sport 18(1)\",",
+      "replace": "\"title\": \"Teaching novices the handstand: a practical approach of different sport-specific feedback concepts on movement learning\",\n        \"source\": \"Science of Gymnastics Journal 10(1):29-42\","
+    },
+    {
+      "slug": "handstand-walk",
+      "find": "\"title\": \"Upper-quadrant Y-balance and CKCUEST vs handstand E-score\",",
+      "replace": "\"title\": \"Are the shoulder joint function, stability, and mobility tests predictive of handstand execution?\","
+    },
+    {
+      "slug": "handstand-walk",
+      "find": "\"title\": \"Postural control strategies of handstand-trained subjects\",\n        \"source\": \"Acta of Bioengineering and Biomechanics\",",
+      "replace": "\"title\": \"Stabilometric profile of handstand technique in male gymnasts\",\n        \"source\": \"Acta of Bioengineering and Biomechanics 21(1):63-71\","
+    },
+    {
+      "slug": "handstand-walk",
+      "find": "\"authors\": \"Vidal-Torija A, et al.\",\n        \"year\": 2025,\n        \"title\": \"Wrist symptoms in adult handstand practitioners: a cross-sectional survey\",\n        \"source\": \"Frontiers (PMC12550924), n=321\",",
+      "replace": "\"authors\": \"Martonovich N, Maman D, Mahamid A, Alfandari L, Behrbalk E\",\n        \"year\": 2025,\n        \"title\": \"The Wrist as a Weightbearing Joint in Adult Handstand Practitioners: A Cross-Sectional Survey of Chronic Pain and Training-Related Factors\",\n        \"source\": \"Journal of Functional Morphology and Kinesiology 10(4):372\","
+    },
+    {
+      "slug": "handstand-walk",
+      "find": "\"authors\": \"Sci Reports handstand-walk shoulder pain team\",\n        \"year\": 2026,\n        \"title\": \"Handstand walking biomechanics and shoulder pain association\",\n        \"source\": \"Scientific Reports (s41598-026-51612-w)\",",
+      "replace": "\"authors\": \"Angioi M, Hinds N, Twycross-Lewis R, Farmer C, Birn-Jeffery AV\",\n        \"year\": 2026,\n        \"title\": \"Exploring handstand walking biomechanics and shoulder pain\",\n        \"source\": \"Scientific Reports 16:22766, doi 10.1038/s41598-026-51612-w\","
+    },
+    {
+      "slug": "rowing-2k-test-prep",
+      "find": "\"url\": \"https://pubmed.ncbi.nlm.nih.gov/?term=Steinacker+physiological+aspects+training+rowing+1993\",",
+      "replace": "\"url\": \"https://pubmed.ncbi.nlm.nih.gov/8262704/\","
+    },
+    {
+      "slug": "first-strict-pullup",
+      "find": "\"authors\": \"Walker MP, Brakefield T, Hobson JA, Stickgold R\",\n        \"year\": 2003,\n        \"title\": \"Dissociable stages of human memory consolidation and reconsolidation\",\n        \"source\": \"Nature 425(6958):616-620\",",
+      "replace": "\"authors\": \"Walker MP, Brakefield T, Seidman J, Morgan A, Hobson JA, Stickgold R\",\n        \"year\": 2003,\n        \"title\": \"Sleep and the time course of motor skill learning\",\n        \"source\": \"Learning & Memory 10(4):275-284\","
+    },
+    {
+      "slug": "muscle-up",
+      "find": "\"authors\": \"Walker MP, Brakefield T, Hobson JA, Stickgold R\",\n        \"year\": 2003,\n        \"title\": \"Dissociable stages of human memory consolidation and reconsolidation\",\n        \"source\": \"Nature 425(6958):616-620\",",
+      "replace": "\"authors\": \"Walker MP, Brakefield T, Seidman J, Morgan A, Hobson JA, Stickgold R\",\n        \"year\": 2003,\n        \"title\": \"Sleep and the time course of motor skill learning\",\n        \"source\": \"Learning & Memory 10(4):275-284\","
+    },
+    {
+      "slug": "handstand-walk",
+      "find": "\"authors\": \"Walker MP, Brakefield T, Hobson JA, Stickgold R\",\n        \"year\": 2003,\n        \"title\": \"Dissociable stages of human memory consolidation and reconsolidation\",\n        \"source\": \"Learning & Memory 10(4):275-284\",",
+      "replace": "\"authors\": \"Walker MP, Brakefield T, Seidman J, Morgan A, Hobson JA, Stickgold R\",\n        \"year\": 2003,\n        \"title\": \"Sleep and the time course of motor skill learning\",\n        \"source\": \"Learning & Memory 10(4):275-284\","
+    },
+    {
+      "slug": "overhead-mobility",
+      "find": "\"authors\": \"Walker MP, Brakefield T, Hobson JA, Stickgold R\",\n        \"year\": 2003,\n        \"title\": \"Dissociable stages of human memory consolidation and reconsolidation\",\n        \"source\": \"Learning & Memory 10(4):275-284\",",
+      "replace": "\"authors\": \"Walker MP, Brakefield T, Seidman J, Morgan A, Hobson JA, Stickgold R\",\n        \"year\": 2003,\n        \"title\": \"Sleep and the time course of motor skill learning\",\n        \"source\": \"Learning & Memory 10(4):275-284\","
+    }
+  ]
+}
