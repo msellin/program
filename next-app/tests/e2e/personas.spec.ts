@@ -315,6 +315,15 @@ for (const persona of PERSONAS) {
      * the substitute is present, and the user is told why. The last part
      * matters most — a silent substitution is indistinguishable from a bug.
      */
+    /**
+     * "verified" only if the deferral copy was actually asserted against a
+     * real session. A rest day yields "skipped-rest-day" — recorded, not
+     * swallowed, because a silent skip is how this path came to be covered
+     * by exactly one persona that happened to land on a rest day for two
+     * consecutive sweeps while the summary still read green.
+     */
+    let deferralCheck: "verified" | "skipped-rest-day" | "no-capture" | null = null;
+
     if (persona.intakeAnswers) {
       const sessionCapture = path.join(outDir, "text", "16-session-today.txt");
       const programFile = path.join(
@@ -322,7 +331,7 @@ for (const persona of PERSONAS) {
       );
       const prog = JSON.parse(fs.readFileSync(programFile, "utf8")) as {
         intake_exclusions?: Array<{
-          question_id: string; when_value_in: string[];
+          id: string; question_id: string; when_value_in: string[];
           exclude_exercise_ids: string[]; substitute_with?: string; reason: string;
         }>;
       };
@@ -333,6 +342,7 @@ for (const persona of PERSONAS) {
       expect(fired.length, `${persona.id} answers should trigger at least one rule`)
         .toBeGreaterThan(0);
 
+      deferralCheck = "no-capture";
       if (fs.existsSync(sessionCapture)) {
         const library = JSON.parse(
           fs.readFileSync(
@@ -365,7 +375,15 @@ for (const persona of PERSONAS) {
         // `persona.json` write that every downstream artifact reads — a
         // rest-day persona would silently produce no manifest at all.
         const noSessionToday = /no session scheduled today|Rest day\./i.test(captured);
+        if (noSessionToday) {
+          deferralCheck = "skipped-rest-day";
+          console.warn(
+            `[${persona.id}] DEFERRAL CHECK SKIPPED — rest day, no session to assert against. ` +
+              `Rules that would have been checked: ${fired.map((r) => r.id).join(", ")}`,
+          );
+        }
         if (!noSessionToday) {
+          deferralCheck = "verified";
           for (const rule of fired) {
             // The reason is user-facing and must be on the screen.
             expect(captured, `${persona.id}: deferral reason not shown`).toContain(rule.reason);
@@ -409,6 +427,7 @@ for (const persona of PERSONAS) {
           programSlug: persona.programSlug,
           days: persona.days,
           focus: persona.focus,
+          deferralCheck,
           simulatedAt: new Date().toISOString(),
           simSummary: summariseStore(simResult.finalStore),
           tourSummary: {

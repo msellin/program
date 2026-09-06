@@ -426,6 +426,45 @@ export function writeFleetSummary(rootDir: string, reports: CoverageReport[]): v
         `${r.flows.ok}/${r.flows.skipped}/${r.flows.error} | ${r.states.fullyLoggedExercises} | ${r.states.partiallyLoggedExercises} |`,
     );
   }
+  /**
+   * Intake-deferral verification, called out separately.
+   *
+   * This is the only assertion in the sweep that can quietly stop running
+   * without anything going red: a persona whose day lands on a rest day has
+   * no session, so there is nothing to defer from and the check skips. It
+   * skipped on two consecutive sweeps while the summary read green, and the
+   * fix it was meant to prove — deferral rules reaching production at all —
+   * stayed unverified end-to-end the whole time.
+   *
+   * Rolled up here so the number of personas that ACTUALLY asserted it is a
+   * line in the report rather than something you only find by reading
+   * worker logs.
+   */
+  const deferral: Array<{ id: string; state: string }> = [];
+  for (const r of reports) {
+    const file = path.join(rootDir, r.personaId, "persona.json");
+    try {
+      const p = JSON.parse(fs.readFileSync(file, "utf8")) as { deferralCheck?: string | null };
+      if (p.deferralCheck) deferral.push({ id: r.personaId, state: p.deferralCheck });
+    } catch {
+      // No manifest, or one from an older harness — not a deferral persona.
+    }
+  }
+  if (deferral.length > 0) {
+    const verified = deferral.filter((d) => d.state === "verified").length;
+    lines.push(
+      "",
+      `## Intake-deferral checks — ${verified}/${deferral.length} verified end-to-end`,
+      "",
+      ...(verified === 0
+        ? ["**Nothing verified this sweep.** Every deferral persona skipped; the rules are covered by unit tests only.", ""]
+        : []),
+      "| Persona | Deferral check |",
+      "|---|---|",
+      ...deferral.map((d) => `| ${d.id} | ${d.state === "verified" ? "verified" : `**${d.state}**`} |`),
+    );
+  }
+
   // Per-surface control detail, unioned across the fleet.
   const merged = new Map<
     string,

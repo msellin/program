@@ -91,6 +91,42 @@ export const PERSONAS: Persona[] = [
       "Intake-driven deferral: heavy negatives excluded, scap work substituted, and the reason shown on the session",
   },
   {
+    /**
+     * The SECOND deferral persona, added 2026-09-06.
+     *
+     * `persona-pullup-elbow` was the only persona in the fleet whose intake
+     * answers changed programming — and on the sweep that first ran after
+     * intake deferrals were fixed to execute in production, it landed on a
+     * REST DAY. Empty session capture, nothing to assert, and the most
+     * consequential fix of that day went unverified by the fleet.
+     *
+     * One persona covering one path is not coverage, it is a coin flip
+     * against the calendar. This one carries the same answer against a
+     * DIFFERENT programme (muscle-up defers ring dip work rather than
+     * negatives) and a different day count, so the two are unlikely to be
+     * on a rest day together.
+     *
+     * Note this cannot be made deterministic by choosing `days`: the start
+     * date is today minus `days`, so today's weekday is today's weekday
+     * whatever we pick. Two programmes with different weekly templates is
+     * the available lever.
+     */
+    id: "persona-muscleup-elbow",
+    displayName: "Muscle-up user with current elbow tendon pain",
+    archetypeId: "consistent-average",
+    programSlug: "muscle-up",
+    intakeAnswers: {
+      elbow_tendon_pain: "current",
+      shoulder_pain_overhead: "false",
+      days_per_week: "3",
+    },
+    days: 30,
+    email: "e2e-persona-muscleup-elbow@example.test",
+    password: DEFAULT_PASSWORD,
+    focus:
+      "Intake-driven deferral on a second programme: ring dip work deferred, band-assisted dip substituted, and the reason shown on the session",
+  },
+  {
     id: "persona-recover",
     displayName: "Recovering rehab user",
     archetypeId: "injured-recovery",

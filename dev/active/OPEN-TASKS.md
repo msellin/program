@@ -7,7 +7,9 @@ snapshots. 25 commits on 2026-09-05/06; tests 674 -> 772.
 
 | P | Task | Est | Status |
 |---|---|---|---|
-| P1 | Persona sweep #6 | 31 min | **open** — ~12 app-side changes since sweep #5, none verified against the fleet. Includes the intake-deferral fix, the tier-level fix and the phase-start fix, all of which change what a persona is prescribed |
+| P1 | Persona sweep #6 | 31 min | **done** 2026-09-06 — 23 passed, 0 failures, 28.2 min. Controls 95.5% → 96.2%. Behavioural checks 269 → 263 (predicted ≥269; unexplained, see below). Never-driven still exactly `NoteSheet — Not now` |
+| P1 | Intake-deferral coverage was a coin flip | 45 min | **done** 2026-09-06 — `persona-pullup-elbow` was the fleet's ONLY persona with intake answers and landed on a rest day for two sweeps running, so the deferral fix stayed unverified end-to-end while the report read green. Added `persona-muscleup-elbow` (different programme, different day count), made the rest-day skip record `deferralCheck` + warn instead of passing silently, and the fleet summary now prints "N/M verified end-to-end" |
+| P2 | Explain the 6-check drop in sweep #6 | 30 min | **open** — skip analysis showed no new skip reasons (`retest-logging` 20, `session-hold` 17, `session-log-set` 10, all pre-existing). Per-flow totals sum to 263. Not yet accounted for; do not assume benign |
 | P2 | Label the 5 remaining phantom citations | 45 min | **open** — kim_2013, kilding_2012, ferrari_2021, robertson_2004, salmoni_schmidt_walter_1984. Sourcing agents already produced verdicts and replacements; the records are not yet annotated |
 | P3 | `sorted[1]` vs `last - first` in `buildMetricCtx` | 20 min | **open** — primary and secondary signals disagree six lines apart. Harmless while nothing user-facing reads it |
 | P3 | `OffPlanSheet` 4/6, `NoteSheet` "Not now" | 30 min | **open** — last coverage questions. Five of five previous "gaps" were measurement faults, so expect the same |
