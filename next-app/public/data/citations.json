@@ -386,7 +386,9 @@
       "title": "Walking initiation biomechanics",
       "source": "Gait & Posture",
       "display_short": "Ferrari et al. 2021",
-      "display_line": "Ferrari et al. (2021), Gait & Posture"
+      "display_line": "Ferrari et al. (2021), Gait & Posture",
+      "verification_status": "not_found",
+      "review_note": "NOT_FOUND 2026-09-05, re-checked 2026-09-06. Crossref and Europe PMC return nothing under this byline, title and venue; the one Europe PMC hit for Ferrari A + walking/gait initiation in 2021 is an unrelated Parkinson's freezing-of-gait protocol (PMID 34816053). RETIREMENT ALREADY APPROVED AND ONLY HALF APPLIED: handstand-walk.json retired this id from evidence_base.references[] on 2026-08-18 ('Replaced ferrari_2021 (unlocatable)') in favour of yiou_2017, but the retirement never reached citations.json or exercises.json. The record is still in the shared library, so it still renders on /evidence to every user of every programme, and eight handstand drills still name it in evidence_refs — including the level-3 prerequisite gate on hs_single_step_attempt, whose source: 'literature' currently resolves to nothing. The nearest real work is Grabowiecki M, Rum L, Laudani L, Vannozzi G (2021), 'Biomechanical characteristics of handstand walking initiation', Gait & Posture 86:311-318, DOI 10.1016/j.gaitpost.2021.03.036 — proposing it as a substitute ADDS a claim and needs founder sign-off; completing the approved retirement does not."
     },
     {
       "id": "fyfe_2014",
@@ -532,7 +534,9 @@
       "title": "Investigation of the maximal lactate steady state (MLSS) in trained runners",
       "source": "Int J Sports Med 33(1):11-16",
       "display_short": "Kilding et al. 2012",
-      "display_line": "Kilding et al. (2012), Int J Sports Med 33(1)"
+      "display_line": "Kilding et al. (2012), Int J Sports Med 33(1)",
+      "verification_status": "not_found",
+      "review_note": "NOT_FOUND 2026-09-05, re-checked 2026-09-06. Worse than unlocatable — the locator is specific enough to be checked and is demonstrably wrong. PubMed enumeration of Int J Sports Med vol 33 issue 1 returns 13 articles whose page ranges (1-7, 8-12, 13-17, ...) leave no article at 11-16; the claimed range straddles two real articles and matches neither, and no Kilding paper is in the issue. Europe PMC 'maximal lactate steady state AND Kilding' is an empty set. The real Kilding/Winter/Fysh IJSM paper is a 2006 oxygen-uptake-kinetics study (27:419-426, DOI 10.1055/s-2005-865778) — right author trio, wrong year, volume and topic. A real byline has been attached to a title and locator that do not go together. This is rowing-2k-test-prep's ONLY cited warrant that MLSS is a valid basis for threshold prescription."
     },
     {
       "id": "kim_2013",
@@ -541,7 +545,9 @@
       "title": "Reliability of shoulder ROM measurement in supine position",
       "source": "J Phys Ther Sci 25(11):1435-1438",
       "display_short": "Kim et al. 2013",
-      "display_line": "Kim et al. (2013), J Phys Ther Sci 25(11)"
+      "display_line": "Kim et al. (2013), J Phys Ther Sci 25(11)",
+      "verification_status": "not_found",
+      "review_note": "NOT_FOUND 2026-09-05, re-checked 2026-09-06. No such paper is retrievable. PubMed esearch on '\"J Phys Ther Sci\"[Jour] AND 2013[pdat] AND shoulder AND supine AND reliability' returns Count 0, and pages 1435-1438 of J Phys Ther Sci 25(11) are not occupied by any article. The record carries no DOI and no PMID; its `url` was a PubMed SEARCH QUERY, not a record. This id is the named anchor for supine-flexion goniometer reliability in overhead-mobility, i.e. the warrant under that programme's entire retest metric (shoulder_flexion_deg_gain, '+10-25'). Labelling it does not withdraw it: it still renders on /evidence as a cited study. Withdraw-or-replace is a founder decision and is on the open list."
     },
     {
       "id": "kinoshita_2022",
@@ -825,7 +831,12 @@
       "title": "Current concepts in procedural consolidation",
       "source": "Nature Reviews Neuroscience 5:576-582",
       "display_short": "Robertson et al. 2004",
-      "display_line": "Robertson et al. (2004), Nature Reviews Neuroscience 5"
+      "display_line": "Robertson et al. (2004), Nature Reviews Neuroscience 5",
+      "pmid": "15208699",
+      "doi": "10.1038/nrn1426",
+      "url": "https://doi.org/10.1038/nrn1426",
+      "verification_status": "record_verified_claim_unverified",
+      "review_note": "Checked 2026-09-05, re-checked 2026-09-06. THE RECORD IS CORRECT — PMID 15208699, Nat Rev Neurosci 2004 Jul;5(7):576-82, DOI 10.1038/nrn1426; authors, year, journal, volume and pages all match, and the identifiers above were added from that record so the /evidence line is now followable. THE CLAIM IS NOT VERIFIED: the paper's content could not be retrieved anywhere — PubMed carries no abstract, OpenAlex returns abstract_inverted_index: null, Semantic Scholar returns null, and nature.com/articles/nrn1426 303s to an identity provider. The cited '4-6 h post-practice consolidation window vulnerable to similar-task interference' is therefore asserted from the title, which is not evidence. Separately, sourcing found the specific 4-6 h figure is CONTESTED in the primary literature. Exposure is copy, not behaviour: grep finds no scheduling code reading a consolidation window, so the handstand-after-overhead-press placement rule is a stated rationale a user may believe, not something the engine enforces. Soften the number or source it to a retrievable sentence."
     },
     {
       "id": "robineau_2016",
@@ -900,7 +911,12 @@
       "title": "Knowledge of results and motor learning: a review and critical reappraisal",
       "source": "Psychol Bull 95(3):355-386",
       "display_short": "Salmoni et al. 1984",
-      "display_line": "Salmoni et al. (1984), Psychol Bull 95(3)"
+      "display_line": "Salmoni et al. (1984), Psychol Bull 95(3)",
+      "pmid": "6399752",
+      "doi": "10.1037/0033-2909.95.3.355",
+      "url": "https://doi.org/10.1037/0033-2909.95.3.355",
+      "verification_status": "record_verified_claim_unverified",
+      "review_note": "Checked 2026-09-05, re-checked 2026-09-06. THE RECORD IS CORRECT and every bibliographic field matches exactly — PMID 6399752, Psychol Bull 1984 May;95(3):355-86, DOI 10.1037/0033-2909.95.3.355. The identifiers above were the only thing missing and are now present, which is what the audit said would make the /evidence line followable. THE CLAIM IS NOT VERIFIED: no sentence of the paper was retrievable — no abstract on PubMed, null on OpenAlex and Semantic Scholar, none on Crossref, PsycNet JS-gated, two candidate PDFs 404/403. So 'guidance hypothesis; feedback frequency in mobility drill acquisition' remains unconfirmed from primary text. Search-engine summaries asserting it were returned and are deliberately NOT relied on — a summary is not retrieved primary text. This is very likely the right paper for the guidance hypothesis; 'likely' is not 'verified', and the distinction is the point."
     },
     {
       "id": "san_millan_brooks_2018",
