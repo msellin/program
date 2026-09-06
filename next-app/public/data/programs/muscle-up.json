@@ -407,7 +407,8 @@
           "under_3"
         ],
         "block_title": "Build the ring-dip base first",
-        "block_body": "Under 3 strict ring dips, the top-half of the muscle-up will collapse. The Tier A phase of this program is a ring-dip build — it's a legitimate use of your time here — but you may prefer to run a dedicated dip program first. If you continue, the Tier A phase becomes your ring-dip build."
+        "block_body": "Under 3 strict ring dips, the top half of the muscle-up will collapse, so this programme does not start here. Build the ring-dip base first — a dedicated dip progression, or any strength work that gets you to three strict reps — then come back. This screen will let you through at that point.",
+        "authoring_note": "Copy corrected 2026-09-06. It previously read \"The Tier A phase of this program is a ring-dip build ... If you continue, the Tier A phase becomes your ring-dip build\" — offering a choice the gate does not give. This gate declares no `severity`, and `severityOf` treats absent as BLOCK, so the user was invited to continue and then refused. OPEN FOR THE PROGRAMME AUTHOR: whether this should be `severity: \"warn\"` instead. The old copy reads as though warn was the intent, but safety-gates.ts reserves that call to the author precisely so a refusal cannot be quietly downgraded, so the copy was matched to the behaviour rather than the reverse. Note the consequence either way: `tier_a_prep` requires `ring_dip_max_reps < 3`, which is exactly the population this gate blocks, so Tier A is currently unreachable."
       },
       {
         "question_id": "cervical_radiculopathy",

@@ -1809,3 +1809,64 @@ describe("a citation url points at a record, not a search", () => {
     expect(offenders).toEqual([]);
   });
 });
+
+describe("a blocking safety gate does not offer a way through", () => {
+  /**
+   * Found 2026-09-06 by the `programme-integrity` agent.
+   *
+   * muscle-up's `ring_dip_count` gate told the user "If you continue, the
+   * Tier A phase becomes your ring-dip build" and then refused them. It
+   * declares no `severity`, and `severityOf` treats absent as BLOCK by
+   * design — that default exists so a refusal cannot be quietly downgraded,
+   * and it is right. What went wrong is that the copy was written as though
+   * the gate were a warning.
+   *
+   * Whether that gate SHOULD be `warn` is the programme author's call, which
+   * `safety-gates.ts` reserves explicitly. This test does not touch that. It
+   * asserts only that whichever severity a gate has, its copy agrees with
+   * it — an invitation the app will not honour is worse than a plain
+   * refusal, because the user makes a decision on it.
+   *
+   * A `warn` gate may say "if you continue" freely: that is exactly what a
+   * warn does.
+   */
+  const INVITES_CONTINUATION =
+    /\bif you (?:continue|proceed|carry on)\b|\byou (?:may|can) (?:still )?(?:continue|proceed)\b/i;
+
+  it("no block-severity gate invites the user to continue", () => {
+    const offenders: string[] = [];
+    for (const { id, program } of programs) {
+      const gates =
+        ((program as unknown as {
+          intake?: { safety_gates?: Array<Record<string, unknown>> };
+        }).intake?.safety_gates ?? []);
+      for (const g of gates) {
+        // Mirrors severityOf(): anything not explicitly "warn" blocks.
+        if (g.severity === "warn") continue;
+        const body = `${g.block_body ?? ""} ${g.block_title ?? ""}`;
+        if (INVITES_CONTINUATION.test(body)) {
+          offenders.push(`${id} :: ${String(g.question_id)}`);
+        }
+      }
+    }
+    expect(
+      offenders,
+      "a blocking gate whose copy offers a way through — either add severity: \"warn\" or fix the copy",
+    ).toEqual([]);
+  });
+
+  /**
+   * A second assertion lived here and was removed the day it was written.
+   *
+   * It tried to require that every blocking gate says what would clear it,
+   * matched by a keyword regex. It fired on six gates whose copy is fine —
+   * "Get BP treated before starting" states the exit perfectly well and
+   * simply used words the list did not have. Widening the list until the
+   * false positives stop is not a test, it is a thesaurus, and the next
+   * person to write good copy in a new phrasing gets a red suite for it.
+   *
+   * The assertion above stays because it is precise: "if you continue" on a
+   * gate that will not let you continue is a contradiction a regex CAN
+   * settle. Whether a refusal explains itself well is a copy review.
+   */
+});
