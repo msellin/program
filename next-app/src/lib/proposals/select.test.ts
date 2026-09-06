@@ -274,3 +274,102 @@ describe("selectProposals — non_responder_recommendation", () => {
     expect(out.find((p) => p.kind === "non_responder_recommendation")).toBeUndefined();
   });
 });
+
+describe("under_dosing can actually fire", () => {
+  /**
+   * It never could. Found 2026-09-06 by the `programme-integrity` agent.
+   *
+   * Both `under_dosing` rules require a compliance variable —
+   * engine-builder's is `progress_ratio_at_mid_block < 0.4 AND
+   * intensity_compliance_pct < 80` — and the condition DSL evaluates any
+   * comparison against an undefined operand as false. `select.ts` called
+   * `classify` without passing compliance at all, so the rule was
+   * unsatisfiable for every programme and every user.
+   *
+   * With `true_non_response` suppressed on evidence grounds earlier the same
+   * day, that left the entire HERITAGE classifier unable to emit anything.
+   * Worth stating plainly because I told the founder that morning that
+   * `under_dosing` was being KEPT as the useful half. It was, but it had
+   * never once fired, so keeping it preserved something already dark.
+   *
+   * The value was never missing: RetestLoggingSheet collects it and writes
+   * it onto the reading. It simply was not forwarded.
+   *
+   * Fixture note: the delta is -3 against a -12 target, a progress ratio of
+   * 0.25. That sits deliberately BETWEEN true_non_response's threshold (0.1)
+   * and under_dosing's (0.4). A flatter signal trips true_non_response
+   * first — it is evaluated before under_dosing — and that verdict is
+   * suppressed, so the composite comes back insufficient_data and this test
+   * would prove nothing. Which is correct behaviour: when the instrument
+   * cannot tell non-response from under-dosing, it should say so.
+   */
+  const date = "2026-02-01";
+
+  it("fires when the signal is flat and logged intensity is low", () => {
+    const program = baseProgram({
+      non_responder_classifier: CLASSIFIER,
+      retest_metrics: [
+        {
+          metric_id: "submax_hr_bpm",
+          display_name: "Submax HR",
+          unit: "bpm",
+          direction: "lower_is_better",
+          source: "log",
+          source_ref: "runs.hr",
+          targets: [{ tier_id: "push", target: -12, at_week: 8 }],
+        },
+      ],
+    } as unknown as Partial<Program>);
+    const store = baseStore({
+      retest_readings: [
+        { metric_id: "submax_hr_bpm", value: 150, observed_at: "2026-01-01" },
+        {
+          metric_id: "submax_hr_bpm",
+          value: 147,
+          observed_at: "2026-02-01",
+          intensity_compliance_pct: 60,
+        },
+      ],
+    });
+    const p = selectProposals(store, program, date).find(
+      (x) => x.kind === "non_responder_recommendation",
+    );
+    expect(p, "under_dosing should reach the user").toBeDefined();
+    if (p?.kind === "non_responder_recommendation") expect(p.verdict).toBe("under_dosing");
+  });
+
+  it("stays silent when the user hit their prescribed intensity", () => {
+    // The rule must be driven by the COMPLIANCE value, not merely by the
+    // presence of one. Same flat signal, high compliance, no proposal.
+    const program = baseProgram({
+      non_responder_classifier: CLASSIFIER,
+      retest_metrics: [
+        {
+          metric_id: "submax_hr_bpm",
+          display_name: "Submax HR",
+          unit: "bpm",
+          direction: "lower_is_better",
+          source: "log",
+          source_ref: "runs.hr",
+          targets: [{ tier_id: "push", target: -12, at_week: 8 }],
+        },
+      ],
+    } as unknown as Partial<Program>);
+    const store = baseStore({
+      retest_readings: [
+        { metric_id: "submax_hr_bpm", value: 150, observed_at: "2026-01-01" },
+        {
+          metric_id: "submax_hr_bpm",
+          value: 147,
+          observed_at: "2026-02-01",
+          intensity_compliance_pct: 95,
+        },
+      ],
+    });
+    expect(
+      selectProposals(store, program, date).find(
+        (x) => x.kind === "non_responder_recommendation",
+      ),
+    ).toBeUndefined();
+  });
+});

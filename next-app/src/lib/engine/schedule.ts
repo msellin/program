@@ -206,6 +206,35 @@ export function activePhaseFor(
     if (tier) {
       const tierMatch = matches.find((p) => p.for_tier_ids?.includes(tier));
       if (tierMatch) return tierMatch;
+
+      /**
+       * The tier's own declared entry phase (2026-09-06).
+       *
+       * `plan_tiers[].starting_phase_id` is in the schema and was read by
+       * NOTHING — the schema line was its only occurrence in `src`.
+       *
+       * engine-builder-block-2 is where that mattered. Its
+       * `phase_0_re_entry_ramp` (Jan 5-18) and `phase_1_intro_week`
+       * (Jan 5-11) start on the SAME DAY with no `for_tier_ids` on either,
+       * so `matches[0]` handed the re-entry ramp to every tier and
+       * `phase_1_intro_week` — which the programme calls its reference plan
+       * and which progression and push both name as their start — was
+       * unreachable.
+       *
+       * Checked before the `for_tier_ids` fallback below, not before the
+       * `for_tier_ids` match above: an explicit tier tag on a phase is a
+       * stronger statement than a tier's preferred entry point.
+       */
+      const startId = (
+        (program.plan_tiers ?? []).find(
+          (t) => (t as unknown as { id?: string }).id === tier,
+        ) as unknown as { starting_phase_id?: string } | undefined
+      )?.starting_phase_id;
+      if (startId) {
+        const declared = matches.find((p) => p.id === startId);
+        if (declared) return declared;
+      }
+
       const untagged = matches.find((p) => !p.for_tier_ids);
       if (untagged) return untagged;
     }

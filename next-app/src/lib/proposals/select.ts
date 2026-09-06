@@ -260,7 +260,42 @@ function selectNonResponder(
     if (row && typeof row.target === "number") targets[metricId] = row.target;
   }
 
-  const result = classify(program, store, { baselines: readings, targets });
+  /**
+   * Forward the compliance the user already gave us (2026-09-06).
+   *
+   * Both `under_dosing` rules need it — engine-builder's is
+   * `progress_ratio_at_mid_block < 0.4 AND intensity_compliance_pct < 80`,
+   * rowing's uses `session_compliance_pct` — and the DSL treats a comparison
+   * against an undefined operand as false. So `under_dosing` could never
+   * fire, on any programme, for any user.
+   *
+   * The value was never missing. `RetestLoggingSheet` collects it and stores
+   * it on the reading; this call simply did not pass it on. Taken from the
+   * most recent reading that carries one, since compliance describes the
+   * block leading up to that measurement.
+   *
+   * `session_compliance_pct` is forwarded the same way but no surface
+   * collects it yet, so rowing's rule stays dark until one does. Recorded
+   * rather than faked: deriving it from logged-vs-prescribed sessions is a
+   * real decision about what counts as a completed session.
+   */
+  const latestWithCompliance = [...readings]
+    .sort((a, b) => String(a.observed_at).localeCompare(String(b.observed_at)))
+    .reverse()
+    .find(
+      (r) =>
+        typeof (r as { intensity_compliance_pct?: number }).intensity_compliance_pct === "number" ||
+        typeof (r as { session_compliance_pct?: number }).session_compliance_pct === "number",
+    ) as
+    | { intensity_compliance_pct?: number; session_compliance_pct?: number }
+    | undefined;
+
+  const result = classify(program, store, {
+    baselines: readings,
+    targets,
+    intensity_compliance_pct: latestWithCompliance?.intensity_compliance_pct,
+    session_compliance_pct: latestWithCompliance?.session_compliance_pct,
+  });
   if (
     result.composite_verdict !== "true_non_response" &&
     result.composite_verdict !== "under_dosing"
