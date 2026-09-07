@@ -128,6 +128,7 @@ export const FLOW_SURFACES: Record<string, string[]> = {
    * fails on any flow id missing from this object, so the distinction now
    * has to be made deliberately.
    */
+  "profile-link-walk": [],
   "hip-check": [],
   "session-hold": [],
   "cold-load-resume": [],

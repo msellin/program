@@ -1037,6 +1037,68 @@ export const FLOWS: Flow[] = [
     },
   },
   {
+    /**
+     * Walk the Profile menu by CLICKING, the way a user does.
+     *
+     * The tour visits every route by `page.goto`. That is not how anyone uses
+     * this app — it is an installed PWA with no URL bar, so the only way in is
+     * a tap. A route can be perfectly healthy and completely unreachable, and
+     * route coverage would still read 100%.
+     *
+     * The founder found exactly that on 2026-09-07: "profile offplan and other
+     * links not working or opening anything". Eight sweeps at 100% route
+     * coverage never touched it, because not one of them ever pressed a link.
+     *
+     * So this taps each row in the Profile menu, asserts the URL actually
+     * changed and the destination rendered something, and comes back. It is
+     * the cheapest possible version of the right idea; the tour should
+     * eventually work this way throughout.
+     */
+    id: "profile-link-walk",
+    desc: "Profile → tap every menu row, the way a PWA user reaches these pages",
+    async run(ctx) {
+      await ctx.page.goto("/profile/");
+      await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
+      await ctx.capture("01-profile");
+
+      const rows = ctx.page.locator('main a[href^="/"]');
+      const total = await rows.count();
+      if (total === 0) throw new SkipFlow("no menu rows on Profile");
+
+      const targets: string[] = [];
+      for (let i = 0; i < total; i++) {
+        const href = await rows.nth(i).getAttribute("href");
+        if (href && !targets.includes(href)) targets.push(href);
+      }
+
+      const broken: string[] = [];
+      for (const href of targets) {
+        await ctx.page.goto("/profile/");
+        await ctx.page.waitForTimeout(400);
+        const link = ctx.page.locator(`main a[href="${href}"]`).first();
+        if ((await link.count()) === 0) continue;
+        await link.click({ timeout: CLICK_TIMEOUT_MS }).catch(() => {});
+        await ctx.page.waitForTimeout(900);
+
+        const landed = new URL(ctx.page.url()).pathname.replace(/\/$/, "");
+        const wanted = href.replace(/\/$/, "");
+        const body = ((await ctx.page.locator("body").innerText().catch(() => "")) ?? "").trim();
+
+        // Two ways a link can be broken: it goes nowhere, or it arrives at a
+        // page with nothing on it. Both look identical to a user.
+        if (landed !== wanted) broken.push(`${href} → landed on ${landed || "/"}`);
+        else if (body.length < 40) broken.push(`${href} → arrived empty`);
+      }
+
+      await ctx.check(
+        "every Profile menu row opens its page",
+        async () => broken.length === 0,
+        broken.join(" · ") || `${targets.length} rows checked`,
+      );
+      ctx.record("ProfileMenu", `${targets.length} rows tapped`);
+    },
+  },
+  {
     id: "session-note-sheet",
     desc: "⋯ → Note for this exercise — the only place notes still live",
     async run(ctx) {
