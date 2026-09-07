@@ -10,6 +10,7 @@ import { countLoggedSets, requiredRowCount } from "@/lib/set-progress";
 import { OffPlanSheet } from "@/components/session/OffPlanSheet";
 import type { RailExercise, SessionSheet } from "@/components/session/DaySession";
 import type { Block, Phase, Program, Proposal, Store } from "@/lib/schemas";
+import { escalationNoticeFor } from "@/lib/engine/escalation";
 import { activeExclusions, exclusionNotices, exclusionsAffectingDay } from "@/lib/engine/intake-exclusions";
 
 /**
@@ -80,6 +81,7 @@ export function BriefView({
 
   const progressLabel = phase ? humanPhaseName(phase.name) : null;
   const progressDetail = phase ? phaseProgress(phase, activeDate) : null;
+  const escalation = escalationNoticeFor(program, store, activeDate);
 
   const gateUnresolved = !!cycleGateProposal;
 
@@ -267,6 +269,21 @@ export function BriefView({
                 reads as the plan being wrong rather than the plan listening,
                 and confirm-first only means anything if the user can see why
                 the plan looks the way it does. (2026-09-02) */}
+            {/* The programme's own escalation rule, shown at the moment it
+                applies rather than only inside a collapsed accordion on
+                /plan. Verbatim — the app does not paraphrase a stop-rule.
+                Not enforced: the engine proposes, the user decides, same as
+                every other adaptive change here. See lib/engine/escalation.ts
+                for why executing these six prose rules would be worse than
+                surfacing them. (2026-09-07) */}
+            {escalation ? (
+              <div className="rounded border border-amber/40 bg-surface px-3.5 py-3">
+                <p className="font-mono text-[10px] uppercase tracking-widest text-amber mb-1">
+                  {escalation.streak} red days in a row — your programme's rule
+                </p>
+                <p className="text-[13.5px] leading-snug text-ink">{escalation.text}</p>
+              </div>
+            ) : null}
             {exclusionNotices(
               exclusionsAffectingDay(
                 program,
