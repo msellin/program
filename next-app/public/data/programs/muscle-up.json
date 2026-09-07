@@ -1227,7 +1227,10 @@
         "year": 2013,
         "title": "Clinical implications of scapular dyskinesis in shoulder injury: the 2013 consensus statement from the Scapular Summit",
         "source": "British Journal of Sports Medicine 47(14):877-885",
-        "used_for": "The 2013 Scapular Summit consensus statement: scapular dyskinesis is present in a high percentage of shoulder injuries, its exact role in creating or exacerbating shoulder dysfunction 'is not clearly defined', it is 'most aptly viewed as a potential impairment', and scapular rehabilitation is endorsed only 'within a more comprehensive shoulder rehabilitation programme'. Corrected 2026-09-05: the id resolved in citations.json to a different real paper (Kibler WB & Sciascia A 2010, 'Current concepts: scapular dyskinesis', BJSM 44(5):300-305) while this programme described the 2013 consensus; the canonical record has been corrected to the 2013 consensus, which is what this programme means. The consensus concerns injured shoulders and studies no hang loading, so the shoulder-prep-before-every-session rule for asymptomatic trainees is an engineering choice rather than a finding of it."
+        "used_for": "The 2013 Scapular Summit consensus statement: scapular dyskinesis is present in a high percentage of shoulder injuries, its exact role in creating or exacerbating shoulder dysfunction 'is not clearly defined', it is 'most aptly viewed as a potential impairment', and scapular rehabilitation is endorsed only 'within a more comprehensive shoulder rehabilitation programme'. Corrected 2026-09-05: the id resolved in citations.json to a different real paper (Kibler WB & Sciascia A 2010, 'Current concepts: scapular dyskinesis', BJSM 44(5):300-305) while this programme described the 2013 consensus; the canonical record has been corrected to the 2013 consensus, which is what this programme means. The consensus concerns injured shoulders and studies no hang loading, so the shoulder-prep-before-every-session rule for asymptomatic trainees is an engineering choice rather than a finding of it.",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/23580420/",
+        "doi": "10.1136/bjsports-2013-092425",
+        "pmid": "23580420"
       },
       {
         "id": "sadowski_2021",

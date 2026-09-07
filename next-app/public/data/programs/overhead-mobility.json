@@ -1032,8 +1032,10 @@
         "title": "Clinical implications of scapular dyskinesis in shoulder injury: the 2013 consensus statement from the Scapular Summit",
         "source": "British Journal of Sports Medicine 47(14):877-885",
         "used_for": "This programme means Kibler WB & Sciascia A (2010), 'Current concepts: scapular dyskinesis', BJSM 44(5):300-305 (PMID 19996329, DOI 10.1136/bjsm.2009.058834) - a DIFFERENT paper from the one the id kibler_2013 now serves. That paper describes a scapular examination consisting of visual inspection of scapular position at rest and during dynamic humeral movement, objective posture measurement and scapular corrective manoeuvres, and concludes that scapular dyskinesis 'appears to be a non-specific response to a painful condition in the shoulder rather than a specific response to certain glenohumeral pathology'. Corrected 2026-09-05: two things. (1) The id collision: kibler_2013 was resolving to the 2010 paper in citations.json while first-strict-pullup and muscle-up described the 2013 Scapular Summit consensus. The canonical record now serves the 2013 consensus; the 2010 paper needs its own id before this reference resolves correctly, and this reference should keep verification_status 'unverified' until it does. (2) 'SICK scapula screening pattern' is withdrawn: that term does not appear in the retrieved 2010 abstract, and the full text was unreachable (BMJ interstitial, not in PMC), so it can be neither confirmed nor excluded. SICK scapula is a separately named syndrome from a different paper. The screen this programme runs stands as an engineering choice built on the 2010 examination description.",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/?term=Kibler+Sciascia+scapular+dyskinesis+current+concepts",
-        "verification_status": "unverified"
+        "url": "https://pubmed.ncbi.nlm.nih.gov/23580420/",
+        "verification_status": "unverified",
+        "doi": "10.1136/bjsports-2013-092425",
+        "pmid": "23580420"
       },
       {
         "id": "kim_2013",
@@ -1042,8 +1044,7 @@
         "title": "Reliability of shoulder ROM measurement in supine position",
         "source": "J Phys Ther Sci 25(11):1435-1438",
         "used_for": "Supine flexion goniometer reliability — the retest_metric anchor",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/?term=Kim+shoulder+ROM+supine+position+reliability+2013",
-        "verification_status": "verified"
+        "verification_status": "not_found"
       },
       {
         "id": "escamilla_2009",
@@ -1060,8 +1061,10 @@
         "title": "Shoulder range of motion and baseball arm injuries: a systematic review and meta-analysis",
         "source": "J Athl Train 53(12):1190-1199",
         "used_for": "Systematic review and meta-analysis in prospectively followed baseball players: high-quality evidence that deficits in throwing-arm total rotational arc and internal rotation are associated with upper-extremity injury. Cited for the rotational-ROM construct, and it establishes that construct only as an injury-risk marker in throwers. Engineering choice: including a rotational component alongside supine flexion in the retest for a general, non-throwing overhead-mobility population is a coaching judgement; an injury association in throwers does not by itself establish that the retest is informative here. Does NOT support the thoracic-to-shoulder pathway; that rationale rests on Kim 2013 plus coaching consensus. Corrected 2026-09-05: the record described a 2019 paper on baseball throwing PERFORMANCE that does not exist; the real paper is the 2018 meta-analysis on arm INJURY, and the programme's url was a PubMed search query rather than a record.",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/?term=Bullock+shoulder+range+of+motion+baseball+throwing+2019",
-        "verification_status": "unverified"
+        "url": "https://pubmed.ncbi.nlm.nih.gov/30525937/",
+        "verification_status": "unverified",
+        "doi": "10.4085/1062-6050-439-17",
+        "pmid": "30525937"
       },
       {
         "id": "manske_2010",
@@ -1070,8 +1073,10 @@
         "title": "A randomized controlled single-blinded comparison of stretching versus stretching and joint mobilization for posterior shoulder tightness measured by internal rotation motion loss",
         "source": "Sports Health 2(2):94-100",
         "used_for": "Randomised single-blinded trial in 39 ASYMPTOMATIC college-age participants (7 men, 32 women) comparing a CROSS-BODY stretch alone against cross-body stretch plus posterior joint mobilisation, with internal-rotation motion loss as the outcome. The combined group gained more internal rotation, but the between-group difference was not statistically significant. Corrected 2026-09-05: this read 'sleeper stretch effectiveness for posterior capsule tightness'. The trial tested the cross-body stretch, not the sleeper stretch, and choosing between those two is precisely what the citation was meant to settle; the participants were asymptomatic rather than people with symptomatic posterior capsule tightness; and the difference it did find was not significant. Prescribing the sleeper stretch is an engineering choice with no trial behind it here. The verification_status 'verified' flag on this reference was wrong for this use and should read 'unverified' - note it is stripped by Zod and has no runtime meaning either way. The record's PubMed search-string url is replaced by PMID 23015927.",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/?term=Manske+stretching+joint+mobilization+posterior+shoulder+tightness",
-        "verification_status": "verified"
+        "url": "https://pubmed.ncbi.nlm.nih.gov/23015927/",
+        "verification_status": "verified",
+        "doi": "10.1177/1941738109347775",
+        "pmid": "23015927"
       },
       {
         "id": "difiori_2006",

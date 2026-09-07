@@ -920,7 +920,6 @@
         "title": "Maturation to elite status: a six-year physiological case study of a world champion rowing crew",
         "source": "Eur J Appl Physiol 111(9):2363-2368",
         "used_for": "Elite rower development trajectory context",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/?term=Mikulic+maturation+elite+rowing+crew+2011",
         "verification_status": "unverified"
       },
       {
@@ -950,8 +949,7 @@
         "title": "Investigation of the maximal lactate steady state (MLSS) in trained runners",
         "source": "Int J Sports Med 33(1):11-16",
         "used_for": "MLSS validity for threshold prescription",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/?term=Kilding+Winter+maximal+lactate+steady+state+trained+runners+2012",
-        "verification_status": "unverified"
+        "verification_status": "not_found"
       }
     ],
     "reference_ids": [

@@ -1,10 +1,10 @@
 # Reviewer packet — Race prep & concurrent training
 
-**Generated 2026-09-06 from the shipping program data.** Regenerate with
+**Generated 2026-09-07 from the shipping program data.** Regenerate with
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: f32a22a4c81aaf43 -->
+<!-- source-fingerprint: 722253ca005ccd28 -->
 
 ## What we are asking
 
@@ -237,7 +237,7 @@ Printed against the questions above so you can see which are actually detectable
 - *rowing-2k-test-prep says it supports:* Aerobic interval prescription
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
-**billat_2001** — The concept of maximal lactate steady state · Billat V, Sirvent P, Py G, et al. · 2001
+**billat_2001** — The concept of maximal lactate steady state: a bridge between biochemistry, physiology and sport science · Billat VL, Sirvent P, Py G, Koralsztein JP, Mercier J · 2003
 
 - *rowing-2k-test-prep says it supports:* MLSS as threshold intensity target
 - **Does it? ☐ yes ☐ partly ☐ no —**

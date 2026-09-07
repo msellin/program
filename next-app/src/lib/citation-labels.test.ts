@@ -42,7 +42,24 @@ const byId = new Map(CITATIONS.map((c) => [c.id, c]));
  * a correct decision applied uniformly to cases that differ.
  */
 describe("citation verification labels survive edits", () => {
-  const NOT_FOUND = ["kim_2013", "kilding_2012", "ferrari_2021"];
+  const NOT_FOUND = ["kim_2013", "kilding_2012"];
+  /**
+   * Withdrawn, not merely labelled.
+   *
+   * `ferrari_2021` was retired from handstand-walk on 2026-08-18 and the
+   * retirement never reached `citations.json` or `exercises.json`. The
+   * exercises half has since been done — every handstand drill now cites
+   * `grabowiecki_2021` (PMID 33839425), which is real, verified, and states
+   * the repo's own cue rationale almost verbatim — leaving the record an
+   * orphan that nothing referenced and `/evidence` still rendered as a cited
+   * study. Removed 2026-09-07, which completes a decision already taken
+   * rather than making a new one.
+   */
+  const WITHDRAWN = ["ferrari_2021"];
+
+  it.each(WITHDRAWN)("%s is gone from the library, not just labelled", (id) => {
+    expect(byId.has(id)).toBe(false);
+  });
   const RECORD_OK_CLAIM_NOT = ["robertson_2004", "salmoni_schmidt_walter_1984"];
 
   it.each(NOT_FOUND)("%s is labelled not_found", (id) => {
@@ -82,6 +99,63 @@ describe("citation verification labels survive edits", () => {
     const offenders = CITATIONS.filter((c) => /[?&]term=|\/\?/.test(c.url ?? ""))
       .map((c) => `${c.id}: ${c.url}`);
     expect(offenders).toEqual([]);
+  });
+
+  /**
+   * And the same rule in the programmes, which is where six of them were.
+   *
+   * Yesterday's version of this test checked `citations.json` only, passed
+   * clean, and I recorded the search-query URLs as fixed. Every programme
+   * keeps its OWN copy of a reference in `evidence_base.references[]`, and
+   * six of those copies still carried the search string — including
+   * `kim_2013` and `kilding_2012`, the two phantoms, whose "links" resolved
+   * to a results page and therefore looked alive.
+   *
+   * A guard applied to one of two places that hold the same data is this
+   * repo's signature defect, and I wrote one into the fix for it.
+   */
+  it("no programme reference links to a search query either", () => {
+    const dir = path.resolve(__dirname, "../../public/data/programs");
+    const offenders = fs
+      .readdirSync(dir)
+      .filter((f) => f.endsWith(".json") && f !== "manifest.json")
+      .flatMap((f) => {
+        const prog = JSON.parse(fs.readFileSync(path.join(dir, f), "utf8")) as {
+          evidence_base?: { references?: Array<{ id?: string; url?: string }> };
+        };
+        return (prog.evidence_base?.references ?? [])
+          .filter((r) => /[?&]term=|\/\?/.test(r.url ?? ""))
+          .map((r) => `${f} → ${r.id}: ${r.url}`);
+      });
+    expect(offenders).toEqual([]);
+  });
+
+  /**
+   * A programme's copy of a reference must not contradict the library.
+   *
+   * `kibler_2013`, `bullock_2019` and `manske_2010` all had a verified PubMed
+   * URL in `citations.json` and a search-box string in the programme copy —
+   * the correction had been made once and never propagated.
+   */
+  it("a programme reference carries the library's identifier where one exists", () => {
+    const dir = path.resolve(__dirname, "../../public/data/programs");
+    const drift = fs
+      .readdirSync(dir)
+      .filter((f) => f.endsWith(".json") && f !== "manifest.json")
+      .flatMap((f) => {
+        const prog = JSON.parse(fs.readFileSync(path.join(dir, f), "utf8")) as {
+          evidence_base?: { references?: Array<{ id?: string; doi?: string; pmid?: string }> };
+        };
+        return (prog.evidence_base?.references ?? []).flatMap((r) => {
+          const lib = r.id ? byId.get(r.id) : undefined;
+          if (!lib) return [];
+          const out: string[] = [];
+          if (lib.doi && r.doi && lib.doi !== r.doi) out.push(`${f} → ${r.id}: doi ${r.doi} ≠ ${lib.doi}`);
+          if (lib.pmid && r.pmid && lib.pmid !== r.pmid) out.push(`${f} → ${r.id}: pmid ${r.pmid} ≠ ${lib.pmid}`);
+          return out;
+        });
+      });
+    expect(drift).toEqual([]);
   });
 
   /**

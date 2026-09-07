@@ -135,12 +135,17 @@
     },
     {
       "id": "billat_2001",
-      "authors": "Billat V, Sirvent P, Py G, et al.",
-      "year": 2001,
-      "title": "The concept of maximal lactate steady state",
+      "authors": "Billat VL, Sirvent P, Py G, Koralsztein JP, Mercier J",
+      "year": 2003,
+      "title": "The concept of maximal lactate steady state: a bridge between biochemistry, physiology and sport science",
       "source": "Sports Med 33(6):407-426",
-      "display_short": "Billat et al. 2001",
-      "display_line": "Billat et al. (2001), Sports Med 33(6)"
+      "display_short": "Billat et al. 2003",
+      "display_line": "Billat et al. (2003), Sports Med 33(6)",
+      "doi": "10.2165/00007256-200333060-00003",
+      "pmid": "12744715",
+      "url": "https://doi.org/10.2165/00007256-200333060-00003",
+      "verification_status": "verified",
+      "id_note": "Corrected 2026-09-07 against Europe PMC (DOI 10.2165/00007256-200333060-00003, PMID 12744715). The record read year 2001 with a truncated title, while carrying volume 33 — Sports Med volume 33 is 2003, so the record contradicted itself and nothing caught it. Real paper: Billat VL, Sirvent P, Py G, Koralsztein JP, Mercier J (2003), \"The concept of maximal lactate steady state: a bridge between biochemistry, physiology and sport science\", Sports Med 33(6):407-426. THE ID IS A MISNOMER AND STAYS ONE: `billat_2001` is referenced from programme reference_ids, and renaming it would silently orphan every one of those. Same reasoning as the `_at_mid_block` rule keys."
     },
     {
       "id": "bishop_2008",
@@ -378,17 +383,6 @@
       "display_short": "Feito et al. 2018",
       "display_line": "Feito et al. (2018), Sports 6(3)",
       "id_note": "Corrected 2026-09-05: bibliography is right, the use was not. This is a definitional review of high-intensity functional training, not a 16-week trial. Its own 16-week sentence reports VO2max (~12%), body fat (~8%) and bone mineral content (~1%); it reports no strength outcome. The strength half of the claim it was cited for traces to a different 2018 paper by the same first author (Feito Y, Hoffstetter W, Serafini P, Mangine G, PLoS ONE 13:e0198324), which measured 5RM strength and WOD performance but not VO2max. No single cited paper shows strength and VO2max improving concurrently. Verified via Europe PMC PMID 30087252, DOI 10.3390/sports6030076."
-    },
-    {
-      "id": "ferrari_2021",
-      "authors": "Ferrari A, et al.",
-      "year": 2021,
-      "title": "Walking initiation biomechanics",
-      "source": "Gait & Posture",
-      "display_short": "Ferrari et al. 2021",
-      "display_line": "Ferrari et al. (2021), Gait & Posture",
-      "verification_status": "not_found",
-      "review_note": "NOT_FOUND 2026-09-05, re-checked 2026-09-06. Crossref and Europe PMC return nothing under this byline, title and venue; the one Europe PMC hit for Ferrari A + walking/gait initiation in 2021 is an unrelated Parkinson's freezing-of-gait protocol (PMID 34816053). RETIREMENT ALREADY APPROVED AND ONLY HALF APPLIED: handstand-walk.json retired this id from evidence_base.references[] on 2026-08-18 ('Replaced ferrari_2021 (unlocatable)') in favour of yiou_2017, but the retirement never reached citations.json or exercises.json. The record is still in the shared library, so it still renders on /evidence to every user of every programme, and eight handstand drills still name it in evidence_refs — including the level-3 prerequisite gate on hs_single_step_attempt, whose source: 'literature' currently resolves to nothing. The nearest real work is Grabowiecki M, Rum L, Laudani L, Vannozzi G (2021), 'Biomechanical characteristics of handstand walking initiation', Gait & Posture 86:311-318, DOI 10.1016/j.gaitpost.2021.03.036 — proposing it as a substitute ADDS a claim and needs founder sign-off; completing the approved retirement does not."
     },
     {
       "id": "fyfe_2014",
