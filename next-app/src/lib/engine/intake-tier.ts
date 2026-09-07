@@ -373,6 +373,34 @@ const SELF_REPORT_TO_TEST_VAR: Record<string, Record<string, string>> = {
   },
 };
 
+/**
+ * Does this programme actually have a self-report proxy?
+ *
+ * The intake tells every user "Physical tests are optional. Skip and we use
+ * your self-report as a proxy." For `muscle-up` and `overhead-mobility` there
+ * is no entry in either map above, so an unmeasured test variable resolves to
+ * 0 (see the `?? 0` fallback in `resolve`) and the self-report is discarded —
+ * the opposite of what the sentence promises.
+ *
+ * The consequence is not cosmetic. `muscle-up`'s `tier_b_transition` requires
+ * `ring_dip_max_reps >= 3`; with no proxy that is 0 for anyone who skips, so
+ * the tier cannot be reached and the user falls to `plan_tiers[0]` with the
+ * internal rationale "No tier matched — defaulted to lowest".
+ *
+ * Exported so the intake can stop making the promise where it cannot keep it.
+ * Building the missing maps is the better fix and is NOT this: deciding that
+ * "3-5 ring dips" means the number 3 rather than 4 is a programming judgement
+ * about who gets which tier, and it belongs to the programme author.
+ */
+export function hasSelfReportProxy(programSlug: string): boolean {
+  return Object.keys(SELF_REPORT_TO_TEST_VAR[programSlug] ?? {}).length > 0;
+}
+
+/** The slugs that do have one, for tests that need to enumerate them. */
+export function selfReportProxySlugs(): string[] {
+  return Object.keys(SELF_REPORT_TO_TEST_VAR);
+}
+
 export type InferredTier = {
   tier_id: string;
   tier_label: string;

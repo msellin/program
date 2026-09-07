@@ -12,6 +12,7 @@ import {
   acknowledgementsToPersist,
   type GateNotice,
 } from "@/lib/engine/safety-gates";
+import { hasSelfReportProxy } from "@/lib/engine/intake-tier";
 import { cn } from "@/lib/utils";
 import { inferTier } from "@/lib/engine/intake-tier";
 import { DashboardBlock } from "@/components/DashboardBlock";
@@ -863,6 +864,7 @@ export function IntakeClient({ slug }: Props) {
 
         {currentStep?.kind === "physical_test" ? (
           <WizardPhysicalTestScreen
+            slug={slug}
             step={currentStep}
             results={testResults}
             setResult={(id, n) => setTestResults((r) => ({ ...r, [id]: n }))}
@@ -1304,6 +1306,7 @@ function WizardPhysicalTestScreen({
   results,
   setResult,
   onSkipAll,
+  slug,
 }: {
   step: {
     kind: "physical_test";
@@ -1315,6 +1318,7 @@ function WizardPhysicalTestScreen({
   results: Record<string, number>;
   setResult: (id: string, n: number) => void;
   onSkipAll: () => void;
+  slug: string;
 }) {
   const t = step.test;
   const inputId = `phys-test-${t.id}`;
@@ -1428,9 +1432,16 @@ function WizardPhysicalTestScreen({
       )}
       {step.indexInSection === 0 ? (
         <>
+          {/* The proxy promise is only made where a proxy exists.
+              `muscle-up` and `overhead-mobility` have no entry in
+              `SELF_REPORT_TO_TEST_VAR`, so skipping leaves the tier
+              conditions reading 0 and drops the user to the lowest tier —
+              while this sentence told them their self-report would be used.
+              See `hasSelfReportProxy`. (2026-09-07) */}
           <p className="text-[12px] text-muted italic">
-            Physical tests are optional. Skip and we use your self-report as a proxy —
-            you can retake these later on Retest.
+            {hasSelfReportProxy(slug)
+              ? "Physical tests are optional. Skip and we use your self-report as a proxy — you can retake these later on Retest."
+              : "Physical tests are optional, but this programme places you by measured result — skip them and you start at the introductory tier. You can retake these later on Retest."}
           </p>
           <button
             type="button"
