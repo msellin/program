@@ -1,4 +1,4 @@
-# Open tasks — as of 2026-09-07
+# Open tasks — as of 2026-09-07 (afternoon)
 
 Live register. Supersedes the task lists inside the handovers, which are
 snapshots. 33 commits on 2026-09-05/06; tests 674 -> 798.
@@ -24,15 +24,16 @@ snapshots. 33 commits on 2026-09-05/06; tests 674 -> 798.
 | P | Task | Est | Status |
 |---|---|---|---|
 | P1 | **Background the app mid-set on Android** | 2 min | **open** — still the only real-device proof for four eviction fixes |
-| P1 | `ring_dip_count`: `warn` or `block`? | 10 min | **open** — recorded in the gate's `authoring_note`. Either way, `tier_a_prep` is currently unreachable: its condition is exactly the population the gate refuses |
+| P1 | `ring_dip_count`: `warn` or `block`? | 10 min | **open, and now the ONLY question left in it** — the "Tier A unreachable" half was FALSE and is struck. The gate reads `ring_dip_count` (a select); the tiers read `ring_dip_max_reps` (a test). Nothing joins them |
+| P2 | Build `SELF_REPORT_TO_TEST_VAR` for muscle-up + overhead-mobility | 30 min | **open** — without it, a skipper's test vars are 0, `tier_b_transition` is unreachable, and everyone lands in the lowest tier. Needs your judgement on what "3-5 ring dips" maps to. Intake copy no longer promises a proxy in the meantime (done) |
 | P1 | Escalation rules: enforce or leave as guidance? | 30 min | **open** — six programmes declare "three red days -> take a week off and consult a clinician". Now displayed, not enforced. The engine has a mechanism for optimism (green streak -> add load) and none for caution |
-| P2 | Foundation-tier loaded overhead | 1 h | **open** — every drill in that slot is level 3-4, so foundation users get an empty block. Author entry drills, or gate the block by tier |
-| P2 | VERIFIED badge | 30 min | **open, now with a number under it** — 45% of 126 citations verified clean. See `2026-09-05-citation-sweep-SUMMARY.md` |
+| P2 | Capability slots that yield nothing | 1 h | **open, and the reported symptom was the wrong one** — foundation never gets an empty block because `reference_week_foundation` never schedules loaded work AT ALL (phases 2 and 3 are named for it). The block that DOES ship empty is `block_thoracic_prep` for **push** users, 4 days/week, all 3 phases — both drills are level 1, push reads level 3. Three gaps pinned by a guard test |
+| P1 | VERIFIED badge | 30 min | **open, and it is a live public overclaim** — all 8 public programmes carry `status: "REVIEWED"` → green VERIFIED on the app catalog AND `review: "verified"` hardcoded on the landing, while every one of the 124 citations renders CITED (none carries a `status`). 45% verified clean. The app already contradicts itself |
 | P2 | Pull-up Tier B eccentric volume | 20 min | **narrowed** — the evidence question is settled (Spudic & Nosaka 2025: no advantage for a concentric goal) and the citation corrected. What remains is the entry-intensity ramp, which no study specifies |
 | P2 | Muscle-up false-grip from Tier A | 20 min | **narrowed** — needs a coach, not a clinician. Walker 2023 suggests bar-before-rings |
-| P3 | Log Friday's two activities | 3 min | **open** — `crossfit_class` x2, Sep 4 |
+| P3 | Log Friday's two activities | 3 min | **open — checked, not stale.** Your 2026-09-04 has the hip drills (dead bug 3×6, 90/90 hip switch 3×12) and no `runs[]`. You logged a hyrox on Sep 6, so the mechanism works; Friday was never backfilled |
 | P3 | `starting_values_kg`: wire up or delete? | 20 min | **open** — pinned by a test. Deleting silently kills TM bumps |
-| P3 | Resend key — is a second one live? | 2 min | **unsourced** — carried in two handovers with no backing anywhere in the repo. P0 if a broad-scoped key exists |
+| P3 | Resend key — is a second one live? | 2 min | **still unchecked** — I tried the Resend connector and the permission classifier blocked the key listing. Needs you, or a permission grant |
 | P4 | SR-panel §C remainder, EVID-1, QA-1, S4, S3 billing | — | **open** — admin and prescription decisions |
 
 ## Blocked on data or infrastructure
