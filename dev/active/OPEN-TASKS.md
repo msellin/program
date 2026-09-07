@@ -1,7 +1,7 @@
-# Open tasks — as of 2026-09-06
+# Open tasks — as of 2026-09-07
 
 Live register. Supersedes the task lists inside the handovers, which are
-snapshots. 25 commits on 2026-09-05/06; tests 674 -> 772.
+snapshots. 33 commits on 2026-09-05/06; tests 674 -> 798.
 
 ## Mine
 
@@ -16,6 +16,7 @@ snapshots. 25 commits on 2026-09-05/06; tests 674 -> 772.
 | P2 | Persona sweep #7 | 31 min | **done** 2026-09-06 — 24 passed, 0 failures, 27.9 min. Checks 263 → **319**, controls 96.2% → **98%**, never-driven **0**. Both new flows ran. Predicted ≥300 / 0 never-driven / ≥1 deferral verified: two hit, one **missed** |
 | P1 | Deferral check was date-fragile for three sweeps | 45 min | **done** 2026-09-06 — 0/2 verified in #7. Adding a second persona did NOT decorrelate: pull-up and muscle-up both rest on Sunday. Now asserts against the first non-rest capture of today/past/future; dry-run green on both personas. Found two more defects doing it — see below |
 | P1 | "Adjusted for you" claimed adjustments that never happened | 30 min | **done** 2026-09-06 — the notice rendered off `activeExclusions` (a property of the USER, true every day), so a muscle-up user saw "ring dip work is band-assisted only" above a session with no dip work at all. The original defect reversed. `exclusionsAffectingDay` scopes it to the day; undecidable cases keep the notice |
+| P2 | Persona sweep #8 — prove the deferral check finally runs | 31 min | **open** — the fix is dry-run green against sweep #7's artifacts, which is not the same as having run. Three sweeps in a row reported this path verified-by-nothing; the first sweep that prints "2/2 verified" is the first evidence it works |
 | P4 | Traffic: content, structured data, Search Console | days | **open, and blocked on the evidence page settling** — see `dev/active/traffic/` |
 
 ## Yours
