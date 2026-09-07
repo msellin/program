@@ -944,6 +944,22 @@ export const programSchema = z.object({
           .enum(["latest", "best_of_last_n", "trend_slope", "median_of_window"])
           .optional(),
         window_days: z.number().optional(),
+        /**
+         * Smallest change distinguishable from measurement error, in `unit`.
+         *
+         * Added 2026-09-07. `overhead-mobility` claimed a Push-tier gain of
+         * "+5-10 degrees" on a metric whose best-case single-rater MDC is
+         * 7-9 (Muir 2010, PMID 21589666) — the tier could not detect its own
+         * success, and the app coloured a 6-degree reading green as progress.
+         *
+         * Optional: a metric with no published MDC declares none rather than
+         * inventing one, and the UI then behaves exactly as it did before.
+         * `mdc_note` carries the provenance and, where it matters, the fact
+         * that a lab figure is a FLOOR for a user measuring themselves.
+         */
+        minimal_detectable_change: z.number().positive().optional(),
+        mdc_reference_id: z.string().optional(),
+        mdc_note: z.string().optional(),
       }),
     )
     .optional(),

@@ -45,11 +45,12 @@
     {
       "id": "foundation",
       "label": "Foundation — Wall-arm-raise fails / can't reach vertical",
-      "condition": "shoulder_flexion_supine_deg < 160",
+      "condition": "shoulder_flexion_supine_deg < 165",
       "typical_outcome": "By week 10: supine shoulder flexion 165-175°, empty-bar OHS to parallel without heel lift, first snatch-grip Sotts press.",
       "outcome_confidence": "realistic",
       "full_goal_weeks_estimate": 10,
-      "starting_phase_id": "phase_1_kinematic_base"
+      "starting_phase_id": "phase_1_kinematic_base",
+      "condition_note": "Was `< 160` against progression's `>= 165`, leaving 160.0-164.99 matching no tier at all — those users fell to the plan_tiers[0] default with the internal rationale 'No tier matched'. Closed downward on 2026-09-07: the gap is smaller than the metric's own 9 deg MDC, so which side a reading lands on is not distinguishable from measurement error, and the lower tier is the safe side."
     },
     {
       "id": "progression",
@@ -775,7 +776,10 @@
           "at_week": 10
         }
       ],
-      "aggregation": "latest"
+      "aggregation": "latest",
+      "minimal_detectable_change": 9,
+      "mdc_reference_id": "muir_2010",
+      "mdc_note": "Single-rater MDC for supine passive shoulder flexion is 7 deg in normal shoulders and 9 deg in pathological ones (Muir 2010, PMID 21589666); 9-11 deg once two different raters are involved. 9 is used here as the conservative single-rater figure. It is a FLOOR: Muir measured trained physiotherapists working to a standardised protocol, and this app's users self-measure at home. A change smaller than this cannot be distinguished from measurement error, and the app must not present one as progress."
     },
     {
       "metric_id": "ohs_depth_ratio",
@@ -1104,6 +1108,17 @@
         "title": "Knowledge of results and motor learning: a review and critical reappraisal",
         "source": "Psychol Bull 95(3):355-386",
         "used_for": "Guidance hypothesis; feedback frequency in mobility drill acquisition"
+      },
+      {
+        "id": "muir_2010",
+        "authors": "Muir SW, Corea CL, Beaupre L",
+        "year": 2010,
+        "title": "Evaluating change in clinical status: reliability and measures of agreement for the assessment of glenohumeral range of motion",
+        "source": "N Am J Sports Phys Ther 5(3):98-110",
+        "pmid": "21589666",
+        "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2971638/",
+        "used_for": "Supine goniometric shoulder flexion is the most reliably measured shoulder motion (single-rater ICC 0.85-0.92 supine); single-rater minimal detectable change 7-9 deg. Anchors the retest metric AND the measurement-error floor shown with every reading.",
+        "verification_status": "verified"
       }
     ],
     "reference_ids": [
@@ -1125,7 +1140,8 @@
       "manske_2010",
       "difiori_2006",
       "sands_2000",
-      "salmoni_schmidt_walter_1984"
+      "salmoni_schmidt_walter_1984",
+      "muir_2010"
     ]
   },
   "onboarding_steps": [

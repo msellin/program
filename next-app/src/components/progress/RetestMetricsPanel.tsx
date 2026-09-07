@@ -86,11 +86,27 @@ function RetestCard({
   program: Program;
 }) {
   const delta = deltaFromBaseline(m);
+  /**
+   * A change inside the metric's measurement error is not coloured, in
+   * either direction.
+   *
+   * Supine goniometry has a single-rater MDC of 7-9 degrees (Muir 2010,
+   * PMID 21589666) and this app's users measure themselves at home, so that
+   * is a floor. A 6-degree reading was previously green — the same green a
+   * real 20-degree gain gets — and overhead-mobility's Push tier claimed a
+   * "+5-10 degree" gain, entirely inside that band. The app was reporting
+   * the instrument's noise back to the user as their progress.
+   *
+   * Muted, not hidden. The number stays visible and honest; what goes away
+   * is the claim that it means something.
+   */
   const deltaColor = !delta
     ? "text-muted"
-    : delta.isImprovement
-      ? "text-green"
-      : "text-amber";
+    : delta.withinError
+      ? "text-muted"
+      : delta.isImprovement
+        ? "text-green"
+        : "text-amber";
 
   // Batch 35 · sparkline data source. Pull all readings for this metric
   // from retest_readings + prepend the baseline so the line starts from
@@ -124,9 +140,11 @@ function RetestCard({
   }
   const sparklineDirection: "improving" | "worsening" | "flat" = !delta
     ? "flat"
-    : delta.isImprovement
-      ? "improving"
-      : "worsening";
+    : delta.withinError
+      ? "flat"
+      : delta.isImprovement
+        ? "improving"
+        : "worsening";
 
   const [retestOpen, setRetestOpen] = useState(false);
   const [value, setValue] = useState("");
@@ -206,6 +224,12 @@ function RetestCard({
               <p className={`font-mono ${deltaColor}`}>
                 {delta ? formatDelta(delta.value, m.unit) : "—"}
               </p>
+              {delta?.withinError && m.minimal_detectable_change != null ? (
+                <p className="text-[10px] leading-tight text-muted mt-0.5">
+                  within measurement error (±
+                  {formatMetric(m.minimal_detectable_change, m.unit)})
+                </p>
+              ) : null}
             </div>
           </div>
           {/* Batch 35 · sparkline of retest_readings history. Renders

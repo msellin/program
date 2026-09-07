@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: ce230a244a89072b -->
+<!-- source-fingerprint: 35c9875f0163a26f -->
 
 ## What we are asking
 
@@ -127,7 +127,7 @@ Printed against the questions above so you can see which are actually detectable
 
 # Citations for this domain
 
-19 unique papers across 1 programs. Where a paper backs more than one claim, every claim is listed under it — a paper stretched across two claims is worth a second look.
+20 unique papers across 1 programs. Where a paper backs more than one claim, every claim is listed under it — a paper stretched across two claims is worth a second look.
 
 **bullock_2019** — Shoulder range of motion and baseball arm injuries: a systematic review and meta-analysis · Bullock GS, Faherty MS, Ledbetter L, Thigpen CA, Sell TC · 2018
 
@@ -177,6 +177,11 @@ Printed against the questions above so you can see which are actually detectable
 **manske_2010** — A randomized controlled single-blinded comparison of stretching versus stretching and joint mobilization for posterior shoulder tightness measured by internal rotation motion loss · Manske RC, Meschke M, Porter A, Smith B, Reiman M · 2010
 
 - *overhead-mobility says it supports:* Randomised single-blinded trial in 39 ASYMPTOMATIC college-age participants (7 men, 32 women) comparing a CROSS-BODY stretch alone against cross-body stretch plus posterior joint mobilisation, with internal-rotation motion loss as the outcome. The combined group gained more internal rotation, but the between-group difference was not statistically significant. Corrected 2026-09-05: this read 'sleeper stretch effectiveness for posterior capsule tightness'. The trial tested the cross-body stretch, not the sleeper stretch, and choosing between those two is precisely what the citation was meant to settle; the participants were asymptomatic rather than people with symptomatic posterior capsule tightness; and the difference it did find was not significant. Prescribing the sleeper stretch is an engineering choice with no trial behind it here. The verification_status 'verified' flag on this reference was wrong for this use and should read 'unverified' - note it is stripped by Zod and has no runtime meaning either way. The record's PubMed search-string url is replaced by PMID 23015927.
+- **Does it? ☐ yes ☐ partly ☐ no —**
+
+**muir_2010** — Evaluating change in clinical status: reliability and measures of agreement for the assessment of glenohumeral range of motion · Muir SW, Corea CL, Beaupre L · 2010
+
+- *overhead-mobility says it supports:* Supine goniometric shoulder flexion is the most reliably measured shoulder motion (single-rater ICC 0.85-0.92 supine); single-rater minimal detectable change 7-9 deg. Anchors the retest metric AND the measurement-error floor shown with every reading.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **reinold_2007** — Electromyographic analysis of the supraspinatus and deltoid muscles during 3 common rehabilitation exercises · Reinold MM, Macrina LC, Wilk KE, Fleisig GS, Dun S, Barrentine SW, Ellerbusch MT, Andrews JR · 2007

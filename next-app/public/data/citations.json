@@ -22,6 +22,18 @@
       "display_line": "Ackerman (1988), Journal of Experimental Psychology"
     },
     {
+      "id": "adkin_frank_2000",
+      "authors": "Adkin AL, Frank JS, Carpenter MG, Peysar GW",
+      "year": 2000,
+      "title": "Postural control is scaled to level of postural threat",
+      "source": "Gait & Posture 12(2):87-93",
+      "display_short": "Adkin et al. 2000",
+      "display_line": "Adkin et al. (2000), Gait & Posture 12(2)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10998604/",
+      "review_note": "Verified 2026-09-05 against PMID 10998604: authors, title, journal, volume, issue, pages and year are all correct. What the paper found: 62 healthy young adults (20.3 +/- 1.3 y) stood quietly on a force plate at 40, 100 and 160 cm above ground; centre-of-pressure amplitude fell and its frequency rose linearly as postural threat increased, i.e. the nervous system progressively tightened postural control under threat. It recorded centre-of-pressure kinematics only. Corrected 2026-09-05: the record is sound, but the claim attached to it in handstand-walk prose ('postural threat alters muscle activation before the fall') is not this paper's finding, because no EMG was recorded here; that result belongs to carpenter_frank_2001. The 'Adkin & Frank 2002' companion cited alongside it in the same sentence has no entry in this library and was not located.",
+      "id_note": "Identifier, byline and bibliographic fields all correct. The defect was the claim attached to it in prose: this study measured centre-of-pressure only, contains no EMG, and was credited with a muscle-activation finding that belongs to Carpenter 2001. The paired 'Adkin & Frank 2002' has no record here."
+    },
+    {
       "id": "andersen_henriksson_1977",
       "authors": "Andersen P, Henriksson J",
       "year": 1977,
@@ -94,6 +106,16 @@
       "display_line": "MacDonald et al. (2025), Frontiers in Sports and Active Living (PMC12745452)"
     },
     {
+      "id": "bandura_1997_self_efficacy",
+      "authors": "Bandura A",
+      "year": 1997,
+      "title": "Self-Efficacy: The Exercise of Control",
+      "source": "W. H. Freeman (book)",
+      "display_short": "Bandura 1997",
+      "display_line": "Bandura (1997), Self-Efficacy",
+      "review_note": "Book, not paper. Referenced for the mastery-experiences → threat-perception reduction mechanism used in Phase 0 bail-out drill design."
+    },
+    {
       "id": "barlow_2020",
       "authors": "Barlow C, Scholtz K, Medeiros DM",
       "year": 2020,
@@ -110,6 +132,19 @@
       "source": "Eur J Sport Sci 15(1):3-12",
       "display_short": "Bartlett et al. 2015",
       "display_line": "Bartlett et al. (2015), Eur J Sport Sci 15(1)"
+    },
+    {
+      "id": "beattie_2014",
+      "authors": "Beattie K, Kenny IC, Lyons M, Carson BP",
+      "year": 2014,
+      "title": "The effect of strength training on performance in endurance athletes",
+      "source": "Sports Medicine 44(6):845-865",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24532151/",
+      "display_short": "Beattie et al. 2014",
+      "display_line": "Beattie et al. (2014), Sports Medicine 44(6)",
+      "verification_status": "verified",
+      "review_note": "Verified 2026-09-05 via Crossref 10.1007/s40279-014-0157-y and PMID 24532151: authors, title, journal, volume, issue, pages and year all exact; link added, having been null. What the paper found: a systematic review of 26 studies asking whether strength training improves economy, VO2max and muscle power in well-trained endurance athletes (at least 6 months of endurance training, at least 6 h/week or VO2max at least 50 mL/min/kg); it concluded that strength training improved time-trial performance, economy, VO2max and vMART in competitive endurance athletes. Corrected 2026-09-05: the record was flagged pending and is now verified, because the defect was never the paper. It was withdrawn from first-strict-pullup's references for being an endurance-athlete review cited for grip dose, and that judgement stands: it says nothing about grip endurance, isometric hang dose or loaded carries. The withdrawal was incomplete - pointers survived in two drills in exercises.json and are removed by this patch.",
+      "id_note": "Record was correct but unlinked and marked pending. The real defect was attachment, not attribution: the programme reference was withdrawn while two exercises.json evidence_refs pointers were left behind."
     },
     {
       "id": "berryman_2018",
@@ -176,6 +211,18 @@
       "source": "Royal Society Open Science 4:161018",
       "display_short": "Blenkinsop et al. 2017",
       "display_line": "Blenkinsop et al. (2017), Royal Society Open Science 4"
+    },
+    {
+      "id": "bosquet_2007",
+      "authors": "Bosquet L, Montpetit J, Arvisais D, Mujika I",
+      "year": 2007,
+      "title": "Effects of tapering on performance: a meta-analysis",
+      "source": "Medicine & Science in Sports & Exercise 39(8):1358-1365",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17762369/",
+      "display_short": "Bosquet et al. 2007",
+      "display_line": "Bosquet et al. (2007), MSSE 39(8)",
+      "review_note": "Verified 2026-09-05 against PMID 17762369: authors, title, journal, volume, issue, pages and year all exact. Full text is closed (Unpaywall reports oa_status closed, no OA locations), so only the abstract was retrievable. What the paper found: 27 of 182 screened studies met inclusion; the optimal strategy is a 2-week taper (overall effect 0.59 +/- 0.33, p < 0.001) in which training volume is exponentially decreased by 41-60% (overall effect 0.72 +/- 0.36, p < 0.001) without modifying training intensity or frequency. Corrected 2026-09-05: it was described in rowing-2k-test-prep as the stronger single-source anchor for a ~3% performance uplift. The retrievable record reports standardised effect sizes, not percentages, and no 3% figure appears in it; the same 3% is attributed elsewhere in that programme to Mujika & Padilla 2000. The structural prescription this paper supports verbatim; the quantified promise it does not, and full text would be needed to close the question.",
+      "id_note": "Identifier and bibliographic fields correct. The defect is the number: a percentage uplift was credited to a meta-analysis that reports standardised effect sizes, with full text unavailable to check."
     },
     {
       "id": "bouchard_1999_heritage",
@@ -270,6 +317,18 @@
       "id_note": "Merged 2026-09-05. `butcher_2015_crossfit` was a second id for this same paper, so /evidence listed it twice and the study count overstated by one. Fields carried over: url."
     },
     {
+      "id": "carpenter_frank_2001",
+      "authors": "Carpenter MG, Frank JS, Silcher CP, Peysar GW",
+      "year": 2001,
+      "title": "The influence of postural threat on the control of upright stance",
+      "source": "Experimental Brain Research 138(2):210-218",
+      "display_short": "Carpenter et al. 2001",
+      "display_line": "Carpenter et al. (2001), Exp Brain Res 138(2)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11417462/",
+      "review_note": "Verified 2026-09-05 against PMID 11417462: authors, title, journal, volume, issue, pages and year are all correct. What the paper found: eight young healthy adults in quiet upright stance under three levels of postural threat (up to 81 cm elevation) adopted a stiffening strategy under high threat, with significant changes in kinematic, kinetic and EMG variables and an anterior-posterior stiffness constant 27.5% higher than at low threat. This is the correct source for the claim that postural threat changes muscle activation. Corrected 2026-09-05: the record is sound, but 'anxiety degrades balance strategy' overstates it two ways. The paper reports a different strategy (stiffening), not a demonstrated decrement, and anxiety was not the manipulated variable - elevation was. n = 8, quiet bipedal stance, no inversion and no hand support.",
+      "id_note": "Identifier and byline correct. The defect was interpretive: a change of postural strategy under threat was reported as a degradation of balance, and threat was read as anxiety."
+    },
+    {
       "id": "chiviacowsky_wulf_2002",
       "authors": "Chiviacowsky S, Wulf G",
       "year": 2002,
@@ -308,6 +367,20 @@
       "display_line": "Coyle et al. (1984), Journal of Applied Physiology 57(6)",
       "pmid": "6511559",
       "id_note": "Verified 2026-09-05 (citation sweep batch 2): authors, year, title, journal, volume, issue, pages and url are all correct and the url resolves to the right paper. PMID field added for completeness. The defect was in the programme used_for strings, which reported the 7% VO2max decline at 12 days; the paper reports it over the first 21 days, and 12 days is the half-time of the oxidative-enzyme decline, a different quantity."
+    },
+    {
+      "id": "dickie_2017",
+      "authors": "Dickie JA, Faulkner JA, Barnes MJ, Lark SD",
+      "year": 2017,
+      "title": "Electromyographic analysis of muscle activation during pull-up variations",
+      "source": "Journal of Electromyography and Kinesiology 32:30-36",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28011412/",
+      "display_short": "Dickie et al. 2017",
+      "display_line": "Dickie et al. (2017), J Electromyogr Kinesiol 32",
+      "verification_status": "verified",
+      "doi": "10.1016/j.jelekin.2016.11.004",
+      "review_note": "Verified 2026-09-05 via Crossref 10.1016/j.jelekin.2016.11.004 and PMID 28011412: authors, title, journal, volume, pages and year all exact; DOI and link added, both previously absent. What the paper found: peak and average rectified EMG of the shoulder-arm-forearm complex in 19 strength-trained males across four conditions - supinated, pronated, neutral and rope pull-ups. Its conclusion is that activation is SIMILAR across hand orientations despite the differing grips, with the exception of middle trapezius in pronated versus neutral; the clear difference it does report is between concentric and eccentric phases, with brachioradialis, biceps brachii and pectoralis major significantly more active concentrically. Corrected 2026-09-05: cited in muscle-up for 'the false-grip pull-up as its own capability'. False grip was not one of the four conditions, and the paper's headline finding runs the opposite way to the framing it was used to support.",
+      "id_note": "Record correct but unlinked and marked pending. The defect is claim-fit: false grip was never studied, and the paper concludes hand orientation largely does NOT differentiate activation, which is the reverse of what it was cited for."
     },
     {
       "id": "difiori_2006",
@@ -409,6 +482,19 @@
       "id_note": "Byline corrected 2026-09-05. Frontiers in Physiology 7:487 is 'Endurance Training Intensity Does Not Mediate Interference to Maximal Lower-Body Strength Gain during Short-Term Concurrent Training', by Fyfe JJ, Bartlett JD, Hanson ED, Stepto NK, Bishop DJ (Crossref 10.3389/fphys.2016.00487, PMID 27857692). The record previously carried the byline of a different Fyfe 2016 paper (the mTORC1 / microRNA study, Am J Physiol Regul Integr Comp Physiol 310:R1297-R1311, Fyfe JJ, Bishop DJ, Zacharewicz E, Russell AP, Stepto NK). Two programme records carried a third byline naming 'Hamilton DL', who is on neither paper. Substantively: the trial work-matched its two endurance arms, so endurance volume was held constant and never manipulated. It supports only the negative finding that endurance intensity is not a critical mediator of interference; it cannot support 'volume drives interference'. data-integrity.test.ts compares first surname only, which is why three different wrong bylines passed."
     },
     {
+      "id": "grabowiecki_2021",
+      "authors": "Grabowiecki M, et al.",
+      "year": 2021,
+      "title": "Biomechanical characteristics of handstand walking initiation",
+      "source": "Gait Posture 86:311-318",
+      "doi": "10.1016/j.gaitpost.2021.03.036",
+      "pmid": "33839425",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33839425/",
+      "display_short": "Grabowiecki et al. 2021",
+      "display_line": "Grabowiecki et al. (2021), Gait Posture 86",
+      "id_note": "Added 2026-09-05, verified against Europe PMC. Replaces ferrari_2021, which has no referent. Its finding states the repo's own cue rationale almost verbatim: 'A shift of the CoM forward and towards the stance hand is required as a result of a lateral and posterior CoP shift.'"
+    },
+    {
       "id": "hagerman_1994",
       "authors": "Hagerman FC",
       "year": 1994,
@@ -427,6 +513,15 @@
       "url": "https://pubmed.ncbi.nlm.nih.gov/25200666/",
       "display_short": "Halson 2014",
       "display_line": "Halson (2014), Sports Medicine 44(Suppl 2)"
+    },
+    {
+      "id": "hardy_1996_catastrophe",
+      "authors": "Hardy L",
+      "year": 1996,
+      "title": "A test of the catastrophe models of anxiety and sports performance against multidimensional anxiety theory",
+      "source": "Anxiety, Stress, & Coping 9(1):69-86",
+      "display_short": "Hardy 1996",
+      "display_line": "Hardy (1996), Anxiety Stress Coping 9(1)"
     },
     {
       "id": "helgerud_2007",
@@ -676,6 +771,19 @@
       "display_line": "Morton et al. (2018), British Journal of Sports Medicine 52"
     },
     {
+      "id": "muir_2010",
+      "authors": "Muir SW, Corea CL, Beaupre L",
+      "year": 2010,
+      "title": "Evaluating change in clinical status: reliability and measures of agreement for the assessment of glenohumeral range of motion",
+      "source": "N Am J Sports Phys Ther 5(3):98-110",
+      "pmid": "21589666",
+      "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2971638/",
+      "display_short": "Muir et al. 2010",
+      "display_line": "Muir et al. (2010), N Am J Sports Phys Ther 5(3)",
+      "verification_status": "verified",
+      "id_note": "Added 2026-09-07, verified against Europe PMC (PMID 21589666, PMC2971638). Replaces kim_2013, which does not exist. Quoted from the retrieved paper: 'Assessment of AROM and PROM in supine achieves superior reliability.' Supine passive flexion, normal shoulders: mean 177 deg (SD 6), intra-rater ICC 0.85, SEM 3, single-rater MDC 7; pathological shoulders MDC 9. Two raters: 9-11. MEASURED BY TRAINED PHYSIOTHERAPISTS ON A PLINTH — Terav users self-measure unsupervised, so these are a FLOOR on the real error, not an estimate of it. n=17 subjects; wide CIs."
+    },
+    {
       "id": "mujika_padilla_2000",
       "authors": "Mujika I, Padilla S",
       "year": 2000,
@@ -864,6 +972,18 @@
       "id_note": "The title in the record is not the paper's title, and the venue was a hedged either/or with the wrong volume, so the /evidence row was unfollowable. The paper is Science of Gymnastics Journal 10(1):29-42, 26 university students in a single pre-post session, randomised to tactile-verbal feedback (n=13) or visual-comparative feedback (n=13). Programme and citations.json agreed with each other on the wrong title and venue, so no cross-record test could see it. Corrected 2026-09-05: invented title, hedged double venue, wrong volume; and the used_for claimed a combined-feedback superiority from a study with no combined arm."
     },
     {
+      "id": "roig_2009",
+      "authors": "Roig M, O'Brien K, Kirk G, Murray R, McKinnon P, Shadgan B, Reid WD",
+      "year": 2009,
+      "title": "The effects of eccentric versus concentric resistance training on muscle strength and mass in healthy adults: a systematic review with meta-analysis",
+      "source": "British Journal of Sports Medicine 43(8):556-568",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18981046/",
+      "display_short": "Roig et al. 2009",
+      "display_line": "Roig et al. (2009), BJSM 43(8)",
+      "verification_status": "verified",
+      "id_note": "SUPERSEDED 2026-09-05 by spudic_nosaka_2025. The quoted effect sizes are absent from Roig's full text, and it states that at comparable intensity 'no significant differences in the improvement of total strength after training were observed'. The 2025 meta-analysis settles it: eccentric-only beats concentric-only for ECCENTRIC strength and is indistinguishable for CONCENTRIC. A first strict pull-up is a concentric task."
+    },
+    {
       "id": "ronnestad_hansen_2020",
       "authors": "Rønnestad BR, Hansen J, et al.",
       "year": 2020,
@@ -1013,6 +1133,18 @@
       "id_note": "The DOI, journal, volume, issue and article number were right and the finding is exactly as cited, but Simunkova K is not an author of this paper; the first author is Malir R. Programme and citations.json agreed with each other, so the cross-record test in data-integrity.test.ts is blind to it by construction. The id itself is now a misnomer and should be renamed malir_2024 by whoever applies this. Diacritics are dropped in this patch for ASCII transport; the applier may restore Malir as Malir with the hacek and Trebicky with its diacritics. The same wrong byline is still in handstand-walk.json's reference record and must be replaced by hand: the line \"authors\": \"Simunkova K, et al.\" (written there with diacritics) has no ASCII-only exact match, so it is not in programme_text. Corrected 2026-09-05: wrong first author and a description in place of the published title, on both sides of the record at once."
     },
     {
+      "id": "sinnett_2019",
+      "authors": "Sinnett AM, Cheatham SW, Brismée JM",
+      "year": 2019,
+      "title": "The effect of band-assisted pull-up training on muscular strength and pull-up performance",
+      "source": "Journal of Strength and Conditioning Research (or proceedings)",
+      "url": null,
+      "display_short": "Sinnett et al. 2019",
+      "display_line": "Sinnett et al. (2019), JSCR",
+      "verification_status": "pending",
+      "id_note": "NO REFERENT, 2026-09-05. Exhaustive search of Europe PMC, Crossref and full-text found no such paper; a web search returned a confident FABRICATED summary of it, and the page it was built from names none of these authors. This was the sole warrant for band assistance, including the muscle-up deferral substitute. The practice is retained as an ENGINEERING CHOICE and labelled so; deliberately NOT substituted with Lopes 2019, whose band RESISTANCE is the mechanical opposite of assistance."
+    },
+    {
       "id": "sobera_2019",
       "authors": "Sobera M, Serafin R, Rutkowska-Kucharska A",
       "year": 2019,
@@ -1022,6 +1154,19 @@
       "display_line": "Sobera et al. (2019), Acta Bioeng Biomech 21(1):63-71",
       "url": "https://pubmed.ncbi.nlm.nih.gov/31197281/",
       "id_note": "The title was a description, the source carried no volume or pages, and there was no URL, so the row could not be looked up. The study is eight acrobatic gymnasts, four more and four less experienced, in a static handstand on a force platform. Corrected 2026-09-05: description-as-title, no volume, pages or identifier; and the used_for called a four-versus-four experience contrast an elite-versus-novice difference and used it as outcome evidence for a walking programme."
+    },
+    {
+      "id": "spudic_nosaka_2025",
+      "authors": "Spudić D, Nosaka K",
+      "year": 2025,
+      "title": "Eccentric-only versus concentric-only isokinetic strength training effects on maximal voluntary eccentric, concentric and isometric contraction strength: a systematic review and meta-analysis",
+      "source": "Sports Med Open 11",
+      "doi": "10.1186/s40798-025-00887-w",
+      "pmid": "40839186",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40839186/",
+      "display_short": "Spudić & Nosaka 2025",
+      "display_line": "Spudić & Nosaka (2025), Sports Med Open 11",
+      "id_note": "Added 2026-09-05, verified against Europe PMC. Supersedes roig_2009 for the eccentric-superiority claim: 'Eccentric-only strength training is more effective for improving MVC_ECC, but both concentric-only and eccentric-only training provide similar effects on improving MVC_CON and MVC_ISO.'"
     },
     {
       "id": "steinacker_1993",
@@ -1034,6 +1179,18 @@
       "url": "https://pubmed.ncbi.nlm.nih.gov/8262704/",
       "review_note": "Verified 2026-09-05 against PMID 8262704, Int J Sports Med 1993 Sep;14 Suppl 1:S3-10. The paper exists exactly as claimed. It is a descriptive review of what successful international rowers do: anaerobic threshold at 80-85 percent of maximal performance in highly trained rowers, 70-90 percent of training time below that threshold, annual volumes reaching 1000 hours or 5000-7000 km. Its only interval content is one clause about work eliciting blood lactate above 4.0 mmol/L plus sprint and athletics training.",
       "id_note": "The record's only locator was a PubMed search query rather than a record, and rowing-2k-test-prep marked it unverified on that basis. It now has a real identifier, PMID 8262704, and the verification_status flag on the programme record can be cleared. Corrected 2026-09-05: a search URL in place of an identifier, and a descriptive review of elite practice described as a prescription."
+    },
+    {
+      "id": "steinacker_1998",
+      "authors": "Steinacker JM, Lormes W, Lehmann M, Altenburg D",
+      "year": 1998,
+      "title": "Training of rowers before world championships",
+      "source": "Medicine & Science in Sports & Exercise 30(7):1158-1163",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9662689/",
+      "display_short": "Steinacker et al. 1998",
+      "display_line": "Steinacker et al. (1998), MSSE 30(7)",
+      "pmid": "9662689",
+      "id_note": "Identifier corrected 2026-09-05 — the previous url resolved to an unrelated paper and was rendered as a live link on /evidence. It pointed at PMID 9662688 — off by one."
     },
     {
       "id": "stoggl_sperlich_2014",
@@ -1056,6 +1213,18 @@
       "display_line": "Tanaka et al. (2001), Journal of the American College of Cardiology 37(1)"
     },
     {
+      "id": "vidal_rovira_2024",
+      "authors": "Vidal-Rovira R, et al.",
+      "year": 2024,
+      "title": "Forearm activation patterns in false-grip vs standard grip on gymnastic rings",
+      "source": "Preprint / conference — verification required",
+      "url": null,
+      "display_short": "Vidal-Rovira et al. 2024",
+      "display_line": "Vidal-Rovira et al. (2024), preprint (verification pending)",
+      "verification_status": "pending",
+      "id_note": "NO REFERENT, 2026-09-05. Europe PMC returns one record for 'false grip' in the entire indexed literature and it is not this. Superseded by walker_2023_muscleup, which is real — and which points mildly AGAINST the current design, suggesting a bar-before-rings progression."
+    },
+    {
       "id": "vidal_torija_2025",
       "authors": "Martonovich N, Maman D, Mahamid A, Alfandari L, Behrbalk E",
       "year": 2025,
@@ -1066,6 +1235,19 @@
       "doi": "10.3390/jfmk10040372",
       "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12550924/",
       "id_note": "The findings were exact (n=321, chronic wrist pain in 182 or 56.7 percent, no significant association with weekly training hours, training frequency, training duration, warm-up routines or brace use) but the byline, the title and the venue all belonged to no paper: Vidal-Torija A appears nowhere in the record, and it is MDPI's Journal of Functional Morphology and Kinesiology, not Frontiers. Programme and citations.json agreed with each other. The id is now a misnomer and should be renamed martonovich_2025 by whoever applies this. Corrected 2026-09-05: invented byline, invented title and wrong publisher on the one row a user can see, with no URL to fall back on."
+    },
+    {
+      "id": "vigouroux_2007",
+      "authors": "Vigouroux L, Quaine F, Labarre-Vila A, Moutet F",
+      "year": 2006,
+      "title": "Estimation of finger muscle tendon tensions and pulley forces during specific sport-climbing grip techniques",
+      "source": "J Biomech 39(14):2583-2592",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16225880/",
+      "display_short": "Vigouroux et al. 2007",
+      "display_line": "Vigouroux et al. (2007), J Biomech 40(13)",
+      "verification_status": "verified",
+      "pmid": "16225880",
+      "id_note": "Identifier corrected 2026-09-05 — the previous url resolved to an unrelated paper and was rendered as a live link on /evidence. It pointed at a pesticide-residue paper. The real work is Vigouroux 2006, not 2007 — the id is kept for stability, the year is corrected."
     },
     {
       "id": "walker_2003",
@@ -1079,6 +1261,19 @@
       "doi": "10.1101/lm.58503",
       "url": "https://pubmed.ncbi.nlm.nih.gov/12888546/",
       "id_note": "One id, two papers, fields spliced, and the four programme files disagreed with each other about source (first-strict-pullup and muscle-up said Nature 425(6958):616-620; handstand-walk and overhead-mobility said Learning & Memory 10(4):275-284). data-integrity.test.ts compares authors and title but never source, so the disagreement was invisible to the suite. The prior review_note claiming the record had been corrected made it internally inconsistent instead: it kept Nature's byline and omitted Seidman J and Morgan A, who are authors of the Learning & Memory paper. Corrected 2026-09-05: a bibliography row spliced from two different papers, resolving to neither."
+    },
+    {
+      "id": "walker_2023_muscleup",
+      "authors": "Walker CW, et al.",
+      "year": 2023,
+      "title": "Comparison of muscle activity during a ring muscle up and a bar muscle up",
+      "source": "Int J Exerc Sci 16(x)",
+      "doi": "10.70252/fjql7859",
+      "pmid": "38288256",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38288256/",
+      "display_short": "Walker et al. 2023",
+      "display_line": "Walker et al. (2023), Int J Exerc Sci",
+      "id_note": "Added 2026-09-05, verified against Europe PMC. The real false-grip/ring paper, replacing vidal_rovira_2024 which has no referent. n=10 EMG; note it points MILDLY AGAINST the current design, suggesting bar-before-rings progression."
     },
     {
       "id": "wiesinger_2019",
@@ -1150,73 +1345,6 @@
       "display_line": "Wulf & Shea (2002), Psychonomic Bulletin & Review 9"
     },
     {
-      "id": "adkin_frank_2000",
-      "authors": "Adkin AL, Frank JS, Carpenter MG, Peysar GW",
-      "year": 2000,
-      "title": "Postural control is scaled to level of postural threat",
-      "source": "Gait & Posture 12(2):87-93",
-      "display_short": "Adkin et al. 2000",
-      "display_line": "Adkin et al. (2000), Gait & Posture 12(2)",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/10998604/",
-      "review_note": "Verified 2026-09-05 against PMID 10998604: authors, title, journal, volume, issue, pages and year are all correct. What the paper found: 62 healthy young adults (20.3 +/- 1.3 y) stood quietly on a force plate at 40, 100 and 160 cm above ground; centre-of-pressure amplitude fell and its frequency rose linearly as postural threat increased, i.e. the nervous system progressively tightened postural control under threat. It recorded centre-of-pressure kinematics only. Corrected 2026-09-05: the record is sound, but the claim attached to it in handstand-walk prose ('postural threat alters muscle activation before the fall') is not this paper's finding, because no EMG was recorded here; that result belongs to carpenter_frank_2001. The 'Adkin & Frank 2002' companion cited alongside it in the same sentence has no entry in this library and was not located.",
-      "id_note": "Identifier, byline and bibliographic fields all correct. The defect was the claim attached to it in prose: this study measured centre-of-pressure only, contains no EMG, and was credited with a muscle-activation finding that belongs to Carpenter 2001. The paired 'Adkin & Frank 2002' has no record here."
-    },
-    {
-      "id": "carpenter_frank_2001",
-      "authors": "Carpenter MG, Frank JS, Silcher CP, Peysar GW",
-      "year": 2001,
-      "title": "The influence of postural threat on the control of upright stance",
-      "source": "Experimental Brain Research 138(2):210-218",
-      "display_short": "Carpenter et al. 2001",
-      "display_line": "Carpenter et al. (2001), Exp Brain Res 138(2)",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/11417462/",
-      "review_note": "Verified 2026-09-05 against PMID 11417462: authors, title, journal, volume, issue, pages and year are all correct. What the paper found: eight young healthy adults in quiet upright stance under three levels of postural threat (up to 81 cm elevation) adopted a stiffening strategy under high threat, with significant changes in kinematic, kinetic and EMG variables and an anterior-posterior stiffness constant 27.5% higher than at low threat. This is the correct source for the claim that postural threat changes muscle activation. Corrected 2026-09-05: the record is sound, but 'anxiety degrades balance strategy' overstates it two ways. The paper reports a different strategy (stiffening), not a demonstrated decrement, and anxiety was not the manipulated variable - elevation was. n = 8, quiet bipedal stance, no inversion and no hand support.",
-      "id_note": "Identifier and byline correct. The defect was interpretive: a change of postural strategy under threat was reported as a degradation of balance, and threat was read as anxiety."
-    },
-    {
-      "id": "hardy_1996_catastrophe",
-      "authors": "Hardy L",
-      "year": 1996,
-      "title": "A test of the catastrophe models of anxiety and sports performance against multidimensional anxiety theory",
-      "source": "Anxiety, Stress, & Coping 9(1):69-86",
-      "display_short": "Hardy 1996",
-      "display_line": "Hardy (1996), Anxiety Stress Coping 9(1)"
-    },
-    {
-      "id": "bandura_1997_self_efficacy",
-      "authors": "Bandura A",
-      "year": 1997,
-      "title": "Self-Efficacy: The Exercise of Control",
-      "source": "W. H. Freeman (book)",
-      "display_short": "Bandura 1997",
-      "display_line": "Bandura (1997), Self-Efficacy",
-      "review_note": "Book, not paper. Referenced for the mastery-experiences → threat-perception reduction mechanism used in Phase 0 bail-out drill design."
-    },
-    {
-      "id": "bosquet_2007",
-      "authors": "Bosquet L, Montpetit J, Arvisais D, Mujika I",
-      "year": 2007,
-      "title": "Effects of tapering on performance: a meta-analysis",
-      "source": "Medicine & Science in Sports & Exercise 39(8):1358-1365",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/17762369/",
-      "display_short": "Bosquet et al. 2007",
-      "display_line": "Bosquet et al. (2007), MSSE 39(8)",
-      "review_note": "Verified 2026-09-05 against PMID 17762369: authors, title, journal, volume, issue, pages and year all exact. Full text is closed (Unpaywall reports oa_status closed, no OA locations), so only the abstract was retrievable. What the paper found: 27 of 182 screened studies met inclusion; the optimal strategy is a 2-week taper (overall effect 0.59 +/- 0.33, p < 0.001) in which training volume is exponentially decreased by 41-60% (overall effect 0.72 +/- 0.36, p < 0.001) without modifying training intensity or frequency. Corrected 2026-09-05: it was described in rowing-2k-test-prep as the stronger single-source anchor for a ~3% performance uplift. The retrievable record reports standardised effect sizes, not percentages, and no 3% figure appears in it; the same 3% is attributed elsewhere in that programme to Mujika & Padilla 2000. The structural prescription this paper supports verbatim; the quantified promise it does not, and full text would be needed to close the question.",
-      "id_note": "Identifier and bibliographic fields correct. The defect is the number: a percentage uplift was credited to a meta-analysis that reports standardised effect sizes, with full text unavailable to check."
-    },
-    {
-      "id": "steinacker_1998",
-      "authors": "Steinacker JM, Lormes W, Lehmann M, Altenburg D",
-      "year": 1998,
-      "title": "Training of rowers before world championships",
-      "source": "Medicine & Science in Sports & Exercise 30(7):1158-1163",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/9662689/",
-      "display_short": "Steinacker et al. 1998",
-      "display_line": "Steinacker et al. (1998), MSSE 30(7)",
-      "pmid": "9662689",
-      "id_note": "Identifier corrected 2026-09-05 — the previous url resolved to an unrelated paper and was rendered as a live link on /evidence. It pointed at PMID 9662688 — off by one."
-    },
-    {
       "id": "yiou_2017",
       "authors": "Yiou E, Caderby T, Delafontaine A, Fourcade P, Honeine JL",
       "year": 2017,
@@ -1240,121 +1368,6 @@
       "verification_status": "verified",
       "review_note": "Byline corrected 2026-09-05 against PMID 21068680. The record previously read 'Youdas JW, Amundson CL, Cicirello KS, Hellmers CJ, Hollman JH': Cicirello KS and Hellmers CJ are not on the paper, and Hahn JJ and Harezlak DT were missing. Journal, volume, issue, pages, year and PMID were all correct. What the paper found: surface EMG in 21 men and 4 women across three conditions - conventional pull-up, chin-up, and a rotating-handle (Perfect-Pullup) variant - with a sequential activation pattern in which lower trapezius and pectoralis major initiate the repetition and biceps brachii and latissimus dorsi complete it. No wide-grip condition, no neutral-grip condition, no false grip, and brachialis was not one of the eight recorded muscles. Corrected 2026-09-05: the same wrong byline was carried identically in first-strict-pullup and muscle-up reference blocks, which is why the cross-record consistency test passed over it; apply this corrected byline in all three places.",
       "id_note": "Two authors invented and two omitted, identically here and in both programme reference blocks, so no cross-record test could see it. Two of the claims built on this paper describe conditions it never ran."
-    },
-    {
-      "id": "roig_2009",
-      "authors": "Roig M, O'Brien K, Kirk G, Murray R, McKinnon P, Shadgan B, Reid WD",
-      "year": 2009,
-      "title": "The effects of eccentric versus concentric resistance training on muscle strength and mass in healthy adults: a systematic review with meta-analysis",
-      "source": "British Journal of Sports Medicine 43(8):556-568",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/18981046/",
-      "display_short": "Roig et al. 2009",
-      "display_line": "Roig et al. (2009), BJSM 43(8)",
-      "verification_status": "verified",
-      "id_note": "SUPERSEDED 2026-09-05 by spudic_nosaka_2025. The quoted effect sizes are absent from Roig's full text, and it states that at comparable intensity 'no significant differences in the improvement of total strength after training were observed'. The 2025 meta-analysis settles it: eccentric-only beats concentric-only for ECCENTRIC strength and is indistinguishable for CONCENTRIC. A first strict pull-up is a concentric task."
-    },
-    {
-      "id": "sinnett_2019",
-      "authors": "Sinnett AM, Cheatham SW, Brismée JM",
-      "year": 2019,
-      "title": "The effect of band-assisted pull-up training on muscular strength and pull-up performance",
-      "source": "Journal of Strength and Conditioning Research (or proceedings)",
-      "url": null,
-      "display_short": "Sinnett et al. 2019",
-      "display_line": "Sinnett et al. (2019), JSCR",
-      "verification_status": "pending",
-      "id_note": "NO REFERENT, 2026-09-05. Exhaustive search of Europe PMC, Crossref and full-text found no such paper; a web search returned a confident FABRICATED summary of it, and the page it was built from names none of these authors. This was the sole warrant for band assistance, including the muscle-up deferral substitute. The practice is retained as an ENGINEERING CHOICE and labelled so; deliberately NOT substituted with Lopes 2019, whose band RESISTANCE is the mechanical opposite of assistance."
-    },
-    {
-      "id": "vigouroux_2007",
-      "authors": "Vigouroux L, Quaine F, Labarre-Vila A, Moutet F",
-      "year": 2006,
-      "title": "Estimation of finger muscle tendon tensions and pulley forces during specific sport-climbing grip techniques",
-      "source": "J Biomech 39(14):2583-2592",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/16225880/",
-      "display_short": "Vigouroux et al. 2007",
-      "display_line": "Vigouroux et al. (2007), J Biomech 40(13)",
-      "verification_status": "verified",
-      "pmid": "16225880",
-      "id_note": "Identifier corrected 2026-09-05 — the previous url resolved to an unrelated paper and was rendered as a live link on /evidence. It pointed at a pesticide-residue paper. The real work is Vigouroux 2006, not 2007 — the id is kept for stability, the year is corrected."
-    },
-    {
-      "id": "beattie_2014",
-      "authors": "Beattie K, Kenny IC, Lyons M, Carson BP",
-      "year": 2014,
-      "title": "The effect of strength training on performance in endurance athletes",
-      "source": "Sports Medicine 44(6):845-865",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/24532151/",
-      "display_short": "Beattie et al. 2014",
-      "display_line": "Beattie et al. (2014), Sports Medicine 44(6)",
-      "verification_status": "verified",
-      "review_note": "Verified 2026-09-05 via Crossref 10.1007/s40279-014-0157-y and PMID 24532151: authors, title, journal, volume, issue, pages and year all exact; link added, having been null. What the paper found: a systematic review of 26 studies asking whether strength training improves economy, VO2max and muscle power in well-trained endurance athletes (at least 6 months of endurance training, at least 6 h/week or VO2max at least 50 mL/min/kg); it concluded that strength training improved time-trial performance, economy, VO2max and vMART in competitive endurance athletes. Corrected 2026-09-05: the record was flagged pending and is now verified, because the defect was never the paper. It was withdrawn from first-strict-pullup's references for being an endurance-athlete review cited for grip dose, and that judgement stands: it says nothing about grip endurance, isometric hang dose or loaded carries. The withdrawal was incomplete - pointers survived in two drills in exercises.json and are removed by this patch.",
-      "id_note": "Record was correct but unlinked and marked pending. The real defect was attachment, not attribution: the programme reference was withdrawn while two exercises.json evidence_refs pointers were left behind."
-    },
-    {
-      "id": "dickie_2017",
-      "authors": "Dickie JA, Faulkner JA, Barnes MJ, Lark SD",
-      "year": 2017,
-      "title": "Electromyographic analysis of muscle activation during pull-up variations",
-      "source": "Journal of Electromyography and Kinesiology 32:30-36",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/28011412/",
-      "display_short": "Dickie et al. 2017",
-      "display_line": "Dickie et al. (2017), J Electromyogr Kinesiol 32",
-      "verification_status": "verified",
-      "doi": "10.1016/j.jelekin.2016.11.004",
-      "review_note": "Verified 2026-09-05 via Crossref 10.1016/j.jelekin.2016.11.004 and PMID 28011412: authors, title, journal, volume, pages and year all exact; DOI and link added, both previously absent. What the paper found: peak and average rectified EMG of the shoulder-arm-forearm complex in 19 strength-trained males across four conditions - supinated, pronated, neutral and rope pull-ups. Its conclusion is that activation is SIMILAR across hand orientations despite the differing grips, with the exception of middle trapezius in pronated versus neutral; the clear difference it does report is between concentric and eccentric phases, with brachioradialis, biceps brachii and pectoralis major significantly more active concentrically. Corrected 2026-09-05: cited in muscle-up for 'the false-grip pull-up as its own capability'. False grip was not one of the four conditions, and the paper's headline finding runs the opposite way to the framing it was used to support.",
-      "id_note": "Record correct but unlinked and marked pending. The defect is claim-fit: false grip was never studied, and the paper concludes hand orientation largely does NOT differentiate activation, which is the reverse of what it was cited for."
-    },
-    {
-      "id": "vidal_rovira_2024",
-      "authors": "Vidal-Rovira R, et al.",
-      "year": 2024,
-      "title": "Forearm activation patterns in false-grip vs standard grip on gymnastic rings",
-      "source": "Preprint / conference — verification required",
-      "url": null,
-      "display_short": "Vidal-Rovira et al. 2024",
-      "display_line": "Vidal-Rovira et al. (2024), preprint (verification pending)",
-      "verification_status": "pending",
-      "id_note": "NO REFERENT, 2026-09-05. Europe PMC returns one record for 'false grip' in the entire indexed literature and it is not this. Superseded by walker_2023_muscleup, which is real — and which points mildly AGAINST the current design, suggesting a bar-before-rings progression."
-    },
-    {
-      "id": "grabowiecki_2021",
-      "authors": "Grabowiecki M, et al.",
-      "year": 2021,
-      "title": "Biomechanical characteristics of handstand walking initiation",
-      "source": "Gait Posture 86:311-318",
-      "doi": "10.1016/j.gaitpost.2021.03.036",
-      "pmid": "33839425",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/33839425/",
-      "display_short": "Grabowiecki et al. 2021",
-      "display_line": "Grabowiecki et al. (2021), Gait Posture 86",
-      "id_note": "Added 2026-09-05, verified against Europe PMC. Replaces ferrari_2021, which has no referent. Its finding states the repo's own cue rationale almost verbatim: 'A shift of the CoM forward and towards the stance hand is required as a result of a lateral and posterior CoP shift.'"
-    },
-    {
-      "id": "spudic_nosaka_2025",
-      "authors": "Spudić D, Nosaka K",
-      "year": 2025,
-      "title": "Eccentric-only versus concentric-only isokinetic strength training effects on maximal voluntary eccentric, concentric and isometric contraction strength: a systematic review and meta-analysis",
-      "source": "Sports Med Open 11",
-      "doi": "10.1186/s40798-025-00887-w",
-      "pmid": "40839186",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/40839186/",
-      "display_short": "Spudić & Nosaka 2025",
-      "display_line": "Spudić & Nosaka (2025), Sports Med Open 11",
-      "id_note": "Added 2026-09-05, verified against Europe PMC. Supersedes roig_2009 for the eccentric-superiority claim: 'Eccentric-only strength training is more effective for improving MVC_ECC, but both concentric-only and eccentric-only training provide similar effects on improving MVC_CON and MVC_ISO.'"
-    },
-    {
-      "id": "walker_2023_muscleup",
-      "authors": "Walker CW, et al.",
-      "year": 2023,
-      "title": "Comparison of muscle activity during a ring muscle up and a bar muscle up",
-      "source": "Int J Exerc Sci 16(x)",
-      "doi": "10.70252/fjql7859",
-      "pmid": "38288256",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/38288256/",
-      "display_short": "Walker et al. 2023",
-      "display_line": "Walker et al. (2023), Int J Exerc Sci",
-      "id_note": "Added 2026-09-05, verified against Europe PMC. The real false-grip/ring paper, replacing vidal_rovira_2024 which has no referent. n=10 EMG; note it points MILDLY AGAINST the current design, suggesting bar-before-rings progression."
     }
   ]
 }

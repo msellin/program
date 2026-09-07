@@ -35,6 +35,8 @@ export type RetestValue = {
   cadence_weeks: number | null;
   supported: boolean;
   note?: string;
+  /** Smallest change distinguishable from measurement error, in `unit`. */
+  minimal_detectable_change?: number;
 };
 
 type Filter = { field: string; op: "eq"; value: string };
@@ -339,6 +341,13 @@ export function evaluateRetestMetrics(
       at_week,
       cadence_weeks,
       supported: true,
+      // Zod keeps this only because the schema declares it — the repeated
+      // lesson in this repo is that an authored key nothing forwards is a
+      // key that does nothing.
+      minimal_detectable_change:
+        typeof m.minimal_detectable_change === "number"
+          ? m.minimal_detectable_change
+          : undefined,
     };
   });
 }
@@ -432,9 +441,31 @@ export function formatMetric(value: number | null, unit: string): string {
  */
 export function deltaFromBaseline(
   m: RetestValue,
-): { value: number; isImprovement: boolean } | null {
+): { value: number; isImprovement: boolean; withinError: boolean } | null {
   if (m.current == null || m.baseline == null) return null;
   const raw = m.current - m.baseline;
+  /**
+   * A change smaller than the metric's minimal detectable change is not a
+   * change. It is the instrument.
+   *
+   * `overhead-mobility` measures supine shoulder flexion with a goniometer,
+   * whose best-case single-rater MDC is 7-9 degrees (Muir 2010, PMID
+   * 21589666) — and that figure comes from trained physiotherapists working
+   * to a protocol, where this app's users measure themselves at home. The
+   * programme's own Push-tier gain target was "+5-10 degrees": a tier that
+   * could not detect its own success, reported to the user in green.
+   *
+   * `isImprovement` keeps its sign so nothing downstream has to change, and
+   * `withinError` is added rather than substituted, so a caller that has not
+   * been taught about measurement error behaves exactly as before instead of
+   * silently losing the distinction.
+   *
+   * Metrics with no declared MDC report `withinError: false` — an absent
+   * figure means unknown, not zero, and inventing one would be the same
+   * error in the opposite direction.
+   */
+  const mdc = m.minimal_detectable_change;
+  const withinError = mdc != null && Math.abs(raw) < mdc;
   const isImprovement = m.direction === "higher_is_better" ? raw > 0 : raw < 0;
-  return { value: raw, isImprovement };
+  return { value: raw, isImprovement, withinError };
 }
