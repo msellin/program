@@ -1,40 +1,43 @@
-# Open tasks — as of 2026-09-07 (afternoon)
+# Open tasks — as of 2026-09-07
 
 Live register. Supersedes the task lists inside the handovers, which are
-snapshots. 33 commits on 2026-09-05/06; tests 674 -> 798.
+snapshots. 39 commits on 2026-09-05/07; tests 674 -> 805.
 
 ## Mine
 
 | P | Task | Est | Status |
 |---|---|---|---|
-| P1 | Persona sweep #6 | 31 min | **done** 2026-09-06 — 23 passed, 0 failures, 28.2 min. Controls 95.5% → 96.2%. Behavioural checks 269 → 263 (predicted ≥269; unexplained, see below). Never-driven still exactly `NoteSheet — Not now` |
-| P1 | Intake-deferral coverage was a coin flip | 45 min | **done** 2026-09-06 — `persona-pullup-elbow` was the fleet's ONLY persona with intake answers and landed on a rest day for two sweeps running, so the deferral fix stayed unverified end-to-end while the report read green. Added `persona-muscleup-elbow` (different programme, different day count), made the rest-day skip record `deferralCheck` + warn instead of passing silently, and the fleet summary now prints "N/M verified end-to-end" |
-| P2 | Explain the 6-check drop in sweep #6 | 30 min | **done** 2026-09-06 — not a regression. Sweep #5 had one FAILED persona, which aborts before writing coverage, and the fleet summary read its previous sweep's file off disk. 269 counted 21 personas that ran plus one that did not. Runs now stamp `SWEEP_ID`; stale reports are dropped and named, and the summary says "N of M defined" |
-| P2 | Label the 5 remaining phantom citations | 45 min | **done** 2026-09-06 — three labelled `not_found` (kim_2013, kilding_2012, ferrari_2021), two `record_verified_claim_unverified` (robertson_2004, salmoni — real papers, content unretrievable) with their DOIs/PMIDs added. Guard test pins all five. NOT a withdrawal: the three phantoms still render on /evidence |
-| P3 | `sorted[1]` vs `last - first` in `buildMetricCtx` | 20 min | **done** 2026-09-06 — and it had stopped being harmless: compliance forwarding landed the same day, so `under_dosing` can fire and this was its input. Three-plus readings were judged on the first retest forever |
-| P3 | `OffPlanSheet` 4/6, `NoteSheet` "Not now" | 30 min | **done and proven in sweep #7** (NoteSheet 6/7, OffPlanSheet 5/6, both fully accounted; 0 never-driven fleet-wide) 2026-09-06 — both were REAL gaps, not measurement faults (the run of five ends). "Not now" is a dismiss nothing had walked; "N drills available" is a real `<Link>` to the drill library nothing had followed. Added `offplan-drill-library` (terminal) and a discard-vs-save assertion on the note sheet |
-| P2 | Persona sweep #7 | 31 min | **done** 2026-09-06 — 24 passed, 0 failures, 27.9 min. Checks 263 → **319**, controls 96.2% → **98%**, never-driven **0**. Both new flows ran. Predicted ≥300 / 0 never-driven / ≥1 deferral verified: two hit, one **missed** |
-| P1 | Deferral check was date-fragile for three sweeps | 45 min | **done** 2026-09-06 — 0/2 verified in #7. Adding a second persona did NOT decorrelate: pull-up and muscle-up both rest on Sunday. Now asserts against the first non-rest capture of today/past/future; dry-run green on both personas. Found two more defects doing it — see below |
-| P1 | "Adjusted for you" claimed adjustments that never happened | 30 min | **done** 2026-09-06 — the notice rendered off `activeExclusions` (a property of the USER, true every day), so a muscle-up user saw "ring dip work is band-assisted only" above a session with no dip work at all. The original defect reversed. `exclusionsAffectingDay` scopes it to the day; undecidable cases keep the notice |
-| P2 | Persona sweep #8 — prove the deferral check finally runs | 31 min | **open** — the fix is dry-run green against sweep #7's artifacts, which is not the same as having run. Three sweeps in a row reported this path verified-by-nothing; the first sweep that prints "2/2 verified" is the first evidence it works |
-| P4 | Traffic: content, structured data, Search Console | days | **open, and blocked on the evidence page settling** — see `dev/active/traffic/` |
+| P2 | Persona sweep #8 — prove the deferral check finally runs | 31 min | **open** — the fix is dry-run green against sweep #7's artifacts, which is not the same as having run. Three sweeps in a row reported this path verified-by-nothing; the first sweep printing "2/2 verified" is the first evidence it works |
+| P4 | Traffic: content, structured data, Search Console | days | **open, blocked** on the VERIFIED badge and the evidence page settling — see `dev/active/traffic/` |
 
-## Yours
+## Yours — decisions only I cannot make
 
 | P | Task | Est | Status |
 |---|---|---|---|
+| P1 | **VERIFIED badge is a live public overclaim** | 30 min | **open** — all 8 public programmes carry `status: "REVIEWED"` → green VERIFIED on the app catalog and `review: "verified"` hardcoded on the landing, while all 124 citations render CITED (none carries a `status`). 45% verified clean. The app already contradicts itself. Blocks my traffic work |
+| P1 | **Overhead-mobility retest targets are inside measurement noise** | 1 h | **open, new 2026-09-07** — best-case supine goniometry MDC is 7–11° (Muir 2010, PMID 21589666). Push target is `+5-10`, Progression `+5-15`. The Push tier cannot detect its own success. Absolute targets 185/190° also exceed the measured healthy supine mean (177°, SD 6) |
+| P1 | Escalation rules: enforce or leave as guidance? | 30 min | **open** — six programmes declare "three red days → take a week off and consult a clinician". Read by one line, rendered in a default-collapsed accordion on `/plan` only. Nothing counts reds. Three *greens* is a counted trigger that adds load, and `select.ts:513` drops the caution proposal in favour of it. Delivery could reuse the proposal pipeline; the trigger needs new code and the six rules are prose |
 | P1 | **Background the app mid-set on Android** | 2 min | **open** — still the only real-device proof for four eviction fixes |
-| P1 | `ring_dip_count`: `warn` or `block`? | 10 min | **open, and now the ONLY question left in it** — the "Tier A unreachable" half was FALSE and is struck. The gate reads `ring_dip_count` (a select); the tiers read `ring_dip_max_reps` (a test). Nothing joins them |
-| P2 | Build `SELF_REPORT_TO_TEST_VAR` for muscle-up + overhead-mobility | 30 min | **open** — without it, a skipper's test vars are 0, `tier_b_transition` is unreachable, and everyone lands in the lowest tier. Needs your judgement on what "3-5 ring dips" maps to. Intake copy no longer promises a proxy in the meantime (done) |
-| P1 | Escalation rules: enforce or leave as guidance? | 30 min | **open** — six programmes declare "three red days -> take a week off and consult a clinician". Now displayed, not enforced. The engine has a mechanism for optimism (green streak -> add load) and none for caution |
-| P2 | Capability slots that yield nothing | 1 h | **open, and the reported symptom was the wrong one** — foundation never gets an empty block because `reference_week_foundation` never schedules loaded work AT ALL (phases 2 and 3 are named for it). The block that DOES ship empty is `block_thoracic_prep` for **push** users, 4 days/week, all 3 phases — both drills are level 1, push reads level 3. Three gaps pinned by a guard test |
-| P1 | VERIFIED badge | 30 min | **open, and it is a live public overclaim** — all 8 public programmes carry `status: "REVIEWED"` → green VERIFIED on the app catalog AND `review: "verified"` hardcoded on the landing, while every one of the 124 citations renders CITED (none carries a `status`). 45% verified clean. The app already contradicts itself |
-| P2 | Pull-up Tier B eccentric volume | 20 min | **narrowed** — the evidence question is settled (Spudic & Nosaka 2025: no advantage for a concentric goal) and the citation corrected. What remains is the entry-intensity ramp, which no study specifies |
+| P1 | `ring_dip_count`: `warn` or `block`? | 10 min | **open, and now the only question left in it** — the "Tier A unreachable" half was FALSE and is struck |
+| P2 | Withdraw `kilding_2012` and its claim — do not re-source | 20 min | **open, new 2026-09-07** — the rowing literature argues against it. Possamai 2022: critical power 37% above MLSS in rowing, "much larger than in running and cycling"; Beneke 1995: 4 mmol and IAT "do not represent MLSS workload". The programme never measures lactate — it prescribes a 2K-pace offset. `kilbey_2025` (PMID 40019691) is the honest replacement for a *differently worded* claim |
+| P2 | `kim_2013` → adopt `muir_2010`? | 20 min | **open, new 2026-09-07** — adding a citation adds a claim, so it is yours. Muir supports the reliability half and supplies the MDC that undermines the targets above |
+| P2 | Build `SELF_REPORT_TO_TEST_VAR` for muscle-up + overhead-mobility | 30 min | **open** — without it a skipper's test vars are 0, `tier_b_transition` is unreachable, and everyone lands in the lowest tier. Needs your call on what "3-5 ring dips" maps to. Intake copy no longer promises a proxy in the meantime |
+| P2 | Capability slots that yield nothing | 1 h | **open, and the reported symptom was the wrong one** — foundation never gets an empty block because `reference_week_foundation` never schedules loaded work at all (phases 2 and 3 are named for it). The block that DOES ship empty is `block_thoracic_prep` for **push** users, 4 days/week, all 3 phases. Three gaps pinned by a guard test |
+| P2 | Pull-up Tier B eccentric volume | 20 min | **narrowed** — evidence settled (Spudic & Nosaka 2025: no advantage for a concentric goal), citation corrected. What remains is the entry-intensity ramp, which no study specifies |
 | P2 | Muscle-up false-grip from Tier A | 20 min | **narrowed** — needs a coach, not a clinician. Walker 2023 suggests bar-before-rings |
-| P3 | Log Friday's two activities | 3 min | **open — checked, not stale.** Your 2026-09-04 has the hip drills (dead bug 3×6, 90/90 hip switch 3×12) and no `runs[]`. You logged a hyrox on Sep 6, so the mechanism works; Friday was never backfilled |
-| P3 | `starting_values_kg`: wire up or delete? | 20 min | **open** — pinned by a test. Deleting silently kills TM bumps |
-| P3 | Resend key — is a second one live? | 2 min | **still unchecked** — I tried the Resend connector and the permission classifier blocked the key listing. Needs you, or a permission grant |
+| P3 | Log Friday's two activities | 3 min | **open — checked, not stale** — 2026-09-04 has the hip drills (dead bug 3×6, 90/90 hip switch 3×12) and no `runs[]`. You logged a hyrox on Sep 6, so the mechanism works; Friday was never backfilled |
+| P3 | `starting_values_kg`: wire up or delete? | 20 min | **open** — pinned by a test. `Boolean(tms.starting_values_kg)` gates the whole TM-bump engine while none of its values are read; deleting it silently kills progression |
+| P3 | Resend key — is a second one live? | 2 min | **still unchecked** — the permission classifier blocked the connector's key listing. Needs you, or a permission grant |
 | P4 | SR-panel §C remainder, EVID-1, QA-1, S4, S3 billing | — | **open** — admin and prescription decisions |
+
+## Found but not yet triaged (from the 2026-09-07 integrity audit)
+
+| Item | Where | Class |
+|---|---|---|
+| muscle-up tier `starting_capability_levels`: 4 of 5 keys match no domain | `muscle-up.json` ↔ `plan-generator.ts:555` | DEAD — the 2026-09-06 rename moved block slots and not tier keys |
+| CSM amber rule enforced in code by hardcoded slug, and its data key is dead | `plan-generator.ts:83-102`, `CSM.json:502` | LIVE(code)/DEAD(data); the "resume at 3×4" half is unimplemented, and it may not fire on the production read path at all |
+| `shoulder_pain_stop_rule` consent recorded, never enforced or resurfaced | `muscle-up.json:382` | Same family as `shoulder_pain_stops_session` |
+| `authoring_note` is stripped by Zod | `schemas.ts:508-531` | DEAD — author-facing only, invisible to tooling |
 
 ## Blocked on data or infrastructure
 
@@ -44,12 +47,24 @@ snapshots. 33 commits on 2026-09-05/06; tests 674 -> 798.
 | F4 | EU object storage |
 | FLAG-5 | analytics decision |
 
-## Closed 2026-09-05/06
+## Closed 2026-09-05/07
 
-Failed-attempt logging · wall-clock timers x3 · session cursor · rest restore
-· Android `resume` listener · `true_non_response` suppressed · 44 citation
-overstatements · 7 wrong-paper URLs · 3 contradicting citations · duplicate
-ids merged · intake deferrals reaching production · 50 invisible rules · tier
-base level · taper phase schema · negative numbers in tier conditions ·
-per-capability independence · starting phase · HERITAGE compliance
-forwarding · sitemap + robots · 14 agent definitions now tracked
+**Sweeps and harness:** sweep #6 · sweep #7 (24 passed, checks 263→319, controls
+98%, 0 never-driven) · the 6-check drop explained (stale reports, not a
+regression) · `SWEEP_ID` stamping · `OffPlanSheet` + `NoteSheet` coverage ·
+`offplan-drill-library` flow · flow→surface map completed and guarded ·
+deferral check date fragility.
+
+**Engine:** failed-attempt logging · wall-clock timers ×3 · session cursor ·
+rest restore · Android `resume` listener · `true_non_response` suppressed ·
+intake deferrals reaching production · "Adjusted for you" scoped to the day ·
+`buildMetricCtx` delta · tier base level · taper phase schema · negative
+numbers in tier conditions · per-capability independence · starting phase ·
+HERITAGE compliance forwarding · 50 invisible rules.
+
+**Evidence:** 44 overstatements · 7 wrong-paper URLs · 3 contradicting
+citations · duplicate ids merged · 5 phantoms labelled · `ferrari_2021`
+withdrawn · `billat_2001` corrected (2001→2003, PMID 12744715) · 6 programme
+references that linked to search boxes · self-report proxy promise made honest.
+
+**Infra:** sitemap + robots · 14 agent definitions tracked.
