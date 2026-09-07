@@ -508,6 +508,7 @@
         "unsafe_values": [
           "yes"
         ],
+        "severity": "block",
         "block_title": "See your clinician first",
         "block_body": "Freestanding handstands and bail landings load the distal radius and vertebrae — common fracture sites in osteoporosis. This program isn't safe to start without medical clearance."
       },
@@ -516,6 +517,7 @@
         "unsafe_values": [
           "yes"
         ],
+        "severity": "block",
         "block_title": "See your clinician first",
         "block_body": "Inversions transiently spike systolic pressure. Get hypertension controlled before adding inverted training."
       },
@@ -524,6 +526,7 @@
         "unsafe_values": [
           "true"
         ],
+        "severity": "block",
         "block_title": "Wait for the acute injury to resolve",
         "block_body": "An acute wrist injury needs healing time and clinical assessment. Come back once you're cleared to load the wrist."
       },

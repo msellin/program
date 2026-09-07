@@ -379,6 +379,7 @@
         "unsafe_values": [
           "yes"
         ],
+        "severity": "block",
         "block_title": "See your clinician first",
         "block_body": "The Norwegian 4x4 sessions push HR near max. Unmanaged hypertension makes that unsafe. Get BP treated before starting."
       },
@@ -387,6 +388,7 @@
         "unsafe_values": [
           "true"
         ],
+        "severity": "block",
         "block_title": "Work with a specialist",
         "block_body": "HR-based zones are unreliable during first-trimester pregnancy. Work with a specialist to adapt cardio prescription."
       },
@@ -395,6 +397,7 @@
         "unsafe_values": [
           "true"
         ],
+        "severity": "block",
         "block_title": "Get full cardiac clearance first",
         "block_body": "History of exertional syncope or unexplained cardiac symptoms is a full-clearance prerequisite before any high-intensity program."
       },
@@ -403,6 +406,7 @@
         "unsafe_values": [
           "true"
         ],
+        "severity": "block",
         "block_title": "Wait for baseline HR to normalise",
         "block_body": "Persistent HR elevation post-COVID means the cardiovascular system is still recovering. Interval work now can prolong recovery. Return when resting HR is back to baseline."
       },
@@ -411,6 +415,7 @@
         "unsafe_values": [
           "true"
         ],
+        "severity": "block",
         "block_title": "Stay on low-impact modality",
         "block_body": "A flaring joint or tendon condition means don't add the running variant of intervals in week 5. Consider the cycling/rowing/erg version — or wait until the flare is resolved."
       },

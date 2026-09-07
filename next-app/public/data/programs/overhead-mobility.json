@@ -349,6 +349,7 @@
         "unsafe_values": [
           "yes"
         ],
+        "severity": "block",
         "block_title": "See your physio first",
         "block_body": "A diagnosed rotator-cuff tear needs a rehab pathway, not a mobility program. Return once cleared for overhead loading."
       },
@@ -357,6 +358,7 @@
         "unsafe_values": [
           "true"
         ],
+        "severity": "block",
         "block_title": "Get clinician clearance first",
         "block_body": "Recent dislocation requires clinician clearance and typically capsule-stability work before overhead ROM work is safe."
       },
@@ -365,6 +367,7 @@
         "unsafe_values": [
           "true"
         ],
+        "severity": "block",
         "block_title": "Settle the neck first",
         "block_body": "Cervical radicular symptoms need their own workup. Overhead ROM work can amplify a nerve-root irritation."
       },

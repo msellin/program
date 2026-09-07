@@ -365,6 +365,7 @@
         "unsafe_values": [
           "true"
         ],
+        "severity": "block",
         "block_title": "Wait for the acute injury to resolve",
         "block_body": "An acute shoulder injury needs healing time and clinical assessment. Come back once you're cleared to load the shoulder in a hang position."
       },

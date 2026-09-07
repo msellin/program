@@ -359,6 +359,7 @@
         "unsafe_values": [
           "no"
         ],
+        "severity": "block",
         "block_title": "Build the base first",
         "block_body": "Block 2 stacks two hard sessions per week on top of a Z1 volume floor. Without the aerobic base Block 1 (or an equivalent) builds, this block will over-fatigue you and under-adapt. Start with Engine Builder Block 1."
       },
@@ -367,6 +368,7 @@
         "unsafe_values": [
           "yes"
         ],
+        "severity": "block",
         "block_title": "See your clinician first",
         "block_body": "The threshold and Norwegian 4×4 sessions push HR near max. Unmanaged hypertension makes that unsafe. Get BP treated before starting."
       },
@@ -375,6 +377,7 @@
         "unsafe_values": [
           "true"
         ],
+        "severity": "block",
         "block_title": "Get full cardiac clearance first",
         "block_body": "History of exertional syncope or unexplained cardiac symptoms is a full-clearance prerequisite before any high-intensity program."
       },
@@ -383,6 +386,7 @@
         "unsafe_values": [
           "true"
         ],
+        "severity": "block",
         "block_title": "Wait for baseline HR to normalise",
         "block_body": "Persistent HR elevation post-COVID means the cardiovascular system is still recovering. Interval work now can prolong recovery."
       },

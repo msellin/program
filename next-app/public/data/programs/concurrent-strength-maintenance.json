@@ -244,6 +244,7 @@
         "unsafe_values": [
           "yes"
         ],
+        "severity": "block",
         "block_title": "See your clinician first",
         "block_body": "Unmanaged hypertension makes high-intensity interval work unsafe. Get BP under management before starting concurrent programming."
       },
@@ -252,6 +253,7 @@
         "unsafe_values": [
           "true"
         ],
+        "severity": "block",
         "block_title": "Get full cardiac clearance first",
         "block_body": "History of exertional syncope requires medical clearance before any interval-based program."
       },
@@ -260,6 +262,7 @@
         "unsafe_values": [
           "true"
         ],
+        "severity": "block",
         "block_title": "Resolve the flare first",
         "block_body": "Running-based intervals will amplify a flaring tendon. Consider deferring, or the strength-only variant while it settles."
       },

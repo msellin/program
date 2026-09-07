@@ -300,6 +300,7 @@
         "unsafe_values": [
           "yes"
         ],
+        "severity": "block",
         "block_title": "See your clinician first",
         "block_body": "Threshold and race-pace rowing pushes HR near max. Unmanaged hypertension makes that unsafe."
       },
@@ -308,6 +309,7 @@
         "unsafe_values": [
           "true"
         ],
+        "severity": "block",
         "block_title": "Get cardiac clearance first",
         "block_body": "History of exertional syncope requires clearance before any high-intensity program."
       },
@@ -316,6 +318,7 @@
         "unsafe_values": [
           "true"
         ],
+        "severity": "block",
         "block_title": "See your clinician first",
         "block_body": "Recent chest pain / SOB is a red flag. Defer high-intensity work pending workup."
       },
@@ -324,6 +327,7 @@
         "unsafe_values": [
           "true"
         ],
+        "severity": "block",
         "block_title": "Resolve the flare first",
         "block_body": "Rowing loads the lumbar spine. Come back once the low back is settled."
       },
