@@ -1,7 +1,7 @@
 # Open tasks — as of 2026-09-07
 
 Live register. Supersedes the task lists inside the handovers, which are
-snapshots. 39 commits on 2026-09-05/07; tests 674 -> 805.
+snapshots. 44 commits on 2026-09-05/07; tests 674 -> 828.
 
 ## Mine
 
@@ -14,13 +14,9 @@ snapshots. 39 commits on 2026-09-05/07; tests 674 -> 805.
 
 | P | Task | Est | Status |
 |---|---|---|---|
-| P1 | **VERIFIED badge is a live public overclaim** | 30 min | **open** — all 8 public programmes carry `status: "REVIEWED"` → green VERIFIED on the app catalog and `review: "verified"` hardcoded on the landing, while all 124 citations render CITED (none carries a `status`). 45% verified clean. The app already contradicts itself. Blocks my traffic work |
-| P1 | **Overhead-mobility retest targets are inside measurement noise** | 1 h | **open, new 2026-09-07** — best-case supine goniometry MDC is 7–11° (Muir 2010, PMID 21589666). Push target is `+5-10`, Progression `+5-15`. The Push tier cannot detect its own success. Absolute targets 185/190° also exceed the measured healthy supine mean (177°, SD 6) |
-| P1 | Escalation rules: enforce or leave as guidance? | 30 min | **open** — six programmes declare "three red days → take a week off and consult a clinician". Read by one line, rendered in a default-collapsed accordion on `/plan` only. Nothing counts reds. Three *greens* is a counted trigger that adds load, and `select.ts:513` drops the caution proposal in favour of it. Delivery could reuse the proposal pipeline; the trigger needs new code and the six rules are prose |
-| P1 | **Background the app mid-set on Android** | 2 min | **open** — still the only real-device proof for four eviction fixes |
-| P1 | `ring_dip_count`: `warn` or `block`? | 10 min | **open, and now the only question left in it** — the "Tier A unreachable" half was FALSE and is struck |
+| P1 | **Background the app mid-set on Android** | 2 min | **open — the only P1 left, and I cannot do it.** Real-device proof for four eviction fixes |
+| P2 | **Overhead-mobility Push targets** | 20 min | **open, narrowed** — Progression 180° → Push 185° is a 5° step inside the metric's own 9° MDC, so a Push user cannot demonstrate reaching anything Progression did not. Stretch 190° is >2 SD above the measured healthy supine mean (177°, SD 6). Recorded as an ACCEPTED exception in `measurement-error.test.ts`; moving a target is yours |
 | P2 | Withdraw `kilding_2012` and its claim — do not re-source | 20 min | **open, new 2026-09-07** — the rowing literature argues against it. Possamai 2022: critical power 37% above MLSS in rowing, "much larger than in running and cycling"; Beneke 1995: 4 mmol and IAT "do not represent MLSS workload". The programme never measures lactate — it prescribes a 2K-pace offset. `kilbey_2025` (PMID 40019691) is the honest replacement for a *differently worded* claim |
-| P2 | `kim_2013` → adopt `muir_2010`? | 20 min | **open, new 2026-09-07** — adding a citation adds a claim, so it is yours. Muir supports the reliability half and supplies the MDC that undermines the targets above |
 | P2 | Build `SELF_REPORT_TO_TEST_VAR` for muscle-up + overhead-mobility | 30 min | **open** — without it a skipper's test vars are 0, `tier_b_transition` is unreachable, and everyone lands in the lowest tier. Needs your call on what "3-5 ring dips" maps to. Intake copy no longer promises a proxy in the meantime |
 | P2 | Capability slots that yield nothing | 1 h | **open, and the reported symptom was the wrong one** — foundation never gets an empty block because `reference_week_foundation` never schedules loaded work at all (phases 2 and 3 are named for it). The block that DOES ship empty is `block_thoracic_prep` for **push** users, 4 days/week, all 3 phases. Three gaps pinned by a guard test |
 | P2 | Pull-up Tier B eccentric volume | 20 min | **narrowed** — evidence settled (Spudic & Nosaka 2025: no advantage for a concentric goal), citation corrected. What remains is the entry-intensity ramp, which no study specifies |
@@ -68,3 +64,13 @@ withdrawn · `billat_2001` corrected (2001→2003, PMID 12744715) · 6 programme
 references that linked to search boxes · self-report proxy promise made honest.
 
 **Infra:** sitemap + robots · 14 agent definitions tracked.
+
+**The four P1 decisions, 2026-09-07:** VERIFIED badge derived from citation
+verification rather than asserted in the manifest (all 8 demoted to CITED,
+which is true) · 26 safety gates that were blocking by omission now declare
+`severity: "block"`, `ring_dip_count` included and its warn/block question
+resolved in the safe direction · measurement error respected — MDC forwarded
+end-to-end, within-error deltas muted instead of green, tier gap at 160-165
+closed, `muir_2010` adopted for the phantom `kim_2013` · escalation surfaced —
+`redStreak` counts what `evaluateOverperformer` never had a counterpart for,
+and BriefView shows the programme's own sentence at the moment it applies.
