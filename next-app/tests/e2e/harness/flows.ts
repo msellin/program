@@ -284,6 +284,44 @@ async function enterSetFlow(ctx: FlowContext): Promise<void> {
   await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
 }
 
+/**
+ * Move to an exercise that still has a set with rest AFTER it.
+ *
+ * `enterSetFlow` lands wherever the simulator left off, and where that is the
+ * LAST set of an exercise, logging it correctly opens no rest takeover —
+ * there is nothing to rest before. Every rest-dependent flow then skipped or
+ * cut short, and the fleet total moved with it: sweep #8 lost seventeen
+ * behavioural checks against sweep #7 purely because more personas happened
+ * to land on a final set. Nothing about the app had changed. `session-cold-
+ * reload` on `persona-muscleup` opened on "HOLLOW BODY HOLD · SET 3 OF 3".
+ *
+ * Which set you land on depends on how far the simulator got, which depends
+ * on the date — so this is the same date-sensitivity that made the deferral
+ * assertion skip three sweeps running, wearing different clothes.
+ *
+ * Returns false when no such exercise exists, so a caller can skip with an
+ * honest reason instead of reporting a rest failure that is really a
+ * scheduling fact.
+ */
+async function moveToSetWithRestAfter(ctx: FlowContext): Promise<boolean> {
+  const rail = ctx.page.locator('[data-surface="SetView"] [role="tab"], [data-rail-exercise]');
+  const count = await rail.count().catch(() => 0);
+  for (let i = 0; i < count; i++) {
+    const label = (await rail.nth(i).textContent().catch(() => "")) ?? "";
+    // Rail labels carry progress as "Name2/6" — logged/total in one node.
+    const m = label.match(/(\d+)\s*\/\s*(\d+)\s*$/);
+    if (!m) continue;
+    const [logged, total] = [Number(m[1]), Number(m[2])];
+    // Need at least two unlogged sets: one to log, one for the rest to
+    // precede. One remaining set is exactly the case that opens no rest.
+    if (total - logged < 2) continue;
+    await rail.nth(i).click({ timeout: CLICK_TIMEOUT_MS }).catch(() => {});
+    await ctx.page.waitForTimeout(400);
+    return true;
+  }
+  return false;
+}
+
 /** Log the currently-shown set, whatever its shape. */
 /**
  * The rest takeover's countdown in whole seconds, or null when it is not
@@ -591,6 +629,10 @@ export const FLOWS: Flow[] = [
        * than on a sweep.
        */
       await enterSetFlow(ctx);
+      // A final set opens no rest, which silently costs this flow its two
+      // rest checks. Try to stand somewhere the rest path is reachable; if
+      // nothing qualifies, carry on — check 1 is still worth running.
+      await moveToSetWithRestAfter(ctx);
       await ctx.capture("01-mid-set");
       const before = await ctx.page
         .locator('[data-surface="SetView"] span')
@@ -653,6 +695,12 @@ export const FLOWS: Flow[] = [
        * rather than in the middle of one with three assertions after it.
        */
       await enterSetFlow(ctx);
+      if (!(await moveToSetWithRestAfter(ctx))) {
+        // Honest reason. "rest takeover did not open" was reported for this
+        // eleven times in sweep #8 and meant, every time, that the persona
+        // was standing on the last set of an exercise.
+        throw new SkipFlow("no exercise has two sets left, so no rest follows");
+      }
       await logCurrentSet(ctx);
       await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
       if ((await ctx.page.locator('[data-surface="RestTakeover"]').count()) === 0) {
@@ -684,6 +732,12 @@ export const FLOWS: Flow[] = [
     desc: "The rest takeover — timer, effort scale, jump sheet",
     async run(ctx) {
       await enterSetFlow(ctx);
+      if (!(await moveToSetWithRestAfter(ctx))) {
+        // Honest reason. "rest takeover did not open" was reported for this
+        // eleven times in sweep #8 and meant, every time, that the persona
+        // was standing on the last set of an exercise.
+        throw new SkipFlow("no exercise has two sets left, so no rest follows");
+      }
       await logCurrentSet(ctx);
       await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
       const rest = ctx.page.locator('[data-surface="RestTakeover"]');
