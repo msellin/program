@@ -1342,6 +1342,28 @@ export const storeSchema = z.object({
   version: z.literal(2),
   logs: z.record(z.string(), dayLogSchema),
   training_maxes: z.record(z.string(), z.number()),
+  /**
+   * How each training max got its value. Additive and optional on purpose —
+   * `training_maxes` stays a plain number map, because ten components read it
+   * as one and changing that shape to carry provenance would be a rewrite in
+   * exchange for nothing.
+   *
+   * Without this a TM is a bare number and nobody can tell a measured one from
+   * one ratcheted up by eight accepted proposals since anything was last
+   * measured. `staleness` in particular is the question the engine could never
+   * ask: how many increments ago was the last actual evidence?
+   */
+  training_max_provenance: z
+    .record(
+      z.string(),
+      z.object({
+        source: z.enum(["manual", "test", "bump", "cycle", "intake"]),
+        at: z.string(),
+        /** Violations recorded at write time — a manual override keeps its receipt. */
+        overrode: z.array(z.string()).optional(),
+      }),
+    )
+    .optional(),
   cycle: z.object({
     phase_id: z.string().nullable(),
     cycle_number: z.number(),

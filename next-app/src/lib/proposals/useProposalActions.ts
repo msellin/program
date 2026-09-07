@@ -59,7 +59,7 @@ export function useProposalActions(proposal: Proposal, date: string) {
       }
       case "tm_bump": {
         for (const l of proposal.lifts) {
-          setTM(l.exerciseId, l.newTM);
+          setTM(l.exerciseId, l.newTM, "bump");
           // Bug fix 2026-08-22 · founder report — Accept without dismiss
           // let the engine re-fire the same tm_bump on the next render
           // using the newly-bumped TM as currentTM, so a fast tapper could

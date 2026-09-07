@@ -8,6 +8,7 @@ import type { Store, DayLog, ExerciseLog, SetLog, Program, RunLog, Proposal } fr
 import { today, iso } from "./utils";
 import { snapshotCitation } from "./engine/citations";
 import { announce } from "./announce";
+import { validateTMWrite, type TMSource } from "./engine/tm-write";
 
 /**
  * Save to persistence AND fire a debounced remote push.
@@ -73,7 +74,7 @@ type StoreState = {
   store: Store;
   hydrated: boolean;
   hydrate: () => void;
-  setTM: (exId: string, kg: number | null) => void;
+  setTM: (exId: string, kg: number | null, source?: TMSource) => void;
   updateSet: (
     blockId: string,
     exId: string,
@@ -446,11 +447,55 @@ export const useStore = create<StoreState>((set, get) => ({
     });
   },
 
-  setTM: (exId, kg) => {
+  /**
+   * The single place a training max changes — and now the single place that
+   * knows what a plausible one is.
+   *
+   * Five call sites reach this: a manual edit on Profile, an accepted
+   * suggestion on the exercise card, the cycle-rollover bump, the adaptive
+   * `tm_bump` proposal, and intake. None of them consulted
+   * `tm-plausibility`, which is how the engine came to propose a front-squat
+   * TM of 112.5 to a user who had maxed 115 at RPE 10 six days earlier.
+   *
+   * A choke point that validates is worth more than five call sites that
+   * remember to. `source` defaults to "manual" so an un-migrated caller gets
+   * the permissive path rather than a silently blocked write — failing open
+   * for a human edit is the safe direction here, and every automated caller
+   * is passing its source explicitly.
+   */
+  setTM: (exId, kg, source = "manual") => {
     const s = { ...get().store };
     s.training_maxes = { ...s.training_maxes };
-    if (kg == null || !isFinite(kg) || kg <= 0 || kg > 500) delete s.training_maxes[exId];
-    else s.training_maxes[exId] = kg;
+    if (kg == null || !isFinite(kg) || kg <= 0 || kg > 500) {
+      delete s.training_maxes[exId];
+      if (s.training_max_provenance) {
+        s.training_max_provenance = { ...s.training_max_provenance };
+        delete s.training_max_provenance[exId];
+      }
+      commit(s);
+      set({ store: s });
+      return;
+    }
+
+    const verdict = validateTMWrite(s, exId, kg, source);
+    if (!verdict.ok) {
+      // Refused, and deliberately silent to the store: the engine does not get
+      // to write a training max the log rules out. Surfacing it is the
+      // proposal layer's job, which holds the verdict.
+      return;
+    }
+
+    s.training_maxes[exId] = kg;
+    s.training_max_provenance = {
+      ...(s.training_max_provenance ?? {}),
+      [exId]: {
+        source,
+        at: new Date().toISOString(),
+        ...(verdict.violations.length
+          ? { overrode: verdict.violations.map((v) => v.kind) }
+          : {}),
+      },
+    };
     commit(s);
     set({ store: s });
   },

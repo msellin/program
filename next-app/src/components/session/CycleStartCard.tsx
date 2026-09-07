@@ -94,7 +94,7 @@ export function CycleStartCard({
             // value back to the original proposed number.
             onAccept(null);
             if (Object.keys(overrides).length) {
-              for (const l of bump.lifts) setTM(l.exerciseId, effectiveNewTM(l.exerciseId, l.newTM));
+              for (const l of bump.lifts) setTM(l.exerciseId, effectiveNewTM(l.exerciseId, l.newTM), "cycle");
             }
           }}
           className="flex-1 h-[52px] rounded-[9px] bg-slate text-ground text-[15.5px] font-semibold"
