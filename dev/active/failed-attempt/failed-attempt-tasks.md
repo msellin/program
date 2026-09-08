@@ -15,7 +15,7 @@
 - [x] `npm run verify` — 698 passing
 - [x] eslint + tsc clean
 - [x] Production build check
-- [ ] Commit and push
+- [x] Commit and push — done 2026-09-05, failed-attempt logging shipped.
 - [~] ~~Founder logs the 122 through the UI~~ — **dropped 2026-09-04, founder's
   call.** Do not raise it again. Backfilling it would change no output: the
   check is already silent on front squat and stays silent with the 122 in

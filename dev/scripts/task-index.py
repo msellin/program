@@ -63,6 +63,11 @@ def build() -> str:
     for path in sorted(ROOT.glob("dev/**/*.md")):
         if path == INDEX:
             continue
+        # Archived originals are history, not queue. Counting them made the
+        # first triage pass INCREASE the backlog by 12, which is the clearest
+        # possible sign that a number was measuring the wrong thing.
+        if any(part in ("archive", "completed") for part in path.parts):
+            continue
         c = counts(path)
         total = sum(c.values())
         if total < MIN_ITEMS:

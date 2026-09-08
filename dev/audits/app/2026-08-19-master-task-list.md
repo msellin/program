@@ -416,22 +416,44 @@ Not tasks — calls to make.
 
 ---
 
+## Section H — carried forward from `tomorrow-2026-08-19.md` (archived 2026-09-08)
+
+That file was a one-day plan from three weeks ago: 9 done, 3 obsolete, 2 founder
+calls that belong in Section F. Two items were genuinely unshipped and genuinely
+useful, so they move here rather than dying with it.
+
+- [ ] **H1 — the simulator never seeds baselines.** The writer exists
+      (`simulator-v2.ts:388-410`, `:816-838`) but **0 of 23 personas define
+      `capabilitySeed`**, only 2 define `intakeAnswers`, and `capability_profile`
+      is `{}` in all 23 `final-store.json` artifacts. The `bumpBy` ramp loops
+      over an empty object every persona-day, and every baseline-dependent
+      surface in the app is unexercised by the fleet.
+- [ ] **H2 — delete `store.cycle.phase_id`.** `useStore.ts:408` still writes
+      `phase_id: null`. The item originally offered "wire a writer or delete";
+      the wire option died with `coach-client.ts` in the R12 kill. Delete-only.
+
 ## Section G — Rejected (do NOT ship)
+
+> Re-encoded 2026-09-08. These were written as `- [ ]`, so every task counter in
+> the repo read twelve settled REJECTIONS as twelve open tasks — a decision
+> register masquerading as a queue. They are now plain bullets. A rejection is
+> not work outstanding, and it should never again inflate a backlog number.
+
 
 Deduplicated across visual-craft §16 + mobile-ux §10 + roadmap:
 
-- [ ] **R1** Photography anywhere in the app.
-- [ ] **R2** Second primary accent — nothing competes with bronze for CTA.
-- [ ] **R3** H1 larger than 32 px — no Whoop score-donut, no Whoop-scale hero.
-- [ ] **R4** Softer mono-caps everywhere — mono is Terav's technical identity.
-- [ ] **R5** Streak / challenge / gamification counters — violates confirm-first, cite-the-paper contract.
-- [ ] **R6** Filling Coach empty-state fold — absence is honest.
-- [ ] **R7** Runna-style drag-to-reschedule — breaks confirm-first; explicit MoveSheet is stronger.
-- [ ] **R8** Whoop-style autonomous score-hero — wrong tone for confirm-first.
-- [ ] **R9** Pliability-style "one arc per day" — Terav's multi-track is a deliberate feature.
-- [ ] **R10** Video form analysis as paid pillar — Concern C evidence stands (kill from `product-concerns-2026-08-17/roadmap.md`).
-- [ ] **R11** Cross-user note aggregation at beta scale — Concern D, deferred until N > 1000.
-- [ ] **R12** Coach chat surface — shelved 2026-08-19 (S1 kill). AI-token costs don't pencil until N ≥ 50 users. `/coach` route + `coach-client.ts` deleted; restore when the paid-user base can amortize per-turn LLM cost.
+- **R1** Photography anywhere in the app.
+- **R2** Second primary accent — nothing competes with bronze for CTA.
+- **R3** H1 larger than 32 px — no Whoop score-donut, no Whoop-scale hero.
+- **R4** Softer mono-caps everywhere — mono is Terav's technical identity.
+- **R5** Streak / challenge / gamification counters — violates confirm-first, cite-the-paper contract.
+- **R6** Filling Coach empty-state fold — absence is honest.
+- **R7** Runna-style drag-to-reschedule — breaks confirm-first; explicit MoveSheet is stronger.
+- **R8** Whoop-style autonomous score-hero — wrong tone for confirm-first.
+- **R9** Pliability-style "one arc per day" — Terav's multi-track is a deliberate feature.
+- **R10** Video form analysis as paid pillar — Concern C evidence stands (kill from `product-concerns-2026-08-17/roadmap.md`).
+- **R11** Cross-user note aggregation at beta scale — Concern D, deferred until N > 1000.
+- **R12** Coach chat surface — shelved 2026-08-19 (S1 kill). AI-token costs don't pencil until N ≥ 50 users. `/coach` route + `coach-client.ts` deleted; restore when the paid-user base can amortize per-turn LLM cost.
 
 ---
 

@@ -53,4 +53,4 @@ trusting the code:
 - [x] R2-6 · seed contraindications (in the daily loop — seedStore is pre-hydration and gets clobbered); widen the dismissed/proposal_history gate
 - [x] R2-7 · CONSISTENT_AVERAGE's life_load was hardcoded flat, one point under amber — its own lifeLoad(d) was dead code
 - [x] Re-run the sweep against prod — surfaces 92.3%, store 97.7%, controls 91.7%, 148 checks / 0 failures
-- [ ] Docs + commit
+- [x] Docs + commit — done; the harness work shipped across sweeps #5-#8.

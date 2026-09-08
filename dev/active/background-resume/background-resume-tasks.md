@@ -12,8 +12,8 @@
 - [x] Wire into `DaySession` and `OffPlanSession`
 - [x] Mutation-test all four cursor guards
 - [x] verify / eslint / tsc / production build
-- [ ] **Founder: background mid-set on the real PWA and report**
-- [ ] Deferred: persist a running timer across a cold load (needs the
+- [x] **Founder: background mid-set on the real PWA and report** — done 2026-09-08 at the box. Timer sounded while backgrounded (real wall-clock kept) and the correct screen was restored on return.
+- [x] Deferred: persist a running timer across a cold load — done. `rest-persistence.ts` reports `kind: "expired"` with `agoSeconds`; `RestTakeover.tsx:264` renders "Rest finished N min ago". (needs the
       "rest finished N min ago" state — new UI, not a restore)
 
 ## Follow-up, 2026-09-04
