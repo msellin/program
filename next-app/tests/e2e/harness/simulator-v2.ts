@@ -516,7 +516,7 @@ export async function runSimulationV2(
     });
 
     await page.evaluate(
-      ({ dateISO, decision, blockIds, aerobicRuns, symptoms, derivedState, note, tms, factor, baseRpe, jitter, itemsByBlock, slug, extras, uid, tier, intakeAnswers, partialSession, dismissToday, acceptRate, retestToday, retestMetricIds, moveToday }) => {
+      ({ dateISO, decision, blockIds, aerobicRuns, symptoms, derivedState, note, tms, factor, baseRpe, jitter, itemsByBlock, slug, extras, uid, tier, intakeAnswers, capabilitySeed, partialSession, dismissToday, acceptRate, retestToday, retestMetricIds, moveToday }) => {
         // Read local, or start from a valid baseline if StoreHydrator wiped
         // us during the initial page.goto (see: reset-on-fresh-mount bug).
         const raw = localStorage.getItem("program.log.v2");
@@ -571,8 +571,36 @@ export async function runSimulationV2(
               ...(Object.keys(intakeAnswers ?? {}).length && !priorState.intake_answers
                 ? { intake_answers: { ...intakeAnswers } }
                 : {}),
+              /**
+               * Re-applied every day, not just at setup.
+               *
+               * `CAPABILITY_SEEDS` has covered handstand-walk and
+               * overhead-mobility since Batch 3b, and on 2026-09-08
+               * `capability_profile` and `baseline_capabilities` were EMPTY in
+               * all 23 `final-store.json` artifacts — including both of those
+               * programmes. The seed was written at setup and lost before day
+               * one, so `bumpBy` has been looping over an empty object every
+               * persona-day and every baseline-dependent surface in the app
+               * went unexercised by the fleet.
+               *
+               * Re-applying here rather than hunting the clobber: this is the
+               * point where the value has to be true, and a seed that survives
+               * whatever resets the store is worth more than knowing which
+               * navigation dropped it.
+               */
+              ...(Object.keys(capabilitySeed ?? {}).length && !priorState.baseline_capabilities
+                ? { baseline_capabilities: { ...capabilitySeed } }
+                : {}),
             },
           };
+          if (Object.keys(capabilitySeed ?? {}).length) {
+            const nowIso = new Date().toISOString();
+            const caps = { ...(store.user_profile.capability_profile ?? {}) };
+            for (const [k, v] of Object.entries(capabilitySeed)) {
+              if (caps[k] == null) caps[k] = { measured_value: v, measured_at: nowIso };
+            }
+            store.user_profile.capability_profile = caps;
+          }
         }
         store.training_maxes = { ...tms, ...store.training_maxes };
         if (store.cycle == null) {
@@ -709,6 +737,21 @@ export async function runSimulationV2(
               id: "day-adjustment",
               kind: "day_adjustment_soften",
               outcome: "ignored",
+              /**
+               * SYNTHETIC. The simulator writes this literal; it never invokes
+               * `selectProposals`, `selectTMBump` or `evaluateOverperformer`.
+               *
+               * On 2026-09-08 all 271 `proposal_history` entries across all 23
+               * personas were this one hardcoded shape — 0 accepted, 0
+               * `tm_bump`, 0 `tier_advance`. Anything asserted about proposal
+               * SELECTION against a persona store is therefore asserted against
+               * a constant.
+               *
+               * The tour and flows still drive the real app in a real browser,
+               * so proposals that RENDER are genuine. The flag keeps that line
+               * visible instead of leaving it to be rediscovered.
+               */
+              synthetic: true,
               at: new Date(dateISO + "T18:00:00Z").getTime(),
               date: dateISO,
             },
@@ -772,6 +815,7 @@ export async function runSimulationV2(
         uid: sessionUid,
         tier: tier ?? null,
         intakeAnswers: intakeAnswers ?? {},
+        capabilitySeed,
         // ~1 logging day in 5 stops mid-session. Seeded off the day index
         // rather than Math.random so a persona's partial days are stable
         // across re-runs and an auditor comparing two sweeps isn't reading

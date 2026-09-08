@@ -100,15 +100,15 @@ workstream with many open items and an old date is stalled, not busy.
 | [saas-launch](dev/active/saas-launch/tasks.md) | 60 | 0 | 0 | 48 | 2026-08-18 |
 | [video-analysis](dev/active/video-analysis/tasks.md) ⚠ | 42 | 1 | 2 | 11 | 2026-09-01 |
 | [saas-launch](dev/active/saas-launch/plan.md) | 36 | 0 | 0 | 0 | 2026-08-15 |
-| [app](dev/audits/app/2026-08-19-open-task-list.md) | 9 | 0 | 0 | 0 | 2026-08-19 |
-| [app](dev/audits/app/2026-08-19-master-task-list.md) | 6 | 2 | 0 | 252 | 2026-09-03 |
-| [post-audit-p0s](dev/active/post-audit-p0s/implementation-plan.md) | 7 | 0 | 0 | 0 | 2026-08-17 |
-| [batch-36](dev/active/batch-36/tasks.md) | 6 | 0 | 0 | 0 | 2026-08-20 |
+| [app](dev/audits/app/2026-08-19-open-task-list.md) | 9 | 0 | 0 | 0 | 2026-09-08 |
+| [app](dev/audits/app/2026-08-19-master-task-list.md) | 6 | 2 | 0 | 252 | 2026-09-08 |
+| [post-audit-p0s](dev/active/post-audit-p0s/implementation-plan.md) | 7 | 0 | 0 | 0 | 2026-09-08 |
+| [batch-36](dev/active/batch-36/tasks.md) | 6 | 0 | 0 | 0 | 2026-09-08 |
 | [traffic](dev/active/traffic/traffic-tasks.md) | 4 | 0 | 0 | 4 | 2026-09-06 |
-| [failed-attempt](dev/active/failed-attempt/failed-attempt-tasks.md) | 0 | 1 | 0 | 16 | 2026-09-04 |
+| [failed-attempt](dev/active/failed-attempt/failed-attempt-tasks.md) | 0 | 1 | 0 | 16 | 2026-09-08 |
 | [sr-panel-c](dev/active/sr-panel-c/sr-panel-c-tasks.md) | 1 | 0 | 0 | 10 | 2026-09-05 |
-| [background-resume](dev/active/background-resume/background-resume-tasks.md) | 0 | 0 | 0 | 17 | 2026-09-04 |
-| [harness-coverage](dev/active/harness-coverage/tasks.md) | 0 | 0 | 0 | 20 | 2026-08-27 |
+| [background-resume](dev/active/background-resume/background-resume-tasks.md) | 0 | 0 | 0 | 17 | 2026-09-08 |
+| [harness-coverage](dev/active/harness-coverage/tasks.md) | 0 | 0 | 0 | 20 | 2026-09-08 |
 | [offplan-flag](dev/active/offplan-flag/tasks.md) | 0 | 0 | 0 | 12 | 2026-08-24 |
 | [optional-items](dev/active/optional-items/tasks.md) | 0 | 0 | 0 | 8 | 2026-09-03 |
 | [personal-cue-separation](dev/active/personal-cue-separation/tasks.md) | 0 | 0 | 0 | 11 | 2026-09-01 |
