@@ -120,16 +120,61 @@ export function applyProgramSoftening(
    * watched it survive.
    */
   const today = new Date(dateISO + "T00:00:00");
-  let amberCount = 0;
-  for (let back = 0; back < 7; back++) {
-    const d = new Date(today);
-    d.setDate(today.getDate() - back);
-    const key = iso(d);
-    if (store.logs?.[key]?.derived_state === "amber") amberCount++;
-  }
-  if (amberCount < 3) return blocks;
+  /** Amber days in the 7-day window ending `offset` days before `dateISO`. */
+  const ambersInWeekEnding = (offset: number): number => {
+    let n = 0;
+    for (let back = offset; back < offset + 7; back++) {
+      const d = new Date(today);
+      d.setDate(today.getDate() - back);
+      if (store.logs?.[iso(d)]?.derived_state === "amber") n++;
+    }
+    return n;
+  };
 
-  return blocks.filter((b) => b.id !== "block_4x4_row");
+  if (ambersInWeekEnding(0) >= 3) {
+    return blocks.filter((b) => b.id !== "block_4x4_row");
+  }
+
+  /**
+   * "…resume next week at 3×4" — the other half of the rule (2026-09-11).
+   *
+   * The programme's red state reads: "drop 4×4 for a week; resume next week at
+   * 3×4." Only the drop was implemented. Once the amber days aged out of the
+   * window the block came back at FULL 4×4, so a user went from withdrawn
+   * straight back to the hardest aerobic session in the programme, skipping
+   * the step the programme put there to catch them.
+   *
+   * The resume week is detected the same way the drop is, one week further
+   * back: the previous window triggered and this one does not. No new stored
+   * state, so it cannot drift out of sync with the drop it follows.
+   *
+   * The prescription lives in `name` and `note` — this block authors no items
+   * — so reducing the dose means rewriting those, and only those. The
+   * `≥6h from any lift` constraint and the HR target are carried through
+   * untouched: this is a volume reduction, not a different session.
+   *
+   * The THRESHOLD is still code, not data. Making
+   * `progression_rules.states[]` live would put nine unreviewed threshold sets
+   * on the decision that tells someone not to train, which CLAUDE.md rules out
+   * deliberately. What is implemented here is the programme's own authored
+   * ACTION at a threshold that was already ours.
+   */
+  if (ambersInWeekEnding(7) >= 3) {
+    return blocks.map((b) =>
+      b.id === "block_4x4_row"
+        ? {
+            ...b,
+            name: b.name.replace("4×4", "3×4"),
+            note:
+              (b.note ?? "").replace("4×4 min", "3×4 min") +
+              " — reduced this week: three amber days the week before, so the " +
+              "programme steps you back in at three intervals rather than four.",
+          }
+        : b,
+    );
+  }
+
+  return blocks;
 }
 
 /**

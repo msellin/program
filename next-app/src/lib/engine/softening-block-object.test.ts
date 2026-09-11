@@ -75,6 +75,67 @@ describe("CSM amber softening", () => {
     expect(out.length).toBe(blocks.length - 1);
   });
 
+  /**
+   * "…resume next week at 3x4" — the half that was missing until 2026-09-11.
+   *
+   * The programme's red state reads "drop 4x4 for a week; resume next week at
+   * 3x4". Only the drop existed, so once the amber days aged out of the window
+   * the block returned at FULL 4x4 — a user went from withdrawn straight back
+   * to the hardest aerobic session in the programme, skipping the step the
+   * programme put there to catch them.
+   */
+  describe("the resume week", () => {
+    /** Three ambers in the week ENDING 7 days before today. */
+    const priorWeekAmber = amberDays(["2026-09-02", "2026-09-03", "2026-09-04"]);
+
+    it("brings the block back rather than leaving it withdrawn", () => {
+      const out = applyProgramSoftening(blocks, program, TODAY, storeWith(priorWeekAmber));
+      expect(
+        out.some((b) => b.id === "block_4x4_row"),
+        "the drop is one week, not indefinite",
+      ).toBe(true);
+      expect(out.length).toBe(blocks.length);
+    });
+
+    it("brings it back at 3x4, not 4x4", () => {
+      const out = applyProgramSoftening(blocks, program, TODAY, storeWith(priorWeekAmber));
+      const row = out.find((b) => b.id === "block_4x4_row")!;
+      expect(row.name).toContain("3×4");
+      expect(row.name, "still advertising the full dose").not.toContain("4×4");
+      expect(row.note).toContain("3×4 min");
+      expect(row.note, "the user should be told why this week is lighter").toMatch(
+        /reduced this week/,
+      );
+    });
+
+    it("keeps the constraints that are not about volume", () => {
+      // A volume reduction, not a different session: the HR target and the
+      // 6-hour separation from lifting are unchanged.
+      const out = applyProgramSoftening(blocks, program, TODAY, storeWith(priorWeekAmber));
+      const row = out.find((b) => b.id === "block_4x4_row")!;
+      expect(row.note).toContain("90-95% max HR");
+      expect(row.note).toContain("6h from any lift");
+    });
+
+    it("a quiet fortnight gets the full session back", () => {
+      // The reduction is for the week after a drop, not a new normal.
+      const out = applyProgramSoftening(blocks, program, TODAY, storeWith({}));
+      const row = out.find((b) => b.id === "block_4x4_row")!;
+      expect(row.name).toContain("4×4");
+      expect(row.note ?? "").not.toMatch(/reduced this week/);
+    });
+
+    it("a still-bad week stays withdrawn rather than resuming", () => {
+      // Ambers in BOTH windows: the drop wins. Resuming at 3x4 on top of a
+      // fresh trigger would be the rule reading its own history and ignoring
+      // the present.
+      const both = { ...amberDays(["2026-09-02", "2026-09-03", "2026-09-04"]),
+                     ...amberDays(["2026-09-09", "2026-09-10", "2026-09-11"]) };
+      const out = applyProgramSoftening(blocks, program, TODAY, storeWith(both));
+      expect(out.some((b) => b.id === "block_4x4_row")).toBe(false);
+    });
+  });
+
   it("another programme is untouched by CSM's rule", () => {
     const other = load("engine-builder");
     const store = storeWith(amberDays(["2026-09-09", "2026-09-10", "2026-09-11"]));

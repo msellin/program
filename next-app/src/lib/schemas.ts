@@ -1547,6 +1547,35 @@ export const storeSchema = z.object({
         at: z.number(),
         date: z.string(),
         citation_snapshot: citationSnapshotSchema.optional(),
+        /**
+         * What the accept CHANGED, so it can be changed back (2026-09-11).
+         *
+         * `recordProposalOutcome` shipped and the undo it was written for
+         * never did — and could not have, because nothing recorded a "before".
+         * `training_max_provenance` keeps a source and a timestamp but not the
+         * previous value, so an accepted TM bump had nothing to restore.
+         *
+         * Captured at outcome time rather than derived later, because the
+         * derivation is not available afterwards: once the TM is bumped, the
+         * old one is gone, and a tier promotion's prior tier survives only in
+         * `tier_history`.
+         *
+         * `undone_at` marks a reversal instead of deleting the row.
+         * `proposal_history` is documented append-only for the export path —
+         * an undo is a thing that happened, not a thing that unhappened, and a
+         * GDPR export that quietly omits it would be the wrong kind of tidy.
+         */
+        reversal: z
+          .object({
+            training_maxes: z.record(z.string(), z.number().nullable()).optional(),
+            tier: z.string().nullable().optional(),
+            phase_shift_days: z.number().nullable().optional(),
+            program_slug: z.string().optional(),
+            day_adjustment_date: z.string().optional(),
+            had_day_adjustment: z.boolean().optional(),
+          })
+          .optional(),
+        undone_at: z.number().optional(),
       }),
     )
     .optional(),

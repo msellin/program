@@ -5,7 +5,7 @@ import { useStore } from "@/lib/useStore";
 import { hapticTap } from "@/lib/utils";
 import { playConfirm } from "@/lib/sound";
 import { announce } from "@/lib/announce";
-import type { Proposal } from "@/lib/schemas";
+import type { Proposal, Store } from "@/lib/schemas";
 
 /**
  * P0-1 — Accept/Ignore handler extraction so `<ProposalCard>` (inline
@@ -31,6 +31,38 @@ export function useProposalActions(proposal: Proposal, date: string) {
     hapticTap("medium");
     playConfirm();
     pulseTarget?.closest("[data-proposal-card]")?.classList.add("pulse-accept");
+
+    /**
+     * Capture the "before" BEFORE anything changes it (2026-09-11).
+     *
+     * This has to happen here rather than inside the store, and ahead of the
+     * switch, because every branch below overwrites the thing it would need
+     * to record. Once `setTM` runs, the old training max is gone;
+     * `training_max_provenance` keeps a source and a timestamp and not the
+     * value. That absence is the reason `undoLastProposalOutcome` could not be
+     * written when `recordProposalOutcome` shipped.
+     */
+    const store = useStore.getState().store;
+    const slug =
+      "programSlug" in proposal ? (proposal as { programSlug: string }).programSlug : undefined;
+    const priorState = slug ? store.user_profile?.program_states?.[slug] : undefined;
+    const reversal: NonNullable<Store["proposal_history"]>[number]["reversal"] =
+      proposal.kind === "tm_bump"
+        ? {
+            training_maxes: Object.fromEntries(
+              proposal.lifts.map((l) => [l.exerciseId, store.training_maxes?.[l.exerciseId] ?? null]),
+            ),
+          }
+        : proposal.kind === "tier_advance"
+          ? { program_slug: slug, tier: priorState?.tier ?? null }
+          : proposal.kind === "readiness_after_layoff"
+            ? { program_slug: slug, phase_shift_days: priorState?.phase_shift_days ?? null }
+            : proposal.kind === "day_adjustment_soften"
+              ? {
+                  day_adjustment_date: proposal.date,
+                  had_day_adjustment: Boolean(store.day_adjustments?.[proposal.date]),
+                }
+              : undefined;
 
     switch (proposal.kind) {
       case "day_adjustment_soften": {
@@ -90,7 +122,7 @@ export function useProposalActions(proposal: Proposal, date: string) {
         return;
       }
     }
-    recordProposalOutcome(proposal, "accepted", date);
+    recordProposalOutcome(proposal, "accepted", date, reversal);
   };
 
   const onIgnore = () => {

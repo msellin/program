@@ -126,7 +126,22 @@ type StoreState = {
     proposal: Proposal,
     outcome: "accepted" | "ignored",
     date: string,
+    /**
+     * What the accept changed, captured by the CALLER before it changed it.
+     * Only meaningful for `accepted`; an ignore alters nothing to reverse.
+     */
+    reversal?: NonNullable<Store["proposal_history"]>[number]["reversal"],
   ) => void;
+  /**
+   * Reverse the most recent accepted outcome that is still reversible.
+   *
+   * Returns a short description of what was undone, or null when there is
+   * nothing to undo — the caller announces it. Deliberately only the LAST one:
+   * a stack of undos across a week of accepts is a different feature, and
+   * offering it here would imply an ordering guarantee across proposal kinds
+   * that nothing maintains.
+   */
+  undoLastProposalOutcome: () => string | null;
   /** Append a self-scored assessment entry to the given pack. */
   recordAssessment: (
     packId: string,
@@ -824,7 +839,7 @@ export const useStore = create<StoreState>((set, get) => ({
     set({ store: s });
   },
 
-  recordProposalOutcome: (proposal, outcome, date) => {
+  recordProposalOutcome: (proposal, outcome, date, reversal) => {
     const s = { ...get().store };
     const history = [...(s.proposal_history ?? [])];
     const snapshot = proposal.citationId ? snapshotCitation(proposal.citationId) : null;
@@ -835,10 +850,82 @@ export const useStore = create<StoreState>((set, get) => ({
       at: Date.now(),
       date,
       ...(snapshot ? { citation_snapshot: snapshot } : {}),
+      // Only on an accept: an ignore changes nothing, so recording a
+      // "before" for it would invite an undo that restores a state the user
+      // never left.
+      ...(outcome === "accepted" && reversal ? { reversal } : {}),
     });
     s.proposal_history = history;
     commit(s);
     set({ store: s });
+  },
+
+  undoLastProposalOutcome: () => {
+    const s = { ...get().store };
+    const history = [...(s.proposal_history ?? [])];
+    // The most recent accept that carries a reversal and has not been undone.
+    // Scanning rather than taking the tail: an ignore, a retest_due, or an
+    // older client's entry can all sit on top without being undoable.
+    const idx = (() => {
+      for (let i = history.length - 1; i >= 0; i--) {
+        const h = history[i];
+        if (h.outcome === "accepted" && h.reversal && !h.undone_at) return i;
+      }
+      return -1;
+    })();
+    if (idx === -1) return null;
+
+    const entry = history[idx];
+    const rev = entry.reversal!;
+    const parts: string[] = [];
+
+    if (rev.training_maxes) {
+      s.training_maxes = { ...s.training_maxes };
+      for (const [exId, prior] of Object.entries(rev.training_maxes)) {
+        if (prior == null) delete s.training_maxes[exId];
+        else s.training_maxes[exId] = prior;
+        parts.push(exId);
+      }
+    }
+
+    if (rev.program_slug && (rev.tier !== undefined || rev.phase_shift_days !== undefined)) {
+      const profile = { ...(s.user_profile ?? {}) };
+      const states = { ...(profile.program_states ?? {}) };
+      const prior = { ...(states[rev.program_slug] ?? {}) };
+      if (rev.tier !== undefined) {
+        if (rev.tier == null) delete prior.tier;
+        else prior.tier = rev.tier;
+        // Drop the history row this accept appended, so an undone promotion
+        // does not leave a promotion on the record.
+        const th = [...((prior as { tier_history?: unknown[] }).tier_history ?? [])];
+        th.pop();
+        if (th.length) (prior as { tier_history?: unknown[] }).tier_history = th;
+        else delete (prior as { tier_history?: unknown[] }).tier_history;
+        parts.push("tier");
+      }
+      if (rev.phase_shift_days !== undefined) {
+        if (rev.phase_shift_days == null) delete prior.phase_shift_days;
+        else prior.phase_shift_days = rev.phase_shift_days;
+        parts.push("phase");
+      }
+      states[rev.program_slug] = prior;
+      profile.program_states = states;
+      s.user_profile = profile;
+    }
+
+    if (rev.day_adjustment_date) {
+      s.day_adjustments = { ...(s.day_adjustments ?? {}) };
+      if (rev.had_day_adjustment === false) delete s.day_adjustments[rev.day_adjustment_date];
+      parts.push("today's load");
+    }
+
+    // Mark, never delete. `proposal_history` is append-only for the export
+    // path, and an undo is something that happened.
+    history[idx] = { ...entry, undone_at: Date.now() };
+    s.proposal_history = history;
+    commit(s);
+    set({ store: s });
+    return parts.length ? parts.join(", ") : entry.kind;
   },
 
   recordAssessment: (packId, date, scores, notes) => {

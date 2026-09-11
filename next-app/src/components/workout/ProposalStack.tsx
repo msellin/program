@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useStore } from "@/lib/useStore";
+import { announce } from "@/lib/announce";
 import { selectProposals } from "@/lib/proposals/select";
 import { ProposalCard } from "./ProposalCard";
 import { ProposalStickyActionBar } from "./ProposalStickyActionBar";
@@ -28,6 +29,63 @@ export function ProposalStack({ program, date }: { program: Program | null | und
   // Day1EmptyState owns the fold anyway.
   const syncStable = (store.updated_at ?? 0) > 0;
 
+  /**
+   * Undo affordance (2026-09-11).
+   *
+   * Confirm-first means the user is the one who decides — and until now that
+   * decision was one-way. There was no undo anywhere on the stack, and
+   * `recordProposalOutcome` had shipped with the undo it was written for
+   * missing, because nothing recorded a "before" to restore.
+   *
+   * Shown only when the last accept is genuinely reversible, so the offer is
+   * never made and then refused. Six seconds, then it goes: an undo that
+   * lingers reads as an invitation to second-guess a decision already made,
+   * and the accept itself is repeatable from tomorrow's proposal anyway.
+   *
+   * `role="status"` rather than `alert` — this is a confirmation with an
+   * option attached, not an error, and `alert` interrupts a screen reader
+   * mid-sentence.
+   */
+  const undoLast = useStore((s) => s.undoLastProposalOutcome);
+  const lastReversible = useStore((s) => {
+    const h = s.store.proposal_history ?? [];
+    for (let i = h.length - 1; i >= 0; i--) {
+      if (h[i].outcome === "accepted" && h[i].reversal && !h[i].undone_at) return h[i];
+    }
+    return undefined;
+  });
+  const [undoVisible, setUndoVisible] = useState(false);
+  const lastAt = lastReversible?.at;
+  useEffect(() => {
+    if (!lastAt) return;
+    // Only for an accept that just happened — a reversible entry from last
+    // week should not raise a toast when the component mounts.
+    if (Date.now() - lastAt > 6000) return;
+    setUndoVisible(true);
+    const timer = setTimeout(() => setUndoVisible(false), 6000 - (Date.now() - lastAt));
+    return () => clearTimeout(timer);
+  }, [lastAt]);
+
+  const undoToast = undoVisible ? (
+    <div
+      role="status"
+      className="flex items-center justify-between gap-3 rounded border border-line-soft bg-surface px-3 py-2 text-sm"
+    >
+      <span className="text-ink">Applied.</span>
+      <button
+        type="button"
+        onClick={() => {
+          const what = undoLast();
+          setUndoVisible(false);
+          announce(what ? `Undone — ${what} put back.` : "Nothing to undo.");
+        }}
+        className="min-h-[44px] px-2 font-mono text-[11px] uppercase tracking-wider text-bronze"
+      >
+        Undo
+      </button>
+    </div>
+  ) : null;
+
   const proposals = useMemo(() => {
     if (!program || !syncStable) return [];
     return selectProposals(store, program, date);
@@ -42,7 +100,9 @@ export function ProposalStack({ program, date }: { program: Program | null | und
   if (!syncStable) {
     return <div aria-hidden className="min-h-[120px]" />;
   }
-  if (proposals.length === 0) return null;
+  // Render the toast even with an empty stack: accepting the LAST proposal
+  // collapses the stack, which is precisely the moment the undo is wanted.
+  if (proposals.length === 0) return undoToast;
 
   // P0-1 (Batch 17): top proposal's verbs live in the sticky bottom bar
   // (thumb-reach). Non-top proposals keep inline buttons.
@@ -56,6 +116,7 @@ export function ProposalStack({ program, date }: { program: Program | null | und
   const [topProposal, ...rest] = proposals;
   return (
     <>
+      {undoToast}
       <section
         aria-label="Engine proposals"
         className="space-y-3"
