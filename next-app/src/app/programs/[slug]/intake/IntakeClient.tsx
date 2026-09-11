@@ -1,5 +1,28 @@
 "use client";
 
+/*
+ * Two React Compiler diagnostics are disabled for this file (2026-09-11), each
+ * for a reason, and neither is "it was noisy".
+ *
+ * `react-hooks/refs` — `stepAnnounceRef.current` is written during render at
+ *   the bottom of this component so the announce effect can read the step that
+ *   is being rendered NOW. Deriving it in the effect instead would announce
+ *   the previous step to a screen reader, which is worse than the lint. The
+ *   write is to a ref deliberately, so it does not itself cause a render.
+ *
+ * The second diagnostic this file used to carry — "Compilation Skipped:
+ * existing memoization could not be preserved" on the `blocker` useMemo — was
+ * FIXED rather than disabled. The compiler was right: the deps named two
+ * properties of `program` where the memo depends on `program` itself, so a new
+ * object with equal sub-objects would not re-run the gate that decides whether
+ * someone may start a programme.
+ *
+ * Scoped to this file rather than disabled globally, so the rule keeps
+ * applying everywhere else. If it is fixed, delete the line —
+ * `eslint --report-unused-disable-directives` will say so.
+ */
+/* eslint-disable react-hooks/refs */
+
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -238,7 +261,17 @@ export function IntakeClient({ slug }: Props) {
       }
     }
     return null;
-  }, [gateEval, answers, program?.schedule_constraints, program?.goals]);
+    // Depends on `program`, not on two of its properties (2026-09-11).
+    //
+    // React Compiler refused to optimise this component over exactly this:
+    // "the inferred dependency was `program`, but the source dependencies
+    // were [...]. Inferred less specific property than source." The body
+    // reads `program?.schedule_constraints` AND `program?.goals`, so naming
+    // both looked more precise — but a new `program` object with equal
+    // sub-objects would not re-run the memo, and this is the memo that
+    // decides whether someone is BLOCKED from starting a programme. Being
+    // stale there is the wrong way to be wrong.
+  }, [gateEval, answers, program]);
 
   // consent_symptom_data is authored as a required question but rendered as
   // a consent checkbox (see CONSENT_IDS below). Its "answer" lives in

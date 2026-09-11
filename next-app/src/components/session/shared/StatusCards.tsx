@@ -292,8 +292,22 @@ export function GraduationCard({ program }: { program: Program }) {
     undefined;
   const weeksIn = (() => {
     if (!startedAt) return null;
+    /**
+     * `todayISO()`, not `Date.now()` (2026-09-11).
+     *
+     * Two reasons, and the second is the one that matters. React Compiler
+     * flags `Date.now()` during render as impure, which it is — two renders
+     * of the same props can disagree.
+     *
+     * But `today()` also honours the `?today=YYYY-MM-DD` override, which
+     * exists specifically so the engine can be exercised at fixed dates
+     * without touching the OS clock. This computation ignored it, so a
+     * developer or persona pinning the date still saw "week N" counted from
+     * the real wall clock — the one number on the card that silently refused
+     * to be tested.
+     */
     const start = new Date(startedAt.slice(0, 10) + "T00:00:00").getTime();
-    const now = Date.now();
+    const now = new Date(todayISO() + "T00:00:00").getTime();
     const days = Math.floor((now - start) / 864e5);
     return days > 0 ? Math.floor(days / 7) : null;
   })();

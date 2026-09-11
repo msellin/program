@@ -77,6 +77,21 @@ jobs:
       # reads landing/src/lib/programs-catalog.ts to assert the landing catalog
       # agrees with the app manifest. The landing has no suite of its own, and
       # its manual deploy script has never had a gate at all.
+      # Lint was never gated anywhere (added 2026-09-11).
+      #
+      # `npm run verify` is vitest only, the pre-commit hook runs verify, and
+      # `npm run deploy` runs verify — so eslint ran when somebody chose to run
+      # it. It had accumulated 27 errors, twenty of them one React Compiler
+      # rule firing on an idiom this codebase uses correctly, which is how the
+      # other seven stayed invisible. Among them: a `use` disable directive
+      # that silenced nothing because a multi-line comment sat between it and
+      # the code, and a `useMemo` whose deps named two properties of `program`
+      # where it depends on `program` — on the gate that decides whether
+      # someone may start a programme.
+      #
+      # Now zero, and gated so it stays there.
+      - run: npm run lint
+        working-directory: next-app
       - run: npm run verify
         working-directory: next-app
 

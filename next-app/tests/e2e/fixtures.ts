@@ -20,10 +20,6 @@ type AuthFixtures = {
  * is fragile. We just sign in fresh per test; it takes ~1-2 seconds.
  */
 export const test = base.extend<AuthFixtures>({
-  // eslint-disable-next-line react-hooks/rules-of-hooks -- `use` here is
-  // Playwright's fixture callback, not React's `use` hook. The rule matches on
-  // the identifier alone and cannot tell the two apart; renaming the parameter
-  // is not an option because Playwright supplies it.
   authedPage: async ({ page }, use) => {
     await ensureTestUser();
     await page.goto("/sign-in/");
@@ -44,6 +40,19 @@ export const test = base.extend<AuthFixtures>({
     } catch {
       /* no modal — fine */
     }
+    /*
+     * `use` here is Playwright's fixture callback, not React's `use` hook.
+     * The rule matches on the identifier alone and cannot tell them apart,
+     * and the parameter name is Playwright's to choose.
+     *
+     * Two placements failed before this one, both silently. On the function
+     * signature it was nowhere near the reported line; directly above the
+     * call but followed by four more comment lines, it applied to the COMMENT
+     * — `eslint-disable-next-line` means the literal next line, and a
+     * multi-line explanation underneath it absorbs the directive. The
+     * explanation goes above; the directive touches the code.
+     */
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     await use(page);
   },
 });
