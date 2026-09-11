@@ -496,11 +496,11 @@
       "starting_phase_id": "phase_1_dip_and_false_grip_base",
       "program_adjustments": {
         "starting_capability_levels": {
-          "mu_false_grip_pull": 1,
+          "mu_false_grip": 1,
           "mu_ring_dip_strength": 1,
-          "mu_transition_control": 1,
-          "mu_straight_arm_lockout": 1,
-          "mu_hollow_active_shape": 2
+          "mu_transition_mechanics": 1,
+          "pu_scap_control": 1,
+          "pu_hollow_active_shape": 2
         },
         "sessions_per_week": 3,
         "session_length_min": 25,
@@ -517,11 +517,11 @@
       "starting_phase_id": "phase_2_transition_and_low_ring",
       "program_adjustments": {
         "starting_capability_levels": {
-          "mu_false_grip_pull": 2,
+          "mu_false_grip": 2,
           "mu_ring_dip_strength": 2,
-          "mu_transition_control": 1,
-          "mu_straight_arm_lockout": 2,
-          "mu_hollow_active_shape": 2
+          "mu_transition_mechanics": 1,
+          "pu_scap_control": 2,
+          "pu_hollow_active_shape": 2
         },
         "sessions_per_week": 4,
         "session_length_min": 30,
@@ -538,11 +538,11 @@
       "starting_phase_id": "phase_3_first_rep_consolidation",
       "program_adjustments": {
         "starting_capability_levels": {
-          "mu_false_grip_pull": 3,
+          "mu_false_grip": 3,
           "mu_ring_dip_strength": 3,
-          "mu_transition_control": 3,
-          "mu_straight_arm_lockout": 3,
-          "mu_hollow_active_shape": 3
+          "mu_transition_mechanics": 3,
+          "pu_scap_control": 3,
+          "pu_hollow_active_shape": 3
         },
         "sessions_per_week": 4,
         "session_length_min": 30,

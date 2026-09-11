@@ -358,6 +358,83 @@ describe("display names", () => {
  * the withdrawal is DOCUMENTED, and the record of why a number was dropped has
  * to be allowed to name it.
  */
+/**
+ * A tier's authored capability levels must name domains the programme uses
+ * (added 2026-09-11).
+ *
+ * `plan_tiers[].program_adjustments.starting_capability_levels` is keyed by
+ * capability DOMAIN, and `composeSlotDrills` looks a domain up by the
+ * `capability_slot` on a block. When the two disagree the lookup falls through
+ * a Proxy to the flat tier baseline — silently, because both sides are
+ * `z.string()` and a fallen-through level looks exactly like an authored one.
+ *
+ * That is not hypothetical. 8fde4c2 (2026-09-01) renamed four of muscle-up's
+ * BLOCK slots to match first-strict-pullup's convention and left the TIER keys
+ * on the old names. Nothing caught it because the tier keys had no reader at
+ * all until 2026-09-06, so for five days the drift was invisible, and for five
+ * days after that it silently disabled `multi_dimensional` — the premise these
+ * programmes are sold on — for four of muscle-up's five domains.
+ *
+ * Two distinct failures share this shape and they are NOT the same problem:
+ *
+ *   NAME DRIFT — the tier names a domain that a slot used to be called. There
+ *   is a correct target and the fix is mechanical. muscle-up's four.
+ *
+ *   ORPHAN — the tier names a domain no block has ever composed against.
+ *   handstand-walk declares `handstand_obstacles`, `hollow_body_shape` and
+ *   `wrist_extension_mobility`, and none of the three has ever appeared as a
+ *   `capability_slot` in that file's history. The programme's own premise text
+ *   names obstacles as a separate state variable — "static hold, dynamic walk,
+ *   turns, obstacles are separate state variables" — so it promises
+ *   independent obstacle training and composes none. Deleting the keys would
+ *   erase the record of that intent, so they are listed here instead.
+ */
+describe("tier capability levels resolve against the programme's own slots", () => {
+  /** Orphans: OPEN, not approved. Same contract as OPEN_DROPPED_KEYS. */
+  const ORPHAN_TIER_DOMAINS: Record<string, string[]> = {
+    "handstand-walk": [
+      "handstand_obstacles",
+      "hollow_body_shape",
+      "wrist_extension_mobility",
+    ],
+  };
+
+  const withTiers = manifest.programs.filter((p) => {
+    const raw = read(`programs/${p.slug ?? p.id}.json`) as Record<string, unknown>;
+    return Array.isArray(raw.plan_tiers);
+  });
+
+  it.each(withTiers.map((p) => p.slug ?? p.id))("%s", (slug) => {
+    const raw = read(`programs/${slug}.json`) as Record<string, unknown>;
+    const slots = new Set(
+      [...JSON.stringify(raw).matchAll(/"capability_slot":\s*"([^"]+)"/g)].map((m) => m[1]),
+    );
+
+    const declared = new Set<string>();
+    for (const tier of raw.plan_tiers as Array<Record<string, unknown>>) {
+      const adj = (tier.program_adjustments ?? {}) as Record<string, unknown>;
+      for (const k of Object.keys(
+        (adj.starting_capability_levels ?? {}) as Record<string, number>,
+      )) {
+        declared.add(k);
+      }
+    }
+
+    const unresolved = [...declared].filter((d) => !slots.has(d)).sort();
+    const orphans = ORPHAN_TIER_DOMAINS[slug] ?? [];
+
+    expect(
+      unresolved.filter((u) => !orphans.includes(u)),
+      `${slug}: tier declares a capability domain no block composes against — ` +
+        "levels fall through to the flat tier baseline and multi_dimensional stops working",
+    ).toEqual([]);
+    expect(
+      orphans.filter((o) => !unresolved.includes(o)),
+      `${slug}: delist from ORPHAN_TIER_DOMAINS — it resolves now`,
+    ).toEqual([]);
+  });
+});
+
 describe("withdrawn figures do not appear in user-facing copy", () => {
   const WITHDRAWN = [
     {

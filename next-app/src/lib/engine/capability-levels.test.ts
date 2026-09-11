@@ -55,8 +55,25 @@ describe("capability levels come from the tier's authored domains", () => {
     ["handstand-walk", "tier_c_freestand", "handstand_turns", 2, 3],
     ["handstand-walk", "tier_c_freestand", "handstand_obstacles", 1, 3],
     ["handstand-walk", "tier_d_advanced", "handstand_obstacles", 2, 4],
-    ["muscle-up", "tier_b_transition", "mu_transition_control", 1, 2],
+    ["muscle-up", "tier_b_transition", "mu_transition_mechanics", 1, 2],
   ];
+
+  /**
+   * That last case read `mu_transition_control` until 2026-09-11, and passed
+   * the whole time the feature was broken.
+   *
+   * It asked `deriveLevelsFromProfile` for the domain using the TIER's key.
+   * The tier had one, so a level came back and the assertion held. But
+   * `composeSlotDrills` looks up the BLOCK's `capability_slot`, which
+   * 8fde4c2 had renamed to `mu_transition_mechanics` — so the real consumer
+   * asked for a domain the tier did not declare, fell through the Proxy to
+   * the flat tier baseline, and four of five capabilities moved together
+   * again. The test and the app were reading different keys.
+   *
+   * Using the slot name is what makes this test track the thing that
+   * actually runs. `data-integrity.test.ts` now fails if the two namespaces
+   * drift apart again.
+   */
 
   for (const [slug, tierId, domain, authored, baseline] of CASES) {
     it(`${slug}/${tierId}: ${domain} is ${authored}, not the tier baseline ${baseline}`, () => {

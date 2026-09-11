@@ -44,6 +44,26 @@ export function programDisplayName(_program: Program, slug: string): string {
     .join(" ");
 }
 
+/**
+ * An exercise's name for a LIST, where neighbours are visible (2026-09-11).
+ *
+ * `variant` was split out of `name` so cards could render it as a subtitle
+ * instead of truncating "Active hang (scap-engaged)" mid-word. Lists then
+ * rendered `name` alone, which was fine while a list only ever held one
+ * programme's exercises.
+ *
+ * It stopped being fine when off-plan started offering the whole shared
+ * library: `farmer_carry` and `pu_farmers_carry` are both named "Farmer's
+ * carry", so two adjacent rows read identically, both said "3 sets", and
+ * there was no way to tell which one you had just logged.
+ *
+ * Only for list and rail contexts. A detail view has room for the variant on
+ * its own line and should keep using `name` + `variant` separately.
+ */
+export function exerciseListName(exercise: { name: string; variant?: string }): string {
+  return exercise.variant ? `${exercise.name} (${exercise.variant})` : exercise.name;
+}
+
 // Strip only obvious dev / phase-scope suffixes. Keep em-dash context intact:
 // "Week 1 — pure Z1 introduction" is the phase's actual intent and the user
 // wants to see it. Only kill parentheticals that look like phase-scope hints

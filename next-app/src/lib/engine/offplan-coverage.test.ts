@@ -126,3 +126,86 @@ describe("off-plan reaches every lift the engine reads", () => {
     expect(SOURCE).toMatch(/Lifts you did elsewhere/);
   });
 });
+
+/**
+ * The 2026-09-03 fix was half a fix, and the founder hit the other half.
+ *
+ * The test above asserts off-plan surfaces the `strength` CATEGORY. It does,
+ * and the category was sourced — like every other group — from
+ * `program.blocks`. So "lifts you did elsewhere" could only ever offer lifts
+ * your own programme already prescribes. A front squat worked because the
+ * founder's programme has a front-squat block. A bench press did not: no
+ * programme has a bench block, and `bench_press` was not among the 134
+ * exercises at all.
+ *
+ * The consequence was a bench session filed as `activity_type: "other"` on
+ * `runLogSchema` — an AEROBIC shape with distance, minutes and heart rate, and
+ * nowhere to put sets, reps or weight. The lift was recorded as cardio.
+ *
+ * A group whose premise is "this was not on the plan" cannot be sourced from
+ * the plan. These assert the two halves that fix it: the library carries the
+ * common barbell lifts, and the component reads the library rather than only
+ * the programme.
+ */
+describe("off-plan reaches lifts no programme prescribes", () => {
+  const EXERCISES = path.resolve(__dirname, "../../../public/data/exercises.json");
+  const library = JSON.parse(fs.readFileSync(EXERCISES, "utf8")) as {
+    exercises: Array<{ id: string; category: string }>;
+  };
+
+  /**
+   * The lifts a strength athlete logs outside a plan. The library grew out of
+   * a hip-rehab corpus, so it was squat / deadlift / hip heavy and had no
+   * horizontal or vertical press of any kind.
+   */
+  const MUST_EXIST = [
+    "bench_press",
+    "overhead_press_barbell",
+    "barbell_row",
+    "weighted_pullup",
+    "dip_weighted",
+    "romanian_deadlift",
+  ];
+
+  it.each(MUST_EXIST)("%s is in the shared library", (id) => {
+    const found = library.exercises.find((e) => e.id === id);
+    expect(found, `${id} missing — a lift with no library entry cannot be logged as a lift`).toBeTruthy();
+    expect(["strength", "unilateral"]).toContain(found!.category);
+  });
+
+  it("none of them is prescribed by any programme, which is the point", () => {
+    // If one of these ever enters a programme's blocks it stops being proof
+    // that the library path works, and this test should pick a different lift
+    // rather than quietly keep passing for the wrong reason.
+    const prescribed = new Set(
+      programs().flatMap(({ program }) =>
+        (program.blocks ?? []).flatMap((b) => {
+          const items = b.items ?? (b.segments ?? []).flatMap((s) => s.items ?? []);
+          return items.map((i) => i.exercise_id).filter(Boolean) as string[];
+        }),
+      ),
+    );
+    expect(MUST_EXIST.filter((id) => prescribed.has(id))).toEqual([]);
+  });
+
+  it("the component sources that group from the library, not from program.blocks", () => {
+    // Mirror-guard, same contract as the category check above. If this read
+    // reverts to `program.blocks` the group silently narrows back to the
+    // programme's own lifts and nothing else fails.
+    expect(SOURCE, "libraryLifts was removed — off-plan is back to programme-only lifts").toContain(
+      "libraryLifts",
+    );
+    expect(SOURCE, "library lifts must reach the rail, not just be computed").toMatch(
+      /return \[\.\.\.out, \.\.\.libraryLifts\]/,
+    );
+    expect(SOURCE, "library lifts need their own block id so logs stay keyed distinctly").toContain(
+      'LIBRARY_BLOCK_ID = "off_plan_library"',
+    );
+  });
+
+  it("does not offer a lift twice when the programme already prescribes it", () => {
+    expect(SOURCE, "library lifts must exclude what the programme's strength blocks contribute").toContain(
+      "fromProgram.has(e.id)",
+    );
+  });
+});

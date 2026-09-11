@@ -4360,6 +4360,154 @@
         "chiviacowsky_wulf_2002"
       ],
       "video_search": "how to record muscle up attempt"
+    },
+    {
+      "id": "bench_press",
+      "name": "Bench press",
+      "category": "strength",
+      "targets": [
+        "pec",
+        "triceps",
+        "front_delt"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 5,
+        "intensity": "moderate"
+      },
+      "setup": "Flat bench, feet planted, shoulder blades pulled back and down and kept there for the whole set.",
+      "cues": [
+        "Set the shoulder blades before you unrack, not after.",
+        "Bar path finishes over the shoulder joint, not the throat.",
+        "Touch the chest under control; no bounce.",
+        "Drive the feet into the floor as you press."
+      ],
+      "rationale": "The primary horizontal press. Loads the chest, front delt and triceps through a long range with a load you can measure, which is what makes it a useful progress marker rather than just volume.",
+      "video_search": "bench press technique setup"
+    },
+    {
+      "id": "overhead_press_barbell",
+      "name": "Overhead press",
+      "variant": "strict, barbell",
+      "category": "strength",
+      "targets": [
+        "front_delt",
+        "triceps",
+        "upper_trap"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 5,
+        "intensity": "moderate"
+      },
+      "setup": "Bar on the front rack at collarbone height, feet hip width, ribs stacked over the pelvis.",
+      "cues": [
+        "Squeeze the glutes and brace before the bar moves — no layback.",
+        "Move the head back out of the way, then return it under the bar at lockout.",
+        "Finish with the biceps beside the ears, bar over the mid-foot.",
+        "Strict means no leg drive; if the knees bend it is a push press."
+      ],
+      "rationale": "The primary vertical press, and the one overhead position most people load regularly. Strict reps keep the shoulder doing the work rather than the legs.",
+      "video_search": "strict overhead press barbell technique"
+    },
+    {
+      "id": "barbell_row",
+      "name": "Barbell row",
+      "variant": "bent-over",
+      "category": "strength",
+      "targets": [
+        "lat",
+        "rhomboid",
+        "mid_trap",
+        "hamstring"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 8,
+        "intensity": "moderate"
+      },
+      "setup": "Hip hinge to roughly 45 degrees, back flat, bar hanging under the shoulders.",
+      "cues": [
+        "Set the torso angle first and hold it — the row happens at the elbows, not the spine.",
+        "Pull to the bottom of the ribcage, not the collarbone.",
+        "Lead with the elbow; let the shoulder blade travel.",
+        "Lower under control rather than dropping into the next rep."
+      ],
+      "rationale": "Horizontal pull that loads heavier than most machine or dumbbell variants, and trains the hinge position isometrically while it does.",
+      "video_search": "barbell bent over row technique"
+    },
+    {
+      "id": "weighted_pullup",
+      "name": "Weighted pull-up",
+      "category": "strength",
+      "targets": [
+        "lat",
+        "biceps",
+        "mid_trap"
+      ],
+      "default": {
+        "sets": 4,
+        "reps": 4,
+        "intensity": "heavy"
+      },
+      "setup": "Belt or vest, full hang at the bottom, chin clearly over the bar at the top.",
+      "cues": [
+        "Start from a dead hang and set the shoulder blades before pulling.",
+        "Keep the ribs down; the load will pull you into extension if you let it.",
+        "Full range or the added weight is not telling you anything.",
+        "Lower under control — the added load makes a dropped eccentric expensive."
+      ],
+      "rationale": "The way to keep progressing a vertical pull once bodyweight reps stop being a strength stimulus, with a number you can track.",
+      "video_search": "weighted pull up technique"
+    },
+    {
+      "id": "dip_weighted",
+      "name": "Dip",
+      "variant": "bar or ring, loadable",
+      "category": "strength",
+      "targets": [
+        "pec",
+        "triceps",
+        "front_delt"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 6,
+        "intensity": "moderate"
+      },
+      "setup": "Support position with straight arms, shoulders down away from the ears, slight forward torso lean.",
+      "cues": [
+        "Own the top support position before adding depth or load.",
+        "Descend until the upper arm is roughly parallel to the floor, no deeper than the shoulder tolerates.",
+        "Keep the shoulders packed down rather than shrugging up at the bottom.",
+        "Rings are harder than a bar — regress the load when you change implement."
+      ],
+      "rationale": "A loadable vertical press that trains the support position directly, which transfers to gymnastics work as well as pressing strength.",
+      "video_search": "weighted dip technique"
+    },
+    {
+      "id": "romanian_deadlift",
+      "name": "Romanian deadlift",
+      "category": "strength",
+      "targets": [
+        "hamstring",
+        "glute_max",
+        "erector"
+      ],
+      "default": {
+        "sets": 3,
+        "reps": 8,
+        "intensity": "moderate"
+      },
+      "setup": "Standing, bar at the hip, soft knees held at a constant angle throughout.",
+      "cues": [
+        "Push the hips back rather than bending down; the bar stays close to the legs.",
+        "Stop where the hamstrings stop the movement, not where the floor is.",
+        "Knee angle should look the same at the bottom as at the top.",
+        "Stand tall to finish — squeeze the glutes rather than leaning back."
+      ],
+      "rationale": "Loads the hamstrings and hip hinge under a long lever without the floor pull's setup demand, which makes it easier to run at moderate loads alongside other work.",
+      "video_search": "romanian deadlift technique"
     }
   ],
   "class_modifications": [

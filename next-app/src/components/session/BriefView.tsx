@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { RacePlanCard } from "@/components/session/RacePlanCard";
-import { humanPhaseName, phaseProgress, programDisplayName, humanBlockName } from "@/lib/day-format";
+import { humanPhaseName, phaseProgress, programDisplayName, humanBlockName, exerciseListName } from "@/lib/day-format";
 import { entrySets } from "@/lib/useStore";
 import { ProposalCard } from "@/components/workout/ProposalCard";
 import { CycleStartCard } from "@/components/session/CycleStartCard";
@@ -328,7 +328,7 @@ export function BriefView({
                 >
                   <span className="min-w-0">
                     <span className="block text-[15px] font-semibold text-strong tracking-[-.01em] mb-0.5">
-                      {r.exercise.name}
+                      {exerciseListName(r.exercise)}
                     </span>
                     <span className="block text-[13px] text-ink">
                       {railScheme(r)}

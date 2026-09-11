@@ -8,7 +8,7 @@ import { playTimerComplete } from "@/lib/sound";
 import { useStore, useDayExercise, entrySets } from "@/lib/useStore";
 import { isSetPR } from "@/lib/pr";
 import { platesLabel } from "@/lib/plates";
-import { restSecondsFor } from "@/lib/day-format";
+import { restSecondsFor, exerciseListName } from "@/lib/day-format";
 import { lastSessionSetsFor } from "@/lib/engine/history";
 import { OverflowSheet } from "@/components/session/OverflowSheet";
 import type { RailExercise, SessionSheet } from "@/components/session/DaySession";
@@ -373,7 +373,7 @@ export function SetView({
                     "block text-[10.5px] font-semibold truncate " + (isActive ? "text-strong" : "text-ink")
                   }
                 >
-                  {r.exercise.name}
+                  {exerciseListName(r.exercise)}
                 </span>
                 <span
                   className={"block font-mono text-[9px] mt-0.5 " + (isActive ? "text-bronze" : "text-muted")}

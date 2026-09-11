@@ -6,7 +6,7 @@ import { useStore, entrySets } from "@/lib/useStore";
 import { today as todayISO } from "@/lib/utils";
 import { suggestForExercise } from "@/lib/engine/suggest";
 import { composeBlockForUser } from "@/lib/engine/plan-generator";
-import { dedupeItems, humanBlockName } from "@/lib/day-format";
+import { dedupeItems, humanBlockName, exerciseListName } from "@/lib/day-format";
 import { DateNav } from "@/components/workout/DateNav";
 import { EmptyStateCard } from "@/components/EmptyStateCard";
 import { isOffPlanOn } from "@/lib/features";
@@ -105,6 +105,60 @@ export function OffPlanSession() {
     ];
   }, [primarySlug]);
 
+  /**
+   * The rest of the barbell library, not just what your programme prescribes
+   * (2026-09-11).
+   *
+   * The group above was added on 2026-09-03 for exactly this problem and only
+   * half-solved it: it still filters `program.blocks`, so "lifts you did
+   * elsewhere" could only ever offer lifts your own plan already contains. A
+   * front squat worked because the founder's programme has a front-squat
+   * block. A bench press did not, because no programme has a bench block —
+   * and `bench_press` was not in the 134-exercise library at all, which is
+   * why a bench session had to be filed as `activity_type: "other"` on an
+   * AEROBIC log shape with no sets, reps or weight.
+   *
+   * A group whose entire premise is "this was not on the plan" cannot be
+   * sourced from the plan. It draws from the shared library instead, minus
+   * whatever the programme's own strength blocks already contribute above, so
+   * nothing appears twice.
+   *
+   * Synthetic block id: logs are keyed `${blockId}:${exerciseId}` as a flat
+   * string, so a new prefix is additive and no history migrates.
+   * `suggestForExercise` returns null for anything without a training max,
+   * which is the correct behaviour here — a lift you did elsewhere has no
+   * prescription to compare against, only a number to record.
+   */
+  const LIBRARY_BLOCK_ID = "off_plan_library";
+  const libraryLifts: RailExercise[] = useMemo(() => {
+    if (!Object.keys(byId).length) return [];
+    const fromProgram = new Set(
+      (program?.blocks ?? [])
+        .filter((b) => (b.category ?? "strength") === "strength")
+        .flatMap((b) => dedupeItems(b.items ?? (b.segments ?? []).flatMap((s) => s.items)))
+        .map((i) => i.exercise_id)
+        .filter(Boolean) as string[],
+    );
+
+    return Object.values(byId)
+      .filter((e) => ["strength", "unilateral"].includes(e.category))
+      .filter((e) => !fromProgram.has(e.id))
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map((exercise) => ({
+        key: `${LIBRARY_BLOCK_ID}:${exercise.id}`,
+        blockId: LIBRARY_BLOCK_ID,
+        blockName: "Lifts you did elsewhere",
+        exercise,
+        item: { exercise_id: exercise.id },
+        rowCount:
+          typeof exercise.default?.sets === "number" ? (exercise.default.sets as number) : 3,
+        suggestion: program
+          ? suggestForExercise(exercise.id, LIBRARY_BLOCK_ID, program, store, activeDate)
+          : null,
+        isLoadable: true,
+      }));
+  }, [byId, program, store, activeDate]);
+
   // Rail: flattened across both groups, so mid-set rail-tap and Rest's
   // "next up" work the same way Day's cross-block rail already does.
   // Not schedule-gated — off-plan blocks are always available, filtered
@@ -145,9 +199,13 @@ export function OffPlanSession() {
         }
       }
     }
-    return out;
+    // Library lifts last: the programme's own strength work stays at the top
+    // of the group where a returning user expects it, and the long
+    // alphabetical tail of "everything else you could have lifted" sits under
+    // it rather than burying it.
+    return [...out, ...libraryLifts];
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [program, byId, groupDefs, userProfile, store.logs, store.training_maxes, activeDate]);
+  }, [program, byId, groupDefs, userProfile, store.logs, store.training_maxes, activeDate, libraryLifts]);
 
   /**
    * Same cursor restore as DaySession — see `lib/session-cursor.ts`. Off-plan
@@ -366,7 +424,17 @@ export function OffPlanSession() {
                       >
                         <span className="min-w-0">
                           <span className="block text-[15px] font-semibold text-strong tracking-[-.01em] mb-0.5">
-                            {r.exercise.name}
+                            {/*
+                              `exerciseListName` folds in `variant`, which
+                              matters here in a way it did not before
+                              2026-09-11: this list used to hold only the
+                              programme's own lifts and now holds the shared
+                              library, where `farmer_carry` and
+                              `pu_farmers_carry` are both "Farmer's carry".
+                              Two identical rows, three sets each, and no way
+                              to tell which one you logged.
+                            */}
+                            {exerciseListName(r.exercise)}
                           </span>
                           <span className="block text-[13px] text-ink">{r.blockName} · {r.rowCount} sets</span>
                         </span>
