@@ -1,9 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
-import { BottomNav } from "@/components/nav/BottomNav";
-import { StoreHydrator } from "@/components/StoreHydrator";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
-import { RestTimerHost } from "@/components/workout/RestTimerHost";
 import { AuthGate } from "@/components/AuthGate";
 import { AppShell } from "@/components/AppShell";
 import "./globals.css";

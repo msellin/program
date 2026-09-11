@@ -258,7 +258,7 @@ function MoveSheet({
           </button>
         </div>
         <p className="text-[14px] text-muted">
-          This track's session on {fromDate} moves to the chosen date. Other tracks
+          This track&rsquo;s session on {fromDate} moves to the chosen date. Other tracks
           today are unaffected.
         </p>
         <div>

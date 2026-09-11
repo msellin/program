@@ -1,5 +1,5 @@
 import type { AdaptAdapter } from "./types";
-import type { Phase, Program, Store } from "../../schemas";
+import type { Phase, Program } from "../../schemas";
 
 /**
  * multi_dimensional adapter (Phase B stub, Phase C fills the body).

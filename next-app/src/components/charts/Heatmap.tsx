@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import type { Store, DayLog } from "@/lib/schemas";
+import type { Store } from "@/lib/schemas";
 import { cn, iso } from "@/lib/utils";
 import { isBlockObjectOn } from "@/lib/engine/block-selectors";
 

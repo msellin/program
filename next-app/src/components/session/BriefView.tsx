@@ -279,7 +279,7 @@ export function BriefView({
             {escalation ? (
               <div className="rounded border border-amber/40 bg-surface px-3.5 py-3">
                 <p className="font-mono text-[10px] uppercase tracking-widest text-amber mb-1">
-                  {escalation.streak} red days in a row — your programme's rule
+                  {escalation.streak} red days in a row — your programme&rsquo;s rule
                 </p>
                 <p className="text-[13.5px] leading-snug text-ink">{escalation.text}</p>
               </div>

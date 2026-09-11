@@ -20,6 +20,10 @@ type AuthFixtures = {
  * is fragile. We just sign in fresh per test; it takes ~1-2 seconds.
  */
 export const test = base.extend<AuthFixtures>({
+  // eslint-disable-next-line react-hooks/rules-of-hooks -- `use` here is
+  // Playwright's fixture callback, not React's `use` hook. The rule matches on
+  // the identifier alone and cannot tell the two apart; renaming the parameter
+  // is not an option because Playwright supplies it.
   authedPage: async ({ page }, use) => {
     await ensureTestUser();
     await page.goto("/sign-in/");

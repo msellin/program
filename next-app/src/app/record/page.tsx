@@ -37,7 +37,6 @@ import { CutCProgramCurveCard } from "@/components/record/CutCProgramCurveCard";
 import { CutCLogList } from "@/components/record/CutCLogList";
 import { CutCRecordOnboardingBeacon } from "@/components/record/CutCRecordOnboardingBeacon";
 import { downloadRecordExport } from "@/lib/engine/record-export";
-import { today } from "@/lib/utils";
 import dynamic from "next/dynamic";
 import type { Program, Exercise } from "@/lib/schemas";
 

@@ -1,7 +1,7 @@
 import { evaluateCycleEnd } from "../adapt";
 import { suggestForExercise } from "../suggest";
 import type { AdaptAdapter } from "./types";
-import type { Phase, Program, Store } from "../../schemas";
+import type { Phase, Program } from "../../schemas";
 
 /**
  * correlated_tier adapter — thin wrapper over the existing 5/3/1 evaluator
