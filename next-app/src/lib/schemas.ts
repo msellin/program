@@ -528,6 +528,22 @@ export const programIntakeSchema = z.object({
         severity: z.enum(["block", "warn"]).optional(),
         /** Warn-only: what the user is ticking. Defaults to a generic line. */
         acknowledge_label: z.string().optional(),
+        /**
+         * Author-facing provenance for this gate. Nothing renders it.
+         *
+         * Declared 2026-09-11 so it stops being SILENTLY dropped. It was an
+         * unknown key, so Zod discarded it at parse — which is the exact
+         * mechanism that killed `daily_log_schema` and
+         * `progression_rules.states[]`, and the top-level dead-key guard did
+         * not cover it because it is nested.
+         *
+         * Kept rather than deleted: muscle-up's note records why its ring-dip
+         * gate stays a block, and corrects a false claim about Tier A being
+         * unreachable that had already propagated into the task list once.
+         * That is provenance worth having. Declaring it makes it visible to
+         * tooling; it still reaches no user.
+         */
+        authoring_note: z.string().optional(),
       }),
     )
     .optional(),

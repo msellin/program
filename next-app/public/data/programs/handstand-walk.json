@@ -1247,7 +1247,7 @@
         {
           "exercise_id": "wall_cartwheel_exit",
           "sets": 5,
-          "reps_per_set": 2
+          "reps": 2
         }
       ],
       "note": "The single most-used bail-out for over-tipping. Start from a controlled wall handstand, drop one arm, rotate hips, land on that side's leg. Fail forward, not backward.",
@@ -1263,7 +1263,7 @@
         {
           "exercise_id": "quarter_pirouette_exit",
           "sets": 5,
-          "reps_per_set": 2
+          "reps": 2
         }
       ],
       "note": "From wall handstand, twist upper body 90° and step down to feet. Practices the escape route to the SIDE when a straight-back cartwheel isn't available.",
@@ -1279,7 +1279,7 @@
         {
           "exercise_id": "tuck_forward_roll_from_crow",
           "sets": 4,
-          "reps_per_set": 3
+          "reps": 3
         }
       ],
       "note": "From a crow pose, tuck chin, roll forward onto upper back, come up to sitting. Teaches the FORWARD escape route — the one people usually don't have.",
@@ -1295,7 +1295,7 @@
         {
           "exercise_id": "deliberate_mat_falls",
           "sets": 6,
-          "reps_per_set": 1
+          "reps": 1
         }
       ],
       "note": "From wall handstand, LET GO ON PURPOSE. Land on a crash mat or folded gymnastics mat — enough depth to absorb a fall from full inversion. A thin exercise or yoga mat is NOT enough for this drill; if that is all you have, skip it and do the wall bail-outs instead. Exhale on impact. Do this cold — the body needs to prove to itself that a controlled fall is a survivable non-event.",
@@ -1609,7 +1609,7 @@
   "evidence_base": {
     "physiological_targets": [
       "Wrist load tolerance — tendon adaptation timeframe roughly 8-12 weeks for early collagen turnover (Wiesinger 2019 — used as mechanism basis; no direct dose-response for handstand wrist load, flagged as engineering choice). Vidal-Torija 2025 (n=321 adult practitioners): 56.7% report chronic wrist pain but NO association with weekly training hours — technique-driven, not volume-driven. Barlow 2020: adult wrist WB tolerance declines from age 45.",
-      "Shoulder overhead endurance — sustained flexion at ≥170° draws on serratus anterior, upper/lower trapezius endurance (Ludewig & Cook 2000 shoulder-impingement kinematics; Ludewig & Reynolds 2009). Sadowski 2021: a straight-arm press to handstand produces ~3× BW shoulder moment — do NOT program straight-arm press early.",
+      "Shoulder overhead endurance — sustained flexion at ≥170° draws on serratus anterior, upper/lower trapezius endurance (Ludewig & Cook 2000 shoulder-impingement kinematics; Ludewig & Reynolds 2009). Mizutori 2021 (id `sadowski_2021`): less-skilled performers produced LARGER peak shoulder flexion moments in the press to handstand — do NOT program straight-arm press early, because the cost falls hardest on exactly the people not yet ready for it.",
       "Balance strategy — the handstand hold is wrist-torque-dominated (Kerwin & Trewartha 2001; Blenkinsop 2017). Elite vs novice differ mainly in medial-lateral CoP control + stiffening strategy (Sobera 2019; Baker 2025 systematic review). Novices show a wider CoP excursion; training reduces variability with time.",
       "Progressive position ladder — Kinoshita 2022 EMG-validated the 4-position progression: 90° incline → 135° incline → elbow / straddle-L stand → full wall handstand. Each step approximately doubles the overhead time-under-tension.",
       "Motor consolidation — Karni 1998 (fast/slow learning phases, M1 remapping over ~3 weeks); Walker 2003 (dissociable consolidation stages); Robertson 2004 (4-6h post-practice interference window). Daily short skill exposure builds a stronger trace than infrequent long sessions.",
@@ -1618,7 +1618,7 @@
     ],
     "session_rationale": {
       "block_wrist_prep": "Wrist tissue adaptation lags most other adaptations by weeks (Wiesinger 2019). 3-5 min of graded wrist prep before every session builds accumulated exposure without spiking a single session. Vidal-Torija 2025 shows chronic pain is technique-driven, not volume-driven — but the volume cap is a defensible upper bound while good technique is being built. Weekly cap 20-30 min in weeks 1-2 is an engineering choice (no direct dose-response study).",
-      "block_skill_A_kinoshita": "Kinoshita 2022 progressive position ladder: 90° incline hold recruits the shoulder overhead endurance system without asking for full balance. EMG-validated. Ideal Tier A entry point — the shape of a handstand loaded through the same tissues, with no bail risk. Sadowski 2021 explains why straight-arm press to handstand is NOT a Tier A drill: 3× BW shoulder moment is too much, too early.",
+      "block_skill_A_kinoshita": "Kinoshita 2022 progressive position ladder: 90° incline hold recruits the shoulder overhead endurance system without asking for full balance. EMG-validated. Ideal Tier A entry point — the shape of a handstand loaded through the same tissues, with no bail risk. Mizutori 2021 (id `sadowski_2021`) explains why straight-arm press to handstand is NOT a Tier A drill: the less skilled the performer, the LARGER the peak shoulder flexion moment they generate, so the drill loads a Tier A athlete hardest.",
       "block_skill_A_wall_hold": "Chest-to-wall hold builds the plumb-line shape under load (Kerwin & Trewartha 2001 wrist-strategy characterisation). Wall shrugs isolate the serratus / trap endurance that a handstand demands over time (Ludewig & Cook 2000). Belly-to-wall added when static hold is level 2: introduces active wrist strategy that a chest-to-wall hold hides.",
       "block_skill_B_freestand_search": "Kick-up practice + freestand attempts + optional tuck freestand for reduced moment of inertia. Video review button is self-controlled (Chiviacowsky & Wulf 2002) — user taps if they want feedback, no auto-show. Potdevin 2018 pattern: KP after ~5 reps, not every rep.",
       "block_skill_A_freestand_hold": "Freestand hold is the primary KPI at Tier C — trackable weekly, sensitive early indicator. Sobera 2019: elite-novice CoP-variability differences mean the freestand hold time is a valid capability marker across the skill acquisition arc.",

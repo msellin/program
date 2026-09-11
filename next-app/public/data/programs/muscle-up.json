@@ -76,7 +76,7 @@
     {
       "id": "shoulder_pain_stops_session",
       "rule": "Any shoulder pain during a hang, transition, or support hold ends the session — no working through it",
-      "detail": "Support position on rings loads the long head of biceps + supraspinatus at end-range. Sadowski 2021 (straight-arm press to handstand: 3× BW shoulder moment) is the analog — support lockout on rings sees similar peak moments. Pain-through reinforces the compensation."
+      "detail": "Support position on rings loads the long head of biceps + supraspinatus at end-range. Mizutori 2021 (id `sadowski_2021`) is the analog — in the press to handstand, less-skilled performers produced larger peak shoulder flexion moments, and support lockout on rings loads the same end-range position. Pain-through reinforces the compensation."
     },
     {
       "id": "no_kip_no_swing_ever_in_this_program",
@@ -1142,7 +1142,7 @@
       "False-grip tolerance — the wrist position (radial-flexed with hand on top of ring) loads flexor carpi ulnaris and extensor carpi radialis in a novel pattern. Vidal-Rovira 2024 (small-sample) documents higher forearm activation vs standard hang. Tendon adaptation timeframe is Wiesinger 2019 analog (~8-12 weeks for early collagen turnover) — flagged as engineering choice on exact volume.",
       "Transition mechanic — the muscle-up transition is a straight-arm-to-bent-arm shift with elbows travelling from behind to in front of the body at chest height. No RCT-derived dose-response. Roig 2009 eccentric-heavy meta supports the negatives-from-support drill as the highest-transfer analog.",
       "Ring dip strength — the top half of the muscle-up. Ring dips load rotator cuff + long head of biceps at end range more than parallel bar dips (Dickie 2017, Youdas 2010 dip variant EMG). Support hold isolates the lockout — the exact position the muscle-up finishes in.",
-      "Straight-arm shoulder integrity — support lockout and straight-arm pull-down train the shoulder in end-range flexion and extension. Sadowski 2021 (straight-arm press to handstand: 3× BW shoulder moment) is the closest analog for peak load; support lockout under bodyweight is lower but still significant.",
+      "Straight-arm shoulder integrity — support lockout and straight-arm pull-down train the shoulder in end-range flexion and extension. Mizutori 2021 (id `sadowski_2021`) is the closest analog: in the press to handstand, less-skilled performers produced larger peak shoulder flexion moments. Support lockout under bodyweight is lower but still significant.",
       "Motor learning stages — Fitts & Posner 1967 cognitive → associative → autonomous. Tier A/B is cognitive → early associative for the transition. Blocked practice weeks 1-2 (Wulf & Shea 2002 complex-skill caveat), interleaved from week 3.",
       "External-focus cues — Wulf 1998, 2013 (15-year review, ~100 studies). Halperin 2019: external focus specifically improves 1RM strength / force / velocity in weightlifting. Cues target the ring path (rings to sternum, drive rings down past hips), not the muscles."
     ],

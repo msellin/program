@@ -338,6 +338,64 @@ describe("display names", () => {
  * the landing's headline numbers are: a number maintained in prose drifts,
  * and nothing downstream can tell a stale one from a current one.
  */
+/**
+ * Withdrawn evidence must not survive in user-facing copy (added 2026-09-11).
+ *
+ * `sadowski_2021` was corrected on 2026-09-05: no Sadowski paper exists, the
+ * DOI always resolved to Mizutori et al., it is a FLOOR study rather than
+ * parallel bars, and the "3x bodyweight shoulder moment" everyone was quoting
+ * lives in that paper's INTRODUCTION, quoting someone else. All three
+ * `used_for` fields were updated to say the number is withdrawn and must not
+ * be cited.
+ *
+ * The number then kept shipping for six days. Four prose strings — two in
+ * handstand-walk, two in muscle-up — still told the user "~3x BW shoulder
+ * moment", because the withdrawal was recorded in the citation metadata and
+ * the copy was never swept. A programme's evidence block said "do not cite
+ * this" on one screen while the next screen cited it.
+ *
+ * So the withdrawal is a test now. `used_for` is exempt: that field is where
+ * the withdrawal is DOCUMENTED, and the record of why a number was dropped has
+ * to be allowed to name it.
+ */
+describe("withdrawn figures do not appear in user-facing copy", () => {
+  const WITHDRAWN = [
+    {
+      pattern: /3\s*[x\u00d7]\s*(BW|bodyweight)/i,
+      why: "sadowski_2021/Mizutori 2021 — the 3x bodyweight shoulder moment was withdrawn 2026-09-05; it is an introduction quoting a third party, not this paper's finding",
+    },
+  ];
+
+  // Where a withdrawal is allowed to name the thing it withdrew.
+  const RECORD_FIELDS = new Set(["used_for", "id_note", "review_note", "authoring_note"]);
+
+  const walk = (node: unknown, key: string, hits: string[], why: string, re: RegExp) => {
+    if (typeof node === "string") {
+      if (!RECORD_FIELDS.has(key) && re.test(node)) hits.push(`${key}: ${node.slice(0, 90)}…`);
+      return;
+    }
+    if (Array.isArray(node)) {
+      node.forEach((n) => walk(n, key, hits, why, re));
+      return;
+    }
+    if (node && typeof node === "object") {
+      for (const [k, v] of Object.entries(node as Record<string, unknown>)) {
+        walk(v, k, hits, why, re);
+      }
+    }
+  };
+
+  it.each(programs.map((p) => p.id))("%s cites no withdrawn figure", (id) => {
+    const entry = manifest.programs.find((p) => p.id === id)!;
+    const raw = read(`programs/${entry.slug ?? entry.id}.json`);
+    for (const { pattern, why } of WITHDRAWN) {
+      const hits: string[] = [];
+      walk(raw, "", hits, why, pattern);
+      expect(hits, `${id}: ${why}`).toEqual([]);
+    }
+  });
+});
+
 describe("CLAUDE.md agrees with the manifest", () => {
   const CLAUDE_MD = path.resolve(process.cwd(), "..", "CLAUDE.md");
 
@@ -648,6 +706,110 @@ describe("programs do not author top-level keys the runtime discards", () => {
       (k) => !known.has(k) && !(k in DOCUMENTED_ONLY),
     );
     expect(dropped).toEqual([]);
+  });
+
+  /**
+   * The same check, one level deeper than the one above — which is where it
+   * was always needed (2026-09-11).
+   *
+   * The test above reads `Object.keys(raw)`: TOP-LEVEL keys only. Its own
+   * docstring promises more than that ("a program can declare anything and it
+   * simply vanishes"), and the gap was not theoretical. Parsing every shipped
+   * program and diffing the result against its source found NINETEEN distinct
+   * nested paths being discarded, and they were not all prose:
+   *
+   *   - `blocks[].items[].reps_per_set` — handstand-walk's bail-out drills,
+   *     authored `sets: 5, reps_per_set: 2`. The field is `reps`. Four
+   *     falling-safety drills rendered as five sets of nothing. Fixed in the
+   *     data by the same commit as this test.
+   *   - `phases[].gates_on` — `phase_0_bail_out_prep` declares it applies to
+   *     users who answered `bail_out_readiness` with never_inverted /
+   *     would_fall / can_step_out. Nothing reads it.
+   *   - `phases[].retest_gate`, `blocks[].phase_gated_optional`,
+   *     `blocks[].cautions` — gates and safety copy, all discarded.
+   *
+   * Every one of those was authored by someone who believed it took effect,
+   * which is the whole pathology this file exists to catch. Checking the top
+   * level only meant the guard agreed with them.
+   */
+  const DOCUMENTED_ONLY_NESTED: Record<string, string> = {
+    "phases[].weekly_overrides_removed_2026_09_03":
+      "tombstone — records that weekly overrides were removed, deliberately inert",
+    "phases[].block_final_week_replacements_note": "prose explaining a taper decision",
+    "blocks[].rationale": "author prose; user-facing rationale comes from exercises.json",
+    "retest_metrics[].note": "author prose",
+    "retest_metrics[].targets[].note": "author prose",
+    "plan_tiers[].condition_note": "author prose explaining a tier condition",
+    "evidence_base.references[].doi":
+      "identifier duplicated from citations.json, which is canonical and IS read",
+    "evidence_base.references[].pmid": "same as doi",
+    "evidence_base.references[].verification_status":
+      "per-program copy; the live value is in citations.json and drives the ladder",
+  };
+
+  const nestedDrops = (raw: unknown, parsed: unknown, at: string, out: string[]) => {
+    if (Array.isArray(raw)) {
+      if (!Array.isArray(parsed)) return;
+      raw.forEach((r, i) => nestedDrops(r, parsed[i], `${at}[]`, out));
+      return;
+    }
+    if (raw && typeof raw === "object" && parsed && typeof parsed === "object") {
+      const r = raw as Record<string, unknown>;
+      const pd = parsed as Record<string, unknown>;
+      for (const k of Object.keys(r)) {
+        const at2 = at ? `${at}.${k}` : k;
+        if (!(k in pd)) out.push(at2);
+        else nestedDrops(r[k], pd[k], at2, out);
+      }
+    }
+  };
+
+  /**
+   * Gaps that are OPEN, not approved.
+   *
+   * Deliberately a separate map from `DOCUMENTED_ONLY_NESTED`, because those
+   * two things are not the same claim and collapsing them is how a defect
+   * becomes a convention. An entry above says "nothing is supposed to read
+   * this". An entry HERE says "something plainly was, and it does not".
+   *
+   * Same shape as the SCREEN-1 baseline: every existing gap is listed so a NEW
+   * one fails the suite, and a FIXED one must be delisted here or the test
+   * fails for the opposite reason. The baseline is visibility, not approval.
+   *
+   * What each of these was meant to do is a programme-authoring decision, so
+   * they are logged for the author rather than quietly deleted or quietly
+   * blessed.
+   */
+  const OPEN_DROPPED_KEYS: Record<string, string[]> = {
+    "anterior-hip-rebuild": [
+      "blocks[].tm_calculation",
+      "blocks[].attached_to",
+      "blocks[].phase_gated_optional",
+      "blocks[].protocol",
+      "blocks[].cautions",
+    ],
+    "handstand-walk": ["phases[].gates_on", "phases[].retest_gate"],
+  };
+
+  it.each(programs.map((p) => p.id))("%s authors nothing dropped at ANY depth", (id) => {
+    const entry = manifest.programs.find((p) => p.id === id)!;
+    const raw = read(`programs/${entry.slug ?? entry.id}.json`) as Record<string, unknown>;
+    const parsed = programSchema.parse(raw);
+
+    const out: string[] = [];
+    nestedDrops(raw, parsed, "", out);
+
+    const dropped = [...new Set(out)].filter(
+      (pth) => !(pth in DOCUMENTED_ONLY_NESTED) && !(pth in DOCUMENTED_ONLY),
+    );
+    const baseline = OPEN_DROPPED_KEYS[entry.slug ?? entry.id] ?? [];
+
+    // New gaps fail.
+    expect(dropped.filter((d) => !baseline.includes(d)), `${id}: NEW dropped key`).toEqual(
+      [],
+    );
+    // Fixed gaps must be delisted, or the baseline rots into a permitted list.
+    expect(baseline.filter((b) => !dropped.includes(b)), `${id}: delist from OPEN_DROPPED_KEYS`).toEqual([]);
   });
 });
 
