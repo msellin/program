@@ -435,6 +435,110 @@ describe("tier capability levels resolve against the programme's own slots", () 
   });
 });
 
+/**
+ * A programme must not promise a block it does not ship (added 2026-09-11).
+ *
+ * `engine-builder` sold a "Block 3 (polarised)" in user-facing outcome copy.
+ * It was removed on 2026-09-03, and `status_note` recorded the rule in prose:
+ * "do not reintroduce the promise before the programme does." A rule stated
+ * only in prose is a rule with no enforcement, and this repo has watched that
+ * fail often enough — the 3x-bodyweight figure was withdrawn in three
+ * `used_for` fields and went on shipping in four prose strings for six days.
+ *
+ * The residual case that prompted this: `goals.arc.block_3_polarise` still
+ * described the block exactly like its two shipping siblings, five lines under
+ * a note saying it does not exist. Nothing renders `goals.arc`, so no user saw
+ * it — but an author reading the arc and trusting it is precisely how the
+ * promise comes back.
+ *
+ * Scope is the manifest, not one programme: any block named in an arc must
+ * either exist as a shipping programme or be marked NOT SHIPPED.
+ */
+describe("no programme advertises a block it does not ship", () => {
+  /**
+   * Every arc entry states its status, in the vocabulary the programmes
+   * already use: "this program", "(shipped)", "expected", "NOT SHIPPED".
+   *
+   * Checking the key against manifest slugs was the first attempt and it was
+   * wrong — arc keys are `block_2_volume` and `block_1_this_program`, which
+   * name a position in the arc rather than a programme. Five programmes failed
+   * for a reason that was about the test.
+   *
+   * The status word is what a reader actually goes by, and two entries were
+   * genuinely missing one. `engine-builder`'s `block_2_volume` described the
+   * next block with no marker at all, while `engine-builder-block-2` has been
+   * in the manifest for weeks — a user finishing Block 1 could not tell from
+   * the arc whether the thing existed. And the two files disagreed about the
+   * same absent Block 3: one called it "expected", the other "NOT SHIPPED".
+   */
+  const STATUS = /this program|shipped|expected|planned only|does not exist/i;
+
+  it.each(programs.map((p) => p.id))("%s", (id) => {
+    const entry = manifest.programs.find((p) => p.id === id)!;
+    const raw = read(`programs/${entry.slug ?? entry.id}.json`) as Record<string, unknown>;
+    const arc = ((raw.goals ?? {}) as Record<string, unknown>).arc as
+      | Record<string, unknown>
+      | undefined;
+    if (!arc) return;
+
+    const unmarked = Object.entries(arc)
+      // Not arc entries: a week-range estimate and the prose footer.
+      .filter(([key]) => key.startsWith("block_"))
+      // The status can live in either half. handstand-walk, first-strict-pullup
+      // and muscle-up encode it in the KEY (`block_1_this_program`,
+      // `block_2_expected`); the engine-builder pair encodes it in the copy.
+      //
+      // In the copy it must come FIRST — within the opening clause, not
+      // anywhere in the string. Mutation-testing caught why: these entries
+      // carry long explanatory notes, and an explanation of why a block is
+      // unshipped naturally contains the words "not shipped". Scanning the
+      // whole string let the annotation satisfy the guard on behalf of the
+      // marker it was explaining, so deleting the marker outright still
+      // passed. Leading is also what a reader needs — the status is the first
+      // thing you want from an arc entry, not the last.
+      .filter(([key, copy]) => {
+        if (STATUS.test(key.replace(/_/g, " "))) return false;
+        // A leading WINDOW, not the first clause: the established phrasing is
+        // "8 weeks — this program", so the status sits in the second clause
+        // and splitting on the dash rejected entries that are perfectly clear.
+        // 90 characters covers every current entry's opening statement and is
+        // far short of the explanatory tails that caused the false pass.
+        return !STATUS.test(String(copy).slice(0, 90));
+      })
+      .map(([key]) => key);
+
+    expect(
+      unmarked,
+      `${id}: goals.arc entry with no status — a reader cannot tell whether it ships`,
+    ).toEqual([]);
+  });
+
+  it("a block described as shipped is actually in the manifest", () => {
+    // The other half: "shipped" must be true, not aspirational.
+    const shipped = new Set(manifest.programs.map((p) => p.slug ?? p.id));
+    const offenders: string[] = [];
+    for (const { id } of programs) {
+      const entry = manifest.programs.find((p) => p.id === id)!;
+      const raw = read(`programs/${entry.slug ?? entry.id}.json`) as Record<string, unknown>;
+      const arc = ((raw.goals ?? {}) as Record<string, unknown>).arc as
+        | Record<string, unknown>
+        | undefined;
+      for (const [key, copy] of Object.entries(arc ?? {})) {
+        if (!key.startsWith("block_")) continue;
+        const text = String(copy);
+        if (!/\bSHIPPED\b/.test(text) || /NOT SHIPPED/.test(text)) continue;
+        // Claims to ship — it must name a slug that does.
+        const named = [...shipped].find((s) => text.includes(s));
+        if (!named) offenders.push(`${id}/${key}`);
+      }
+    }
+    expect(
+      offenders,
+      "arc claims a block ships but names no manifest slug that does",
+    ).toEqual([]);
+  });
+});
+
 describe("withdrawn figures do not appear in user-facing copy", () => {
   const WITHDRAWN = [
     {

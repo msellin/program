@@ -410,7 +410,7 @@
         "block_open_2k",
         "block_easy_recovery"
       ],
-      "goal": "Volume down 40-50%, intensity held. Test at week 6.",
+      "goal": "Volume down 40-50%, intensity held through week 5; race-pace withdrawn in the final 7 days. Test at week 6.",
       "rationale": "Mujika & Padilla 2000 — the taper is bought by cutting volume while holding intensity, not by more work. Corrected 2026-09-05: the ~3% uplift figure was credited here to Mujika & Padilla 2000, which contains no such number; Part II supports only the qualitative rule, and the 41-60% volume-reduction figure belongs to Bosquet 2007.",
       "is_taper": true,
       "duration_multiplier": 0.55,

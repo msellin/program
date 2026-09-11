@@ -8,8 +8,8 @@
     "primary_intent": "Build a durable aerobic engine. Block 1 is the base — Z1/Z2 volume with a single hard weekly stimulus once the base is laid. This is the foundation the next two blocks build on.",
     "arc": {
       "block_1_base": "8 weeks — this program. Aerobic base, first exposure to threshold and VO2max work in weeks 4-7, retest week 8.",
-      "block_2_volume": "8-12 weeks — where the majority of VO2max gains land. Two hard sessions per week, higher Z1/Z2 volume, longer intervals.",
-      "block_3_polarise": "12-16 weeks — advanced. 80/20 polarised model, race-specific work, taper and test.",
+      "block_2_volume": "8-12 weeks (SHIPPED, as engine-builder-block-2) — where the majority of VO2max gains land. Two hard sessions per week, higher Z1/Z2 volume, longer intervals.",
+      "block_3_polarise": "NOT SHIPPED — planned only. 12-16 weeks, advanced: 80/20 polarised model, race-specific work, taper and test. Marked here 2026-09-11 because this entry described the block exactly like its two shipping siblings while `status_note` five lines above says it does not exist, and `dose_calibration_note` says \"Blocks 2 and 3 (not shipped yet)\". An arc listing three blocks with no marker is how a removed user-facing promise gets reintroduced by someone reading the arc and trusting it.",
       "total_arc_weeks_estimate": [
         28,
         36
@@ -1638,7 +1638,7 @@
     {
       "metric_id": "submax_hr_pace5_bpm",
       "display_name": "Submax HR — easy-effort avg",
-      "note": "Batch 39 (2026-08-21) F10-EB caveat b: display_name was 'Submax HR at pace-5 (row 2:00/500m)' but the source_ref filters only on intensity == 'easy' — RunLog has no pace_500m field, so the pace anchor couldn't be enforced. Renamed to reflect what's actually computed. metric_id retained for schema stability.",
+      "note": "Batch 39 (2026-08-21) F10-EB caveat b: display_name was 'Submax HR at pace-5 (row 2:00/500m)' but the source_ref filters only on intensity == 'easy' — RunLog had no pace field then, so the pace anchor couldn't be enforced. STALE AS WRITTEN, corrected 2026-09-11: `avg_pace_500m_seconds` exists in runLogSchema and rowing-2k-test-prep already filters on it. The reason this metric still has no anchor is not a missing field — it is that engine-builder is modality-agnostic (run, row, bike, ski erg) and a 500m split anchors only the erg modalities. What the metric measures is therefore still the average HR of whatever the user labelled easy, which the display_name now says plainly. Giving it a real anchor means choosing a per-modality intensity reference, which is metric design. Renamed to reflect what's actually computed. metric_id retained for schema stability.",
       "unit": "bpm",
       "direction": "lower_is_better",
       "source": "run_field",

@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: f720e3a4164e7412 -->
+<!-- source-fingerprint: 60193795ba2306f2 -->
 
 ## What we are asking
 
@@ -69,7 +69,7 @@ is published too, not quietly dropped.
 
 - **Base check · Weeks 1–2** (2 wks) — Establish current 2K + submax HR baseline. Sharpen technique before overloading.
 - **Threshold build · Weeks 3–4** (2 wks) — Push threshold pace up. Add one race-pace session per week.
-- **Taper + test · Weeks 5–6** (2 wks) — Volume down 40-50%, intensity held. Test at week 6.
+- **Taper + test · Weeks 5–6** (2 wks) — Volume down 40-50%, intensity held through week 5; race-pace withdrawn in the final 7 days. Test at week 6.
 
 ### What it retests, and how often
 
