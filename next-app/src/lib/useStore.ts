@@ -9,6 +9,7 @@ import { today, iso } from "./utils";
 import { snapshotCitation } from "./engine/citations";
 import { announce } from "./announce";
 import { validateTMWrite, type TMSource } from "./engine/tm-write";
+import { deriveState } from "./symptom-state";
 
 /**
  * Save to persistence AND fire a debounced remote push.
@@ -92,6 +93,23 @@ type StoreState = {
     derived: DayLog["derived_state"],
   ) => void;
   setDayNotes: (date: string, notes: string) => void;
+  /**
+   * Pain reported DURING a session (2026-09-11).
+   *
+   * Four programmes require the user to tick "I agree to stop the session if
+   * shoulder pain appears during a hang, transition, or support hold — no
+   * training through it." Nothing could detect that. The morning check is the
+   * only symptom input and it runs before the session, so the moment the
+   * consent is actually about had no way to be recorded at all.
+   *
+   * Takes the MAXIMUM of what is already stored for the region, never a
+   * replacement: a 6 reported mid-session must not be erased by a 2 from the
+   * morning, and re-reporting the same region should not walk the number down.
+   * `derived_state` is recomputed from the merged symptoms through the same
+   * `deriveState` the morning check uses — the threshold does not get a second
+   * implementation just because the input arrived later in the day.
+   */
+  reportInSessionSymptom: (date: string, regionId: string, score: number) => void;
   replaceStore: (next: Store) => void;
   wipe: () => void;
   skipDay: (date: string, reason?: string) => void;
@@ -597,6 +615,19 @@ export const useStore = create<StoreState>((set, get) => ({
       ? { ...symptoms, scale_version: SYMPTOM_SCALE_VERSION }
       : symptoms;
     day.derived_state = derived;
+    commit(s);
+    set({ store: s });
+  },
+
+  reportInSessionSymptom: (date, regionId, score) => {
+    const s = { ...get().store };
+    const day = ensureDay(s, date);
+    const prior = (day.symptoms ?? {}) as Record<string, unknown>;
+    const existing = typeof prior[regionId] === "number" ? (prior[regionId] as number) : 0;
+    // Max, not replace. See the interface comment.
+    const merged = { ...prior, [regionId]: Math.max(existing, score) } as DayLog["symptoms"];
+    day.symptoms = merged ? { ...merged, scale_version: SYMPTOM_SCALE_VERSION } : merged;
+    day.derived_state = merged ? deriveState(merged) : day.derived_state;
     commit(s);
     set({ store: s });
   },
