@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { BookOpen, ChevronRight, ClipboardList, FileText, Library, ListPlus, LogOut } from "lucide-react";
+import { BookOpen, ChevronRight, ClipboardList, FileText, Library, ListPlus, LogOut, MessageSquare } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useStore } from "@/lib/useStore";
 import { createClient } from "@/lib/supabase/client";
@@ -319,6 +319,21 @@ export default function ProfilePage() {
             "/programs/{slug}/intake" is not something a user can reach by
             typing it. Primary programme only — a picker here would be a
             second catalog, and the per-programme pages already deep-link. */}
+        {/* Feedback (2026-09-11). Beta users had no channel at all: the app
+            asks for a symptom score every morning and an Accept or Ignore on
+            every proposal, and offered nowhere to say a proposal made no
+            sense. The only route was knowing the founder personally, which
+            describes this beta and not the next one. */}
+        <Link
+          href="/feedback/"
+          className="flex items-center justify-between gap-3 px-3 py-3 min-h-[48px] active:bg-line-soft/50"
+        >
+          <span className="flex items-center gap-3 text-sm">
+            <MessageSquare size={16} className="text-muted" />
+            Send feedback
+          </span>
+          <ChevronRight size={16} className="text-muted flex-shrink-0" />
+        </Link>
         {activeProgramId ? (
           <Link
             href={`/programs/${activeProgramId}/intake/`}
