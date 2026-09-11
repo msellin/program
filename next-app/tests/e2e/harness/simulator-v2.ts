@@ -329,6 +329,58 @@ export async function runSimulationV2(
       ohs_hip_below_knee_cm: -3,
       tgu_hold_max_seconds: 12,
     },
+    /**
+     * Added 2026-09-11 (H1). Every value is derived from the programme's own
+     * tier-A condition, not invented — personas set no `tier`, so
+     * `resolveActiveTier` falls back to `plan_tiers[0]` and a seed that
+     * contradicts it would place the fleet in a tier the harness did not ask
+     * for.
+     *
+     * The reported gap was "0 of 23 personas define capabilitySeed", later
+     * "7 of 9 programmes unseeded". Both overcount: three programmes
+     * (anterior-hip-rebuild, concurrent-strength-maintenance,
+     * rowing-2k-test-prep) declare NO physical tests at all, so there is
+     * nothing to seed. Six are seedable; all six now are.
+     */
+
+    // tier_a_hang: `dead_hang_max_seconds < 15`.
+    "first-strict-pullup": {
+      dead_hang_max_seconds: 11,
+      scap_pull_max_reps: 2,
+      ring_row_max_reps_feet_elevated: 5,
+      strict_pullup_max_reps: 0,
+      negative_pullup_seconds: 4,
+    },
+    // tier_a_prep: `strict_pullup_max_reps >= 3 && ring_dip_max_reps < 3`.
+    // Both halves matter — a seed with 5 pull-ups and 4 ring dips would land
+    // the persona in tier_b_transition instead.
+    "muscle-up": {
+      strict_pullup_max_reps: 5,
+      ring_dip_max_reps: 1,
+      false_grip_hang_max_seconds: 8,
+      false_grip_pullup_max_reps: 0,
+      ring_support_lockout_seconds: 10,
+    },
+    /**
+     * The engine programmes tier on INTAKE ANSWERS (`cardio_hours_per_week`,
+     * `can_sustain_20min_easy`), not on these tests — so these seeds cannot
+     * move the tier and are not trying to. They exist for the other half of
+     * `capabilitySeed`'s purpose: retest cards rendering a real
+     * baseline/current/delta instead of "— · — · —".
+     */
+    "engine-builder": {
+      resting_hr_morning: 58,
+      submax_hr_5min: 148,
+      row_500m_tt: 108,
+      run_1km_tt: 285,
+    },
+    "engine-builder-block-2": {
+      resting_hr_morning: 54,
+      submax_hr_5min: 142,
+      threshold_test_20min: 1200,
+      row_2k_tt: 452,
+      run_5k_tt: 1500,
+    },
   };
   const capabilitySeed = CAPABILITY_SEEDS[programSlug] ?? {};
 
