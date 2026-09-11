@@ -321,6 +321,57 @@ describe("display names", () => {
   });
 });
 
+/**
+ * CLAUDE.md's program count (added 2026-09-11).
+ *
+ * That file is the first thing every session reads, and its second paragraph
+ * asserted "5 shipping programs" while the manifest held nine. The claim had
+ * been wrong since `first-strict-pullup`, `muscle-up` and
+ * `engine-builder-block-2` shipped, and it was wrong in the direction that
+ * matters: a session briefed on five programs reasons about five, and the
+ * catalog-wide defects this repo keeps finding — a hip program's symptom map
+ * rendered to everyone, a load axis hardcoded to two programs' lifts — are
+ * exactly the class of bug you miss when you think the catalog is smaller
+ * than it is.
+ *
+ * Pinned to the manifest rather than re-counted by hand, for the same reason
+ * the landing's headline numbers are: a number maintained in prose drifts,
+ * and nothing downstream can tell a stale one from a current one.
+ */
+describe("CLAUDE.md agrees with the manifest", () => {
+  const CLAUDE_MD = path.resolve(process.cwd(), "..", "CLAUDE.md");
+
+  it("states the manifest's real program count", () => {
+    if (!fs.existsSync(CLAUDE_MD)) return; // doc not checked out
+
+    const src = fs.readFileSync(CLAUDE_MD, "utf8");
+    const m = src.match(/\*\*(\d+) shipping programs\*\*/);
+    expect(m, "CLAUDE.md must state '**N shipping programs**'").not.toBeNull();
+    expect(Number(m![1])).toBe(manifest.programs.length);
+  });
+
+  it("names every manifest slug in the catalog paragraph itself", () => {
+    if (!fs.existsSync(CLAUDE_MD)) return;
+
+    // A count alone can be right while the list beneath it is stale, which is
+    // how the old sentence named six programs under the number five.
+    //
+    // Scoped to the paragraph rather than the whole file, and this is the
+    // whole point: the first version searched all of CLAUDE.md, and a
+    // mutation test that deleted `muscle-up` from the catalog list still
+    // passed — the Validation section mentions muscle-up for an unrelated
+    // reason. A guard that a stale catalog can satisfy by coincidence is not
+    // a guard.
+    const src = fs.readFileSync(CLAUDE_MD, "utf8");
+    const start = src.indexOf("**" + manifest.programs.length + " shipping programs**");
+    const para = src.slice(start, src.indexOf("\n\n", start));
+    const missing = manifest.programs
+      .map((p) => p.slug)
+      .filter((slug) => !para.includes(slug));
+    expect(missing).toEqual([]);
+  });
+});
+
 describe("landing catalog matches the app manifest", () => {
   const LANDING_CATALOG = path.resolve(
     process.cwd(),

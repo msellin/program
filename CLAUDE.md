@@ -8,10 +8,14 @@ Project context for Claude Code sessions in this repo.
 Positioning: pick one focus (an engine, a skill, a lift, a stubborn joint); Terav sharpens that
 arc every session against your log; runs alongside your existing week. NOT a full training plan.
 
-Multi-user beta (Supabase auth + KV state sync). 5 shipping programs across strength (5/3/1
-anterior-hip), aerobic (Engine Builder), concurrent (CSM), skill (Handstand Walk), mobility
-(Overhead), and race-anchored (Rowing 2K Test Prep). Confirm-first mechanic — engine proposes,
-user Accepts, every change cites a study OR names its log signal.
+Multi-user beta (Supabase auth + KV state sync). **9 shipping programs**, and the count
+belongs to `next-app/public/data/programs/manifest.json` rather than to this sentence — it
+said "5" until 2026-09-11, four programs after that stopped being true. By category:
+rehab (anterior-hip-rebuild, `personal: true`), strength (concurrent-strength-maintenance),
+endurance (engine-builder, engine-builder-block-2, rowing-2k-test-prep), skill
+(handstand-walk, first-strict-pullup, muscle-up), asymmetry (overhead-mobility).
+Confirm-first mechanic — engine proposes, user Accepts, every change cites a study OR names
+its log signal.
 
 Data model at `data/` was originally seeded from Margus's own multi-year rehab logs (still the
 `anterior-hip-rebuild` program's clinical context) — derived from ten Digilugu / Terviseportaal

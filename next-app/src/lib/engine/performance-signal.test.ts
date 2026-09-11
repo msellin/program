@@ -49,7 +49,7 @@ const store = {
   version: 2,
   logs: {},
   training_maxes: { front_squat: 110, back_squat_highbar: 110, block_pull_midshin: 145 },
-  cycle: { phase_id: null, cycle_number: 1, week_in_cycle: 1 },
+  cycle: { cycle_number: 1, week_in_cycle: 1 },
 } as unknown as Store;
 
 describe("performanceSignals — the founder's own sessions", () => {

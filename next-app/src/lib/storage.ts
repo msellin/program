@@ -10,7 +10,7 @@ const emptyStore = (): Store => ({
   version: 2,
   logs: {},
   training_maxes: {},
-  cycle: { phase_id: null, cycle_number: 1, week_in_cycle: 1 },
+  cycle: { cycle_number: 1, week_in_cycle: 1 },
 });
 
 /**

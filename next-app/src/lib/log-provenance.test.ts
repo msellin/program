@@ -61,7 +61,7 @@ describe("first_written_at", () => {
         "2026-08-01": { date: "2026-08-01", exercises: {}, symptoms: null, derived_state: null },
       },
       training_maxes: {},
-      cycle: { phase_id: null, cycle_number: 1, week_in_cycle: 1 },
+      cycle: { cycle_number: 1, week_in_cycle: 1 },
     });
     expect(parsed.success).toBe(true);
   });
@@ -103,7 +103,7 @@ describe("symptoms.scale_version", () => {
         },
       },
       training_maxes: {},
-      cycle: { phase_id: null, cycle_number: 1, week_in_cycle: 1 },
+      cycle: { cycle_number: 1, week_in_cycle: 1 },
     });
     expect(parsed.success).toBe(true);
     expect(

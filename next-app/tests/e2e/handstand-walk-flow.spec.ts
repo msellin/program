@@ -220,7 +220,7 @@ test("A second program replaces the first, and says so before the intake", async
       version: 2,
       logs: {},
       training_maxes: {},
-      cycle: { phase_id: null, cycle_number: 1, week_in_cycle: 1 },
+      cycle: { cycle_number: 1, week_in_cycle: 1 },
       updated_at: now,
       scheduled_overrides: {},
       skipped: {},

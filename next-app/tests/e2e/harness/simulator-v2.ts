@@ -339,14 +339,14 @@ export async function runSimulationV2(
         version: 2,
         logs: {},
         training_maxes: {},
-        cycle: { phase_id: null, cycle_number: 1, week_in_cycle: 1 },
+        cycle: { cycle_number: 1, week_in_cycle: 1 },
         updated_at: Date.now(),
         scheduled_overrides: {},
         skipped: {},
         dismissed_proposals: {},
       };
       if (store.cycle == null) {
-        store.cycle = { phase_id: null, cycle_number: 1, week_in_cycle: 1 };
+        store.cycle = { cycle_number: 1, week_in_cycle: 1 };
       }
       const allSlugs = [slug, ...extras];
       const startedAtISO = new Date().toISOString();
@@ -526,7 +526,7 @@ export async function runSimulationV2(
               version: 2,
               logs: {},
               training_maxes: {},
-              cycle: { phase_id: null, cycle_number: 1, week_in_cycle: 1 },
+              cycle: { cycle_number: 1, week_in_cycle: 1 },
               updated_at: Date.now(),
               scheduled_overrides: {},
               skipped: {},
@@ -604,7 +604,7 @@ export async function runSimulationV2(
         }
         store.training_maxes = { ...tms, ...store.training_maxes };
         if (store.cycle == null) {
-          store.cycle = { phase_id: null, cycle_number: 1, week_in_cycle: 1 };
+          store.cycle = { cycle_number: 1, week_in_cycle: 1 };
         }
 
         // Always write morning check + symptoms.

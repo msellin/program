@@ -16,7 +16,7 @@ function makeBaseStore(activeSlug: string): Store {
     version: 2,
     logs: {},
     training_maxes: {},
-    cycle: { phase_id: null, cycle_number: 0, week_in_cycle: 0 },
+    cycle: { cycle_number: 0, week_in_cycle: 0 },
     user_profile: {
       active_program_id: activeSlug,
     },

@@ -16,7 +16,7 @@ function storeWith(days: Array<[string, string | undefined]>): Store {
       ]),
     ),
     training_maxes: {},
-    cycle: { phase_id: null, cycle_number: 0, week_in_cycle: 0 },
+    cycle: { cycle_number: 0, week_in_cycle: 0 },
   } as unknown as Store;
 }
 

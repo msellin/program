@@ -1364,8 +1364,26 @@ export const storeSchema = z.object({
       }),
     )
     .optional(),
+  /**
+   * `phase_id` removed 2026-09-11 (H2).
+   *
+   * It was written in six places — `storage.ts`, `useStore.ts`, the two
+   * simulators — and read in none. The original item offered "wire a writer or
+   * delete"; the wire option died with `coach-client.ts` in the R12 kill, so
+   * this is delete-only.
+   *
+   * Dropping it from the schema is backwards-compatible in the direction that
+   * matters: Zod strips unknown keys, so every stored store and all 37 persona
+   * artifacts carrying `"phase_id": null` still parse. Nothing needs migrating
+   * and nothing was rewritten to make this true.
+   *
+   * NOTE the two survivors have no readers either — `cycle_number` and
+   * `week_in_cycle` are written and never consulted, so `store.cycle` is now a
+   * wholly dead object rather than a mostly dead one. Left in place: removing
+   * live-looking state structure is a product call, not a cleanup, and it is
+   * logged as its own task rather than folded into this one.
+   */
   cycle: z.object({
-    phase_id: z.string().nullable(),
     cycle_number: z.number(),
     week_in_cycle: z.number(),
   }),

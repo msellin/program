@@ -12,7 +12,7 @@ const emptyStore: Store = {
   version: 2,
   logs: {},
   training_maxes: {},
-  cycle: { phase_id: null, cycle_number: 1, week_in_cycle: 1 },
+  cycle: { cycle_number: 1, week_in_cycle: 1 },
 };
 
 describe("detectPauseResume", () => {
@@ -223,7 +223,7 @@ describe("evaluateCycleEnd — RPE integration", () => {
       version: 2,
       logs,
       training_maxes: { back_squat_highbar: 100 },
-      cycle: { phase_id: "phase_test", cycle_number: 1, week_in_cycle: 4 },
+      cycle: { cycle_number: 1, week_in_cycle: 4 },
     };
   }
 
@@ -375,7 +375,7 @@ describe("evaluateOverperformer", () => {
       version: 2,
       logs,
       training_maxes: args.tms ?? { back_squat_highbar: 100, deadlift_conventional: 140 },
-      cycle: { phase_id: "phase_test", cycle_number: 1, week_in_cycle: 2 },
+      cycle: { cycle_number: 1, week_in_cycle: 2 },
     };
   }
 

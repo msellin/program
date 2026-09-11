@@ -46,7 +46,7 @@ describe("failed survives the schema", () => {
     const raw = {
       version: 2,
       training_maxes: { front_squat: 110 },
-      cycle: { cycle_number: 1, week_in_cycle: 1, phase_id: "p1" },
+      cycle: { cycle_number: 1, week_in_cycle: 1 },
       logs: {
         "2026-09-01": {
           date: "2026-09-01", notes: "", symptoms: null, derived_state: null,
@@ -119,7 +119,7 @@ describe("the clinical report", () => {
     ({
       version: 2,
       training_maxes: { front_squat: 110 },
-      cycle: { cycle_number: 1, week_in_cycle: 1, phase_id: "p1" },
+      cycle: { cycle_number: 1, week_in_cycle: 1 },
       logs: {
         "2026-09-01": {
           date: "2026-09-01", notes: "", symptoms: null, derived_state: null,
