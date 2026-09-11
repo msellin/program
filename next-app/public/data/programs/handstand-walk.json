@@ -715,15 +715,6 @@
       "ends": "2026-01-11",
       "duration_weeks": 1,
       "goal": "Learn to fall on purpose before you learn to hold vertical. Fear-of-falling gates handstand progress more than physical capacity for most self-taught users.",
-      "gates_on": {
-        "intake_answer": {
-          "bail_out_readiness": [
-            "never_inverted",
-            "would_fall",
-            "can_step_out"
-          ]
-        }
-      },
       "rationale": "Fear-of-falling literature: Adkin & Frank 2000 (as postural threat rises, the nervous system tightens postural control - centre-of-pressure amplitude down and frequency up in 62 healthy young adults standing quietly on a raised platform; this study recorded centre-of-pressure only, no muscle activity, and there is no 2002 companion paper in this library); Carpenter 2001 (under postural threat, eight quiet standers adopted a stiffening strategy, with significant changes in kinematic, kinetic and EMG variables and anterior-posterior stiffness 27.5% higher than at low threat - a different balance strategy, not a measured decrement, and elevation rather than anxiety was the manipulated variable). Corrected 2026-09-05: the muscle-activation claim had been attributed to Adkin, which measured none, and Carpenter had been read as showing that anxiety degrades balance; both studied quiet bipedal standing, so treating them as evidence about falling out of an inverted handstand is an engineering choice, not a licensed transfer; Hardy 1996 was cited here for a catastrophe effect and was WITHDRAWN 2026-09-05 — that study is a null result in eight golfers putting, concluding it offers no clear evidence for either model; Bandura (mastery experiences on bail-outs reduce threat perception on the primary skill — you don't reduce fear by walking more). Gymnastics/circus pedagogy (USA Gymnastics, NICA, Emmet Louis, Yuval Ayalon) treats cartwheel exit / pirouette / tuck forward roll as pre-requisite to freestanding, not optional. Phase 0 is deliberately short — one week of exit drills, not a rehab arc.",
       "blocks": [
         "block_bail_wall_cartwheel_exit",

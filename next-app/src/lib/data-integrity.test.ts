@@ -921,6 +921,10 @@ describe("programs do not author top-level keys the runtime discards", () => {
     "retest_metrics[].note": "author prose",
     "retest_metrics[].targets[].note": "author prose",
     "plan_tiers[].condition_note": "author prose explaining a tier condition",
+    "blocks[].attached_to":
+      "vestigial — `block_runs` declares attached_to: 'run_sessions', but what " +
+      "actually schedules it is `category: \"run\"` plus `phase_gated`. Read " +
+      "2026-09-11: no reader ever existed and the two live fields cover it",
     "evidence_base.references[].doi":
       "identifier duplicated from citations.json, which is canonical and IS read",
     "evidence_base.references[].pmid": "same as doi",
@@ -962,14 +966,57 @@ describe("programs do not author top-level keys the runtime discards", () => {
    * blessed.
    */
   const OPEN_DROPPED_KEYS: Record<string, string[]> = {
+    /**
+     * Read one by one on 2026-09-11, and they are three different things.
+     *
+     * `tm_calculation` was USER-FACING INSTRUCTION — "TM = 5RM x 0.90. Set
+     * values in the app's Training Maxes tab immediately after this session."
+     * Authored on the two evaluation blocks, discarded at parse, and never
+     * shown to the person whose job it described. Folded into `note`, which
+     * renders. Delisted.
+     *
+     * `attached_to` is vestigial and moved to DOCUMENTED_ONLY above.
+     *
+     * These three remain OPEN, and they are ONE finding rather than three:
+     * all three sit on the same block. `protocol` is its prescription,
+     * `phase_gated_optional` its gating, and `cautions` its SAFETY COPY —
+     * "first amber week, drop out immediately", "requires TM known to be
+     * accurate, do not run on estimated TM". An entire optional block,
+     * schedule and rules and warnings, authored and unreachable.
+     * `block_smolov_jr_squat` is a fully authored optional peaking block — a
+     * 4-week, 4-day-per-week protocol the founder has personal history with —
+     * scheduled by NOTHING. Its own id appears exactly once in the
+     * file, in its own definition. It is gated by `phase_gated_optional`,
+     * which is discarded, so unlike every sibling it has no `phase_gated` to
+     * fall back on. Making it reachable is a prescription decision: its note
+     * says it substitutes for cycle 4 weeks 1-3 and displaces pull frequency
+     * to 1x/week.
+     */
     "anterior-hip-rebuild": [
-      "blocks[].tm_calculation",
-      "blocks[].attached_to",
       "blocks[].phase_gated_optional",
       "blocks[].protocol",
       "blocks[].cautions",
     ],
-    "handstand-walk": ["phases[].gates_on", "phases[].retest_gate"],
+    /**
+     * `gates_on` was DELETED on 2026-09-11, not implemented.
+     *
+     * It duplicated `phase_gates[]`, which is live and which
+     * `isPhaseGateSkipped` reads — same phase, same question, same answers.
+     * The bail-out phase was never ungated; driving `activePhaseFor` across
+     * both answers shows it running for `never_inverted` and skipped for
+     * `can_exit_reliably`. Two declarations of one rule is a drift hazard in
+     * the direction nobody checks: an author correcting the dead one would
+     * change nothing and believe otherwise. `phase-zero-gate.test.ts` keeps
+     * the record and asserts the surviving gate behaves.
+     *
+     * `retest_gate` is a different thing and genuinely unimplemented: it
+     * declares how a user EXITS phase 0 — "bail_out_confidence >= 6 for 2
+     * consecutive days", and a nudge toward a coach if fear persists past two
+     * weeks. Phases here are date-driven and phase 0 is one authored week, so
+     * none of it happens and there is no `bail_out_confidence` field for it to
+     * read. Building that is a design decision, not a rename.
+     */
+    "handstand-walk": ["phases[].retest_gate"],
   };
 
   it.each(programs.map((p) => p.id))("%s authors nothing dropped at ANY depth", (id) => {
