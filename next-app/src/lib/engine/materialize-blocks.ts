@@ -24,6 +24,7 @@ import type {
 } from "../schemas";
 import { activePhaseFor } from "./schedule";
 import { blocksForDate } from "./plan-generator";
+import { iso } from "../utils";
 
 /**
  * Stable id for a scheduled block instance. Uses the ORIGINAL
@@ -48,7 +49,25 @@ function datesInRange(startISO: string, endISO: string): string[] {
   if (!Number.isFinite(start) || !Number.isFinite(end) || end < start) return out;
   const DAY_MS = 864e5;
   for (let t = start; t <= end; t += DAY_MS) {
-    out.push(new Date(t).toISOString().slice(0, 10));
+    /**
+     * `iso()`, not `toISOString()` (fixed 2026-09-11).
+     *
+     * The range starts at LOCAL midnight — `new Date(startISO + "T00:00:00")`
+     * — and then each step was converted back through UTC. East of UTC those
+     * disagree by a day: in UTC+3, local midnight on the 11th is 21:00 UTC on
+     * the 10th, so `datesInRange("2026-09-11", "2026-09-13")` returned
+     * ["2026-09-10", "2026-09-11", "2026-09-12"].
+     *
+     * **Every materialized block was keyed a day early**, and this is the
+     * block-object WRITE path, which `StoreHydrator` turns on for everyone who
+     * has not opted out. `blockInstanceId` embeds `plannedDate`, so the ids
+     * were wrong too.
+     *
+     * Mixing the two conventions in one function is the whole bug: local in,
+     * UTC out. `lib/utils.ts` exports `iso()` precisely so a Date becomes the
+     * calendar date a person is living in.
+     */
+    out.push(iso(new Date(t)));
   }
   return out;
 }
@@ -133,9 +152,10 @@ export function materializeLookahead(
   existing: Record<string, ScheduledBlock> | undefined,
   profile?: Store["user_profile"],
 ): { blocks: Record<string, ScheduledBlock>; materializedThrough: string } {
-  const end = new Date(new Date(todayISO + "T00:00:00").getTime() + lookaheadDays * 864e5)
-    .toISOString()
-    .slice(0, 10);
+  // Local out, to match the local parse going in (fixed 2026-09-11). This is
+  // the far edge of the materialization window and it feeds `datesInRange`
+  // below — the same mixed-calendar bug, one call earlier.
+  const end = iso(new Date(new Date(todayISO + "T00:00:00").getTime() + lookaheadDays * 864e5));
   const fresh = materializeBlocks(program, todayISO, end, profile);
   const blocks = mergeMaterialization(existing, fresh);
   return { blocks, materializedThrough: end };

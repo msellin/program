@@ -32,6 +32,7 @@
 
 import type { Program, Store, ScheduledBlock } from "../schemas";
 import { materializeBlocks, blockInstanceId, mergeMaterialization } from "../engine/materialize-blocks";
+import { iso } from "../utils";
 
 // Batch 38 (2026-08-21) — bumped v1 → v2 so users whose data was migrated
 // under v1 (before BUG-8's shouldFlipDone logic landed) get their stuck
@@ -57,7 +58,10 @@ export function needsBlockMigration(store: Store): boolean {
 export function migrateLegacyToBlocks(
   store: Store,
   programsBySlug: Record<string, Program>,
-  todayISO: string = new Date().toISOString().slice(0, 10),
+  // Local date (fixed 2026-09-11). This defaults the day a one-shot migration
+  // believes it is running on; UTC would make it yesterday for anyone east of
+  // UTC migrating between local midnight and the offset.
+  todayISO: string = iso(new Date()),
 ): Store {
   if (!needsBlockMigration(store)) return store;
 
@@ -72,12 +76,11 @@ export function migrateLegacyToBlocks(
   // Anchor: 4 weeks back so a prior `moved` or `skipped` on a recent
   // date has a target block to attach to. 4 weeks forward gives the
   // materializer's rollover a lead.
-  const start = new Date(new Date(todayISO + "T00:00:00").getTime() - 28 * 864e5)
-    .toISOString()
-    .slice(0, 10);
-  const end = new Date(new Date(todayISO + "T00:00:00").getTime() + 28 * 864e5)
-    .toISOString()
-    .slice(0, 10);
+  // Local out, matching the local parse in (fixed 2026-09-11). These bound a
+  // ONE-SHOT migration: a boundary a day off silently drops the oldest day of
+  // history it was meant to carry across, and it only runs once per user.
+  const start = iso(new Date(new Date(todayISO + "T00:00:00").getTime() - 28 * 864e5));
+  const end = iso(new Date(new Date(todayISO + "T00:00:00").getTime() + 28 * 864e5));
 
   // 1 — materialize
   let blocks: Record<string, ScheduledBlock> = { ...(next.scheduled_blocks ?? {}) };

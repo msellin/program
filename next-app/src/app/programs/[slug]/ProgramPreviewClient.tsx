@@ -7,7 +7,7 @@ import { ChevronLeft, Play, Check } from "lucide-react";
 import { loadProgram, loadProgramManifest } from "@/lib/data-loader";
 import { useStore } from "@/lib/useStore";
 import { useIsSuperAdmin } from "@/lib/super-admin";
-import { cn } from "@/lib/utils";
+import { cn, iso as isoDate } from "@/lib/utils";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
 import { DashboardBlock } from "@/components/DashboardBlock";
 import { StatusPill } from "@/components/ui/StatusPill";
@@ -125,7 +125,9 @@ export function ProgramPreviewClient({ slug }: Props) {
   const writeTraceOnStart = () => {
     if (!program) return;
     const uid = uidForTrace ?? "guest";
-    const startDate = new Date().toISOString().slice(0, 10);
+    // Local — same deterministic seed as IntakeClient; the two must agree or a
+    // user seeded on the preview and on the intake gets two different plans.
+    const startDate = isoDate(new Date());
     writeGenerationTrace(slug, {
       strategy: program.generation_strategy ?? "correlated_tier",
       tier_id: effectiveTier ?? undefined,

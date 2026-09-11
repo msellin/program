@@ -25,6 +25,7 @@
 import { materializeLookahead } from "./materialize-blocks";
 import { SCHEDULE_RULES_VERSION } from "./schedule";
 import type { Program, ScheduledBlock, Store } from "../schemas";
+import { iso as isoDate } from "../utils";
 
 /** How far ahead we keep blocks materialized. */
 export const LOOKAHEAD_DAYS = 56;
@@ -36,10 +37,11 @@ export const LOOKAHEAD_DAYS = 56;
  */
 export const REFRESH_WHEN_RUNWAY_UNDER_DAYS = 28;
 
-function addDays(iso: string, days: number): string {
-  return new Date(new Date(iso + "T00:00:00").getTime() + days * 864e5)
-    .toISOString()
-    .slice(0, 10);
+function addDays(date: string, days: number): string {
+  // Local out, matching the local parse in (fixed 2026-09-11). The parameter
+  // is renamed off `iso` because that is now the helper's name, and shadowing
+  // it here is how this comes back.
+  return isoDate(new Date(new Date(date + "T00:00:00").getTime() + days * 864e5));
 }
 
 export function activeSlugsOf(store: Store): string[] {

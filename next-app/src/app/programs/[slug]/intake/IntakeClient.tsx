@@ -36,7 +36,7 @@ import {
   type GateNotice,
 } from "@/lib/engine/safety-gates";
 import { hasSelfReportProxy } from "@/lib/engine/intake-tier";
-import { cn } from "@/lib/utils";
+import { cn, iso as isoDate } from "@/lib/utils";
 import { inferTier } from "@/lib/engine/intake-tier";
 import { DashboardBlock } from "@/components/DashboardBlock";
 import { announce } from "@/lib/announce";
@@ -371,7 +371,17 @@ export function IntakeClient({ slug }: Props) {
       const authoredStart = program.phases[0].starts;
       if (/^\d{4}-\d{2}-\d{2}$/.test(authoredStart)) {
         const authored = new Date(authoredStart + "T00:00:00").getTime();
-        const todayIso = new Date().toISOString().slice(0, 10);
+        /**
+         * Local, to match `authored` (fixed 2026-09-11).
+         *
+         * `authored` is parsed at LOCAL midnight and this was read in UTC, so
+         * the two sides of the subtraction below used different calendars.
+         * Their difference IS `phase_shift_days` — the number that decides
+         * which phase a user is in on any given day, and therefore which
+         * blocks they are prescribed and when their retest falls. Same class
+         * of bug as `shiftIsoDate`, at the other end of the same value.
+         */
+        const todayIso = isoDate(new Date());
         const today = new Date(todayIso + "T00:00:00").getTime();
         if (Number.isFinite(authored) && Number.isFinite(today)) {
           const shift = Math.round((today - authored) / 864e5);
@@ -464,7 +474,9 @@ export function IntakeClient({ slug }: Props) {
     // includes uid + slug + start date; two users with the same intake but
     // different uids get different seeds → different downstream shuffles.
     const uid = userProfileForTrace?.uid ?? "guest";
-    const startDate = new Date().toISOString().slice(0, 10);
+    // Local: this is part of a deterministic seed, so the day it names should
+    // be the day the user started, not a UTC day they were never in.
+    const startDate = isoDate(new Date());
     writeGenerationTrace(slug, {
       strategy: program?.generation_strategy ?? "correlated_tier",
       tier_id: chosenTierId,
@@ -1273,7 +1285,9 @@ function WizardQuestionScreen({
             type="date"
             value={currentValue ?? ""}
             onChange={(e) => setAnswer(q.id, e.target.value)}
-            min={new Date().toISOString().slice(0, 10)}
+            // Local: in UTC+3 between midnight and 03:00 the UTC form accepts
+            // YESTERDAY as a valid future date.
+            min={isoDate(new Date())}
             aria-labelledby={`q-heading-${q.id}`}
             className="w-full text-[15px] px-3 py-3 min-h-[48px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
           />

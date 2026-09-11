@@ -17,6 +17,7 @@ import {
   OFF_PLAN_GRANDFATHER_MARKER,
 } from "@/lib/features";
 import type { Program, Store } from "@/lib/schemas";
+import { iso as isoDate } from "@/lib/utils";
 
 const KEY = "program.log.v2";
 
@@ -182,7 +183,7 @@ export function StoreHydrator() {
         for (const p of programs) if (p.slug) bySlug[p.slug] = p;
         const current = useStore.getState().store;
         if (!needsBlockMigration(current)) return;
-        const migrated = migrateLegacyToBlocks(current, bySlug, new Date().toISOString().slice(0, 10));
+        const migrated = migrateLegacyToBlocks(current, bySlug, isoDate(new Date()));
         useStore.getState().replaceStore(migrated);
       })
       .catch(() => {
@@ -203,7 +204,7 @@ export function StoreHydrator() {
     // replaces the store.
     if (needsBlockMigration(state.store)) return;
 
-    const todayISO = new Date().toISOString().slice(0, 10);
+    const todayISO = isoDate(new Date());
     const slugs = slugsNeedingMaterialization(state.store, todayISO);
     if (!slugs.length) return;
 

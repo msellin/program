@@ -102,8 +102,18 @@ describe("ensureMaterialized", () => {
       (b) => b.program_slug === SECOND,
     );
     expect(secondBlocks.length).toBeGreaterThan(0);
+    /**
+     * A LITERAL, for the same reason as `materialize-blocks.test.ts`.
+     *
+     * This compared against the file's own `addDays`, which converted through
+     * UTC exactly like the implementation did — so both shifted together and
+     * the test stayed green across a real defect. TODAY is 2026-08-24 and the
+     * lookahead is 56 days, which is 2026-10-19.
+     */
+    expect(TODAY).toBe("2026-08-24");
+    expect(LOOKAHEAD_DAYS).toBe(56);
     expect(after!.program_materialization?.[SECOND]?.materialized_through).toBe(
-      addDays(TODAY, LOOKAHEAD_DAYS),
+      "2026-10-19",
     );
   });
 

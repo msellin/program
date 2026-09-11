@@ -123,10 +123,23 @@ describe("materializeLookahead", () => {
     const program = loadProgram("concurrent-strength-maintenance");
     const start = program.phases[0].starts;
     const result = materializeLookahead(program, start, 7, undefined);
-    const expectedEnd = new Date(new Date(start + "T00:00:00").getTime() + 7 * 864e5)
-      .toISOString()
-      .slice(0, 10);
-    expect(result.materializedThrough).toBe(expectedEnd);
+
+    /**
+     * A LITERAL, computed by hand (2026-09-11).
+     *
+     * This asserted an `expectedEnd` built with the same
+     * `.toISOString().slice(0, 10)` the implementation used — so when that
+     * shifted the date a day west of local, the expectation shifted with it
+     * and the test passed. A test that reimplements the implementation's bug
+     * cannot see the bug.
+     *
+     * The programme's first phase starts 2026-08-12; seven days later is
+     * 2026-08-19. Written out, so the only way to satisfy it is to be right —
+     * and asserting `start` too, because a literal that silently depends on
+     * programme data is a literal only until someone edits the JSON.
+     */
+    expect(start).toBe("2026-08-12");
+    expect(result.materializedThrough).toBe("2026-08-19");
     expect(Object.keys(result.blocks).length).toBeGreaterThan(0);
   });
 });

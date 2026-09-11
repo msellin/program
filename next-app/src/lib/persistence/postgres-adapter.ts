@@ -18,6 +18,7 @@ import { createClient } from "@/lib/supabase/client";
 import { loadStore, saveStore } from "../storage";
 import { storeSchema, type Store } from "../schemas";
 import type { PersistenceAdapter, PullResult } from "./adapter";
+import { iso as isoDate } from "../utils";
 
 const DEBOUNCE_MS = 2000;
 const SNAPSHOT_RETENTION_DAYS = 14;
@@ -26,7 +27,13 @@ let pushTimer: ReturnType<typeof setTimeout> | null = null;
 let inFlight = false;
 
 function todayISO(): string {
-  return new Date().toISOString().slice(0, 10);
+  /**
+   * Local date (fixed 2026-09-11). `toISOString()` is UTC, so east of UTC
+   * every user between local midnight and the offset — 00:00 to 03:00 in
+   * UTC+3 — was writing and reading YESTERDAY's key. Exactly the people
+   * logging a late session.
+   */
+  return isoDate(new Date());
 }
 
 function isEffectivelyEmpty(store: Store): boolean {
@@ -83,7 +90,10 @@ async function writeLive(userId: string, store: Store): Promise<boolean> {
     if (snapErr) return;
     const cutoff = new Date();
     cutoff.setDate(cutoff.getDate() - SNAPSHOT_RETENTION_DAYS);
-    const cutoffISO = cutoff.toISOString().slice(0, 10);
+    // Local, for the same reason as `todayISO` above. A day either way on a
+    // retention window is harmless; using two date conventions in one file is
+    // how the harmless one teaches the harmful one.
+    const cutoffISO = isoDate(cutoff);
     await supabase
       .from("user_state_snapshots")
       .delete()
