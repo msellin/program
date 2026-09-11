@@ -539,8 +539,40 @@ export function evaluateOverperformer(
   // prescribed. Requiring the note meant three sessions of deliberate
   // overperformance — 95×9 on a 93.5×5+, 125×9, 80×9 at RPE 7 — produced no
   // proposal at all, because the notes were empty. See `performanceSignals`.
-  const easyDays = recent.filter((d) => daySignals(d).easy);
-  const perf = performanceSignals(program, store, recent);
+  /**
+   * External load disqualifies a day as EVIDENCE OF HEADROOM (2026-09-11).
+   *
+   * The founder's Monday carried a 5.79 km run and 106 minutes of HIIT
+   * alongside the squats. The day read green, the top set came in at RPE 7,
+   * and the engine proposed a training-max bump on the strength of it —
+   * knowing about neither, and then telling him "3 straight green days. The
+   * engine reads that as headroom."
+   *
+   * The signals were already there and already audited. `daySignals` computes
+   * `fatigue: high` at >=90 cardio minutes, >=60 minutes hard, or a max HR
+   * >=180, and `runLogSchema`'s own comment says "a Z3 today counts as
+   * external load" for the next session. Nothing downstream read either:
+   * `externalLoad` reached the weekly narrative TILE and stopped there.
+   *
+   * The narrow correction is that RPE 7 on a day with 106 minutes of HIIT is
+   * not the same evidence as RPE 7 on a rest day, so it should not count as
+   * the same evidence. The green-streak check above is untouched — it is
+   * symptom-derived and means something different — and a day with merely
+   * ELEVATED load still counts, because a concurrent athlete does cardio by
+   * design and suppressing on that would mean they never get a bump at all.
+   * Only `high` disqualifies.
+   */
+  const heavyLoadDays = recent.filter((d) => daySignals(d).fatigue === "high");
+  const heavyLoadDates = new Set(heavyLoadDays.map((d) => d.date));
+
+  const easyDays = recent.filter((d) => daySignals(d).easy && !heavyLoadDates.has(d.date));
+  // Filtered at the INPUT: `performanceSignals` keys its output by exercise
+  // and carries no date, so there is nothing to filter afterwards.
+  const perf = performanceSignals(
+    program,
+    store,
+    recent.filter((d) => !heavyLoadDates.has(d.date)),
+  );
   if (easyDays.length === 0 && perf.length === 0) return null;
 
   // Which lifts to bump? Ones the user actually trained in the last 7 days
@@ -594,10 +626,37 @@ export function evaluateOverperformer(
   // Reason is intentionally short — the delta list beneath (rendered by
   // ProposalCard) shows the exact numbers, and the Ignore button on the
   // same card provides the reversibility affordance.
+  /**
+   * Name the external load the engine DID see, when there was some.
+   *
+   * Days at `fatigue: high` are excluded from the evidence above, so they
+   * cannot cause a bump. Days at `elevated` still count — a concurrent
+   * athlete does cardio by design — but a proposal that says "the engine
+   * reads that as headroom" while silently sitting on 50 minutes of logged
+   * Z3 is making a claim broader than what it checked. Confirm-first only
+   * means anything if what the user is confirming is stated.
+   */
+  const loadNote = (() => {
+    const elevated = recent.filter(
+      (d) => !heavyLoadDates.has(d.date) && daySignals(d).externalLoad,
+    );
+    if (heavyLoadDays.length > 0) {
+      return ` ${heavyLoadDays.length} heavy outside-training day${
+        heavyLoadDays.length > 1 ? "s" : ""
+      } in this window ${heavyLoadDays.length > 1 ? "were" : "was"} left out of that read.`;
+    }
+    if (elevated.length > 0) {
+      return ` Counted alongside ${elevated.length} day${
+        elevated.length > 1 ? "s" : ""
+      } with outside training logged.`;
+    }
+    return "";
+  })();
+
   const reason =
-    triggers.length > 1
+    (triggers.length > 1
       ? `${triggers[0]} plus ${triggers[1]}. The engine reads that as headroom.`
-      : `${triggers[0]}. The engine reads that as headroom.`;
+      : `${triggers[0]}. The engine reads that as headroom.`) + loadNote;
 
   return {
     kind: "tm_bump",

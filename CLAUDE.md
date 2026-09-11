@@ -184,11 +184,32 @@ directory, and reported as live. Production had never received the build —
 system could tell those two apart, so "I verified it" and "it works" had come
 apart with no way to notice.
 
-**Secrets live in GitHub Actions secrets**, not just `.env.local`. A new
-`NEXT_PUBLIC_*` var must be added in BOTH places or CI ships a build without
-it. Currently: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
+**There are TWO kinds of secret here and they live in different places.**
+Conflating them is how a feature ships that compiles, deploys, and then fails
+the first time a real user reaches it.
+
+**Build-time — GitHub Actions secrets.** `output: "export"` inlines every
+`NEXT_PUBLIC_*` at build time, so a new one must be added in BOTH Actions
+secrets and `.env.local` or CI ships a build without it. Currently:
+`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
 `NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT`,
 `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`.
+
+**Runtime — Cloudflare Pages project bindings.** Everything under
+`next-app/functions/` reads `env.*` at request time. These are NOT in the
+build, NOT `NEXT_PUBLIC_`, and CI's artifact grep cannot see them, so the
+three-gate pipeline above passes with all of them missing. Currently:
+`SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SERVICE_ROLE_KEY`,
+`ADMIN_EMAILS`, `RESEND_API_KEY`.
+
+Documented 2026-09-11, having never been written down. The sharp one is
+`SUPABASE_SERVICE_ROLE_KEY`: without it `DELETE /api/delete-account` returns
+500 and **account deletion — a GDPR obligation on health data — does not
+happen**. It fails safe (the check runs after auth and before anything
+destructive, so nobody is half-deleted) but it fails silently from the
+outside, and the endpoint cannot be verified end-to-end without a real
+session. `runtime-env.test.ts` asserts this list still matches what the
+functions actually read.
 
 Referential integrity across the shipped tree — `exercise_id` and `drill_library`
 resolution, `capability_slot` satisfiability, `references[]` ↔ `reference_ids[]` ↔
