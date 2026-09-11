@@ -74,7 +74,16 @@ const SOFTENED = [
   "app/plan/page.tsx",
 ];
 
-/** Callers that do not. OPEN, not approved — shrink this. */
+/**
+ * Callers that do not. OPEN, not approved — shrink this.
+ *
+ * `lib/engine/daily-plan.ts` was here until 2026-09-11 and is now deleted.
+ * `composeDailyPlan` had zero callers anywhere in src — 127 lines that looked
+ * like a live read path while being reachable from nothing. It is the kind of
+ * entry that makes a gap list longer without making anything safer, and
+ * keeping it would have meant carrying a permanent exception for code no user
+ * can reach. Recoverable from git history if ever wanted.
+ */
 const UNSOFTENED: Record<string, string> = {
   "lib/engine/materialize-blocks.ts":
     "THE IMPORTANT ONE — builds scheduled_blocks for the block_object path, " +
@@ -82,9 +91,6 @@ const UNSOFTENED: Record<string, string> = {
   "lib/engine/missed-week.ts": "reconstructs a missed week from the unsoftened plan",
   "components/workout/SignalsStrip.tsx": "derives signals from an unsoftened block list",
   "components/workout/MissedSessionPrompt.tsx": "asks about yesterday's unsoftened plan",
-  "lib/engine/daily-plan.ts":
-    "composeDailyPlan has NO callers anywhere in src — a dead module, listed so " +
-    "it is neither mistaken for a live gap nor silently 'fixed'",
 };
 
 describe("the CSM amber softening and the path users are actually on", () => {
@@ -127,19 +133,40 @@ describe("the CSM amber softening and the path users are actually on", () => {
     ).toEqual([]);
   });
 
-  it("the block_object path still bypasses blocksForDate entirely", () => {
-    // If this ever fails, the bypass is gone and the gap above may be closed —
-    // re-check before celebrating, and delist accordingly.
+  it("the block_object path softens, even though it never calls blocksForDate", () => {
+    /**
+     * Updated 2026-09-11, when the gap this file recorded was closed.
+     *
+     * The branch still does not call `blocksForDate` — it reads materialized
+     * `scheduled_blocks`, which is the whole point of the block-object path.
+     * What changed is that it now applies `applyProgramSoftening` directly, so
+     * the safety rule reaches the path users are actually on.
+     *
+     * Comments are stripped before matching. The first version of this
+     * assertion broke the moment the fix landed, because the fix's own comment
+     * explains that the branch "never calls blocksForDate" — and the check was
+     * scanning prose. Third time in one day that a guard matched an
+     * explanation instead of code.
+     */
     const src = read("components/session/TodaySession.tsx");
-    const blockObjectBranch = src.slice(
+    const branch = src.slice(
       src.indexOf("if (blockObjectOn && p.slug)"),
       src.indexOf("// Legacy path."),
     );
-    expect(blockObjectBranch.length, "the block_object branch moved").toBeGreaterThan(0);
+    expect(branch.length, "the block_object branch moved").toBeGreaterThan(0);
+
+    const code = branch
+      .replace(/\/\*[\s\S]*?\*\//g, "")
+      .replace(/^\s*\/\/.*$/gm, "");
+
     expect(
-      blockObjectBranch.includes("blocksForDate"),
-      "block_object path now calls blocksForDate — the softening may finally apply; re-verify",
+      code.includes("blocksForDate"),
+      "block_object path now routes through blocksForDate — re-read this file, the model here has changed",
     ).toBe(false);
+    expect(
+      code,
+      "block_object path stopped softening — the safety rule is inert again for ~every user",
+    ).toContain("applyProgramSoftening");
   });
 
   it("block_object is still defaulted ON for users who never chose", () => {

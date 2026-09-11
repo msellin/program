@@ -148,6 +148,36 @@ export default function WeekPage() {
   const programRules = ((program as unknown as { principles?: ProgramRule[] }).principles ?? [])
     .filter((p) => typeof p?.rule === "string" && p.rule.trim().length > 0);
   /**
+   * Required intake consents that describe a STOP behaviour (2026-09-11).
+   *
+   * Four programmes make the user tick "I agree to stop the session if
+   * shoulder pain appears during a hang, transition, or support hold — no
+   * training through it." It is `required: true`, so nobody starts these
+   * programmes without agreeing to it.
+   *
+   * And then it was never mentioned again. Intake consents are captured once
+   * and read nowhere afterwards — a commitment the user made about their own
+   * mid-session behaviour, shown to them exactly once, on the screen where
+   * they were trying to get started.
+   *
+   * This is the same defect the escalation rule above had, fixed the same
+   * way: the rule already existed and simply reached the user through no
+   * channel. It is NOT enforcement — the app cannot detect shoulder pain
+   * during a set, and an in-session symptom input is a larger design change
+   * than resurfacing a sentence. Logged separately rather than implied here.
+   */
+  const consentRules = (
+    (program as unknown as {
+      intake?: { consent?: Array<{ id?: string; label?: string; required?: boolean }> };
+    }).intake?.consent ?? []
+  )
+    .filter((c) => c?.required && typeof c.label === "string")
+    // `not_medical_advice` is a disclaimer, not a training rule — it belongs on
+    // the disclaimer page, and repeating it here would bury the one that tells
+    // someone to rack the bar.
+    .filter((c) => /stop_rule|stops_session/.test(c.id ?? ""))
+    .map((c) => `You agreed at intake — ${c.label}`);
+  /**
    * The programme's escalation rule (2026-09-06).
    *
    * `progression_rules.escalation` is where six of the nine programmes put
@@ -753,9 +783,13 @@ export default function WeekPage() {
           Found by the citation sweep, which went looking for what a shaky
           citation underwrote and discovered the claim it underwrote was
           never displayed. */}
-      {escalation || programRules.length || wt?.principles?.length ? (
+      {escalation || programRules.length || consentRules.length || wt?.principles?.length ? (
         <RulesAccordion
           principles={[
+            // Consented stop-rules lead. Everything else here is guidance; this
+            // is the one the user personally agreed to, and it is the one that
+            // ends a session.
+            ...consentRules,
             ...(escalation ? [`When to back off — ${escalation}`] : []),
             ...programRules.map((p) => (p.detail ? `${p.rule} — ${p.detail}` : p.rule)),
             ...(wt?.principles ?? []),

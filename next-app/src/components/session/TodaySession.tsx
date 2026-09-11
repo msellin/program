@@ -21,7 +21,7 @@ import {
   isAwayOn,
   HOLIDAY_GAP,
 } from "@/lib/engine/schedule";
-import { blocksForDate, composeBlockForUser } from "@/lib/engine/plan-generator";
+import { applyProgramSoftening, blocksForDate, composeBlockForUser } from "@/lib/engine/plan-generator";
 import { getBlocksForDate, isBlockObjectOn, DAY_VISIBLE_BLOCK_STATES } from "@/lib/engine/block-selectors";
 import { migrateLegacyToBlocks, needsBlockMigration } from "@/lib/migrations/legacy-to-blocks";
 import { RestDayCard, RetestReminder, GraduationCard } from "@/components/session/shared/StatusCards";
@@ -185,7 +185,33 @@ export function TodaySession({
         // Template ID → authored block, which for slot-based programs has no
         // items until they're composed per user. See composeBlockForUser.
         .map((b) => composeBlockForUser(p, b, userProfile, activeDate, byId, { onlyIfEmpty: true }));
-      return { program: p, blocks: composed, scheduled: scheduledForToday };
+      /**
+       * Programme softening, on this path too (2026-09-11).
+       *
+       * `applyProgramSoftening` is CSM's safety rule — three amber days in a
+       * trailing week and `block_4x4_row` is withdrawn. It ran inside
+       * `blocksForDate`, which this branch never calls, and `StoreHydrator`
+       * defaults `block_object` ON for anyone who has not opted out. So the
+       * rule applied on the path almost nobody was on: a user with three amber
+       * days was still prescribed the block their programme says to withdraw,
+       * while the legacy path they were not using would have removed it.
+       *
+       * Applied at READ, which is parity with the legacy path rather than a
+       * new decision — that path filters here too, so a withdrawn block
+       * disappears from today's view and the saved week is left alone.
+       * Filtering at materialization instead would rewrite scheduled_blocks,
+       * a different and much larger claim.
+       */
+      const softened = applyProgramSoftening(composed, p, activeDate, store);
+      return {
+        program: p,
+        blocks: softened,
+        // Keep `scheduled` aligned with what is shown, or Skip/Move would go on
+        // offering verbs for a block the safety rule just removed.
+        scheduled: scheduledForToday.filter((sb) =>
+          softened.some((b) => b.id === sb.block_template_id),
+        ),
+      };
     }
     // Legacy path.
     const overrideBlocks = i === 0 && override

@@ -1,6 +1,7 @@
 import type { Block, Exercise, Phase, Program, Store } from "../schemas";
 import { activePhaseFor, strengthBlocksForDate } from "./schedule";
 import { activeExclusions, applyIntakeExclusions } from "./intake-exclusions";
+import { iso } from "../utils";
 
 type Levels = Partial<Record<string, 1 | 2 | 3 | 4 | 5>>;
 type DrillsById = Record<string, Exercise>;
@@ -67,6 +68,15 @@ export function blocksForDate(
 }
 
 /**
+ * Exported 2026-09-11 so the block-object read path can apply it too.
+ *
+ * It was private because `blocksForDate` was assumed to be the only read path.
+ * It is not: `TodaySession` reads materialized `scheduled_blocks` when
+ * `block_object` is on, which `StoreHydrator` turns on for everyone who has
+ * not opted out — so the one path that applied this rule was the one almost
+ * nobody was on, and a CSM user with three amber days went on being prescribed
+ * the rowing block their programme says to withdraw.
+ *
  * Program-level softening filters. Adaptive-engine hooks that programs
  * declare in JSON but that the engine actually consumes at block-
  * resolution time.
@@ -80,7 +90,7 @@ export function blocksForDate(
  * mutation. If the user Accepts an explicit proposal later, that write
  * lands as a scheduled_blocks state change and overrides this filter.
  */
-function applyProgramSoftening(
+export function applyProgramSoftening(
   blocks: Block[],
   program: Program,
   dateISO: string,
@@ -90,12 +100,31 @@ function applyProgramSoftening(
 
   // Amber-window: count amber derived_states in trailing 7 days
   // (inclusive of dateISO). Applies to days within 7 of the trigger.
+  /**
+   * Local dates, not UTC (fixed 2026-09-11).
+   *
+   * This walked the window with `toISOString().slice(0, 10)`, which converts
+   * to UTC. `lib/utils.ts` documents exactly why that is wrong — "in any
+   * timezone east of UTC that flips the calendar date at local midnight,
+   * causing off-by-one bugs everywhere date strings are used as keys" — and
+   * exports `iso()` for it.
+   *
+   * The effect here was not cosmetic. In UTC+3, which is where this is
+   * developed and used, `back = 0` resolved to YESTERDAY. The window covered
+   * days -1 through -7 instead of 0 through -6, so **today's amber day was
+   * never counted** — the single most relevant day to a rule about whether to
+   * train today. A user on their third consecutive amber day was read as
+   * having had two.
+   *
+   * Found by a test that expected three amber days to withdraw the block and
+   * watched it survive.
+   */
   const today = new Date(dateISO + "T00:00:00");
   let amberCount = 0;
   for (let back = 0; back < 7; back++) {
     const d = new Date(today);
     d.setDate(today.getDate() - back);
-    const key = d.toISOString().slice(0, 10);
+    const key = iso(d);
     if (store.logs?.[key]?.derived_state === "amber") amberCount++;
   }
   if (amberCount < 3) return blocks;

@@ -1,4 +1,5 @@
 import type { Program, Phase, Block, Store } from "../schemas";
+import { iso as isoDate } from "../utils";
 
 /**
  * Central per-date session routing.
@@ -48,10 +49,27 @@ const HIP_HOLIDAY_GAP = { start: "2026-12-21", end: "2027-01-04" };
 
 const DAY_SHORT_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as const;
 
-function shiftIsoDate(iso: string, days: number): string {
-  const d = new Date(iso + "T00:00:00");
+/**
+ * Shift a date string by N days, in LOCAL time (fixed 2026-09-11).
+ *
+ * Returned `toISOString().slice(0, 10)` until now, which converts to UTC.
+ * `lib/utils.ts` documents the failure and exports `isoDate` for it: east of
+ * UTC the calendar date flips at local midnight, so every shifted boundary
+ * landed a day early.
+ *
+ * This is not cosmetic here. The only callers shift a programme's PHASE
+ * `starts` and `ends` by the user's intake `phase_shift_days`, and by an
+ * extension's added weeks — so in UTC+3 every phase transition, and therefore
+ * which blocks a user is prescribed and which day their retest falls on, was
+ * off by one.
+ *
+ * The parameter is named `date` rather than `iso` because `iso` is now the
+ * imported helper and shadowing it here is exactly how this comes back.
+ */
+function shiftIsoDate(date: string, days: number): string {
+  const d = new Date(date + "T00:00:00");
   d.setDate(d.getDate() + days);
-  return d.toISOString().slice(0, 10);
+  return isoDate(d);
 }
 
 /**
