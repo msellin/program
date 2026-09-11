@@ -45,7 +45,27 @@ jobs:
     name: Verify
     runs-on: ubuntu-latest
     steps:
+      # fetch-depth: 0 is REQUIRED, not a nicety (2026-09-11).
+      #
+      # `dev/scripts/task-index.py` stamps each workstream with its own
+      # last-commit date, and `task-index.test.ts` fails when the generated
+      # block differs from the committed one. Under the default shallow
+      # checkout (depth 1) the runner has exactly one commit and no parents, so
+      # `git log -1 -- <path>` reports THAT commit for every tracked file: all
+      # sixteen workstreams come back stamped with HEAD's date.
+      #
+      # So the index CI generated could never match the index anyone committed,
+      # and the guard failed on every single push from the moment it landed on
+      # 2026-09-08 — three red runs, none of them staleness. It was never
+      # reproducible locally, because a normal clone has the history.
+      #
+      # Loosening the test was the wrong fix: the dates are the point. The
+      # script's own docstring says a workstream with 81 open items and no
+      # commits for three weeks is telling you something a count alone hides,
+      # and under a shallow clone every one of those dates reads as "today".
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
