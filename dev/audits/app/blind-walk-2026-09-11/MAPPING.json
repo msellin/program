@@ -1,0 +1,486 @@
+{
+  "seed": 1789133643,
+  "generated_at": "2026-09-11T16:34:04.276022Z",
+  "slots": [
+    {
+      "slot": 1,
+      "anon_name": "screen-001.png",
+      "original_rel": "persona-strength-slow/desktop/01-today.png",
+      "side": "post"
+    },
+    {
+      "slot": 2,
+      "anon_name": "screen-002.png",
+      "original_rel": "persona-strength-slow/desktop/07-programs-active.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 3,
+      "anon_name": "screen-003.png",
+      "original_rel": "persona-handstand-fast/mobile/08-profile.png",
+      "side": "post"
+    },
+    {
+      "slot": 4,
+      "anon_name": "screen-004.png",
+      "original_rel": "persona-strength-slow/desktop/06-programs.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 5,
+      "anon_name": "screen-005.png",
+      "original_rel": "persona-strength-slow/desktop/06-programs.png",
+      "side": "post"
+    },
+    {
+      "slot": 6,
+      "anon_name": "screen-006.png",
+      "original_rel": "persona-concurrent/mobile/07-programs-active.png",
+      "side": "post"
+    },
+    {
+      "slot": 7,
+      "anon_name": "screen-007.png",
+      "original_rel": "persona-handstand-fast/desktop/01-today.png",
+      "side": "post"
+    },
+    {
+      "slot": 8,
+      "anon_name": "screen-008.png",
+      "original_rel": "persona-graduate/desktop/05-progress.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 9,
+      "anon_name": "screen-009.png",
+      "original_rel": "persona-mobility/desktop/06-programs.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 10,
+      "anon_name": "screen-010.png",
+      "original_rel": "persona-strength/desktop/04-history.png",
+      "side": "post"
+    },
+    {
+      "slot": 11,
+      "anon_name": "screen-011.png",
+      "original_rel": "persona-strength-slow/desktop/04-history.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 12,
+      "anon_name": "screen-012.png",
+      "original_rel": "persona-multitrack/desktop/07-programs-active.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 13,
+      "anon_name": "screen-013.png",
+      "original_rel": "persona-handstand/desktop/12-extras.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 14,
+      "anon_name": "screen-014.png",
+      "original_rel": "persona-graduate/desktop/07-programs-active.png",
+      "side": "post"
+    },
+    {
+      "slot": 15,
+      "anon_name": "screen-015.png",
+      "original_rel": "persona-handstand-fast/mobile/08-profile.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 16,
+      "anon_name": "screen-016.png",
+      "original_rel": "persona-graduate/desktop/07-programs-active.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 17,
+      "anon_name": "screen-017.png",
+      "original_rel": "persona-rowing-erratic/desktop/01-today.png",
+      "side": "post"
+    },
+    {
+      "slot": 18,
+      "anon_name": "screen-018.png",
+      "original_rel": "persona-rowing/mobile/01-today.png",
+      "side": "post"
+    },
+    {
+      "slot": 19,
+      "anon_name": "screen-019.png",
+      "original_rel": "persona-handstand-fast/mobile/12-extras.png",
+      "side": "post"
+    },
+    {
+      "slot": 20,
+      "anon_name": "screen-020.png",
+      "original_rel": "persona-rowing-erratic/mobile/08-profile.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 21,
+      "anon_name": "screen-021.png",
+      "original_rel": "persona-erratic/desktop/06-programs.png",
+      "side": "post"
+    },
+    {
+      "slot": 22,
+      "anon_name": "screen-022.png",
+      "original_rel": "persona-multitrack/desktop/07-programs-active.png",
+      "side": "post"
+    },
+    {
+      "slot": 23,
+      "anon_name": "screen-023.png",
+      "original_rel": "persona-mobility/desktop/12-extras.png",
+      "side": "post"
+    },
+    {
+      "slot": 24,
+      "anon_name": "screen-024.png",
+      "original_rel": "persona-strength-slow/mobile/14-check-hip.png",
+      "side": "post"
+    },
+    {
+      "slot": 25,
+      "anon_name": "screen-025.png",
+      "original_rel": "persona-engine/desktop/15-events.png",
+      "side": "post"
+    },
+    {
+      "slot": 26,
+      "anon_name": "screen-026.png",
+      "original_rel": "persona-handstand-fast/mobile/01-today.png",
+      "side": "post"
+    },
+    {
+      "slot": 27,
+      "anon_name": "screen-027.png",
+      "original_rel": "persona-rowing/mobile/03-coach.png",
+      "side": "post"
+    },
+    {
+      "slot": 28,
+      "anon_name": "screen-028.png",
+      "original_rel": "persona-handstand-fast/desktop/02-week.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 29,
+      "anon_name": "screen-029.png",
+      "original_rel": "persona-handstand-fast/desktop/01-today.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 30,
+      "anon_name": "screen-030.png",
+      "original_rel": "persona-handstand-fast/desktop/12-extras.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 31,
+      "anon_name": "screen-031.png",
+      "original_rel": "persona-multitrack/desktop/06-programs.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 32,
+      "anon_name": "screen-032.png",
+      "original_rel": "persona-engine/desktop/06-programs.png",
+      "side": "post"
+    },
+    {
+      "slot": 33,
+      "anon_name": "screen-033.png",
+      "original_rel": "persona-mobility/desktop/12-extras.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 34,
+      "anon_name": "screen-034.png",
+      "original_rel": "persona-rowing-erratic/desktop/01-today.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 35,
+      "anon_name": "screen-035.png",
+      "original_rel": "persona-multitrack/desktop/06-programs.png",
+      "side": "post"
+    },
+    {
+      "slot": 36,
+      "anon_name": "screen-036.png",
+      "original_rel": "persona-rowing/mobile/03-coach.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 37,
+      "anon_name": "screen-037.png",
+      "original_rel": "persona-rowing/mobile/01-today.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 38,
+      "anon_name": "screen-038.png",
+      "original_rel": "persona-engine/mobile/10-report.png",
+      "side": "post"
+    },
+    {
+      "slot": 39,
+      "anon_name": "screen-039.png",
+      "original_rel": "persona-handstand-fast/desktop/02-week.png",
+      "side": "post"
+    },
+    {
+      "slot": 40,
+      "anon_name": "screen-040.png",
+      "original_rel": "persona-engine/desktop/06-programs.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 41,
+      "anon_name": "screen-041.png",
+      "original_rel": "persona-multitrack/desktop/14-check-hip.png",
+      "side": "post"
+    },
+    {
+      "slot": 42,
+      "anon_name": "screen-042.png",
+      "original_rel": "persona-strength-slow/desktop/12-extras.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 43,
+      "anon_name": "screen-043.png",
+      "original_rel": "persona-strength/desktop/04-history.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 44,
+      "anon_name": "screen-044.png",
+      "original_rel": "persona-graduate/mobile/02-week.png",
+      "side": "post"
+    },
+    {
+      "slot": 45,
+      "anon_name": "screen-045.png",
+      "original_rel": "persona-graduate/mobile/02-week.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 46,
+      "anon_name": "screen-046.png",
+      "original_rel": "persona-graduate/desktop/05-progress.png",
+      "side": "post"
+    },
+    {
+      "slot": 47,
+      "anon_name": "screen-047.png",
+      "original_rel": "persona-erratic/desktop/06-programs.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 48,
+      "anon_name": "screen-048.png",
+      "original_rel": "persona-concurrent/mobile/14-check-hip.png",
+      "side": "post"
+    },
+    {
+      "slot": 49,
+      "anon_name": "screen-049.png",
+      "original_rel": "persona-multitrack/mobile/05-progress.png",
+      "side": "post"
+    },
+    {
+      "slot": 50,
+      "anon_name": "screen-050.png",
+      "original_rel": "persona-strength-slow/desktop/04-history.png",
+      "side": "post"
+    },
+    {
+      "slot": 51,
+      "anon_name": "screen-051.png",
+      "original_rel": "persona-handstand/mobile/08-profile.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 52,
+      "anon_name": "screen-052.png",
+      "original_rel": "persona-handstand-fast/desktop/12-extras.png",
+      "side": "post"
+    },
+    {
+      "slot": 53,
+      "anon_name": "screen-053.png",
+      "original_rel": "persona-multitrack/mobile/05-progress.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 54,
+      "anon_name": "screen-054.png",
+      "original_rel": "persona-multitrack/desktop/12-extras.png",
+      "side": "post"
+    },
+    {
+      "slot": 55,
+      "anon_name": "screen-055.png",
+      "original_rel": "persona-rowing-erratic/mobile/08-profile.png",
+      "side": "post"
+    },
+    {
+      "slot": 56,
+      "anon_name": "screen-056.png",
+      "original_rel": "persona-recover/mobile/05-progress.png",
+      "side": "post"
+    },
+    {
+      "slot": 57,
+      "anon_name": "screen-057.png",
+      "original_rel": "persona-concurrent/mobile/07-programs-active.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 58,
+      "anon_name": "screen-058.png",
+      "original_rel": "persona-mobility/mobile/11-guide.png",
+      "side": "post"
+    },
+    {
+      "slot": 59,
+      "anon_name": "screen-059.png",
+      "original_rel": "persona-multitrack/desktop/12-extras.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 60,
+      "anon_name": "screen-060.png",
+      "original_rel": "persona-engine/mobile/10-report.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 61,
+      "anon_name": "screen-061.png",
+      "original_rel": "persona-concurrent/mobile/14-check-hip.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 62,
+      "anon_name": "screen-062.png",
+      "original_rel": "persona-handstand/mobile/08-profile.png",
+      "side": "post"
+    },
+    {
+      "slot": 63,
+      "anon_name": "screen-063.png",
+      "original_rel": "persona-strength-slow/desktop/01-today.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 64,
+      "anon_name": "screen-064.png",
+      "original_rel": "persona-strength-slow/mobile/14-check-hip.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 65,
+      "anon_name": "screen-065.png",
+      "original_rel": "persona-engine-fast/desktop/12-extras.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 66,
+      "anon_name": "screen-066.png",
+      "original_rel": "persona-concurrent/mobile/03-coach.png",
+      "side": "post"
+    },
+    {
+      "slot": 67,
+      "anon_name": "screen-067.png",
+      "original_rel": "persona-concurrent/mobile/03-coach.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 68,
+      "anon_name": "screen-068.png",
+      "original_rel": "persona-mobility/mobile/11-guide.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 69,
+      "anon_name": "screen-069.png",
+      "original_rel": "persona-recover/mobile/05-progress.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 70,
+      "anon_name": "screen-070.png",
+      "original_rel": "persona-strength-slow/desktop/07-programs-active.png",
+      "side": "post"
+    },
+    {
+      "slot": 71,
+      "anon_name": "screen-071.png",
+      "original_rel": "persona-strength-slow/desktop/12-extras.png",
+      "side": "post"
+    },
+    {
+      "slot": 72,
+      "anon_name": "screen-072.png",
+      "original_rel": "persona-engine-fast/desktop/11-guide.png",
+      "side": "post"
+    },
+    {
+      "slot": 73,
+      "anon_name": "screen-073.png",
+      "original_rel": "persona-multitrack/desktop/14-check-hip.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 74,
+      "anon_name": "screen-074.png",
+      "original_rel": "persona-engine/desktop/15-events.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 75,
+      "anon_name": "screen-075.png",
+      "original_rel": "persona-handstand/desktop/12-extras.png",
+      "side": "post"
+    },
+    {
+      "slot": 76,
+      "anon_name": "screen-076.png",
+      "original_rel": "persona-engine-fast/desktop/11-guide.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 77,
+      "anon_name": "screen-077.png",
+      "original_rel": "persona-engine-fast/desktop/12-extras.png",
+      "side": "post"
+    },
+    {
+      "slot": 78,
+      "anon_name": "screen-078.png",
+      "original_rel": "persona-handstand-fast/mobile/12-extras.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 79,
+      "anon_name": "screen-079.png",
+      "original_rel": "persona-handstand-fast/mobile/01-today.png",
+      "side": "baseline"
+    },
+    {
+      "slot": 80,
+      "anon_name": "screen-080.png",
+      "original_rel": "persona-mobility/desktop/06-programs.png",
+      "side": "post"
+    }
+  ]
+}

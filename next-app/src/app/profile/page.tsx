@@ -2,14 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import {
-  BookOpen,
-  LogOut,
-  ChevronRight,
-  ListPlus,
-  FileText,
-  Library,
-} from "lucide-react";
+import { BookOpen, ChevronRight, ClipboardList, FileText, Library, ListPlus, LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useStore } from "@/lib/useStore";
 import { createClient } from "@/lib/supabase/client";
@@ -310,6 +303,30 @@ export default function ProfilePage() {
             <span className="flex items-center gap-3 text-sm">
               <ListPlus size={16} className="text-muted" />
               Off-plan
+            </span>
+            <ChevronRight size={16} className="text-muted flex-shrink-0" />
+          </Link>
+        ) : null}
+        {/* Re-run intake (2026-09-11).
+            Intake answers drive safety gates, tier placement and which drills
+            compose — and they were answerable exactly once, at the moment a
+            user knew least about the programme. `restartProgram` deliberately
+            PRESERVES them, so restarting was not a way back in either.
+            Nothing in the app cleared or re-collected them.
+            The route already exists and a commit overwrites the stored
+            answers, so this is a missing door rather than missing machinery.
+            It needs to be a real row: an installed PWA has no address bar, so
+            "/programs/{slug}/intake" is not something a user can reach by
+            typing it. Primary programme only — a picker here would be a
+            second catalog, and the per-programme pages already deep-link. */}
+        {activeProgramId ? (
+          <Link
+            href={`/programs/${activeProgramId}/intake/`}
+            className="flex items-center justify-between gap-3 px-3 py-3 min-h-[48px] active:bg-line-soft/50"
+          >
+            <span className="flex items-center gap-3 text-sm">
+              <ClipboardList size={16} className="text-muted" />
+              Re-run intake
             </span>
             <ChevronRight size={16} className="text-muted flex-shrink-0" />
           </Link>

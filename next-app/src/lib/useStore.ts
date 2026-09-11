@@ -162,7 +162,17 @@ type StoreState = {
    * appends a `tier_history` entry, clears any previous
    * `tier_proposal_dismissed_for` marker.
    */
-  promoteTier: (slug: string, newTierId: string, trigger?: "retest" | "manual") => void;
+  /**
+   * `citationId` / `logSignal` added 2026-09-11 — see `tier_history` in
+   * schemas.ts. A promotion was recorded with no evidence while its sibling
+   * `acceptDayAdjustment` had snapshotted one since the feature shipped.
+   */
+  promoteTier: (
+    slug: string,
+    newTierId: string,
+    trigger?: "retest" | "manual",
+    evidence?: { citationId?: string | null },
+  ) => void;
   /**
    * Record that the user chose "Not yet" on a tier-advance proposal. Stores
    * `<tier_id>@<vars_hash>` so the same proposal on the same numbers won't
@@ -176,7 +186,11 @@ type StoreState = {
    * authored `starts` minus today. Used by the reintro-readiness Advance
    * button on the hip program, and by any future explicit-advance flow.
    */
-  advancePhase: (slug: string, daysToShift: number) => void;
+  advancePhase: (
+    slug: string,
+    daysToShift: number,
+    evidence?: { citationId?: string | null },
+  ) => void;
   /**
    * Add a program to the list of concurrently-active programs. Preserves the
    * existing `active_program_id` as primary; the added slug becomes an
@@ -1426,7 +1440,7 @@ export const useStore = create<StoreState>((set, get) => ({
     set({ store: s });
   },
 
-  promoteTier: (slug, newTierId, trigger = "retest") => {
+  promoteTier: (slug, newTierId, trigger = "retest", evidence) => {
     const s = { ...get().store };
     const profile = { ...(s.user_profile ?? {}) };
     const states = { ...(profile.program_states ?? {}) };
@@ -1437,11 +1451,15 @@ export const useStore = create<StoreState>((set, get) => ({
       at: string;
       trigger: "retest" | "manual";
     }>;
+    // Snapshot, not an id — `citations.json` is edited, and a promotion should
+    // record the sentence the user was shown when they tapped Accept.
+    const snapshot = evidence?.citationId ? snapshotCitation(evidence.citationId) : null;
     history.push({
       from_tier: prior.tier ?? "",
       to_tier: newTierId,
       at: new Date().toISOString(),
       trigger,
+      ...(snapshot ? { citation_snapshot: snapshot } : {}),
     });
     states[slug] = {
       ...prior,
@@ -1470,13 +1488,41 @@ export const useStore = create<StoreState>((set, get) => ({
     set({ store: s });
   },
 
-  advancePhase: (slug, daysToShift) => {
+  advancePhase: (slug, daysToShift, evidence) => {
     const s = { ...get().store };
     const profile = { ...(s.user_profile ?? {}) };
     const states = { ...(profile.program_states ?? {}) };
+    /**
+     * A phase advance is recorded in `tier_history` too (2026-09-11).
+     *
+     * It is not a tier change, so `from_tier` and `to_tier` are the current
+     * tier — what is being recorded is that the user accepted a jump forward
+     * in the plan, and on what evidence. Before this, `advancePhase` wrote
+     * `phase_shift_days` and nothing else: the single most consequential
+     * accept in the app, moving a user bodily forward through their
+     * programme, left no trace of why.
+     */
+    const prior = states[slug] ?? {};
+    const snapshot = evidence?.citationId ? snapshotCitation(evidence.citationId) : null;
+    type TierHistoryEntry = NonNullable<
+      NonNullable<Store["user_profile"]>["program_states"]
+    >[string]["tier_history"];
+    const history = [
+      ...((prior as { tier_history?: NonNullable<TierHistoryEntry> }).tier_history ?? []),
+    ];
+    if (snapshot) {
+      history.push({
+        from_tier: prior.tier ?? "",
+        to_tier: prior.tier ?? "",
+        at: new Date().toISOString(),
+        trigger: "retest" as const,
+        ...(snapshot ? { citation_snapshot: snapshot } : {}),
+      });
+    }
     states[slug] = {
       ...(states[slug] ?? {}),
       phase_shift_days: daysToShift,
+      ...(history.length ? { tier_history: history } : {}),
     };
     profile.program_states = states;
     s.user_profile = profile;

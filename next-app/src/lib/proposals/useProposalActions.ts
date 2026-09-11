@@ -47,13 +47,22 @@ export function useProposalActions(proposal: Proposal, date: string) {
         break;
       }
       case "readiness_after_layoff": {
-        advancePhase(proposal.programSlug, proposal.daysToShift);
+        // Same evidence the card showed. Before 2026-09-11 both of these
+        // accepted silently: `acceptDayAdjustment` snapshotted its citation
+        // and its two siblings on this very switch did not, so the two most
+        // consequential accepts in the app — moving a user forward through
+        // their programme, and promoting their tier — left no record of why.
+        advancePhase(proposal.programSlug, proposal.daysToShift, {
+          citationId: proposal.citationId,
+        });
         dismissProposal(date, "reintro-graduation");
         announce(`Plan sharpened. Advanced to ${proposal.targetPhaseName}.`);
         break;
       }
       case "tier_advance": {
-        promoteTier(proposal.programSlug, proposal.tierId, "retest");
+        promoteTier(proposal.programSlug, proposal.tierId, "retest", {
+          citationId: proposal.citationId,
+        });
         announce(`Plan sharpened. Advanced to ${proposal.tierLabel}.`);
         break;
       }

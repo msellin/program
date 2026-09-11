@@ -1354,6 +1354,23 @@ const featureFlagsSchema = z.object({
   off_plan: z.boolean().optional(),
 });
 
+/**
+ * A citation as it read AT ACCEPT TIME.
+ *
+ * Named 2026-09-11, having been inlined in two places and about to be inlined
+ * in a third. The reason it is a snapshot rather than an id: `citations.json`
+ * is edited. Papers in this repo have been withdrawn, re-attributed and had
+ * their claims narrowed, so resolving an id later can show a user a different
+ * sentence from the one they agreed to — or nothing at all, if the entry was
+ * removed.
+ */
+export const citationSnapshotSchema = z.object({
+  id: z.string(),
+  display_short: z.string(),
+  display_line: z.string(),
+  snapshotted_at: z.number(),
+});
+
 export const storeSchema = z.object({
   version: z.literal(2),
   logs: z.record(z.string(), dayLogSchema),
@@ -1506,14 +1523,7 @@ export const storeSchema = z.object({
          * Survives later edits to `citations.json`. Absent for log-cited
          * proposals (no underlying study — reason is derived from the log).
          */
-        citation_snapshot: z
-          .object({
-            id: z.string(),
-            display_short: z.string(),
-            display_line: z.string(),
-            snapshotted_at: z.number(),
-          })
-          .optional(),
+        citation_snapshot: citationSnapshotSchema.optional(),
       }),
     )
     .optional(),
@@ -1536,14 +1546,7 @@ export const storeSchema = z.object({
         outcome: z.enum(["accepted", "ignored"]),
         at: z.number(),
         date: z.string(),
-        citation_snapshot: z
-          .object({
-            id: z.string(),
-            display_short: z.string(),
-            display_line: z.string(),
-            snapshotted_at: z.number(),
-          })
-          .optional(),
+        citation_snapshot: citationSnapshotSchema.optional(),
       }),
     )
     .optional(),
@@ -1699,6 +1702,31 @@ export const storeSchema = z.object({
                   to_tier: z.string(),
                   at: z.string(),
                   trigger: z.enum(["retest", "manual"]),
+                  /**
+                   * The evidence as it read AT ACCEPT TIME (added 2026-09-11).
+                   *
+                   * `acceptDayAdjustment` has snapshotted its citation since
+                   * the feature shipped; `promoteTier` and `advancePhase` —
+                   * its two siblings on the same Accept path — did not. So a
+                   * tier promotion was recorded with no evidence at all, on a
+                   * product whose stated mechanic is that every change cites a
+                   * study or names its log signal.
+                   *
+                   * A snapshot rather than a citation ID on purpose, matching
+                   * the sibling: `citations.json` is edited — papers have been
+                   * withdrawn, corrected and re-attributed repeatedly — and a
+                   * history entry should say what the user was actually shown
+                   * when they tapped Accept, not what the library says today.
+                   */
+                  citation_snapshot: citationSnapshotSchema.optional(),
+                  // NOT adding a `log_signal` field here. The mechanic is
+                  // "cites a study OR names its log signal", so one looks
+                  // natural — but no proposal payload carries a log signal
+                  // today, so the field would be written by nothing. That is
+                  // the exact shape of `daily_log_schema` and
+                  // `progression_rules.states[]`: authored in good faith,
+                  // silently discarded, believed for months. Add it with the
+                  // writer, not before.
                 }),
               )
               .optional(),

@@ -73,6 +73,7 @@ def anonymize(
     pairs: list[tuple[str, Path, Path]],
     out: Path,
     seed: int,
+    sample: int | None = None,
 ) -> dict:
     """
     Shuffle every screen into a flat anonymized sequence.
@@ -89,6 +90,14 @@ def anonymize(
         entries.append((rel, "post", post_abs))
 
     rng = random.Random(seed)
+    if sample is not None and sample * 2 < len(entries):
+        # PAIRS, not screens. Taking N random entries could hand the scorer the
+        # baseline of one screen and the post of another, which measures
+        # nothing. Drawn from the same seeded rng, so a run is still
+        # reproducible from its seed alone.
+        rels = sorted({rel for rel, _, _ in entries})
+        keep = set(rng.sample(rels, min(sample, len(rels))))
+        entries = [e for e in entries if e[0] in keep]
     rng.shuffle(entries)
 
     mapping = {"seed": seed, "generated_at": datetime.utcnow().isoformat() + "Z", "slots": []}
@@ -154,6 +163,19 @@ def main() -> int:
     ap.add_argument("--post", type=Path, required=True, help="Post-Batch-36 persona artifacts dir")
     ap.add_argument("--out", type=Path, required=True, help="Output dir for anonymized set")
     ap.add_argument("--seed", type=int, default=None, help="Random seed (default: current unix timestamp)")
+    ap.add_argument(
+        "--sample",
+        type=int,
+        default=None,
+        help=(
+            "Score a random sample of N PAIRS instead of all of them. The "
+            "first real run of this script, on 2026-09-11, produced 840 slots "
+            "-- at fifteen seconds each, three and a half hours of founder "
+            "time. A gate nobody can finish is not a gate. The design assumed "
+            "a far smaller comparable set than the persona fleet has grown "
+            "into."
+        ),
+    )
     args = ap.parse_args()
 
     if not args.baseline.is_dir():
@@ -172,7 +194,7 @@ def main() -> int:
         print("error: no shared screens between baseline and post", file=sys.stderr)
         return 1
 
-    mapping = anonymize(pairs, args.out, seed)
+    mapping = anonymize(pairs, args.out, seed, args.sample)
     (args.out / "MAPPING.json").write_text(json.dumps(mapping, indent=2), encoding="utf-8")
     write_scoresheet(args.out, len(mapping["slots"]))
 
