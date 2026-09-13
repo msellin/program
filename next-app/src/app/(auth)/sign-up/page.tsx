@@ -4,6 +4,7 @@ import { useState, FormEvent } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { GoogleAuthButton } from "@/components/auth/GoogleAuthButton";
+import { mapAuthError } from "@/lib/auth-errors";
 
 /**
  * Sign-up requires:
@@ -39,7 +40,7 @@ export default function SignUpPage() {
     });
     setResending(false);
     if (err) {
-      setError(err.message);
+      setError(mapAuthError(err.message).message);
       return;
     }
     setResent(true);
@@ -80,7 +81,7 @@ export default function SignUpPage() {
     });
     setSubmitting(false);
     if (err) {
-      setError(err.message);
+      setError(mapAuthError(err.message).message);
       return;
     }
     setSent(true);

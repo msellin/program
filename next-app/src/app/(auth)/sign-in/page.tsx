@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { GoogleAuthButton } from "@/components/auth/GoogleAuthButton";
+import { mapAuthError } from "@/lib/auth-errors";
 
 export default function SignInPage() {
   return (
@@ -59,7 +60,7 @@ function SignInInner() {
       if (/not.*confirmed|email.*confirm/i.test(err.message)) {
         setNeedsConfirmation(true);
       } else {
-        setError(err.message);
+        setError(mapAuthError(err.message).message);
       }
       return;
     }
@@ -87,7 +88,7 @@ function SignInInner() {
     });
     setResending(false);
     if (err) {
-      setError(err.message);
+      setError(mapAuthError(err.message).message);
       return;
     }
     setConfirmationResent(true);
@@ -109,7 +110,7 @@ function SignInInner() {
     });
     setResetting(false);
     if (err) {
-      setError(err.message);
+      setError(mapAuthError(err.message).message);
       return;
     }
     setResetSent(true);
