@@ -133,16 +133,60 @@ export default function CheckPage() {
   const logs = useStore((s) => s.store.logs);
   const activeSlug = useStore((s) => s.store.user_profile?.active_program_id);
 
-  const [REGIONS, setRegions] = useState<SymptomRegion[]>(() => regionsForProgram(null));
-  const [FLAGS, setFlags] = useState<SymptomFlag[]>(() => flagsForProgram(null));
+  /**
+   * `null` means NOT YET KNOWN, which is not the same as "declares nothing"
+   * (fixed 2026-09-14, found by persona sweep #8).
+   *
+   * These seeded with `regionsForProgram(null)`, and that fallback is
+   * `LEGACY_REGIONS` — `groin_left`, `low_back`, `buttock_left`,
+   * `shoulder_right`. So every load of this page opened with the ANTERIOR-HIP
+   * programme's clinical map, for every user, until the programme resolved a
+   * moment later.
+   *
+   * That is the exact defect CLAUDE.md records as fixed: "the check rendered
+   * groin_left / low_back / buttock_left / shoulder_right — anterior-hip's
+   * clinical map, the one program marked personal: true — to every user of
+   * every program. A pull-up user with medial epicondylitis had no elbow field
+   * and the engine saw green." The resolver was fixed; the INITIAL STATE was
+   * not, so it survived as a render-time race.
+   *
+   * The sweep caught it on production: `persona-pullup-elbow`'s captured
+   * check reads "Left groin / Low back / Left buttock / Right shoulder".
+   *
+   * It is worse than a flash. The scores are written under the REGION ID, so a
+   * pull-up user tapping "Right shoulder" writes `shoulder_right` — their
+   * programme's own `shoulder` stays unscored, and the day is derived from a
+   * region their programme never asked about.
+   *
+   * A failed load now shows an error rather than the legacy four. Recording a
+   * score against the wrong region is worse than recording none: the point of
+   * `symptom_regions[]` is that a programme asks about the body it is training.
+   */
+  const [REGIONS, setRegions] = useState<SymptomRegion[] | null>(null);
+  const [FLAGS, setFlags] = useState<SymptomFlag[] | null>(null);
+  const [regionsError, setRegionsError] = useState(false);
   useEffect(() => {
-    if (!activeSlug) return;
+    if (!activeSlug) {
+      // No programme picked: the historical four are the only sensible set,
+      // and this is the case the fallback was written for.
+      setRegions(regionsForProgram(null));
+      setFlags(flagsForProgram(null));
+      return;
+    }
     let live = true;
     void loadProgram(activeSlug)
-      .then((p) => { if (live) { setRegions(regionsForProgram(p)); setFlags(flagsForProgram(p)); } })
-      // A failed program load must not blank the check — fall back to the
-      // historical four rather than rendering a form with no regions.
-      .catch(() => { if (live) { setRegions(regionsForProgram(null)); setFlags(flagsForProgram(null)); } });
+      .then((p) => {
+        if (!live) return;
+        setRegions(regionsForProgram(p));
+        setFlags(flagsForProgram(p));
+        setRegionsError(false);
+      })
+      .catch(() => {
+        if (!live) return;
+        setRegions([]);
+        setFlags([]);
+        setRegionsError(true);
+      });
     return () => { live = false; };
   }, [activeSlug]);
 
@@ -248,7 +292,19 @@ export default function CheckPage() {
           <span aria-hidden className="h-px flex-1" style={{ background: "linear-gradient(to right, var(--color-line-soft), transparent)" }} />
         </div>
         <div className="rounded-md border border-line-soft bg-surface px-3">
-          {REGIONS.map((r) => (
+          {/* Not yet resolved: show nothing rather than someone else's body
+              map. A pull-up user must never be offered "Left groin" — the
+              scores are written under the region ID, so a tap on the wrong
+              label is a score on the wrong region, not just a wrong word. */}
+          {REGIONS === null ? (
+            <p className="py-3 text-sm text-muted">Loading your programme&rsquo;s regions…</p>
+          ) : regionsError ? (
+            <p role="alert" className="py-3 text-sm text-red">
+              Couldn&rsquo;t load your programme. Reload before scoring — answering against
+              the wrong regions is worse than not answering.
+            </p>
+          ) : null}
+          {(REGIONS ?? []).map((r) => (
             <CheckRegionRow
               key={r.id}
               label={r.label}
@@ -273,7 +329,7 @@ export default function CheckPage() {
               answer, wrong mechanism. The next program needing its own flag
               would have added a second slug check, which is precisely how
               SKILL_PROGRAMS came to hold a slug that does not exist. */}
-          {FLAGS.map((f) => {
+          {(FLAGS ?? []).map((f) => {
             const on = f.keys.every((k) => values[k as keyof Symptoms] === true);
             return (
               <CheckFlagChip
