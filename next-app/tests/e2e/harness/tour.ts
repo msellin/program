@@ -1,4 +1,11 @@
 import type { Page, ConsoleMessage } from "@playwright/test";
+import {
+  installVitals,
+  readVitals,
+  overBudget,
+  VITALS_BUDGET,
+  type RouteVitals,
+} from "./vitals";
 import * as fs from "node:fs";
 import * as path from "node:path";
 
@@ -114,6 +121,17 @@ export async function runTour(
 ): Promise<TourResult[]> {
   const { routes, viewports, outDir, personaId } = opts;
   const results: TourResult[] = [];
+  /**
+   * Core Web Vitals, per route per viewport.
+   *
+   * Eight sweeps at full route coverage produced screenshots, DOM and text for
+   * every surface and not one number about how any of them loaded. Installed
+   * before the first navigation, because an observer attached afterwards
+   * misses the LCP candidate on a fast route — the route you would most want
+   * to be sure about.
+   */
+  const vitals: RouteVitals[] = [];
+  await installVitals(page);
 
   /**
    * Hide the Sentry feedback trigger for the duration of the tour.
@@ -203,6 +221,8 @@ export async function runTour(
             fullPage: true,
           });
 
+          vitals.push(await readVitals(page, route.slug, viewport.name));
+
           if (viewport.name === "mobile") {
             const text = await page.evaluate(() => document.body?.innerText ?? "");
             fs.writeFileSync(path.join(outDir, "text", `${route.slug}.txt`), text, "utf8");
@@ -252,6 +272,35 @@ export async function runTour(
         capturedAt: new Date().toISOString(),
         viewports: viewports.map((v) => ({ name: v.name, width: v.width, height: v.height })),
         routes: results,
+      },
+      null,
+      2,
+    ),
+    "utf8",
+  );
+
+  /**
+   * Written beside the screenshots, not into the console.
+   *
+   * A number printed during a run is gone when the run ends; the point of the
+   * artifact tree is that two sweeps can be compared. `over_budget` is
+   * computed here so a reader does not have to remember what "good" is, and
+   * it is NOT asserted — a Playwright run on a laptop that is also hosting the
+   * dev server measures the laptop as much as the app, and a flaky
+   * performance gate gets disabled within a fortnight.
+   */
+  fs.writeFileSync(
+    path.join(outDir, "vitals.json"),
+    JSON.stringify(
+      {
+        persona: personaId,
+        captured_at: new Date().toISOString(),
+        budget: VITALS_BUDGET,
+        note:
+          "inp_max_ms is the MAXIMUM interaction latency over the tour, not INP. " +
+          "Real INP is a p98 over a session; a tour has nowhere near enough " +
+          "interactions for a percentile to mean anything. Treat it as an upper bound.",
+        routes: vitals.map((v) => ({ ...v, over_budget: overBudget(v) })),
       },
       null,
       2,
