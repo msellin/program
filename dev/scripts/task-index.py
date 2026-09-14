@@ -20,6 +20,7 @@ is telling you something a count alone hides.
 """
 
 import re
+import datetime as _dt
 import subprocess
 import sys
 from pathlib import Path
@@ -48,7 +49,27 @@ def counts(path: Path) -> dict[str, int]:
 
 
 def last_touched(path: Path) -> str:
+    """
+    The date this workstream last changed.
+
+    Uncommitted edits count as today. Without that, the staleness guard was
+    unsatisfiable in a single commit: the date came from `git log`, which
+    cannot know about a change until after it is committed, so regenerating
+    the index BEFORE committing wrote the old date and CI — checking out the
+    commit where the change now exists — recomputed a newer one and failed.
+    Every workstream edit needed two commits, and the second one existed only
+    to appease the check.
+
+    Found 2026-09-14 when CI went red on a commit whose index had been
+    regenerated correctly, locally, immediately before.
+    """
     try:
+        dirty = subprocess.run(
+            ["git", "status", "--porcelain", "--", str(path)],
+            cwd=ROOT, capture_output=True, text=True, check=False,
+        )
+        if (dirty.stdout or "").strip():
+            return _dt.date.today().isoformat()
         out = subprocess.run(
             ["git", "log", "-1", "--format=%ad", "--date=short", "--", str(path)],
             cwd=ROOT, capture_output=True, text=True, check=False,

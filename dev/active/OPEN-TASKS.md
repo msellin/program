@@ -1009,9 +1009,9 @@ workstream with many open items and an old date is stalled, not busy.
 | [video-analysis](dev/active/video-analysis/tasks.md) ⚠ | 42 | 1 | 2 | 11 | 2026-09-01 |
 | [saas-launch](dev/active/saas-launch/plan.md) | 36 | 0 | 0 | 0 | 2026-08-15 |
 | [app](dev/audits/app/2026-08-19-open-task-list.md) | 9 | 0 | 0 | 0 | 2026-09-08 |
-| [app](dev/audits/app/2026-08-19-master-task-list.md) | 5 | 2 | 0 | 253 | 2026-09-08 |
+| [app](dev/audits/app/2026-08-19-master-task-list.md) | 5 | 2 | 0 | 253 | 2026-09-14 |
 | [batch-36](dev/active/batch-36/tasks.md) | 6 | 0 | 0 | 0 | 2026-09-08 |
-| [post-audit-p0s](dev/active/post-audit-p0s/implementation-plan.md) | 6 | 0 | 0 | 1 | 2026-09-08 |
+| [post-audit-p0s](dev/active/post-audit-p0s/implementation-plan.md) | 6 | 0 | 0 | 1 | 2026-09-14 |
 | [traffic](dev/active/traffic/traffic-tasks.md) | 4 | 0 | 0 | 4 | 2026-09-06 |
 | [failed-attempt](dev/active/failed-attempt/failed-attempt-tasks.md) | 0 | 1 | 0 | 16 | 2026-09-08 |
 | [sr-panel-c](dev/active/sr-panel-c/sr-panel-c-tasks.md) | 1 | 0 | 0 | 10 | 2026-09-05 |
