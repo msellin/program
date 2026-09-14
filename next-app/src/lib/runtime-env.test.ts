@@ -24,8 +24,14 @@ import path from "node:path";
  * verified end-to-end without a real user session, which means the only
  * defence available is knowing the binding has to be there.
  *
- * This does not prove the bindings are SET — nothing in the repo can. It
- * proves the list a human would check against is still the right list.
+ * This file proves the list a human would check against is still the right
+ * list. It does NOT prove the bindings are set — the sentence that used to sit
+ * here said nothing in the repo ever could, and that was wrong for as long as
+ * it was written. `wrangler pages secret list` reports binding NAMES with a
+ * token the deploy workflow already holds, so gate 4
+ * (`dev/scripts/check-runtime-bindings.sh`) now asserts existence against the
+ * live project before every deploy. The tests below guard that gate: a check
+ * that can be quietly dropped from the workflow is not a gate.
  */
 const FUNCTIONS = path.resolve(process.cwd(), "functions");
 const CLAUDE_MD = path.resolve(process.cwd(), "..", "CLAUDE.md");
@@ -80,6 +86,60 @@ describe("every runtime Pages binding is documented", () => {
     expect(
       guard < destructive,
       "the service-role check must precede the admin delete call",
+    ).toBe(true);
+  });
+});
+
+/**
+ * Gate 4 is a shell script referenced from a YAML file. Nothing else in the
+ * suite would notice if either end went away, which is the same shape of
+ * failure as the lint step that was never wired: present in the repo, absent
+ * from the pipeline, believed to be running.
+ */
+const WORKFLOW = path.resolve(process.cwd(), "..", ".github", "workflows", "deploy.yml");
+const GATE = path.resolve(process.cwd(), "..", "dev", "scripts", "check-runtime-bindings.sh");
+
+describe("gate 4 - runtime bindings are asserted before deploy", () => {
+  it("the gate script exists and is executable", () => {
+    expect(fs.existsSync(GATE), "check-runtime-bindings.sh is gone").toBe(true);
+    expect((fs.statSync(GATE).mode & 0o111) !== 0, "gate script is not executable").toBe(true);
+  });
+
+  it("derives its expected list rather than hardcoding one", () => {
+    const src = fs.readFileSync(GATE, "utf8");
+    // The whole point: a binding added to a function is covered on the same
+    // commit. A literal list here would drift the first time someone forgot.
+    expect(
+      src.includes("grep -rhoE") && src.includes("functions"),
+      "the gate must scan functions/ for env reads, not carry a typed list",
+    ).toBe(true);
+    for (const v of envVarsRead(FUNCTIONS)) {
+      expect(
+        src.includes(`"${v}"`) || src.includes(`'${v}'`) || src.includes(` ${v} `),
+        `gate script hardcodes ${v} - the list must be derived`,
+      ).toBe(false);
+    }
+  });
+
+  it("CI runs the gate, and runs it before the deploy", () => {
+    if (!fs.existsSync(WORKFLOW)) return;
+    const yml = fs.readFileSync(WORKFLOW, "utf8");
+    // Comments stripped first. Every guard in this repo that matched raw text
+    // has at some point been satisfied by its own explanatory comment.
+    const code = yml
+      .split("\n")
+      .filter((l) => !l.trim().startsWith("#"))
+      .join("\n");
+
+    const gate = code.indexOf("check-runtime-bindings.sh");
+    expect(gate, "gate 4 is not referenced by the deploy workflow").toBeGreaterThan(-1);
+
+    const deploy = code.indexOf("wrangler@4 pages deploy");
+    expect(deploy, "the deploy step moved - this guard needs rewriting").toBeGreaterThan(-1);
+    expect(
+      gate < deploy,
+      "gate 4 must run BEFORE the deploy: a build that would 500 on first " +
+        "use should not replace a working one",
     ).toBe(true);
   });
 });

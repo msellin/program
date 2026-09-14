@@ -161,9 +161,10 @@ Enforced at three points, all running `npm run verify`:
    builds and deploys BOTH Pages projects. This is now the real gate; the
    laptop deploy is the fallback, not the path to production.
 
-**CI gates on three separate things, and they are not the same thing.** Tests
-passing does not mean the artifact is correct, and a correct artifact does not
-mean production received it:
+**CI gates on four separate things, and they are not the same thing.** Tests
+passing does not mean the artifact is correct, a correct artifact does not mean
+production received it, and none of that says the server-side config the
+artifact depends on exists:
 
 1. `verify` — the suite. Also the landing's only gate: the landing has no suite
    of its own, and `data-integrity.test.ts` is what asserts its catalog agrees
@@ -176,6 +177,14 @@ mean production received it:
 3. **The live site serves that exact artifact.** CI records the built
    `main-app-<hash>.js` filename and polls `app.terav.fit` until the live HTML
    asks for that same file.
+4. **The runtime bindings the functions need are actually bound.** Gates 1-3
+   are all blind to these by construction — see the runtime-secrets section
+   below. `dev/scripts/check-runtime-bindings.sh` (gate 4, added 2026-09-14)
+   scans `next-app/functions/` for every `env.*` read and asserts each one
+   against `wrangler pages secret list` on the live project, before the
+   deploy. The expected list is derived, never typed, so a binding introduced
+   by a new function is covered on the same commit. Names only — wrangler
+   reports "Value Encrypted" and the script never holds a value.
 
 Gate 3 exists because of a specific failure. On 2026-09-01 a Sentry DSN was
 added to a gitignored `.env.local`, verified by grepping the local `out/`
@@ -197,8 +206,8 @@ secrets and `.env.local` or CI ships a build without it. Currently:
 
 **Runtime — Cloudflare Pages project bindings.** Everything under
 `next-app/functions/` reads `env.*` at request time. These are NOT in the
-build, NOT `NEXT_PUBLIC_`, and CI's artifact grep cannot see them, so the
-three-gate pipeline above passes with all of them missing. Currently:
+build, NOT `NEXT_PUBLIC_`, and CI's artifact grep cannot see them — gates 1-3
+all pass with every one of them missing. That is what gate 4 is for. Currently:
 `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SERVICE_ROLE_KEY`,
 `ADMIN_EMAILS`, `RESEND_API_KEY`.
 
@@ -209,7 +218,13 @@ happen**. It fails safe (the check runs after auth and before anything
 destructive, so nobody is half-deleted) but it fails silently from the
 outside, and the endpoint cannot be verified end-to-end without a real
 session. `runtime-env.test.ts` asserts this list still matches what the
-functions actually read.
+functions actually read, and guards gate 4 at both ends — the script exists
+and derives its list, and CI still runs it *before* the deploy.
+
+All five were confirmed present on `program-v2` on 2026-09-14. The **preview**
+environment has none, so any branch deployment's `functions/` will 500; that is
+harmless while this project pushes only to main, and would not be if that
+changed.
 
 Referential integrity across the shipped tree — `exercise_id` and `drill_library`
 resolution, `capability_slot` satisfiability, `references[]` ↔ `reference_ids[]` ↔
