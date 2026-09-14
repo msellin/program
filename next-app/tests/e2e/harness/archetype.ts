@@ -169,8 +169,27 @@ export const INJURED_RECOVERY: Archetype = {
     return "log";
   },
   lifeLoad: (d) => d < 7 ? 7 : d < 21 ? 5 : 3,
+  /**
+   * Decay rate corrected 2026-09-14.
+   *
+   * It was `6 - floor(d / 5)`, which is RED (`peak > 5`) on days 0-4 and amber
+   * from day 5 onwards. `logDecision` skips days 0-6 outright. So the red
+   * window sat entirely inside the skip window, and the only cell in the
+   * matrix built to exercise the red-state load-reduction path could not log
+   * a single red day. Ninety simulated days produced `day_adjustments: 0` --
+   * a result indistinguishable from a healthy athlete, on the archetype named
+   * `injured-recovery`.
+   *
+   * Nothing asserted on it, so it read as a pass for as long as it existed.
+   *
+   * `/10` keeps the archetype's stated shape -- "first week high, then gradual
+   * reduction over 4 weeks" (3/10 by day 30) -- while leaving red overlapping
+   * the day 7-13 window where logging resumes at 50%. The point of this cell
+   * is a person who is still symptomatic WHILE returning to training; the old
+   * curve described someone whose symptoms ended the day they came back.
+   */
   symptoms: (d) => {
-    const decayed = Math.max(0, 6 - Math.floor(d / 5));
+    const decayed = Math.max(0, 6 - Math.floor(d / 10));
     return { groin_left: decayed, low_back: Math.floor(decayed / 2), life_load: d < 14 ? 6 : 3 };
   },
   acceptProposal: 0.9,

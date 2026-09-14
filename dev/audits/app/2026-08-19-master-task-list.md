@@ -428,7 +428,10 @@ useful, so they move here rather than dying with it.
       is `{}` in all 23 `final-store.json` artifacts. The `bumpBy` ramp loops
       over an empty object every persona-day, and every baseline-dependent
       surface in the app is unexercised by the fleet.
-- [ ] **H2 — delete `store.cycle.phase_id`.** `useStore.ts:408` still writes
+- [x] **H2 — delete `store.cycle.phase_id`.** Done 2026-09-11, and the whole
+      of `store.cycle` followed on 2026-09-14: `cycle_number` and
+      `week_in_cycle` had no readers either. Typecheck clean with it gone,
+      confirming nothing depended on it. `useStore.ts:408` still wrote
       `phase_id: null`. The item originally offered "wire a writer or delete";
       the wire option died with `coach-client.ts` in the R12 kill. Delete-only.
 

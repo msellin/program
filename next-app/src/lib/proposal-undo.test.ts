@@ -30,7 +30,6 @@ const base = (): Store =>
     version: 2,
     logs: {},
     training_maxes: { back_squat: 120, deadlift_conventional: 150 },
-    cycle: { cycle_number: 1, week_in_cycle: 1 },
     user_profile: {
       active_program_id: "concurrent-strength-maintenance",
       program_states: { "concurrent-strength-maintenance": { tier: "tier_a" } },

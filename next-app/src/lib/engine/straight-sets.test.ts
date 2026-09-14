@@ -34,7 +34,6 @@ const program: Program = (() => {
 const store = {
   logs: {},
   training_maxes: { front_squat: 110, back_squat_highbar: 140 },
-  cycle: { cycle_number: 1, week_in_cycle: 1 },
 } as unknown as Store;
 
 /** Mirrors DaySession's row maths — the number of sets the user is shown. */
@@ -115,7 +114,6 @@ describe("concurrent-strength-maintenance — the sibling that was missed", () =
   const csmStore = {
     logs: {},
     training_maxes: { back_squat_highbar: 140, block_pull_midshin: 160, front_squat: 110 },
-    cycle: { cycle_number: 1, week_in_cycle: 1 },
   } as unknown as Store;
 
   const cases: Array<[string, string, string, number]> = [

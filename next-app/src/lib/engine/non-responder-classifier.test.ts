@@ -20,7 +20,6 @@ function emptyStore(): Store {
     version: 2,
     logs: {},
     training_maxes: {},
-    cycle: { cycle_number: 0, week_in_cycle: 0 },
   } as unknown as Store;
 }
 

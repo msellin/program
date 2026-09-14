@@ -1,866 +1,217 @@
 {
   "version": 2,
   "logs": {
-    "2026-08-13": {
-      "date": "2026-08-13",
-      "exercises": {},
-      "symptoms": {
-        "low_back": 0,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-08-14": {
-      "date": "2026-08-14",
-      "exercises": {
-        "block_reintro:back_squat_highbar": {
-          "done": true,
-          "sets": [
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 7
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 8
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 8
-            }
-          ]
-        },
-        "block_reintro:block_pull_midshin": {
-          "done": true,
-          "sets": [
-            {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 6.5
-            },
-            {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 8
-            },
-            {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 7.5
-            }
-          ]
-        }
-      },
-      "symptoms": {
-        "low_back": 0,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-08-15": {
-      "date": "2026-08-15",
-      "exercises": {},
-      "symptoms": {
-        "low_back": 0,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-08-16": {
-      "date": "2026-08-16",
-      "exercises": {},
-      "symptoms": {
-        "low_back": 0,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-08-17": {
-      "date": "2026-08-17",
-      "exercises": {
-        "block_reintro:back_squat_highbar": {
-          "done": true,
-          "sets": [
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 7.5
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 7
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 8.5
-            }
-          ]
-        },
-        "block_reintro:block_pull_midshin": {
-          "done": true,
-          "sets": [
-            {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 7
-            },
-            {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 7
-            },
-            {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 8
-            }
-          ]
-        }
-      },
-      "symptoms": {
-        "low_back": 2,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-08-18": {
-      "date": "2026-08-18",
-      "exercises": {},
-      "symptoms": {
-        "low_back": 0,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-08-19": {
-      "date": "2026-08-19",
-      "exercises": {
-        "block_evaluate:back_squat_highbar": {
-          "done": true,
-          "sets": [
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 7
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 7.5
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 8
-            }
-          ]
-        },
-        "block_evaluate:block_pull_midshin": {
-          "done": true,
-          "sets": [
-            {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 6.5
-            },
-            {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 7.5
-            },
-            {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 7.5
-            }
-          ]
-        }
-      },
-      "symptoms": {
-        "low_back": 0,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-08-20": {
-      "date": "2026-08-20",
-      "exercises": {},
-      "symptoms": {
-        "low_back": 0,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-08-21": {
-      "date": "2026-08-21",
-      "exercises": {
-        "block_reintro:back_squat_highbar": {
-          "done": true,
-          "sets": [
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 6.5
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 7.5
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 8
-            }
-          ]
-        },
-        "block_reintro:block_pull_midshin": {
-          "done": true,
-          "sets": [
-            {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 7.5
-            },
-            {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 8
-            },
-            {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 8
-            }
-          ]
-        }
-      },
-      "symptoms": {
-        "low_back": 0,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-08-22": {
-      "date": "2026-08-22",
-      "exercises": {},
-      "symptoms": {
-        "low_back": 0,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-08-23": {
-      "date": "2026-08-23",
-      "exercises": {},
-      "symptoms": {
-        "low_back": 0,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-08-24": {
-      "date": "2026-08-24",
-      "exercises": {
-        "block_reintro:back_squat_highbar": {
-          "done": true,
-          "sets": [
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 7
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 7.5
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 8
-            }
-          ]
-        },
-        "block_reintro:block_pull_midshin": {
-          "done": true,
-          "sets": [
-            {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 6.5
-            },
-            {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 7.5
-            },
-            {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 8
-            }
-          ]
-        }
-      },
-      "symptoms": {
-        "low_back": 0,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-08-25": {
-      "date": "2026-08-25",
-      "exercises": {},
-      "symptoms": {
-        "low_back": 0,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-08-26": {
-      "date": "2026-08-26",
-      "exercises": {
-        "block_evaluate:back_squat_highbar": {
-          "done": true,
-          "sets": [
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 7.5
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 7.5
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 8
-            }
-          ]
-        },
-        "block_evaluate:block_pull_midshin": {
-          "done": true,
-          "sets": [
-            {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 6.5
-            },
-            {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 8
-            },
-            {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 8.5
-            }
-          ]
-        }
-      },
-      "symptoms": {
-        "low_back": 2,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-08-27": {
-      "date": "2026-08-27",
-      "exercises": {},
-      "symptoms": {
-        "low_back": 0,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-08-28": {
-      "date": "2026-08-28",
-      "exercises": {
-        "block_reintro:back_squat_highbar": {
-          "done": true,
-          "sets": [
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 7
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 7.5
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 8.5
-            }
-          ]
-        },
-        "block_reintro:block_pull_midshin": {
-          "done": true,
-          "sets": [
-            {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 7.5
-            },
-            {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 7.5
-            },
-            {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 8
-            }
-          ]
-        }
-      },
-      "symptoms": {
-        "low_back": 0,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-08-29": {
-      "date": "2026-08-29",
-      "exercises": {},
-      "symptoms": {
-        "low_back": 2,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-08-30": {
-      "date": "2026-08-30",
-      "exercises": {},
-      "symptoms": {
-        "low_back": 0,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-08-31": {
-      "date": "2026-08-31",
-      "exercises": {
-        "block_squat_heavy:back_squat_highbar": {
-          "done": true,
-          "sets": [
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 7
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 7.5
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 7.5
-            }
-          ]
-        }
-      },
-      "symptoms": {
-        "low_back": 0,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-09-01": {
-      "date": "2026-09-01",
-      "exercises": {},
-      "symptoms": {
-        "low_back": 0,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-09-02": {
-      "date": "2026-09-02",
-      "exercises": {
-        "block_pull_heavy:block_pull_midshin": {
-          "done": true,
-          "sets": [
-            {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 7
-            },
-            {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 7.5
-            },
-            {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 8
-            }
-          ]
-        }
-      },
-      "symptoms": {
-        "low_back": 0,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-09-03": {
-      "date": "2026-09-03",
-      "exercises": {},
-      "symptoms": {
-        "low_back": 2,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-09-04": {
-      "date": "2026-09-04",
-      "exercises": {
-        "block_squat_variant:front_squat": {
-          "done": true,
-          "sets": [
-            {
-              "weight_kg": 72.5,
-              "reps": 5,
-              "rpe": 7
-            },
-            {
-              "weight_kg": 72.5,
-              "reps": 5,
-              "rpe": 8
-            },
-            {
-              "weight_kg": 72.5,
-              "reps": 5,
-              "rpe": 8.5
-            }
-          ]
-        }
-      },
-      "symptoms": {
-        "low_back": 0,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-09-05": {
-      "date": "2026-09-05",
-      "exercises": {},
-      "symptoms": {
-        "low_back": 0,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-09-06": {
-      "date": "2026-09-06",
-      "exercises": {},
-      "symptoms": {
-        "low_back": 2,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-09-07": {
-      "date": "2026-09-07",
-      "exercises": {
-        "block_squat_heavy:back_squat_highbar": {
-          "done": true,
-          "sets": [
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 7.5
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 7
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 8
-            }
-          ]
-        }
-      },
-      "symptoms": {
-        "low_back": 2,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-09-08": {
-      "date": "2026-09-08",
-      "exercises": {},
-      "symptoms": {
-        "low_back": 0,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-09-09": {
-      "date": "2026-09-09",
-      "exercises": {},
-      "symptoms": {
-        "low_back": 2,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-09-10": {
-      "date": "2026-09-10",
-      "exercises": {},
-      "symptoms": {
-        "low_back": 0,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-09-11": {
-      "date": "2026-09-11",
-      "exercises": {},
-      "symptoms": {
-        "low_back": 2,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
     "2026-09-12": {
       "date": "2026-09-12",
       "exercises": {},
       "symptoms": {
-        "low_back": 0,
-        "life_load": 4
+        "groin_left": 0,
+        "life_load": 3
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-09-13": {
       "date": "2026-09-13",
       "exercises": {},
       "symptoms": {
-        "low_back": 0,
+        "groin_left": 0,
         "life_load": 4
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-09-14": {
       "date": "2026-09-14",
-      "exercises": {
-        "block_squat_heavy:back_squat_highbar": {
-          "done": true,
-          "sets": [
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 7
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 7
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 7.5
-            }
-          ]
-        }
-      },
+      "exercises": {},
       "symptoms": {
-        "low_back": 0,
+        "groin_left": 0,
         "life_load": 4
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-09-15": {
       "date": "2026-09-15",
       "exercises": {},
       "symptoms": {
-        "low_back": 0,
+        "groin_left": 0,
         "life_load": 4
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-09-16": {
       "date": "2026-09-16",
       "exercises": {
-        "block_pull_heavy:block_pull_midshin": {
-          "done": true,
+        "block_squat_heavy:back_squat_highbar": {
+          "done": false,
           "sets": [
             {
-              "weight_kg": 119,
+              "weight_kg": 93.5,
               "reps": 5,
               "rpe": 7
             },
             {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 8
+              "weight_kg": null,
+              "reps": null,
+              "rpe": null
             },
             {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 8
+              "weight_kg": null,
+              "reps": null,
+              "rpe": null
             }
           ]
         }
       },
       "symptoms": {
-        "low_back": 0,
-        "life_load": 4
+        "groin_left": 0,
+        "life_load": 5
       },
-      "derived_state": "green"
+      "derived_state": "amber",
+      "notes": ""
     },
     "2026-09-17": {
       "date": "2026-09-17",
       "exercises": {},
       "symptoms": {
-        "low_back": 0,
-        "life_load": 4
+        "groin_left": 0,
+        "life_load": 3
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-09-18": {
       "date": "2026-09-18",
       "exercises": {
-        "block_squat_variant:front_squat": {
+        "block_pull_heavy:block_pull_midshin": {
           "done": true,
           "sets": [
             {
-              "weight_kg": 72.5,
+              "weight_kg": 119,
               "reps": 5,
-              "rpe": 6.5
+              "rpe": 7
             },
             {
-              "weight_kg": 72.5,
+              "weight_kg": 119,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 119,
               "reps": 5,
               "rpe": 7.5
-            },
-            {
-              "weight_kg": 72.5,
-              "reps": 5,
-              "rpe": 8
             }
           ]
         }
       },
       "symptoms": {
-        "low_back": 2,
-        "life_load": 4
+        "groin_left": 2,
+        "life_load": 5
       },
-      "derived_state": "green"
+      "derived_state": "amber",
+      "notes": ""
     },
     "2026-09-19": {
       "date": "2026-09-19",
       "exercises": {},
       "symptoms": {
-        "low_back": 0,
-        "life_load": 4
+        "groin_left": 0,
+        "life_load": 5
       },
-      "derived_state": "green"
+      "derived_state": "amber",
+      "notes": ""
     },
     "2026-09-20": {
       "date": "2026-09-20",
       "exercises": {},
       "symptoms": {
-        "low_back": 0,
-        "life_load": 4
+        "groin_left": 0,
+        "life_load": 3
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-09-21": {
       "date": "2026-09-21",
       "exercises": {},
       "symptoms": {
-        "low_back": 2,
-        "life_load": 4
+        "groin_left": 2,
+        "life_load": 5
       },
-      "derived_state": "green"
+      "derived_state": "amber",
+      "notes": ""
     },
     "2026-09-22": {
       "date": "2026-09-22",
       "exercises": {},
       "symptoms": {
-        "low_back": 0,
+        "groin_left": 0,
         "life_load": 4
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-09-23": {
       "date": "2026-09-23",
       "exercises": {
-        "block_pull_heavy:block_pull_midshin": {
-          "done": true,
+        "block_squat_heavy:back_squat_highbar": {
+          "done": false,
           "sets": [
             {
-              "weight_kg": 119,
+              "weight_kg": 93.5,
               "reps": 5,
-              "rpe": 7
+              "rpe": 7.5
             },
             {
-              "weight_kg": 119,
+              "weight_kg": 93.5,
               "reps": 5,
-              "rpe": 8
+              "rpe": 7.5
             },
             {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 8.5
+              "weight_kg": null,
+              "reps": null,
+              "rpe": null
             }
           ]
         }
       },
       "symptoms": {
-        "low_back": 0,
-        "life_load": 4
+        "groin_left": 0,
+        "life_load": 3
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-09-24": {
       "date": "2026-09-24",
       "exercises": {},
       "symptoms": {
-        "low_back": 0,
-        "life_load": 4
+        "groin_left": 0,
+        "life_load": 5
       },
-      "derived_state": "green"
+      "derived_state": "amber",
+      "notes": ""
     },
     "2026-09-25": {
       "date": "2026-09-25",
       "exercises": {
-        "block_squat_variant:front_squat": {
+        "block_pull_heavy:block_pull_midshin": {
           "done": true,
           "sets": [
             {
-              "weight_kg": 72.5,
+              "weight_kg": 119,
               "reps": 5,
               "rpe": 7
             },
             {
-              "weight_kg": 72.5,
+              "weight_kg": 119,
               "reps": 5,
-              "rpe": 7.5
+              "rpe": 8
             },
             {
-              "weight_kg": 72.5,
+              "weight_kg": 119,
               "reps": 5,
               "rpe": 8
             }
@@ -868,482 +219,426 @@
         }
       },
       "symptoms": {
-        "low_back": 0,
-        "life_load": 4
+        "groin_left": 0,
+        "life_load": 5
       },
-      "derived_state": "green"
+      "derived_state": "amber",
+      "notes": ""
     },
     "2026-09-26": {
       "date": "2026-09-26",
       "exercises": {},
       "symptoms": {
-        "low_back": 0,
-        "life_load": 4
+        "groin_left": 0,
+        "life_load": 3
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-09-27": {
       "date": "2026-09-27",
       "exercises": {},
       "symptoms": {
-        "low_back": 0,
-        "life_load": 4
+        "groin_left": 0,
+        "life_load": 5
       },
-      "derived_state": "green"
+      "derived_state": "amber",
+      "notes": ""
     },
     "2026-09-28": {
       "date": "2026-09-28",
-      "exercises": {
-        "block_squat_heavy:back_squat_highbar": {
-          "done": true,
-          "sets": [
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 7
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 7
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 8.5
-            }
-          ]
-        }
-      },
+      "exercises": {},
       "symptoms": {
-        "low_back": 0,
+        "groin_left": 0,
         "life_load": 4
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-09-29": {
       "date": "2026-09-29",
       "exercises": {},
       "symptoms": {
-        "low_back": 0,
-        "life_load": 4
+        "groin_left": 0,
+        "life_load": 3
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-09-30": {
       "date": "2026-09-30",
       "exercises": {
-        "block_pull_heavy:block_pull_midshin": {
-          "done": true,
+        "block_squat_heavy:back_squat_highbar": {
+          "done": false,
           "sets": [
             {
-              "weight_kg": 119,
+              "weight_kg": 93.5,
               "reps": 5,
-              "rpe": 7.5
+              "rpe": 6.5
             },
             {
-              "weight_kg": 119,
+              "weight_kg": 93.5,
               "reps": 5,
-              "rpe": 7.5
+              "rpe": 8
             },
             {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 8.5
+              "weight_kg": null,
+              "reps": null,
+              "rpe": null
             }
           ]
         }
       },
       "symptoms": {
-        "low_back": 0,
+        "groin_left": 0,
         "life_load": 4
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-10-01": {
       "date": "2026-10-01",
       "exercises": {},
       "symptoms": {
-        "low_back": 0,
-        "life_load": 4
+        "groin_left": 0,
+        "life_load": 3
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-10-02": {
       "date": "2026-10-02",
       "exercises": {
-        "block_squat_variant:front_squat": {
+        "block_pull_heavy:block_pull_midshin": {
           "done": true,
           "sets": [
             {
-              "weight_kg": 72.5,
-              "reps": 5,
-              "rpe": 7
-            },
-            {
-              "weight_kg": 72.5,
+              "weight_kg": 119,
               "reps": 5,
               "rpe": 7.5
             },
             {
-              "weight_kg": 72.5,
+              "weight_kg": 119,
               "reps": 5,
-              "rpe": 7.5
+              "rpe": 8
+            },
+            {
+              "weight_kg": 119,
+              "reps": 5,
+              "rpe": 8
             }
           ]
         }
       },
       "symptoms": {
-        "low_back": 0,
-        "life_load": 4
+        "groin_left": 0,
+        "life_load": 3
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-10-03": {
       "date": "2026-10-03",
       "exercises": {},
       "symptoms": {
-        "low_back": 0,
+        "groin_left": 0,
         "life_load": 4
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-10-04": {
       "date": "2026-10-04",
       "exercises": {},
       "symptoms": {
-        "low_back": 0,
-        "life_load": 4
+        "groin_left": 0,
+        "life_load": 3
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-10-05": {
       "date": "2026-10-05",
-      "exercises": {
-        "block_squat_heavy:back_squat_highbar": {
-          "done": true,
-          "sets": [
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 7.5
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 7
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 8
-            }
-          ]
-        }
-      },
+      "exercises": {},
       "symptoms": {
-        "low_back": 0,
+        "groin_left": 0,
         "life_load": 4
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-10-06": {
       "date": "2026-10-06",
       "exercises": {},
       "symptoms": {
-        "low_back": 0,
+        "groin_left": 0,
         "life_load": 4
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-10-07": {
       "date": "2026-10-07",
       "exercises": {
-        "block_pull_heavy:block_pull_midshin": {
-          "done": true,
+        "block_squat_heavy:back_squat_highbar": {
+          "done": false,
           "sets": [
             {
-              "weight_kg": 119,
+              "weight_kg": 93.5,
               "reps": 5,
-              "rpe": 7.5
+              "rpe": 7
             },
             {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 7.5
+              "weight_kg": null,
+              "reps": null,
+              "rpe": null
             },
             {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 8
+              "weight_kg": null,
+              "reps": null,
+              "rpe": null
             }
           ]
         }
       },
       "symptoms": {
-        "low_back": 0,
-        "life_load": 4
+        "groin_left": 0,
+        "life_load": 3
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-10-08": {
       "date": "2026-10-08",
       "exercises": {},
       "symptoms": {
-        "low_back": 0,
-        "life_load": 4
+        "groin_left": 0,
+        "life_load": 5
       },
-      "derived_state": "green"
+      "derived_state": "amber",
+      "notes": ""
     },
     "2026-10-09": {
       "date": "2026-10-09",
       "exercises": {
-        "block_squat_variant:front_squat": {
+        "block_pull_heavy:block_pull_midshin": {
           "done": true,
           "sets": [
             {
-              "weight_kg": 72.5,
+              "weight_kg": 119,
               "reps": 5,
-              "rpe": 6.5
+              "rpe": 7
             },
             {
-              "weight_kg": 72.5,
+              "weight_kg": 119,
               "reps": 5,
               "rpe": 7.5
             },
             {
-              "weight_kg": 72.5,
+              "weight_kg": 119,
               "reps": 5,
-              "rpe": 8
+              "rpe": 8.5
             }
           ]
         }
       },
       "symptoms": {
-        "low_back": 0,
-        "life_load": 4
+        "groin_left": 0,
+        "life_load": 5
       },
-      "derived_state": "green"
+      "derived_state": "amber",
+      "notes": ""
     },
     "2026-10-10": {
       "date": "2026-10-10",
       "exercises": {},
       "symptoms": {
-        "low_back": 0,
-        "life_load": 4
+        "groin_left": 0,
+        "life_load": 5
       },
-      "derived_state": "green"
+      "derived_state": "amber",
+      "notes": ""
     },
     "2026-10-11": {
       "date": "2026-10-11",
       "exercises": {},
       "symptoms": {
-        "low_back": 0,
-        "life_load": 4
+        "groin_left": 0,
+        "life_load": 5
       },
-      "derived_state": "green"
+      "derived_state": "amber",
+      "notes": ""
     },
     "2026-10-12": {
       "date": "2026-10-12",
-      "exercises": {
-        "block_squat_heavy:back_squat_highbar": {
-          "done": true,
-          "sets": [
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 6.5
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 7
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 8
-            }
-          ]
-        }
-      },
+      "exercises": {},
       "symptoms": {
-        "low_back": 0,
-        "life_load": 4
+        "groin_left": 0,
+        "life_load": 3
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-10-13": {
       "date": "2026-10-13",
       "exercises": {},
       "symptoms": {
-        "low_back": 2,
-        "life_load": 4
+        "groin_left": 2,
+        "life_load": 3
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-10-14": {
       "date": "2026-10-14",
       "exercises": {
-        "block_pull_heavy:block_pull_midshin": {
-          "done": true,
+        "block_squat_heavy:back_squat_highbar": {
+          "done": false,
           "sets": [
             {
-              "weight_kg": 119,
+              "weight_kg": 93.5,
               "reps": 5,
               "rpe": 7
             },
             {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 7.5
+              "weight_kg": null,
+              "reps": null,
+              "rpe": null
             },
             {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 8.5
+              "weight_kg": null,
+              "reps": null,
+              "rpe": null
             }
           ]
         }
       },
       "symptoms": {
-        "low_back": 0,
-        "life_load": 4
+        "groin_left": 0,
+        "life_load": 3
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-10-15": {
       "date": "2026-10-15",
       "exercises": {},
       "symptoms": {
-        "low_back": 0,
-        "life_load": 4
+        "groin_left": 0,
+        "life_load": 3
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-10-16": {
       "date": "2026-10-16",
       "exercises": {},
       "symptoms": {
-        "low_back": 0,
+        "groin_left": 0,
         "life_load": 4
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-10-17": {
       "date": "2026-10-17",
       "exercises": {},
       "symptoms": {
-        "low_back": 2,
-        "life_load": 4
+        "groin_left": 2,
+        "life_load": 5
       },
-      "derived_state": "green"
+      "derived_state": "amber",
+      "notes": ""
     },
     "2026-10-18": {
       "date": "2026-10-18",
       "exercises": {},
       "symptoms": {
-        "low_back": 0,
+        "groin_left": 0,
         "life_load": 4
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-10-19": {
       "date": "2026-10-19",
-      "exercises": {
-        "block_squat_heavy:back_squat_highbar": {
-          "done": true,
-          "sets": [
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 7
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 7.5
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 7.5
-            }
-          ]
-        }
-      },
+      "exercises": {},
       "symptoms": {
-        "low_back": 0,
-        "life_load": 4
+        "groin_left": 0,
+        "life_load": 3
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-10-20": {
       "date": "2026-10-20",
       "exercises": {},
       "symptoms": {
-        "low_back": 0,
-        "life_load": 4
+        "groin_left": 0,
+        "life_load": 3
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-10-21": {
       "date": "2026-10-21",
       "exercises": {
-        "block_pull_heavy:block_pull_midshin": {
-          "done": true,
+        "block_squat_heavy:back_squat_highbar": {
+          "done": false,
           "sets": [
             {
-              "weight_kg": 119,
+              "weight_kg": 93.5,
               "reps": 5,
-              "rpe": 7.5
+              "rpe": 7
             },
             {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 7.5
+              "weight_kg": null,
+              "reps": null,
+              "rpe": null
             },
             {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 8
+              "weight_kg": null,
+              "reps": null,
+              "rpe": null
             }
           ]
         }
       },
       "symptoms": {
-        "low_back": 2,
-        "life_load": 4
+        "groin_left": 2,
+        "life_load": 3
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-10-22": {
       "date": "2026-10-22",
       "exercises": {},
       "symptoms": {
-        "low_back": 0,
-        "life_load": 4
+        "groin_left": 0,
+        "life_load": 5
       },
-      "derived_state": "green"
+      "derived_state": "amber",
+      "notes": ""
     },
     "2026-10-23": {
       "date": "2026-10-23",
       "exercises": {
-        "block_squat_variant:front_squat": {
+        "block_pull_heavy:block_pull_midshin": {
           "done": true,
           "sets": [
             {
-              "weight_kg": 72.5,
+              "weight_kg": 119,
               "reps": 5,
               "rpe": 7
             },
             {
-              "weight_kg": 72.5,
+              "weight_kg": 119,
               "reps": 5,
-              "rpe": 7
+              "rpe": 7.5
             },
             {
-              "weight_kg": 72.5,
+              "weight_kg": 119,
               "reps": 5,
               "rpe": 8
             }
@@ -1351,196 +646,95 @@
         }
       },
       "symptoms": {
-        "low_back": 0,
+        "groin_left": 0,
         "life_load": 4
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-10-24": {
       "date": "2026-10-24",
       "exercises": {},
       "symptoms": {
-        "low_back": 0,
+        "groin_left": 0,
         "life_load": 4
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-10-25": {
       "date": "2026-10-25",
       "exercises": {},
       "symptoms": {
-        "low_back": 0,
-        "life_load": 4
+        "groin_left": 0,
+        "life_load": 3
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-10-26": {
       "date": "2026-10-26",
-      "exercises": {
-        "block_squat_heavy:back_squat_highbar": {
-          "done": true,
-          "sets": [
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 6.5
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 8
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 8.5
-            }
-          ]
-        }
-      },
+      "exercises": {},
       "symptoms": {
-        "low_back": 0,
-        "life_load": 4
+        "groin_left": 0,
+        "life_load": 5
       },
-      "derived_state": "green"
+      "derived_state": "amber",
+      "notes": ""
     },
     "2026-10-27": {
       "date": "2026-10-27",
       "exercises": {},
       "symptoms": {
-        "low_back": 0,
+        "groin_left": 0,
         "life_load": 4
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-10-28": {
       "date": "2026-10-28",
       "exercises": {
-        "block_pull_heavy:block_pull_midshin": {
-          "done": true,
+        "block_squat_heavy:back_squat_highbar": {
+          "done": false,
           "sets": [
             {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 6.5
-            },
-            {
-              "weight_kg": 119,
+              "weight_kg": 93.5,
               "reps": 5,
               "rpe": 7.5
             },
             {
-              "weight_kg": 119,
-              "reps": 5,
-              "rpe": 8
+              "weight_kg": null,
+              "reps": null,
+              "rpe": null
+            },
+            {
+              "weight_kg": null,
+              "reps": null,
+              "rpe": null
             }
           ]
         }
       },
       "symptoms": {
-        "low_back": 2,
-        "life_load": 4
+        "groin_left": 2,
+        "life_load": 3
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-10-29": {
       "date": "2026-10-29",
       "exercises": {},
       "symptoms": {
-        "low_back": 2,
-        "life_load": 4
+        "groin_left": 2,
+        "life_load": 3
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-10-30": {
       "date": "2026-10-30",
-      "exercises": {
-        "block_squat_variant:front_squat": {
-          "done": true,
-          "sets": [
-            {
-              "weight_kg": 72.5,
-              "reps": 5,
-              "rpe": 6.5
-            },
-            {
-              "weight_kg": 72.5,
-              "reps": 5,
-              "rpe": 7.5
-            },
-            {
-              "weight_kg": 72.5,
-              "reps": 5,
-              "rpe": 8.5
-            }
-          ]
-        }
-      },
-      "symptoms": {
-        "low_back": 0,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-10-31": {
-      "date": "2026-10-31",
-      "exercises": {},
-      "symptoms": {
-        "low_back": 0,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-11-01": {
-      "date": "2026-11-01",
-      "exercises": {},
-      "symptoms": {
-        "low_back": 0,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-11-02": {
-      "date": "2026-11-02",
-      "exercises": {
-        "block_squat_heavy:back_squat_highbar": {
-          "done": true,
-          "sets": [
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 7
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 8
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 8.5
-            }
-          ]
-        }
-      },
-      "symptoms": {
-        "low_back": 0,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-11-03": {
-      "date": "2026-11-03",
-      "exercises": {},
-      "symptoms": {
-        "low_back": 2,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-11-04": {
-      "date": "2026-11-04",
       "exercises": {
         "block_pull_heavy:block_pull_midshin": {
           "done": true,
@@ -1553,7 +747,119 @@
             {
               "weight_kg": 119,
               "reps": 5,
+              "rpe": 8
+            },
+            {
+              "weight_kg": 119,
+              "reps": 5,
+              "rpe": 8.5
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 0,
+        "life_load": 3
+      },
+      "derived_state": "green",
+      "notes": ""
+    },
+    "2026-10-31": {
+      "date": "2026-10-31",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "life_load": 3
+      },
+      "derived_state": "green",
+      "notes": ""
+    },
+    "2026-11-01": {
+      "date": "2026-11-01",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "life_load": 3
+      },
+      "derived_state": "green",
+      "notes": ""
+    },
+    "2026-11-02": {
+      "date": "2026-11-02",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "life_load": 3
+      },
+      "derived_state": "green",
+      "notes": ""
+    },
+    "2026-11-03": {
+      "date": "2026-11-03",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 2,
+        "life_load": 4
+      },
+      "derived_state": "green",
+      "notes": ""
+    },
+    "2026-11-04": {
+      "date": "2026-11-04",
+      "exercises": {
+        "block_squat_heavy:back_squat_highbar": {
+          "done": false,
+          "sets": [
+            {
+              "weight_kg": 93.5,
+              "reps": 5,
+              "rpe": 7.5
+            },
+            {
+              "weight_kg": 93.5,
+              "reps": 5,
               "rpe": 7
+            },
+            {
+              "weight_kg": null,
+              "reps": null,
+              "rpe": null
+            }
+          ]
+        }
+      },
+      "symptoms": {
+        "groin_left": 0,
+        "life_load": 4
+      },
+      "derived_state": "green",
+      "notes": ""
+    },
+    "2026-11-05": {
+      "date": "2026-11-05",
+      "exercises": {},
+      "symptoms": {
+        "groin_left": 0,
+        "life_load": 4
+      },
+      "derived_state": "green",
+      "notes": ""
+    },
+    "2026-11-06": {
+      "date": "2026-11-06",
+      "exercises": {
+        "block_pull_heavy:block_pull_midshin": {
+          "done": true,
+          "sets": [
+            {
+              "weight_kg": 119,
+              "reps": 5,
+              "rpe": 7
+            },
+            {
+              "weight_kg": 119,
+              "reps": 5,
+              "rpe": 7.5
             },
             {
               "weight_kg": 119,
@@ -1564,184 +870,801 @@
         }
       },
       "symptoms": {
-        "low_back": 0,
-        "life_load": 4
+        "groin_left": 0,
+        "life_load": 3
       },
-      "derived_state": "green"
-    },
-    "2026-11-05": {
-      "date": "2026-11-05",
-      "exercises": {},
-      "symptoms": {
-        "low_back": 0,
-        "life_load": 4
-      },
-      "derived_state": "green"
-    },
-    "2026-11-06": {
-      "date": "2026-11-06",
-      "exercises": {
-        "block_squat_variant:front_squat": {
-          "done": true,
-          "sets": [
-            {
-              "weight_kg": 72.5,
-              "reps": 5,
-              "rpe": 7
-            },
-            {
-              "weight_kg": 72.5,
-              "reps": 5,
-              "rpe": 7
-            },
-            {
-              "weight_kg": 72.5,
-              "reps": 5,
-              "rpe": 8
-            }
-          ]
-        }
-      },
-      "symptoms": {
-        "low_back": 0,
-        "life_load": 4
-      },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-11-07": {
       "date": "2026-11-07",
       "exercises": {},
       "symptoms": {
-        "low_back": 0,
-        "life_load": 4
+        "groin_left": 0,
+        "life_load": 5
       },
-      "derived_state": "green"
+      "derived_state": "amber",
+      "notes": ""
     },
     "2026-11-08": {
       "date": "2026-11-08",
       "exercises": {},
       "symptoms": {
-        "low_back": 2,
-        "life_load": 4
+        "groin_left": 2,
+        "life_load": 5
       },
-      "derived_state": "green"
+      "derived_state": "amber",
+      "notes": ""
     },
     "2026-11-09": {
       "date": "2026-11-09",
-      "exercises": {
-        "block_squat_heavy:back_squat_highbar": {
-          "done": true,
-          "sets": [
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 7
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 7.5
-            },
-            {
-              "weight_kg": 93.5,
-              "reps": 5,
-              "rpe": 8
-            }
-          ]
-        }
-      },
+      "exercises": {},
       "symptoms": {
-        "low_back": 2,
+        "groin_left": 2,
         "life_load": 4
       },
-      "derived_state": "green"
+      "derived_state": "green",
+      "notes": ""
     },
     "2026-11-10": {
       "date": "2026-11-10",
       "exercises": {},
       "symptoms": {
-        "low_back": 0,
-        "life_load": 4
+        "groin_left": 0,
+        "life_load": 5
       },
-      "derived_state": "green"
+      "derived_state": "amber",
+      "notes": ""
     }
   },
   "training_maxes": {
-    "back_squat_highbar": 115,
-    "block_pull_midshin": 147.5,
-    "front_squat": 90,
-    "deadlift_conventional": 157.5,
-    "trap_bar_dl_floor": 152.5
+    "back_squat_highbar": 110,
+    "block_pull_midshin": 140,
+    "front_squat": 85,
+    "deadlift_conventional": 150,
+    "trap_bar_dl_floor": 145
   },
-  "cycle": null,
-  "updated_at": 1794211200000,
-  "scheduled_overrides": {},
+  "cycle": {
+    "cycle_number": 1,
+    "week_in_cycle": 1
+  },
+  "updated_at": 1794297600000,
+  "scheduled_overrides": {
+    "2026-09-14": {
+      "blocks": [
+        "block_a_home"
+      ],
+      "reason": "moved from 2026-09-12"
+    }
+  },
   "skipped": {
-    "2026-09-03": {
-      "blocks": [],
-      "reason": "sim: archetype skipped"
-    },
-    "2026-09-09": {
-      "blocks": [],
-      "reason": "sim: archetype skipped"
-    },
-    "2026-09-11": {
-      "blocks": [],
-      "reason": "sim: archetype skipped"
-    },
     "2026-09-21": {
-      "blocks": [],
       "reason": "sim: archetype skipped"
     },
     "2026-09-24": {
-      "blocks": [],
       "reason": "sim: archetype skipped"
     },
     "2026-09-27": {
-      "blocks": [],
       "reason": "sim: archetype skipped"
     },
     "2026-10-16": {
-      "blocks": [],
       "reason": "sim: archetype skipped"
     },
     "2026-10-17": {
-      "blocks": [],
       "reason": "sim: archetype skipped"
     },
     "2026-10-20": {
-      "blocks": [],
       "reason": "sim: archetype skipped"
     },
     "2026-10-22": {
-      "blocks": [],
       "reason": "sim: archetype skipped"
     },
     "2026-10-27": {
-      "blocks": [],
       "reason": "sim: archetype skipped"
     }
   },
-  "dismissed_proposals": {},
+  "scheduled_blocks": {
+    "anterior-hip-rebuild:2026-09-14:block_squat_heavy": {
+      "id": "anterior-hip-rebuild:2026-09-14:block_squat_heavy",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_heavy",
+      "planned_date": "2026-09-14",
+      "actual_date": "2026-09-14",
+      "state": "planned",
+      "log_entry_id": "2026-09-14"
+    },
+    "anterior-hip-rebuild:2026-09-16:block_pull_heavy": {
+      "id": "anterior-hip-rebuild:2026-09-16:block_pull_heavy",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_pull_heavy",
+      "planned_date": "2026-09-16",
+      "actual_date": "2026-09-16",
+      "state": "planned",
+      "log_entry_id": "2026-09-16"
+    },
+    "anterior-hip-rebuild:2026-09-17:block_squat_variant": {
+      "id": "anterior-hip-rebuild:2026-09-17:block_squat_variant",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_variant",
+      "planned_date": "2026-09-17",
+      "actual_date": "2026-09-17",
+      "state": "planned",
+      "log_entry_id": "2026-09-17"
+    },
+    "anterior-hip-rebuild:2026-09-19:block_squat_volume": {
+      "id": "anterior-hip-rebuild:2026-09-19:block_squat_volume",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_volume",
+      "planned_date": "2026-09-19",
+      "actual_date": "2026-09-19",
+      "state": "planned",
+      "log_entry_id": "2026-09-19"
+    },
+    "anterior-hip-rebuild:2026-09-21:block_squat_heavy": {
+      "id": "anterior-hip-rebuild:2026-09-21:block_squat_heavy",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_heavy",
+      "planned_date": "2026-09-21",
+      "actual_date": "2026-09-21",
+      "state": "skipped",
+      "log_entry_id": "2026-09-21",
+      "notes": "sim: archetype skipped"
+    },
+    "anterior-hip-rebuild:2026-09-23:block_pull_heavy": {
+      "id": "anterior-hip-rebuild:2026-09-23:block_pull_heavy",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_pull_heavy",
+      "planned_date": "2026-09-23",
+      "actual_date": "2026-09-23",
+      "state": "planned",
+      "log_entry_id": "2026-09-23"
+    },
+    "anterior-hip-rebuild:2026-09-24:block_squat_variant": {
+      "id": "anterior-hip-rebuild:2026-09-24:block_squat_variant",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_variant",
+      "planned_date": "2026-09-24",
+      "actual_date": "2026-09-24",
+      "state": "skipped",
+      "log_entry_id": "2026-09-24",
+      "notes": "sim: archetype skipped"
+    },
+    "anterior-hip-rebuild:2026-09-26:block_squat_volume": {
+      "id": "anterior-hip-rebuild:2026-09-26:block_squat_volume",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_volume",
+      "planned_date": "2026-09-26",
+      "actual_date": "2026-09-26",
+      "state": "planned",
+      "log_entry_id": "2026-09-26"
+    },
+    "anterior-hip-rebuild:2026-09-28:block_squat_heavy": {
+      "id": "anterior-hip-rebuild:2026-09-28:block_squat_heavy",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_heavy",
+      "planned_date": "2026-09-28",
+      "actual_date": "2026-09-28",
+      "state": "planned",
+      "log_entry_id": "2026-09-28"
+    },
+    "anterior-hip-rebuild:2026-09-30:block_pull_heavy": {
+      "id": "anterior-hip-rebuild:2026-09-30:block_pull_heavy",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_pull_heavy",
+      "planned_date": "2026-09-30",
+      "actual_date": "2026-09-30",
+      "state": "planned",
+      "log_entry_id": "2026-09-30"
+    },
+    "anterior-hip-rebuild:2026-10-01:block_squat_variant": {
+      "id": "anterior-hip-rebuild:2026-10-01:block_squat_variant",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_variant",
+      "planned_date": "2026-10-01",
+      "actual_date": "2026-10-01",
+      "state": "planned",
+      "log_entry_id": "2026-10-01"
+    },
+    "anterior-hip-rebuild:2026-10-03:block_squat_volume": {
+      "id": "anterior-hip-rebuild:2026-10-03:block_squat_volume",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_volume",
+      "planned_date": "2026-10-03",
+      "actual_date": "2026-10-03",
+      "state": "planned",
+      "log_entry_id": "2026-10-03"
+    },
+    "anterior-hip-rebuild:2026-10-05:block_squat_heavy": {
+      "id": "anterior-hip-rebuild:2026-10-05:block_squat_heavy",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_heavy",
+      "planned_date": "2026-10-05",
+      "actual_date": "2026-10-05",
+      "state": "planned",
+      "log_entry_id": "2026-10-05"
+    },
+    "anterior-hip-rebuild:2026-10-07:block_pull_heavy": {
+      "id": "anterior-hip-rebuild:2026-10-07:block_pull_heavy",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_pull_heavy",
+      "planned_date": "2026-10-07",
+      "actual_date": "2026-10-07",
+      "state": "planned",
+      "log_entry_id": "2026-10-07"
+    },
+    "anterior-hip-rebuild:2026-10-08:block_squat_variant": {
+      "id": "anterior-hip-rebuild:2026-10-08:block_squat_variant",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_variant",
+      "planned_date": "2026-10-08",
+      "actual_date": "2026-10-08",
+      "state": "planned",
+      "log_entry_id": "2026-10-08"
+    },
+    "anterior-hip-rebuild:2026-10-10:block_squat_volume": {
+      "id": "anterior-hip-rebuild:2026-10-10:block_squat_volume",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_volume",
+      "planned_date": "2026-10-10",
+      "actual_date": "2026-10-10",
+      "state": "planned",
+      "log_entry_id": "2026-10-10"
+    },
+    "anterior-hip-rebuild:2026-10-12:block_squat_heavy": {
+      "id": "anterior-hip-rebuild:2026-10-12:block_squat_heavy",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_heavy",
+      "planned_date": "2026-10-12",
+      "actual_date": "2026-10-12",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-10-14:block_pull_heavy": {
+      "id": "anterior-hip-rebuild:2026-10-14:block_pull_heavy",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_pull_heavy",
+      "planned_date": "2026-10-14",
+      "actual_date": "2026-10-14",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-10-15:block_squat_variant": {
+      "id": "anterior-hip-rebuild:2026-10-15:block_squat_variant",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_variant",
+      "planned_date": "2026-10-15",
+      "actual_date": "2026-10-15",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-10-17:block_squat_volume": {
+      "id": "anterior-hip-rebuild:2026-10-17:block_squat_volume",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_volume",
+      "planned_date": "2026-10-17",
+      "actual_date": "2026-10-17",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-10-19:block_squat_heavy": {
+      "id": "anterior-hip-rebuild:2026-10-19:block_squat_heavy",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_heavy",
+      "planned_date": "2026-10-19",
+      "actual_date": "2026-10-19",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-10-21:block_pull_heavy": {
+      "id": "anterior-hip-rebuild:2026-10-21:block_pull_heavy",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_pull_heavy",
+      "planned_date": "2026-10-21",
+      "actual_date": "2026-10-21",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-10-22:block_squat_variant": {
+      "id": "anterior-hip-rebuild:2026-10-22:block_squat_variant",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_variant",
+      "planned_date": "2026-10-22",
+      "actual_date": "2026-10-22",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-10-24:block_squat_volume": {
+      "id": "anterior-hip-rebuild:2026-10-24:block_squat_volume",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_volume",
+      "planned_date": "2026-10-24",
+      "actual_date": "2026-10-24",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-10-26:block_squat_heavy": {
+      "id": "anterior-hip-rebuild:2026-10-26:block_squat_heavy",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_heavy",
+      "planned_date": "2026-10-26",
+      "actual_date": "2026-10-26",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-10-28:block_pull_heavy": {
+      "id": "anterior-hip-rebuild:2026-10-28:block_pull_heavy",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_pull_heavy",
+      "planned_date": "2026-10-28",
+      "actual_date": "2026-10-28",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-10-29:block_squat_variant": {
+      "id": "anterior-hip-rebuild:2026-10-29:block_squat_variant",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_variant",
+      "planned_date": "2026-10-29",
+      "actual_date": "2026-10-29",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-10-31:block_squat_volume": {
+      "id": "anterior-hip-rebuild:2026-10-31:block_squat_volume",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_volume",
+      "planned_date": "2026-10-31",
+      "actual_date": "2026-10-31",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-11-02:block_squat_heavy": {
+      "id": "anterior-hip-rebuild:2026-11-02:block_squat_heavy",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_heavy",
+      "planned_date": "2026-11-02",
+      "actual_date": "2026-11-02",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-11-04:block_pull_heavy": {
+      "id": "anterior-hip-rebuild:2026-11-04:block_pull_heavy",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_pull_heavy",
+      "planned_date": "2026-11-04",
+      "actual_date": "2026-11-04",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-11-05:block_squat_variant": {
+      "id": "anterior-hip-rebuild:2026-11-05:block_squat_variant",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_variant",
+      "planned_date": "2026-11-05",
+      "actual_date": "2026-11-05",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-11-07:block_squat_volume": {
+      "id": "anterior-hip-rebuild:2026-11-07:block_squat_volume",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_volume",
+      "planned_date": "2026-11-07",
+      "actual_date": "2026-11-07",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-11-09:block_squat_heavy": {
+      "id": "anterior-hip-rebuild:2026-11-09:block_squat_heavy",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_heavy",
+      "planned_date": "2026-11-09",
+      "actual_date": "2026-11-09",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-11-11:block_pull_heavy": {
+      "id": "anterior-hip-rebuild:2026-11-11:block_pull_heavy",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_pull_heavy",
+      "planned_date": "2026-11-11",
+      "actual_date": "2026-11-11",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-11-12:block_squat_variant": {
+      "id": "anterior-hip-rebuild:2026-11-12:block_squat_variant",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_variant",
+      "planned_date": "2026-11-12",
+      "actual_date": "2026-11-12",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-11-14:block_squat_volume": {
+      "id": "anterior-hip-rebuild:2026-11-14:block_squat_volume",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_volume",
+      "planned_date": "2026-11-14",
+      "actual_date": "2026-11-14",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-11-16:block_squat_heavy": {
+      "id": "anterior-hip-rebuild:2026-11-16:block_squat_heavy",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_heavy",
+      "planned_date": "2026-11-16",
+      "actual_date": "2026-11-16",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-11-18:block_pull_heavy": {
+      "id": "anterior-hip-rebuild:2026-11-18:block_pull_heavy",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_pull_heavy",
+      "planned_date": "2026-11-18",
+      "actual_date": "2026-11-18",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-11-19:block_squat_variant": {
+      "id": "anterior-hip-rebuild:2026-11-19:block_squat_variant",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_variant",
+      "planned_date": "2026-11-19",
+      "actual_date": "2026-11-19",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-11-21:block_squat_volume": {
+      "id": "anterior-hip-rebuild:2026-11-21:block_squat_volume",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_volume",
+      "planned_date": "2026-11-21",
+      "actual_date": "2026-11-21",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-11-23:block_squat_heavy": {
+      "id": "anterior-hip-rebuild:2026-11-23:block_squat_heavy",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_heavy",
+      "planned_date": "2026-11-23",
+      "actual_date": "2026-11-23",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-11-25:block_pull_heavy": {
+      "id": "anterior-hip-rebuild:2026-11-25:block_pull_heavy",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_pull_heavy",
+      "planned_date": "2026-11-25",
+      "actual_date": "2026-11-25",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-11-26:block_squat_variant": {
+      "id": "anterior-hip-rebuild:2026-11-26:block_squat_variant",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_variant",
+      "planned_date": "2026-11-26",
+      "actual_date": "2026-11-26",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-11-28:block_squat_volume": {
+      "id": "anterior-hip-rebuild:2026-11-28:block_squat_volume",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_volume",
+      "planned_date": "2026-11-28",
+      "actual_date": "2026-11-28",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-11-30:block_squat_heavy": {
+      "id": "anterior-hip-rebuild:2026-11-30:block_squat_heavy",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_heavy",
+      "planned_date": "2026-11-30",
+      "actual_date": "2026-11-30",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-12-02:block_pull_heavy": {
+      "id": "anterior-hip-rebuild:2026-12-02:block_pull_heavy",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_pull_heavy",
+      "planned_date": "2026-12-02",
+      "actual_date": "2026-12-02",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-12-03:block_squat_variant": {
+      "id": "anterior-hip-rebuild:2026-12-03:block_squat_variant",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_variant",
+      "planned_date": "2026-12-03",
+      "actual_date": "2026-12-03",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-12-05:block_squat_volume": {
+      "id": "anterior-hip-rebuild:2026-12-05:block_squat_volume",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_volume",
+      "planned_date": "2026-12-05",
+      "actual_date": "2026-12-05",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-12-07:block_squat_heavy": {
+      "id": "anterior-hip-rebuild:2026-12-07:block_squat_heavy",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_heavy",
+      "planned_date": "2026-12-07",
+      "actual_date": "2026-12-07",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-12-09:block_pull_heavy": {
+      "id": "anterior-hip-rebuild:2026-12-09:block_pull_heavy",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_pull_heavy",
+      "planned_date": "2026-12-09",
+      "actual_date": "2026-12-09",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-12-10:block_squat_variant": {
+      "id": "anterior-hip-rebuild:2026-12-10:block_squat_variant",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_variant",
+      "planned_date": "2026-12-10",
+      "actual_date": "2026-12-10",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-12-12:block_squat_volume": {
+      "id": "anterior-hip-rebuild:2026-12-12:block_squat_volume",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_volume",
+      "planned_date": "2026-12-12",
+      "actual_date": "2026-12-12",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-12-14:block_squat_heavy": {
+      "id": "anterior-hip-rebuild:2026-12-14:block_squat_heavy",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_heavy",
+      "planned_date": "2026-12-14",
+      "actual_date": "2026-12-14",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-12-16:block_pull_heavy": {
+      "id": "anterior-hip-rebuild:2026-12-16:block_pull_heavy",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_pull_heavy",
+      "planned_date": "2026-12-16",
+      "actual_date": "2026-12-16",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-12-17:block_squat_variant": {
+      "id": "anterior-hip-rebuild:2026-12-17:block_squat_variant",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_variant",
+      "planned_date": "2026-12-17",
+      "actual_date": "2026-12-17",
+      "state": "planned"
+    },
+    "anterior-hip-rebuild:2026-12-19:block_squat_volume": {
+      "id": "anterior-hip-rebuild:2026-12-19:block_squat_volume",
+      "program_slug": "anterior-hip-rebuild",
+      "block_template_id": "block_squat_volume",
+      "planned_date": "2026-12-19",
+      "actual_date": "2026-12-19",
+      "state": "planned"
+    }
+  },
+  "program_materialization": {
+    "anterior-hip-rebuild": {
+      "materialized_through": "2027-01-05",
+      "materialized_at": "2026-11-10T08:00:00.000Z",
+      "materialization_seed": "",
+      "rules_version": "2026-08-27-eval-spacing"
+    }
+  },
+  "feature_flags": {
+    "block_object": true
+  },
+  "migrations_applied": [
+    "blocks_v2",
+    "off_plan_grandfather_v1"
+  ],
+  "day_adjustments": {
+    "2026-09-16": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1789459200000
+    },
+    "2026-09-18": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1789632000000
+    },
+    "2026-09-19": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1789718400000
+    },
+    "2026-09-25": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1790236800000
+    },
+    "2026-10-08": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1791360000000
+    },
+    "2026-10-09": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1791446400000
+    },
+    "2026-10-10": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1791532800000
+    },
+    "2026-10-11": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1791619200000
+    },
+    "2026-10-26": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1792915200000
+    },
+    "2026-11-07": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1793952000000
+    },
+    "2026-11-08": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1794038400000
+    },
+    "2026-11-10": {
+      "load_multiplier": 0.95,
+      "reason": "sim: amber state",
+      "source": "notes",
+      "accepted_at": 1794211200000
+    }
+  },
+  "dismissed_proposals": {
+    "2026-09-16": [
+      "day-adjustment"
+    ],
+    "2026-09-21": [
+      "day-adjustment"
+    ],
+    "2026-09-26": [
+      "day-adjustment"
+    ],
+    "2026-10-01": [
+      "day-adjustment"
+    ],
+    "2026-10-06": [
+      "day-adjustment"
+    ],
+    "2026-10-11": [
+      "day-adjustment"
+    ],
+    "2026-10-16": [
+      "day-adjustment"
+    ],
+    "2026-10-21": [
+      "day-adjustment"
+    ],
+    "2026-10-26": [
+      "day-adjustment"
+    ],
+    "2026-10-31": [
+      "day-adjustment"
+    ],
+    "2026-11-05": [
+      "day-adjustment"
+    ],
+    "2026-11-10": [
+      "day-adjustment"
+    ]
+  },
+  "proposal_history": [
+    {
+      "id": "day-adjustment",
+      "kind": "day_adjustment_soften",
+      "outcome": "ignored",
+      "at": 1789581600000,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "day-adjustment",
+      "kind": "day_adjustment_soften",
+      "outcome": "ignored",
+      "at": 1790013600000,
+      "date": "2026-09-21"
+    },
+    {
+      "id": "day-adjustment",
+      "kind": "day_adjustment_soften",
+      "outcome": "ignored",
+      "at": 1790445600000,
+      "date": "2026-09-26"
+    },
+    {
+      "id": "day-adjustment",
+      "kind": "day_adjustment_soften",
+      "outcome": "ignored",
+      "at": 1790877600000,
+      "date": "2026-10-01"
+    },
+    {
+      "id": "day-adjustment",
+      "kind": "day_adjustment_soften",
+      "outcome": "ignored",
+      "at": 1791309600000,
+      "date": "2026-10-06"
+    },
+    {
+      "id": "day-adjustment",
+      "kind": "day_adjustment_soften",
+      "outcome": "ignored",
+      "at": 1791741600000,
+      "date": "2026-10-11"
+    },
+    {
+      "id": "day-adjustment",
+      "kind": "day_adjustment_soften",
+      "outcome": "ignored",
+      "at": 1792173600000,
+      "date": "2026-10-16"
+    },
+    {
+      "id": "day-adjustment",
+      "kind": "day_adjustment_soften",
+      "outcome": "ignored",
+      "at": 1792605600000,
+      "date": "2026-10-21"
+    },
+    {
+      "id": "day-adjustment",
+      "kind": "day_adjustment_soften",
+      "outcome": "ignored",
+      "at": 1793037600000,
+      "date": "2026-10-26"
+    },
+    {
+      "id": "day-adjustment",
+      "kind": "day_adjustment_soften",
+      "outcome": "ignored",
+      "at": 1793469600000,
+      "date": "2026-10-31"
+    },
+    {
+      "id": "day-adjustment",
+      "kind": "day_adjustment_soften",
+      "outcome": "ignored",
+      "at": 1793901600000,
+      "date": "2026-11-05"
+    },
+    {
+      "id": "day-adjustment",
+      "kind": "day_adjustment_soften",
+      "outcome": "ignored",
+      "at": 1794333600000,
+      "date": "2026-11-10"
+    }
+  ],
   "user_profile": {
+    "uid": "c667e674-2f66-4e3f-bbfa-3a34bd9297f1",
+    "email": "e2e-matrix@margus.dolmit.dev",
     "active_program_id": "anterior-hip-rebuild",
+    "active_program_started_at": "2026-09-11T08:00:00.000Z",
     "active_program_ids": [
       "anterior-hip-rebuild"
     ],
-    "active_program_started_at": "2026-08-12T08:00:00.106Z",
+    "program_states": {
+      "anterior-hip-rebuild": {
+        "started_at": "2026-09-11T08:00:00.000Z"
+      }
+    },
     "tier": "beta_forever"
   },
-  "tm_history": [
+  "contraindications": [
     {
-      "date": "2026-10-07",
-      "snapshot": {
-        "back_squat_highbar": 115,
-        "block_pull_midshin": 147.5,
-        "front_squat": 90,
-        "deadlift_conventional": 157.5,
-        "trap_bar_dl_floor": 152.5
-      },
-      "source": "sim:cycle_end_accept"
+      "id": "sim-contra-1",
+      "label": "Overhead pressing",
+      "reason": "sim: shoulder flagged during intake",
+      "added_at": 1789113600000
     }
   ]
 }

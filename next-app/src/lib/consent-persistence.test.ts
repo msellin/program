@@ -51,7 +51,6 @@ describe("intake consent survives the commit that deletes its draft", () => {
       version: 2,
       logs: {},
       training_maxes: {},
-      cycle: { cycle_number: 1, week_in_cycle: 1 },
       user_profile: {
         consent_symptom_data_at: 1_756_000_000_000,
         program_states: {

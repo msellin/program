@@ -452,7 +452,6 @@ const initial: Store = {
   version: 2,
   logs: {},
   training_maxes: {},
-  cycle: { cycle_number: 1, week_in_cycle: 1 },
 };
 
 export const useStore = create<StoreState>((set, get) => ({

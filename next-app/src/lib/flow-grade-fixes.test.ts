@@ -57,7 +57,6 @@ const storeWith = (
   ({
     version: 2,
     training_maxes: {},
-    cycle: { cycle_number: 1, week_in_cycle: 1 },
     logs,
     user_profile: {
       active_program_id: slug,

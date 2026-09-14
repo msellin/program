@@ -44,7 +44,7 @@ const amberDays = (dates: string[]): Record<string, DayLog> =>
   );
 
 const storeWith = (logs: Record<string, DayLog>): Store =>
-  ({ version: 2, training_maxes: {}, cycle: { cycle_number: 1, week_in_cycle: 1 }, logs }) as unknown as Store;
+  ({ version: 2, training_maxes: {}, logs }) as unknown as Store;
 
 const TODAY = "2026-09-11";
 

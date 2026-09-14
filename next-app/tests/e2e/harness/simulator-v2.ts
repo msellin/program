@@ -267,6 +267,30 @@ export async function runSimulationV2(
     days: number;
     snapshotDays: number[];
     screenshotDir: string;
+    /**
+     * Wipe the persisted store before seeding (added 2026-09-14, default off).
+     *
+     * The seed block below reads `program.log.v2` and REUSES it if present:
+     * `const store = raw ? JSON.parse(raw) : {...}`. Every spec here signs in
+     * through the same `authedPage` fixture, and that fixture calls
+     * `ensureTestUser()` -- idempotent, reuses the account if it exists -- so
+     * one Supabase account carries state from cell to cell and from run to
+     * run.
+     *
+     * What that did to the engine matrix: all six cells came back with an
+     * identical `active_program_started_at` stamped three days before the run,
+     * identical `logs_count` of 61, and identical `training_maxes` across two
+     * DIFFERENT programmes. The first 29 of 90 simulated days fell before the
+     * inherited start date and were dropped, so `injured-recovery` -- whose
+     * whole symptomatic window is days 1-13 -- logged nothing but green and
+     * produced zero adjustments, which is the result a healthy athlete gives.
+     *
+     * Opt-in rather than default because 23 persona artifacts were captured
+     * under the old behaviour, and flipping it globally would invalidate every
+     * baseline in one commit while claiming to fix a test. The matrix opts in;
+     * the personas are a separate, deliberate migration.
+     */
+    resetStore?: boolean;
   },
 ): Promise<{
   archetypeId: string;
@@ -384,6 +408,17 @@ export async function runSimulationV2(
   };
   const capabilitySeed = CAPABILITY_SEEDS[programSlug] ?? {};
 
+  if (opts.resetStore) {
+    // Before the seed reads it. Clearing the whole of localStorage would also
+    // drop the Supabase session this page just signed in with, so only the
+    // app's own keys go.
+    await page.evaluate(() => {
+      for (const k of Object.keys(localStorage)) {
+        if (k.startsWith("program.")) localStorage.removeItem(k);
+      }
+    });
+  }
+
   await page.evaluate(
     ({ slug, extras, tier, tms, uid, capabilitySeed, intakeAnswers }) => {
       const raw = localStorage.getItem("program.log.v2");
@@ -391,15 +426,11 @@ export async function runSimulationV2(
         version: 2,
         logs: {},
         training_maxes: {},
-        cycle: { cycle_number: 1, week_in_cycle: 1 },
         updated_at: Date.now(),
         scheduled_overrides: {},
         skipped: {},
         dismissed_proposals: {},
       };
-      if (store.cycle == null) {
-        store.cycle = { cycle_number: 1, week_in_cycle: 1 };
-      }
       const allSlugs = [slug, ...extras];
       const startedAtISO = new Date().toISOString();
       store.user_profile = {
@@ -578,7 +609,6 @@ export async function runSimulationV2(
               version: 2,
               logs: {},
               training_maxes: {},
-              cycle: { cycle_number: 1, week_in_cycle: 1 },
               updated_at: Date.now(),
               scheduled_overrides: {},
               skipped: {},
@@ -655,9 +685,6 @@ export async function runSimulationV2(
           }
         }
         store.training_maxes = { ...tms, ...store.training_maxes };
-        if (store.cycle == null) {
-          store.cycle = { cycle_number: 1, week_in_cycle: 1 };
-        }
 
         // Always write morning check + symptoms.
         store.logs = store.logs ?? {};

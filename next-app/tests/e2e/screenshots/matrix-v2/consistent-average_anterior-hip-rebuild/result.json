@@ -3,15 +3,15 @@
   "programSlug": "anterior-hip-rebuild",
   "daysSimulated": 90,
   "summary": {
-    "logs_count": 90,
-    "skipped_count": 11,
-    "day_adjustments_count": 0,
+    "logs_count": 60,
+    "skipped_count": 8,
+    "day_adjustments_count": 12,
     "training_maxes": {
-      "back_squat_highbar": 115,
-      "block_pull_midshin": 147.5,
-      "front_squat": 90,
-      "deadlift_conventional": 157.5,
-      "trap_bar_dl_floor": 152.5
+      "back_squat_highbar": 110,
+      "block_pull_midshin": 140,
+      "front_squat": 85,
+      "deadlift_conventional": 150,
+      "trap_bar_dl_floor": 145
     }
   }
 }

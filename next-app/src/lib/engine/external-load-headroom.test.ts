@@ -65,7 +65,6 @@ const storeWith = (logs: DayLog[]): Store =>
   ({
     version: 2,
     training_maxes: { back_squat: 120 },
-    cycle: { cycle_number: 1, week_in_cycle: 1 },
     logs: Object.fromEntries(logs.map((d) => [d.date, d])),
   }) as unknown as Store;
 

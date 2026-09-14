@@ -1398,28 +1398,28 @@ export const storeSchema = z.object({
     )
     .optional(),
   /**
-   * `phase_id` removed 2026-09-11 (H2).
+   * `store.cycle` removed 2026-09-14. The whole object, not just a key.
    *
-   * It was written in six places — `storage.ts`, `useStore.ts`, the two
-   * simulators — and read in none. The original item offered "wire a writer or
-   * delete"; the wire option died with `coach-client.ts` in the R12 kill, so
-   * this is delete-only.
+   * `phase_id` went first (2026-09-11, H2) — written in six places, read in
+   * none. That left `cycle_number` and `week_in_cycle`, and a note saying they
+   * had no readers either, so `store.cycle` was a wholly dead object rather
+   * than a mostly dead one. It was left in place then because removing
+   * live-looking state is a product call rather than a cleanup, and it is now
+   * made: it goes.
    *
-   * Dropping it from the schema is backwards-compatible in the direction that
-   * matters: Zod strips unknown keys, so every stored store and all 37 persona
-   * artifacts carrying `"phase_id": null` still parse. Nothing needs migrating
-   * and nothing was rewritten to make this true.
+   * The reason it goes is the defect class this repo keeps rediscovering.
+   * `daily_log_schema` and `progression_rules.states[]` were both authored in
+   * good faith, believed live for months, and read by nothing. A store object
+   * named `cycle`, carrying a `cycle_number` that increments nowhere, is the
+   * same trap one layer in — the next person to need cycle logic would find it,
+   * write to it, and get no error and no effect.
    *
-   * NOTE the two survivors have no readers either — `cycle_number` and
-   * `week_in_cycle` are written and never consulted, so `store.cycle` is now a
-   * wholly dead object rather than a mostly dead one. Left in place: removing
-   * live-looking state structure is a product call, not a cleanup, and it is
-   * logged as its own task rather than folded into this one.
+   * Removing it is backwards-compatible in the direction that matters: Zod
+   * strips unknown keys, so every stored store, every Supabase snapshot and all
+   * 37 persona artifacts carrying `"cycle": {...}` still parse. Nothing needs
+   * migrating and nothing was rewritten to make that true.
+   * `store-schema-compat.test.ts` holds that property down.
    */
-  cycle: z.object({
-    cycle_number: z.number(),
-    week_in_cycle: z.number(),
-  }),
   stretch_targets: z.record(z.string(), z.number()).optional(),
   /**
    * HERITAGE Phase 5 (2026-08-18 · #63) — retest readings the classifier

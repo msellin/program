@@ -42,7 +42,6 @@ function baseStore(overrides?: Partial<Store>): Store {
     version: 2,
     logs: {},
     training_maxes: {},
-    cycle: { cycle_number: 1, week_in_cycle: 1 },
     user_profile: {
       uid: "test-uid",
       active_program_id: "test-program",
