@@ -472,13 +472,31 @@ function useMemoRail(
           : suggestion?.fsl
             ? suggestion.fsl.sets + (suggestion.straight_sets ? 0 : 1)
             : defaultSets;
+        /**
+         * The prescription is a FLOOR, not a ceiling.
+         *
+         * `rowCount` used to be the scheme's number alone, so the store and
+         * the screen disagreed the moment a user added a set: `addSet` pushed
+         * a row into `sets[]` and the rail still rendered the prescribed
+         * count, so the new set was invisible. The button did something real
+         * and appeared to do nothing, which is the worst of both — the
+         * founder tapped it three times on 2026-09-21 and finished the day
+         * with three empty rows he could neither see nor delete.
+         *
+         * Taking the max also covers the honest case of a session that ran
+         * longer than planned: extra sets you logged are yours, and a
+         * prescription changing underneath them must never hide them.
+         */
+        const storedSetCount =
+          store.logs[activeDate]?.exercises[`${block.id}:${exercise.id}`]?.sets?.length ?? 0;
+        const rowCount = Math.max(schemeRowCount, storedSetCount);
         out.push({
           key: `${block.id}:${exercise.id}`,
           blockId: block.id,
           blockName: humanBlockName(block.name),
           exercise,
           item,
-          rowCount: schemeRowCount,
+          rowCount,
           suggestion,
           // Was hardcoded `true` with the comment "blocksForDate only ever
           // selects strength blocks". That is false: a strength BLOCK

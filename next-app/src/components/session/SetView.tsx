@@ -74,6 +74,7 @@ export function SetView({
   const store = useStore((s) => s.store);
   const updateSet = useStore((s) => s.updateSet);
   const addSet = useStore((s) => s.addSet);
+  const removeSet = useStore((s) => s.removeSet);
 
   // Long rails scroll, so the active exercise can start off-screen —
   // most obviously on off-plan, where you tap in from a grouped list and
@@ -842,11 +843,20 @@ export function SetView({
       {sheet === "overflow" ? (
         <OverflowSheet
           active={active}
+          activeSetIndex={activeSetIndex}
           date={date}
           onClose={onCloseSheet}
           onAddSet={() => {
             addSet(active.blockId, active.exercise.id, date);
             onCloseSheet();
+          }}
+          onRemoveSet={() => {
+            removeSet(active.blockId, active.exercise.id, activeSetIndex, date);
+            onCloseSheet();
+            // The row under the cursor just went away. Re-landing on the
+            // first unfinished set is what `onSetLogged` already does, and
+            // leaving the index pointing past the end renders a blank set.
+            onBackToBrief();
           }}
           onFinishHere={() => {
             onCloseSheet();

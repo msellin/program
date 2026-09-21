@@ -11,22 +11,40 @@ import { useStore, useDayExercise, entrySets } from "@/lib/useStore";
 import type { RailExercise } from "@/components/session/DaySession";
 
 /**
- * Screen 6b's `⋯` sheet. "Remove a set" is cut per the design — "Finish
- * here" is what people actually mean; removing set 3 of 5 while set 4
- * exists is a data-model action, not a gym action.
+ * Screen 6b's `⋯` sheet.
+ *
+ * "Remove a set" was cut per the original design, on the reasoning that
+ * "Finish here" is what people actually mean and that removing set 3 of 5
+ * while set 4 exists is a data-model action rather than a gym action.
+ *
+ * Restored 2026-09-21. The reasoning held for the case it imagined and not
+ * for the one that happened: "Finish here" ends the exercise, it does not
+ * delete anything, so a row that exists stays in the log for ever. The
+ * founder's 2026-09-21 back squat is stored as three real sets followed by
+ * three rows of nulls — `addSet` had been writing rows the rail never
+ * rendered — and there was no way, anywhere in the app, to take them out.
+ *
+ * An app that can add a set and cannot remove one is not making a
+ * considered choice about gym actions; it is asymmetric.
  */
 export function OverflowSheet({
   active,
+  activeSetIndex,
   date,
   onClose,
   onAddSet,
+  onRemoveSet,
   onFinishHere,
   onOpenNote,
 }: {
   active: RailExercise;
+  /** Which row the user is looking at — the one "Remove set N" removes. */
+  activeSetIndex: number;
   date: string;
   onClose: () => void;
   onAddSet: () => void;
+  /** Removes the set currently being viewed. */
+  onRemoveSet: () => void;
   onFinishHere: () => void;
   onOpenNote: () => void;
 }) {
@@ -104,6 +122,17 @@ export function OverflowSheet({
         </p>
         <div className="flex flex-col gap-px bg-line-soft border border-line-soft rounded-[9px] overflow-hidden mb-3.5">
           <Row label="Add a set" hint={`${active.rowCount + 1}th at prescription`} onClick={onAddSet} />
+          {active.rowCount > 1 ? (
+            <Row
+              label={`Remove set ${activeSetIndex + 1}`}
+              hint={
+                loggedCount > 0 && activeSetIndex < loggedCount
+                  ? "Deletes what you logged for it"
+                  : "Takes the empty row out"
+              }
+              onClick={onRemoveSet}
+            />
+          ) : null}
           <Row
             label="Finish here"
             hint={`Logs ${loggedCount} of ${active.rowCount}, moves on`}
