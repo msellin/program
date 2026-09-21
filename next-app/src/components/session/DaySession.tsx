@@ -10,7 +10,7 @@ import { getBlocksForDate, isBlockObjectOn, DAY_VISIBLE_BLOCK_STATES } from "@/l
 import { migrateLegacyToBlocks, needsBlockMigration } from "@/lib/migrations/legacy-to-blocks";
 import { suggestForExercise, type Suggestion } from "@/lib/engine/suggest";
 import { selectProposals } from "@/lib/proposals/select";
-import { dedupeItems, humanBlockName, programDisplayName } from "@/lib/day-format";
+import { dedupeItems, planDayItems, humanBlockName, programDisplayName } from "@/lib/day-format";
 import { RestDayCard, GraduationCard } from "@/components/session/shared/StatusCards";
 import { BriefView } from "@/components/session/BriefView";
 import { SetView } from "@/components/session/SetView";
@@ -435,23 +435,26 @@ function useMemoRail(
 ): RailExercise[] {
   return useMemo(() => {
     const out: RailExercise[] = [];
+    /**
+     * One card per exercise per DAY, not per block.
+     *
+     * `dedupeItems` already collapses repeats within a block — that is why the
+     * heavy-squat day's A1 top set and A2 FSL render as one back-squat card.
+     * Across blocks nothing did, so a Monday scheduling both `block_a_home`
+     * and `block_squat_heavy` asked for dead bug twice, on separate cards,
+     * with separate log keys. The founder did all six sets on 2026-09-14
+     * because the app asked for them.
+     *
+     * First occurrence wins and later schemes merge into it, matching what
+     * `dedupeItems` does one level down.
+     */
     if (!program) return out;
-    for (const block of blocks) {
-      // Run-category blocks are logged as ACTIVITIES, not as sets
-      // (2026-08-26). Engine Builder authors one vestigial item per run
-      // block, which made the app draw a set screen for a 45-minute Zone 1
-      // run and write reps and kilos into `exercises[]` — where nothing
-      // reads them. Its only log-based metric is
-      // `runs[].avg_hr where intensity == 'easy'`, so a diligent user could
-      // log every session and show zero progress. CSM's run blocks already
-      // author zero items; rowing's do too. Route by category so all three
-      // behave the same.
-      if ((block.category ?? "strength") === "run") continue;
-      const items = dedupeItems(block.items ?? []);
-      for (const item of items) {
-        if (!item.exercise_id) continue;
-        const exercise = byId[item.exercise_id];
-        if (!exercise) continue;
+    // Cross-block dedupe lives in `planDayItems` so it can be tested without
+    // rendering a session — see its docblock for the dead-bug-twice defect.
+    for (const { blockId, item } of planDayItems(blocks, (id) => !!byId[id])) {
+      const block = blocks.find((b) => b.id === blockId)!;
+      {
+        const exercise = byId[item.exercise_id!];
         const suggestion = suggestForExercise(exercise.id, block.id, program, store, activeDate);
         const defaultSets =
           (typeof item.sets === "number" ? item.sets : undefined) ??
@@ -461,9 +464,14 @@ function useMemoRail(
         // extra row existed because `top_set` + `fsl` can only describe
         // 5/3/1, so a plain 5×5 was encoded as 1 + 5×5 and rendered six
         // identical sets for a five-set prescription.
-        const schemeRowCount = suggestion?.fsl
-          ? suggestion.fsl.sets + (suggestion.straight_sets ? 0 : 1)
-          : defaultSets;
+        // `working_sets` is an explicit per-row ladder and wins outright.
+        // Without it, a week with no FSL (the 5/3/1 deload) fell through to
+        // `defaultSets` — 5 rows for a three-set prescription, four blank.
+        const schemeRowCount = suggestion?.working_sets?.length
+          ? suggestion.working_sets.length
+          : suggestion?.fsl
+            ? suggestion.fsl.sets + (suggestion.straight_sets ? 0 : 1)
+            : defaultSets;
         out.push({
           key: `${block.id}:${exercise.id}`,
           blockId: block.id,

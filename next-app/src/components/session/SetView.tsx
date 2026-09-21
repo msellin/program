@@ -140,7 +140,9 @@ export function SetView({
     if (perSide) parts.push("per side");
     return parts.length ? parts.join(" · ") : null;
   })();
-  const prescribed = active.suggestion?.fsl
+  const prescribed = active.suggestion?.working_sets?.length
+    ? (active.suggestion.working_sets[activeSetIndex] ?? null)
+    : active.suggestion?.fsl
     ? activeSetIndex === 0 && !active.suggestion.straight_sets
       ? active.suggestion.top_set
       : { kg: active.suggestion.fsl.kg, reps: String(active.suggestion.fsl.reps) }

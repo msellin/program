@@ -88,7 +88,11 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
   // rowCount ignored FSL and defaulted to 3 or defaultSets, so users on
   // squat/pull heavy days saw 4 FSL + 1 top = 5 rows (missing FSL 5) or
   // even worse, 3 rows total. Founder-reported 2026-08-18.
-  const schemeRowCount = suggestion?.fsl ? suggestion.fsl.sets + 1 : defaultSets;
+  const schemeRowCount = suggestion?.working_sets?.length
+    ? suggestion.working_sets.length
+    : suggestion?.fsl
+      ? suggestion.fsl.sets + 1
+      : defaultSets;
   const rowCount = Math.max(sets.length, schemeRowCount);
 
   // Auto-expand once the user starts logging (any set has a value).

@@ -1,5 +1,6 @@
 import type { Store, ExerciseLog, Program } from "../schemas";
 import { iso } from "../utils";
+import { STANDARD_PLATES_KG } from "../plates";
 
 const MAIN_PHASE_IDS = new Set([
   "phase_2_cycle_1",
@@ -64,6 +65,22 @@ const round = (v: number, step = 0.5) => {
   return rounded * step;
 };
 
+/**
+ * The smallest change you can actually make to a loaded barbell.
+ *
+ * Derived from the plate inventory rather than typed, because the two must
+ * agree: plates go on in PAIRS, so the smallest plate (1.25 kg) moves the bar
+ * by 2.5 kg. Rounding prescriptions to 0.5 produced numbers nobody can load —
+ * on 2026-09-21 the deload asked for 56.5 kg, which needs 0.25 kg plates, and
+ * `platesLabel` then rendered it as "55 kg (-1.50)". A prescription the
+ * equipment cannot express is a prescription the user has to silently
+ * reinterpret at the rack, every set.
+ */
+const BAR_STEP_KG = Math.min(...STANDARD_PLATES_KG) * 2;
+
+/** Round a barbell prescription to something that can actually be loaded. */
+const loadable = (v: number) => round(v, BAR_STEP_KG);
+
 export type Suggestion = {
   warmups?: { kg: number; reps: string }[];
   top_set: { kg: number; reps: string };
@@ -93,6 +110,22 @@ export type Suggestion = {
    * it on top of the FSL rows.
    */
   straight_sets?: boolean;
+  /**
+   * An explicit, per-row ladder: every working set, in order, each with its
+   * own weight. When present this is AUTHORITATIVE — the session renders one
+   * row per entry and ignores `top_set`/`fsl` for row counting.
+   *
+   * It exists because `top_set` + `fsl` can only describe "one heavy set then
+   * N identical lighter ones", and a 5/3/1 deload is three DIFFERENT working
+   * sets (40/50/60% × 5). That shape had nowhere to go, so the deload was
+   * folded into `warmups` (which render as a text line, not rows) plus a
+   * `top_set`, and `fsl: null` then sent the row count to `defaultSets` — 5,
+   * from `exercises.json`. The founder hit it on 2026-09-21: five rows for a
+   * three-set prescription, four of them blank, the only weight on the last.
+   *
+   * `top_set` still carries the heaviest set so summary surfaces keep working.
+   */
+  working_sets?: { kg: number; reps: string }[];
   state?: "green" | "amber" | "red" | null;
   reasoning: string;
   cap_applied?: boolean;
@@ -205,7 +238,7 @@ export function suggestForExercise(
   const maintPctFn = MAINTENANCE_BLOCK_PCTS[blockId];
   if (maintPctFn) {
     const pct = maintPctFn(exId);
-    const kg = round(tm * pct * combinedMod);
+    const kg = loadable(tm * pct * combinedMod);
     // Pull patterns run 5×3, everything else 5×5. Matches the JSON schemes
     // "5×5 @ 75% TM" for squat and "5×3 @ 78% TM" for pull at
     // concurrent-strength-maintenance.json:287-297.
@@ -238,7 +271,7 @@ export function suggestForExercise(
 
   // Sat moderate volume — 65% TM × 5 for 5 sets. No top-set / FSL structure.
   if (VOLUME_BLOCKS.has(blockId)) {
-    const kg = round(tm * 0.65 * combinedMod);
+    const kg = loadable(tm * 0.65 * combinedMod);
     return {
       top_set: { kg, reps: "5" },
       fsl: { kg, sets: 5, reps: 5 },
@@ -249,7 +282,7 @@ export function suggestForExercise(
   }
   // Thu front-squat variant — 70% TM × 5 for 5 sets on the variant lift.
   if (VARIANT_BLOCKS.has(blockId)) {
-    const kg = round(tm * 0.7 * combinedMod);
+    const kg = loadable(tm * 0.7 * combinedMod);
     return {
       top_set: { kg, reps: "5" },
       fsl: { kg, sets: 5, reps: 5 },
@@ -263,13 +296,25 @@ export function suggestForExercise(
   if (MAIN_PHASE_IDS.has(phase.id)) {
     const week = cycleWeekIndex(phase.starts, todayISO);
     const pcts = CYCLE_PERCENTS[week % 4];
-    const kg = pcts.top.map((p) => round((tm * p) / 100 * combinedMod));
+    const kg = pcts.top.map((p) => loadable((tm * p) / 100 * combinedMod));
+    // Deload weeks have no FSL, and their three ascending sets are all WORK —
+    // calling the first two "warm-ups" hid two thirds of the session in a
+    // text line. Any week without FSL gets an explicit ladder instead.
+    if (!pcts.fsl) {
+      return {
+        working_sets: kg.map((w, i) => ({ kg: w, reps: pcts.topReps[i] })),
+        top_set: { kg: kg[2], reps: pcts.topReps[2] },
+        fsl: null,
+        state: todayState,
+        reasoning: `${cycleLabelForPhase(phase.id)}, week ${(week % 4) + 1} — deload. ${pcts.top.join("/")}% TM × ${pcts.topReps[2]}, no back-off sets.${stateNote}${adjNote}`,
+      };
+    }
     return {
       warmups: kg.slice(0, 2).map((w, i) => ({ kg: w, reps: pcts.topReps[i] })),
       top_set: { kg: kg[2], reps: pcts.topReps[2] },
       fsl: pcts.fsl
         ? {
-            kg: round((tm * pcts.fsl) / 100 * combinedMod),
+            kg: loadable((tm * pcts.fsl) / 100 * combinedMod),
             sets: 5,
             reps: 5,
             optional: TAPER_BLOCKS.has(blockId),
@@ -284,13 +329,24 @@ export function suggestForExercise(
   if (phase.id === PEAK_PHASE_ID) {
     const week = cycleWeekIndex(phase.starts, todayISO);
     const pcts = PEAK_PERCENTS[Math.min(3, week)];
-    const kg = pcts.top.map((p) => round((tm * p) / 100 * combinedMod));
+    const kg = pcts.top.map((p) => loadable((tm * p) / 100 * combinedMod));
+    // Same as the main cycle: peak weeks 3 and 4 carry no FSL, so their
+    // ascending sets are the session rather than a preamble to it.
+    if (!pcts.fsl) {
+      return {
+        working_sets: kg.map((w, i) => ({ kg: w, reps: pcts.topReps[i] })),
+        top_set: { kg: kg[2], reps: pcts.topReps[2] },
+        fsl: null,
+        state: todayState,
+        reasoning: `Peak phase — ${pcts.label}. ${pcts.top.join("/")}% TM × ${pcts.topReps[2]}, no back-off sets.${stateNote}${adjNote}`,
+      };
+    }
     return {
       warmups: kg.slice(0, 2).map((w, i) => ({ kg: w, reps: pcts.topReps[i] })),
       top_set: { kg: kg[2], reps: pcts.topReps[2] },
       fsl: pcts.fsl
         ? {
-            kg: round((tm * pcts.fsl) / 100 * combinedMod),
+            kg: loadable((tm * pcts.fsl) / 100 * combinedMod),
             sets: 5,
             reps: 5,
             optional: TAPER_BLOCKS.has(blockId),
@@ -303,7 +359,7 @@ export function suggestForExercise(
 
   // Phase 1 (reintro/eval) or other — autoregulate from last logged set
   const last = findLastLoggedSet(store, exId, todayISO);
-  const reintroCap = round(tm * 0.8);
+  const reintroCap = loadable(tm * 0.8);
   if (last) {
     const rpe = last.rpe ?? null;
     // RPE 9 now BACKS OFF instead of holding (2026-08-27).
@@ -329,7 +385,7 @@ export function suggestForExercise(
       else if (rpe <= 8) bump = 2.5;
       else bump = -5;
     }
-    const rawNext = round(last.weight_kg + bump);
+    const rawNext = loadable(last.weight_kg + bump);
     // The 80% TM reintro cap only applies while the athlete is still UNDER it.
     // Once they've demonstrated tolerance above the cap, we no longer clamp them back down
     // (that would violate "never lose the progressive approach").
@@ -342,7 +398,7 @@ export function suggestForExercise(
     const alreadyAboveCap = last.weight_kg >= reintroCap && (rpe == null || rpe <= 8);
     const beforeStateMod = alreadyAboveCap ? rawNext : Math.min(rawNext, reintroCap);
     const capApplied = !alreadyAboveCap && rawNext > reintroCap;
-    const suggested = round(beforeStateMod * combinedMod);
+    const suggested = loadable(beforeStateMod * combinedMod);
     // Assemble reasoning as clean sentences, no awkward concat.
     const parts: string[] = [];
     parts.push(`Last ${last.date}: ${last.weight_kg} kg × ${last.reps} @ RPE ${rpe ?? "?"}.`);
@@ -369,7 +425,7 @@ export function suggestForExercise(
   }
 
   // Cold start — no prior log
-  const cold = round(tm * 0.55 * combinedMod);
+  const cold = loadable(tm * 0.55 * combinedMod);
   return {
     top_set: { kg: cold, reps: "5" },
     state: todayState,
@@ -464,7 +520,7 @@ export function inferTMFromSet(
   const rir = rpe != null && rpe >= 1 && rpe <= 10 ? Math.max(0, 10 - rpe) : 0;
   const maxReps = reps + rir;
   const est1RM = weight * (1 + maxReps / 30);
-  let suggestedTM = round(est1RM * 0.85);
+  let suggestedTM = loadable(est1RM * 0.85);
 
   // Clamp: absolute upper bound
   const ABS_MAX_TM = 400;

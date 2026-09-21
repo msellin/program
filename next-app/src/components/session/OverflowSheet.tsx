@@ -79,7 +79,9 @@ export function OverflowSheet({
 
   const markAllPrescribed = () => {
     for (let i = 0; i < active.rowCount; i++) {
-      const prescribed = active.suggestion?.fsl
+      const prescribed = active.suggestion?.working_sets?.length
+        ? (active.suggestion.working_sets[i] ?? null)
+        : active.suggestion?.fsl
         ? i === 0
           ? active.suggestion.top_set
           : { kg: active.suggestion.fsl.kg, reps: String(active.suggestion.fsl.reps) }

@@ -158,3 +158,53 @@ export function restSecondsFor(ex: Exercise): number {
   if (ex.category === "trunk" || ex.category === "mobility") return 60;
   return 120;
 }
+
+
+/**
+ * One entry per exercise for a whole DAY, across every block scheduled on it.
+ *
+ * `dedupeItems` collapses repeats within a single block — that is why the
+ * heavy-squat day's A1 top set and A2 FSL render as one back-squat card.
+ * Nothing did the same across blocks, so a Monday scheduling both
+ * `block_a_home` and `block_squat_heavy` asked for dead bug twice, as two
+ * cards with two log keys. The founder did all six sets on 2026-09-14,
+ * because the app asked for them.
+ *
+ * First occurrence wins and later schemes merge into it, which is exactly
+ * what `dedupeItems` does one level down. `hasExercise` filters items whose
+ * `exercise_id` does not resolve, so an unresolvable id cannot occupy the
+ * slot and suppress a real duplicate behind it.
+ */
+export function planDayItems<T extends { exercise_id?: string | null; scheme?: string }>(
+  blocks: { id: string; category?: string | null; items?: T[] | null }[],
+  hasExercise: (id: string) => boolean,
+): { blockId: string; item: T }[] {
+  const out: { blockId: string; item: T }[] = [];
+  const seen = new Map<string, number>();
+  for (const block of blocks) {
+    // Run-category blocks are logged as activities, not sets.
+    if ((block.category ?? "strength") === "run") continue;
+    for (const item of dedupeItems(block.items ?? [])) {
+      const id = item.exercise_id;
+      if (!id || !hasExercise(id)) continue;
+      const at = seen.get(id);
+      if (at == null) {
+        seen.set(id, out.length);
+        out.push({ blockId: block.id, item });
+        continue;
+      }
+      const extra = typeof item.scheme === "string" ? item.scheme : null;
+      const prior = out[at];
+      if (extra && prior.item.scheme !== extra) {
+        out[at] = {
+          ...prior,
+          item: {
+            ...prior.item,
+            scheme: prior.item.scheme ? `${prior.item.scheme} · then ${extra}` : extra,
+          },
+        };
+      }
+    }
+  }
+  return out;
+}

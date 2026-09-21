@@ -40,7 +40,16 @@ export function SuggestionBox({ suggestion }: { suggestion: Suggestion }) {
           </span>
         </p>
       ) : null}
-      {suggestion.warmups && suggestion.warmups.length ? (
+      {suggestion.working_sets && suggestion.working_sets.length ? (
+        /*
+         * The ladder, spelled out. These are WORKING sets — on a deload every
+         * one of them is the session, and rendering them as "Warm-up: 45×5 →
+         * 55×5" told the user two thirds of their squat day was optional.
+         */
+        <p className="text-xs font-mono text-muted mt-2">
+          Sets: {suggestion.working_sets.map((w) => `${w.kg}×${w.reps}`).join(" → ")}
+        </p>
+      ) : suggestion.warmups && suggestion.warmups.length ? (
         <p className="text-[11px] font-mono text-muted mt-0.5">
           Warm-up: {suggestion.warmups.map((w) => `${w.kg}×${w.reps}`).join(" → ")}
         </p>

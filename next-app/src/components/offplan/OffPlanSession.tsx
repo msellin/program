@@ -192,7 +192,11 @@ export function OffPlanSession() {
             blockName: humanBlockName(block.name),
             exercise,
             item,
-            rowCount: suggestion?.fsl ? suggestion.fsl.sets + 1 : defaultSets,
+            rowCount: suggestion?.working_sets?.length
+              ? suggestion.working_sets.length
+              : suggestion?.fsl
+                ? suggestion.fsl.sets + 1
+                : defaultSets,
             suggestion,
             isLoadable,
           });
