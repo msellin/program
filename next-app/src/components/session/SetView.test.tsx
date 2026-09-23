@@ -336,3 +336,78 @@ describe("the hold timer survives a backgrounded app", () => {
     }
   });
 });
+
+describe("Add a set lands on the set it added (2026-09-23)", () => {
+  // Deload block pull: three prescribed rows, all three logged. The founder
+  // came back to it from the next exercise, chose Add a set, and the screen
+  // kept showing set 3 at 120 kg — so he wrote 130/140/150 into a note.
+  const deload = {
+    rowCount: 3,
+    schemeRowCount: 3,
+    suggestion: {
+      top_set: { kg: 92.5, reps: "5" },
+      fsl: null,
+      working_sets: [
+        { kg: 62.5, reps: "5" },
+        { kg: 77.5, reps: "5" },
+        { kg: 92.5, reps: "5" },
+      ],
+      reasoning: "",
+    },
+  } as Partial<RailExercise>;
+  const KEY = "block_pull_heavy:block_pull_midshin";
+  const seed = (sets: { weight_kg: number | null; reps: number | null; rpe: number | null }[]) =>
+    useStore.getState().replaceStore({
+      version: 2,
+      training_maxes: {},
+      logs: { "2026-09-02": { date: "2026-09-02", exercises: { [KEY]: { done: true, sets } } } },
+    } as unknown as Store);
+  const storedSets = () => useStore.getState().store.logs["2026-09-02"].exercises[KEY].sets!;
+
+  function renderOverflow(over: Partial<RailExercise>, setIndex: number) {
+    const active = rail({ ...deload, ...over });
+    const onSelectSetIndex = vi.fn();
+    render(
+      <SetView
+        railExercises={[active]}
+        active={active}
+        activeSetIndex={setIndex}
+        editingLoad={false}
+        onEditingLoad={() => {}}
+        onSelectExercise={() => {}}
+        onSelectSetIndex={onSelectSetIndex}
+        onBackToBrief={() => {}}
+        onConfirmed={() => {}}
+        onEdited={() => {}}
+        sheet="overflow"
+        onOpenSheet={() => {}}
+        onCloseSheet={() => {}}
+        date="2026-09-02"
+      />,
+    );
+    fireEvent.click(screen.getByText("Add a set"));
+    return { onSelectSetIndex };
+  }
+
+  it("moves to the new row instead of staying on the last logged one", () => {
+    seed([80, 100, 120].map((w) => ({ weight_kg: w, reps: 5, rpe: 5 })));
+    const { onSelectSetIndex } = renderOverflow({}, 2);
+    expect(storedSets()).toHaveLength(4);
+    expect(onSelectSetIndex).toHaveBeenCalledWith(3);
+  });
+
+  it("adds a row past the prescription even when fewer rows are stored", () => {
+    // One set logged of three: pushing a single row used to fill prescribed
+    // slot 2, so the count stayed at 3 and nothing visibly happened.
+    seed([{ weight_kg: 62.5, reps: 5, rpe: null }]);
+    const { onSelectSetIndex } = renderOverflow({}, 0);
+    expect(storedSets()).toHaveLength(4);
+    expect(onSelectSetIndex).toHaveBeenCalledWith(3);
+  });
+
+  it("offers today's last set as the starting load, not last session's", () => {
+    seed([...[80, 100, 120].map((w) => ({ weight_kg: w, reps: 5, rpe: 5 })), { weight_kg: null, reps: null, rpe: null }]);
+    renderSet({ ...deload, rowCount: 4 }, 3);
+    expect(screen.getByRole("button", { name: /Done — set 4 · 120 kg/ })).toBeDefined();
+  });
+});

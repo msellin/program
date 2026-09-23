@@ -168,8 +168,16 @@ export function SetView({
   // the prescription/last-time fallback. Committed to the store only on
   // Done — the README: "Weight is prefilled... editable at any moment,"
   // and the confirm button names the exact number it will log.
+  // A row the user added past the prescription has no prescribed load, so it
+  // fell through to LAST SESSION's same-index set: after 80/100/120 today, an
+  // added set 4 offered 100 × 7 from a week earlier. Someone adding a set is
+  // carrying on from the row they just did — seed from that instead.
+  const priorRowToday =
+    active.schemeRowCount != null && activeSetIndex >= active.schemeRowCount
+      ? sets.slice(0, activeSetIndex).reverse().find((s) => s.weight_kg != null && s.failed !== true) ?? null
+      : null;
   const [weight, setWeight] = useState<number>(
-    () => setForRow.weight_kg ?? prescribed?.kg ?? prev?.weight_kg ?? 0,
+    () => setForRow.weight_kg ?? prescribed?.kg ?? priorRowToday?.weight_kg ?? prev?.weight_kg ?? 0,
   );
   // Seeding chain (2026-08-25): what you logged → what the engine
   // prescribes → what you did last time → the exercise's authored default
@@ -192,7 +200,7 @@ export function SetView({
       // normal chain instead; the set is still marked missed until Done is
       // pressed, which is what clears the flag.
       (setForRow.failed === true ? null : setForRow.reps) ??
-      (parseInt(prescribed?.reps ?? "", 10) || prev?.reps || defaultReps || 0),
+      (parseInt(prescribed?.reps ?? "", 10) || priorRowToday?.reps || prev?.reps || defaultReps || 0),
   );
   // No resync-effect: DaySession mounts this component with
   // `key={active.key + activeSetIndex}`, so React fully remounts (and
@@ -847,8 +855,25 @@ export function SetView({
           date={date}
           onClose={onCloseSheet}
           onAddSet={() => {
-            addSet(active.blockId, active.exercise.id, date);
+            /**
+             * Two ways "Add a set" appeared to do nothing (founder, 2026-09-23).
+             *
+             * 1. It added the row and left the cursor where it was. Coming back
+             *    to a finished exercise lands on its LAST logged set, so the
+             *    screen kept saying "Editing 120 kg · Save — set 3" and the new
+             *    row was a small tile at the end of the strip. He wrote the
+             *    extra sets into a note instead.
+             * 2. `addSet` pushes onto what is STORED, and rows are only stored
+             *    once touched. With fewer stored than prescribed, the pushed
+             *    row filled a prescribed slot and `rowCount` did not move.
+             *
+             * So pad to the prescription first, add one past it, and land on
+             * the new row — the one the user asked for.
+             */
+            const newIndex = Math.max(active.rowCount, sets.length);
+            for (let n = sets.length; n <= newIndex; n++) addSet(active.blockId, active.exercise.id, date);
             onCloseSheet();
+            onSelectSetIndex(newIndex);
           }}
           onRemoveSet={() => {
             removeSet(active.blockId, active.exercise.id, activeSetIndex, date);

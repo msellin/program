@@ -45,6 +45,12 @@ export type RailExercise = {
   exercise: Exercise;
   item: NonNullable<Block["items"]>[number];
   rowCount: number;
+  /**
+   * The prescription's own row count, before stored rows extend it. Rows at
+   * or past this index are ones the user added. Undefined on OffPlanSession's
+   * rail, which has no prescription to exceed.
+   */
+  schemeRowCount?: number;
   suggestion: Suggestion | null;
   // Ported from the old ExerciseCard's isLoadable gate — mobility/cardio
   // exercises don't carry a weight. SetView hides the weight row when
@@ -497,6 +503,7 @@ function useMemoRail(
           exercise,
           item,
           rowCount,
+          schemeRowCount,
           suggestion,
           // Was hardcoded `true` with the comment "blocksForDate only ever
           // selects strength blocks". That is false: a strength BLOCK
