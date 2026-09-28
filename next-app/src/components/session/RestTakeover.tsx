@@ -18,12 +18,20 @@ import type { UpNext } from "@/components/session/shared/advance";
  *
  * Labels lead with reps-in-reserve because that is the question a lifter can
  * actually answer after an AMRAP — "how many more could you have done" — and it
- * is exactly what the engine converts the RPE back into. Easy/Solid/Grind are
+ * is exactly what the engine converts the RPE back into. The word labels are
  * kept as the familiar wording for fixed-rep sets.
+ *
+ * Until 2026-09-28 the scale also skipped RPE 6: "Very easy" covered "4-5+
+ * more" and logged 5, so every set with four in reserve reached the engine as
+ * five. Weeks of the founder's back-off sets were recorded that way, just as
+ * he started aiming them at RPE 6-7 — the target band had no button of its
+ * own. Each tile is now exactly one RIR step, and "Easy" moved down to take
+ * the new 4-in-reserve slot; the 3-in-reserve tile it used to be is "Steady".
  */
 const EFFORTS = [
-  { label: "Very easy", rir: "4-5+ more", rpe: 5 },
-  { label: "Easy", rir: "~3 more", rpe: 7 },
+  { label: "Very easy", rir: "5+ more", rpe: 5 },
+  { label: "Easy", rir: "~4 more", rpe: 6 },
+  { label: "Steady", rir: "~3 more", rpe: 7 },
   { label: "Solid", rir: "~2 more", rpe: 8 },
   { label: "Grind", rir: "0-1 more", rpe: 9 },
 ] as const;
@@ -315,7 +323,7 @@ export function RestTakeover({
               How many more could you have done?{" "}
               {hasTrainingMax ? "This sets your training max." : "It tunes what comes next."}
             </p>
-            <div className="flex gap-2" role="radiogroup" aria-label="How hard was that set?">
+            <div className="flex gap-1.5" role="radiogroup" aria-label="How hard was that set?">
               {EFFORTS.map((effort) => (
                 <button
                   key={effort.label}
@@ -331,7 +339,7 @@ export function RestTakeover({
                       : "border-line-strong bg-surface-2")
                   }
                 >
-                  <span className="block text-[14px] font-semibold text-strong leading-snug">{effort.label}</span>
+                  <span className="block text-[13px] font-semibold text-strong leading-snug">{effort.label}</span>
                   <span
                     className={
                       "block font-mono text-[10px] mt-0.5 leading-snug " +

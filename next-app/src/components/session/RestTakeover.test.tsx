@@ -3,6 +3,7 @@ import { render, screen, cleanup, fireEvent, act } from "@testing-library/react"
 import { RestTakeover } from "./RestTakeover";
 import type { RailExercise } from "./DaySession";
 import type { Exercise } from "@/lib/schemas";
+import { useStore } from "@/lib/useStore";
 
 vi.mock("@/lib/sound", () => ({ playTimerComplete: vi.fn(), playConfirm: vi.fn() }));
 vi.mock("@/lib/announce", () => ({ announce: vi.fn() }));
@@ -53,9 +54,31 @@ describe("the effort picker", () => {
     // one they guess at.
     renderRest();
     // Anchored: an unanchored /easy/i matches "Very easy" too.
-    for (const label of [/^very easy/i, /^easy/i, /^solid/i, /^grind/i]) {
+    for (const label of [/^very easy/i, /^easy/i, /^steady/i, /^solid/i, /^grind/i]) {
       expect(screen.getByRole("radio", { name: label }), String(label)).toBeDefined();
     }
+  });
+
+  it("has one tile per rep in reserve, from 5+ down to 0-1, with RPE 6 among them", () => {
+    // BUG-33 (2026-09-28): the scale jumped from "4-5+ more" = RPE 5 straight
+    // to "~3 more" = RPE 7, so four in reserve could only be logged as five.
+    // `inferTMFromSet` reads RIR as 10 - rpe; each tile must be one step.
+    renderRest();
+    const names = screen.getAllByRole("radio").map((r) => r.getAttribute("aria-label"));
+    expect(names).toEqual([
+      "Very easy — 5+ more",
+      "Easy — ~4 more",
+      "Steady — ~3 more",
+      "Solid — ~2 more",
+      "Grind — 0-1 more",
+    ]);
+  });
+
+  it("records ~4 more as RPE 6 on the set just logged", () => {
+    renderRest();
+    fireEvent.click(screen.getByRole("radio", { name: /~4 more/ }));
+    const entry = useStore.getState().store.logs["2026-09-02"]?.exercises["b:back_squat_highbar"];
+    expect(entry?.sets?.[0]?.rpe).toBe(6);
   });
 
   it("exposes the options as a radiogroup with checked state", () => {
