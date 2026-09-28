@@ -12,7 +12,7 @@ These are **IDEAS, not action items**. The engine + rehab-first positioning over
 
 **Counts by bucket (post-Cut-D audit, 2026-08-21):**
 
-- **Bugs:** 0 open
+- **Bugs:** 1 open — BUG-33 (effort picker has no RPE 6), top priority
 - **P0:** 0 open
 - **P1:** 0 open
 - **P2:** 0 open — the last carry (P2-32 icon-stroke discipline) remains `[ ]` deferred as low-ROI codemod, tracked below
@@ -49,6 +49,8 @@ Keep the convention terse — the four markers cover every state. Don't invent n
 ## Section A — Real bugs (fix regardless)
 
 *Sourced from the post-Batch-25 audit round (2026-08-19, 6 agents), + the founder-observations audit round (2026-08-19, 8 agents against O1-O17).*
+
+- [ ] **BUG-33 · TOP PRIORITY (founder, 2026-09-28)** — The effort picker cannot record RPE 6, so logged effort reads easier than it was. `RestTakeover.tsx` `EFFORTS` offers four choices: Very easy "4-5+ more" = RPE 5, Easy "~3 more" = 7, Solid "~2 more" = 8, Grind "0-1 more" = 9. There is no 4-in-reserve / RPE 6 option, so a set with 4 reps left is logged as 5. `inferTMFromSet` reads RIR as `10 - rpe`, so the engine sees 5 in reserve where there were 4. Weeks of back-off sets are logged at RPE 5 in the founder's record (e.g. 2026-09-14 back squat 85×8 @5, 2026-09-24 front squat 80×5 @5), and he is now targeting RPE 6-7 on back-offs. **Fix:** add a "~4 more" = RPE 6 choice between Very easy and Easy (and check whether Very easy should then read "5+ more"). Check every consumer of the RPE values (`inferTMFromSet`, `engine/history.ts`, `note-signals.ts`, TM-bump evaluation) still behaves with a 6 in the data. Update the `RestTakeover.test.tsx` "effort picker" cases. Half-point RPEs (8.5, 9.5) already parse; the founder's 2026-09-23 deadlift was backfilled with them. Files: `next-app/src/components/session/RestTakeover.tsx`, `next-app/src/components/session/RestTakeover.test.tsx`. Size: XS
 
 - [x] **BUG-4** — first-strict-pullup tier engine bug shipped 2026-08-19 (`82d62f0`). Added program to both proxy tables in `intake-tier.ts` + conservative-defaults entry + 5 regression tests. 14/14 intake-tier tests pass.
 - [x] **BUG-5** — DateNav Home reserved-slot pattern shipped 2026-08-19 (`82d62f0`). Applied Week's `invisible pointer-events-none` treatment; forward-arrow no longer jumps on day change.
