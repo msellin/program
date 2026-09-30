@@ -5,6 +5,7 @@ import {
   evaluateCycleEnd,
   averageTopSetRPE,
   evaluateOverperformer,
+  performanceSignals,
 } from "./adapt";
 import type { Store, Program, DayLog } from "../schemas";
 
@@ -389,7 +390,116 @@ describe("evaluateOverperformer", () => {
     expect(out!.lifts.length).toBeGreaterThan(0);
     expect(out!.lifts[0].delta).toBeGreaterThan(0);
     const squat = out!.lifts.find((l) => l.exerciseId === "back_squat_highbar");
-    expect(squat?.delta).toBe(2.5);
+    // Sized from the set since BUG-35: 100 × 5 at RPE 6 on a 100 kg TM is an
+    // estimated max of ~130, whose 85% is 110 — capped at +10 per proposal.
+    // It used to be the fixed +2.5 regardless of what the set said.
+    expect(squat?.delta).toBe(10);
+  });
+
+  describe("the founder's 2026-09-28 squat (BUG-35, BUG-36)", () => {
+    // 100 × 10 at RPE 6 on a 115 kg TM: about 14 reps possible, an estimated
+    // max near 147. The engine offered 115 → 117.5 on Monday and nothing at
+    // all by Wednesday.
+    const founderSet = [[100, 10, 6]];
+
+    it("sizes the bump from the set, not a fixed +2.5", () => {
+      const s = overStore({
+        tms: { back_squat_highbar: 115 },
+        days: [
+          { date: "2026-08-12", state: "green", sets: [[80, 5, 5]] },
+          { date: "2026-08-14", state: "green", sets: [[80, 5, 5]] },
+          { date: "2026-08-17", state: "green", sets: founderSet },
+        ],
+      });
+      const out = evaluateOverperformer(trainingProgram, s, evalDay);
+      const squat = out?.lifts.find((l) => l.exerciseId === "back_squat_highbar");
+      // 146.7 × 0.85 = 124.7, rounded DOWN to a loadable 122.5 — what the
+      // founder set by hand.
+      expect(squat?.newTM).toBe(122.5);
+      expect(out!.reason).toContain("estimated max ~147 kg");
+    });
+
+    it("still proposes with two green checks in the week, when the set carries it", () => {
+      // Ill 25-27 Sep: no morning checks, so only two stated days in the window.
+      const s = overStore({
+        tms: { back_squat_highbar: 115 },
+        days: [
+          { date: "2026-08-12", state: "green", sets: [[80, 5, 5]] },
+          { date: "2026-08-17", state: "green", sets: founderSet },
+        ],
+      });
+      const out = evaluateOverperformer(trainingProgram, s, evalDay);
+      expect(out, "a set this strong on a green morning is evidence on its own").not.toBeNull();
+      expect(out!.triggers[0]).toContain("no amber or red");
+    });
+
+    it("does not bypass the streak when any check this week was amber", () => {
+      const s = overStore({
+        tms: { back_squat_highbar: 115 },
+        days: [
+          { date: "2026-08-12", state: "amber", sets: [[80, 5, 5]] },
+          { date: "2026-08-17", state: "green", sets: founderSet },
+        ],
+      });
+      expect(evaluateOverperformer(trainingProgram, s, evalDay)).toBeNull();
+    });
+
+    it("a note alone still needs the full streak", () => {
+      const s = overStore({
+        tms: { back_squat_highbar: 115 },
+        days: [
+          { date: "2026-08-12", state: "green", sets: [[80, 5, 9]] },
+          { date: "2026-08-17", state: "green", notes: "felt strong today", sets: [[80, 5, 9]] },
+        ],
+      });
+      expect(evaluateOverperformer(trainingProgram, s, evalDay)).toBeNull();
+    });
+
+    it("only the lift whose set earned it moves — nothing rides along", () => {
+      // 2026-09-28: the front squat was bumped +2.5 on the strength of a
+      // back-squat AMRAP, by the heaviest-two fallback meant for notes.
+      const s = overStore({
+        tms: { back_squat_highbar: 115, deadlift_conventional: 140 },
+        days: [
+          { date: "2026-08-12", state: "green", sets: [[80, 5, 5]] },
+          { date: "2026-08-14", state: "green", sets: [[80, 5, 5]] },
+          { date: "2026-08-17", state: "green", sets: founderSet },
+        ],
+      });
+      s.logs["2026-08-17"].exercises["block:deadlift_conventional"] = {
+        done: true,
+        sets: [set(100, 5, 8)],
+        notes: "",
+      } as DayLog["exercises"][string];
+      const out = evaluateOverperformer(trainingProgram, s, evalDay);
+      expect(out!.lifts.map((l) => l.exerciseId)).toEqual(["back_squat_highbar"]);
+    });
+
+    it("leaves a lift out when its set implies a training max no higher than the current one", () => {
+      // Plenty of reps, but 80 × 8 at RPE 9 is an estimated max near 104 —
+      // proposing 115 → 117.5 on it would push the wrong way.
+      const weak = overStore({
+        tms: { back_squat_highbar: 115 },
+        days: [
+          { date: "2026-08-12", state: "green", sets: [[80, 5, 5]] },
+          { date: "2026-08-14", state: "green", sets: [[80, 5, 5]] },
+          { date: "2026-08-17", state: "green", sets: [[80, 8, 9]] },
+        ],
+      });
+      const strong = overStore({
+        tms: { back_squat_highbar: 115 },
+        days: [
+          { date: "2026-08-12", state: "green", sets: [[80, 5, 5]] },
+          { date: "2026-08-14", state: "green", sets: [[80, 5, 5]] },
+          { date: "2026-08-17", state: "green", sets: [[110, 8, 9]] },
+        ],
+      });
+      // The weak set DOES fire a performance signal — the rep surplus — so a
+      // null below is the sizing rule, not a missing signal.
+      expect(performanceSignals(trainingProgram, weak, Object.values(weak.logs)).map((p) => p.liftId)).toContain("back_squat_highbar");
+      expect(evaluateOverperformer(trainingProgram, strong, evalDay), "control: the same shape with real headroom proposes").not.toBeNull();
+      expect(evaluateOverperformer(trainingProgram, weak, evalDay)).toBeNull();
+    });
   });
 
   it("does not fire without an easy signal", () => {

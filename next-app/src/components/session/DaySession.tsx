@@ -388,6 +388,7 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
           upNext={upNext}
           effortAnswered={effortAnswered}
           onEffortAnswered={setEffortAnswered}
+          tmBump={tmBump}
           date={activeDate}
           onDone={() => {
             setResting(false);

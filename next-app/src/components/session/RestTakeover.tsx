@@ -7,6 +7,8 @@ import { announce } from "@/lib/announce";
 import { playCountdownTick, playTimerComplete } from "@/lib/sound";
 import type { RailExercise } from "@/components/session/DaySession";
 import type { UpNext } from "@/components/session/shared/advance";
+import { ProposalCard } from "@/components/workout/ProposalCard";
+import type { Proposal } from "@/lib/schemas";
 
 /**
  * The scale bottomed out at RPE 7 until 2026-09-01, and that cost real
@@ -70,6 +72,7 @@ export function RestTakeover({
   onDone,
   onJump,
   onOpenNoteSheet,
+  tmBump = null,
 }: {
   active: RailExercise;
   justLoggedSetIndex: number;
@@ -99,6 +102,13 @@ export function RestTakeover({
   onDone: () => void;
   onJump: (key: string) => void;
   onOpenNoteSheet: () => void;
+  /**
+   * The session's live training-max proposal, if any (BUG-34, 2026-09-30).
+   * Proposals rendered only on the Brief, before the first set — but the set
+   * that earns a bump is the top set, logged after it. On 2026-09-28 the
+   * founder's 100 × 10 at RPE 6 produced a bump nobody showed him.
+   */
+  tmBump?: Proposal | null;
 }) {
   const updateSet = useStore((s) => s.updateSet);
   const store = useStore((s) => s.store);
@@ -352,6 +362,15 @@ export function RestTakeover({
               ))}
             </div>
           </div>
+        ) : null}
+        {/* Shown once the effort is in, because the RPE is part of the
+            evidence: the bump is sized from reps plus reps-in-reserve, so it
+            can only appear, or change, after that tap. Only for the lift
+            being rested on — a proposal about another lift is the Brief's. */}
+        {effortAnswered &&
+        tmBump?.kind === "tm_bump" &&
+        tmBump.lifts.some((l) => l.exerciseId === active.exercise.id) ? (
+          <ProposalCard proposal={tmBump} date={date} />
         ) : null}
         <div className="flex gap-2.5">
           <button

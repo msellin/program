@@ -2,11 +2,16 @@ import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
 import { render, screen, cleanup, fireEvent, act } from "@testing-library/react";
 import { RestTakeover } from "./RestTakeover";
 import type { RailExercise } from "./DaySession";
-import type { Exercise } from "@/lib/schemas";
+import type { Exercise, Proposal } from "@/lib/schemas";
 import { useStore } from "@/lib/useStore";
 
 vi.mock("@/lib/sound", () => ({ playTimerComplete: vi.fn(), playConfirm: vi.fn() }));
 vi.mock("@/lib/announce", () => ({ announce: vi.fn() }));
+// The real card fetches citations.json, which has no server under happy-dom.
+// What is under test here is whether the rest screen SHOWS the proposal.
+vi.mock("@/components/workout/ProposalCard", () => ({
+  ProposalCard: ({ proposal }: { proposal: { reason: string } }) => <div>{proposal.reason}</div>,
+}));
 
 const rail = (over: Partial<RailExercise> = {}): RailExercise =>
   ({
@@ -21,7 +26,7 @@ const rail = (over: Partial<RailExercise> = {}): RailExercise =>
     ...over,
   }) as RailExercise;
 
-function renderRest(over: { upNext?: Parameters<typeof RestTakeover>[0]["upNext"]; effortAnswered?: boolean; onDone?: () => void; restoredStartedAt?: number; restoredExpired?: boolean } = {}) {
+function renderRest(over: { upNext?: Parameters<typeof RestTakeover>[0]["upNext"]; effortAnswered?: boolean; onDone?: () => void; restoredStartedAt?: number; restoredExpired?: boolean; tmBump?: Proposal | null } = {}) {
   const active = rail();
   const onEffortAnswered = vi.fn();
   render(
@@ -39,6 +44,7 @@ function renderRest(over: { upNext?: Parameters<typeof RestTakeover>[0]["upNext"
       onDone={over.onDone ?? (() => {})}
       onJump={() => {}}
       onOpenNoteSheet={() => {}}
+      tmBump={over.tmBump ?? null}
     />,
   );
   return { onEffortAnswered };
@@ -239,5 +245,35 @@ describe("a rest restored after the app was discarded", () => {
       vi.advanceTimersByTime(250);
     });
     expect(onDone).toHaveBeenCalled();
+  });
+});
+
+describe("a training-max increase is shown after the set that earns it (BUG-34)", () => {
+  // 2026-09-28: 100 × 10 at RPE 6 produced a bump that only the Brief could
+  // show, and the Brief is behind you once the top set is logged.
+  const bump = (exerciseId: string): Proposal =>
+    ({
+      kind: "tm_bump",
+      id: `tm-bump:${exerciseId}`,
+      priority: 30,
+      reason: "A green morning check plus 100 kg × 10 where 5+ was prescribed. The engine reads that as headroom.",
+      citationId: "rhea_2003_meta",
+      lifts: [{ exerciseId, currentTM: 115, newTM: 122.5, delta: 7.5 }],
+      triggers: [],
+    }) as unknown as Proposal;
+
+  it("appears once the effort is in, for the lift just rested on", () => {
+    renderRest({ effortAnswered: true, tmBump: bump("back_squat_highbar") });
+    expect(screen.getAllByText(/reads that as headroom/i).length).toBeGreaterThan(0);
+  });
+
+  it("waits for the effort answer — the RPE is part of the evidence", () => {
+    renderRest({ effortAnswered: false, tmBump: bump("back_squat_highbar") });
+    expect(screen.queryByText(/reads that as headroom/i)).toBeNull();
+  });
+
+  it("stays on the Brief when it is about a different lift", () => {
+    renderRest({ effortAnswered: true, tmBump: bump("block_pull_midshin") });
+    expect(screen.queryByText(/reads that as headroom/i)).toBeNull();
   });
 });

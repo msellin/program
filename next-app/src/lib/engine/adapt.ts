@@ -383,6 +383,14 @@ function bumpFor(exerciseId: string): number {
   return exerciseId.includes("squat") ? 2.5 : 5;
 }
 
+/** Most one evidence-sized proposal may move a training max. */
+const MAX_EVIDENCE_BUMP_KG = 10;
+
+/** Round DOWN to the 2.5 kg a barbell can actually be loaded in. */
+function floorToLoadable(kg: number): number {
+  return Math.floor(kg / 2.5 + 1e-9) * 2.5;
+}
+
 
 /**
  * Did the user's own numbers say the weight was easy?
@@ -419,6 +427,8 @@ function bumpFor(exerciseId: string): number {
 export type PerformanceSignal = {
   liftId: string;
   reason: string;
+  /** The set that fired it. `evaluateOverperformer` sizes the bump from it. */
+  top: { weight_kg: number; reps: number; rpe: number | null };
 };
 
 /** A top set at or below this RPE was not limited by the load. */
@@ -454,6 +464,7 @@ export function performanceSignals(
         out.set(exId, {
           liftId: exId,
           reason: `${top.weight_kg} kg × ${top.reps} where ${prescribed.top_set.reps} was prescribed`,
+          top,
         });
         continue;
       }
@@ -461,6 +472,7 @@ export function performanceSignals(
         out.set(exId, {
           liftId: exId,
           reason: `top set at RPE ${top.rpe} — the load was not the limiter`,
+          top,
         });
         continue;
       }
@@ -480,6 +492,7 @@ export function performanceSignals(
         out.set(exId, {
           liftId: exId,
           reason: `${top.weight_kg} kg used where ${prescribed.top_set.kg} kg was prescribed`,
+          top,
         });
       }
     }
@@ -524,14 +537,31 @@ export function evaluateOverperformer(
   const recent = Object.values(store.logs)
     .filter((d) => d.date >= cutoffISO && d.date <= todayISO)
     .sort((a, b) => a.date.localeCompare(b.date));
-  if (recent.length < 3) return null;
 
-  // Green-streak check — the last 3 logged days with derived_state must be
-  // all green. Days without derived_state break the streak (we can't tell).
+  /**
+   * Symptom gate. Two ways through (BUG-36, 2026-09-30).
+   *
+   * The streak: the last 3 days with a morning check are all green. This was
+   * the only way, and it threw away real evidence. The founder was ill 25-27
+   * Sep and did no morning checks, so the week held two checks. On Mon 28 he
+   * squatted 100 × 10 at RPE 6 on a 97.5 × 5+, on a green morning; the bump
+   * existed Monday and Tuesday because Sep 23 was still in the window, and on
+   * Wednesday it returned null with nothing having changed but the calendar.
+   *
+   * The performance route: a top set that beat its prescription on a day
+   * whose own check was green, with no amber or red check anywhere in the
+   * window. The lift itself is the evidence of headroom; the streak was only
+   * ever a proxy for "nothing hurts", and a week with no non-green check says
+   * that as well as three consecutive greens do.
+   *
+   * Notes-only evidence ("felt strong") still needs the streak — a sentence
+   * is weaker evidence than a set.
+   */
   const stated = recent.filter((d) => d.derived_state);
-  if (stated.length < 3) return null;
-  const last3 = stated.slice(-3);
-  if (!last3.every((d) => d.derived_state === "green")) return null;
+  const streakGreen =
+    stated.length >= 3 && stated.slice(-3).every((d) => d.derived_state === "green");
+  const anyNonGreen = stated.some((d) => d.derived_state !== "green");
+  if (!streakGreen && (anyNonGreen || stated.length === 0)) return null;
 
   // Easy-signal check. Two ways to say the same thing, and the numbers are
   // the better one: a written cue ("felt strong", folded out of notes by
@@ -571,9 +601,15 @@ export function evaluateOverperformer(
   const perf = performanceSignals(
     program,
     store,
-    recent.filter((d) => !heavyLoadDates.has(d.date)),
+    recent.filter(
+      (d) =>
+        !heavyLoadDates.has(d.date) &&
+        // Off the streak, only a set done on a green-check day counts.
+        (streakGreen || d.derived_state === "green"),
+    ),
   );
-  if (easyDays.length === 0 && perf.length === 0) return null;
+  const usableEasyDays = streakGreen ? easyDays : [];
+  if (usableEasyDays.length === 0 && perf.length === 0) return null;
 
   // Which lifts to bump? Ones the user actually trained in the last 7 days
   // with logged working sets AND has a TM for.
@@ -595,7 +631,12 @@ export function evaluateOverperformer(
   // names a specific lift; a written cue does not, so notes-only runs keep
   // the previous heaviest-two behaviour.
   const signalled = new Set(perf.map((p) => p.liftId));
+  // When the evidence is sets, only the lifts that produced it move. The
+  // heaviest-two fallback is for a written "felt strong", which names no lift;
+  // with set evidence it let the founder's front squat ride a back-squat
+  // AMRAP to +2.5 on 2026-09-28 with nothing of its own behind it.
   const ranked = Array.from(trainedTMLifts)
+    .filter((id) => perf.length === 0 || signalled.has(id))
     .map((id) => ({ id, tm: tms[id] }))
     .sort((a, b) => {
       const bySignal = Number(signalled.has(b.id)) - Number(signalled.has(a.id));
@@ -603,22 +644,55 @@ export function evaluateOverperformer(
     })
     .slice(0, 2);
 
-  const lifts = ranked.map(({ id, tm }) => {
-    const delta = bumpFor(id);
-    return { exerciseId: id, currentTM: tm, newTM: round(tm + delta), delta };
-  });
+  /**
+   * Size from the set, not a fixed step (BUG-35, 2026-09-30).
+   *
+   * `bumpFor` alone meant 100 × 10 at RPE 6 — about 14 reps possible, an
+   * estimated max near 147 kg — could only ever propose 115 → 117.5. The
+   * founder set 122.5 by hand. The estimate is `inferTMFromSet`'s (reps plus
+   * reps-in-reserve from the logged RPE, Epley), taken at 85% and rounded
+   * DOWN to a loadable weight, capped at +10 kg per proposal. The fixed step
+   * is the floor.
+   *
+   * And when the set does NOT support even the floor, the lift is left out.
+   * A 95 × 5 at RPE 8 front squat on a 70% variant day fires the "load above
+   * prescription" signal, but it implies a training max under the current
+   * 115, so proposing 117.5 on the strength of it would push the wrong way.
+   */
+  const perfByLift = new Map(perf.map((p) => [p.liftId, p]));
+  type SizedLift = { exerciseId: string; currentTM: number; newTM: number; delta: number; est1RM?: number };
+  const lifts = ranked
+    .map(({ id, tm }): SizedLift | null => {
+      const step = bumpFor(id);
+      const evidence = perfByLift.get(id);
+      if (!evidence) return { exerciseId: id, currentTM: tm, newTM: round(tm + step), delta: step };
+      const inferred = inferTMFromSet(evidence.top.weight_kg, evidence.top.reps, evidence.top.rpe, tm);
+      if (!inferred) return { exerciseId: id, currentTM: tm, newTM: round(tm + step), delta: step };
+      const target = Math.min(floorToLoadable(inferred.est1RM * 0.85), tm + MAX_EVIDENCE_BUMP_KG);
+      if (target < tm + step) return null;
+      return { exerciseId: id, currentTM: tm, newTM: target, delta: round(target - tm), est1RM: inferred.est1RM };
+    })
+    .filter((l): l is SizedLift => l !== null);
+  if (lifts.length === 0) return null;
 
   // Cite what actually fired. A proposal that says "'felt strong' in a recent
   // note" when there was no note is the kind of claim this project keeps
   // finding — true when the code was written, false ever since.
-  const perfForRanked = perf.filter((p) => ranked.some((r) => r.id === p.liftId));
-  const triggers = ["3 straight green days"];
+  const perfForRanked = perf.filter((p) => lifts.some((l) => l.exerciseId === p.liftId));
+  const triggers = [streakGreen ? "3 straight green days" : "a green morning check and no amber or red this week"];
   if (perfForRanked.length > 0) {
-    triggers.push(perfForRanked.map((p) => p.reason).join("; "));
-  } else if (easyDays.length > 0) {
     triggers.push(
-      easyDays.length > 1
-        ? `${easyDays.length} "felt strong" notes`
+      perfForRanked
+        .map((p) => {
+          const est1RM = lifts.find((l) => l.exerciseId === p.liftId)?.est1RM;
+          return est1RM != null ? `${p.reason} (estimated max ~${Math.round(est1RM)} kg)` : p.reason;
+        })
+        .join("; "),
+    );
+  } else if (usableEasyDays.length > 0) {
+    triggers.push(
+      usableEasyDays.length > 1
+        ? `${usableEasyDays.length} "felt strong" notes`
         : "'felt strong' in a recent note",
     );
   }
@@ -660,7 +734,7 @@ export function evaluateOverperformer(
 
   return {
     kind: "tm_bump",
-    lifts,
+    lifts: lifts.map(({ exerciseId, currentTM, newTM, delta }) => ({ exerciseId, currentTM, newTM, delta })),
     triggers,
     reason,
   };

@@ -21,6 +21,7 @@
 
 import type {
   Program,
+  DayLog,
   Store,
   Proposal,
   DayAdjustmentProposalPayload,
@@ -30,7 +31,7 @@ import type {
   NonResponderProposalPayload,
   RetestDueProposalPayload,
 } from "@/lib/schemas";
-import { daySignals, proposedLoadMultiplier } from "@/lib/engine/note-signals";
+import { daySignals, proposedLoadMultiplier, type NoteSignals } from "@/lib/engine/note-signals";
 import { activePhaseFor } from "@/lib/engine/schedule";
 import { blocksForDate } from "@/lib/engine/plan-generator";
 import { assessReintroReadiness } from "@/lib/engine/readiness";
@@ -98,6 +99,86 @@ function nextLoadedDay(store: Store, program: Program, from: string): string | n
   return null;
 }
 
+/**
+ * Is the signal behind a soften just this user's ordinary week? (BUG-37)
+ *
+ * `daySignals` reads load against fixed thresholds: 45+ cardio minutes or a
+ * life load of 4 is `elevated`, 90+ minutes is `high`. For someone whose
+ * normal week is a CrossFit class most days, that is every day. The founder
+ * was offered "trim 5-10%" on seven of eight mornings from 21 to 28 Sep, all
+ * green, ignored every time — and then squatted 100 × 10 at RPE 6 on one of
+ * them. A proposal that fires every day and is always wrong teaches the user
+ * to stop reading the card, including on the day it is right.
+ *
+ * So the load-shaped drivers are read against the user's OWN last 28 days:
+ *   - life load: soften only at 7+, or when it sits more than 1 above their
+ *     usual (median) rating;
+ *   - cardio: soften only above their usual (75th percentile) daily minutes,
+ *     or for 45+ minutes marked hard.
+ * Anything else — pain, RPE drift, a note saying sore or wrecked, free-text
+ * outside load — is never explained away by a baseline. With too little
+ * history to know what normal is, nothing is suppressed.
+ *
+ * `daySignals` itself is unchanged: it describes the day, and other readers
+ * (the headroom read in `evaluateOverperformer`) want the absolute picture.
+ */
+const NORM_WINDOW_DAYS = 28;
+const MIN_LIFE_LOAD_SAMPLES = 7;
+const MIN_CARDIO_SAMPLES = 6;
+
+function cardioOf(day: DayLog | undefined): { minutes: number; hardMinutes: number } {
+  let minutes = 0;
+  let hardMinutes = 0;
+  for (const r of day?.runs ?? []) {
+    const m = r.minutes ?? (r.total_seconds ? r.total_seconds / 60 : 0);
+    minutes += m;
+    if (r.intensity === "hard") hardMinutes += m;
+  }
+  return { minutes, hardMinutes };
+}
+
+function quantile(values: number[], q: number): number {
+  const sorted = [...values].sort((a, b) => a - b);
+  const pos = (sorted.length - 1) * q;
+  const lo = Math.floor(pos);
+  const hi = Math.ceil(pos);
+  return sorted[lo] + (sorted[hi] - sorted[lo]) * (pos - lo);
+}
+
+function isWithinPersonalNorm(store: Store, signalDate: string, sig: NoteSignals): boolean {
+  if (sig.pain) return false;
+  if (sig.rpeDrift != null && sig.rpeDrift >= 1.5) return false;
+  const loadShaped = (m: string) =>
+    m.startsWith("life load") || m.startsWith("cardio ") || m.startsWith("max HR ");
+  if (sig.matches.length === 0 || !sig.matches.every(loadShaped)) return false;
+
+  const day = store.logs[signalDate];
+  const history = Object.values(store.logs).filter((d) => {
+    if (d.date >= signalDate) return false;
+    const age = (Date.parse(signalDate) - Date.parse(d.date)) / 864e5;
+    return age <= NORM_WINDOW_DAYS;
+  });
+
+  const life = day?.symptoms?.life_load ?? 0;
+  if (life >= 7) return false;
+  if (life >= 4) {
+    const past = history
+      .map((d) => d.symptoms?.life_load)
+      .filter((v): v is number => typeof v === "number");
+    if (past.length < MIN_LIFE_LOAD_SAMPLES) return false;
+    if (life > quantile(past, 0.5) + 1) return false;
+  }
+
+  const { minutes, hardMinutes } = cardioOf(day);
+  if (minutes > 0) {
+    if (hardMinutes >= 45) return false;
+    const past = history.map((d) => cardioOf(d).minutes).filter((m) => m > 0);
+    if (past.length < MIN_CARDIO_SAMPLES) return false;
+    if (minutes > quantile(past, 0.75)) return false;
+  }
+  return true;
+}
+
 function selectDayAdjustment(
   store: Store,
   program: Program,
@@ -108,15 +189,18 @@ function selectDayAdjustment(
 
   // Look at today + the 2 prior days for a signal.
   let sig = daySignals(store.logs[date]);
+  let signalDate = date;
   const todayIsLifeLoadOnly = todayHasOnlyLifeLoadSeed(store, date);
   if (!(sig.fatigue === "high" || sig.pain)) {
     const t = new Date(date + "T00:00:00");
     for (let back = 1; back <= 2 && sig.matches.length === 0; back++) {
       const d = new Date(t);
       d.setDate(t.getDate() - back);
-      sig = daySignals(store.logs[iso(d)]);
+      signalDate = iso(d);
+      sig = daySignals(store.logs[signalDate]);
     }
   }
+  if (isWithinPersonalNorm(store, signalDate, sig)) return null;
   // What gets softened depends on the modality. Only programs that declare
   // `training_maxes` have a top set to trim — exactly the two barbell programs
   // (anterior-hip-rebuild, concurrent-strength-maintenance). The other six

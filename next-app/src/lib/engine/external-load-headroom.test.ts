@@ -64,7 +64,10 @@ const day = (
 const storeWith = (logs: DayLog[]): Store =>
   ({
     version: 2,
-    training_maxes: { back_squat: 120 },
+    // 100 rather than 120 since BUG-35 (2026-09-30): a bump is now sized from
+    // the set, and 100 × 5 at RPE 7 implies a TM near 107.5 — no headroom on
+    // 120, so the control would return null for a reason unrelated to load.
+    training_maxes: { back_squat: 100 },
     logs: Object.fromEntries(logs.map((d) => [d.date, d])),
   }) as unknown as Store;
 
