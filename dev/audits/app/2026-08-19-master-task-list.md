@@ -12,7 +12,7 @@ These are **IDEAS, not action items**. The engine + rehab-first positioning over
 
 **Counts by bucket (post-Cut-D audit, 2026-08-21):**
 
-- **Bugs:** 0 open
+- **Bugs:** 4 open — BUG-34..37 (TM-bump surfacing, sizing, streak gate; soften noise), all top priority
 - **P0:** 0 open
 - **P1:** 0 open
 - **P2:** 0 open — the last carry (P2-32 icon-stroke discipline) remains `[ ]` deferred as low-ROI codemod, tracked below
@@ -49,6 +49,11 @@ Keep the convention terse — the four markers cover every state. Don't invent n
 ## Section A — Real bugs (fix regardless)
 
 *Sourced from the post-Batch-25 audit round (2026-08-19, 6 agents), + the founder-observations audit round (2026-08-19, 8 agents against O1-O17).*
+
+- [ ] **BUG-34 · TOP PRIORITY (founder, 2026-09-30)** — A training-max increase is never shown after the set that earns it. `selectProposals` results render only on the session Brief (`DaySession.tsx:308` → `BriefView`). On a heavy day the AMRAP top set is logged AFTER the Brief, and nothing afterwards brings a new proposal back. Founder, 2026-09-28: 100×10 @ RPE 6 on a 97.5×5+ back squat. `evaluateOverperformer` returned "back squat and front squat 115 → 117.5" on Mon and Tue (reproduced against his real store), but `proposal_history` has no record of it being displayed. Earlier that morning, before any sets, the Brief showed a soften proposal, which he ignored. **Fix:** after an AMRAP / top set is logged, show the tm_bump (still Accept/Ignore — confirm-first) in the RestTakeover or at the end of the exercise. Size: S
+- [ ] **BUG-35 · TOP PRIORITY (founder, 2026-09-30)** — The TM bump size ignores the evidence. `bumpFor` in `engine/adapt.ts` is a fixed +2.5 kg for squats and +5 kg otherwise. 100×10 @ RPE 6 (≈4 RIR, e1RM ≈140-147) implies a back squat TM ≈125 at 85-90%, but the proposal could only offer 115 → 117.5. The founder set 122.5 manually on 2026-09-30. **Fix:** size the proposal from the top set's estimated 1RM (reps + RIR from the logged RPE; `inferTMFromSet` already exists), capped and rounded to loadable plates, and cite that in the reason. Keep the fixed step as a floor. Size: S
+- [ ] **BUG-36 · TOP PRIORITY (founder, 2026-09-30)** — The green-streak gate kills a valid bump within two days. `evaluateOverperformer` needs 3 days with `derived_state` in the last 7, all green. A user who skips morning checks for a few days (founder was ill 25-27 Sep) has only 2 stated days: the Mon 28 bump existed Mon and Tue and returned null on Wed 30, with nothing having changed. **Fix (decide):** let a single strong top set on a green-check day qualify on its own, or count the last 3 checks regardless of how far back (with a max age), rather than requiring them inside a 7-day window. Tests: `adapt` overperformer cases. Size: S
+- [ ] **BUG-37 · TOP PRIORITY (founder, 2026-09-30)** — The "go lighter" soften proposal fires almost every day for a concurrent athlete. `proposal_history` 2026-09-21 → 09-28: seven `day_adjustment_soften` (load 0.9/0.95), all ignored, all on green-symptom mornings. Source: `daySignals` reads logged outside training (daily 80-130 min HIIT, via `runs[]`) as `fatigue: elevated/high`, and `proposedLoadMultiplier` turns that into a trim. Working as designed, but for someone whose normal week is CrossFit most days it is constant noise, and every ignore teaches them to ignore the card. **Fix (decide):** compare against the user's OWN baseline external load (a trim only when load is above their norm), and/or stop re-proposing after N consecutive ignores with the top set then performed at or above prescription. Size: M
 
 - [x] **BUG-4** — first-strict-pullup tier engine bug shipped 2026-08-19 (`82d62f0`). Added program to both proxy tables in `intake-tier.ts` + conservative-defaults entry + 5 regression tests. 14/14 intake-tier tests pass.
 - [x] **BUG-5** — DateNav Home reserved-slot pattern shipped 2026-08-19 (`82d62f0`). Applied Week's `invisible pointer-events-none` treatment; forward-arrow no longer jumps on day change.
