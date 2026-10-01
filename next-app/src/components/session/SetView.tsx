@@ -107,8 +107,13 @@ export function SetView({
   const authored = active.exercise.default ?? {};
   const num = (k: string): number | null =>
     typeof authored[k] === "number" ? (authored[k] as number) : null;
-  const authoredReps = num("reps");
-  const holdSeconds = num("hold_seconds");
+  // The programme's own numbers for this item win over the library default
+  // (BUG-42, 2026-10-01): Thursday's split squats are authored 4×6 and were
+  // showing the library's 3×8.
+  const itemNum = (k: "reps" | "sets" | "hold_seconds"): number | null =>
+    typeof active.item?.[k] === "number" ? (active.item[k] as number) : null;
+  const authoredReps = itemNum("reps") ?? num("reps");
+  const holdSeconds = itemNum("hold_seconds") ?? num("hold_seconds");
   // Duration-based work. Aerobic blocks author minutes, not reps —
   // `aerobic_z1_steady` is `{minutes: 45}`, `aerobic_threshold_cruise` is
   // `{sets: 3, minutes_per_set: 8}` — so a 45-minute Zone 1 run was
@@ -117,7 +122,7 @@ export function SetView({
   // half of the catalog. Same class as the hold bug, one step out.
   const authoredMinutes = num("minutes_per_set") ?? num("minutes");
   const timedSeconds = holdSeconds ?? (authoredMinutes != null ? authoredMinutes * 60 : null);
-  const authoredSets = num("sets");
+  const authoredSets = itemNum("sets") ?? num("sets");
   const perSide = authored.per_side === true;
   // Hold-based work (isometrics, stretches) authors `hold_seconds` and no
   // reps — there is no rep count to predefine. One hold is one effort, so
@@ -200,7 +205,7 @@ export function SetView({
       // normal chain instead; the set is still marked missed until Done is
       // pressed, which is what clears the flag.
       (setForRow.failed === true ? null : setForRow.reps) ??
-      (parseInt(prescribed?.reps ?? "", 10) || priorRowToday?.reps || prev?.reps || defaultReps || 0),
+      (parseInt(prescribed?.reps ?? "", 10) || itemNum("reps") || priorRowToday?.reps || prev?.reps || defaultReps || 0),
   );
   // No resync-effect: DaySession mounts this component with
   // `key={active.key + activeSetIndex}`, so React fully remounts (and

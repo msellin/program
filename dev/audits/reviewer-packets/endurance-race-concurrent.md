@@ -1,10 +1,10 @@
 # Reviewer packet — Race prep & concurrent training
 
-**Generated 2026-09-11 from the shipping program data.** Regenerate with
+**Generated 2026-10-01 from the shipping program data.** Regenerate with
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: 60193795ba2306f2 -->
+<!-- source-fingerprint: 7605bfc07dc59401 -->
 
 ## What we are asking
 

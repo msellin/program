@@ -2383,7 +2383,12 @@
         "ludewig_reynolds_2009",
         "wulf_shea_2002"
       ],
-      "video_search": "foam roller thoracic extension mobility"
+      "video_search": "foam roller thoracic extension mobility",
+      "default": {
+        "sets": 2,
+        "reps": 8
+      },
+      "video_url": "https://www.youtube.com/watch?v=SQF-0s1CckA"
     },
     {
       "id": "om_quadruped_thoracic_rotation",
@@ -2412,7 +2417,13 @@
       "evidence_refs": [
         "ludewig_cook_2000"
       ],
-      "video_search": "quadruped thread the needle thoracic rotation"
+      "video_search": "quadruped thread the needle thoracic rotation",
+      "default": {
+        "sets": 2,
+        "reps": 8,
+        "per_side": true
+      },
+      "video_url": "https://www.youtube.com/watch?v=ZabQ50IlM9A"
     },
     {
       "id": "om_wall_slides",
@@ -2444,7 +2455,12 @@
         "ludewig_reynolds_2009",
         "reinold_2007"
       ],
-      "video_search": "wall slides shoulder mobility exercise"
+      "video_search": "wall slides shoulder mobility exercise",
+      "default": {
+        "sets": 2,
+        "reps": 10
+      },
+      "video_url": "https://www.youtube.com/watch?v=oMSVe7PWJ3o"
     },
     {
       "id": "om_prone_y_raise",
@@ -2473,7 +2489,12 @@
         "reinold_2007",
         "wulf_shea_2002"
       ],
-      "video_search": "prone Y raise shoulder exercise"
+      "video_search": "prone Y raise shoulder exercise",
+      "default": {
+        "sets": 3,
+        "reps": 10
+      },
+      "video_url": "https://www.youtube.com/watch?v=TudaAEghZdY"
     },
     {
       "id": "om_kb_arm_bar",
@@ -2509,7 +2530,13 @@
       "evidence_refs": [
         "reinold_2007"
       ],
-      "video_search": "kettlebell arm bar mobility drill"
+      "video_search": "kettlebell arm bar mobility drill",
+      "default": {
+        "sets": 2,
+        "hold_seconds": 30,
+        "per_side": true
+      },
+      "video_url": "https://www.youtube.com/watch?v=Ya0DCt11wGI"
     },
     {
       "id": "om_supine_dowel_pullover",
@@ -2537,7 +2564,12 @@
       "evidence_refs": [
         "ludewig_reynolds_2009"
       ],
-      "video_search": "supine dowel pullover stretch shoulder"
+      "video_search": "supine dowel pullover stretch shoulder",
+      "default": {
+        "sets": 3,
+        "hold_seconds": 30
+      },
+      "video_url": "https://www.youtube.com/watch?v=3KIZy8lGcWA"
     },
     {
       "id": "om_passive_bar_hang",
@@ -2573,7 +2605,12 @@
       "evidence_refs": [
         "wulf_shea_2002"
       ],
-      "video_search": "passive dead hang mobility"
+      "video_search": "passive dead hang mobility",
+      "default": {
+        "sets": 3,
+        "hold_seconds": 30
+      },
+      "video_url": "https://www.youtube.com/watch?v=iIVg_KK_Uzs"
     },
     {
       "id": "om_half_kneeling_dowel_press",
@@ -2601,7 +2638,12 @@
       "evidence_refs": [
         "reinold_2007"
       ],
-      "video_search": "half kneeling overhead dowel press"
+      "video_search": "half kneeling overhead dowel press",
+      "default": {
+        "sets": 2,
+        "reps": 8
+      },
+      "video_url": "https://www.youtube.com/watch?v=e6lBfC7DHzA"
     },
     {
       "id": "om_bottom_up_kb_press",
@@ -2637,7 +2679,13 @@
       "evidence_refs": [
         "reinold_2007"
       ],
-      "video_search": "bottoms up kettlebell press exercise"
+      "video_search": "bottoms up kettlebell press exercise",
+      "default": {
+        "sets": 3,
+        "reps": 5,
+        "per_side": true
+      },
+      "video_url": "https://www.youtube.com/watch?v=x0gWtyBRrWk"
     },
     {
       "id": "om_empty_bar_ohs",
@@ -2674,7 +2722,12 @@
       "evidence_refs": [
         "wulf_2013"
       ],
-      "video_search": "empty bar overhead squat technique"
+      "video_search": "empty bar overhead squat technique",
+      "default": {
+        "sets": 3,
+        "reps": 5
+      },
+      "video_url": "https://www.youtube.com/watch?v=pn8mqlG0nkE"
     },
     {
       "id": "om_snatch_grip_sotts_press",
@@ -2710,7 +2763,12 @@
       "evidence_refs": [
         "reinold_2007"
       ],
-      "video_search": "snatch grip Sotts press olympic weightlifting"
+      "video_search": "snatch grip Sotts press olympic weightlifting",
+      "default": {
+        "sets": 3,
+        "reps": 5
+      },
+      "video_url": "https://www.youtube.com/watch?v=UrdNFJaTAnc"
     },
     {
       "id": "om_tgu_hold",
@@ -2746,7 +2804,13 @@
         "reinold_2007",
         "wulf_2013"
       ],
-      "video_search": "turkish get up overhead hold"
+      "video_search": "turkish get up overhead hold",
+      "default": {
+        "sets": 2,
+        "hold_seconds": 20,
+        "per_side": true
+      },
+      "video_url": "https://www.youtube.com/watch?v=r_sJKLowdak"
     },
     {
       "id": "aerobic_short_intervals",

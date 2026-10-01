@@ -633,13 +633,16 @@
           "exercise_id": "bulgarian_split_squat_db",
           "order": "B1",
           "role": "unilateral",
-          "scheme": "3×6 per side"
+          "scheme": "3×6 per side",
+          "reps": 6
         },
         {
           "exercise_id": "single_leg_rdl",
           "order": "B2",
           "role": "unilateral",
-          "scheme": "2×6 per side"
+          "scheme": "2×6 per side",
+          "sets": 2,
+          "reps": 6
         },
         {
           "exercise_id": "dead_bug",
@@ -695,7 +698,8 @@
         {
           "exercise_id": "back_squat_highbar",
           "role": "recovery",
-          "scheme": "3×5 @ ~60% expected TM. Same weight all sets. RPE cap 6."
+          "scheme": "3×5 @ ~60% expected TM. Same weight all sets. RPE cap 6.",
+          "sets": 3
         }
       ]
     },
@@ -791,13 +795,16 @@
           "exercise_id": "front_squat",
           "order": "A1",
           "role": "main",
-          "scheme": "5×5 at 65-75% front squat TM. Progress load when all sets clean."
+          "scheme": "5×5 at 65-75% front squat TM. Progress load when all sets clean.",
+          "sets": 5
         },
         {
           "exercise_id": "bulgarian_split_squat_db",
           "order": "B1",
           "role": "unilateral_heavy",
-          "scheme": "4×6 per side, heavier than Mon"
+          "scheme": "4×6 per side, heavier than Mon",
+          "sets": 4,
+          "reps": 6
         },
         {
           "exercise_id": "nordic_curl",
@@ -838,19 +845,23 @@
           "exercise_id": "single_leg_rdl",
           "order": "B1",
           "role": "unilateral_pull",
-          "scheme": "4×6 per side, extra set left"
+          "scheme": "4×6 per side, extra set left",
+          "sets": 4,
+          "reps": 6
         },
         {
           "exercise_id": "suitcase_carry",
           "order": "C1",
           "role": "trunk_anti_rotation",
-          "scheme": "4 × 20 m per side"
+          "scheme": "4 × 20 m per side",
+          "sets": 4
         },
         {
           "exercise_id": "farmer_carry",
           "order": "C2",
           "role": "trunk",
-          "scheme": "3 × 40 m"
+          "scheme": "3 × 40 m",
+          "distance_m": 40
         }
       ]
     },
@@ -1132,7 +1143,8 @@
           "order": "B2",
           "role": "unilateral",
           "scheme": "2×8 per side, light",
-          "optional": true
+          "optional": true,
+          "sets": 2
         },
         {
           "exercise_id": "pallof_press",
@@ -1167,7 +1179,8 @@
           "order": "B2",
           "role": "glute_max",
           "scheme": "2×8, light",
-          "optional": true
+          "optional": true,
+          "sets": 2
         },
         {
           "exercise_id": "single_leg_rdl",

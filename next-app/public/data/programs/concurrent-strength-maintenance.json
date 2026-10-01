@@ -365,7 +365,8 @@
         {
           "exercise_id": "block_pull_midshin",
           "role": "top_set",
-          "scheme": "5×3 @ 78% TM, RPE ≤ 7"
+          "scheme": "5×3 @ 78% TM, RPE ≤ 7",
+          "reps": 3
         }
       ]
     },
@@ -380,7 +381,8 @@
         {
           "exercise_id": "front_squat",
           "role": "top_set",
-          "scheme": "5×5 @ 65% TM"
+          "scheme": "5×5 @ 65% TM",
+          "sets": 5
         }
       ]
     },

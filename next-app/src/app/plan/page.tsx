@@ -751,6 +751,9 @@ export default function WeekPage() {
                         isSkipped={!!skip}
                         isOverride={!!override}
                         primarySlug={primarySlug}
+                        programSlugs={Array.from(
+                          new Set(displayBlocks.map((b) => b.programSlug).filter((x): x is string => !!x)),
+                        )}
                         blockIds={displayBlocks.map((b) => b.id)}
                         weekDaysCatalog={weekDaysCatalog}
                       />
@@ -827,6 +830,7 @@ function WeekDayActions({
   isSkipped,
   isOverride,
   primarySlug,
+  programSlugs = [],
   blockIds,
   weekDaysCatalog,
 }: {
@@ -840,6 +844,13 @@ function WeekDayActions({
   isSkipped: boolean;
   isOverride: boolean;
   primarySlug: string | undefined;
+  /**
+   * Every active programme with blocks on this day, primary first (BUG-41).
+   * "Log session →" opened only the primary's session, which does not render
+   * a secondary programme's blocks — so the founder could backfill Wed 30
+   * Sep's hip session but not that day's overhead-mobility block.
+   */
+  programSlugs?: string[];
   blockIds: string[];
   weekDaysCatalog: WeekDayEntry[];
 }) {
@@ -887,8 +898,22 @@ function WeekDayActions({
     );
   }
 
+  const secondarySlugs = programSlugs.filter((slug) => slug !== primarySlug);
   return (
     <>
+      {isPast && secondarySlugs.length > 0 ? (
+        <div className="mt-3 flex flex-col gap-2">
+          {secondarySlugs.map((slug) => (
+            <Link
+              key={slug}
+              href={`/session/${slug}?date=${dateISO}`}
+              className="w-full text-[14px] font-semibold px-3 py-2 rounded border border-line-strong text-ink hover:bg-line-soft min-h-[44px] flex items-center justify-center text-center"
+            >
+              Log {slug.replace(/-/g, " ")} →
+            </Link>
+          ))}
+        </div>
+      ) : null}
       {/* P1-63 (Batch 27) — 3-verb action grid migrated from 11 px
           mono-caps to 14 px sentence-case. Verb labels shouldn't read
           as chip pills.

@@ -56,6 +56,7 @@ export function BriefView({
 }) {
   const [expandedProposalId, setExpandedProposalId] = useState<string | null>(null);
   const hero = railExercises[0];
+  const heroShape: SetShape = hero ? setShape(hero) : { kind: "none" };
   const totalMinutes = blocks.reduce((sum, b) => {
     if (!b.duration_min) return sum;
     const d = Array.isArray(b.duration_min) ? b.duration_min[1] : b.duration_min;
@@ -175,23 +176,50 @@ export function BriefView({
         {hero ? (
           <div className="rounded border-2 border-l-bronze border-line-strong bg-surface px-4 py-[15px]">
             <p className="font-mono text-[10px] uppercase tracking-[.16em] text-muted mb-2.5">
-              Today&apos;s top set
+              {heroShape.kind === "top_set" ? "Today\u2019s top set" : "Today\u2019s working sets"}
             </p>
             <p className="text-[16.5px] font-semibold text-strong mb-2 tracking-[-.015em]">
               {hero.exercise.name}
             </p>
-            {hero.suggestion ? (
+            {hero.suggestion && heroShape.kind !== "none" ? (
               <>
                 <div className="flex items-baseline gap-[7px] mb-2">
-                  <span className="text-[40px] leading-none font-semibold tracking-[-.04em] text-strong">
-                    {hero.suggestion.top_set.kg}
-                  </span>
-                  <span className="text-[16px] font-medium text-muted">kg</span>
-                  <span className="text-[18px] text-muted">×</span>
-                  <span className="text-[24px] leading-none font-semibold text-strong">
-                    {hero.suggestion.top_set.reps}
-                  </span>
+                  {heroShape.kind === "straight" ? (
+                    <>
+                      <span className="text-[24px] leading-none font-semibold text-strong">{heroShape.sets}</span>
+                      <span className="text-[18px] text-muted">×</span>
+                      <span className="text-[24px] leading-none font-semibold text-strong">{heroShape.reps}</span>
+                      <span className="text-[18px] text-muted">at</span>
+                      <span className="text-[40px] leading-none font-semibold tracking-[-.04em] text-strong">{heroShape.kg}</span>
+                      <span className="text-[16px] font-medium text-muted">kg</span>
+                    </>
+                  ) : heroShape.kind === "ladder" ? (
+                    <>
+                      <span className="text-[32px] leading-none font-semibold tracking-[-.03em] text-strong">
+                        {heroShape.kgs.join(" · ")}
+                      </span>
+                      <span className="text-[16px] font-medium text-muted">kg</span>
+                      <span className="text-[18px] text-muted">×</span>
+                      <span className="text-[24px] leading-none font-semibold text-strong">{heroShape.reps}</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="text-[40px] leading-none font-semibold tracking-[-.04em] text-strong">{heroShape.kg}</span>
+                      <span className="text-[16px] font-medium text-muted">kg</span>
+                      <span className="text-[18px] text-muted">×</span>
+                      <span className="text-[24px] leading-none font-semibold text-strong">{heroShape.reps}</span>
+                    </>
+                  )}
                 </div>
+                <p className="text-[14px] leading-snug text-ink">
+                  {heroShape.kind === "straight"
+                    ? "No top set today \u2014 every set at the same weight."
+                    : heroShape.kind === "ladder"
+                      ? "No top set today \u2014 one set at each weight, lightest first."
+                      : heroShape.backoff
+                        ? `Then ${heroShape.backoff.sets} \u00d7 ${heroShape.backoff.kg} kg.`
+                        : null}
+                </p>
                 {basisLine(hero, store) ? (
                   <p className="text-[14px] leading-snug text-ink">{basisLine(hero, store)}</p>
                 ) : null}
@@ -450,15 +478,59 @@ function toneClasses(kind: Proposal["kind"]): string {
  * old label claimed — it just stops attributing the top weight to all of them.
  */
 export function railScheme(r: RailExercise): string {
-  if (!r.suggestion) return `${r.rowCount} sets`;
+  const shape = setShape(r);
+  if (!r.suggestion || shape.kind === "none") return `${r.rowCount} sets`;
+  if (shape.kind === "straight") return `${shape.sets} × ${shape.kg} kg`;
+  if (shape.kind === "ladder") return `${shape.kgs.length} sets · ${shape.kgs.join(" / ")} kg`;
   const { top_set, fsl } = r.suggestion;
   if (fsl) return `1 × ${top_set.kg} kg · ${fsl.sets} × ${fsl.kg} kg`;
   return `${r.rowCount} sets · ${top_set.kg} kg`;
 }
 
+/**
+ * Does today have a top set at all? (BUG-38, founder 2026-10-01)
+ *
+ * A suggestion carries `top_set` + `fsl` for three different days, and the
+ * Brief rendered all three as 5/3/1:
+ *   - top set + back-offs (5/3/1)  → one heavy set, then lighter ones;
+ *   - straight sets (variant/volume) → every set at one weight, no top set;
+ *   - a ladder (`working_sets`, the deload) → ascending sets, no top set.
+ * The Thursday front squat, 5 × 75 kg, read "TODAY'S TOP SET 75 × 5" above a
+ * rail line "1 × 75 kg · 5 × 75 kg" — six sets and a top set, on a day with
+ * five sets and none. The founder could not tell what was prescribed.
+ */
+export type SetShape =
+  | { kind: "top_set"; kg: number; reps: string; backoff: { sets: number; kg: number } | null }
+  | { kind: "straight"; sets: number; kg: number; reps: string }
+  | { kind: "ladder"; kgs: number[]; reps: string }
+  | { kind: "none" };
+
+export function setShape(r: RailExercise): SetShape {
+  const sug = r.suggestion;
+  if (!sug) return { kind: "none" };
+  if (sug.working_sets?.length) {
+    return { kind: "ladder", kgs: sug.working_sets.map((w) => w.kg), reps: sug.working_sets[0].reps };
+  }
+  if (sug.fsl && sug.straight_sets) {
+    return { kind: "straight", sets: sug.fsl.sets, kg: sug.fsl.kg, reps: String(sug.fsl.reps) };
+  }
+  return {
+    kind: "top_set",
+    kg: sug.top_set.kg,
+    reps: sug.top_set.reps,
+    backoff: sug.fsl ? { sets: sug.fsl.sets, kg: sug.fsl.kg } : null,
+  };
+}
+
 function basisLine(r: RailExercise, store: Store): string | null {
   const tm = store.training_maxes[r.exercise.id];
   if (!tm || !r.suggestion) return null;
+  const ladder = r.suggestion.working_sets;
+  if (ladder?.length) {
+    const lo = Math.round((ladder[0].kg / tm) * 100);
+    const hi = Math.round((ladder[ladder.length - 1].kg / tm) * 100);
+    return `${lo}\u2013${hi}% of your ${tm} kg training max`;
+  }
   const pct = Math.round((r.suggestion.top_set.kg / tm) * 100);
   if (!Number.isFinite(pct) || pct <= 0) return null;
   return `${pct}% of your ${tm} kg training max`;

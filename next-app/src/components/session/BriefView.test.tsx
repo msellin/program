@@ -84,6 +84,51 @@ describe("the exercise rail's scheme line (BUG-29)", () => {
   });
 });
 
+describe("the day says whether there is a top set (BUG-38)", () => {
+  // Founder, 2026-10-01: Thursday's 5 × 75 kg front squat read "TODAY'S TOP
+  // SET 75 × 5" above a rail line "1 × 75 kg · 5 × 75 kg" — a top set and six
+  // sets, on a day with neither. This is the shape the engine actually
+  // returns for a variant day: `fsl` AND `straight_sets`.
+  const straight = {
+    rowCount: 5,
+    suggestion: { top_set: { kg: 75, reps: "5" }, fsl: { kg: 75, sets: 5, reps: 5 }, straight_sets: true, reasoning: "" },
+  } as Partial<RailExercise>;
+  const ladder = {
+    rowCount: 3,
+    suggestion: {
+      top_set: { kg: 92.5, reps: "5" },
+      fsl: null,
+      working_sets: [
+        { kg: 62.5, reps: "5" },
+        { kg: 77.5, reps: "5" },
+        { kg: 92.5, reps: "5" },
+      ],
+      reasoning: "",
+    },
+  } as Partial<RailExercise>;
+
+  it("a straight-sets day reads as five sets at one weight, with no top set", () => {
+    renderBrief({ rails: [rail(straight)] });
+    expect(screen.getByText("5 × 75 kg")).toBeDefined();
+    expect(screen.queryByText(/1 × 75 kg/)).toBeNull();
+    expect(screen.queryByText(/today.s top set/i)).toBeNull();
+    expect(screen.getByText(/No top set today/)).toBeDefined();
+    expect(screen.getByText(/working sets/i)).toBeDefined();
+  });
+
+  it("a deload ladder reads as its three weights, with no top set", () => {
+    renderBrief({ rails: [rail(ladder)] });
+    expect(screen.getByText("3 sets · 62.5 / 77.5 / 92.5 kg")).toBeDefined();
+    expect(screen.queryByText(/today.s top set/i)).toBeNull();
+  });
+
+  it("a 5/3/1 day still says top set, and names the back-offs", () => {
+    renderBrief();
+    expect(screen.getAllByText(/top set/i).length).toBeGreaterThan(0);
+    expect(screen.getByText("Then 5 × 71.5 kg.")).toBeDefined();
+  });
+});
+
 describe("intake-driven deferrals are shown, not applied silently", () => {
   const program: Partial<Program> = {
     slug: "muscle-up",

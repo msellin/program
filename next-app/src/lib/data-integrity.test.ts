@@ -225,6 +225,83 @@ describe("no program lost its cue rendering", () => {
  * them because both sides are `z.string()`. Each one below is here because it
  * caught a real defect on the day it was written.
  */
+/**
+ * Every drill a programme can schedule says how much of it to do (BUG-39).
+ *
+ * Slot programmes build sessions from `drill_library` rather than authored
+ * block items, so the only dose a drill can have is its library `default`.
+ * All 12 overhead-mobility drills had `default: null`; `SetView` fell back to
+ * 3 sets of 1 rep, and a 30-second passive hang was logged as "1 rep" three
+ * times (founder, 2026-10-01).
+ *
+ * KNOWN_UNDOSED is the gap as it stood that day, in three programmes the
+ * founder does not run. It may only shrink: a dosed drill still listed fails,
+ * as does a new undosed drill not listed.
+ */
+const KNOWN_UNDOSED: Record<string, number> = {
+  "first-strict-pullup": 26,
+  "handstand-walk": 31,
+  "muscle-up": 29,
+};
+const hasDose = (ex: Exercise | undefined) => {
+  const d = (ex?.default ?? {}) as Record<string, unknown>;
+  return ["reps", "hold_seconds", "minutes", "minutes_per_set", "distance_m", "reps_per_set"].some(
+    (k) => typeof d[k] === "number",
+  );
+};
+
+describe("every schedulable drill carries a dose (BUG-39)", () => {
+  for (const { id, program } of programs) {
+    const drills = program.drill_library ?? [];
+    if (drills.length === 0) continue;
+    it(`${id}: drills without a dose match the recorded gap`, () => {
+      const undosed = drills.filter((d) => !hasDose(byId[d]));
+      expect(undosed.length, `${id} undosed: ${undosed.join(", ")}`).toBe(KNOWN_UNDOSED[id] ?? 0);
+    });
+  }
+
+  it("overhead-mobility: every drill has a dose and an embedded video", () => {
+    const om = programs.find((p) => p.id === "overhead-mobility")!.program;
+    for (const d of om.drill_library ?? []) {
+      expect(hasDose(byId[d]), `${d} has no dose`).toBe(true);
+      expect(byId[d]?.video_url, `${d} has no video_url`).toMatch(/^https:\/\/www\.youtube\.com\/watch\?v=[\w-]{11}$/);
+    }
+  });
+});
+
+/**
+ * A scheme's "N×M" and the numbers the app actually uses agree (BUG-42).
+ *
+ * `scheme` is prose; the row count comes from `item.sets`, then the library
+ * `default.sets`, then 3. Thursday's split squats were authored "4×6 per
+ * side" and rendered 3 sets of 8, because only the prose said 4×6
+ * (founder, 2026-10-01). The prose stays for people; the numbers are now
+ * authored beside it, and this keeps the two from drifting apart.
+ */
+describe("a scheme's N×M matches the sets and reps the app uses (BUG-42)", () => {
+  for (const { id, program } of programs) {
+    it(`${id}`, () => {
+      const drift: string[] = [];
+      for (const block of program.blocks ?? []) {
+        for (const item of block.items ?? []) {
+          const m = /^\s*(\d+)\s*[×x]\s*(\d+)\s*(min\b|m\b|s\b)?/.exec(item.scheme ?? "");
+          if (!m || !item.exercise_id) continue;
+          const d = (byId[item.exercise_id]?.default ?? {}) as Record<string, unknown>;
+          const sets = item.sets ?? (typeof d.sets === "number" ? d.sets : 3);
+          if (sets !== Number(m[1])) drift.push(`${block.id}/${item.exercise_id}: "${item.scheme}" but ${sets} sets`);
+          if (!m[3]) {
+            const reps = item.reps ?? (typeof d.reps === "number" ? d.reps : undefined);
+            if (reps !== undefined && reps !== Number(m[2])) {
+              drift.push(`${block.id}/${item.exercise_id}: "${item.scheme}" but ${reps} reps`);
+            }
+          }
+        }
+      }
+      expect(drift).toEqual([]);
+    });
+  }
+});
+
 const citationIds = new Set(
   (read("citations.json") as { citations: Array<{ id: string }> }).citations.map((c) => c.id),
 );

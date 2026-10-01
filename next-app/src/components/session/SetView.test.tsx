@@ -411,3 +411,19 @@ describe("Add a set lands on the set it added (2026-09-23)", () => {
     expect(screen.getByRole("button", { name: /Done — set 4 · 120 kg/ })).toBeDefined();
   });
 });
+
+describe("the programme's own reps beat the library default (BUG-42)", () => {
+  it("Thursday's split squat, authored 4×6, offers 6 reps rather than the library's 8", () => {
+    useStore.getState().replaceStore({ version: 2, logs: {}, training_maxes: {} } as Store);
+    renderSet(
+      {
+        exercise: exercise({ id: "bulgarian_split_squat_db", name: "Bulgarian split squat", default: { sets: 3, reps: 8 } } as Partial<Exercise>),
+        item: { exercise_id: "bulgarian_split_squat_db", sets: 4, reps: 6 },
+        rowCount: 4,
+        suggestion: null,
+      },
+      0,
+    );
+    expect(screen.getByText("6 reps")).toBeDefined();
+  });
+});

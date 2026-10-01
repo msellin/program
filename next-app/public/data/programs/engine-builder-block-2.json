@@ -721,7 +721,8 @@
           "exercise_id": "aerobic_short_intervals",
           "order": "A1",
           "role": "main",
-          "scheme": "5×3 min at 92-95% HRmax with 2 min recovery, OR 8×2 min at 95%+ HRmax with 1 min recovery. Pick one per session; alternate weekly."
+          "scheme": "5×3 min at 92-95% HRmax with 2 min recovery, OR 8×2 min at 95%+ HRmax with 1 min recovery. Pick one per session; alternate weekly.",
+          "sets": 5
         }
       ]
     },
