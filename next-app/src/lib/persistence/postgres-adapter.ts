@@ -15,7 +15,8 @@
  */
 
 import { createClient } from "@/lib/supabase/client";
-import { loadStore, saveStore } from "../storage";
+import { loadStore, saveStore, emptyStore } from "../storage";
+import { repairStore, reportStoreRepair } from "../store-repair";
 import { storeSchema, type Store } from "../schemas";
 import type { PersistenceAdapter, PullResult } from "./adapter";
 import { iso as isoDate } from "../utils";
@@ -63,6 +64,14 @@ async function fetchLive(userId: string): Promise<{
   if (!data) return null;
   const parsed = storeSchema.safeParse(data.store);
   if (!parsed.success) {
+    // One malformed field used to make the whole server copy unusable
+    // (BUG-44). Repair it the same way the local load does; the server row
+    // itself is untouched until the next ordinary push.
+    const repaired = repairStore(data.store, emptyStore());
+    if (repaired) {
+      reportStoreRepair("remote", repaired.dropped);
+      return { store: repaired.store, updated_at: Number(data.updated_at) };
+    }
     throw new Error(
       `Remote schema mismatch: ${parsed.error.issues[0]?.message ?? "unknown"}`,
     );

@@ -1,4 +1,5 @@
 import { storeSchema, type Store, type DayLog, type ExerciseLog } from "./schemas";
+import { repairStore, reportStoreRepair } from "./store-repair";
 import { today } from "./utils";
 
 const KEY = "program.log.v2";
@@ -6,7 +7,7 @@ const OLD_KEY = "program.log.v1";
 const CORRUPT_BACKUP_KEY = "program.log.v2.corrupt";
 const SEED_DONE_KEY = "program.log.v2.seeded";  // set once seed-from-repo has run
 
-const emptyStore = (): Store => ({
+export const emptyStore = (): Store => ({
   version: 2,
   logs: {},
   training_maxes: {},
@@ -25,6 +26,14 @@ export function loadStore(): Store {
       const parsed = JSON.parse(raw);
       const result = storeSchema.safeParse(parsed);
       if (result.success) return result.data;
+      // Remove only what is invalid and keep the rest (BUG-44). The raw
+      // payload is still backed up, so nothing the repair drops is lost.
+      const repaired = repairStore(parsed, emptyStore());
+      if (repaired) {
+        localStorage.setItem(CORRUPT_BACKUP_KEY, raw);
+        reportStoreRepair("local", repaired.dropped);
+        return repaired.store;
+      }
       // Try a lenient sanitisation before giving up
       const cleaned = trySanitize(parsed);
       if (cleaned) return cleaned;

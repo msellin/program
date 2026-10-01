@@ -679,7 +679,20 @@ export async function runSimulationV2(
             const nowIso = new Date().toISOString();
             const caps = { ...(store.user_profile.capability_profile ?? {}) };
             for (const [k, v] of Object.entries(capabilitySeed)) {
-              if (caps[k] == null) caps[k] = { measured_value: v, measured_at: nowIso };
+              // The shape `capabilityEntrySchema` requires — the same one
+              // `recordCapabilityMeasurement` writes. `{ measured_value,
+              // measured_at }` failed `storeSchema`, so the app discarded the
+              // WHOLE store on load and every slot/aerobic persona toured an
+              // empty account ("Pick your focus"), failing 14 of 24 on
+              // 2026-10-01 for a reason that had nothing to do with the app.
+              if (caps[k] == null) {
+                caps[k] = {
+                  estimated_level: 1,
+                  confidence: "physical_test",
+                  measured_value: v,
+                  last_measured_at: nowIso,
+                };
+              }
             }
             store.user_profile.capability_profile = caps;
           }
