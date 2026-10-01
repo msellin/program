@@ -150,6 +150,15 @@ const SESSION_SETTLE_MS = 700;
  * closed" into eight downstream flows.
  */
 const CLICK_TIMEOUT_MS = 15_000;
+/**
+ * A text read for an element that may legitimately be absent. Untimed,
+ * `locator.textContent()` waits for the element until the TEST times out —
+ * so once overhead and skill drills gained hold doses (BUG-39/43,
+ * 2026-10-01) and their set screen stopped rendering a "Done — set N"
+ * button, eight personas hung for 15 minutes reading a CTA that a hold
+ * screen does not have.
+ */
+const TEXT_TIMEOUT_MS = 3_000;
 
 function shiftISO(days: number): string {
   return new Date(Date.now() + days * 864e5).toISOString().slice(0, 10);
@@ -231,7 +240,7 @@ async function openBrief(ctx: FlowContext, opts?: { requireSetFlow?: boolean }):
     // swings on whether the sweep happened to land on a lifting day —
     // exactly the weekday fragility this walk exists to remove.
     if (opts?.requireSetFlow) {
-      const label = (await start.first().textContent()) ?? "";
+      const label = (await start.first().textContent({ timeout: TEXT_TIMEOUT_MS })) ?? "";
       if (/log this session/i.test(label)) continue;
     }
     if (await start.first().isDisabled()) {
@@ -307,7 +316,7 @@ async function moveToSetWithRestAfter(ctx: FlowContext): Promise<boolean> {
   const rail = ctx.page.locator('[data-surface="SetView"] [role="tab"], [data-rail-exercise]');
   const count = await rail.count().catch(() => 0);
   for (let i = 0; i < count; i++) {
-    const label = (await rail.nth(i).textContent().catch(() => "")) ?? "";
+    const label = (await rail.nth(i).textContent({ timeout: TEXT_TIMEOUT_MS }).catch(() => "")) ?? "";
     // Rail labels carry progress as "Name2/6" — logged/total in one node.
     const m = label.match(/(\d+)\s*\/\s*(\d+)\s*$/);
     if (!m) continue;
@@ -334,7 +343,7 @@ async function readRestClockSeconds(ctx: FlowContext): Promise<number | null> {
     .locator('[data-surface="RestTakeover"] p')
     .filter({ hasText: /^\d+:\d\d$/ })
     .first()
-    .textContent()
+    .textContent({ timeout: TEXT_TIMEOUT_MS })
     .catch(() => null);
   const m = (t ?? "").trim().match(/^(\d+):(\d\d)$/);
   return m ? Number(m[1]) * 60 + Number(m[2]) : null;
@@ -344,6 +353,14 @@ async function logCurrentSet(ctx: FlowContext): Promise<void> {
   const done = ctx.page.getByRole("button", { name: /^(Done|Save) — set \d+/ });
   if (await done.count()) {
     await done.first().click({ timeout: CLICK_TIMEOUT_MS });
+    return;
+  }
+  // A timed hold renders "Start the hold" and "Log it now" instead; logging
+  // without running the timer is the user's own shortcut, and the only one
+  // that does not make the sweep wait out a real 30-second hold.
+  const logHold = ctx.page.getByRole("button", { name: /^Log it now$/ });
+  if (await logHold.count()) {
+    await logHold.first().click({ timeout: CLICK_TIMEOUT_MS });
     return;
   }
   // AMRAP sets render a rep keypad instead of a single confirm button.
@@ -458,7 +475,7 @@ export const FLOWS: Flow[] = [
             .locator('[data-surface="SetView"] p')
             .filter({ hasText: /^\d+\+? reps?$/ })
             .first()
-            .textContent()
+            .textContent({ timeout: TEXT_TIMEOUT_MS })
             .catch(() => null);
           if (reps == null) return true; // a hold or duration screen
           return Number(reps.match(/\d+/)?.[0] ?? "0") > 0;
@@ -470,7 +487,7 @@ export const FLOWS: Flow[] = [
           const cta = await ctx.page
             .getByRole("button", { name: /^(Done|Save) — set/ })
             .first()
-            .textContent()
+            .textContent({ timeout: TEXT_TIMEOUT_MS })
             .catch(() => null);
           if (cta == null) return true;
           const namesKg = /·\s*[\d.]+\s*kg/.test(cta);
@@ -638,7 +655,7 @@ export const FLOWS: Flow[] = [
         .locator('[data-surface="SetView"] span')
         .filter({ hasText: /· set \d+ of \d+/ })
         .first()
-        .textContent()
+        .textContent({ timeout: TEXT_TIMEOUT_MS })
         .catch(() => null);
 
       await logCurrentSet(ctx);
@@ -750,7 +767,7 @@ export const FLOWS: Flow[] = [
           .locator("p")
           .filter({ hasText: /^\d+:\d\d$/ })
           .first()
-          .textContent()
+          .textContent({ timeout: TEXT_TIMEOUT_MS })
           .catch(() => null);
         const [m, sec] = (t ?? "0:00").trim().split(":").map(Number);
         return m * 60 + sec;
@@ -1012,7 +1029,7 @@ export const FLOWS: Flow[] = [
         // public catalog, so the link is absent rather than unreachable.
         throw new SkipFlow("drill library is not enabled for this persona");
       }
-      const label = ((await drills.first().textContent()) ?? "").trim();
+      const label = ((await drills.first().textContent({ timeout: TEXT_TIMEOUT_MS })) ?? "").trim();
       await drills.first().click({ timeout: CLICK_TIMEOUT_MS });
       await ctx.page.waitForURL(/\/off-plan\/?$/, { timeout: 15_000 }).catch(() => {});
       await ctx.page.waitForTimeout(600);
