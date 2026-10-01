@@ -12,7 +12,7 @@ These are **IDEAS, not action items**. The engine + rehab-first positioning over
 
 **Counts by bucket (post-Cut-D audit, 2026-08-21):**
 
-- **Bugs:** 1 open — BUG-43 (undosed drills in three skill programmes the founder does not run)
+- **Bugs:** 0 open
 - **P0:** 0 open
 - **P1:** 0 open
 - **P2:** 0 open — the last carry (P2-32 icon-stroke discipline) remains `[ ]` deferred as low-ROI codemod, tracked below
@@ -52,7 +52,6 @@ Keep the convention terse — the four markers cover every state. Don't invent n
 
 
 
-- [ ] **BUG-43 (2026-10-01)** — 86 drills in three slot programmes have no dose. Found fixing BUG-39: `first-strict-pullup` (26), `handstand-walk` (31) and `muscle-up` (29) schedule `drill_library` drills whose `exercises.json` `default` is null, so every one renders 3 sets × 1 rep and holds count as reps — the bug the founder hit on overhead-mobility. Recorded as `KNOWN_UNDOSED` in `data-integrity.test.ts`, which may only shrink. Not top priority: the founder runs none of the three. Size: M
 
 - [x] **BUG-4** — first-strict-pullup tier engine bug shipped 2026-08-19 (`82d62f0`). Added program to both proxy tables in `intake-tier.ts` + conservative-defaults entry + 5 regression tests. 14/14 intake-tier tests pass.
 - [x] **BUG-5** — DateNav Home reserved-slot pattern shipped 2026-08-19 (`82d62f0`). Applied Week's `invisible pointer-events-none` treatment; forward-arrow no longer jumps on day change.
@@ -470,6 +469,7 @@ Strikethrough preserves history; these items are OUT of the open list.
 
 **Pre-invite catalog leak (founder, 2026-09-01) — Batch 46:**
 
+- [x] **BUG-43** — The three skill programmes' drills carry a dose, shipped 2026-10-01. 75 unique drills (86 drill-library slots) in first-strict-pullup, handstand-walk and muscle-up got a general `default`: hangs, holds, support holds and freestanding attempts as `hold_seconds` (so the timer runs); reps for pulls, rows, dips, negatives and transitions; `distance_m` for the farmer's carry; `per_side` where one-sided; attempts and video reviews as single reps. `KNOWN_UNDOSED` in `data-integrity.test.ts` is now empty, so any new undosed drill fails.
 - [x] **BUG-38** — The day now says whether there is a top set, shipped 2026-10-01. `BriefView` gained `setShape()` (top set + back-offs / straight sets / deload ladder). The hero reads "Today's working sets · 5 × 5 at 75 kg · No top set today" on a straight-sets day and lists the three weights on a deload; `railScheme` reads "5 × 75 kg", not "1 × 75 kg · 5 × 75 kg"; a 5/3/1 day still says top set and adds "Then 5 × N kg". The basis line gives a % range for a ladder. Founder: "the day should clearly say if there is top set or not." Tests: `BriefView.test.tsx` (3). Verified on local dev with the founder's store.
 - [x] **BUG-39** — Overhead-mobility drills carry a dose, shipped 2026-10-01. All 12 `om_*` drills got a general `default` (sets + reps, or `hold_seconds` for the hang, dowel pullover, arm bar and TGU hold; `per_side` where one-sided). Holds now run the timer ("30s hold · 3 sets"), where before they counted "1 rep". Guard in `data-integrity.test.ts`: every drill-library drill has a dose, except a recorded gap in first-strict-pullup (26), handstand-walk (31) and muscle-up (29) that may only shrink — see BUG-43.
 - [x] **BUG-40** — Overhead-mobility drills have embedded videos, shipped 2026-10-01. Twelve `video_url`s, each found in YouTube search and checked via oEmbed twice ([P]rehab, E3 Rehab, Squat University, Catalyst Athletics, CrossFit, OPEX, Ido Portal, Tom Morrison, Forté, Momentum PT, Clint Hobbs). Close-but-not-exact picks: wall slides (serratus forearm version), half-kneeling dowel press (snatch-grip PVC), TGU hold (half get-up). Guard: every overhead drill has a `youtube.com/watch?v=` URL. The other ~85 search-only exercises remain.

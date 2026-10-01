@@ -923,7 +923,11 @@
         "barlow_2020",
         "wiesinger_2019"
       ],
-      "video_search": "wrist prep handstand warmup"
+      "video_search": "wrist prep handstand warmup",
+      "default": {
+        "sets": 2,
+        "reps": 10
+      }
     },
     {
       "id": "hs_wrist_pushups_floor",
@@ -968,7 +972,11 @@
         "wiesinger_2019",
         "vidal_torija_2025"
       ],
-      "video_search": "wrist push up handstand prep"
+      "video_search": "wrist push up handstand prep",
+      "default": {
+        "sets": 2,
+        "reps": 10
+      }
     },
     {
       "id": "hs_finger_raises",
@@ -1004,7 +1012,12 @@
       "evidence_refs": [
         "vidal_torija_2025"
       ],
-      "video_search": "finger raises handstand wrist prep"
+      "video_search": "finger raises handstand wrist prep",
+      "default": {
+        "sets": 2,
+        "reps": 5,
+        "per_side": true
+      }
     },
     {
       "id": "hs_fingertip_taps",
@@ -1040,7 +1053,11 @@
         "kerwin_trewartha_2001",
         "blenkinsop_2017"
       ],
-      "video_search": "fingertip tapping drill balance"
+      "video_search": "fingertip tapping drill balance",
+      "default": {
+        "sets": 2,
+        "hold_seconds": 20
+      }
     },
     {
       "id": "hs_hollow_body_hold",
@@ -1075,7 +1092,11 @@
       "evidence_refs": [
         "baker_2025_review"
       ],
-      "video_search": "hollow body hold gymnastics"
+      "video_search": "hollow body hold gymnastics",
+      "default": {
+        "sets": 3,
+        "hold_seconds": 20
+      }
     },
     {
       "id": "hs_hollow_rock",
@@ -1117,7 +1138,11 @@
       "evidence_refs": [
         "baker_2025_review"
       ],
-      "video_search": "hollow rock gymnastics"
+      "video_search": "hollow rock gymnastics",
+      "default": {
+        "sets": 3,
+        "reps": 15
+      }
     },
     {
       "id": "hs_arch_hold",
@@ -1153,7 +1178,11 @@
       "evidence_refs": [
         "baker_2025_review"
       ],
-      "video_search": "arch hold superman gymnastics"
+      "video_search": "arch hold superman gymnastics",
+      "default": {
+        "sets": 3,
+        "hold_seconds": 20
+      }
     },
     {
       "id": "hs_incline_90_hold",
@@ -1200,7 +1229,11 @@
         "kinoshita_2022",
         "sadowski_2021"
       ],
-      "video_search": "pike handstand hold feet elevated"
+      "video_search": "pike handstand hold feet elevated",
+      "default": {
+        "sets": 3,
+        "hold_seconds": 20
+      }
     },
     {
       "id": "hs_incline_135_hold",
@@ -1256,7 +1289,11 @@
         "sadowski_2021",
         "ludewig_cook_2000"
       ],
-      "video_search": "elevated pike push handstand progression"
+      "video_search": "elevated pike push handstand progression",
+      "default": {
+        "sets": 3,
+        "hold_seconds": 20
+      }
     },
     {
       "id": "hs_elbow_stand_straddle_l",
@@ -1308,7 +1345,11 @@
       "evidence_refs": [
         "kinoshita_2022"
       ],
-      "video_search": "straddle L stand handstand progression"
+      "video_search": "straddle L stand handstand progression",
+      "default": {
+        "sets": 3,
+        "hold_seconds": 15
+      }
     },
     {
       "id": "hs_wall_walk",
@@ -1355,7 +1396,11 @@
         "kinoshita_2022",
         "wiesinger_2019"
       ],
-      "video_search": "wall walk handstand progression"
+      "video_search": "wall walk handstand progression",
+      "default": {
+        "sets": 3,
+        "reps": 3
+      }
     },
     {
       "id": "hs_wall_hs_hold_chest",
@@ -1417,7 +1462,11 @@
         "kinoshita_2022",
         "sadowski_2021"
       ],
-      "video_search": "chest to wall handstand hold"
+      "video_search": "chest to wall handstand hold",
+      "default": {
+        "sets": 3,
+        "hold_seconds": 30
+      }
     },
     {
       "id": "hs_wall_hs_hold_belly",
@@ -1464,7 +1513,11 @@
         "blenkinsop_2017",
         "sobera_2019"
       ],
-      "video_search": "back to wall handstand kick up hold"
+      "video_search": "back to wall handstand kick up hold",
+      "default": {
+        "sets": 3,
+        "hold_seconds": 20
+      }
     },
     {
       "id": "hs_wall_supported_shrugs",
@@ -1509,7 +1562,11 @@
         "reinold_2007",
         "sadowski_2021"
       ],
-      "video_search": "handstand shoulder shrug wall"
+      "video_search": "handstand shoulder shrug wall",
+      "default": {
+        "sets": 3,
+        "reps": 8
+      }
     },
     {
       "id": "hs_wall_shoulder_taps",
@@ -1556,7 +1613,12 @@
         "kinoshita_2022",
         "grabowiecki_2021"
       ],
-      "video_search": "handstand shoulder taps wall"
+      "video_search": "handstand shoulder taps wall",
+      "default": {
+        "sets": 3,
+        "reps": 6,
+        "per_side": true
+      }
     },
     {
       "id": "hs_kickup_practice",
@@ -1600,7 +1662,11 @@
         "kinoshita_2022",
         "chiviacowsky_wulf_2002"
       ],
-      "video_search": "handstand kick up practice"
+      "video_search": "handstand kick up practice",
+      "default": {
+        "sets": 3,
+        "reps": 5
+      }
     },
     {
       "id": "hs_freestand_attempt",
@@ -1645,7 +1711,11 @@
         "sobera_2019",
         "chiviacowsky_wulf_2002"
       ],
-      "video_search": "freestanding handstand hold beginner"
+      "video_search": "freestanding handstand hold beginner",
+      "default": {
+        "sets": 5,
+        "hold_seconds": 10
+      }
     },
     {
       "id": "hs_tuck_freestand",
@@ -1688,7 +1758,11 @@
         "kinoshita_2022",
         "sobera_2019"
       ],
-      "video_search": "tuck freestanding handstand"
+      "video_search": "tuck freestanding handstand",
+      "default": {
+        "sets": 5,
+        "hold_seconds": 10
+      }
     },
     {
       "id": "hs_single_step_attempt",
@@ -1734,7 +1808,11 @@
         "grabowiecki_2021",
         "kinoshita_2022"
       ],
-      "video_search": "handstand walk first step drill"
+      "video_search": "handstand walk first step drill",
+      "default": {
+        "sets": 3,
+        "reps": 5
+      }
     },
     {
       "id": "hs_walk_shuttle_2_3",
@@ -1781,7 +1859,11 @@
         "grabowiecki_2021",
         "kinoshita_2022"
       ],
-      "video_search": "handstand walk short shuttle"
+      "video_search": "handstand walk short shuttle",
+      "default": {
+        "sets": 3,
+        "reps": 5
+      }
     },
     {
       "id": "hs_walk_continuous_line",
@@ -1824,7 +1906,11 @@
         "grabowiecki_2021",
         "sci_reports_2026_handstand_shoulder"
       ],
-      "video_search": "handstand walk on line"
+      "video_search": "handstand walk on line",
+      "default": {
+        "sets": 5,
+        "reps": 1
+      }
     },
     {
       "id": "hs_walk_marker_path",
@@ -1869,7 +1955,11 @@
         "shea_morgan_1979",
         "potdevin_2018"
       ],
-      "video_search": "handstand walk marker precision"
+      "video_search": "handstand walk marker precision",
+      "default": {
+        "sets": 5,
+        "reps": 1
+      }
     },
     {
       "id": "hs_half_pirouette_wall",
@@ -1915,7 +2005,11 @@
         "kinoshita_2022",
         "potdevin_2018"
       ],
-      "video_search": "wall handstand pirouette 180"
+      "video_search": "wall handstand pirouette 180",
+      "default": {
+        "sets": 3,
+        "reps": 3
+      }
     },
     {
       "id": "hs_half_pirouette_free",
@@ -1967,7 +2061,11 @@
         "potdevin_2018",
         "chiviacowsky_wulf_2002"
       ],
-      "video_search": "freestanding handstand 180 pirouette"
+      "video_search": "freestanding handstand 180 pirouette",
+      "default": {
+        "sets": 3,
+        "reps": 3
+      }
     },
     {
       "id": "hs_full_pirouette_free",
@@ -2012,7 +2110,11 @@
       "evidence_refs": [
         "potdevin_2018"
       ],
-      "video_search": "handstand 360 pirouette"
+      "video_search": "handstand 360 pirouette",
+      "default": {
+        "sets": 3,
+        "reps": 3
+      }
     },
     {
       "id": "hs_walk_over_plate",
@@ -2056,7 +2158,11 @@
         "grabowiecki_2021",
         "simunkova_2024"
       ],
-      "video_search": "handstand walk over plate crossfit"
+      "video_search": "handstand walk over plate crossfit",
+      "default": {
+        "sets": 5,
+        "reps": 1
+      }
     },
     {
       "id": "hs_walk_through_cones",
@@ -2103,7 +2209,11 @@
         "shea_morgan_1979",
         "simunkova_2024"
       ],
-      "video_search": "handstand walk cones weave"
+      "video_search": "handstand walk cones weave",
+      "default": {
+        "sets": 5,
+        "reps": 1
+      }
     },
     {
       "id": "hs_walk_precision_path",
@@ -2149,7 +2259,11 @@
         "kerwin_trewartha_2001",
         "blenkinsop_2017"
       ],
-      "video_search": "handstand walk narrow lane precision"
+      "video_search": "handstand walk narrow lane precision",
+      "default": {
+        "sets": 5,
+        "reps": 1
+      }
     },
     {
       "id": "hs_wrist_downdog_recovery",
@@ -2186,7 +2300,11 @@
         "vidal_torija_2025",
         "wiesinger_2019"
       ],
-      "video_search": "downward dog wrist recovery"
+      "video_search": "downward dog wrist recovery",
+      "default": {
+        "sets": 2,
+        "hold_seconds": 30
+      }
     },
     {
       "id": "hs_wrist_childs_recovery",
@@ -2221,7 +2339,11 @@
       "evidence_refs": [
         "vidal_torija_2025"
       ],
-      "video_search": "childs pose wrist stretch"
+      "video_search": "childs pose wrist stretch",
+      "default": {
+        "sets": 2,
+        "hold_seconds": 30
+      }
     },
     {
       "id": "hs_video_review",
@@ -2259,7 +2381,11 @@
         "chiviacowsky_wulf_2002",
         "rohleder_vogt_2018"
       ],
-      "video_search": "video feedback handstand practice"
+      "video_search": "video feedback handstand practice",
+      "default": {
+        "sets": 1,
+        "reps": 1
+      }
     },
     {
       "id": "wall_cartwheel_exit",
@@ -2886,7 +3012,11 @@
       "evidence_refs": [
         "vigouroux_2007"
       ],
-      "video_search": "dead hang pull up bar tutorial"
+      "video_search": "dead hang pull up bar tutorial",
+      "default": {
+        "sets": 3,
+        "hold_seconds": 30
+      }
     },
     {
       "id": "pu_active_hang",
@@ -2917,7 +3047,11 @@
         "youdas_2010",
         "reinold_2007"
       ],
-      "video_search": "active hang scapular pull up progression"
+      "video_search": "active hang scapular pull up progression",
+      "default": {
+        "sets": 3,
+        "hold_seconds": 20
+      }
     },
     {
       "id": "pu_scap_pull",
@@ -2953,7 +3087,11 @@
         "youdas_2010",
         "ludewig_reynolds_2009"
       ],
-      "video_search": "scapular pull up tutorial"
+      "video_search": "scapular pull up tutorial",
+      "default": {
+        "sets": 3,
+        "reps": 8
+      }
     },
     {
       "id": "pu_scap_retraction_hold",
@@ -2990,7 +3128,11 @@
         "ludewig_reynolds_2009",
         "reinold_2007"
       ],
-      "video_search": "scapular retraction hold pull up bar"
+      "video_search": "scapular retraction hold pull up bar",
+      "default": {
+        "sets": 3,
+        "reps": 5
+      }
     },
     {
       "id": "pu_ring_row_incline",
@@ -3020,7 +3162,11 @@
         "youdas_2010",
         "sinnett_2019"
       ],
-      "video_search": "ring row incline beginner"
+      "video_search": "ring row incline beginner",
+      "default": {
+        "sets": 3,
+        "reps": 10
+      }
     },
     {
       "id": "pu_ring_row_horizontal",
@@ -3057,7 +3203,11 @@
         "youdas_2010",
         "sinnett_2019"
       ],
-      "video_search": "horizontal ring row bodyweight"
+      "video_search": "horizontal ring row bodyweight",
+      "default": {
+        "sets": 3,
+        "reps": 8
+      }
     },
     {
       "id": "pu_ring_row_feet_elevated",
@@ -3094,7 +3244,11 @@
         "sinnett_2019",
         "youdas_2010"
       ],
-      "video_search": "ring row feet elevated"
+      "video_search": "ring row feet elevated",
+      "default": {
+        "sets": 3,
+        "reps": 6
+      }
     },
     {
       "id": "pu_dumbbell_row",
@@ -3123,7 +3277,12 @@
         "sinnett_2019",
         "youdas_2010"
       ],
-      "video_search": "single arm dumbbell row bench"
+      "video_search": "single arm dumbbell row bench",
+      "default": {
+        "sets": 3,
+        "reps": 10,
+        "per_side": true
+      }
     },
     {
       "id": "pu_lat_pulldown",
@@ -3154,7 +3313,11 @@
         "youdas_2010",
         "sinnett_2019"
       ],
-      "video_search": "wide grip lat pulldown technique"
+      "video_search": "wide grip lat pulldown technique",
+      "default": {
+        "sets": 3,
+        "reps": 8
+      }
     },
     {
       "id": "pu_negative_pullup_5s",
@@ -3198,7 +3361,11 @@
         "roig_2009",
         "dickie_2017"
       ],
-      "video_search": "negative pull up eccentric"
+      "video_search": "negative pull up eccentric",
+      "default": {
+        "sets": 3,
+        "reps": 4
+      }
     },
     {
       "id": "pu_negative_pullup_10s",
@@ -3236,7 +3403,11 @@
         "roig_2009",
         "dickie_2017"
       ],
-      "video_search": "10 second negative pull up eccentric"
+      "video_search": "10 second negative pull up eccentric",
+      "default": {
+        "sets": 3,
+        "reps": 3
+      }
     },
     {
       "id": "pu_isometric_top_hold",
@@ -3273,7 +3444,11 @@
         "roig_2009",
         "sinnett_2019"
       ],
-      "video_search": "isometric hold chin over bar"
+      "video_search": "isometric hold chin over bar",
+      "default": {
+        "sets": 3,
+        "hold_seconds": 15
+      }
     },
     {
       "id": "pu_isometric_mid_hold",
@@ -3309,7 +3484,11 @@
       "evidence_refs": [
         "roig_2009"
       ],
-      "video_search": "isometric hold mid range pull up"
+      "video_search": "isometric hold mid range pull up",
+      "default": {
+        "sets": 3,
+        "hold_seconds": 10
+      }
     },
     {
       "id": "pu_isometric_chin_over_bar",
@@ -3346,7 +3525,11 @@
       "evidence_refs": [
         "sinnett_2019"
       ],
-      "video_search": "chin over bar hold"
+      "video_search": "chin over bar hold",
+      "default": {
+        "sets": 2,
+        "hold_seconds": 15
+      }
     },
     {
       "id": "pu_arch_hold",
@@ -3375,7 +3558,11 @@
       "evidence_refs": [
         "youdas_2010"
       ],
-      "video_search": "arch hold gymnastics"
+      "video_search": "arch hold gymnastics",
+      "default": {
+        "sets": 3,
+        "hold_seconds": 20
+      }
     },
     {
       "id": "pu_hollow_body_hold",
@@ -3403,7 +3590,11 @@
       "evidence_refs": [
         "youdas_2010"
       ],
-      "video_search": "hollow body hold gymnastics"
+      "video_search": "hollow body hold gymnastics",
+      "default": {
+        "sets": 3,
+        "hold_seconds": 20
+      }
     },
     {
       "id": "pu_hollow_body_pullover",
@@ -3440,7 +3631,11 @@
         "youdas_2010",
         "sinnett_2019"
       ],
-      "video_search": "hollow body pullover"
+      "video_search": "hollow body pullover",
+      "default": {
+        "sets": 3,
+        "reps": 8
+      }
     },
     {
       "id": "pu_band_pullup_heavy",
@@ -3477,7 +3672,11 @@
         "sinnett_2019",
         "youdas_2010"
       ],
-      "video_search": "band assisted pull up heavy band"
+      "video_search": "band assisted pull up heavy band",
+      "default": {
+        "sets": 3,
+        "reps": 6
+      }
     },
     {
       "id": "pu_band_pullup_light",
@@ -3513,7 +3712,11 @@
       "evidence_refs": [
         "sinnett_2019"
       ],
-      "video_search": "band assisted pull up light band"
+      "video_search": "band assisted pull up light band",
+      "default": {
+        "sets": 3,
+        "reps": 5
+      }
     },
     {
       "id": "pu_first_strict_attempt",
@@ -3554,7 +3757,11 @@
       "evidence_refs": [
         "sinnett_2019"
       ],
-      "video_search": "first strict pull up attempt technique"
+      "video_search": "first strict pull up attempt technique",
+      "default": {
+        "sets": 3,
+        "reps": 1
+      }
     },
     {
       "id": "pu_partial_rom_pullup",
@@ -3592,7 +3799,11 @@
         "roig_2009",
         "sinnett_2019"
       ],
-      "video_search": "partial rom pull up top range"
+      "video_search": "partial rom pull up top range",
+      "default": {
+        "sets": 3,
+        "reps": 5
+      }
     },
     {
       "id": "pu_slow_tempo_pullup",
@@ -3630,7 +3841,11 @@
         "roig_2009",
         "sinnett_2019"
       ],
-      "video_search": "slow tempo pull up 3-1-3"
+      "video_search": "slow tempo pull up 3-1-3",
+      "default": {
+        "sets": 3,
+        "reps": 3
+      }
     },
     {
       "id": "pu_grease_the_groove_singles",
@@ -3665,7 +3880,11 @@
       "evidence_refs": [
         "sinnett_2019"
       ],
-      "video_search": "grease the groove pull ups Pavel"
+      "video_search": "grease the groove pull ups Pavel",
+      "default": {
+        "sets": 5,
+        "reps": 1
+      }
     },
     {
       "id": "pu_farmers_carry",
@@ -3694,7 +3913,11 @@
       "evidence_refs": [
         "vigouroux_2007"
       ],
-      "video_search": "farmers walk grip endurance"
+      "video_search": "farmers walk grip endurance",
+      "default": {
+        "sets": 3,
+        "distance_m": 30
+      }
     },
     {
       "id": "pu_shoulder_prep_band",
@@ -3724,7 +3947,11 @@
         "reinold_2007",
         "ludewig_reynolds_2009"
       ],
-      "video_search": "band shoulder prep face pull external rotation"
+      "video_search": "band shoulder prep face pull external rotation",
+      "default": {
+        "sets": 4,
+        "reps": 10
+      }
     },
     {
       "id": "pu_video_review",
@@ -3752,7 +3979,11 @@
       "evidence_refs": [
         "chiviacowsky_wulf_2002"
       ],
-      "video_search": "how to record and review your workout"
+      "video_search": "how to record and review your workout",
+      "default": {
+        "sets": 1,
+        "reps": 1
+      }
     },
     {
       "id": "mu_false_grip_hang",
@@ -3780,7 +4011,11 @@
       "evidence_refs": [
         "vidal_rovira_2024"
       ],
-      "video_search": "false grip hang rings tutorial"
+      "video_search": "false grip hang rings tutorial",
+      "default": {
+        "sets": 3,
+        "hold_seconds": 15
+      }
     },
     {
       "id": "mu_false_grip_ring_row",
@@ -3817,7 +4052,11 @@
         "vidal_rovira_2024",
         "sinnett_2019"
       ],
-      "video_search": "false grip ring row muscle up prep"
+      "video_search": "false grip ring row muscle up prep",
+      "default": {
+        "sets": 3,
+        "reps": 8
+      }
     },
     {
       "id": "mu_false_grip_pullup",
@@ -3858,7 +4097,11 @@
       "evidence_refs": [
         "vidal_rovira_2024"
       ],
-      "video_search": "false grip pull up rings muscle up progression"
+      "video_search": "false grip pull up rings muscle up progression",
+      "default": {
+        "sets": 3,
+        "reps": 3
+      }
     },
     {
       "id": "mu_ring_dip_support_hold",
@@ -3887,7 +4130,11 @@
         "reinold_2007",
         "roig_2009"
       ],
-      "video_search": "ring support hold RTO"
+      "video_search": "ring support hold RTO",
+      "default": {
+        "sets": 3,
+        "hold_seconds": 20
+      }
     },
     {
       "id": "mu_ring_dip_negative",
@@ -3924,7 +4171,11 @@
         "roig_2009",
         "reinold_2007"
       ],
-      "video_search": "ring dip negative eccentric"
+      "video_search": "ring dip negative eccentric",
+      "default": {
+        "sets": 3,
+        "reps": 4
+      }
     },
     {
       "id": "mu_ring_dip_full",
@@ -3961,7 +4212,11 @@
         "reinold_2007",
         "sinnett_2019"
       ],
-      "video_search": "ring dip full range strict"
+      "video_search": "ring dip full range strict",
+      "default": {
+        "sets": 3,
+        "reps": 5
+      }
     },
     {
       "id": "mu_ring_dip_deep",
@@ -3997,7 +4252,11 @@
       "evidence_refs": [
         "reinold_2007"
       ],
-      "video_search": "deep ring dip full depth"
+      "video_search": "deep ring dip full depth",
+      "default": {
+        "sets": 3,
+        "reps": 4
+      }
     },
     {
       "id": "mu_band_assisted_ring_dip",
@@ -4063,7 +4322,11 @@
       "evidence_refs": [
         "reinold_2007"
       ],
-      "video_search": "RTO ring dip rings turned out"
+      "video_search": "RTO ring dip rings turned out",
+      "default": {
+        "sets": 3,
+        "reps": 4
+      }
     },
     {
       "id": "mu_ring_support_lockout",
@@ -4099,7 +4362,11 @@
       "evidence_refs": [
         "reinold_2007"
       ],
-      "video_search": "ring support lockout RTO"
+      "video_search": "ring support lockout RTO",
+      "default": {
+        "sets": 3,
+        "hold_seconds": 20
+      }
     },
     {
       "id": "mu_transition_seated_band",
@@ -4128,7 +4395,11 @@
       "evidence_refs": [
         "vidal_rovira_2024"
       ],
-      "video_search": "seated band muscle up transition drill"
+      "video_search": "seated band muscle up transition drill",
+      "default": {
+        "sets": 3,
+        "reps": 5
+      }
     },
     {
       "id": "mu_transition_negative_low",
@@ -4165,7 +4436,11 @@
         "vidal_rovira_2024",
         "roig_2009"
       ],
-      "video_search": "low ring transition negative muscle up"
+      "video_search": "low ring transition negative muscle up",
+      "default": {
+        "sets": 3,
+        "reps": 4
+      }
     },
     {
       "id": "mu_transition_negative_high",
@@ -4208,7 +4483,11 @@
         "vidal_rovira_2024",
         "roig_2009"
       ],
-      "video_search": "high ring transition negative muscle up"
+      "video_search": "high ring transition negative muscle up",
+      "default": {
+        "sets": 3,
+        "reps": 3
+      }
     },
     {
       "id": "mu_jump_muscle_up",
@@ -4243,7 +4522,11 @@
       "evidence_refs": [
         "vidal_rovira_2024"
       ],
-      "video_search": "jump assisted muscle up"
+      "video_search": "jump assisted muscle up",
+      "default": {
+        "sets": 3,
+        "reps": 3
+      }
     },
     {
       "id": "mu_low_ring_muscle_up",
@@ -4279,7 +4562,11 @@
       "evidence_refs": [
         "vidal_rovira_2024"
       ],
-      "video_search": "low ring muscle up transition drill"
+      "video_search": "low ring muscle up transition drill",
+      "default": {
+        "sets": 3,
+        "reps": 5
+      }
     },
     {
       "id": "mu_first_strict_ring_mu_attempt",
@@ -4327,7 +4614,11 @@
         "vidal_rovira_2024",
         "sinnett_2019"
       ],
-      "video_search": "first strict ring muscle up attempt"
+      "video_search": "first strict ring muscle up attempt",
+      "default": {
+        "sets": 3,
+        "reps": 1
+      }
     },
     {
       "id": "mu_straight_arm_pulldown_band",
@@ -4358,7 +4649,11 @@
         "youdas_2010",
         "sinnett_2019"
       ],
-      "video_search": "band straight arm pulldown"
+      "video_search": "band straight arm pulldown",
+      "default": {
+        "sets": 3,
+        "reps": 12
+      }
     },
     {
       "id": "mu_straight_arm_pulldown_cable",
@@ -4395,7 +4690,11 @@
         "youdas_2010",
         "sinnett_2019"
       ],
-      "video_search": "cable straight arm pulldown"
+      "video_search": "cable straight arm pulldown",
+      "default": {
+        "sets": 3,
+        "reps": 10
+      }
     },
     {
       "id": "mu_video_review",
@@ -4423,7 +4722,11 @@
       "evidence_refs": [
         "chiviacowsky_wulf_2002"
       ],
-      "video_search": "how to record muscle up attempt"
+      "video_search": "how to record muscle up attempt",
+      "default": {
+        "sets": 1,
+        "reps": 1
+      }
     },
     {
       "id": "bench_press",

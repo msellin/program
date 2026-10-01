@@ -234,15 +234,11 @@ describe("no program lost its cue rendering", () => {
  * 3 sets of 1 rep, and a 30-second passive hang was logged as "1 rep" three
  * times (founder, 2026-10-01).
  *
- * KNOWN_UNDOSED is the gap as it stood that day, in three programmes the
- * founder does not run. It may only shrink: a dosed drill still listed fails,
- * as does a new undosed drill not listed.
+ * KNOWN_UNDOSED held the same gap in first-strict-pullup (26), handstand-walk
+ * (31) and muscle-up (29) until BUG-43 closed it the same day. It stays as
+ * the escape hatch, and it is empty: a new undosed drill fails.
  */
-const KNOWN_UNDOSED: Record<string, number> = {
-  "first-strict-pullup": 26,
-  "handstand-walk": 31,
-  "muscle-up": 29,
-};
+const KNOWN_UNDOSED: Record<string, number> = {};
 const hasDose = (ex: Exercise | undefined) => {
   const d = (ex?.default ?? {}) as Record<string, unknown>;
   return ["reps", "hold_seconds", "minutes", "minutes_per_set", "distance_m", "reps_per_set"].some(
