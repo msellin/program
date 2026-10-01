@@ -11,7 +11,27 @@ vi.mock("@sentry/nextjs", () => ({ captureMessage: vi.fn() }));
  * intact logs) and the server copy was refused. These pin that a single bad
  * entry now costs that entry and nothing else.
  */
-const good = () =>
+type Fixture = {
+  version: number;
+  training_maxes: unknown;
+  logs: Record<
+    string,
+    {
+      date: string;
+      notes: string;
+      symptoms: null;
+      derived_state: string;
+      exercises: Record<string, { done: boolean; sets: Array<Record<string, unknown>> }>;
+    }
+  >;
+  user_profile: {
+    active_program_id: string;
+    active_program_ids: string[];
+    capability_profile: Record<string, Record<string, unknown>>;
+  };
+};
+
+const good = (): Fixture =>
   ({
     version: 2,
     training_maxes: { back_squat_highbar: 122.5 },
@@ -36,7 +56,7 @@ const good = () =>
         strict_pullup_max_reps: { estimated_level: 2, confidence: "physical_test", measured_value: 1, last_measured_at: "2026-09-27T08:00:00.000Z" },
       },
     },
-  }) as Record<string, any>;
+  });
 
 describe("repairStore (BUG-44)", () => {
   it("leaves a valid store exactly as it is", () => {
