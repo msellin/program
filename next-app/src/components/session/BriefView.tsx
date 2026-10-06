@@ -216,9 +216,16 @@ export function BriefView({
                     ? "No top set today \u2014 every set at the same weight."
                     : heroShape.kind === "ladder"
                       ? "No top set today \u2014 one set at each weight, lightest first."
-                      : heroShape.backoff
-                        ? `Then ${heroShape.backoff.sets} \u00d7 ${heroShape.backoff.kg} kg.`
-                        : null}
+                      : [
+                          heroShape.ramp.length
+                            ? `After ${heroShape.ramp.map((w) => `${w.kg} \u00d7 ${w.reps}`).join(", ")}.`
+                            : null,
+                          heroShape.backoff
+                            ? `Then ${heroShape.backoff.sets} \u00d7 ${heroShape.backoff.kg} kg.`
+                            : null,
+                        ]
+                          .filter(Boolean)
+                          .join(" ") || null}
                 </p>
                 {basisLine(hero, store) ? (
                   <p className="text-[14px] leading-snug text-ink">{basisLine(hero, store)}</p>
@@ -483,6 +490,12 @@ export function railScheme(r: RailExercise): string {
   if (shape.kind === "straight") return `${shape.sets} × ${shape.kg} kg`;
   if (shape.kind === "ladder") return `${shape.kgs.length} sets · ${shape.kgs.join(" / ")} kg`;
   const { top_set, fsl } = r.suggestion;
+  // With ramp sets every row before the back-offs differs, so each is
+  // spelled weight × reps: "85 × 3 · 97.5 × 3 · 110 × 3+ · 5 × 85 kg".
+  if (shape.ramp.length) {
+    const sets = [...shape.ramp, top_set].map((w) => `${w.kg} × ${w.reps}`);
+    return [...sets, ...(fsl ? [`${fsl.sets} × ${fsl.kg} kg`] : [])].join(" · ");
+  }
   if (fsl) return `1 × ${top_set.kg} kg · ${fsl.sets} × ${fsl.kg} kg`;
   return `${r.rowCount} sets · ${top_set.kg} kg`;
 }
@@ -500,7 +513,14 @@ export function railScheme(r: RailExercise): string {
  * five sets and none. The founder could not tell what was prescribed.
  */
 export type SetShape =
-  | { kind: "top_set"; kg: number; reps: string; backoff: { sets: number; kg: number } | null }
+  | {
+      kind: "top_set";
+      kg: number;
+      reps: string;
+      /** The 5/3/1 working sets before the top set, lightest first. */
+      ramp: { kg: number; reps: string }[];
+      backoff: { sets: number; kg: number } | null;
+    }
   | { kind: "straight"; sets: number; kg: number; reps: string }
   | { kind: "ladder"; kgs: number[]; reps: string }
   | { kind: "none" };
@@ -518,6 +538,7 @@ export function setShape(r: RailExercise): SetShape {
     kind: "top_set",
     kg: sug.top_set.kg,
     reps: sug.top_set.reps,
+    ramp: sug.ramp_sets ?? [],
     backoff: sug.fsl ? { sets: sug.fsl.sets, kg: sug.fsl.kg } : null,
   };
 }

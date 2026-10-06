@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { countLoggedSets } from "@/lib/set-progress";
+import { prescriptionRows } from "@/lib/engine/suggest";
 import { BottomSheet } from "@/components/session/shared/BottomSheet";
 import { VideoModal } from "@/components/VideoModal";
 import { loadProgram } from "@/lib/data-loader";
@@ -96,16 +97,9 @@ export function OverflowSheet({
   const tm = store.training_maxes[exercise.id];
 
   const markAllPrescribed = () => {
+    const rows = prescriptionRows(active.suggestion, active.schemeRowCount ?? active.rowCount);
     for (let i = 0; i < active.rowCount; i++) {
-      const prescribed = active.suggestion?.working_sets?.length
-        ? (active.suggestion.working_sets[i] ?? null)
-        : active.suggestion?.fsl
-        ? i === 0
-          ? active.suggestion.top_set
-          : { kg: active.suggestion.fsl.kg, reps: String(active.suggestion.fsl.reps) }
-        : i === active.rowCount - 1 && active.suggestion
-          ? active.suggestion.top_set
-          : null;
+      const prescribed = rows[i] ?? null;
       if (!prescribed) continue;
       const reps = parseInt(prescribed.reps, 10);
       updateSet(active.blockId, exercise.id, i, { weight_kg: prescribed.kg, reps: Number.isFinite(reps) ? reps : null }, date);

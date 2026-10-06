@@ -8,7 +8,7 @@ import { activePhaseFor, isPastProgramEnd, isAwayOn, HOLIDAY_GAP } from "@/lib/e
 import { blocksForDate, composeBlockForUser } from "@/lib/engine/plan-generator";
 import { getBlocksForDate, isBlockObjectOn, DAY_VISIBLE_BLOCK_STATES } from "@/lib/engine/block-selectors";
 import { migrateLegacyToBlocks, needsBlockMigration } from "@/lib/migrations/legacy-to-blocks";
-import { suggestForExercise, type Suggestion } from "@/lib/engine/suggest";
+import { prescriptionRows, suggestForExercise, type Suggestion } from "@/lib/engine/suggest";
 import { selectProposals } from "@/lib/proposals/select";
 import { dedupeItems, planDayItems, humanBlockName, programDisplayName } from "@/lib/day-format";
 import { RestDayCard, GraduationCard } from "@/components/session/shared/StatusCards";
@@ -467,18 +467,10 @@ function useMemoRail(
           (typeof item.sets === "number" ? item.sets : undefined) ??
           (typeof exercise.default?.sets === "number" ? (exercise.default.sets as number) : undefined) ??
           3;
-        // A straight-set day is `fsl.sets` rows, not `fsl.sets + 1`. The
-        // extra row existed because `top_set` + `fsl` can only describe
-        // 5/3/1, so a plain 5×5 was encoded as 1 + 5×5 and rendered six
-        // identical sets for a five-set prescription.
-        // `working_sets` is an explicit per-row ladder and wins outright.
-        // Without it, a week with no FSL (the 5/3/1 deload) fell through to
-        // `defaultSets` — 5 rows for a three-set prescription, four blank.
-        const schemeRowCount = suggestion?.working_sets?.length
-          ? suggestion.working_sets.length
-          : suggestion?.fsl
-            ? suggestion.fsl.sets + (suggestion.straight_sets ? 0 : 1)
-            : defaultSets;
+        // Row shape lives in `prescriptionRows`: ramp sets + top set + FSL on
+        // a 5/3/1 day, `fsl.sets` on a straight-set day, the ladder on a
+        // deload. See its docblock for why it stopped being derived here.
+        const schemeRowCount = prescriptionRows(suggestion, defaultSets).length;
         /**
          * The prescription is a FLOOR, not a ceiling.
          *
@@ -515,9 +507,9 @@ function useMemoRail(
           // has always used.
           isLoadable: ["strength", "unilateral"].includes(exercise.category),
           optional: item.optional === true,
-          // FSL rows sit AFTER the top set (SetView's `prescribed` maps
-          // index 0 → top_set, the rest → fsl), so the optional rows are
-          // exactly the trailing `fsl.sets`.
+          // FSL rows sit AFTER the ramp sets and the top set (see
+          // `prescriptionRows`), so the optional rows are exactly the
+          // trailing `fsl.sets`.
           optionalRows: suggestion?.fsl?.optional ? suggestion.fsl.sets : 0,
         });
       }

@@ -10,6 +10,7 @@ import { isSetPR } from "@/lib/pr";
 import { platesLabel } from "@/lib/plates";
 import { restSecondsFor, exerciseListName } from "@/lib/day-format";
 import { lastSessionSetsFor } from "@/lib/engine/history";
+import { prescriptionRows } from "@/lib/engine/suggest";
 import { OverflowSheet } from "@/components/session/OverflowSheet";
 import type { RailExercise, SessionSheet } from "@/components/session/DaySession";
 
@@ -146,15 +147,9 @@ export function SetView({
     if (perSide) parts.push("per side");
     return parts.length ? parts.join(" · ") : null;
   })();
-  const prescribed = active.suggestion?.working_sets?.length
-    ? (active.suggestion.working_sets[activeSetIndex] ?? null)
-    : active.suggestion?.fsl
-    ? activeSetIndex === 0 && !active.suggestion.straight_sets
-      ? active.suggestion.top_set
-      : { kg: active.suggestion.fsl.kg, reps: String(active.suggestion.fsl.reps) }
-    : activeSetIndex === active.rowCount - 1 && active.suggestion
-      ? active.suggestion.top_set
-      : null;
+  const prescribed = active.suggestion
+    ? (prescriptionRows(active.suggestion, active.schemeRowCount ?? active.rowCount)[activeSetIndex] ?? null)
+    : null;
   const isAmrap = !!prescribed?.reps?.includes("+");
   // Time-based work. An exercise that authors `hold_seconds` and no reps
   // is held, not counted — a rep stepper is the wrong instrument for it,

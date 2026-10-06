@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { cn, hapticTap } from "@/lib/utils";
 import { useStore, useDayExercise, entrySets } from "@/lib/useStore";
-import { suggestForExercise, inferTMFromSet, type Suggestion } from "@/lib/engine/suggest";
+import { prescriptionRows, suggestForExercise, inferTMFromSet, type Suggestion } from "@/lib/engine/suggest";
 import { lastSessionSetsFor } from "@/lib/engine/history";
 import { isSetPR } from "@/lib/pr";
 import { SetRow } from "./SetRow";
@@ -88,11 +88,8 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
   // rowCount ignored FSL and defaulted to 3 or defaultSets, so users on
   // squat/pull heavy days saw 4 FSL + 1 top = 5 rows (missing FSL 5) or
   // even worse, 3 rows total. Founder-reported 2026-08-18.
-  const schemeRowCount = suggestion?.working_sets?.length
-    ? suggestion.working_sets.length
-    : suggestion?.fsl
-      ? suggestion.fsl.sets + 1
-      : defaultSets;
+  const prescribed = prescriptionRows(suggestion, defaultSets);
+  const schemeRowCount = prescribed.length;
   const rowCount = Math.max(sets.length, schemeRowCount);
 
   // Auto-expand once the user starts logging (any set has a value).
@@ -298,18 +295,7 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
                       index={i}
                       set={setForRow}
                       prev={prevProp}
-                      prescribed={
-                        // 5/3/1 order fix (2026-08-18): top set is the AMRAP;
-                        // canonical Wendler order is top set first, then FSL.
-                        // Previously top set was rendered as the LAST row.
-                        suggestion?.fsl
-                          ? i === 0
-                            ? suggestion.top_set
-                            : { kg: suggestion.fsl.kg, reps: String(suggestion.fsl.reps) }
-                          : i === rowCount - 1 && suggestion
-                            ? suggestion.top_set
-                            : null
-                      }
+                      prescribed={prescribed[i] ?? null}
                       isPR={pr}
                       restSeconds={restSecondsFor(exercise)}
                       onChange={(patch) => updateSet(blockId, exercise.id, i, patch, activeDate)}

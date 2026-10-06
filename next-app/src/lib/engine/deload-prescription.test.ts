@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
-import { suggestForExercise } from "./suggest";
+import { prescriptionRows, suggestForExercise, type Suggestion } from "./suggest";
 import { STANDARD_PLATES_KG } from "../plates";
 import type { Program, Store } from "../schemas";
 
@@ -40,16 +40,8 @@ const store = {
   training_maxes: { back_squat_highbar: 112.5, front_squat: 112.5, block_pull_midshin: 155 },
 } as unknown as Store;
 
-/** Mirrors DaySession's row maths — the number of rows the user is shown. */
-const rowsFor = (
-  s: { working_sets?: unknown[]; fsl?: { sets: number } | null; straight_sets?: boolean } | null,
-  defaultSets: number,
-) =>
-  s?.working_sets?.length
-    ? s.working_sets.length
-    : s?.fsl
-      ? s.fsl.sets + (s.straight_sets ? 0 : 1)
-      : defaultSets;
+/** The number of rows the user is shown — the same function DaySession uses. */
+const rowsFor = (s: Suggestion | null, defaultSets: number) => prescriptionRows(s, defaultSets).length;
 
 const BAR_STEP = Math.min(...STANDARD_PLATES_KG) * 2;
 const isLoadable = (kg: number) => Math.abs(kg / BAR_STEP - Math.round(kg / BAR_STEP)) < 1e-9;
@@ -84,10 +76,10 @@ describe("the deload week prescribes the sets it actually wants", () => {
     expect(s!.top_set.kg).toBe(kgs[kgs.length - 1]);
   });
 
-  it("does not hide two thirds of the session in `warmups`", () => {
-    // The warm-up line renders as text. Anything listed there is work the
-    // user is told is optional preamble.
-    expect(s?.warmups ?? []).toEqual([]);
+  it("does not split the ladder into `ramp_sets` + a top set", () => {
+    // A deload is three different working sets and no top set. Splitting it
+    // into ramp sets + `top_set` would put a TOP SET card over a 60% day.
+    expect(s?.ramp_sets ?? []).toEqual([]);
   });
 
   it("says the word deload, so the screen explains itself", () => {
@@ -110,7 +102,7 @@ describe("every prescribed weight can be put on a bar", () => {
       const all = [
         s.top_set.kg,
         ...(s.working_sets ?? []).map((w) => w.kg),
-        ...(s.warmups ?? []).map((w) => w.kg),
+        ...(s.ramp_sets ?? []).map((w) => w.kg),
         ...(s.fsl ? [s.fsl.kg] : []),
       ];
       for (const kg of all) {
@@ -140,7 +132,10 @@ describe("the heavy weeks are unchanged", () => {
     expect(s?.fsl?.sets).toBe(5);
   });
 
-  it("still shows six rows — one top set plus five back-offs", () => {
-    expect(rowsFor(s!, 5)).toBe(6);
+  // Was "six rows — one top set plus five back-offs", which asserted the
+  // defect fixed 2026-10-06: the two 5/3/1 sets before the top set were
+  // missing from every heavy week. See ramp-sets.test.ts.
+  it("shows eight rows — two ramp sets, the top set, five back-offs", () => {
+    expect(rowsFor(s!, 5)).toBe(8);
   });
 });

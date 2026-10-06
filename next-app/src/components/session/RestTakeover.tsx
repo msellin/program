@@ -9,6 +9,7 @@ import type { RailExercise } from "@/components/session/DaySession";
 import type { UpNext } from "@/components/session/shared/advance";
 import { ProposalCard } from "@/components/workout/ProposalCard";
 import type { Proposal } from "@/lib/schemas";
+import { prescriptionRows } from "@/lib/engine/suggest";
 
 /**
  * The scale bottomed out at RPE 7 until 2026-09-01, and that cost real
@@ -306,9 +307,15 @@ export function RestTakeover({
             <p className="text-[20px] font-semibold text-strong mb-1 tracking-[-.02em]">
               {upNext.kind === "set"
                 ? `Set ${upNext.setIndex + 1} of ${upNext.rail.rowCount}`
-                : upNext.rail.suggestion
-                  ? `${upNext.rail.suggestion.top_set.kg} kg × ${upNext.rail.suggestion.top_set.reps}`
-                  : `${upNext.rail.rowCount} sets`}
+                : (() => {
+                    // The first row, not the top set: on a 5/3/1 day the
+                    // next exercise opens on its lightest ramp set.
+                    const first = prescriptionRows(
+                      upNext.rail.suggestion,
+                      upNext.rail.schemeRowCount ?? upNext.rail.rowCount,
+                    ).find((r) => r != null);
+                    return first ? `${first.kg} kg × ${first.reps}` : `${upNext.rail.rowCount} sets`;
+                  })()}
             </p>
             <p className="text-[14.5px] text-ink">{upNext.rail.exercise.name}</p>
           </>

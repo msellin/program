@@ -82,7 +82,18 @@ const BAR_STEP_KG = Math.min(...STANDARD_PLATES_KG) * 2;
 const loadable = (v: number) => round(v, BAR_STEP_KG);
 
 export type Suggestion = {
-  warmups?: { kg: number; reps: string }[];
+  /**
+   * The 5/3/1 sets BEFORE the top set — 65/75% × 5, 70/80% × 3, 75/85% × 5/3.
+   * These are WORKING sets, one row each, not a warm-up line.
+   *
+   * Was `warmups`, rendered as one muted text line in the old ExerciseCard and
+   * not at all in the set-by-set session. So every 5/3/1 week opened cold on
+   * the top set: the founder's 2026-10-05 squat day showed set 1 as 110 × 3+
+   * and then 5 × 85, with 85 × 3 and 97.5 × 3 nowhere. The name said
+   * "optional preamble" and every surface believed it. Same defect the deload
+   * had before `working_sets` existed, in the three weeks that do have FSL.
+   */
+  ramp_sets?: { kg: number; reps: string }[];
   top_set: { kg: number; reps: string };
   /**
    * First-Set-Last volume. `optional: true` marks these trailing sets as
@@ -118,7 +129,7 @@ export type Suggestion = {
    * It exists because `top_set` + `fsl` can only describe "one heavy set then
    * N identical lighter ones", and a 5/3/1 deload is three DIFFERENT working
    * sets (40/50/60% × 5). That shape had nowhere to go, so the deload was
-   * folded into `warmups` (which render as a text line, not rows) plus a
+   * folded into `warmups` (now `ramp_sets`; then a text line, not rows) plus a
    * `top_set`, and `fsl: null` then sent the row count to `defaultSets` — 5,
    * from `exercises.json`. The founder hit it on 2026-09-21: five rows for a
    * three-set prescription, four of them blank, the only weight on the last.
@@ -130,6 +141,49 @@ export type Suggestion = {
   reasoning: string;
   cap_applied?: boolean;
 };
+
+export type PrescribedRow = { kg: number; reps: string };
+
+/**
+ * The prescription as rows: what set N of this exercise asks for, in order.
+ *
+ * The ONE place a suggestion's shape turns into sets. Before this, five
+ * surfaces (DaySession, SetView, OverflowSheet, ExerciseCard, OffPlanSession)
+ * each re-derived "row 0 is the top set, the rest are FSL" by hand, which is
+ * how `ramp_sets` could be dropped by all of them at once, and how two of them
+ * still counted a straight 5×5 as six rows after the other three had stopped.
+ *
+ *   - `working_sets` (deload, peak ladder) → exactly those rows;
+ *   - straight sets (variant/volume)       → `fsl.sets` rows at one weight;
+ *   - 5/3/1 with FSL                       → ramp sets, top set, then FSL;
+ *   - no FSL (autoreg, reintro)            → `defaultSets` rows in total, only
+ *     the last carrying a weight (the top set).
+ *
+ * The length never depends on `defaultSets` except in that last case, so
+ * passing a previous result's length back in returns the same rows.
+ */
+export function prescriptionRows(
+  s: Suggestion | null | undefined,
+  defaultSets: number,
+): (PrescribedRow | null)[] {
+  if (!s) return Array.from({ length: defaultSets }, () => null);
+  if (s.working_sets?.length) return s.working_sets.map((w) => ({ ...w }));
+  if (s.fsl && s.straight_sets) {
+    const fsl = s.fsl;
+    return Array.from({ length: fsl.sets }, () => ({ kg: fsl.kg, reps: String(fsl.reps) }));
+  }
+  const ramp: PrescribedRow[] = (s.ramp_sets ?? []).map((w) => ({ ...w }));
+  if (s.fsl) {
+    const fsl = s.fsl;
+    return [
+      ...ramp,
+      { ...s.top_set },
+      ...Array.from({ length: fsl.sets }, () => ({ kg: fsl.kg, reps: String(fsl.reps) })),
+    ];
+  }
+  const blanks = Array.from({ length: Math.max(0, defaultSets - ramp.length - 1) }, () => null);
+  return [...ramp, ...blanks, { ...s.top_set }];
+}
 
 /**
  * Compute a concrete weight suggestion for an exercise on today's session.
@@ -310,7 +364,7 @@ export function suggestForExercise(
       };
     }
     return {
-      warmups: kg.slice(0, 2).map((w, i) => ({ kg: w, reps: pcts.topReps[i] })),
+      ramp_sets: kg.slice(0, 2).map((w, i) => ({ kg: w, reps: pcts.topReps[i] })),
       top_set: { kg: kg[2], reps: pcts.topReps[2] },
       fsl: pcts.fsl
         ? {
@@ -342,7 +396,7 @@ export function suggestForExercise(
       };
     }
     return {
-      warmups: kg.slice(0, 2).map((w, i) => ({ kg: w, reps: pcts.topReps[i] })),
+      ramp_sets: kg.slice(0, 2).map((w, i) => ({ kg: w, reps: pcts.topReps[i] })),
       top_set: { kg: kg[2], reps: pcts.topReps[2] },
       fsl: pcts.fsl
         ? {

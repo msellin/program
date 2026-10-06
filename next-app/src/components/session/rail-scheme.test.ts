@@ -38,6 +38,23 @@ describe("railScheme", () => {
     ).toBe("5 sets · 60 kg");
   });
 
+  it("spells out the 5/3/1 ramp sets before the top set", () => {
+    // Founder 2026-10-06: the rail read "1 × 110 kg · 5 × 85 kg" on a day
+    // that is 85 × 3, 97.5 × 3, 110 × 3+, then 5 × 85.
+    const label = railScheme(
+      rail(8, {
+        ramp_sets: [
+          { kg: 85, reps: "3" },
+          { kg: 97.5, reps: "3" },
+        ],
+        top_set: { kg: 110, reps: "3+" },
+        fsl: { kg: 85, sets: 5, reps: 5 },
+        reasoning: "",
+      }),
+    );
+    expect(label).toBe("85 × 3 · 97.5 × 3 · 110 × 3+ · 5 × 85 kg");
+  });
+
   it("falls back to a bare set count when there is no suggestion", () => {
     expect(railScheme(rail(3, null))).toBe("3 sets");
   });

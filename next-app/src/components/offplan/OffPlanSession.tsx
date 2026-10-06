@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { loadProgram, loadExercises, applyProgramExerciseOverrides } from "@/lib/data-loader";
 import { useStore, entrySets } from "@/lib/useStore";
 import { today as todayISO } from "@/lib/utils";
-import { suggestForExercise } from "@/lib/engine/suggest";
+import { prescriptionRows, suggestForExercise } from "@/lib/engine/suggest";
 import { composeBlockForUser } from "@/lib/engine/plan-generator";
 import { dedupeItems, humanBlockName, exerciseListName } from "@/lib/day-format";
 import { DateNav } from "@/components/workout/DateNav";
@@ -192,11 +192,7 @@ export function OffPlanSession() {
             blockName: humanBlockName(block.name),
             exercise,
             item,
-            rowCount: suggestion?.working_sets?.length
-              ? suggestion.working_sets.length
-              : suggestion?.fsl
-                ? suggestion.fsl.sets + 1
-                : defaultSets,
+            rowCount: prescriptionRows(suggestion, defaultSets).length,
             suggestion,
             isLoadable,
           });

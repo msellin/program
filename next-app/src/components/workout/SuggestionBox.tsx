@@ -49,9 +49,10 @@ export function SuggestionBox({ suggestion }: { suggestion: Suggestion }) {
         <p className="text-xs font-mono text-muted mt-2">
           Sets: {suggestion.working_sets.map((w) => `${w.kg}×${w.reps}`).join(" → ")}
         </p>
-      ) : suggestion.warmups && suggestion.warmups.length ? (
+      ) : suggestion.ramp_sets && suggestion.ramp_sets.length ? (
+        // Working sets before the top set — not a warm-up. See `ramp_sets`.
         <p className="text-[11px] font-mono text-muted mt-0.5">
-          Warm-up: {suggestion.warmups.map((w) => `${w.kg}×${w.reps}`).join(" → ")}
+          Sets: {[...suggestion.ramp_sets, suggestion.top_set].map((w) => `${w.kg}×${w.reps}`).join(" → ")}
         </p>
       ) : null}
       <p className="text-[11px] italic text-muted mt-1.5">{suggestion.reasoning}</p>
