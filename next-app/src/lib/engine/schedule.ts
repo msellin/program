@@ -205,7 +205,7 @@ function isPhaseGateSkipped(
  * the founder's blocks were materialized through 2026-11-18 — without the
  * bump every Saturday until then would still say "volume squat".
  */
-export const SCHEDULE_RULES_VERSION = "2026-10-19-hip-three-day";
+export const SCHEDULE_RULES_VERSION = "2026-10-19-hip-home-block-on-today";
 
 export function activePhaseFor(
   program: Program,
@@ -588,10 +588,18 @@ export function strengthBlockIdsForDate(
 /**
  * Resolve the block objects for a date.
  *
- * anterior-hip-rebuild keeps the strength-category filter (its non-strength
- * blocks live on the Extras tab by design). All other programs return every
- * block the weekly_template references regardless of category, so aerobic /
- * skill / concurrent sessions actually reach the user's Today screen.
+ * anterior-hip-rebuild filters to strength + accessory. Accessory was filtered
+ * out "because it lives on the Extras tab", but that tab became a redirect to
+ * the flag-gated off-plan page, so the home block (`block_a_home`, the left-hip
+ * rehab work) reached no screen at all for a default account (2026-10-19). Its
+ * template days (Tue/Fri/Sat/Sun) now show it on Today and in the session like
+ * any block. Every "missed session" check filters to category strength on its
+ * own, so an unlogged home block is never a missed strength day.
+ * `block_daily_skill` is category "skill" (a separate opt-in track) and stays off.
+ *
+ * All other programs return every block the weekly_template references
+ * regardless of category, so aerobic / skill / concurrent sessions actually
+ * reach the user's Today screen.
  */
 export function strengthBlocksForDate(
   program: Program,
@@ -603,7 +611,7 @@ export function strengthBlocksForDate(
   const slug = (program as unknown as { slug?: string }).slug;
   if (slug === HIP_SLUG) {
     return program.blocks.filter(
-      (b) => ids.includes(b.id) && (b.category ?? "strength") === "strength",
+      (b) => ids.includes(b.id) && ["strength", "accessory"].includes(b.category ?? "strength"),
     );
   }
   return program.blocks.filter((b) => ids.includes(b.id));

@@ -21,6 +21,8 @@ import { nextAfterSet } from "@/components/session/shared/advance";
 import { NoteSheet } from "@/components/session/NoteSheet";
 import { countLoggedSets } from "@/lib/set-progress";
 import { RunSlotCard } from "@/components/workout/RunSlotCard";
+import { FollowAlong } from "@/components/follow-along/FollowAlong";
+import { buildSteps } from "@/lib/follow-along/steps";
 import type { Block, Exercise, Program, Store } from "@/lib/schemas";
 
 /**
@@ -111,6 +113,8 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
 
   // Session-shell UI state (README interaction spec).
   const [mode, setMode] = useState<"brief" | "set">("brief");
+  // The block being run in the guided follow-along player, or null.
+  const [followBlockId, setFollowBlockId] = useState<string | null>(null);
   const [activeKey, setActiveKey] = useState<string | null>(null);
   const [activeSetIndex, setActiveSetIndex] = useState(0);
   const [editingLoad, setEditingLoad] = useState(false);
@@ -314,6 +318,24 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
   );
   const cycleGateActive = !!tmBump && !loggedSetsToday;
 
+  // Blocks the guided player can run: every exercise in them is unloaded
+  // (holds, bodyweight reps, mobility). Barbell work stays on SetView, where
+  // the load and RPE rows live.
+  const followBlocks = blocks
+    .map((b) => ({ block: b, rail: railExercises.filter((r) => r.blockId === b.id) }))
+    .filter(({ rail }) => rail.length > 0 && rail.every((r) => !r.isLoadable));
+  const following = followBlocks.find(({ block }) => block.id === followBlockId) ?? null;
+  if (following) {
+    return (
+      <FollowAlong
+        title={humanBlockName(following.block.name)}
+        steps={buildSteps(following.rail.map((r) => ({ blockId: r.blockId, exercise: r.exercise, item: r.item })))}
+        date={activeDate}
+        onExit={() => setFollowBlockId(null)}
+      />
+    );
+  }
+
   if (mode === "brief" || !active) {
     return (
       <BriefView
@@ -327,6 +349,8 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
         cycleGateProposal={cycleGateActive ? tmBump : null}
         onStart={startSession}
         onSelectExercise={jumpTo}
+        followBlocks={followBlocks.map(({ block, rail }) => ({ id: block.id, name: block.name, count: rail.length }))}
+        onFollowAlong={setFollowBlockId}
         sheet={sheet}
         onOpenSheet={setSheet}
         onCloseSheet={() => setSheet(null)}

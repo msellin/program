@@ -312,13 +312,13 @@
     },
     "hip_flexor_iso_seated": {
       "cues_append": [
-        "Left side gets the extra holds — 5 left, 3 right. Left hip reads stiffer than right (2026-10-19)"
+        "Left side gets one extra hold. Left hip reads stiffer than right (2026-10-19)"
       ],
       "extra_set_side": "left"
     },
     "hip_flexor_stretch_kneeling": {
       "cues_append": [
-        "Left gets the extra set — 2 × 30 s left, 1 × 30 s right. Tuck the pelvis and squeeze the glute; gentle, never a couch-stretch depth"
+        "Left gets one extra set. Tuck the pelvis and squeeze the glute; gentle, never a couch-stretch depth"
       ],
       "extra_set_side": "left"
     },
@@ -882,7 +882,7 @@
     {
       "id": "block_daily_skill",
       "name": "Daily squat skill (5-10 min)",
-      "category": "accessory",
+      "category": "skill",
       "location": "anywhere",
       "frequency": "daily on non-barbell days",
       "duration_min": [

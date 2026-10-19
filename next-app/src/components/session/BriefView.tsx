@@ -36,6 +36,8 @@ export function BriefView({
   cycleGateProposal,
   onStart,
   onSelectExercise,
+  followBlocks = [],
+  onFollowAlong,
   sheet,
   onOpenSheet,
   onCloseSheet,
@@ -50,6 +52,9 @@ export function BriefView({
   cycleGateProposal: Proposal | null;
   onStart: (key?: string) => void;
   onSelectExercise: (key: string) => void;
+  /** Blocks the guided follow-along player can run (all unloaded work). */
+  followBlocks?: { id: string; name: string; count: number }[];
+  onFollowAlong?: (blockId: string) => void;
   sheet: SessionSheet;
   onOpenSheet: (s: SessionSheet) => void;
   onCloseSheet: () => void;
@@ -271,6 +276,29 @@ export function BriefView({
                 </div>
               ))}
             </div>
+          </div>
+        ) : null}
+
+        {onFollowAlong && followBlocks.length > 0 ? (
+          <div className="mb-4 space-y-2">
+            {followBlocks.map((b) => (
+              <button
+                key={b.id}
+                type="button"
+                onClick={() => onFollowAlong(b.id)}
+                className="flex w-full items-center gap-3 rounded border border-line-soft bg-surface px-3.5 py-3 text-left"
+              >
+                <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-bronze" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="#0e0f12"><polygon points="8 5 19 12 8 19 8 5" /></svg>
+                </span>
+                <span className="min-w-0 flex-grow">
+                  <span className="block text-[15px] font-semibold text-strong">Follow along · {humanBlockName(b.name)}</span>
+                  <span className="block text-[13px] text-muted">
+                    {b.count} {b.count === 1 ? "move" : "moves"} · guided, one at a time, with a timer
+                  </span>
+                </span>
+              </button>
+            ))}
           </div>
         ) : null}
 

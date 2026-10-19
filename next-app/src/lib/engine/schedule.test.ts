@@ -333,15 +333,37 @@ describe("hip program runs three barbell days from cycle 2 week 4 (2026-10-19)",
   const ids = (d: string) =>
     strengthBlocksForDate(program, activePhaseFor(program, d), d).map((b) => b.id);
 
-  it("prescribes Mon squat, Wed pull, Thu front squat and nothing on Saturday", () => {
+  it("prescribes Mon squat, Wed pull, Thu front squat and no barbell on Saturday", () => {
     expect(ids("2026-10-26")).toEqual(["block_squat_heavy"]);
     expect(ids("2026-10-28")).toEqual(["block_pull_heavy"]);
     expect(ids("2026-10-29")).toEqual(["block_squat_variant"]);
-    expect(ids("2026-10-31")).toEqual([]);
-    expect(ids("2026-10-24")).toEqual([]); // this week's Saturday too
+    // Saturday carries only the home block (rehab, no barbell) since it
+    // reaches Today — see the next describe.
+    expect(ids("2026-10-31")).toEqual(["block_a_home"]);
+    expect(ids("2026-10-24")).toEqual(["block_a_home"]); // this week's Saturday too
   });
 
-  it("keeps Saturday clear after the birthday waypoint", () => {
+  it("keeps Saturday clear of barbell work after the birthday waypoint", () => {
     expect(ids("2027-05-01")).toEqual([]);
+  });
+});
+
+describe("the hip home block reaches Today (2026-10-19)", () => {
+  // It was filtered out as "lives on the Extras tab", but that tab became a
+  // redirect to a flag-gated page, so the founder's left-hip rehab work was on
+  // no screen at all. Its template days now carry it like any block.
+  const program = loadProgramJson("anterior-hip-rebuild");
+  const ids = (d: string) =>
+    strengthBlocksForDate(program, activePhaseFor(program, d), d).map((b) => b.id);
+
+  it("schedules block_a_home on Tue, Fri, Sat and Sun", () => {
+    expect(ids("2026-10-27")).toEqual(["block_a_home"]); // Tue
+    expect(ids("2026-10-30")).toEqual(["block_a_home"]); // Fri
+    expect(ids("2026-10-31")).toEqual(["block_a_home"]); // Sat
+    expect(ids("2026-11-01")).toEqual(["block_a_home"]); // Sun
+  });
+
+  it("does not add the opt-in skill block", () => {
+    for (const d of ["2026-10-27", "2026-10-30"]) expect(ids(d)).not.toContain("block_daily_skill");
   });
 });
