@@ -9,13 +9,26 @@ follow-along player. Replaces both self-filming and the SVG illustrations if it 
 1. **Step 0, once:** paste the *character reference sheet* prompt into Gemini as an
    **image** request. Regenerate until you like the person, then keep that image.
    It is the identity anchor for every future clip.
-2. **Steps 1 and 2:** start a **video** request and **attach the reference image**
-   (as a reference / ingredient if your tool offers it). Paste the clip JSON.
-   - If your tool only accepts an image as the *first frame*, first ask Gemini image:
-     "Using the attached person, show them in this exact start pose: <start_pose
-     from the JSON>", then use that still as the first frame with the same JSON.
-3. Download the clips and drop them in a folder. Claude trims, loops, strips audio
+2. **Steps 1a / 2a (image):** attach `terav-athlete-01-sheet.jpg` and paste the
+   start-frame prompt. Check the still: one person, correct pose, and the correct colour
+   nearest the camera.
+3. **Steps 1b / 2b (video):** attach the checked still and paste the clip JSON. Gemini
+   uses the attached image as the first frame, which is what we want here.
+4. Download the clips and drop them in a folder. Claude trims, loops, strips audio
    and puts them into the canvas player.
+
+## Result of test 1 (2026-10-19) and what changed
+
+- **The character works.** The sheet gave one consistent person, and the 10 s video kept her identical
+  throughout: same face, hair and clothes.
+- **Left and right were mirrored in every view** (teal on her right). Fixed by flipping the
+  sheet horizontally: `terav-athlete-01-sheet.jpg` in this folder is the corrected one. **Use it
+  for everything from now on**, and keep checking L/R in each new still, because the model
+  may mirror again.
+- **Gemini used the attached image as the FIRST FRAME**, not as a character reference, so it
+  animated the sheet itself (arm raises and kicks) instead of the dead bug. It also added sound.
+  → New workflow: **1a/2a** make a start-frame still from the sheet, check it, then **1b/2b**
+  animate that still. The video prompts below now say the attached image is the first frame.
 
 ## Scorecard (fill per clip)
 
@@ -64,13 +77,31 @@ follow-along player. Replaces both self-filming and the SVG illustrations if it 
 }
 ```
 
-## Step 1 — Dead bug, slow (VIDEO) — the hard test
+## Step 1a — Dead bug start frame (IMAGE, attach `terav-athlete-01-sheet.jpg`)
+
+```json
+{
+  "task": "single_start_frame_from_reference",
+  "reference": "The attached character sheet shows the person to use. Same face, hair, build and clothing. Use ONE person only, NOT a sheet, NOT multiple views.",
+  "output": { "type": "image", "aspect_ratio": "16:9", "style": "photorealistic studio photography, same look as the reference" },
+  "pose": "dead bug start position: lying on her back on a dark grey exercise mat; both arms pointing straight up to the ceiling directly above the shoulders; hips and knees bent 90 degrees, knees stacked directly above the hips, shins parallel to the floor; lower back flat on the mat; head resting on the mat",
+  "camera": "low at mat level, perpendicular to the body, on her RIGHT side. Her head is on the LEFT of the image and her feet on the RIGHT. Full body visible with margin. Locked-off.",
+  "side_check": "Because the camera is on her right side, the PURPLE wristband and PURPLE sock are on the limbs nearest the camera; the TEAL wristband and TEAL sock are on the far limbs, partly hidden behind.",
+  "environment": "seamless matte charcoal background (#16181c), dark grey matte mat and floor (#24272f), nothing else",
+  "lighting": "soft even key light from above, subtle rim light, same as the reference",
+  "avoid": ["multiple people", "multiple views", "character sheet layout", "inset close-up", "text", "props", "shoes"]
+}
+```
+
+**Check before animating:** purple is nearest the camera, there's one person, the pose is right. If teal is nearest, regenerate or flip the still horizontally; flipping also moves the head to the right, which is fine.
+
+## Step 1b — Dead bug, slow (VIDEO, attach the 1a still) — the hard test
 
 ```json
 {
   "task": "exercise_demo_clip",
   "exercise": "Dead bug, slow — one repetition: RIGHT arm with LEFT leg",
-  "reference": "Use the attached reference image as the exact identity, body and clothing of the person. Do not change the face, hair, build or clothes.",
+  "first_frame": "The attached image IS the first frame. Keep this exact person, clothing, camera angle, framing, background and lighting for the whole clip. Animate only the movement in action_timeline. Do not cut away, do not add other views or other people.",
   "output": {
     "type": "video", "duration_seconds": 8, "aspect_ratio": "16:9", "fps": 24,
     "audio": "none — completely silent, no music, no voice, no sound effects",
@@ -109,13 +140,31 @@ follow-along player. Replaces both self-filming and the SVG illustrations if it 
 }
 ```
 
-## Step 2 — Single-leg glute bridge, left foot planted (VIDEO)
+## Step 2a — Glute bridge start frame (IMAGE, attach `terav-athlete-01-sheet.jpg`)
+
+```json
+{
+  "task": "single_start_frame_from_reference",
+  "reference": "The attached character sheet shows the person to use. Same face, hair, build and clothing. Use ONE person only, NOT a sheet, NOT multiple views.",
+  "output": { "type": "image", "aspect_ratio": "16:9", "style": "photorealistic studio photography, same look as the reference" },
+  "pose": "single-leg glute bridge start position: lying on her back on a dark grey exercise mat, arms flat on the mat alongside the body, palms down; LEFT knee bent with the LEFT foot (teal sock) planted flat about 30 cm from the buttocks; RIGHT leg (purple sock) held straight and lifted so the right thigh is in line with the left thigh; hips resting on the mat",
+  "camera": "low at mat level, perpendicular to the body, on her LEFT side. Her head is on the RIGHT of the image and her feet on the LEFT. Full body visible with margin. Locked-off.",
+  "side_check": "Because the camera is on her left side, the TEAL sock (planted foot) and TEAL wristband are nearest the camera; the PURPLE straight leg is on the far side.",
+  "environment": "seamless matte charcoal background (#16181c), dark grey matte mat and floor (#24272f), nothing else",
+  "lighting": "soft even key light from above, subtle rim light, same as the reference",
+  "avoid": ["multiple people", "multiple views", "character sheet layout", "inset close-up", "both feet planted", "text", "props", "shoes"]
+}
+```
+
+**Check before animating:** the planted foot wears the teal sock and is nearest the camera.
+
+## Step 2b — Single-leg glute bridge, left foot planted (VIDEO, attach the 2a still)
 
 ```json
 {
   "task": "exercise_demo_clip",
   "exercise": "Single-leg glute bridge — working leg LEFT (left foot planted)",
-  "reference": "Use the attached reference image as the exact identity, body and clothing of the person. Do not change the face, hair, build or clothes.",
+  "first_frame": "The attached image IS the first frame. Keep this exact person, clothing, camera angle, framing, background and lighting for the whole clip. Animate only the movement in action_timeline. Do not cut away, do not add other views or other people.",
   "output": {
     "type": "video", "duration_seconds": 8, "aspect_ratio": "16:9", "fps": 24,
     "audio": "none — completely silent, no music, no voice, no sound effects",
