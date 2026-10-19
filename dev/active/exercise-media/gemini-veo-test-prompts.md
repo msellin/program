@@ -228,3 +228,13 @@ follow-along player. Replaces both self-filming and the SVG illustrations if it 
   The app builds the return by playing it backwards (forward + reverse = a seamless loop).
   → `prompts/1b-dead-bug-v2-out-and-hold.VIDEO.json`, used with the same 1a start frame.
   Generate 2–3 takes; results vary per take.
+
+## Result of test 3 — dead bug v2, two takes (2026-10-19) → AI clips PAUSED
+
+- Both takes ignored "one movement, then hold still". The arms flail, then **both feet drop to the
+  floor** and she ends lying with knees bent, which is not a dead bug. Both ran 10 s, not 6.
+- Identity, set and L/R colours held in every take. The model fails on **following a precise
+  movement**, not on keeping the same person.
+- **Decision (founder, 2026-10-19): pause AI video.** Media plan: SVG illustrations now; the
+  founder films real clips once Terav has users. Revisit AI video when models follow
+  movement timelines reliably. The character sheet and prompts stay here for that.
