@@ -1,0 +1,41 @@
+{
+  "task": "exercise_demo_clip",
+  "exercise": "Single-leg glute bridge — working leg LEFT (left foot planted)",
+  "first_frame": "The attached image IS the first frame. Keep this exact person, clothing, camera angle, framing, background and lighting for the whole clip. Animate only the movement in action_timeline. Do not cut away, do not add other views or other people.",
+  "output": {
+    "type": "video", "duration_seconds": 8, "aspect_ratio": "16:9", "fps": 24,
+    "audio": "none — completely silent, no music, no voice, no sound effects",
+    "on_screen_text": "none", "cuts": "none — one continuous shot",
+    "loop": "the pose at 0.0 s and at 8.0 s must be identical so the clip loops seamlessly"
+  },
+  "character": {
+    "id": "TERAV_ATHLETE_01",
+    "identity": "a fit adult woman in her early 30s, athletic but not bodybuilder build, medium height, light olive skin, dark brown hair tied in a low bun, calm focused neutral expression, no tattoos, no jewelry, no visible makeup",
+    "wardrobe": "fitted plain charcoal grey short-sleeve t-shirt; plain matte black knee-length training shorts; TEAL (#4a8894) wristband on LEFT wrist and TEAL ankle sock on LEFT foot; MUTED PURPLE (#a279a8) wristband on RIGHT wrist and PURPLE ankle sock on RIGHT foot; no shoes"
+  },
+  "environment": "seamless matte charcoal studio background (#16181c), dark grey matte exercise mat on a dark floor (#24272f), nothing else in frame",
+  "lighting": "soft even key light from above, subtle rim light so the limbs read clearly against the dark background, no flicker",
+  "camera": {
+    "position": "low, at mat level (about 40 cm high), perpendicular to the body, on the person's LEFT side",
+    "framing": "entire body visible with margin; head on the RIGHT of frame, feet on the LEFT of frame",
+    "movement": "locked-off tripod, no pan, no zoom, no shake",
+    "consequence": "the working LEFT leg (teal sock) is nearest the camera and fully visible"
+  },
+  "start_pose": "lying on the back on the mat, arms resting flat on the mat alongside the body, palms down; LEFT knee bent with the LEFT foot (teal sock) planted flat on the mat about 30 cm from the buttocks; RIGHT leg (purple sock) held straight, lifted so the right thigh is in line with the left thigh; hips resting on the mat",
+  "action_timeline": [
+    { "t": "0.0-0.5 s", "action": "hold the start pose, still" },
+    { "t": "0.5-2.0 s", "action": "drive through the LEFT heel and lift the hips until shoulders, hips and LEFT knee form one straight line; the RIGHT leg stays straight and keeps its angle relative to the thigh" },
+    { "t": "2.0-4.0 s", "action": "hold the top position with a visible glute squeeze; hips level, no rotation" },
+    { "t": "4.0-6.5 s", "action": "SLOWLY lower the hips back to the mat" },
+    { "t": "6.5-8.0 s", "action": "hold the start pose, identical to 0.0 s" }
+  ],
+  "must": [
+    "only the LEFT foot (teal sock) is on the mat; the RIGHT foot (purple sock) never touches the mat",
+    "at the top: shoulders, hips and knee in one straight line — NO arching of the lower back, ribs stay down",
+    "shoulders and head stay on the mat throughout",
+    "slow, controlled tempo with no jerks",
+    "teal stays on the LEFT side and purple on the RIGHT side for the entire clip",
+    "anatomically correct body: two arms, two legs, five fingers per hand"
+  ],
+  "avoid": ["both feet planted", "lower back hyperextension", "hips rotating or dropping to one side", "bouncing", "morphing or changing face", "camera movement", "text", "music", "extra people", "props"]
+}

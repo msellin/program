@@ -6,6 +6,19 @@ follow-along player. Replaces both self-filming and the SVG illustrations if it 
 
 ## How to run the test
 
+> **One request = one file.** Copy the whole content of ONE file from `prompts/` per Gemini
+> request, and nothing else. Pasting this whole document made Gemini run the first task in it
+> (the character sheet) as a video. The JSON blocks below are the same prompts, for reading.
+>
+> | Request | File | Attach |
+> |---|---|---|
+> | Image | `prompts/1a-dead-bug-start-frame.IMAGE.json` | `terav-athlete-01-sheet.jpg` |
+> | Video | `prompts/1b-dead-bug.VIDEO.json` | the checked 1a still |
+> | Image | `prompts/2a-glute-bridge-start-frame.IMAGE.json` | `terav-athlete-01-sheet.jpg` |
+> | Video | `prompts/2b-glute-bridge.VIDEO.json` | the checked 2a still |
+>
+> `prompts/0-character-sheet.IMAGE.json` is done. Only re-run it if you want a different person.
+
 1. **Step 0, once:** paste the *character reference sheet* prompt into Gemini as an
    **image** request. Regenerate until you like the person, then keep that image.
    It is the identity anchor for every future clip.

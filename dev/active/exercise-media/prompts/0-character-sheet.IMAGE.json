@@ -1,0 +1,27 @@
+{
+  "task": "character_reference_sheet",
+  "purpose": "Identity anchor reused for every exercise video. Same person, same clothes, every time.",
+  "output": { "type": "image", "aspect_ratio": "16:9", "style": "photorealistic studio photography, natural skin texture, not illustrated, not CGI-looking" },
+  "character": {
+    "id": "TERAV_ATHLETE_01",
+    "identity": "a fit adult woman in her early 30s, athletic but not bodybuilder build, medium height, light olive skin, dark brown hair tied in a low bun, calm focused neutral expression, no tattoos, no jewelry, no visible makeup",
+    "wardrobe": {
+      "top": "fitted plain charcoal grey short-sleeve t-shirt, no logos",
+      "bottom": "plain matte black knee-length training shorts, no logos",
+      "left_wrist": "TEAL (#4a8894) terry-cloth wristband on the LEFT wrist only",
+      "right_wrist": "MUTED PURPLE (#a279a8) terry-cloth wristband on the RIGHT wrist only",
+      "left_foot": "TEAL (#4a8894) ankle sock on the LEFT foot only",
+      "right_foot": "MUTED PURPLE (#a279a8) ankle sock on the RIGHT foot only",
+      "shoes": "none"
+    }
+  },
+  "layout": "four views side by side on one sheet: front view standing, left side view standing, back view standing, right side view standing; plus one head-and-shoulders close-up in the top-right corner",
+  "pose": "relaxed neutral standing, arms slightly away from the body so both wristbands are clearly visible, feet hip-width so both socks are visible",
+  "environment": "seamless matte charcoal studio background (#16181c), dark grey matte floor (#24272f), no props, no text, no labels",
+  "lighting": "soft even key light from front-above, gentle rim light separating the silhouette from the dark background, no harsh shadows",
+  "must": [
+    "teal items are ONLY on the person's LEFT side, purple items ONLY on the RIGHT side, in every view",
+    "identical person, face and clothing across all views"
+  ],
+  "avoid": ["text", "labels", "logos", "extra people", "props", "mirrors", "jewelry", "patterned clothing", "shoes"]
+}

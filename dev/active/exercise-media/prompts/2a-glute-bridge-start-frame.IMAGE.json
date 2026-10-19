@@ -1,0 +1,11 @@
+{
+  "task": "single_start_frame_from_reference",
+  "reference": "The attached character sheet shows the person to use. Same face, hair, build and clothing. Use ONE person only, NOT a sheet, NOT multiple views.",
+  "output": { "type": "image", "aspect_ratio": "16:9", "style": "photorealistic studio photography, same look as the reference" },
+  "pose": "single-leg glute bridge start position: lying on her back on a dark grey exercise mat, arms flat on the mat alongside the body, palms down; LEFT knee bent with the LEFT foot (teal sock) planted flat about 30 cm from the buttocks; RIGHT leg (purple sock) held straight and lifted so the right thigh is in line with the left thigh; hips resting on the mat",
+  "camera": "low at mat level, perpendicular to the body, on her LEFT side. Her head is on the RIGHT of the image and her feet on the LEFT. Full body visible with margin. Locked-off.",
+  "side_check": "Because the camera is on her left side, the TEAL sock (planted foot) and TEAL wristband are nearest the camera; the PURPLE straight leg is on the far side.",
+  "environment": "seamless matte charcoal background (#16181c), dark grey matte mat and floor (#24272f), nothing else",
+  "lighting": "soft even key light from above, subtle rim light, same as the reference",
+  "avoid": ["multiple people", "multiple views", "character sheet layout", "inset close-up", "both feet planted", "text", "props", "shoes"]
+}

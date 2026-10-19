@@ -1,0 +1,11 @@
+{
+  "task": "single_start_frame_from_reference",
+  "reference": "The attached character sheet shows the person to use. Same face, hair, build and clothing. Use ONE person only, NOT a sheet, NOT multiple views.",
+  "output": { "type": "image", "aspect_ratio": "16:9", "style": "photorealistic studio photography, same look as the reference" },
+  "pose": "dead bug start position: lying on her back on a dark grey exercise mat; both arms pointing straight up to the ceiling directly above the shoulders; hips and knees bent 90 degrees, knees stacked directly above the hips, shins parallel to the floor; lower back flat on the mat; head resting on the mat",
+  "camera": "low at mat level, perpendicular to the body, on her RIGHT side. Her head is on the LEFT of the image and her feet on the RIGHT. Full body visible with margin. Locked-off.",
+  "side_check": "Because the camera is on her right side, the PURPLE wristband and PURPLE sock are on the limbs nearest the camera; the TEAL wristband and TEAL sock are on the far limbs, partly hidden behind.",
+  "environment": "seamless matte charcoal background (#16181c), dark grey matte mat and floor (#24272f), nothing else",
+  "lighting": "soft even key light from above, subtle rim light, same as the reference",
+  "avoid": ["multiple people", "multiple views", "character sheet layout", "inset close-up", "text", "props", "shoes"]
+}
