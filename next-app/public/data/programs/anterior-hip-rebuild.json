@@ -304,7 +304,23 @@
       "extra_set_side": "left"
     },
     "dead_bug": {
-      "rationale": "Anti-extension trunk work — the single most relevant home exercise for the Bertolotti segment."
+      "rationale": "Anti-extension trunk work — the single most relevant home exercise for the Bertolotti segment.",
+      "cues_append": [
+        "Do these after the hip-flexor holds, not first",
+        "A painless left-hip click on the first reps that fades as you go has been reported (2026-10-19) — fine to continue; a painful click is a stop, log it"
+      ]
+    },
+    "hip_flexor_iso_seated": {
+      "cues_append": [
+        "Left side gets the extra holds — 5 left, 3 right. Left hip reads stiffer than right (2026-10-19)"
+      ],
+      "extra_set_side": "left"
+    },
+    "hip_flexor_stretch_kneeling": {
+      "cues_append": [
+        "Left gets the extra set — 2 × 30 s left, 1 × 30 s right. Tuck the pelvis and squeeze the glute; gentle, never a couch-stretch depth"
+      ],
+      "extra_set_side": "left"
     },
     "split_squat_rfe": {
       "cues_append": [
@@ -456,7 +472,6 @@
         "block_squat_heavy",
         "block_pull_heavy",
         "block_squat_variant",
-        "block_squat_volume",
         "block_daily_skill"
       ],
       "template": "5/3/1 FSL 5×5; then peaking within cycle 4 for 1RM test",
@@ -511,7 +526,6 @@
         "block_squat_heavy",
         "block_pull_heavy",
         "block_squat_variant",
-        "block_squat_volume",
         "block_daily_skill"
       ],
       "template": "Adaptive — engine generates next cycle structure based on birthday outcome and updated TMs",
@@ -549,7 +563,7 @@
       "name": "Home rehab and activation",
       "category": "accessory",
       "location": "home",
-      "frequency": "most days, especially rest days",
+      "frequency": "4-5 days a week, including after runs and on rest days",
       "duration_min": [
         10,
         15
@@ -1192,7 +1206,7 @@
     }
   ],
   "weekly_template": {
-    "note": "Reference layout for phases 2-4 and 6. Phase 1 uses a lighter reintro/eval structure; phase 5 substitutes Hatch blocks for the squat days.",
+    "note": "Reference layout for phases 2-4 and 6. Phase 1 uses a lighter reintro/eval structure; phase 5 substitutes Hatch blocks for the squat days. Three barbell days since 2026-10-19: Saturday is the user's Hyrox / run day, and the Sat volume session (block_squat_volume) was logged 0 of 3 times in cycle 2 while the squat still progressed. Its single-leg RDLs already live on Wed (block_pull_heavy B2, extra set left); the other volume went with it.",
     "week": [
       {
         "day": "Mon",
@@ -1221,8 +1235,8 @@
       },
       {
         "day": "Sat",
-        "session": "block_squat_volume",
-        "conditioning": "Optional easy CrossFit if energy allows."
+        "session": "block_a_home",
+        "conditioning": "Hyrox or run. No barbell."
       },
       {
         "day": "Sun",

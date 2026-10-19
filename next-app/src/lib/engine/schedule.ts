@@ -199,8 +199,13 @@ function isPhaseGateSkipped(
  *
  * `ensureMaterialized` compares this against the version stored per
  * program and regenerates the FORWARD window when they differ.
+ *
+ * Also bumped for DATA changes that move days (2026-10-19): the hip
+ * program's Saturday went from `block_squat_volume` to the home block, and
+ * the founder's blocks were materialized through 2026-11-18 — without the
+ * bump every Saturday until then would still say "volume squat".
  */
-export const SCHEDULE_RULES_VERSION = "2026-08-27-eval-spacing";
+export const SCHEDULE_RULES_VERSION = "2026-10-19-hip-three-day";
 
 export function activePhaseFor(
   program: Program,

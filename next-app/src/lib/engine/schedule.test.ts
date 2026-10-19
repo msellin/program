@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { blocksForDate } from "./plan-generator";
-import { strengthBlocksForDate } from "./schedule";
+import { strengthBlocksForDate, activePhaseFor } from "./schedule";
 import fs from "node:fs";
 import path from "node:path";
 import type { Program, Store } from "../schemas";
@@ -321,5 +321,27 @@ describe("evaluations count as heavy days for spacing", () => {
     // Recovery after a max effort is what matters.
     expect(idsOn("2026-08-25")).toEqual(["block_eval_pull"]); // Tuesday
     expect(idsOn("2026-08-24")).toEqual(["block_reintro"]); // Monday, kept
+  });
+});
+
+describe("hip program runs three barbell days from cycle 2 week 4 (2026-10-19)", () => {
+  // Saturday is the founder's Hyrox / run day. The Sat volume squat was
+  // logged 0 of 3 times in cycle 2, so it went. Phase 7 schedules by block
+  // NAME ("Sat — ..."), so the block also has to leave that phase's list or
+  // Saturday comes back after the birthday waypoint.
+  const program = loadProgramJson("anterior-hip-rebuild");
+  const ids = (d: string) =>
+    strengthBlocksForDate(program, activePhaseFor(program, d), d).map((b) => b.id);
+
+  it("prescribes Mon squat, Wed pull, Thu front squat and nothing on Saturday", () => {
+    expect(ids("2026-10-26")).toEqual(["block_squat_heavy"]);
+    expect(ids("2026-10-28")).toEqual(["block_pull_heavy"]);
+    expect(ids("2026-10-29")).toEqual(["block_squat_variant"]);
+    expect(ids("2026-10-31")).toEqual([]);
+    expect(ids("2026-10-24")).toEqual([]); // this week's Saturday too
+  });
+
+  it("keeps Saturday clear after the birthday waypoint", () => {
+    expect(ids("2027-05-01")).toEqual([]);
   });
 });
