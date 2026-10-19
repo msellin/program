@@ -216,3 +216,15 @@ follow-along player. Replaces both self-filming and the SVG illustrations if it 
   "avoid": ["both feet planted", "lower back hyperextension", "hips rotating or dropping to one side", "bouncing", "morphing or changing face", "camera movement", "text", "music", "extra people", "props"]
 }
 ```
+
+## Result of test 2 — dead bug video (2026-10-19)
+
+- **First rep correct:** the right arm went overhead with the left leg straightening low, and the
+  other limbs stayed put. Same person, right set, ended in the start pose.
+- **Unusable as-is:** the legs swapped sock colour as they passed each other (about 2 s), a
+  duplicated forearm appeared (3.5–4 s), it invented a second wrong rep (arm toward the knees,
+  legs crossed, after 5 s), and it ran 10 s with sound.
+- **Lesson:** Veo fills the clip with motion. Ask for the OUTWARD half only, then stillness.
+  The app builds the return by playing it backwards (forward + reverse = a seamless loop).
+  → `prompts/1b-dead-bug-v2-out-and-hold.VIDEO.json`, used with the same 1a start frame.
+  Generate 2–3 takes; results vary per take.

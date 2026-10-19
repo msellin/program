@@ -1,0 +1,66 @@
+{
+  "task": "exercise_demo_clip",
+  "exercise": "Dead bug — ONLY the outward half: RIGHT arm with LEFT leg, then hold still",
+  "first_frame": "The attached image IS the first frame. Keep this exact person, clothing, camera angle, framing, background and lighting for the whole clip. Animate only the movement in action_timeline. Do not cut away, do not add other views or other people.",
+  "output": {
+    "type": "video",
+    "duration_seconds": 6,
+    "aspect_ratio": "16:9",
+    "fps": 24,
+    "audio": "none — completely silent, no music, no voice, no sound effects",
+    "on_screen_text": "none",
+    "cuts": "none — one continuous shot",
+    "loop": "not required — the clip is played forward and then in reverse by the app, so it must contain ONE outward movement and then complete stillness"
+  },
+  "character": {
+    "id": "TERAV_ATHLETE_01",
+    "identity": "a fit adult woman in her early 30s, athletic but not bodybuilder build, medium height, light olive skin, dark brown hair tied in a low bun, calm focused neutral expression, no tattoos, no jewelry, no visible makeup",
+    "wardrobe": "fitted plain charcoal grey short-sleeve t-shirt; plain matte black knee-length training shorts; TEAL (#4a8894) wristband on LEFT wrist and TEAL ankle sock on LEFT foot; MUTED PURPLE (#a279a8) wristband on RIGHT wrist and PURPLE ankle sock on RIGHT foot; no shoes"
+  },
+  "environment": "seamless matte charcoal studio background (#16181c), dark grey matte exercise mat on a dark floor (#24272f), nothing else in frame",
+  "lighting": "soft even key light from above, subtle rim light so the limbs read clearly against the dark background, no flicker",
+  "camera": {
+    "position": "low, at mat level (about 40 cm high), perpendicular to the body, on the person's RIGHT side",
+    "framing": "entire body visible with margin; head on the LEFT of frame, feet on the RIGHT of frame",
+    "movement": "locked-off tripod, no pan, no zoom, no shake",
+    "consequence": "the person's RIGHT arm (purple wristband) and RIGHT leg (purple sock) are nearest the camera; LEFT arm (teal) and LEFT leg (teal) are on the far side"
+  },
+  "start_pose": "lying on the back on the mat; both arms pointing straight up to the ceiling directly above the shoulders; hips and knees bent at 90 degrees with knees stacked directly above the hips and shins parallel to the floor (tabletop); lower back pressed flat into the mat; head resting on the mat",
+  "action_timeline": [
+    {
+      "t": "0.0-0.5 s",
+      "action": "hold the start pose exactly as in the attached first frame, completely still"
+    },
+    {
+      "t": "0.5-3.5 s",
+      "action": "ONE single slow continuous movement, both limbs at the same time: the RIGHT arm (purple wristband) lowers overhead behind the head until it hovers just above the mat; the LEFT leg (teal sock) straightens and lowers until it hovers about 10 cm above the mat. The LEFT arm (teal wristband) stays pointing at the ceiling, unmoving. The RIGHT leg (purple sock) stays bent in tabletop, unmoving."
+    },
+    {
+      "t": "3.5-6.0 s",
+      "action": "hold the extended position COMPLETELY STILL until the clip ends. No return, no second repetition, no other movement of any kind."
+    }
+  ],
+  "must": [
+    "exactly ONE movement in the whole clip, then stillness",
+    "OPPOSITE arm and leg: RIGHT arm with LEFT leg",
+    "the legs never cross or pass through each other; the purple sock stays on the bent leg and the teal sock on the straightening leg for the whole clip",
+    "exactly two arms and two legs at all times; no extra or duplicated limbs",
+    "lower back stays flat on the mat",
+    "teal stays on the LEFT side and purple on the RIGHT side for the entire clip",
+    "anatomically correct body: two arms, two legs, five fingers per hand"
+  ],
+  "avoid": [
+    "returning to the start pose",
+    "a second repetition",
+    "legs crossing or swapping",
+    "colour changes on socks or wristbands",
+    "duplicated or ghost limbs",
+    "the arm reaching toward the knees",
+    "lifting head or shoulders",
+    "camera movement",
+    "text",
+    "music",
+    "extra people",
+    "props"
+  ]
+}
