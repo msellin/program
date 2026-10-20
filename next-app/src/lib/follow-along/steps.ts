@@ -65,7 +65,9 @@ export function buildSteps(inputs: FollowInput[]): FollowStep[] {
     const reps = num(it, "reps") ?? num(def, "reps");
     const minutes = num(def, "minutes_per_set") ?? num(def, "minutes");
     const hold = num(it, "hold_seconds") ?? num(def, "hold_seconds") ?? (minutes != null ? minutes * 60 : null);
-    const sets = num(it, "sets") ?? num(def, "sets") ?? 1;
+    // Same fallback as the session rail (DaySession: item → default → 3), so the
+    // Brief's "3 sets" and the player never disagree about an undosed count.
+    const sets = num(it, "sets") ?? num(def, "sets") ?? 3;
     const perSide = def.per_side === true;
     const extra = def.extra_set_side === "left" ? "L" : def.extra_set_side === "right" ? "R" : null;
     const kind: FollowStep["kind"] = hold != null && reps == null ? "hold" : "reps";

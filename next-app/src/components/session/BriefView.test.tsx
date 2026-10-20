@@ -267,3 +267,68 @@ describe("optional work is visible as optional (comp-week taper)", () => {
     expect(screen.getByText("Main")).toBeTruthy();
   });
 });
+
+describe("follow-along on the Brief (2026-10-20)", () => {
+  const homeRail = (id: string, name: string): RailExercise =>
+    ({
+      key: `block_a_home:${id}`,
+      blockId: "block_a_home",
+      blockName: "Home rehab and activation",
+      exercise: { id, name, category: "isometric", targets: ["general"], default: { sets: 5, hold_seconds: 20 } } as Exercise,
+      item: { exercise_id: id },
+      rowCount: 5,
+      suggestion: null,
+      isLoadable: false,
+    }) as RailExercise;
+
+  function renderFollow(rails: RailExercise[]) {
+    const onFollowAlong = vi.fn();
+    const onStart = vi.fn();
+    render(
+      <BriefView
+        program={{ slug: "anterior-hip-rebuild", name: "Hip" } as Program}
+        phase={null}
+        activeDate="2026-10-20"
+        blocks={[]}
+        railExercises={rails}
+        store={emptyStore()}
+        proposals={[]}
+        cycleGateProposal={null}
+        onStart={onStart}
+        onSelectExercise={() => {}}
+        followBlocks={[{ id: "block_a_home", name: "Home rehab and activation", count: rails.filter((r) => !r.isLoadable).length }]}
+        onFollowAlong={onFollowAlong}
+        sheet={null}
+        onOpenSheet={() => {}}
+        onCloseSheet={() => {}}
+      />,
+    );
+    return { onFollowAlong, onStart };
+  }
+
+  it("lists each follow-along move once, inside its card, not again in the session list", () => {
+    renderFollow([homeRail("adductor_iso_bent", "Adductor squeeze"), homeRail("dead_bug", "Dead bug, slow")]);
+    expect(screen.getAllByText("Adductor squeeze")).toHaveLength(1);
+    expect(screen.getAllByText("Dead bug, slow")).toHaveLength(1);
+  });
+
+  it("makes the big Start button start the follow-along when the whole day is follow-along work", () => {
+    const { onFollowAlong, onStart } = renderFollow([homeRail("adductor_iso_bent", "Adductor squeeze")]);
+    screen.getByText("Start — Follow along").click();
+    expect(onFollowAlong).toHaveBeenCalledWith("block_a_home");
+    expect(onStart).not.toHaveBeenCalled();
+  });
+
+  it("starts the player at a move tapped in the card", () => {
+    const { onFollowAlong } = renderFollow([homeRail("adductor_iso_bent", "Adductor squeeze"), homeRail("dead_bug", "Dead bug, slow")]);
+    screen.getByLabelText("Follow along from Dead bug, slow").click();
+    expect(onFollowAlong).toHaveBeenCalledWith("block_a_home", "block_a_home:dead_bug");
+  });
+
+  it("keeps barbell work in the session list and on the Start button on a mixed day", () => {
+    const { onStart } = renderFollow([rail(), homeRail("adductor_iso_bent", "Adductor squeeze")]);
+    expect(screen.getByText("The whole session")).toBeDefined();
+    screen.getByText(/^Start — Back squat/).click();
+    expect(onStart).toHaveBeenCalled();
+  });
+});

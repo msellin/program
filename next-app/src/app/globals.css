@@ -248,11 +248,17 @@ main { animation: route-in 150ms ease-out; }
    actions. Motion-safe respected via the transition property; users with
    prefers-reduced-motion still see the opacity change but instantly. */
 @media (hover: none) {
+  /* revert-layer, not revert (2026-10-20). `revert` rolls back to the
+     BROWSER's stylesheet, whose button background is ButtonFace — grey on
+     Android. Touch browsers keep :hover on the last tapped element, so every
+     tapped button turned into a grey box (founder, follow-along Back button
+     and Brief rows). revert-layer drops only this unlayered override and
+     lands on the app's own Tailwind styles. */
   a:hover, button:hover, [role="button"]:hover {
-    background-color: revert;
-    color: revert;
-    border-color: revert;
-    text-decoration-color: revert;
+    background-color: revert-layer;
+    color: revert-layer;
+    border-color: revert-layer;
+    text-decoration-color: revert-layer;
   }
   a:active, button:active, [role="button"]:active {
     opacity: 0.7;

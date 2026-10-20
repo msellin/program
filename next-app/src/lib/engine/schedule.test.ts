@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { blocksForDate } from "./plan-generator";
-import { strengthBlocksForDate, activePhaseFor } from "./schedule";
+import { strengthBlocksForDate, activePhaseFor, blockShownOnDay } from "./schedule";
 import fs from "node:fs";
 import path from "node:path";
 import type { Program, Store } from "../schemas";
@@ -365,5 +365,21 @@ describe("the hip home block reaches Today (2026-10-19)", () => {
 
   it("does not add the opt-in skill block", () => {
     for (const d of ["2026-10-27", "2026-10-30"]) expect(ids(d)).not.toContain("block_daily_skill");
+  });
+});
+
+describe("blockShownOnDay guards stale stored schedules (2026-10-20)", () => {
+  // The founder's stored schedule carried block_daily_skill after it was
+  // retagged `skill`; the read paths now re-apply the category rule.
+  const hip = loadProgramJson("anterior-hip-rebuild");
+  const block = (id: string) => hip.blocks.find((b) => b.id === id)!;
+  it("hides the hip skill block and keeps strength and the home block", () => {
+    expect(blockShownOnDay(hip, block("block_daily_skill"))).toBe(false);
+    expect(blockShownOnDay(hip, block("block_a_home"))).toBe(true);
+    expect(blockShownOnDay(hip, block("block_squat_heavy"))).toBe(true);
+  });
+  it("never filters other programmes", () => {
+    const om = loadProgramJson("overhead-mobility");
+    for (const b of om.blocks) expect(blockShownOnDay(om, b)).toBe(true);
   });
 });

@@ -54,13 +54,20 @@ export function BriefView({
   onSelectExercise: (key: string) => void;
   /** Blocks the guided follow-along player can run (all unloaded work). */
   followBlocks?: { id: string; name: string; count: number }[];
-  onFollowAlong?: (blockId: string) => void;
+  onFollowAlong?: (blockId: string, startKey?: string) => void;
   sheet: SessionSheet;
   onOpenSheet: (s: SessionSheet) => void;
   onCloseSheet: () => void;
 }) {
   const [expandedProposalId, setExpandedProposalId] = useState<string | null>(null);
-  const hero = railExercises[0];
+  // Exercises in a follow-along block live INSIDE its card, not again in the
+  // session list (founder, 2026-10-20: "1 item that starts the flow and then
+  // all 6 items duplicate"). The hero and the Start CTA describe the set-flow
+  // work; a day that is all follow-along gets a follow-along Start instead.
+  const followIds = new Set(onFollowAlong ? followBlocks.map((b) => b.id) : []);
+  const listRail = railExercises.filter((r) => !followIds.has(r.blockId));
+  const allFollow = followIds.size > 0 && listRail.length === 0;
+  const hero = listRail[0];
   const heroShape: SetShape = hero ? setShape(hero) : { kind: "none" };
   const totalMinutes = blocks.reduce((sum, b) => {
     if (!b.duration_min) return sum;
@@ -134,6 +141,8 @@ export function BriefView({
 
   const startLabel = isPrescriptionSession
     ? "Log this session"
+    : allFollow
+    ? "Start — Follow along"
     : !hero
     ? "Start"
     : heroLoggedCount > 0
@@ -280,31 +289,59 @@ export function BriefView({
         ) : null}
 
         {onFollowAlong && followBlocks.length > 0 ? (
-          <div className="mb-4 space-y-2">
-            {followBlocks.map((b) => (
-              <button
-                key={b.id}
-                type="button"
-                onClick={() => onFollowAlong(b.id)}
-                className="flex w-full items-center gap-3 rounded border border-line-soft bg-surface px-3.5 py-3 text-left"
-              >
-                <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-bronze" aria-hidden="true">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="#0e0f12"><polygon points="8 5 19 12 8 19 8 5" /></svg>
-                </span>
-                <span className="min-w-0 flex-grow">
-                  <span className="block text-[15px] font-semibold text-strong">Follow along · {humanBlockName(b.name)}</span>
-                  <span className="block text-[13px] text-muted">
-                    {b.count} {b.count === 1 ? "move" : "moves"} · guided, one at a time, with a timer
-                  </span>
-                </span>
-              </button>
-            ))}
+          <div className="space-y-2">
+            {followBlocks.map((b) => {
+              const moves = railExercises.filter((r) => r.blockId === b.id);
+              return (
+                <div key={b.id} className="overflow-hidden rounded border border-line-soft bg-surface">
+                  <button
+                    type="button"
+                    onClick={() => onFollowAlong(b.id)}
+                    className="flex w-full items-center gap-3 px-3.5 py-3 text-left"
+                  >
+                    <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-bronze" aria-hidden="true">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="#0e0f12"><polygon points="8 5 19 12 8 19 8 5" /></svg>
+                    </span>
+                    <span className="min-w-0 flex-grow">
+                      <span className="block text-[15px] font-semibold text-strong">Follow along · {humanBlockName(b.name)}</span>
+                      <span className="block text-[13px] text-muted">
+                        {b.count} {b.count === 1 ? "move" : "moves"} · guided, one at a time, with a timer
+                      </span>
+                    </span>
+                  </button>
+                  <ul className="border-t border-line-soft">
+                    {moves.map((r) => {
+                      const logged = countLoggedSets(entrySets(store.logs[activeDate]?.exercises[r.key] ?? null), r.isLoadable);
+                      const isOptional = requiredRowCount(r) === 0;
+                      return (
+                        <li key={r.key}>
+                          <button
+                            type="button"
+                            onClick={() => onFollowAlong(b.id, r.key)}
+                            aria-label={`Follow along from ${exerciseListName(r.exercise)}`}
+                            className="flex w-full items-center justify-between gap-3 px-3.5 py-2.5 text-left"
+                          >
+                            <span className="min-w-0">
+                              <span className="block truncate text-[14px] text-strong">{exerciseListName(r.exercise)}</span>
+                              <span className="block text-[12.5px] text-muted">{railScheme(r)}</span>
+                            </span>
+                            <span className="flex-shrink-0 font-mono text-[10px] uppercase tracking-[.1em] text-muted">
+                              {logged >= r.rowCount ? "Done" : logged > 0 ? "Held" : isOptional ? "Optional" : ""}
+                            </span>
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              );
+            })}
           </div>
         ) : null}
 
-        <div>
+        <div className={allFollow && prescriptionBlocks.length === 0 && !escalation ? "hidden" : undefined}>
           <p className="font-mono text-[10px] uppercase tracking-[.16em] text-muted mb-[9px]">
-            {isPrescriptionSession ? "Today's session" : "The whole session"}
+            {isPrescriptionSession ? "Today's session" : allFollow ? "Also today" : "The whole session"}
           </p>
           <div className="space-y-[7px]">
             {prescriptionBlocks.map((b) => (
@@ -364,7 +401,7 @@ export function BriefView({
                 <p className="text-[13.5px] leading-snug text-ink">{note}</p>
               </div>
             ))}
-            {railExercises.map((r) => {
+            {listRail.map((r) => {
               const entry = store.logs[activeDate]?.exercises[r.key] ?? null;
               const loggedCount = countLoggedSets(entrySets(entry), r.isLoadable);
               // Not `entry?.done` — the store flips that flag true on the
@@ -475,6 +512,7 @@ export function BriefView({
             // (`runs[].total_seconds where activity_type == 'row'`).
             // Starting the set flow here opened an empty shell.
             if (isPrescriptionSession) onOpenSheet("off-plan");
+            else if (allFollow) onFollowAlong?.(followBlocks[0].id);
             else onStart();
           }}
           className={

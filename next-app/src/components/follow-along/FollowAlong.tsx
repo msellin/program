@@ -44,16 +44,19 @@ const RING = 2 * Math.PI * 80;
 export function FollowAlong({
   title,
   steps,
+  initialIndex = 0,
   date,
   onExit,
 }: {
   title: string;
   steps: FollowStep[];
+  /** Start on this step (a move tapped in the Brief's follow-along card). */
+  initialIndex?: number;
   date: string;
   onExit: () => void;
 }) {
   const updateSet = useStore((s) => s.updateSet);
-  const [idx, setIdx] = useState(0);
+  const [idx, setIdx] = useState(initialIndex);
   const [phase, setPhase] = useState<Phase>("ready");
   const [endAt, setEndAt] = useState(0);
   const [pausedLeft, setPausedLeft] = useState<number | null>(null);

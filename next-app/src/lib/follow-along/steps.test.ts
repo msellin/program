@@ -52,6 +52,8 @@ describe("follow-along steps for the founder's home block", () => {
 
   it("carries the 90/90 as optional and gives every illustrated exercise its figure", () => {
     expect(of("hip_switch_9090").every((s) => s.optional)).toBe(true);
+    // No authored set count: the same default (3) the Brief shows.
+    expect(of("hip_switch_9090")).toHaveLength(3);
     for (const s of steps) expect(s.figure, s.exerciseId).not.toBeNull();
   });
 

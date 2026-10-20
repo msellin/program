@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { loadProgram, loadExercises, applyProgramExerciseOverrides } from "@/lib/data-loader";
 import { useStore, entrySets } from "@/lib/useStore";
 import { today as todayISO } from "@/lib/utils";
-import { activePhaseFor, isPastProgramEnd, isAwayOn, HOLIDAY_GAP } from "@/lib/engine/schedule";
+import { activePhaseFor, isPastProgramEnd, isAwayOn, HOLIDAY_GAP, blockShownOnDay } from "@/lib/engine/schedule";
 import { blocksForDate, composeBlockForUser } from "@/lib/engine/plan-generator";
 import { getBlocksForDate, isBlockObjectOn, DAY_VISIBLE_BLOCK_STATES } from "@/lib/engine/block-selectors";
 import { migrateLegacyToBlocks, needsBlockMigration } from "@/lib/migrations/legacy-to-blocks";
@@ -114,7 +114,7 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
   // Session-shell UI state (README interaction spec).
   const [mode, setMode] = useState<"brief" | "set">("brief");
   // The block being run in the guided follow-along player, or null.
-  const [followBlockId, setFollowBlockId] = useState<string | null>(null);
+  const [follow, setFollow] = useState<{ blockId: string; startKey?: string } | null>(null);
   const [activeKey, setActiveKey] = useState<string | null>(null);
   const [activeSetIndex, setActiveSetIndex] = useState(0);
   const [editingLoad, setEditingLoad] = useState(false);
@@ -147,7 +147,7 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
           );
           return scheduledForToday
             .map((sb) => program.blocks.find((b) => b.id === sb.block_template_id))
-            .filter((b): b is Block => Boolean(b))
+            .filter((b): b is Block => Boolean(b) && blockShownOnDay(program, b!))
             // `scheduled_blocks` stores template IDs, so what comes back is
             // the AUTHORED block. Slot-based programs (overhead-mobility)
             // author no items at all — their exercises are composed per user
@@ -324,14 +324,17 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
   const followBlocks = blocks
     .map((b) => ({ block: b, rail: railExercises.filter((r) => r.blockId === b.id) }))
     .filter(({ rail }) => rail.length > 0 && rail.every((r) => !r.isLoadable));
-  const following = followBlocks.find(({ block }) => block.id === followBlockId) ?? null;
+  const following = followBlocks.find(({ block }) => block.id === follow?.blockId) ?? null;
   if (following) {
+    const steps = buildSteps(following.rail.map((r) => ({ blockId: r.blockId, exercise: r.exercise, item: r.item })));
+    const start = Math.max(0, steps.findIndex((s) => s.key === follow?.startKey));
     return (
       <FollowAlong
         title={humanBlockName(following.block.name)}
-        steps={buildSteps(following.rail.map((r) => ({ blockId: r.blockId, exercise: r.exercise, item: r.item })))}
+        steps={steps}
+        initialIndex={start}
         date={activeDate}
-        onExit={() => setFollowBlockId(null)}
+        onExit={() => setFollow(null)}
       />
     );
   }
@@ -350,7 +353,7 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
         onStart={startSession}
         onSelectExercise={jumpTo}
         followBlocks={followBlocks.map(({ block, rail }) => ({ id: block.id, name: block.name, count: rail.length }))}
-        onFollowAlong={setFollowBlockId}
+        onFollowAlong={(blockId, startKey) => setFollow({ blockId, startKey })}
         sheet={sheet}
         onOpenSheet={setSheet}
         onCloseSheet={() => setSheet(null)}

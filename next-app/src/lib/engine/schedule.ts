@@ -205,7 +205,7 @@ function isPhaseGateSkipped(
  * the founder's blocks were materialized through 2026-11-18 — without the
  * bump every Saturday until then would still say "volume squat".
  */
-export const SCHEDULE_RULES_VERSION = "2026-10-19-hip-home-block-on-today";
+export const SCHEDULE_RULES_VERSION = "2026-10-20-hip-read-time-category";
 
 export function activePhaseFor(
   program: Program,
@@ -608,13 +608,23 @@ export function strengthBlocksForDate(
   profile?: Store["user_profile"],
 ): Block[] {
   const ids = strengthBlockIdsForDate(program, phase, dateISO, profile);
-  const slug = (program as unknown as { slug?: string }).slug;
-  if (slug === HIP_SLUG) {
-    return program.blocks.filter(
-      (b) => ids.includes(b.id) && ["strength", "accessory"].includes(b.category ?? "strength"),
-    );
-  }
-  return program.blocks.filter((b) => ids.includes(b.id));
+  return program.blocks.filter((b) => ids.includes(b.id) && blockShownOnDay(program, b));
+}
+
+/**
+ * Whether a programme's block may appear on a day at all — the category rule
+ * above, shared with the block-object READ paths (2026-10-20).
+ *
+ * `scheduled_blocks` is a stored snapshot. On the founder's phone it carried
+ * `block_daily_skill` on 2026-10-20 although the shipped JSON had retagged it
+ * `skill`: the snapshot was written from programme data that predated the
+ * retag, and snapshots only regenerate on a rules-version change. Applying
+ * the rule again at read keeps a stale snapshot from showing a block the
+ * programme no longer schedules.
+ */
+export function blockShownOnDay(program: Program, block: Block): boolean {
+  if (program.slug !== HIP_SLUG) return true;
+  return ["strength", "accessory"].includes(block.category ?? "strength");
 }
 
 // Kept as named exports for existing consumers; both are hip-only signals.

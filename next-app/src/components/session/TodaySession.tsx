@@ -20,6 +20,7 @@ import {
   isPastProgramEnd,
   isAwayOn,
   HOLIDAY_GAP,
+  blockShownOnDay,
 } from "@/lib/engine/schedule";
 import { applyProgramSoftening, blocksForDate, composeBlockForUser } from "@/lib/engine/plan-generator";
 import { getBlocksForDate, isBlockObjectOn, DAY_VISIBLE_BLOCK_STATES } from "@/lib/engine/block-selectors";
@@ -181,7 +182,7 @@ export function TodaySession({
       );
       const composed = scheduledForToday
         .map((sb) => p.blocks.find((b) => b.id === sb.block_template_id))
-        .filter((b): b is Block => Boolean(b))
+        .filter((b): b is Block => Boolean(b) && blockShownOnDay(p, b!))
         // Template ID → authored block, which for slot-based programs has no
         // items until they're composed per user. See composeBlockForUser.
         .map((b) => composeBlockForUser(p, b, userProfile, activeDate, byId, { onlyIfEmpty: true }));
