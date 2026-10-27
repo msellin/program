@@ -79,7 +79,7 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 | SG-03 | Remove "no signup wall", "closed beta", "two minutes"; review the `auth-errors.ts` invite remap | H | A | S | compliance 8 | ✓ 6e89b95
 | SG-04 | Privacy truth pass (`:75,80,97,114,117,121,135`): Stripe not Paddle; name Google OAuth, Cloudflare Analytics, Resend | H | A | M | compliance 4, roadmap 3 | ✓ 6e89b95
 | SG-05 | Landing legal pages mirror or link the app's; terms consistent (beta/pricing) | H | A | S | compliance 5 | ✓ 43048ef
-| SG-06 | Branded Supabase email templates (confirm, reset) | H | A+O | S | g3 | ✓ 43048ef
+| SG-06 ✓ applied 2026-10-27 | Branded Supabase email templates (confirm, reset) | H | A+O | S | g3 | ✓ 43048ef
 | SG-08 | Cloudflare Turnstile widget on sign-up (email + Google), passing `captchaToken`; THEN enable Supabase captcha (`CAPTCHA=1`) | H | A+O | M | kickoff kit | ✓ 6e89b95
 | SG-07 | Paid terms: renewal, EU 14-day withdrawal, VAT; a consent-withdrawal path | S | A (+lawyer) | M | compliance §4 |
 
@@ -112,7 +112,7 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 ## 8. Infrastructure and ops
 | ID | Action | When | Who | Effort | Source |
 |----|--------|------|-----|--------|--------|
-| O-01 | Supabase: sign-ups ON, custom SMTP (Resend), captcha (Turnstile), auth rate limits, confirm-email ON | H | A+O | S | O1 |
+| O-01 ✓ SMTP+limits 2026-10-27 (captcha waits on SG-08) | Supabase: sign-ups ON, custom SMTP (Resend), captcha (Turnstile), auth rate limits, confirm-email ON | H | A+O | S | O1 |
 | O-02 | A real phone sign-up with a real inbox, after deploy | H | O | S | O4 |
 | O-03 | Re-run `npm run e2e:personas` after the sprint; fix the muscle-up-elbow failure (deferral) | H | A | S | x11 |
 | O-04 | Sentry in functions; function rate limits; confirm the Supabase plan and backups | S | A+O | M | h17 |
