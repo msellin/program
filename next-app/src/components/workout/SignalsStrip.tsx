@@ -421,7 +421,7 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
           ) : null}
 
           {/* Delegated components — each renders null when inactive. */}
-          <AssessmentDueBanner date={date} />
+          {program.slug === "anterior-hip-rebuild" ? <AssessmentDueBanner date={date} /> : null}
         </div>
       ) : null}
     </section>

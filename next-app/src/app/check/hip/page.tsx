@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, Check } from "lucide-react";
 import { HIP_FLEXOR_PACK, scoreKeysFor, type AssessmentQuestion } from "@/lib/assessments-data";
@@ -20,6 +21,13 @@ import { VideoModal } from "@/components/VideoModal";
 export default function HipCheckPage() {
   const pack = HIP_FLEXOR_PACK;
   const recordAssessment = useStore((s) => s.recordAssessment);
+  const router = useRouter();
+  const hydrated = useStore((s) => s.hydrated);
+  const activeProgram = useStore((s) => s.store.user_profile?.active_program_id);
+  const isHip = activeProgram === "anterior-hip-rebuild";
+  useEffect(() => {
+    if (hydrated && !isHip) router.replace("/");
+  }, [hydrated, isHip, router]);
 
   const steps = useMemo(() => buildSteps(pack.questions), [pack.questions]);
   const [stepIdx, setStepIdx] = useState(-1); // -1 = intro
@@ -33,6 +41,8 @@ export default function HipCheckPage() {
   const current = !isIntro && !isReview ? steps[stepIdx] : null;
 
   const missingKeys = scoreKeysFor(pack).filter((k) => scores[k] == null);
+
+  if (!hydrated || !isHip) return null;
 
   if (submitted) {
     return (

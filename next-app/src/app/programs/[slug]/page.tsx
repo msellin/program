@@ -15,8 +15,9 @@ export function generateStaticParams(): Array<{ slug: string }> {
     "manifest.json",
   );
   const raw = readFileSync(manifestPath, "utf-8");
-  const manifest = JSON.parse(raw) as { programs: Array<{ slug: string }> };
-  return manifest.programs.map((p) => ({ slug: p.slug }));
+  const manifest = JSON.parse(raw) as { programs: Array<{ slug: string; personal?: boolean }> };
+  // Personal programs are not catalog-public: no preview page is exported.
+  return manifest.programs.filter((p) => !p.personal).map((p) => ({ slug: p.slug }));
 }
 
 export const dynamicParams = false;

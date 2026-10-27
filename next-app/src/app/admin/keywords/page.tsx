@@ -49,8 +49,12 @@ export default function AdminKeywordsPage() {
         cache: "no-store",
       });
       if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        setError(`${res.status} — ${body.error ?? res.statusText}`);
+        // Non-admins learn nothing about what this page is.
+        if (res.status === 401 || res.status === 403) setError("Not found.");
+        else {
+          const body = await res.json().catch(() => ({}));
+          setError(`${res.status} — ${body.error ?? res.statusText}`);
+        }
         return;
       }
       const json = (await res.json()) as ApiResponse;
