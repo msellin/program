@@ -1,0 +1,21 @@
+# G2 support and data-rights audit (2026-10-27, read-only)
+Verdict: NOT ready for strangers. Privacy copy makes false claims, delete and reset error states are broken, feedback can fail silently. Founder contact is sellinmargus@gmail.com on every public surface checked.
+- [HACKATHON] legal/privacy/page.tsx:110-111 says local data stays "until you sign out". profile/page.tsx:83-86 and StoreHydrator.tsx:108 never wipe on sign-out. Fix the copy or wipe on sign-out.
+- [HACKATHON] legal/privacy/page.tsx:115 says in-app feedback goes to Sentry. It goes to Resend (feedback.ts:110).
+- [HACKATHON] legal/privacy/page.tsx:75 promises consent timestamps kept 3 years after deletion. sign-up/page.tsx:74 stores them in auth user_metadata, which delete-account.ts:91 removes. The claim is false.
+- [HACKATHON] legal/privacy/page.tsx:170-171 say export and delete are "from Profile". Both are on /account, reached via profile/page.tsx:104. Correct the copy.
+- [HACKATHON] Delete takes 4 taps: Profile tab (BottomNav.tsx:32), identity chip, "Delete my account", "Delete forever" (account/page.tsx:217-244). Limit is 3. Add a direct Settings row.
+- [HACKATHON] account/actions.ts:56 shows raw server JSON to the user when delete fails. Replace with plain copy plus sellinmargus@gmail.com.
+- [HACKATHON] reset-password/page.tsx:21-35 never detects an expired or used link. It shows "Waiting for the reset link" forever. Detect the #error hash and offer "send a new link".
+- [HACKATHON] reset-password/page.tsx:53 shows raw Supabase error text. sign-in/page.tsx:24 and auth-errors.ts:52 pass network errors through verbatim ("Failed to fetch"-style).
+- [HACKATHON] feedback.ts:67-72 has no try/catch around the Supabase call, so an outage gives a bare 500. Line 73 reports any non-OK as "Session expired".
+- [HACKATHON] feedback.ts:46-76 has no per-user rate limit. Any signed-in account can send unlimited Resend mail. Add a daily cap.
+- [HACKATHON] feedback.ts:107 "email instead" gives no address. Print sellinmargus@gmail.com.
+- [HACKATHON] Sign-out sheet (profile/page.tsx, ConfirmSheet) says "Your data is synced". postgres-adapter.ts:85-89 returns false silently and useStore.ts:24,41 discard it. Soften the copy until a sync indicator exists.
+- [BEFORE-SCALE] No server-side export. account/actions.ts:22-34 exports only the local store, so auth metadata and feedback are absent. Portability is partial.
+- [BEFORE-SCALE] No sync-status UI and no retry for failed pushes (postgres-adapter.ts:170-177). Cross-device data can be lost silently.
+- [BEFORE-SCALE] Email change is a mailto (account/page.tsx:299-305). Fine for a closed beta, not for open ads.
+- [BEFORE-SCALE] Feedback lands in one personal Gmail with no ticket trail (feedback.ts:42).
+- [BEFORE-SCALE] Retention claims (backups 30/90 days, Sentry 90 days) are not checked against any backup or Sentry config.
+- [LATER] super-admin.ts:8 ships margus@dolmit.com in the client bundle. Remove it or move the check server-side.
+- Not checked: Supabase dashboard (signup toggle, Site URL and redirect allowlist, email templates, SMTP), Resend domain verification for notices@terav.fit, Sentry scrubbing, backups, Supabase region, sign-up consent text, Paddle, and a live browser run (none performed).

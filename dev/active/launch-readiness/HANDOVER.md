@@ -21,8 +21,8 @@ Non-negotiables from `CLAUDE.md`:
 - **Never checked:** Supabase dashboard, Cloudflare Analytics toggle, ad accounts, Meta's health classification.
 - **The Haiku audits make mistakes.** Fix only what you verified; the Sonnet findings say what they re-checked.
 
-## 1. Owner decisions: get the answers before B3, B5 and B11 (recommendation first)
-| # | Decision | Recommendation |
+## 1. Owner decisions: ALL AGREED 2026-10-27 (owner: "I agree to all")
+| # | Decision | Decided |
 |---|----------|----------------|
 | D1 | Today's offer | Free open beta; paid comes with Stripe |
 | D2 | Programs to advertise | First strict pull-up, handstand walk, strength + cardio (concurrent-strength-maintenance), once B12 is fixed. This replaces the old "Engine Builder alone" beta plan, since Engine Builder carries withdrawn numbers |
@@ -32,18 +32,22 @@ Non-negotiables from `CLAUDE.md`:
 | D6 | Email confirmation at sign-up | On, once Resend SMTP is set (O1) |
 | D7 | Budget | €150: Meta €100, Google €50 |
 | D8 | Review panel before publishing | One round, 3 Sonnet lenses on the ad copy + landing (~150k tokens) |
-| D9 | Billing timing | Stripe (decided). Free beta today, Stripe straight after (rec), or paid trial from the first click (+3–5 h today)? |
+| D9 | Billing timing | Stripe; free beta for the first ads, Stripe straight after |
 | D10 | Free/Pro line | As drafted in `free-tier-design.md` (free = one focus + full engine + safety; Pro = more focuses, full history, reports, next-focus, imports) |
 
-## 2. Owner-only steps: start now, some wait on approvals
-| # | Step | Blocks ads? |
-|---|------|-------------|
-| O1 | Supabase: sign-ups ON; custom SMTP via Resend; captcha (Turnstile) + auth rate limits; confirm-email per D6 | yes |
-| O2 | Cloudflare Web Analytics ON for terav.fit and app.terav.fit | yes |
-| O3 | Meta Business + Google Ads accounts; 18+; interests/keywords only; **no** custom audiences, remarketing or Customer Match | yes |
-| O4 | One real sign-up from your phone after the sprint deploys | yes |
-| O5 | Stripe: a **separate Terav account** under your existing login; Stripe Tax on; ask the accountant about EU VAT/OSS (home-country VAT under €10k/year of EU cross-border consumer sales, OSS above) | no |
-| O6 | Lawyer: Art. 9 consent design + DPIA; is cookieless analytics OK without consent; subscription terms | before scale |
+## 2. External setup: who does what
+Owner, 2026-10-27: "probably at least half you can do". An agent in the hackathon session can do the marked rows
+**if the owner provides an API token as an env var and approves each change**. Nothing is done in this session.
+| # | Step | Who | Blocks ads? |
+|---|------|-----|-------------|
+| O1 | Supabase auth config: sign-ups ON, custom SMTP via Resend, captcha, auth rate limits, confirm-email ON, branded email templates | **Agent** via the Supabase Management API (`PATCH /v1/projects/{ref}/config/auth`), with an owner-provided access token + Resend SMTP key as env vars | yes |
+| O2 | Cloudflare Web Analytics for terav.fit + app.terav.fit; Turnstile site key for the captcha | **Agent** via the Cloudflare API/wrangler, with an owner-scoped token | yes |
+| O3 | Meta Business + Google Ads accounts: business verification, payment method | **Owner** (identity + payment) | yes |
+| O3b | Ad campaigns: 3 ad sets, targeting spec, copy and creatives, UTMs | **Agent prepares** a ready-to-paste spec + image files; **owner** uploads and sets spend | yes |
+| O4 | One real sign-up on a phone with a real inbox | **Owner** (real device + inbox); the agent re-checks the flow headlessly with the harness | yes |
+| O5 | Stripe: separate Terav account (owner), then products, prices, the 14-day trial, Customer Portal, webhook endpoint and Stripe Tax config | **Owner** creates the account; **agent** does the rest via Stripe CLI/API in test mode, and the owner flips to live | no |
+| O6 | Lawyer: Art. 9 consent design + DPIA, cookieless analytics, subscription terms | **Owner** hires; **agent drafts** the question list + current-state summary | before scale |
+| O7 | Accountant: EU VAT / OSS for Stripe sales | **Owner**; the agent drafts the one-paragraph question | before billing |
 
 Meta ad review can take up to 24 h. Submit as soon as B1–B8 are live.
 

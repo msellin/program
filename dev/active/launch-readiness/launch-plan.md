@@ -65,7 +65,7 @@ conversion rates.
 - **Ops:** Sentry in functions; function rate limits; confirm the Supabase plan and backups.
 - **Video coach:** pull-up first, validated on the owner's clips (`findings-video-coach.md`).
 
-## D. Owner decisions, one line each (recommendation first)
+## D. Owner decisions: ALL AGREED 2026-10-27 (see HANDOVER §1 for the final wording)
 1. **Today's offer:** free open beta, paid later? *(rec: yes)*
 2. **Programs to advertise:** first strict pull-up, handstand walk, strength + cardio? *(rec: yes)*
 3. **Say "CrossFit"?** Ads say "functional fitness" (trademark unchecked). Does the landing say "CrossFit and
