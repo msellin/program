@@ -321,6 +321,7 @@ export function TodaySession({
         if (!hasHistory && noCheckToday && activeDate === todayISO()) {
           return (
             <Day1EmptyState
+              slug={primary?.slug}
               sessionHref={
                 allBlocks.length > 0 && primary?.slug
                   ? `/session/${primary.slug}?date=${activeDate}`
@@ -334,7 +335,8 @@ export function TodaySession({
 
       {!isPastProgramEnd(primary, activeDate, userProfile) ? (
         <>
-          <ProposalStack program={primary} date={activeDate} />
+          {/* A fresh sign-up has no log for the engine to propose against. */}
+          {hasHistory ? <ProposalStack program={primary} date={activeDate} /> : null}
           {/* A-UX-03: no readiness hero ("Workout ready") on a rest day. */}
           {allBlocks.length > 0 ? <HeroStateCard date={activeDate} /> : null}
           <SignalsStrip program={primary} date={activeDate} />
@@ -529,7 +531,7 @@ export function TodaySession({
                       : "rest";
             return (
               <>
-              {variant === "rest" && activeDate === todayISO() && primary.slug ? (
+              {variant === "rest" && activeDate === todayISO() && primary.slug && (hasHistory || logs[activeDate]?.symptoms) ? (
                 <FirstSessionOfferCard slug={primary.slug} />
               ) : null}
               <RestDayCard
