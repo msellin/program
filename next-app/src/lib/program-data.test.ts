@@ -5,7 +5,6 @@ import {
   programSchema,
   exercisesFileSchema,
   programManifestSchema,
-  storeSchema,
 } from "./schemas";
 
 /**
@@ -58,10 +57,6 @@ describe("shared runtime data validates", () => {
 
   it("programs/manifest.json", () => {
     expectParses(programManifestSchema, "programs/manifest.json", readJson(PROGRAM_DIR, "manifest.json"));
-  });
-
-  it("log.json seed", () => {
-    expectParses(storeSchema, "log.json", readJson(DATA_DIR, "log.json"));
   });
 });
 

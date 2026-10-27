@@ -5,7 +5,6 @@ import { today } from "./utils";
 const KEY = "program.log.v2";
 const OLD_KEY = "program.log.v1";
 const CORRUPT_BACKUP_KEY = "program.log.v2.corrupt";
-const SEED_DONE_KEY = "program.log.v2.seeded";  // set once seed-from-repo has run
 
 export const emptyStore = (): Store => ({
   version: 2,
@@ -127,43 +126,6 @@ export function saveStore(store: Store): void {
     // Quota exceeded, corrupt storage, etc.
     console.error("saveStore failed:", e);
     throw e;
-  }
-}
-
-/**
- * Fetch /data/log.json (the seed log the repo ships) and merge into the store
- * ONLY on the very first visit ever. The `SEED_DONE_KEY` flag is set once
- * seed either succeeds or is skipped, so subsequent wipes stay wiped, and
- * migrated v1 data isn't clobbered by the seed.
- */
-export async function seedFromRepoLogIfEmpty(current: Store): Promise<Store | null> {
-  if (typeof window === "undefined") return null;
-  // Never seed twice. Wipe intentionally does NOT clear this flag.
-  if (localStorage.getItem(SEED_DONE_KEY) === "1") return null;
-
-  const isEmpty =
-    Object.keys(current.logs).length === 0 &&
-    Object.keys(current.training_maxes).length === 0;
-  // Mark as seed-attempted BEFORE the fetch so a race between StrictMode double-mount
-  // (or concurrent tabs) doesn't produce two overlapping writes.
-  try { localStorage.setItem(SEED_DONE_KEY, "1"); } catch { /* ignore quota */ }
-
-  if (!isEmpty) return null; // store already has content — v1 migration wins
-
-  try {
-    const res = await fetch("/data/log.json", { cache: "no-cache" });
-    if (!res.ok) return null;
-    const data = await res.json();
-    const result = storeSchema.safeParse(data);
-    if (!result.success) {
-      console.warn("Repo log fell short of schema; skipping seed:", result.error.message);
-      return null;
-    }
-    saveStore(result.data);
-    return result.data;
-  } catch (e) {
-    console.warn("Repo log seed fetch failed:", e);
-    return null;
   }
 }
 

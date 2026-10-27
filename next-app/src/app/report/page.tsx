@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Printer, ChevronLeft } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useStore } from "@/lib/useStore";
-import { loadProgram, loadExercises, applyProgramExerciseOverrides, loadClinicalContext, type ClinicalContext } from "@/lib/data-loader";
+import { loadProgram, loadExercises, applyProgramExerciseOverrides } from "@/lib/data-loader";
 import { computeReport, type ReportData } from "@/lib/engine/report";
 import { RetestMetricsPanel } from "@/components/progress/RetestMetricsPanel";
 import { isPastProgramEnd } from "@/lib/engine/schedule";
@@ -36,7 +36,6 @@ type RangePreset = "4w" | "12w" | "26w" | "all";
 export default function ReportPage() {
   const [program, setProgram] = useState<Program | null>(null);
   const [byId, setById] = useState<Record<string, Exercise>>({});
-  const [clinical, setClinical] = useState<ClinicalContext | null>(null);
   // Default to "all" for accounts with little data so a fresh account doesn't
   // open on "Last 12w" and see empty sections everywhere. Once the user has
   // 4+ weeks of logs the 12w default becomes useful; before that, "all" is
@@ -77,11 +76,10 @@ export default function ReportPage() {
 
   useEffect(() => {
     if (!primarySlug) return;
-    void Promise.all([loadProgram(primarySlug), loadExercises(), loadClinicalContext()])
-      .then(([p, x, c]) => {
+    void Promise.all([loadProgram(primarySlug), loadExercises()])
+      .then(([p, x]) => {
         setProgram(p);
         setById(applyProgramExerciseOverrides(x.byId, p));
-        setClinical(c);
       })
       .catch((e) => setError(e instanceof Error ? e.message : String(e)));
   }, [primarySlug]);
@@ -755,54 +753,6 @@ export default function ReportPage() {
               </li>
             ))}
           </ul>
-        </ReportSection>
-      ) : null}
-
-      {/* Clinical context — hip program only. `clinical-context.json` is the
-          founder's personal file (imaging findings, provocative-position
-          screening, red-flag rules for HIS hip). Rendering it under a
-          rowing / engine / handstand user's Report was a cross-program leak. */}
-      {clinical && isHipProgram ? (
-        <ReportSection
-          title="Clinical constraints on file"
-          subtitle="Constraints the training programme respected across the range above. Sourced from the user's clinical records; not medical advice from this app."
-        >
-          {clinical.provocative_positions?.length ? (
-            <div className="mb-3">
-              <p className="font-semibold text-[14px] text-strong mb-1">
-                Provocative positions avoided
-              </p>
-              <ul className="list-disc pl-5 text-[14px] space-y-1">
-                {clinical.provocative_positions.map((p) => (
-                  <li key={p.id}>
-                    <span className="font-semibold">{p.label}</span>
-                    {p.reason ? <span className="text-muted"> — {p.reason}</span> : null}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
-          {clinical.red_flags?.length ? (
-            <div className="mb-3">
-              <p className="font-semibold text-[14px] text-strong mb-1">Red-flag rules</p>
-              <ul className="list-disc pl-5 text-[14px] space-y-1">
-                {clinical.red_flags.map((r) => (
-                  <li key={r.id}>
-                    <span className="font-semibold">{r.label}</span>
-                    {r.action ? (
-                      <span className="text-muted">
-                        {" "}
-                        — action: {r.action.replace(/_/g, " ")}
-                      </span>
-                    ) : null}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
-          {clinical.staleness_warning ? (
-            <p className="text-[12px] text-muted italic mt-2">{clinical.staleness_warning}</p>
-          ) : null}
         </ReportSection>
       ) : null}
 

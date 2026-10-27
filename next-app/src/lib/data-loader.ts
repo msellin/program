@@ -122,19 +122,6 @@ export function applyProgramExerciseOverrides(
   return out;
 }
 
-export async function loadClinicalContext(): Promise<ClinicalContext | null> {
-  if (cache.clinical) return cache.clinical;
-  try {
-    const res = await fetch("/data/clinical-context.json");
-    if (!res.ok) return null;
-    const data = (await res.json()) as ClinicalContext;
-    cache.clinical = data;
-    return data;
-  } catch {
-    return null;
-  }
-}
-
 export function clearDataCache(): void {
   cache = { programBySlug: new Map() };
 }

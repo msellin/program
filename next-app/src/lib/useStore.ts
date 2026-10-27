@@ -1,7 +1,7 @@
 "use client";
 
 import { create } from "zustand";
-import { ensureDay, ensureExercise, seedFromRepoLogIfEmpty } from "./storage";
+import { ensureDay, ensureExercise } from "./storage";
 import { SYMPTOM_SCALE_VERSION } from "./symptom-regions";
 import { getAdapter } from "./persistence/adapter";
 import type { Store, DayLog, ExerciseLog, SetLog, Program, RunLog, Proposal } from "./schemas";
@@ -462,14 +462,6 @@ export const useStore = create<StoreState>((set, get) => ({
     const adapter = getAdapter();
     const loaded = adapter.loadLocal();
     set({ store: loaded, hydrated: true });
-    // Seed-from-repo-log path DISABLED in multi-user mode. Historically it
-    // bootstrapped Margus's own account from /data/log.json when the store
-    // was empty; in the multi-user world it would inject Margus's data into
-    // a fresh new-user account (or overwrite a real user after a session
-    // reset if their local was momentarily empty). Kept as a dead symbol
-    // reference below so tree-shaking doesn't complain and a future
-    // single-user-migration path is trivial to re-enable if needed.
-    void seedFromRepoLogIfEmpty;
     // Pull remote (if online). Runs after local paint so UI isn't blocked.
     //
     // Empty-local guard: if the loaded local store has no logs, no TMs, no
