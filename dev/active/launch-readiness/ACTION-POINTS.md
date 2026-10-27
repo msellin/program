@@ -97,6 +97,7 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 | L-09 | Close the citation hold: evidence-verifier on all 125 → VERIFIED badges; publish the whitepapers as pages | S | A | L | evidence-angle |
 | L-10 | Named expert reviewer ("Reviewed by …") | L | O | — | evidence-angle |
 | L-11 | Real beta quote with consent (social proof) | S | O | S | product §4 |
+| L-12 | After the app redesign (D-03/D-04, A-UX-09): re-shoot real app screens and rebuild the landing visuals from them. Today the landing uses coded mockups (`TodayMockup` etc.), not screenshots, and the ad creatives are text cards (review panel #9: a phone-frame Today shot is the biggest click lever). Capture from the persona harness, never the owner's account | S | A | M | owner 2026-10-27, M-04 #9 |
 
 ## 7. Measurement and ads
 | ID | Action | When | Who | Effort | Source |
