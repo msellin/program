@@ -38,7 +38,7 @@
       "prerequisites": [],
       "short_description": "Block 1 of a 3-block, ~6-month engine transformation. Eight weeks of Zone 1/2 base with a single weekly hard session added in week 4. Row, bike, ski-erg, or run.",
       "who_this_is_for": "You've got okay strength but your engine is the thing holding you back — a metcon at 15 minutes falls apart, a 5k feels harder than it should, HR runs away at moderate pace. You want a plan that actually builds the base rather than chasing intervals from day one.",
-      "what_youll_achieve": "Block 1 of a 6-month engine transformation. In these 8 weeks: 5-8% VO2max improvement, a measurable resting HR drop (5-10 bpm typical), and — most importantly — the aerobic base that lets Block 2 (volume) and Block 3 (polarised) actually work. Modality is your choice at intake: row, bike, ski-erg, or run. Weeks 1-4 are low-impact regardless; running introduces at week 5 if that's your goal.",
+      "what_youll_achieve": "Block 1 of a longer engine build. Eight weeks of mostly easy aerobic work with a little intensity, retested at the end against your own baseline, so you see what changed for you rather than a promised number. It builds the aerobic base that Block 2 (volume) relies on. Modality is your choice at intake: row, bike, ski-erg, or run. Weeks 1-4 are low-impact regardless; running introduces at week 5 if that's your goal.",
       "retest": "Week 8 midweek. Repeat everything you measured at intake: resting HR (3-morning average), 5-minute submax HR at your intake pace, plus 500m row TT and/or 1km run TT if applicable. Rest HR and submax HR are always measurable — they're the honest answer to 'did the block work'.",
       "tags": [
         "endurance",
@@ -98,7 +98,7 @@
       ],
       "short_description": "For lifters adding cardio without losing the squat. Explosive-strength cost bounded, cited, PR-banned.",
       "who_this_is_for": "You have a documented strength floor you'd rather not lose. You want aerobic capacity. Traditional 5/3/1 fights with running; this program bounds the cost against Schumann 2022's SMD data.",
-      "what_youll_achieve": "Submax HR down 8-15 bpm at fixed pace, back squat / block pull / front squat maintained within 2.5 kg of pre-block TM, RPE ceiling 7 throughout (Schumann 2022 explosive-strength discipline).",
+      "what_youll_achieve": "Your back squat, block pull and front squat held near your pre-block training max while conditioning goes in alongside, at an RPE ceiling of 7. Strength and heart rate at a fixed pace are retested against your own baseline.",
       "retest": "Cycle-end 5RM confirm + submax HR at row pace-5. At week 8 (end of block).",
       "tags": [
         "strength",
@@ -123,9 +123,9 @@
       "prerequisites": [
         "An existing Z2 aerobic base — either you've been rowing / cycling / running easy for 4+ weeks recently, or you've completed the Engine Builder program."
       ],
-      "short_description": "For rowers chasing the 2K PR. Six weeks, cited, tapered — no more than that.",
-      "who_this_is_for": "You've built a Z2 base (or you've completed Engine Builder). Now you want to PR the 2K.",
-      "what_youll_achieve": "2K down 3-30 seconds by tier. Threshold pace shifted 3-6%. Race-day taper baked in.",
+      "short_description": "For rowers preparing for a 2K test. Six weeks, cited, tapered.",
+      "who_this_is_for": "You've built a Z2 base (or you've completed Engine Builder). Now you want to prepare for a 2K test.",
+      "what_youll_achieve": "Threshold and race-pace work matched to your tier, a race plan rehearsed in training, and a taper into test day. You retest against your own starting 2K.",
       "retest": "2K test every 2 weeks. Full test at week 6.",
       "tags": [
         "rowing",
@@ -259,8 +259,8 @@
         "Chest-strap HR monitor strongly recommended — half the block's target zones sit in the range where wrist-optical HR drops out."
       ],
       "short_description": "Block 2 of the 3-block engine transformation. Two hard sessions per week on top of a rising Z1 volume floor. Threshold pace shift is the headline metric.",
-      "who_this_is_for": "You finished Block 1 (or have an equivalent base) and want to keep going. Block 2 is where the majority of VO2max and threshold gains land — but only after the base is in. This is a sharp-end block: two hard sessions per week, more time, more intensity.",
-      "what_youll_achieve": "Threshold pace / power shift 2-5% by tier. Additional VO2max +4-9% on top of Block 1. Submax HR at fixed pace additional -3 to -8 bpm. Retest at week 4 (mid-block check) and week 8-10 (end-of-block).",
+      "who_this_is_for": "You finished Block 1 (or have an equivalent base) and want to keep going. Block 2 adds volume and threshold work, which only pays off once the base is in. This is a sharp-end block: two hard sessions per week, more time, more intensity.",
+      "what_youll_achieve": "More volume and more threshold work on top of the Block 1 base, matched to your tier. Retest at week 4 (mid-block check) and week 8-10 (end of block), against your own Block 1 numbers.",
       "retest": "20-min TT + submax HR at fixed pace at week 4 and week 8-10. Modality-specific TT (2K row / 5K run) at end-of-block if applicable.",
       "physical_test_prerequisite": "Fresh 20-min TT within the last 4 weeks OR schedule one in week 1 Wednesday.",
       "tags": [

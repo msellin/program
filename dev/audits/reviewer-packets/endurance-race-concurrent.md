@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: 62f7779204ea4ff3 -->
+<!-- source-fingerprint: 2d508be38ae58af5 -->
 
 ## What we are asking
 
@@ -52,9 +52,9 @@ is published too, not quietly dropped.
 
 **Goal the program sells:** 2K row time reduction — target -15 seconds, stretch -30.
 
-**What it tells users it does:** For rowers chasing the 2K PR. Six weeks, cited, tapered — no more than that.
+**What it tells users it does:** For rowers preparing for a 2K test. Six weeks, cited, tapered.
 
-**What it promises by the end:** 2K down 3-30 seconds by tier. Threshold pace shifted 3-6%. Race-day taper baked in.
+**What it promises by the end:** Threshold and race-pace work matched to your tier, a race plan rehearsed in training, and a taper into test day. You retest against your own starting 2K.
 
 ### Entry tiers
 
@@ -129,7 +129,7 @@ Printed against the questions above so you can see which are actually detectable
 
 **What it tells users it does:** For lifters adding cardio without losing the squat. Explosive-strength cost bounded, cited, PR-banned.
 
-**What it promises by the end:** Submax HR down 8-15 bpm at fixed pace, back squat / block pull / front squat maintained within 2.5 kg of pre-block TM, RPE ceiling 7 throughout (Schumann 2022 explosive-strength discipline).
+**What it promises by the end:** Your back squat, block pull and front squat held near your pre-block training max while conditioning goes in alongside, at an RPE ceiling of 7. Strength and heart rate at a fixed pace are retested against your own baseline.
 
 ### Entry tiers
 

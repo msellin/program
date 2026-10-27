@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: 59085458bd40b434 -->
+<!-- source-fingerprint: 60ef80eb887dd4b5 -->
 
 ## What we are asking
 
@@ -54,7 +54,7 @@ is published too, not quietly dropped.
 
 **What it tells users it does:** Block 1 of a 3-block, ~6-month engine transformation. Eight weeks of Zone 1/2 base with a single weekly hard session added in week 4. Row, bike, ski-erg, or run.
 
-**What it promises by the end:** Block 1 of a 6-month engine transformation. In these 8 weeks: 5-8% VO2max improvement, a measurable resting HR drop (5-10 bpm typical), and — most importantly — the aerobic base that lets Block 2 (volume) and Block 3 (polarised) actually work. Modality is your choice at intake: row, bike, ski-erg, or run. Weeks 1-4 are low-impact regardless; running introduces at week 5 if that's your goal.
+**What it promises by the end:** Block 1 of a longer engine build. Eight weeks of mostly easy aerobic work with a little intensity, retested at the end against your own baseline, so you see what changed for you rather than a promised number. It builds the aerobic base that Block 2 (volume) relies on. Modality is your choice at intake: row, bike, ski-erg, or run. Weeks 1-4 are low-impact regardless; running introduces at week 5 if that's your goal.
 
 ### Entry tiers
 
@@ -159,7 +159,7 @@ Printed against the questions above so you can see which are actually detectable
 
 **What it tells users it does:** Block 2 of the 3-block engine transformation. Two hard sessions per week on top of a rising Z1 volume floor. Threshold pace shift is the headline metric.
 
-**What it promises by the end:** Threshold pace / power shift 2-5% by tier. Additional VO2max +4-9% on top of Block 1. Submax HR at fixed pace additional -3 to -8 bpm. Retest at week 4 (mid-block check) and week 8-10 (end-of-block).
+**What it promises by the end:** More volume and more threshold work on top of the Block 1 base, matched to your tier. Retest at week 4 (mid-block check) and week 8-10 (end of block), against your own Block 1 numbers.
 
 ### Entry tiers
 
