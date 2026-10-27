@@ -98,6 +98,7 @@ export default function WeekPage() {
   const hydrated = useStore((s) => s.hydrated);
   const store = useStore((s) => s.store);
   const skipped = useStore((s) => s.store.skipped);
+  const clearSkip = useStore((s) => s.clearSkip);
   const overrides = useStore((s) => s.store.scheduled_overrides);
   const logs = useStore((s) => s.store.logs);
   const userProfile = useStore((s) => s.store.user_profile);
@@ -468,6 +469,9 @@ export default function WeekPage() {
             }
             const isToday = dateISO === todayISO();
             const dayLog = logs?.[dateISO];
+            // One status per day: legacy skip map OR every block skipped.
+            const dayBlocks = Object.values(blocksTodayByProgram).flat();
+            const daySkipped = !!skip || (dayBlocks.length > 0 && dayBlocks.every((b) => b.state === "skipped"));
             const doneCount = dayLog
               ? Object.values(dayLog.exercises).filter((e) => e.done).length
               : 0;
@@ -676,7 +680,9 @@ export default function WeekPage() {
                         ) : null}
                       </div>
                       <span className="font-mono text-[11px] text-muted text-right flex items-center gap-1">
-                        {isRest ? "rest" : names ? "" : "—"}
+                        {daySkipped ? (
+                          <span className="text-amber">Skipped</span>
+                        ) : isRest ? "rest" : names ? "" : "—"}
                         <ChevronDown
                           size={14}
                           aria-hidden
@@ -697,16 +703,22 @@ export default function WeekPage() {
                       {names || displayLabel}
                     </p>
                   </button>
+                  {daySkipped && !isExpanded ? (
+                    <button
+                      type="button"
+                      onClick={() => clearSkip(dateISO)}
+                      className="mt-1 min-h-[44px] text-[13px] text-slate underline underline-offset-4 hover:text-ink"
+                    >
+                      Unskip
+                    </button>
+                  ) : null}
                   {isExpanded ? (
                     <div id={`weekday-${dateISO}`}>
                       {override?.reason ? (
                         <p className="text-[12px] text-slate italic mt-1">↳ {override.reason}</p>
                       ) : null}
-                      {skip ? (
-                        <p className="text-[12px] text-muted italic mt-1">
-                          Skipped{skip.reason ? `: ${skip.reason}` : ""}
-                          {skip.moved_to ? ` · moved to ${skip.moved_to}` : ""}
-                        </p>
+                      {skip?.moved_to ? (
+                        <p className="text-[12px] text-muted italic mt-1">Moved to {skip.moved_to}</p>
                       ) : null}
                       {templateEntry?.conditioning && !skip && !override ? (
                         <p className="text-[12px] text-muted italic mt-1">{templateEntry.conditioning}</p>
@@ -748,7 +760,7 @@ export default function WeekPage() {
                         isPast={isPast}
                         isFuture={dateISO > todayISO()}
                         hasSession={!isRest}
-                        isSkipped={!!skip}
+                        isSkipped={daySkipped}
                         isOverride={!!override}
                         primarySlug={primarySlug}
                         programSlugs={Array.from(
