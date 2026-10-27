@@ -19,7 +19,11 @@
 - [x] Tier 2: findings-{compliance,money-tech,product}.md (Sonnet ×3)
 - [x] launch-plan.md (written by orchestrator; planner agent skipped — no independent review)
 - [x] HANDOVER.md
-- [ ] Owner answers launch-plan.md §D  ← waiting
+- [x] Stripe chosen as billing provider (owner)
+- [x] free-tier-design.md (free tier + 14-day Pro reverse trial)
+- [x] Full roadmap reconciliation (Haiku ×5 → roadmap-reconciliation.md)
+- [x] HANDOVER.md self-contained (all decisions, owner steps, B1–B13)
+- [ ] Owner answers HANDOVER §1 D1–D10  ← waiting
 - [ ] Build sprint B1-B11 (new account session)
 
 ## (superseded) Phase 0 — capture
