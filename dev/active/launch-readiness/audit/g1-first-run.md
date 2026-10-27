@@ -1,0 +1,22 @@
+# G1 first-run gap audit (read-only, 2026-10-27)
+Refs are next-app/src unless noted. Code-read only, not run in a browser.
+1. [HACKATHON] Today, no program: "Pick your focus." + "Browse programs" CTA. Clear next step. components/session/TodaySession.tsx:663-676
+2. [HACKATHON] Today, day 1: Day1EmptyState "One focus, sharpened every session." + "Open morning check" (components/workout/Day1EmptyState.tsx:28,34-40), but HeroStateCard also shows "No check yet" linking /check on the same screen (components/workout/HeroStateCard.tsx:91-92). Two competing check CTAs.
+3. [HACKATHON] Day 1 stacks YourPlanCard + FirstRunBanner ("Four tabs, one flow", FirstRunBanner.tsx:51) above the fold. Banner hides after any log (FirstRunBanner.tsx:42) even if never dismissed.
+4. [HACKATHON] Today shows raw error text: "Couldn't load program data" then `{error}` (TodaySession.tsx:146-147). Technical message to a user.
+5. [HACKATHON] /week, /progress, /history are client redirects to /plan and /record (app/week/page.tsx:18, app/progress/page.tsx:26, app/history/page.tsx:19). No blank screen; brief "moved to" flash only.
+6. [HACKATHON] Plan, no program: "Your week starts once you pick a focus." + Browse programs (app/plan/page.tsx:138-141). Good.
+7. [HACKATHON] Record, no program: H1 "Your record lands here after a few sessions." (app/record/page.tsx:114) contradicts body "once you pick a program" (line 115).
+8. [HACKATHON] Record, program + zero logs: heatmap caption OK (components/ui/WeeklyHeatmap.tsx:77); literal "Retests · 0 events" label (components/record/CutCRetestTimeline.tsx:130); trend curve returns null with no caption (components/record/CutCProgramCurveCard.tsx:62).
+9. [HACKATHON] Report, program + zero logs: "No readings yet. Log your baseline below" (components/progress/RetestMetricsPanel.tsx:207) points at nothing; /report has no log form (app/report/page.tsx:320).
+10. [HACKATHON] Dev/admin reachable: /dev/primitives has no guard beyond AuthGate and is not in BottomNav (app/dev/primitives/page.tsx:32; lib/route-access.ts:14-22). Any signed-in user can open it. /admin/keywords renders for any signed-in user and shows the allowlist message (app/admin/keywords/page.tsx:98-100).
+11. [HACKATHON] Welcome: no welcome page. Sign-up says "Check your email" with no expectations (app/(auth)/sign-up/page.tsx:93-95). The expectation copy is OnboardingRunner, mounted on Today only (components/AppShell.tsx:148). The three ad programs each declare 3 onboarding_steps, so FallbackStep "Welcome to Terav." (components/onboarding/FallbackStep.tsx:13-19) never shows. First screen has no time-commitment or "not a clinician" line.
+12. [HACKATHON] Programs catalog states "Not field-proven" and "No program has yet been signed off" (app/programs/page.tsx:215-217, 422-423). Accurate, but visible to paid-ads traffic. Needs a wording decision before ads.
+13. [HACKATHON] After last set: "How was that?" picker, then back to brief (components/session/RestTakeover.tsx:328-331; DaySession.tsx:420-440). No completion state. Brief CTA then reads "Continue — <first exercise>, set N" (components/session/BriefView.tsx:149).
+14. [HACKATHON] Day 2: "Morning check overdue" amber fires once any log exists and today has no check (components/workout/SignalsStrip.tsx:167-200). Day-1 suppression only holds with zero history, so a user who logged without a check gets a warning. Verify at runtime.
+15. [HACKATHON] Day 2: Day1EmptyState gone (TodaySession.tsx:311); the only check CTA left is HeroStateCard. YourPlanCard persists until 3 views (YourPlanCard.tsx:49) or 3 logs (TodaySession.tsx:266).
+16. [HACKATHON] Intake commit routes to Today (app/programs/[slug]/intake/IntakeClient.tsx:514). Morning check save routes to Today (app/check/page.tsx:234). Both fine.
+17. [LATER] Local-midnight bug: UTC day keys via toISOString at app/record/page.tsx:279, components/record/CutCActivityHeatmap.tsx:51, TodaySession.tsx:361. Users in UTC+ zones see the wrong day for the first hours.
+18. [LATER] Possible "1 block · 0 exercises" when a block has no items and no duration (TodaySession.tsx:551).
+19. [BEFORE-SCALE] Gate /admin/keywords page, not only its API. Remove or prod-gate /dev/primitives from the build.
+Not checked: browser runtime (NaN and blank states inferred from code); real Supabase data; Plan day-row labels for multi_dimensional programs with empty weekly_template.week (handstand-walk, first-strict-pullup); onboarding step body text and length; /dev/primitives in the static export; timezone behaviour; accessibility; performance.

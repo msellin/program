@@ -1,0 +1,22 @@
+# X02 Plan/week audit (persona-pullup, persona-concurrent, persona-multitrack)
+
+BROKEN · persona-multitrack/flows/plan-move-commit/02-moved.png · src/components/workout/MoveSheet.tsx (move commit) · [BEFORE-SCALE] — after moving Tue's session, Mon collapses to "— Moved-in session" and Mon's three original tracks disappear; Tue shows "Skipped · moved to 2026-10-26" and a "✓ 32 min run · hard" log at once.
+CONFUSING · persona-pullup/flows/plan-move-commit/02-moved.png · src/app/plan/page.tsx:867-875 · [HACKATHON] — Wed reads "1 logged" and "Skipped · moved to 2026-10-26" together; the moved-in session on Mon carries no label distinguishing it from its own plan.
+CONFUSING · persona-pullup/flows/plan-skip-commit/01-skipped.png · src/lib/useStore.ts:1427 · [HACKATHON] — the toast says "Skipped 3 sessions" for one skipped day (pullup), "2" (concurrent), "4" (multitrack); it counts internal scheduled blocks, not the sessions the user sees.
+CONFUSING · persona-pullup/flows/plan-skip-commit/01-skipped.png · src/app/plan/page.tsx:867-875 · [HACKATHON] — after skipping, the Mon row shows only "rest" and "Log a session →"; no Unskip is visible, so reversing a skip is undiscoverable from the row.
+CONFUSING · persona-pullup/flows/plan-skip-confirm/01-skip-confirm.png · plan skip sheet · [HACKATHON] — "Keep it" / "Skip" reads as a choice of verbs rather than cancel / confirm; "intentional off-day, not a missed one" contradicts the week card's "You've missed 1 of 3" wording.
+CONFUSING · persona-concurrent/mobile/02-plan.png · src/components/plan/WeekRecoveryCard.tsx:129,140,183 · [HACKATHON] — missed-week card is open by default and pushes the list down; copy uses "wave", "mid-wave", "training max", "progression order breaks" with no gloss for a first-time athlete.
+CONFUSING · persona-pullup/mobile/02-plan.png · session row copy (plan rows) · [LATER] — titles like "Dead-hang ladder (Tier A/B)", "closed-chain pull", "pull-shape isometrics", "Scapular pull ladder" are unexplained jargon on the at-a-glance view.
+UGLY · persona-pullup/flows/plan-move-sheet/01-move-sheet.png · src/components/workout/MoveSheet.tsx · [HACKATHON] — day rows and session descriptions run past the right edge of the 393px sheet and clip; next-week rows clip behind the sticky "Move session" button.
+CONFUSING · persona-pullup/flows/plan-expand-day/02-day-expanded.png · [LATER] — expanded row shows "Log session →", "Move…", "Skip"; the Move sheet title is "Move Mon 26 Oct's session", and the multitrack text capture shows "Open Day" and "Move session" for the same concept.
+CONFUSING · persona-multitrack/flows/plan-move-commit/01-move-filled.png · src/components/workout/MoveSheet.tsx:178-210 · [LATER] — stacking needs a second tap: the hint says "Tap Move session again to confirm you want to stack them", and the button then becomes "Confirm — stack the session". Clear, but the word "stack" is jargon.
+CONFUSING · two overlapping mechanisms · src/components/workout/SessionActions.tsx:181 vs WeekRecoveryCard.tsx:148 · [LATER] — "Skip whole week" (strength days shift +7 days, phase runs longer) and "Push the week out" (remaining sessions move 7 days) do similar things with different copy; a user cannot tell which to use.
+POLISH · persona-concurrent/desktop/02-week.png (text/02-week.txt) · src/app/week/layout.tsx:9 · [LATER] — the /week route captures a stale week (17 Aug) and tab title "Week", while the redirect lands on /plan (src/app/week/page.tsx:17 router.replace) with "Week moved to Plan" interstitial. Redirect works; the title and interstitial are briefly inconsistent.
+POLISH · persona-multitrack/flows/plan-move-commit/01-move-filled.png · MoveSheet.tsx · [LATER] — the "Why?" field arrives pre-filled with "harness: moved for coverage", a persona-harness artifact, not product copy; confirm the field is empty for real users.
+
+Good:
+- Day list is scannable: date, state dot, one-line session, rest days dimmed, and a progress count (3/4) above.
+- Move sheet shows the week in context with HAS SESSION / LOGGED tags and a "moving from here" anchor, and warns before stacking two sessions.
+- Skip confirm explains the engine effect in one sentence, and moved rows expose an UNSKIP / Undo control.
+
+Not checked: desktop and 375px SE layouts; concurrent move and skip screenshots (text only); Skip-whole-week sheet visually; Open Day label source; first-run plan state; stale 17 Aug week source; tap-target sizes; the 12-image cap was reached at 9 images.
