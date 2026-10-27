@@ -32,11 +32,9 @@ import { prescriptionRows } from "@/lib/engine/suggest";
  * the new 4-in-reserve slot; the 3-in-reserve tile it used to be is "Steady".
  */
 const EFFORTS = [
-  { label: "Very easy", rir: "5+ more", rpe: 5 },
-  { label: "Easy", rir: "~4 more", rpe: 6 },
-  { label: "Steady", rir: "~3 more", rpe: 7 },
-  { label: "Solid", rir: "~2 more", rpe: 8 },
-  { label: "Grind", rir: "0-1 more", rpe: 9 },
+  { label: "Easy", rir: "4+ more", rpe: 6 },
+  { label: "Right", rir: "~2 more", rpe: 8 },
+  { label: "Too hard", rir: "0-1 more", rpe: 9 },
 ] as const;
 
 /**
@@ -259,15 +257,27 @@ export function RestTakeover({
     setSelectedEffort(effort.label);
     onEffortAnswered(true);
     updateSet(active.blockId, active.exercise.id, justLoggedSetIndex, { rpe: effort.rpe }, date);
-    if (effort.label === "Grind") onOpenNoteSheet();
+    if (effort.label === "Too hard") onOpenNoteSheet();
   };
 
   const skip = () => {
     onDone();
   };
 
+  const rootRef = useRef<HTMLDivElement>(null);
+  // Move focus into the takeover so keyboard / screen-reader users land on it.
+  useEffect(() => {
+    rootRef.current?.focus();
+  }, []);
+
   return (
-    <div data-surface="RestTakeover" className="fixed inset-0 z-50 bg-ground flex flex-col">
+    <div
+      ref={rootRef}
+      tabIndex={-1}
+      aria-label="Rest"
+      data-surface="RestTakeover"
+      className="fixed inset-0 z-50 bg-ground flex flex-col outline-none"
+    >
       <div className="flex-shrink-0 px-[22px] pt-1">
         <div className="h-[3px] bg-surface-2 rounded-full overflow-hidden">
           <div className="h-full bg-slate rounded-full transition-[width]" style={{ width: `${pct}%` }} />
@@ -303,7 +313,7 @@ export function RestTakeover({
           </p>
         ) : upNext.kind !== "done" ? (
           <>
-            <p className="font-mono text-[10px] uppercase tracking-[.16em] text-muted mb-2">Next up</p>
+            <p className="font-mono text-[12px] uppercase tracking-[.16em] text-muted mb-2">Next up</p>
             <p className="text-[20px] font-semibold text-strong mb-1 tracking-[-.02em]">
               {upNext.kind === "set"
                 ? `Set ${upNext.setIndex + 1} of ${upNext.rail.rowCount}`
@@ -338,7 +348,7 @@ export function RestTakeover({
             <p className="text-[16px] font-semibold text-strong mb-1 tracking-[-.01em]">How was that?</p>
             <p className="text-[13px] text-ink mb-3">
               How many more could you have done?{" "}
-              {hasTrainingMax ? "This sets your training max." : "It tunes what comes next."}
+              {hasTrainingMax ? "This sets your training max." : "We'll use it next week."}
             </p>
             <div className="flex gap-1.5" role="radiogroup" aria-label="How hard was that set?">
               {EFFORTS.map((effort) => (
@@ -359,7 +369,7 @@ export function RestTakeover({
                   <span className="block text-[13px] font-semibold text-strong leading-snug">{effort.label}</span>
                   <span
                     className={
-                      "block font-mono text-[10px] mt-0.5 leading-snug " +
+                      "block font-mono text-[12px] mt-0.5 leading-snug " +
                       (selectedEffort === effort.label ? "text-bronze" : "text-muted")
                     }
                   >
@@ -394,7 +404,7 @@ export function RestTakeover({
           >
             +30s
             {extra > 0 ? (
-              <span className="block font-mono text-[9.5px] text-muted leading-none mt-0.5">
+              <span className="block font-mono text-[12px] text-muted leading-none mt-0.5">
                 +{extra}s added
               </span>
             ) : null}
@@ -409,7 +419,7 @@ export function RestTakeover({
         </div>
         {/* A7 (2026-08-26): note capture was reachable two ways, both
             buried — `⋯` → "Note for this exercise", or an auto-open that
-            fired ONLY if you tapped "Grind". Rest is the one moment in a
+            fired ONLY if you tapped "Too hard". Rest is the one moment in a
             session you are actually holding the phone, so the affordance
             belongs here unconditionally. Shows what you already wrote, so
             the loop closes: notes stopped being write-only. */}

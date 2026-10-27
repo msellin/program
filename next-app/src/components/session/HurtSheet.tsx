@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BottomSheet } from "@/components/session/shared/BottomSheet";
 import { loadProgram } from "@/lib/data-loader";
 import { regionsForProgram, type SymptomRegion } from "@/lib/symptom-regions";
@@ -61,11 +61,24 @@ export function HurtSheet({
   const [recorded, setRecorded] = useState<string | null>(null);
   const regions = useSessionRegions(slug, step === "where");
   const reportInSessionSymptom = useStore((s) => s.reportInSessionSymptom);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  // Moving on to the next step replaces the control that had focus.
+  useEffect(() => {
+    if (step !== "menu") titleRef.current?.focus();
+  }, [step]);
 
   return (
     <BottomSheet surface="HurtSheet" titleId="hurt-title" onClose={onClose}>
-      <p id="hurt-title" className="mb-3 text-[16px] font-semibold tracking-[-.015em] text-strong">
-        Something hurt
+      <h2
+        id="hurt-title"
+        ref={titleRef}
+        tabIndex={-1}
+        className="mb-3 text-[16px] font-semibold tracking-[-.015em] text-strong outline-none"
+      >
+        {step === "menu" ? "Something hurt" : step === "where" ? "Where did it hurt?" : "Recorded"}
+      </h2>
+      <p role="status" className="sr-only">
+        {step === "recorded" ? `Recorded: ${recorded}.` : ""}
       </p>
       {step === "menu" ? (
         <div className="space-y-2 p-1">
@@ -99,7 +112,7 @@ export function HurtSheet({
         </div>
       ) : (
         <div className="space-y-3 p-1">
-          <p role="status" className="text-sm text-ink">
+          <p className="text-sm text-ink">
             Recorded — {recorded}. Today&rsquo;s readiness has been updated, so tomorrow&rsquo;s
             session already knows.
           </p>

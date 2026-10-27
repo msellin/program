@@ -391,13 +391,13 @@ export function SetView({
               >
                 <span
                   className={
-                    "block text-[10.5px] font-semibold truncate " + (isActive ? "text-strong" : "text-ink")
+                    "block text-[12px] font-semibold truncate " + (isActive ? "text-strong" : "text-ink")
                   }
                 >
                   {exerciseListName(r.exercise)}
                 </span>
                 <span
-                  className={"block font-mono text-[9px] mt-0.5 " + (isActive ? "text-bronze" : "text-muted")}
+                  className={"block font-mono text-[12px] mt-0.5 " + (isActive ? "text-bronze" : "text-muted")}
                 >
                   {logged}/{r.rowCount}
                 </span>
@@ -426,11 +426,11 @@ export function SetView({
             prep on floor · set 121 sets 1 of 2 left". The name is the
             part that can be shortened; the counters can't. */}
         <div className="flex items-baseline justify-between gap-3 mt-2.5 px-1.5">
-          <span className="min-w-0 truncate font-mono text-[10px] uppercase tracking-[.14em] text-ink">
+          <span className="min-w-0 truncate font-mono text-[12px] uppercase tracking-[.14em] text-ink">
             {active.exercise.name} · set {activeSetIndex + 1} of {active.rowCount}
             {isOptionalRow(active, activeSetIndex) ? " · optional" : ""}
           </span>
-          <span className="flex-shrink-0 font-mono text-[10px] uppercase tracking-[.14em] text-ink">
+          <span className="flex-shrink-0 font-mono text-[12px] uppercase tracking-[.14em] text-ink">
             {totalRemaining} {totalRemaining === 1 ? "set" : "sets"} left
           </span>
         </div>
@@ -479,7 +479,7 @@ export function SetView({
                 >
                   <span
                     className={
-                      "block font-mono text-[10px] leading-none " +
+                      "block font-mono text-[12px] leading-none " +
                       (isCurrent ? "text-bronze" : done ? "text-ink" : "text-muted")
                     }
                   >
@@ -487,7 +487,7 @@ export function SetView({
                   </span>
                   <span
                     className={
-                      "block font-mono text-[9px] leading-none mt-0.5 truncate " +
+                      "block font-mono text-[12px] leading-none mt-0.5 truncate " +
                       (isCurrent ? "text-strong" : done ? "text-ink" : "text-muted")
                     }
                   >
@@ -520,12 +520,12 @@ export function SetView({
               ? "Top set"
               : "Set"}
           {setForRow.failed === true ? (
-            <span className="font-mono text-[9.5px] font-semibold uppercase tracking-[.12em] text-strong border border-line-strong rounded px-1.5 py-0.5">
+            <span className="font-mono text-[12px] font-semibold uppercase tracking-[.12em] text-strong border border-line-strong rounded px-1.5 py-0.5">
               Missed
             </span>
           ) : null}
           {wouldBePR ? (
-            <span className="font-mono text-[9.5px] font-semibold uppercase tracking-[.12em] text-ground bg-green rounded px-1.5 py-0.5">
+            <span className="font-mono text-[12px] font-semibold uppercase tracking-[.12em] text-ground bg-green rounded px-1.5 py-0.5">
               Rep PR
             </span>
           ) : null}
@@ -570,7 +570,7 @@ export function SetView({
         {!prev && !prescribed && authoredDose ? (
           <div className="border border-line-soft rounded-[8px] overflow-hidden mb-3">
             <div className="px-4 py-2.5 bg-surface">
-              <p className="font-mono text-[9.5px] uppercase tracking-[.14em] text-muted mb-0.5">
+              <p className="font-mono text-[12px] uppercase tracking-[.14em] text-muted mb-0.5">
                 Programme asks for
               </p>
               <p className="text-[15px] font-semibold text-ink">{authoredDose}</p>
@@ -581,7 +581,7 @@ export function SetView({
           <div className="flex items-stretch border border-line-soft rounded-[8px] overflow-hidden mb-3">
             {prev ? (
               <div className="px-4 py-2.5 bg-surface">
-                <p className="font-mono text-[9.5px] uppercase tracking-[.14em] text-muted mb-0.5">
+                <p className="font-mono text-[12px] uppercase tracking-[.14em] text-muted mb-0.5">
                   Last time
                 </p>
                 <p className="text-[15px] font-semibold text-ink">
@@ -592,7 +592,7 @@ export function SetView({
             {prev && prescribed ? <div className="w-px bg-line-soft" /> : null}
             {prescribed ? (
               <div className="px-4 py-2.5 bg-surface">
-                <p className="font-mono text-[9.5px] uppercase tracking-[.14em] text-muted mb-0.5">
+                <p className="font-mono text-[12px] uppercase tracking-[.14em] text-muted mb-0.5">
                   Prescribed
                 </p>
                 <p className="text-[15px] font-semibold text-ink">
@@ -736,7 +736,7 @@ export function SetView({
               <div className="border border-line-strong rounded-[10px] bg-surface p-3 mb-2.5 flex flex-col gap-2">
                 <StepperRow label="kg" value={weight} step={2.5} onChange={setWeight} />
                 <div className="flex items-center justify-between pt-0.5">
-                  <span className="font-mono text-[10px] uppercase tracking-[.14em] text-ink">
+                  <span className="font-mono text-[12px] uppercase tracking-[.14em] text-ink">
                     Steps of 2.5 kg
                   </span>
                   {prescribed ? (
@@ -751,7 +751,7 @@ export function SetView({
                 </div>
               </div>
             ) : null}
-            <p className="font-mono text-[10px] uppercase tracking-[.14em] text-muted mb-2 text-center">
+            <p className="font-mono text-[12px] uppercase tracking-[.14em] text-muted mb-2 text-center">
               {isEditingLoggedSet
                 ? `Fix the reps on set ${activeSetIndex + 1}`
                 : `Reps you got on set ${activeSetIndex + 1}`}
@@ -844,7 +844,7 @@ export function SetView({
                 ) : null}
                 <StepperRow label="reps" value={reps} step={1} onChange={setReps} />
                 <div className="flex items-center justify-between pt-0.5">
-                  <span className="font-mono text-[10px] uppercase tracking-[.14em] text-ink">
+                  <span className="font-mono text-[12px] uppercase tracking-[.14em] text-ink">
                     {active.isLoadable ? "Steps of 2.5 kg" : "Steps of 1 rep"}
                   </span>
                   {prescribed ? (

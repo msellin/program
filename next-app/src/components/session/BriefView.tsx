@@ -162,7 +162,7 @@ export function BriefView({
             {dayName(activeDate)}
           </h1>
           {program.slug ? (
-            <span className="font-mono text-[10px] uppercase tracking-[.14em] text-bronze flex-shrink-0">
+            <span className="font-mono text-[12px] uppercase tracking-[.14em] text-bronze flex-shrink-0">
               {programDisplayName(program, program.slug)}
             </span>
           ) : null}
@@ -194,7 +194,7 @@ export function BriefView({
 
         {hero ? (
           <div className="rounded border-2 border-l-bronze border-line-strong bg-surface px-4 py-[15px]">
-            <p className="font-mono text-[10px] uppercase tracking-[.16em] text-muted mb-2.5">
+            <p className="font-mono text-[12px] uppercase tracking-[.16em] text-muted mb-2.5">
               {heroShape.kind === "top_set" ? "Today\u2019s top set" : "Today\u2019s working sets"}
             </p>
             <p className="text-[16.5px] font-semibold text-strong mb-2 tracking-[-.015em]">
@@ -275,7 +275,7 @@ export function BriefView({
 
         {guidanceBlocks.length > 0 ? (
           <div className="mb-4">
-            <p className="font-mono text-[10px] uppercase tracking-[.16em] text-muted mb-[9px]">
+            <p className="font-mono text-[12px] uppercase tracking-[.16em] text-muted mb-[9px]">
               How to run this
             </p>
             <div className="space-y-2">
@@ -330,7 +330,7 @@ export function BriefView({
                               <span className="block truncate text-[14px] text-strong">{exerciseListName(r.exercise)}</span>
                               <span className="block text-[12.5px] text-muted">{railScheme(r)}</span>
                             </span>
-                            <span className="flex-shrink-0 font-mono text-[10px] uppercase tracking-[.1em] text-muted">
+                            <span className="flex-shrink-0 font-mono text-[12px] uppercase tracking-[.1em] text-muted">
                               {logged >= r.rowCount ? "Done" : logged > 0 ? "Held" : isOptional ? "Optional" : ""}
                             </span>
                           </button>
@@ -345,7 +345,7 @@ export function BriefView({
         ) : null}
 
         <div className={allFollow && prescriptionBlocks.length === 0 && !escalation ? "hidden" : undefined}>
-          <p className="font-mono text-[10px] uppercase tracking-[.16em] text-muted mb-[9px]">
+          <p className="font-mono text-[12px] uppercase tracking-[.16em] text-muted mb-[9px]">
             {isPrescriptionSession ? "Today's session" : allFollow ? "Also today" : "The whole session"}
           </p>
           <div className="space-y-[7px]">
@@ -358,7 +358,7 @@ export function BriefView({
                   {humanBlockName(b.name)}
                 </p>
                 {b.duration_min ? (
-                  <p className="font-mono text-[10px] uppercase tracking-[.14em] text-muted mb-1">
+                  <p className="font-mono text-[12px] uppercase tracking-[.14em] text-muted mb-1">
                     {Array.isArray(b.duration_min)
                       ? `${b.duration_min[0]}–${b.duration_min[1]} min`
                       : `${b.duration_min} min`}
@@ -383,7 +383,7 @@ export function BriefView({
                 surfacing them. (2026-09-07) */}
             {escalation ? (
               <div className="rounded border border-amber/40 bg-surface px-3.5 py-3">
-                <p className="font-mono text-[10px] uppercase tracking-widest text-amber mb-1">
+                <p className="font-mono text-[12px] uppercase tracking-widest text-amber mb-1">
                   {escalation.streak} red days in a row — your programme&rsquo;s rule
                 </p>
                 <p className="text-[13.5px] leading-snug text-ink">{escalation.text}</p>
@@ -400,7 +400,7 @@ export function BriefView({
                 key={note}
                 className="rounded border border-line-soft bg-surface px-3.5 py-3"
               >
-                <p className="font-mono text-[10px] uppercase tracking-widest text-slate mb-1">
+                <p className="font-mono text-[12px] uppercase tracking-widest text-slate mb-1">
                   Adjusted for you
                 </p>
                 <p className="text-[13.5px] leading-snug text-ink">{note}</p>
@@ -460,7 +460,7 @@ export function BriefView({
                   </span>
                   <span
                     className={
-                      "flex-shrink-0 font-mono text-[10px] uppercase tracking-[.1em] " +
+                      "flex-shrink-0 font-mono text-[12px] uppercase tracking-[.1em] " +
                       (isDone ? "text-muted" : isMain ? "text-bronze" : "text-muted")
                     }
                   >
@@ -481,7 +481,7 @@ export function BriefView({
         </div>
       </div>
 
-      <div className="flex-shrink-0 border-t border-line-soft pt-2 pb-1 mt-5 space-y-2">
+      <div className="sticky bottom-[calc(64px+env(safe-area-inset-bottom))] z-10 flex-shrink-0 border-t border-line-soft bg-ground pt-2 pb-1 mt-5 space-y-2">
         <button
           type="button"
           onClick={() => onOpenSheet("off-plan")}
@@ -497,13 +497,13 @@ export function BriefView({
           <span className="flex-shrink-0 text-[14px] text-muted">›</span>
         </button>
         {progressLabel ? (
-          <p className="font-mono text-[10px] uppercase tracking-[.14em] text-muted">
+          <p className="font-mono text-[12px] uppercase tracking-[.14em] text-muted">
             {progressLabel}
             {progressDetail ? ` · ${progressDetail}` : ""}
           </p>
         ) : null}
         {gateUnresolved ? (
-          <p className="font-mono text-[10px] uppercase tracking-[.14em] text-muted">
+          <p className="font-mono text-[12px] uppercase tracking-[.14em] text-muted">
             Accept the numbers to start
           </p>
         ) : null}

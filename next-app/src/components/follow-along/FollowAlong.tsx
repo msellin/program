@@ -24,7 +24,7 @@ import type { FollowStep, StepSide } from "@/lib/follow-along/steps";
  *   lines each for name and cue, an always-present 44px aux row.
  * - Timers run off wall-clock end times, so a locked phone does not freeze or
  *   drift a hold.
- * - "This hurts" is always on screen and ends the session.
+ * - "Something hurts" is always on screen and ends the session.
  *
  * Logging goes through `updateSet` with exactly the shape SetView writes, so
  * history cannot tell which surface logged a set (see follow-along/steps.ts
@@ -64,6 +64,7 @@ export function FollowAlong({
   const [results, setResults] = useState<Record<number, "done" | "skip">>({});
   const [hurt, setHurt] = useState(false);
   const [video, setVideo] = useState(false);
+  const [skipArmed, setSkipArmed] = useState(false);
   const anim = useRef({ start: 0, frozen: 0 });
   const [now, setNow] = useState(() => Date.now());
   const doneHeading = useRef<HTMLHeadingElement>(null);
@@ -268,16 +269,7 @@ export function FollowAlong({
       : `Next: ${next.name}`
     : "Last set";
 
-  const summary = useMemo(() => {
-    const c = { L: 0, R: 0, B: 0, skipped: 0 };
-    for (const [k, v] of Object.entries(results)) {
-      const s = steps[Number(k)];
-      if (v === "skip") c.skipped++;
-      else if (s.side === "L" || s.side === "R") c[s.side]++;
-      else c.B++;
-    }
-    return c;
-  }, [results, steps]);
+  const loggedSets = useMemo(() => Object.values(results).filter((v) => v === "done").length, [results]);
 
   const progress = `${Math.round(((phase === "done" ? steps.length : idx) / steps.length) * 100)}%`;
 
@@ -302,19 +294,6 @@ export function FollowAlong({
           <div className="h-1 flex-grow overflow-hidden rounded-full bg-line-soft" aria-hidden="true">
             <div className="h-1 bg-bronze" style={{ width: progress }} />
           </div>
-          {phase !== "done" ? (
-            <button
-              type="button"
-              onClick={() => {
-                setHurt(true);
-                setPhase("done");
-                announce("Stopped. Note what hurt in your check.");
-              }}
-              className="h-11 w-[104px] flex-shrink-0 rounded-full border border-red-strong/45 text-[13px] font-semibold text-red-strong"
-            >
-              This hurts
-            </button>
-          ) : null}
         </div>
 
         {phase === "done" ? (
@@ -322,22 +301,17 @@ export function FollowAlong({
             <h2 ref={doneHeading} tabIndex={-1} className="text-[28px] font-bold text-strong outline-none">
               {hurt ? "Stopped" : `${title} done`}
             </h2>
-            <div className="flex flex-wrap justify-center gap-2">
-              <span className="rounded-full bg-lat-left px-3 py-1.5 text-[13px] font-bold text-ground">L · {summary.L} sets</span>
-              <span className="rounded-full bg-lat-right px-3 py-1.5 text-[13px] font-bold text-ground">R · {summary.R} sets</span>
-              <span className="rounded-full bg-line-soft px-3 py-1.5 text-[13px] font-semibold text-ink">Both · {summary.B}</span>
-            </div>
             <p className="text-[15px] text-muted">
               {hurt
-                ? "Stopping was the right call. Log what hurt so the plan can see it."
-                : `${summary.L > summary.R ? `Left side got ${summary.L - summary.R} extra sets today. ` : ""}${summary.skipped ? `${summary.skipped} skipped — not logged.` : "Nothing skipped."}`}
+                ? `${loggedSets} ${loggedSets === 1 ? "set" : "sets"} logged. Stopping early is fine.`
+                : `${loggedSets} ${loggedSets === 1 ? "set" : "sets"} logged.`}
             </p>
             {hurt ? (
               <Link
                 href="/check"
                 className="mt-1 flex h-[52px] items-center rounded-[14px] bg-bronze px-7 font-bold text-ground"
               >
-                Log how it feels
+                Log what hurt
               </Link>
             ) : null}
             <button
@@ -349,7 +323,7 @@ export function FollowAlong({
                   : "mt-1 flex h-[52px] items-center rounded-[14px] bg-bronze px-7 font-bold text-ground"
               }
             >
-              Back to session
+              {hurt ? "Back to Today" : "Back to session"}
             </button>
           </div>
         ) : (
@@ -366,7 +340,7 @@ export function FollowAlong({
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center px-6 text-center text-[13px] text-muted">
-                    No illustration yet — open the full tutorial
+                    {step.cue ?? "Open the full tutorial for this move."}
                   </div>
                 )}
                 <button
@@ -440,9 +414,16 @@ export function FollowAlong({
                       <button
                         type="button"
                         onClick={() => setCount((c) => Math.max(0, c - 1))}
-                        className="h-11 w-[72px] rounded-xl border border-line text-[15px] font-semibold text-ink"
+                        className="h-11 w-[64px] rounded-xl border border-line text-[15px] font-semibold text-ink"
                       >
                         −1
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setCount((c) => Math.min(step.reps ?? 1, c + 1))}
+                        className="h-11 w-[72px] rounded-xl border border-line text-[15px] font-semibold text-ink"
+                      >
+                        +1
                       </button>
                       <button
                         type="button"
@@ -470,7 +451,20 @@ export function FollowAlong({
               </div>
             </div>
 
-            <div className="grid flex-shrink-0 grid-cols-3 items-start px-7 pb-6 pt-2.5">
+            <div className="flex flex-shrink-0 justify-center px-7 pt-1">
+            <button
+              type="button"
+              onClick={() => {
+                setHurt(true);
+                setPhase("done");
+                announce("Stopped. Note what hurt in your check.");
+              }}
+              className="min-h-[44px] w-auto px-5 flex-shrink-0 rounded-full border border-red-strong/45 text-[13px] font-semibold text-red-strong"
+            >
+              Something hurts
+            </button>
+            </div>
+            <div className="grid flex-shrink-0 grid-cols-3 items-start px-7 pb-4 pt-2.5">
               <button
                 type="button"
                 // During a rest the cursor still points at the set just finished:
@@ -500,6 +494,12 @@ export function FollowAlong({
               <button
                 type="button"
                 onClick={() => {
+                  // A set in progress with reps counted needs a second tap.
+                  if (phase === "work" && count > 0 && !skipArmed) {
+                    setSkipArmed(true);
+                    return;
+                  }
+                  setSkipArmed(false);
                   // During a rest the set at `idx` is already DONE; Skip means the
                   // upcoming one. Marking `idx` here overwrote finished work.
                   const target = phase === "rest" ? idx + 1 : idx;
@@ -513,7 +513,7 @@ export function FollowAlong({
                     <polyline points="9 18 15 12 9 6" />
                   </svg>
                 </span>
-                <span className="text-[12px] text-muted">Skip set</span>
+                <span className="text-[12px] text-muted">{skipArmed ? "Tap again" : "Skip set"}</span>
               </button>
             </div>
           </>

@@ -81,7 +81,7 @@ describe("FollowAlong", () => {
       "2026-10-20",
     );
     expect(screen.getByText("Home rehab done")).toBeTruthy();
-    expect(screen.getByText(/2 skipped — not logged/)).toBeTruthy();
+    expect(screen.getByText(/sets? logged\./)).toBeTruthy();
   });
 
   it("pausing a hold stops its clock", () => {
@@ -97,11 +97,11 @@ describe("FollowAlong", () => {
     expect(ring()).toBe(shown);
   });
 
-  it("'This hurts' ends the session and points to the symptom check", () => {
+  it("'Something hurts' ends the session and points to the symptom check", () => {
     setup();
-    fireEvent.click(screen.getByText("This hurts"));
+    fireEvent.click(screen.getByText("Something hurts"));
     expect(screen.getByText("Stopped")).toBeTruthy();
-    expect(screen.getByText("Log how it feels").closest("a")?.getAttribute("href")).toBe("/check");
+    expect(screen.getByText("Log what hurt").closest("a")?.getAttribute("href")).toBe("/check");
   });
 
   it("Log all counts the full set in one tap (phone out of reach)", () => {
@@ -132,8 +132,7 @@ describe("FollowAlong done screen", () => {
     fireEvent.click(screen.getByText("Start"));
     advance(3_300);
     fireEvent.click(screen.getByText("Log all 3")); // L bridge set, last step
-    expect(screen.getByText("L · 2 sets")).toBeTruthy();
-    expect(screen.getByText(/1 skipped/)).toBeTruthy();
+    expect(screen.getByText(/sets? logged\./)).toBeTruthy();
   });
 });
 
@@ -151,8 +150,7 @@ describe("FollowAlong during a rest", () => {
     advance(20_500); // L hold done → rest
     fireEvent.click(screen.getByText("Skip set")); // skips R, lands on the bridge
     expect(screen.getByText("Single-leg glute bridge")).toBeTruthy();
-    fireEvent.click(screen.getByText("This hurts"));
-    expect(screen.getByText("L · 1 sets")).toBeTruthy();
-    expect(screen.getByText(/R · 0 sets/)).toBeTruthy();
+    fireEvent.click(screen.getByText("Something hurts"));
+    expect(screen.getByText(/1 set logged\./)).toBeTruthy();
   });
 });

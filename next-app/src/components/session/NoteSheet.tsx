@@ -5,7 +5,7 @@ import { BottomSheet } from "@/components/session/shared/BottomSheet";
 import { useStore } from "@/lib/useStore";
 import type { RailExercise } from "@/components/session/DaySession";
 
-const CHIPS = ["Felt heavy", "Form broke down", "Pain or tweak"] as const;
+const CHIPS = ["Felt heavy", "Form broke down", "Something hurt"] as const;
 
 /**
  * Screen 6d from the Day redesign. Offered unprompted only after a
@@ -13,7 +13,7 @@ const CHIPS = ["Felt heavy", "Form broke down", "Pain or tweak"] as const;
  * sheet. Per-set notes are cut (decision 2 in the README) — this is the
  * one note, per exercise, per day.
  *
- * "Pain or tweak" is the one chip that changes behavior: it flags the
+ * "Something hurt" is the one chip that changes behavior: it flags the
  * exercise (prefixes the saved note so it's visible on History/Coach)
  * and, on a skill program, offers to stop the session — the app's
  * existing shoulder-pain safety rule, previously a static banner. There
@@ -50,7 +50,7 @@ export function NoteSheet({
   const save = () => {
     const parts = [...selected, detail.trim()].filter(Boolean);
     setNotes(active.blockId, active.exercise.id, parts.join(" · "), date);
-    if (selected.has("Pain or tweak") && isSkillProgram) {
+    if (selected.has("Something hurt") && isSkillProgram) {
       setOfferStop(true);
       return;
     }
