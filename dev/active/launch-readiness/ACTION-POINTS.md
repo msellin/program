@@ -6,6 +6,15 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 - **Effort:** S <1h · M 1–3h · L >3h.
 - **Source** = the file in this folder with the evidence.
 
+## 0. Done during prep (2026-10-27, before the hackathon)
+| ID | Action | Status |
+|----|--------|--------|
+| X-01 | CI had been failing since 2026-10-20 (`tsc` error in `BriefView.test.tsx:289`); nothing deployed, BUG-48 included | ✓ fixed |
+| X-02 | `npm run verify` now runs `tsc --noEmit` + vitest (pre-commit catches type errors before CI) | ✓ |
+| X-03 | Task index regenerated (the `task-index.test.ts` staleness failure) | ✓ |
+| X-04 | `tests/e2e/launch-gaps.spec.ts`: stranger first run, red day, 375/393 viewports; baseline in `screens/gaps/` | ✓ |
+| X-05 | `dev/scripts/hackathon-auth-config.sh` (not run), `LANES.md`, `ads/ad-spec-draft.md`, `owner-questions.md` | ✓ |
+
 ## 1. Personal track and privacy (the owner's clinical data and the hip track)
 | ID | Action | When | Who | Effort | Source |
 |----|--------|------|-----|--------|--------|
@@ -71,6 +80,7 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 | SG-04 | Privacy truth pass (`:75,80,97,114,117,121,135`): Stripe not Paddle; name Google OAuth, Cloudflare Analytics, Resend | H | A | M | compliance 4, roadmap 3 |
 | SG-05 | Landing legal pages mirror or link the app's; terms consistent (beta/pricing) | H | A | S | compliance 5 |
 | SG-06 | Branded Supabase email templates (confirm, reset) | H | A+O | S | g3 |
+| SG-08 | Cloudflare Turnstile widget on sign-up (email + Google), passing `captchaToken`; THEN enable Supabase captcha (`CAPTCHA=1`) | H | A+O | M | kickoff kit |
 | SG-07 | Paid terms: renewal, EU 14-day withdrawal, VAT; a consent-withdrawal path | S | A (+lawyer) | M | compliance §4 |
 
 ## 6. Landing, claims and evidence

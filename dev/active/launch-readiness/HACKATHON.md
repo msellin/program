@@ -14,6 +14,24 @@ look), `findings-app.md` (verified bugs, file:line), `personal-separation.md`.
 - A catalog change needs a persona-harness review in the same commit.
 - Cheap models: Haiku for sweeps, Sonnet for judgement.
 
+## Before you start (prepared 2026-10-27)
+- **Main deploys again.** CI had been failing since 2026-10-20 (a `tsc` error in `BriefView.test.tsx`), so BUG-48
+  never reached production. That is fixed, and `npm run verify` now runs `tsc --noEmit` + vitest, so the pre-commit
+  hook catches type errors before CI does. The first hackathon push also ships BUG-48: check it on the live site.
+- **Paste-ready briefs** for each lane: `LANES.md`. Ad spec draft: `ads/ad-spec-draft.md`. Lawyer and accountant
+  questions: `owner-questions.md`.
+- **Baseline captures** to compare against: `screens/gaps/` (stranger first run, red day, 375 + 393 viewports) and
+  `audit/gap-*.md`. Re-run with `npx playwright test -c tests/e2e/playwright.config.ts launch-gaps.spec.ts --workers=1`
+  (from `next-app`, about 2 min).
+
+**Tokens the owner puts in env at kickoff (never in chat or the repo):**
+| Env var | Where to get it | Used for |
+|---------|-----------------|----------|
+| `SUPABASE_ACCESS_TOKEN` | supabase.com/dashboard/account/tokens | `dev/scripts/hackathon-auth-config.sh` (O-01): `show` first, then `apply` |
+| `RESEND_SMTP_KEY` | resend.com → API keys (sending access; terav.fit is already verified, since feedback mail sends from notices@terav.fit) | Supabase custom SMTP |
+| `CLOUDFLARE_API_TOKEN` (Pages + Analytics + Turnstile edit) | dash.cloudflare.com → My Profile → API Tokens | M-01 Web Analytics; the Turnstile site key/secret for SG-08 |
+| `TURNSTILE_SECRET` + site key | Cloudflare → Turnstile → add site terav.fit / app.terav.fit | captcha, enabled **only after** the sign-up widget ships (SG-08), with `CAPTCHA=1` |
+
 ## Timeline (about 8 hours)
 | Time | Block | What |
 |------|-------|------|

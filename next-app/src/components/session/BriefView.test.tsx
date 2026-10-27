@@ -286,7 +286,7 @@ describe("follow-along on the Brief (2026-10-20)", () => {
     const onStart = vi.fn();
     render(
       <BriefView
-        program={{ slug: "anterior-hip-rebuild", name: "Hip" } as Program}
+        program={{ slug: "anterior-hip-rebuild", name: "Hip" } as unknown as Program}
         phase={null}
         activeDate="2026-10-20"
         blocks={[]}
