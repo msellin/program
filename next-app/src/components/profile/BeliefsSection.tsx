@@ -218,6 +218,9 @@ function formatTierLabel(tier: string | undefined): string | null {
   if (tier === "foundation" || tier === "progression" || tier === "push") {
     return tier.charAt(0).toUpperCase() + tier.slice(1);
   }
+  // "tier_a_hang" is Tier A everywhere else the app names it; "Hang" alone was the id's tail.
+  const letter = /^tier_([a-z])(?:_|$)/i.exec(tier);
+  if (letter) return `Tier ${letter[1].toUpperCase()}`;
   const short = tier.replace(/^tier_[a-z]_?/i, "");
   return short.length ? short.charAt(0).toUpperCase() + short.slice(1) : tier;
 }

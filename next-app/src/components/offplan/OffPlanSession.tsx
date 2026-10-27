@@ -83,7 +83,7 @@ export function OffPlanSession() {
         ? "Attach these to your run sessions. Log to today."
         : "Aerobic + conditioning blocks from your program.";
     return [
-      { cat: "accessory" as const, title: "Accessories & home rehab", note: "Do these when you can — no calendar constraint." },
+      { cat: "accessory" as const, title: primarySlug === "anterior-hip-rebuild" ? "Accessories & home rehab" : "Accessory work", note: "Do these when you can — no calendar constraint." },
       { cat: "run" as const, title: runTitle, note: runNote },
       // Barbell work done somewhere else — a class, another gym, a friend's
       // garage. This group did not exist until 2026-09-03, so off-plan
