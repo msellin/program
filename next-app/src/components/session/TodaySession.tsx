@@ -11,6 +11,7 @@ import { YourPlanCard } from "@/components/workout/YourPlanCard";
 import { SignalsStrip } from "@/components/workout/SignalsStrip";
 import { RunSlotCard } from "@/components/workout/RunSlotCard";
 import { ProposalStack } from "@/components/workout/ProposalStack";
+import { FirstSessionOfferCard } from "@/components/session/FirstSessionOfferCard";
 import { Day1EmptyState } from "@/components/workout/Day1EmptyState";
 import { ArcProgressBar } from "@/components/ui/ArcProgressBar";
 import { useStore } from "@/lib/useStore";
@@ -527,6 +528,10 @@ export function TodaySession({
                       ? "holiday"
                       : "rest";
             return (
+              <>
+              {variant === "rest" && activeDate === todayISO() && primary.slug ? (
+                <FirstSessionOfferCard slug={primary.slug} />
+              ) : null}
               <RestDayCard
                 variant={variant}
                 programName={programDisplayName(primary, primary.slug ?? "")}
@@ -534,6 +539,7 @@ export function TodaySession({
                 firstSessionDate={primary.phases[0]?.starts}
                 programSlug={primary.slug}
               />
+              </>
             );
           })()}
           <div id="log-session" className="cv-auto"><RunSlotCard date={activeDate} /></div>
