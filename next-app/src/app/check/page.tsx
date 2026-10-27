@@ -218,7 +218,20 @@ export default function CheckPage() {
   }, [hydrated, storedSymptomsRaw, logs, today, initialised]);
 
   const state: CheckState = useMemo(() => deriveState(values), [values]);
-  const reason = useMemo(() => reasonForState(values, state), [values, state]);
+  const reason = useMemo(
+    () => (state === "green" ? "You\u2019re good to train as planned." : reasonForState(values, state)),
+    [values, state],
+  );
+
+  // Keep a focused control clear of the sticky Save bar.
+  useEffect(() => {
+    const el = document.documentElement;
+    const prior = el.style.scrollPaddingBottom;
+    el.style.scrollPaddingBottom = "140px";
+    return () => {
+      el.style.scrollPaddingBottom = prior;
+    };
+  }, []);
 
   if (!hydrated) return <div className="mt-8 text-sm text-muted">Loading…</div>;
 
@@ -275,7 +288,7 @@ export default function CheckPage() {
       {saved ? (
         <p className="text-[13px] text-green flex items-center gap-1.5">
           <span aria-hidden>✓</span>
-          Saved. Today&apos;s prescription adjusts to this read.
+          Saved. Today&apos;s plan is adjusted.
         </p>
       ) : prefilledFrom ? (
         <div className="rounded border border-line-soft bg-surface px-3 py-2 flex items-baseline justify-between gap-3 text-[12px]">
@@ -299,6 +312,9 @@ export default function CheckPage() {
           <span id="check-regions" className="font-mono text-[10px] uppercase tracking-[0.06em] text-muted">Regions</span>
           <span aria-hidden className="h-px flex-1" style={{ background: "linear-gradient(to right, var(--color-line-soft), transparent)" }} />
         </div>
+        <p className="mb-2 text-[12px] text-muted">
+          Mild: barely there. Notable: you notice it. Severe: it limits you.
+        </p>
         <div className="rounded-md border border-line-soft bg-surface px-3">
           {/* Not yet resolved: show nothing rather than someone else's body
               map. A pull-up user must never be offered "Left groin" — the
@@ -372,7 +388,7 @@ export default function CheckPage() {
             onChange={(v) => updateNumber("morning_stiffness_min", v)}
           />
           <CheckSelectorRow
-            label="Life load"
+            label="A heavy week outside training"
             options={LIFELOAD_OPTIONS}
             value={values.life_load ?? 0}
             onChange={(v) => updateNumber("life_load", v)}
@@ -386,7 +402,7 @@ export default function CheckPage() {
           htmlFor="outside-training"
           className="block text-[14px] font-medium text-strong mb-2"
         >
-          Outside training yesterday
+          Anything outside training lately?
         </label>
         <input
           id="outside-training"
@@ -397,7 +413,7 @@ export default function CheckPage() {
             setSaved(false);
             setTouched(true);
           }}
-          placeholder="e.g. 90 min padel, poor sleep"
+          placeholder="Also happened: 90 min padel, poor sleep"
           className="block w-full text-[15px] px-3 py-3 min-h-[44px] border border-line-strong rounded-md bg-surface text-ink focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate break-words [overflow-wrap:anywhere]"
         />
         <EngineReadsNotesHint variant="check" />

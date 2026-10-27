@@ -454,7 +454,7 @@ export function GraduationCard({ program }: { program: Program }) {
             <p className="font-mono text-[10px] uppercase tracking-widest text-slate">Next block</p>
             <p className="text-sm font-semibold text-strong mt-0.5">{nextBlockEntry.name}</p>
             <p className="text-[12px] text-muted mt-1 line-clamp-2">
-              {nextBlockEntry.short_description ?? "The next arc in this program family."}
+              {nextBlockEntry.short_description ?? "The next block in this program family."}
             </p>
             <p className="text-[11px] font-mono uppercase tracking-wider text-slate mt-1.5">
               Preview →
@@ -465,47 +465,52 @@ export function GraduationCard({ program }: { program: Program }) {
           {program.slug ? (
             <VerbRow
               variant="primary"
-              label="Repeat this arc"
-              caption="Restart · keep intake + baselines"
-              onClick={() => {
-                if (!program.slug) return;
-                restartProgram(program.slug, todayISO());
-              }}
-            />
-          ) : null}
-          {program.slug ? (
-            <VerbRow
-              variant="secondary"
-              label="Extend +4 weeks"
-              caption="Push the retest date · keep the arc going"
+              label="Keep going 4 more weeks"
+              caption="Pushes the retest date · same program"
               onClick={() => {
                 if (!program.slug) return;
                 extendProgram(program.slug, 4);
               }}
             />
           ) : null}
-          {program.slug ? (
-            <VerbRow
-              variant="secondary"
-              label="Take a break"
-              caption="Pauses Today · stays in your programs list"
-              onClick={() => {
-                if (!program.slug) return;
-                pauseProgram(program.slug, todayISO());
-              }}
-            />
-          ) : null}
-          <Link
-            href="/programs"
-            className="block rounded border border-slate/40 bg-surface active:bg-slate/10 px-3 py-2.5 min-h-[52px]"
-          >
-            <p className="font-mono text-[11px] uppercase tracking-wider text-slate">
-              Pick your next focus →
-            </p>
-            <p className="text-[12px] text-muted mt-0.5">
-              {nextBlockEntry ? "Preview the next block or browse the catalog" : "Browse the catalog"}
-            </p>
-          </Link>
+          <details className="group">
+            <summary className="min-h-11 flex items-center cursor-pointer text-[14px] font-semibold text-ink list-none">
+              Other options
+            </summary>
+            <div className="space-y-2 pt-1">
+              {program.slug ? (
+                <VerbRow
+                  variant="secondary"
+                  label="Repeat this program"
+                  caption="Restart · keep intake + baselines"
+                  onClick={() => {
+                    if (!program.slug) return;
+                    restartProgram(program.slug, todayISO());
+                  }}
+                />
+              ) : null}
+              {program.slug ? (
+                <VerbRow
+                  variant="secondary"
+                  label="Take a break"
+                  caption="Pauses Today · stays in your programs list"
+                  onClick={() => {
+                    if (!program.slug) return;
+                    pauseProgram(program.slug, todayISO());
+                  }}
+                />
+              ) : null}
+              <Link
+                href="/programs"
+                className="block rounded border border-slate/40 bg-surface active:bg-slate/10 px-3 py-2.5 min-h-[52px]"
+              >
+                <p className="text-[14px] font-semibold text-ink">Pick your next focus</p>
+                <p className="text-[12px] text-muted mt-0.5">
+                  {nextBlockEntry ? "Preview the next block or browse the catalog" : "Browse the catalog"}
+                </p>
+              </Link>
+            </div>
+          </details>
         </div>
         <GraduationFeedback slug={program.slug ?? null} />
         <button
@@ -545,7 +550,7 @@ function GraduationFeedback({ slug }: { slug: string | null }) {
   if (!open && stored) {
     return (
       <p className="text-[12px] text-muted italic pt-1">
-        You rated this arc {stored.rating}/5.{" "}
+        You rated this program {stored.rating}/5.{" "}
         <button
           type="button"
           className="underline decoration-muted/40 hover:text-ink"
@@ -560,7 +565,7 @@ function GraduationFeedback({ slug }: { slug: string | null }) {
   return (
     <div className="rounded border border-line-soft bg-surface p-3 space-y-2">
       <p className="font-mono text-[10px] uppercase tracking-wider text-muted">
-        How was this arc?
+        How was this program?
       </p>
       <div className="flex items-center gap-2">
         {[1, 2, 3, 4, 5].map((n) => (

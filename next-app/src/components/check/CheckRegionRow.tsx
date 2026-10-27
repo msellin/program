@@ -24,6 +24,7 @@
  */
 
 import { cn } from "@/lib/utils";
+import { rovingKeyDown } from "./roving";
 
 export type SymptomBucket = "none" | "mild" | "notable" | "severe";
 
@@ -75,6 +76,14 @@ export function CheckRegionRow({ label, lat, value, onChange }: CheckRegionRowPr
         role="radiogroup"
         aria-label={`${label} severity`}
         className="grid grid-cols-4 gap-1.5"
+        onKeyDown={(e) =>
+          rovingKeyDown(
+            e,
+            OPTIONS.length,
+            OPTIONS.findIndex((o) => o.bucket === active),
+            (i) => onChange(BUCKET_TO_VALUE[OPTIONS[i].bucket]),
+          )
+        }
       >
         {OPTIONS.map((opt) => {
           const isActive = active === opt.bucket;
@@ -84,13 +93,14 @@ export function CheckRegionRow({ label, lat, value, onChange }: CheckRegionRowPr
               type="button"
               role="radio"
               aria-checked={isActive}
+              tabIndex={isActive ? 0 : -1}
               onClick={() => onChange(BUCKET_TO_VALUE[opt.bucket])}
               className={cn(
                 "relative min-h-[44px] px-1.5 py-2 text-[12px] rounded border motion-reduce:transition-none transition-colors",
-                "focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2",
+                "focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-strong focus-visible:outline-offset-2",
                 isActive
                   ? cn(
-                      "text-strong bg-surface-2",
+                      "text-strong bg-surface-2 font-semibold",
                       opt.tone === "neutral" && "border-strong",
                       opt.tone === "amber" && "border-amber",
                       opt.tone === "red" && "border-red",
@@ -98,6 +108,7 @@ export function CheckRegionRow({ label, lat, value, onChange }: CheckRegionRowPr
                   : "text-muted border-line-strong hover:text-ink hover:bg-line-soft",
               )}
             >
+              {isActive ? <span aria-hidden>✓ </span> : null}
               {opt.label}
               {isActive ? (
                 <span

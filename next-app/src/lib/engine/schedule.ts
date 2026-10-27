@@ -90,7 +90,7 @@ function shiftIsoDate(date: string, days: number): string {
  * Hip program keeps its own started_at anchor logic and skips the
  * implicit fallback.
  */
-function shiftedPhases(program: Program, profile?: Store["user_profile"]): Phase[] {
+export function shiftedPhases(program: Program, profile?: Store["user_profile"]): Phase[] {
   const slug = program.slug;
   const explicit = slug ? profile?.program_states?.[slug]?.phase_shift_days : undefined;
 

@@ -97,20 +97,21 @@ export function YourPlanCard({ program }: { program: Program }) {
             </h2>
           </div>
           <p className="text-[14px] text-ink leading-relaxed">{copy.schedule_line}</p>
-          <p className="text-[14px] text-muted leading-relaxed">{copy.tier_line}</p>
           {copy.phase_lines.length ? (
-            <ul className="mt-1 space-y-0.5 text-[14px] text-muted">
-              {copy.phase_lines.map((line, i) => (
-                <li key={i} className="pl-3 -indent-3">
-                  <span className="text-bronze">·</span>{" "}
-                  {line}
-                </li>
-              ))}
-            </ul>
+            <details>
+              <summary className="min-h-11 flex items-center cursor-pointer text-[14px] font-semibold text-ink list-none">
+                See plan
+              </summary>
+              <ul className="space-y-0.5 text-[14px] text-muted">
+                {copy.phase_lines.map((line, i) => (
+                  <li key={i} className="pl-3 -indent-3">
+                    <span className="text-bronze">·</span>{" "}
+                    {line}
+                  </li>
+                ))}
+              </ul>
+            </details>
           ) : null}
-          <p className="text-[12px] text-slate italic leading-relaxed pt-1 border-t border-line-soft/60">
-            {copy.attribution_line}
-          </p>
         </div>
       </div>
     </section>

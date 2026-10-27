@@ -123,7 +123,7 @@ export function MoveSheet({
       <div
         ref={panelRef}
         onClick={(e) => e.stopPropagation()}
-        className="w-full sm:max-w-md bg-surface-2 border border-line rounded-t-lg sm:rounded-lg max-h-[85vh] flex flex-col"
+        className="w-full sm:max-w-md bg-surface-2 border border-line rounded-t-lg sm:rounded-lg max-h-[85vh] flex flex-col min-w-0 overflow-hidden"
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       >
         {/* Header — sticky at the top of the sheet body */}
@@ -145,7 +145,7 @@ export function MoveSheet({
         </div>
 
         {/* Scrollable list — radios, this week + next week */}
-        <div className="flex-1 overflow-y-auto px-4 py-3 space-y-4">
+        <div className="flex-1 min-w-0 overflow-y-auto overflow-x-hidden px-4 py-3 space-y-4">
           <DayList
             heading="This week"
             days={thisWeek}
@@ -230,7 +230,7 @@ function DayList({
   onPick: (dateISO: string) => void;
 }) {
   return (
-    <fieldset>
+    <fieldset className="min-w-0">
       <legend className="font-mono text-[10px] uppercase tracking-widest text-muted mb-1.5">
         {heading}
       </legend>

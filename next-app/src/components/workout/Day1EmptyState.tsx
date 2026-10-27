@@ -34,12 +34,12 @@ export function Day1EmptyState({ sessionHref, slug }: { sessionHref?: string; sl
         Setup · one minute
       </p>
       <h2 id="day1-title" className="text-lg font-semibold text-strong leading-snug">
-        One focus, sharpened every session.
+        Week 1. Start with your first session.
       </h2>
       <p className="text-[14px] text-muted leading-relaxed">
         {sessionHref || offer
-          ? "Terav writes the focus arc; the rest of your week is still yours. Start with your first session — a morning check is optional."
-          : "Starts with a morning check — one minute of tapping calibrates today's load. Terav writes the focus arc; the rest of your week is still yours."}
+          ? "Do it at an easy effort and log what you get. A morning check is optional."
+          : "Start with a morning check. It takes a minute and sets today's load."}
       </p>
       <div className="flex flex-wrap items-center gap-x-4">
         {offer ? (

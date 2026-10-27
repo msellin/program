@@ -76,13 +76,11 @@ export function CheckLiveVerdict({ state, reason }: CheckLiveVerdictProps) {
           type="button"
           onClick={() => setSheetOpen(true)}
           className="mt-1 inline-flex items-center gap-1.5 min-h-[44px] py-2 text-[12px] text-ink cursor-pointer motion-reduce:transition-none transition-colors hover:text-strong focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2 rounded"
-          aria-label="View citation source"
+          aria-label="Why this result?"
         >
-          <span className="font-mono text-[10px] uppercase tracking-[0.06em] text-strong font-medium">
-            Cited
+          <span className="font-mono text-[11px] uppercase tracking-[0.06em] text-strong font-medium">
+            Why?
           </span>
-          <span>Kellmann 2010 · pain-provocation thresholds</span>
-          <span aria-hidden className="text-muted ml-1">→</span>
         </button>
       </div>
       {sheetOpen ? (

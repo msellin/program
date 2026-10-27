@@ -7,6 +7,8 @@ import { loadProgram } from "@/lib/data-loader";
 import { EmptyStateCard } from "@/components/EmptyStateCard";
 import { useStore } from "@/lib/useStore";
 import { today as todayISO, iso, cn } from "@/lib/utils";
+import { humanPhaseName, humanBlockName } from "@/lib/day-format";
+import { programProgress } from "@/lib/program-progress";
 import { activePhaseFor, activePhaseForWeek } from "@/lib/engine/schedule";
 import { blocksForDate } from "@/lib/engine/plan-generator";
 import { getBlocksForDate, isBlockObjectOn, DAY_VISIBLE_BLOCK_STATES } from "@/lib/engine/block-selectors";
@@ -28,31 +30,6 @@ type WeekDayEntry = {
 };
 
 const DAY_NAMES = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as const;
-
-/**
- * Batch 36 Step 14e — phase week pair for the Week surface. Only
- * returns a valid {current,total} when the user is viewing the CURRENT
- * week (offset === 0) since the progress bar represents "current phase
- * week", not the browsed range.
- */
-function phaseWeekPairForWeek(
-  phase: Phase | null | undefined,
-  weekStartISO: string,
-  offset: number,
-): { current: number; total: number } | null {
-  if (offset !== 0) return null;
-  if (!phase || !phase.starts || !phase.ends) return null;
-  const start = new Date(phase.starts + "T00:00:00");
-  const end = new Date(phase.ends + "T00:00:00");
-  const anchor = new Date(weekStartISO + "T00:00:00");
-  if (anchor < start || anchor > end) return null;
-  const daysIn = Math.floor((anchor.getTime() - start.getTime()) / 864e5);
-  const totalDays = Math.floor((end.getTime() - start.getTime()) / 864e5) + 1;
-  return {
-    current: Math.floor(daysIn / 7) + 1,
-    total: Math.max(1, Math.ceil(totalDays / 7)),
-  };
-}
 
 /**
  * How far ahead / behind Week lets you jump.
@@ -302,9 +279,10 @@ export default function WeekPage() {
           Also suppressed when browsing past/future weeks — the
           progress bar represents "current phase week", not the
           browsed range. */}
-      {weekPhase && phaseWeekPairForWeek(weekPhase, iso(viewedMon), offset) ? (
+      {offset === 0 && programProgress(program, todayISO(), userProfile) ? (
         (() => {
-          const pair = phaseWeekPairForWeek(weekPhase, iso(viewedMon), offset)!;
+          const prog = programProgress(program, todayISO(), userProfile)!;
+          const pair = { current: prog.weekN, total: prog.totalWeeks };
           const programName = program.slug
             ? program.slug.split("-").map((w) => w[0].toUpperCase() + w.slice(1)).join(" ")
             : "Program";
@@ -377,7 +355,9 @@ export default function WeekPage() {
       {weekPhase ? (
         <div className="rounded border border-line-soft border-l-4 border-l-slate bg-surface px-3 py-2 text-[14px]">
           <span className="font-semibold text-strong">
-            {humanPhaseName(weekPhase.name)}
+            {humanPhaseName(weekPhase.name)
+              .replace(/interleaved consolidation/i, "Mixed practice")
+              .replace(/\s+for all tiers$/i, "")}
           </span>
           {weekPhase.goal ? <span className="text-muted"> · {weekPhase.goal}</span> : null}
         </div>
@@ -540,7 +520,7 @@ export default function WeekPage() {
               displayLabel = displayBlocks.length ? "" : "Rest / accessory day";
             }
 
-            const names = displayBlocks.map((b) => b.name).join(" + ");
+            const names = displayBlocks.map((b) => humanBlockName(b.name)).join(" + ");
             const isRest = displayBlocks.length === 0 && !override;
 
             // Pick a single status the leading dot represents. Priority order picks
@@ -658,10 +638,15 @@ export default function WeekPage() {
                   >
                     <div className="flex items-baseline justify-between gap-3">
                       <div className="font-semibold flex items-baseline gap-2 flex-wrap">
-                        <span>{dayName}</span>
+                        <span className="inline-block w-9">{dayName}</span>
                         <span className="font-mono text-[11px] text-muted font-normal">
                           {dateForDay.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
                         </span>
+                        {isToday ? (
+                          <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full bg-bronze/15 text-bronze font-normal">
+                            Today
+                          </span>
+                        ) : null}
                         {doneCount > 0 && !isToday ? (
                           <span className="text-[11px] text-green font-mono font-normal">
                             · {doneCount} logged
@@ -973,7 +958,7 @@ function WeekDayActions({
           type="button"
           onClick={() => setMoveOpen(true)}
           disabled={!canMove}
-          className="text-[14px] font-semibold px-3 py-2 rounded border border-line text-ink hover:bg-line-soft min-h-[44px] disabled:opacity-40 disabled:cursor-not-allowed"
+          className="text-[14px] font-semibold px-3 py-2 rounded border border-line text-ink hover:bg-line-soft min-h-[44px] disabled:opacity-40 disabled:cursor-not-allowed disabled:text-muted disabled:border-line-soft disabled:hover:bg-transparent"
         >
           Move…
         </button>
@@ -981,7 +966,7 @@ function WeekDayActions({
           type="button"
           onClick={() => setConfirmSkip(true)}
           disabled={!canSkip}
-          className="text-[14px] font-semibold px-3 py-2 rounded border border-line text-ink hover:bg-line-soft min-h-[44px] disabled:opacity-40 disabled:cursor-not-allowed"
+          className="text-[14px] font-semibold px-3 py-2 rounded border border-line text-ink hover:bg-line-soft min-h-[44px] disabled:opacity-40 disabled:cursor-not-allowed disabled:text-muted disabled:border-line-soft disabled:hover:bg-transparent"
         >
           Skip
         </button>
@@ -1090,12 +1075,6 @@ function perProgramDayStates(
     });
   }
   return { dots };
-}
-
-function humanPhaseName(name: string): string {
-  return name
-    .replace(/\s*\((?:Phase|weeks?|week|sub-goal|dev|internal)\b[^)]*\)\s*$/i, "")
-    .trim();
 }
 
 /**

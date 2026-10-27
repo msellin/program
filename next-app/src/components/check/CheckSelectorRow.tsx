@@ -16,6 +16,7 @@
  */
 
 import { cn } from "@/lib/utils";
+import { rovingKeyDown } from "./roving";
 
 export type CheckSelectorOption<T extends string | number> = {
   label: string;
@@ -43,24 +44,35 @@ export function CheckSelectorRow<T extends string | number>({
         aria-label={label}
         className="grid gap-1 border border-line-soft rounded-md p-1"
         style={{ gridTemplateColumns: `repeat(${options.length}, 1fr)` }}
+        onKeyDown={(e) =>
+          rovingKeyDown(
+            e,
+            options.length,
+            Math.max(0, options.findIndex((o) => o.value === value)),
+            (i) => onChange(options[i].value),
+          )
+        }
       >
-        {options.map((opt) => {
+        {options.map((opt, idx) => {
           const isActive = value === opt.value;
+          const tabStop = isActive || (value == null || !options.some((o) => o.value === value)) && idx === 0;
           return (
             <button
               key={String(opt.value)}
               type="button"
               role="radio"
               aria-checked={isActive}
+              tabIndex={tabStop ? 0 : -1}
               onClick={() => onChange(opt.value)}
               className={cn(
                 "min-h-[44px] px-1 py-2 text-[12px] rounded motion-reduce:transition-none transition-colors",
-                "focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2",
+                "focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-strong focus-visible:outline-offset-2",
                 isActive
-                  ? "bg-surface-2 text-strong font-medium"
+                  ? "bg-surface-2 text-strong font-semibold ring-1 ring-strong"
                   : "text-muted hover:text-ink",
               )}
             >
+              {isActive ? <span aria-hidden>✓ </span> : null}
               {opt.label}
             </button>
           );

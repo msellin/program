@@ -29,7 +29,8 @@ import { applyProgramSoftening, blocksForDate, composeBlockForUser } from "@/lib
 import { getBlocksForDate, isBlockObjectOn, DAY_VISIBLE_BLOCK_STATES } from "@/lib/engine/block-selectors";
 import { migrateLegacyToBlocks, needsBlockMigration } from "@/lib/migrations/legacy-to-blocks";
 import { RestDayCard, RetestReminder, GraduationCard } from "@/components/session/shared/StatusCards";
-import { programDisplayName, humanPhaseName, humanBlockName, phaseProgress, phaseWeekPair } from "@/lib/day-format";
+import { programProgress, endsLabel, type ProgramProgress } from "@/lib/program-progress";
+import { programDisplayName, humanPhaseName, humanBlockName } from "@/lib/day-format";
 import type { Program, Block, Exercise, Phase, Store, ScheduledBlock, ProgramManifest } from "@/lib/schemas";
 /**
  * F8-second (2026-08-19/20), trimmed for the Day redesign (2026-08-23) —
@@ -265,16 +266,17 @@ export function TodaySession({
           own DashboardBlock groups. */}
       <header className="space-y-1">
         <p className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted">
-          {todayEyebrow(activeDate, phase)}
+          {todayEyebrow(activeDate, programProgress(primary, activeDate, userProfile))}
         </p>
         <h1 className="text-[32px] font-semibold tracking-[-0.03em] text-strong leading-none">
           {primary.slug ? programDisplayName(primary, primary.slug) : "Day"}
         </h1>
       </header>
 
-      {programs.length === 1 && phase && phaseWeekPair(phase, activeDate) ? (
+      {programs.length === 1 && programProgress(primary, activeDate, userProfile) ? (
         (() => {
-          const pair = phaseWeekPair(phase, activeDate)!;
+          const prog = programProgress(primary, activeDate, userProfile)!;
+          const pair = { current: prog.weekN, total: prog.totalWeeks };
           const programName = primary.slug ? programDisplayName(primary, primary.slug) : "Program";
           return (
             <ArcProgressBar
@@ -464,7 +466,13 @@ export function TodaySession({
                   left three different week numbers on one screen with nothing
                   saying they count different things — persona-pullup, day 45,
                   2026-09-02. */}
-              {mode.charAt(0).toUpperCase() + mode.slice(1)}. <span className="text-muted">Shea & Morgan 1979.</span>
+              {week <= 2
+                ? "Drills run in a set order while you learn them."
+                : "Drills are mixed up each session; it helps skills stick."}{" "}
+              <details className="inline">
+                <summary className="inline cursor-pointer underline underline-offset-2">Why?</summary>{" "}
+                {mode.charAt(0).toUpperCase() + mode.slice(1)}. Shea &amp; Morgan 1979.
+              </details>
             </p>
           );
         })()
@@ -494,10 +502,10 @@ export function TodaySession({
           let interference: string;
           if (hasStrengthAndAerobic) {
             interference =
-              "Concurrent endurance + strength has known interference effects (Schumann 2022). Aim for ≥6 hours between sessions if you do both.";
+              "Concurrent endurance + strength has known interference effects. Aim for ≥6 hours between sessions if you do both.";
           } else if (hasSkill && (has("strength") || has("endurance"))) {
             interference =
-              "Skill + strength/aerobic on the same day: put the skill work first — motor learning suffers when the CNS is already fatigued (Sadowski 2021 analog).";
+              "Skill + strength/aerobic on the same day: put the skill work first — motor learning suffers when the CNS is already fatigued.";
           } else if (hasRehab && has("endurance")) {
             interference =
               "Rehab + endurance: watch symptom score after cardio. Any groin / hip flare-up = tomorrow's rehab session is symptom-gated.";
@@ -628,7 +636,7 @@ export function TodaySession({
                 title={summary}
                 lede={
                   groupPhase
-                    ? `${humanPhaseName(groupPhase.name)}${phaseProgress(groupPhase, activeDate) ? " · " + phaseProgress(groupPhase, activeDate) : ""}`
+                    ? `${humanPhaseName(groupPhase.name)}${(() => { const pp = programProgress(g.program, activeDate, userProfile); return pp ? ` · week ${pp.weekN} of ${pp.totalWeeks} · ends ${endsLabel(pp.endsOn)}` : ""; })()}`
                     : undefined
                 }
                 primaryCta={
@@ -684,11 +692,11 @@ export function TodaySession({
  */
 function todayEyebrow(
   activeDate: string,
-  phase: Phase | null | undefined,
+  prog: ProgramProgress | null,
 ): string {
   const iso = todayISO();
   const scopeToken = activeDate === iso ? "TODAY" : shortDateToken(activeDate);
-  const progressToken = phase ? phaseProgressToken(phase, activeDate) : null;
+  const progressToken = prog ? `WEEK ${prog.weekN} OF ${prog.totalWeeks}` : null;
   return progressToken ? `${scopeToken} · ${progressToken}` : scopeToken;
 }
 
@@ -699,12 +707,6 @@ function shortDateToken(iso: string): string {
     .toUpperCase();
 }
 
-function phaseProgressToken(phase: Phase, activeDate: string): string | null {
-  const raw = phaseProgress(phase, activeDate);
-  if (!raw) return null;
-  // phaseProgress returns "week 3 of 6" style; upper-case for the eyebrow tier.
-  return raw.toUpperCase();
-}
 
 function NoActiveProgram() {
   return (
