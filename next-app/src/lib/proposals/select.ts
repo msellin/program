@@ -38,6 +38,7 @@ import { assessReintroReadiness } from "@/lib/engine/readiness";
 import { nextEligibleTier, isProposalDismissed } from "@/lib/engine/tier-promotion";
 import { evaluateOverperformer } from "@/lib/engine/adapt";
 import { classify } from "@/lib/engine/non-responder-classifier";
+import { effectiveCheckState } from "@/lib/engine/red-day";
 import { weekNumberFromProgramStart } from "@/lib/engine/plan-generator";
 import { isPastProgramEnd } from "@/lib/engine/schedule";
 import { citationIdForKind } from "@/lib/engine/proposal-citations";
@@ -606,7 +607,26 @@ export function selectProposals(store: Store, program: Program, date: string): P
     }
   }
 
+  // G-06 (2026-10-27): nothing that pushes is offered on a red or amber day.
+  // "Advance to Tier D" rendered under a red banner. Red holds the session
+  // (`redDayDirective`) and amber says "hold, don't push", so a promotion,
+  // a TM bump, a phase graduation or a max-effort retest contradicts the
+  // same screen. They come back with the next green check.
+  const { state } = effectiveCheckState(store.logs, date);
+  if (state === "red" || state === "amber") {
+    for (let i = out.length - 1; i >= 0; i--) {
+      if (PUSH_KINDS.has(out[i].kind)) out.splice(i, 1);
+    }
+  }
+
   // Highest priority first.
   out.sort((a, b) => b.priority - a.priority);
   return out;
 }
+
+const PUSH_KINDS: ReadonlySet<Proposal["kind"]> = new Set([
+  "tier_advance",
+  "tm_bump",
+  "readiness_after_layoff",
+  "retest_due",
+]);
