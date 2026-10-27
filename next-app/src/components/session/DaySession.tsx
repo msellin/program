@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { loadProgram, loadExercises, applyProgramExerciseOverrides } from "@/lib/data-loader";
 import { useStore, entrySets } from "@/lib/useStore";
@@ -9,6 +10,7 @@ import { blocksForDate, composeBlockForUser } from "@/lib/engine/plan-generator"
 import { getBlocksForDate, isBlockObjectOn, DAY_VISIBLE_BLOCK_STATES } from "@/lib/engine/block-selectors";
 import { migrateLegacyToBlocks, needsBlockMigration } from "@/lib/migrations/legacy-to-blocks";
 import { prescriptionRows, suggestForExercise, type Suggestion } from "@/lib/engine/suggest";
+import { redDayDirective } from "@/lib/engine/red-day";
 import { selectProposals } from "@/lib/proposals/select";
 import { dedupeItems, planDayItems, humanBlockName, programDisplayName } from "@/lib/day-format";
 import { RestDayCard, GraduationCard } from "@/components/session/shared/StatusCards";
@@ -139,7 +141,18 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
   // first render) and `useMemoRail` — which wraps `useMemo` — is called
   // before any early return below.
   const phase = program ? activePhaseFor(program, activeDate, userProfile) : undefined;
-  const blocks: Block[] = !program
+  // G-07: red holds today's planned session. The program's alternative (if it
+  // authors one) replaces it only after the user chooses it.
+  const [altChosen, setAltChosen] = useState(false);
+  const redDay = program && activeDate === todayISO() ? redDayDirective(program, store.logs, activeDate) : null;
+  const holdToday = !!redDay?.hold;
+  const altBlocks: Block[] =
+    program && redDay?.hold && redDay.alternative
+      ? redDay.alternative.blocks.map((b) =>
+          composeBlockForUser(program, b, userProfile, activeDate, byId, { onlyIfEmpty: true }),
+        )
+      : [];
+  const plannedBlocks: Block[] = !program
     ? []
     : (() => {
         if (blockObjectOn) {
@@ -165,6 +178,7 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
         if (overrideBlocks && overrideBlocks.length) return overrideBlocks;
         return blocksForDate(program, userProfile, phase, activeDate, byId, store);
       })();
+  const blocks: Block[] = holdToday && altChosen && altBlocks.length ? altBlocks : plannedBlocks;
   const railExercises: RailExercise[] = useMemoRail(blocks, byId, program, store, activeDate);
 
   /**
@@ -214,6 +228,43 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
 
   if (isPastProgramEnd(program, activeDate, userProfile) && activeDate === todayISO()) {
     return <GraduationCard program={program} />;
+  }
+
+  // Hold: nothing logged yet today and the morning check is red. Rest first;
+  // the alternative is optional. No "start the planned session" path here.
+  const anyLoggedToday = railExercises.some(
+    (r) => countLoggedSets(entrySets(store.logs[activeDate]?.exercises[r.key] ?? null), r.isLoadable) > 0,
+  );
+  if (redDay?.hold && !altChosen && !anyLoggedToday && blocks.length > 0 && !ended) {
+    return (
+      <div className="space-y-4 pt-4" data-surface="RedDayHold">
+        <h1 className="text-[32px] font-semibold tracking-[-0.035em] text-strong leading-none">Rest today</h1>
+        <p className="text-[15px] text-ink">
+          {redDay.reason ?? "Your check came back red."} Today&rsquo;s planned session is on hold, and
+          nothing progresses.
+        </p>
+        {redDay.redFlag ? (
+          <p className="text-[14px] text-muted">
+            What you reported is worth raising with a clinician rather than training around.
+          </p>
+        ) : null}
+        {redDay.alternative && redDay.alternative.blocks.length > 0 ? (
+          <button
+            type="button"
+            onClick={() => setAltChosen(true)}
+            className="w-full min-h-[52px] rounded-[10px] border border-line-strong px-4 py-3 text-left text-[15px] text-strong"
+          >
+            Optional: {redDay.alternative.label}
+          </button>
+        ) : null}
+        <Link
+          href="/"
+          className="flex h-[56px] w-full items-center justify-center rounded-[10px] bg-bronze text-[16px] font-semibold text-ground"
+        >
+          Back to Today
+        </Link>
+      </div>
+    );
   }
 
   if (!blocks.length) {
