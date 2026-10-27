@@ -24,7 +24,7 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 | P-04 | Guard `/check/hip` (redirect unless the hip program) | H | A | S | app #5 |
 | P-05 | Report: hide "Rehab days", the clinical footer and the clinical section for non-hip programs | H | A | S | app #9 |
 | P-06 | Drop the personal slug from `generateStaticParams` | H | A | S | compliance |
-| P-07 | Landing: replace the hip mock (`TodayMockup.tsx:21`); the founder story without hip naming | H | A | S | product 3 |
+| P-07 ✓ 5fe464a | Landing: replace the hip mock (`TodayMockup.tsx:21`); the founder story without hip naming | H | A | S | product 3 |
 | P-08 | Move the hip-clinical triggers out of the shared `deriveState`, into a personal rule set; add a test | S | A | M | personal-separation P5 |
 | P-09 | Remove the LEGACY_REGIONS and `DEFAULT_PROGRAM_SLUG` hip fallbacks | S | A | S | P6 |
 | P-10 | `guide/page.tsx:155` hip case study; the personal note in `anterior-hip-rebuild.json`; fixture "groin" note | S | A | S | P8, P10, P11 |
@@ -86,14 +86,14 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 ## 6. Landing, claims and evidence
 | ID | Action | When | Who | Effort | Source |
 |----|--------|------|-----|--------|--------|
-| L-01 | Strip withdrawn numbers (`manifest.json` ~41,101,128,263; "125 primary studies"; "Six weeks to a 2K PR"; "Every change cites a study"); check `programs-catalog.ts` | H | A | S–M | h18, compliance 7 |
+| L-01 ✓ 5fe464a (landing part; manifest = lane 4) | Strip withdrawn numbers (`manifest.json` ~41,101,128,263; "125 primary studies"; "Six weeks to a 2K PR"; "Every change cites a study"); check `programs-catalog.ts` | H | A | S–M | h18, compliance 7 |
 | L-02 | Remove withdrawn citations from advertised programs: Sadowski (handstand, muscle-up), `kilding_2012` | H | A | S | roadmap 2 |
-| L-03 | Hero: outcome-first, one "Start free" CTA everywhere, the mockup under the headline on phone, a sticky CTA on program pages | H | A | M | product §1,5 |
+| L-03 ✓ 5fe464a | Hero: outcome-first, one "Start free" CTA everywhere, the mockup under the headline on phone, a sticky CTA on program pages | H | A | M | product §1,5 |
 | L-04 | Catalog: advertise pull-up, handstand walk, strength + cardio; engine/rowing/overhead "coming soon" (+ persona-harness review) | H | A | M | product §2, roadmap |
-| L-05 | OG image + title per program page (ad and link previews); fix the home meta description ("stubborn joint") | H | A | S | g3, Lighthouse |
-| L-06 | Landing 404 page; iOS "add to home screen" hint | H | A | S | g3 |
-| L-07 | Programs page: no "specialist" review claim; methodology below the fold | H | A | S | x05 |
-| L-08 | Evidence line, stage 1: "Built on published sport science. Every change shows its reason and source." | H | A | S | evidence-angle |
+| L-05 ✓ 5fe464a | OG image + title per program page (ad and link previews); fix the home meta description ("stubborn joint") | H | A | S | g3, Lighthouse |
+| L-06 ✓ 5fe464a | Landing 404 page; iOS "add to home screen" hint | H | A | S | g3 |
+| L-07 ✓ 5fe464a | Programs page: no "specialist" review claim; methodology below the fold | H | A | S | x05 |
+| L-08 ✓ 5fe464a | Evidence line, stage 1: "Built on published sport science. Every change shows its reason and source." | H | A | S | evidence-angle |
 | L-09 | Close the citation hold: evidence-verifier on all 125 → VERIFIED badges; publish the whitepapers as pages | S | A | L | evidence-angle |
 | L-10 | Named expert reviewer ("Reviewed by …") | L | O | — | evidence-angle |
 | L-11 | Real beta quote with consent (social proof) | S | O | S | product §4 |
@@ -103,7 +103,7 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 |----|--------|------|-----|--------|--------|
 | M-01 | Cloudflare Web Analytics ON (both domains) | H | A+O | S | compliance §3 |
 | M-02 | UTMs captured on landing → sign-up → user metadata; an SQL query for sign-ups and activations by campaign | H | A | M | money-tech | ✓ 6e89b95
-| M-03 | Ad spec: 3 ad sets, targeting 18+, interests/keywords only, safe wording, UTM links, creatives | H | A | M | compliance §2 |
+| M-03 ✓ ec8f21b | Ad spec: 3 ad sets, targeting 18+, interests/keywords only, safe wording, UTM links, creatives | H | A | M | compliance §2 |
 | M-04 | Review panel: 3 Sonnet lenses, 1 round, on the ads + landing (~150k tokens) | H | A | S | D8 |
 | M-05 | Meta Business + Google Ads accounts, payment, upload, spend €150 (Meta €100 / Google €50) | H | O | M | O3 |
 | M-06 | Read the test after 3–5 days: sign-ups and activations per campaign | S | A+O | S | launch-plan |
