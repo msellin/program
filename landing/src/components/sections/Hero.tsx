@@ -5,9 +5,9 @@ import { APP_URL } from "@/config";
 import { CtaLink } from "../CtaLink";
 
 /**
- * Bronze→teal chisel stroke that redraws itself under the H1 keyword.
- * Uses stroke-dashoffset animation — no JS. The `sharpen` metaphor named
- * by the product name (Terav = sharp) as a visual signature.
+ * Flat bronze chisel stroke that redraws itself under the H1 keyword.
+ * Uses stroke-dashoffset animation — no JS. Flat since the 2026-10-27 brand
+ * decision (Direction B): the identity has no gradients anywhere.
  */
 function ChiselStroke() {
   return (
@@ -17,16 +17,9 @@ function ChiselStroke() {
       className="pointer-events-none absolute -bottom-1 left-0 h-2.5 w-full"
       preserveAspectRatio="none"
     >
-      <defs>
-        <linearGradient id="chisel-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="var(--color-bronze-hi)" />
-          <stop offset="55%" stopColor="var(--color-bronze)" />
-          <stop offset="100%" stopColor="var(--color-teal)" />
-        </linearGradient>
-      </defs>
       <path
         d="M4 8 L296 4"
-        stroke="url(#chisel-gradient)"
+        stroke="var(--color-bronze)"
         strokeWidth="3.5"
         strokeLinecap="round"
         fill="none"
@@ -62,7 +55,7 @@ export function Hero({ dict }: { dict: LandingDict }) {
               {t.h1_a}
               <br className="hidden sm:inline" />{" "}
               <span className="relative inline-block">
-                <span className="bg-gradient-to-r from-[var(--color-bronze-hi)] via-[var(--color-bronze)] to-[var(--color-teal)] bg-clip-text text-transparent">
+                <span className="text-[var(--color-bronze)]">
                   {t.h1_b}
                 </span>
                 <ChiselStroke />
@@ -80,7 +73,7 @@ export function Hero({ dict }: { dict: LandingDict }) {
           <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
             <CtaLink
               href={`${APP_URL}/sign-up`}
-              className="group inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-[var(--color-bronze-hi)] to-[var(--color-bronze-lo)] px-6 py-3.5 text-sm font-semibold text-black shadow-[0_10px_40px_-10px_rgba(208,154,104,0.6)] transition hover:brightness-110 sm:w-auto sm:text-base"
+              className="group inline-flex w-full items-center justify-center rounded-full bg-[var(--color-bronze)] hover:bg-[var(--color-bronze-hover)] px-6 py-3.5 text-sm font-semibold text-black shadow-[0_10px_40px_-10px_rgba(200,150,102,0.6)] transition hover:brightness-110 sm:w-auto sm:text-base"
             >
               <span>{t.cta_primary}</span>
               <span className="ml-2 transition-transform group-hover:translate-x-0.5">→</span>

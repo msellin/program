@@ -22,7 +22,7 @@ export default function NotFound() {
           <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:justify-center">
             <Link
               href="/programs"
-              className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[var(--color-bronze-hi)] to-[var(--color-bronze-lo)] px-6 py-3.5 text-sm font-semibold text-black transition hover:brightness-110"
+              className="inline-flex items-center justify-center rounded-full bg-[var(--color-bronze)] hover:bg-[var(--color-bronze-hover)] px-6 py-3.5 text-sm font-semibold text-black transition hover:brightness-110"
             >
               See the programs
             </Link>

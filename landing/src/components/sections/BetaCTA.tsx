@@ -10,7 +10,7 @@ export function BetaCTA({ dict }: { dict: LandingDict }) {
       <h2 className="text-balance text-[32px] font-bold leading-[1.08] tracking-tight text-white sm:text-5xl md:text-6xl md:leading-[1.02]">
         {t.h2_a}
         <br />
-        <span className="bg-gradient-to-r from-[var(--color-bronze-hi)] via-[var(--color-bronze)] to-[var(--color-teal)] bg-clip-text text-transparent">
+        <span className="text-[var(--color-bronze)]">
           {t.h2_b}
         </span>
       </h2>
@@ -22,7 +22,7 @@ export function BetaCTA({ dict }: { dict: LandingDict }) {
       <div className="mt-10 flex flex-col items-stretch gap-3 sm:flex-row sm:justify-center">
         <CtaLink
           href={`${APP_URL}/sign-up`}
-          className="group inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-[var(--color-bronze-hi)] to-[var(--color-bronze-lo)] px-7 py-4 text-base font-semibold text-black shadow-[0_10px_40px_-10px_rgba(208,154,104,0.6)] transition hover:brightness-110 sm:w-auto"
+          className="group inline-flex w-full items-center justify-center rounded-full bg-[var(--color-bronze)] hover:bg-[var(--color-bronze-hover)] px-7 py-4 text-base font-semibold text-black shadow-[0_10px_40px_-10px_rgba(200,150,102,0.6)] transition hover:brightness-110 sm:w-auto"
         >
           <span>{t.cta_primary}</span>
           <span className="ml-2 transition-transform group-hover:translate-x-0.5">→</span>

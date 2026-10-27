@@ -1,56 +1,24 @@
 @import "tailwindcss";
+/* Shared brand tokens live in ONE file for the landing and the app (D-04).
+   Do not redefine any of them here; next-app's brand.test.ts fails if this
+   block does. Brand guide: dev/active/brand/brand-guide.md. */
+@import "../../../brand/tokens.css";
 
 /*
- * Terav landing — warm dark palette derived from the parent app.
- * Bronze primary + slate teal secondary. Slightly punchier saturation for
- * marketing surface vs the app itself. Deeper ground.
- *
- * Accent-economy rule (Refactoring UI):
- *   bronze  — brand + primary CTA + identity gradient.
- *   teal    — product signal + identity gradient companion only.
+ * Accent economy (Refactoring UI), same rules as the app:
+ *   bronze  — brand + primary CTA. Flat: the identity has no gradients.
+ *   teal    — product signal, data and info only.
  *   amber   — warning / refusal (never decorative).
  *   green   — success / available (never decorative).
  *   red     — destructive (never decorative).
  * Do NOT use amber, green, or red as category tones or as sibling accents.
  */
 @theme {
-  /* Canvas + surfaces — unified with the app's ground color (#0e0f12) per
-     the design-system alignment audit. Landing used to sit at #0a0b0e as a
-     deliberate depth trick; now a screenshot of the app dropped next to the
-     landing frame blends seamlessly. */
-  --color-ground: #0e0f12;
-  --color-ground-2: #16181c;
-  --color-surface: #16181c;
-  --color-surface-2: #20232a;
-  --color-surface-3: #2a2e37;
-
-  /* Text */
-  --color-ink: #d6d9de;
-  --color-strong: #f4f5f7;
-  --color-muted: #8a8f9a;
-  --color-faint: #5a5f6a;
-
-  /* Lines */
-  --color-line: #2a2e37;
-  --color-line-soft: #20232a;
-
-  /* Semantic states */
-  --color-green: #5fb37a;
-  --color-amber: #e0a63a;
-  --color-red: #e5654b;
-
-  /* Accents — bronze primary, slate teal secondary (punchier than the app) */
-  --color-bronze: #d09a68;
-  --color-bronze-hi: #e8b988;
-  --color-bronze-lo: #a67a4a;
-  --color-teal: #7fc4d0;
-  --color-teal-hi: #a0d8e0;
-
-  /* Typography */
-  --font-sans:
-    var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-mono:
-    var(--font-mono), ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  /* Landing-only aliases, kept so existing class strings resolve. Values come
+     from the shared tokens; teal-hi is the one landing-only hover tint. */
+  --color-ground-2: var(--color-surface);
+  --color-bronze-lo: var(--color-bronze-active);
+  --color-teal-hi: #a0d0da;
 }
 
 html,

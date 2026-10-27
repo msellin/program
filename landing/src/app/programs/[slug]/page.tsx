@@ -182,7 +182,7 @@ export default async function ProgramDetailPage({
                 <div className="mt-5 flex flex-wrap gap-3">
                   <CtaLink
                     href={signUpHref}
-                    className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[var(--color-bronze-hi)] to-[var(--color-bronze-lo)] px-6 py-3 text-sm font-semibold text-black shadow-[0_10px_40px_-10px_rgba(208,154,104,0.6)] transition hover:brightness-110"
+                    className="inline-flex items-center gap-2 rounded-full bg-[var(--color-bronze)] hover:bg-[var(--color-bronze-hover)] px-6 py-3 text-sm font-semibold text-black shadow-[0_10px_40px_-10px_rgba(200,150,102,0.6)] transition hover:brightness-110"
                   >
                     Start free
                     <span>→</span>
@@ -234,7 +234,7 @@ export default async function ProgramDetailPage({
           <div className="fixed inset-x-0 bottom-0 z-20 border-t border-white/10 bg-[var(--color-ground)]/95 px-5 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur sm:hidden">
             <CtaLink
               href={signUpHref}
-              className="inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-[var(--color-bronze-hi)] to-[var(--color-bronze-lo)] px-6 py-3.5 text-sm font-semibold text-black"
+              className="inline-flex w-full items-center justify-center rounded-full bg-[var(--color-bronze)] hover:bg-[var(--color-bronze-hover)] px-6 py-3.5 text-sm font-semibold text-black"
             >
               Start free →
             </CtaLink>

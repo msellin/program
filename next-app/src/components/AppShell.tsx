@@ -11,6 +11,7 @@ import { RestTimerHost } from "@/components/workout/RestTimerHost";
 import { OnboardingRunner } from "@/components/onboarding/OnboardingRunner";
 import { createClient } from "@/lib/supabase/client";
 import { isGuestRoute, isSemiPublicRoute } from "@/lib/route-access";
+import { Wordmark } from "@/components/ui/Wordmark";
 
 /**
  * App shell — the persistent chrome around every authenticated route.
@@ -152,12 +153,12 @@ function AuthGatedShell({
           the whole reason we shipped the /programs public preview. */}
       {isTodayRoute ? <OnboardingRunner /> : null}
       {/* F8 Batch 29 · IA restructure (2026-08-19). Header collapses to
-          TERAV wordmark (left) + Settings icon (right). Programs / Morning-
+          wordmark (left) + Settings icon (right). Programs / Morning-
           check / ⋮ overflow all deleted — bottom nav owns tab-switching,
           top owns identity + preferences (Whoop / Runna / Pliability
           model). Extras / Report / Evidence moved to Profile → More.
-          Wordmark aligns with landing pattern: bronze pip + strong
-          wordmark (P1-72). ReadinessDot removed 2026-08-19 (P1-78 · F8
+          Wordmark is the shared "terav." SVG, the same file the landing
+          nav serves (brand Direction B, 2026-10-27). ReadinessDot removed 2026-08-19 (P1-78 · F8
           second push) — redundant with the MorningCheckBlock at the top
           of Today's dashboard, which is the primary signal now. */}
       {isTabRoot ? (
@@ -169,10 +170,9 @@ function AuthGatedShell({
             <Link
               href="/"
               aria-label="Terav — Today"
-              className="flex items-center gap-2 font-sans font-semibold text-[14px] uppercase tracking-[0.22em] text-strong hover:opacity-80"
+              className="flex items-center min-h-11 hover:opacity-80"
             >
-              <span aria-hidden className="inline-block h-2 w-2 rounded-full bg-bronze" />
-              TERAV
+              <Wordmark />
             </Link>
             <Link
               href="/settings/"

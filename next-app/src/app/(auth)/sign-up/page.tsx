@@ -9,6 +9,7 @@ import { mapAuthError } from "@/lib/auth-errors";
 import { TurnstileWidget, captchaRequired } from "@/components/auth/TurnstileWidget";
 import { captureAttribution, signupMetadata, stashPendingSignupMeta } from "@/lib/attribution";
 import { Button } from "@/components/ui/Button";
+import { Wordmark } from "@/components/ui/Wordmark";
 
 /**
  * Sign-up requires:
@@ -172,7 +173,7 @@ function SignUpInner() {
   return (
     <div className="max-w-sm mx-auto pt-8 space-y-5">
       <div className="flex items-center gap-1.5 mb-4">
-        <span className="font-mono text-[14px] uppercase tracking-[0.2em] text-bronze">Terav</span>
+        <Wordmark />
       </div>
       <header className="space-y-1">
         <h1 className="text-2xl font-semibold tracking-tight text-strong">Sign up</h1>

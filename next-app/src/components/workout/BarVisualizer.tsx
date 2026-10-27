@@ -35,9 +35,9 @@ export function BarVisualizer({ targetKg, barKg = 20 }: { targetKg: number; barK
       {/* bar shaft */}
       <rect x={12 + sideWidth} y={shaftY} width={shaftLen} height={3} fill="#C89666" rx={1.5} />
       {/* left sleeve base */}
-      <rect x={10 + sideWidth - 6} y={cy - 4} width={8} height={8} fill="#8A8F9A" />
+      <rect x={10 + sideWidth - 6} y={cy - 4} width={8} height={8} fill="#93989f" />
       {/* right sleeve base */}
-      <rect x={10 + sideWidth + shaftLen - 2} y={cy - 4} width={8} height={8} fill="#8A8F9A" />
+      <rect x={10 + sideWidth + shaftLen - 2} y={cy - 4} width={8} height={8} fill="#93989f" />
 
       {/* plates per side */}
       {renderPlates(plates, 10, cy, "left", width, height)}
@@ -113,6 +113,6 @@ function plateColour(kg: number): string {
   if (kg >= 15) return "#E0A63A"; // yellow/amber
   if (kg >= 10) return "#5FB37A"; // green
   if (kg >= 5) return "#D6D9DE"; // white/light
-  if (kg >= 2.5) return "#3A3F4A"; // dark
+  if (kg >= 2.5) return "#5f6570"; // dark
   return "#79B8C4"; // slate/small
 }

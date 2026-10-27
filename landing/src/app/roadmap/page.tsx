@@ -201,7 +201,7 @@ const items: Item[] = [
     title: "Terav brand identity",
     status: "shipped",
     kind: "brand",
-    detail: "Bronze T monogram, chisel-stroke gradient, icon set at every size, sign-in wordmark.",
+    detail: "One mark across app, site and ads: the \"t.\" icon and \"terav.\" wordmark, every icon size, iOS launch screens, one shared colour file.",
   },
   {
     title: "Estonian (ET) landing",

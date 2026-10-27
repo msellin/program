@@ -166,7 +166,7 @@ export default function EvidencePage() {
           <h1 className="text-4xl font-black leading-[1.05] tracking-tight text-white sm:text-6xl">
             The primary sources
             <br />
-            <span className="bg-gradient-to-r from-[var(--color-bronze-hi)] via-[var(--color-bronze)] to-[var(--color-teal)] bg-clip-text text-transparent">
+            <span className="text-[var(--color-bronze)]">
               Terav is built on.
             </span>
           </h1>

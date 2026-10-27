@@ -4,6 +4,7 @@ import { useState, FormEvent, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { Wordmark } from "@/components/ui/Wordmark";
 
 /**
  * Landing point for the "reset password" email link. Supabase routes the user
@@ -58,9 +59,8 @@ export default function ResetPasswordPage() {
 
   return (
     <div className="max-w-sm mx-auto pt-8 space-y-5">
-      <div className="flex items-center gap-1.5 mb-4">
-        <span className="font-mono text-[14px] uppercase tracking-[0.2em] text-bronze">Terav</span>
-        <span className="text-[11px] text-muted mt-0.5">— sharp</span>
+      <div className="mb-4">
+        <Wordmark />
       </div>
       <header className="space-y-1">
         <h1 className="text-2xl font-semibold tracking-tight text-strong">Set a new password</h1>

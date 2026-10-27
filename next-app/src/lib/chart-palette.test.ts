@@ -14,7 +14,11 @@ import path from "node:path";
  * near-miss colour is the least visible defect there is.
  */
 const SRC = path.resolve(__dirname, "..");
-const CSS = fs.readFileSync(path.join(SRC, "app/globals.css"), "utf8");
+// The palette is the shared brand/tokens.css (D-04) plus the app's own
+// chart / laterality tokens in globals.css.
+const CSS =
+  fs.readFileSync(path.join(SRC, "../../brand/tokens.css"), "utf8") +
+  fs.readFileSync(path.join(SRC, "app/globals.css"), "utf8");
 
 const TOKEN_HEXES = new Set(
   (CSS.match(/#[0-9A-Fa-f]{6}\b/g) ?? []).map((h) => h.toLowerCase()),

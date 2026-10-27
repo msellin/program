@@ -6,9 +6,9 @@
 export function Ambient() {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden">
-      <div className="blob-drift absolute -top-40 left-1/2 h-[640px] w-[640px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_center,rgba(208,154,104,0.32),transparent_62%)] blur-3xl" />
-      <div className="blob-drift absolute top-1/3 -right-40 h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle_at_center,rgba(127,196,208,0.22),transparent_65%)] blur-3xl" />
-      <div className="blob-drift absolute bottom-0 left-0 h-[420px] w-[420px] rounded-full bg-[radial-gradient(circle_at_center,rgba(166,122,74,0.18),transparent_65%)] blur-3xl" />
+      <div className="blob-drift absolute -top-40 left-1/2 h-[640px] w-[640px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_center,rgba(200,150,102,0.32),transparent_62%)] blur-3xl" />
+      <div className="blob-drift absolute top-1/3 -right-40 h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle_at_center,rgba(121,184,196,0.22),transparent_65%)] blur-3xl" />
+      <div className="blob-drift absolute bottom-0 left-0 h-[420px] w-[420px] rounded-full bg-[radial-gradient(circle_at_center,rgba(179,129,79,0.18),transparent_65%)] blur-3xl" />
       <div
         className="absolute inset-0 opacity-[0.05]"
         style={{

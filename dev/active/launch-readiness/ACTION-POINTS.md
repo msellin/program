@@ -69,7 +69,7 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 | D-01 | One `ui/Button` (tan rect, sentence case); swap the primaries on the 6 ad-path screens | H | A | M | design §5a | ✓ 57c5a85 |
 | D-02 | One header rule: the wordmark on tab roots, back + H1 on sub-pages | H | A | S–M | design §5b | ✓ 0b8b667 |
 | D-03 | One card style; the accent bar means status only | S | A | M | design §5c |
-| D-04 | Type scale; shared tokens for landing + app; cut the 1,552 hardcoded styles | S | A | L | design §5d-e, h06 |
+| D-04 | Type scale; shared tokens for landing + app; cut the 1,552 hardcoded styles. **Shared tokens done 2026-10-27** (`brand/tokens.css`, guarded by `brand.test.ts`) with the brand Direction B assets (`dev/active/brand/`); type scale and hardcoded-style purge still open | S | A | L | design §5d-e, h06 |
 
 ## 5. Sign-up, onboarding and legal
 | ID | Action | When | Who | Effort | Source |

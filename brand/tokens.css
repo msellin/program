@@ -1,0 +1,64 @@
+/*
+ * Terav brand tokens — the ONE file both surfaces import (D-04, 2026-10-27).
+ *
+ *   next-app/src/app/globals.css  →  @import "../../../brand/tokens.css";
+ *   landing/src/app/globals.css   →  @import "../../../brand/tokens.css";
+ *
+ * Change a colour here and both the app and terav.fit change with it. A
+ * surface may ADD tokens in its own @theme (the app's chart, laterality and
+ * safe-area tokens; the landing's two aliases) but must not redefine one of
+ * these. `next-app/src/lib/brand.test.ts` fails if either globals.css does.
+ *
+ * Direction B · Lettermark (owner-approved 2026-10-27, panel record in
+ * dev/active/brand/). Flat identity: no gradients. Bronze is the only accent —
+ * brand mark, primary button, Accept. Teal is for data and info, never for
+ * decoration or a CTA. Status colours always travel with an icon and a word:
+ * amber sits ~11° of hue from bronze, so colour alone is never the signal.
+ */
+@theme {
+  /* Canvas + surfaces */
+  --color-ground: #0e0f12;
+  --color-surface: #16181c;
+  --color-surface-2: #20232a;
+  --color-surface-3: #2a2e37;
+
+  /* Text. muted #93989f clears 4.6:1 on surface-3 (a11y jury v1.1.1). */
+  --color-ink: #d6d9de;
+  --color-strong: #f4f5f7;
+  --color-muted: #93989f;
+
+  /* Lines. line-soft = divider only. line = a boundary that carries meaning
+     (3:1 on ground, WCAG 1.4.11). line-strong = focusable input outline. */
+  --color-line-soft: #24272f;
+  --color-line: #5f6570;
+  --color-line-strong: #6b717d;
+
+  /* Status — never decorative, never a category tone. *-strong is the
+     on-tint variant for text inside a /20 fill of the same colour. */
+  --color-green: #5fb37a;
+  --color-amber: #e0a63a;
+  --color-amber-strong: #f0b854;
+  --color-red: #e5654b;
+  --color-red-strong: #f28068;
+
+  /* Brand accent. bronze-hi is the on-tint text variant; bronze-deep is
+     bronze for text or thin strokes on a LIGHT ground (cream, white, print),
+     where #c89666 is only ~2.4:1. The pip in the mark stays #c89666. */
+  --color-bronze: #c89666;
+  --color-bronze-hover: #d9a97c;
+  --color-bronze-active: #b3814f;
+  --color-bronze-hi: #e2b686;
+  --color-bronze-deep: #9a6a3c;
+
+  /* Data / info accent. */
+  --color-teal: #79b8c4;
+
+  /* Typography — Inter + JetBrains Mono, loaded by next/font in each app. */
+  --font-sans:
+    var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono:
+    var(--font-mono), ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* The canonical ease for every primitive transition. */
+  --ease-out-terav: cubic-bezier(0.2, 0.8, 0.2, 1);
+}

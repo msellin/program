@@ -69,14 +69,14 @@ export function CutCRechartsInner({ points, showRaw, unit, direction }: CutCRech
         />
         <XAxis
           dataKey="short"
-          axisLine={{ stroke: "#3A3F4A" }}
+          axisLine={{ stroke: "#5f6570" }}
           tickLine={false}
           tick={{ fill: "#93989f", fontSize: 10, fontFamily: "var(--font-mono)" }}
           interval="preserveStartEnd"
           minTickGap={30}
         />
         <YAxis
-          axisLine={{ stroke: "#3A3F4A" }}
+          axisLine={{ stroke: "#5f6570" }}
           tickLine={false}
           tick={{ fill: "#93989f", fontSize: 10, fontFamily: "var(--font-mono)" }}
           domain={["auto", "auto"]}
@@ -85,7 +85,7 @@ export function CutCRechartsInner({ points, showRaw, unit, direction }: CutCRech
         <Tooltip
           contentStyle={{
             background: "#16181c",
-            border: "1px solid #3A3F4A",
+            border: "1px solid #5f6570",
             borderRadius: 4,
             fontSize: 12,
             color: "#D6D9DE",
@@ -94,7 +94,7 @@ export function CutCRechartsInner({ points, showRaw, unit, direction }: CutCRech
           // full-height white rectangle band across the chart on hover/tap.
           // Ugly on the warm-dark palette + reads as "selection box". Replace
           // with a hairline dashed vertical guide in line-strong.
-          cursor={{ stroke: "#3A3F4A", strokeWidth: 1, strokeDasharray: "3 3" }}
+          cursor={{ stroke: "#5f6570", strokeWidth: 1, strokeDasharray: "3 3" }}
           formatter={(value, name) => {
             const num = typeof value === "number" ? value : null;
             if (num == null) return ["—", String(name)];

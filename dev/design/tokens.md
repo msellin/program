@@ -24,8 +24,8 @@ Adapted from Refactoring UI. Applies to landing AND app equally.
 
 | Accent | Meaning | Never use for |
 |---|---|---|
-| **bronze** | Brand + primary CTA + user commitment + identity gradient | Warnings, decorative dividers, category tones |
-| **teal / slate** | Product signal, secondary accent, identity gradient companion | Primary CTA, safety |
+| **bronze** | Brand + primary CTA + user commitment. Flat — no gradients (2026-10-27) | Warnings, decorative dividers, category tones |
+| **teal / slate** | Data, charts, info | Primary CTA, safety, decoration |
 | **amber** | Warning, calibration tone, refusal ("this dose won't hit the promise") | Decorative |
 | **green** | Success, "available", accept-fire pulse | Decorative, category tones |
 | **red** | Destructive, safety-gate trip, dismissal-with-consequence | Decorative, warning-only |
@@ -46,14 +46,17 @@ value on one surface, either (a) it's a bug — pull to the shared value, or
 (b) it's a new variant token — add it here, name it, and document when to use
 which. There is no third path.
 
-## Rule 3 · One CSS file per surface implements this doc
+## Rule 3 · One shared token file (since 2026-10-27, D-04)
 
-- `next-app/src/app/globals.css` — the app's `@theme` block IS the source of
-  truth in code
-- `landing/src/app/globals.css` — the landing's `@theme` block
+- `brand/tokens.css` — THE source of truth in code for every colour, font and
+  ease both surfaces share. Both `globals.css` files `@import` it.
+- Each `globals.css` may only ADD surface-specific tokens (app: chart `--dv-*`,
+  laterality, safe-area, the `slate` alias; landing: `ground-2`, `bronze-lo`,
+  `teal-hi` aliases). `next-app/src/lib/brand.test.ts` fails on a redefinition.
+- Brand rules (mark, wordmark, assets, ads): `dev/active/brand/brand-guide.md`.
 
-Both must stay in lockstep with this doc. When you edit a token here, edit
-both CSS files. When you edit either CSS file, edit here.
+The tables below describe the tokens. On a conflict, `brand/tokens.css` wins
+and this doc is the bug.
 
 ---
 
@@ -71,7 +74,7 @@ Unified across landing and app.
 
 **Landing-only variants (documented drift):**
 - `ground-2` (`#16181c`) — alias for surface. Landing uses to signal "raised container"; app does the same via `surface`. If you're on landing, prefer `ground-2`; if on app, prefer `surface`. Consolidation candidate.
-- `surface-3` (`#2a2e37`) — third raise, used for landing's evidence-grid tiles. App has no analog. Keep landing-only until app needs one.
+- `surface-3` (`#2a2e37`) — third raise. Shared in `brand/tokens.css` since 2026-10-27.
 
 ### Text
 
@@ -79,15 +82,18 @@ Unified across landing and app.
 |---|---|---|
 | `strong` | `#f4f5f7` | Primary headings, question labels, values-that-matter |
 | `ink` | `#d6d9de` | Body text default |
-| `muted` | `#8a8f9a` | Hints, secondary labels, mono-caps default |
-| `faint` (landing-only) | `#5a5f6a` | Ultra-quiet meta, footnote sources. App has no analog. |
+| `muted` | `#93989f` | Hints, secondary labels, mono-caps default |
 
 ### Lines
 
-| Token | Hex (app) | Hex (landing) | Note |
-|---|---|---|---|
-| `line` | `#3a3f4a` | `#2a2e37` | **Documented drift.** App's line is punchier (higher-contrast) because in-app dense UIs need visible separators. Landing's line is softer because heavy borders on a marketing surface read as clip-art. Do NOT unify without a call. |
-| `line-soft` | `#24272f` | `#20232a` | Same rationale. |
+Shared since 2026-10-27. The landing used `line` (#2a2e37) only in its token
+file — no component referenced it — so the app's a11y-tuned values won.
+
+| Token | Hex | Use |
+|---|---|---|
+| `line-soft` | `#24272f` | Divider only |
+| `line` | `#5f6570` | Boundary that carries meaning (3:1 on ground) |
+| `line-strong` | `#6b717d` | Focusable input outline |
 
 ### Semantic states
 
@@ -101,14 +107,16 @@ Identical across both surfaces.
 
 ### Accents
 
-| Token | Hex (app) | Hex (landing) | Note |
-|---|---|---|---|
-| `bronze` | `#c89666` | `#d09a68` | **Documented drift.** Landing's bronze is punchier (marketing wants glow). App's bronze is calmer (in-flow UI needs the button to sit, not shout). |
-| `bronze-hover` (app) | `#d9a97c` | — | Solid hover for app's flat button |
-| `bronze-active` (app) | `#b3814f` | — | Pressed state for app's flat button |
-| `bronze-hi` (landing) | `#e8b988` | — | Highlight stop for landing's gradient buttons |
-| `bronze-lo` (landing) | `#a67a4a` | — | Shadow stop for landing's gradient buttons |
-| `slate` (app) / `teal` (landing) | `#79b8c4` | `#7fc4d0` | Same role, different name. **Rename candidate** — both should be `teal` for consistency. |
+One set for both surfaces since 2026-10-27 (the landing's punchier
+`#d09a68` / `#7fc4d0` retired; the app's contrast-audited values won).
+
+| Token | Hex | Note |
+|---|---|---|
+| `bronze` | `#c89666` | Brand, primary CTA, Accept |
+| `bronze-hover` / `bronze-active` | `#d9a97c` / `#b3814f` | Flat button states (landing `bronze-lo` aliases active) |
+| `bronze-hi` | `#e2b686` | Text on a bronze tint |
+| `bronze-deep` | `#9a6a3c` | Bronze text on a LIGHT ground (ads, print) |
+| `teal` | `#79b8c4` | App alias `slate` = `var(--color-teal)` |
 
 ### Laterality (app only)
 
