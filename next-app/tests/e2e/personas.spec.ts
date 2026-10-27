@@ -358,6 +358,7 @@ for (const persona of PERSONAS) {
           id: string; question_id: string; when_value_in: string[];
           exclude_exercise_ids: string[]; substitute_with?: string; reason: string;
         }>;
+        blocks?: Array<{ id: string; name?: string; items?: Array<{ exercise_id?: string }> }>;
       };
       const fired = (prog.intake_exclusions ?? []).filter((r) => {
         const answer = persona.intakeAnswers?.[r.question_id];
@@ -423,7 +424,25 @@ for (const persona of PERSONAS) {
              * substitution is still the thing being guarded against — that is
              * exactly the case this covers.
              */
-            if (subName && captured.includes(subName)) {
+            // The substitute is only evidence of a swap when the programme does
+            // not also prescribe it on its own. first-strict-pullup authors
+            // `pu_scap_pull` natively in the scap ladder, so a week-4 day with
+            // no negatives showed it and the app rightly showed no notice
+            // (`exclusionsAffectingDay`). In that case require the reason only
+            // when a block that authors an excluded exercise is on screen.
+            const blockName = (b: { name?: string }) =>
+              (b.name ?? "").replace(/^Weeks? [\d-]+ — /, "").replace(/\s*\(Tier[^)]*\)/g, "").trim();
+            const ids = (b: { items?: Array<{ exercise_id?: string }> }) =>
+              (b.items ?? []).map((it) => it.exercise_id);
+            const subIsNative = (prog.blocks ?? []).some(
+              (b) => ids(b).includes(rule.substitute_with) &&
+                !rule.exclude_exercise_ids.some((x) => ids(b).includes(x)),
+            );
+            const affectedBlockShown = (prog.blocks ?? []).some(
+              (b) => rule.exclude_exercise_ids.some((x) => ids(b).includes(x)) &&
+                blockName(b) !== "" && captured.includes(blockName(b)),
+            );
+            if (subName && captured.includes(subName) && (!subIsNative || affectedBlockShown)) {
               expect(captured, `${persona.id}: substituted "${subName}" without saying why`)
                 .toContain(rule.reason);
             }

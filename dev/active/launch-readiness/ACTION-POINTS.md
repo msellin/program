@@ -80,7 +80,7 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 | SG-04 | Privacy truth pass (`:75,80,97,114,117,121,135`): Stripe not Paddle; name Google OAuth, Cloudflare Analytics, Resend | H | A | M | compliance 4, roadmap 3 | ✓ 6e89b95
 | SG-05 | Landing legal pages mirror or link the app's; terms consistent (beta/pricing) | H | A | S | compliance 5 | ✓ 43048ef
 | SG-06 ✓ applied 2026-10-27 | Branded Supabase email templates (confirm, reset) | H | A+O | S | g3 | ✓ 43048ef
-| SG-08 | Cloudflare Turnstile widget on sign-up (email + Google), passing `captchaToken`; THEN enable Supabase captcha (`CAPTCHA=1`) | H | A+O | M | kickoff kit | ✓ 6e89b95
+| SG-08 | Cloudflare Turnstile widget on sign-up (email + Google), passing `captchaToken`; THEN enable Supabase captcha (`CAPTCHA=1`). Widget "Terav sign-in" (app.terav.fit) created and site key in Actions secrets 2026-10-28; Supabase secret = owner. Once on, the live harness cannot sign in through the UI (follow-up) | H | A+O | M | kickoff kit | ✓ 6e89b95
 | SG-07 | Paid terms: renewal, EU 14-day withdrawal, VAT; a consent-withdrawal path | S | A (+lawyer) | M | compliance §4 |
 
 ## 6. Landing, claims and evidence
@@ -102,7 +102,7 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 ## 7. Measurement and ads
 | ID | Action | When | Who | Effort | Source |
 |----|--------|------|-----|--------|--------|
-| M-01 | Cloudflare Web Analytics ON (both domains) | H | A+O | S | compliance §3 |
+| M-01 ✓ Pages Web Analytics enabled on program-v2 + terav-landing 2026-10-28 | Cloudflare Web Analytics ON (both domains) | H | A+O | S | compliance §3 |
 | M-02 | UTMs captured on landing → sign-up → user metadata; an SQL query for sign-ups and activations by campaign | H | A | M | money-tech | ✓ 6e89b95
 | M-03 ✓ ec8f21b | Ad spec: 3 ad sets, targeting 18+, interests/keywords only, safe wording, UTM links, creatives | H | A | M | compliance §2 |
 | M-04 ✓ 7f78fb3 | Review panel: 3 Sonnet lenses, 1 round, on the ads + landing (~150k tokens) | H | A | S | D8 |
@@ -115,7 +115,7 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 |----|--------|------|-----|--------|--------|
 | O-01 ✓ SMTP+limits 2026-10-27 (captcha waits on SG-08) | Supabase: sign-ups ON, custom SMTP (Resend), captcha (Turnstile), auth rate limits, confirm-email ON | H | A+O | S | O1 |
 | O-02 | A real phone sign-up with a real inbox, after deploy | H | O | S | O4 |
-| O-03 | Re-run `npm run e2e:personas` after the sprint; fix the muscle-up-elbow failure (deferral) | H | A | S | x11 |
+| O-03 ✓ 2026-10-28 sweep 30/31 + pullup-elbow false positive fixed in the spec; red-day session page confirmed live | Re-run `npm run e2e:personas` after the sprint; fix the muscle-up-elbow failure (deferral) | H | A | S | x11 |
 | O-04 | Sentry in functions; function rate limits; confirm the Supabase plan and backups | S | A+O | M | h17 |
 | O-05 | Revoke the unused Resend key | L | O | S | roadmap |
 | O-06 | The harness misses a true stranger first run: add a signed-out → sign-up → intake → day-1 spec | S | A | M | app §3 |
