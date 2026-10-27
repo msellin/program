@@ -6,18 +6,18 @@ keyword, path, utm and creative filename: **no hits**. Character counts: all pas
 ## Owner decisions still open (judgement calls, NOT applied)
 1. **Pull-up headline "Pull-up progressions, with sources"** (and its creative): athlete says weak hook, beginner says
    jargon. Alternatives: "Build toward your first pull-up" (already hB). Suggest A/B as already set; swap the creative text if you agree.
-2. **Google "Your first strict pull-up" / "Train one skill till it sticks"**: compliance reads these as outcome promises;
+2. **[APPLIED 2026-10-27] Google "Your first strict pull-up" / "Train one skill till it sticks"**: compliance reads these as outcome promises;
    proposed "Work toward a strict pull-up", "Train one skill, step by step".
 3. **Hero audience line** "For CrossFit and functional-fitness athletes." reads as "not for me" to a beginner. Proposal: "For anyone who trains, from first-timers to athletes." (D3 says landing may say CrossFit; a widening is yours to call.)
 4. **Landing hero vs ad**: ad says "Get better at one thing"; landing says "Improve your weakest area." (D4 allows the ad line on the landing too.)
-5. **Handstand audience mismatch**: page needs a 10 s wall handstand, ads say "step by step" and keyword "learn handstand walk" pulls beginners. Gate with a line on the page, or drop "learn".
-6. **Strength + cardio page** needs a rower/bike/erg and a lifting base; add "New to lifting? Start with pull-up" and/or a prerequisite line in the hero.
+5. **[APPLIED 2026-10-27] Handstand audience mismatch**: page needs a 10 s wall handstand, ads say "step by step" and keyword "learn handstand walk" pulls beginners. Gate with a line on the page, or drop "learn".
+6. **[APPLIED 2026-10-27] Strength + cardio page** needs a rower/bike/erg and a lifting base; add "New to lifting? Start with pull-up" and/or a prerequisite line in the hero.
 7. **Session length**: ad says "short"; only the pull-up page gives "15-30 minutes". Add a time line to handstand and strength pages once someone confirms the real length.
 8. **Proof**: "CITED" chips have no links; no real log screenshot or founder proof; competitor table ("Next Tuesday, in bulk") reads as straw man. Athlete suggests real before/after adjustments or dropping the table.
 9. **Creatives are text cards with no product**. Biggest click lever: phone-frame Today screenshot ("grip gave out early, hands slipping" proposal card, no banned words). Timing is yours.
 10. **"Free during the beta" vs Stripe coming**: add "paid plans come later; your log stays yours"? Privacy page already names Stripe.
 11. **Privacy page "symptom scores"** may spook a beginner; compliance says wording is accurate. Left.
-12. **Tracking**: Google auto-tagging adds `gclid`, Meta adds `fbclid`; privacy page covers neither. Spec now says turn auto-tagging off; the owner must do it. Have evidence-verifier confirm "Baker 2025 systematic review" exists before traffic lands on it.
+12. **[APPLIED 2026-10-27] Tracking**: Google auto-tagging adds `gclid`, Meta adds `fbclid`; privacy page covers neither. Spec now says turn auto-tagging off; the owner must do it. Have evidence-verifier confirm "Baker 2025 systematic review" exists before traffic lands on it.
 13. Beginner proposals to simplify program pages (RPE, retest, scapular, "Multi-tier", dead-hang glossary, program grid showing only the 3 open programs first, "What happens after sign-up" box). Not applied: they touch many strings and the mockup; do as a post-test pass.
 14. Meta ad A/B fix suggested by athlete: put the "grip gave out, shorter hangs" example into a primary text.
 

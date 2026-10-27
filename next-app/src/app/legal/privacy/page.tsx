@@ -76,7 +76,7 @@ export default function PrivacyPage() {
           </tr>
           <tr className="border-b border-line-soft">
             <td className="py-1.5 pr-2">How you found Terav (campaign tags from the link you clicked, e.g. utm_campaign)</td>
-            <td className="py-1.5 pr-2">Telling which ads and posts bring in sign-ups</td>
+            <td className="py-1.5 pr-2">Used only to measure which campaigns bring people in</td>
             <td className="py-1.5">Stored in your account record. Deleted with your account</td>
           </tr>
           <tr className="border-b border-line-soft">
@@ -161,7 +161,9 @@ export default function PrivacyPage() {
         <strong>Cloudflare Web Analytics</strong>, which counts page views without
         cookies and without tracking you across sites. We also read campaign tags
         (utm_*) from the link you arrive on and save them with your account when you
-        sign up; see the table above. Sign-up pages use Cloudflare Turnstile, a bot
+        sign up; see the table above. Ad links can also carry campaign tags and click
+        IDs (utm_*, gclid, fbclid), added by Google and Meta. We use them only to
+        measure which campaigns bring people in. Sign-up pages use Cloudflare Turnstile, a bot
         check, which may load a small script from Cloudflare.
       </p>
       <p>

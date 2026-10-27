@@ -29,7 +29,9 @@ export default function PrivacyPage() {
         <li>
           This site uses Cloudflare Web Analytics (no cookies, no cross-site
           tracking) to count visits, and reads campaign tags (utm_*) from the link
-          you arrive on. They are saved with your account if you sign up.
+          you arrive on. Ad links can also carry campaign tags and click IDs (utm_*,
+          gclid, fbclid). We use them only to measure which campaigns bring people
+          in, and they are saved with your account if you sign up.
         </li>
         <li>
           Processors: Supabase (data, EU), Cloudflare (hosting), Resend (email),
