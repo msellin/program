@@ -193,7 +193,9 @@ artifact depends on exists:
 After the app deploy, CI also purges the terav.fit edge cache for every `/data/*` URL and fails if the
 removed personal files (`clinical-context`, `log`, `program`, `open-questions`) still return 200
 (2026-10-27: deleted from the deploy, yet served from the edge cache for hours). The
-`CLOUDFLARE_API_TOKEN` secret needs Zone → Cache Purge on terav.fit for this.
+`CLOUDFLARE_API_TOKEN` secret needs Zone → Cache Purge on terav.fit for this. The zone purge
+was not enough: the Pages asset cache at some locations (Stockholm) kept serving them, so
+`functions/data/[file].ts` answers 404 for those four names before static assets are consulted.
 
 Gate 3 exists because of a specific failure. On 2026-09-01 a Sentry DSN was
 added to a gitignored `.env.local`, verified by grepping the local `out/`
