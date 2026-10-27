@@ -237,7 +237,8 @@ export function ProgramPreviewClient({ slug }: Props) {
             outside the ladder, so no attribution row either. */}
         {!entry.personal &&
         (program.status === "REVIEWED" || program.status === "VERIFIED") &&
-        program.reviewed_by ? (
+        program.reviewed_by &&
+        !/agent/i.test(program.reviewed_by.name) ? (
           <div className="rounded border border-slate/40 border-l-4 border-l-slate bg-surface p-3 text-[14px] mt-2 space-y-1">
             <p className="text-strong">
               <span className="font-semibold">Reviewed by</span>{" "}

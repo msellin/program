@@ -192,6 +192,8 @@ export default function ProgramCatalogPage() {
             from `statusLabelOf` above (which never emits "REVIEWED"). One
             lexicon everywhere. Sheet still holds the historical 3-tier
             detail for anyone who wants it. */}
+        <details className="pt-1 text-[12px]">
+          <summary className="cursor-pointer text-muted underline-offset-2 hover:underline">How we check programs</summary>
         <p className="text-[12px] text-ink pt-1 leading-relaxed">
           <button
             type="button"
@@ -219,6 +221,7 @@ export default function ProgramCatalogPage() {
           will say so and name them. Personal programs (author&apos;s own clinical
           context) sit outside this ladder — see the &ldquo;personal&rdquo; badge instead.
         </p>
+        </details>
       </header>
 
       {/* Batch 36 Step 13 · "5 REFERENCED · Live now" strip per v1.1.1
@@ -247,14 +250,14 @@ export default function ProgramCatalogPage() {
             </p>
           </div>
           <ul
-            className="flex gap-3 overflow-x-auto px-4 sm:px-6 pb-2 snap-x snap-mandatory"
+            className="flex gap-3 overflow-x-auto pl-4 pr-10 sm:px-6 pb-2 snap-x snap-mandatory scroll-pl-4"
             style={{ overscrollBehaviorX: "contain" }}
           >
             {openPrograms.map((p) => {
               const accent = CATEGORY_ACCENT[p.category] ?? CATEGORY_ACCENT.other;
               const stripeClass = ACCENT_STRIPE[accent];
               return (
-                <li key={p.slug} className="snap-start flex-shrink-0 w-[240px]">
+                <li key={p.slug} className="snap-start flex-shrink-0 w-[220px]">
                   <Link
                     href={`/programs/${p.slug}`}
                     className={cn(
@@ -280,7 +283,7 @@ export default function ProgramCatalogPage() {
                       {p.short_description}
                     </p>
                     <p className="font-mono text-[10px] tabular-nums text-muted">
-                      {p.duration_weeks} wks · {p.difficulty}
+                      <span className="whitespace-nowrap">{p.duration_weeks} wks</span> · {p.difficulty}
                     </p>
                   </Link>
                 </li>
@@ -542,6 +545,7 @@ function ProgramCard({
         // border-l-2 keeps the category color as a subtle marker on the row.
         "block rounded border-l-2 bg-line-soft/30 hover:bg-line-soft/60 transition-colors px-4 py-3.5",
         cat.borderClass,
+        p.coming_soon && !isActive && "opacity-60",
       )}
     >
       <div className="flex items-start justify-between gap-3">
@@ -582,7 +586,7 @@ function ProgramCard({
             {p.short_description}
           </p>
           <div className="mt-2 flex items-center gap-2 text-[11px] font-mono text-muted">
-            <span>{p.duration_weeks} wk</span>
+            <span className="whitespace-nowrap">{p.duration_weeks} wk</span>
             {p.load_hint ? (
               <>
                 <span aria-hidden="true">·</span>
