@@ -1,0 +1,19 @@
+# H13 legal pages, first-pass gap list (not legal advice)
+Read-only audit. Paths relative to repo root. Owner decides every item.
+
+- [BLOCKS-ADS-TODAY] Google sign-up skips the Art. 9 tick: `next-app/src/app/(auth)/sign-up/page.tsx:133,135-148` (Google button, "Continuing accepts..." implied consent). Only the email path gates on the tick (`:57-60,208-222`) and writes timestamps (`:73-74`, client-supplied metadata). Privacy `legal/privacy/page.tsx:97` says "you ticked the box at sign-up": false for Google users.
+- [BLOCKS-ADS-TODAY] False retention claim: `legal/privacy/page.tsx:75` keeps consent timestamps 3 years post-deletion. Deletion removes the auth user (`next-app/functions/api/delete-account.ts:67-72,88-92`) and no audit table ships (`supabase/migrations/` has only user_states; `dev/active/saas-launch/sql/001_user_profiles.sql` is a plan).
+- [BLOCKS-ADS-TODAY] No age gate: sign-up has no age tick (`sign-up/page.tsx:188-222`). Terms say 16+ (`legal/terms/page.tsx:35`), privacy excludes under-16 (`legal/privacy/page.tsx:192`). Verify Estonian threshold (believed 13) before ads.
+- [BLOCKS-ADS-TODAY] Analytics claim: no analytics SDK in package.json or src/functions (Sentry only). Claims at `landing/src/app/privacy/page.tsx:42-44`, `legal/privacy/page.tsx:142-144,165`. An ad pixel makes these false and needs prior consent (ePrivacy Art. 5(3)); no consent UI exists in repo.
+- [BLOCKS-ADS-TODAY] Processors missing or wrong: Google OAuth not named (`src/components/auth/GoogleAuthButton.tsx`). Resend described as notices-only (`legal/privacy/page.tsx:117-119`), but `functions/api/feedback.ts:110-122` emails user message, uid and email. Cloudflare listed as static hosting only (`:114`) though Functions process requests.
+- [BLOCKS-ADS-TODAY] Landing terms are the weaker copy: `landing/src/app/terms/page.tsx:52-58` has no mandatory-law carve-out and no GDPR rights; landing privacy `:38-59` has no controller detail, processors or rights, and says deletion is by email (app has one-click delete, `src/app/account/page.tsx:217-242`).
+- [BEFORE-SCALE] Contradiction on paid tiers: landing `terms/page.tsx:33` "lifetime free access" vs app `legal/terms/page.tsx:29-30` "advance notice".
+- [BEFORE-SCALE] No subscription terms anywhere: trial, auto-renew, cancellation, 14-day withdrawal for digital service (waiver needs express request), refunds. Paddle only mentioned as "when paid tier launches" (`legal/privacy/page.tsx:121`).
+- [BEFORE-SCALE] Consent withdrawal only by full account deletion (`legal/privacy/page.tsx:174`); Art. 7(3) parity question. Timestamps are client-written, not server-verified (`sign-up/page.tsx:73-74`).
+- [BEFORE-SCALE] Overstated Sentry claim: "symptom text scrubbed" (`legal/privacy/page.tsx:80`). `sentry.client.config.ts:56-58` strips only email; masking applies to error-triggered replay (`:85-89`).
+- [BEFORE-SCALE] Both app pages say "lawyer-reviewed before public launch" (`legal/terms/page.tsx:12`); dates diverge (terms 2026-08-18, privacy 2026-09-03).
+- [LATER] Medical disclaimer prominence is good in app (checkbox, `sign-up/page.tsx:196-204`) but landing reaches it only via footer (`landing/src/components/Footer.tsx:63`). Landing disclaimer `disclaimer/page.tsx:20-22` uses personal "author's own recovery arc" copy on a public page.
+- [LATER] "Two of them are outside the EU" (`legal/privacy/page.tsx:130`) is incomplete: Cloudflare, Google and Paddle (UK) also transfer.
+- [LATER] "One session cookie" (`:142`) understates: Supabase SSR stores session in cookies plus localStorage (`src/lib/supabase/client.ts:7`).
+
+Not checked: Supabase region and DPA status; Sentry, Resend, Paddle DPAs and retention settings; Cloudflare Web Analytics toggle (dashboard, edge-injected); production sign-up flow; backup purge timing; Estonian law specifics; running legal-disclosure.test.ts.

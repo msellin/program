@@ -1,0 +1,16 @@
+# H18 claims audit: which outcome and number claims could not be defended in an ad (2026-10-27, read-only)
+Sources: en.ts, manifest.json, program JSON evidence_base, citations.json (125 entries, generated 2026-08-17), dev/audits/programs/2026-09-05-*.md, dev/active/traffic/.
+[BLOCKS-ADS-TODAY] rowing-2k-test-prep manifest "Threshold pace shifted 3-6%": the program JSON marks the 3-6% WITHDRAWN 2026-09-05 (sourcing-endurance section 4: inside measurement noise). Still shipping.
+[BLOCKS-ADS-TODAY] engine-builder-block-2 manifest "Threshold pace / power shift 2-5%": its own outcome_evidence says "NO FIGURE" (unsourced until 2026-09-05). Still shipping.
+[BLOCKS-ADS-TODAY] engine-builder manifest "5-8% VO2max improvement" and "5-10 bpm resting HR drop": no citation. engine-builder.json has conflicting VO2max figures (outcome_by_tier.foundation.vo2max_pct "+3-6%", outcome_evidence "+5-8%"). Anchor helgerud_2007 (+7.2%) used 3 hard sessions/wk, a higher dose than Block 1 per dose_calibration_note. 5-10 bpm not found in outcome fields (push tier: -3 to -6). Result promise.
+[BLOCKS-ADS-TODAY] engine-builder-block-2 manifest "+4-9% VO2max" vs astorino_2013 used_for "supports 5-10%". Internal mismatch.
+[BLOCKS-ADS-TODAY] rowing-2k-test-prep "2K down 3-30 seconds" and landing pitch "Six weeks to a 2K row PR" (en.ts rowing_pitch): no rowing-specific source; file calls the cycling-to-rowing extrapolation the weak seam. Result promise.
+[BLOCKS-ADS-TODAY] concurrent-strength-maintenance "Submax HR down 8-15 bpm": none of its 32 refs supports an HR magnitude; schumann_2022 and wilson_2012 cover strength and hypertrophy only.
+[BLOCKS-ADS-TODAY] en.ts "125 primary studies" (hero stat_studies_value, evidence.title): 125 entries is not 125 primary studies (includes reviews and meta-analyses). Batch verdicts 2026-09-05: batch7 OVERSTATED 18, NOT_FOUND 9, CONTRADICTS 6. traffic-plan.md: ~25 overstated, ~13 unfindable, "study count wrong four times", and "finish corrections before promoting". Paid traffic to /evidence hits this now.
+[BLOCKS-ADS-TODAY] "Every session cites its research" (evidence.title), "Every change cites a study" (hero.sub), "Cited before shipped" (programs.sub): program-audits plan shows only 3 programs promoted to REVIEWED/VERIFIED; the rest are REFERENCED/CITED.
+[BEFORE-SCALE] en.ts "8 programs" / "Eight programs live": manifest has 9. Probably 8 catalog-public (anterior-hip-rebuild is personal:true), but programs-catalog.ts not checked.
+[BEFORE-SCALE] first-strict-pullup and muscle-up week targets (25-45 s hang by week 8; first strict attempt week 8-10) are plan timings, not results; the file says "No cohort ETAs". No "first strict pull-up in N weeks" in shipped copy. Keep it out of ads.
+[BEFORE-SCALE] muscle-up and overhead-mobility cite sadowski_2021: "ATTRIBUTION UNRESOLVED", flagged for founder review.
+[LATER] en.ts "VO2max response varies ~10x": supported by bouchard_1999_heritage used_for. Defensible as description if the citation is shown.
+[LATER] pullup_pitch "From no hang to a rep you own": promise-flavoured tagline; soften before scale.
+Not checked: other landing pages (Programs.tsx, roadmap, YourFirstWeek, program pages), other locales, live site copy, per-id verifier verdicts (only batch totals counted), programs-catalog.ts public count, review badge state in the landing.

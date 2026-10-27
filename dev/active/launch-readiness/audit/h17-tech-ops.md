@@ -1,0 +1,15 @@
+# H17 tech ops audit (read-only, 2026-10-27)
+Static repo read only; no live calls. Auth + RLS hold for hundreds of users. Blockers are auth email delivery and dashboard settings the repo cannot show.
+- [BLOCKS-ADS-TODAY] Auth mail uses Supabase built-in SMTP unless set in dashboard: no SMTP block in supabase/config.toml; signUp (next-app/src/app/(auth)/sign-up/page.tsx:68) and resetPasswordForEmail (sign-in/page.tsx:105) depend on it. Resend only sends feedback/notify (functions/api/feedback.ts:110, admin/notify.ts:120). Check Auth > SMTP before spend.
+- [BLOCKS-ADS-TODAY] No captcha or invite gate in repo: sign-up/page.tsx:68 sends no captcha token. Paid-traffic bots can create accounts and trigger confirmation mail. Check Auth bot protection and rate limits in dashboard.
+- [BEFORE-SCALE] Silent write loss: postgres-adapter.ts:89 writeLive returns false on error; debounced push (:163) discards it. No retry, no Sentry, no user message. Local copy is the only copy until the next good push.
+- [BEFORE-SCALE] Functions have no Sentry (grep of next-app/functions: none). Failures in delete-account.ts, feedback.ts and admin/* are invisible. Client/server Sentry is wired (next-app/instrumentation.ts, sentry.server.config.ts; CSP allows ingest per csp.test.ts:32).
+- [BEFORE-SCALE] No rate limiting on any function. feedback.ts:79 onRequestPost is signed-in only but unthrottled; each call sends Resend mail (cost, sender reputation). delete-account.ts has none either.
+- [BEFORE-SCALE] Admin endpoints full-scan user_states per request with service role: admin/keywords.ts:103-125, admin/readiness.ts:81-98, admin/completions.ts:83. Offset paging of every row; fine at hundreds, linear cost later. Admin-only.
+- [BEFORE-SCALE] Backups: no backup config, PITR or export script in repo. Supabase free plan has no automated backups (verify plan in dashboard).
+- [BEFORE-SCALE] DB size: whole store jsonb rewritten on each 2s debounced push (postgres-adapter.ts:24) plus a daily snapshot upsert (:96-120). Free plan DB cap is 500 MB; per-user size not measured.
+- [LATER] RLS on both tables with own-row policies: migrations/20260818000001_user_states.sql:36-54; no user delete policy (deletion via FK cascade, correct). Grants explicit only for service_role (20260818000002_service_role_grants.sql:10-11); add explicit revoke from anon.
+- [LATER] Admin gate trusts the JWT email from /auth/v1/user matched to ADMIN_EMAILS (admin/keywords.ts:56-71, readiness.ts:50-67, completions.ts:48-65, notify.ts:59-67). Safe only if email confirmation is on, which config.toml does not show.
+- [OK] delete-account.ts:36-75 requires a Bearer token and uses service role only after auth; FK cascade covers user_states and snapshots (migration lines 17, 25). Service-role key is read only in functions/.
+- [UNKNOWN] Supabase down: postgres-adapter.ts pullRemote returns kind "error" (:128-135); UI handling of that state not checked.
+Not checked: Supabase dashboard (plan, SMTP, email confirmation, captcha, PITR, MAU and rate limits), Supabase advisors, Sentry DSN delivery, Cloudflare Pages limits, UI error states, Resend account limits, load test.

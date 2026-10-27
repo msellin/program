@@ -1,0 +1,15 @@
+# H15 Google Ads policy check (access 2026-10-27)
+
+Sources: Healthcare https://support.google.com/adspolicy/answer/176031 · Personalized advertising https://support.google.com/adspolicy/answer/143465 · Unreliable claims https://support.google.com/adspolicy/answer/6020955 · Destination requirements https://support.google.com/adspolicy/answer/6368661 · EU user consent https://www.google.com/about/company/user-consent-policy/
+
+- [BLOCKS-ADS-TODAY] EEA: the EU user consent policy requires valid consent for cookies and personalised ads, records of consent, and named disclosure of parties. Ship a consent banner plus Consent Mode before any EEA traffic, and use no remarketing for EEA users without consent.
+- [BLOCKS-ADS-TODAY] Remarketing and Customer Match are unsupported once health is the sensitive category (Personalized advertising page). Do not build data-segment audiences from pages showing pain, symptom or injury content. Search, in-market and affinity targeting remain available.
+- [BLOCKS-ADS-TODAY] "First strict pull-up in 8 weeks": Unreliable claims bars an "improbable result" presented as the likely outcome. A timed promise is a likely disapproval. Rewrite to a non-timed outcome ("Build toward your first strict pull-up") before launch.
+- [BLOCKS-ADS-TODAY] Destination must work and be crawlable, with the display domain matching the final URL (Destination requirements). Confirm terav.fit landing and app.terav.fit links resolve for AdsBot. The privacy policy is not a Google destination requirement, but the EU consent duty to disclose parties makes a visible privacy policy necessary for EEA.
+- [BEFORE-SCALE] "Research-backed training plans": Google's pages do not rule on it, but it is an unsubstantiated claim until the landing page quotes its sources. Link to the evidence list or remove the wording.
+- [BEFORE-SCALE] "Fix your weakness": implies correcting a deficit. Keep it fitness-framed and avoid pain, injury or rehab words, which can move the ad toward health territory.
+- [BEFORE-SCALE] Healthcare policy does not cover fitness. Restrictions target drugs, supplements, unapproved products and treatments for disease. Terms such as "rehab", "treat", "cure", "recover from injury" or pain-scale language risk a health-category review even without a product. Keep rehab copy out of ads; the hip-rebuild program is personal-only and should not be advertised.
+- [LATER] "Stuck on muscle-ups?": a question hook, low policy risk. Re-check on the Performance Max or YouTube creative.
+- [LATER] Re-check the sensitive-category rule before any scale-up or new audience type, since Google may reclassify the app based on landing content and health-related check-in features.
+
+Not checked: Consent Mode v2 requirement on Google's own help page (guessed URLs returned 404; the EEA mandate rests on third-party sources and needs confirming); the criteria Google uses to classify a fitness app as health; the Misrepresentation page's "research-backed" and "guaranteed" wording; the Oct 2025 Healthcare update (answer/16606361); the live policy-manager status of the account; tag rules for pages holding symptom data.
