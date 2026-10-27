@@ -126,7 +126,10 @@ export function applyProgramSoftening(
     for (let back = offset; back < offset + 7; back++) {
       const d = new Date(today);
       d.setDate(today.getDate() - back);
-      if (store.logs?.[iso(d)]?.derived_state === "amber") n++;
+      // Red counts too (SF-04, 2026-10-27). Counting amber only meant three
+      // RED days in a week never withdrew the block that three amber days do.
+      const st = store.logs?.[iso(d)]?.derived_state;
+      if (st === "amber" || st === "red") n++;
     }
     return n;
   };
@@ -167,7 +170,7 @@ export function applyProgramSoftening(
             name: b.name.replace("4×4", "3×4"),
             note:
               (b.note ?? "").replace("4×4 min", "3×4 min") +
-              " — reduced this week: three amber days the week before, so the " +
+              " — reduced this week: three amber or red days the week before, so the " +
               "programme steps you back in at three intervals rather than four.",
           }
         : b,

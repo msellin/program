@@ -208,3 +208,26 @@ describe("CSM amber softening", () => {
     ).toContain("softened.some");
   });
 });
+
+describe("CSM softening counts red days, not just amber (SF-04)", () => {
+  const program = load("concurrent-strength-maintenance");
+  const blocks = (program.blocks ?? []) as Block[];
+  const days = (state: "amber" | "red", dates: string[]): Record<string, DayLog> =>
+    Object.fromEntries(
+      dates.map((d) => [d, { date: d, derived_state: state, exercises: {} } as unknown as DayLog]),
+    );
+
+  it("three red days withdraw the 4x4 block", () => {
+    const store = storeWith(days("red", ["2026-09-09", "2026-09-10", "2026-09-11"]));
+    expect(applyProgramSoftening(blocks, program, TODAY, store).some((b) => b.id === "block_4x4_row")).toBe(false);
+  });
+
+  it("a mixed red/amber week resumes at 3x4 the week after", () => {
+    const store = storeWith({
+      ...days("red", ["2026-09-02"]),
+      ...days("amber", ["2026-09-03", "2026-09-04"]),
+    });
+    const row = applyProgramSoftening(blocks, program, TODAY, store).find((b) => b.id === "block_4x4_row")!;
+    expect(row.name).toContain("3×4");
+  });
+});

@@ -39,3 +39,9 @@ The owning lane picks it up, does it in its own commit, and marks the line `✓ 
   `const weekPhase = activePhaseForWeek(program, iso(viewedMon), userProfile);` (import from `@/lib/engine/schedule`).
   The function exists on main (tested in `phase-for-week.test.ts`): first day of the week any phase covers decides it, so a
   mid-week starter's week 1 stops saying "No phase covers this week". Please mark ✓ <sha> here when done.
+- [lane 4 → lane 2a] `next-app/src/components/session/DaySession.tsx` ~line 158 (the `if (blockObjectOn)` branch of
+  `plannedBlocks`) — **SF-04 needs the CSM softening on the session path.** That branch returns scheduled blocks without
+  `applyProgramSoftening`, so Today shows the 4×4 withdrawn / at 3×4 while the session still serves full 4×4 (the legacy
+  branch gets it via `blocksForDate(..., store)`). Fix: wrap the branch's result —
+  `return applyProgramSoftening(<the mapped array>, program, activeDate, store);` (import from `@/lib/engine/plan-generator`;
+  TodaySession.tsx:216 does exactly this). Lane 4 made red days count toward the rule (only amber did).
