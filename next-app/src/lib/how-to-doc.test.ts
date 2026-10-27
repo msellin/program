@@ -31,7 +31,7 @@ describe("the how-to doc exists and stays honest", () => {
   it("the affordances it tells people to tap all exist", () => {
     const d = doc();
     if (d.includes("Something hurt")) {
-      expect(src("components/session/OverflowSheet.tsx")).toContain('label="Something hurt"');
+      expect(src("components/session/SetView.tsx")).toContain("Something hurt");
     }
     if (d.includes("Send feedback")) {
       expect(src("app/profile/page.tsx")).toContain('href="/feedback/"');

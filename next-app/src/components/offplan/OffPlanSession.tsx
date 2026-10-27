@@ -314,6 +314,12 @@ export function OffPlanSession() {
             setActiveSetIndex(i);
           }}
           onBackToBrief={() => setMode("brief")}
+          onStopSession={() => {
+            setSheet(null);
+            setResting(false);
+            clearRest();
+            setMode("brief");
+          }}
           onConfirmed={(secs) => {
             setRestSeconds(secs);
             setRestStartedAt(null);
@@ -370,7 +376,7 @@ export function OffPlanSession() {
           <NoteSheet
             active={active}
             date={activeDate}
-            isSkillProgram={primarySlug === "handstand-walk"}
+            isSkillProgram={true}
             onClose={() => setSheet(null)}
             onStopSession={() => {
               setSheet(null);

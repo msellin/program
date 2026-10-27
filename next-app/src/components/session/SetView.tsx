@@ -12,6 +12,7 @@ import { restSecondsFor, exerciseListName } from "@/lib/day-format";
 import { lastSessionSetsFor } from "@/lib/engine/history";
 import { prescriptionRows } from "@/lib/engine/suggest";
 import { OverflowSheet } from "@/components/session/OverflowSheet";
+import { HurtSheet } from "@/components/session/HurtSheet";
 import type { RailExercise, SessionSheet } from "@/components/session/DaySession";
 
 /**
@@ -29,6 +30,8 @@ export function SetView({
   onSelectExercise,
   onSelectSetIndex,
   onBackToBrief,
+  onStopSession,
+  programSlug,
   onConfirmed,
   onEdited,
   sheet,
@@ -52,6 +55,10 @@ export function SetView({
    */
   onSelectSetIndex: (index: number) => void;
   onBackToBrief: () => void;
+  /** Ends the session as stopped (not finished). Reached from the Something hurt chip. */
+  onStopSession: () => void;
+  /** The programme this session belongs to; falls back to the active programme. */
+  programSlug?: string;
   // Carries the rest duration up rather than starting `lib/useTimer.ts`'s
   // shared store directly — that store also drives the OLD bottom-fixed
   // `RestTimerHost`/`RestTimer` widget (still live on `/off-plan`, which
@@ -251,6 +258,8 @@ export function SetView({
    * re-taken on resume.
    */
   const [banked, setBanked] = useState(0);
+  // "Log it now" with nothing timed would store 0 s but count as logged.
+  const [confirmUntimed, setConfirmUntimed] = useState(false);
   const held = useElapsedSeconds(running, null, banked);
   const remaining = Math.max(0, seconds - held);
   const awaitingOtherSide = perSide && remaining === 0 && sideIndex === 0;
@@ -308,7 +317,7 @@ export function SetView({
   const canRecordMiss =
     active.isLoadable && typeof store.training_maxes?.[active.exercise.id] === "number";
 
-  const confirm = (finalReps: number, failed = false) => {
+  const confirm = (finalReps: number, failed = false, heldOverride?: number) => {
     updateSet(
       active.blockId,
       active.exercise.id,
@@ -328,7 +337,7 @@ export function SetView({
         // `running` was wrong for the paused case — pausing then logging
         // recorded the full authored time regardless of when you stopped.
         ...(isHold
-          ? { seconds: remaining === 0 ? seconds : Math.max(0, seconds - remaining) }
+          ? { seconds: heldOverride ?? (remaining === 0 ? seconds : Math.max(0, seconds - remaining)) }
           : {}),
       },
       date,
@@ -395,6 +404,13 @@ export function SetView({
             );
           })}
           </div>
+          <button
+            type="button"
+            onClick={() => onOpenSheet("hurt")}
+            className="flex-shrink-0 h-[34px] rounded-[7px] border border-amber/60 bg-surface-2 px-2.5 text-[12px] font-semibold text-amber"
+          >
+            Something hurt
+          </button>
           <button
             type="button"
             onClick={() => onOpenSheet("overflow")}
@@ -664,6 +680,10 @@ export function SetView({
                 type="button"
                 onClick={() => {
                   setRunning(false);
+                  if (isHold && remaining === seconds) {
+                    setConfirmUntimed(true);
+                    return;
+                  }
                   confirm(1);
                 }}
                 className="flex-1 h-10 text-ink text-[14px]"
@@ -671,6 +691,32 @@ export function SetView({
                 Log it now
               </button>
             </div>
+            {confirmUntimed ? (
+              <div role="alertdialog" aria-label="Log an untimed hold" className="mt-2 rounded-[8px] border border-line-strong bg-surface p-3">
+                <p className="text-[14px] text-ink mb-2">
+                  The timer hasn&rsquo;t run. Log the full {seconds}s as held?
+                </p>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setConfirmUntimed(false);
+                      confirm(1, false, seconds);
+                    }}
+                    className="flex-1 min-h-[44px] rounded-[8px] bg-bronze text-ground text-[14px] font-semibold"
+                  >
+                    Log {seconds}s
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setConfirmUntimed(false)}
+                    className="flex-1 min-h-[44px] rounded-[8px] border border-line-strong text-ink text-[14px]"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            ) : null}
           </>
         ) : isAmrap ? (
           <>
@@ -848,6 +894,25 @@ export function SetView({
         )}
       </div>
 
+      {sheet === "hurt" ? (
+        <HurtSheet
+          slug={programSlug ?? store.user_profile?.active_program_id}
+          date={date}
+          onClose={onCloseSheet}
+          onNote={() => onOpenSheet("note")}
+          onSkipExercise={() => {
+            const i = railExercises.findIndex((r) => r.key === active.key);
+            const next = railExercises[i + 1];
+            onCloseSheet();
+            if (next) onSelectExercise(next.key);
+            else onBackToBrief();
+          }}
+          onStopSession={() => {
+            onCloseSheet();
+            onStopSession();
+          }}
+        />
+      ) : null}
       {sheet === "overflow" ? (
         <OverflowSheet
           active={active}

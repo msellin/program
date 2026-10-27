@@ -35,6 +35,7 @@ export function BriefView({
   proposals,
   cycleGateProposal,
   onStart,
+  onFinishSession,
   onSelectExercise,
   followBlocks = [],
   onFollowAlong,
@@ -51,6 +52,8 @@ export function BriefView({
   proposals: Proposal[];
   cycleGateProposal: Proposal | null;
   onStart: (key?: string) => void;
+  /** Ends the session on the Done screen. Offered once something is logged. */
+  onFinishSession?: () => void;
   onSelectExercise: (key: string) => void;
   /** Blocks the guided follow-along player can run (all unloaded work). */
   followBlocks?: { id: string; name: string; count: number }[];
@@ -524,6 +527,15 @@ export function BriefView({
         >
           {startLabel}
         </button>
+        {heroLoggedCount > 0 && onFinishSession ? (
+          <button
+            type="button"
+            onClick={onFinishSession}
+            className="w-full h-[48px] rounded-[10px] border border-line-strong text-[15px] font-medium text-ink"
+          >
+            Finish session
+          </button>
+        ) : null}
       </div>
 
       {sheet === "off-plan" ? (

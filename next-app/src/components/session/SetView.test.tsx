@@ -63,6 +63,7 @@ function renderSet(over: Partial<RailExercise> = {}, setIndex = 0) {
       onSelectExercise={() => {}}
       onSelectSetIndex={() => {}}
       onBackToBrief={() => {}}
+      onStopSession={() => {}}
       onConfirmed={onConfirmed}
       onEdited={() => {}}
       sheet={null}
@@ -377,6 +378,7 @@ describe("Add a set lands on the set it added (2026-09-23)", () => {
         onSelectExercise={() => {}}
         onSelectSetIndex={onSelectSetIndex}
         onBackToBrief={() => {}}
+        onStopSession={() => {}}
         onConfirmed={() => {}}
         onEdited={() => {}}
         sheet="overflow"

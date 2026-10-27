@@ -19,6 +19,7 @@ import { writeRest, clearRest, restoreRest } from "@/lib/rest-persistence";
 import { RestTakeover } from "@/components/session/RestTakeover";
 import { nextAfterSet } from "@/components/session/shared/advance";
 import { NoteSheet } from "@/components/session/NoteSheet";
+import { SessionDone, type SessionEnd } from "@/components/session/SessionDone";
 import { countLoggedSets } from "@/lib/set-progress";
 import { RunSlotCard } from "@/components/workout/RunSlotCard";
 import { FollowAlong } from "@/components/follow-along/FollowAlong";
@@ -77,7 +78,7 @@ export type RailExercise = {
   optionalRows?: number;
 };
 
-export type SessionSheet = "off-plan" | "overflow" | "note" | "jump" | "details" | null;
+export type SessionSheet = "off-plan" | "overflow" | "note" | "jump" | "details" | "hurt" | null;
 
 export function DaySession({ slug, initialDate }: { slug: string; initialDate?: string }) {
   const [program, setProgram] = useState<Program | null>(null);
@@ -130,6 +131,8 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
   /** Whether that restored rest had already run out. See `RestTakeover`. */
   const [restExpired, setRestExpired] = useState(false);
   const [effortAnswered, setEffortAnswered] = useState(false);
+  /** Finish and Stop are different endings: a Done screen vs a stopped screen with a symptom prompt. */
+  const [ended, setEnded] = useState<SessionEnd | null>(null);
 
   // Hooks must run unconditionally on every render, so `phase`/`blocks`
   // are computed defensively here (program may still be null on the
@@ -256,6 +259,19 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
     );
   }
 
+  const endSession = (how: SessionEnd) => {
+    setSheet(null);
+    setResting(false);
+    clearRest();
+    setEffortAnswered(false);
+    setMode("brief");
+    setEnded(how);
+  };
+
+  if (ended) {
+    return <SessionDone end={ended} rail={railExercises} date={activeDate} slug={slug} />;
+  }
+
   const activeIdx = activeKey ? railExercises.findIndex((r) => r.key === activeKey) : -1;
   const active = activeIdx >= 0 ? railExercises[activeIdx] : null;
 
@@ -354,6 +370,7 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
         onSelectExercise={jumpTo}
         followBlocks={followBlocks.map(({ block, rail }) => ({ id: block.id, name: block.name, count: rail.length }))}
         onFollowAlong={(blockId, startKey) => setFollow({ blockId, startKey })}
+        onFinishSession={() => endSession("finished")}
         sheet={sheet}
         onOpenSheet={setSheet}
         onCloseSheet={() => setSheet(null)}
@@ -380,6 +397,8 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
           setActiveSetIndex(i);
         }}
         onBackToBrief={() => setMode("brief")}
+        onStopSession={() => endSession("stopped")}
+        programSlug={slug}
         onConfirmed={(secs) => {
           setRestSeconds(secs);
           setRestStartedAt(null);
@@ -430,7 +449,7 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
               setActiveKey(upNext.rail.key);
               setActiveSetIndex(0);
             } else {
-              setMode("brief");
+              endSession("finished");
             }
           }}
           onJump={(key) => {
@@ -446,14 +465,9 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
         <NoteSheet
           active={active}
           date={activeDate}
-          isSkillProgram={program.slug === "handstand-walk"}
+          isSkillProgram={true}
           onClose={() => setSheet(null)}
-          onStopSession={() => {
-            setSheet(null);
-            setResting(false);
-            clearRest();
-            setMode("brief");
-          }}
+          onStopSession={() => endSession("stopped")}
         />
       ) : null}
     </div>

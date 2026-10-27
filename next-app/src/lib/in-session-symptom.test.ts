@@ -51,12 +51,11 @@ describe("reporting a symptom mid-session", () => {
      * can stop if it warrants it.
      */
     const src = fs.readFileSync(
-      path.resolve(process.cwd(), "src/components/session/OverflowSheet.tsx"),
+      path.resolve(process.cwd(), "src/components/session/HurtSheet.tsx"),
       "utf8",
     );
-    expect(src, "the sheet's reported severity moved").toContain(
-      "reportInSessionSymptom(date, r.id, 5)",
-    );
+    expect(src, "the sheet's reported severity moved").toContain("IN_SESSION_HURT_SCORE = 5");
+    expect(src).toContain("reportInSessionSymptom(date, r.id, IN_SESSION_HURT_SCORE)");
     useStore.getState().reportInSessionSymptom(DATE, "shoulder", 5);
     expect(useStore.getState().store.logs[DATE].derived_state).toBe("amber");
   });
@@ -117,12 +116,12 @@ describe("reporting a symptom mid-session", () => {
 
 describe("the report is reachable, and offers the stop rather than taking it", () => {
   const src = fs.readFileSync(
-    path.resolve(process.cwd(), "src/components/session/OverflowSheet.tsx"),
+    path.resolve(process.cwd(), "src/components/session/HurtSheet.tsx"),
     "utf8",
   );
 
   it("the in-session sheet has a way in", () => {
-    expect(src).toContain('label="Something hurt"');
+    expect(src).toContain("Something hurt");
     expect(src).toContain("reportInSessionSymptom(");
   });
 
@@ -132,7 +131,7 @@ describe("the report is reachable, and offers the stop rather than taking it", (
      * stopped proposing — and the user may be mid-warm-up on an unrelated
      * lift. The recommendation is stated; the decision stays theirs.
      */
-    expect(src).toContain("Stop here");
+    expect(src).toContain("Stop session");
     expect(src).toContain("Keep going");
   });
 
