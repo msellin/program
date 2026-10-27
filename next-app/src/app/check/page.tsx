@@ -256,7 +256,7 @@ export default function CheckPage() {
   };
 
   return (
-    <div className="space-y-5 pt-4">
+    <div className="space-y-5 pt-4 pb-28">
       <header>
         <h1 className="text-2xl font-semibold tracking-tight text-strong">Morning check</h1>
         <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.06em] text-muted">

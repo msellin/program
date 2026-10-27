@@ -34,7 +34,7 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 |----|--------|------|-----|--------|--------|
 | SF-01 | "Something hurt" as an always-visible top-row chip → Note / Swap or skip / Stop | H | A | S–M | app #4, design §4 |
 | SF-02 | A real Stop for every program (not only handstand), with a stopped screen + symptom prompt | H | A | M | app #1-2 |
-| SF-03 | Public programs: a one-tap "How do you feel today?" on the brief replaces the required morning check (fallback: drop "Check first" as a blocker) | H | A | M | personal-separation |
+| SF-03 | Public programs: a one-tap "How do you feel today?" on the brief replaces the required morning check (fallback: drop "Check first" as a blocker) | H | A | M | personal-separation | (fallback only ✓ 362d271)
 | SF-04 | Concurrent-strength-maintenance red state: "resume at 3×4" missing. Fix it or drop the promise | H | A | M | roadmap B12 |
 | SF-05 | Handstand-walk `retest_gate` / bail-out gates nothing. Fix it or drop the promise | H | A | M | roadmap B12 |
 | SF-06 | Capture red-day screens + the CSM red state with the harness (never captured) | S | A | S | app §3 |
@@ -42,19 +42,19 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 ## 3. App bugs and clarity (confirmed in code)
 | ID | Action | When | Who | Effort | Source |
 |----|--------|------|-----|--------|--------|
-| A-UX-01 | Nothing sticky except the nav: suggestions inline under the hero; the feedback button moves into You | H | A | M | owner, design §3 |
+| A-UX-01 | Nothing sticky except the nav: suggestions inline under the hero; the feedback button moves into You | H | A | M | owner, design §3 | ✓ 362d271
 | A-UX-02 | Session Done screen (summary + "Back to Today" + suggestion); split the Finish and Stop handlers; fix the stale "Continue" CTA | H | A | M–L | app #3,13 |
-| A-UX-03 | Today: at most 3 cards, one hero state; no "Workout ready" over "Rest day"; one week number | H | A | M | app #8,10 |
+| A-UX-03 | Today: at most 3 cards, one hero state; no "Workout ready" over "Rest day"; one week number | H | A | M | app #8,10 | ✓ 362d271
 | A-UX-04 | One name per concept: "Extra session", "Suggestion" (Accept / Not now), "reps left", "working max"; citations behind "Why?" | H | A | S–M | app #12,18, h04 |
 | A-UX-05 | Plan: one status per day; the skip toast counts visible sessions; a visible Unskip | H | A | M | app #11 |
 | A-UX-06 | A hold logged with 0 s counts as logged: require held>0 or a confirm | H | A | S | app #7 |
 | A-UX-07 | Gate `/dev/primitives` and `/admin/keywords` to dev/admin | H | A | S | app #15 |
-| A-UX-08 | A friendly error instead of the raw `{error}` on Today | H | A | S | design §3 |
+| A-UX-08 | A friendly error instead of the raw `{error}` on Today | H | A | S | design §3 | ✓ 362d271
 | A-UX-09 | Tabs Today / Plan / Record / You; fold Account and Settings into You; remove the header gear; Record absorbs progress/history/report | H (cuttable) | A | M | design §1 |
 | A-UX-10 | reset-password with no token: a timeout, "link expired, request new" | S | A | S | app #14 |
 | A-UX-11 | Record tile vs timeline disagree: one shared selector | S | A | M | app #16 |
 | A-UX-12 | Rest rail: no reorder after "Jump to"; untruncated labels | S | A | M | design §4 |
-| A-UX-13 | First-run end: a post-first-workout next step; no amber "Morning check overdue" on day 2 | H | A | S | g1 |
+| A-UX-13 | First-run end: a post-first-workout next step; no amber "Morning check overdue" on day 2 | H | A | S | g1 | ✓ 362d271
 | A-UX-14 | Welcome expectation copy shown for the 3 advertised programs | H | A | S | g1 |
 | A-UX-15 | Delete account in ≤2 taps; no raw JSON on failure | H | A | S | g2 |
 | A-UX-16 | Feedback endpoint: a visible error, a rate limit | S | A | S | g2 |
@@ -142,17 +142,17 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 ## 11. From the gap captures (stranger first run, red day, 375/393; `audit/gap-A/B/C`)
 | ID | Action | When | Who | Effort | Lane | Source |
 |----|--------|------|-----|--------|------|--------|
-| G-01 | **A new sign-up's day 1 is a rest day:** no first workout is reachable. Offer a session on day 1 (start the schedule today, or "Start your first session now") | H | A | M | 2b + 4 | gap-A |
+| G-01 | **A new sign-up's day 1 is a rest day:** no first workout is reachable. Offer a session on day 1 (start the schedule today, or "Start your first session now") | H | A | M | 2b + 4 | gap-A | (Today side ✓ 362d271)
 | G-02 | Placement mismatch: the intake result says Tier D (the walker typed 3 into every test), but Today says Tier A and offers "Advance to Tier D". Verify the placement is saved and applied | H | A | S–M | 5 | gap-A |
 | G-03 | Intake physical-test steps (5 screens) overflow horizontally at 375px | H | A | S | 5 | gap-A |
-| G-04 | **An untouched morning check saves a green day** (all defaults 0; Save is never disabled; `check/page.tsx:62-74,403`). Unanswered must not mean "fine" | H | A | S | 2b | gap-B |
-| G-05 | After the first check, the "How Terav reads you" onboarding modal covers Today and hides the red verdict (`OnboardingRunner.tsx:72-103`) | H | A | S | 2b | gap-B, gap-C |
+| G-04 | **An untouched morning check saves a green day** (all defaults 0; Save is never disabled; `check/page.tsx:62-74,403`). Unanswered must not mean "fine" | H | A | S | 2b | gap-B | ✓ e2f79b3
+| G-05 | After the first check, the "How Terav reads you" onboarding modal covers Today and hides the red verdict (`OnboardingRunner.tsx:72-103`) | H | A | S | 2b | gap-B, gap-C | ✓ e2f79b3
 | G-06 | **A tier-advance suggestion shows on a red day** ("advance to Tier D"); `selectTierAdvance` has no state check (`lib/proposals/select.ts:280-300`) | H | A | S | 4 | gap-B |
 | G-07 | **Red doesn't change the session or plan** ("Open session" ungated; the 10% cut is on the TM path only, `suggest.ts:265-271`). **Confirmed on a real session 2026-10-27** (CSM: a low-back-severe red, and the bike session is unchanged). Make red = hold + the program's alternative | H | A | M | 2a + 4 | gap-B |
-| G-08 | Red copy has no next step; "see a clinician" exists only inside the Why/Cited sheets; a night-pain red has no referral line | H | A | S | 2b | gap-B |
+| G-08 | Red copy has no next step; "see a clinician" exists only inside the Why/Cited sheets; a night-pain red has no referral line | H | A | S | 2b | gap-B | ✓ e2f79b3
 | G-09 | **Plan says "No phase covers this week" in every new user's first week.** Checked 2026-10-27: `plan/page.tsx:216` resolves the phase for the viewed week's Monday (`activePhaseFor(program, iso(viewedMon))`), which falls before a mid-week `started_at`. The program files' calendar dates are fine (`shiftedPhases` rebases them; Today correctly says Week 1 of 4). Fix: use the later of Monday and started_at, or any scheduled day in the week | H | A | S | 4 | gap-B, verified |
-| G-10 | Check screen: the sticky Save covers the last region row at 375; the feedback bubble sits on the CTA (with A-UX-01) | H | A | S | 2b | gap-B, gap-C |
-| G-11 | User-facing copy "no LLM, just a keyword parser": cut | H | A | S | 2b | gap-B |
+| G-10 | Check screen: the sticky Save covers the last region row at 375; the feedback bubble sits on the CTA (with A-UX-01) | H | A | S | 2b | gap-B, gap-C | ✓ (pending)
+| G-11 | User-facing copy "no LLM, just a keyword parser": cut | H | A | S | 2b | gap-B | ✓ e2f79b3
 | G-12 | The scale anchors (4–6 ache, 7–10 pause) disagree with the gate (amber 4–5, red >5) and the chip labels; align the copy to the gate, never the reverse | S | A | S | — | gap-B |
 | G-13 | The Record sheet clips the nav icons; "/" at 393 resolved to /off-plan in the capture (a redirect quirk) | S | A | S | — | gap-C |
 | G-14 | Red against a real session. **Spec done 2026-10-27:** part B picks the first advertised-program persona with a loadable session that day and dismisses onboarding. **Result on CSM (Zone 2 bike):** Today says "Back off", but the session is unchanged and loggable (confirms G-07). **Still to do:** a loaded pull-up/handstand day, after lanes 2a + 4 | H (QA) | A | S | QA | screens/gaps/B-red-day |
