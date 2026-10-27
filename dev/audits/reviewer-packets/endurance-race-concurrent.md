@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: 2d508be38ae58af5 -->
+<!-- source-fingerprint: ad67cc93ee5119f8 -->
 
 ## What we are asking
 
@@ -195,7 +195,7 @@ Printed against the questions above so you can see which are actually detectable
 
 # Citations for this domain
 
-51 unique papers across 2 programs. Where a paper backs more than one claim, every claim is listed under it — a paper stretched across two claims is worth a second look.
+50 unique papers across 2 programs. Where a paper backs more than one claim, every claim is listed under it — a paper stretched across two claims is worth a second look.
 
 **andersen_henriksson_1977** — Capillary supply of the quadriceps femoris muscle of man: adaptive response to exercise · Andersen P, Henriksson J · 1977
 
@@ -355,11 +355,6 @@ Printed against the questions above so you can see which are actually detectable
 
 - *rowing-2k-test-prep says it supports:* Models endurance performance as VO2max, lactate threshold and efficiency INTERACTING multiplicatively, and states that the oxidative capacity underlying the lactate threshold is 'highly plastic' and can more than double with appropriate training. Corrected 2026-09-05: this read 'Threshold > VO2max as primary metric to track'. The paper ranks no determinant above another and does not frame any as a metric to track; the word 'plateau' does not occur in it, so the 'post-VO2max ceiling' and 'VO2max plateaus much earlier' framings elsewhere in this file are not its language. It also contains no threshold-shift magnitude of any kind - the only numeric change figures in it are efficiency case reports (about 1-3% per year) and a greater-than-twofold oxidative-capacity figure - which is consistent with this file's existing decision on 2026-09-05 to attach no numeric target to threshold. Training threshold first is an engineering choice; this paper supports that threshold is highly trainable.
 - *concurrent-strength-maintenance says it supports:* Models endurance performance as VO2max, lactate threshold and efficiency INTERACTING multiplicatively (marathon speed 'essentially predicted by' VO2max x lactate threshold percentage x running economy), and states that the oxidative capacity underlying the lactate threshold is 'highly plastic' and can more than double with training. Corrected 2026-09-05: this read 'Threshold > VO2max as primary metric to track'. The paper ranks no determinant above another and frames none of the three as a metric to track; it also contains no threshold-change magnitude, and the word 'plateau' does not occur in it. Using pre/post submaximal HR at fixed pace as a threshold-shift proxy remains a defensible engineering choice; this paper establishes that the threshold is trainable, not that it should be the primary metric.
-- **Does it? ☐ yes ☐ partly ☐ no —**
-
-**kilding_2012** — Investigation of the maximal lactate steady state (MLSS) in trained runners · Kilding AE, Winter EM, Fysh M · 2012
-
-- *rowing-2k-test-prep says it supports:* MLSS validity for threshold prescription
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **laursen_jenkins_2002** — The scientific basis for high-intensity interval training · Laursen PB, Jenkins DG · 2002

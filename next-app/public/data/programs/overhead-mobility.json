@@ -968,15 +968,6 @@
         "used_for": "This id now resolves to the EMG study, J Athl Train 42(4):464-469, PMID 18174934: 22 asymptomatic subjects, three isolated cuff exercises, no difference among them for supraspinatus. The cross-drill activation catalogue this programme actually described is a different work, Reinold, Escamilla and Wilk, JOSPT 2009;39(2):105-117, PMID 19194023, a narrative review the authors grade Level of Evidence 5; it needs its own citation id before Phase 2 copy can cite it. Neither paper states that cuff activation must precede end-range loading, so the light-load bias is an engineering choice, as this programme's own engineering_choices_flagged block already says. Corrected 2026-09-05: the record was dated 2007 at JOSPT 37(11):659-670, a locator with zero results, for a paper published in 2009, and a hard rule was attributed to text that is in neither abstract."
       },
       {
-        "id": "sadowski_2021",
-        "authors": "Mizutori H, et al.",
-        "year": 2021,
-        "title": "Kinematics and joint moments during the press to handstand",
-        "source": "PLoS One 16(7):e0253951",
-        "used_for": "Shoulder-moment analysis for the straight-arm press to handstand — informs the no-heavy-load-early rule. Attribution flagged for founder review (see citations.json review_note): DOI resolves to a Mizutori-authored floor study; the 3× BW figure is a parallel-bars finding, not a floor finding. Terav uses this only for the general 'heavy shoulder moment early is unsafe' principle, not for a specific numeric threshold. CORRECTED 2026-09-05: the byline said Sadowski and no such paper exists, but the DOI was always right and resolves to Mizutori et al. It is a FLOOR study, not parallel bars, and the 3x bodyweight figure lived in its introduction quoting someone else. Its real finding — less-skilled performers produced LARGER shoulder flexion moments — supports this rule better than the withdrawn number.",
-        "verification_status": "unverified"
-      },
-      {
         "id": "wulf_1998",
         "authors": "Wulf G, Höß M, Prinz W",
         "year": 1998,
@@ -1125,7 +1116,6 @@
       "ludewig_cook_2000",
       "ludewig_reynolds_2009",
       "reinold_2007",
-      "sadowski_2021",
       "wulf_1998",
       "wulf_2013",
       "karni_1998",

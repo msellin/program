@@ -1606,7 +1606,7 @@
   "evidence_base": {
     "physiological_targets": [
       "Wrist load tolerance — tendon adaptation timeframe roughly 8-12 weeks for early collagen turnover (Wiesinger 2019 — used as mechanism basis; no direct dose-response for handstand wrist load, flagged as engineering choice). Vidal-Torija 2025 (n=321 adult practitioners): 56.7% report chronic wrist pain but NO association with weekly training hours — technique-driven, not volume-driven. Barlow 2020: adult wrist WB tolerance declines from age 45.",
-      "Shoulder overhead endurance — sustained flexion at ≥170° draws on serratus anterior, upper/lower trapezius endurance (Ludewig & Cook 2000 shoulder-impingement kinematics; Ludewig & Reynolds 2009). Mizutori 2021 (id `sadowski_2021`): less-skilled performers produced LARGER peak shoulder flexion moments in the press to handstand — do NOT program straight-arm press early, because the cost falls hardest on exactly the people not yet ready for it.",
+      "Shoulder overhead endurance — sustained flexion at ≥170° draws on serratus anterior, upper/lower trapezius endurance (Ludewig & Cook 2000 shoulder-impingement kinematics; Ludewig & Reynolds 2009). Straight-arm press is not programmed early: a coaching choice to build overhead endurance first, not a cited threshold.",
       "Balance strategy — the handstand hold is wrist-torque-dominated (Kerwin & Trewartha 2001; Blenkinsop 2017). Elite vs novice differ mainly in medial-lateral CoP control + stiffening strategy (Sobera 2019; Baker 2025 systematic review). Novices show a wider CoP excursion; training reduces variability with time.",
       "Progressive position ladder — Kinoshita 2022 EMG-validated the 4-position progression: 90° incline → 135° incline → elbow / straddle-L stand → full wall handstand. Each step approximately doubles the overhead time-under-tension.",
       "Motor consolidation — Karni 1998 (fast/slow learning phases, M1 remapping over ~3 weeks); Walker 2003 (dissociable consolidation stages); Robertson 2004 (4-6h post-practice interference window). Daily short skill exposure builds a stronger trace than infrequent long sessions.",
@@ -1615,7 +1615,7 @@
     ],
     "session_rationale": {
       "block_wrist_prep": "Wrist tissue adaptation lags most other adaptations by weeks (Wiesinger 2019). 3-5 min of graded wrist prep before every session builds accumulated exposure without spiking a single session. Vidal-Torija 2025 shows chronic pain is technique-driven, not volume-driven — but the volume cap is a defensible upper bound while good technique is being built. Weekly cap 20-30 min in weeks 1-2 is an engineering choice (no direct dose-response study).",
-      "block_skill_A_kinoshita": "Kinoshita 2022 progressive position ladder: 90° incline hold recruits the shoulder overhead endurance system without asking for full balance. EMG-validated. Ideal Tier A entry point — the shape of a handstand loaded through the same tissues, with no bail risk. Mizutori 2021 (id `sadowski_2021`) explains why straight-arm press to handstand is NOT a Tier A drill: the less skilled the performer, the LARGER the peak shoulder flexion moment they generate, so the drill loads a Tier A athlete hardest.",
+      "block_skill_A_kinoshita": "Kinoshita 2022 progressive position ladder: 90° incline hold recruits the shoulder overhead endurance system without asking for full balance. EMG-validated. Ideal Tier A entry point — the shape of a handstand loaded through the same tissues, with no bail risk. Straight-arm press to handstand is not a Tier A drill: a coaching choice, not a cited threshold.",
       "block_skill_A_wall_hold": "Chest-to-wall hold builds the plumb-line shape under load (Kerwin & Trewartha 2001 wrist-strategy characterisation). Wall shrugs isolate the serratus / trap endurance that a handstand demands over time (Ludewig & Cook 2000). Belly-to-wall added when static hold is level 2: introduces active wrist strategy that a chest-to-wall hold hides.",
       "block_skill_B_freestand_search": "Kick-up practice + freestand attempts + optional tuck freestand for reduced moment of inertia. Video review button is self-controlled (Chiviacowsky & Wulf 2002) — user taps if they want feedback, no auto-show. Potdevin 2018 pattern: KP after ~5 reps, not every rep.",
       "block_skill_A_freestand_hold": "Freestand hold is the primary KPI at Tier C — trackable weekly, sensitive early indicator. Sobera 2019: elite-novice CoP-variability differences mean the freestand hold time is a valid capability marker across the skill acquisition arc.",
@@ -1742,15 +1742,6 @@
         "title": "Self-controlled feedback: does it enhance learning because performers get feedback when they need it?",
         "source": "Research Quarterly for Exercise and Sport 73:408-415",
         "used_for": "Self-controlled feedback beats forced schedules. The video review button design (self-selected, never auto-shown) is directly from this study."
-      },
-      {
-        "id": "sadowski_2021",
-        "authors": "Mizutori H, et al.",
-        "year": 2021,
-        "title": "Kinematics and joint moments during the press to handstand",
-        "source": "PLoS One 16(7):e0253951",
-        "used_for": "Shoulder-moment analysis of the press to handstand. Directly informs the choice NOT to program straight-arm press early, and the Tier A entry at Kinoshita 90°. Attribution flagged for founder review (see citations.json review_note): DOI 10.1371/journal.pone.0253951 resolves to a Mizutori-authored parallel-bars paper. The heavy-shoulder-moment principle survives on general grounds; the specific 3× BW figure was a parallel-bars finding, not a floor finding — do not cite that number. CORRECTED 2026-09-05: the byline said Sadowski and no such paper exists, but the DOI was always right and resolves to Mizutori et al. It is a FLOOR study, not parallel bars, and the 3x bodyweight figure lived in its introduction quoting someone else. Its real finding — less-skilled performers produced LARGER shoulder flexion moments — supports this rule better than the withdrawn number.",
-        "verification_status": "unverified"
       },
       {
         "id": "barlow_2020",
@@ -1960,7 +1951,6 @@
       "rohleder_vogt_2018",
       "potdevin_2018",
       "chiviacowsky_wulf_2002",
-      "sadowski_2021",
       "barlow_2020",
       "vidal_torija_2025",
       "difiori_2006",

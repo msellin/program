@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: 7941e82f2b5c5d32 -->
+<!-- source-fingerprint: efc842ea4257baee -->
 
 ## What we are asking
 
@@ -202,7 +202,7 @@ Printed against the questions above so you can see which are actually detectable
 
 Printed against the questions above so you can see which are actually detectable.
 
-- Shoulder pain during a hang, transition, or support hold — session ends immediately. Do not train through it. Reinold 2007 supraspinatus load data + Sadowski 2021 straight-arm shoulder moment analog support the caution.
+- Shoulder pain during a hang, transition, or support hold — session ends immediately. Do not train through it. Reinold 2007 supraspinatus load data supports the caution.
 - Acute rotator-cuff injury, labral tear, or shoulder dislocation in the last 6 months — dead hangs, ring support, and transition attempts contraindicated until cleared.
 - Currently symptomatic medial or lateral elbow tendinopathy — defer ring dip work and transition negatives. Use scap and hollow work only until cleared.
 - Acute wrist injury (TFCC tear, ligament instability) in the last 6 weeks — false-grip work is prohibited; hollow + hang-only substitutes.
@@ -313,7 +313,7 @@ Printed against the questions above so you can see which are actually detectable
 
 # Citations for this domain
 
-42 unique papers across 3 programs. Where a paper backs more than one claim, every claim is listed under it — a paper stretched across two claims is worth a second look.
+41 unique papers across 3 programs. Where a paper backs more than one claim, every claim is listed under it — a paper stretched across two claims is worth a second look.
 
 **ackerman_1988** — Determinants of individual differences during skill acquisition · Ackerman PL · 1988
 
@@ -433,12 +433,6 @@ Printed against the questions above so you can see which are actually detectable
 
 - *first-strict-pullup says it supports:* SUPERSEDED 2026-09-05. This read: 'Meta-analytic evidence: eccentric training produces greater strength gains than concentric-only for matched work (ES 1.02 vs 0.94).' Neither effect size appears in Roig's full text, and the paper states that at comparable intensity 'no significant differences in the improvement of total strength after training were observed'. Spudic & Nosaka 2025 (spudic_nosaka_2025, 27 studies, GRADE) settles it: eccentric-only beats concentric-only for ECCENTRIC strength (g=1.51) and is statistically indistinguishable for CONCENTRIC (g=-0.10, p=.726). A first strict pull-up is a CONCENTRIC task — so on the outcome this programme exists to produce, the pooled evidence shows no advantage. Negatives are retained: they build position tolerance and are a reasonable entry for someone with no concentric rep. But they are an ENGINEERING CHOICE, not an evidence-backed shortcut, and the programme should not imply otherwise.
 - *muscle-up says it supports:* SUPERSEDED 2026-09-05 — see spudic_nosaka_2025. Eccentric-only is indistinguishable from concentric-only for concentric strength (g=-0.10, p=.726), so 'produces greater strength gains' is not supportable. The transition negative is retained as the closest available POSITION rehearsal for the muscle-up transition, which is a specificity argument, not a strength-gain one. Roig's own text also declines the transfer claim, leaving open 'transferability of strength gains to more complex human movements'.
-- **Does it? ☐ yes ☐ partly ☐ no —**
-
-**sadowski_2021** — Kinematics and joint moments during the press to handstand · Mizutori H, et al. · 2021
-
-- *muscle-up says it supports:* Press-to-handstand shoulder-moment analysis, cited as the closest available analog for ring-support end-range shoulder load. ATTRIBUTION UNRESOLVED — the DOI resolves to a Mizutori-authored parallel-bars paper; handstand-walk carries the same flag and instructs that the 3x bodyweight figure not be cited. The specific number is therefore withdrawn here too (2026-09-03): the two programmes were shipping opposite instructions about the same citation. The qualitative point — straight-arm press is a high end-range shoulder load — stands without it. CORRECTED 2026-09-05: the byline said Sadowski and no such paper exists, but the DOI was always right and resolves to Mizutori et al. It is a FLOOR study, not parallel bars, and the 3x bodyweight figure lived in its introduction quoting someone else. Its real finding — less-skilled performers produced LARGER shoulder flexion moments — supports this rule better than the withdrawn number.
-- *handstand-walk says it supports:* Shoulder-moment analysis of the press to handstand. Directly informs the choice NOT to program straight-arm press early, and the Tier A entry at Kinoshita 90°. Attribution flagged for founder review (see citations.json review_note): DOI 10.1371/journal.pone.0253951 resolves to a Mizutori-authored parallel-bars paper. The heavy-shoulder-moment principle survives on general grounds; the specific 3× BW figure was a parallel-bars finding, not a floor finding — do not cite that number. CORRECTED 2026-09-05: the byline said Sadowski and no such paper exists, but the DOI was always right and resolves to Mizutori et al. It is a FLOOR study, not parallel bars, and the 3x bodyweight figure lived in its introduction quoting someone else. Its real finding — less-skilled performers produced LARGER shoulder flexion moments — supports this rule better than the withdrawn number.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **sands_2000** — Injury prevention in women's gymnastics · Sands WA · 2000

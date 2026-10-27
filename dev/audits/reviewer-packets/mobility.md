@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: 038a787b98f27720 -->
+<!-- source-fingerprint: 05ed6093dd461ed3 -->
 
 ## What we are asking
 
@@ -127,7 +127,7 @@ Printed against the questions above so you can see which are actually detectable
 
 # Citations for this domain
 
-20 unique papers across 1 programs. Where a paper backs more than one claim, every claim is listed under it — a paper stretched across two claims is worth a second look.
+19 unique papers across 1 programs. Where a paper backs more than one claim, every claim is listed under it — a paper stretched across two claims is worth a second look.
 
 **bullock_2019** — Shoulder range of motion and baseball arm injuries: a systematic review and meta-analysis · Bullock GS, Faherty MS, Ledbetter L, Thigpen CA, Sell TC · 2018
 
@@ -187,11 +187,6 @@ Printed against the questions above so you can see which are actually detectable
 **reinold_2007** — Electromyographic analysis of the supraspinatus and deltoid muscles during 3 common rehabilitation exercises · Reinold MM, Macrina LC, Wilk KE, Fleisig GS, Dun S, Barrentine SW, Ellerbusch MT, Andrews JR · 2007
 
 - *overhead-mobility says it supports:* This id now resolves to the EMG study, J Athl Train 42(4):464-469, PMID 18174934: 22 asymptomatic subjects, three isolated cuff exercises, no difference among them for supraspinatus. The cross-drill activation catalogue this programme actually described is a different work, Reinold, Escamilla and Wilk, JOSPT 2009;39(2):105-117, PMID 19194023, a narrative review the authors grade Level of Evidence 5; it needs its own citation id before Phase 2 copy can cite it. Neither paper states that cuff activation must precede end-range loading, so the light-load bias is an engineering choice, as this programme's own engineering_choices_flagged block already says. Corrected 2026-09-05: the record was dated 2007 at JOSPT 37(11):659-670, a locator with zero results, for a paper published in 2009, and a hard rule was attributed to text that is in neither abstract.
-- **Does it? ☐ yes ☐ partly ☐ no —**
-
-**sadowski_2021** — Kinematics and joint moments during the press to handstand · Mizutori H, et al. · 2021
-
-- *overhead-mobility says it supports:* Shoulder-moment analysis for the straight-arm press to handstand — informs the no-heavy-load-early rule. Attribution flagged for founder review (see citations.json review_note): DOI resolves to a Mizutori-authored floor study; the 3× BW figure is a parallel-bars finding, not a floor finding. Terav uses this only for the general 'heavy shoulder moment early is unsafe' principle, not for a specific numeric threshold. CORRECTED 2026-09-05: the byline said Sadowski and no such paper exists, but the DOI was always right and resolves to Mizutori et al. It is a FLOOR study, not parallel bars, and the 3x bodyweight figure lived in its introduction quoting someone else. Its real finding — less-skilled performers produced LARGER shoulder flexion moments — supports this rule better than the withdrawn number.
 - **Does it? ☐ yes ☐ partly ☐ no —**
 
 **salmoni_schmidt_walter_1984** — Knowledge of results and motor learning: a review and critical reappraisal · Salmoni AW, Schmidt RA, Walter CB · 1984

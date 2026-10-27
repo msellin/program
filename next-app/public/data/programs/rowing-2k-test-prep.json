@@ -945,15 +945,6 @@
         "used_for": "Meta-analysis of 27 tapering studies (from 182 screened). It supports the structure of the taper week as prescribed here, verbatim: a 2-week taper (overall effect 0.59 +/- 0.33, p < 0.001) in which training volume is decreased exponentially by 41-60% (overall effect 0.72 +/- 0.36, p < 0.001) with no change to training intensity or frequency. Corrected 2026-09-05: this reference previously called the paper 'the stronger single-source anchor' for a ~3% performance uplift. The paper reports standardised effect sizes, not percentages, and no 3% figure appears anywhere in its retrievable record; the same 3% is attributed elsewhere in this programme to Mujika & Padilla 2000, so the anchor claim was circular. Full text is closed and could not be checked, so the number is unconfirmed rather than disproved. What is cited is the taper structure; any percentage shown to a user should read as Terav's own expectation, not as a measured meta-analytic result.",
         "url": "https://pubmed.ncbi.nlm.nih.gov/17762369/",
         "verification_status": "verified"
-      },
-      {
-        "id": "kilding_2012",
-        "authors": "Kilding AE, Winter EM, Fysh M",
-        "year": 2012,
-        "title": "Investigation of the maximal lactate steady state (MLSS) in trained runners",
-        "source": "Int J Sports Med 33(1):11-16",
-        "used_for": "MLSS validity for threshold prescription",
-        "verification_status": "not_found"
       }
     ],
     "reference_ids": [
@@ -984,8 +975,7 @@
       "steinacker_1993",
       "mikulic_2011",
       "steinacker_1998",
-      "bosquet_2007",
-      "kilding_2012"
+      "bosquet_2007"
     ]
   },
   "onboarding_steps": [
