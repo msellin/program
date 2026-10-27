@@ -55,7 +55,7 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 | A-UX-11 | Record tile vs timeline disagree: one shared selector | S | A | M | app #16 |
 | A-UX-12 | Rest rail: no reorder after "Jump to"; untruncated labels | S | A | M | design §4 |
 | A-UX-13 | First-run end: a post-first-workout next step; no amber "Morning check overdue" on day 2 | H | A | S | g1 | ✓ 362d271
-| A-UX-14 | Welcome expectation copy shown for the 3 advertised programs | H | A | S | g1 | ✓ 30ebb11
+| A-UX-14 | Welcome expectation copy shown for the 3 advertised programs | H | A | S | g1 | ✓ 43048ef
 | A-UX-15 | Delete account in ≤2 taps; no raw JSON on failure | H | A | S | g2 | ✓ 6e89b95
 | A-UX-16 | Feedback endpoint: a visible error, a rate limit | S | A | S | g2 |
 | A-UX-17 | Off-plan: duplicate rows in the pull-up drill list; the contradictory "changes the plan" copy | S | A | S | x09 |
@@ -78,8 +78,8 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 | SG-02 | Google sign-up disabled until the terms + health-consent boxes are ticked; a 16+ age tick | H | A | S | compliance 3,6 | ✓ 6e89b95
 | SG-03 | Remove "no signup wall", "closed beta", "two minutes"; review the `auth-errors.ts` invite remap | H | A | S | compliance 8 | ✓ 6e89b95
 | SG-04 | Privacy truth pass (`:75,80,97,114,117,121,135`): Stripe not Paddle; name Google OAuth, Cloudflare Analytics, Resend | H | A | M | compliance 4, roadmap 3 | ✓ 6e89b95
-| SG-05 | Landing legal pages mirror or link the app's; terms consistent (beta/pricing) | H | A | S | compliance 5 | ✓ 30ebb11
-| SG-06 | Branded Supabase email templates (confirm, reset) | H | A+O | S | g3 | ✓ 30ebb11
+| SG-05 | Landing legal pages mirror or link the app's; terms consistent (beta/pricing) | H | A | S | compliance 5 | ✓ 43048ef
+| SG-06 | Branded Supabase email templates (confirm, reset) | H | A+O | S | g3 | ✓ 43048ef
 | SG-08 | Cloudflare Turnstile widget on sign-up (email + Google), passing `captchaToken`; THEN enable Supabase captcha (`CAPTCHA=1`) | H | A+O | M | kickoff kit | ✓ 6e89b95
 | SG-07 | Paid terms: renewal, EU 14-day withdrawal, VAT; a consent-withdrawal path | S | A (+lawyer) | M | compliance §4 |
 
@@ -144,7 +144,7 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 |----|--------|------|-----|--------|------|--------|
 | G-01 | **A new sign-up's day 1 is a rest day:** no first workout is reachable. Offer a session on day 1 (start the schedule today, or "Start your first session now") | H | A | M | 2b + 4 | gap-A | (Today side ✓ 362d271)
 | G-02 | Placement mismatch: the intake result says Tier D (the walker typed 3 into every test), but Today says Tier A and offers "Advance to Tier D". Verify the placement is saved and applied | H | A | S–M | 5 | gap-A |
-| G-03 | Intake physical-test steps (5 screens) overflow horizontally at 375px | H | A | S | 5 | gap-A | ✓ 30ebb11
+| G-03 | Intake physical-test steps (5 screens) overflow horizontally at 375px | H | A | S | 5 | gap-A | ✓ 43048ef
 | G-04 | **An untouched morning check saves a green day** (all defaults 0; Save is never disabled; `check/page.tsx:62-74,403`). Unanswered must not mean "fine" | H | A | S | 2b | gap-B | ✓ e2f79b3
 | G-05 | After the first check, the "How Terav reads you" onboarding modal covers Today and hides the red verdict (`OnboardingRunner.tsx:72-103`) | H | A | S | 2b | gap-B, gap-C | ✓ e2f79b3
 | G-06 | **A tier-advance suggestion shows on a red day** ("advance to Tier D"); `selectTierAdvance` has no state check (`lib/proposals/select.ts:280-300`) | H | A | S | 4 | gap-B |
