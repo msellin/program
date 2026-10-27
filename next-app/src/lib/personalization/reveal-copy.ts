@@ -1,4 +1,5 @@
 import type { Program, Store } from "../schemas";
+import { programDisplayName } from "../day-format";
 
 export type RevealCopy = {
   headline: string;
@@ -82,7 +83,8 @@ export function buildRevealCopy(
     if (value != null && unit) {
       attributionParts.push(`${humanDomain(domain)} = ${value}${unit}`);
     } else if (level != null) {
-      attributionParts.push(`${humanDomain(domain)} at level ${level}`);
+      // No "level N": Today names tiers by letter, a number here read as a second scale.
+      attributionParts.push(`${humanDomain(domain)} (your test result)`);
     }
   }
   if (modality) attributionParts.push(`${humanModality(modality)} over other modalities (your pick)`);
@@ -119,10 +121,7 @@ export function buildRevealCopy(
 function deriveProgramName(program: Program): string {
   const slug = (program as unknown as { slug?: string }).slug;
   if (slug) {
-    return slug
-      .split("-")
-      .map((w) => (w.length ? w[0].toUpperCase() + w.slice(1) : w))
-      .join(" ");
+    return programDisplayName(program, slug);
   }
   const goal = program.program_goal;
   if (goal?.display_name) return goal.display_name.replace(/\s+/g, " ").trim();

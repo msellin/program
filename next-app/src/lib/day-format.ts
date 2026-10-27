@@ -70,6 +70,9 @@ export function exerciseListName(exercise: { name: string; variant?: string }): 
 // ("(Phase 1 weeks 0-1)") or explicit developer tags ("(sub-goal)").
 export function humanPhaseName(name: string): string {
   return name
+    // Leading "Weeks 5-8 — " counts program weeks while the ring counts the
+    // phase's own weeks; two clocks on one screen (V-01).
+    .replace(/^weeks?\s+\d+\s*[-–]\s*\d+\s*[—–-]\s*/i, "")
     .replace(/\s*\((?:Phase|weeks?|week|sub-goal|dev|internal)\b[^)]*\)\s*$/i, "")
     .trim();
 }
@@ -78,7 +81,7 @@ export function humanPhaseName(name: string): string {
 // "(Phase 1 weeks 0-1)" which are misleading when read literally by a user
 // looking at Today (they imply the phase is only 2 weeks long).
 export function humanBlockName(name: string): string {
-  return name.replace(/\s*\((?:Phase|weeks?|week)\b[^)]*\)\s*$/i, "").trim();
+  return name.replace(/\s*\((?:Phase|weeks?|week|Tier)\b[^)]*\)\s*$/i, "").trim();
 }
 
 /**

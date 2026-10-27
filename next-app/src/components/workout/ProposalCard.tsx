@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowUp } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 import { CitationRef } from "@/components/citations/CitationRef";
 import { RetestLoggingSheet } from "@/components/workout/RetestLoggingSheet";
 import { useProposalActions } from "@/lib/proposals/useProposalActions";
@@ -157,20 +158,15 @@ export function ProposalCard({
       </div>
       {showInlineActions ? (
         <div className="flex flex-wrap gap-2 pt-1">
-          <button
-            type="button"
+          <Button
             onClick={(e) => onAccept(e.currentTarget)}
-            className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover min-h-[44px]"
+            className="!h-auto min-h-12 py-2 text-left"
           >
             {acceptVerb}
-          </button>
-          <button
-            type="button"
-            onClick={onIgnore}
-            className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-ink hover:bg-line-soft min-h-[44px]"
-          >
+          </Button>
+          <Button variant="secondary" onClick={onIgnore}>
             Not now
-          </button>
+          </Button>
         </div>
       ) : null}
       {retestSheetOpen && proposal.kind === "retest_due" ? (
@@ -246,7 +242,7 @@ function eyebrowFor(p: Proposal): string {
     case "readiness_after_layoff":
       return "You look ready to leave reintro";
     case "tier_advance":
-      return "Tier gate cleared";
+      return "Suggestion: move up a tier";
     case "tm_bump":
       return "Room to push — headroom on your log";
     case "non_responder_recommendation":

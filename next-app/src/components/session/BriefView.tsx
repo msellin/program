@@ -139,14 +139,15 @@ export function BriefView({
   // Blocks that carry guidance AND exercises — the prescription-only ones
   // already render their note as the session itself, so exclude them here
   // to avoid printing the same text twice.
-  const guidanceBlocks = blocks.filter(
-    (b) => (b.note ?? "").trim().length > 0 && !prescriptionBlocks.includes(b),
-  );
+  const guidanceBlocks = blocks
+    .filter((b) => !prescriptionBlocks.includes(b))
+    .map((b) => ({ ...b, note: plainNote(b.note) }))
+    .filter((b) => b.note.length > 0);
 
   const startLabel = isPrescriptionSession
     ? "Log this session"
     : allFollow
-    ? "Start — Follow along"
+    ? "Start session"
     : !hero
     ? "Start"
     : heroLoggedCount > 0
@@ -631,4 +632,20 @@ function basisLine(r: RailExercise, store: Store): string | null {
 function dayName(dateISO: string): string {
   const d = new Date(dateISO + "T12:00:00");
   return d.toLocaleDateString("en-GB", { weekday: "long" });
+}
+
+/**
+ * A block note as a beginner should read it. Authors tag notes with their own
+ * provenance ("Coaching heuristic (Tsatsouline) — flagged as engineering
+ * choice…", "Consistent with Karni 1998…"); that belongs on /evidence, not in
+ * the first brief someone sees (V-06). Drops those sentences and parentheticals,
+ * keeps the instruction.
+ */
+export function plainNote(note: string | undefined): string {
+  const stripped = (note ?? "").replace(/\s*\([^()]*engineering choice[^()]*\)/gi, "");
+  return stripped
+    .split(/(?<=[.!?])\s+/)
+    .filter((s) => !/^coaching heuristic/i.test(s) && !/\b[A-Z][a-z]+(?: et al\.?)? (?:19|20)\d{2}\b/.test(s))
+    .join(" ")
+    .trim();
 }

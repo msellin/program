@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { useStore } from "@/lib/useStore";
+import { Button } from "@/components/ui/Button";
 
 const DISMISS_KEY = "program.firstrun.dismissed";
 
@@ -48,35 +49,27 @@ export function FirstRunBanner() {
     >
       <div className="flex items-start justify-between gap-3">
         <p id="firstrun-title" className="font-semibold text-strong text-[14px]">
-          Four tabs, one flow
+          Four tabs
         </p>
         <button
           type="button"
           onClick={dismiss}
-          aria-label="Dismiss four-tab tour"
+          aria-label="Dismiss tab tour"
           className="text-muted hover:text-ink w-11 h-11 -m-2 flex items-center justify-center"
         >
           <X size={16} />
         </button>
       </div>
       <ul className="text-[14px] text-muted space-y-1 leading-relaxed">
-        <li><span className="text-ink">Day</span> — the session you&apos;re prescribed right now.</li>
-        <li><span className="text-ink">Plan</span> — the 7-day rhythm; browse other days from here.</li>
-        <li><span className="text-ink">Record</span> — training maxes, retests, trends, and every logged session.</li>
-        <li><span className="text-ink">Profile</span> — account, active plans, menu.</li>
+        <li><span className="text-ink">Today</span> — the session for today.</li>
+        <li><span className="text-ink">Plan</span> — your week; move or skip a day here.</li>
+        <li><span className="text-ink">Record</span> — your progress and every logged session.</li>
+        <li><span className="text-ink">You</span> — programs, settings and account.</li>
       </ul>
-      <p className="text-[12px] text-muted pt-1">
-        More lives under <span className="text-ink">Profile</span>: Programs, Extra session, Report, Guide and Evidence. The daily check is
-        reached from Day when one is due.
-      </p>
       <div className="pt-1">
-        <button
-          type="button"
-          onClick={dismiss}
-          className="text-[14px] font-semibold px-4 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover min-h-[44px]"
-        >
-          Got it — start the day
-        </button>
+        <Button variant="secondary" onClick={dismiss}>
+          Got it
+        </Button>
       </div>
     </section>
   );

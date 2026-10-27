@@ -272,8 +272,11 @@ export function TodaySession({
       {/* Suppress the reveal card once the user has any real log history —
           if they've been using the app, they know what plan they're on.
           Also suppress after graduation. Delta audit 2026-08-19. */}
+      {/* Day 1 (no log, no check): Day1EmptyState below owns the screen, so its
+          CTA is not pushed under the fold by the plan card (V-04). */}
       {!isPastProgramEnd(primary, activeDate, userProfile) &&
-      Object.keys(logs ?? {}).length < 3 ? (
+      Object.keys(logs ?? {}).length < 3 &&
+      (hasHistory || logs[activeDate]?.symptoms || activeDate !== todayISO()) ? (
         <YourPlanCard program={primary} />
       ) : null}
 
@@ -309,10 +312,8 @@ export function TodaySession({
       !isPastProgramEnd(primary, activeDate, userProfile) &&
       allBlocks.length === 0 ? (
         <p className="-mt-3 text-[14px] text-muted leading-tight">
+          {/* Week N of M lives in the eyebrow and the ring above; a third copy here is noise. */}
           <span className="text-strong">{humanPhaseName(phase.name)}</span>
-          {phaseProgress(phase, activeDate) ? (
-            <span className="text-slate"> · {phaseProgress(phase, activeDate)}</span>
-          ) : null}
         </p>
       ) : null}
 
@@ -435,7 +436,7 @@ export function TodaySession({
           const started = new Date(userProfile.active_program_started_at.slice(0, 10) + "T00:00:00");
           const today = new Date(activeDate + "T00:00:00");
           const daysIn = Math.max(0, Math.floor((today.getTime() - started.getTime()) / 864e5));
-          const week = Math.floor(daysIn / 7) + 1;
+          const week = Math.floor(daysIn / 7) + 1; // program week, only picks the mode; never shown
           const mode = week <= 2 ? "blocked practice — drills in the composed order" : "random practice — order varies each session";
           return (
             <p className="text-[11px] text-muted font-mono">
@@ -445,7 +446,7 @@ export function TodaySession({
                   left three different week numbers on one screen with nothing
                   saying they count different things — persona-pullup, day 45,
                   2026-09-02. */}
-              Program week {week} · {mode}. <span className="text-muted">Shea & Morgan 1979.</span>
+              {mode.charAt(0).toUpperCase() + mode.slice(1)}. <span className="text-muted">Shea & Morgan 1979.</span>
             </p>
           );
         })()
@@ -694,10 +695,6 @@ function NoActiveProgram() {
         body="Each program starts with a short intake so the plan is calibrated to your baseline, not a template with your name on it."
         cta={{ href: "/programs/", label: "Browse programs" }}
       />
-      {/* Fresh-signup privacy pitch — the FirstRunBanner would otherwise never
-          show for a signed-in user landing on this state (the earlier code
-          short-circuited to render this component before mounting the banner). */}
-      <FirstRunBanner />
     </>
   );
 }

@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { AlertTriangle, Info, ChevronDown, ChevronUp } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { selectProposals } from "@/lib/proposals/select";
 import { useStore } from "@/lib/useStore";
 import { isDue } from "@/lib/engine/assessment-engine";
 import { activePhaseFor } from "@/lib/engine/schedule";
@@ -105,7 +106,9 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
     const userTier = slug
       ? store.user_profile?.program_states?.[slug]?.tier
       : undefined;
-    if (userTier) {
+    // Skipped when the tier-advance proposal is on screen: that card says the same thing with Accept / Not now.
+    const tierAdvanceShown = selectProposals(store, program, date).some((p) => p.kind === "tier_advance");
+    if (userTier && !tierAdvanceShown) {
       try {
         const retestVals = evaluateRetestMetrics(program, store, userTier);
         for (const m of retestVals) {

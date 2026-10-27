@@ -314,7 +314,7 @@ describe("follow-along on the Brief (2026-10-20)", () => {
 
   it("makes the big Start button start the follow-along when the whole day is follow-along work", () => {
     const { onFollowAlong, onStart } = renderFollow([homeRail("adductor_iso_bent", "Adductor squeeze")]);
-    screen.getByText("Start — Follow along").click();
+    screen.getByText("Start session").click();
     expect(onFollowAlong).toHaveBeenCalledWith("block_a_home");
     expect(onStart).not.toHaveBeenCalled();
   });

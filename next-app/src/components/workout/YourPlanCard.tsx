@@ -101,9 +101,9 @@ export function YourPlanCard({ program }: { program: Program }) {
           {copy.phase_lines.length ? (
             <ul className="mt-1 space-y-0.5 text-[14px] text-muted">
               {copy.phase_lines.map((line, i) => (
-                <li key={i} className="pl-3 -indent-3 truncate">
+                <li key={i} className="pl-3 -indent-3">
                   <span className="text-bronze">·</span>{" "}
-                  <span title={line}>{line}</span>
+                  {line}
                 </li>
               ))}
             </ul>
