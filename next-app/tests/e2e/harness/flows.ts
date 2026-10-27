@@ -160,6 +160,24 @@ const CLICK_TIMEOUT_MS = 15_000;
  */
 const TEXT_TIMEOUT_MS = 3_000;
 
+/** The Brief's Start CTA. "Start session" is what an all-follow-along day reads. */
+const START_RE = /^(Start|Continue) —|^Start session$/;
+const FOLLOW_EXIT = { name: "End follow-along" } as const;
+
+/**
+ * True when the guided follow-along player (no `data-surface` of its own —
+ * selectors are its "End follow-along" button and "This hurts" chip) is up.
+ */
+async function guidedUp(ctx: FlowContext, timeoutMs = 0): Promise<boolean> {
+  const exit = ctx.page.getByRole("button", FOLLOW_EXIT);
+  try {
+    await exit.first().waitFor({ state: "visible", timeout: timeoutMs || 1 });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function shiftISO(days: number): string {
   return new Date(Date.now() + days * 864e5).toISOString().slice(0, 10);
 }
@@ -220,7 +238,7 @@ async function openBrief(ctx: FlowContext, opts?: { requireSetFlow?: boolean }):
     // rowing personas stayed at 46.7% surfaces with 15 flows skipped for
     // want of a session that was right there.
     const start = ctx.page.getByRole("button", {
-      name: /^(Start|Continue) —|^Log this session$/,
+      name: new RegExp(`${START_RE.source}|^Log this session$`),
     });
     if ((await start.count()) === 0) continue;
 
@@ -274,7 +292,7 @@ async function openBrief(ctx: FlowContext, opts?: { requireSetFlow?: boolean }):
 async function enterSetFlow(ctx: FlowContext): Promise<void> {
   await openBrief(ctx, { requireSetFlow: true });
   await ctx.page
-    .getByRole("button", { name: /^(Start|Continue) —|^Log this session$/ })
+    .getByRole("button", { name: new RegExp(`${START_RE.source}|^Log this session$`) })
     .first()
     .click({ timeout: CLICK_TIMEOUT_MS });
   // WAIT for the surface rather than sampling once after a fixed delay.
@@ -288,6 +306,11 @@ async function enterSetFlow(ctx: FlowContext): Promise<void> {
       .first()
       .waitFor({ state: "attached", timeout: 8000 });
   } catch {
+    if (await guidedUp(ctx, 1500)) {
+      throw new SkipFlow(
+        "guided follow-along session — no SetView; covered by session-follow-along / session-follow-along-stop",
+      );
+    }
     throw new SkipFlow("prescription session — logged as an activity, no set flow");
   }
   await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
@@ -372,6 +395,35 @@ async function logCurrentSet(ctx: FlowContext): Promise<void> {
   throw new SkipFlow("no confirm control on the set screen");
 }
 
+/**
+ * Open the guided follow-along player from a Brief, or skip honestly when no
+ * day within ±7 has one. Tries the Brief's Start CTA first (an all-follow-along
+ * day routes it to the player), then a "Follow along ·" block button.
+ */
+async function openGuided(ctx: FlowContext): Promise<void> {
+  await openBrief(ctx);
+  await ctx.capture("01-brief");
+  await ctx.page
+    .getByRole("button", { name: START_RE })
+    .first()
+    .click({ timeout: CLICK_TIMEOUT_MS })
+    .catch(() => {});
+  if (await guidedUp(ctx, 4000)) return;
+  // Start opened SetView (or nothing): back to the Brief and use the block button.
+  const follow = ctx.page.getByRole("button", { name: /^Follow along ·/ });
+  if ((await ctx.page.locator('[data-surface="SetView"]').count()) > 0) {
+    await ctx.page.getByRole("button", { name: /back to brief/i }).first().click({ timeout: CLICK_TIMEOUT_MS }).catch(() => {});
+    await ctx.page.waitForTimeout(500);
+  }
+  if ((await follow.count()) === 0) {
+    throw new SkipFlow("this program's Brief has no guided follow-along block");
+  }
+  await follow.first().click({ timeout: CLICK_TIMEOUT_MS });
+  if (!(await guidedUp(ctx, 4000))) {
+    throw new SkipFlow("follow-along block did not open the guided player");
+  }
+}
+
 export const FLOWS: Flow[] = [
   {
     id: "session-log-set",
@@ -383,7 +435,7 @@ export const FLOWS: Flow[] = [
       await openBrief(ctx, { requireSetFlow: true });
       await ctx.capture("01-brief");
       await ctx.page
-        .getByRole("button", { name: /^(Start|Continue) —/ })
+        .getByRole("button", { name: START_RE })
         .first()
         .click({ timeout: CLICK_TIMEOUT_MS });
       try {
@@ -392,6 +444,11 @@ export const FLOWS: Flow[] = [
           .first()
           .waitFor({ state: "attached", timeout: 8000 });
       } catch {
+        if (await guidedUp(ctx, 1500)) {
+          throw new SkipFlow(
+            "guided follow-along session — Start opens the player, not SetView; covered by session-follow-along",
+          );
+        }
         throw new SkipFlow("Start opened no set screen (SetView never mounted)");
       }
       await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
@@ -1725,6 +1782,68 @@ export const FLOWS: Flow[] = [
       await ctx.tap("NoteSheet", /^Stop session/);
       await ctx.page.waitForTimeout(700);
       await ctx.capture("02-session-stopped");
+    },
+  },
+  {
+    id: "session-follow-along",
+    desc: "Brief → Start → guided player: log one set, skip the rest → Done screen",
+    destructive: true,
+    async run(ctx) {
+      await openGuided(ctx);
+      await ctx.capture("02-guided-ready");
+      const page = ctx.page;
+      const primary = page.getByRole("button", { name: /^(Start|Set done|Pause|Resume|Skip rest|Cancel)$/ });
+      // Log the first set honestly: Start → count-in → work. Rep work offers
+      // "Log all N"; a timed hold would take its real duration, so it is
+      // skipped instead (Skip never logs).
+      await primary.first().click({ timeout: CLICK_TIMEOUT_MS });
+      const logAll = page.getByRole("button", { name: /^Log all \d+/ });
+      let logged = false;
+      try {
+        await logAll.first().waitFor({ state: "visible", timeout: 8000 });
+        await ctx.capture("03-guided-working");
+        await logAll.first().click({ timeout: CLICK_TIMEOUT_MS });
+        logged = true;
+      } catch {
+        await ctx.capture("03-guided-working");
+      }
+      await page.waitForTimeout(SESSION_SETTLE_MS);
+      await ctx.capture("04-guided-after-first-set");
+      // Walk to the end with Skip set — it is always on screen.
+      const done = page.getByRole("heading", { name: /done$/i });
+      const skip = page.getByRole("button", { name: /^Skip set$/ });
+      for (let i = 0; i < 60; i++) {
+        if ((await done.count()) > 0) break;
+        if ((await skip.count()) === 0) break;
+        await skip.first().click({ timeout: CLICK_TIMEOUT_MS });
+        await page.waitForTimeout(250);
+      }
+      if ((await done.count()) === 0) {
+        await ctx.capture("05-guided-no-done");
+        throw new Error("guided player never reached its Done screen after skipping every step");
+      }
+      await ctx.capture("05-guided-done");
+      await ctx.check(
+        "guided-done-screen",
+        async () => (await page.getByRole("button", { name: /^Back to session$/ }).count()) > 0,
+        "Done screen offers Back to session" + (logged ? " (one set logged)" : " (nothing logged: first step was timed)"),
+      );
+    },
+  },
+  {
+    id: "session-follow-along-stop",
+    desc: "Brief → Start → guided player → This hurts → Stopped screen",
+    destructive: true,
+    async run(ctx) {
+      await openGuided(ctx);
+      await ctx.capture("02-guided-ready");
+      await ctx.page.getByRole("button", { name: /^This hurts$/ }).click({ timeout: CLICK_TIMEOUT_MS });
+      const stopped = ctx.page.getByRole("heading", { name: /^Stopped$/ });
+      await stopped.waitFor({ state: "visible", timeout: 5000 });
+      await ctx.capture("03-guided-stopped");
+      if ((await ctx.page.getByRole("link", { name: /Log how it feels/ }).count()) === 0) {
+        throw new Error("Stopped screen has no 'Log how it feels' link");
+      }
     },
   },
   {
