@@ -104,7 +104,7 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 | M-01 | Cloudflare Web Analytics ON (both domains) | H | A+O | S | compliance §3 |
 | M-02 | UTMs captured on landing → sign-up → user metadata; an SQL query for sign-ups and activations by campaign | H | A | M | money-tech | ✓ 6e89b95
 | M-03 ✓ ec8f21b | Ad spec: 3 ad sets, targeting 18+, interests/keywords only, safe wording, UTM links, creatives | H | A | M | compliance §2 |
-| M-04 | Review panel: 3 Sonnet lenses, 1 round, on the ads + landing (~150k tokens) | H | A | S | D8 |
+| M-04 ✓ e2156dc | Review panel: 3 Sonnet lenses, 1 round, on the ads + landing (~150k tokens) | H | A | S | D8 |
 | M-05 | Meta Business + Google Ads accounts, payment, upload, spend €150 (Meta €100 / Google €50) | H | O | M | O3 |
 | M-06 | Read the test after 3–5 days: sign-ups and activations per campaign | S | A+O | S | launch-plan |
 | M-07 | Consent Mode v2 + a consent banner, then conversion tags (never health events) | S | A | M | compliance §4 |
