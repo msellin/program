@@ -1,7 +1,14 @@
 # HANDOVER: launch-readiness → launch sprint (2026-10-27)
 
-For the session that runs the build sprint (new account). **This file holds every action. The other files are
-detail.** Read this, then the repo `CLAUDE.md`, then open a findings file only when an item points to it.
+For the session that runs the build sprint (new account).
+
+**Start here, in this order:**
+1. **`HACKATHON.md`:** the 1-day plan (timeline, 5 parallel lanes, cut order). Run the day from it.
+2. **`ACTION-POINTS.md`:** every action found (about 100, with IDs, who, when, effort, source). The lanes refer to its IDs.
+3. This file: the decisions, the owner/agent split and the rules.
+4. Repo `CLAUDE.md`.
+
+Open a findings file only when an item points to it. Sections 3–5 below are the earlier draft; ACTION-POINTS supersedes them where they differ.
 
 Non-negotiables from `CLAUDE.md`:
 - Run `cd next-app && npm run verify` before every commit. Enable the hook once with
@@ -115,6 +122,9 @@ section 3 above; everything else is tagged there.
   write. Save Sonnet output yourself.
 
 ## File map
+- `HACKATHON.md` · `ACTION-POINTS.md`: start here.
+- `findings-app.md` (verified app bugs) · `findings-design.md` (clean/intuitive decisions) · `personal-separation.md` (owner-specific parts + new safety flow) · `findings-evidence-angle.md` (research selling point, staged)
+- `audit/x01-x13` (exploratory app audit, fresh 2026-10-27 persona captures in `next-app/tests/e2e/artifacts/personas/`, gitignored) · `audit/g1-g3` (first run, support/data, email/PWA/SEO)
 - `launch-plan.md`: the plan this handover expands.
 - `findings-{market,video-coach,compliance,money-tech,product}.md`
 - `free-tier-design.md` · `roadmap-reconciliation.md`

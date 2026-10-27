@@ -23,7 +23,12 @@
 - [x] free-tier-design.md (free tier + 14-day Pro reverse trial)
 - [x] Full roadmap reconciliation (Haiku ×5 → roadmap-reconciliation.md)
 - [x] HANDOVER.md self-contained (all decisions, owner steps, B1–B13)
-- [ ] Owner answers HANDOVER §1 D1–D10  ← waiting
+- [x] Owner agreed D1–D10 (2026-10-27)
+- [x] Gap audits g1–g3, Lighthouse, OG/meta checks
+- [x] Fresh persona run (23/24 pass) + exploratory app audit x01–x13 (Haiku) + findings-app (Sonnet verify) + findings-design (design lead)
+- [x] personal-separation.md, findings-evidence-angle.md
+- [x] ACTION-POINTS.md (master register) + HACKATHON.md (1-day roadmap)
+- [ ] Hackathon on the new account  ← next
 - [ ] Build sprint B1-B11 (new account session)
 
 ## (superseded) Phase 0 — capture

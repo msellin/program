@@ -45,7 +45,11 @@ hypotheses → 3 Haiku agents researching the video-coach market → `findings-v
 Lean audit done → `launch-plan.md` + `HANDOVER.md`. Free open beta today, 3 programs advertised, cookieless
 analytics + UTMs, no pixel. B1 (owner clinical JSON public at app.terav.fit/data/*) is the top blocker.
 
+## Final state (2026-10-27)
+
+Audit complete, including the exploratory app audit on fresh captures. Deliverables: `HACKATHON.md` (1-day roadmap),
+`ACTION-POINTS.md` (master register), `HANDOVER.md`. The owner agreed all decisions. No product code changed.
+
 ## Next steps
 
-1. Owner answers `launch-plan.md` §D (9 one-line decisions).
-2. Build sprint B1-B11 in the new-account session, starting from `HANDOVER.md`.
+1. New account session: read `HACKATHON.md`, run the day.
