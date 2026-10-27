@@ -86,6 +86,10 @@ export const PROGRAMS: LandingProgram[] = [
     slug: "concurrent-strength-maintenance",
     name: "Concurrent-Strength Maintenance",
     tagline: "Add cardio. Keep the squat.",
+    prerequisite: {
+      text: "Start here if you already lift and have a rower, bike or erg. New to lifting or pull-ups?",
+      link: { slug: "first-strict-pullup", label: "Start with the pull-up program" },
+    },
     domain: "concurrent",
     domainLabel: "Concurrent",
     status: "AVAILABLE",
