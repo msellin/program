@@ -5,7 +5,6 @@ import { useStore } from "@/lib/useStore";
 import { announce } from "@/lib/announce";
 import { selectProposals } from "@/lib/proposals/select";
 import { ProposalCard } from "./ProposalCard";
-import { ProposalStickyActionBar } from "./ProposalStickyActionBar";
 import type { Program } from "@/lib/schemas";
 
 /**
@@ -120,14 +119,14 @@ export function ProposalStack({ program, date }: { program: Program | null | und
       <section
         aria-label="Engine proposals"
         className="space-y-3"
-        style={{ paddingBottom: "calc(128px + env(safe-area-inset-bottom))" }}
       >
-        <ProposalCard proposal={topProposal} date={date} showInlineActions={false} />
+        {/* A-UX-01: nothing sticky but the nav — every proposal carries its own
+            Accept/Ignore inline, directly under the hero. */}
+        <ProposalCard proposal={topProposal} date={date} />
         {rest.map((p) => (
           <ProposalCard key={p.id} proposal={p} date={date} />
         ))}
       </section>
-      <ProposalStickyActionBar proposal={topProposal} date={date} />
     </>
   );
 }

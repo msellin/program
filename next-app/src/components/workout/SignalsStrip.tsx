@@ -191,10 +191,9 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
             break;
           }
         }
-        if (!found || daysSince >= 3) {
-          const label = found
-            ? `Morning check overdue (${daysSince}d)`
-            : "Morning check overdue";
+        // A-UX-13: someone who has never checked is not "overdue" on day 2.
+        if (found && daysSince >= 3) {
+          const label = `Morning check overdue (${daysSince}d)`;
           list.push({ id: "check-overdue", tone: "amber", label });
         }
       }

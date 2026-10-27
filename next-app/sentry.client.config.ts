@@ -60,6 +60,8 @@ if (DSN) {
       integrations: [
         Sentry.feedbackIntegration({
           colorScheme: "system",
+          // A-UX-01: no floating trigger. Feedback lives in You (/feedback).
+          autoInject: false,
           showBranding: false,
           // Icon-only trigger. The default "Report a Bug" pill is 145x50 and
           // sits on top of everything: on a 393px phone that is over a third

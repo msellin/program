@@ -15,7 +15,7 @@ import { ArrowRight } from "lucide-react";
  * one-CTA framing makes that call load-bearing rather than one option
  * among many.
  */
-export function Day1EmptyState() {
+export function Day1EmptyState({ sessionHref }: { sessionHref?: string }) {
   return (
     <section
       aria-labelledby="day1-title"
@@ -28,16 +28,27 @@ export function Day1EmptyState() {
         One focus, sharpened every session.
       </h2>
       <p className="text-[14px] text-muted leading-relaxed">
-        Starts with a morning check — one minute of tapping calibrates today&apos;s load.
-        Terav writes the focus arc; the rest of your week is still yours.
+        {sessionHref
+          ? "Terav writes the focus arc; the rest of your week is still yours. Start with your first session — a morning check is optional."
+          : "Starts with a morning check — one minute of tapping calibrates today's load. Terav writes the focus arc; the rest of your week is still yours."}
       </p>
-      <Link
-        href="/check/"
-        className="inline-flex items-center gap-1.5 min-h-[44px] px-4 py-2 rounded bg-bronze text-ground font-mono text-[11px] uppercase tracking-wider hover:bg-bronze-hover"
-      >
-        Open morning check
-        <ArrowRight size={14} />
-      </Link>
+      <div className="flex flex-wrap items-center gap-x-4">
+        <Link
+          href={sessionHref ?? "/check/"}
+          className="inline-flex items-center gap-1.5 min-h-[44px] px-4 py-2 rounded bg-bronze text-ground font-mono text-[11px] uppercase tracking-wider hover:bg-bronze-hover"
+        >
+          {sessionHref ? "Start your first session" : "Open morning check"}
+          <ArrowRight size={14} />
+        </Link>
+        {sessionHref ? (
+          <Link
+            href="/check/"
+            className="min-h-[44px] inline-flex items-center text-[13px] text-slate hover:text-ink"
+          >
+            Do a morning check first
+          </Link>
+        ) : null}
+      </div>
     </section>
   );
 }

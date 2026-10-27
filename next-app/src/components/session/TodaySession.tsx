@@ -143,8 +143,17 @@ export function TodaySession({
   if (error) {
     return (
       <div className="mt-8 rounded border border-red bg-surface p-4">
-        <h2 className="mb-2 text-lg font-semibold">Couldn&apos;t load program data</h2>
-        <p className="text-sm text-muted">{error}</p>
+        <h2 className="mb-2 text-lg font-semibold">Couldn&apos;t load your program</h2>
+        <p className="text-sm text-muted">
+          Check your connection and reload. Your logs are safe.
+        </p>
+        <button
+          type="button"
+          onClick={() => window.location.reload()}
+          className="mt-3 min-h-[44px] px-4 rounded border border-line-strong text-[14px] text-ink"
+        >
+          Reload
+        </button>
       </div>
     );
   }
@@ -309,7 +318,15 @@ export function TodaySession({
       {(() => {
         const noCheckToday = !logs[activeDate]?.symptoms;
         if (!hasHistory && noCheckToday && activeDate === todayISO()) {
-          return <Day1EmptyState />;
+          return (
+            <Day1EmptyState
+              sessionHref={
+                allBlocks.length > 0 && primary?.slug
+                  ? `/session/${primary.slug}?date=${activeDate}`
+                  : undefined
+              }
+            />
+          );
         }
         return null;
       })()}
@@ -317,7 +334,8 @@ export function TodaySession({
       {!isPastProgramEnd(primary, activeDate, userProfile) ? (
         <>
           <ProposalStack program={primary} date={activeDate} />
-          <HeroStateCard date={activeDate} />
+          {/* A-UX-03: no readiness hero ("Workout ready") on a rest day. */}
+          {allBlocks.length > 0 ? <HeroStateCard date={activeDate} /> : null}
           <SignalsStrip program={primary} date={activeDate} />
           <RetestReminder program={primary} profile={userProfile} activeDate={activeDate} />
         </>

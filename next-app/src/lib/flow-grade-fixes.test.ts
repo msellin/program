@@ -165,7 +165,7 @@ describe("Bug #3 — day one has one thing to do", () => {
     // "Rest day" copy underneath.
     expect(fs.existsSync(path.resolve(process.cwd(), "src/components/workout/Day1EmptyState.tsx"))).toBe(true);
     const today = read("components/session/TodaySession.tsx");
-    expect(today).toContain("<Day1EmptyState />");
+    expect(today).toContain("<Day1EmptyState");
   });
 });
 
