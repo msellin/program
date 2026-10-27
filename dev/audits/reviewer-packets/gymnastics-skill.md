@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: efc842ea4257baee -->
+<!-- source-fingerprint: c1dcd7c1d6ab845e -->
 
 ## What we are asking
 
@@ -235,7 +235,7 @@ Printed against the questions above so you can see which are actually detectable
 
 ### Phases and what each is for
 
-- **Week 0 — Exits before line** (1 wks) — Learn to fall on purpose before you learn to hold vertical. Fear-of-falling gates handstand progress more than physical capacity for most self-taught users.
+- **Week 0 — Exits before line** (1 wks) — Learn to fall on purpose before you learn to hold vertical. Fear-of-falling gates handstand progress more than physical capacity for most self-taught users. This is one week and the plan moves on after it. If exits still don't feel safe, keep repeating these drills before any freestand attempt, or book a session or two with a coach.
 - **Weeks 1-2 — Wrist prep + Kinoshita position ladder (blocked practice)** (2 wks) — Build wrist load tolerance base + first exposure to the Kinoshita position 1 and 2 holds. No wall handstand attempts yet for Tier A.
   - Method note: Blocked practice (Shea & Morgan 1979, Wulf & Shea 2002): one drill focus per session. Reduces cognitive load in acquisition.
 - **Weeks 1-4 — Wall handstand established + first freestand attempts** (4 wks) — Consolidate the wall handstand shape, add balance-search (belly-to-wall), begin freestand kick-up attempts from week 3.

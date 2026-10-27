@@ -714,22 +714,14 @@
       "starts": "2026-01-05",
       "ends": "2026-01-11",
       "duration_weeks": 1,
-      "goal": "Learn to fall on purpose before you learn to hold vertical. Fear-of-falling gates handstand progress more than physical capacity for most self-taught users.",
+      "goal": "Learn to fall on purpose before you learn to hold vertical. Fear-of-falling gates handstand progress more than physical capacity for most self-taught users. This is one week and the plan moves on after it. If exits still don't feel safe, keep repeating these drills before any freestand attempt, or book a session or two with a coach.",
       "rationale": "Fear-of-falling literature: Adkin & Frank 2000 (as postural threat rises, the nervous system tightens postural control - centre-of-pressure amplitude down and frequency up in 62 healthy young adults standing quietly on a raised platform; this study recorded centre-of-pressure only, no muscle activity, and there is no 2002 companion paper in this library); Carpenter 2001 (under postural threat, eight quiet standers adopted a stiffening strategy, with significant changes in kinematic, kinetic and EMG variables and anterior-posterior stiffness 27.5% higher than at low threat - a different balance strategy, not a measured decrement, and elevation rather than anxiety was the manipulated variable). Corrected 2026-09-05: the muscle-activation claim had been attributed to Adkin, which measured none, and Carpenter had been read as showing that anxiety degrades balance; both studied quiet bipedal standing, so treating them as evidence about falling out of an inverted handstand is an engineering choice, not a licensed transfer; Hardy 1996 was cited here for a catastrophe effect and was WITHDRAWN 2026-09-05 — that study is a null result in eight golfers putting, concluding it offers no clear evidence for either model; Bandura (mastery experiences on bail-outs reduce threat perception on the primary skill — you don't reduce fear by walking more). Gymnastics/circus pedagogy (USA Gymnastics, NICA, Emmet Louis, Yuval Ayalon) treats cartwheel exit / pirouette / tuck forward roll as pre-requisite to freestanding, not optional. Phase 0 is deliberately short — one week of exit drills, not a rehab arc.",
       "blocks": [
         "block_bail_wall_cartwheel_exit",
         "block_bail_quarter_pirouette",
         "block_bail_tuck_forward_roll",
         "block_bail_mat_falls"
-      ],
-      "retest_gate": {
-        "criteria_any": [
-          "self_report: bail_out_confidence >= 6 for 2 consecutive days",
-          "coach_or_video_evidence: successful pirouette exit or cartwheel exit demonstrated"
-        ],
-        "on_success": "Advance to phase_1_foundation_prep. bail_out_confidence remains a daily log field the engine consults.",
-        "on_fail": "Repeat Phase 0 for another week. If fear persists >2 weeks, the intake nudges the user to work with a coach for 1-2 sessions — this is the pattern that reliably breaks the fear cycle (see rationale)."
-      }
+      ]
     },
     {
       "id": "phase_1_foundation_prep",
@@ -1572,12 +1564,12 @@
     },
     "derived_state": "green|amber|red",
     "notes": "string",
-    "derived_state_rule": "red if wrist_symptom_score > 6 OR shoulder_symptom_score > 3 OR new_acute_injury; amber if wrist_symptom_score 4-6 OR life_load >= 7; else green If bail_out_confidence <= 3, the day defers walking attempts to wall-supported holds regardless of symptom score.",
+    "derived_state_rule": "red if wrist_symptom_score > 6 OR shoulder_symptom_score > 3 OR new_acute_injury; amber if wrist_symptom_score 4-6 OR life_load >= 7; else green",
     "bail_out_confidence": {
       "type": "int",
       "range": "0-10",
       "label": "Bail-out confidence today",
-      "hint": "How confident are you that you can exit an over-tipped handstand safely if it goes wrong right now? 0 = 'terrified', 10 = 'certain'. Low scores gate the engine off walking attempts today.",
+      "hint": "How confident are you that you can exit an over-tipped handstand safely if it goes wrong right now? 0 = 'terrified', 10 = 'certain'.",
       "optional": true
     }
   },

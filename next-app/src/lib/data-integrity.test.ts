@@ -1088,14 +1088,13 @@ describe("programs do not author top-level keys the runtime discards", () => {
      * change nothing and believe otherwise. `phase-zero-gate.test.ts` keeps
      * the record and asserts the surviving gate behaves.
      *
-     * `retest_gate` is a different thing and genuinely unimplemented: it
-     * declares how a user EXITS phase 0 — "bail_out_confidence >= 6 for 2
-     * consecutive days", and a nudge toward a coach if fear persists past two
-     * weeks. Phases here are date-driven and phase 0 is one authored week, so
-     * none of it happens and there is no `bail_out_confidence` field for it to
-     * read. Building that is a design decision, not a rename.
+     * `retest_gate` was DELETED on 2026-10-27 (SF-05). It declared how a
+     * user EXITS phase 0 ("bail_out_confidence >= 6 for 2 consecutive days")
+     * and nothing could enforce it: phases are date-driven and no such log
+     * field exists. Phase 0's goal now says plainly that it is one week and
+     * what to do if exits still feel unsafe. Building a real exit gate needs
+     * a confidence input first — a design decision, not a rename.
      */
-    "handstand-walk": ["phases[].retest_gate"],
   };
 
   it.each(programs.map((p) => p.id))("%s authors nothing dropped at ANY depth", (id) => {
