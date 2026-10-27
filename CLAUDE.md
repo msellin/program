@@ -190,6 +190,11 @@ artifact depends on exists:
    by a new function is covered on the same commit. Names only — wrangler
    reports "Value Encrypted" and the script never holds a value.
 
+After the app deploy, CI also purges the terav.fit edge cache for every `/data/*` URL and fails if the
+removed personal files (`clinical-context`, `log`, `program`, `open-questions`) still return 200
+(2026-10-27: deleted from the deploy, yet served from the edge cache for hours). The
+`CLOUDFLARE_API_TOKEN` secret needs Zone → Cache Purge on terav.fit for this.
+
 Gate 3 exists because of a specific failure. On 2026-09-01 a Sentry DSN was
 added to a gitignored `.env.local`, verified by grepping the local `out/`
 directory, and reported as live. Production had never received the build —
