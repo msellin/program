@@ -3,7 +3,7 @@
 - [x] Read brief + CLAUDE.md
 - [x] Commit brief
 - [x] Write plan / context / tasks
-- [ ] Owner go-ahead on the audit plan  ← in progress (waiting)
+- [x] Owner go-ahead (lean audit, 2026-10-27)
 
 ## Phase M — market (Haiku ×23 → Sonnet synthesis)
 - [x] 23 market/<slug>.md
@@ -15,10 +15,12 @@
 
 ## LEAN AUDIT (revised 2026-10-27)
 - [x] screens/ — 14 live shots
-- [ ] Tier 1: audit/h01-h18 (Haiku ×18)  ← in progress
-- [ ] Tier 2: findings-{compliance,money-tech,product}.md (Sonnet ×3)
-- [ ] launch-plan.md (Sonnet planner)
-- [ ] HANDOVER.md
+- [x] Tier 1: audit/h01-h18 (Haiku ×18)
+- [x] Tier 2: findings-{compliance,money-tech,product}.md (Sonnet ×3)
+- [x] launch-plan.md (written by orchestrator; planner agent skipped — no independent review)
+- [x] HANDOVER.md
+- [ ] Owner answers launch-plan.md §D  ← waiting
+- [ ] Build sprint B1-B11 (new account session)
 
 ## (superseded) Phase 0 — capture
 - [ ] Persona run against app.terav.fit

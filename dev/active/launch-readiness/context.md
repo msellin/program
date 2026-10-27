@@ -40,7 +40,12 @@ Core idea = improve weaknesses, CrossFit-leaning, research/whitepaper-based. Pai
 coach (plan in `dev/active/video-analysis/`, spike passed 2026-09-01, unbuilt). Owner ideas are
 hypotheses → 3 Haiku agents researching the video-coach market → `findings-video-coach.md` verdict.
 
+## Audit result (2026-10-27)
+
+Lean audit done → `launch-plan.md` + `HANDOVER.md`. Free open beta today, 3 programs advertised, cookieless
+analytics + UTMs, no pixel. B1 (owner clinical JSON public at app.terav.fit/data/*) is the top blocker.
+
 ## Next steps
 
-1. Owner go-ahead on Phase 0 capture + Phase 1 audit.
-2. Phase 0 capture.
+1. Owner answers `launch-plan.md` §D (9 one-line decisions).
+2. Build sprint B1-B11 in the new-account session, starting from `HANDOVER.md`.
