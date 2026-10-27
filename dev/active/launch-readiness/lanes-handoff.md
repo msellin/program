@@ -21,3 +21,10 @@ The owning lane picks it up, does it in its own commit, and marks the line `✓ 
   offer today's planned session as-is; show "Rest" first, then `alternative.label` with `alternative.blocks` (render them
   like any program block). `alternative` is null on a red flag (night pain / gait change / painful click) — rest only.
   Every program declares `red_day` in its JSON (test: `red-day.test.ts`). Lane 4 does not touch session UI.
+- [lane 4 → lane 2b] **G-01 schedule side exists:** `firstSessionOffer(store: Store, slug: string, todayISO: string): FirstSessionOffer | null`
+  in `next-app/src/lib/engine/first-session.ts` → `{ fromDate, blockInstanceIds, blockTemplateIds }`. Non-null only when the
+  program started < 7 days ago, nothing is done yet, today has nothing on it, and a planned session exists within 7 days.
+  **Today CTA should read: "Start your first session now"** (sub-line: "Your plan's first session is <weekday of fromDate>.
+  Do it today instead?"). On tap: `moveWholeDay(offer.fromDate, todayISO, FIRST_SESSION_MOVE_REASON)` (existing store
+  action), then open today's session. Pulling only the first session forward never tightens spacing to the next one.
+  No change to existing users' calendars.
