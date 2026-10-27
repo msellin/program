@@ -26,8 +26,12 @@ Non-negotiables from `CLAUDE.md`:
 - **Confirmed live:** `app.terav.fit/data/{clinical-context,open-questions,log,program}.json` and
   `programs/anterior-hip-rebuild.json` are public. That is the owner's clinical record. **Do B1 first.**
 - **Never checked:** Supabase dashboard, Cloudflare Analytics toggle, ad accounts, Meta's health classification.
-- **Covered since:** a stranger's first run, a red day and 375/393 viewports (`screens/gaps/`, `audit/gap-*`). Still
-  open: red against a real scheduled session (G-14).
+- **Covered since:** a stranger's first run, a red day and 375/393 viewports (`screens/gaps/`, `audit/gap-*`).
+- **⚠ G-14, red against a real session:** checked 2026-10-27 on `e2e-persona-strength` (Zone 2 bike today). A red
+  check (low back, severe) shows "Back off" + Escalate on Today, but **the session itself is unchanged and fully
+  loggable**: the red gate is advice only (G-07, confirmed). **Still to do in hackathon QA:** the same check on a
+  *loaded* pull-up or handstand session. `launch-gaps.spec.ts` part B picks whichever advertised-program persona has
+  a session that day. Re-run it after lanes 2a and 4 land, and expect red = hold + an alternative.
 - **Deploys fixed (2026-10-27):** CI had failed since 2026-10-20. It's green again (run 40489982992), and production
   serves the latest main, BUG-48 included.
 - **The Haiku audits make mistakes.** Fix only what you verified; the Sonnet findings say what they re-checked.
@@ -113,6 +117,36 @@ parallel lanes.
 ## 5. Roadmap reconciliation
 See `roadmap-reconciliation.md` (merged from `roadmap/r1-r5`). Its BLOCKS-ADS-TODAY items are folded into
 section 3 above; everything else is tagged there.
+
+## Test users (for auditing and testing in the hackathon)
+All test accounts are `e2e-*@example.test` users in production Supabase.
+- **Safety fence:** `next-app/tests/e2e/setup-test-user.ts` refuses any email without the `e2e-` prefix and never
+  touches the owner's real uid.
+- **Credentials:** the password is in `tests/e2e/harness/personas.ts` (`DEFAULT_PASSWORD`). Never paste it in chat.
+- **Signing in:** the harness signs users in from code. Don't type test credentials into the live site by hand;
+  use the specs.
+
+| Purpose | User | Program | State (from the 2026-10-27 run) |
+|---------|------|---------|-------------------------------|
+| **Stranger first run** | `e2e-launch-firstrun@example.test` | none → first-strict-pullup | **Reset to empty** by `launch-gaps.spec.ts` part A on every run |
+| **Red day vs a real session (G-14)** | chosen automatically from the six below | advertised programs | Part B uses the first one with a loadable session **on the day it runs** (the schedule is weekday-based) |
+| Pull-up, mid-arc | `e2e-persona-pullup@example.test` | first-strict-pullup | day 45 |
+| Pull-up, finished arc | `e2e-persona-pullup-fast@example.test` | first-strict-pullup | day 60; Today shows "You finished" + "Pick your next focus" |
+| Pull-up with elbow pain | `e2e-persona-pullup-elbow@example.test` | first-strict-pullup | day 21, elbow symptoms |
+| Strength + cardio | `e2e-persona-strength@example.test` | concurrent-strength-maintenance | day 30. **A red check (low back, severe) was saved on 2026-10-27 by this audit** |
+| Strength + cardio, long / slow / erratic | `e2e-persona-strength-long`, `-strength-slow`, `-erratic@example.test` | concurrent-strength-maintenance | days 400 / 60 / 45 |
+| Handstand | `e2e-persona-handstand`, `-handstand-fast@example.test` | handstand-walk | days 45 / 60 |
+| Muscle-up (+ elbow) | `e2e-persona-muscleup`, `-muscleup-elbow@example.test` | muscle-up | days 60 / 30. **muscle-up-elbow fails the harness** (a deferred item leaks) |
+| Engine / rowing / mobility / multitrack / retest / graduate | `e2e-persona-engine*`, `-rowing*`, `-mobility`, `-multitrack`, `-retest`, `-graduate@example.test` | the other programs | various |
+| ⚠ Hip program | `e2e-persona-concurrent`, `-recover@example.test` | **anterior-hip-rebuild** (the owner's personal track) | `persona-concurrent` is misnamed: it is NOT strength + cardio |
+
+**Commands (from `next-app`):**
+- **Refresh every persona** (it resets each user, re-simulates and captures every screen, about 30 min):
+  `npm run e2e:personas`. Output goes to `tests/e2e/artifacts/personas/` (gitignored, on this machine only).
+- **The launch gaps** (first run, red day on a session, 375/393 viewports, about 2 min):
+  `npx playwright test -c tests/e2e/playwright.config.ts launch-gaps.spec.ts --workers=1`.
+  Output goes to `dev/active/launch-readiness/screens/gaps/` (committed: the baseline to compare against).
+- **The owner's real account:** never use it for tests. It's the only account with the hip track and real data.
 
 ## 6. How the owner works (keep it)
 - **Owner-only:** dashboards, provider sign-ups, ad spend, approvals, sending messages.

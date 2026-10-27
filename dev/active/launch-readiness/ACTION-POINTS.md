@@ -131,7 +131,7 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 ## 10. Product, roadmap and docs
 | ID | Action | When | Who | Effort | Source |
 |----|--------|------|-----|--------|--------|
-| R-01 | "Next focus" offer at program end (goal-reached churn) | S | A | M | market, free-tier |
+| R-01 | "Next focus" offer at program end (goal-reached churn). **Partly exists:** a finished arc shows "You finished" + "Pick your next focus" + repeat/extend (seen on pullup-fast); make it the Pro hook and check its numbers ("0 reps, +0" after 8 weeks under "Nice.") | S | A | M | market, free-tier |
 | R-02 | Engine gaps: off-plan strength and external load reach proposals; load softening on 7/9 programs; 16 UTC date sites | S | A | L | roadmap |
 | R-03 | QA-1 drift: Ferrari (handstand), Das (rowing) still present | S | A | S | roadmap |
 | R-04 | HYROX station-focus program; Concept2 import | L | A | L | market |
@@ -148,11 +148,11 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 | G-04 | **An untouched morning check saves a green day** (all defaults 0; Save is never disabled; `check/page.tsx:62-74,403`). Unanswered must not mean "fine" | H | A | S | 2b | gap-B |
 | G-05 | After the first check, the "How Terav reads you" onboarding modal covers Today and hides the red verdict (`OnboardingRunner.tsx:72-103`) | H | A | S | 2b | gap-B, gap-C |
 | G-06 | **A tier-advance suggestion shows on a red day** ("advance to Tier D"); `selectTierAdvance` has no state check (`lib/proposals/select.ts:280-300`) | H | A | S | 4 | gap-B |
-| G-07 | **Red doesn't change the session or plan** for pull-up ("Open session" ungated; the 10% cut is on the TM path only, `suggest.ts:265-271`). Unverified on a training day (today was a rest day): test it, then make red = hold + the program's alternative | H | A | M | 2a + 4 | gap-B |
+| G-07 | **Red doesn't change the session or plan** ("Open session" ungated; the 10% cut is on the TM path only, `suggest.ts:265-271`). **Confirmed on a real session 2026-10-27** (CSM: a low-back-severe red, and the bike session is unchanged). Make red = hold + the program's alternative | H | A | M | 2a + 4 | gap-B |
 | G-08 | Red copy has no next step; "see a clinician" exists only inside the Why/Cited sheets; a night-pain red has no referral line | H | A | S | 2b | gap-B |
 | G-09 | **Plan says "No phase covers this week" in every new user's first week.** Checked 2026-10-27: `plan/page.tsx:216` resolves the phase for the viewed week's Monday (`activePhaseFor(program, iso(viewedMon))`), which falls before a mid-week `started_at`. The program files' calendar dates are fine (`shiftedPhases` rebases them; Today correctly says Week 1 of 4). Fix: use the later of Monday and started_at, or any scheduled day in the week | H | A | S | 4 | gap-B, verified |
 | G-10 | Check screen: the sticky Save covers the last region row at 375; the feedback bubble sits on the CTA (with A-UX-01) | H | A | S | 2b | gap-B, gap-C |
 | G-11 | User-facing copy "no LLM, just a keyword parser": cut | H | A | S | 2b | gap-B |
 | G-12 | The scale anchors (4–6 ache, 7–10 pause) disagree with the gate (amber 4–5, red >5) and the chip labels; align the copy to the gate, never the reverse | S | A | S | — | gap-B |
 | G-13 | The Record sheet clips the nav icons; "/" at 393 resolved to /off-plan in the capture (a redirect quirk) | S | A | S | — | gap-C |
-| G-14 | `launch-gaps.spec.ts` part B: dismiss the onboarding modal and run on a training day, so red is tested against a real session | H (QA) | A | S | QA | this run |
+| G-14 | Red against a real session. **Spec done 2026-10-27:** part B picks the first advertised-program persona with a loadable session that day and dismisses onboarding. **Result on CSM (Zone 2 bike):** Today says "Back off", but the session is unchanged and loggable (confirms G-07). **Still to do:** a loaded pull-up/handstand day, after lanes 2a + 4 | H (QA) | A | S | QA | screens/gaps/B-red-day |

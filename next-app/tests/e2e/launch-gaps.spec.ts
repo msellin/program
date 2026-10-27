@@ -8,7 +8,9 @@ import { resetTestUser } from "./setup-test-user";
  * persona sweep never showed:
  *   A. a stranger's first run (signed-out landing → sign-up page → fresh
  *      account → programs → intake → day 1 → first session),
- *   B. a red day (check saved with a red region score),
+ *   B. a red day against a really scheduled session (check saved with a red
+ *      region score; the first advertised-program persona with a session
+ *      today is used, since the schedule is weekday-based),
  *   C. real-viewport screenshots at 375×667 and 393×852 (not full-page, so
  *      fixed/sticky bars show where a phone actually draws them).
  *
@@ -139,27 +141,91 @@ test("A · stranger first run at 375×667", async ({ page }) => {
   fs.writeFileSync(path.join(dir("A-first-run"), "notes.md"), notes.join("\n"));
 });
 
-test("B · red day at 375×667", async ({ page }) => {
-  test.setTimeout(300_000);
+// Advertised-program personas, tried in order; the schedule is weekday-based,
+// so whichever has a session today is the one red is tested against (G-14).
+// Their state comes from the last `npm run e2e:personas` run.
+const RED_DAY_CANDIDATES = [
+  ["e2e-persona-pullup-fast@example.test", "first-strict-pullup"],
+  ["e2e-persona-pullup@example.test", "first-strict-pullup"],
+  ["e2e-persona-strength@example.test", "concurrent-strength-maintenance"],
+  ["e2e-persona-strength-slow@example.test", "concurrent-strength-maintenance"],
+  ["e2e-persona-handstand@example.test", "handstand-walk"],
+  ["e2e-persona-handstand-fast@example.test", "handstand-walk"],
+] as const;
+
+async function dismissOnboarding(page: Page): Promise<void> {
+  const skip = page
+    .getByRole("button", { name: /^skip setup$/i })
+    .or(page.getByRole("link", { name: /^skip setup$/i }));
+  await skip.first().click({ timeout: 3000 }).catch(() => {});
+}
+
+async function hasSessionToday(page: Page, slug: string): Promise<boolean> {
+  await page.goto(`/session/${slug}/`);
+  await dismissOnboarding(page);
+  await page.waitForTimeout(1500);
+  const text = await page.locator("main").innerText({ timeout: 10_000 }).catch(() => "");
+  // A finished program, a rest day or an empty day are all "no session to load".
+  if (/rest day|no session scheduled|you finished|end this program/i.test(text)) return false;
+  return /today'?s session|log this session|start session|open session|\bset 1\b/i.test(text);
+}
+
+test("B · red day against a scheduled session at 375×667", async ({ page }) => {
+  test.setTimeout(420_000);
   await page.setViewportSize(SMALL);
   const notes: string[] = [];
-  await signIn(page, FRESH_EMAIL);
+  let chosen: (typeof RED_DAY_CANDIDATES)[number] | undefined;
+  for (const candidate of RED_DAY_CANDIDATES) {
+    await signIn(page, candidate[0]);
+    if (await hasSessionToday(page, candidate[1])) {
+      chosen = candidate;
+      break;
+    }
+    notes.push(`${candidate[0]}: no loadable session today (rest day or finished), skipped\n`);
+  }
+  if (!chosen) {
+    notes.push("No advertised-program persona has a session today. Re-run `npm run e2e:personas` or try tomorrow.\n");
+    fs.writeFileSync(path.join(dir("B-red-day"), "notes.md"), notes.join("\n"));
+    test.skip(true, "no candidate has a session today");
+    return;
+  }
+  const [email, slug] = chosen;
+  notes.push(`Red-day user: ${email} (${slug}), session scheduled today\n`);
+  await shot(page, "B-red-day", "00-session-before-check", notes);
+  await page.goto("/");
+  await dismissOnboarding(page);
+  await shot(page, "B-red-day", "00b-today-before-check", notes);
+
   await page.goto("/check/");
-  await page.locator('[role="radiogroup"][aria-label$="severity"]').first().waitFor({ timeout: 20_000 });
+  await dismissOnboarding(page);
+  const group = page.locator('[role="radiogroup"][aria-label$="severity"]').first();
+  await group.waitFor({ timeout: 20_000 });
   await shot(page, "B-red-day", "01-check-empty", notes);
-  await page.locator('[role="radiogroup"][aria-label$="severity"]').first().locator('[role="radio"]').last().click();
+  await group.locator('[role="radio"]').last().click();
   await shot(page, "B-red-day", "02-check-red-selected", notes);
   await page.getByRole("button", { name: /save check|update check/i }).click();
+  await page.waitForTimeout(1500);
+  await dismissOnboarding(page);
   await shot(page, "B-red-day", "03-check-saved", notes);
+
   await page.goto("/");
+  await dismissOnboarding(page);
   await shot(page, "B-red-day", "04-today-red", notes);
   await page.mouse.wheel(0, 4000);
   await shot(page, "B-red-day", "05-today-red-bottom", notes);
-  await page.goto("/session/first-strict-pullup/");
+  await page.goto(`/session/${slug}/`);
+  await dismissOnboarding(page);
   await shot(page, "B-red-day", "06-session-on-red-day", notes);
+  // Can the user still start loading the painful area? Press the session's primary start.
+  const start = page.getByRole("button", { name: /^(start|begin|continue|open session|log this session)/i }).first();
+  if (await start.count()) {
+    await start.click().catch(() => {});
+    await shot(page, "B-red-day", "07-session-started-on-red", notes);
+  } else {
+    notes.push("No start button on the red-day session screen.\n");
+  }
   await page.goto("/plan/");
-  await shot(page, "B-red-day", "07-plan-on-red-day", notes);
-  fs.writeFileSync(path.join(dir("B-red-day"), "notes.md"), notes.join("\n"));
+  await shot(page, "B-red-day", "08-plan-on-red-day", notes);
 });
 
 test("C · real-viewport sweep, 375 and 393", async ({ page }) => {
