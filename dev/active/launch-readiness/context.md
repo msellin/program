@@ -27,7 +27,14 @@
 - Owner 2026-10-27: everything lands in this repo folder; cheaper models (no Opus agents); 23 Haiku
   web-search agents on competitors + market, answering "market / add / pivot".
 
+## Market result (2026-10-27)
+
+`findings-market.md`: **as-built, no pivot signal, evidence WEAK** (adjacent apps get paid; no demand test
+for Terav itself). BLOCKS-ADS adds: lead message = per-change why + Accept; clear trial-end/cancel; read
+Meta/Google primary health-ad policy. BEFORE-SCALE: post-goal next-focus path (H&F first renewal ~30%),
+Concept2 import, annual vs one-off framing. €150 test ≈ 4-30 trials: shows cost per trial, not conversion.
+
 ## Next steps
 
-1. Owner go-ahead (or changes) on `plan.md`.
+1. Owner go-ahead on Phase 0 capture + Phase 1 audit.
 2. Phase 0 capture.

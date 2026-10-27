@@ -6,8 +6,8 @@
 - [ ] Owner go-ahead on the audit plan  ← in progress (waiting)
 
 ## Phase M — market (Haiku ×23 → Sonnet synthesis)
-- [ ] 23 market/<slug>.md  ← in progress (20 running; hybrid-hyrox, retention-churn, joint-prehab-apps queued — 20-agent concurrency cap)
-- [ ] findings-market.md (market / add / pivot verdict)
+- [x] 23 market/<slug>.md
+- [x] findings-market.md — verdict as-built, evidence WEAK; adds: lead with why+Accept, trial/cancel clarity, post-goal path
 
 ## Phase 0 — capture
 - [ ] Persona run against app.terav.fit
