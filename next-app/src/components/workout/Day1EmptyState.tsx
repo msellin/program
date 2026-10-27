@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { useStore } from "@/lib/useStore";
 import { today as todayISO } from "@/lib/utils";
 import { firstSessionOffer, FIRST_SESSION_MOVE_REASON } from "@/lib/engine/first-session";
+import { Button } from "@/components/ui/Button";
 
 /**
  * Day-1 empty-state card. Fix for Bug #3 from the 2026-08-17 flow-review
@@ -42,30 +43,20 @@ export function Day1EmptyState({ sessionHref, slug }: { sessionHref?: string; sl
       </p>
       <div className="flex flex-wrap items-center gap-x-4">
         {offer ? (
-          <button
-            type="button"
-            onClick={() => moveWholeDay(offer.fromDate, today, FIRST_SESSION_MOVE_REASON)}
-            className="inline-flex items-center gap-1.5 min-h-[44px] px-4 py-2 rounded bg-bronze text-ground font-mono text-[11px] uppercase tracking-wider hover:bg-bronze-hover"
-          >
+          <Button onClick={() => moveWholeDay(offer.fromDate, today, FIRST_SESSION_MOVE_REASON)}>
             Start your first session now
             <ArrowRight size={14} />
-          </button>
+          </Button>
         ) : (
-        <Link
-          href={sessionHref ?? "/check/"}
-          className="inline-flex items-center gap-1.5 min-h-[44px] px-4 py-2 rounded bg-bronze text-ground font-mono text-[11px] uppercase tracking-wider hover:bg-bronze-hover"
-        >
+        <Button href={sessionHref ?? "/check/"}>
           {sessionHref ? "Start your first session" : "Open morning check"}
           <ArrowRight size={14} />
-        </Link>
+        </Button>
         )}
         {sessionHref || offer ? (
-          <Link
-            href="/check/"
-            className="min-h-[44px] inline-flex items-center text-[13px] text-slate hover:text-ink"
-          >
+          <Button variant="tertiary" href="/check/">
             Do a morning check first
-          </Link>
+          </Button>
         ) : null}
       </div>
     </section>

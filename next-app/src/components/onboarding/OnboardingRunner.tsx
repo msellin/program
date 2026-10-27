@@ -13,6 +13,7 @@ import { SymptomPrimerStep } from "./SymptomPrimerStep";
 import { ScanAnchorStep } from "./ScanAnchorStep";
 import { CustomCopyStep } from "./CustomCopyStep";
 import { FallbackStep } from "./FallbackStep";
+import { Button } from "@/components/ui/Button";
 
 /**
  * B3 (Phase 4). Replaces the hardcoded hip-only Onboarding component.
@@ -129,20 +130,10 @@ export function OnboardingRunner() {
         ) : null}
 
         <div className="flex items-center justify-between gap-3 pt-2">
-          <button
-            type="button"
-            onClick={dismiss}
-            className="px-4 py-3 min-h-[44px] border border-line text-strong rounded font-mono text-[11px] uppercase tracking-wider hover:bg-line-soft"
-          >
+          <Button variant="secondary" onClick={dismiss}>
             Skip setup
-          </button>
-          <button
-            type="button"
-            onClick={advance}
-            className="px-6 py-3 min-h-[44px] bg-bronze text-ground rounded font-semibold text-sm hover:bg-bronze-hover"
-          >
-            {isLast ? "Start" : "Next"}
-          </button>
+          </Button>
+          <Button onClick={advance}>{isLast ? "Start" : "Next"}</Button>
         </div>
       </div>
     </div>

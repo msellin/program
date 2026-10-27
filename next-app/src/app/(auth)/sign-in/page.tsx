@@ -8,6 +8,7 @@ import { GoogleAuthButton } from "@/components/auth/GoogleAuthButton";
 import { mapAuthError } from "@/lib/auth-errors";
 import { TurnstileWidget, captchaRequired } from "@/components/auth/TurnstileWidget";
 import { applyPendingSignupMeta } from "@/lib/attribution";
+import { Button } from "@/components/ui/Button";
 
 export default function SignInPage() {
   return (
@@ -200,13 +201,13 @@ function SignInInner() {
           </div>
         ) : null}
         <TurnstileWidget onToken={setCaptchaToken} resetKey={captchaReset} />
-        <button
+        <Button
           type="submit"
           disabled={submitting}
-          className="w-full font-mono text-[14px] uppercase tracking-wider py-3 rounded bg-bronze text-ground hover:bg-bronze/90 disabled:opacity-50 min-h-[44px]"
+          block
         >
           {submitting ? "Signing in…" : "Sign in"}
-        </button>
+        </Button>
       </form>
 
       {resetSent ? (

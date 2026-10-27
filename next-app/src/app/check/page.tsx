@@ -44,6 +44,7 @@ import { CheckLiveVerdict, type CheckState } from "@/components/check/CheckLiveV
 import { regionsForProgram, flagsForProgram, type SymptomRegion, type SymptomFlag } from "@/lib/symptom-regions";
 import { deriveState, reasonForState } from "@/lib/symptom-state";
 import { loadProgram } from "@/lib/data-loader";
+import { Button } from "@/components/ui/Button";
 
 /**
  * Regions come from the active program's `symptom_regions[]` (see
@@ -403,25 +404,16 @@ export default function CheckPage() {
       </div>
 
       {!canSave && (
-        <button
-          type="button"
-          onClick={() => setTouched(true)}
-          className="w-full min-h-[44px] rounded-lg border border-line-strong text-[14px] text-ink hover:bg-surface focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-strong"
-        >
+        <Button variant="secondary" block onClick={() => setTouched(true)}>
           Nothing to report today
-        </button>
+        </Button>
       )}
 
       {/* Sticky Save — keyboard-aware primitive lifts above iOS keyboard */}
       <StickyCta keyboardAware>
-        <button
-          type="button"
-          onClick={save}
-          disabled={!canSave}
-          className="w-full disabled:opacity-40 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2 bg-bronze text-ground rounded-lg py-3 min-h-[52px] font-semibold text-[15px] hover:bg-bronze-hover active:bg-bronze-active motion-reduce:transition-none transition-colors shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_1px_2px_rgba(0,0,0,0.4)] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-strong focus-visible:outline-offset-2"
-        >
+        <Button block onClick={save} disabled={!canSave}>
           {saved ? "Update check" : "Save check"} <span aria-hidden>→</span>
-        </button>
+        </Button>
       </StickyCta>
     </div>
   );

@@ -6,6 +6,7 @@ import { useStore, entrySets } from "@/lib/useStore";
 import { countLoggedSets } from "@/lib/set-progress";
 import { IN_SESSION_HURT_SCORE, useSessionRegions } from "@/components/session/HurtSheet";
 import type { RailExercise } from "@/components/session/DaySession";
+import { Button } from "@/components/ui/Button";
 
 export type SessionEnd = "finished" | "stopped";
 
@@ -91,12 +92,9 @@ export function SessionDone({
               ))}
         </section>
       ) : null}
-      <Link
-        href="/"
-        className="flex h-[60px] w-full items-center justify-center rounded-[10px] bg-bronze text-[17px] font-semibold text-ground"
-      >
+      <Button href="/" size="lg" block>
         Back to Today
-      </Link>
+      </Button>
     </div>
   );
 }

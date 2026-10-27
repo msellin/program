@@ -14,6 +14,7 @@ import { StatusPill } from "@/components/ui/StatusPill";
 import { BeliefsSection } from "@/components/profile/BeliefsSection";
 import { AwayDays } from "@/components/profile/AwayDays";
 import type { ProgramManifest } from "@/lib/schemas";
+import { Button } from "@/components/ui/Button";
 
 /**
  * Profile — switchboard (not dashboard) for identity, active programs, and
@@ -414,14 +415,10 @@ export default function ProfilePage() {
           thing on the screen so scrolling the whole Profile lands on
           the resting exit affordance. */}
       <section>
-        <button
-          type="button"
-          onClick={() => setSignOutOpen(true)}
-          className="w-full inline-flex items-center justify-center gap-2 font-mono text-[12px] uppercase tracking-wider px-4 py-3 rounded border border-line text-ink active:bg-line-soft min-h-[48px]"
-        >
+        <Button variant="secondary" block onClick={() => setSignOutOpen(true)}>
           <LogOut size={16} />
           Sign out
-        </button>
+        </Button>
       </section>
 
       <ConfirmSheet

@@ -14,6 +14,7 @@ import { prescriptionRows } from "@/lib/engine/suggest";
 import { OverflowSheet } from "@/components/session/OverflowSheet";
 import { HurtSheet } from "@/components/session/HurtSheet";
 import type { RailExercise, SessionSheet } from "@/components/session/DaySession";
+import { Button } from "@/components/ui/Button";
 
 /**
  * Screen 3 ("Set" / 4a work state / 6b) from the Day redesign. One set at
@@ -623,7 +624,7 @@ export function SetView({
                 />
               </div>
             ) : null}
-            <button
+            <Button
               type="button"
               onClick={() => {
                 if (running) {
@@ -649,7 +650,8 @@ export function SetView({
                 setRunning(true);
                 announce(`Hold started, ${remaining} seconds.`);
               }}
-              className="w-full h-[62px] rounded-[10px] bg-bronze text-ground text-[17px] font-semibold tracking-[-.01em]"
+              size="lg"
+              block
             >
               {running
                 ? "Pause"
@@ -664,7 +666,7 @@ export function SetView({
                     : isHoldShaped
                       ? `Start the hold · ${seconds}s`
                       : `Start the timer · ${Math.round(seconds / 60)} min`}
-            </button>
+            </Button>
             <div className="flex gap-2 mt-1.5">
               <button
                 type="button"
@@ -865,15 +867,16 @@ export function SetView({
                 looked like it wasn't there: the set counter is the smallest
                 type on the screen, and the button covered by your thumb was
                 the only other place a number appeared. */}
-            <button
+            <Button
               type="button"
               onClick={() => confirm(reps)}
-              className="w-full h-[62px] rounded-[10px] bg-bronze text-ground text-[17px] font-semibold tracking-[-.01em]"
+              size="lg"
+              block
             >
               {active.isLoadable
                 ? `${isEditingLoggedSet ? "Save" : "Done"} — set ${activeSetIndex + 1} · ${weight} kg`
                 : `${isEditingLoggedSet ? "Save" : "Done"} — set ${activeSetIndex + 1}`}
-            </button>
+            </Button>
             <div className="flex gap-2 mt-1.5">
               <button
                 type="button"

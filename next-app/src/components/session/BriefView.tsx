@@ -12,6 +12,7 @@ import type { RailExercise, SessionSheet } from "@/components/session/DaySession
 import type { Block, Phase, Program, Proposal, Store } from "@/lib/schemas";
 import { escalationNoticeFor } from "@/lib/engine/escalation";
 import { activeExclusions, exclusionNotices, exclusionsAffectingDay } from "@/lib/engine/intake-exclusions";
+import { Button } from "@/components/ui/Button";
 
 /**
  * Screen 4a (single track) from the Day redesign. Never scrolls past one
@@ -505,7 +506,7 @@ export function BriefView({
             Accept the numbers to start
           </p>
         ) : null}
-        <button
+        <Button
           type="button"
           disabled={gateUnresolved}
           onClick={() => {
@@ -518,23 +519,15 @@ export function BriefView({
             else if (allFollow) onFollowAlong?.(followBlocks[0].id);
             else onStart();
           }}
-          className={
-            "w-full h-[60px] rounded-[10px] text-[17px] font-semibold tracking-[-.01em] " +
-            (gateUnresolved
-              ? "bg-surface-2 text-muted cursor-not-allowed"
-              : "bg-bronze text-ground hover:bg-bronze-hover")
-          }
+          size="lg"
+          block
         >
           {startLabel}
-        </button>
+        </Button>
         {heroLoggedCount > 0 && onFinishSession ? (
-          <button
-            type="button"
-            onClick={onFinishSession}
-            className="w-full h-[48px] rounded-[10px] border border-line-strong text-[15px] font-medium text-ink"
-          >
+          <Button variant="secondary" block onClick={onFinishSession}>
             Finish session
-          </button>
+          </Button>
         ) : null}
       </div>
 

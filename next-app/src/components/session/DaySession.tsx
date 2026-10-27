@@ -27,6 +27,7 @@ import { RunSlotCard } from "@/components/workout/RunSlotCard";
 import { FollowAlong } from "@/components/follow-along/FollowAlong";
 import { buildSteps } from "@/lib/follow-along/steps";
 import type { Block, Exercise, Program, Store } from "@/lib/schemas";
+import { Button } from "@/components/ui/Button";
 
 /**
  * Day redesign (2026-08-23) — the /session/[slug] shell.
@@ -259,12 +260,9 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
             Optional: {redDay.alternative.label}
           </button>
         ) : null}
-        <Link
-          href="/"
-          className="flex h-[56px] w-full items-center justify-center rounded-[10px] bg-bronze text-[16px] font-semibold text-ground"
-        >
+        <Button href="/" size="lg" block>
           Back to Today
-        </Link>
+        </Button>
       </div>
     );
   }
