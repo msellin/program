@@ -55,8 +55,8 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 | A-UX-11 | Record tile vs timeline disagree: one shared selector | S | A | M | app #16 |
 | A-UX-12 | Rest rail: no reorder after "Jump to"; untruncated labels | S | A | M | design §4 |
 | A-UX-13 | First-run end: a post-first-workout next step; no amber "Morning check overdue" on day 2 | H | A | S | g1 | ✓ 362d271
-| A-UX-14 | Welcome expectation copy shown for the 3 advertised programs | H | A | S | g1 |
-| A-UX-15 | Delete account in ≤2 taps; no raw JSON on failure | H | A | S | g2 |
+| A-UX-14 | Welcome expectation copy shown for the 3 advertised programs | H | A | S | g1 | ✓ 68c9d10
+| A-UX-15 | Delete account in ≤2 taps; no raw JSON on failure | H | A | S | g2 | ✓ 6e89b95
 | A-UX-16 | Feedback endpoint: a visible error, a rate limit | S | A | S | g2 |
 | A-UX-17 | Off-plan: duplicate rows in the pull-up drill list; the contradictory "changes the plan" copy | S | A | S | x09 |
 | A-UX-18 | muscle-up "Ring dip ladder" title when the item is excluded | S | A | S | app #17 |
@@ -74,13 +74,13 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 ## 5. Sign-up, onboarding and legal
 | ID | Action | When | Who | Effort | Source |
 |----|--------|------|-----|--------|--------|
-| SG-01 | Carry `?next=` (the chosen program) through sign-up, email confirm and Google, into intake | H | A | M | h05, money-tech |
-| SG-02 | Google sign-up disabled until the terms + health-consent boxes are ticked; a 16+ age tick | H | A | S | compliance 3,6 |
-| SG-03 | Remove "no signup wall", "closed beta", "two minutes"; review the `auth-errors.ts` invite remap | H | A | S | compliance 8 |
-| SG-04 | Privacy truth pass (`:75,80,97,114,117,121,135`): Stripe not Paddle; name Google OAuth, Cloudflare Analytics, Resend | H | A | M | compliance 4, roadmap 3 |
-| SG-05 | Landing legal pages mirror or link the app's; terms consistent (beta/pricing) | H | A | S | compliance 5 |
-| SG-06 | Branded Supabase email templates (confirm, reset) | H | A+O | S | g3 |
-| SG-08 | Cloudflare Turnstile widget on sign-up (email + Google), passing `captchaToken`; THEN enable Supabase captcha (`CAPTCHA=1`) | H | A+O | M | kickoff kit |
+| SG-01 | Carry `?next=` (the chosen program) through sign-up, email confirm and Google, into intake | H | A | M | h05, money-tech | ✓ 6e89b95
+| SG-02 | Google sign-up disabled until the terms + health-consent boxes are ticked; a 16+ age tick | H | A | S | compliance 3,6 | ✓ 6e89b95
+| SG-03 | Remove "no signup wall", "closed beta", "two minutes"; review the `auth-errors.ts` invite remap | H | A | S | compliance 8 | ✓ 6e89b95
+| SG-04 | Privacy truth pass (`:75,80,97,114,117,121,135`): Stripe not Paddle; name Google OAuth, Cloudflare Analytics, Resend | H | A | M | compliance 4, roadmap 3 | ✓ 6e89b95
+| SG-05 | Landing legal pages mirror or link the app's; terms consistent (beta/pricing) | H | A | S | compliance 5 | ✓ 68c9d10
+| SG-06 | Branded Supabase email templates (confirm, reset) | H | A+O | S | g3 | ✓ 68c9d10
+| SG-08 | Cloudflare Turnstile widget on sign-up (email + Google), passing `captchaToken`; THEN enable Supabase captcha (`CAPTCHA=1`) | H | A+O | M | kickoff kit | ✓ 6e89b95
 | SG-07 | Paid terms: renewal, EU 14-day withdrawal, VAT; a consent-withdrawal path | S | A (+lawyer) | M | compliance §4 |
 
 ## 6. Landing, claims and evidence
@@ -102,7 +102,7 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 | ID | Action | When | Who | Effort | Source |
 |----|--------|------|-----|--------|--------|
 | M-01 | Cloudflare Web Analytics ON (both domains) | H | A+O | S | compliance §3 |
-| M-02 | UTMs captured on landing → sign-up → user metadata; an SQL query for sign-ups and activations by campaign | H | A | M | money-tech |
+| M-02 | UTMs captured on landing → sign-up → user metadata; an SQL query for sign-ups and activations by campaign | H | A | M | money-tech | ✓ 6e89b95
 | M-03 | Ad spec: 3 ad sets, targeting 18+, interests/keywords only, safe wording, UTM links, creatives | H | A | M | compliance §2 |
 | M-04 | Review panel: 3 Sonnet lenses, 1 round, on the ads + landing (~150k tokens) | H | A | S | D8 |
 | M-05 | Meta Business + Google Ads accounts, payment, upload, spend €150 (Meta €100 / Google €50) | H | O | M | O3 |
@@ -144,7 +144,7 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 |----|--------|------|-----|--------|------|--------|
 | G-01 | **A new sign-up's day 1 is a rest day:** no first workout is reachable. Offer a session on day 1 (start the schedule today, or "Start your first session now") | H | A | M | 2b + 4 | gap-A | (Today side ✓ 362d271)
 | G-02 | Placement mismatch: the intake result says Tier D (the walker typed 3 into every test), but Today says Tier A and offers "Advance to Tier D". Verify the placement is saved and applied | H | A | S–M | 5 | gap-A |
-| G-03 | Intake physical-test steps (5 screens) overflow horizontally at 375px | H | A | S | 5 | gap-A |
+| G-03 | Intake physical-test steps (5 screens) overflow horizontally at 375px | H | A | S | 5 | gap-A | ✓ 68c9d10
 | G-04 | **An untouched morning check saves a green day** (all defaults 0; Save is never disabled; `check/page.tsx:62-74,403`). Unanswered must not mean "fine" | H | A | S | 2b | gap-B | ✓ e2f79b3
 | G-05 | After the first check, the "How Terav reads you" onboarding modal covers Today and hides the red verdict (`OnboardingRunner.tsx:72-103`) | H | A | S | 2b | gap-B, gap-C | ✓ e2f79b3
 | G-06 | **A tier-advance suggestion shows on a red day** ("advance to Tier D"); `selectTierAdvance` has no state check (`lib/proposals/select.ts:280-300`) | H | A | S | 4 | gap-B |
