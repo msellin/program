@@ -34,6 +34,11 @@ export function OnboardingRunner() {
   const session = useSession();
   const hydrated = useStore((s) => s.hydrated);
   const activeSlug = useStore((s) => s.store.user_profile?.active_program_id);
+  // G-05: someone who has already saved a check has been read; the explainer
+  // must not cover their verdict on Today.
+  const hasChecked = useStore((s) =>
+    Object.values(s.store.logs ?? {}).some((l) => l?.symptoms),
+  );
   const [dismissed, setDismissed] = useState(true);
   const [program, setProgram] = useState<Program | null>(null);
   const [step, setStep] = useState(0);
@@ -69,7 +74,7 @@ export function OnboardingRunner() {
     setDismissed(true);
   };
 
-  const active = hydrated && isAuthed && !dismissed && program != null;
+  const active = hydrated && isAuthed && !dismissed && !hasChecked && program != null;
   useFocusTrap(panelRef, dismiss, active);
 
   if (!active || !program) return null;

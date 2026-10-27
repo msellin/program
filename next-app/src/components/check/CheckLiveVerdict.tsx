@@ -66,6 +66,12 @@ export function CheckLiveVerdict({ state, reason }: CheckLiveVerdictProps) {
           {copy.pill}
         </span>
         <p className="mt-1.5 text-[14px] text-ink leading-relaxed">{reason}</p>
+        {state === "red" && (
+          <p className="mt-1.5 text-[13px] text-ink leading-relaxed">
+            Next step: skip hard training today. If this is night pain, a sudden change, or
+            it isn&apos;t settling, talk to a doctor or physio. Terav isn&apos;t medical advice.
+          </p>
+        )}
         <button
           type="button"
           onClick={() => setSheetOpen(true)}

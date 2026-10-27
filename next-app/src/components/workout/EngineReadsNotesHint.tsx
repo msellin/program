@@ -28,8 +28,7 @@ export function EngineReadsNotesHint({
   return (
     <p className="text-[11px] text-muted mt-1 leading-snug">
       The engine reads these. Keywords like{" "}
-      <em className="not-italic text-ink">{examples}</em> feed today&apos;s proposal — no LLM, just
-      a keyword parser, all done on-device.
+      <em className="not-italic text-ink">{examples}</em> feed today&apos;s proposal.
     </p>
   );
 }

@@ -194,6 +194,9 @@ export default function CheckPage() {
   const [initialised, setInitialised] = useState(false);
   const [prefilledFrom, setPrefilledFrom] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
+  // G-04: an untouched form is "unanswered", not "fine". Save stays disabled
+  // until the user answers something or taps "Nothing to report".
+  const [touched, setTouched] = useState(false);
 
   useEffect(() => {
     if (initialised || !hydrated) return;
@@ -226,7 +229,9 @@ export default function CheckPage() {
   // feedback for a save was three words changing on the button under your
   // thumb. The `saved` state below still matters for re-entering /check
   // later the same day.
+  const canSave = touched || saved || prefilledFrom !== null;
   const save = () => {
+    if (!canSave) return;
     const derived = deriveState(values);
     saveDay(today, values, derived);
     setSaved(true);
@@ -242,10 +247,12 @@ export default function CheckPage() {
   const updateNumber = (key: keyof Symptoms, v: number) => {
     setValues({ ...values, [key]: v });
     setSaved(false);
+    setTouched(true);
   };
   const toggleBool = (key: keyof Symptoms) => {
     setValues({ ...values, [key]: !values[key] });
     setSaved(false);
+    setTouched(true);
   };
 
   return (
@@ -341,6 +348,7 @@ export default function CheckPage() {
                   for (const k of f.keys) (next as Record<string, unknown>)[k] = !on;
                   setValues(next);
                   setSaved(false);
+                  setTouched(true);
                 }}
               />
             );
@@ -386,6 +394,7 @@ export default function CheckPage() {
           onChange={(e) => {
             setValues({ ...values, outside_training: e.target.value });
             setSaved(false);
+            setTouched(true);
           }}
           placeholder="e.g. 90 min padel, poor sleep"
           className="block w-full text-[15px] px-3 py-3 min-h-[44px] border border-line-strong rounded-md bg-surface text-ink focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate break-words [overflow-wrap:anywhere]"
@@ -393,12 +402,23 @@ export default function CheckPage() {
         <EngineReadsNotesHint variant="check" />
       </div>
 
+      {!canSave && (
+        <button
+          type="button"
+          onClick={() => setTouched(true)}
+          className="w-full min-h-[44px] rounded-lg border border-line-strong text-[14px] text-ink hover:bg-surface focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-strong"
+        >
+          Nothing to report today
+        </button>
+      )}
+
       {/* Sticky Save — keyboard-aware primitive lifts above iOS keyboard */}
       <StickyCta keyboardAware>
         <button
           type="button"
           onClick={save}
-          className="w-full inline-flex items-center justify-center gap-2 bg-bronze text-ground rounded-lg py-3 min-h-[52px] font-semibold text-[15px] hover:bg-bronze-hover active:bg-bronze-active motion-reduce:transition-none transition-colors shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_1px_2px_rgba(0,0,0,0.4)] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-strong focus-visible:outline-offset-2"
+          disabled={!canSave}
+          className="w-full disabled:opacity-40 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2 bg-bronze text-ground rounded-lg py-3 min-h-[52px] font-semibold text-[15px] hover:bg-bronze-hover active:bg-bronze-active motion-reduce:transition-none transition-colors shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_1px_2px_rgba(0,0,0,0.4)] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-strong focus-visible:outline-offset-2"
         >
           {saved ? "Update check" : "Save check"} <span aria-hidden>→</span>
         </button>
