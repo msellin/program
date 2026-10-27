@@ -65,6 +65,9 @@ export function BeliefsSection({ programLifts }: { programLifts?: string | null 
       : `Bumped ${hits.length} times, most recently accepted on ${dateStr}.`;
   };
 
+  // P-07: no lifts, no heading.
+  if (tmEntries.length === 0) return null;
+
   return (
     <div>
       <p className="font-mono text-[10px] uppercase tracking-widest text-muted mb-2">

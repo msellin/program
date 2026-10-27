@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { RacePlanCard } from "@/components/session/RacePlanCard";
-import { humanPhaseName, phaseProgress, programDisplayName, humanBlockName, exerciseListName } from "@/lib/day-format";
+import { programProgress, endsLabel } from "@/lib/program-progress";
+import { humanPhaseName, programDisplayName, humanBlockName, exerciseListName } from "@/lib/day-format";
 import { entrySets } from "@/lib/useStore";
 import { ProposalCard } from "@/components/workout/ProposalCard";
 import { CycleStartCard } from "@/components/session/CycleStartCard";
@@ -97,7 +98,9 @@ export function BriefView({
         : `${requiredRail.length} ${exWord}${optionalSuffix}`;
 
   const progressLabel = phase ? humanPhaseName(phase.name) : null;
-  const progressDetail = phase ? phaseProgress(phase, activeDate) : null;
+  // P-06: week N of M comes from the same whole-program selector as Today and Plan.
+  const prog = program.phases?.length ? programProgress(program, activeDate, store.user_profile) : null;
+  const progressDetail = prog ? `week ${prog.weekN} of ${prog.totalWeeks} · ends ${endsLabel(prog.endsOn)}` : null;
   const escalation = escalationNoticeFor(program, store, activeDate);
 
   const gateUnresolved = !!cycleGateProposal;

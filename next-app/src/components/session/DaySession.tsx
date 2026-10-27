@@ -11,6 +11,7 @@ import { getBlocksForDate, isBlockObjectOn, DAY_VISIBLE_BLOCK_STATES } from "@/l
 import { migrateLegacyToBlocks, needsBlockMigration } from "@/lib/migrations/legacy-to-blocks";
 import { prescriptionRows, suggestForExercise, type Suggestion } from "@/lib/engine/suggest";
 import { redDayDirective } from "@/lib/engine/red-day";
+import { RedRestCard } from "@/components/workout/RedRestCard";
 import { selectProposals } from "@/lib/proposals/select";
 import { dedupeItems, planDayItems, humanBlockName, programDisplayName } from "@/lib/day-format";
 import { RestDayCard, GraduationCard } from "@/components/session/shared/StatusCards";
@@ -233,24 +234,19 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
     return <GraduationCard program={program} />;
   }
 
-  // Hold: nothing logged yet today and the morning check is red. Rest first;
-  // the alternative is optional. No "start the planned session" path here.
-  const anyLoggedToday = railExercises.some(
-    (r) => countLoggedSets(entrySets(store.logs[activeDate]?.exercises[r.key] ?? null), r.isLoadable) > 0,
-  );
-  if (redDay?.hold && !altChosen && !anyLoggedToday && blocks.length > 0 && !ended) {
+  // Hold: the morning check is red. Same rest card as Today (P-01/P-02), no
+  // Start, no Follow along, no extra-session link. Sets already logged today do
+  // not lift it. The program's alternative stays optional.
+  if (redDay?.hold && !altChosen && !ended) {
     return (
       <div className="space-y-4 pt-4" data-surface="RedDayHold">
-        <h1 className="text-[32px] font-semibold tracking-[-0.035em] text-strong leading-none">Rest today</h1>
-        <p className="text-[15px] text-ink">
-          {redDay.reason ?? "Your check came back red."} Today&rsquo;s planned session is on hold, and
-          nothing progresses.
-        </p>
-        {redDay.redFlag ? (
-          <p className="text-[14px] text-muted">
-            What you reported is worth raising with a clinician rather than training around.
-          </p>
-        ) : null}
+        <header className="space-y-1">
+          <p className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted">TODAY</p>
+          <h1 className="text-[32px] font-semibold tracking-[-0.03em] text-strong leading-none">
+            {programDisplayName(program, slug)}
+          </h1>
+        </header>
+        <RedRestCard sourceDate={redDay.sourceDate} />
         {redDay.alternative && redDay.alternative.blocks.length > 0 ? (
           <button
             type="button"

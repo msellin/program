@@ -106,7 +106,7 @@ export function computeWeekSummary(
     return blockIds.length > 0 ? 1 : 0;
   });
   // wt.week is Mon..Sun already; matches our date order.
-  const scheduled = strengthCountsPerDay.reduce((a, b) => a + b, 0);
+  const templateScheduled = strengthCountsPerDay.reduce((a, b) => a + b, 0);
 
   let completed = 0;
   const states = { green: 0, amber: 0, red: 0, unchecked: 0 };
@@ -128,14 +128,10 @@ export function computeWeekSummary(
       if (d <= anchorDateISO) states.unchecked++;
       continue;
     }
-    // Session complete if any exercise in a strength block is done that day.
-    const anyStrengthDone = Object.entries(day.exercises).some(([key, e]) => {
-      if (!e.done) return false;
-      const blockId = key.split(":")[0];
-      const b = program.blocks.find((x) => x.id === blockId);
-      return (b?.category ?? "strength") === "strength";
-    });
-    if (anyStrengthDone) completed++;
+    // Session complete if any exercise is done that day, whatever its block's
+    // category: Plan's "N logged" counts the same, and a skill-program day was
+    // read as 0 here while Plan said 1.
+    if (Object.values(day.exercises).some((e) => e.done)) completed++;
 
     // State counts (only for days that have a check).
     if (day.derived_state === "green") states.green++;
@@ -191,6 +187,8 @@ export function computeWeekSummary(
   }
   const tmChanges: WeekSummary["training"]["tmChanges"] = [];
 
+  // A logged day is a scheduled one, so "1 / 0" cannot happen.
+  const scheduled = Math.max(templateScheduled, completed);
   const label = `Week of ${new Date(weekStart + "T00:00:00").toLocaleDateString("en-GB", {
     day: "numeric",
     month: "short",

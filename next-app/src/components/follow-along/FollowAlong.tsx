@@ -329,7 +329,7 @@ export function FollowAlong({
         ) : (
           <>
             <div className="flex min-h-0 flex-grow flex-col px-4 pt-2">
-              <div className="relative aspect-video w-full flex-shrink-0 overflow-hidden rounded-[18px] bg-surface">
+              <div className="relative aspect-video w-full flex-shrink-0 overflow-hidden rounded-[18px] bg-surface [@media(max-height:700px)]:aspect-[2.3]">
                 {step.figure ? (
                   <ExerciseFigure
                     key={`${step.figure}-${step.side}`}
@@ -381,9 +381,9 @@ export function FollowAlong({
                   } : undefined}
                   disabled={!repWork}
                   aria-label={repWork ? `Rep ${count} of ${step.reps}. Tap to count the next rep` : `${big} ${caption}`}
-                  className="relative h-[176px] w-[176px] flex-shrink-0 disabled:cursor-default"
+                  className="relative h-[176px] w-[176px] flex-shrink-0 disabled:cursor-default [@media(max-height:700px)]:h-[148px] [@media(max-height:700px)]:w-[148px]"
                 >
-                  <svg width="176" height="176" viewBox="0 0 176 176" aria-hidden="true" className="absolute inset-0">
+                  <svg width="100%" height="100%" viewBox="0 0 176 176" aria-hidden="true" className="absolute inset-0">
                     <circle cx="88" cy="88" r="80" fill="#16181c" stroke="#24272f" strokeWidth="10" />
                     <circle
                       cx="88"
@@ -400,7 +400,7 @@ export function FollowAlong({
                   </svg>
                   <span className="absolute inset-0 flex flex-col items-center justify-center gap-0.5">
                     <span
-                      className="font-mono text-[64px] font-semibold leading-none tabular-nums"
+                      className="font-mono text-[64px] font-semibold leading-none tabular-nums [@media(max-height:700px)]:text-[52px]"
                       style={{ color: phase === "rest" ? "#93989f" : "#f4f5f7" }}
                     >
                       {big}

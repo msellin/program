@@ -570,9 +570,12 @@ export function IntakeClient({ slug }: Props) {
   // screen. Rendering them AGAIN as regular questions was double-consent.
   const CONSENT_IDS = new Set(["consent_symptom_data"]);
   const screening = questions.filter((q) => SCREENING_IDS.has(q.id) && !CONSENT_IDS.has(q.id));
-  const skill = questions.filter((q) => SKILL_IDS.has(q.id));
+  // P-25: every program's self-reported ability question counts as "where you are now",
+  // not just handstand's. Without the suffix match, first-strict-pullup opened on screening.
+  const isSkill = (id: string) => SKILL_IDS.has(id) || id === "current_strict_pullups" || id.endsWith("_selfreport");
+  const skill = questions.filter((q) => isSkill(q.id) && !SCREENING_IDS.has(q.id));
   const about = questions.filter(
-    (q) => !SCREENING_IDS.has(q.id) && !SKILL_IDS.has(q.id) && !CONSENT_IDS.has(q.id),
+    (q) => !SCREENING_IDS.has(q.id) && !isSkill(q.id) && !CONSENT_IDS.has(q.id),
   );
 
   if (reviewing) {

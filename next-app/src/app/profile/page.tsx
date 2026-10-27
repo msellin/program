@@ -209,9 +209,6 @@ export default function ProfilePage() {
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-semibold text-strong truncate flex items-center gap-1.5">
                       <span className="truncate">{p.name}</span>
-                      {graduated ? (
-                        <StatusPill label="graduated" tone="green" className="flex-shrink-0" />
-                      ) : null}
                     </p>
                     <p className="text-[11px] text-muted mt-0.5 flex items-center gap-1.5 flex-wrap">
                       <span>{p.duration_weeks} weeks · {p.difficulty}</span>

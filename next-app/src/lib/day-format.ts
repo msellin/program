@@ -74,6 +74,9 @@ export function humanPhaseName(name: string): string {
     // phase's own weeks; two clocks on one screen (V-01).
     .replace(/^weeks?\s+\d+\s*[-–]\s*\d+\s*[—–-]\s*/i, "")
     .replace(/\s*\((?:Phase|weeks?|week|sub-goal|dev|internal)\b[^)]*\)\s*$/i, "")
+    // P-09: the engine's tier is not a word the user chose or sees.
+    .replace(/\s*\(\s*tiers?\b[^)]*\)/gi, "")
+    .replace(/\s+for all tiers\b/i, "")
     .trim();
 }
 

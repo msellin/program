@@ -278,7 +278,28 @@ function selectReadiness(
   };
 }
 
+/**
+ * P-09: "your latest retest clears the threshold" is only true if a retest was
+ * logged after the program began. Intake answers alone can infer a higher tier,
+ * but that is not a retest, so a day-1 user gets no such card.
+ */
+export function hasQualifyingRetest(store: Store, program: Program): boolean {
+  const slug = program.slug;
+  if (!slug) return false;
+  if ((store.retest_readings ?? []).some((r) => !r.program_slug || r.program_slug === slug)) return true;
+  const startedRaw = store.user_profile?.program_states?.[slug]?.started_at;
+  if (!startedRaw) return false;
+  const started = startedRaw.slice(0, 10);
+  return Object.values(store.user_profile?.capability_profile ?? {}).some(
+    (c) =>
+      typeof c?.measured_value === "number" &&
+      c.confidence !== "self_report" &&
+      c.last_measured_at.slice(0, 10) > started,
+  );
+}
+
 function selectTierAdvance(store: Store, program: Program): TierAdvanceProposalPayload | null {
+  if (!hasQualifyingRetest(store, program)) return null;
   const eligible = nextEligibleTier(program, store.user_profile);
   if (!eligible) return null;
   if (isProposalDismissed(program, store.user_profile, eligible)) return null;

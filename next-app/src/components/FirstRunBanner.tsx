@@ -64,7 +64,7 @@ export function FirstRunBanner() {
         <li><span className="text-ink">Today</span> — the session for today.</li>
         <li><span className="text-ink">Plan</span> — your week; move or skip a day here.</li>
         <li><span className="text-ink">Record</span> — your progress and every logged session.</li>
-        <li><span className="text-ink">You</span> — programs, settings and account.</li>
+        <li><span className="text-ink">Profile</span> — programs, settings and account.</li>
       </ul>
       <div className="pt-1">
         <Button variant="secondary" onClick={dismiss}>
