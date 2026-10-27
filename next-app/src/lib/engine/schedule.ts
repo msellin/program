@@ -631,3 +631,27 @@ export function blockShownOnDay(program: Program, block: Block): boolean {
 // New code that needs "is this a race day" or "is this a holiday gap" should
 // gate on program.slug first.
 export { HIP_HOLIDAY_GAP as HOLIDAY_GAP };
+
+/**
+ * G-09 (2026-10-27): the phase a calendar WEEK belongs to, for week views.
+ *
+ * The plan resolved a week's phase from its Monday. A user who starts on a
+ * Wednesday has phases rebased to Wednesday, so Monday falls before the first
+ * phase and every new user's first week read "No phase covers this week",
+ * while Today correctly said Week 1. The first day of the week that any phase
+ * covers decides it.
+ */
+export function activePhaseForWeek(
+  program: Program,
+  mondayISO: string,
+  profile?: Store["user_profile"],
+): Phase | undefined {
+  const mon = new Date(mondayISO + "T00:00:00");
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(mon);
+    d.setDate(mon.getDate() + i);
+    const phase = activePhaseFor(program, isoDate(d), profile);
+    if (phase) return phase;
+  }
+  return undefined;
+}
