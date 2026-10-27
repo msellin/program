@@ -34,6 +34,12 @@ for Terav itself). BLOCKS-ADS adds: lead message = per-change why + Accept; clea
 Meta/Google primary health-ad policy. BEFORE-SCALE: post-goal next-focus path (H&F first renewal ~30%),
 Concept2 import, annual vs one-off framing. €150 test ≈ 4-30 trials: shows cost per trial, not conversion.
 
+## Owner clarification (2026-10-27)
+
+Core idea = improve weaknesses, CrossFit-leaning, research/whitepaper-based. Paid-tier idea = AI video
+coach (plan in `dev/active/video-analysis/`, spike passed 2026-09-01, unbuilt). Owner ideas are
+hypotheses → 3 Haiku agents researching the video-coach market → `findings-video-coach.md` verdict.
+
 ## Next steps
 
 1. Owner go-ahead on Phase 0 capture + Phase 1 audit.

@@ -8,6 +8,18 @@ folder, and a 20+ agent Haiku market/competitor sweep that also answers *is ther
 Market sweep started; Phase 0/1 wait for go-ahead.
 Source of truth for the why: `brief.md` (same folder).
 
+## Owner clarification (2026-10-27) — what Terav is meant to be
+
+- **Core idea:** improve a weakness. Leans CrossFit / functional fitness, but useful in other areas too.
+- **Research- and whitepaper-based** (`dev/whitepapers/00-07`). That is the product's spine, not a footnote.
+- **Paid-tier idea: an AI video coach.** Barely built. A detailed plan already exists in
+  `dev/active/video-analysis/` (on-device MediaPipe, skill-first, "margins not verdicts", pull not push).
+  The Phase 0 spike passed on 2026-09-01; nothing ships in the app yet.
+
+Effect on the audit: area 1 (product) and area 8 (ads) test the catalog and message against
+"fix your weakness, built for CrossFit athletes". Area 5 (monetisation) treats the video coach as a
+paid-tier candidate, using the market research in `market/video-coach-*.md`.
+
 ## Phase 0 — capture (mechanical, no agents, zero model tokens)
 
 Persona screenshots in `next-app/tests/e2e/artifacts/personas/` date from 2026-10-01 and predate
@@ -28,6 +40,20 @@ session, record, check, progress, history, report, evidence, guide, settings, ac
 off-plan, extras, legal ×3. States: brand-new empty account, mid-program (engine, pull-up), multi-track.
 `/check/hip` is captured too, as evidence for the personal-track separation finding. Excluded: `/admin`,
 `/dev/primitives`.
+
+## REVISED 2026-10-27 (owner): lean audit, ads live by end of today
+
+The owner will switch accounts and run the build sprint there, so this session only audits and hands over.
+Replaces Phases 0-2 below where they differ:
+- **Capture:** 14 live screenshots (`screens/`, landing + app entry; phone + desktop). App interior uses the
+  2026-10-01 persona shots. No persona re-run.
+- **Tier 1:** 18 Haiku first-pass agents → `audit/h01..h18-*.md` (≤25 lines, tagged BLOCKS-ADS-TODAY /
+  BEFORE-SCALE / LATER).
+- **Tier 2:** 3 Sonnet deep agents where expertise matters → `findings-{compliance,money-tech,product}.md`.
+- **Plan:** one Sonnet planner → `launch-plan.md` (today's sprint, ordered, with effort and one-line owner
+  decisions). The 3-planner / blind-judge / red-team process is **skipped** for speed. That is a weaker
+  review than the owner's standard, and the plan says so.
+- **Handover:** `HANDOVER.md` for the new account.
 
 ## Phase M — market + competitors (started 2026-10-27, 23 agents, Haiku)
 
