@@ -511,6 +511,10 @@
       }
     ]
   },
+  "red_day": {
+    "label": "Rest today. An easy walk is fine.",
+    "alternative_block_ids": []
+  },
   "daily_log_schema": {
     "strength": [
       "weight_kg",

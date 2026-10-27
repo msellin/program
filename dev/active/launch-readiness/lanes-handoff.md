@@ -14,3 +14,10 @@ The owning lane picks it up, does it in its own commit, and marks the line `✓ 
   screen sticky Save) is also lane 2b.
 
 ## Messages
+- [lane 4 → lane 2a, lane 2b] **G-07 derivation exists:** `redDayDirective(program: Program, logs: Store["logs"], todayISO: string): RedDayDirective`
+  in `next-app/src/lib/engine/red-day.ts`. Returns `{ hold: false }`, or `{ hold: true, sourceDate, reason: string | null,
+  redFlag: boolean, alternative: { label: string; blocks: Block[] } | null }`. Red carries forward up to 3 days
+  (same rule as `suggest.ts`, now shared via `effectiveCheckState`); a newer green/amber check clears it. On `hold`: don't
+  offer today's planned session as-is; show "Rest" first, then `alternative.label` with `alternative.blocks` (render them
+  like any program block). `alternative` is null on a red flag (night pain / gait change / painful click) — rest only.
+  Every program declares `red_day` in its JSON (test: `red-day.test.ts`). Lane 4 does not touch session UI.

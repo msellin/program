@@ -1294,6 +1294,12 @@
     "cycle_end_rule": "At the end of every 4-week 5/3/1 cycle: if all 4 weeks green → TM +5 kg squat / +7.5 kg pull. Any amber week → hold TM. Any red week → TM -10%.",
     "escalation": "Night pain, a clear step-change in symptoms, or three amber weeks in a row means see the orthopaedist. Do not simply keep resetting the TM."
   },
+  "red_day": {
+    "label": "Skip loaded work. The home isometrics only if they don't provoke anything.",
+    "alternative_block_ids": [
+      "block_a_home"
+    ]
+  },
   "daily_log_schema": {
     "date": "ISO date",
     "sessions_completed": [

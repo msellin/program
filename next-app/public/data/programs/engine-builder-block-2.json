@@ -1130,6 +1130,12 @@
     "week_end_rule": "If the week's threshold session hit target pace/power AND ended feeling like you had one more interval → proceed. If threshold degraded across sets → hold at current volume next week. Two consecutive weeks of threshold regression → engine proposes swapping one 4×4 for a threshold cruise the following week.",
     "escalation": "Two red days in the same week → skip the VO2max session that week; do threshold + Z1 only. Three red days in a row → take a full week off before returning."
   },
+  "red_day": {
+    "label": "Rest, or an easy recovery session only.",
+    "alternative_block_ids": [
+      "block_easy_recovery"
+    ]
+  },
   "daily_log_schema": {
     "date": "ISO date",
     "sessions_completed": [

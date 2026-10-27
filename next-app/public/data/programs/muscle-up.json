@@ -1083,6 +1083,13 @@
     "week_end_rule": "If the week's key retest (max muscle-up reps for C, false-grip hang seconds + ring dip reps for A/B) improved or held → advance. If regressed AND symptom scores elevated → hold or drop level.",
     "escalation": "Two red days in a week → skip the heavier transition or muscle-up test session. Persistent shoulder or wrist pain > 3 days → stop, see a clinician."
   },
+  "red_day": {
+    "label": "Rest, or shoulder prep and hollow-body work only. No rings.",
+    "alternative_block_ids": [
+      "block_shoulder_prep",
+      "block_active_hollow"
+    ]
+  },
   "daily_log_schema": {
     "date": "ISO date",
     "sessions_completed": [

@@ -1167,6 +1167,12 @@
     "week_end_rule": "If the week's hard session was hit at intended intensity and finished feeling like you had one more interval in the tank → proceed. If the hard session degraded across sets or HR wouldn't climb → hold at current volume next week; do not skip the deload/retest.",
     "escalation": "Two red days in the same week → skip the hard session that week. Three red days in a row, or any red day with unexplained resting HR elevation > 15 bpm, means take a full week off and consult a clinician if it persists."
   },
+  "red_day": {
+    "label": "Rest, or an easy recovery session only.",
+    "alternative_block_ids": [
+      "block_easy_recovery"
+    ]
+  },
   "daily_log_schema": {
     "date": "ISO date",
     "sessions_completed": [

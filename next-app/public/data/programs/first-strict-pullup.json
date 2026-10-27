@@ -1181,6 +1181,13 @@
     "week_end_rule": "If the week's max-rep retest improved OR held AND symptom scores trended flat/down → advance capability_profile.estimated_level where applicable. If max reps regressed AND symptom scores elevated → hold the level; engine picks lower-level drills next week.",
     "escalation": "Two red days in a week → skip the heavier pull session, do shoulder prep + row strength only. Persistent shoulder or elbow pain > 3 days → stop, see a clinician."
   },
+  "red_day": {
+    "label": "Rest, or shoulder prep and hollow-body work only. No hanging.",
+    "alternative_block_ids": [
+      "block_shoulder_prep",
+      "block_active_hollow"
+    ]
+  },
   "daily_log_schema": {
     "date": "ISO date",
     "sessions_completed": [

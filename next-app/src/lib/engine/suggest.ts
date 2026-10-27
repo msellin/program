@@ -1,6 +1,7 @@
 import type { Store, ExerciseLog, Program } from "../schemas";
 import { iso } from "../utils";
 import { STANDARD_PLATES_KG } from "../plates";
+import { effectiveCheckState } from "./red-day";
 
 const MAIN_PHASE_IDS = new Set([
   "phase_2_cycle_1",
@@ -243,24 +244,8 @@ export function suggestForExercise(
   // Symptom-state modifier. If today has no check saved, look back up to 3 days for
   // the most recent state — a red day on Friday should still colour Saturday's session
   // until the user records a new morning check.
-  const todaysLog = store.logs[todayISO];
-  let todayState: "green" | "amber" | "red" | null = todaysLog?.derived_state ?? null;
-  let stateSourceDate: string | null = todayState ? todayISO : null;
-  if (!todayState) {
-    // Walk back up to 3 days looking for the most recent morning check
-    const t = new Date(todayISO + "T00:00:00");
-    for (let back = 1; back <= 3; back++) {
-      const d = new Date(t);
-      d.setDate(t.getDate() - back);
-      const key = iso(d);
-      const s = store.logs[key]?.derived_state;
-      if (s) {
-        todayState = s;
-        stateSourceDate = key;
-        break;
-      }
-    }
-  }
+  // Shared with `redDayDirective`, so the session hold and this cut agree on the day's state.
+  const { state: todayState, sourceDate: stateSourceDate } = effectiveCheckState(store.logs, todayISO);
   const stateMod =
     todayState === "red" ? 0.9 : todayState === "amber" ? 0.95 : 1.0;
   const carriedSuffix = stateSourceDate && stateSourceDate !== todayISO ? ` (from ${stateSourceDate})` : "";

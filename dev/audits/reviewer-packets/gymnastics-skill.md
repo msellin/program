@@ -1,10 +1,10 @@
 # Reviewer packet — Gymnastics & upper-body skill
 
-**Generated 2026-10-01 from the shipping program data.** Regenerate with
+**Generated 2026-10-27 from the shipping program data.** Regenerate with
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: b53a71ce3a9105ae -->
+<!-- source-fingerprint: 3e9088f3bbdfaacd -->
 
 ## What we are asking
 

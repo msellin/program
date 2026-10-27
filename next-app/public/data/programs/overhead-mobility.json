@@ -1230,5 +1230,11 @@
   ],
   "load_signals": [
     "hold_seconds"
-  ]
+  ],
+  "red_day": {
+    "label": "Rest, or the daily reset only.",
+    "alternative_block_ids": [
+      "block_daily_reset"
+    ]
+  }
 }

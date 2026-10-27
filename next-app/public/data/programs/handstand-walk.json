@@ -1537,6 +1537,12 @@
     "week_end_rule": "If the week's freestand-hold retest improved OR wrist symptom score trended down → advance capability_profile.estimated_level where applicable. If freestand hold regressed AND wrist symptom score elevated → hold the level; engine picks lower-level drills next week.",
     "escalation": "Two red days in a week → skip the higher-load skill session (kick-up or walk attempts) that week, replace with Kinoshita position 1 and hollow-body only. Persistent shoulder pain > 3 days → stop, see a clinician. Pain-during-load motor-learning principle: continued exposure with pain reinforces the compensation pattern."
   },
+  "red_day": {
+    "label": "Rest, or the wrist recovery stretches only.",
+    "alternative_block_ids": [
+      "block_recovery"
+    ]
+  },
   "daily_log_schema": {
     "date": "ISO date",
     "sessions_completed": [

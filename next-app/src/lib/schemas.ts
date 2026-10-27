@@ -770,6 +770,19 @@ export const programSchema = z.object({
     )
     .optional(),
   progression_rules: z.record(z.string(), z.unknown()).optional(),
+  /**
+   * G-07 (2026-10-27): what a red day turns into. The gate itself stays in
+   * `lib/symptom-state.ts`; this only names the program's alternative to the
+   * session it holds. `alternative_block_ids` resolve against this program's
+   * `blocks[]` and may be empty (rest is the alternative). Read by
+   * `redDayDirective` in `lib/engine/red-day.ts`.
+   */
+  red_day: z
+    .object({
+      label: z.string(),
+      alternative_block_ids: z.array(z.string()),
+    })
+    .optional(),
   daily_log_schema: z.record(z.string(), z.unknown()).optional(),
   immediate_actions: z.array(z.record(z.string(), z.unknown())).optional(),
   adaptive_engine: z.record(z.string(), z.unknown()).optional(),

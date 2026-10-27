@@ -1105,5 +1105,11 @@
   ],
   "load_signals": [
     "aerobic_minutes"
-  ]
+  ],
+  "red_day": {
+    "label": "Rest, or an easy recovery row only.",
+    "alternative_block_ids": [
+      "block_easy_recovery"
+    ]
+  }
 }
