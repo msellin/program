@@ -35,7 +35,7 @@
 **Owns:** `components/session/{DaySession,SetView,OverflowSheet,NoteSheet,BriefView,RestTakeover}.tsx`, the new
 `components/session/SessionDone.tsx`, `components/session/OffPlanSession.tsx` (the stop path only).
 
-**Items:** SF-01, SF-02, A-UX-02, A-UX-06.
+**Items:** SF-01, SF-02, A-UX-02, A-UX-06, G-07 (the session side: red = hold + alternative).
 **Detail:** `findings-app.md` #1–4, #7, #13; `findings-design.md` §4.
 **Done when:**
 - In every advertised program, "Something hurt" is visible in the session's top row and reachable in one tap.
@@ -51,7 +51,8 @@
 `FirstRunBanner.tsx`, the feedback/report-a-bug floating button, `app/plan/page.tsx`, `lib/useStore.ts`
 (the skip-count area only).
 
-**Items:** A-UX-01, A-UX-03, A-UX-05, A-UX-08, A-UX-13, SF-03 (minimum: no "Check first" blocker for public
+**Also owns:** `app/check/page.tsx`, `components/check/*`, `components/onboarding/OnboardingRunner.tsx`.
+**Items:** G-01 (the Today side), G-04, G-05, G-08, G-10, G-11, A-UX-01, A-UX-03, A-UX-05, A-UX-08, A-UX-13, SF-03 (minimum: no "Check first" blocker for public
 programs; full version: the one-tap "How do you feel today?" row from `personal-separation.md`).
 **Detail:** `findings-app.md` #8, #10, #11; `findings-design.md` §3; owner: the sticky bars cover content on a real
 phone.
@@ -89,7 +90,8 @@ phone.
 `next-app/public/data/citations.json`, the engine gate code for the CSM red state and the handstand retest_gate
 (find it via OPEN-TASKS.md:46 and :55), `tests/e2e/harness/personas.ts`.
 
-**Items:** L-01 (manifest numbers), L-02, L-04 (catalog flags plus the persona-harness review: owner rule), SF-04,
+**Also owns:** `lib/proposals/select.ts`, `lib/engine/suggest.ts`, the phase/schedule code.
+**Items:** G-01 (the schedule side), G-06, G-07 (with lane 2a), G-09, L-01 (manifest numbers), L-02, L-04 (catalog flags plus the persona-harness review: owner rule), SF-04,
 SF-05.
 **Detail:** `audit/h18-claims.md` (exact manifest lines), `roadmap-reconciliation.md` 1–2, `audit/x12`.
 **Done when:**
@@ -106,7 +108,8 @@ SF-05.
 `app/welcome/**`, `app/account/page.tsx` (the delete flow), the UTM capture (new `lib/attribution.ts` plus the hook
 point in sign-up), `dev/scripts/hackathon-auth-config.sh`, Supabase email templates (`supabase/templates/`, new).
 
-**Items:** SG-01, SG-02, SG-03, SG-04, SG-05, SG-06, SG-08, M-02, A-UX-14, A-UX-15.
+**Also owns:** `app/programs/[slug]/intake/IntakeClient.tsx`.
+**Items:** G-02, G-03, SG-01, SG-02, SG-03, SG-04, SG-05, SG-06, SG-08, M-02, A-UX-14, A-UX-15.
 **Detail:** `findings-money-tech.md`, `findings-compliance.md` 3–6, 8, `audit/h05`, `g2`, `g3`.
 **Done when:**
 - `screens/gaps/A-first-run/notes.md` shows the landing CTA is already `sign-up?next=%2Fprograms%2Ffirst-strict-pullup`.
@@ -125,7 +128,7 @@ rule), then A-UX-09 if time allows.
 **Rule:** these touch every lane's files, so start only when lanes 1–5 have pushed.
 
 ## QA block (about 1 h)
-1. Re-run the gap capture: `npx playwright test -c tests/e2e/playwright.config.ts launch-gaps.spec.ts --workers=1`.
+1. Fix G-14 in the spec first (dismiss the onboarding modal; test red on a training day). Then re-run the gap capture: `npx playwright test -c tests/e2e/playwright.config.ts launch-gaps.spec.ts --workers=1`.
    Compare it with today's `screens/gaps/`.
 2. Run `npm run e2e:personas` in the background (about 30 min). All 24 should pass; the muscle-up-elbow failure is
    known (O-03).

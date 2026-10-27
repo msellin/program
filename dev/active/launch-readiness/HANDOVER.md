@@ -26,6 +26,10 @@ Non-negotiables from `CLAUDE.md`:
 - **Confirmed live:** `app.terav.fit/data/{clinical-context,open-questions,log,program}.json` and
   `programs/anterior-hip-rebuild.json` are public. That is the owner's clinical record. **Do B1 first.**
 - **Never checked:** Supabase dashboard, Cloudflare Analytics toggle, ad accounts, Meta's health classification.
+- **Covered since:** a stranger's first run, a red day and 375/393 viewports (`screens/gaps/`, `audit/gap-*`). Still
+  open: red against a real scheduled session (G-14).
+- **Deploys fixed (2026-10-27):** CI had failed since 2026-10-20. It's green again (run 40489982992), and production
+  serves the latest main, BUG-48 included.
 - **The Haiku audits make mistakes.** Fix only what you verified; the Sonnet findings say what they re-checked.
 
 ## 1. Owner decisions: ALL AGREED 2026-10-27 (owner: "I agree to all")
