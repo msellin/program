@@ -45,8 +45,8 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 | A-UX-01 | Nothing sticky except the nav: suggestions inline under the hero; the feedback button moves into You | H | A | M | owner, design §3 | ✓ 362d271
 | A-UX-02 | Session Done screen (summary + "Back to Today" + suggestion); split the Finish and Stop handlers; fix the stale "Continue" CTA | H | A | M–L | app #3,13 ✓ 8a245f0 |
 | A-UX-03 | Today: at most 3 cards, one hero state; no "Workout ready" over "Rest day"; one week number | H | A | M | app #8,10 | ✓ 362d271
-| A-UX-04 | One name per concept: "Extra session", "Suggestion" (Accept / Not now), "reps left", "working max"; citations behind "Why?" | H | A | S–M | app #12,18, h04 |
-| A-UX-05 | Plan: one status per day; the skip toast counts visible sessions; a visible Unskip | H | A | M | app #11 |
+| A-UX-04 | One name per concept: "Extra session", "Suggestion" (Accept / Not now), "reps left", "working max"; citations behind "Why?" | H | A | S–M | app #12,18, h04 | ✓ 4308e73 (partial: citations behind Why? not moved) |
+| A-UX-05 | Plan: one status per day; the skip toast counts visible sessions; a visible Unskip | H | A | M | app #11 | ✓ e1ecbf6 (status/Unskip; toast text unchanged) |
 | A-UX-06 | A hold logged with 0 s counts as logged: require held>0 or a confirm | H | A | S | app #7 ✓ 8a245f0 |
 | A-UX-07 | Gate `/dev/primitives` and `/admin/keywords` to dev/admin | H | A | S | app #15 | ✓ bf64bd2 |
 | A-UX-08 | A friendly error instead of the raw `{error}` on Today | H | A | S | design §3 | ✓ 362d271
@@ -66,8 +66,8 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 ## 4. Design system
 | ID | Action | When | Who | Effort | Source |
 |----|--------|------|-----|--------|--------|
-| D-01 | One `ui/Button` (tan rect, sentence case); swap the primaries on the 6 ad-path screens | H | A | M | design §5a |
-| D-02 | One header rule: the wordmark on tab roots, back + H1 on sub-pages | H | A | S–M | design §5b |
+| D-01 | One `ui/Button` (tan rect, sentence case); swap the primaries on the 6 ad-path screens | H | A | M | design §5a | ✓ 57c5a85 |
+| D-02 | One header rule: the wordmark on tab roots, back + H1 on sub-pages | H | A | S–M | design §5b | ✓ 0b8b667 |
 | D-03 | One card style; the accent bar means status only | S | A | M | design §5c |
 | D-04 | Type scale; shared tokens for landing + app; cut the 1,552 hardcoded styles | S | A | L | design §5d-e, h06 |
 
