@@ -32,8 +32,8 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 ## 2. Safety in the session
 | ID | Action | When | Who | Effort | Source |
 |----|--------|------|-----|--------|--------|
-| SF-01 | "Something hurt" as an always-visible top-row chip → Note / Swap or skip / Stop | H | A | S–M | app #4, design §4 |
-| SF-02 | A real Stop for every program (not only handstand), with a stopped screen + symptom prompt | H | A | M | app #1-2 |
+| SF-01 | "Something hurt" as an always-visible top-row chip → Note / Swap or skip / Stop | H | A | S–M | app #4, design §4 ✓ 8a245f0 |
+| SF-02 | A real Stop for every program (not only handstand), with a stopped screen + symptom prompt | H | A | M | app #1-2 ✓ 8a245f0 |
 | SF-03 | Public programs: a one-tap "How do you feel today?" on the brief replaces the required morning check (fallback: drop "Check first" as a blocker) | H | A | M | personal-separation | (fallback only ✓ 362d271)
 | SF-04 | Concurrent-strength-maintenance red state: "resume at 3×4" missing. Fix it or drop the promise | H | A | M | roadmap B12 |
 | SF-05 | Handstand-walk `retest_gate` / bail-out gates nothing. Fix it or drop the promise | H | A | M | roadmap B12 |
@@ -43,11 +43,11 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 | ID | Action | When | Who | Effort | Source |
 |----|--------|------|-----|--------|--------|
 | A-UX-01 | Nothing sticky except the nav: suggestions inline under the hero; the feedback button moves into You | H | A | M | owner, design §3 | ✓ 362d271
-| A-UX-02 | Session Done screen (summary + "Back to Today" + suggestion); split the Finish and Stop handlers; fix the stale "Continue" CTA | H | A | M–L | app #3,13 |
+| A-UX-02 | Session Done screen (summary + "Back to Today" + suggestion); split the Finish and Stop handlers; fix the stale "Continue" CTA | H | A | M–L | app #3,13 ✓ 8a245f0 |
 | A-UX-03 | Today: at most 3 cards, one hero state; no "Workout ready" over "Rest day"; one week number | H | A | M | app #8,10 | ✓ 362d271
 | A-UX-04 | One name per concept: "Extra session", "Suggestion" (Accept / Not now), "reps left", "working max"; citations behind "Why?" | H | A | S–M | app #12,18, h04 |
 | A-UX-05 | Plan: one status per day; the skip toast counts visible sessions; a visible Unskip | H | A | M | app #11 |
-| A-UX-06 | A hold logged with 0 s counts as logged: require held>0 or a confirm | H | A | S | app #7 |
+| A-UX-06 | A hold logged with 0 s counts as logged: require held>0 or a confirm | H | A | S | app #7 ✓ 8a245f0 |
 | A-UX-07 | Gate `/dev/primitives` and `/admin/keywords` to dev/admin | H | A | S | app #15 |
 | A-UX-08 | A friendly error instead of the raw `{error}` on Today | H | A | S | design §3 | ✓ 362d271
 | A-UX-09 | Tabs Today / Plan / Record / You; fold Account and Settings into You; remove the header gear; Record absorbs progress/history/report | H (cuttable) | A | M | design §1 |
@@ -148,7 +148,7 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 | G-04 | **An untouched morning check saves a green day** (all defaults 0; Save is never disabled; `check/page.tsx:62-74,403`). Unanswered must not mean "fine" | H | A | S | 2b | gap-B | ✓ e2f79b3
 | G-05 | After the first check, the "How Terav reads you" onboarding modal covers Today and hides the red verdict (`OnboardingRunner.tsx:72-103`) | H | A | S | 2b | gap-B, gap-C | ✓ e2f79b3
 | G-06 | **A tier-advance suggestion shows on a red day** ("advance to Tier D"); `selectTierAdvance` has no state check (`lib/proposals/select.ts:280-300`) | H | A | S | 4 | gap-B |
-| G-07 | **Red doesn't change the session or plan** ("Open session" ungated; the 10% cut is on the TM path only, `suggest.ts:265-271`). **Confirmed on a real session 2026-10-27** (CSM: a low-back-severe red, and the bike session is unchanged). Make red = hold + the program's alternative | H | A | M | 2a + 4 | gap-B |
+| G-07 | **Red doesn't change the session or plan** ("Open session" ungated; the 10% cut is on the TM path only, `suggest.ts:265-271`). **Confirmed on a real session 2026-10-27** (CSM: a low-back-severe red, and the bike session is unchanged). Make red = hold + the program's alternative | H | A | M | 2a + 4 | gap-B ✓ fbef3c9 (session side; derivation 783f977) |
 | G-08 | Red copy has no next step; "see a clinician" exists only inside the Why/Cited sheets; a night-pain red has no referral line | H | A | S | 2b | gap-B | ✓ e2f79b3
 | G-09 | **Plan says "No phase covers this week" in every new user's first week.** Checked 2026-10-27: `plan/page.tsx:216` resolves the phase for the viewed week's Monday (`activePhaseFor(program, iso(viewedMon))`), which falls before a mid-week `started_at`. The program files' calendar dates are fine (`shiftedPhases` rebases them; Today correctly says Week 1 of 4). Fix: use the later of Monday and started_at, or any scheduled day in the week | H | A | S | 4 | gap-B, verified |
 | G-10 | Check screen: the sticky Save covers the last region row at 375; the feedback bubble sits on the CTA (with A-UX-01) | H | A | S | 2b | gap-B, gap-C | ✓ 6a2f1e9
