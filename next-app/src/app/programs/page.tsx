@@ -159,6 +159,8 @@ export default function ProgramCatalogPage() {
     (p) => !p.personal && p.status !== "DRAFT" && p.status !== "PROVISIONAL",
   );
   const populatedCategoryIds = new Set<string>(publicPrograms.map((p) => p.category));
+  // L-04: the "live now" strip and its count are the programs a new user can start.
+  const openPrograms = publicPrograms.filter((p) => !p.coming_soon);
 
   const filterOptions: Array<{ id: FilterCat; label: string }> = [
     { id: "all", label: "All" },
@@ -225,7 +227,7 @@ export default function ProgramCatalogPage() {
           above the filter chips so the browse mental model is: "here's
           what's shipping today" first, "browse by category" second.
           Sizes tuned for one-and-a-half card peek at 393px. */}
-      {publicPrograms.length > 0 ? (
+      {openPrograms.length > 0 ? (
         <section className="space-y-2 -mx-4 sm:-mx-6" aria-labelledby="live-now-eyebrow">
           <div className="px-4 sm:px-6 flex items-baseline gap-2">
             {/* Batch 36 P0 (audit 2026-08-21 · app-visual-craft) — swapped
@@ -241,14 +243,14 @@ export default function ProgramCatalogPage() {
                   eight are VERIFIED, so it understated every card beneath it. A
                   tier word in a count label drifts every time the ladder moves;
                   the count alone cannot. */}
-              {publicPrograms.length} programs · live now
+              {openPrograms.length} programs · live now
             </p>
           </div>
           <ul
             className="flex gap-3 overflow-x-auto px-4 sm:px-6 pb-2 snap-x snap-mandatory"
             style={{ overscrollBehaviorX: "contain" }}
           >
-            {publicPrograms.map((p) => {
+            {openPrograms.map((p) => {
               const accent = CATEGORY_ACCENT[p.category] ?? CATEGORY_ACCENT.other;
               const stripeClass = ACCENT_STRIPE[accent];
               return (
@@ -551,7 +553,13 @@ function ProgramCard({
                 active
               </span>
             ) : null}
-            <StatusChip status={p.status} personal={p.personal} />
+            {p.coming_soon && !isActive ? (
+              <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted">
+                coming soon
+              </span>
+            ) : (
+              <StatusChip status={p.status} personal={p.personal} />
+            )}
             {p.personal ? (
               <span
                 className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5"

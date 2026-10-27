@@ -116,7 +116,9 @@ export function ProgramPreviewClient({ slug }: Props) {
     entry.status === "draft" ||
     entry.status === "PROVISIONAL";
   const draftBlocked = isDraft && !isSuperAdmin;
-  const canStart = (!requiresTierPick || !!effectiveTier) && !draftBlocked;
+  // L-04: "coming soon" closes NEW starts only. Anyone already running it keeps it.
+  const comingSoonBlocked = !!entry.coming_soon && !isActive && !isSuperAdmin;
+  const canStart = (!requiresTierPick || !!effectiveTier) && !draftBlocked && !comingSoonBlocked;
 
   const saveTierIfNeeded = () => {
     if (requiresTierPick && effectiveTier) setProgramTier(slug, effectiveTier);
@@ -545,6 +547,15 @@ export function ProgramPreviewClient({ slug }: Props) {
               </div>
             ) : null}
 
+            {comingSoonBlocked ? (
+              <div className="mb-3 rounded border border-line-soft border-l-4 border-l-line bg-surface p-3 text-[13.5px]">
+                <p className="font-semibold text-strong">Coming soon.</p>
+                <p className="mt-1 text-muted">
+                  This program isn&apos;t open to new starts yet. You can read how it works here.
+                </p>
+              </div>
+            ) : null}
+
             <div className="flex flex-wrap gap-2">
               {hasOtherActive ? (
                 <>
@@ -555,7 +566,7 @@ export function ProgramPreviewClient({ slug }: Props) {
                     className="inline-flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-wider px-4 py-3 rounded bg-bronze text-ground hover:bg-bronze/90 disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     <Play size={14} />
-                    {starting ? "Starting…" : draftBlocked ? "Not published yet" : requiresTierPick && !effectiveTier ? "Pick a tier" : "Make this my focus (replace current)"}
+                    {starting ? "Starting…" : draftBlocked ? "Not published yet" : comingSoonBlocked ? "Coming soon" : requiresTierPick && !effectiveTier ? "Pick a tier" : "Make this my focus (replace current)"}
                   </button>
                   {isSuperAdmin ? (
                     <button
@@ -586,7 +597,7 @@ export function ProgramPreviewClient({ slug }: Props) {
                   className="inline-flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-wider px-4 py-3 rounded bg-bronze text-ground hover:bg-bronze/90 disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   <Play size={14} />
-                  {starting ? "Starting…" : draftBlocked ? "Not published yet" : requiresTierPick && !effectiveTier ? "Pick a tier to start" : "Make this my focus"}
+                  {starting ? "Starting…" : draftBlocked ? "Not published yet" : comingSoonBlocked ? "Coming soon" : requiresTierPick && !effectiveTier ? "Pick a tier to start" : "Make this my focus"}
                 </button>
               )}
             </div>

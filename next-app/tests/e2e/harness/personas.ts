@@ -20,6 +20,14 @@ import { ARCHETYPES, type ArchetypeId } from "./archetype";
  *
  * See also: reference_app-audit-system.md + feedback_harness-persona-
  * coverage.md in the founder's auto-memory.
+ *
+ * Catalog review 2026-10-27 (L-04): engine-builder, engine-builder-block-2,
+ * rowing-2k-test-prep, overhead-mobility and muscle-up became `coming_soon`
+ * (closed to NEW starts in the preview). Personas seed program state
+ * directly and never start through the preview, so every persona below
+ * still runs, and existing users of those programs are the case they now
+ * cover. No persona changed; `catalog-coming-soon.test.ts` asserts every
+ * manifest program still has one.
  */
 
 export type Persona = {

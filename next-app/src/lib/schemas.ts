@@ -2023,6 +2023,13 @@ export const programManifestEntrySchema = z.object({
   review_evidence: z.array(z.string()).optional(),
   featured: z.boolean().optional(),
   /**
+   * L-04 (2026-10-27): listed in the catalog but not open to NEW starts. The
+   * card says "Coming soon" and the preview's start button is disabled; anyone
+   * already running it keeps it. Must agree with the landing catalog's
+   * `status: "COMING"` (asserted in `catalog-coming-soon.test.ts`).
+   */
+  coming_soon: z.boolean().optional(),
+  /**
    * When true, this program is authored for one specific user's clinical context
    * (see repo /data/clinical-context.json) and is NOT marketed as an evidence-
    * backed catalog program. The catalog renders a "Personal" badge and the
