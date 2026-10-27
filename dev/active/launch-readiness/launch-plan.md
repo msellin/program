@@ -27,7 +27,7 @@ athletes to a free open beta and measures sign-ups and first sessions per progra
 | O2 | Cloudflare Web Analytics ON for terav.fit and app.terav.fit | yes |
 | O3 | Meta Business + Google Ads accounts. Targeting 18+, interests/keywords only, **no** custom audiences, remarketing or Customer Match | yes |
 | O4 | One real sign-up from your phone after the sprint deploys | yes |
-| O5 | Apply to Paddle (Polar as fallback). Ask in writing that a training app is not "medical advice" | no (billing next) |
+| O5 | Stripe (owner's existing account, as used for OddsIntel): create a **separate Stripe account for Terav** under the same login, turn on Stripe Tax, and ask the accountant about EU VAT/OSS | no (billing next) |
 
 Meta ad review can take up to 24 hours. Submit the ads as soon as B1–B8 are live.
 
@@ -54,7 +54,7 @@ roughly 4–30 trials. That shows whether cold traffic signs up at all and rough
 conversion rates.
 
 ## C. Next, before scaling (not today)
-- **Billing:** checkout, webhook → `tier`, gate, cancel portal, trial-end email. Plus paid terms (renewal, EU
+- **Billing (Stripe, owner decision 2026-10-27):** Checkout with a 14-day trial, one Pages Function webhook → `tier`, gate, Stripe Customer Portal for cancellation, trial-end email. About 3–5 h. Stripe is not a merchant of record: Stripe Tax collects VAT, the owner files it (home-country VAT under €10k/year of cross-border EU B2C sales, OSS above that). Plus paid terms (renewal, EU
   14-day withdrawal).
 - **Tracking:** Consent Mode v2 + CMP, then conversion tags. A lawyer reviews the Art. 9 consent design and a DPIA.
 - **Product:** a "next focus" offer at the end of each program (goal-reached churn). Intake cut to about 5 up-front
@@ -77,4 +77,4 @@ conversion rates.
 7. **Budget split:** €150 total, Meta €100 / Google €50? *(rec: yes)*
 8. **Review panel before publishing:** one round of 3 Sonnet lenses on the ad copy + landing (~150k tokens), or
    skip? *(rec: run it; owner rule for anything public)*
-9. **Billing provider:** apply to Paddle now? *(rec: yes)*
+9. **Billing provider:** Stripe (existing account; separate Terav account). Decided 2026-10-27. Still open: free beta today with Stripe straight after *(rec)*, or a paid trial from the first click (+3–5 h today)?

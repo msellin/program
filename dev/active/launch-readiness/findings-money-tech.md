@@ -34,3 +34,6 @@
 ## 5. Verified vs Haiku
 - Verified in code: sign-up emailRedirectTo hard-coded (L37, L76), no `?next` read; signup_disabled remap in auth-errors.ts; CSP script-src 'self' 'unsafe-inline' in _headers; functions/api has only admin, delete-account, feedback (no billing).
 - From Haiku, unverified: dashboard state (toggle, SMTP, captcha, confirm), Paddle/Polar approval time and Estonia payouts, Meta/Google/Paddle policy text, user_profiles trigger applied, Cloudflare Analytics needing no banner (check with counsel), market numbers (weak, no demand test).
+
+
+> **Superseded 2026-10-27 (owner):** billing provider is **Stripe** (existing account, separate Terav account, Stripe Tax). Paddle/Polar are no longer the plan. See `launch-plan.md` O5, C and D9.
