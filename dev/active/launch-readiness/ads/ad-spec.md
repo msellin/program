@@ -25,7 +25,7 @@ Base URL pattern: `https://terav.fit/programs/<slug>/?utm_source=<meta|google>&u
 | Set | Landing URL | utm_campaign | Meta detailed targeting (interests) | Google keywords (phrase match) |
 |-----|-------------|--------------|-------------------------------------|--------------------------------|
 | **pullup** | `https://terav.fit/programs/first-strict-pullup/?utm_source={meta\|google}&utm_medium=paid&utm_campaign=pullup-v1&utm_content={ad}` | `pullup-v1` | Calisthenics, Bodyweight exercise, Functional training, Gymnastics | "first pull up", "pull up progression", "strict pull up program" |
-| **handstand** | `https://terav.fit/programs/handstand-walk/?utm_source={meta\|google}&utm_medium=paid&utm_campaign=handstand-v1&utm_content={ad}` | `handstand-v1` | Calisthenics, Gymnastics, Handstand, Functional training | "handstand walk progression", "learn handstand walk", "handstand walk drills" |
+| **handstand** | `https://terav.fit/programs/handstand-walk/?utm_source={meta\|google}&utm_medium=paid&utm_campaign=handstand-v1&utm_content={ad}` | `handstand-v1` | Calisthenics, Gymnastics, Handstand, Functional training | "handstand walk progression", "handstand walk training", "handstand walk drills" |
 | **strengthcardio** | `https://terav.fit/programs/concurrent-strength-maintenance/?utm_source={meta\|google}&utm_medium=paid&utm_campaign=strengthcardio-v1&utm_content={ad}` | `strengthcardio-v1` | Functional training, Weight training, Hybrid training, HYROX (if offered) | "keep strength while doing cardio", "strength and cardio plan", "concurrent training program" |
 
 `utm_content` values: Meta `m-hA-tA`, `m-hB-tB` (headline/text letters below); Google `g-rsa1`. `{meta|google}` is

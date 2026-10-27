@@ -10,6 +10,8 @@ export type LandingProgram = {
   slug: string;
   name: string;
   tagline: string; // one-sentence hook, marketing tone
+  /** Short "start here if" line shown under the tagline; links to another program when `prerequisiteLink` is set. */
+  prerequisite?: { text: string; link?: { slug: string; label: string } };
   domain: "aerobic" | "concurrent" | "skill";
   domainLabel: string;
   status: "AVAILABLE" | "COMING" | "PERSONAL";
@@ -173,6 +175,9 @@ export const PROGRAMS: LandingProgram[] = [
     slug: "handstand-walk",
     name: "Handstand Walk",
     tagline: "From wall-supported to consistent walk.",
+    prerequisite: {
+      text: "Start here if you can hold a wall handstand for about 10 seconds.",
+    },
     domain: "skill",
     domainLabel: "Skill",
     status: "AVAILABLE",

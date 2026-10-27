@@ -86,6 +86,23 @@ export default async function ProgramDetailPage({
             <p className="mt-4 text-lg font-medium leading-snug text-white/85 sm:text-xl">
               {p.tagline}
             </p>
+            {p.prerequisite && (
+              <p className="mt-3 text-[15px] leading-snug text-white/65">
+                {p.prerequisite.text}
+                {p.prerequisite.link && (
+                  <>
+                    {" "}
+                    <Link
+                      href={`/programs/${p.prerequisite.link.slug}`}
+                      className="underline underline-offset-2 hover:text-white"
+                    >
+                      {p.prerequisite.link.label}
+                    </Link>
+                    .
+                  </>
+                )}
+              </p>
+            )}
           </header>
 
           <Section title="What it's for">
