@@ -56,15 +56,15 @@ export default function GuidePage() {
       </Section>
 
       <Section title="Strength terms">
-        <Term term="TM (Training Max)">
+        <Term term="Working max">
           The number all percentages calculate from. Roughly 90% of a solid 5RM or 85% of your 1RM.
-          Deliberately submaximal — that headroom is what lets you progress without stalling. If TM
+          Deliberately submaximal — that headroom is what lets you progress without stalling. If working max
           is 110 kg, top set week 1 is 85% × 110 = 93.5 kg for 5+ reps.
         </Term>
         <Term term="1RM">Your one-rep max. Only tested at the end of a full 4-cycle block and at program-defined peak points.</Term>
         <Term term="5RM">
-          Heaviest weight you can move for 5 clean reps. Used in evaluation week to set the initial TM.
-          Formula: TM = 5RM × 0.90.
+          Heaviest weight you can move for 5 clean reps. Used in evaluation week to set the initial working max.
+          Formula: working max = 5RM × 0.90.
         </Term>
         <Term term="Sets × reps">&ldquo;5×5&rdquo; = five sets of five. Rest 2-3 min between working sets on main lifts.</Term>
         <Term term="AMRAP">
@@ -77,23 +77,23 @@ export default function GuidePage() {
         </Term>
         <Term term="Cycle">One 4-week 5/3/1 block: week 1 (5s), week 2 (3s), week 3 (1+ AMRAP), week 4 (deload).</Term>
         <Term term="Deload">
-          Week 4 of every cycle. Low load (40/50/60% TM). Not optional. It&apos;s what lets you keep progressing.
+          Week 4 of every cycle. Low load (40/50/60% working max). Not optional. It&apos;s what lets you keep progressing.
         </Term>
-        <Term term="RPE (0–10) — Rate of Perceived Exertion">
+        <Term term="Effort (0–10) — how many reps were left">
           How hard the set felt = how many reps you had left in the tank.
           <br /><br />
           <span className="font-mono text-[12px] text-muted">
             10 = failure · 9 = one rep left · 8 = two left · 7 = three · 6 = four · 5 = half-effort
           </span>
           <br /><br />
-          Example: <em>90 × 5 @ RPE 5</em> means you did 5 reps with 90 kg and could have done 5 more.
-          The app reads RPE to decide next session&apos;s bump — RPE ≤ 5 gets +10 kg, RPE 7 gets +5,
-          RPE 9 holds, RPE 10 usually means TM reset.
+          Example: <em>90 × 5 @ effort 5</em> means you did 5 reps with 90 kg and could have done 5 more.
+          The app reads effort to decide next session&apos;s bump — effort ≤ 5 gets +10 kg, effort 7 gets +5,
+          effort 9 holds, effort 10 usually means working max reset.
           <br /><br />
-          Target RPE by scheme: warm-ups 4-6 · 5/3/1 top set week 1 = 7-8 · week 2 = 8 · week 3 AMRAP = 9-10 · FSL 5×5 = 6-7 · deload = 4-5.
+          Target effort by scheme: warm-ups 4-6 · 5/3/1 top set week 1 = 7-8 · week 2 = 8 · week 3 AMRAP = 9-10 · FSL 5×5 = 6-7 · deload = 4-5.
         </Term>
         <Term term="Reset rule">
-          If you fail to hit reps on the week-3 top set, drop TM by 10% next cycle. Normal — don&apos;t
+          If you fail to hit reps on the week-3 top set, drop working max by 10% next cycle. Normal — don&apos;t
           muscle through failed reps.
         </Term>
       </Section>
@@ -101,7 +101,7 @@ export default function GuidePage() {
       <Section title="How to use the tabs">
         <Row label="Day">
           Today&apos;s prescribed session — fixed to the current calendar day.
-          Strength shows exercises with weight, reps, RPE per set, plate
+          Strength shows exercises with weight, reps, effort per set, plate
           breakdown and a bar visual. Aerobic / rowing shows the block
           prescription plus a session-log card (duration, HR, splits, watts).
           To browse tomorrow or yesterday, go to Plan.
@@ -118,7 +118,7 @@ export default function GuidePage() {
         </p>
         <Row label="Programs">The catalog. Browse, preview, start a program.</Row>
         <Row label="Check">Morning symptom scoring. Save it and today&apos;s prescription auto-adjusts (amber −5%, red −10%).</Row>
-        <Row label="Off-plan">Accessories, home rehab, cardio / conditioning blocks — no calendar pressure.</Row>
+        <Row label="Extra session">Extra drills, home rehab, cardio / conditioning blocks — no calendar pressure.</Row>
         <Row label="Report">Specialist-facing summary. Print / save as PDF for a clinician or coach.</Row>
         <Row label="Data">Manage data — import, export, wipe local.</Row>
         <Row label="Evidence">
@@ -131,13 +131,13 @@ export default function GuidePage() {
       <Section title="Green / Amber / Red">
         <p>Symptom state, judged by the morning check the day after training.</p>
         <p>
-          <strong className="text-green">Green.</strong> Nothing above 3/10, baseline within 24h. Progress load. TM +5-7.5 kg at cycle end.
+          <strong className="text-green">Green.</strong> Nothing above 3/10, baseline within 24h. Progress load. Working max +5-7.5 kg at cycle end.
         </p>
         <p>
           <strong className="text-amber">Amber.</strong> A 4-5/10 or morning stiffness over 30 min. Hold load. Repeat the week.
         </p>
         <p>
-          <strong className="text-red">Red.</strong> Painful click, night pain, gait change, or anything over 5. Back off two steps. TM -10%. Three ambers in a row = same action. Real red flags = clinician, not the app.
+          <strong className="text-red">Red.</strong> Painful click, night pain, gait change, or anything over 5. Back off two steps. Working max -10%. Three ambers in a row = same action. Real red flags = clinician, not the app.
         </p>
       </Section>
 

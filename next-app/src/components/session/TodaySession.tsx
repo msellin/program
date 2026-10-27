@@ -436,7 +436,7 @@ export function TodaySession({
           const today = new Date(activeDate + "T00:00:00");
           const daysIn = Math.max(0, Math.floor((today.getTime() - started.getTime()) / 864e5));
           const week = Math.floor(daysIn / 7) + 1;
-          const mode = week <= 2 ? "blocked practice — drills in the composed order" : "random practice — order shuffled by the seed";
+          const mode = week <= 2 ? "blocked practice — drills in the composed order" : "random practice — order varies each session";
           return (
             <p className="text-[11px] text-muted font-mono">
               {/* "Program week" not "Week": the header above already reads

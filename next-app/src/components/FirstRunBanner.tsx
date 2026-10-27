@@ -66,7 +66,7 @@ export function FirstRunBanner() {
         <li><span className="text-ink">Profile</span> — account, active plans, menu.</li>
       </ul>
       <p className="text-[12px] text-muted pt-1">
-        More lives under <span className="text-ink">Profile</span>: Programs, Off-plan, Report, Guide and Evidence. The daily check is
+        More lives under <span className="text-ink">Profile</span>: Programs, Extra session, Report, Guide and Evidence. The daily check is
         reached from Day when one is due.
       </p>
       <div className="pt-1">

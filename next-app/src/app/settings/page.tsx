@@ -86,11 +86,11 @@ export default function SettingsPage() {
       </Section>
 
       {offPlanVisible ? (
-        <Section eyebrow="Off-plan">
+        <Section eyebrow="Extra session">
           <ToggleRow
             icon={<ListPlus size={16} className="text-muted" aria-hidden />}
-            label="Off-plan drills"
-            hint="Accessory and mobility work outside the schedule. Your plan already puts these on specific days."
+            label="Extra session drills"
+            hint="Extra drills and mobility work outside the schedule. Your plan already puts these on specific days."
             value={offPlan}
             onToggle={(v) => {
               setFeatureFlag("off_plan", v);

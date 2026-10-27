@@ -15,7 +15,7 @@ export function FallbackStep({ programName }: { programName: string }) {
       <p className="text-[14px] text-muted leading-relaxed">
         You&apos;ve picked <span className="text-strong">{programName}</span>. Terav sharpens one
         focus at a time — sessions land on Today, you log what happens, and the engine proposes
-        adjustments you Accept or Ignore. Nothing changes without your call.
+        adjustments you Accept or say not now. Nothing changes without your call.
       </p>
       <p className="text-[11px] text-muted italic">
         Every adjustment shows its reasoning — a log signal or a cited study.

@@ -302,7 +302,7 @@ export default function ProfilePage() {
           >
             <span className="flex items-center gap-3 text-sm">
               <ListPlus size={16} className="text-muted" />
-              Off-plan
+              Extra session
             </span>
             <ChevronRight size={16} className="text-muted flex-shrink-0" />
           </Link>

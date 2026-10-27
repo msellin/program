@@ -84,7 +84,7 @@ export function RunSlotCard({ date }: { date: string }) {
         // (dropped article, added arrow suffix per §2.13 row 8).
         title: "Log extra session →",
         detail:
-          "Cross-modal work, walks, class attendance, mobility — anything not in the prescribed block. Optional. Nothing here changes the plan.",
+          "Runs, rows, walks, classes, mobility — anything not in the prescribed block. Optional. Nothing here changes the plan.",
       }
     : slotForDow(dow);
   const runs = store.logs[date]?.runs ?? [];

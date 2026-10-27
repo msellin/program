@@ -128,7 +128,7 @@ export function ProposalCard({
                 {proposal.evidence.map((e) => (
                   <li key={e.date + e.exerciseId}>
                     {e.date} · {humanizeExerciseId(e.exerciseId)} · {e.weightKg} kg × {e.reps}
-                    {e.rpe != null ? ` @ RPE ${e.rpe}` : ""} · {e.pctTM}% TM
+                    {e.rpe != null ? ` · effort ${e.rpe}` : ""} · {e.pctTM}% of working max
                   </li>
                 ))}
               </ul>
@@ -169,7 +169,7 @@ export function ProposalCard({
             onClick={onIgnore}
             className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-ink hover:bg-line-soft min-h-[44px]"
           >
-            Ignore
+            Not now
           </button>
         </div>
       ) : null}

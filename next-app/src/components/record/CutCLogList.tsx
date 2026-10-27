@@ -214,7 +214,7 @@ function ExerciseRow({
                   : s.seconds != null
                     ? `${s.seconds}s hold`
                     : `${s.weight_kg != null ? `${s.weight_kg} kg` : "—"} × ${s.reps != null ? s.reps : "—"}`}
-                {s.rpe != null ? ` @ RPE ${s.rpe}` : ""}
+                {s.rpe != null ? ` · effort ${s.rpe}` : ""}
               </span>
               {s.notes ? (
                 <span className="text-[11px] italic ml-2 truncate">{s.notes}</span>

@@ -55,7 +55,7 @@ export function OffPlanSheet({
   return (
     <BottomSheet surface="OffPlanSheet" titleId="off-plan-title" onClose={onClose}>
       <p id="off-plan-title" className="text-[16px] font-semibold text-strong mb-1 tracking-[-.015em]">
-        Log an activity
+        Log an extra session
       </p>
       {/* Copy is deliberately neutral about whether this was prescribed.
           For Engine Builder and rowing-2k it usually WAS — those programs

@@ -46,7 +46,7 @@ export function ProposalStickyActionBar({
             onClick={onIgnore}
             className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-ink hover:bg-line-soft active:bg-line-soft min-h-[44px]"
           >
-            Ignore
+            Not now
           </button>
         </div>
       </div>

@@ -491,7 +491,7 @@ export function BriefView({
               and activity logging, which is the retest data source for
               four programs. Only the second survives here, so the line
               names it. */}
-          <span className="text-[13.5px] text-muted">Log a run, row, or class</span>
+          <span className="text-[13.5px] text-muted">Log an extra session</span>
           <span className="flex-shrink-0 text-[14px] text-muted">›</span>
         </button>
         {progressLabel ? (

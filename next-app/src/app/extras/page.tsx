@@ -21,7 +21,7 @@ export default function ExtrasRedirect() {
   return (
     <div className="mt-8 text-center">
       <p className="text-[14px] text-muted">
-        Extras moved to <a href="/off-plan/" className="text-bronze underline">Off-plan</a>.
+        Extras moved to <a href="/off-plan/" className="text-bronze underline">Extra session</a>.
       </p>
       <p className="text-[12px] text-muted mt-2 italic">Redirecting…</p>
     </div>

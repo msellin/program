@@ -116,8 +116,8 @@ export function SetRow({ index, set, prev, prescribed, isPR, restSeconds, onChan
         step={0.5}
         min={0}
         max={10}
-        placeholder="RPE"
-        aria-label={`Set ${index + 1} RPE`}
+        placeholder="Effort"
+        aria-label={`Set ${index + 1} effort`}
         value={set.rpe ?? ""}
         onChange={(e) => {
           const raw = e.target.value;

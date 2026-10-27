@@ -247,7 +247,7 @@ export function OffPlanSession() {
   if (!offPlanOn) {
     return (
       <EmptyStateCard
-        title="Accessory work lives in your sessions now."
+        title="Extra drills live in your sessions now."
         body="Mobility drills, activation and around-run work are scheduled into the days your plan puts them on, so there's no separate list to keep up with. To log a run, a row or a class, use “Log a run, row, or class” at the bottom of any session."
         cta={{ href: "/", label: "Back to Day" }}
       />
@@ -256,8 +256,8 @@ export function OffPlanSession() {
   if (!primarySlug) {
     return (
       <EmptyStateCard
-        title="Accessory work lives here — once you have a focus."
-        body="Accessory work, mobility drills, and around-session blocks show up here once you pick a program. Optional — the plan's core sessions live on Today."
+        title="Extra sessions live here — once you have a focus."
+        body="Extra drills, mobility work, and around-session blocks show up here once you pick a program. Optional — the plan's core sessions live on Today."
         cta={{ href: "/programs/", label: "Browse programs" }}
       />
     );
@@ -393,9 +393,9 @@ export function OffPlanSession() {
   return (
     <div className="space-y-6 pt-4">
       <header>
-        <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">Off-plan</h1>
+        <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">Extra session</h1>
         <p className="mt-1 text-sm text-muted">
-          Accessory work, home rehab, around-runs.{" "}
+          Anything outside your plan: a run, a class, mobility.{" "}
           {activeDate === todayISO() ? "Logging to today." : "Logging to the selected date."}
         </p>
       </header>

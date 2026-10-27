@@ -61,7 +61,7 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
     // info) so the user can still see "×0.90 applied today" at a glance.
     const accepted = store.day_adjustments?.[date];
     if (accepted) {
-      list.push({ id: "day-adj-active", tone: "slate", label: `Not feeling 100% · ×${accepted.load_multiplier.toFixed(2)} applied` });
+      list.push({ id: "day-adj-active", tone: "slate", label: `Eased today by ${Math.round((1 - accepted.load_multiplier) * 100)}% because you felt off` });
     }
 
     // Anterior-hip: monthly hip check assessment cadence stays as a signal
@@ -83,7 +83,7 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
       list.push({
         id: "cycle-end",
         tone: cycleEval.worstState === "red" ? "red" : cycleEval.worstState === "amber" ? "amber" : "slate",
-        label: `Cycle end — ${cycleEval.recommendation.length} TM change${cycleEval.recommendation.length === 1 ? "" : "s"} proposed`,
+        label: `Cycle end — ${cycleEval.recommendation.length} working-max change${cycleEval.recommendation.length === 1 ? "" : "s"} suggested`,
       });
     }
 

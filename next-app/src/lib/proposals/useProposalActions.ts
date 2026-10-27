@@ -147,7 +147,7 @@ export function useProposalActions(proposal: Proposal, date: string) {
         break;
     }
     recordProposalOutcome(proposal, "ignored", date);
-    announce("Ignored.");
+    announce("Not now.");
   };
 
   const closeRetestSheet = (didSubmit: boolean) => {

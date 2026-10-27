@@ -274,7 +274,7 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
                   <span>Prev / Rx</span>
                   <span>Weight kg</span>
                   <span>Reps</span>
-                  <span>RPE</span>
+                  <span>Effort</span>
                   <span aria-hidden></span>
                   <span aria-hidden></span>
                 </div>

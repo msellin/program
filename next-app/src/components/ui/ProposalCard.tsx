@@ -156,13 +156,13 @@ export function ProposalCard({
               "focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2",
             )}
           >
-            Ignore
+            Not now
           </button>
         </div>
       ) : (
         <div className="flex items-center justify-between gap-2 pt-1">
           <StatusPill
-            label={status === "accepted" ? "Accepted" : "Ignored"}
+            label={status === "accepted" ? "Accepted" : "Not now"}
             tone={status === "accepted" ? "green" : "muted"}
           />
           {onUndo ? (

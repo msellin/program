@@ -93,12 +93,12 @@ test("public account: the three off-plan surfaces are gone", async ({ page }) =>
   // Profile carries no off-plan row.
   await page.goto("/profile/");
   await page.waitForSelector("text=More", { timeout: 20_000 });
-  await expect(page.getByRole("link", { name: /^Off-plan$/ })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: /^Extra session$/ })).toHaveCount(0);
 
   // Settings carries no off-plan toggle — the flag was never set.
   await page.goto("/settings/");
   await page.waitForSelector("text=Sound effects", { timeout: 20_000 });
-  await expect(page.getByText("Off-plan drills")).toHaveCount(0);
+  await expect(page.getByText("Extra session drills")).toHaveCount(0);
 
   // The route explains itself rather than 404ing or showing a drill list.
   await page.goto("/off-plan/");
@@ -136,7 +136,7 @@ test("grandfathered account: off-plan survives and is recoverable in Settings", 
       { timeout: 15_000 },
     )
     .toBe(true);
-  await expect(page.getByRole("link", { name: /^Off-plan$/ })).toBeVisible();
+  await expect(page.getByRole("link", { name: /^Extra session$/ })).toBeVisible();
 
   // The drill page works.
   await page.goto("/off-plan/");
@@ -145,7 +145,7 @@ test("grandfathered account: off-plan survives and is recoverable in Settings", 
   // And the toggle exists — the only in-app way back, since the installed
   // PWA has no URL bar to carry a query-string escape hatch.
   await page.goto("/settings/");
-  await expect(page.getByText("Off-plan drills")).toBeVisible({ timeout: 20_000 });
+  await expect(page.getByText("Extra session drills")).toBeVisible({ timeout: 20_000 });
 });
 
 test("an incidental single use does not grandfather", async ({ page }) => {
@@ -154,7 +154,7 @@ test("an incidental single use does not grandfather", async ({ page }) => {
   });
   await page.goto("/profile/");
   await page.waitForSelector("text=More", { timeout: 20_000 });
-  await expect(page.getByRole("link", { name: /^Off-plan$/ })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: /^Extra session$/ })).toHaveCount(0);
 });
 
 test("accessory exercises seed their authored reps, not zero", async ({ page }) => {
