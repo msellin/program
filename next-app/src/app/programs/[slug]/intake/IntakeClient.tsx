@@ -27,6 +27,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ChevronLeft, ShieldAlert, Check } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 import { loadProgram, loadProgramManifest } from "@/lib/data-loader";
 import { useStore } from "@/lib/useStore";
 import {
@@ -574,8 +575,6 @@ export function IntakeClient({ slug }: Props) {
     (q) => !SCREENING_IDS.has(q.id) && !SKILL_IDS.has(q.id) && !CONSENT_IDS.has(q.id),
   );
 
-  const backHref = `/programs/${slug}`;
-
   if (reviewing) {
     return (
       <div className="mx-auto max-w-2xl space-y-5 pt-4 pb-8">
@@ -733,14 +732,9 @@ export function IntakeClient({ slug }: Props) {
         </section>
 
         <div className="sticky bottom-2 pt-2">
-          <button
-            type="button"
-            onClick={commit}
-            disabled={committing || !chosenTierId}
-            className="w-full inline-flex items-center justify-center gap-1.5 font-mono text-[12px] uppercase tracking-wider px-4 py-3 rounded bg-bronze text-ground hover:bg-bronze/90 disabled:opacity-40 disabled:cursor-not-allowed"
-          >
+          <Button block onClick={commit} disabled={committing || !chosenTierId}>
             {committing ? "Starting…" : "Start program with this tier"}
-          </button>
+          </Button>
         </div>
       </div>
     );
@@ -870,13 +864,6 @@ export function IntakeClient({ slug }: Props) {
           into the progress rail as an additional segment (rail carries
           {program} · {section} · Step N of M), so users still see the
           context on every step without the wall of restated purpose. */}
-      <div className="flex items-center justify-between gap-2">
-        <Link href={backHref} className="inline-flex items-center gap-1 text-[14px] text-muted hover:text-ink">
-          <ChevronLeft size={14} />
-          Cancel intake
-        </Link>
-      </div>
-
       <h1 className="sr-only">Intake — {manifestEntry?.name ?? slug.replace(/-/g, " ")}</h1>
 
       <WizardProgress
@@ -1005,13 +992,13 @@ function WizardProgress({
             a real signal, not chrome. Keep "Step N of M" form (do NOT
             switch to %) per audit + a11y warning (only one progressbar
             role per view). */}
-        <span className="min-w-0 max-w-[70%] text-right leading-tight font-mono text-[13px] text-muted uppercase tracking-wider sm:tracking-widest">
+        <span className="flex min-w-0 max-w-[70%] items-baseline justify-end gap-1 text-right leading-tight font-mono text-[13px] text-muted uppercase tracking-wider sm:tracking-widest">
           {/* The gap between label and counter was a CSS margin only, so the
               text layer read "SCREENING· Step 1 of 9" — fine on screen, wrong
               for anything reading the DOM. Real separator character instead. */}
-          {sectionLabel ? <span className="text-strong">{sectionLabel}</span> : null}
-          <span>
-            {sectionLabel ? " · " : ""}Step {currentIndex + 1} of {total}
+          {sectionLabel ? <span className="min-w-0 truncate text-strong">{sectionLabel}</span> : null}
+          <span className="whitespace-nowrap">
+            {sectionLabel ? "· " : ""}Step {currentIndex + 1} of {total}
           </span>
         </span>
       </div>
@@ -1613,35 +1600,23 @@ function WizardFooter({
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
       <div className="mx-auto max-w-2xl py-3 flex items-center gap-3">
-        <button
-          type="button"
-          onClick={onBack}
-          disabled={!canGoBack}
-          className={cn(
-            "font-mono text-[12px] uppercase tracking-wider px-4 py-3 rounded border border-line text-strong min-w-[88px] min-h-[44px]",
-            !canGoBack && "opacity-30 cursor-not-allowed",
-          )}
-        >
+        <Button variant="secondary" onClick={onBack} disabled={!canGoBack} className="min-w-[88px]">
           Back
-        </button>
+        </Button>
         <span
           className="flex-1 text-center font-mono text-[10px] text-muted uppercase tracking-widest"
           aria-hidden
         >
           {stepIndex + 1} / {total}
         </span>
-        <button
-          type="button"
+        <Button
           onClick={isLast ? onFinish : onNext}
           disabled={!nextReady}
           title={secondaryTitle}
-          className={cn(
-            "font-mono text-[12px] uppercase tracking-wider px-5 py-3 rounded bg-bronze text-ground min-w-[100px] min-h-[44px]",
-            !nextReady && "opacity-40 cursor-not-allowed",
-          )}
+          className="min-w-[100px]"
         >
           {primaryLabel}
-        </button>
+        </Button>
       </div>
       {/* Founder screenshot 2026-08-18 — caption used to render only when
           !nextReady, so answering a question shrank the footer by ~24px

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ChevronLeft, Play, Check } from "lucide-react";
+import { Play, Check } from "lucide-react";
 import { loadProgram, loadProgramManifest } from "@/lib/data-loader";
 import { useStore } from "@/lib/useStore";
 import { useIsSuperAdmin } from "@/lib/super-admin";
@@ -192,16 +192,6 @@ export function ProgramPreviewClient({ slug }: Props) {
 
   return (
     <div className="space-y-6 pt-4">
-      <div>
-        <Link
-          href="/programs"
-          className="inline-flex items-center gap-1 text-[14px] text-slate hover:text-ink"
-        >
-          <ChevronLeft size={14} />
-          All programs
-        </Link>
-      </div>
-
       {/* Batch 36 Step 14f · Program preview header modernized per v1.1.1
           §2.2 (h2-hero 26px on Preview) + StatusPill migration for the
           "active", ladder status, and personal chips. Prior inline

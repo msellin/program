@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { ChevronLeft, Volume2, Vibrate, Palette, Languages, Download, ListPlus } from "lucide-react";
 import { useStore } from "@/lib/useStore";
 import { hasOffPlanSetting, isOffPlanOn } from "@/lib/features";
@@ -33,15 +32,6 @@ export default function SettingsPage() {
 
   return (
     <div className="mt-6 space-y-6 max-w-md mx-auto">
-      <Link
-        href="/"
-        aria-label="Back to Today"
-        className="inline-flex items-center gap-1 text-[14px] text-muted hover:text-ink"
-      >
-        <ChevronLeft size={16} />
-        Back
-      </Link>
-
       {/* Batch 36 · H1 sized per v1.1.1 §1 h1-display (32px). Settings
           is a top-level route; carries the display H1 like Progress /
           Profile / Programs / History / Week. */}

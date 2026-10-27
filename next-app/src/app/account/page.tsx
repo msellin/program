@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { ChevronRight } from "lucide-react";
 import { useStore } from "@/lib/useStore";
 import { createClient } from "@/lib/supabase/client";
 import { useIsSuperAdmin } from "@/lib/super-admin";
@@ -34,7 +33,6 @@ export default function AccountPage() {
   const revertExtension = useStore((s) => s.revertExtension);
   const isSuperAdmin = useIsSuperAdmin();
   const [pendingRevert, setPendingRevert] = useState<string | null>(null);
-  const router = useRouter();
   const [email, setEmail] = useState<string | null>(null);
   const [memberSince, setMemberSince] = useState<string | null>(null);
   const [manifest, setManifest] = useState<ProgramManifest | null>(null);
@@ -90,17 +88,6 @@ export default function AccountPage() {
 
   return (
     <div className="space-y-5 pt-4">
-      <div className="flex items-center gap-2">
-        <button
-          type="button"
-          onClick={() => router.back()}
-          className="inline-flex items-center gap-1 text-[13px] text-slate hover:text-ink"
-        >
-          <ChevronLeft size={14} />
-          Profile
-        </button>
-      </div>
-
       <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">
         Account
       </h1>
