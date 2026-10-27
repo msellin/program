@@ -26,7 +26,7 @@ import { cn } from "@/lib/utils";
 // See dev/active/decisions-2026-08-21-locked.md for the full locked
 // decision set.
 const TABS = [
-  { href: "/", label: "Day", Icon: Dumbbell },
+  { href: "/", label: "Today", Icon: Dumbbell },
   { href: "/plan/", label: "Plan", Icon: CalendarDays },
   { href: "/record/", label: "Record", Icon: Activity },
   { href: "/profile/", label: "Profile", Icon: User },

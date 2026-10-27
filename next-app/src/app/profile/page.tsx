@@ -96,7 +96,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="space-y-5 pt-4 pb-10">
+    <div className="space-y-5 pt-4 pb-28">
       {/* Design-lead brief 2026-08-19 (gowod-visual-system) §1.1 + §4.2:
           promoted from sr-only to visible 32 px semibold. Highest-impact-
           per-minute edit in the brief — the Profile tab read "empty and

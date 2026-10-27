@@ -99,7 +99,7 @@ export default function GuidePage() {
       </Section>
 
       <Section title="How to use the tabs">
-        <Row label="Day">
+        <Row label="Today">
           Today&apos;s prescribed session — fixed to the current calendar day.
           Strength shows exercises with weight, reps, effort per set, plate
           breakdown and a bar visual. Aerobic / rowing shows the block
