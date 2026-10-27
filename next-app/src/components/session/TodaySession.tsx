@@ -7,6 +7,8 @@ import { HeroStateCard } from "@/components/workout/HeroStateCard";
 import { FirstRunBanner } from "@/components/FirstRunBanner";
 import { EmptyStateCard } from "@/components/EmptyStateCard";
 import { DashboardBlock } from "@/components/DashboardBlock";
+import { RedRestCard } from "@/components/workout/RedRestCard";
+import { redDayDirective } from "@/lib/engine/red-day";
 import { YourPlanCard } from "@/components/workout/YourPlanCard";
 import { SignalsStrip } from "@/components/workout/SignalsStrip";
 import { RunSlotCard } from "@/components/workout/RunSlotCard";
@@ -235,6 +237,22 @@ export function TodaySession({
     return { program: p, blocks: composed, scheduled: [] as ScheduledBlock[] };
   });
   const allBlocks = groups.flatMap((g) => g.blocks);
+  // P-01/P-02: on a red day Today is one rest card. Display only; the gate is unchanged.
+  const redToday =
+    activeDate === todayISO() ? redDayDirective(primary, logs, activeDate) : null;
+  if (redToday?.hold && !isPastProgramEnd(primary, activeDate, userProfile)) {
+    return (
+      <div className="space-y-6 pt-4">
+        <header className="space-y-1">
+          <p className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted">TODAY</p>
+          <h1 className="text-[32px] font-semibold tracking-[-0.03em] text-strong leading-none">
+            {primary.slug ? programDisplayName(primary, primary.slug) : "Day"}
+          </h1>
+        </header>
+        <RedRestCard sourceDate={redToday.sourceDate} />
+      </div>
+    );
+  }
   const groupsWithBlocks = groups.filter((g) => g.blocks.length > 0);
   const multipleProgramsToday = groupsWithBlocks.length >= 2;
 
@@ -541,6 +559,7 @@ export function TodaySession({
                 dateISO={activeDate}
                 firstSessionDate={primary.phases[0]?.starts}
                 programSlug={primary.slug}
+                program={primary}
               />
               </>
             );

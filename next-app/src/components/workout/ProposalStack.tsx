@@ -4,6 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useStore } from "@/lib/useStore";
 import { announce } from "@/lib/announce";
 import { selectProposals } from "@/lib/proposals/select";
+import { effectiveCheckState } from "@/lib/engine/red-day";
+import { peakRegionScore } from "@/lib/symptom-state";
 import { ProposalCard } from "./ProposalCard";
 import type { Program } from "@/lib/schemas";
 
@@ -87,7 +89,13 @@ export function ProposalStack({ program, date }: { program: Program | null | und
 
   const proposals = useMemo(() => {
     if (!program || !syncStable) return [];
-    return selectProposals(store, program, date);
+    const all = selectProposals(store, program, date);
+    // P-03: no load-adjust offer while the check is red or any region is >= 5/10.
+    // Render-side filter only; the engine and the gate are unchanged.
+    const { state, sourceDate } = effectiveCheckState(store.logs, date);
+    const sym = sourceDate ? store.logs[sourceDate]?.symptoms : null;
+    const severe = state === "red" || (!!sym && peakRegionScore(sym).value >= 5);
+    return severe ? all.filter((p) => p.kind !== "day_adjustment_soften") : all;
   }, [store, program, date, syncStable]);
 
   // Reserve minimum vertical space while sync is settling so HeroStateCard

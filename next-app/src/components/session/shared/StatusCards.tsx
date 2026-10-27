@@ -6,7 +6,7 @@ import { loadProgramManifest } from "@/lib/data-loader";
 import { useStore } from "@/lib/useStore";
 import { today as todayISO } from "@/lib/utils";
 import { evaluateRetestMetrics, formatMetric, deltaFromBaseline } from "@/lib/engine/retest-evaluator";
-import { programDisplayName } from "@/lib/day-format";
+import { programDisplayName, humanBlockName } from "@/lib/day-format";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
 import type { Program, ProgramManifest, Store } from "@/lib/schemas";
 
@@ -27,7 +27,9 @@ export function RestDayCard({
   firstSessionDate,
   programSlug,
   dateISO,
+  program,
 }: {
+  program?: Program;
   variant?: "rest" | "before" | "away" | "holiday" | "test";
   programName?: string;
   firstSessionDate?: string;
@@ -35,6 +37,20 @@ export function RestDayCard({
   /** The day being viewed. Omit for today. */
   dateISO?: string;
 }) {
+  const scheduled = useStore((st) => st.store.scheduled_blocks);
+  // P-10: a rest day names the next session so it is not a dead end.
+  const base = dateISO ?? todayISO();
+  const nextBlock = programSlug
+    ? Object.values(scheduled ?? {})
+        .filter((b) => b.program_slug === programSlug && b.state === "planned" && b.actual_date > base)
+        .sort((a, b) => a.actual_date.localeCompare(b.actual_date))[0]
+    : undefined;
+  const nextTitle = nextBlock
+    ? program?.blocks.find((b) => b.id === nextBlock.block_template_id)?.name
+    : undefined;
+  const nextLine = nextBlock
+    ? `Next session: ${new Date(nextBlock.actual_date + "T12:00:00").toLocaleDateString("en-GB", { weekday: "long" })}${nextTitle ? `, ${humanBlockName(nextTitle)}` : ""}.`
+    : null;
   const whenLabel =
     !dateISO || dateISO === todayISO()
       ? "today"
@@ -115,10 +131,10 @@ export function RestDayCard({
           "today" regardless of the date being viewed — the same bug fixed in
           OffPlanSheet on 2026-08-31 that never reached here. */}
       <p className="mt-1 text-muted">
-        {programName
-          ? `${programName} has no session scheduled ${whenLabel}. `
-          : `No session scheduled ${whenLabel}. `}
-        If you trained anyway — a ride, a run, a class — log it below; it still counts toward your history.
+        {nextLine ?? (programName
+          ? `${programName} has no session scheduled ${whenLabel}.`
+          : `No session scheduled ${whenLabel}.`)}{" "}
+        Trained anyway? Log it.
       </p>
     </div>
   );

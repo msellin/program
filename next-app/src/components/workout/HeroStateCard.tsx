@@ -112,7 +112,6 @@ export function HeroStateCard({ date }: { date: string }) {
   // per v1.1.1 §5 semantic score-hero pattern. Whole strip is chrome above
   // the block list; the workout name remains the H1 on the parent surface.
   if (isToday && state !== "none") {
-    const escalate = state === "red";
     return (
       <>
         <div className="space-y-2">
@@ -131,14 +130,6 @@ export function HeroStateCard({ date }: { date: string }) {
               ) : null}
               <span className="text-[14px] text-muted">{copy.sub}</span>
             </div>
-            {escalate ? (
-              <Link
-                href="/guide/#red-flags"
-                className="font-mono text-[11px] text-red border-b border-red/50 hover:opacity-80 whitespace-nowrap"
-              >
-                Escalate →
-              </Link>
-            ) : null}
           </div>
           <ReadinessTrail logs={logs} activeDate={date} />
         </div>

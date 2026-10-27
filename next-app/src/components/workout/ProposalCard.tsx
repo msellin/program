@@ -99,7 +99,7 @@ export function ProposalCard({
                   className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5"
                 >
                   <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-amber" />
-                  {m}
+                  {/^life load/i.test(m) ? "A heavy week outside training" : m}
                 </span>
               ))}
             </div>
@@ -162,9 +162,9 @@ export function ProposalCard({
             onClick={(e) => onAccept(e.currentTarget)}
             className="!h-auto min-h-12 py-2 text-left"
           >
-            {acceptVerb}
+            {proposal.kind === "day_adjustment_soften" ? "Do it" : acceptVerb}
           </Button>
-          <Button variant="secondary" onClick={onIgnore}>
+          <Button variant="secondary" onClick={onIgnore} className="!h-auto min-h-12 py-2">
             Not now
           </Button>
         </div>
@@ -238,7 +238,7 @@ function toneFor(p: Proposal): Tone {
 function eyebrowFor(p: Proposal): string {
   switch (p.kind) {
     case "day_adjustment_soften":
-      return "Fatigue or pain flagged today";
+      return "Lighter lifts next session?";
     case "readiness_after_layoff":
       return "You look ready to leave reintro";
     case "tier_advance":
