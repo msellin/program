@@ -67,7 +67,7 @@ export const en: LandingDict = {
   },
   evidence: {
     eyebrow: "The evidence",
-    title: "Built on published sport science. Every change shows its reason and source.",
+    title: "Built on published sport science. Every change shows its reason: a cited study or your log signal.",
     read_link: "Read",
   },
   wontdo: {
@@ -90,9 +90,9 @@ export const en: LandingDict = {
     // the founder at the centre of a section that works better pointed at the
     // reader. Replaced with what actually happened, in his own words.
     quote:
-      "It started with my own training log. Then I realised everyone is working around something.",
+      "It started with my own training log. Then I realised everyone has a weak spot.",
     body:
-      "The engine was built against one real training log: years of strength work, with every retest gate, safety rule and confirm-first mechanic proving itself there before it shipped. Your weak spot will be a different one. Terav is a focused-improvement tool, not a full training plan — it runs alongside your box, your coach, or your own week. If you have a specific medical issue, work with a clinician.",
+      "The engine was built against one real training log: years of strength work, with every rule and safety check proving itself there before it shipped. Your weak spot will be a different one. Terav is a focused-improvement tool, not a full training plan — it runs alongside your box, your coach, or your own week. If you have a specific medical issue, work with a clinician.",
   },
   beta: {
     h2_a: "One short intake.",

@@ -73,8 +73,12 @@ export default async function ProgramDetailPage({
               <span className="mono-caps">{p.domainLabel}</span>
               <span className="text-white/25">·</span>
               <span className="mono-caps text-[var(--color-muted)]">{p.duration}</span>
-              <span className="text-white/25">·</span>
-              <span className="mono-caps text-[var(--color-muted)]">{p.difficulty}</span>
+              {p.difficulty !== "multi-tier" && (
+                <>
+                  <span className="text-white/25">·</span>
+                  <span className="mono-caps text-[var(--color-muted)]">{p.difficulty}</span>
+                </>
+              )}
             </div>
             <h1 className="text-4xl font-black leading-[1.05] tracking-tight text-white sm:text-5xl md:text-6xl">
               {p.name}

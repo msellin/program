@@ -94,7 +94,7 @@ export const PROGRAMS: LandingProgram[] = [
     fitFor: [
       "You lift heavy and need cardio without losing your lifts.",
       "Your coach recommended it — you're skeptical of interference cost.",
-      "You want a specific number to defend: how much strength am I risking?",
+      "You want to see whether your squat holds, with a retest at week 8.",
       "You already own a rower, bike or erg.",
     ],
     arcSummary:
@@ -183,7 +183,7 @@ export const PROGRAMS: LandingProgram[] = [
     fitFor: [
       "You can kick to a wall handstand and hold 10+ seconds.",
       "You want structured drill progression, not \"do more walks\".",
-      "You care about the science of skill acquisition — blocked vs random practice.",
+      "You want drills picked from your weakest sub-skill, with practice that switches from blocked to random at week 3.",
       "You have wrist and shoulder mobility (or want to build them alongside).",
     ],
     arcSummary:

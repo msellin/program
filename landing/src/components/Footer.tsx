@@ -70,7 +70,7 @@ export function Footer() {
         </div>
 
         <div className="flex flex-col items-start justify-between gap-2 border-t border-white/[0.05] pt-6 text-xs text-white/40 sm:flex-row sm:items-center">
-          <div>© {year} Terav. Training log. Not medical advice.</div>
+          <div>© {year} Terav. A training log and plan. Not medical advice.</div>
         </div>
       </div>
     </footer>
