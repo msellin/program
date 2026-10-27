@@ -8,7 +8,7 @@ import { useStore } from "@/lib/useStore";
 import { createClient } from "@/lib/supabase/client";
 import { useIsSuperAdmin } from "@/lib/super-admin";
 import { isOffPlanOn } from "@/lib/features";
-import { loadProgramManifest } from "@/lib/data-loader";
+import { loadProgram, loadProgramManifest } from "@/lib/data-loader";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
 import { StatusPill } from "@/components/ui/StatusPill";
 import { BeliefsSection } from "@/components/profile/BeliefsSection";
@@ -40,6 +40,14 @@ export default function ProfilePage() {
   const [email, setEmail] = useState<string | null>(null);
   const [memberSince, setMemberSince] = useState<string | null>(null);
   const [manifest, setManifest] = useState<ProgramManifest | null>(null);
+  const [activeProgramJson, setActiveProgramJson] = useState<string | null | undefined>(undefined);
+  const activeSlugForLifts = store.user_profile?.active_program_id ?? null;
+  useEffect(() => {
+    if (!activeSlugForLifts) return;
+    void loadProgram(activeSlugForLifts)
+      .then((p) => setActiveProgramJson(JSON.stringify(p)))
+      .catch(() => setActiveProgramJson(undefined));
+  }, [activeSlugForLifts]);
   // Delete + Export moved to /account in F7 (Batch 23). The identity chip
   // above deep-links there.
 
@@ -133,7 +141,7 @@ export default function ProfilePage() {
       {/* Design package t2/2b ("what Terav believes about you"), scoped
           to two rows — see dev/active/profile-beliefs-plan.md. Renders
           null when there's nothing to show yet (no TM, no active tier). */}
-      <BeliefsSection />
+      <BeliefsSection programLifts={activeProgramJson} />
 
       {/* Active plan(s). No inline × — removal happens on the program page
           (see product-design-lead brief). Row is chevron → deep link. */}

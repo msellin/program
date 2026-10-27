@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Link from "next/link";
 import { AlertTriangle, ChevronDown } from "lucide-react";
 import { useStore } from "@/lib/useStore";
 import { humanizeExerciseId } from "@/lib/humanize-metrics";
@@ -21,15 +20,25 @@ import { checkTrainingMaxes } from "@/lib/engine/tm-plausibility";
  * it actually changes, so the absence of a Change button reads as
  * intentional rather than broken.
  */
-export function BeliefsSection() {
+export function BeliefsSection({ programLifts }: { programLifts?: string | null } = {}) {
   const store = useStore((s) => s.store);
   const setTM = useStore((s) => s.setTM);
   const [openRow, setOpenRow] = useState<string | null>(null); // exId, or "tier"
   const [editingTM, setEditingTM] = useState<string | null>(null);
   const [draft, setDraft] = useState(0);
 
+  // P-07 (2026-10-27): a max shows only if the active program names that lift or the user
+  // set it themselves. Intake seeds and cross-program maxes made a pull-up user see squats.
+  // `programLifts` is the active program's JSON; undefined means "not loaded / don't filter".
+  const provenance = store.training_max_provenance ?? {};
   const tmEntries = Object.entries(store.training_maxes ?? {}).filter(
-    (entry): entry is [string, number] => typeof entry[1] === "number" && entry[1] > 0,
+    (entry): entry is [string, number] =>
+      typeof entry[1] === "number" &&
+      entry[1] > 0 &&
+      (programLifts == null ||
+        programLifts.includes(`"${entry[0]}"`) ||
+        provenance[entry[0]]?.source === "manual" ||
+        provenance[entry[0]]?.source === "test"),
   );
 
   // Does each training max agree with what the user has actually lifted?
@@ -40,14 +49,6 @@ export function BeliefsSection() {
   // edited. It proposes nothing and changes nothing.
   const tmFindings = useMemo(() => checkTrainingMaxes(store), [store]);
   const findingFor = (exId: string) => tmFindings.find((f) => f.liftId === exId);
-
-  const activeSlug = store.user_profile?.active_program_id ?? null;
-  const tierState = activeSlug ? store.user_profile?.program_states?.[activeSlug] : undefined;
-  const tierLabel = formatTierLabel(tierState?.tier);
-  const tierHistory = tierState?.tier_history ?? [];
-  const latestTierChange = tierHistory.length ? tierHistory[tierHistory.length - 1] : null;
-
-  if (tmEntries.length === 0 && !tierLabel) return null;
 
   const tmWhy = (exId: string): string => {
     const hits = (store.proposal_history ?? [])
@@ -64,16 +65,10 @@ export function BeliefsSection() {
       : `Bumped ${hits.length} times, most recently accepted on ${dateStr}.`;
   };
 
-  const tierWhy = latestTierChange
-    ? `Promoted from ${formatTierLabel(latestTierChange.from_tier)} to ${formatTierLabel(latestTierChange.to_tier)} on ${formatDate(latestTierChange.at)} — ${
-        latestTierChange.trigger === "retest" ? "you cleared the retest gate" : "set manually"
-      }.`
-    : "Your intake answers put you here.";
-
   return (
     <div>
       <p className="font-mono text-[10px] uppercase tracking-widest text-muted mb-2">
-        What Terav believes
+        Your working maxes
       </p>
       <div className="rounded border border-line-soft bg-surface divide-y divide-line-soft">
         {tmEntries.map(([exId, kg]) => {
@@ -178,51 +173,9 @@ export function BeliefsSection() {
             </div>
           );
         })}
-        {activeSlug && tierLabel ? (
-          <div>
-            <button
-              type="button"
-              onClick={() => setOpenRow(openRow === "tier" ? null : "tier")}
-              aria-expanded={openRow === "tier"}
-              className="w-full flex items-baseline gap-3 px-3 py-3 min-h-[48px] text-left active:bg-line-soft/50"
-            >
-              <span className="flex-1 min-w-0 text-[15px] text-ink truncate">Program tier</span>
-              <span className="text-[15px] font-semibold text-strong flex-shrink-0">{tierLabel}</span>
-              <ChevronDown
-                size={14}
-                aria-hidden
-                className={`text-muted flex-shrink-0 transition-transform ${openRow === "tier" ? "rotate-180" : ""}`}
-              />
-            </button>
-            {openRow === "tier" ? (
-              <div className="px-3 pb-3 -mt-1">
-                <p className="text-[13.5px] text-ink leading-snug mb-1.5">{tierWhy}</p>
-                <p className="text-[12px] text-muted leading-snug">
-                  Changes automatically when you clear your next retest gate — Terav promotes you,
-                  you don&apos;t self-select it.{" "}
-                  <Link href="/progress" className="text-slate underline decoration-slate/40">
-                    See Progress →
-                  </Link>
-                </p>
-              </div>
-            ) : null}
-          </div>
-        ) : null}
       </div>
     </div>
   );
-}
-
-function formatTierLabel(tier: string | undefined): string | null {
-  if (!tier) return null;
-  if (tier === "foundation" || tier === "progression" || tier === "push") {
-    return tier.charAt(0).toUpperCase() + tier.slice(1);
-  }
-  // "tier_a_hang" is Tier A everywhere else the app names it; "Hang" alone was the id's tail.
-  const letter = /^tier_([a-z])(?:_|$)/i.exec(tier);
-  if (letter) return `Tier ${letter[1].toUpperCase()}`;
-  const short = tier.replace(/^tier_[a-z]_?/i, "");
-  return short.length ? short.charAt(0).toUpperCase() + short.slice(1) : tier;
 }
 
 function formatDate(iso: string): string {
