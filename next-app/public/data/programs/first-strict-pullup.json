@@ -242,7 +242,7 @@
         "label": "Do you have an acute shoulder injury (rotator cuff tear, labral tear, dislocation) in the last 6 months?",
         "type": "boolean",
         "required": true,
-        "help": "If yes, dead hangs and pull-up attempts are contraindicated until cleared."
+        "help": "If yes, hanging and pull-up attempts aren't safe to start yet. We'll tell you what to do next, and you can come back once it's been checked."
       },
       {
         "id": "bodyweight_kg",
@@ -273,7 +273,7 @@
             "label": "Yes"
           }
         ],
-        "help": "Radicular symptoms need their own workup. This program's foundation is the dead hang, which loads exactly that."
+        "help": "Pain, numbness or tingling that runs down your arm needs a proper check first. This program is built on hanging, which loads exactly that. If yes, we'll explain what to do next."
       },
       {
         "id": "hypertension_valsalva",
@@ -294,7 +294,7 @@
             "label": "Yes"
           }
         ],
-        "help": "The top of a pull-up is a sustained braced effort, which raises blood pressure sharply."
+        "help": "Holding the top of a pull-up is a hard braced effort that pushes your blood pressure up. If yes or not sure, we'll tell you what to check first."
       },
       {
         "id": "consent_symptom_data",
@@ -376,7 +376,7 @@
         ],
         "severity": "block",
         "block_title": "Get the neck looked at first",
-        "block_body": "This program is built on the dead hang, and our own guidance is to avoid dead hangs entirely with persistent radicular symptoms. Come back once you've been assessed."
+        "block_body": "This program is built on hanging, so it isn't a safe start with arm pain, numbness or tingling that keeps coming back. Come back once a clinician has checked it."
       },
       {
         "question_id": "hypertension_valsalva",
@@ -404,7 +404,7 @@
         ],
         "severity": "warn",
         "block_title": "Worth getting a blood-pressure reading",
-        "block_body": "You said you're not sure. The top-hold of a pull-up raises blood pressure sharply. A pharmacy cuff takes two minutes — get a reading before the week-3 isometric holds.",
+        "block_body": "You said you're not sure. Holding the top of a pull-up pushes your blood pressure up. A pharmacy cuff takes two minutes: get a reading before the week-3 holds.",
         "acknowledge_label": "I'll get a reading before the week-3 holds."
       }
     ]

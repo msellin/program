@@ -590,7 +590,7 @@ export function IntakeClient({ slug }: Props) {
 
         <header className="space-y-1">
           <h1 className="text-2xl font-semibold tracking-tight text-strong">
-            Your starting tier
+            Where you start
           </h1>
           <p className="text-sm text-muted">
             {manifestEntry?.name ?? slug.replace(/-/g, " ")}
@@ -659,7 +659,7 @@ export function IntakeClient({ slug }: Props) {
                       </p>
                       <p className="text-muted">
                         If the numbers above feel wrong, tap a different
-                        tier below — or run the physical tests from
+                        starting point below — or run the physical tests from
                         Profile → Programs to let the engine pick with full
                         signal.
                       </p>
@@ -693,7 +693,7 @@ export function IntakeClient({ slug }: Props) {
 
         <section className="space-y-2">
           <p className="text-[11px] font-mono uppercase tracking-wider text-muted">
-            Don&apos;t agree? Pick a different tier
+            Don&apos;t agree? Pick a different starting point
           </p>
           <ul className="space-y-1.5">
             {program.plan_tiers?.map((t) => {
@@ -733,7 +733,7 @@ export function IntakeClient({ slug }: Props) {
 
         <div className="sticky bottom-2 pt-2">
           <Button block onClick={commit} disabled={committing || !chosenTierId}>
-            {committing ? "Starting…" : "Start program with this tier"}
+            {committing ? "Starting…" : "Start program"}
           </Button>
         </div>
       </div>
@@ -770,18 +770,20 @@ export function IntakeClient({ slug }: Props) {
     | { kind: "consent"; sectionLabel: string };
 
   const steps: WizardStep[] = [
-    ...screening.map<WizardStep>((q) => ({
-      kind: "question",
-      section: "screening",
-      tone: "gate",
-      sectionLabel: "Screening",
-      q,
-    })),
+    // P-25 (2026-10-27): ability questions first, safety screening second — a beginner
+    // was asked about blood pressure before "can you hang?". Every screening question is still asked.
     ...skill.map<WizardStep>((q) => ({
       kind: "question",
       section: "skill",
       tone: "calibration",
       sectionLabel: "Where you are now",
+      q,
+    })),
+    ...screening.map<WizardStep>((q) => ({
+      kind: "question",
+      section: "screening",
+      tone: "gate",
+      sectionLabel: "Screening",
       q,
     })),
     ...about.map<WizardStep>((q) => ({
@@ -793,7 +795,7 @@ export function IntakeClient({ slug }: Props) {
     })),
     ...physicalTests.map<WizardStep>((test, idx) => ({
       kind: "physical_test",
-      sectionLabel: `Physical tests · ${idx + 1} of ${physicalTests.length} · optional`,
+      sectionLabel: `Physical tests · ${idx + 1} of ${physicalTests.length}`,
       test,
       indexInSection: idx,
       totalInSection: physicalTests.length,

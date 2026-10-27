@@ -298,7 +298,7 @@
             "label": "Yes — diagnosed"
           }
         ],
-        "help": "If yes, freestanding and any bail-risk attempts are contraindicated in this program. DiFiori 2006 catalogued distal radius as a common fracture site under this mechanism."
+        "help": "If yes, freestanding attempts and anything with a bail-out risk aren't part of this program for you. Wrist fractures are a common injury from falling out of a handstand. We'll tell you what to do next."
       },
       {
         "id": "hypertension_uncontrolled",
@@ -566,7 +566,7 @@
         ],
         "severity": "warn",
         "block_title": "Worth getting a blood-pressure reading",
-        "block_body": "Being inverted raises blood pressure in the head and neck. A pharmacy cuff takes two minutes — get a reading before you start kicking up.",
+        "block_body": "Being upside down pushes blood pressure up in your head and neck. A pharmacy cuff takes two minutes: get a reading before you start kicking up.",
         "acknowledge_label": "I'll get a reading before Phase 1."
       },
       {

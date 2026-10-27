@@ -279,7 +279,7 @@
             "label": "Yes"
           }
         ],
-        "help": "Radicular symptoms need their own workup. This program loads dead hangs and false grip heavily."
+        "help": "Pain, numbness or tingling that runs down your arm needs a proper check first. This program loads hanging and false grip heavily. If yes, we'll explain what to do next."
       },
       {
         "id": "acute_wrist_injury",
@@ -321,7 +321,7 @@
             "label": "Yes"
           }
         ],
-        "help": "The transition and ring support are sustained braced efforts, which raise blood pressure sharply."
+        "help": "The transition and ring support are hard braced efforts that push your blood pressure up. If yes or not sure, we'll tell you what to check first."
       },
       {
         "id": "consent_symptom_data",
@@ -420,7 +420,7 @@
         ],
         "severity": "block",
         "block_title": "Get the neck looked at first",
-        "block_body": "Our own guidance is to avoid dead hangs and false-grip work entirely with persistent radicular symptoms, and both are foundations here."
+        "block_body": "Hanging and false-grip work aren't a safe start with arm pain, numbness or tingling that keeps coming back, and both are foundations here. Come back once a clinician has checked it."
       },
       {
         "question_id": "acute_wrist_injury",
@@ -467,7 +467,7 @@
         ],
         "severity": "warn",
         "block_title": "Worth getting a blood-pressure reading",
-        "block_body": "You said you're not sure. The transition and ring support are sustained braced efforts that raise blood pressure sharply. Get a reading before the support holds.",
+        "block_body": "You said you're not sure. The transition and ring support are hard braced efforts that push your blood pressure up. Get a reading before the support holds.",
         "acknowledge_label": "I'll get a reading before the support holds."
       }
     ]
