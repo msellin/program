@@ -46,3 +46,5 @@ The owning lane picks it up, does it in its own commit, and marks the line `✓ 
   `return applyProgramSoftening(<the mapped array>, program, activeDate, store);` (import from `@/lib/engine/plan-generator`;
   TodaySession.tsx:216 does exactly this). Lane 4 made red days count toward the rule (only amber did).
 - [from lane 2a → lane 4] DaySession.tsx: blockObjectOn branch now wrapped in applyProgramSoftening (SF-04 request) ✓
+- [from lane 1 → owner] Edge cache still serves `app.terav.fit/data/{clinical-context,log,program,open-questions}.json` as 200 at the plain URL (age ~2h; `?x=1` gives 404). Files are gone from the deploy; purge those 4 URLs in the Cloudflare cache (needs a zone token Lane 1 does not hold).
+- [from lane 1 → owner] Report's "Clinical constraints on file" section was deleted with clinical-context.json (owner's hip report loses it); restore later via an auth-checked function if wanted.

@@ -18,15 +18,15 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 ## 1. Personal track and privacy (the owner's clinical data and the hip track)
 | ID | Action | When | Who | Effort | Source |
 |----|--------|------|-----|--------|--------|
-| P-01 | Remove `public/data/{log,program,open-questions}.json`, plus the dead seed function | H | A | S | HANDOVER B1 |
-| P-02 | `clinical-context.json`: delete it, or serve it via an auth-checked function; gate `loadClinicalContext` to the hip slug | H | A | M | B1 |
-| P-03 | Gate the "First hip check" banner (`SignalsStrip.tsx:425`) to the hip slug | H | A | S | app #6 |
-| P-04 | Guard `/check/hip` (redirect unless the hip program) | H | A | S | app #5 |
-| P-05 | Report: hide "Rehab days", the clinical footer and the clinical section for non-hip programs | H | A | S | app #9 |
-| P-06 | Drop the personal slug from `generateStaticParams` | H | A | S | compliance |
+| P-01 | Remove `public/data/{log,program,open-questions}.json`, plus the dead seed function | H | A | S | HANDOVER B1 | ✓ 81d4b5d |
+| P-02 | `clinical-context.json`: delete it, or serve it via an auth-checked function; gate `loadClinicalContext` to the hip slug | H | A | M | B1 | ✓ 81d4b5d |
+| P-03 | Gate the "First hip check" banner (`SignalsStrip.tsx:425`) to the hip slug | H | A | S | app #6 | ✓ bf64bd2 |
+| P-04 | Guard `/check/hip` (redirect unless the hip program) | H | A | S | app #5 | ✓ bf64bd2 |
+| P-05 | Report: hide "Rehab days", the clinical footer and the clinical section for non-hip programs | H | A | S | app #9 | ✓ bf64bd2 |
+| P-06 | Drop the personal slug from `generateStaticParams` | H | A | S | compliance | ✓ bf64bd2 |
 | P-07 ✓ 5fe464a | Landing: replace the hip mock (`TodayMockup.tsx:21`); the founder story without hip naming | H | A | S | product 3 |
-| P-08 | Move the hip-clinical triggers out of the shared `deriveState`, into a personal rule set; add a test | S | A | M | personal-separation P5 |
-| P-09 | Remove the LEGACY_REGIONS and `DEFAULT_PROGRAM_SLUG` hip fallbacks | S | A | S | P6 |
+| P-08 | Move the hip-clinical triggers out of the shared `deriveState`, into a personal rule set; add a test | S | A | M | personal-separation P5 | ✓ bf64bd2 |
+| P-09 | Remove the LEGACY_REGIONS and `DEFAULT_PROGRAM_SLUG` hip fallbacks | S | A | S | P6 | ✓ bf64bd2 |
 | P-10 | `guide/page.tsx:155` hip case study; the personal note in `anterior-hip-rebuild.json`; fixture "groin" note | S | A | S | P8, P10, P11 |
 
 ## 2. Safety in the session
@@ -48,7 +48,7 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 | A-UX-04 | One name per concept: "Extra session", "Suggestion" (Accept / Not now), "reps left", "working max"; citations behind "Why?" | H | A | S–M | app #12,18, h04 |
 | A-UX-05 | Plan: one status per day; the skip toast counts visible sessions; a visible Unskip | H | A | M | app #11 |
 | A-UX-06 | A hold logged with 0 s counts as logged: require held>0 or a confirm | H | A | S | app #7 ✓ 8a245f0 |
-| A-UX-07 | Gate `/dev/primitives` and `/admin/keywords` to dev/admin | H | A | S | app #15 |
+| A-UX-07 | Gate `/dev/primitives` and `/admin/keywords` to dev/admin | H | A | S | app #15 | ✓ bf64bd2 |
 | A-UX-08 | A friendly error instead of the raw `{error}` on Today | H | A | S | design §3 | ✓ 362d271
 | A-UX-09 | Tabs Today / Plan / Record / You; fold Account and Settings into You; remove the header gear; Record absorbs progress/history/report | H (cuttable) | A | M | design §1 |
 | A-UX-10 | reset-password with no token: a timeout, "link expired, request new" | S | A | S | app #14 |
