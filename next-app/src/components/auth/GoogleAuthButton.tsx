@@ -25,13 +25,23 @@ import { createClient } from "@/lib/supabase/client";
  * Brand-mark compliance: Google requires "Continue with Google" wording +
  * their multi-color G logo. Logo is inline SVG so we don't ship an asset.
  */
-export function GoogleAuthButton({ nextPath }: { nextPath?: string }) {
+export function GoogleAuthButton({
+  nextPath,
+  disabled = false,
+  onBeforeRedirect,
+}: {
+  nextPath?: string;
+  /** Sign-up holds the button until the consent ticks are in. */
+  disabled?: boolean;
+  onBeforeRedirect?: () => void;
+}) {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const onClick = async () => {
     setError(null);
     setSubmitting(true);
+    onBeforeRedirect?.();
     const supabase = createClient();
     const origin =
       typeof window !== "undefined" ? window.location.origin : "";
@@ -39,7 +49,7 @@ export function GoogleAuthButton({ nextPath }: { nextPath?: string }) {
     // the page's mount effect. `/sign-in` (not `/sign-up`) for both
     // because either way the user ends up with an active session and
     // needs to land on their next path.
-    const nextParam = nextPath ? `?next=${encodeURIComponent(nextPath)}` : "";
+    const nextParam = nextPath && nextPath !== "/" ? `?next=${encodeURIComponent(nextPath)}` : "";
     const { error: err } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
@@ -59,7 +69,7 @@ export function GoogleAuthButton({ nextPath }: { nextPath?: string }) {
       <button
         type="button"
         onClick={onClick}
-        disabled={submitting}
+        disabled={submitting || disabled}
         className="w-full flex items-center justify-center gap-3 py-3 min-h-[44px] rounded border border-line bg-surface hover:bg-line-soft text-strong text-[14px] font-medium disabled:opacity-50 transition-colors"
         aria-label="Continue with Google"
       >

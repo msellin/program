@@ -9,7 +9,7 @@ export default function PrivacyPage() {
     <div className="max-w-2xl mx-auto space-y-4 pt-4 text-[14px] leading-relaxed">
       <h1 className="text-2xl font-semibold text-strong">Privacy policy</h1>
       <p className="text-muted italic">
-        Last updated: 2026-09-03. Beta — this policy will be lawyer-reviewed before public launch.
+        Last updated: 2026-10-27. Beta — this policy will be lawyer-reviewed before public launch.
       </p>
 
       <h2 className="text-lg font-semibold text-strong pt-2">Who controls your data</h2>
@@ -34,7 +34,7 @@ export default function PrivacyPage() {
         <tbody className="align-top">
           <tr className="border-b border-line-soft">
             <td className="py-1.5 pr-2">Email address</td>
-            <td className="py-1.5 pr-2">Sign-in, recovery, beta announcements</td>
+            <td className="py-1.5 pr-2">Sign-in, account emails, recovery, beta announcements</td>
             <td className="py-1.5">Until you delete your account</td>
           </tr>
           <tr className="border-b border-line-soft">
@@ -72,12 +72,17 @@ export default function PrivacyPage() {
           <tr className="border-b border-line-soft">
             <td className="py-1.5 pr-2">Consent timestamps</td>
             <td className="py-1.5 pr-2">Proof of consent (GDPR requirement)</td>
-            <td className="py-1.5">Kept until 3 years after account deletion (audit trail)</td>
+            <td className="py-1.5">Stored in your account record. Deleted with your account</td>
+          </tr>
+          <tr className="border-b border-line-soft">
+            <td className="py-1.5 pr-2">How you found Terav (campaign tags from the link you clicked, e.g. utm_campaign)</td>
+            <td className="py-1.5 pr-2">Telling which ads and posts bring in sign-ups</td>
+            <td className="py-1.5">Stored in your account record. Deleted with your account</td>
           </tr>
           <tr className="border-b border-line-soft">
             <td className="py-1.5 pr-2">Automatic error reports (Sentry)</td>
             <td className="py-1.5 pr-2">Debugging crashes</td>
-            <td className="py-1.5">90 days, email stripped, symptom text scrubbed</td>
+            <td className="py-1.5">90 days. Email addresses are stripped and known symptom fields are removed before sending; free-text you type may still appear</td>
           </tr>
           <tr className="border-b border-line-soft">
             <td className="py-1.5 pr-2">Bug reports you send from the app</td>
@@ -94,7 +99,7 @@ export default function PrivacyPage() {
       <h2 className="text-lg font-semibold text-strong pt-2">Lawful basis (GDPR Art. 6 & 9)</h2>
       <ul className="list-disc pl-5 space-y-1">
         <li><strong>Account + training log:</strong> contract with you (Art. 6(1)(b)).</li>
-        <li><strong>Symptom scores, pain ratings, self-assessments:</strong> your explicit consent (Art. 9(2)(a)) — health data is a &quot;special category&quot; and we store it only because you ticked the box at sign-up.</li>
+        <li><strong>Symptom scores, pain ratings, self-assessments:</strong> your explicit consent (Art. 9(2)(a)) — health data is a &quot;special category&quot; and we store it only because you ticked the consent box at sign-up (for Google sign-up, the same tick on the sign-up page before you continue to Google).</li>
         <li><strong>Error reports:</strong> our legitimate interest in a working service (Art. 6(1)(f)), scrubbed of health content before transmission.</li>
       </ul>
 
@@ -111,14 +116,26 @@ export default function PrivacyPage() {
           until you sign out or clear site data — worth knowing if you use Terav on a
           shared or work computer.
         </li>
-        <li>Static hosting: <strong>Cloudflare Pages</strong> (global CDN).</li>
+        <li>
+          Hosting and request handling: <strong>Cloudflare</strong> (Pages and Pages
+          Functions, global network). Cloudflare processes your requests, including
+          your IP address, in order to serve the app and its small server-side endpoints
+          (feedback, account deletion).
+        </li>
+        <li>
+          Sign-in with Google (optional): <strong>Google</strong> OAuth. If you choose
+          &quot;Continue with Google&quot;, Google tells us your email address and
+          verifies it; Google receives the fact that you signed in to Terav.
+        </li>
         <li>Error reports and in-app feedback (when enabled): <strong>Sentry</strong> (US region, sentry.io), under standard contractual clauses.</li>
         <li>
           Notification email (breach notices, sub-processor changes):{" "}
-          <strong>Resend</strong> (EU region, eu-west-1). Your address is sent only
-          at the moment a notice goes out — we do not keep a mailing list there.
+          <strong>Resend</strong> (EU region, eu-west-1). Resend also sends your
+          sign-up confirmation and password-reset emails, and the feedback form
+          sends it your message, your account email and your user id. We do not
+          keep a mailing list there.
         </li>
-        <li>Payment data (when paid tier launches): handled entirely by <strong>Paddle</strong>. We never see card numbers.</li>
+        <li>Payment data (when paid tier launches): handled entirely by <strong>Stripe</strong>. We never see card numbers.</li>
       </ul>
       <p className="text-[14px] text-muted">
         These providers act as sub-processors under standard data-processing agreements. Sub-processor
@@ -132,7 +149,7 @@ export default function PrivacyPage() {
         <strong>Sentry in the United States</strong> under standard contractual clauses:
         error events are scrubbed of health content before transmission, but a screenshot
         you choose to attach to a feedback report is sent exactly as you see it, so think
-        before attaching one from the symptom check. Payment processing (Paddle) may
+        before attaching one from the symptom check. Payment processing (Stripe, when the paid tier launches) may
         transfer minimal transactional data to the US, also under standard contractual
         clauses. Some CDN edges serve static assets globally; no personal data is involved.
       </p>
@@ -140,8 +157,12 @@ export default function PrivacyPage() {
       <h2 className="text-lg font-semibold text-strong pt-2">Cookies & tracking</h2>
       <p>
         We use one session cookie (Supabase auth) so you stay signed in. We do not use
-        marketing cookies, ad networks, or cross-site trackers. No analytics tools are
-        active in beta.
+        marketing cookies, ad networks, or cross-site trackers. We use{" "}
+        <strong>Cloudflare Web Analytics</strong>, which counts page views without
+        cookies and without tracking you across sites. We also read campaign tags
+        (utm_*) from the link you arrive on and save them with your account when you
+        sign up; see the table above. Sign-up pages use Cloudflare Turnstile, a bot
+        check, which may load a small script from Cloudflare.
       </p>
       <p>
         One exception worth naming: technique demonstrations are YouTube videos, and
@@ -167,8 +188,8 @@ export default function PrivacyPage() {
 
       <h2 className="text-lg font-semibold text-strong pt-2">Your rights (GDPR)</h2>
       <ul className="list-disc pl-5 space-y-1">
-        <li><strong>Access</strong> — export your entire dataset as JSON from Profile.</li>
-        <li><strong>Delete</strong> — one-click account deletion from Profile. Server-side data is wiped within 30 days; backup rotations may take up to 90 days.</li>
+        <li><strong>Access</strong> — export your entire dataset as JSON from Profile → Account.</li>
+        <li><strong>Delete</strong> — one-click account deletion from Profile → Account. Deleting your account removes your server-side data; backup rotations may keep a copy for up to 90 days.</li>
         <li><strong>Correct</strong> — edit anything you&apos;ve logged, any time.</li>
         <li><strong>Portability</strong> — the JSON export is a documented, human-readable format.</li>
         <li><strong>Withdraw consent</strong> — deleting your account also withdraws consent to health-data processing.</li>

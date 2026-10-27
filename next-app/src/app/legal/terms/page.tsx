@@ -24,7 +24,7 @@ export default function TermsPage() {
 
       <h2 className="text-lg font-semibold text-strong pt-2">Beta status</h2>
       <p>
-        Terav is currently in closed beta and provided <strong>free of charge</strong>.
+        Terav is currently in open beta and provided <strong>free of charge</strong>.
         Features may change, break, or disappear. We aim to preserve your data but backups
         are not guaranteed during beta — please export from Profile periodically. When a
         paid tier launches, current beta users will get advance notice.

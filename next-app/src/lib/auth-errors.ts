@@ -4,8 +4,8 @@
  * `sign-up` and `sign-in` both did `setError(err.message)` — the provider's
  * own string, rendered verbatim. Most are fine. One is not.
  *
- * Terav is a closed beta, and closing it is a Supabase dashboard toggle rather
- * than anything in this repo. Flip it and every would-be signup sees "Signups
+ * Terav is an open free beta, but sign-up is a Supabase dashboard toggle rather
+ * than anything in this repo, and it can be paused. Flip it and every would-be signup sees "Signups
  * not allowed for this instance": accurate, and it tells them nothing about
  * what to do next. Someone a beta user has recommended the app to hits a
  * sentence about an instance and leaves.
@@ -27,8 +27,8 @@ export function mapAuthError(raw: string | null | undefined): Mapped {
     return {
       closedBeta: true,
       message:
-        `Terav is in closed beta, so new accounts are invite-only right now. ` +
-        `Email ${CONTACT} and Margus will send you one.`,
+        `Sign-ups are paused right now. Try again in a little while, or ` +
+        `email ${CONTACT} and Margus will sort it out.`,
     };
   }
 

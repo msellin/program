@@ -51,9 +51,9 @@ export function useAccountActions() {
         headers: { authorization: `Bearer ${session.access_token}` },
       });
       if (!res.ok) {
-        const text = await res.text().catch(() => "");
         setDeleteError(
-          `Delete failed (${res.status}). ${text || "Try again in a moment."}`,
+          `Couldn't delete your account (error ${res.status}). Nothing was removed. ` +
+            `Try again in a moment, or email sellinmargus@gmail.com and it will be done by hand.`,
         );
         setDeleting(false);
         return;
@@ -62,7 +62,9 @@ export function useAccountActions() {
       await supabase.auth.signOut();
       router.replace("/sign-in");
     } catch (e) {
-      setDeleteError(e instanceof Error ? e.message : String(e));
+      setDeleteError(
+        "Couldn't reach the server. Check your connection and try again, or email sellinmargus@gmail.com.",
+      );
       setDeleting(false);
     }
   };

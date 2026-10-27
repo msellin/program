@@ -23,7 +23,7 @@ describe("closed-beta signup", () => {
   it("tells the reader what to do, and who to ask", () => {
     const m = mapAuthError("Signups not allowed for this instance");
     expect(m.closedBeta).toBe(true);
-    expect(m.message).toMatch(/invite/i);
+    expect(m.message).toMatch(/paused/i);
     expect(m.message, "no way to actually get one").toContain("sellinmargus@gmail.com");
   });
 

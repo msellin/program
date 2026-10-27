@@ -6,6 +6,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { GoogleAuthButton } from "@/components/auth/GoogleAuthButton";
 import { mapAuthError } from "@/lib/auth-errors";
+import { TurnstileWidget, captchaRequired } from "@/components/auth/TurnstileWidget";
+import { applyPendingSignupMeta } from "@/lib/attribution";
 
 export default function SignInPage() {
   return (
@@ -19,6 +21,8 @@ function SignInInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const nextPath = searchParams?.get("next") ?? "/";
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [captchaReset, setCaptchaReset] = useState(0);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -38,7 +42,8 @@ function SignInInner() {
       if (event === "SIGNED_IN" && session) {
         const safeNext =
           nextPath.startsWith("/") && !nextPath.startsWith("//") ? nextPath : "/";
-        router.push(safeNext);
+        // Google sign-up: consent + attribution were stashed before the hop.
+        void applyPendingSignupMeta(supabase).finally(() => router.push(safeNext));
       }
     });
     return () => sub.subscription.unsubscribe();
@@ -51,8 +56,13 @@ function SignInInner() {
     setConfirmationResent(false);
     setSubmitting(true);
     const supabase = createClient();
-    const { error: err } = await supabase.auth.signInWithPassword({ email, password });
+    const { error: err } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+      options: { captchaToken: captchaToken ?? undefined },
+    });
     setSubmitting(false);
+    setCaptchaReset((n) => n + 1);
     if (err) {
       // Detect the "not confirmed" case and swap to a friendlier prompt +
       // resend button. Supabase returns "Email not confirmed" for this;
@@ -82,11 +92,13 @@ function SignInInner() {
       type: "signup",
       email,
       options: {
+        captchaToken: captchaToken ?? undefined,
         emailRedirectTo:
           typeof window !== "undefined" ? `${window.location.origin}/sign-in` : undefined,
       },
     });
     setResending(false);
+    setCaptchaReset((n) => n + 1);
     if (err) {
       setError(mapAuthError(err.message).message);
       return;
@@ -103,12 +115,14 @@ function SignInInner() {
     setResetting(true);
     const supabase = createClient();
     const { error: err } = await supabase.auth.resetPasswordForEmail(email, {
+      captchaToken: captchaToken ?? undefined,
       redirectTo:
         typeof window !== "undefined"
           ? `${window.location.origin}/reset-password`
           : undefined,
     });
     setResetting(false);
+    setCaptchaReset((n) => n + 1);
     if (err) {
       setError(mapAuthError(err.message).message);
       return;
@@ -185,6 +199,7 @@ function SignInInner() {
             )}
           </div>
         ) : null}
+        <TurnstileWidget onToken={setCaptchaToken} resetKey={captchaReset} />
         <button
           type="submit"
           disabled={submitting}

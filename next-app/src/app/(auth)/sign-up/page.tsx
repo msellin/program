@@ -1,10 +1,13 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { Suspense, useEffect, useState, FormEvent } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { GoogleAuthButton } from "@/components/auth/GoogleAuthButton";
 import { mapAuthError } from "@/lib/auth-errors";
+import { TurnstileWidget, captchaRequired } from "@/components/auth/TurnstileWidget";
+import { captureAttribution, signupMetadata, stashPendingSignupMeta } from "@/lib/attribution";
 
 /**
  * Sign-up requires:
@@ -16,10 +19,32 @@ import { mapAuthError } from "@/lib/auth-errors";
  * the record shows exactly when the user agreed to what.
  */
 export default function SignUpPage() {
+  return (
+    <Suspense fallback={<div className="pt-8 text-sm text-muted">Loading…</div>}>
+      <SignUpInner />
+    </Suspense>
+  );
+}
+
+function SignUpInner() {
+  const searchParams = useSearchParams();
+  const rawNext = searchParams?.get("next") ?? "";
+  // Relative paths only: this lands in an emailRedirectTo and a router push.
+  const nextPath = rawNext.startsWith("/") && !rawNext.startsWith("//") ? rawNext : "/";
+  const signInUrl = (origin: string) =>
+    `${origin}/sign-in${nextPath !== "/" ? `?next=${encodeURIComponent(nextPath)}` : ""}`;
+
+  useEffect(() => {
+    captureAttribution();
+  }, []);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [consentSymptom, setConsentSymptom] = useState(false);
+  const [confirmAge, setConfirmAge] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [captchaReset, setCaptchaReset] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
@@ -34,11 +59,13 @@ export default function SignUpPage() {
       type: "signup",
       email,
       options: {
+        captchaToken: captchaToken ?? undefined,
         emailRedirectTo:
-          typeof window !== "undefined" ? `${window.location.origin}/sign-in` : undefined,
+          typeof window !== "undefined" ? signInUrl(window.location.origin) : undefined,
       },
     });
     setResending(false);
+    setCaptchaReset((n) => n + 1);
     if (err) {
       setError(mapAuthError(err.message).message);
       return;
@@ -58,8 +85,16 @@ export default function SignUpPage() {
       setError("Please tick the health-data consent — the app can't work without it.");
       return;
     }
+    if (!confirmAge) {
+      setError("Please confirm you are 16 or older.");
+      return;
+    }
     if (password.length < 8) {
       setError("Password must be at least 8 characters.");
+      return;
+    }
+    if (captchaRequired && !captchaToken) {
+      setError("Please complete the bot check below first.");
       return;
     }
 
@@ -69,23 +104,23 @@ export default function SignUpPage() {
       email,
       password,
       options: {
-        data: {
-          accepted_terms_at: new Date().toISOString(),
-          consented_symptom_data_at: new Date().toISOString(),
-        },
+        captchaToken: captchaToken ?? undefined,
+        data: signupMetadata(),
         emailRedirectTo:
-          typeof window !== "undefined"
-            ? `${window.location.origin}/sign-in`
-            : undefined,
+          typeof window !== "undefined" ? signInUrl(window.location.origin) : undefined,
       },
     });
     setSubmitting(false);
+    setCaptchaReset((n) => n + 1);
     if (err) {
       setError(mapAuthError(err.message).message);
       return;
     }
     setSent(true);
   };
+
+  const signInHref = nextPath !== "/" ? `/sign-in?next=${encodeURIComponent(nextPath)}` : "/sign-in";
+  const consentsComplete = acceptTerms && consentSymptom && confirmAge;
 
   if (sent) {
     return (
@@ -98,6 +133,7 @@ export default function SignUpPage() {
           Nothing arrived after a couple of minutes? Check the spam folder, or resend below.
         </p>
         {error ? <p className="text-[14px] text-red">{error}</p> : null}
+        <TurnstileWidget onToken={setCaptchaToken} resetKey={captchaReset} />
         {resent ? (
           <p className="text-[14px] text-green">Sent again — check your inbox.</p>
         ) : null}
@@ -105,13 +141,13 @@ export default function SignUpPage() {
           <button
             type="button"
             onClick={resendConfirmation}
-            disabled={resending || resent}
+            disabled={resending || resent || (captchaRequired && !captchaToken)}
             className="inline-flex items-center gap-1.5 min-h-[44px] font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {resending ? "Sending…" : resent ? "Sent" : "Resend confirmation"}
           </button>
           <Link
-            href="/sign-in"
+            href={signInHref}
             className="inline-flex items-center min-h-[44px] font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line hover:bg-line-soft"
           >
             Back to sign in
@@ -130,23 +166,62 @@ export default function SignUpPage() {
         <h1 className="text-2xl font-semibold tracking-tight text-strong">Sign up</h1>
       </header>
 
-      <GoogleAuthButton />
+      <div className="space-y-3">
+        <label className="flex items-start gap-2 text-[14px] ">
+          <input
+            type="checkbox"
+            checked={acceptTerms}
+            onChange={(e) => setAcceptTerms(e.target.checked)}
+            className="mt-0.5 w-4 h-4 accent-bronze flex-shrink-0"
+          />
+          <span>
+            I accept the{" "}
+            <Link href="/legal/terms" target="_blank" className="text-slate border-b border-slate">
+              terms
+            </Link>{" "}
+            and{" "}
+            <Link href="/legal/disclaimer" target="_blank" className="text-slate border-b border-slate">
+              medical disclaimer
+            </Link>
+            . Terav is a training log — not medical advice.
+          </span>
+        </label>
 
-      <p className="text-[11px] text-muted leading-relaxed -mt-1">
-        Continuing accepts the{" "}
-        <Link href="/legal/terms" target="_blank" className="text-slate border-b border-slate">
-          terms
-        </Link>
-        ,{" "}
-        <Link href="/legal/disclaimer" target="_blank" className="text-slate border-b border-slate">
-          medical disclaimer
-        </Link>
-        , and consent to store training + symptom data (
-        <Link href="/legal/privacy" target="_blank" className="text-slate border-b border-slate">
-          privacy
-        </Link>
-        ).
-      </p>
+        <label className="flex items-start gap-2 text-[14px]">
+          <input
+            type="checkbox"
+            checked={consentSymptom}
+            onChange={(e) => setConsentSymptom(e.target.checked)}
+            className="mt-0.5 w-4 h-4 accent-bronze flex-shrink-0"
+          />
+          <span>
+            I consent to storing my training log and symptom scores. See the{" "}
+            <Link href="/legal/privacy" target="_blank" className="text-slate border-b border-slate">
+              privacy policy
+            </Link>
+            {" "}— you can export or delete everything from Profile.
+          </span>
+        </label>
+
+        <label className="flex items-start gap-2 text-[14px]">
+          <input
+            type="checkbox"
+            checked={confirmAge}
+            onChange={(e) => setConfirmAge(e.target.checked)}
+            className="mt-0.5 w-4 h-4 accent-bronze flex-shrink-0"
+          />
+          <span>I am 16 or older.</span>
+        </label>
+      </div>
+
+      <GoogleAuthButton
+        nextPath={nextPath}
+        disabled={!consentsComplete}
+        onBeforeRedirect={stashPendingSignupMeta}
+      />
+      {!consentsComplete ? (
+        <p className="text-[11px] text-muted -mt-2">Tick the three boxes above to continue with Google or email.</p>
+      ) : null}
 
       <div className="flex items-center gap-3 pt-1">
         <span className="flex-1 h-px bg-line-soft" aria-hidden />
@@ -185,45 +260,11 @@ export default function SignUpPage() {
           />
         </label>
 
-        <label className="flex items-start gap-2 text-[14px] pt-1">
-          <input
-            type="checkbox"
-            checked={acceptTerms}
-            onChange={(e) => setAcceptTerms(e.target.checked)}
-            className="mt-0.5 w-4 h-4 accent-bronze flex-shrink-0"
-          />
-          <span>
-            I accept the{" "}
-            <Link href="/legal/terms" target="_blank" className="text-slate border-b border-slate">
-              terms
-            </Link>{" "}
-            and{" "}
-            <Link href="/legal/disclaimer" target="_blank" className="text-slate border-b border-slate">
-              medical disclaimer
-            </Link>
-            . Terav is a training log — not medical advice.
-          </span>
-        </label>
-
-        <label className="flex items-start gap-2 text-[14px]">
-          <input
-            type="checkbox"
-            checked={consentSymptom}
-            onChange={(e) => setConsentSymptom(e.target.checked)}
-            className="mt-0.5 w-4 h-4 accent-bronze flex-shrink-0"
-          />
-          <span>
-            I consent to storing my training log and symptom scores. See the{" "}
-            <Link href="/legal/privacy" target="_blank" className="text-slate border-b border-slate">
-              privacy policy
-            </Link>
-            {" "}— you can export or delete everything from Profile.
-          </span>
-        </label>
-
         {error ? (
           <p className="text-[14px] text-red border-l-4 border-red pl-2">{error}</p>
         ) : null}
+
+        <TurnstileWidget onToken={setCaptchaToken} resetKey={captchaReset} />
 
         <button
           type="submit"
@@ -236,7 +277,7 @@ export default function SignUpPage() {
 
       <p className="text-[14px] text-muted">
         Already have an account?{" "}
-        <Link href="/sign-in" className="text-slate border-b border-slate">
+        <Link href={signInHref} className="text-slate border-b border-slate">
           Sign in
         </Link>
       </p>
