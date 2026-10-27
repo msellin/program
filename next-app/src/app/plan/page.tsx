@@ -7,7 +7,7 @@ import { loadProgram } from "@/lib/data-loader";
 import { EmptyStateCard } from "@/components/EmptyStateCard";
 import { useStore } from "@/lib/useStore";
 import { today as todayISO, iso, cn } from "@/lib/utils";
-import { activePhaseFor } from "@/lib/engine/schedule";
+import { activePhaseFor, activePhaseForWeek } from "@/lib/engine/schedule";
 import { blocksForDate } from "@/lib/engine/plan-generator";
 import { getBlocksForDate, isBlockObjectOn, DAY_VISIBLE_BLOCK_STATES } from "@/lib/engine/block-selectors";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
@@ -213,7 +213,7 @@ export default function WeekPage() {
   }`;
 
   // Determine the dominant phase for the viewed week (use Mon; falls back to sample days if unset).
-  const weekPhase = activePhaseFor(program, iso(viewedMon), userProfile);
+  const weekPhase = activePhaseForWeek(program, iso(viewedMon), userProfile);
 
   const atFutureEdge = offset >= FUTURE_WEEKS;
   const atPastEdge = offset <= -PAST_WEEKS;
