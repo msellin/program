@@ -1,0 +1,7 @@
+# Panel: user agent — 34, never done a pull-up, from IG ad (Haiku) — ~43 images
+Confused: intake step 1 asks shoulder/neck/blood pressure before ability (`A-first-run/06-intake-01`); recommended Tier D "8-10 pull-ups by week 8" and quoted "dead hang ≈ 3 s" never typed (`06-intake-17`) [walker typed 3 reps — check]; Day 1 "Grease-the-groove singles at 60-70% max" for zero reps (`07`); Profile lists squat/deadlift TMs + "Tier A" vs Day "Tier D" (`persona-pullup/mobile/08-profile`); progress 1/8 "ends 21 Dec" (first run) vs 3/4 "ends 6 Nov" vs Plan "Weeks 5-8"; Record "Base 100 reps · Now 112" next to "Latest retest 0 reps" — most damaging; "Reviewed by Terav specialist audit agent" + CITED/VERIFIED reads as AI grading itself (`05-program-detail`); follow-along "No illustration yet", done screen "10 skipped" + L/R 0 chips.
+Would quit: intake step 3-4 (blood pressure before "can you hang?"); Day 1 before starting (doesn't understand what to do).
+Trust: "This hurts" always on screen + "Stopping was the right call"; "cites its source" + Export; honest consent.
+Distrust: lift table, 100-rep base, Tier D vs A, 3/4 vs 1/8, "audit agent".
+Come back if: plain Day-1 line ("Try one hang, 5 seconds, log what you get"); one progress number everywhere; retest shows real start.
+Top 5: Record baseline matches real entries; no lifts/"Tier A" on Profile for users who never entered them; one progress/end-date source across Day, Plan, first-run; plain first-session instruction before "60-70% max"; screening after ability questions + cut "audit agent" label.
