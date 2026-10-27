@@ -65,6 +65,16 @@ const ADVANCE = /^(next|continue|review|start|start program|start this program|b
 
 /** Answer whatever the current intake step asks with the first option, then advance. */
 async function answerStep(page: Page): Promise<boolean> {
+  // Intake result screen: accept the recommended tier. Its picker is a list of
+  // buttons, and "click the first answer button" below would pick Tier A as an
+  // override (G-02 was this walker, not the app).
+  if ((await page.getByRole("heading", { name: /your starting tier/i }).count()) > 0) {
+    const start = page.getByRole("button", { name: /start program with this tier/i });
+    if (!(await start.isEnabled().catch(() => false))) return false;
+    await start.click().catch(() => {});
+    await page.waitForTimeout(600);
+    return true;
+  }
   // Screening questions are Yes/No buttons: answer "No" (healthy athlete).
   const no = page.getByRole("radio", { name: /^no$/i });
   if ((await no.count()) > 0) {

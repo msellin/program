@@ -143,7 +143,7 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 | ID | Action | When | Who | Effort | Lane | Source |
 |----|--------|------|-----|--------|------|--------|
 | G-01 ✓ ac82d14 (schedule; Today = 2b 5ee0c66) | **A new sign-up's day 1 is a rest day:** no first workout is reachable. Offer a session on day 1 (start the schedule today, or "Start your first session now") | H | A | M | 2b + 4 | gap-A | (Today side ✓ 362d271)
-| G-02 | Placement mismatch: the intake result says Tier D (the walker typed 3 into every test), but Today says Tier A and offers "Advance to Tier D". Verify the placement is saved and applied | H | A | S–M | 5 | gap-A |
+| G-02 | Placement mismatch: the intake result says Tier D (the walker typed 3 into every test), but Today says Tier A and offers "Advance to Tier D". Verify the placement is saved and applied | H | A | S–M | 5 | gap-A | ✓ walker artifact, see lanes-handoff
 | G-03 | Intake physical-test steps (5 screens) overflow horizontally at 375px | H | A | S | 5 | gap-A | ✓ 43048ef
 | G-04 | **An untouched morning check saves a green day** (all defaults 0; Save is never disabled; `check/page.tsx:62-74,403`). Unanswered must not mean "fine" | H | A | S | 2b | gap-B | ✓ e2f79b3
 | G-05 | After the first check, the "How Terav reads you" onboarding modal covers Today and hides the red verdict (`OnboardingRunner.tsx:72-103`) | H | A | S | 2b | gap-B, gap-C | ✓ e2f79b3
