@@ -142,7 +142,7 @@ would make the next specialist appointment productive.
 cd next-app && npm run verify
 ```
 
-`verify` is `tsc --noEmit -p . && vitest run` (since 2026-10-27). Before that it was vitest only, and `next build`
+`verify` is `next typegen && tsc --noEmit -p . && vitest run` (since 2026-10-27; typegen first because `LayoutProps`/`PageProps` are generated globals that a clean CI checkout lacks). Before that it was vitest only, and `next build`
 in CI was the first type check. A test-file cast error then broke every deploy from 2026-10-20 to 2026-10-27
 without anyone noticing, because the pre-commit hook passed.
 

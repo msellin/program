@@ -10,7 +10,7 @@
     "lint": "eslint",
     "test": "vitest run",
     "e2e:personas": "playwright test -c tests/e2e/playwright.config.ts personas.spec.ts",
-    "verify": "tsc --noEmit -p . && vitest run"
+    "verify": "next typegen && tsc --noEmit -p . && vitest run"
   },
   "dependencies": {
     "@sentry/nextjs": "^10.70.0",
