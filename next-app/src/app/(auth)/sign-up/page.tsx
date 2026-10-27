@@ -129,6 +129,17 @@ function SignUpInner() {
         <p className="text-sm text-ink">
           We sent a confirmation link to <strong>{email}</strong>. Tap it, then sign in.
         </p>
+        <div className="rounded border border-line-soft bg-surface p-3 space-y-1.5">
+          <p className="font-mono text-[10px] uppercase tracking-widest text-muted">What happens next</p>
+          <ol className="list-decimal pl-5 text-[13px] text-ink space-y-1">
+            <li>Tap the link in the email, then sign in.</li>
+            <li>Answer a few questions about where you are now (a few minutes, one per screen). Physical tests are optional.</li>
+            <li>Your first session is ready on Today. Terav sharpens it against your log as you go.</li>
+          </ol>
+          <p className="text-[12px] text-muted">
+            Terav is a training log, not a clinician or medical advice. Stop if something hurts.
+          </p>
+        </div>
         <p className="text-[12px] text-muted">
           Nothing arrived after a couple of minutes? Check the spam folder, or resend below.
         </p>

@@ -1005,7 +1005,7 @@ function WizardProgress({
             a real signal, not chrome. Keep "Step N of M" form (do NOT
             switch to %) per audit + a11y warning (only one progressbar
             role per view). */}
-        <span className="font-mono text-[13px] text-muted uppercase tracking-widest whitespace-nowrap">
+        <span className="min-w-0 max-w-[70%] text-right leading-tight font-mono text-[13px] text-muted uppercase tracking-wider sm:tracking-widest">
           {/* The gap between label and counter was a CSS margin only, so the
               text layer read "SCREENING· Step 1 of 9" — fine on screen, wrong
               for anything reading the DOM. Real separator character instead. */}
@@ -1472,9 +1472,9 @@ function WizardPhysicalTestScreen({
               const n = Number(e.target.value);
               if (isFinite(n)) setResult(t.id, n);
             }}
-            className="flex-1 text-[15px] px-3 py-3 min-h-[48px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+            className="flex-1 min-w-0 text-[15px] px-3 py-3 min-h-[48px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
           />
-          <span className="text-[12px] text-muted font-mono w-16 text-right">{t.unit}</span>
+          <span className="text-[12px] text-muted font-mono w-16 shrink-0 text-right">{t.unit}</span>
         </div>
       )}
       {step.indexInSection === 0 ? (
