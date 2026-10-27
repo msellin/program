@@ -7,7 +7,7 @@ export const metadata = {
 export default function DisclaimerPage() {
   return (
     <div className="max-w-2xl mx-auto space-y-4 pt-4 text-[14px] leading-relaxed">
-      <h1 className="text-2xl font-semibold text-strong">Medical disclaimer</h1>
+      <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">Medical disclaimer</h1>
 
       <p>
         Terav is a <strong>training log</strong>. It records what you do, notices patterns

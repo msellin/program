@@ -7,7 +7,7 @@ export const metadata = {
 export default function PrivacyPage() {
   return (
     <div className="max-w-2xl mx-auto space-y-4 pt-4 text-[14px] leading-relaxed">
-      <h1 className="text-2xl font-semibold text-strong">Privacy policy</h1>
+      <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">Privacy policy</h1>
       <p className="text-muted italic">
         Last updated: 2026-10-27. Beta — this policy will be lawyer-reviewed before public launch.
       </p>

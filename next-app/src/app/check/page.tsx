@@ -259,7 +259,7 @@ export default function CheckPage() {
   return (
     <div className="space-y-5 pt-4 pb-28">
       <header>
-        <h1 className="text-2xl font-semibold tracking-tight text-strong">Morning check</h1>
+        <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">Morning check</h1>
         <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.06em] text-muted">
           {new Date(today + "T12:00:00").toLocaleDateString("en-GB", {
             weekday: "long",

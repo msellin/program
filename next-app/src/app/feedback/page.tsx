@@ -76,7 +76,7 @@ export default function FeedbackPage() {
   if (sent) {
     return (
       <div className="mt-8 space-y-4">
-        <h1 className="text-lg font-semibold text-strong">Sent</h1>
+        <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">Sent</h1>
         <p className="text-sm text-muted">
           Thanks — it goes straight to Margus, and replies come back to the address you
           signed up with.
@@ -95,7 +95,7 @@ export default function FeedbackPage() {
   return (
     <div className="mt-8 space-y-4">
       <header>
-        <h1 className="text-lg font-semibold text-strong">Send feedback</h1>
+        <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">Send feedback</h1>
         <p className="mt-1 text-sm text-muted">
           Bugs, confusing copy, a proposal that made no sense. It reaches a person, not a
           queue.

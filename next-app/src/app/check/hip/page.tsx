@@ -78,7 +78,7 @@ export default function HipCheckPage() {
     <div className="mt-4 space-y-5">
       <header className="space-y-1">
         <p className="mono-caps">Hip check</p>
-        <h1 className="text-2xl font-semibold tracking-tight text-strong">{pack.name}</h1>
+        <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">{pack.name}</h1>
         {!isIntro && !isReview ? (
           <p className="text-[12px] text-muted">
             Step {stepIdx + 1} of {totalSteps}

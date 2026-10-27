@@ -39,6 +39,7 @@ import { CutCRecordOnboardingBeacon } from "@/components/record/CutCRecordOnboar
 import { downloadRecordExport } from "@/lib/engine/record-export";
 import dynamic from "next/dynamic";
 import type { Program, Exercise } from "@/lib/schemas";
+import { Button } from "@/components/ui/Button";
 
 // Recharts is ~112KB gz. Already lazy for SymptomLoadChart; adding the
 // Record surface's rolling-avg curve later reuses the same lazy chunk.
@@ -131,14 +132,13 @@ export default function RecordPage() {
           a citation-attributed payload per R-CutC-2. */}
       <header className="flex items-baseline justify-between gap-3">
         <h1 className="text-[32px] font-semibold tracking-[-0.03em] text-strong leading-none">Record</h1>
-        <button
-          type="button"
+        <Button
+          variant="tertiary"
           onClick={() => downloadRecordExport(store)}
-          className="border border-line-strong rounded-md px-3 py-2 min-h-[44px] font-mono text-[11px] uppercase tracking-widest text-ink motion-reduce:transition-none transition-colors hover:bg-line-soft focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2"
           aria-label="Export your record as JSON"
         >
           Export
-        </button>
+        </Button>
       </header>
 
       {/* C5 — one-time onboarding beacon dramatizing the cite-per-adjustment

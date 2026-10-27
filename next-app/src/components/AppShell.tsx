@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
-import { Settings } from "lucide-react";
+import { ChevronLeft, Settings } from "lucide-react";
 import { BottomNav } from "@/components/nav/BottomNav";
 import { StoreHydrator } from "@/components/StoreHydrator";
 import { ResumeLastRoute } from "@/components/ResumeLastRoute";
@@ -128,6 +128,11 @@ function AuthGatedShell({
   }
 
   const isTodayRoute = pathname === "/" || pathname === "";
+  // D-02 header rule: the wordmark bar belongs to the four tab roots only.
+  // Every other screen gets a back link; the screen's own H1 names it.
+  const bare = pathname.replace(/\/+$/, "") || "/";
+  const isTabRoot = ["/", "/plan", "/record", "/profile"].includes(bare);
+  const hasOwnTopRow = bare.startsWith("/session");
   return (
     <>
       {/* P1-56 (Batch 26) — WCAG 2.4.1 bypass block. Keyboard-only users
@@ -155,28 +160,44 @@ function AuthGatedShell({
           wordmark (P1-72). ReadinessDot removed 2026-08-19 (P1-78 · F8
           second push) — redundant with the MorningCheckBlock at the top
           of Today's dashboard, which is the primary signal now. */}
+      {isTabRoot ? (
       <header
-        className="max-w-[760px] mx-auto w-full"
-        style={{ paddingTop: "env(safe-area-inset-top)" }}
-      >
-        <div className="flex items-center justify-between px-4 pt-3 pb-2 sm:px-6">
-          <Link
-            href="/"
-            aria-label="Terav — Today"
-            className="flex items-center gap-2 font-sans font-semibold text-[14px] uppercase tracking-[0.22em] text-strong hover:opacity-80"
+          className="max-w-[760px] mx-auto w-full"
+          style={{ paddingTop: "env(safe-area-inset-top)" }}
+        >
+          <div className="flex items-center justify-between px-4 pt-3 pb-2 sm:px-6">
+            <Link
+              href="/"
+              aria-label="Terav — Today"
+              className="flex items-center gap-2 font-sans font-semibold text-[14px] uppercase tracking-[0.22em] text-strong hover:opacity-80"
+            >
+              <span aria-hidden className="inline-block h-2 w-2 rounded-full bg-bronze" />
+              TERAV
+            </Link>
+            <Link
+              href="/settings/"
+              aria-label="Settings"
+              className="w-11 h-11 flex items-center justify-center rounded text-muted hover:text-ink hover:bg-line-soft focus-visible:text-ink focus-visible:bg-line-soft focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2 active:bg-surface-2"
+            >
+              <Settings size={18} strokeWidth={1.75} />
+            </Link>
+          </div>
+        </header>
+      ) : hasOwnTopRow ? null : (
+        <div
+          className="max-w-[760px] mx-auto w-full px-4 sm:px-6"
+          style={{ paddingTop: "env(safe-area-inset-top)" }}
+        >
+          <button
+            type="button"
+            onClick={() => (window.history.length > 1 ? router.back() : router.push("/"))}
+            className="mt-2 -ml-2 inline-flex items-center gap-1 min-h-[44px] px-2 text-[14px] text-slate hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze"
           >
-            <span aria-hidden className="inline-block h-2 w-2 rounded-full bg-bronze" />
-            TERAV
-          </Link>
-          <Link
-            href="/settings/"
-            aria-label="Settings"
-            className="w-11 h-11 flex items-center justify-center rounded text-muted hover:text-ink hover:bg-line-soft focus-visible:text-ink focus-visible:bg-line-soft focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2 active:bg-surface-2"
-          >
-            <Settings size={18} strokeWidth={1.75} />
-          </Link>
+            <ChevronLeft size={18} aria-hidden />
+            Back
+          </button>
         </div>
-      </header>
+      )}
       {/* Batch 36 Step 2 (v1.1.1 §2.14 P1-5) — Today gets
           overscroll-behavior-y: contain so iOS Safari's rubber-band →
           refresh gesture doesn't fire when the user overscrolls the
