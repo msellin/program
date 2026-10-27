@@ -45,3 +45,4 @@ The owning lane picks it up, does it in its own commit, and marks the line `✓ 
   branch gets it via `blocksForDate(..., store)`). Fix: wrap the branch's result —
   `return applyProgramSoftening(<the mapped array>, program, activeDate, store);` (import from `@/lib/engine/plan-generator`;
   TodaySession.tsx:216 does exactly this). Lane 4 made red days count toward the rule (only amber did).
+- [from lane 2a → lane 4] DaySession.tsx: blockObjectOn branch now wrapped in applyProgramSoftening (SF-04 request) ✓

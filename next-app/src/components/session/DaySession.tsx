@@ -6,7 +6,7 @@ import { loadProgram, loadExercises, applyProgramExerciseOverrides } from "@/lib
 import { useStore, entrySets } from "@/lib/useStore";
 import { today as todayISO } from "@/lib/utils";
 import { activePhaseFor, isPastProgramEnd, isAwayOn, HOLIDAY_GAP, blockShownOnDay } from "@/lib/engine/schedule";
-import { blocksForDate, composeBlockForUser } from "@/lib/engine/plan-generator";
+import { applyProgramSoftening, blocksForDate, composeBlockForUser } from "@/lib/engine/plan-generator";
 import { getBlocksForDate, isBlockObjectOn, DAY_VISIBLE_BLOCK_STATES } from "@/lib/engine/block-selectors";
 import { migrateLegacyToBlocks, needsBlockMigration } from "@/lib/migrations/legacy-to-blocks";
 import { prescriptionRows, suggestForExercise, type Suggestion } from "@/lib/engine/suggest";
@@ -161,7 +161,7 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
             activeDate,
             { slug: program.slug, states: DAY_VISIBLE_BLOCK_STATES },
           );
-          return scheduledForToday
+          const composed = scheduledForToday
             .map((sb) => program.blocks.find((b) => b.id === sb.block_template_id))
             .filter((b): b is Block => Boolean(b) && blockShownOnDay(program, b!))
             // `scheduled_blocks` stores template IDs, so what comes back is
@@ -171,6 +171,8 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
             // the Brief had nothing to start. Legacy path gets the same
             // treatment inside blocksForDate.
             .map((b) => composeBlockForUser(program, b, userProfile, activeDate, byId, { onlyIfEmpty: true }));
+          // SF-04: CSM's amber-streak withdrawal, same as Today (parity with the legacy path).
+          return applyProgramSoftening(composed, program, activeDate, store);
         }
         const overrideBlocks = override
           ? program.blocks.filter((b) => override.blocks.includes(b.id) && (b.category ?? "strength") === "strength")
