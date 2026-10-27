@@ -35,8 +35,8 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 | SF-01 | "Something hurt" as an always-visible top-row chip → Note / Swap or skip / Stop | H | A | S–M | app #4, design §4 ✓ 8a245f0 |
 | SF-02 | A real Stop for every program (not only handstand), with a stopped screen + symptom prompt | H | A | M | app #1-2 ✓ 8a245f0 |
 | SF-03 | Public programs: a one-tap "How do you feel today?" on the brief replaces the required morning check (fallback: drop "Check first" as a blocker) | H | A | M | personal-separation | (fallback only ✓ 362d271)
-| SF-04 | Concurrent-strength-maintenance red state: "resume at 3×4" missing. Fix it or drop the promise | H | A | M | roadmap B12 |
-| SF-05 | Handstand-walk `retest_gate` / bail-out gates nothing. Fix it or drop the promise | H | A | M | roadmap B12 |
+| SF-04 ✓ 6f58787 (+ lane 2a 9964a2a) | Concurrent-strength-maintenance red state: "resume at 3×4" missing. Fix it or drop the promise | H | A | M | roadmap B12 |
+| SF-05 ✓ a2613fa (promise dropped; entry gate live) | Handstand-walk `retest_gate` / bail-out gates nothing. Fix it or drop the promise | H | A | M | roadmap B12 |
 | SF-06 | Capture red-day screens + the CSM red state with the harness (never captured) | S | A | S | app §3 |
 
 ## 3. App bugs and clarity (confirmed in code)
@@ -86,10 +86,10 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 ## 6. Landing, claims and evidence
 | ID | Action | When | Who | Effort | Source |
 |----|--------|------|-----|--------|--------|
-| L-01 ✓ 5fe464a (landing part; manifest = lane 4) | Strip withdrawn numbers (`manifest.json` ~41,101,128,263; "125 primary studies"; "Six weeks to a 2K PR"; "Every change cites a study"); check `programs-catalog.ts` | H | A | S–M | h18, compliance 7 |
-| L-02 | Remove withdrawn citations from advertised programs: Sadowski (handstand, muscle-up), `kilding_2012` | H | A | S | roadmap 2 |
+| L-01 ✓ 5fe464a (landing) ✓ 47a66ca (manifest) | Strip withdrawn numbers (`manifest.json` ~41,101,128,263; "125 primary studies"; "Six weeks to a 2K PR"; "Every change cites a study"); check `programs-catalog.ts` | H | A | S–M | h18, compliance 7 |
+| L-02 ✓ 1231f42 | Remove withdrawn citations from advertised programs: Sadowski (handstand, muscle-up), `kilding_2012` | H | A | S | roadmap 2 |
 | L-03 ✓ 5fe464a | Hero: outcome-first, one "Start free" CTA everywhere, the mockup under the headline on phone, a sticky CTA on program pages | H | A | M | product §1,5 |
-| L-04 | Catalog: advertise pull-up, handstand walk, strength + cardio; engine/rowing/overhead "coming soon" (+ persona-harness review) | H | A | M | product §2, roadmap |
+| L-04 ✓ 1220b53 | Catalog: advertise pull-up, handstand walk, strength + cardio; engine/rowing/overhead "coming soon" (+ persona-harness review) | H | A | M | product §2, roadmap |
 | L-05 ✓ 5fe464a | OG image + title per program page (ad and link previews); fix the home meta description ("stubborn joint") | H | A | S | g3, Lighthouse |
 | L-06 ✓ 5fe464a | Landing 404 page; iOS "add to home screen" hint | H | A | S | g3 |
 | L-07 ✓ 5fe464a | Programs page: no "specialist" review claim; methodology below the fold | H | A | S | x05 |
@@ -142,15 +142,15 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 ## 11. From the gap captures (stranger first run, red day, 375/393; `audit/gap-A/B/C`)
 | ID | Action | When | Who | Effort | Lane | Source |
 |----|--------|------|-----|--------|------|--------|
-| G-01 | **A new sign-up's day 1 is a rest day:** no first workout is reachable. Offer a session on day 1 (start the schedule today, or "Start your first session now") | H | A | M | 2b + 4 | gap-A | (Today side ✓ 362d271)
+| G-01 ✓ ac82d14 (schedule; Today = 2b 5ee0c66) | **A new sign-up's day 1 is a rest day:** no first workout is reachable. Offer a session on day 1 (start the schedule today, or "Start your first session now") | H | A | M | 2b + 4 | gap-A | (Today side ✓ 362d271)
 | G-02 | Placement mismatch: the intake result says Tier D (the walker typed 3 into every test), but Today says Tier A and offers "Advance to Tier D". Verify the placement is saved and applied | H | A | S–M | 5 | gap-A |
 | G-03 | Intake physical-test steps (5 screens) overflow horizontally at 375px | H | A | S | 5 | gap-A | ✓ 43048ef
 | G-04 | **An untouched morning check saves a green day** (all defaults 0; Save is never disabled; `check/page.tsx:62-74,403`). Unanswered must not mean "fine" | H | A | S | 2b | gap-B | ✓ e2f79b3
 | G-05 | After the first check, the "How Terav reads you" onboarding modal covers Today and hides the red verdict (`OnboardingRunner.tsx:72-103`) | H | A | S | 2b | gap-B, gap-C | ✓ e2f79b3
-| G-06 | **A tier-advance suggestion shows on a red day** ("advance to Tier D"); `selectTierAdvance` has no state check (`lib/proposals/select.ts:280-300`) | H | A | S | 4 | gap-B |
-| G-07 | **Red doesn't change the session or plan** ("Open session" ungated; the 10% cut is on the TM path only, `suggest.ts:265-271`). **Confirmed on a real session 2026-10-27** (CSM: a low-back-severe red, and the bike session is unchanged). Make red = hold + the program's alternative | H | A | M | 2a + 4 | gap-B ✓ fbef3c9 (session side; derivation 783f977) |
+| G-06 ✓ 1fe275a | **A tier-advance suggestion shows on a red day** ("advance to Tier D"); `selectTierAdvance` has no state check (`lib/proposals/select.ts:280-300`) | H | A | S | 4 | gap-B |
+| G-07 ✓ 783f977 (derivation; session = lane 2a) | **Red doesn't change the session or plan** ("Open session" ungated; the 10% cut is on the TM path only, `suggest.ts:265-271`). **Confirmed on a real session 2026-10-27** (CSM: a low-back-severe red, and the bike session is unchanged). Make red = hold + the program's alternative | H | A | M | 2a + 4 | gap-B ✓ fbef3c9 (session side; derivation 783f977) |
 | G-08 | Red copy has no next step; "see a clinician" exists only inside the Why/Cited sheets; a night-pain red has no referral line | H | A | S | 2b | gap-B | ✓ e2f79b3
-| G-09 | **Plan says "No phase covers this week" in every new user's first week.** Checked 2026-10-27: `plan/page.tsx:216` resolves the phase for the viewed week's Monday (`activePhaseFor(program, iso(viewedMon))`), which falls before a mid-week `started_at`. The program files' calendar dates are fine (`shiftedPhases` rebases them; Today correctly says Week 1 of 4). Fix: use the later of Monday and started_at, or any scheduled day in the week | H | A | S | 4 | gap-B, verified |
+| G-09 ✓ edf2908 (+ 2b 2aa81c7) | **Plan says "No phase covers this week" in every new user's first week.** Checked 2026-10-27: `plan/page.tsx:216` resolves the phase for the viewed week's Monday (`activePhaseFor(program, iso(viewedMon))`), which falls before a mid-week `started_at`. The program files' calendar dates are fine (`shiftedPhases` rebases them; Today correctly says Week 1 of 4). Fix: use the later of Monday and started_at, or any scheduled day in the week | H | A | S | 4 | gap-B, verified |
 | G-10 | Check screen: the sticky Save covers the last region row at 375; the feedback bubble sits on the CTA (with A-UX-01) | H | A | S | 2b | gap-B, gap-C | ✓ 6a2f1e9
 | G-11 | User-facing copy "no LLM, just a keyword parser": cut | H | A | S | 2b | gap-B | ✓ e2f79b3
 | G-12 | The scale anchors (4–6 ache, 7–10 pause) disagree with the gate (amber 4–5, red >5) and the chip labels; align the copy to the gate, never the reverse | S | A | S | — | gap-B |
