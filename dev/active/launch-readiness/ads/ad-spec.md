@@ -56,8 +56,8 @@ as the spare. Meta CTA button: **Sign Up**. Display link: `terav.fit`. Descripti
 **Google RSA, per ad group** (8 headlines, 3 descriptions; pins none)
 - Headlines (≤30): "Get better at one thing" · "Adapts to your training log" · "Free during the beta" ·
   "Every change shows why" · "You approve every change" · "Start free in the beta" and the set's own:
-  - pullup: "Pull-up progressions" · "Your first strict pull-up"
-  - handstand: "Handstand walk, step by step" · "Train one skill till it sticks"
+  - pullup: "Pull-up progressions" · "Work toward a strict pull-up"
+  - handstand: "Handstand walk, step by step" · "Train one skill, step by step"
   - strengthcardio: "Add cardio, keep strength" · "Focused strength and cardio"
 - Descriptions (≤90):
   - "One focus, built around your training week. Every change shows its reason. Free beta." (85)
