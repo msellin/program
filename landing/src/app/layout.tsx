@@ -17,23 +17,23 @@ const mono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://terav.fit"),
   title: {
-    default: "Terav — Pick one thing you want stronger. Sharpen it every session.",
+    default: "Terav — Improve your weakest area. Keep your training.",
     template: "%s · Terav",
   },
   description:
-    "A focused-improvement training tool. An engine, a skill, a lift, a stubborn joint — Terav writes that focus arc; the rest of your week is still yours. Every change cites a study.",
+    "Improve your weakest area and keep your training. For CrossFit and functional-fitness athletes: pick a skill or a lift, and Terav adjusts each session from your log and tells you why. Free during the beta.",
   openGraph: {
-    title: "Terav — Pick your focus. Sharpen it every session.",
+    title: "Terav — Improve your weakest area. Keep your training.",
     description:
-      "Focused-improvement training that sharpens one capability at a time — engine, skill, lift, or joint — against your log. 91 cited studies.",
+      "Pick a skill or a lift. Terav adjusts each session from your log and tells you why. You approve every change. Free during the beta.",
     type: "website",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Terav — Pick your focus. Sharpen it every session.",
+    title: "Terav — Improve your weakest area. Keep your training.",
     description:
-      "Focused-improvement training that sharpens one capability at a time — runs alongside your existing week. 91 cited studies.",
+      "Pick a skill or a lift. Terav adjusts each session from your log and tells you why. Free during the beta.",
   },
   icons: {
     apple: "/apple-touch-icon.png",

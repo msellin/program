@@ -1,5 +1,7 @@
 import type { LandingDict } from "@/i18n/dictionaries/types";
 import { APP_URL } from "@/config";
+import { CtaLink } from "../CtaLink";
+import { IosHint } from "../IosHint";
 
 export function BetaCTA({ dict }: { dict: LandingDict }) {
   const t = dict.beta;
@@ -18,13 +20,13 @@ export function BetaCTA({ dict }: { dict: LandingDict }) {
       </p>
 
       <div className="mt-10 flex flex-col items-stretch gap-3 sm:flex-row sm:justify-center">
-        <a
+        <CtaLink
           href={`${APP_URL}/sign-up`}
           className="group inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-[var(--color-bronze-hi)] to-[var(--color-bronze-lo)] px-7 py-4 text-base font-semibold text-black shadow-[0_10px_40px_-10px_rgba(208,154,104,0.6)] transition hover:brightness-110 sm:w-auto"
         >
           <span>{t.cta_primary}</span>
           <span className="ml-2 transition-transform group-hover:translate-x-0.5">→</span>
-        </a>
+        </CtaLink>
         <a
           href="mailto:sellinmargus@gmail.com?subject=Terav%20beta"
           className="inline-flex w-full items-center justify-center rounded-full border border-white/15 bg-white/[0.03] px-7 py-4 text-base font-medium text-white/85 backdrop-blur transition hover:border-white/40 hover:bg-white/[0.06] sm:w-auto"
@@ -32,6 +34,7 @@ export function BetaCTA({ dict }: { dict: LandingDict }) {
           {t.cta_secondary}
         </a>
       </div>
+      <IosHint />
     </section>
   );
 }

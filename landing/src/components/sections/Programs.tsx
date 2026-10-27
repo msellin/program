@@ -45,7 +45,10 @@ function programsFor(dict: LandingDict): Program[] {
     concurrent: t.domain_concurrent,
     skill: t.domain_skill,
   };
-  return PUBLIC_PROGRAMS.map((p) => ({
+  const ordered = [...PUBLIC_PROGRAMS].sort(
+    (a, b) => Number(b.status === "AVAILABLE") - Number(a.status === "AVAILABLE"),
+  );
+  return ordered.map((p) => ({
     slug: p.slug,
     name: p.name,
     // The catalog carries "Multi-tier · 8 weeks"; the card has room for the
@@ -133,7 +136,7 @@ function ProgramCard({ p }: { p: Program }) {
   return (
     <a
       href={href}
-      className="group relative block overflow-hidden rounded-2xl border border-white/[0.08] bg-[var(--color-ground-2)] p-6 backdrop-blur transition hover:border-white/20 hover:bg-white/[0.04] active:border-white/35 active:bg-white/[0.07] focus-visible:border-white/25 focus-visible:bg-white/[0.05]"
+      className={`group relative block overflow-hidden rounded-2xl border border-white/[0.08] bg-[var(--color-ground-2)] p-6 backdrop-blur transition hover:border-white/20 hover:bg-white/[0.04] active:border-white/35 active:bg-white/[0.07] focus-visible:border-white/25 focus-visible:bg-white/[0.05] ${p.status === "COMING" ? "opacity-70" : ""}`}
     >
       <div className="mb-5 flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -142,7 +145,7 @@ function ProgramCard({ p }: { p: Program }) {
         </div>
         {p.status !== "AVAILABLE" ? (
           <span className={`rounded-full border px-2 py-0.5 text-[10px] font-medium tracking-wide ${statusStyle}`}>
-            {p.status}
+            {p.status === "COMING" ? "COMING SOON" : p.status}
           </span>
         ) : (
           /* The app distinguishes CITED from VERIFIED and the landing did not,
@@ -163,7 +166,7 @@ function ProgramCard({ p }: { p: Program }) {
                  mean. (2026-09-01) */
               p.review === "verified"
                 ? "Citations re-audited against the literature in a documented second pass."
-                : "Every claim cites a study. The second audit pass is still to come."
+                : "Sources are listed on the program page. The second review pass is still to come."
             }
           >
             {p.review === "verified" ? "VERIFIED" : "CITED"}

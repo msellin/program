@@ -7,7 +7,7 @@ import { PUBLIC_PROGRAMS, type LandingProgram } from "@/lib/programs-catalog";
 
 const PROGRAMS_TITLE = "Programs — pick your focus";
 const PROGRAMS_DESC =
-  "Each Terav program is one focus arc — an engine, a skill, a lift, a stubborn joint. Authored against real evidence with honest outcome ranges.";
+  "Pick a skill or a lift. Each Terav program shows what it is for, who it is not for, and the sources behind it.";
 
 export const metadata: Metadata = {
   title: PROGRAMS_TITLE,
@@ -43,22 +43,24 @@ export default function ProgramsIndexPage() {
           <header className="mb-10 max-w-3xl">
             <div className="mono-caps mb-3 text-[var(--color-bronze-hi)]">Programs</div>
             <h1 className="text-4xl font-black leading-[1.05] tracking-tight text-white sm:text-5xl md:text-6xl">
-              Pick your fight.
+              Pick your focus.
             </h1>
             <p className="mt-4 text-base leading-relaxed text-white/70 sm:text-lg">
               Every program lists what it&apos;s for, what it&apos;s <em>not</em> for, and
-              the studies it&apos;s built on. Preview before you sign up.
+              the sources it&apos;s built on. Preview before you sign up.
             </p>
           </header>
 
           <div className="grid gap-5 md:grid-cols-2">
-            {PUBLIC_PROGRAMS.map((p) => (
+            {[...PUBLIC_PROGRAMS]
+              .sort((a, b) => Number(b.status === "AVAILABLE") - Number(a.status === "AVAILABLE"))
+              .map((p) => (
               <ProgramCard key={p.slug} p={p} />
             ))}
           </div>
 
           <p className="mt-10 text-sm text-[var(--color-muted)]">
-            More programs land as they&apos;re authored. Two are already in flight — see the{" "}
+            More programs land as they&apos;re ready. See the{" "}
             <Link
               href="/roadmap"
               className="underline decoration-white/20 underline-offset-4 hover:text-white hover:decoration-white/50"
@@ -116,7 +118,7 @@ function ProgramCard({ p }: { p: LandingProgram }) {
 
         <div className="mt-6 flex items-center justify-between border-t border-white/[0.06] pt-4">
           <span className="text-[11.5px] text-[var(--color-muted)] uppercase tracking-wider font-mono">
-            {p.evidence.length} cited studies
+            {p.status === "COMING" ? "Coming soon" : `${p.evidence.length} sources`}
           </span>
           <span className="text-[13px] font-medium text-white/80 transition group-hover:text-white">
             Preview →

@@ -774,36 +774,42 @@ describe("landing headline numbers match the app", () => {
   const DICT = path.resolve(
     __dirname, "..", "..", "..", "landing", "src", "i18n", "dictionaries", "en.ts",
   );
+  const LANDING_CATALOG = path.resolve(
+    __dirname, "..", "..", "..", "landing", "src", "lib", "programs-catalog.ts",
+  );
   const pick = (src: string, key: string) => {
     const m = src.match(new RegExp(`${key}:\\s*"([^"]*)"`));
     return m ? m[1] : null;
   };
 
-  it("program counts on the landing equal the public catalog", () => {
-    if (!fs.existsSync(DICT)) return; // landing not checked out
-    const src = fs.readFileSync(DICT, "utf8");
-    // Every non-personal manifest program ships publicly, CITED or VERIFIED.
-    // The ladder is a confidence label, not a gate on being listed.
-    const publicCount = manifest.programs.filter((p) => p.personal !== true).length;
-
-    const statDigit = Number((pick(src, "stat_programs_value") ?? "").match(/\d+/)?.[0]);
-    expect(statDigit, "hero.stat_programs_value").toBe(publicCount);
-
-    // Match the sentence, not the key: `pick` would return contrast.title,
-    // which is the first `title:` in the file.
-    const titleWord = src.match(/title:\s*"([A-Za-z]+) programs live/)?.[1]?.toLowerCase();
-    expect(titleWord, "programs.title spells the count").toBe(NUMBER_WORDS[publicCount]);
-  });
-
-  it("citation counts on the landing equal citations.json", () => {
+  /**
+   * Launch-readiness L-01/L-08 (2026-10-27): the landing quotes no program
+   * count and no study count. Both drifted before (`91`, `125`), the 125 was
+   * withdrawn with the overstated citations behind it, and stage 1 of the
+   * evidence line is deliberately count-free. A number maintained in prose
+   * drifts, so the rule is: don't print one. Programs that are open are the
+   * catalog's `status: "AVAILABLE"` entries, and each must exist in the app.
+   */
+  it("the landing prints no study count and no program count", () => {
     if (!fs.existsSync(DICT)) return;
     const src = fs.readFileSync(DICT, "utf8");
-    const cites = read("citations.json");
-    const total = (cites.citations ?? cites.references ?? []).length;
+    expect(src, "a study count in the dictionary").not.toMatch(/\d+\s+(primary |cited )?studies/i);
+    expect(src, "a program count in the dictionary").not.toMatch(
+      /\b(\d+|eight|nine|five|six|seven)\s+programs? live/i,
+    );
+    expect(pick(src, "stat_programs_value") ?? "", "hero.stat_programs_value").not.toMatch(/\d/);
+    expect(pick(src, "stat_studies_value") ?? "", "hero.stat_studies_value").not.toMatch(/\d/);
+  });
 
-    expect(Number(pick(src, "stat_studies_value")), "hero.stat_studies_value").toBe(total);
-    const evidenceNum = Number((src.match(/(\d+) primary studies/) ?? [])[1]);
-    expect(evidenceNum, "evidence.title").toBe(total);
+  it("every program the landing marks open exists in the app manifest", () => {
+    if (!fs.existsSync(LANDING_CATALOG)) return;
+    const src = fs.readFileSync(LANDING_CATALOG, "utf8");
+    const open = [...src.matchAll(/slug:\s*"([^"]+)"[\s\S]*?status:\s*"(AVAILABLE|COMING|PERSONAL)"/g)]
+      .filter((m) => m[2] === "AVAILABLE")
+      .map((m) => m[1]);
+    const appSlugs = manifest.programs.map((p) => p.slug);
+    expect(open.filter((s) => !appSlugs.includes(s))).toEqual([]);
+    expect(open.length, "the landing advertises at least one open program").toBeGreaterThan(0);
   });
 
   /**

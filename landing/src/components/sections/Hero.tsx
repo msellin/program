@@ -2,6 +2,7 @@ import { TodayMockup } from "../mockups/TodayMockup";
 import { TodayMockupMobile } from "../mockups/TodayMockupMobile";
 import type { LandingDict } from "@/i18n/dictionaries/types";
 import { APP_URL } from "@/config";
+import { CtaLink } from "../CtaLink";
 
 /**
  * Bronze→teal chisel stroke that redraws itself under the H1 keyword.
@@ -77,13 +78,13 @@ export function Hero({ dict }: { dict: LandingDict }) {
           </p>
 
           <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
-            <a
+            <CtaLink
               href={`${APP_URL}/sign-up`}
               className="group inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-[var(--color-bronze-hi)] to-[var(--color-bronze-lo)] px-6 py-3.5 text-sm font-semibold text-black shadow-[0_10px_40px_-10px_rgba(208,154,104,0.6)] transition hover:brightness-110 sm:w-auto sm:text-base"
             >
               <span>{t.cta_primary}</span>
               <span className="ml-2 transition-transform group-hover:translate-x-0.5">→</span>
-            </a>
+            </CtaLink>
             <a
               href="/programs"
               className="inline-flex w-full items-center justify-center rounded-full border border-white/15 bg-white/[0.03] px-6 py-3.5 text-sm font-medium text-white/85 backdrop-blur transition hover:border-white/40 hover:bg-white/[0.06] sm:w-auto sm:text-base"
@@ -93,7 +94,7 @@ export function Hero({ dict }: { dict: LandingDict }) {
           </div>
           {/* C3 · CTA friction disclosure (post-audit backlog) */}
           <p className="mt-3 text-[12px] text-white/50">
-            Email + password. No card, no signup wall. Beta is free.
+            Free during the beta. No card needed.
           </p>
 
           <a

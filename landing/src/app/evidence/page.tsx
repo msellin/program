@@ -3,9 +3,9 @@ import { Ambient } from "@/components/Ambient";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 
-const EVIDENCE_TITLE = "Evidence — the primary sources Terav builds on";
+const EVIDENCE_TITLE = "Evidence — the published research Terav builds on";
 const EVIDENCE_DESC =
-  "The peer-reviewed studies behind Terav's engine. Grouped by domain: aerobic physiology, concurrent training, motor learning.";
+  "The published research behind Terav's programs. Grouped by domain: aerobic physiology, concurrent training, motor learning.";
 
 export const metadata: Metadata = {
   title: EVIDENCE_TITLE,
@@ -39,7 +39,7 @@ type Group = {
 const groups: Group[] = [
   {
     domain: "Aerobic physiology",
-    eyebrow: "28 primary sources",
+    eyebrow: "Sources",
     summary:
       "The base for Engine Builder. What actually adapts in the first 8 weeks of aerobic work, at what dose, and which metric to track.",
     citations: [
@@ -75,7 +75,7 @@ const groups: Group[] = [
   },
   {
     domain: "Concurrent training",
-    eyebrow: "26 primary sources",
+    eyebrow: "Sources",
     summary:
       "How strength and aerobic work coexist without interference — session order, modality, dose, protein floor. What we ban PR-chasing during an aerobic block.",
     citations: [
@@ -109,7 +109,7 @@ const groups: Group[] = [
   },
   {
     domain: "Motor learning + skill acquisition",
-    eyebrow: "37 primary sources",
+    eyebrow: "Sources",
     summary:
       "The base for skill programs — handstand, HSPU, muscle-up. Multi-dimensional generation, external-focus cues, contextual interference, spacing.",
     citations: [
@@ -171,17 +171,11 @@ export default function EvidencePage() {
             </span>
           </h1>
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/65 sm:text-lg">
-            Every rule the engine applies traces to one of these. Where the
+            The research Terav draws on, grouped by domain. Where the
             literature isn&rsquo;t there — session length, exact retest cadence,
             specific cue phrasing — we tag the choice as{" "}
             <em>engineering</em> in the app, not science.
           </p>
-
-          <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6">
-            <Stat n="28" label="Aerobic physiology" />
-            <Stat n="26" label="Concurrent training" />
-            <Stat n="37" label="Motor learning" />
-          </div>
         </section>
 
         <section className="mx-auto max-w-4xl px-5 pb-24 sm:px-6">
@@ -247,15 +241,6 @@ function GroupBlock({ group }: { group: Group }) {
           </li>
         ))}
       </ul>
-    </div>
-  );
-}
-
-function Stat({ n, label }: { n: string; label: string }) {
-  return (
-    <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4">
-      <div className="font-mono text-2xl text-[var(--color-bronze-hi)]">{n}</div>
-      <div className="mt-1 text-xs text-[var(--color-muted)]">{label}</div>
     </div>
   );
 }

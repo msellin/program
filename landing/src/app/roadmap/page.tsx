@@ -149,7 +149,7 @@ const items: Item[] = [
     status: "planned",
     kind: "new_program",
     detail: "Wrist tolerance → wall → freestand. Shares handstand drill library.",
-    evidence: "Kinoshita 2022, Sadowski 2021, Barlow 2020",
+    evidence: "Kinoshita 2022, Barlow 2020",
   },
   {
     title: "HYROX prep — strength-floor protected",
@@ -157,13 +157,6 @@ const items: Item[] = [
     kind: "new_program",
     detail: "For hybrid athletes who won't sacrifice the squat. VO2max-led per Brandt 2025.",
     evidence: "Brandt 2025, Helgerud 2007, Schumann 2022",
-  },
-  {
-    title: "Rehab as a main track",
-    status: "deferred",
-    kind: "new_program",
-    detail:
-      "Anterior Hip Rebuild is personal-scope. A general rehab main track needs a second user to validate against. Post-launch.",
   },
 
   // ---- Product development ----
@@ -281,7 +274,7 @@ export default function RoadmapPage() {
             Roadmap.
           </h1>
           <p className="mt-4 max-w-xl text-base leading-relaxed text-[var(--color-muted)] sm:text-lg">
-            Every program is one focus arc — an engine, a skill, a lift, a stubborn joint.
+            Every program is one focus arc — a skill, a lift or an engine.
             Here&rsquo;s what&rsquo;s shipped, what&rsquo;s in build, what&rsquo;s next.
             Programs in bronze; product development mixed in.
           </p>

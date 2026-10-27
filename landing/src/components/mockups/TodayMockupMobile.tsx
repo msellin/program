@@ -10,7 +10,7 @@ import { PhoneFrame } from "./PhoneFrame";
  * only the three surfaces that do 3-second proof work:
  *
  *   #1 Signals strip     — adaptive, cites your body
- *   #2 Program header    — cited protocol (Norwegian 4×4 = real study name)
+ *   #2 Program header    — cited protocol (source named on every change)
  *   #5 Note + Accept     — confirm-first mechanic, the differentiator
  *
  * Swaps in via md:hidden / hidden md:block in Hero.tsx.
@@ -27,15 +27,15 @@ export function TodayMockupMobile() {
             <span className="ml-auto text-white/40">tap</span>
           </div>
           <div className="mt-2 text-[11px] leading-snug text-[var(--color-muted)]">
-            Left hip stiffness noted 2× · load ×0.90 proposed
+            Grip fatigue noted 2× · shorter hangs proposed
           </div>
         </div>
 
         {/* Program header */}
         <div>
-          <div className="mono-caps">Engine Builder · Week 3 of 8</div>
+          <div className="mono-caps">First Strict Pull-Up · Week 3 of 8</div>
           <div className="mt-1 font-semibold text-white">
-            Aerobic base · Norwegian 4×4
+            Hang tier · Scap pulls
           </div>
         </div>
 
@@ -43,10 +43,10 @@ export function TodayMockupMobile() {
         <div className="rounded-2xl border border-white/[0.08] bg-[var(--color-ground-2)] p-4">
           <div className="mono-caps mb-1.5">Note detected</div>
           <div className="text-[12.5px] leading-snug text-white/80">
-            &ldquo;legs feeling flat, low fuel this morning&rdquo;
+            &ldquo;grip gave out early, hands slipping&rdquo;
           </div>
           <div className="mt-1.5 text-[11.5px] text-[var(--color-amber)]">
-            → fatigue signal · load ×0.90 proposed
+            → grip signal · shorter hangs proposed
           </div>
           <div className="mt-3 flex gap-2">
             <span className="rounded-md bg-[var(--color-bronze)]/20 px-2.5 py-1 text-[11px] font-semibold text-[var(--color-bronze-hi)]">

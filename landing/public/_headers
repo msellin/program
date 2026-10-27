@@ -1,0 +1,5 @@
+# next/og writes the preview cards without a file extension; say what they are.
+/opengraph-image
+  Content-Type: image/png
+/programs/*/opengraph-image
+  Content-Type: image/png

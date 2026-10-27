@@ -18,16 +18,16 @@ export function TodayMockup() {
             <span className="ml-auto text-white/40">tap</span>
           </div>
           <div className="mt-2 text-[11px] text-[var(--color-muted)] leading-snug">
-            Left hip stiffness noted 2× · load ×0.90 proposed
+            Grip fatigue noted 2× · shorter hangs proposed
           </div>
         </div>
 
         {/* Program header */}
         <div>
-          <div className="mono-caps">Engine Builder · Week 3 of 8</div>
-          <div className="mt-1 font-semibold text-white">Aerobic base · Norwegian 4×4</div>
+          <div className="mono-caps">First Strict Pull-Up · Week 3 of 8</div>
+          <div className="mt-1 font-semibold text-white">Hang tier · Scap pulls</div>
           <div className="mt-0.5 text-xs text-[var(--color-muted)]">
-            HR 90-95% · row or ski-erg · fuelled
+            Pull-up bar · band optional
           </div>
         </div>
 
@@ -35,22 +35,22 @@ export function TodayMockup() {
         <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4">
           <div className="flex items-start justify-between">
             <div>
-              <div className="text-sm font-semibold text-white">4 × 4 min interval</div>
-              <div className="mt-0.5 text-[11px] text-[var(--color-muted)]">3 min active rest</div>
+              <div className="text-sm font-semibold text-white">Dead hang</div>
+              <div className="mt-0.5 text-[11px] text-[var(--color-muted)]">Stop when your grip goes</div>
             </div>
             <span className="rounded-full border border-[var(--color-bronze)]/40 bg-[var(--color-bronze)]/[0.08] px-2 py-0.5 text-[10px] font-medium text-[var(--color-bronze-hi)]">
-              Interval
+              Hang
             </span>
           </div>
 
           <div className="mt-3 grid grid-cols-4 gap-1.5 text-[10px]">
             <div className="mono-caps text-white/40">Set</div>
-            <div className="mono-caps text-white/40">Time</div>
-            <div className="mono-caps text-white/40">HR</div>
+            <div className="mono-caps text-white/40">Hold</div>
+            <div className="mono-caps text-white/40">Rest</div>
             <div className="mono-caps text-white/40">RPE</div>
 
-            <SetRow set="1" time="1:32" hr="182" rpe="8" done />
-            <SetRow set="2" time="1:34" hr="184" rpe="8" done />
+            <SetRow set="1" time="0:18" hr="60 s" rpe="7" done />
+            <SetRow set="2" time="0:20" hr="60 s" rpe="8" done />
             <SetRow set="3" time="—" hr="—" rpe="—" />
             <SetRow set="4" time="—" hr="—" rpe="—" />
           </div>
@@ -58,9 +58,9 @@ export function TodayMockup() {
           <div className="mt-3 rounded-lg border border-white/[0.06] bg-black/20 p-2.5">
             <div className="mono-caps mb-1 text-[9px]">Note detected</div>
             <div className="text-[11px] leading-snug text-white/70">
-              &ldquo;legs feeling flat, low fuel this morning&rdquo;
+              &ldquo;grip gave out early, hands slipping&rdquo;
               <span className="mt-1 block text-[10px] text-[var(--color-amber)]">
-                → fatigue signal · load ×0.90 proposed
+                → grip signal · shorter hangs proposed
               </span>
               <div className="mt-2 flex gap-1.5">
                 <span className="rounded-md bg-[var(--color-bronze)]/20 px-2 py-1 text-[9.5px] font-semibold text-[var(--color-bronze-hi)]">

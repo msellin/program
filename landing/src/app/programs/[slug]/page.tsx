@@ -6,6 +6,7 @@ import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { findProgram, PUBLIC_PROGRAMS, type LandingProgram } from "@/lib/programs-catalog";
 import { APP_URL } from "@/config";
+import { CtaLink } from "@/components/CtaLink";
 
 type Params = { slug: string };
 
@@ -50,13 +51,15 @@ export default async function ProgramDetailPage({
   const { slug } = await params;
   const p = findProgram(slug);
   if (!p || p.personal) notFound();
+  const open = p.status === "AVAILABLE";
+  const signUpHref = `${APP_URL}/sign-up?next=${encodeURIComponent(`/programs/${p.slug}`)}`;
 
   return (
     <div className="relative min-h-dvh overflow-hidden bg-[var(--color-ground)] text-white">
       <Ambient />
       <div className="relative">
         <Nav />
-        <article className="mx-auto max-w-3xl px-5 pt-8 pb-16 sm:px-6 sm:pt-12">
+        <article className="mx-auto max-w-3xl px-5 pt-8 pb-28 sm:px-6 sm:pt-12 sm:pb-16">
           <Link
             href="/programs"
             className="mono-caps mb-6 inline-block text-[var(--color-muted)] hover:text-white/80"
@@ -102,7 +105,7 @@ export default async function ProgramDetailPage({
             </div>
           </Section>
 
-          <Section title="Honest outcome ranges">
+          <Section title="What each stage looks like">
             <div className="space-y-2">
               {p.outcomes.map((o) => (
                 <div
@@ -115,12 +118,11 @@ export default async function ProgramDetailPage({
               ))}
             </div>
             <p className="mt-3 text-[12.5px] italic text-[var(--color-muted)]">
-              Ranges are honest, not guarantees. Response varies — HERITAGE non-response
-              distributions apply to any structured training program.
+              Not guarantees. People respond to training differently.
             </p>
           </Section>
 
-          <Section title="What it cites">
+          <Section title="Sources">
             <ul className="space-y-4">
               {p.evidence.map((e) => (
                 <li key={e.label}>
@@ -148,31 +150,48 @@ export default async function ProgramDetailPage({
 
           <section className="mt-12 rounded-3xl border border-[var(--color-bronze)]/25 bg-[var(--color-bronze)]/[0.05] p-6 sm:p-8">
             <div className="mono-caps mb-3 text-[var(--color-bronze-hi)]">
-              Ready to start
+              {open ? "Ready to start" : "Coming soon"}
             </div>
-            <p className="text-[15px] leading-relaxed text-white/85">
-              Sign up on the app, complete the intake, and your first session is on
-              Today within two minutes. Free during beta.
-            </p>
-            <div className="mt-5 flex flex-wrap gap-3">
-              <a
-                href={`${APP_URL}/sign-up?next=${encodeURIComponent(
-                  `/programs/${p.slug}`,
-                )}`}
-                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[var(--color-bronze-hi)] to-[var(--color-bronze-lo)] px-6 py-3 text-sm font-semibold text-black shadow-[0_10px_40px_-10px_rgba(208,154,104,0.6)] transition hover:brightness-110"
-              >
-                Sign up to start
-                <span>→</span>
-              </a>
-              <a
-                href={`${APP_URL}/sign-in?next=${encodeURIComponent(
-                  `/programs/${p.slug}`,
-                )}`}
-                className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.03] px-6 py-3 text-sm font-medium text-white/85 backdrop-blur transition hover:border-white/40 hover:bg-white/[0.06]"
-              >
-                Already have an account
-              </a>
-            </div>
+            {open ? (
+              <>
+                <p className="text-[15px] leading-relaxed text-white/85">
+                  Sign up, answer a few intake questions, and your first session is
+                  waiting on Today. Free during the beta.
+                </p>
+                <div className="mt-5 flex flex-wrap gap-3">
+                  <CtaLink
+                    href={signUpHref}
+                    className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[var(--color-bronze-hi)] to-[var(--color-bronze-lo)] px-6 py-3 text-sm font-semibold text-black shadow-[0_10px_40px_-10px_rgba(208,154,104,0.6)] transition hover:brightness-110"
+                  >
+                    Start free
+                    <span>→</span>
+                  </CtaLink>
+                  <a
+                    href={`${APP_URL}/sign-in?next=${encodeURIComponent(
+                      `/programs/${p.slug}`,
+                    )}`}
+                    className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.03] px-6 py-3 text-sm font-medium text-white/85 backdrop-blur transition hover:border-white/40 hover:bg-white/[0.06]"
+                  >
+                    Already have an account
+                  </a>
+                </div>
+              </>
+            ) : (
+              <>
+                <p className="text-[15px] leading-relaxed text-white/85">
+                  This program is still being finished. The beta is open for the
+                  programs marked available.
+                </p>
+                <div className="mt-5">
+                  <Link
+                    href="/programs"
+                    className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.03] px-6 py-3 text-sm font-medium text-white/85 backdrop-blur transition hover:border-white/40 hover:bg-white/[0.06]"
+                  >
+                    See the open programs →
+                  </Link>
+                </div>
+              </>
+            )}
           </section>
 
           <div className="mt-12 flex flex-wrap gap-4 border-t border-white/[0.06] pt-8 text-[13px]">
@@ -190,6 +209,16 @@ export default async function ProgramDetailPage({
             </Link>
           </div>
         </article>
+        {open ? (
+          <div className="fixed inset-x-0 bottom-0 z-20 border-t border-white/10 bg-[var(--color-ground)]/95 px-5 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur sm:hidden">
+            <CtaLink
+              href={signUpHref}
+              className="inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-[var(--color-bronze-hi)] to-[var(--color-bronze-lo)] px-6 py-3.5 text-sm font-semibold text-black"
+            >
+              Start free →
+            </CtaLink>
+          </div>
+        ) : null}
         <Footer />
       </div>
     </div>

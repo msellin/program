@@ -1,7 +1,8 @@
 /**
  * Concrete alternative to the abstract "Intake · Session · Sharpen" three-step
- * ladder. Shows Mon/Wed/Fri of Engine Builder Week 1 as three cards with
- * real prescriptions and their source citations.
+ * ladder. Shows Mon/Wed/Fri of First Strict Pull-Up week 1 (tier A) as three
+ * cards, with the source behind each. No numbers: tier A layout is in the
+ * program JSON, the per-set dose is picked at composition time.
  *
  * The founder's rule everyone else violates: "one concrete cite beats 100+
  * cited studies for conviction." (competitor audit).
@@ -16,27 +17,27 @@ export function YourFirstWeek() {
   }[] = [
     {
       day: "Mon",
-      session: "Z2 base row",
-      prescription: "40 min · HR 75–85% max",
+      session: "Hang session",
+      prescription: "Dead hangs · active hollow",
       detail:
-        "Easy — conversational. The block where mitochondrial density and capillary work quietly compound.",
-      cite: "Seiler 2010 · Brooks 2018",
+        "Grip endurance and shoulder position come first. No pull-up attempts yet.",
+      cite: "Youdas 2010",
     },
     {
       day: "Wed",
-      session: "Norwegian 4×4",
-      prescription: "4 × 4 min @ 90–95% HRmax · 3 min recovery",
+      session: "Scap-pull session",
+      prescription: "Scap pulls · ring rows",
       detail:
-        "The canonical VO2max interval. The single most studied protocol in the program.",
-      cite: "Helgerud 2007 · Wisløff 2007",
+        "Learn to start the pull from the shoulder blades, the step before any rep.",
+      cite: "Youdas 2010",
     },
     {
       day: "Fri",
-      session: "Threshold row",
-      prescription: "3 × 8 min @ pace-5 · 2 min rest",
+      session: "Row session",
+      prescription: "Ring rows · short hangs",
       detail:
-        "Just under LT2 — the number that keeps improving after VO2max plateaus.",
-      cite: "Joyner & Coyle 2008",
+        "Build the pulling strength that the first rep will draw on.",
+      cite: "Roig 2009",
     },
   ];
 
@@ -45,10 +46,10 @@ export function YourFirstWeek() {
       <div className="max-w-3xl">
         <div className="mono-caps mb-3">Your first week</div>
         <h2 className="text-[32px] font-bold leading-tight tracking-tight text-white sm:text-4xl md:text-5xl">
-          This is Engine Builder, Week&nbsp;1.
+          This is First Strict Pull-Up, week&nbsp;1.
         </h2>
         <p className="mt-4 max-w-xl text-base leading-relaxed text-[var(--color-muted)] sm:text-lg">
-          Three sessions a week. The other four days are yours — keep your box, your coach, your own runs. Terav writes the focus arc. No mystery, no filler.
+          Three sessions a week. The other four days are yours — keep your box, your coach, your own runs. Terav writes the focus. No mystery, no filler.
         </p>
       </div>
 
@@ -82,9 +83,9 @@ export function YourFirstWeek() {
       </div>
 
       <p className="mt-6 max-w-2xl text-[13px] leading-relaxed text-[var(--color-muted)]">
-        Every other program shows the same shape — a concrete prescription for
-        each session, cited to the primary source. Adaptive changes propose
-        against your log; you Accept or Ignore.
+        Every program shows the same shape: a concrete plan for each session, with
+        the source behind it. Changes are proposed from your log; you Accept or
+        Ignore.
       </p>
     </section>
   );

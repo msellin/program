@@ -40,7 +40,7 @@ export const PROGRAMS: LandingProgram[] = [
     tagline: "The base your engine's been missing.",
     domain: "aerobic",
     domainLabel: "Aerobic",
-    status: "AVAILABLE",
+    status: "COMING",
     review: "cited",
     duration: "8 weeks",
     difficulty: "beginner",
@@ -52,7 +52,7 @@ export const PROGRAMS: LandingProgram[] = [
       "You'll swap rowing / cycling / ski-erg / running as your machine.",
     ],
     arcSummary:
-      "Eight weeks of Zone 1/2 base with a single weekly hard session added in week 4. Norwegian 4×4 intervals appear once you can hold Z2 for 45 minutes without HR drift. Retest week 8 measures submax-HR at your intake pace — the aerobic gain is real and readable.",
+      "Eight weeks of Zone 1/2 base with a single weekly hard session added in week 4. Norwegian 4×4 intervals appear once you can hold Z2 for 45 minutes without HR drift. Retest week 8 measures submax heart rate at your intake pace.",
     evidence: [
       {
         label: "Hickson 1980 · concurrent training",
@@ -67,11 +67,11 @@ export const PROGRAMS: LandingProgram[] = [
         source: "80/20 easy/hard is the honest volume distribution — this program follows it.",
       },
     ],
-    retest: "Week 8: submax HR at your intake pace should be 3-8 bpm lower. Resting HR drops 3-10 bpm.",
+    retest: "Week 8: submax heart rate at your intake pace, compared with where you started.",
     outcomes: [
-      { tier: "Foundation", expected: "Comfortable 60 min Z1. Submax HR −3 to −6 bpm. Modest VO2max gain (~3-6%)." },
-      { tier: "Progression", expected: "Comfortable 75-90 min Z1. Submax HR −5 to −10 bpm. VO2max +5-8%." },
-      { tier: "Push", expected: "90+ min Z1 comfortable, threshold pace clearly established. VO2max +4-7%." },
+      { tier: "Foundation", expected: "Easy aerobic sessions feel comfortable for longer, and your heart rate sits lower at the same effort." },
+      { tier: "Progression", expected: "Longer easy sessions, with a clear ability to hold the base before intervals are added." },
+      { tier: "Push", expected: "Threshold pace is established and the weekly hard session is repeatable." },
     ],
     contraindications: [
       "Unmanaged high blood pressure (resting > 160/100).",
@@ -98,11 +98,11 @@ export const PROGRAMS: LandingProgram[] = [
       "You already own a rower, bike or erg.",
     ],
     arcSummary:
-      "Two lift days + three-to-four low-intensity aerobic sessions + one hard interval. Explicit 6-hour separation between hard cardio and heavy squat. Retest at week 8: back-squat 5RM should be held within 2.5 kg AND submax-HR at pace-5 should be down 5-10 bpm.",
+      "Two lift days + three-to-four low-intensity aerobic sessions + one hard interval. Explicit 6-hour separation between hard cardio and heavy squat. Retest at week 8: back-squat 5RM held, and submax heart rate at pace-5 compared with intake.",
     evidence: [
       {
         label: "Schumann 2022 meta-analysis",
-        source: "Explosive-strength cost of concurrent training bounded at SMD −0.28 — the number this program is authored against.",
+        source: "Meta-analysis of how much explosive strength concurrent training costs — the bound this program is authored against.",
       },
       {
         label: "Hickson 1980",
@@ -115,9 +115,9 @@ export const PROGRAMS: LandingProgram[] = [
     ],
     retest: "Week 8: 5RM back-squat + 5-min submax HR at rowing pace-5. Both trend-tracked cycle-to-cycle.",
     outcomes: [
-      { tier: "Foundation", expected: "Squat held ±2.5 kg, submax HR −5-10 bpm at pace-5." },
-      { tier: "Progression", expected: "Squat held or +2.5 kg on a green cycle, HR −8-15 bpm." },
-      { tier: "Push", expected: "VO2max +2-4% AND strength floor. Above this bar, response is stochastic." },
+      { tier: "Foundation", expected: "Your main lifts hold steady while easy cardio becomes routine." },
+      { tier: "Progression", expected: "Lifts held or nudged up on a good cycle while your engine builds." },
+      { tier: "Push", expected: "Cardio fitness keeps growing with the strength floor still intact." },
     ],
     contraindications: [
       "Peaking for a powerlifting meet — pause this until post-meet.",
@@ -128,10 +128,10 @@ export const PROGRAMS: LandingProgram[] = [
   {
     slug: "rowing-2k-test-prep",
     name: "Rowing 2K Test Prep",
-    tagline: "Six weeks. A cleaner pull. A faster 2K.",
+    tagline: "A race-anchored plan for the 2K row.",
     domain: "aerobic",
     domainLabel: "Aerobic",
-    status: "AVAILABLE",
+    status: "COMING",
     review: "cited",
     duration: "6 weeks",
     difficulty: "intermediate",
@@ -143,11 +143,11 @@ export const PROGRAMS: LandingProgram[] = [
       "You care about splits, watts, and HR zones — not just \"feel\".",
     ],
     arcSummary:
-      "Six weeks with a race-anchored taper. Weeks 1-2: baseline + technique. Weeks 3-4: threshold builds. Weeks 5-6: volume drops 45%, intensity holds, then the peak 2K test on race day. Test-date-driven — enter your target date at intake and the whole phase structure shifts to end there.",
+      "Six weeks with a race-anchored taper. Weeks 1-2: baseline + technique. Weeks 3-4: threshold builds. Weeks 5-6: volume drops, intensity holds, then the peak 2K test on race day. Test-date-driven — enter your target date at intake and the whole phase structure shifts to end there.",
     evidence: [
       {
         label: "Mujika & Padilla 2000",
-        source: "The taper is where the ~3% peak uplift comes from — not from more work in the final week.",
+        source: "The taper is where peak performance comes from — not from more work in the final week.",
       },
       {
         label: "Joyner & Coyle 2008",
@@ -155,14 +155,14 @@ export const PROGRAMS: LandingProgram[] = [
       },
       {
         label: "Bosquet 2007",
-        source: "Meta-analysis: 40-60% volume reduction with intensity held is the taper sweet spot.",
+        source: "Meta-analysis: cutting volume while holding intensity is the taper sweet spot.",
       },
     ],
     retest: "Weeks 3 (mid-block) and 6 (peak) 2K tests. Log via the app — pace, split, and target time surface on the block card.",
     outcomes: [
-      { tier: "Foundation", expected: "2K time down 15-30 seconds. Personal target split derived from your intake." },
-      { tier: "Progression", expected: "2K time down 8-15 seconds. Threshold pace visibly cleaner." },
-      { tier: "Push", expected: "2K time down 3-8 seconds — a stretch, but achievable at this level." },
+      { tier: "Foundation", expected: "A clean baseline, pacing you can repeat, and a taper plan built around your date." },
+      { tier: "Progression", expected: "Threshold pace holds more steadily across the block." },
+      { tier: "Push", expected: "A well-paced test on race day, with the taper doing its job." },
     ],
     contraindications: [
       "Low-back injury in the last 90 days without physio clearance.",
@@ -204,9 +204,9 @@ export const PROGRAMS: LandingProgram[] = [
     ],
     retest: "Freestand-hold duration + walk distance retested every 4 weeks. Tier gates unlock on measured thresholds.",
     outcomes: [
-      { tier: "Foundation", expected: "Wall hold 60s consistently. First 2-3 walking steps." },
-      { tier: "Progression", expected: "Freestand hold 15-30s. 5-10 m walk under control." },
-      { tier: "Push", expected: "Consistent 20 m walk. Introduction to turns + obstacles." },
+      { tier: "Foundation", expected: "Steady wall holds and your first controlled steps." },
+      { tier: "Progression", expected: "Freestand holds you can repeat, with short walks under control." },
+      { tier: "Push", expected: "Longer, steadier walks, plus an introduction to turns." },
     ],
     contraindications: [
       "Any acute wrist injury — build wrist tolerance first.",
@@ -220,7 +220,7 @@ export const PROGRAMS: LandingProgram[] = [
     tagline: "Stronger snatch, OHS, and press.",
     domain: "skill",
     domainLabel: "Skill",
-    status: "AVAILABLE",
+    status: "COMING",
     review: "cited",
     duration: "10 weeks",
     difficulty: "intermediate",
@@ -249,9 +249,9 @@ export const PROGRAMS: LandingProgram[] = [
     ],
     retest: "Every 2 weeks: supine shoulder flexion ROM (goniometer or phone-app angle). Improvement = phase advance.",
     outcomes: [
-      { tier: "Foundation", expected: "+10° ROM. Overhead position holds under empty barbell." },
-      { tier: "Progression", expected: "+15° ROM. Overhead squat with 30-40 kg feels supported." },
-      { tier: "Push", expected: "+20° ROM. Snatch bottom feels stable." },
+      { tier: "Foundation", expected: "Better overhead range, and a position you can hold under an empty barbell." },
+      { tier: "Progression", expected: "Overhead squats that feel supported at light loads." },
+      { tier: "Push", expected: "A stable bottom position in the snatch." },
     ],
     contraindications: [
       "Recent shoulder surgery or acute injury.",
@@ -294,10 +294,10 @@ export const PROGRAMS: LandingProgram[] = [
     retest:
       "Hang time retested weekly at the lower tiers, max reps weekly at the upper. Full assessment every 4 weeks — dead hang, scap pull, ring row, negative control.",
     outcomes: [
-      { tier: "Hang", expected: "25-45 second dead hang. Clean scap pulls. First ring rows." },
-      { tier: "Assisted", expected: "First strict rep, off a 10-second negative." },
-      { tier: "First Rep", expected: "3-5 unbroken." },
-      { tier: "Volume", expected: "8-10 unbroken, wide-grip variety unlocked." },
+      { tier: "Hang", expected: "A steady dead hang, clean scap pulls and your first ring rows." },
+      { tier: "Assisted", expected: "Controlled negatives and band-assisted reps, building toward a first strict rep." },
+      { tier: "First Rep", expected: "Your first strict reps, with the pattern grooved." },
+      { tier: "Volume", expected: "Sets of unbroken reps, with grip variations unlocked." },
     ],
     contraindications: [
       "Active shoulder or elbow pain under load — see a clinician before hanging.",
@@ -310,7 +310,7 @@ export const PROGRAMS: LandingProgram[] = [
     tagline: "The transition is the bottleneck. Train it directly.",
     domain: "skill",
     domainLabel: "Skill",
-    status: "AVAILABLE",
+    status: "COMING",
     review: "cited",
     duration: "Multi-tier · 10 weeks",
     difficulty: "multi-tier",
@@ -340,9 +340,9 @@ export const PROGRAMS: LandingProgram[] = [
     retest:
       "False-grip hang and ring-dip capacity retested weekly at the lower tiers, max reps at the top. Full assessment battery every 4 weeks.",
     outcomes: [
-      { tier: "Prep", expected: "3-5 strict ring dips. 15-second false-grip hang." },
-      { tier: "Transition", expected: "Seated-band mastered, first low-ring muscle-up, first strict attempt." },
-      { tier: "First Rep", expected: "2-3 strict ring muscle-ups unbroken." },
+      { tier: "Prep", expected: "Solid strict ring dips and a steady false-grip hang." },
+      { tier: "Transition", expected: "The seated-band transition, low-ring muscle-ups and first strict attempts." },
+      { tier: "First Rep", expected: "Strict ring muscle-ups, built deliberately." },
     ],
     contraindications: [
       "Requires an existing strict pull-up and ring dip — start with First Strict Pull-Up if you don't have them.",
@@ -355,7 +355,7 @@ export const PROGRAMS: LandingProgram[] = [
     tagline: "Where the threshold gains actually land.",
     domain: "aerobic",
     domainLabel: "Aerobic",
-    status: "AVAILABLE",
+    status: "COMING",
     review: "cited",
     duration: "Multi-tier · 10 weeks",
     difficulty: "multi-tier",
@@ -385,9 +385,9 @@ export const PROGRAMS: LandingProgram[] = [
     retest:
       "20-minute time trial plus submax HR at a fixed pace, at week 4 and again at week 8-10. Modality-specific TT (2K row / 5K run) at the end if it applies.",
     outcomes: [
-      { tier: "Foundation", expected: "Threshold pace/power +2%. Submax HR -3 bpm at fixed pace." },
-      { tier: "Progression", expected: "Threshold +3-4%. VO2max gains on top of Block 1." },
-      { tier: "Push", expected: "Threshold +5%. Submax HR -8 bpm." },
+      { tier: "Foundation", expected: "Threshold work feels more controlled at the same effort." },
+      { tier: "Progression", expected: "Longer cruise intervals, with high-end intervals added on top." },
+      { tier: "Push", expected: "Higher threshold output, with the base still in place." },
     ],
     contraindications: [
       "Not a starting point — do Block 1 first, or declare an equivalent base at intake.",
