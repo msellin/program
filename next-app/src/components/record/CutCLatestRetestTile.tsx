@@ -24,7 +24,6 @@
  */
 
 import { useMemo } from "react";
-import Link from "next/link";
 import {
   deltaFromBaseline,
   evaluateRetestMetrics,
@@ -33,7 +32,6 @@ import {
 } from "@/lib/engine/retest-evaluator";
 import { resolveRetestReadings, readingsForMetric } from "@/lib/engine/retest-readings";
 import type { Program, Store } from "@/lib/schemas";
-import { CitationRef } from "@/components/citations/CitationRef";
 import { cn } from "@/lib/utils";
 
 export type CutCLatestRetestTileProps = {
@@ -57,12 +55,23 @@ function pickLatestRetest(
     ? store.user_profile?.program_states?.[program.slug]?.tier
     : undefined;
   const values = evaluateRetestMetrics(program, store, userTier);
-  const withData = values.filter((v) => v.current != null && v.baseline != null);
+  // P-05 (2026-10-27): the card and the chart must read one source. The evaluator's
+  // current/baseline can differ from the logged readings (and show 0 / 0.0 beside a
+  // chart averaging 109), so both come from the readings. Fewer than 2 readings means
+  // there is nothing to compare: hide the card rather than show a delta of zero.
+  const readings = resolveRetestReadings(store, program);
+  const withData: RetestValue[] = [];
+  for (const v of values) {
+    const rs = readings
+      .filter((r) => r.metric_id === v.metric_id)
+      .sort((a, b) => a.observed_at.localeCompare(b.observed_at));
+    if (rs.length < 2) continue;
+    withData.push({ ...v, baseline: rs[0].value, current: rs[rs.length - 1].value });
+  }
   if (withData.length === 0) return null;
 
   // Prefer the metric whose most-recent reading is most recent (matches
   // the mockup's "latest retest" concept).
-  const readings = resolveRetestReadings(store, program);
   let bestMetric: RetestValue = withData[0];
   let bestDate = "";
   for (const v of withData) {
@@ -100,50 +109,16 @@ function formatSinceBaseline(m: RetestValue, retestCount: number): string {
   return `${sign}${formatted} ${m.unit} since baseline · ${retestCount} retest${retestCount === 1 ? "" : "s"}`;
 }
 
-/**
- * Basis line — names the log signal that triggered the retest.
- * Falls back to a program-agnostic default when the metric doesn't
- * carry an explicit signal name.
- */
-function basisLine(m: RetestValue, store: Store, program: Program): string {
-  const count = readingsForMetric(store, program, m.metric_id).length;
-  if (count === 0) return `Basis · first reading`;
-  // Prefer explicit signal name from the metric config if the program
-  // schema carries it (extended per program in Cut A retest-cadence work).
-  const anyM = m as unknown as { signal_name?: string };
-  if (anyM.signal_name) {
-    return `Basis · log signal \`${anyM.signal_name}\``;
-  }
-  return `Basis · ${count} reading${count === 1 ? "" : "s"} logged`;
-}
-
 export function CutCLatestRetestTile({ program, store, className }: CutCLatestRetestTileProps) {
   const picked = useMemo(() => pickLatestRetest(program, store), [program, store]);
 
-  if (!picked) {
-    return (
-      <div className={cn("rounded border border-line-soft bg-surface p-3", className)}>
-        <p className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted mb-2">
-          Latest retest
-        </p>
-        <p className="text-[14px] text-muted italic">
-          Your first retest lands here once you have a baseline reading. Log a session at the retest window to seed it.
-        </p>
-        <Link
-          href="/check/"
-          className="mt-2 inline-flex items-center gap-1 font-mono text-[11px] uppercase tracking-widest text-slate hover:text-ink"
-        >
-          Log a check →
-        </Link>
-      </div>
-    );
-  }
+  if (!picked) return null;
 
   const { metric, nextRetestInDays } = picked;
   const delta = deltaFromBaseline(metric);
   const retestCount = readingsForMetric(store, program, metric.metric_id).length;
 
-  const deltaColor = !delta
+  const deltaColor = !delta || delta.value === 0
     ? "text-muted"
     : delta.isImprovement
       ? "text-green"
@@ -152,10 +127,6 @@ export function CutCLatestRetestTile({ program, store, className }: CutCLatestRe
   // Prev reading for the "vs" line — sort readings, pick the second-latest.
   const readings = readingsForMetric(store, program, metric.metric_id).slice().reverse();
   const prev = readings[1];
-
-  // Citation ID from program.retest_metrics config (if present).
-  const rawMetrics = (program as unknown as { retest_metrics?: Array<{ metric_id?: string; citation_id?: string }> }).retest_metrics;
-  const citationId = rawMetrics?.find((r) => r.metric_id === metric.metric_id)?.citation_id;
 
   return (
     <div
@@ -199,25 +170,10 @@ export function CutCLatestRetestTile({ program, store, className }: CutCLatestRe
         {formatSinceBaseline(metric, retestCount)}
       </p>
 
-      <hr className="my-2.5 border-0 h-px bg-line-soft" />
-
-      {/* Basis + citation — inline body content, NOT a footnote (matrix rec #4). */}
-      <p className="text-[12px] text-ink leading-relaxed">{basisLine(metric, store, program)}</p>
-
-      {citationId ? (
-        <div className="mt-1">
-          <CitationRef id={citationId} />
-        </div>
-      ) : (
-        <p className="mt-1 text-[11px] text-muted italic">
-          Signal-cited · no study reference for this metric.
-        </p>
-      )}
-
       {/* Next-retest chip */}
       {nextRetestInDays != null ? (
         <p className="mt-2 text-right text-[11px] text-muted font-mono tabular-nums">
-          Next retest in {nextRetestInDays}d
+          Next test in {nextRetestInDays} day{nextRetestInDays === 1 ? "" : "s"}
         </p>
       ) : null}
     </div>

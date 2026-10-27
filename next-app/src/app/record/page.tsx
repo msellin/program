@@ -35,7 +35,6 @@ import { CutCRetestTimeline } from "@/components/record/CutCRetestTimeline";
 import { CutCActivityHeatmap } from "@/components/record/CutCActivityHeatmap";
 import { CutCProgramCurveCard } from "@/components/record/CutCProgramCurveCard";
 import { CutCLogList } from "@/components/record/CutCLogList";
-import { CutCRecordOnboardingBeacon } from "@/components/record/CutCRecordOnboardingBeacon";
 import { downloadRecordExport } from "@/lib/engine/record-export";
 import dynamic from "next/dynamic";
 import type { Program, Exercise } from "@/lib/schemas";
@@ -144,7 +143,9 @@ export default function RecordPage() {
       {/* C5 — one-time onboarding beacon dramatizing the cite-per-adjustment
           differentiator per matrix rec #4. Renders on first /record visit
           only; localStorage-persisted seen state. */}
-      <CutCRecordOnboardingBeacon />
+      <p className="-mt-4 text-[13px] text-muted">
+        Tap a point to see why it moved. Every change cites a study or a signal from your log.
+      </p>
 
       {/* NOW section */}
       <section aria-labelledby="record-now">
@@ -155,22 +156,18 @@ export default function RecordPage() {
             <p className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted mb-2">
               Readiness — 12 weeks
             </p>
-            <ErrorBoundary fallback={<p className="text-[12px] text-muted italic">Heatmap unavailable.</p>}>
-              <WeeklyHeatmap
-                cells={cells}
-                ariaLabel="Readiness heatmap over the past 12 weeks."
-              />
-            </ErrorBoundary>
-            <div className="mt-2 flex items-center gap-3 text-[11px] text-muted">
-              <span className="inline-flex items-center gap-1.5">
-                <span aria-hidden className="inline-block w-2 h-2 rounded-sm bg-green" />
-                green day
-              </span>
-              <span className="inline-flex items-center gap-1.5">
-                <span aria-hidden className="inline-block w-2 h-2 rounded-sm bg-amber" />
-                amber (check first)
-              </span>
-            </div>
+            {cells.some((c) => c.sessionState !== "none") ? (
+              <>
+                <ErrorBoundary fallback={<p className="text-[12px] text-muted italic">Heatmap unavailable.</p>}>
+                  <WeeklyHeatmap
+                    cells={cells}
+                    ariaLabel="Readiness heatmap over the past 12 weeks."
+                  />
+                </ErrorBoundary>
+              </>
+            ) : (
+              <p className="text-[14px] text-muted">Check in a few mornings to see this.</p>
+            )}
           </div>
 
           <ErrorBoundary fallback={<p className="text-[12px] text-muted italic">Weekly narrative unavailable.</p>}>

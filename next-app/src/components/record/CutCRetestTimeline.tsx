@@ -208,13 +208,14 @@ export function CutCRetestTimeline({ program, store, className, onPinTap }: CutC
 
       {/* Base · Now · Delta summary — tabular-nums */}
       <p className="mt-2 font-mono text-[12px] text-ink tabular-nums">
-        Base {baselineStr} · Now {nowStr} · {deltaSign}
-        {deltaAbs} {isImprovement ? "" : "(direction check)"}
+        Base {baselineStr} · Now {nowStr}
+        {rawDelta === 0 ? "" : ` · ${deltaSign}`}
+        {rawDelta === 0 ? "" : deltaAbs} {isImprovement || rawDelta === 0 ? "" : "(direction check)"}
       </p>
 
       {/* Tap hint — points to Phase 3 wiring for per-event citation sheet */}
       <p className="mt-1 text-[11px] text-muted italic">
-        Tap any pin for the source behind that retest →
+        Tap a point to see why it moved.
       </p>
     </div>
   );
