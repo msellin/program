@@ -377,12 +377,23 @@ export const FLOWS: Flow[] = [
     id: "session-log-set",
     desc: "Brief → Start → log set 1 → rest → skip rest → set 2",
     async run(ctx) {
-      await openBrief(ctx);
+      // A set-based day only. "Log this session" opens the activity sheet,
+      // which has no "Done — set N" control — so walk past it (±7 days) and
+      // skip honestly, with the reason, if no set-based day exists.
+      await openBrief(ctx, { requireSetFlow: true });
       await ctx.capture("01-brief");
       await ctx.page
-        .getByRole("button", { name: /^(Start|Continue) —|^Log this session$/ })
+        .getByRole("button", { name: /^(Start|Continue) —/ })
         .first()
         .click({ timeout: CLICK_TIMEOUT_MS });
+      try {
+        await ctx.page
+          .locator('[data-surface="SetView"]')
+          .first()
+          .waitFor({ state: "attached", timeout: 8000 });
+      } catch {
+        throw new SkipFlow("Start opened no set screen (SetView never mounted)");
+      }
       await ctx.page.waitForTimeout(SESSION_SETTLE_MS);
       await ctx.capture("02-set");
       await logCurrentSet(ctx);
