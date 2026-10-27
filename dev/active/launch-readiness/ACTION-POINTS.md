@@ -25,8 +25,8 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 | P-05 | Report: hide "Rehab days", the clinical footer and the clinical section for non-hip programs | H | A | S | app #9 | ✓ bf64bd2 |
 | P-06 | Drop the personal slug from `generateStaticParams` | H | A | S | compliance | ✓ bf64bd2 |
 | P-07 ✓ 5fe464a | Landing: replace the hip mock (`TodayMockup.tsx:21`); the founder story without hip naming | H | A | S | product 3 |
-| P-08 | Move the hip-clinical triggers out of the shared `deriveState`, into a personal rule set; add a test | S | A | M | personal-separation P5 | ✓ bf64bd2 |
-| P-09 | Remove the LEGACY_REGIONS and `DEFAULT_PROGRAM_SLUG` hip fallbacks | S | A | S | P6 | ✓ bf64bd2 |
+| P-08 | Move the hip-clinical triggers out of the shared `deriveState`, into a personal rule set; add a test | S | A | M | personal-separation P5 |
+| P-09 | Remove the LEGACY_REGIONS and `DEFAULT_PROGRAM_SLUG` hip fallbacks | S | A | S | P6 |
 | P-10 | `guide/page.tsx:155` hip case study; the personal note in `anterior-hip-rebuild.json`; fixture "groin" note | S | A | S | P8, P10, P11 |
 
 ## 2. Safety in the session
