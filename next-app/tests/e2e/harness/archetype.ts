@@ -197,12 +197,65 @@ export const INJURED_RECOVERY: Archetype = {
   sessionNote: (day) => day < 7 ? "Symptoms high — going light." : day < 21 ? "Feeling it come back, but cautious." : null,
 };
 
+/**
+ * Symptom-shape archetypes added 2026-10-27 for the advertised-program
+ * coverage personas. NOTE the simulator maps severities onto a program's
+ * `symptom_regions` BY POSITION (low_back -> region[0], groin_left ->
+ * region[1], buttock_left -> region[2], shoulder_right -> region[3]; see
+ * `projectSymptomsOntoProgram`), so "low_back" below means "the program's
+ * first region": low_back for concurrent-strength-maintenance, wrist for
+ * handstand-walk, shoulder for first-strict-pullup. The day thresholds are
+ * written against a fixed persona length (30 / 21), because `symptoms(day)`
+ * does not see the total.
+ */
+export const RED_LATE_30: Archetype = {
+  ...CONSISTENT_AVERAGE,
+  id: "red-late-30",
+  displayName: "Consistent, severe first-region pain in the last 2 days",
+  description: "Green for 28 days, then first region at 8/10 on days 29-30 (red).",
+  symptoms: (d) => ({
+    low_back: d >= 29 ? 8 : 0,
+    groin_left: 0,
+    buttock_left: 0,
+    shoulder_right: 0,
+    life_load: d >= 29 ? 4 : 2,
+  }),
+};
+
+export const AMBER_FIRST_REGION: Archetype = {
+  ...CONSISTENT_AVERAGE,
+  id: "amber-first-region",
+  displayName: "Consistent, first region at amber (4-5)",
+  description: "Quiet until day 15, then first region 4-5/10 (amber, never red).",
+  symptoms: (d) => ({
+    low_back: d < 15 ? 1 : 4 + Math.floor(seededRand("amber-first-region", d) * 2),
+    groin_left: 0,
+    buttock_left: 0,
+    shoulder_right: 0,
+    life_load: 3,
+  }),
+};
+
+export const ERRATIC_PAINFUL: Archetype = {
+  ...ERRATIC,
+  id: "erratic-painful",
+  displayName: "Erratic adherence with persistent first-region pain",
+  description: "Erratic's 40% skip rate and life load, first region 3-5/10 every day.",
+  symptoms: (d) => ({
+    low_back: 3 + Math.floor(seededRand("erratic-painful", d, 7) * 3),
+    life_load: 7,
+  }),
+};
+
 export const ARCHETYPES = {
   overperformer: OVERPERFORMER,
   underperformer: UNDERPERFORMER,
   "consistent-average": CONSISTENT_AVERAGE,
   erratic: ERRATIC,
   "injured-recovery": INJURED_RECOVERY,
+  "red-late-30": RED_LATE_30,
+  "amber-first-region": AMBER_FIRST_REGION,
+  "erratic-painful": ERRATIC_PAINFUL,
 } as const;
 
 export type ArchetypeId = keyof typeof ARCHETYPES;

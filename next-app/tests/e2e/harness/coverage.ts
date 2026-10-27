@@ -132,6 +132,7 @@ export const FLOW_SURFACES: Record<string, string[]> = {
   "hip-check": [],
   "session-hold": [],
   // The guided player has no data-surface (see report), so no surface credit.
+  "session-hurt-stop": ["SetView"],
   "session-follow-along": [],
   "session-follow-along-stop": [],
   "cold-load-resume": [],

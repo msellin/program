@@ -1785,6 +1785,35 @@ export const FLOWS: Flow[] = [
     },
   },
   {
+    id: "session-hurt-stop",
+    desc: "SetView → Something hurt → Stop session → Session stopped screen",
+    destructive: true,
+    async run(ctx) {
+      // enterSetFlow walks ±7 days for a set-based Brief and skips honestly
+      // (guided-player or activity-only days) when there is none.
+      await enterSetFlow(ctx);
+      const page = ctx.page;
+      const chip = page.getByRole("button", { name: /^Something hurt$/ });
+      if ((await chip.count()) === 0) throw new SkipFlow("no 'Something hurt' chip on the set screen");
+      await ctx.capture("01-set-screen");
+      await chip.first().click({ timeout: CLICK_TIMEOUT_MS });
+      await page.locator('[data-surface="HurtSheet"]').first().waitFor({ state: "visible", timeout: 5000 });
+      await ctx.capture("02-hurt-sheet");
+      await page
+        .locator('[data-surface="HurtSheet"]')
+        .getByRole("button", { name: /^Stop session$/ })
+        .click({ timeout: CLICK_TIMEOUT_MS });
+      const stopped = page.locator('[data-surface="SessionDone"][data-end="stopped"]');
+      await stopped.waitFor({ state: "visible", timeout: 8000 });
+      await ctx.capture("03-session-stopped");
+      await ctx.check(
+        "stopped-screen",
+        async () => (await page.getByRole("heading", { name: /^Session stopped$/ }).count()) > 0,
+        "heading reads 'Session stopped'",
+      );
+    },
+  },
+  {
     id: "session-follow-along",
     desc: "Brief → Start → guided player: log one set, skip the rest → Done screen",
     destructive: true,

@@ -234,7 +234,94 @@ export const PERSONAS: Persona[] = [
     email: "e2e-persona-pullup@example.test",
     password: DEFAULT_PASSWORD,
     focus:
-      "Skill arc, 4-tier. Persona enters at Tier A (no dead hang yet). 45 days covers the 8-week manifest arc plus the weekly hang-time retest and the 4-week full assessment. Audit target: does a user with zero pull-ups understand why they are doing scap pulls and ring rows? Does the hang-time retest read as progress when the headline metric (strict reps) is still zero?",
+      "Skill arc, 4-tier. Persona enters at Tier A (no dead hang yet). 45 days is only ~6.5 of the 8 manifest weeks: it reaches the weekly hang-time retest and the 4-week full assessment but NOT the final week or the week-8 re-assessment (persona-pullup-final, day 54, covers those). Audit target: does a user with zero pull-ups understand why they are doing scap pulls and ring rows? Does the hang-time retest read as progress when the headline metric (strict reps) is still zero?",
+  },
+  // 2026-10-27 · advertised-program state coverage (first-strict-pullup,
+  // handstand-walk, concurrent-strength-maintenance). Symptom severities map
+  // to a program's regions by position — see archetype.ts RED_LATE_30.
+  {
+    id: "persona-handstand-d2",
+    displayName: "Handstand · day 2",
+    archetypeId: "consistent-average",
+    programSlug: "handstand-walk",
+    tier: "tier_a_foundation",
+    days: 2,
+    email: "e2e-persona-handstand-d2@example.test",
+    password: DEFAULT_PASSWORD,
+    focus:
+      "First-week state: day 2 of the skill arc. Audit target: first sessions, empty history, no retest yet, onboarding-to-first-session handoff.",
+  },
+  {
+    id: "persona-csm-d2",
+    displayName: "CSM · day 2",
+    archetypeId: "consistent-average",
+    programSlug: "concurrent-strength-maintenance",
+    tier: "foundation",
+    days: 2,
+    email: "e2e-persona-csm-d2@example.test",
+    password: DEFAULT_PASSWORD,
+    focus:
+      "First-week state: day 2 of concurrent strength. Audit target: empty record, first training-max display, first sessions.",
+  },
+  {
+    id: "persona-pullup-final",
+    displayName: "Pull-up · final week (day 54)",
+    archetypeId: "consistent-average",
+    programSlug: "first-strict-pullup",
+    tier: "tier_a_hang",
+    days: 54,
+    email: "e2e-persona-pullup-final@example.test",
+    password: DEFAULT_PASSWORD,
+    focus:
+      "Final week of the 8-week arc (day 54 of ~56). Audit target: week-8 re-assessment prompt, end-of-arc messaging, what happens after the last tier gate.",
+  },
+  {
+    id: "persona-handstand-final",
+    displayName: "Handstand · final week (day 54)",
+    archetypeId: "consistent-average",
+    programSlug: "handstand-walk",
+    tier: "tier_a_foundation",
+    days: 54,
+    email: "e2e-persona-handstand-final@example.test",
+    password: DEFAULT_PASSWORD,
+    focus:
+      "Final week of the 8-week handstand arc. Audit target: week-8 full re-assessment, end-of-arc messaging, tier-gate state.",
+  },
+  {
+    id: "persona-csm-red",
+    displayName: "CSM · red check, low back, last 2 days",
+    archetypeId: "red-late-30",
+    programSlug: "concurrent-strength-maintenance",
+    tier: "foundation",
+    days: 30,
+    email: "e2e-persona-csm-red@example.test",
+    password: DEFAULT_PASSWORD,
+    focus:
+      "Day 30; low back reports 8/10 on days 29-30 (red). Audit target: red-day banner, session gating, Stop affordances, return-to-training messaging.",
+  },
+  {
+    id: "persona-handstand-wrist",
+    displayName: "Handstand · wrist amber (day 21)",
+    archetypeId: "amber-first-region",
+    programSlug: "handstand-walk",
+    tier: "tier_a_foundation",
+    days: 21,
+    email: "e2e-persona-handstand-wrist@example.test",
+    password: DEFAULT_PASSWORD,
+    focus:
+      "Day 21; wrist reports 4-5/10 from day 15 (amber, never red). Audit target: amber messaging for wrist load, whether wall-walk volume is held, no silent progression.",
+  },
+  {
+    id: "persona-pullup-erratic-shoulder",
+    displayName: "Pull-up · erratic + shoulder pain (day 30)",
+    archetypeId: "erratic-painful",
+    programSlug: "first-strict-pullup",
+    tier: "tier_a_hang",
+    days: 30,
+    email: "e2e-persona-pullup-erratic-shoulder@example.test",
+    password: DEFAULT_PASSWORD,
+    focus:
+      "Day 30; 40% skipped sessions and shoulder 3-5/10 daily. Audit target: how the plan absorbs gaps, whether shoulder pain at the amber edge changes the proposals.",
   },
   {
     id: "persona-mobility",
