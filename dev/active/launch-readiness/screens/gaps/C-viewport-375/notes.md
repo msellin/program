@@ -4,14 +4,34 @@ horizontal overflow: false
 
 Skip to content
 
-TODAY
+TODAY · WEEK 7 OF 8
 
 First Strict Pull-Up
-Rest today.
+FIRST STRICT PULL-UP
+7/8
+WORKOUT READY
+WHY?
+Progress load — nothing above 3/10 today.
 
-Your shoulder is 8/10, so hard training waits. If it isn’t settling, see a physio or doctor.
+Drills are mixed up each session; it helps skills stick. Why?
 
-Log how it feels
+TODAY
+
+3 blocks · 6 exercises
+
+Interleaved consolidation · week 7 of 8 · ends 7 Nov
+
+· Row strength — closed-chain pull
+· Scapular pull ladder
+· Shoulder + grip prep — every session
+Open session
+
+Log extra session →
+
+Runs, rows, walks, classes, mobility — anything not in the prescribed block. Optional. Nothing here changes the plan.
+
+Log session
+Import GPX
 TODAY
 PLAN
 RECORD
@@ -23,14 +43,34 @@ horizontal overflow: false
 
 Skip to content
 
-TODAY
+TODAY · WEEK 7 OF 8
 
 First Strict Pull-Up
-Rest today.
+FIRST STRICT PULL-UP
+7/8
+WORKOUT READY
+WHY?
+Progress load — nothing above 3/10 today.
 
-Your shoulder is 8/10, so hard training waits. If it isn’t settling, see a physio or doctor.
+Drills are mixed up each session; it helps skills stick. Why?
 
-Log how it feels
+TODAY
+
+3 blocks · 6 exercises
+
+Interleaved consolidation · week 7 of 8 · ends 7 Nov
+
+· Row strength — closed-chain pull
+· Scapular pull ladder
+· Shoulder + grip prep — every session
+Open session
+
+Log extra session →
+
+Runs, rows, walks, classes, mobility — anything not in the prescribed block. Optional. Nothing here changes the plan.
+
+Log session
+Import GPX
 TODAY
 PLAN
 RECORD
@@ -57,13 +97,14 @@ This week
 
 ›
 Mixed practice · Post-acquisition: engine interleaves 2-3 drills per session across the weakest capabilities.
-first strict pullup: planned
+first strict pullup: skipped
 Mon
 26 Oct
-· 1 logged
+Skipped
 
-Active hollow body — pull-shape isometrics + Dead-hang ladder + Shoulder + grip prep — every session
+Rest / accessory day
 
+Unskip
 Tue
 27 Oct
 rest
@@ -127,13 +168,14 @@ This week
 
 ›
 Mixed practice · Post-acquisition: engine interleaves 2-3 drills per session across the weakest capabilities.
-first strict pullup: planned
+first strict pullup: skipped
 Mon
 26 Oct
-· 1 logged
+Skipped
 
-Active hollow body — pull-shape isometrics + Dead-hang ladder + Shoulder + grip prep — every session
+Rest / accessory day
 
+Unskip
 Tue
 27 Oct
 rest
@@ -186,15 +228,46 @@ horizontal overflow: false
 
 Skip to content
 
-TODAY
+FIRST STRICT PULL-UP
 
-First Strict Pull-Up
-Rest today.
+Wednesday
 
-Your shoulder is 8/10, so hard training waits. If it isn’t settling, see a physio or doctor.
+5 exercises · about 32 min · +1 optional
 
-Log how it feels
-Optional: Rest, or shoulder prep and hollow-body work only. No hanging.Back to Today
+HOW TO RUN THIS
+
+Feet-elevated ring row / inverted row.
+
+The neuromuscular precursor to a pull-up. Retraction hold isolates the endpoint.
+
+Band pull-aparts + scap CARs + light forearm activation. 3-5 min before any bar-hang work. Non-optional in weeks 1-3.
+
+Follow along · Row strength — closed-chain pull
+3 moves · guided, one at a time, with a timer
+Ring row (incline, easy)
+3 sets
+HELD
+Ring row (horizontal)
+4 sets
+Ring row (feet elevated)
+4 sets
+Follow along · Scapular pull ladder
+2 moves · guided, one at a time, with a timer
+Scapular pull-up
+4 sets
+Scap retraction hold at top
+3 sets
+OPTIONAL
+Follow along · Shoulder + grip prep — every session
+1 move · guided, one at a time, with a timer
+Band shoulder prep (I-Y-T + face pull)
+2 sets
+Log an extra session
+›
+
+INTERLEAVED CONSOLIDATION · WEEK 7 OF 8 · ENDS 7 NOV
+
+Start session
 TODAY
 PLAN
 RECORD
@@ -206,21 +279,52 @@ horizontal overflow: false
 
 Skip to content
 
-TODAY
+FIRST STRICT PULL-UP
 
-First Strict Pull-Up
-Rest today.
+Wednesday
 
-Your shoulder is 8/10, so hard training waits. If it isn’t settling, see a physio or doctor.
+5 exercises · about 32 min · +1 optional
 
-Log how it feels
-Optional: Rest, or shoulder prep and hollow-body work only. No hanging.Back to Today
+HOW TO RUN THIS
+
+Feet-elevated ring row / inverted row.
+
+The neuromuscular precursor to a pull-up. Retraction hold isolates the endpoint.
+
+Band pull-aparts + scap CARs + light forearm activation. 3-5 min before any bar-hang work. Non-optional in weeks 1-3.
+
+Follow along · Row strength — closed-chain pull
+3 moves · guided, one at a time, with a timer
+Ring row (incline, easy)
+3 sets
+HELD
+Ring row (horizontal)
+4 sets
+Ring row (feet elevated)
+4 sets
+Follow along · Scapular pull ladder
+2 moves · guided, one at a time, with a timer
+Scapular pull-up
+4 sets
+Scap retraction hold at top
+3 sets
+OPTIONAL
+Follow along · Shoulder + grip prep — every session
+1 move · guided, one at a time, with a timer
+Band shoulder prep (I-Y-T + face pull)
+2 sets
+Log an extra session
+›
+
+INTERLEAVED CONSOLIDATION · WEEK 7 OF 8 · ENDS 7 NOV
+
+Start session
 TODAY
 PLAN
 RECORD
 PROFILE
 
-fixed/sticky on 03-session: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=614 h=53
+fixed/sticky on 03-session: div.sticky bottom-[calc(64px+env(safe-area-i @y=453 h=150 | nav.fixed left-0 right-0 bottom-0 z-40 borde @y=614 h=53
 
 ## 04-record-top
 url: https://app.terav.fit/record/
@@ -246,23 +350,23 @@ Week of 26 Oct
 This week so far
 
 Sessions
-2 / 2
+1 / 1
 Morning check
-1 green · 1 amber · 1 red
+1 green · 2 amber
 Signals
-1 fatigue
+2 fatigue
 
 LATEST RETEST · STRICT PULL-UP MAX REPS
 
 Strict pull-up max reps
 112 reps
 +12.0
-vs previous (2026-10-10)
+vs previous (2026-10-11)
 106 reps
 
 +12.0 REPS SINCE BASELINE · 3 RETESTS
 
-Next test in 24 days
+Next test in 25 days
 
 TREND
 Trend
@@ -273,9 +377,9 @@ ALL
 
 14-DAY ROLLING STRICT PULL-UP MAX REPS · HIGHER IS BETTER
 
-26 Sep
-10 Oct
-24 Oct
+27 Sep
+11 Oct
+25 Oct
 100
 104
 108
@@ -284,12 +388,12 @@ ALL
 14-day rolling avg
 retest event
 
-Avg 109 reps +9.0 since 2026-09-26
+Avg 109 reps +9.0 since 2026-09-27
 
 RETESTS · 3 EVENTS
 
 ▲
-2026-09-26
+2026-09-27
 TODAY
 
 Base 100 reps · Now 112 reps · +12.0
@@ -306,20 +410,20 @@ AMBER
 RED-FLAG
 REST OR MISSED
 
-46 active days · showing last 30
+45 active days · showing last 30
 
 Wed 28 Oct
 1 done
 Tue 27 Oct
 logged
 Mon 26 Oct
-1 done
+logged
 Sun 25 Oct
 logged
 Sat 24 Oct
 logged
 Fri 23 Oct
-3 done
+logged
 Thu 22 Oct
 logged
 Wed 21 Oct
@@ -341,7 +445,7 @@ logged
 Tue 13 Oct
 logged
 Mon 12 Oct
-logged
+1 done
 Sun 11 Oct
 logged
 Sat 10 Oct
@@ -355,7 +459,7 @@ logged
 Tue 6 Oct
 logged
 Mon 5 Oct
-1 done
+logged
 Sun 4 Oct
 logged
 Sat 3 Oct
@@ -401,23 +505,23 @@ Week of 26 Oct
 This week so far
 
 Sessions
-2 / 2
+1 / 1
 Morning check
-1 green · 1 amber · 1 red
+1 green · 2 amber
 Signals
-1 fatigue
+2 fatigue
 
 LATEST RETEST · STRICT PULL-UP MAX REPS
 
 Strict pull-up max reps
 112 reps
 +12.0
-vs previous (2026-10-10)
+vs previous (2026-10-11)
 106 reps
 
 +12.0 REPS SINCE BASELINE · 3 RETESTS
 
-Next test in 24 days
+Next test in 25 days
 
 TREND
 Trend
@@ -428,9 +532,9 @@ ALL
 
 14-DAY ROLLING STRICT PULL-UP MAX REPS · HIGHER IS BETTER
 
-26 Sep
-10 Oct
-24 Oct
+27 Sep
+11 Oct
+25 Oct
 100
 104
 108
@@ -439,12 +543,12 @@ ALL
 14-day rolling avg
 retest event
 
-Avg 109 reps +9.0 since 2026-09-26
+Avg 109 reps +9.0 since 2026-09-27
 
 RETESTS · 3 EVENTS
 
 ▲
-2026-09-26
+2026-09-27
 TODAY
 
 Base 100 reps · Now 112 reps · +12.0
@@ -461,20 +565,20 @@ AMBER
 RED-FLAG
 REST OR MISSED
 
-46 active days · showing last 30
+45 active days · showing last 30
 
 Wed 28 Oct
 1 done
 Tue 27 Oct
 logged
 Mon 26 Oct
-1 done
+logged
 Sun 25 Oct
 logged
 Sat 24 Oct
 logged
 Fri 23 Oct
-3 done
+logged
 Thu 22 Oct
 logged
 Wed 21 Oct
@@ -496,7 +600,7 @@ logged
 Tue 13 Oct
 logged
 Mon 12 Oct
-logged
+1 done
 Sun 11 Oct
 logged
 Sat 10 Oct
@@ -510,7 +614,7 @@ logged
 Tue 6 Oct
 logged
 Mon 5 Oct
-1 done
+logged
 Sun 4 Oct
 logged
 Sat 3 Oct
@@ -544,11 +648,9 @@ Morning check
 
 WEDNESDAY 28 OCT
 
-BACK OFF
+WORKOUT READY
 
-Shoulder is above 5/10.
-
-Next step: skip hard training today. If this is night pain, a sudden change, or it isn't settling, talk to a doctor or physio. Terav isn't medical advice.
+You’re good to train as planned.
 
 WHY?
 
@@ -560,10 +662,10 @@ REGIONS
 Mild: barely there. Notable: you notice it. Severe: it limits you.
 
 Shoulder
-None
+✓ None
 Mild
 Notable
-✓ Severe
+Severe
 Elbow
 ✓ None
 Mild
@@ -607,11 +709,9 @@ Morning check
 
 WEDNESDAY 28 OCT
 
-BACK OFF
+WORKOUT READY
 
-Shoulder is above 5/10.
-
-Next step: skip hard training today. If this is night pain, a sudden change, or it isn't settling, talk to a doctor or physio. Terav isn't medical advice.
+You’re good to train as planned.
 
 WHY?
 
@@ -623,10 +723,10 @@ REGIONS
 Mild: barely there. Notable: you notice it. Severe: it limits you.
 
 Shoulder
-None
+✓ None
 Mild
 Notable
-✓ Severe
+Severe
 Elbow
 ✓ None
 Mild
@@ -682,9 +782,10 @@ CITED
 
 Handstand Walk
 
-Multi-tiered handstand walk program from wall-supported beginner to advanced turns and obstacles. Personalised sessions target your specific weak capabilities.
+From wall holds to walking on your hands. Each session trains what holds you back.
 
-8 wks · multi-tier
+8 wks
+ALL LEVELS
 
 STRENGTH
 
@@ -692,9 +793,10 @@ CITED
 
 Concurrent-Strength Maintenance
 
-For lifters adding cardio without losing the squat. Explosive-strength cost bounded, cited, PR-banned.
+Keep your squat strong while you add cardio. Strength is held, not chased.
 
-8 wks · intermediate
+8 wks
+INTERMEDIATE
 
 SKILL
 
@@ -702,9 +804,10 @@ CITED
 
 First Strict Pull-Up
 
-Multi-tier skill program on the shared pull drill library. Grip → scap → negative → band → unassisted, then volume. Personalised sessions target your weakest sub-capability first.
+From a dead hang to your first strict pull-up, then more. Each session trains your weakest link.
 
-8 wks · multi-tier
+8 wks
+ALL LEVELS
 
 All
 Strength
@@ -725,9 +828,10 @@ Move heavier weight in a specific lift or pattern.
 Concurrent-Strength Maintenance
 CITED
 
-For lifters adding cardio without losing the squat. Explosive-strength cost bounded, cited, PR-banned.
+Keep your squat strong while you add cardio. Strength is held, not chased.
 
 8 wk
+INTERMEDIATE
 ·
 ~4-5 hr/week
 
@@ -740,7 +844,22 @@ Unlock a specific movement — pull-up, HSPU, muscle-up, handstand walk.
 Handstand Walk
 CITED
 
-Multi-tiered handstand walk program from wall-supported beginner to advanced turns and obstacles. Personalised sessions target your specific weak capab
+From wall holds to walking on your hands. Each session trains what holds you back.
+
+8 wk
+ALL LEVELS
+·
+~1.5-2 hr/week (5 sessions/wk, 4 on Foundation, 15-18 min each)
+First Strict Pull-Up
+ACTIVE
+CITED
+
+From a dead hang to your first strict pull-up, then more. Each session trains your weakest link.
+
+8 wk
+ALL LEVELS
+·
+~1.5 hr/week (3-4 sessions/wk, 15-30 min ea
 
 ## 06-programs-bottom
 url: https://app.terav.fit/programs/
@@ -762,9 +881,10 @@ CITED
 
 Handstand Walk
 
-Multi-tiered handstand walk program from wall-supported beginner to advanced turns and obstacles. Personalised sessions target your specific weak capabilities.
+From wall holds to walking on your hands. Each session trains what holds you back.
 
-8 wks · multi-tier
+8 wks
+ALL LEVELS
 
 STRENGTH
 
@@ -772,9 +892,10 @@ CITED
 
 Concurrent-Strength Maintenance
 
-For lifters adding cardio without losing the squat. Explosive-strength cost bounded, cited, PR-banned.
+Keep your squat strong while you add cardio. Strength is held, not chased.
 
-8 wks · intermediate
+8 wks
+INTERMEDIATE
 
 SKILL
 
@@ -782,9 +903,10 @@ CITED
 
 First Strict Pull-Up
 
-Multi-tier skill program on the shared pull drill library. Grip → scap → negative → band → unassisted, then volume. Personalised sessions target your weakest sub-capability first.
+From a dead hang to your first strict pull-up, then more. Each session trains your weakest link.
 
-8 wks · multi-tier
+8 wks
+ALL LEVELS
 
 All
 Strength
@@ -805,9 +927,10 @@ Move heavier weight in a specific lift or pattern.
 Concurrent-Strength Maintenance
 CITED
 
-For lifters adding cardio without losing the squat. Explosive-strength cost bounded, cited, PR-banned.
+Keep your squat strong while you add cardio. Strength is held, not chased.
 
 8 wk
+INTERMEDIATE
 ·
 ~4-5 hr/week
 
@@ -820,7 +943,22 @@ Unlock a specific movement — pull-up, HSPU, muscle-up, handstand walk.
 Handstand Walk
 CITED
 
-Multi-tiered handstand walk program from wall-supported beginner to advanced turns and obstacles. Personalised sessions target your specific weak capab
+From wall holds to walking on your hands. Each session trains what holds you back.
+
+8 wk
+ALL LEVELS
+·
+~1.5-2 hr/week (5 sessions/wk, 4 on Foundation, 15-18 min each)
+First Strict Pull-Up
+ACTIVE
+CITED
+
+From a dead hang to your first strict pull-up, then more. Each session trains your weakest link.
+
+8 wk
+ALL LEVELS
+·
+~1.5 hr/week (3-4 sessions/wk, 15-30 min ea
 
 fixed/sticky on 06-programs: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=614 h=53
 
@@ -1094,8 +1232,10 @@ Band shoulder prep (I-Y-T + face pull)
 Shoulder + grip prep — every session · 2 sets
 Dead hang (passive)
 Dead-hang ladder · 4 sets
+HELD
 Active hang (scap-engaged)
 Dead-hang ladder · 3 sets
+HELD
 Scapular pull-up
 Scapular pull ladder · 4 sets
 Scap retraction hold at top
@@ -1132,7 +1272,7 @@ Grease the groove — sub-max singles · 5 sets
 First strict pull-up attempt
 Grip-width variety · 1 sets
 Partial-ROM pull-up (top half)
-Grip-width variety · 4 sets
+Grip-width variet
 
 ## 10-off-plan-bottom
 url: https://app.terav.fit/off-plan/
@@ -1156,8 +1296,10 @@ Band shoulder prep (I-Y-T + face pull)
 Shoulder + grip prep — every session · 2 sets
 Dead hang (passive)
 Dead-hang ladder · 4 sets
+HELD
 Active hang (scap-engaged)
 Dead-hang ladder · 3 sets
+HELD
 Scapular pull-up
 Scapular pull ladder · 4 sets
 Scap retraction hold at top
@@ -1194,6 +1336,6 @@ Grease the groove — sub-max singles · 5 sets
 First strict pull-up attempt
 Grip-width variety · 1 sets
 Partial-ROM pull-up (top half)
-Grip-width variety · 4 sets
+Grip-width variet
 
 fixed/sticky on 10-off-plan: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=614 h=53

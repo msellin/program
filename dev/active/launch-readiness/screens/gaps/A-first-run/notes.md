@@ -50,7 +50,7 @@ Eccentric training produces great
 CTA href from the pull-up landing page: https://app.terav.fit/sign-up?next=%2Fprograms%2Ffirst-strict-pullup&utm_campaign=gap-test
 
 ## 02-sign-up-page-not-submitted
-url: http://localhost:3000/sign-up/
+url: https://app.terav.fit/sign-up/
 horizontal overflow: false
 
 Sign up
@@ -69,7 +69,7 @@ Create account
 Already have an account? Sign in
 
 ## 03-first-screen-after-sign-in
-url: http://localhost:3000/
+url: https://app.terav.fit/
 horizontal overflow: false
 
 Skip to content
@@ -84,7 +84,7 @@ RECORD
 PROFILE
 
 ## 04-programs
-url: http://localhost:3000/programs/
+url: https://app.terav.fit/programs/
 horizontal overflow: false
 
 Skip to content
@@ -103,7 +103,7 @@ CITED
 
 Handstand Walk
 
-Multi-tiered handstand walk program from wall-supported beginner to advanced turns and obstacles. Personalised sessions target your specific weak capabilities.
+From wall holds to walking on your hands. Each session trains what holds you back.
 
 8 wks
 ALL LEVELS
@@ -114,7 +114,7 @@ CITED
 
 Concurrent-Strength Maintenance
 
-For lifters adding cardio without losing the squat. Explosive-strength cost bounded, cited, PR-banned.
+Keep your squat strong while you add cardio. Strength is held, not chased.
 
 8 wks
 INTERMEDIATE
@@ -125,7 +125,7 @@ CITED
 
 First Strict Pull-Up
 
-Multi-tier skill program on the shared pull drill library. Grip → scap → negative → band → unassisted, then volume. Personalised sessions target your weakest sub-capability first.
+From a dead hang to your first strict pull-up, then more. Each session trains your weakest link.
 
 8 wks
 ALL LEVELS
@@ -149,7 +149,7 @@ Move heavier weight in a specific lift or pattern.
 Concurrent-Strength Maintenance
 CITED
 
-For lifters adding cardio without losing the squat. Explosive-strength cost bounded, cited, PR-banned.
+Keep your squat strong while you add cardio. Strength is held, not chased.
 
 8 wk
 INTERMEDIATE
@@ -165,10 +165,25 @@ Unlock a specific movement — pull-up, HSPU, muscle-up, handstand walk.
 Handstand Walk
 CITED
 
-Multi-tiered handstand walk program from wall-supported beginner to advanced turns and obstacles. Personalised sessions target your specific wea
+From wall holds to walking on your hands. Each session trains what holds you back.
+
+8 wk
+ALL LEVELS
+·
+~1.5-2 hr/week (5 sessions/wk, 4 on Foundation, 15-18 min each)
+First Strict Pull-Up
+CITED
+
+From a dead hang to your first strict pull-up, then more. Each session trains your weakest link.
+
+8 wk
+ALL LEVELS
+·
+~1.5 hr/week (3-4 sessions/wk, 15-30 min each)
+Mus
 
 ## 05-program-detail
-url: http://localhost:3000/programs/first-strict-pullup/
+url: https://app.terav.fit/programs/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
@@ -176,7 +191,7 @@ Back
 CITED
 First Strict Pull-Up
 
-Multi-tier skill program on the shared pull drill library. Grip → scap → negative → band → unassisted, then volume. Personalised sessions target your weakest sub-capability first.
+From a dead hang to your first strict pull-up, then more. Each session trains your weakest link.
 
 8
 WEEKS
@@ -207,12 +222,11 @@ RECORD
 PROFILE
 
 ## 06-intake-01
-url: http://localhost:3000/programs/first-strict-pullup/intake/
+url: https://app.terav.fit/programs/first-strict-pullup/intake/
 horizontal overflow: false
 
 Skip to content
 Back
-First Strict Pull-Up
 
 STEP 1 OF 3
 
@@ -230,12 +244,12 @@ Continue
 Detailed setup (about 5 min)
 
 ## 06-intake-02
-url: http://localhost:3000/programs/first-strict-pullup/intake/
+url: https://app.terav.fit/programs/first-strict-pullup/intake/
 horizontal overflow: false
 
 Skip to content
 Back
-Back
+Previous step
 
 STEP 2 OF 3
 
@@ -277,12 +291,12 @@ Continue
 Detailed setup (about 5 min)
 
 ## 06-intake-03
-url: http://localhost:3000/programs/first-strict-pullup/intake/
+url: https://app.terav.fit/programs/first-strict-pullup/intake/
 horizontal overflow: false
 
 Skip to content
 Back
-Back
+Previous step
 
 STEP 3 OF 3
 
@@ -324,7 +338,7 @@ Start
 Detailed setup (about 5 min)
 
 ## 06-intake-04
-url: http://localhost:3000/
+url: https://app.terav.fit/
 horizontal overflow: false
 
 Skip to content
@@ -382,7 +396,7 @@ PROFILE
 Intake steps walked: 4
 
 ## 07-today-day-1
-url: http://localhost:3000/
+url: https://app.terav.fit/
 horizontal overflow: false
 
 Skip to content
@@ -438,7 +452,7 @@ RECORD
 PROFILE
 
 ## 08-first-session
-url: http://localhost:3000/session/first-strict-pullup/
+url: https://app.terav.fit/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
@@ -488,7 +502,7 @@ RECORD
 PROFILE
 
 ## 09-first-session-bottom
-url: http://localhost:3000/session/first-strict-pullup/
+url: https://app.terav.fit/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
