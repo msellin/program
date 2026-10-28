@@ -6,6 +6,7 @@ import { useStore } from "@/lib/useStore";
 import { computeWeekSummary, weekDates } from "@/lib/engine/weekly-narrative";
 import { today as todayISO, iso, cn } from "@/lib/utils";
 import type { Program } from "@/lib/schemas";
+import { cardClass } from "@/components/ui/Card";
 
 /**
  * Deterministic weekly summary tile — no AI. Pure aggregate of what happened.
@@ -54,14 +55,14 @@ export function WeeklyNarrativeTile({
   const atPastEdge = offset <= -12;
 
   return (
-    <section className="rounded border border-line bg-surface p-3 space-y-3">
+    <section className={cn(cardClass(), "space-y-3")}>
       <header className="flex items-center justify-between gap-2">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <h3 className="text-[15px] font-semibold text-strong">{summary.label}</h3>
+            <h3 className="text-body font-semibold text-strong">{summary.label}</h3>
             {headerChip}
           </div>
-          <p className="text-[12px] text-muted">
+          <p className="text-caption text-muted">
             {isCurrentWeek ? "This week so far" : "Completed week"}
           </p>
         </div>
@@ -71,7 +72,7 @@ export function WeeklyNarrativeTile({
             onClick={() => setOffset(offset - 1)}
             disabled={atPastEdge}
             aria-label="Previous week"
-            className="w-11 h-11 flex items-center justify-center rounded hover:bg-line-soft text-muted hover:text-ink disabled:opacity-30 disabled:cursor-not-allowed"
+            className="w-11 h-11 flex items-center justify-center rounded-lg hover:bg-line-soft text-muted hover:text-ink disabled:opacity-30 disabled:cursor-not-allowed"
           >
             <ChevronLeft size={16} />
           </button>
@@ -80,7 +81,7 @@ export function WeeklyNarrativeTile({
             onClick={() => setOffset(offset + 1)}
             disabled={atFutureEdge}
             aria-label="Next week"
-            className="w-11 h-11 flex items-center justify-center rounded hover:bg-line-soft text-muted hover:text-ink disabled:opacity-30 disabled:cursor-not-allowed"
+            className="w-11 h-11 flex items-center justify-center rounded-lg hover:bg-line-soft text-muted hover:text-ink disabled:opacity-30 disabled:cursor-not-allowed"
           >
             <ChevronRight size={16} />
           </button>
@@ -88,11 +89,11 @@ export function WeeklyNarrativeTile({
       </header>
 
       {!summary.hasAnyActivity ? (
-        <p className="text-[14px] text-muted italic">
+        <p className="text-small text-muted italic">
           Nothing logged this week yet. Come back Sunday for a summary.
         </p>
       ) : (
-        <ul className="space-y-1.5 text-sm">
+        <ul className="space-y-1.5 text-small">
           <SummaryLine
             label="Sessions"
             value={`${summary.sessions.completed} / ${summary.sessions.scheduled}`}
@@ -180,7 +181,7 @@ export function WeeklyNarrativeTile({
             aria-expanded={expanded}
             className="w-full flex items-center justify-between gap-2 py-1 text-left"
           >
-            <span className="font-mono text-[10px] uppercase tracking-widest text-muted">
+            <span className="font-mono text-eyebrow uppercase tracking-widest text-muted">
               How the engine reads you
             </span>
             <span aria-hidden className="text-muted">
@@ -210,8 +211,8 @@ function SummaryLine({
   }[tone];
   return (
     <li className="flex items-baseline justify-between gap-3">
-      <span className="text-muted text-[14px]">{label}</span>
-      <span className={cn("font-mono text-[14px] text-right", toneClass)}>{value}</span>
+      <span className="text-muted text-small">{label}</span>
+      <span className={cn("font-mono text-small text-right", toneClass)}>{value}</span>
     </li>
   );
 }

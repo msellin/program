@@ -47,11 +47,7 @@ export function BottomNav() {
   return (
     <nav
       aria-label="Primary"
-      className="fixed left-0 right-0 bottom-0 z-40 border-t border-line bg-surface-2 pb-[env(safe-area-inset-bottom)]"
-      style={{
-        paddingLeft: "env(safe-area-inset-left)",
-        paddingRight: "env(safe-area-inset-right)",
-      }}
+      className="fixed left-0 right-0 bottom-0 z-40 border-t border-line bg-surface-2 pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]"
     >
       <ul className="mx-auto flex max-w-[760px] items-stretch">
         {TABS.map(({ href, label, Icon }) => {
@@ -81,10 +77,10 @@ export function BottomNav() {
                   // (c) 2-3px bronze top-edge indicator (rendered as absolute
                   // ::before above). SC 1.4.1 (color-alone fail) resolved.
                   // Passes protanopia/deuteranopia simulation.
-                  "flex flex-col items-center justify-center gap-0.5 py-2 px-0.5 text-[10px] tracking-[0.08em] uppercase min-h-[52px]",
+                  "flex flex-col items-center justify-center gap-0.5 py-2 px-0.5 text-eyebrow tracking-[0.08em] uppercase min-h-[52px]",
                   active
-                    ? "text-strong font-semibold"
-                    : "text-muted font-medium hover:text-ink",
+                    ? "text-strong font-bold"
+                    : "text-muted font-normal hover:text-ink",
                 )}
               >
                 <Icon

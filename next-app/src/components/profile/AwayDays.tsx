@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { X } from "lucide-react";
 import { useStore } from "@/lib/useStore";
+import { cardClass } from "@/components/ui/Card";
+import { cn } from "@/lib/utils";
 
 /**
  * Away days — dates with no prescribed session (2026-08-27).
@@ -47,11 +49,11 @@ export function AwayDays() {
 
   return (
     <div>
-      <p className="font-mono text-[10px] uppercase tracking-widest text-muted mb-2">
+      <p className="font-mono text-eyebrow uppercase tracking-widest text-muted mb-2">
         Away days
       </p>
-      <div className="rounded border border-line-soft bg-surface p-3 space-y-3">
-        <p className="text-[13px] text-muted leading-snug">
+      <div className={cn(cardClass(), "space-y-3")}>
+        <p className="text-caption text-muted leading-snug">
           Days you can&apos;t train. Nothing gets prescribed — you can still log a
           ride, a run or a class, and the engine still reads it.
         </p>
@@ -61,9 +63,9 @@ export function AwayDays() {
             {periods.map((p) => (
               <li
                 key={`${p.start}-${p.end}`}
-                className="flex items-center justify-between gap-3 rounded border border-line-soft bg-ground px-3 py-2"
+                className="flex items-center justify-between gap-3 rounded-lg border border-line-soft bg-ground px-3 py-2"
               >
-                <span className="min-w-0 text-[14px]">
+                <span className="min-w-0 text-small">
                   {p.start === p.end ? fmt(p.start) : `${fmt(p.start)} – ${fmt(p.end)}`}
                   {p.reason ? (
                     <span className="text-muted italic"> · {p.reason}</span>
@@ -84,7 +86,7 @@ export function AwayDays() {
 
         <div className="flex flex-wrap items-end gap-2">
           <label className="flex-1 min-w-[120px]">
-            <span className="block font-mono text-[10px] uppercase tracking-widest text-muted mb-1">
+            <span className="block font-mono text-eyebrow uppercase tracking-widest text-muted mb-1">
               From
             </span>
             <input
@@ -94,11 +96,11 @@ export function AwayDays() {
                 setStart(e.target.value);
                 if (e.target.value > end) setEnd(e.target.value);
               }}
-              className="w-full text-[14px] px-2 py-2 min-h-[44px] border border-line rounded bg-ground text-ink"
+              className="w-full text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-ground text-ink"
             />
           </label>
           <label className="flex-1 min-w-[120px]">
-            <span className="block font-mono text-[10px] uppercase tracking-widest text-muted mb-1">
+            <span className="block font-mono text-eyebrow uppercase tracking-widest text-muted mb-1">
               To
             </span>
             <input
@@ -106,11 +108,11 @@ export function AwayDays() {
               value={end}
               min={start}
               onChange={(e) => setEnd(e.target.value)}
-              className="w-full text-[14px] px-2 py-2 min-h-[44px] border border-line rounded bg-ground text-ink"
+              className="w-full text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-ground text-ink"
             />
           </label>
           <label className="flex-[2] min-w-[140px]">
-            <span className="block font-mono text-[10px] uppercase tracking-widest text-muted mb-1">
+            <span className="block font-mono text-eyebrow uppercase tracking-widest text-muted mb-1">
               Why (optional)
             </span>
             <input
@@ -119,7 +121,7 @@ export function AwayDays() {
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               placeholder="e.g. Summer trip"
-              className="w-full text-[14px] px-2 py-2 min-h-[44px] border border-line rounded bg-ground text-ink placeholder:text-muted"
+              className="w-full text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-ground text-ink placeholder:text-muted"
             />
           </label>
           <button
@@ -128,7 +130,7 @@ export function AwayDays() {
               addAwayPeriod(start, end, reason.trim() || undefined);
               setReason("");
             }}
-            className="min-h-[44px] px-4 rounded bg-bronze text-ground text-sm font-semibold"
+            className="min-h-[44px] px-4 rounded-lg bg-bronze text-ground text-small font-semibold"
           >
             Add
           </button>

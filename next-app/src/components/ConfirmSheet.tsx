@@ -93,12 +93,12 @@ export function ConfirmSheet({
             <X size={18} />
           </button>
         </div>
-        <div className="text-[14px] text-muted leading-relaxed">{body}</div>
+        <div className="text-small text-muted leading-relaxed">{body}</div>
         <div className="flex gap-2 pt-1">
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 border border-line rounded py-2 min-h-[44px] text-sm hover:bg-line-soft"
+            className="flex-1 border border-line rounded-lg py-2 min-h-[44px] text-small hover:bg-line-soft"
           >
             {cancelLabel}
           </button>
@@ -109,7 +109,7 @@ export function ConfirmSheet({
               playConfirm();
               onConfirm();
             }}
-            className={`flex-1 rounded py-2 min-h-[44px] text-sm font-semibold ${
+            className={`flex-1 rounded-lg py-2 min-h-[44px] text-small font-semibold ${
               danger
                 ? "bg-red text-ground hover:bg-red/90"
                 : "bg-bronze text-ground hover:bg-bronze-hover"

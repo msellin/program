@@ -12,6 +12,7 @@ import { ConfirmSheet } from "@/components/ConfirmSheet";
 import { DashboardBlock } from "@/components/DashboardBlock";
 import { StatusPill } from "@/components/ui/StatusPill";
 import type { Program, ProgramManifest, ProgramManifestEntry } from "@/lib/schemas";
+import { cardClass } from "@/components/ui/Card";
 
 type Props = {
   slug: string;
@@ -72,19 +73,19 @@ export function ProgramPreviewClient({ slug }: Props) {
 
   if (error) {
     return (
-      <div className="mt-8 rounded border border-red bg-surface p-4">
-        <h2 className="mb-2 text-lg font-semibold">Couldn&apos;t load program</h2>
-        <p className="text-sm text-muted">{error}</p>
+      <div className={`${cardClass({ status: "red" })} mt-8`}>
+        <h2 className="mb-2 text-h3">Couldn&apos;t load program</h2>
+        <p className="text-small text-muted">{error}</p>
         <Link
           href="/programs"
-          className="mt-2 inline-block text-[14px] text-slate border-b border-slate"
+          className="mt-2 inline-block text-small text-slate border-b border-slate"
         >
           Back to catalog
         </Link>
       </div>
     );
   }
-  if (!entry || !program) return <div className="mt-8 text-sm text-muted">Loading…</div>;
+  if (!entry || !program) return <div className="mt-8 text-small text-muted">Loading…</div>;
 
   const activeSlugs = activeProgramIds ?? (activeProgramId ? [activeProgramId] : []);
   const isActive = activeSlugs.includes(slug);
@@ -202,7 +203,7 @@ export function ProgramPreviewClient({ slug }: Props) {
           slate; REVIEWED+VERIFIED show as VERIFIED green). */}
       <header className="space-y-2">
         <div className="flex items-baseline gap-2 flex-wrap">
-          <h1 className="text-[26px] font-semibold tracking-tight text-strong leading-tight">
+          <h1 className="text-h1 tracking-tight text-strong leading-tight">
             {entry.name}
           </h1>
           {isActive ? (
@@ -228,7 +229,7 @@ export function ProgramPreviewClient({ slug }: Props) {
             <StatusPill label="personal" tone="slate" className="flex-shrink-0" />
           ) : null}
         </div>
-        <p className="text-sm text-muted">{entry.short_description}</p>
+        <p className="text-small text-muted">{entry.short_description}</p>
         {/* F10 Batch 31 · attribution row for REVIEWED programs. Names the
             reviewer + date + scope so the trust tier isn't a bare chip —
             it's an audit trail. review_evidence[] entries are audit files
@@ -239,7 +240,7 @@ export function ProgramPreviewClient({ slug }: Props) {
         (program.status === "REVIEWED" || program.status === "VERIFIED") &&
         program.reviewed_by &&
         !/agent/i.test(program.reviewed_by.name) ? (
-          <div className="rounded border border-slate/40 border-l-4 border-l-slate bg-surface p-3 text-[14px] mt-2 space-y-1">
+          <div className={`${cardClass()} text-small mt-2 space-y-1`}>
             <p className="text-strong">
               <span className="font-semibold">Reviewed by</span>{" "}
               {program.reviewed_by.name}
@@ -247,7 +248,7 @@ export function ProgramPreviewClient({ slug }: Props) {
                 <span className="text-muted"> · {program.reviewed_by.role}</span>
               ) : null}
             </p>
-            <p className="text-[12px] text-muted">
+            <p className="text-caption text-muted">
               {program.reviewed_by.date}
               {program.reviewed_by.scope ? (
                 <> · scope: {program.reviewed_by.scope}</>
@@ -259,7 +260,7 @@ export function ProgramPreviewClient({ slug }: Props) {
           </div>
         ) : null}
         {entry.personal ? (
-          <p className="text-[14px] text-muted italic border-l-2 border-slate/40 pl-3 mt-2">
+          <p className="text-small text-muted italic mt-2">
             Authored for one specific clinical context. Not marketed as an evidence-backed
             catalog program — the &ldquo;why&rdquo; lives in the author&apos;s clinical notes,
             not in a public references list. Use only if your situation resembles the author&apos;s.
@@ -269,7 +270,7 @@ export function ProgramPreviewClient({ slug }: Props) {
             "beginner" tag so a Tier-C user doesn't think this program is
             below their level. */}
         {entry.levels?.length ? (
-          <div className="flex flex-wrap items-center gap-1 pt-1 text-[12px] font-mono">
+          <div className="flex flex-wrap items-center gap-1 pt-1 text-caption font-mono">
             <span className="text-muted">Levels:</span>
             {entry.levels.map((lvl, i) => (
               <span key={lvl} className="flex items-center gap-1">
@@ -294,21 +295,21 @@ export function ProgramPreviewClient({ slug }: Props) {
         eyebrow="Section 1 of 4"
         title="Who this is for"
       >
-        <p className="text-sm leading-relaxed text-ink">{entry.who_this_is_for}</p>
+        <p className="text-small leading-relaxed text-ink">{entry.who_this_is_for}</p>
       </DashboardBlock>
 
       <DashboardBlock
         eyebrow="Section 2 of 4"
         title="What you'll achieve"
       >
-        <p className="text-sm leading-relaxed text-ink">{entry.what_youll_achieve}</p>
+        <p className="text-small leading-relaxed text-ink">{entry.what_youll_achieve}</p>
       </DashboardBlock>
 
       <DashboardBlock
         eyebrow="Section 3 of 4"
         title="What it takes"
       >
-        <ul className="text-sm leading-relaxed text-ink space-y-1">
+        <ul className="text-small leading-relaxed text-ink space-y-1">
           <li>
             <span className="font-mono text-slate">{entry.duration_weeks} weeks</span>
             {entry.load_hint ? (
@@ -334,12 +335,12 @@ export function ProgramPreviewClient({ slug }: Props) {
             </li>
           ) : null}
           {entry.positioning === "side_track" ? (
-            <li className="text-slate text-[13px]">
+            <li className="text-slate text-caption">
               Layers on any main track — safe to run alongside your existing week.
             </li>
           ) : null}
           {entry.prerequisites?.length ? (
-            <li className="text-amber text-[13px]">
+            <li className="text-amber text-caption">
               Recommended background — see the amber card below.
             </li>
           ) : null}
@@ -352,11 +353,11 @@ export function ProgramPreviewClient({ slug }: Props) {
           reads as "and here's what's special about it" not "before we
           even tell you what it is." Bronze accent economy locked. */}
       {entry.adapts ? (
-        <div className="rounded border border-bronze/30 border-l-4 border-l-bronze bg-bronze/[0.06] px-4 py-3">
-          <p className="font-mono text-[10px] uppercase tracking-widest text-bronze mb-1">
+        <div className={cardClass()}>
+          <p className="font-mono text-eyebrow uppercase tracking-widest text-bronze mb-1">
             Adapts to you
           </p>
-          <p className="text-[14px] text-strong leading-snug">
+          <p className="text-small text-strong leading-snug">
             {entry.adapts} Every session sharpens further from your logs.
           </p>
         </div>
@@ -367,19 +368,19 @@ export function ProgramPreviewClient({ slug }: Props) {
           eyebrow="Section 4 of 4"
           title="How we prove it works"
         >
-          <p className="text-sm leading-relaxed text-ink">{entry.retest}</p>
+          <p className="text-small leading-relaxed text-ink">{entry.retest}</p>
         </DashboardBlock>
       ) : null}
 
       {entry.prerequisites?.length ? (
-        <section className="rounded border border-amber/40 bg-amber/10 p-3 text-[14px] space-y-1">
+        <section className="rounded-lg border border-amber/40 bg-amber/10 p-3 text-small space-y-1">
           <p className="font-semibold text-strong mb-1">Recommended background</p>
           <ul className="list-disc pl-5 space-y-1">
             {entry.prerequisites.map((prereq, i) => (
               <li key={i}>{prereq}</li>
             ))}
           </ul>
-          <p className="text-[11px] text-muted italic mt-1">
+          <p className="text-eyebrow text-muted italic mt-1">
             Not enforced — you can still start if you assess honestly that you&apos;re close enough. The plan will hold you to the paces / loads it prescribes.
           </p>
         </section>
@@ -398,8 +399,8 @@ export function ProgramPreviewClient({ slug }: Props) {
         if (!refs.length || entry.personal) return null;
         const compact = refs.slice(0, 4);
         return (
-          <section className="rounded border border-line-soft bg-surface p-3 text-[13px] space-y-1">
-            <p className="font-mono text-[10px] uppercase tracking-widest text-muted">
+          <section className={`${cardClass()} text-caption space-y-1`}>
+            <p className="font-mono text-eyebrow uppercase tracking-widest text-muted">
               Cites
             </p>
             <p className="text-ink leading-snug">
@@ -416,7 +417,7 @@ export function ProgramPreviewClient({ slug }: Props) {
                 <span className="text-muted"> · +{refs.length - compact.length} more</span>
               ) : null}
             </p>
-            <p className="text-[11px] text-muted">
+            <p className="text-eyebrow text-muted">
               Full bibliography lives in{" "}
               <Link href="/evidence" className="underline underline-offset-2 hover:text-ink">
                 Evidence
@@ -436,7 +437,7 @@ export function ProgramPreviewClient({ slug }: Props) {
           // take a couple of minutes, not days.
           const hasWindow = nT > 0 && (program.intake.duration_days ?? 0) > 0;
           return (
-            <section className="rounded border border-slate/30 bg-slate/10 p-3 text-[14px] space-y-1">
+            <section className="rounded-lg border border-slate/30 bg-slate/10 p-3 text-small space-y-1">
               <p className="font-semibold text-strong">
                 {hasWindow
                   ? `Baseline setup — a few minutes on the wizard + a ${program.intake.duration_days}-day measurement window`
@@ -454,22 +455,22 @@ export function ProgramPreviewClient({ slug }: Props) {
 
       <div className="pt-2">
         {isActive ? (
-          <div className="rounded border border-green/30 bg-green/10 p-3 space-y-2">
-            <p className="text-sm text-strong font-semibold flex items-center gap-1.5">
+          <div className="rounded-lg border border-green/30 bg-green/10 p-3 space-y-2">
+            <p className="text-small text-strong font-semibold flex items-center gap-1.5">
               <Check size={14} />
               This is your current program
             </p>
             <div className="flex flex-wrap gap-2 pt-1">
               <Link
                 href="/"
-                className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground"
+                className="inline-flex items-center gap-1.5 font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-bronze text-ground"
               >
                 Go to Today
               </Link>
               <button
                 type="button"
                 onClick={() => setConfirmEnd(true)}
-                className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-red/40 text-red hover:bg-red/10"
+                className="inline-flex items-center gap-1.5 font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-red/40 text-red hover:bg-red/10"
               >
                 End program
               </button>
@@ -478,18 +479,18 @@ export function ProgramPreviewClient({ slug }: Props) {
         ) : (
           <div className="space-y-3">
             {hasOtherActive ? (
-              <p className="text-[14px] text-amber italic">
+              <p className="text-small text-amber italic">
                 You already have an active program. Starting this one will replace it —
                 your logged history stays, but only one main program at a time during beta.
               </p>
             ) : null}
 
             {requiresTierPick ? (
-              <div className="space-y-2 rounded border border-line-soft bg-line-soft/30 p-3">
-                <p className="text-[12px] font-semibold text-strong uppercase tracking-wider">
+              <div className="space-y-2 rounded-lg bg-surface-2 p-3">
+                <p className="text-caption font-semibold text-strong uppercase tracking-wider">
                   Pick your starting tier
                 </p>
-                <p className="text-[12px] text-muted">
+                <p className="text-caption text-muted">
                   Each tier corresponds to a level of the skill. Pick the one that matches where
                   you are now — you can move up when the retest gate passes.
                 </p>
@@ -502,7 +503,7 @@ export function ProgramPreviewClient({ slug }: Props) {
                           type="button"
                           onClick={() => setPickedTier(t.id)}
                           className={cn(
-                            "w-full text-left rounded border px-3 py-2 flex items-start gap-2 min-h-[52px]",
+                            "w-full text-left rounded-lg border px-3 py-2 flex items-start gap-2 min-h-[52px]",
                             selected
                               ? "border-bronze bg-bronze/10"
                               : "border-line hover:border-slate/40 bg-surface",
@@ -515,9 +516,9 @@ export function ProgramPreviewClient({ slug }: Props) {
                             {selected ? <Check size={11} className="text-ground" strokeWidth={3} /> : null}
                           </div>
                           <div className="min-w-0 flex-1">
-                            <p className="text-sm font-semibold text-strong">{t.label}</p>
+                            <p className="text-small font-semibold text-strong">{t.label}</p>
                             {t.typical_outcome ? (
-                              <p className="text-[12px] text-muted mt-0.5">{t.typical_outcome}</p>
+                              <p className="text-caption text-muted mt-0.5">{t.typical_outcome}</p>
                             ) : null}
                           </div>
                         </button>
@@ -529,7 +530,7 @@ export function ProgramPreviewClient({ slug }: Props) {
             ) : null}
 
             {draftBlocked ? (
-              <div className="mb-3 rounded border border-line-soft border-l-4 border-l-line bg-surface p-3 text-[13.5px]">
+              <div className={`${cardClass()} mb-3 text-small`}>
                 <p className="font-semibold text-strong">Not published yet.</p>
                 <p className="mt-1 text-muted">
                   This program is still being written and isn&apos;t in the catalog.
@@ -539,7 +540,7 @@ export function ProgramPreviewClient({ slug }: Props) {
             ) : null}
 
             {comingSoonBlocked ? (
-              <div className="mb-3 rounded border border-line-soft border-l-4 border-l-line bg-surface p-3 text-[13.5px]">
+              <div className={`${cardClass()} mb-3 text-small`}>
                 <p className="font-semibold text-strong">Coming soon.</p>
                 <p className="mt-1 text-muted">
                   This program isn&apos;t open to new starts yet. You can read how it works here.
@@ -554,7 +555,7 @@ export function ProgramPreviewClient({ slug }: Props) {
                     type="button"
                     onClick={startAlone}
                     disabled={starting || !canStart}
-                    className="inline-flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-wider px-4 py-3 rounded bg-bronze text-ground hover:bg-bronze/90 disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="inline-flex items-center gap-1.5 font-mono text-caption uppercase tracking-wider px-4 py-3 rounded-lg bg-bronze text-ground hover:bg-bronze/90 disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     <Play size={14} />
                     {starting ? "Starting…" : draftBlocked ? "Not published yet" : comingSoonBlocked ? "Coming soon" : requiresTierPick && !effectiveTier ? "Pick a tier" : "Make this my focus (replace current)"}
@@ -574,7 +575,7 @@ export function ProgramPreviewClient({ slug }: Props) {
                         router.push("/");
                       }}
                       disabled={starting || !canStart}
-                      className="inline-flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-wider px-4 py-3 rounded border border-slate/60 text-slate hover:bg-slate/10 disabled:opacity-40 disabled:cursor-not-allowed"
+                      className="inline-flex items-center gap-1.5 font-mono text-caption uppercase tracking-wider px-4 py-3 rounded-lg border border-slate/60 text-slate hover:bg-slate/10 disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       + Add alongside (admin)
                     </button>
@@ -585,7 +586,7 @@ export function ProgramPreviewClient({ slug }: Props) {
                   type="button"
                   onClick={startAlone}
                   disabled={starting || !canStart}
-                  className="inline-flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-wider px-4 py-3 rounded bg-bronze text-ground hover:bg-bronze/90 disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="inline-flex items-center gap-1.5 font-mono text-caption uppercase tracking-wider px-4 py-3 rounded-lg bg-bronze text-ground hover:bg-bronze/90 disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   <Play size={14} />
                   {starting ? "Starting…" : draftBlocked ? "Not published yet" : comingSoonBlocked ? "Coming soon" : requiresTierPick && !effectiveTier ? "Pick a tier to start" : "Make this my focus"}
@@ -631,7 +632,7 @@ export function ProgramPreviewClient({ slug }: Props) {
                 kept — pick it up again from Programs and it resumes where it
                 left off.
               </p>
-              <p className="mt-2 text-[13px] text-muted">
+              <p className="mt-2 text-caption text-muted">
                 Terav runs one focus at a time.
               </p>
             </>
@@ -653,20 +654,20 @@ export function ProgramPreviewClient({ slug }: Props) {
 
       <details className="pt-4 border-t border-line-soft">
         <summary className={cn(
-          "cursor-pointer text-[14px] text-slate font-semibold",
+          "cursor-pointer text-small text-slate font-semibold",
         )}>
           Program shape (peek inside)
         </summary>
-        <div className="mt-3 space-y-3 text-[14px]">
+        <div className="mt-3 space-y-3 text-small">
           {isMultiDim ? (
-            <p className="text-[14px] text-muted italic">
+            <p className="text-small text-muted italic">
               This program is multi-tier — the list below shows every phase and block
               across all levels. You&apos;ll only see the ones your tier uses, and drills
               are picked per session from your capability profile.
             </p>
           ) : null}
           <div>
-            <p className="text-[11px] text-muted uppercase tracking-wider mb-1">Phases</p>
+            <p className="text-eyebrow text-muted uppercase tracking-wider mb-1">Phases</p>
             <ul className="space-y-1">
               {program.phases.map((ph) => {
                 const tierTag = extractTierTag(ph.name);
@@ -674,12 +675,12 @@ export function ProgramPreviewClient({ slug }: Props) {
                   <li key={ph.id} className="text-ink">
                     <div className="flex items-center gap-2 flex-wrap">
                       {tierTag ? (
-                        <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
+                        <span className="font-mono text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
                           <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-slate" />
                           {tierTag}
                         </span>
                       ) : null}
-                      <span className="font-mono text-[11px] text-muted">
+                      <span className="font-mono text-eyebrow text-muted">
                         {ph.starts}
                         {ph.ends ? ` → ${ph.ends}` : ""}
                       </span>
@@ -694,7 +695,7 @@ export function ProgramPreviewClient({ slug }: Props) {
             </ul>
           </div>
           <div>
-            <p className="text-[11px] text-muted uppercase tracking-wider mb-1">Blocks</p>
+            <p className="text-eyebrow text-muted uppercase tracking-wider mb-1">Blocks</p>
             <ul className="text-muted list-disc pl-5">
               {program.blocks.map((b) => (
                 <li key={b.id}>{b.name}</li>
@@ -758,20 +759,20 @@ function PersonalAcknowledgementModal({
         className="w-full max-w-md rounded-t-2xl border border-line bg-surface p-5 shadow-xl sm:rounded-2xl sm:mx-4"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 id="personal-gate-title" className="text-[16px] font-semibold text-strong">
+        <h2 id="personal-gate-title" className="text-body font-semibold text-strong">
           {programName} — proceed with care
         </h2>
-        <p className="mt-3 text-sm text-ink leading-relaxed">
+        <p className="mt-3 text-small text-ink leading-relaxed">
           This program was authored against one specific individual&apos;s clinical
           context: imaging findings, provocative-position screening, and history.
           It respects those constraints and would apply them to your training too.
         </p>
-        <p className="mt-2 text-sm text-ink leading-relaxed">
+        <p className="mt-2 text-small text-ink leading-relaxed">
           If your situation is <em>different</em> — different injury, different
           history, no clinical review — this plan will apply the wrong
           restrictions and progression. That&apos;s not safe.
         </p>
-        <label className="mt-4 flex items-start gap-2 text-[14px] cursor-pointer">
+        <label className="mt-4 flex items-start gap-2 text-small cursor-pointer">
           <input
             type="checkbox"
             checked={ack}
@@ -787,7 +788,7 @@ function PersonalAcknowledgementModal({
           <button
             type="button"
             onClick={onCancel}
-            className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-muted hover:bg-line-soft min-h-[40px]"
+            className="font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line text-muted hover:bg-line-soft min-h-[40px]"
           >
             Not for me
           </button>
@@ -795,7 +796,7 @@ function PersonalAcknowledgementModal({
             type="button"
             onClick={onConfirm}
             disabled={!ack}
-            className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground disabled:opacity-40 disabled:cursor-not-allowed min-h-[40px]"
+            className="font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-bronze text-ground disabled:opacity-40 disabled:cursor-not-allowed min-h-[40px]"
           >
             Continue
           </button>

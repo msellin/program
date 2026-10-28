@@ -46,6 +46,7 @@ import { cn } from "@/lib/utils";
 import { StatusPill, type StatusPillProps } from "@/components/ui/StatusPill";
 import { MetricStripCluster, type MetricStripClusterItem } from "@/components/ui/MetricStripCluster";
 import { StickyCta } from "@/components/ui/StickyCta";
+import { cardClass } from "@/components/ui/Card";
 
 export type WorkoutHeroScope = "today" | "tomorrow" | "session" | "retest" | "preview";
 
@@ -145,8 +146,8 @@ export function WorkoutHero({
   const Heading: "h1" | "h2" = headingLevel === 1 ? "h1" : "h2";
   const titleClasses =
     scope === "today"
-      ? "text-[32px] leading-[1.05] tracking-[-0.03em] font-semibold"
-      : "text-[26px] leading-[1.15] tracking-[-0.02em] font-semibold";
+      ? "text-h1 leading-[1.05] tracking-[-0.03em]"
+      : "text-h1 leading-[1.15] tracking-[-0.02em]";
 
   const ctaButton = <PrimaryCtaButton primaryCta={primaryCta} />;
 
@@ -161,7 +162,7 @@ export function WorkoutHero({
       >
         {/* Eyebrow row — scope + status pill + optional "Why this?" trigger */}
         <header className="flex items-start justify-between gap-3">
-          <p className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted">
+          <p className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted">
             {eyebrow}
           </p>
           {(status || onExplain) && (
@@ -173,10 +174,10 @@ export function WorkoutHero({
                   onClick={onExplain}
                   aria-label="Why this?"
                   className={cn(
-                    "font-mono text-[11px] uppercase tracking-widest text-slate hover:text-ink active:text-strong",
+                    "font-mono text-eyebrow uppercase tracking-widest text-slate hover:text-ink active:text-strong",
                     // Batch 36 P0 (visual-craft audit) — bumped from min-h-[24px]
                     // to min-h-11 per §2.0 invariant 2 (44×44 tap target).
-                    "min-h-11 min-w-11 py-1 px-2 rounded flex items-center justify-center",
+                    "min-h-11 min-w-11 py-1 px-2 rounded-lg flex items-center justify-center",
                     "focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2",
                   )}
                 >
@@ -196,10 +197,10 @@ export function WorkoutHero({
           {title}
         </Heading>
 
-        {lede && <p className="text-[14px] text-muted leading-snug">{lede}</p>}
+        {lede && <p className="text-small text-muted leading-snug">{lede}</p>}
 
         {metrics && metrics.length > 0 && (
-          <div className="rounded border border-line-soft bg-surface p-3">
+          <div className={cardClass()}>
             <MetricStripCluster items={metrics} ariaGroupLabel={`${scope} metrics`} />
           </div>
         )}
@@ -211,14 +212,14 @@ export function WorkoutHero({
                 key={block.number}
                 className="flex items-start gap-3 border-t border-line-soft pt-2 first:border-t-0 first:pt-0"
               >
-                <span className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted mt-0.5 flex-shrink-0 w-8">
+                <span className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted mt-0.5 flex-shrink-0 w-8">
                   {blockLetter(block.number)}
                 </span>
                 <div className="flex-1 min-w-0 space-y-0.5">
-                  <p className="text-[14px] font-medium text-ink leading-snug">
+                  <p className="text-small font-medium text-ink leading-snug">
                     {block.name}
                   </p>
-                  <p className="font-mono text-[12px] text-muted tabular-nums">
+                  <p className="font-mono text-caption text-muted tabular-nums">
                     {block.setsLabel}
                   </p>
                 </div>
@@ -229,11 +230,11 @@ export function WorkoutHero({
                       onClick={() => onBlockCite(block.number)}
                       aria-label={`Show ${block.citationCount} citation${block.citationCount === 1 ? "" : "s"} for ${block.name}`}
                       className={cn(
-                        "font-mono text-[10px] uppercase tracking-widest text-bronze hover:text-bronze-hi active:text-bronze-active",
+                        "font-mono text-eyebrow uppercase tracking-widest text-bronze hover:text-bronze-hi active:text-bronze-active",
                         // Batch 36 P0 (visual-craft audit) — 44×44 tap target
                         // per §2.0 invariant 2. Visual chip stays 10px inline;
                         // hit-slop provided by flex-centered min-h-11 wrapper.
-                        "min-h-11 min-w-11 px-2 py-1 rounded flex-shrink-0 flex items-center justify-center",
+                        "min-h-11 min-w-11 px-2 py-1 rounded-lg flex-shrink-0 flex items-center justify-center",
                         "focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2",
                       )}
                     >
@@ -242,7 +243,7 @@ export function WorkoutHero({
                   ) : (
                     <span
                       aria-hidden
-                      className="font-mono text-[10px] uppercase tracking-widest text-bronze flex-shrink-0"
+                      className="font-mono text-eyebrow uppercase tracking-widest text-bronze flex-shrink-0"
                     >
                       [cited]
                     </span>
@@ -264,7 +265,7 @@ export function WorkoutHero({
 function PrimaryCtaButton({ primaryCta }: { primaryCta: WorkoutHeroPrimaryCta }) {
   const classes = cn(
     "inline-flex w-full items-center justify-center gap-2 rounded-lg",
-    "bg-bronze text-ground font-semibold text-[14px]",
+    "bg-bronze text-ground font-semibold text-small",
     "hover:bg-bronze-hover active:bg-bronze-active",
     "min-h-[44px] px-4 py-2",
     "shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_1px_2px_rgba(0,0,0,0.4)]",

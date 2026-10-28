@@ -27,10 +27,10 @@ export default function ProgressRedirect() {
   }, [router]);
   return (
     <div className="mt-8 text-center">
-      <p className="text-[14px] text-muted">
+      <p className="text-small text-muted">
         Progress moved to <a href="/record/" className="text-bronze underline">Record</a>.
       </p>
-      <p className="text-[12px] text-muted mt-2 italic">
+      <p className="text-caption text-muted mt-2 italic">
         Redirecting…
       </p>
     </div>

@@ -32,12 +32,12 @@ export function SetRow({ index, set, prev, prescribed, isPR, restSeconds, onChan
   return (
     <div
       className={cn(
-        "grid gap-2 items-center py-2 px-3 border-b border-line-soft last:border-b-0 text-sm",
+        "grid gap-2 items-center py-2 px-3 border-b border-line-soft last:border-b-0 text-small",
         "grid-cols-[24px_minmax(60px,1fr)_minmax(70px,80px)_minmax(60px,70px)_50px_28px_28px]",
       )}
     >
-      <span className="text-xs font-mono text-muted text-center">{index + 1}</span>
-      <div className="text-[11px] font-mono text-muted overflow-hidden">
+      <span className="text-caption font-mono text-muted text-center">{index + 1}</span>
+      <div className="text-eyebrow font-mono text-muted overflow-hidden">
         {prescribed ? (
           <span className="text-slate">
             {prescribed.kg}×{prescribed.reps}
@@ -80,7 +80,7 @@ export function SetRow({ index, set, prev, prescribed, isPR, restSeconds, onChan
           const v = raw === "" ? null : clamp(Number(raw), 0, 500);
           onChange({ weight_kg: v });
         }}
-        className="w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze placeholder:text-muted"
+        className="w-full font-mono text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze placeholder:text-muted"
       />
       <input
         type="number"
@@ -108,7 +108,7 @@ export function SetRow({ index, set, prev, prescribed, isPR, restSeconds, onChan
           const v = raw === "" ? null : clampInt(Number(raw), 0, 50);
           onChange({ reps: v });
         }}
-        className="w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze placeholder:text-muted"
+        className="w-full font-mono text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze placeholder:text-muted"
       />
       <input
         type="number"
@@ -124,7 +124,7 @@ export function SetRow({ index, set, prev, prescribed, isPR, restSeconds, onChan
           const v = raw === "" ? null : clamp(Number(raw), 0, 10);
           onChange({ rpe: v });
         }}
-        className="w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
+        className="w-full font-mono text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
       />
       <button
         type="button"
@@ -132,7 +132,7 @@ export function SetRow({ index, set, prev, prescribed, isPR, restSeconds, onChan
         aria-expanded={notesOpen}
         onClick={() => setNotesOpen((v) => !v)}
         className={cn(
-          "w-11 h-11 -my-2 rounded flex items-center justify-center relative",
+          "w-11 h-11 -my-2 rounded-lg flex items-center justify-center relative",
           hasNote ? "text-bronze" : "text-muted hover:text-ink hover:bg-line-soft",
         )}
       >
@@ -147,7 +147,7 @@ export function SetRow({ index, set, prev, prescribed, isPR, restSeconds, onChan
         onClick={onRemove}
         disabled={!onRemove}
         className={cn(
-          "w-11 h-11 -my-2 rounded flex items-center justify-center text-muted",
+          "w-11 h-11 -my-2 rounded-lg flex items-center justify-center text-muted",
           onRemove ? "hover:text-red hover:bg-line-soft" : "opacity-30 cursor-not-allowed",
         )}
       >
@@ -173,7 +173,7 @@ export function SetRow({ index, set, prev, prescribed, isPR, restSeconds, onChan
             placeholder="anything specific to this set — click, side asymmetry, form cue…"
             value={set.notes ?? ""}
             onChange={(e) => onChange({ notes: e.target.value })}
-            className="block w-full max-w-full text-[14px] px-2 py-1.5 border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze resize-y min-h-[44px] break-words [overflow-wrap:anywhere] whitespace-pre-wrap"
+            className="block w-full max-w-full text-small px-2 py-1.5 border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze resize-y min-h-[44px] break-words [overflow-wrap:anywhere] whitespace-pre-wrap"
           />
         </div>
       ) : null}

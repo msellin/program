@@ -11,6 +11,7 @@ import { useAccountActions } from "@/lib/account/actions";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
 import { RotateCcw } from "lucide-react";
 import type { ProgramManifest } from "@/lib/schemas";
+import { cardClass } from "@/components/ui/Card";
 
 /**
  * F7 (Batch 23) — the account route.
@@ -88,21 +89,21 @@ export default function AccountPage() {
 
   return (
     <div className="space-y-5 pt-4">
-      <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">
+      <h1 className="text-h1 tracking-tight text-strong leading-none">
         Account
       </h1>
 
       {/* Identity chip (read-only). Matches the Batch 16 Profile chip
           without the deep-link chevron — this IS the destination. */}
-      <div className="rounded border border-line-soft bg-surface px-4 py-3 flex items-center gap-3">
+      <div className={`${cardClass({ flush: true })} px-4 py-3 flex items-center gap-3`}>
         <div className="w-12 h-12 rounded-full bg-bronze/20 flex items-center justify-center flex-shrink-0">
-          <span className="font-semibold text-lg text-bronze-hi">
+          <span className="font-semibold text-h3 text-bronze-hi">
             {(email ?? "?").charAt(0).toUpperCase()}
           </span>
         </div>
         <div className="min-w-0 flex-1">
-          <p className="text-[16px] font-semibold text-strong break-words">{email}</p>
-          <p className="text-[11px] text-muted mt-0.5 flex items-center gap-2 flex-wrap">
+          <p className="text-body font-semibold text-strong break-words">{email}</p>
+          <p className="text-eyebrow text-muted mt-0.5 flex items-center gap-2 flex-wrap">
             {memberSince ? <span>joined {memberSince}</span> : null}
             {isSuperAdmin ? <span>staff</span> : null}
           </p>
@@ -114,17 +115,17 @@ export default function AccountPage() {
           so SR users get a landmark to jump between. */}
       {/* Sign-in section — currently just email, change deferred. */}
       <section aria-labelledby="acct-signin">
-        <p id="acct-signin" className="font-mono text-[10px] uppercase tracking-widest text-muted mb-2">
+        <p id="acct-signin" className="font-mono text-eyebrow uppercase tracking-widest text-muted mb-2">
           Sign-in
         </p>
         <button
           type="button"
           onClick={() => setEmailNotice(true)}
-          className="w-full flex items-center justify-between gap-3 px-4 py-3 min-h-[48px] active:bg-line-soft/50 rounded border border-line-soft bg-surface text-left"
+          className={`${cardClass({ flush: true })} w-full flex items-center justify-between gap-3 px-4 py-3 min-h-[48px] active:bg-line-soft/50 text-left`}
         >
           <div className="min-w-0 flex-1">
-            <p className="text-[11px] text-muted">Email</p>
-            <p className="text-sm text-strong truncate">{email ?? "—"}</p>
+            <p className="text-eyebrow text-muted">Email</p>
+            <p className="text-small text-strong truncate">{email ?? "—"}</p>
           </div>
           <ChevronRight size={16} className="text-muted flex-shrink-0" />
         </button>
@@ -134,17 +135,17 @@ export default function AccountPage() {
           Single-program users have nothing to pick from. */}
       {multiProgram && manifest ? (
         <section aria-labelledby="acct-programs">
-          <p id="acct-programs" className="font-mono text-[10px] uppercase tracking-widest text-muted mb-2">
+          <p id="acct-programs" className="font-mono text-eyebrow uppercase tracking-widest text-muted mb-2">
             Programs
           </p>
           <button
             type="button"
             onClick={() => setShowPrimaryPicker(true)}
-            className="w-full flex items-center justify-between gap-3 px-4 py-3 min-h-[48px] active:bg-line-soft/50 rounded border border-line-soft bg-surface text-left"
+            className={`${cardClass({ flush: true })} w-full flex items-center justify-between gap-3 px-4 py-3 min-h-[48px] active:bg-line-soft/50 text-left`}
           >
             <div className="min-w-0 flex-1">
-              <p className="text-[11px] text-muted">Primary program</p>
-              <p className="text-sm text-strong truncate">{primaryProgramName ?? "—"}</p>
+              <p className="text-eyebrow text-muted">Primary program</p>
+              <p className="text-small text-strong truncate">{primaryProgramName ?? "—"}</p>
             </div>
             <ChevronRight size={16} className="text-muted flex-shrink-0" />
           </button>
@@ -159,23 +160,23 @@ export default function AccountPage() {
           undo home so the graduation card stays celebratory. */}
       {extendedPrograms.length > 0 ? (
         <section aria-labelledby="acct-extensions">
-          <p id="acct-extensions" className="font-mono text-[10px] uppercase tracking-widest text-muted mb-2">
+          <p id="acct-extensions" className="font-mono text-eyebrow uppercase tracking-widest text-muted mb-2">
             Extensions
           </p>
-          <ul className="rounded border border-line-soft bg-surface divide-y divide-line-soft">
+          <ul className={`${cardClass({ flush: true })} divide-y divide-line-soft`}>
             {extendedPrograms.map((e) => (
               <li
                 key={e.slug}
                 className="flex items-center justify-between gap-3 px-4 py-3 min-h-[48px]"
               >
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm text-strong truncate">{e.name}</p>
+                  <p className="text-small text-strong truncate">{e.name}</p>
                   {/* P1-68 (Batch 27) — "retest window pushed" was
                       vague; now names the delta directly. Not computing
                       the destination date because /account doesn't load
                       programs, and the +Nw already communicates the
                       change unambiguously. */}
-                  <p className="text-[11px] text-muted mt-0.5">
+                  <p className="text-eyebrow text-muted mt-0.5">
                     Retest window pushed by {e.weeks} week{e.weeks === 1 ? "" : "s"}
                   </p>
                 </div>
@@ -190,7 +191,7 @@ export default function AccountPage() {
                 <button
                   type="button"
                   onClick={() => setPendingRevert(e.slug)}
-                  className="inline-flex items-center gap-1.5 text-[11px] text-slate hover:text-ink underline underline-offset-2 decoration-slate/60 hover:decoration-ink min-h-[44px] py-2"
+                  className="inline-flex items-center gap-1.5 text-eyebrow text-slate hover:text-ink underline underline-offset-2 decoration-slate/60 hover:decoration-ink min-h-[44px] py-2"
                 >
                   <RotateCcw size={12} aria-hidden />
                   Undo
@@ -204,16 +205,16 @@ export default function AccountPage() {
       {/* Data & privacy — Export + Delete. Delete lives here exclusively;
           the prior Profile-footer Danger-zone disclosure is gone. */}
       <section aria-labelledby="acct-data">
-        <p id="acct-data" className="font-mono text-[10px] uppercase tracking-widest text-muted mb-2">
+        <p id="acct-data" className="font-mono text-eyebrow uppercase tracking-widest text-muted mb-2">
           Data & privacy
         </p>
-        <div className="rounded border border-line-soft bg-surface divide-y divide-line-soft">
+        <div className={`${cardClass({ flush: true })} divide-y divide-line-soft`}>
           <button
             type="button"
             onClick={exportMyData}
             className="w-full flex items-center justify-between gap-3 px-4 py-3 min-h-[48px] active:bg-line-soft/50 text-left"
           >
-            <span className="text-sm text-strong">Export my data</span>
+            <span className="text-small text-strong">Export my data</span>
             <ChevronRight size={16} className="text-muted flex-shrink-0" />
           </button>
           <button
@@ -225,7 +226,7 @@ export default function AccountPage() {
             disabled={deleting}
             className="w-full flex items-center justify-between gap-3 px-4 py-3 min-h-[48px] active:bg-red/5 text-left disabled:opacity-50"
           >
-            <span className="text-sm text-red">
+            <span className="text-small text-red">
               {deleting ? "Deleting…" : "Delete my account"}
             </span>
             <ChevronRight size={16} className="text-red/60 flex-shrink-0" />
@@ -234,7 +235,7 @@ export default function AccountPage() {
         {deleteError ? (
           <p
             role="alert"
-            className="text-[12px] text-red border-l-4 border-red pl-2 mt-2"
+            className="text-caption text-red border-l-4 border-red pl-2 mt-2"
           >
             {deleteError}
           </p>
@@ -244,7 +245,7 @@ export default function AccountPage() {
       <footer className="pt-4 border-t border-line-soft">
         <nav
           aria-label="Legal"
-          className="text-[11px] text-muted flex items-center flex-wrap"
+          className="text-eyebrow text-muted flex items-center flex-wrap"
         >
           <Link
             href="/legal/privacy"
@@ -340,7 +341,7 @@ export default function AccountPage() {
             <p id="primary-picker-title" className="font-semibold text-strong">
               Pick your primary program
             </p>
-            <ul className="rounded border border-line-soft bg-surface divide-y divide-line-soft">
+            <ul className={`${cardClass({ flush: true })} divide-y divide-line-soft`}>
               {activeProgramIds.map((slug) => {
                 const p = manifest.programs.find((m) => m.slug === slug);
                 if (!p) return null;
@@ -358,9 +359,9 @@ export default function AccountPage() {
                       }}
                       className="w-full flex items-center justify-between gap-3 px-4 py-3 min-h-[48px] active:bg-line-soft/50 text-left"
                     >
-                      <span className="text-sm text-strong">{p.name}</span>
+                      <span className="text-small text-strong">{p.name}</span>
                       {isCurrent ? (
-                        <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
+                        <span className="font-mono text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
                           <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-bronze" />
                           current
                         </span>
@@ -375,7 +376,7 @@ export default function AccountPage() {
             <button
               type="button"
               onClick={() => setShowPrimaryPicker(false)}
-              className="w-full inline-flex items-center justify-center min-h-[44px] py-2 text-sm text-muted"
+              className="w-full inline-flex items-center justify-center min-h-[44px] py-2 text-small text-muted"
             >
               Cancel
             </button>

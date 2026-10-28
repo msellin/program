@@ -14,14 +14,14 @@ type ScanAnchorStepPayload = Extract<OnboardingStep, { kind: "scan_anchor" }>;
 export function ScanAnchorStep({ step }: { step: ScanAnchorStepPayload }) {
   return (
     <div className="space-y-4 text-center">
-      <h2 id="onboarding-title" className="text-2xl font-semibold text-strong tracking-tight">
+      <h2 id="onboarding-title" className="text-h2 text-strong tracking-tight">
         {step.title}
       </h2>
-      <p className="text-[14px] text-muted whitespace-pre-line">{step.body_md}</p>
+      <p className="text-small text-muted whitespace-pre-line">{step.body_md}</p>
       {step.cta_href && step.cta_label ? (
         <Link
           href={step.cta_href}
-          className="inline-block px-4 py-2 min-h-[44px] border border-bronze text-bronze rounded font-mono text-[11px] uppercase tracking-wider hover:bg-bronze/10"
+          className="inline-block px-4 py-2 min-h-[44px] border border-bronze text-bronze rounded-lg font-mono text-eyebrow uppercase tracking-wider hover:bg-bronze/10"
         >
           {step.cta_label}
         </Link>

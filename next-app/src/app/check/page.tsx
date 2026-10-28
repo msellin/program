@@ -45,6 +45,7 @@ import { regionsForProgram, flagsForProgram, type SymptomRegion, type SymptomFla
 import { deriveState, reasonForState } from "@/lib/symptom-state";
 import { loadProgram } from "@/lib/data-loader";
 import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
 
 /**
  * Regions come from the active program's `symptom_regions[]` (see
@@ -233,7 +234,7 @@ export default function CheckPage() {
     };
   }, []);
 
-  if (!hydrated) return <div className="mt-8 text-sm text-muted">Loading…</div>;
+  if (!hydrated) return <div className="mt-8 text-small text-muted">Loading…</div>;
 
   // Return to Day after saving (2026-08-24). The check is entered from
   // Day, has no back affordance of its own, and its whole payoff — "today's
@@ -272,8 +273,8 @@ export default function CheckPage() {
   return (
     <div className="space-y-5 pt-4 pb-28">
       <header>
-        <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">Morning check</h1>
-        <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.06em] text-muted">
+        <h1 className="text-h1 tracking-tight text-strong leading-none">Morning check</h1>
+        <p className="mt-1 font-mono text-eyebrow uppercase tracking-[0.06em] text-muted">
           {new Date(today + "T12:00:00").toLocaleDateString("en-GB", {
             weekday: "long",
             day: "numeric",
@@ -286,44 +287,44 @@ export default function CheckPage() {
       <CheckLiveVerdict state={state} reason={reason} />
 
       {saved ? (
-        <p className="text-[13px] text-green flex items-center gap-1.5">
+        <p className="text-caption text-green flex items-center gap-1.5">
           <span aria-hidden>✓</span>
           Saved. Today&apos;s plan is adjusted.
         </p>
       ) : prefilledFrom ? (
-        <div className="rounded border border-line-soft bg-surface px-3 py-2 flex items-baseline justify-between gap-3 text-[12px]">
+        <Card flush className="px-3 py-2 flex items-baseline justify-between gap-3 text-caption">
           <span className="text-muted">
             Prefilled from {shortDate(prefilledFrom)}&apos;s check.
           </span>
           <button
             type="button"
             onClick={startFresh}
-            className="min-h-[44px] py-2 font-mono text-[11px] uppercase tracking-[0.06em] text-slate hover:text-ink motion-reduce:transition-none transition-colors focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2 rounded"
+            className="min-h-[44px] py-2 font-mono text-eyebrow uppercase tracking-[0.06em] text-slate hover:text-ink motion-reduce:transition-none transition-colors focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2 rounded-lg"
           >
             Start fresh
           </button>
-        </div>
+        </Card>
       ) : null}
 
       {/* REGIONS */}
       <section aria-labelledby="check-regions">
         <div className="flex items-center gap-2 mb-2">
-          <span aria-hidden className="h-px flex-none w-5" style={{ background: "linear-gradient(to left, var(--color-line-soft), transparent)" }} />
-          <span id="check-regions" className="font-mono text-[10px] uppercase tracking-[0.06em] text-muted">Regions</span>
-          <span aria-hidden className="h-px flex-1" style={{ background: "linear-gradient(to right, var(--color-line-soft), transparent)" }} />
+          <span aria-hidden className="h-px flex-none w-5 bg-linear-to-l from-line-soft to-transparent"  />
+          <span id="check-regions" className="font-mono text-eyebrow uppercase tracking-[0.06em] text-muted">Regions</span>
+          <span aria-hidden className="h-px flex-1 bg-linear-to-r from-line-soft to-transparent"  />
         </div>
-        <p className="mb-2 text-[12px] text-muted">
+        <p className="mb-2 text-caption text-muted">
           Mild: barely there. Notable: you notice it. Severe: it limits you.
         </p>
-        <div className="rounded-md border border-line-soft bg-surface px-3">
+        <Card flush className="px-3">
           {/* Not yet resolved: show nothing rather than someone else's body
               map. A pull-up user must never be offered "Left groin" — the
               scores are written under the region ID, so a tap on the wrong
               label is a score on the wrong region, not just a wrong word. */}
           {REGIONS === null ? (
-            <p className="py-3 text-sm text-muted">Loading your programme&rsquo;s regions…</p>
+            <p className="py-3 text-small text-muted">Loading your programme&rsquo;s regions…</p>
           ) : regionsError ? (
-            <p role="alert" className="py-3 text-sm text-red">
+            <p role="alert" className="py-3 text-small text-red">
               Couldn&rsquo;t load your programme. Reload before scoring — answering against
               the wrong regions is worse than not answering.
             </p>
@@ -336,15 +337,15 @@ export default function CheckPage() {
               onChange={(v) => updateNumber(r.id as keyof Symptoms, v)}
             />
           ))}
-        </div>
+        </Card>
       </section>
 
       {/* FLAGS */}
       <section aria-labelledby="check-flags">
         <div className="flex items-center gap-2 mb-2">
-          <span aria-hidden className="h-px flex-none w-5" style={{ background: "linear-gradient(to left, var(--color-line-soft), transparent)" }} />
-          <span id="check-flags" className="font-mono text-[10px] uppercase tracking-[0.06em] text-muted">Flags · tap to toggle</span>
-          <span aria-hidden className="h-px flex-1" style={{ background: "linear-gradient(to right, var(--color-line-soft), transparent)" }} />
+          <span aria-hidden className="h-px flex-none w-5 bg-linear-to-l from-line-soft to-transparent"  />
+          <span id="check-flags" className="font-mono text-eyebrow uppercase tracking-[0.06em] text-muted">Flags · tap to toggle</span>
+          <span aria-hidden className="h-px flex-1 bg-linear-to-r from-line-soft to-transparent"  />
         </div>
         <div className="flex flex-wrap gap-2">
           {/* Driven by the program's `symptom_flags[]`, not a slug comparison.
@@ -376,11 +377,11 @@ export default function CheckPage() {
       {/* CONTEXT */}
       <section aria-labelledby="check-context">
         <div className="flex items-center gap-2 mb-2">
-          <span aria-hidden className="h-px flex-none w-5" style={{ background: "linear-gradient(to left, var(--color-line-soft), transparent)" }} />
-          <span id="check-context" className="font-mono text-[10px] uppercase tracking-[0.06em] text-muted">Context</span>
-          <span aria-hidden className="h-px flex-1" style={{ background: "linear-gradient(to right, var(--color-line-soft), transparent)" }} />
+          <span aria-hidden className="h-px flex-none w-5 bg-linear-to-l from-line-soft to-transparent"  />
+          <span id="check-context" className="font-mono text-eyebrow uppercase tracking-[0.06em] text-muted">Context</span>
+          <span aria-hidden className="h-px flex-1 bg-linear-to-r from-line-soft to-transparent"  />
         </div>
-        <div className="rounded-md border border-line-soft bg-surface px-3">
+        <Card flush className="px-3">
           <CheckSelectorRow
             label="Morning stiffness"
             options={STIFFNESS_OPTIONS}
@@ -393,14 +394,14 @@ export default function CheckPage() {
             value={values.life_load ?? 0}
             onChange={(v) => updateNumber("life_load", v)}
           />
-        </div>
+        </Card>
       </section>
 
       {/* OUTSIDE TRAINING */}
       <div>
         <label
           htmlFor="outside-training"
-          className="block text-[14px] font-medium text-strong mb-2"
+          className="block text-small font-medium text-strong mb-2"
         >
           Anything outside training lately?
         </label>
@@ -414,7 +415,7 @@ export default function CheckPage() {
             setTouched(true);
           }}
           placeholder="Also happened: 90 min padel, poor sleep"
-          className="block w-full text-[15px] px-3 py-3 min-h-[44px] border border-line-strong rounded-md bg-surface text-ink focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate break-words [overflow-wrap:anywhere]"
+          className="block w-full text-body px-3 py-3 min-h-[44px] border border-line-strong rounded-md bg-surface text-ink focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate break-words [overflow-wrap:anywhere]"
         />
         <EngineReadsNotesHint variant="check" />
       </div>

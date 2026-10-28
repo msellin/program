@@ -19,22 +19,22 @@ export const metadata = {
 export default function NotFound() {
   return (
     <div className="max-w-lg mx-auto pt-10 text-center">
-      <p className="font-mono text-[11px] uppercase tracking-widest text-muted">404</p>
-      <h1 className="text-2xl font-semibold text-strong mt-2">This page has moved, or never existed.</h1>
-      <p className="text-[14px] text-ink mt-3 leading-relaxed">
+      <p className="font-mono text-eyebrow uppercase tracking-widest text-muted">404</p>
+      <h1 className="text-h1 text-strong mt-2">This page has moved, or never existed.</h1>
+      <p className="text-small text-ink mt-3 leading-relaxed">
         Some routes were renamed — Today became Day, Week became Plan. An old
         bookmark or home-screen shortcut can still point at the previous name.
       </p>
       <div className="mt-6 flex flex-col items-center gap-3">
         <Link
           href="/"
-          className="inline-flex items-center justify-center min-h-[44px] px-5 rounded bg-bronze text-ground font-mono text-[11px] uppercase tracking-wider hover:bg-bronze-hover"
+          className="inline-flex items-center justify-center min-h-[44px] px-5 rounded-lg bg-bronze text-ground font-mono text-eyebrow uppercase tracking-wider hover:bg-bronze-hover"
         >
           Go to today
         </Link>
         <Link
           href="/programs"
-          className="inline-flex items-center min-h-[44px] font-mono text-[11px] uppercase tracking-wider text-bronze hover:text-bronze-hover"
+          className="inline-flex items-center min-h-[44px] font-mono text-eyebrow uppercase tracking-wider text-bronze hover:text-bronze-hover"
         >
           Browse programs →
         </Link>

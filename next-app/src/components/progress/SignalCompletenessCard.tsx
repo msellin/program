@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { Eye, Plus, ChevronDown, ChevronUp } from "lucide-react";
 import type { Program } from "@/lib/schemas";
+import { cardClass } from "@/components/ui/Card";
+import { cn } from "@/lib/utils";
 
 /**
  * Progress rebuild 2026-08-18 — SignalCompletenessCard now supports an
@@ -46,14 +48,14 @@ export function SignalCompletenessCard({
     <div className="space-y-4">
       <div className="space-y-2">
         {inline ? null : (
-          <p className="font-mono text-[10px] uppercase tracking-widest text-muted flex items-center gap-1.5">
+          <p className="font-mono text-eyebrow uppercase tracking-widest text-muted flex items-center gap-1.5">
             <Eye size={12} aria-hidden="true" />
             The engine sees
           </p>
         )}
         <ul className="space-y-1.5 pl-1">
           {reads.map((r) => (
-            <li key={r.label} className="text-[14px] leading-snug">
+            <li key={r.label} className="text-small leading-snug">
               <span className="text-ink">{r.label}</span>
               {r.detail ? <span className="text-muted"> — {r.detail}</span> : null}
             </li>
@@ -63,23 +65,23 @@ export function SignalCompletenessCard({
 
       {hasGaps ? (
         <div className="space-y-2">
-          <p className="font-mono text-[10px] uppercase tracking-widest text-muted flex items-center gap-1.5">
+          <p className="font-mono text-eyebrow uppercase tracking-widest text-muted flex items-center gap-1.5">
             <Plus size={12} aria-hidden="true" />
             To sharpen more, add:
           </p>
           <ul className="space-y-3 pl-1">
             {wouldUse.map((w) => (
               <li key={w.label} className="space-y-1">
-                <p className="text-[14px] font-semibold text-strong">{w.label}</p>
-                <p className="text-[12px] text-muted leading-snug">
+                <p className="text-small font-semibold text-strong">{w.label}</p>
+                <p className="text-caption text-muted leading-snug">
                   {w.why_it_matters}
                 </p>
-                <p className="text-[12px] text-ink leading-snug">
+                <p className="text-caption text-ink leading-snug">
                   <span className="text-muted">Log it: </span>
                   {w.user_action_free}
                 </p>
                 {w.user_action_paid ? (
-                  <p className="text-[12px] text-slate leading-snug">
+                  <p className="text-caption text-slate leading-snug">
                     <span className="text-muted">Or auto: </span>
                     {w.user_action_paid}
                   </p>
@@ -99,7 +101,7 @@ export function SignalCompletenessCard({
   return (
     <section
       aria-labelledby="signal-completeness-title"
-      className="rounded border border-line bg-surface p-4 space-y-3"
+      className={cn(cardClass(), "space-y-3")}
     >
       <button
         type="button"
@@ -108,7 +110,7 @@ export function SignalCompletenessCard({
         className="w-full flex items-start justify-between gap-3 text-left"
       >
         <div className="min-w-0 flex-1">
-          <p className="font-mono text-[10px] uppercase tracking-widest text-muted">
+          <p className="font-mono text-eyebrow uppercase tracking-widest text-muted">
             What the engine reads
           </p>
           {/* P1-57 (Batch 26) — demoted from h3 → h2. Progress page had
@@ -116,13 +118,13 @@ export function SignalCompletenessCard({
               no visual effect. */}
           <h2
             id="signal-completeness-title"
-            className="text-[15px] font-semibold text-strong mt-0.5"
+            className="text-body font-semibold text-strong mt-0.5"
           >
             {hasGaps
               ? `${reads.length} signals active · ${wouldUse.length} could be added`
               : `${reads.length} signals active — at engine ceiling for this program`}
           </h2>
-          <p className="text-[12px] text-muted mt-1">
+          <p className="text-caption text-muted mt-1">
             {hasGaps
               ? "Adding any of the below sharpens what the engine can propose."
               : "This program uses everything the engine can consume. Nothing to add here."}

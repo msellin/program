@@ -75,10 +75,10 @@ export function OverflowSheet({
   return (
     <>
       <BottomSheet surface="OverflowSheet" titleId="overflow-title" onClose={onClose}>
-        <p id="overflow-title" className="text-[16px] font-semibold text-strong mb-3.5 tracking-[-.015em]">
+        <p id="overflow-title" className="text-body font-semibold text-strong mb-3.5 tracking-[-.015em]">
           {exercise.name}
         </p>
-        <div className="flex flex-col gap-px bg-line-soft border border-line-soft rounded-[9px] overflow-hidden mb-3.5">
+        <div className="flex flex-col gap-px bg-line-soft border border-line-soft rounded-lg overflow-hidden mb-3.5">
           <Row label="Add a set" hint={`${active.rowCount + 1}th at prescription`} onClick={onAddSet} />
           {active.rowCount > 1 ? (
             <Row
@@ -118,7 +118,7 @@ export function OverflowSheet({
         <button
           type="button"
           onClick={onClose}
-          className="w-full h-[52px] rounded-[10px] border border-line-strong text-ink text-[15px]"
+          className="w-full h-[52px] rounded-lg border border-line-strong text-ink text-body"
         >
           Close
         </button>
@@ -159,8 +159,8 @@ function Row({
       onClick={onClick}
       className="flex items-center justify-between gap-3 w-full text-left border-none bg-surface-2 px-3.5 py-[15px]"
     >
-      <span className="text-[15px] font-medium text-strong">{label}</span>
-      <span className="font-mono text-[11px] text-muted">{hint}</span>
+      <span className="text-body font-medium text-strong">{label}</span>
+      <span className="font-mono text-eyebrow text-muted">{hint}</span>
     </button>
   );
 }

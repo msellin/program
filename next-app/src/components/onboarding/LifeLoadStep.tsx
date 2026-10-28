@@ -29,10 +29,10 @@ export function LifeLoadStep({ step, onWritten }: { step: LifeLoadStepPayload; o
 
   return (
     <div className="space-y-4 text-center">
-      <h2 id="onboarding-title" className="text-2xl font-semibold text-strong tracking-tight">
+      <h2 id="onboarding-title" className="text-h2 text-strong tracking-tight">
         {step.title}
       </h2>
-      <p className="text-[14px] text-muted whitespace-pre-line">{step.body_md}</p>
+      <p className="text-small text-muted whitespace-pre-line">{step.body_md}</p>
       <div className="grid grid-cols-6 gap-1.5">
         {Array.from({ length: 11 }).map((_, n) => {
           const isActive = value === n;
@@ -45,12 +45,12 @@ export function LifeLoadStep({ step, onWritten }: { step: LifeLoadStepPayload; o
               aria-pressed={isActive}
               className={
                 isActive
-                  ? "aspect-square rounded font-mono text-base font-semibold bg-bronze text-ground"
+                  ? "aspect-square rounded-lg font-mono text-body font-semibold bg-bronze text-ground"
                   : n >= 7
-                    ? "aspect-square rounded font-mono text-base font-semibold border border-red/40 text-red hover:bg-red/10"
+                    ? "aspect-square rounded-lg font-mono text-body font-semibold border border-red/40 text-red hover:bg-red/10"
                     : n >= 4
-                      ? "aspect-square rounded font-mono text-base font-semibold border border-amber/40 text-amber hover:bg-amber/10"
-                      : "aspect-square rounded font-mono text-base font-semibold border border-line text-muted hover:bg-surface-2 hover:text-ink"
+                      ? "aspect-square rounded-lg font-mono text-body font-semibold border border-amber/40 text-amber hover:bg-amber/10"
+                      : "aspect-square rounded-lg font-mono text-body font-semibold border border-line text-muted hover:bg-surface-2 hover:text-ink"
               }
             >
               {n === 0 ? "—" : n}

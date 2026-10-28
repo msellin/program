@@ -19,7 +19,7 @@ export function FirstSessionOfferCard({ slug }: { slug: string }) {
     <button
       type="button"
       onClick={() => moveWholeDay(offer.fromDate, today, FIRST_SESSION_MOVE_REASON)}
-      className="w-full min-h-[52px] rounded-lg bg-bronze text-ground font-semibold text-[15px] hover:bg-bronze-hover active:bg-bronze-active focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-strong"
+      className="w-full min-h-[52px] rounded-lg bg-bronze text-ground font-semibold text-body hover:bg-bronze-hover active:bg-bronze-active focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-strong"
     >
       Start your first session now
     </button>

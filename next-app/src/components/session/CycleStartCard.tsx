@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { cardClass } from "@/components/ui/Card";
 import { useProposalActions } from "@/lib/proposals/useProposalActions";
 import { useStore } from "@/lib/useStore";
 import { humanizeExerciseId } from "@/lib/humanize-metrics";
@@ -36,14 +37,14 @@ export function CycleStartCard({
   const effectiveNewTM = (liftExId: string, fallback: number) => overrides[liftExId] ?? fallback;
 
   return (
-    <div className="rounded border border-slate bg-[rgba(121,184,196,.08)] px-[15px] py-[14px]">
-      <p className="font-mono text-[10px] uppercase tracking-[.16em] text-slate mb-[9px]">
+    <div className={cardClass()}>
+      <p className="font-mono text-eyebrow uppercase tracking-[.16em] text-slate mb-[9px]">
         New numbers — your training max goes up
       </p>
       <div className="flex flex-col gap-[9px] mb-[14px]">
         {bump.lifts.map((l) => (
           <div key={l.exerciseId} className="flex items-baseline justify-between gap-3">
-            <span className="text-[14.5px] text-ink">{humanizeExerciseId(l.exerciseId)}</span>
+            <span className="text-small text-ink">{humanizeExerciseId(l.exerciseId)}</span>
             {adjusting ? (
               <span className="flex items-center gap-1.5">
                 <button
@@ -54,11 +55,11 @@ export function CycleStartCard({
                       [l.exerciseId]: round(effectiveNewTM(l.exerciseId, l.newTM) - 2.5),
                     }))
                   }
-                  className="w-8 h-8 rounded border border-line-strong bg-surface-2 text-strong text-[16px]"
+                  className="w-8 h-8 rounded-lg border border-line-strong bg-surface-2 text-strong text-body"
                 >
                   −
                 </button>
-                <span className="font-mono text-[14px] text-strong w-14 text-center">
+                <span className="font-mono text-small text-strong w-14 text-center">
                   {effectiveNewTM(l.exerciseId, l.newTM)} kg
                 </span>
                 <button
@@ -69,21 +70,21 @@ export function CycleStartCard({
                       [l.exerciseId]: round(effectiveNewTM(l.exerciseId, l.newTM) + 2.5),
                     }))
                   }
-                  className="w-8 h-8 rounded border border-line-strong bg-surface-2 text-strong text-[16px]"
+                  className="w-8 h-8 rounded-lg border border-line-strong bg-surface-2 text-strong text-body"
                 >
                   +
                 </button>
               </span>
             ) : (
-              <span className="text-[15px] font-semibold text-strong">
+              <span className="text-body font-semibold text-strong">
                 {l.currentTM} → <span className="text-green">{l.newTM}</span>{" "}
-                <span className="text-[12.5px] font-medium text-muted">kg</span>
+                <span className="text-caption font-medium text-muted">kg</span>
               </span>
             )}
           </div>
         ))}
       </div>
-      <p className="text-[13px] leading-snug text-ink mb-[13px]">{bump.reason}</p>
+      <p className="text-caption leading-snug text-ink mb-[13px]">{bump.reason}</p>
       <div className="flex gap-2">
         <button
           type="button"
@@ -97,14 +98,14 @@ export function CycleStartCard({
               for (const l of bump.lifts) setTM(l.exerciseId, effectiveNewTM(l.exerciseId, l.newTM), "cycle");
             }
           }}
-          className="flex-1 h-[52px] rounded-[9px] bg-slate text-ground text-[15.5px] font-semibold"
+          className="flex-1 h-[52px] rounded-lg bg-slate text-ground text-body font-semibold"
         >
           Use these
         </button>
         <button
           type="button"
           onClick={() => setAdjusting((v) => !v)}
-          className="w-28 h-[52px] rounded-[9px] border border-line-strong text-ink text-[15px]"
+          className="w-28 h-[52px] rounded-lg border border-line-strong text-ink text-body"
         >
           {adjusting ? "Done" : "Adjust"}
         </button>

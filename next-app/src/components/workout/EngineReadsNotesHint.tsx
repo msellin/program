@@ -26,7 +26,7 @@ export function EngineReadsNotesHint({
         ? "long, hard, easy, felt smooth"
         : "felt strong, no sleep, wrecked";
   return (
-    <p className="text-[11px] text-muted mt-1 leading-snug">
+    <p className="text-eyebrow text-muted mt-1 leading-snug">
       The engine reads these. Keywords like{" "}
       <em className="not-italic text-ink">{examples}</em> feed today&apos;s proposal.
     </p>

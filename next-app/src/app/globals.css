@@ -90,7 +90,7 @@ body {
  */
 .mono-caps {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--text-caption);
   line-height: 1.15;
   letter-spacing: 0.005em;
   font-weight: 500;

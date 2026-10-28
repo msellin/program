@@ -76,7 +76,7 @@ const TONE_STYLES: Record<StatusPillTone, { border: string; bg: string; text: st
 
 const BASE_CLASSES =
   "inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 " +
-  "font-mono text-[10px] font-medium uppercase tracking-widest whitespace-nowrap";
+  "font-mono text-eyebrow font-medium uppercase tracking-widest whitespace-nowrap";
 
 export const StatusPill = forwardRef<HTMLElement, StatusPillProps>(function StatusPill(
   { label, tone, dot = true, interactive = false, ariaRole, ariaLive, onClick, className },

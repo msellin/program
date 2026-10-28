@@ -60,24 +60,24 @@ export function NoteSheet({
   if (offerStop) {
     return (
       <BottomSheet surface="NoteSheet" titleId="note-stop-title" onClose={onClose}>
-        <p id="note-stop-title" className="text-[16px] font-semibold text-strong mb-1 tracking-[-.015em]">
+        <p id="note-stop-title" className="text-body font-semibold text-strong mb-1 tracking-[-.015em]">
           Stop the session?
         </p>
-        <p className="text-[13.5px] leading-snug text-ink mb-[14px]">
+        <p className="text-small leading-snug text-ink mb-[14px]">
           Any sharp pain during skill work — end the block, take rest. Non-negotiable.
         </p>
         <div className="flex gap-2">
           <button
             type="button"
             onClick={onStopSession}
-            className="flex-1 h-[54px] rounded-[10px] bg-amber text-ground text-[16px] font-semibold"
+            className="flex-1 h-[54px] rounded-lg bg-amber text-ground text-body font-semibold"
           >
             Stop session
           </button>
           <button
             type="button"
             onClick={onClose}
-            className="w-24 h-[54px] rounded-[10px] border border-line-strong text-ink text-[15px]"
+            className="w-24 h-[54px] rounded-lg border border-line-strong text-ink text-body"
           >
             Continue
           </button>
@@ -88,10 +88,10 @@ export function NoteSheet({
 
   return (
     <BottomSheet surface="NoteSheet" titleId="note-title" onClose={onClose}>
-      <p id="note-title" className="text-[16px] font-semibold text-strong mb-1 tracking-[-.015em]">
+      <p id="note-title" className="text-body font-semibold text-strong mb-1 tracking-[-.015em]">
         Anything worth knowing?
       </p>
-      <p className="text-[13.5px] leading-snug text-ink mb-3.5">
+      <p className="text-small leading-snug text-ink mb-3.5">
         The engine reads this when it plans next week.
       </p>
       <div className="flex flex-wrap gap-2 mb-3">
@@ -103,7 +103,7 @@ export function NoteSheet({
               type="button"
               onClick={() => toggle(chip)}
               className={
-                "rounded-full px-[15px] py-[11px] text-[14px] font-medium border " +
+                "rounded-full px-[15px] py-[11px] text-small font-medium border " +
                 (isOn
                   ? "border-bronze bg-[rgba(200,150,102,.14)] text-strong"
                   : "border-line-strong bg-surface-2 text-ink")
@@ -119,20 +119,20 @@ export function NoteSheet({
         value={detail}
         onChange={(e) => setDetail(e.target.value)}
         placeholder="Add a detail — optional"
-        className="w-full bg-surface-2 border border-line-strong rounded-[9px] text-strong text-[14.5px] p-3 resize-none outline-none mb-3.5"
+        className="w-full bg-surface-2 border border-line-strong rounded-lg text-strong text-small p-3 resize-none outline-none mb-3.5"
       />
       <div className="flex gap-2">
         <button
           type="button"
           onClick={save}
-          className="flex-1 h-[54px] rounded-[10px] bg-bronze text-ground text-[16px] font-semibold"
+          className="flex-1 h-[54px] rounded-lg bg-bronze text-ground text-body font-semibold"
         >
           Save to {active.exercise.name}
         </button>
         <button
           type="button"
           onClick={onClose}
-          className="w-24 h-[54px] rounded-[10px] border border-line-strong text-ink text-[15px]"
+          className="w-24 h-[54px] rounded-lg border border-line-strong text-ink text-body"
         >
           Not now
         </button>

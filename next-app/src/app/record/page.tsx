@@ -39,12 +39,13 @@ import { downloadRecordExport } from "@/lib/engine/record-export";
 import dynamic from "next/dynamic";
 import type { Program, Exercise } from "@/lib/schemas";
 import { Button } from "@/components/ui/Button";
+import { cardClass } from "@/components/ui/Card";
 
 // Recharts is ~112KB gz. Already lazy for SymptomLoadChart; adding the
 // Record surface's rolling-avg curve later reuses the same lazy chunk.
 const SymptomLoadChart = dynamic(
   () => import("@/components/charts/SymptomLoadChart").then((m) => ({ default: m.SymptomLoadChart })),
-  { ssr: false, loading: () => <div className="h-[220px] text-[12px] text-muted italic">Loading chart…</div> },
+  { ssr: false, loading: () => <div className="h-[220px] text-caption text-muted italic">Loading chart…</div> },
 );
 
 /**
@@ -56,14 +57,12 @@ function SectionAnchor({ label }: { label: string }) {
     <div className="flex items-center gap-2 mb-3">
       <span
         aria-hidden
-        className="h-px flex-none w-5"
-        style={{ background: "linear-gradient(to left, var(--color-line-soft), transparent)" }}
+        className="h-px flex-none w-5 bg-gradient-to-l from-line-soft to-transparent"
       />
-      <span className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted">{label}</span>
+      <span className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted">{label}</span>
       <span
         aria-hidden
-        className="h-px flex-1"
-        style={{ background: "linear-gradient(to right, var(--color-line-soft), transparent)" }}
+        className="h-px flex-1 bg-gradient-to-r from-line-soft to-transparent"
       />
     </div>
   );
@@ -107,7 +106,7 @@ export default function RecordPage() {
   }, [primarySlug]);
 
   if (error) return <ErrorBox msg={error} />;
-  if (!hydrated) return <div className="mt-8 text-sm text-muted">Loading…</div>;
+  if (!hydrated) return <div className="mt-8 text-small text-muted">Loading…</div>;
   if (!primarySlug) {
     return (
       <EmptyStateCard
@@ -117,7 +116,7 @@ export default function RecordPage() {
       />
     );
   }
-  if (!program) return <div className="mt-8 text-sm text-muted">Loading…</div>;
+  if (!program) return <div className="mt-8 text-small text-muted">Loading…</div>;
 
   // 12-week readiness heatmap cells — same primitive Cut C mockup uses.
   // Sources from store.logs derived_state per day.
@@ -130,7 +129,7 @@ export default function RecordPage() {
       {/* Header — H1 + Export button. Phase 3 wired: JSON export downloads
           a citation-attributed payload per R-CutC-2. */}
       <header className="flex items-baseline justify-between gap-3">
-        <h1 className="text-[32px] font-semibold tracking-[-0.03em] text-strong leading-none">Record</h1>
+        <h1 className="text-h1 tracking-[-0.03em] text-strong leading-none">Record</h1>
         <Button
           variant="tertiary"
           onClick={() => downloadRecordExport(store)}
@@ -143,7 +142,7 @@ export default function RecordPage() {
       {/* C5 — one-time onboarding beacon dramatizing the cite-per-adjustment
           differentiator per matrix rec #4. Renders on first /record visit
           only; localStorage-persisted seen state. */}
-      <p className="-mt-4 text-[13px] text-muted">
+      <p className="-mt-4 text-caption text-muted">
         Tap a point to see why it moved. Every change cites a study or a signal from your log.
       </p>
 
@@ -152,13 +151,13 @@ export default function RecordPage() {
         <SectionAnchor label="Now" />
         <span id="record-now" className="sr-only">Now</span>
         <div className="space-y-3">
-          <div className="rounded border border-line-soft bg-surface p-3">
-            <p className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted mb-2">
+          <div className={cardClass()}>
+            <p className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted mb-2">
               Readiness — 12 weeks
             </p>
             {cells.some((c) => c.sessionState !== "none") ? (
               <>
-                <ErrorBoundary fallback={<p className="text-[12px] text-muted italic">Heatmap unavailable.</p>}>
+                <ErrorBoundary fallback={<p className="text-caption text-muted italic">Heatmap unavailable.</p>}>
                   <WeeklyHeatmap
                     cells={cells}
                     ariaLabel="Readiness heatmap over the past 12 weeks."
@@ -166,15 +165,15 @@ export default function RecordPage() {
                 </ErrorBoundary>
               </>
             ) : (
-              <p className="text-[14px] text-muted">Check in a few mornings to see this.</p>
+              <p className="text-small text-muted">Check in a few mornings to see this.</p>
             )}
           </div>
 
-          <ErrorBoundary fallback={<p className="text-[12px] text-muted italic">Weekly narrative unavailable.</p>}>
+          <ErrorBoundary fallback={<p className="text-caption text-muted italic">Weekly narrative unavailable.</p>}>
             <WeeklyNarrativeTile program={program} />
           </ErrorBoundary>
 
-          <ErrorBoundary fallback={<p className="text-[12px] text-muted italic">Latest retest unavailable.</p>}>
+          <ErrorBoundary fallback={<p className="text-caption text-muted italic">Latest retest unavailable.</p>}>
             <CutCLatestRetestTile program={program} store={store} />
           </ErrorBoundary>
         </div>
@@ -185,13 +184,13 @@ export default function RecordPage() {
         <SectionAnchor label="Trend" />
         <span id="record-trend" className="sr-only">Trend</span>
         <div className="space-y-3">
-          <ErrorBoundary fallback={<p className="text-[12px] text-muted italic">Zoom control unavailable.</p>}>
+          <ErrorBoundary fallback={<p className="text-caption text-muted italic">Zoom control unavailable.</p>}>
             <CutCWindowTierControl dataDays={dataDays} onChange={setZoomTier} />
           </ErrorBoundary>
-          <ErrorBoundary fallback={<p className="text-[12px] text-muted italic">Trend curve unavailable.</p>}>
+          <ErrorBoundary fallback={<p className="text-caption text-muted italic">Trend curve unavailable.</p>}>
             <CutCProgramCurveCard program={program} store={store} zoomTier={zoomTier} />
           </ErrorBoundary>
-          <ErrorBoundary fallback={<p className="text-[12px] text-muted italic">Retest timeline unavailable.</p>}>
+          <ErrorBoundary fallback={<p className="text-caption text-muted italic">Retest timeline unavailable.</p>}>
             <CutCRetestTimeline program={program} store={store} />
           </ErrorBoundary>
 
@@ -200,13 +199,13 @@ export default function RecordPage() {
               recommendation #11 (category vacancy) — no peer does this. */}
           {hasRehabTrack ? (
             <div className="space-y-3">
-              <p className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted pt-2">
+              <p className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted pt-2">
                 Rehab
               </p>
-              <ErrorBoundary fallback={<p className="text-[12px] text-muted italic">Hip tile unavailable.</p>}>
+              <ErrorBoundary fallback={<p className="text-caption text-muted italic">Hip tile unavailable.</p>}>
                 <HipProgressTile />
               </ErrorBoundary>
-              <ErrorBoundary fallback={<p className="text-[12px] text-muted italic">Symptom chart unavailable.</p>}>
+              <ErrorBoundary fallback={<p className="text-caption text-muted italic">Symptom chart unavailable.</p>}>
                 <SymptomLoadChart days={Object.values(store.logs ?? {})} program={program} />
               </ErrorBoundary>
             </div>
@@ -219,10 +218,10 @@ export default function RecordPage() {
         <SectionAnchor label="Log" />
         <span id="record-log" className="sr-only">Log</span>
         <div className="space-y-3">
-          <ErrorBoundary fallback={<p className="text-[12px] text-muted italic">Activity heatmap unavailable.</p>}>
+          <ErrorBoundary fallback={<p className="text-caption text-muted italic">Activity heatmap unavailable.</p>}>
             <CutCActivityHeatmap store={store} />
           </ErrorBoundary>
-          <ErrorBoundary fallback={<p className="text-[12px] text-muted italic">Log unavailable.</p>}>
+          <ErrorBoundary fallback={<p className="text-caption text-muted italic">Log unavailable.</p>}>
             <CutCLogList store={store} />
           </ErrorBoundary>
         </div>
@@ -234,14 +233,14 @@ export default function RecordPage() {
           inbound channel"). Ships as mailto until real analytics + inbox
           infra decision. Founder-durable email per user_founder-email
           memory. */}
-      <footer className="pt-6 border-t border-line-soft flex items-center justify-between gap-3 text-[12px] text-muted">
+      <footer className="pt-6 border-t border-line-soft flex items-center justify-between gap-3 text-caption text-muted">
         {/* "Cut C" is the internal name of the redesign that produced this
             surface, not something a user should ever read. Caught by the
             2026-09-01 copy audit. */}
         <span>Terav — Record</span>
         <a
           href="mailto:sellinmargus@gmail.com?subject=Terav%20feedback"
-          className="inline-flex items-center gap-1 font-mono text-[11px] uppercase tracking-widest text-slate hover:text-ink motion-reduce:transition-none transition-colors min-h-[44px] py-2"
+          className="inline-flex items-center gap-1 font-mono text-eyebrow uppercase tracking-widest text-slate hover:text-ink motion-reduce:transition-none transition-colors min-h-[44px] py-2"
           aria-label="Send feedback to Terav founder"
         >
           Feedback? →
@@ -253,7 +252,7 @@ export default function RecordPage() {
 
 function ErrorBox({ msg }: { msg: string }) {
   return (
-    <div className="rounded border border-red/40 bg-red/10 p-3 text-[14px] text-red">
+    <div className="rounded-lg border border-red/40 bg-red/10 p-3 text-small text-red">
       Failed to load record: {msg}
     </div>
   );

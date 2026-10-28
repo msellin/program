@@ -9,6 +9,7 @@ import { useStore } from "@/lib/useStore";
 import { EngineReadsNotesHint } from "@/components/workout/EngineReadsNotesHint";
 import { today as todayISO } from "@/lib/utils";
 import { VideoModal } from "@/components/VideoModal";
+import { Card } from "@/components/ui/Card";
 
 /**
  * Guided flow through a fixed pack of self-tests. Deliberately linear —
@@ -47,11 +48,11 @@ export default function HipCheckPage() {
   if (submitted) {
     return (
       <div className="mt-8 space-y-4">
-        <div className="rounded border border-green/40 bg-green/10 p-4">
-          <p className="font-mono text-[10px] uppercase tracking-widest text-green mb-1">
+        <div className="rounded-lg border border-green/40 bg-green/10 p-4">
+          <p className="font-mono text-eyebrow uppercase tracking-widest text-green mb-1">
             Logged
           </p>
-          <p className="text-[14px] text-ink">
+          <p className="text-small text-ink">
             Your hip check is saved. You&apos;ll see the trend on the Progress page. Next check
             is scheduled in {pack.cadence_days} days.
           </p>
@@ -59,13 +60,13 @@ export default function HipCheckPage() {
         <div className="flex gap-2">
           <Link
             href="/progress"
-            className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line hover:bg-line-soft"
+            className="font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line hover:bg-line-soft"
           >
             View progress
           </Link>
           <Link
             href="/"
-            className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground"
+            className="font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-bronze text-ground"
           >
             Back to today
           </Link>
@@ -78,9 +79,9 @@ export default function HipCheckPage() {
     <div className="mt-4 space-y-5">
       <header className="space-y-1">
         <p className="mono-caps">Hip check</p>
-        <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">{pack.name}</h1>
+        <h1 className="text-h1 tracking-tight text-strong leading-none">{pack.name}</h1>
         {!isIntro && !isReview ? (
-          <p className="text-[12px] text-muted">
+          <p className="text-caption text-muted">
             Step {stepIdx + 1} of {totalSteps}
           </p>
         ) : null}
@@ -121,7 +122,7 @@ export default function HipCheckPage() {
           <button
             type="button"
             onClick={() => setStepIdx(stepIdx - 1)}
-            className="font-mono text-[11px] uppercase tracking-wider inline-flex items-center gap-1 px-3 py-2 rounded border border-line hover:bg-line-soft"
+            className="font-mono text-eyebrow uppercase tracking-wider inline-flex items-center gap-1 px-3 py-2 rounded-lg border border-line hover:bg-line-soft"
           >
             <ChevronLeft size={14} />
             Back
@@ -131,7 +132,7 @@ export default function HipCheckPage() {
               type="button"
               onClick={() => setStepIdx(stepIdx + 1)}
               disabled={current ? scores[current.key] == null : false}
-              className="font-mono text-[11px] uppercase tracking-wider inline-flex items-center gap-1 px-3 py-2 rounded bg-bronze text-ground disabled:opacity-40 disabled:cursor-not-allowed"
+              className="font-mono text-eyebrow uppercase tracking-wider inline-flex items-center gap-1 px-3 py-2 rounded-lg bg-bronze text-ground disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {stepIdx === totalSteps - 1 ? "Review" : "Next"}
               <ChevronRight size={14} />
@@ -171,15 +172,15 @@ function IntroPanel({
 }) {
   return (
     <div className="space-y-4">
-      <p className="text-[14px] text-ink leading-relaxed">{pack.intro}</p>
-      <div className="rounded border border-amber/40 border-l-4 border-l-amber bg-amber/10 p-3 text-[14px]">
+      <p className="text-small text-ink leading-relaxed">{pack.intro}</p>
+      <Card status="amber" className="text-small">
         <p className="font-semibold text-strong mb-1">Ground rules</p>
         <p>{pack.safety}</p>
-      </div>
+      </Card>
       <button
         type="button"
         onClick={onStart}
-        className="font-mono text-[12px] uppercase tracking-wider px-4 py-3 rounded bg-bronze text-ground hover:bg-bronze/90"
+        className="font-mono text-caption uppercase tracking-wider px-4 py-3 rounded-lg bg-bronze text-ground hover:bg-bronze/90"
       >
         Start check ({pack.questions.length} items)
       </button>
@@ -205,10 +206,10 @@ function QuestionPanel({
         {sideLabel ? (
           <p className="mono-caps text-slate mb-1">{sideLabel}</p>
         ) : null}
-        <h2 className="text-[17px] font-semibold text-strong leading-snug">{q.label}</h2>
+        <h2 className="text-h3 text-strong leading-snug">{q.label}</h2>
       </div>
 
-      <div className="rounded border border-line-soft bg-surface p-3 text-sm leading-relaxed space-y-2">
+      <Card className="text-small leading-relaxed space-y-2">
         <div>
           <p className="mono-caps text-muted mb-1">How to do it</p>
           <p>{q.method}</p>
@@ -220,7 +221,7 @@ function QuestionPanel({
         {q.video_url ? (
           <div className="mt-2">
             <p className="mono-caps text-muted mb-1">Demo</p>
-            <div className="aspect-video w-full rounded overflow-hidden bg-black">
+            <div className="aspect-video w-full rounded-lg overflow-hidden bg-black">
               <iframe
                 src={youTubeEmbed(q.video_url)}
                 title={`${q.label} — demo`}
@@ -234,12 +235,12 @@ function QuestionPanel({
           <button
             type="button"
             onClick={() => setVideoOpen(true)}
-            className="inline-block text-[14px] text-slate border-b border-slate"
+            className="inline-block text-small text-slate border-b border-slate"
           >
             Watch a demo →
           </button>
         ) : null}
-      </div>
+      </Card>
 
       <ScoreSlider value={value} onValue={onValue} scale={q.scale} label={q.label} />
 
@@ -290,9 +291,9 @@ function ScoreSlider({
   const active = value != null;
   return (
     <div className="space-y-2">
-      <div className="flex items-center justify-between text-[11px] font-mono uppercase tracking-wider text-muted">
+      <div className="flex items-center justify-between text-eyebrow font-mono uppercase tracking-wider text-muted">
         <span>{scale.low_label} · 0</span>
-        <span className="text-[20px] font-mono text-strong tabular-nums">
+        <span className="text-h2 font-mono text-strong tabular-nums">
           {active ? value : "—"}
         </span>
         <span>10 · {scale.high_label}</span>
@@ -310,7 +311,7 @@ function ScoreSlider({
               type="button"
               onClick={() => onValue(i)}
               className={
-                "h-11 rounded font-mono text-[14px] tabular-nums " +
+                "h-11 rounded-lg font-mono text-small tabular-nums " +
                 (selected
                   ? "bg-bronze text-ground"
                   : "bg-line-soft text-muted hover:bg-line hover:text-ink")
@@ -352,35 +353,35 @@ function ReviewPanel({
   const anyMissing = missingKeys.length > 0;
   return (
     <div className="space-y-4">
-      <h2 className="text-[17px] font-semibold text-strong">Review your scores</h2>
+      <h2 className="text-h3 text-strong">Review your scores</h2>
       <ul className="space-y-2">
         {pack.questions.map((q) => (
-          <li key={q.id} className="rounded border border-line-soft bg-surface p-3">
+          <Card as="li" key={q.id}>
             <button
               type="button"
               onClick={() => onJumpTo(q.id)}
               className="w-full text-left"
             >
-              <p className="font-semibold text-strong text-[14px]">{q.label}</p>
+              <p className="font-semibold text-strong text-small">{q.label}</p>
               {q.paired === "left_right" ? (
-                <div className="flex gap-4 mt-1 font-mono text-[14px]">
+                <div className="flex gap-4 mt-1 font-mono text-small">
                   <span>L: <strong>{scores[`${q.id}:left`] ?? "—"}</strong></span>
                   <span>R: <strong>{scores[`${q.id}:right`] ?? "—"}</strong></span>
                 </div>
               ) : (
-                <p className="mt-1 font-mono text-[14px]">
+                <p className="mt-1 font-mono text-small">
                   Score: <strong>{scores[q.id] ?? "—"}</strong>
                 </p>
               )}
             </button>
-          </li>
+          </Card>
         ))}
       </ul>
 
       <div>
         <label
           htmlFor="hip-check-notes"
-          className="block font-mono text-[10px] uppercase tracking-widest text-muted mb-1"
+          className="block font-mono text-eyebrow uppercase tracking-widest text-muted mb-1"
         >
           Notes (optional)
         </label>
@@ -390,13 +391,13 @@ function ReviewPanel({
           placeholder="Anything unusual? Skipped a test? Note it here."
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
-          className="block w-full max-w-full text-sm px-2 py-1.5 border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate resize-y min-h-[44px] break-words [overflow-wrap:anywhere] whitespace-pre-wrap"
+          className="block w-full max-w-full text-small px-2 py-1.5 border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate resize-y min-h-[44px] break-words [overflow-wrap:anywhere] whitespace-pre-wrap"
         />
         <EngineReadsNotesHint variant="check" />
       </div>
 
       {anyMissing ? (
-        <p className="text-[14px] text-amber">
+        <p className="text-small text-amber">
           {missingKeys.length} unanswered item{missingKeys.length === 1 ? "" : "s"} — tap them
           above to fill in, or submit anyway if you skipped intentionally.
         </p>
@@ -405,7 +406,7 @@ function ReviewPanel({
       <button
         type="button"
         onClick={onSubmit}
-        className="font-mono text-[12px] uppercase tracking-wider inline-flex items-center gap-1 px-4 py-3 rounded bg-bronze text-ground hover:bg-bronze/90"
+        className="font-mono text-caption uppercase tracking-wider inline-flex items-center gap-1 px-4 py-3 rounded-lg bg-bronze text-ground hover:bg-bronze/90"
       >
         <Check size={14} />
         Log this hip check

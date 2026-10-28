@@ -1,11 +1,13 @@
+import { cardClass } from "@/components/ui/Card";
+
 export default function GuidePage() {
   return (
     <div className="space-y-6 pt-4">
       <header>
         {/* Batch 36 · H1 sized per v1.1.1 §1 h1-display (32px) — top-level
-            authenticated routes carry the display H1. Was text-2xl (24px). */}
-        <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">Guide</h1>
-        <p className="mt-2 text-[14px] text-muted">Everything the app assumes you know, in one place.</p>
+            authenticated routes carry the display H1. Was text-h1 (24px). */}
+        <h1 className="text-h1 tracking-tight text-strong leading-none">Guide</h1>
+        <p className="mt-2 text-small text-muted">Everything the app assumes you know, in one place.</p>
       </header>
 
       <Section title="How Terav plans training">
@@ -82,7 +84,7 @@ export default function GuidePage() {
         <Term term="Effort (0–10) — how many reps were left">
           How hard the set felt = how many reps you had left in the tank.
           <br /><br />
-          <span className="font-mono text-[12px] text-muted">
+          <span className="font-mono text-caption text-muted">
             10 = failure · 9 = one rep left · 8 = two left · 7 = three · 6 = four · 5 = half-effort
           </span>
           <br /><br />
@@ -113,7 +115,7 @@ export default function GuidePage() {
           and day 400 — the zoom control up top adjusts the window.
         </Row>
         <Row label="Profile">Signed-in identity, active plan(s), and a compact menu.</Row>
-        <p className="text-[14px] text-muted italic pt-2">
+        <p className="text-small text-muted italic pt-2">
           These are the bottom-nav tabs. The rest live under Profile:
         </p>
         <Row label="Programs">The catalog. Browse, preview, start a program.</Row>
@@ -143,7 +145,7 @@ export default function GuidePage() {
 
       <section id="red-flags" style={{ scrollMarginTop: "80px" }} />
       <Section title="Red flags — stop the app, call a clinician">
-        <ul className="list-disc pl-5 space-y-1 text-[14px]">
+        <ul className="list-disc pl-5 space-y-1 text-small">
           <li>Pain that wakes you at night, or is worse at rest than with movement</li>
           <li>Any pain that shortens your stride or changes how you walk</li>
           <li>Sharp catch, click or lock in a joint under load</li>
@@ -151,7 +153,7 @@ export default function GuidePage() {
           <li>Morning stiffness over 30 min that responds to movement not rest (screen for inflammatory pattern)</li>
           <li>Any injury with a clear mechanism you don&apos;t bounce back from in 72 h</li>
         </ul>
-        <p className="text-[14px] text-muted italic pt-2">
+        <p className="text-small text-muted italic pt-2">
           Programs that already carry a specific clinical context (e.g. the anterior-hip
           case study) apply extra program-specific red flags on top of this general list.
         </p>
@@ -163,8 +165,8 @@ export default function GuidePage() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="space-y-3">
-      <h2 className="font-mono text-[14px] uppercase tracking-widest">{title}</h2>
-      <div className="rounded border border-line bg-surface p-4 space-y-3 text-[14px] leading-relaxed">
+      <h2 className="font-mono text-small uppercase tracking-widest">{title}</h2>
+      <div className={`${cardClass()} space-y-3 text-small leading-relaxed`}>
         {children}
       </div>
     </section>

@@ -35,7 +35,7 @@ export function CitationRef({ id }: { id: string }) {
   if (!citation) return null;
 
   return (
-    <div className="text-[12px] leading-snug">
+    <div className="text-caption leading-snug">
       <button
         type="button"
         onClick={() => setExpanded((v) => !v)}
@@ -56,10 +56,10 @@ export function CitationRef({ id }: { id: string }) {
       {expanded ? (
         <div
           id={panelId}
-          className="mt-1 pl-3 border-l border-line space-y-1 text-[12px] text-muted"
+          className="mt-1 pl-3 border-l border-line space-y-1 text-caption text-muted"
         >
           <p className="text-ink">{citation.title}</p>
-          <p className="font-mono text-[11px]">{citation.display_line}</p>
+          <p className="font-mono text-eyebrow">{citation.display_line}</p>
           {citation.url ? (
             <p>
               <a

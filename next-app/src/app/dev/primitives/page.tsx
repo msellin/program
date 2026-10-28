@@ -28,6 +28,7 @@ import { ProposalCard } from "@/components/ui/ProposalCard";
 import { StickyCta } from "@/components/ui/StickyCta";
 import { Sparkline } from "@/components/charts/Sparkline";
 import { InfoSheet } from "@/components/InfoSheet";
+import { cardClass } from "@/components/ui/Card";
 
 export default function PrimitivesStory() {
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -40,16 +41,16 @@ export default function PrimitivesStory() {
     <div className="min-h-screen bg-ground text-ink pb-24">
       <div className="max-w-[760px] mx-auto px-4 py-6 space-y-10">
         <header className="space-y-1">
-          <p className="font-mono text-[10px] uppercase tracking-widest text-bronze">
+          <p className="font-mono text-eyebrow uppercase tracking-widest text-bronze">
             /dev/primitives
           </p>
-          <h1 className="text-[32px] font-semibold text-strong tracking-[-0.03em] leading-tight">
+          <h1 className="text-h1 text-strong tracking-[-0.03em] leading-tight">
             Terav primitive story
           </h1>
-          <p className="text-[14px] text-muted leading-snug">
+          <p className="text-small text-muted leading-snug">
             v1.1.1 primitives in isolation. Visual-craft QA runs against this route
             before any primitive touches a surface. See{" "}
-            <code className="font-mono text-[12px] text-bronze">
+            <code className="font-mono text-caption text-bronze">
               dev/audits/app/2026-08-20-terav-design-system-v1.1.md
             </code>{" "}
             for the contract.
@@ -68,7 +69,7 @@ export default function PrimitivesStory() {
         </Section>
 
         <Section title="MetricStripCluster · §2.7">
-          <div className="rounded border border-line-soft bg-surface p-3">
+          <div className={cardClass()}>
             <MetricStripCluster
               items={[
                 { label: "Duration", value: "48 min" },
@@ -78,7 +79,7 @@ export default function PrimitivesStory() {
               ariaGroupLabel="Session metrics"
             />
           </div>
-          <div className="rounded border border-line-soft bg-surface p-3">
+          <div className={cardClass()}>
             <MetricStripCluster
               items={[
                 { label: "Baseline", value: "70 kg", tone: "muted" },
@@ -115,7 +116,7 @@ export default function PrimitivesStory() {
         </Section>
 
         <Section title="WeeklySessionStrip · §2.5">
-          <p className="font-mono text-[10px] uppercase tracking-widest text-muted">
+          <p className="font-mono text-eyebrow uppercase tracking-widest text-muted">
             Display variant (Today hero)
           </p>
           <WeeklySessionStrip
@@ -130,7 +131,7 @@ export default function PrimitivesStory() {
               { dayLetter: "S", scheduled: false, completed: false, isToday: false, isRest: true },
             ]}
           />
-          <p className="font-mono text-[10px] uppercase tracking-widest text-muted pt-2">
+          <p className="font-mono text-eyebrow uppercase tracking-widest text-muted pt-2">
             Interactive variant (/week)
           </p>
           <WeeklySessionStrip
@@ -186,7 +187,7 @@ export default function PrimitivesStory() {
         </Section>
 
         <Section title="OutcomeBar · §2.10">
-          <div className="rounded border border-line-soft bg-surface p-3 space-y-4">
+          <div className={`${cardClass()} space-y-4`}>
             <OutcomeBar
               metricName="5RM press"
               baselineValue="70 kg"
@@ -238,7 +239,7 @@ export default function PrimitivesStory() {
           <button
             type="button"
             onClick={() => setSheetOpen(true)}
-            className="font-mono text-[12px] uppercase tracking-wider text-slate underline"
+            className="font-mono text-caption uppercase tracking-wider text-slate underline"
           >
             Open sheet
           </button>
@@ -268,7 +269,7 @@ export default function PrimitivesStory() {
           <button
             type="button"
             onClick={() => setStickyDemo((v) => !v)}
-            className="font-mono text-[12px] uppercase tracking-wider text-slate underline"
+            className="font-mono text-caption uppercase tracking-wider text-slate underline"
           >
             {stickyDemo ? "Hide" : "Show"} sticky CTA demo
           </button>
@@ -277,7 +278,7 @@ export default function PrimitivesStory() {
               <button
                 type="button"
                 onClick={() => setStickyDemo(false)}
-                className="w-full min-h-[44px] rounded-lg bg-bronze text-ground font-semibold text-[14px]"
+                className="w-full min-h-[44px] rounded-lg bg-bronze text-ground font-semibold text-small"
               >
                 Start block ▶
               </button>
@@ -292,7 +293,7 @@ export default function PrimitivesStory() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="space-y-3">
-      <h2 className="text-[15px] font-semibold text-strong border-b border-line-soft pb-2">
+      <h2 className="text-body font-semibold text-strong border-b border-line-soft pb-2">
         {title}
       </h2>
       <div className="space-y-3">{children}</div>

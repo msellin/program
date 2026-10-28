@@ -6,8 +6,8 @@ export const metadata = {
 
 export default function DisclaimerPage() {
   return (
-    <div className="max-w-2xl mx-auto space-y-4 pt-4 text-[14px] leading-relaxed">
-      <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">Medical disclaimer</h1>
+    <div className="max-w-2xl mx-auto space-y-4 pt-4 text-small leading-relaxed">
+      <h1 className="text-h1 tracking-tight text-strong leading-none">Medical disclaimer</h1>
 
       <p>
         Terav is a <strong>training log</strong>. It records what you do, notices patterns
@@ -16,7 +16,7 @@ export default function DisclaimerPage() {
         clinician.
       </p>
 
-      <h2 className="text-lg font-semibold text-strong pt-2">What Terav is</h2>
+      <h2 className="text-h3 text-strong pt-2">What Terav is</h2>
       <ul className="list-disc pl-5 space-y-1">
         <li>A place to record training sessions, morning check-ins, and how the body responds.</li>
         <li>An engine that proposes load adjustments based on your logs — always confirm-first.</li>
@@ -24,7 +24,7 @@ export default function DisclaimerPage() {
         <li>An honest history to bring to your orthopaedist, physiotherapist, or coach.</li>
       </ul>
 
-      <h2 className="text-lg font-semibold text-strong pt-2">What Terav is not</h2>
+      <h2 className="text-h3 text-strong pt-2">What Terav is not</h2>
       <ul className="list-disc pl-5 space-y-1">
         <li>A diagnostic tool. If something hurts, see a clinician.</li>
         <li>A replacement for a physiotherapist, orthopaedist, or coach.</li>
@@ -34,14 +34,14 @@ export default function DisclaimerPage() {
         <li>A guarantee of any specific outcome. Training response is individual.</li>
       </ul>
 
-      <h2 className="text-lg font-semibold text-strong pt-2">Before starting a program</h2>
+      <h2 className="text-h3 text-strong pt-2">Before starting a program</h2>
       <p>
         If you have any of the following, clear it with a clinician before beginning any
         Terav arc: an active injury, chronic pain, a diagnosed condition affecting the
         joints or spine, cardiovascular disease, pregnancy, or a recent surgery.
       </p>
 
-      <h2 className="text-lg font-semibold text-strong pt-2">Red flags — stop and escalate</h2>
+      <h2 className="text-h3 text-strong pt-2">Red flags — stop and escalate</h2>
       <p>
         See a clinician urgently if you experience any of the following, regardless of
         what the app suggests:
@@ -59,7 +59,7 @@ export default function DisclaimerPage() {
         unsure, the safe choice is always to stop, rest, and consult a professional.
       </p>
 
-      <footer className="pt-6 border-t border-line-soft text-[12px] text-muted">
+      <footer className="pt-6 border-t border-line-soft text-caption text-muted">
         <Link href="/sign-up" className="text-slate border-b border-slate">Back</Link>
       </footer>
     </div>

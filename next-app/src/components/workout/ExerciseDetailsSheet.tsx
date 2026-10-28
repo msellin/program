@@ -65,16 +65,16 @@ export function ExerciseDetailsSheet({
       >
         <header className="sticky top-0 flex items-start justify-between gap-3 px-4 py-3 border-b border-line bg-surface">
           <div className="min-w-0">
-            <h3 id={titleId} className="text-[15px] font-semibold text-strong">
+            <h3 id={titleId} className="text-body font-semibold text-strong">
               {exercise.name}
             </h3>
             {/* P1-79 (2026-08-19) — variant subtitle. Renders before the
                 dose/scheme so hierarchy reads: name → variant → dose. */}
             {exercise.variant ? (
-              <p className="text-[12px] text-muted mt-0.5">{exercise.variant}</p>
+              <p className="text-caption text-muted mt-0.5">{exercise.variant}</p>
             ) : null}
             {(dose || scheme) ? (
-              <p className="text-[14px] text-muted mt-0.5 truncate">
+              <p className="text-small text-muted mt-0.5 truncate">
                 {[dose, scheme].filter(Boolean).join(" · ")}
               </p>
             ) : null}
@@ -83,17 +83,17 @@ export function ExerciseDetailsSheet({
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="text-muted hover:text-ink w-11 h-11 -my-2 flex items-center justify-center text-xl leading-none rounded flex-shrink-0"
+            className="text-muted hover:text-ink w-11 h-11 -my-2 flex items-center justify-center text-h2 leading-none rounded-lg flex-shrink-0"
           >
             ×
           </button>
         </header>
 
-        <div className="p-4 space-y-4 text-sm">
+        <div className="p-4 space-y-4 text-small">
           {(exercise.warning || exercise.avoid) ? (
             <section>
-              <p className="text-[12px] text-red mb-1">Warning</p>
-              <div className="border-l-4 border-red bg-red/10 rounded-r px-3 py-2">
+              <p className="text-caption text-red mb-1">Warning</p>
+              <div className="rounded-lg bg-red/10 px-3 py-2">
                 {exercise.warning ?? exercise.avoid}
               </div>
             </section>
@@ -101,21 +101,21 @@ export function ExerciseDetailsSheet({
 
           {tm != null ? (
             <section>
-              <p className="text-[12px] text-muted mb-0.5">Training max</p>
+              <p className="text-caption text-muted mb-0.5">Training max</p>
               <p className="font-mono">{tm} kg</p>
             </section>
           ) : null}
 
           {exercise.setup ? (
             <section>
-              <p className="text-[12px] text-muted mb-0.5">Setup</p>
+              <p className="text-caption text-muted mb-0.5">Setup</p>
               <p>{exercise.setup}</p>
             </section>
           ) : null}
 
           {exercise.cues?.length ? (
             <section>
-              <p className="text-[12px] text-muted mb-1">Cues</p>
+              <p className="text-caption text-muted mb-1">Cues</p>
               <ul className="list-disc pl-5 space-y-1">
                 {exercise.cues.map((c, i) => (
                   <li key={i}>{c}</li>
@@ -126,14 +126,14 @@ export function ExerciseDetailsSheet({
 
           {exercise.rationale ? (
             <section>
-              <p className="text-[12px] text-muted mb-0.5">Why this exercise</p>
+              <p className="text-caption text-muted mb-0.5">Why this exercise</p>
               <p className="text-muted">{exercise.rationale}</p>
             </section>
           ) : null}
 
           {exercise.flags?.length ? (
             <section>
-              <p className="text-[12px] text-muted mb-1">Flags</p>
+              <p className="text-caption text-muted mb-1">Flags</p>
               <div className="flex flex-wrap gap-1.5">
                 {exercise.flags.map((f) => {
                   const isWarn =
@@ -141,7 +141,7 @@ export function ExerciseDetailsSheet({
                   return (
                     <span
                       key={f}
-                      className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5"
+                      className="font-mono text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5"
                     >
                       <span
                         aria-hidden

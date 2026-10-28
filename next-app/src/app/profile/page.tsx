@@ -15,6 +15,8 @@ import { BeliefsSection } from "@/components/profile/BeliefsSection";
 import { AwayDays } from "@/components/profile/AwayDays";
 import type { ProgramManifest } from "@/lib/schemas";
 import { Button } from "@/components/ui/Button";
+import { cardClass } from "@/components/ui/Card";
+import { cn } from "@/lib/utils";
 
 /**
  * Profile — switchboard (not dashboard) for identity, active programs, and
@@ -101,7 +103,7 @@ export default function ProfilePage() {
           promoted from sr-only to visible 32 px semibold. Highest-impact-
           per-minute edit in the brief — the Profile tab read "empty and
           weird" partly because there was no page-title anchor. */}
-      <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">
+      <h1 className="text-h1 tracking-tight text-strong leading-none">
         Profile
       </h1>
 
@@ -111,20 +113,20 @@ export default function ProfilePage() {
           state mutates on Profile itself. */}
       <Link
         href="/account"
-        className="rounded border border-line-soft bg-surface px-4 py-3 flex items-center gap-3 active:bg-line-soft/50"
+        className="rounded-lg border border-line-soft bg-surface px-4 py-3 flex items-center gap-3 active:bg-line-soft/50"
       >
         <div className="w-12 h-12 rounded-full bg-bronze/20 flex items-center justify-center flex-shrink-0">
-          <span className="font-semibold text-lg text-bronze-hi">
+          <span className="text-h3 text-bronze-hi">
             {(email ?? "?").charAt(0).toUpperCase()}
           </span>
         </div>
         <div className="min-w-0 flex-1">
-          <p className="text-[16px] font-semibold text-strong break-words">
+          <p className="text-body font-semibold text-strong break-words">
             {email ?? (
-              <span className="inline-block w-48 h-4 bg-line-soft rounded motion-safe:animate-pulse" aria-label="Loading email" />
+              <span className="inline-block w-48 h-4 bg-line-soft rounded-md motion-safe:animate-pulse" aria-label="Loading email" />
             )}
           </p>
-          <p className="text-[11px] text-muted mt-0.5 flex items-center gap-2 flex-wrap">
+          <p className="text-eyebrow text-muted mt-0.5 flex items-center gap-2 flex-wrap">
             {memberSince ? (
               <span className="font-mono uppercase tracking-wider">
                 joined {memberSince}
@@ -153,22 +155,22 @@ export default function ProfilePage() {
           the eventual list. */}
       {activeSlugs.length && !manifest ? (
         <div>
-          <p className="font-mono text-[10px] uppercase tracking-widest text-muted mb-2">
+          <p className="font-mono text-eyebrow uppercase tracking-widest text-muted mb-2">
             Your programs
           </p>
           <div
             aria-hidden
-            className="rounded border border-line-soft bg-surface"
+            className={cardClass({ flush: true })}
             style={{ minHeight: `${activeSlugs.length * 72}px` }}
           />
         </div>
       ) : null}
       {activePrograms.length ? (
         <div>
-          <p className="font-mono text-[10px] uppercase tracking-widest text-muted mb-2">
+          <p className="font-mono text-eyebrow uppercase tracking-widest text-muted mb-2">
             Your programs
           </p>
-        <ul className="rounded border border-line-soft bg-surface divide-y divide-line-soft">
+        <ul className={cn(cardClass({ flush: true }), "divide-y divide-line-soft")}>
           {activePrograms.map((p, i) => {
             const isPrimary = i === 0 && p.slug === activeProgramId;
             const state = store.user_profile?.program_states?.[p.slug];
@@ -207,10 +209,10 @@ export default function ProfilePage() {
                   className="flex items-center justify-between gap-3 px-3 py-3 min-h-[48px] active:bg-line-soft/50"
                 >
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-semibold text-strong truncate flex items-center gap-1.5">
+                    <p className="text-small font-semibold text-strong truncate flex items-center gap-1.5">
                       <span className="truncate">{p.name}</span>
                     </p>
-                    <p className="text-[11px] text-muted mt-0.5 flex items-center gap-1.5 flex-wrap">
+                    <p className="text-eyebrow text-muted mt-0.5 flex items-center gap-1.5 flex-wrap">
                       <span>{p.duration_weeks} weeks · {p.difficulty}</span>
                       {isPrimary && activePrograms.length > 1 && !graduated && !paused ? (
                         // Batch 36 · migrated from inline bronze-dot pill to
@@ -241,7 +243,7 @@ export default function ProfilePage() {
                   <button
                     type="button"
                     onClick={() => resumeProgram(p.slug)}
-                    className="ml-auto mr-3 mb-2 -mt-1 text-[11px] text-bronze hover:text-bronze-hover underline decoration-bronze/40 hover:decoration-bronze block"
+                    className="ml-auto mr-3 mb-2 -mt-1 text-eyebrow text-bronze hover:text-bronze-hover underline decoration-bronze/40 hover:decoration-bronze block"
                   >
                     Resume
                   </button>
@@ -251,7 +253,7 @@ export default function ProfilePage() {
                     <button
                       type="button"
                       onClick={() => setRemoveOpen(p)}
-                      className="min-h-11 inline-flex items-center px-1 text-[11px] text-muted hover:text-red underline decoration-line hover:decoration-red"
+                      className="min-h-11 inline-flex items-center px-1 text-eyebrow text-muted hover:text-red underline decoration-line hover:decoration-red"
                     >
                       {isPrimary ? "End this program" : "Remove"}
                     </button>
@@ -278,7 +280,7 @@ export default function ProfilePage() {
           multi-track makes adding a program a repeated action. */}
       <Link
         href="/programs"
-        className="inline-flex items-center min-h-[44px] py-3 font-mono text-[11px] uppercase tracking-wider text-bronze hover:text-bronze-hover"
+        className="inline-flex items-center min-h-[44px] py-3 font-mono text-eyebrow uppercase tracking-wider text-bronze hover:text-bronze-hover"
       >
         {activePrograms.length ? "Browse all programs →" : "Pick your focus →"}
       </Link>
@@ -286,10 +288,10 @@ export default function ProfilePage() {
       <AwayDays />
 
       <div>
-        <p className="font-mono text-[10px] uppercase tracking-widest text-muted mb-2">
+        <p className="font-mono text-eyebrow uppercase tracking-widest text-muted mb-2">
           More
         </p>
-      <nav aria-label="More" className="rounded border border-line-soft bg-surface divide-y divide-line-soft">
+      <nav aria-label="More" className={cn(cardClass({ flush: true }), "divide-y divide-line-soft")}>
         {/* S1 (Batch 25) — Coach shelved until N ≥ 50 users. AI-token
             costs don't pencil at beta scale. Row removed from Profile,
             /coach route + coach-client.ts deleted. R12 covers the
@@ -306,7 +308,7 @@ export default function ProfilePage() {
             href="/off-plan/"
             className="flex items-center justify-between gap-3 px-3 py-3 min-h-[48px] active:bg-line-soft/50"
           >
-            <span className="flex items-center gap-3 text-sm">
+            <span className="flex items-center gap-3 text-small">
               <ListPlus size={16} className="text-muted" />
               Extra session
             </span>
@@ -334,7 +336,7 @@ export default function ProfilePage() {
           href="/feedback/"
           className="flex items-center justify-between gap-3 px-3 py-3 min-h-[48px] active:bg-line-soft/50"
         >
-          <span className="flex items-center gap-3 text-sm">
+          <span className="flex items-center gap-3 text-small">
             <MessageSquare size={16} className="text-muted" />
             Send feedback
           </span>
@@ -345,7 +347,7 @@ export default function ProfilePage() {
             href={`/programs/${activeProgramId}/intake/`}
             className="flex items-center justify-between gap-3 px-3 py-3 min-h-[48px] active:bg-line-soft/50"
           >
-            <span className="flex items-center gap-3 text-sm">
+            <span className="flex items-center gap-3 text-small">
               <ClipboardList size={16} className="text-muted" />
               Re-run intake
             </span>
@@ -356,7 +358,7 @@ export default function ProfilePage() {
           href="/report"
           className="flex items-center justify-between gap-3 px-3 py-3 min-h-[48px] active:bg-line-soft/50"
         >
-          <span className="flex items-center gap-3 text-sm">
+          <span className="flex items-center gap-3 text-small">
             <FileText size={16} className="text-muted" />
             Report
           </span>
@@ -366,7 +368,7 @@ export default function ProfilePage() {
           href="/guide"
           className="flex items-center justify-between gap-3 px-3 py-3 min-h-[48px] active:bg-line-soft/50"
         >
-          <span className="flex items-center gap-3 text-sm">
+          <span className="flex items-center gap-3 text-small">
             <BookOpen size={16} className="text-muted" />
             Guide
           </span>
@@ -376,7 +378,7 @@ export default function ProfilePage() {
           href="/evidence"
           className="flex items-center justify-between gap-3 px-3 py-3 min-h-[48px] active:bg-line-soft/50"
         >
-          <span className="flex items-center gap-3 text-sm">
+          <span className="flex items-center gap-3 text-small">
             <Library size={16} className="text-muted" />
             Evidence
           </span>
@@ -391,7 +393,7 @@ export default function ProfilePage() {
       <footer className="pt-6 border-t border-line-soft">
         <nav
           aria-label="Legal"
-          className="text-[11px] text-muted flex items-center flex-wrap"
+          className="text-eyebrow text-muted flex items-center flex-wrap"
         >
           <Link
             href="/legal/privacy"

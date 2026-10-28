@@ -14,6 +14,7 @@ import { useStore } from "@/lib/useStore";
 import { getBlocksForProgram, isBlockObjectOn } from "@/lib/engine/block-selectors";
 import { loadProgram } from "@/lib/data-loader";
 import type { Program, ScheduledBlock, Store } from "@/lib/schemas";
+import { Card } from "@/components/ui/Card";
 
 const WINDOW_DAYS = 14;
 
@@ -101,13 +102,13 @@ export function BlockHistorySection() {
 
   return (
     <section className="space-y-3">
-      <h2 className="font-mono text-[14px] uppercase tracking-widest">
+      <h2 className="font-mono text-small uppercase tracking-widest">
         Recent sessions · last {WINDOW_DAYS} days
       </h2>
-      <div className="rounded border border-line bg-surface divide-y divide-line-soft">
+      <Card flush className="divide-y divide-line-soft">
         {perProgram.map((g) => (
           <div key={g.slug} className="p-3 space-y-2">
-            <p className="text-[14px] font-semibold text-strong">
+            <p className="text-small font-semibold text-strong">
               {/* Slug title-case matches manifest names for every current
                   program; `program_goal.display_name` is often the target
                   metric (e.g. "Loaded overhead shoulder flexion") and reads
@@ -131,12 +132,12 @@ export function BlockHistorySection() {
                     g.program?.blocks.find((tb) => tb.id === b.block_template_id)?.name ??
                     b.block_template_id;
                   return (
-                    <li key={b.id} className="flex items-baseline gap-2 text-[12px]">
+                    <li key={b.id} className="flex items-baseline gap-2 text-caption">
                       <span className="font-mono text-muted min-w-[80px]">
                         {b.actual_date}
                       </span>
                       <span className="flex-1 text-strong">{blockName}</span>
-                      <span className="font-mono text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
+                      <span className="font-mono text-eyebrow uppercase tracking-widest px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
                         {chip.dotClass ? (
                           <span aria-hidden className={`h-1.5 w-1.5 rounded-full ${chip.dotClass}`} />
                         ) : null}
@@ -148,7 +149,7 @@ export function BlockHistorySection() {
             </ul>
           </div>
         ))}
-      </div>
+      </Card>
     </section>
   );
 }

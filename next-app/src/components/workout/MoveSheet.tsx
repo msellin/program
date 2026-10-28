@@ -5,6 +5,7 @@ import { X } from "lucide-react";
 import { useFocusTrap } from "@/lib/useFocusTrap";
 import { hapticTap, iso } from "@/lib/utils";
 import { useStore } from "@/lib/useStore";
+import { cardClass } from "@/components/ui/Card";
 
 /**
  * F6 (Batch 24) — MoveSheet.
@@ -123,8 +124,7 @@ export function MoveSheet({
       <div
         ref={panelRef}
         onClick={(e) => e.stopPropagation()}
-        className="w-full sm:max-w-md bg-surface-2 border border-line rounded-t-lg sm:rounded-lg max-h-[85vh] flex flex-col min-w-0 overflow-hidden"
-        style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+        className="w-full sm:max-w-md bg-surface-2 border border-line rounded-t-lg sm:rounded-lg max-h-[85vh] flex flex-col min-w-0 overflow-hidden pb-[env(safe-area-inset-bottom)]"
       >
         {/* Header — sticky at the top of the sheet body */}
         <div className="flex items-start justify-between gap-3 p-4 pb-2 border-b border-line-soft">
@@ -132,7 +132,7 @@ export function MoveSheet({
             <p id="movesheet-title" className="font-semibold text-strong pr-4">
               Move {fromLabel}&rsquo;s session
             </p>
-            <p className="text-[13px] text-muted mt-0.5 truncate">{sessionSummary}</p>
+            <p className="text-caption text-muted mt-0.5 truncate">{sessionSummary}</p>
           </div>
           <button
             type="button"
@@ -172,7 +172,7 @@ export function MoveSheet({
           {targetHasSession && selected ? (
             <p
               role="alert"
-              className="text-[12px] text-amber border-l-4 border-amber pl-2 leading-snug"
+              className="text-caption text-amber leading-snug"
             >
               {confirmedStack === selected
                 ? "OK — this will stack two sessions on that day."
@@ -183,7 +183,7 @@ export function MoveSheet({
           <div>
             <label
               htmlFor="movesheet-reason"
-              className="block font-mono text-[10px] uppercase tracking-widest text-muted mb-1"
+              className="block font-mono text-eyebrow uppercase tracking-widest text-muted mb-1"
             >
               Why? (optional)
             </label>
@@ -194,7 +194,7 @@ export function MoveSheet({
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               placeholder="e.g. Family thing came up"
-              className="w-full text-[14px] px-3 py-2 min-h-[44px] border border-line rounded bg-surface text-ink placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
+              className="w-full text-small px-3 py-2 min-h-[44px] border border-line rounded-lg bg-surface text-ink placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
             />
           </div>
         </div>
@@ -205,7 +205,7 @@ export function MoveSheet({
             type="button"
             onClick={commit}
             disabled={!selected}
-            className="w-full inline-flex items-center justify-center gap-2 bg-bronze text-ground rounded py-2 min-h-[44px] text-sm font-semibold hover:bg-bronze-hover disabled:opacity-40 disabled:cursor-not-allowed"
+            className="w-full inline-flex items-center justify-center gap-2 bg-bronze text-ground rounded-lg py-2 min-h-[44px] text-small font-semibold hover:bg-bronze-hover disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {needsSecondTap ? "Confirm — stack the session" : "Move session"}
             <span aria-hidden>→</span>
@@ -231,10 +231,10 @@ function DayList({
 }) {
   return (
     <fieldset className="min-w-0">
-      <legend className="font-mono text-[10px] uppercase tracking-widest text-muted mb-1.5">
+      <legend className="font-mono text-eyebrow uppercase tracking-widest text-muted mb-1.5">
         {heading}
       </legend>
-      <ul className="rounded border border-line-soft bg-surface divide-y divide-line-soft">
+      <ul className={`${cardClass({ flush: true })} divide-y divide-line-soft`}>
         {days.map((d) => {
           const isSource = d.dateISO === fromDate;
           const isSelected = selected === d.dateISO;
@@ -259,19 +259,19 @@ function DayList({
                   className="w-4 h-4 accent-bronze flex-shrink-0"
                 />
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm text-strong">{d.label}</p>
-                  <p className="text-[11px] text-muted truncate">
+                  <p className="text-small text-strong">{d.label}</p>
+                  <p className="text-eyebrow text-muted truncate">
                     {isSource ? "moving from here" : d.summary}
                   </p>
                 </div>
                 {d.hasSession && !isSource ? (
-                  <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted flex-shrink-0 inline-flex items-center gap-1.5">
+                  <span className="font-mono text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted flex-shrink-0 inline-flex items-center gap-1.5">
                     <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-amber" />
                     has session
                   </span>
                 ) : null}
                 {d.isLogged ? (
-                  <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted flex-shrink-0 inline-flex items-center gap-1.5">
+                  <span className="font-mono text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted flex-shrink-0 inline-flex items-center gap-1.5">
                     <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-green" />
                     logged
                   </span>

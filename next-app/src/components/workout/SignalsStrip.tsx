@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { AlertTriangle, Info, ChevronDown, ChevronUp } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { Card, cardClass } from "@/components/ui/Card";
 import { selectProposals } from "@/lib/proposals/select";
 import { useStore } from "@/lib/useStore";
 import { isDue } from "@/lib/engine/assessment-engine";
@@ -213,11 +214,7 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
       ? "amber"
       : "slate";
 
-  const toneClasses = {
-    red: "border-red/50 border-l-red bg-red/10",
-    amber: "border-amber/40 border-l-amber bg-amber/10",
-    slate: "border-line-soft border-l-slate bg-surface",
-  } as const;
+  const toneStatus = { red: "red", amber: "amber", slate: undefined } as const;
 
   const iconColor = {
     red: "text-red",
@@ -236,8 +233,8 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
         aria-expanded={expanded}
         aria-controls="signals-detail"
         className={cn(
-          "w-full text-left border border-l-4 rounded-md px-3 py-2.5 flex items-center gap-2.5 min-h-[44px]",
-          toneClasses[strongestTone],
+          cardClass({ status: toneStatus[strongestTone] }),
+          "w-full text-left px-3 py-2.5 flex items-center gap-2.5 min-h-[44px]",
         )}
       >
         {strongestTone === "red" ? (
@@ -246,10 +243,10 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
           <Info size={16} className={iconColor[strongestTone]} aria-hidden />
         )}
         <div className="flex-1 min-w-0">
-          <p className="text-[14px] font-semibold text-strong truncate">
+          <p className="text-small font-semibold text-strong truncate">
             {primary.label}
             {restCount > 0 ? (
-              <span className="ml-1.5 text-[12px] font-normal text-muted">
+              <span className="ml-1.5 text-caption font-normal text-muted">
                 +{restCount} more
               </span>
             ) : null}
@@ -278,31 +275,31 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
                 if (!accepted) return null;
                 const snap = accepted.citation_snapshot;
                 return (
-                  <div className="rounded border border-line-soft border-l-4 border-l-slate bg-surface p-3 text-sm">
+                  <Card className="p-3 text-small">
                     <p className="font-semibold text-strong">
                       Today softened ×{accepted.load_multiplier.toFixed(2)}
                     </p>
                     {accepted.reason ? (
-                      <p className="text-[14px] text-muted mt-0.5">
+                      <p className="text-small text-muted mt-0.5">
                         Because: {accepted.reason}
                       </p>
                     ) : null}
                     {snap ? (
-                      <p className="text-[12px] text-muted mt-2">
+                      <p className="text-caption text-muted mt-2">
                         <span className="font-mono uppercase tracking-wider text-muted">Source:</span>{" "}
                         {snap.display_short}
                       </p>
                     ) : null}
-                  </div>
+                  </Card>
                 );
               })()
             : null}
 
           {/* Override / moved-in. */}
           {signals.some((s) => s.id === "override") ? (
-            <div className="rounded border border-line-soft border-l-4 border-l-slate bg-surface p-3 text-sm">
+            <Card className="p-3 text-small">
               <p className="font-semibold text-strong">Rescheduled session</p>
-              <p className="text-[14px] text-muted mt-0.5">
+              <p className="text-small text-muted mt-0.5">
                 {(() => {
                   // Phase F · prefer the block-object move_history's most-recent
                   // reason when available, fall back to legacy overrides.
@@ -317,57 +314,57 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
                   );
                 })()}
               </p>
-            </div>
+            </Card>
           ) : null}
 
           {/* Morning-check overdue nudge. */}
           {signals.some((s) => s.id === "check-overdue") ? (
-            <div className="rounded border border-amber/40 border-l-4 border-l-amber bg-amber/10 p-3 text-sm">
+            <Card status="amber" className="p-3 text-small">
               <p className="font-semibold text-strong">Morning check overdue</p>
-              <p className="text-[14px] text-muted mt-1">
+              <p className="text-small text-muted mt-1">
                 Load adjustment, red-state gating, and the notes engine all key off the
                 morning check. A minute of tapping now makes the rest of the day&apos;s
                 recommendations mean something.
               </p>
               <Link
                 href="/check/"
-                className="inline-block mt-2 text-[14px] text-amber border-b border-amber hover:opacity-80"
+                className="inline-block mt-2 text-small text-amber border-b border-amber hover:opacity-80"
               >
                 Log check now →
               </Link>
-            </div>
+            </Card>
           ) : null}
 
           {/* Cycle-end proposal — signal chip on Today, action on Progress. */}
           {signals.some((s) => s.id === "cycle-end") ? (
-            <div className="rounded border border-slate/40 border-l-4 border-l-slate bg-slate/10 p-3 text-sm">
+            <Card className="p-3 text-small">
               <p className="font-semibold text-strong">Cycle-end evaluation ready</p>
-              <p className="text-[14px] text-muted mt-1">
+              <p className="text-small text-muted mt-1">
                 The engine has TM changes to propose based on the last cycle&apos;s AMRAP + symptom pattern. Review and Apply on Progress; nothing changes until you tap Apply.
               </p>
               <Link
                 href="/progress/"
-                className="inline-block mt-2 text-[14px] text-slate border-b border-slate hover:opacity-80"
+                className="inline-block mt-2 text-small text-slate border-b border-slate hover:opacity-80"
               >
                 Review on Progress →
               </Link>
-            </div>
+            </Card>
           ) : null}
 
           {/* Pause / soften proposal — same pattern. */}
           {signals.some((s) => s.id === "pause") ? (
-            <div className="rounded border border-amber/40 border-l-4 border-l-amber bg-amber/10 p-3 text-sm">
+            <Card status="amber" className="p-3 text-small">
               <p className="font-semibold text-strong">Back after a break</p>
-              <p className="text-[14px] text-muted mt-1">
+              <p className="text-small text-muted mt-1">
                 14+ days without a logged strength session. The engine can soften your first week back to protect against a compressed-return spike.
               </p>
               <Link
                 href="/progress/"
-                className="inline-block mt-2 text-[14px] text-amber border-b border-amber hover:opacity-80"
+                className="inline-block mt-2 text-small text-amber border-b border-amber hover:opacity-80"
               >
                 Review on Progress →
               </Link>
-            </div>
+            </Card>
           ) : null}
 
           {/* F12 (2026-08-20) — CSM amber-week auto-swap confirmed.
@@ -392,35 +389,35 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
                explains itself; it does not mean the explanation may be
                decorative. Better to say what we do than to say why on a
                borrowed authority. */
-            <div className="rounded border border-amber/40 border-l-4 border-l-amber bg-amber/10 p-3 text-sm">
+            <Card status="amber" className="p-3 text-small">
               <p className="font-semibold text-strong">Amber week — 4×4 dropped</p>
-              <p className="text-[14px] text-muted mt-1">
+              <p className="text-small text-muted mt-1">
                 {signals.find((s) => s.id === "csm-amber-week")?.label ??
                   "Multiple amber days this week"}
                 . The engine is holding the Norwegian 4×4 for this week
                 and will resume it next week — per{" "}
-                <span className="font-mono text-[12px]">
+                <span className="font-mono text-caption">
                   concurrent-strength-maintenance.json:435
                 </span>
                 . The strength work stays.
               </p>
-            </div>
+            </Card>
           ) : null}
 
           {/* Positive-adaptation advisory — mirror of the pause pattern. */}
           {signals.some((s) => s.id === "positive-adaptation") ? (
-            <div className="rounded border border-slate/40 border-l-4 border-l-slate bg-slate/10 p-3 text-sm">
+            <Card className="p-3 text-small">
               <p className="font-semibold text-strong">Trending well</p>
-              <p className="text-[14px] text-muted mt-1">
+              <p className="text-small text-muted mt-1">
                 {signals.find((s) => s.id === "positive-adaptation")?.label}. Progress → Retest lets you log the reading + review the tier-advance proposal.
               </p>
               <Link
                 href="/progress/"
-                className="inline-block mt-2 text-[14px] text-slate border-b border-slate hover:opacity-80"
+                className="inline-block mt-2 text-small text-slate border-b border-slate hover:opacity-80"
               >
                 Review on Progress →
               </Link>
-            </div>
+            </Card>
           ) : null}
 
           {/* Delegated components — each renders null when inactive. */}

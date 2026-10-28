@@ -42,13 +42,6 @@ export type CategoryTileGridProps = {
   className?: string;
 };
 
-const TINT_STRIPE: Record<CategoryTileTint, string> = {
-  bronze: "border-l-bronze",
-  slate: "border-l-slate",
-  green: "border-l-green",
-  amber: "border-l-amber",
-};
-
 const TINT_GRADIENT: Record<CategoryTileTint, string> = {
   bronze: "from-bronze/[0.08] to-transparent",
   slate: "from-slate/[0.08] to-transparent",
@@ -72,9 +65,8 @@ export function CategoryTileGrid({
             onClick={() => onTileTap(c.id)}
             aria-label={`${c.name}: ${c.pitch}, ${c.count} available`}
             className={cn(
-              "w-full flex flex-col items-start gap-1 rounded-lg border border-line-soft border-l-4 bg-surface-2 p-3 text-left",
+              "w-full flex flex-col items-start gap-1 rounded-xl border border-line-soft bg-surface-2 p-3 text-left",
               "bg-gradient-to-br",
-              TINT_STRIPE[c.tint],
               TINT_GRADIENT[c.tint],
               minH,
               "hover:bg-surface-3 active:scale-[0.98] transition-transform duration-100 motion-reduce:transition-none",
@@ -90,12 +82,12 @@ export function CategoryTileGrid({
                   className="text-muted flex-shrink-0"
                 />
               ) : null}
-              <span className="text-[14px] font-semibold text-strong truncate flex-1 min-w-0">
+              <span className="text-small font-semibold text-strong truncate flex-1 min-w-0">
                 {c.name}
               </span>
             </div>
-            <p className="text-[12px] text-muted leading-snug line-clamp-2 flex-1">{c.pitch}</p>
-            <p className="font-mono text-[10px] uppercase tracking-widest text-muted mt-auto tabular-nums">
+            <p className="text-caption text-muted leading-snug line-clamp-2 flex-1">{c.pitch}</p>
+            <p className="font-mono text-eyebrow uppercase tracking-widest text-muted mt-auto tabular-nums">
               {c.count} available
             </p>
           </button>

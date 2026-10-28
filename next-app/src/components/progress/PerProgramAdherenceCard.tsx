@@ -20,6 +20,8 @@ import {
   isBlockObjectOn,
 } from "@/lib/engine/block-selectors";
 import type { Store } from "@/lib/schemas";
+import { cardClass } from "@/components/ui/Card";
+import { cn } from "@/lib/utils";
 
 const WINDOW_DAYS = 28;
 
@@ -117,10 +119,10 @@ export function PerProgramAdherenceCard() {
   if (rows.length === 0) return null;
 
   return (
-    <section className="rounded border border-line bg-surface p-4 space-y-3">
+    <section className={cn(cardClass(), "space-y-3")}>
       <header className="flex items-baseline justify-between gap-2">
-        <h2 className="text-[15px] font-semibold text-strong">Per-track adherence</h2>
-        <span className="text-[10px] font-mono uppercase tracking-widest text-muted">
+        <h2 className="text-body font-semibold text-strong">Per-track adherence</h2>
+        <span className="text-eyebrow font-mono uppercase tracking-widest text-muted">
           last {WINDOW_DAYS} days
         </span>
       </header>
@@ -128,10 +130,10 @@ export function PerProgramAdherenceCard() {
         {rows.map((r) => (
           <li key={r.slug} className="space-y-1.5">
             <div className="flex items-baseline justify-between gap-2">
-              <p className="text-[14px] text-strong font-medium">
+              <p className="text-small text-strong font-medium">
                 {r.slug.replace(/-/g, " ")}
               </p>
-              <span className="font-mono text-[11px] text-muted">
+              <span className="font-mono text-eyebrow text-muted">
                 {r.done}/{r.total - r.moved} done · {r.adherencePct}%
               </span>
             </div>
@@ -160,7 +162,7 @@ export function PerProgramAdherenceCard() {
                 aria-hidden
               />
             </div>
-            <p className="text-[10px] font-mono text-muted uppercase tracking-widest">
+            <p className="text-eyebrow font-mono text-muted uppercase tracking-widest">
               {r.done > 0 ? `${r.done} done` : ""}
               {r.planned > 0 ? ` · ${r.planned} upcoming` : ""}
               {r.skipped > 0 ? ` · ${r.skipped} skipped` : ""}
@@ -169,7 +171,7 @@ export function PerProgramAdherenceCard() {
           </li>
         ))}
       </ul>
-      <p className="text-[11px] text-muted italic">
+      <p className="text-eyebrow text-muted italic">
         Moved sessions don&apos;t count as misses — they&apos;re rescheduled work.
       </p>
     </section>

@@ -68,14 +68,14 @@ export function WeeklySessionStrip({
             aria-current={d.isToday ? "date" : undefined}
             aria-pressed={d.completed}
             className={cn(
-              "flex-1 min-h-11 rounded flex flex-col items-center justify-center gap-1 py-1",
+              "flex-1 min-h-11 rounded-lg flex flex-col items-center justify-center gap-1 py-1",
               "focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2",
               onCellTap ? "hover:bg-line-soft" : "cursor-default",
               d.isToday && "ring-1 ring-strong/50",
             )}
             disabled={!onCellTap}
           >
-            <span className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted">
+            <span className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted">
               {d.dayLetter}
             </span>
             <StateDot day={d} />
@@ -98,12 +98,12 @@ export function WeeklySessionStrip({
           key={`${d.dayLetter}-${i}`}
           className={cn(
             "flex-1 min-w-[28px] flex flex-col items-center gap-0.5 py-0.5",
-            d.isToday && "ring-1 ring-strong/50 rounded",
+            d.isToday && "ring-1 ring-strong/50 rounded-lg",
           )}
         >
           <span
             aria-hidden
-            className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted"
+            className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted"
           >
             {d.dayLetter}
           </span>

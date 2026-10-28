@@ -67,24 +67,23 @@ export function RetestLoggingSheet({
       //      card itself is never under the home indicator.
       //   2. Scrollable overlay `overflow-y-auto` with items-end on mobile
       //      keeps the keyboard's push-up behavior graceful.
-      style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
-      className="fixed inset-0 z-[70] bg-ground/95 backdrop-blur-sm flex items-end sm:items-center justify-center overflow-y-auto p-4"
+      className="fixed inset-0 z-[70] bg-ground/95 backdrop-blur-sm flex items-end sm:items-center justify-center overflow-y-auto p-4 pb-[env(safe-area-inset-bottom)]"
     >
-      <div className="w-full max-w-md rounded border border-line bg-surface p-4 space-y-4">
+      <div className="w-full max-w-md rounded-xl border border-line bg-surface p-4 space-y-4">
         <div>
-          <p className="font-mono text-[10px] uppercase tracking-widest text-slate">
+          <p className="font-mono text-eyebrow uppercase tracking-widest text-slate">
             Week {proposal.atWeek} · {proposal.cadenceKind === "mid_block" ? "mid-block" : "end-of-block"}
           </p>
-          <h2 id="retest-log-title" className="text-lg font-semibold text-strong mt-1">
+          <h2 id="retest-log-title" className="text-h3 text-strong mt-1">
             Log {proposal.metricDisplayName}
           </h2>
-          <p className="text-[12px] text-muted mt-1">
+          <p className="text-caption text-muted mt-1">
             Recorded {observedAt}. Re-submitting today updates this entry — it won&apos;t duplicate.
           </p>
         </div>
 
         <label className="block space-y-1.5">
-          <span className="text-[12px] text-muted">
+          <span className="text-caption text-muted">
             Reading{proposal.metricUnit ? ` (${proposal.metricUnit})` : ""}
           </span>
           <input
@@ -98,12 +97,12 @@ export function RetestLoggingSheet({
               setError(null);
             }}
             aria-invalid={error != null}
-            className="w-full font-mono text-sm px-3 py-2 border border-line rounded bg-ground text-ink focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze min-h-[44px]"
+            className="w-full font-mono text-small px-3 py-2 border border-line rounded-lg bg-ground text-ink focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze min-h-[44px]"
           />
         </label>
 
         <label className="block space-y-1.5">
-          <span className="text-[12px] text-muted">
+          <span className="text-caption text-muted">
             How closely did you hit the prescribed intensity? (optional)
           </span>
           <input
@@ -117,12 +116,12 @@ export function RetestLoggingSheet({
               setError(null);
             }}
             placeholder="e.g. 90 (you hit ~90% of the prescribed intensity). Blank = skip."
-            className="w-full font-mono text-sm px-3 py-2 border border-line rounded bg-ground text-ink placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze min-h-[44px]"
+            className="w-full font-mono text-small px-3 py-2 border border-line rounded-lg bg-ground text-ink placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze min-h-[44px]"
           />
         </label>
 
         {error ? (
-          <p role="alert" className="text-[12px] text-red">
+          <p role="alert" className="text-caption text-red">
             {error}
           </p>
         ) : null}
@@ -131,7 +130,7 @@ export function RetestLoggingSheet({
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 min-h-[44px] border border-line text-ink rounded font-mono text-[11px] uppercase tracking-wider hover:bg-line-soft"
+            className="px-4 py-2 min-h-[44px] border border-line text-ink rounded-lg font-mono text-eyebrow uppercase tracking-wider hover:bg-line-soft"
           >
             Cancel
           </button>
@@ -139,7 +138,7 @@ export function RetestLoggingSheet({
             type="button"
             onClick={submit}
             disabled={value.trim() === ""}
-            className="px-4 py-2 min-h-[44px] bg-bronze text-ground rounded font-mono text-[11px] uppercase tracking-wider hover:bg-bronze-hover disabled:opacity-40 disabled:cursor-not-allowed"
+            className="px-4 py-2 min-h-[44px] bg-bronze text-ground rounded-lg font-mono text-eyebrow uppercase tracking-wider hover:bg-bronze-hover disabled:opacity-40 disabled:cursor-not-allowed"
           >
             Log reading
           </button>

@@ -22,6 +22,7 @@ import { useStore } from "@/lib/useStore";
 import { useFocusTrap } from "@/lib/useFocusTrap";
 import { iso } from "@/lib/utils";
 import type { ScheduledBlock } from "@/lib/schemas";
+import { Card } from "@/components/ui/Card";
 
 type Props = {
   programSlug: string;
@@ -54,18 +55,17 @@ export function PerProgramActions({ programSlug, programName, date, scheduledBlo
   const everythingMoved = plannedIds.length === 0 && movedIds.length > 0 && skippedIds.length === 0;
 
   if (everythingSkipped || everythingMoved) {
-    // Audit 2026-08-18 (visual-craft) — border-l was `border-l-amber` for
-    // BOTH states. tokens.md accent economy: amber = warn/skipped, slate
-    // = moved/rescheduled. Split by state.
-    const borderTone = everythingSkipped ? "border-l-amber" : "border-l-slate";
+    // Status bar is amber for skipped only; moved is a plain card (accent
+    // economy: the bar means status, never decoration).
+    const cardStatus = everythingSkipped ? "amber" : undefined;
     return (
-      <div className={`rounded border border-line-soft border-l-4 ${borderTone} bg-surface p-3 flex items-center justify-between gap-3`}>
-        <div className="text-sm">
+      <Card status={cardStatus} className="flex items-center justify-between gap-3">
+        <div className="text-small">
           <p className="font-semibold text-strong">
             {programName} — {everythingSkipped ? "skipped today" : "moved"}
           </p>
           {everythingMoved ? (
-            <p className="text-muted text-[14px] mt-0.5">
+            <p className="text-muted text-small mt-0.5">
               Rescheduled to {scheduledBlocks.find((b) => movedIds.includes(b.id))?.actual_date ?? "another day"}.
             </p>
           ) : null}
@@ -77,11 +77,11 @@ export function PerProgramActions({ programSlug, programName, date, scheduledBlo
               restoreBlock(id);
             }
           }}
-          className="text-[12px] mono-caps text-bronze hover:text-bronze-hover"
+          className="text-caption mono-caps text-bronze hover:text-bronze-hover"
         >
           Undo
         </button>
-      </div>
+      </Card>
     );
   }
 
@@ -93,7 +93,7 @@ export function PerProgramActions({ programSlug, programName, date, scheduledBlo
         <button
           type="button"
           onClick={() => setOpen("move")}
-          className="flex flex-col items-center justify-center gap-1 px-2 py-2 min-h-[52px] border border-line-strong rounded bg-surface hover:bg-surface-2 text-[12px]"
+          className="flex flex-col items-center justify-center gap-1 px-2 py-2 min-h-[52px] border border-line-strong rounded-lg bg-surface hover:bg-surface-2 text-caption"
         >
           <CalendarClock size={14} />
           <span>Move</span>
@@ -101,7 +101,7 @@ export function PerProgramActions({ programSlug, programName, date, scheduledBlo
         <button
           type="button"
           onClick={() => setOpen("skip")}
-          className="flex flex-col items-center justify-center gap-1 px-2 py-2 min-h-[52px] border border-line-strong rounded bg-surface hover:bg-surface-2 text-[12px]"
+          className="flex flex-col items-center justify-center gap-1 px-2 py-2 min-h-[52px] border border-line-strong rounded-lg bg-surface hover:bg-surface-2 text-caption"
         >
           <SkipForward size={14} />
           <span>Skip</span>
@@ -182,7 +182,7 @@ function ConfirmSheet({
             <X size={18} />
           </button>
         </div>
-        <p className="text-[14px] text-muted">{body}</p>
+        <p className="text-small text-muted">{body}</p>
         {askReason ? (
           <div>
             <label className="mono-caps block mb-1" htmlFor="ppa-skip-reason">
@@ -194,7 +194,7 @@ function ConfirmSheet({
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               placeholder="e.g. travelling, tired"
-              className="w-full px-3 py-3 min-h-[44px] border border-line rounded bg-surface text-[15px]"
+              className="w-full px-3 py-3 min-h-[44px] border border-line rounded-lg bg-surface text-body"
             />
           </div>
         ) : null}
@@ -202,14 +202,14 @@ function ConfirmSheet({
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 border border-line-strong rounded py-2 text-sm hover:bg-surface-2"
+            className="flex-1 border border-line-strong rounded-lg py-2 text-small hover:bg-surface-2"
           >
             Cancel
           </button>
           <button
             type="button"
             onClick={() => onConfirm(reason || undefined)}
-            className="flex-1 bg-bronze text-ground rounded py-2 text-sm font-semibold hover:bg-bronze-hover"
+            className="flex-1 bg-bronze text-ground rounded-lg py-2 text-small font-semibold hover:bg-bronze-hover"
           >
             {confirmLabel}
           </button>
@@ -257,7 +257,7 @@ function MoveSheet({
             <X size={18} />
           </button>
         </div>
-        <p className="text-[14px] text-muted">
+        <p className="text-small text-muted">
           This track&rsquo;s session on {fromDate} moves to the chosen date. Other tracks
           today are unaffected.
         </p>
@@ -271,17 +271,17 @@ function MoveSheet({
             value={date}
             min={iso(new Date())}
             onChange={(e) => setDate(e.target.value)}
-            className="w-full px-3 py-3 min-h-[44px] border border-line rounded bg-surface text-[15px]"
+            className="w-full px-3 py-3 min-h-[44px] border border-line rounded-lg bg-surface text-body"
           />
         </div>
         <div className="flex gap-2 pt-1">
-          <button type="button" onClick={onCancel} className="flex-1 border border-line-strong rounded py-2 text-sm hover:bg-surface-2">
+          <button type="button" onClick={onCancel} className="flex-1 border border-line-strong rounded-lg py-2 text-small hover:bg-surface-2">
             Cancel
           </button>
           <button
             type="button"
             onClick={() => onConfirm(date)}
-            className="flex-1 bg-bronze text-ground rounded py-2 text-sm font-semibold hover:bg-bronze-hover"
+            className="flex-1 bg-bronze text-ground rounded-lg py-2 text-small font-semibold hover:bg-bronze-hover"
           >
             Move
           </button>

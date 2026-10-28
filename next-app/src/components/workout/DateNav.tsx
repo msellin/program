@@ -23,17 +23,17 @@ export function DateNav({ date, onChange }: Props) {
   });
 
   return (
-    <div className="flex items-center gap-1.5 rounded border border-line bg-surface p-1">
+    <div className="flex items-center gap-1.5 rounded-lg border border-line bg-surface p-1">
       <button
         type="button"
         onClick={() => shift(-1)}
         aria-label="Previous day"
-        className="w-11 h-11 flex items-center justify-center rounded text-muted hover:bg-surface-2 hover:text-ink focus-visible:bg-surface-2 focus-visible:text-ink active:bg-line-soft"
+        className="w-11 h-11 flex items-center justify-center rounded-lg text-muted hover:bg-surface-2 hover:text-ink focus-visible:bg-surface-2 focus-visible:text-ink active:bg-line-soft"
       >
         <ChevronLeft size={18} />
       </button>
       <div className="flex-1 text-center">
-        <p className="text-[15px] font-semibold text-strong leading-tight">{label}</p>
+        <p className="text-body font-semibold text-strong leading-tight">{label}</p>
         <p className="mono-caps mt-0.5">
           {isToday ? "Today" : offsetLabel(date)}
         </p>
@@ -42,7 +42,7 @@ export function DateNav({ date, onChange }: Props) {
         type="button"
         onClick={() => shift(1)}
         aria-label="Next day"
-        className="w-11 h-11 flex items-center justify-center rounded text-muted hover:bg-surface-2 hover:text-ink focus-visible:bg-surface-2 focus-visible:text-ink active:bg-line-soft"
+        className="w-11 h-11 flex items-center justify-center rounded-lg text-muted hover:bg-surface-2 hover:text-ink focus-visible:bg-surface-2 focus-visible:text-ink active:bg-line-soft"
       >
         <ChevronRight size={18} />
       </button>
@@ -54,7 +54,7 @@ export function DateNav({ date, onChange }: Props) {
         aria-hidden={isToday}
         tabIndex={isToday ? -1 : 0}
         className={cn(
-          "w-11 h-11 flex items-center justify-center rounded",
+          "w-11 h-11 flex items-center justify-center rounded-lg",
           isToday
             ? "invisible pointer-events-none"
             : "hover:bg-surface-2 text-bronze",

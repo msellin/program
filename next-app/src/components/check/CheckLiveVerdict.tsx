@@ -21,6 +21,7 @@
 import { useState } from "react";
 import { InfoSheet } from "@/components/InfoSheet";
 import { cn } from "@/lib/utils";
+import { Card } from "@/components/ui/Card";
 
 export type CheckState = "green" | "amber" | "red";
 
@@ -30,10 +31,10 @@ export type CheckLiveVerdictProps = {
   reason: string;
 };
 
-const COPY: Record<CheckState, { pill: string; rail: string }> = {
-  green: { pill: "Workout ready", rail: "border-l-green" },
-  amber: { pill: "Check first", rail: "border-l-amber" },
-  red: { pill: "Back off", rail: "border-l-red" },
+const COPY: Record<CheckState, { pill: string }> = {
+  green: { pill: "Workout ready" },
+  amber: { pill: "Check first" },
+  red: { pill: "Back off" },
 };
 
 const CITATION_BODY: Record<CheckState, string> = {
@@ -47,13 +48,8 @@ export function CheckLiveVerdict({ state, reason }: CheckLiveVerdictProps) {
   const [sheetOpen, setSheetOpen] = useState(false);
   return (
     <>
-      <div
-        className={cn(
-          "rounded-md border border-line-soft bg-surface p-3 border-l-4",
-          copy.rail,
-        )}
-      >
-        <span className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.04em] text-strong font-medium">
+      <Card status={state}>
+        <span className="inline-flex items-center gap-2 font-mono text-eyebrow uppercase tracking-[0.04em] text-strong font-medium">
           <span
             aria-hidden
             className={cn(
@@ -65,9 +61,9 @@ export function CheckLiveVerdict({ state, reason }: CheckLiveVerdictProps) {
           />
           {copy.pill}
         </span>
-        <p className="mt-1.5 text-[14px] text-ink leading-relaxed">{reason}</p>
+        <p className="mt-1.5 text-small text-ink leading-relaxed">{reason}</p>
         {state === "red" && (
-          <p className="mt-1.5 text-[13px] text-ink leading-relaxed">
+          <p className="mt-1.5 text-caption text-ink leading-relaxed">
             Next step: skip hard training today. If this is night pain, a sudden change, or
             it isn&apos;t settling, talk to a doctor or physio. Terav isn&apos;t medical advice.
           </p>
@@ -75,14 +71,14 @@ export function CheckLiveVerdict({ state, reason }: CheckLiveVerdictProps) {
         <button
           type="button"
           onClick={() => setSheetOpen(true)}
-          className="mt-1 inline-flex items-center gap-1.5 min-h-[44px] py-2 text-[12px] text-ink cursor-pointer motion-reduce:transition-none transition-colors hover:text-strong focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2 rounded"
+          className="mt-1 inline-flex items-center gap-1.5 min-h-[44px] py-2 text-caption text-ink cursor-pointer motion-reduce:transition-none transition-colors hover:text-strong focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2 rounded-lg"
           aria-label="Why this result?"
         >
-          <span className="font-mono text-[11px] uppercase tracking-[0.06em] text-strong font-medium">
+          <span className="font-mono text-eyebrow uppercase tracking-[0.06em] text-strong font-medium">
             Why?
           </span>
         </button>
-      </div>
+      </Card>
       {sheetOpen ? (
         <InfoSheet
           title={`${copy.pill}`}
@@ -92,10 +88,10 @@ export function CheckLiveVerdict({ state, reason }: CheckLiveVerdictProps) {
             threshold: CITATION_BODY[state],
           }}
         >
-          <p className="text-[14px] text-ink leading-relaxed">
+          <p className="text-small text-ink leading-relaxed">
             Terav uses a rehab-safe threshold model: any symptom above 3/10 crosses to amber (hold), above 5/10 crosses to red (back off). Red-flag signals (night pain, gait change, painful click) short-circuit to red regardless of score.
           </p>
-          <p className="text-[14px] text-ink leading-relaxed mt-3">
+          <p className="text-small text-ink leading-relaxed mt-3">
             This isn&apos;t a diagnosis — it&apos;s a state read that gates today&apos;s prescribed load. If a red state persists, see a clinician.
           </p>
         </InfoSheet>

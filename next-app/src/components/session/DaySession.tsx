@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { cardClass } from "@/components/ui/Card";
 import { useEffect, useMemo, useState } from "react";
 import { loadProgram, loadExercises, applyProgramExerciseOverrides } from "@/lib/data-loader";
 import { useStore, entrySets } from "@/lib/useStore";
@@ -220,14 +221,14 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
 
   if (error) {
     return (
-      <div className="mt-8 rounded border border-red bg-surface p-4">
-        <h2 className="mb-2 text-lg font-semibold">Couldn&apos;t load program data</h2>
-        <p className="text-sm text-muted">{error}</p>
+      <div className={cardClass({ status: "red" }) + " mt-8"}>
+        <h2 className="mb-2 text-h3 font-semibold">Couldn&apos;t load program data</h2>
+        <p className="text-small text-muted">{error}</p>
       </div>
     );
   }
   if (!program || !hydrated) {
-    return <div className="mt-8 text-sm text-muted">Loading…</div>;
+    return <div className="mt-8 text-small text-muted">Loading…</div>;
   }
 
   if (isPastProgramEnd(program, activeDate, userProfile) && activeDate === todayISO()) {
@@ -241,8 +242,8 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
     return (
       <div className="space-y-4 pt-4" data-surface="RedDayHold">
         <header className="space-y-1">
-          <p className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted">TODAY</p>
-          <h1 className="text-[32px] font-semibold tracking-[-0.03em] text-strong leading-none">
+          <p className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted">TODAY</p>
+          <h1 className="text-h1 font-semibold tracking-[-0.03em] text-strong leading-none">
             {programDisplayName(program, slug)}
           </h1>
         </header>
@@ -251,7 +252,7 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
           <button
             type="button"
             onClick={() => setAltChosen(true)}
-            className="w-full min-h-[52px] rounded-[10px] border border-line-strong px-4 py-3 text-left text-[15px] text-strong"
+            className="w-full min-h-[52px] rounded-lg border border-line-strong px-4 py-3 text-left text-body text-strong"
           >
             Optional: {redDay.alternative.label}
           </button>

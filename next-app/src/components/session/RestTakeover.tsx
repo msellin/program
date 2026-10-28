@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { cardClass } from "@/components/ui/Card";
 import { useStore, entrySets } from "@/lib/useStore";
 import { useElapsedSeconds } from "@/lib/wall-clock";
 import { announce } from "@/lib/announce";
@@ -284,12 +285,12 @@ export function RestTakeover({
         </div>
       </div>
       <div className="flex-1 flex flex-col items-center justify-center px-6 text-center min-h-0">
-        <p className="font-mono text-[11px] uppercase tracking-[.18em] text-slate mb-[18px]">Rest</p>
+        <p className="font-mono text-eyebrow uppercase tracking-[.18em] text-slate mb-[18px]">Rest</p>
         {restoredExpired ? (
           /* Honest about a rest that ended while the app was gone. A
              resurrected countdown would be the app inventing time the user
              then acts on. */
-          <p className="text-[34px] leading-[1.1] font-semibold tracking-[-.02em] text-strong mb-2">
+          <p className="text-h1 leading-[1.1] font-semibold tracking-[-.02em] text-strong mb-2">
             Rest finished{" "}
             {overdueSeconds < 60
               ? "just now"
@@ -299,7 +300,7 @@ export function RestTakeover({
           <p className="text-[104px] leading-[.9] font-semibold tracking-[-.05em] text-strong mb-2">{fmt}</p>
         )}
         {effortAnswered && selectedEffort ? (
-          <p className="text-[14.5px] text-muted">
+          <p className="text-small text-muted">
             {selectedEffort} · {EFFORTS.find((e) => e.label === selectedEffort)?.rir}
             {" · "}
             <button
@@ -313,8 +314,8 @@ export function RestTakeover({
           </p>
         ) : upNext.kind !== "done" ? (
           <>
-            <p className="font-mono text-[12px] uppercase tracking-[.16em] text-muted mb-2">Next up</p>
-            <p className="text-[20px] font-semibold text-strong mb-1 tracking-[-.02em]">
+            <p className="font-mono text-caption uppercase tracking-[.16em] text-muted mb-2">Next up</p>
+            <p className="text-h2 font-semibold text-strong mb-1 tracking-[-.02em]">
               {upNext.kind === "set"
                 ? `Set ${upNext.setIndex + 1} of ${upNext.rail.rowCount}`
                 : (() => {
@@ -327,10 +328,10 @@ export function RestTakeover({
                     return first ? `${first.kg} kg × ${first.reps}` : `${upNext.rail.rowCount} sets`;
                   })()}
             </p>
-            <p className="text-[14.5px] text-ink">{upNext.rail.exercise.name}</p>
+            <p className="text-small text-ink">{upNext.rail.exercise.name}</p>
           </>
         ) : (
-          <p className="text-[14.5px] text-muted">{summary ?? ""}</p>
+          <p className="text-small text-muted">{summary ?? ""}</p>
         )}
       </div>
       {/* pb honours the home indicator. Without the inset the bottom control of
@@ -344,9 +345,9 @@ export function RestTakeover({
             about: it is where an AMRAP lands and where fatigue shows. The
             picker now renders independently of what comes next. */}
         {!effortAnswered ? (
-          <div className="border border-line-strong rounded-xl bg-surface p-4">
-            <p className="text-[16px] font-semibold text-strong mb-1 tracking-[-.01em]">How was that?</p>
-            <p className="text-[13px] text-ink mb-3">
+          <div className={cardClass()}>
+            <p className="text-body font-semibold text-strong mb-1 tracking-[-.01em]">How was that?</p>
+            <p className="text-caption text-ink mb-3">
               How many more could you have done?{" "}
               {hasTrainingMax ? "This sets your training max." : "We'll use it next week."}
             </p>
@@ -360,16 +361,16 @@ export function RestTakeover({
                   aria-label={`${effort.label} — ${effort.rir}`}
                   onClick={() => selectEffort(effort)}
                   className={
-                    "flex-1 h-[66px] px-1 rounded-[10px] border " +
+                    "flex-1 h-[66px] px-1 rounded-lg border " +
                     (selectedEffort === effort.label
                       ? "border-bronze bg-bronze/15"
                       : "border-line-strong bg-surface-2")
                   }
                 >
-                  <span className="block text-[13px] font-semibold text-strong leading-snug">{effort.label}</span>
+                  <span className="block text-caption font-semibold text-strong leading-snug">{effort.label}</span>
                   <span
                     className={
-                      "block font-mono text-[12px] mt-0.5 leading-snug " +
+                      "block font-mono text-caption mt-0.5 leading-snug " +
                       (selectedEffort === effort.label ? "text-bronze" : "text-muted")
                     }
                   >
@@ -400,11 +401,11 @@ export function RestTakeover({
               tickedRef.current.clear();
             }}
             aria-label="Add 30 seconds to the rest timer"
-            className="flex-shrink-0 w-24 h-[58px] rounded-[10px] border border-line-strong text-ink text-[14.5px]"
+            className="flex-shrink-0 w-24 h-[58px] rounded-lg border border-line-strong text-ink text-small"
           >
             +30s
             {extra > 0 ? (
-              <span className="block font-mono text-[12px] text-muted leading-none mt-0.5">
+              <span className="block font-mono text-caption text-muted leading-none mt-0.5">
                 +{extra}s added
               </span>
             ) : null}
@@ -412,7 +413,7 @@ export function RestTakeover({
           <button
             type="button"
             onClick={skip}
-            className="flex-1 h-[58px] rounded-[10px] border border-line-strong bg-surface-2 text-strong text-[16px] font-semibold"
+            className="flex-1 h-[58px] rounded-lg border border-line-strong bg-surface-2 text-strong text-body font-semibold"
           >
             Skip rest
           </button>
@@ -426,24 +427,24 @@ export function RestTakeover({
         <button
           type="button"
           onClick={onOpenNoteSheet}
-          className="w-full flex items-center justify-between gap-2.5 rounded border border-line-soft bg-surface px-3.5 py-2.5 text-left"
+          className="w-full flex items-center justify-between gap-2.5 rounded-lg border border-line-soft bg-surface px-3.5 py-2.5 text-left"
         >
           <span className="min-w-0">
-            <span className="block text-[13.5px] text-ink">
+            <span className="block text-small text-ink">
               {existingNote ? "Note" : "Add a note"}
             </span>
             {existingNote ? (
-              <span className="block text-[12.5px] italic text-slate truncate">
+              <span className="block text-caption italic text-slate truncate">
                 “{existingNote}”
               </span>
             ) : null}
           </span>
-          <span className="flex-shrink-0 text-[14px] text-muted">›</span>
+          <span className="flex-shrink-0 text-small text-muted">›</span>
         </button>
         <button
           type="button"
           onClick={() => setJumpOpen(true)}
-          className="w-full min-h-11 text-ink text-[14px]"
+          className="w-full min-h-11 text-ink text-small"
         >
           Do something else next
         </button>
@@ -459,10 +460,10 @@ export function RestTakeover({
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="w-full bg-surface border-t border-line-strong rounded-t-[16px] px-5 pt-[18px] pb-[calc(22px+env(safe-area-inset-bottom))]"
+            className="w-full bg-surface border-t border-line-strong rounded-t-2xl px-5 pt-[18px] pb-[calc(22px+env(safe-area-inset-bottom))]"
           >
-            <p className="text-[16px] font-semibold text-strong mb-1 tracking-[-.015em]">Jump to</p>
-            <p className="text-[13.5px] leading-snug text-ink mb-3.5">
+            <p className="text-body font-semibold text-strong mb-1 tracking-[-.015em]">Jump to</p>
+            <p className="text-small leading-snug text-ink mb-3.5">
               Order isn&apos;t sacred. The log records what you actually did, in the order you did it.
             </p>
             <div className="flex flex-col gap-[7px] mb-3">
@@ -480,9 +481,9 @@ export function RestTakeover({
                     setJumpOpen(false);
                     onJump(r.key);
                   }}
-                  className="flex items-center justify-between gap-3 rounded border border-line-soft bg-ground px-3.5 py-3"
+                  className="flex items-center justify-between gap-3 rounded-lg border border-line-soft bg-ground px-3.5 py-3"
                 >
-                  <span className="text-[14.5px] font-semibold text-strong tracking-[-.01em]">
+                  <span className="text-small font-semibold text-strong tracking-[-.01em]">
                     {r.exercise.name}
                   </span>
                 </button>
@@ -491,7 +492,7 @@ export function RestTakeover({
             <button
               type="button"
               onClick={() => setJumpOpen(false)}
-              className="w-full h-[50px] rounded-[10px] border border-line-strong text-ink text-[15px]"
+              className="w-full h-[50px] rounded-lg border border-line-strong text-ink text-body"
             >
               Cancel
             </button>

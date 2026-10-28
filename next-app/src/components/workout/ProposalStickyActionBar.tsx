@@ -28,23 +28,20 @@ export function ProposalStickyActionBar({
       <div
         role="region"
         aria-label="Top proposal actions"
-        className="fixed left-0 right-0 z-30 bg-surface/95 backdrop-blur-sm border-t border-line-soft"
-        style={{
-          bottom: "calc(60px + env(safe-area-inset-bottom))",
-        }}
+        className="fixed left-0 right-0 bottom-[calc(60px+env(safe-area-inset-bottom))] z-30 bg-surface/95 backdrop-blur-sm border-t border-line-soft"
       >
         <div className="mx-auto max-w-md px-3 py-2 flex items-center gap-2">
           <button
             type="button"
             onClick={(e) => onAccept(e.currentTarget)}
-            className="flex-1 font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover active:bg-bronze-active min-h-[44px]"
+            className="flex-1 font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-bronze text-ground hover:bg-bronze-hover active:bg-bronze-active min-h-[44px]"
           >
             {acceptVerb}
           </button>
           <button
             type="button"
             onClick={onIgnore}
-            className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-ink hover:bg-line-soft active:bg-line-soft min-h-[44px]"
+            className="font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line text-ink hover:bg-line-soft active:bg-line-soft min-h-[44px]"
           >
             Not now
           </button>

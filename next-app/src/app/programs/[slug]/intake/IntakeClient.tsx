@@ -47,6 +47,7 @@ import type {
   PhysicalTest,
   ProgramManifestEntry,
 } from "@/lib/schemas";
+import { cardClass } from "@/components/ui/Card";
 
 type Props = { slug: string };
 
@@ -517,28 +518,28 @@ export function IntakeClient({ slug }: Props) {
 
   if (error) {
     return (
-      <div className="mt-8 rounded border border-red bg-surface p-4">
-        <h2 className="mb-2 text-lg font-semibold">Couldn&apos;t load program</h2>
-        <p className="text-sm text-muted">{error}</p>
-        <Link href="/programs" className="mt-2 inline-block text-[14px] text-slate border-b border-slate">
+      <div className={`${cardClass({ status: "red" })} mt-8`}>
+        <h2 className="mb-2 text-h3">Couldn&apos;t load program</h2>
+        <p className="text-small text-muted">{error}</p>
+        <Link href="/programs" className="mt-2 inline-block text-small text-slate border-b border-slate">
           Back to catalog
         </Link>
       </div>
     );
   }
   if (!program) {
-    return <div className="mt-8 text-sm text-muted">Loading…</div>;
+    return <div className="mt-8 text-small text-muted">Loading…</div>;
   }
   if (!intake) {
     return (
       <div className="pt-8 space-y-3">
-        <p className="text-[14px] text-strong">This program doesn&apos;t have an intake wizard.</p>
-        <p className="text-[14px] text-muted">
+        <p className="text-small text-strong">This program doesn&apos;t have an intake wizard.</p>
+        <p className="text-small text-muted">
           Head back to the program page to start it directly.
         </p>
         <Link
           href={`/programs/${slug}`}
-          className="inline-block font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground"
+          className="inline-block font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-bronze text-ground"
         >
           Back to {manifestEntry?.name ?? slug}
         </Link>
@@ -585,17 +586,17 @@ export function IntakeClient({ slug }: Props) {
         <button
           type="button"
           onClick={() => setReviewing(false)}
-          className="inline-flex items-center gap-1 text-[14px] text-slate hover:text-ink"
+          className="inline-flex items-center gap-1 text-small text-slate hover:text-ink"
         >
           <ChevronLeft size={14} />
           Back to answers
         </button>
 
         <header className="space-y-1">
-          <h1 className="text-2xl font-semibold tracking-tight text-strong">
+          <h1 className="text-h1 tracking-tight text-strong">
             Where you start
           </h1>
-          <p className="text-sm text-muted">
+          <p className="text-small text-muted">
             {manifestEntry?.name ?? slug.replace(/-/g, " ")}
           </p>
         </header>
@@ -621,15 +622,15 @@ export function IntakeClient({ slug }: Props) {
             );
             return (
               <>
-                <section className="rounded border border-bronze/40 bg-bronze/10 p-4 space-y-2">
-                  <p className="text-[11px] font-mono uppercase tracking-wider text-bronze">
+                <section className="rounded-lg border border-bronze/40 bg-bronze/10 p-4 space-y-2">
+                  <p className="text-eyebrow font-mono uppercase tracking-wider text-bronze">
                     Recommended
                   </p>
-                  <p className="text-[16px] font-semibold text-strong">
+                  <p className="text-body font-semibold text-strong">
                     {inferred.tier_label}
                   </p>
                   {typicalOutcome ? (
-                    <p className="text-[14px] text-ink leading-relaxed">
+                    <p className="text-small text-ink leading-relaxed">
                       {typicalOutcome}
                     </p>
                   ) : null}
@@ -648,7 +649,7 @@ export function IntakeClient({ slug }: Props) {
                   eyebrowTone={testsSkipped ? "amber" : "default"}
                 >
                   {testsSkipped ? (
-                    <div className="space-y-2 text-[14px] text-ink leading-relaxed">
+                    <div className="space-y-2 text-small text-ink leading-relaxed">
                       <p>
                         <span className="text-strong">We used:</span>{" "}
                         your intake answers ({answersSummary}). Physical
@@ -668,7 +669,7 @@ export function IntakeClient({ slug }: Props) {
                       </p>
                     </div>
                   ) : testsDeclared ? (
-                    <div className="space-y-2 text-[14px] text-ink leading-relaxed">
+                    <div className="space-y-2 text-small text-ink leading-relaxed">
                       <p>
                         <span className="text-strong">We used:</span>{" "}
                         your intake answers plus your physical test results
@@ -681,7 +682,7 @@ export function IntakeClient({ slug }: Props) {
                       </p>
                     </div>
                   ) : (
-                    <p className="text-[14px] text-ink leading-relaxed">
+                    <p className="text-small text-ink leading-relaxed">
                       <span className="text-strong">We used:</span>{" "}
                       your intake answers ({answersSummary}). This program
                       doesn&apos;t require physical tests — self-report is
@@ -695,7 +696,7 @@ export function IntakeClient({ slug }: Props) {
         ) : null}
 
         <section className="space-y-2">
-          <p className="text-[11px] font-mono uppercase tracking-wider text-muted">
+          <p className="text-eyebrow font-mono uppercase tracking-wider text-muted">
             Don&apos;t agree? Pick a different starting point
           </p>
           <ul className="space-y-1.5">
@@ -707,7 +708,7 @@ export function IntakeClient({ slug }: Props) {
                     type="button"
                     onClick={() => setOverrideTier(selected ? null : t.id)}
                     className={cn(
-                      "w-full text-left rounded border px-3 py-2 flex items-start gap-2 min-h-[52px]",
+                      "w-full text-left rounded-lg border px-3 py-2 flex items-start gap-2 min-h-[52px]",
                       selected
                         ? "border-bronze bg-bronze/10"
                         : "border-line hover:border-slate/40 bg-surface",
@@ -722,9 +723,9 @@ export function IntakeClient({ slug }: Props) {
                       {selected ? <Check size={11} className="text-ground" strokeWidth={3} /> : null}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-semibold text-strong">{t.label}</p>
+                      <p className="text-small font-semibold text-strong">{t.label}</p>
                       {t.typical_outcome ? (
-                        <p className="text-[12px] text-muted mt-0.5">{t.typical_outcome}</p>
+                        <p className="text-caption text-muted mt-0.5">{t.typical_outcome}</p>
                       ) : null}
                     </div>
                   </button>
@@ -976,7 +977,7 @@ function WizardProgress({
           P1-83 (2026-08-19) — bumped program-name eyebrow 10 → 12 px so
           the intake header reads as intent, not chrome. */}
       {programName ? (
-        <p className="font-mono text-[12px] uppercase tracking-widest text-muted mb-1.5 truncate">
+        <p className="font-mono text-caption uppercase tracking-widest text-muted mb-1.5 truncate">
           Intake · <span className="text-strong">{programName}</span>
         </p>
       ) : null}
@@ -997,7 +998,7 @@ function WizardProgress({
             a real signal, not chrome. Keep "Step N of M" form (do NOT
             switch to %) per audit + a11y warning (only one progressbar
             role per view). */}
-        <span className="flex min-w-0 max-w-[70%] items-baseline justify-end gap-1 text-right leading-tight font-mono text-[13px] text-muted uppercase tracking-wider sm:tracking-widest">
+        <span className="flex min-w-0 max-w-[70%] items-baseline justify-end gap-1 text-right leading-tight font-mono text-caption text-muted uppercase tracking-wider sm:tracking-widest">
           {/* The gap between label and counter was a CSS margin only, so the
               text layer read "SCREENING· Step 1 of 9" — fine on screen, wrong
               for anything reading the DOM. Real separator character instead. */}
@@ -1049,7 +1050,7 @@ function WizardQuestionScreen({
         {pictogram ? <PictogramTile kind={pictogram} /> : null}
         <h2
           id={`q-heading-${q.id}`}
-          className="text-[18px] sm:text-[20px] font-semibold text-strong leading-snug flex-1"
+          className="text-h3 text-h2 text-strong leading-snug flex-1"
         >
           {q.label}
           {q.required ? <span className="text-red ml-1">*</span> : null}
@@ -1057,7 +1058,7 @@ function WizardQuestionScreen({
       </div>
 
       {q.help ? (
-        <p className="text-[14px] text-muted leading-relaxed">{q.help}</p>
+        <p className="text-small text-muted leading-relaxed">{q.help}</p>
       ) : null}
 
       {q.type === "select" && q.options ? (
@@ -1116,7 +1117,7 @@ function WizardQuestionScreen({
                         onKeyDown={onOptionKeyDown}
                         onClick={() => setAnswer(q.id, opt.value)}
                         className={cn(
-                          "w-full text-left rounded border px-3 py-2 flex items-start gap-2 min-h-[52px]",
+                          "w-full text-left rounded-lg border px-3 py-2 flex items-start gap-2 min-h-[52px]",
                           unsafePicked
                             ? "border-red/50 bg-red/10"
                             : picked
@@ -1142,14 +1143,14 @@ function WizardQuestionScreen({
                         <div className="min-w-0 flex-1">
                           <p
                             className={cn(
-                              "text-sm font-semibold",
+                              "text-small font-semibold",
                               unsafePicked ? "text-red" : "text-strong",
                             )}
                           >
                             {opt.label ?? opt.value.replace(/_/g, " ")}
                           </p>
                           {showHint ? (
-                            <p className="text-[11px] font-mono text-muted uppercase tracking-widest mt-0.5">
+                            <p className="text-eyebrow font-mono text-muted uppercase tracking-widest mt-0.5">
                               {opt.hint}
                             </p>
                           ) : null}
@@ -1186,7 +1187,7 @@ function WizardQuestionScreen({
                     onKeyDown={onOptionKeyDown}
                     onClick={() => setAnswer(q.id, opt.value)}
                     className={cn(
-                      "text-[14px] px-4 py-3 rounded border min-h-[48px]",
+                      "text-small px-4 py-3 rounded-lg border min-h-[48px]",
                       unsafePicked
                         ? "border-red/50 bg-red/10 text-red"
                         : picked
@@ -1239,7 +1240,7 @@ function WizardQuestionScreen({
                     onKeyDown={onBoolKeyDown}
                     onClick={() => setAnswer(q.id, v)}
                     className={cn(
-                      "text-[14px] px-5 py-3 rounded border min-h-[48px]",
+                      "text-small px-5 py-3 rounded-lg border min-h-[48px]",
                       unsafePicked
                         ? "border-red/50 bg-red/10 text-red"
                         : picked
@@ -1267,7 +1268,7 @@ function WizardQuestionScreen({
           onChange={(e) => setAnswer(q.id, e.target.value)}
           placeholder={q.unit}
           aria-labelledby={`q-heading-${q.id}`}
-          className="w-full text-[15px] px-3 py-3 min-h-[48px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+          className="w-full text-body px-3 py-3 min-h-[48px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
         />
       ) : null}
 
@@ -1281,7 +1282,7 @@ function WizardQuestionScreen({
             // YESTERDAY as a valid future date.
             min={isoDate(new Date())}
             aria-labelledby={`q-heading-${q.id}`}
-            className="w-full text-[15px] px-3 py-3 min-h-[48px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+            className="w-full text-body px-3 py-3 min-h-[48px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
           />
         ) : (
           <input
@@ -1289,19 +1290,19 @@ function WizardQuestionScreen({
             value={currentValue ?? ""}
             onChange={(e) => setAnswer(q.id, e.target.value)}
             aria-labelledby={`q-heading-${q.id}`}
-            className="w-full text-[15px] px-3 py-3 min-h-[48px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+            className="w-full text-body px-3 py-3 min-h-[48px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
           />
         )
       ) : null}
 
       {showGateBlock && blocker ? (
-        <div className="mt-3 rounded border border-red/40 bg-red/10 p-4 space-y-2" role="alert">
+        <div className="mt-3 rounded-lg border border-red/40 bg-red/10 p-4 space-y-2" role="alert">
           <p className="font-semibold text-red flex items-center gap-2">
             <ShieldAlert size={16} />
             {blocker.title}
           </p>
-          <p className="text-[14px] text-strong">{blocker.body}</p>
-          <p className="text-[12px] text-muted italic">
+          <p className="text-small text-strong">{blocker.body}</p>
+          <p className="text-caption text-muted italic">
             If your answer is right, this program isn&apos;t the right fit today
             — talk to a clinician first.
           </p>
@@ -1317,14 +1318,14 @@ function WizardQuestionScreen({
         .map((w) => (
           <div
             key={w.question_id}
-            className="mt-3 rounded border border-amber/40 bg-amber/10 p-4 space-y-2"
+            className="mt-3 rounded-lg border border-amber/40 bg-amber/10 p-4 space-y-2"
             role="status"
           >
             <p className="font-semibold text-amber flex items-center gap-2">
               <ShieldAlert size={16} />
               {w.title}
             </p>
-            <p className="text-[14px] text-strong">{w.body}</p>
+            <p className="text-small text-strong">{w.body}</p>
             <label className="flex items-start gap-3 pt-1 min-h-[44px] cursor-pointer">
               <input
                 type="checkbox"
@@ -1332,7 +1333,7 @@ function WizardQuestionScreen({
                 onChange={(e) => setSafetyAck(w.question_id, e.target.checked)}
                 className="mt-1 h-5 w-5 shrink-0 accent-amber"
               />
-              <span className="text-[14px] text-strong">{w.acknowledge_label}</span>
+              <span className="text-small text-strong">{w.acknowledge_label}</span>
             </label>
           </div>
         ))}
@@ -1372,19 +1373,19 @@ function WizardPhysicalTestScreen({
     <section className="space-y-5 py-2">
       <h2
         id={`q-heading-${t.id}`}
-        className="text-[18px] sm:text-[20px] font-semibold text-strong leading-snug"
+        className="text-h3 text-h2 text-strong leading-snug"
       >
         {t.label}
       </h2>
       {t.instructions ? (
-        <p className="text-[14px] text-muted leading-relaxed">{t.instructions}</p>
+        <p className="text-small text-muted leading-relaxed">{t.instructions}</p>
       ) : null}
       {t.video_url ? (
         <a
           href={t.video_url}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex items-center gap-1.5 text-[12px] font-mono uppercase tracking-wider text-slate hover:text-ink underline underline-offset-4"
+          className="inline-flex items-center gap-1.5 text-caption font-mono uppercase tracking-wider text-slate hover:text-ink underline underline-offset-4"
         >
           Watch demo ↗
         </a>
@@ -1393,7 +1394,7 @@ function WizardPhysicalTestScreen({
           href={`https://www.google.com/search?q=${encodeURIComponent(t.video_search)}&tbm=vid`}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex items-center gap-1.5 text-[12px] font-mono uppercase tracking-wider text-slate hover:text-ink underline underline-offset-4"
+          className="inline-flex items-center gap-1.5 text-caption font-mono uppercase tracking-wider text-slate hover:text-ink underline underline-offset-4"
         >
           Look up a demo ↗
         </a>
@@ -1411,7 +1412,7 @@ function WizardPhysicalTestScreen({
               <label
                 key={`${r.label}-${r.value}`}
                 className={cn(
-                  "flex items-start gap-3 rounded border p-3 cursor-pointer min-h-[56px] transition-colors",
+                  "flex items-start gap-3 rounded-lg border p-3 cursor-pointer min-h-[56px] transition-colors",
                   checked
                     ? "border-bronze bg-bronze/5"
                     : "border-line hover:border-slate/40 hover:bg-line-soft/40",
@@ -1428,14 +1429,14 @@ function WizardPhysicalTestScreen({
                 <span className="min-w-0 flex-1">
                   <span
                     className={cn(
-                      "block text-[14px] leading-snug",
+                      "block text-small leading-snug",
                       checked ? "text-strong font-medium" : "text-ink",
                     )}
                   >
                     {r.label}
                   </span>
                   {r.description ? (
-                    <span className="block mt-0.5 text-[12px] text-muted leading-snug">
+                    <span className="block mt-0.5 text-caption text-muted leading-snug">
                       {r.description}
                     </span>
                   ) : null}
@@ -1443,7 +1444,7 @@ function WizardPhysicalTestScreen({
               </label>
             );
           })}
-          <p className="text-[11px] text-muted italic pt-1">
+          <p className="text-eyebrow text-muted italic pt-1">
             Pick the option that best matches what you can do today. Rough is fine — the
             engine adjusts as you log real sessions.
           </p>
@@ -1464,9 +1465,9 @@ function WizardPhysicalTestScreen({
               const n = Number(e.target.value);
               if (isFinite(n)) setResult(t.id, n);
             }}
-            className="flex-1 min-w-0 text-[15px] px-3 py-3 min-h-[48px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+            className="flex-1 min-w-0 text-body px-3 py-3 min-h-[48px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
           />
-          <span className="text-[12px] text-muted font-mono w-16 shrink-0 text-right">{t.unit}</span>
+          <span className="text-caption text-muted font-mono w-16 shrink-0 text-right">{t.unit}</span>
         </div>
       )}
       {step.indexInSection === 0 ? (
@@ -1477,7 +1478,7 @@ function WizardPhysicalTestScreen({
               conditions reading 0 and drops the user to the lowest tier —
               while this sentence told them their self-report would be used.
               See `hasSelfReportProxy`. (2026-09-07) */}
-          <p className="text-[12px] text-muted italic">
+          <p className="text-caption text-muted italic">
             {hasSelfReportProxy(slug)
               ? "Physical tests are optional. Skip and we use your self-report as a proxy — you can retake these later on Retest."
               : "Physical tests are optional, but this programme places you by measured result — skip them and you start at the introductory tier. You can retake these later on Retest."}
@@ -1485,7 +1486,7 @@ function WizardPhysicalTestScreen({
           <button
             type="button"
             onClick={onSkipAll}
-            className="text-[11px] mono-caps text-muted hover:text-ink underline underline-offset-4"
+            className="text-eyebrow mono-caps text-muted hover:text-ink underline underline-offset-4"
           >
             Skip physical tests →
           </button>
@@ -1510,9 +1511,9 @@ function WizardConsentScreen({
 }) {
   return (
     <section className="space-y-5 py-2">
-      <h2 className="text-[18px] sm:text-[20px] font-semibold text-strong">
+      <h2 className="text-h3 text-h2 text-strong">
         Consent
-        <span className={cn("ml-2 text-[11px] font-mono uppercase tracking-widest align-middle", SECTION_TONE_META.required.badgeClass)}>
+        <span className={cn("ml-2 text-eyebrow font-mono uppercase tracking-widest align-middle", SECTION_TONE_META.required.badgeClass)}>
           required
         </span>
       </h2>
@@ -1523,14 +1524,14 @@ function WizardConsentScreen({
                 tap targets in the wizard (~32-40px depending on label wrap).
                 Everything else in the wizard is 52-56px. Add min-h-[52px] +
                 p-2 to bring parity. */}
-            <label className="flex items-start gap-3 cursor-pointer min-h-[52px] p-2 -mx-2 rounded hover:bg-line-soft/40">
+            <label className="flex items-start gap-3 cursor-pointer min-h-[52px] p-2 -mx-2 rounded-lg hover:bg-line-soft/40">
               <input
                 type="checkbox"
                 checked={consents[c.id] === true}
                 onChange={(e) => setConsent(c.id, e.target.checked)}
                 className="mt-1 flex-shrink-0 w-5 h-5"
               />
-              <span className="text-[14px] text-strong leading-relaxed">{c.label}</span>
+              <span className="text-small text-strong leading-relaxed">{c.label}</span>
             </label>
           </li>
         ))}
@@ -1539,11 +1540,11 @@ function WizardConsentScreen({
       {/* Audit 2026-08-18 (P1) — review-my-answers collapsible so a user
           on the consent step can verify what they answered without
           walking Back through the whole flow. */}
-      <details className="rounded border border-line-soft bg-surface p-3">
-        <summary className="cursor-pointer text-[14px] text-muted hover:text-ink">
+      <details className={cardClass()}>
+        <summary className="cursor-pointer text-small text-muted hover:text-ink">
           Review my answers
         </summary>
-        <ul className="mt-3 space-y-2 text-[12px]">
+        <ul className="mt-3 space-y-2 text-caption">
           {questions
             .filter((q) => answers[q.id] != null && answers[q.id] !== "")
             .map((q) => {
@@ -1609,7 +1610,7 @@ function WizardFooter({
           Back
         </Button>
         <span
-          className="flex-1 text-center font-mono text-[10px] text-muted uppercase tracking-widest"
+          className="flex-1 text-center font-mono text-eyebrow text-muted uppercase tracking-widest"
           aria-hidden
         >
           {stepIndex + 1} / {total}
@@ -1628,7 +1629,7 @@ function WizardFooter({
           and the Back/Next buttons jumped up. Always reserve the slot;
           swap text vs. an invisible spacer so height is constant. */}
       <p
-        className="mx-auto max-w-2xl pb-3 -mt-1 text-center text-[11px] italic"
+        className="mx-auto max-w-2xl pb-3 -mt-1 text-center text-eyebrow italic"
         aria-hidden={nextReady}
       >
         <span className={nextReady ? "invisible text-muted" : "text-muted"}>

@@ -6,13 +6,13 @@ export const metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div className="max-w-2xl mx-auto space-y-4 pt-4 text-[14px] leading-relaxed">
-      <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">Privacy policy</h1>
+    <div className="max-w-2xl mx-auto space-y-4 pt-4 text-small leading-relaxed">
+      <h1 className="text-h1 tracking-tight text-strong leading-none">Privacy policy</h1>
       <p className="text-muted italic">
         Last updated: 2026-10-27. Beta — this policy will be lawyer-reviewed before public launch.
       </p>
 
-      <h2 className="text-lg font-semibold text-strong pt-2">Who controls your data</h2>
+      <h2 className="text-h3 text-strong pt-2">Who controls your data</h2>
       <p>
         The data controller under GDPR is <strong>Margus Sellin</strong>, natural person,
         based in Estonia. Contact for anything privacy-related:{" "}
@@ -22,8 +22,8 @@ export default function PrivacyPage() {
         .
       </p>
 
-      <h2 className="text-lg font-semibold text-strong pt-2">What we store, why, and for how long</h2>
-      <table className="w-full text-[14px] border-collapse">
+      <h2 className="text-h3 text-strong pt-2">What we store, why, and for how long</h2>
+      <table className="w-full text-small border-collapse">
         <thead>
           <tr className="text-left border-b border-line">
             <th className="py-1.5 pr-2 font-semibold">Data</th>
@@ -96,14 +96,14 @@ export default function PrivacyPage() {
         </tbody>
       </table>
 
-      <h2 className="text-lg font-semibold text-strong pt-2">Lawful basis (GDPR Art. 6 & 9)</h2>
+      <h2 className="text-h3 text-strong pt-2">Lawful basis (GDPR Art. 6 & 9)</h2>
       <ul className="list-disc pl-5 space-y-1">
         <li><strong>Account + training log:</strong> contract with you (Art. 6(1)(b)).</li>
         <li><strong>Symptom scores, pain ratings, self-assessments:</strong> your explicit consent (Art. 9(2)(a)) — health data is a &quot;special category&quot; and we store it only because you ticked the consent box at sign-up (for Google sign-up, the same tick on the sign-up page before you continue to Google).</li>
         <li><strong>Error reports:</strong> our legitimate interest in a working service (Art. 6(1)(f)), scrubbed of health content before transmission.</li>
       </ul>
 
-      <h2 className="text-lg font-semibold text-strong pt-2">Where it lives</h2>
+      <h2 className="text-h3 text-strong pt-2">Where it lives</h2>
       <ul className="list-disc pl-5 space-y-1">
         <li>
           Account, email, training logs and symptom data: <strong>Supabase</strong>{" "}
@@ -137,12 +137,12 @@ export default function PrivacyPage() {
         </li>
         <li>Payment data (when paid tier launches): handled entirely by <strong>Stripe</strong>. We never see card numbers.</li>
       </ul>
-      <p className="text-[14px] text-muted">
+      <p className="text-small text-muted">
         These providers act as sub-processors under standard data-processing agreements. Sub-processor
         list is current as of the &quot;last updated&quot; date above; changes will be announced by email.
       </p>
 
-      <h2 className="text-lg font-semibold text-strong pt-2">International transfers</h2>
+      <h2 className="text-h3 text-strong pt-2">International transfers</h2>
       <p>
         Where each provider stores your data is listed above. Two of them are outside
         the EU. Error reports and any feedback you send from inside the app go to
@@ -154,7 +154,7 @@ export default function PrivacyPage() {
         clauses. Some CDN edges serve static assets globally; no personal data is involved.
       </p>
 
-      <h2 className="text-lg font-semibold text-strong pt-2">Cookies & tracking</h2>
+      <h2 className="text-h3 text-strong pt-2">Cookies & tracking</h2>
       <p>
         We use one session cookie (Supabase auth) so you stay signed in. We do not use
         marketing cookies, ad networks, or cross-site trackers. We use{" "}
@@ -173,14 +173,14 @@ export default function PrivacyPage() {
         never in the background — so if you don&apos;t open a demo, no connection is made.
       </p>
 
-      <h2 className="text-lg font-semibold text-strong pt-2">Automated decisions</h2>
+      <h2 className="text-h3 text-strong pt-2">Automated decisions</h2>
       <p>
         The engine proposes load adjustments and program changes. These are proposals,
         not automatic decisions — nothing changes until you tap Accept. This is confirm-first
         by design and outside the scope of GDPR Art. 22.
       </p>
 
-      <h2 className="text-lg font-semibold text-strong pt-2">What we don&apos;t do</h2>
+      <h2 className="text-h3 text-strong pt-2">What we don&apos;t do</h2>
       <ul className="list-disc pl-5 space-y-1">
         <li>We don&apos;t sell your data. Ever.</li>
         <li>We don&apos;t train AI models on your data.</li>
@@ -188,7 +188,7 @@ export default function PrivacyPage() {
         <li>We don&apos;t use your data for advertising.</li>
       </ul>
 
-      <h2 className="text-lg font-semibold text-strong pt-2">Your rights (GDPR)</h2>
+      <h2 className="text-h3 text-strong pt-2">Your rights (GDPR)</h2>
       <ul className="list-disc pl-5 space-y-1">
         <li><strong>Access</strong> — export your entire dataset as JSON from Profile → Account.</li>
         <li><strong>Delete</strong> — one-click account deletion from Profile → Account. Deleting your account removes your server-side data; backup rotations may keep a copy for up to 90 days.</li>
@@ -202,7 +202,7 @@ export default function PrivacyPage() {
         </li>
       </ul>
 
-      <h2 className="text-lg font-semibold text-strong pt-2">Breach notification</h2>
+      <h2 className="text-h3 text-strong pt-2">Breach notification</h2>
       <p>
         If a personal-data breach happens and it&apos;s likely to affect you, we&apos;ll
         notify you by email within 72 hours of becoming aware, per GDPR Art. 34.
@@ -210,13 +210,13 @@ export default function PrivacyPage() {
         emails you on its own, and there is no marketing list.
       </p>
 
-      <h2 className="text-lg font-semibold text-strong pt-2">Children</h2>
+      <h2 className="text-h3 text-strong pt-2">Children</h2>
       <p>
         Terav is not intended for users under 16. We don&apos;t knowingly collect data
         from anyone under 16.
       </p>
 
-      <h2 className="text-lg font-semibold text-strong pt-2">Contact</h2>
+      <h2 className="text-h3 text-strong pt-2">Contact</h2>
       <p>
         For anything privacy-related, including exercising the rights above, email{" "}
         <a href="mailto:sellinmargus@gmail.com" className="text-slate border-b border-slate">
@@ -225,7 +225,7 @@ export default function PrivacyPage() {
         . We aim to respond within 7 days.
       </p>
 
-      <footer className="pt-6 border-t border-line-soft text-[12px] text-muted">
+      <footer className="pt-6 border-t border-line-soft text-caption text-muted">
         <Link href="/sign-up" className="text-slate border-b border-slate">Back</Link>
       </footer>
     </div>

@@ -1,5 +1,13 @@
 import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { extendTailwindMerge } from "tailwind-merge";
+
+// The type scale in brand/tokens.css (D-04). Without this, tailwind-merge reads
+// `text-caption` as a colour and `cn("text-caption", "text-muted")` drops it.
+const twMerge = extendTailwindMerge({
+  extend: {
+    theme: { text: ["eyebrow", "caption", "small", "body", "h3", "h2", "h1", "metric"] },
+  },
+});
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

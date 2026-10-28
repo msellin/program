@@ -5,6 +5,7 @@ import { useStore } from "@/lib/useStore";
 import { isBlockObjectOn } from "@/lib/engine/block-selectors";
 import type { MissedWeekSignal } from "@/lib/engine/missed-week";
 import type { Program } from "@/lib/schemas";
+import { Card } from "@/components/ui/Card";
 
 const REASONS = ["Ill", "Something hurts", "Just busy"] as const;
 
@@ -72,15 +73,15 @@ export function WeekRecoveryCard({
 
   if (applied) {
     return (
-      <div className="rounded border border-line-soft border-l-4 border-l-green bg-green/10 px-3 py-2.5 text-[14px] flex items-center justify-between gap-3">
+      <Card status="green" flush className="px-3 py-2.5 text-small flex items-center justify-between gap-3">
         <p className="text-strong">
           <span className="font-semibold">{applied}.</span>{" "}
           <span className="text-muted">The plan reads it either way — nothing here is punitive.</span>
         </p>
-        <button type="button" onClick={onDismiss} className="text-muted hover:text-ink text-[13px] flex-shrink-0">
+        <button type="button" onClick={onDismiss} className="text-muted hover:text-ink text-caption flex-shrink-0">
           Done
         </button>
-      </div>
+      </Card>
     );
   }
 
@@ -91,13 +92,13 @@ export function WeekRecoveryCard({
       : `You've missed ${missedCount} scheduled ${dayWord} this week.`;
 
   return (
-    <div className="rounded border border-amber/40 bg-amber/10 p-4 space-y-3">
+    <Card status="amber" className="space-y-3">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="font-mono text-[10px] uppercase tracking-widest text-amber">This week</p>
-          <p className="text-[17px] font-semibold text-strong mt-0.5 leading-snug">{headline}</p>
+          <p className="font-mono text-eyebrow uppercase tracking-widest text-amber">This week</p>
+          <p className="text-h3 text-strong mt-0.5 leading-snug">{headline}</p>
           {remainingScheduledCount > 0 ? (
-            <p className="text-[13px] text-muted mt-0.5">
+            <p className="text-caption text-muted mt-0.5">
               {remainingScheduledCount} scheduled {remainingScheduledCount === 1 ? "day" : "days"} left.
             </p>
           ) : null}
@@ -112,7 +113,7 @@ export function WeekRecoveryCard({
         </button>
       </div>
 
-      <p className="text-[13.5px] leading-snug text-muted">
+      <p className="text-small leading-snug text-muted">
         Nothing here is a failure — the plan reads a missed week the same way it reads a good one. Pick
         whichever of these matches what actually happened.
       </p>
@@ -121,10 +122,10 @@ export function WeekRecoveryCard({
         <button
           type="button"
           onClick={skipOnly}
-          className="w-full text-left rounded border border-line-strong bg-surface px-3.5 py-3 hover:bg-line-soft"
+          className="w-full text-left rounded-lg border border-line-strong bg-surface px-3.5 py-3 hover:bg-line-soft"
         >
-          <p className="text-[14.5px] font-semibold text-strong">Skip what&apos;s missed</p>
-          <p className="text-[13px] text-muted mt-0.5 leading-snug">
+          <p className="text-small font-semibold text-strong">Skip what&apos;s missed</p>
+          <p className="text-caption text-muted mt-0.5 leading-snug">
             Marks {missedCount === 1 ? "that day" : `those ${missedCount} days`} skipped. Rest of the week
             runs as scheduled — progression order breaks if you&apos;re on a wave.
           </p>
@@ -132,10 +133,10 @@ export function WeekRecoveryCard({
         <button
           type="button"
           onClick={shiftWeek}
-          className="w-full text-left rounded border border-bronze/50 bg-bronze/[0.06] px-3.5 py-3 hover:bg-bronze/10"
+          className="w-full text-left rounded-lg border border-bronze/50 bg-bronze/[0.06] px-3.5 py-3 hover:bg-bronze/10"
         >
-          <p className="text-[14.5px] font-semibold text-strong">Shift the week</p>
-          <p className="text-[13px] text-muted mt-0.5 leading-snug">
+          <p className="text-small font-semibold text-strong">Shift the week</p>
+          <p className="text-caption text-muted mt-0.5 leading-snug">
             Each remaining session moves up to cover the gap. The last scheduled day this week drops.
             Recommended if you&apos;re mid-wave.
           </p>
@@ -143,17 +144,17 @@ export function WeekRecoveryCard({
         <button
           type="button"
           onClick={pushWeek}
-          className="w-full text-left rounded border border-line-strong bg-surface px-3.5 py-3 hover:bg-line-soft"
+          className="w-full text-left rounded-lg border border-line-strong bg-surface px-3.5 py-3 hover:bg-line-soft"
         >
-          <p className="text-[14.5px] font-semibold text-strong">Push the week out</p>
-          <p className="text-[13px] text-muted mt-0.5 leading-snug">
+          <p className="text-small font-semibold text-strong">Push the week out</p>
+          <p className="text-caption text-muted mt-0.5 leading-snug">
             Every remaining session this week moves out exactly 7 days. This week becomes a rest week.
           </p>
         </button>
       </div>
 
       <div>
-        <p className="font-mono text-[10px] uppercase tracking-widest text-muted mb-1.5">
+        <p className="font-mono text-eyebrow uppercase tracking-widest text-muted mb-1.5">
           Or tell Terav why — optional
         </p>
         <div className="flex gap-2 flex-wrap">
@@ -163,7 +164,7 @@ export function WeekRecoveryCard({
               type="button"
               onClick={() => setReason((cur) => (cur === r ? null : r))}
               className={
-                "rounded-full px-3.5 py-2 text-[13px] font-medium border " +
+                "rounded-full px-3.5 py-2 text-caption font-medium border " +
                 (reason === r
                   ? "border-bronze bg-[rgba(200,150,102,.14)] text-strong"
                   : "border-line-strong bg-surface text-ink")
@@ -175,15 +176,15 @@ export function WeekRecoveryCard({
         </div>
       </div>
 
-      <div className="rounded border border-line-soft bg-surface px-3.5 py-3">
-        <p className="font-mono text-[10px] uppercase tracking-widest text-muted mb-1">
+      <div className="rounded-lg bg-surface-2 p-3">
+        <p className="font-mono text-eyebrow uppercase tracking-widest text-muted mb-1">
           What a skipped week does
         </p>
-        <p className="text-[13.5px] leading-snug text-ink">
+        <p className="text-small leading-snug text-ink">
           Nothing punitive. Your training max holds where it is, and the record shows the gap honestly
           rather than silently backfilling it.
         </p>
       </div>
-    </div>
+    </Card>
   );
 }

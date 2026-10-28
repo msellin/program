@@ -84,7 +84,7 @@ export function SymptomLoadChart({
 
   if (!anyLoad && !anySymptom) {
     return (
-      <div className="text-[14px] text-muted italic">
+      <div className="text-small text-muted italic">
         No data yet — log a session or morning check first.
       </div>
     );
@@ -174,12 +174,12 @@ export function SymptomLoadChart({
           Sighted keyboard users can't hit tooltip trigger points; the
           table gives them the same numbers with Tab + arrow keys. Screen
           readers already have the chart's aria-label summary. */}
-      <details className="mt-3 text-[13px]">
+      <details className="mt-3 text-caption">
         <summary className="cursor-pointer inline-flex items-center min-h-[44px] py-2 text-muted hover:text-ink select-none">
           Data table
         </summary>
         <div className="mt-1 overflow-x-auto">
-          <table className="w-full text-[12px] font-mono border-collapse">
+          <table className="w-full text-caption font-mono border-collapse">
             <thead>
               <tr className="text-left text-muted border-b border-line-soft">
                 <th className="py-1.5 pr-3 font-normal">Date</th>
@@ -222,7 +222,7 @@ function CustomTooltip(props: {
   if (!active || !payload || !payload.length) return null;
   const row = payload[0].payload as Row;
   return (
-    <div className="rounded border border-line bg-surface p-2 shadow-sm text-[11px]">
+    <div className="rounded-lg border border-line bg-surface p-2 shadow-sm text-eyebrow">
       <p className="font-mono text-muted mb-1">{row.date}</p>
       {signals.map((s, i) =>
         row[s.id] != null ? (

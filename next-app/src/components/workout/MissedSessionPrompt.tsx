@@ -7,6 +7,7 @@ import { blocksForDate } from "@/lib/engine/plan-generator";
 import { activePhaseFor } from "@/lib/engine/schedule";
 import { getBlocksForDate, isBlockObjectOn } from "@/lib/engine/block-selectors";
 import type { Program } from "@/lib/schemas";
+import { Card } from "@/components/ui/Card";
 
 type Stage = "prompt" | "skipChoice";
 
@@ -90,13 +91,13 @@ export function MissedSessionPrompt({
   };
 
   return (
-    <div className="rounded border border-amber/40 border-l-4 border-l-amber bg-amber/10 p-3 space-y-2">
+    <Card status="amber" className="space-y-2">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
-          <p className="font-semibold text-strong text-sm">
+          <p className="font-semibold text-strong text-small">
             Yesterday was a strength day — nothing logged.
           </p>
-          <p className="text-[12px] text-muted mt-0.5 leading-snug">
+          <p className="text-caption text-muted mt-0.5 leading-snug">
             <span className="text-muted">Because:</span>{" "}
             {stage === "prompt"
               ? "yesterday's scheduled strength session had no log — history stays honest either way, and the week's progression responds to your call."
@@ -121,14 +122,14 @@ export function MissedSessionPrompt({
               dismiss();
               onLogYesterday();
             }}
-            className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover min-h-[36px]"
+            className="font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-bronze text-ground hover:bg-bronze-hover min-h-[36px]"
           >
             Log yesterday now
           </button>
           <button
             type="button"
             onClick={() => setStage("skipChoice")}
-            className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-ink hover:bg-line-soft min-h-[36px]"
+            className="font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line text-ink hover:bg-line-soft min-h-[36px]"
           >
             Mark yesterday skipped
           </button>
@@ -145,10 +146,10 @@ export function MissedSessionPrompt({
               }
               dismiss();
             }}
-            className="w-full text-left rounded border border-line hover:border-slate/40 bg-surface p-3 space-y-1"
+            className="w-full text-left rounded-lg border border-line hover:border-slate/40 bg-surface p-3 space-y-1"
           >
-            <p className="font-semibold text-[14px] text-strong">Skip only</p>
-            <p className="text-[11px] text-muted leading-snug">
+            <p className="font-semibold text-small text-strong">Skip only</p>
+            <p className="text-eyebrow text-muted leading-snug">
               This session is lost. Rest of the week runs as scheduled. Progression order breaks if you&apos;re on a wave.
             </p>
           </button>
@@ -158,22 +159,22 @@ export function MissedSessionPrompt({
               if (program) skipAndShiftWeek(yesterdayISO, program, "not completed — shifted week");
               dismiss();
             }}
-            className="w-full text-left rounded border border-bronze/50 bg-bronze/[0.06] p-3 space-y-1"
+            className="w-full text-left rounded-lg border border-bronze/50 bg-bronze/[0.06] p-3 space-y-1"
           >
-            <p className="font-semibold text-[14px] text-strong">Skip & shift the week</p>
-            <p className="text-[11px] text-muted leading-snug">
+            <p className="font-semibold text-small text-strong">Skip & shift the week</p>
+            <p className="text-eyebrow text-muted leading-snug">
               This session takes over the next scheduled strength day. Last day of the week drops. Recommended for wave-based programs.
             </p>
           </button>
           <button
             type="button"
             onClick={() => setStage("prompt")}
-            className="text-[11px] text-muted underline decoration-muted/40 hover:text-ink"
+            className="text-eyebrow text-muted underline decoration-muted/40 hover:text-ink"
           >
             ← Back
           </button>
         </div>
       )}
-    </div>
+    </Card>
   );
 }

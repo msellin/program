@@ -3,14 +3,11 @@ url: https://terav.fit/programs/first-strict-pullup/?utm_campaign=gap-test
 horizontal overflow: false
 
 Skip to main content
-TERAV
 Sign in
 ← ALL PROGRAMS
 SKILL
 ·
 MULTI-TIER · 8 WEEKS
-·
-MULTI-TIER
 First Strict Pull-Up
 
 From no hang to a rep you own.
@@ -28,19 +25,19 @@ WHAT GETS RETESTED
 
 Hang time retested weekly at the lower tiers, max reps weekly at the upper. Full assessment every 4 weeks — dead hang, scap pull, ring row, negative control.
 
-HONEST OUTCOME RANGES
+WHAT EACH STAGE LOOKS LIKE
 HANG
-25-45 second dead hang. Clean scap pulls. First ring rows.
+A steady dead hang, clean scap pulls and your first ring rows.
 ASSISTED
-First strict rep, off a 10-second negative.
+Controlled negatives and band-assisted reps, building toward a first strict rep.
 FIRST REP
-3-5 unbroken.
+Your first strict reps, with the pattern grooved.
 VOLUME
-8-10 unbroken, wide-grip variety unlocked.
+Sets of unbroken reps, with grip variations unlocked.
 
-Ranges are honest, not guarantees. Response varies — HERITAGE non-response distributions apply to any structured training program.
+Not guarantees. People respond to training differently.
 
-WHAT IT CITES
+SOURCES
 
 YOUDAS 2010 · EMG ACROSS PULL-UP VARIANTS
 
@@ -48,26 +45,26 @@ Scapular phase precedes the concentric pull — the reason scap work comes befor
 
 ROIG 2009 · ECCENTRIC VS CONCENTRIC
 
-Eccentric training produce
+Eccentric training produces great
 
-CTA href from the pull-up landing page: https://app.terav.fit/sign-up?next=%2Fprograms%2Ffirst-strict-pullup
+CTA href from the pull-up landing page: https://app.terav.fit/sign-up?next=%2Fprograms%2Ffirst-strict-pullup&utm_campaign=gap-test
 
 ## 02-sign-up-page-not-submitted
 url: https://app.terav.fit/sign-up/
 horizontal overflow: false
 
-TERAV
 Sign up
+I accept the terms and medical disclaimer. Terav is a training log — not medical advice.
+I consent to storing my training log and symptom scores. See the privacy policy — you can export or delete everything from Profile.
+I am 16 or older.
 Continue with Google
 
-Continuing accepts the terms, medical disclaimer, and consent to store training + symptom data (privacy).
+Tick the three boxes above to continue with Google or email.
 
 OR WITH EMAIL
 Email
 Password (8+ characters)
-I accept the terms and medical disclaimer. Terav is a training log — not medical advice.
-I consent to storing my training log and symptom scores. See the privacy policy — you can export or delete everything from Profile.
-CREATE ACCOUNT
+Create account
 
 Already have an account? Sign in
 
@@ -76,24 +73,12 @@ url: https://app.terav.fit/
 horizontal overflow: false
 
 Skip to content
-TERAV
 Pick your focus.
 
 Each program starts with a short intake so the plan is calibrated to your baseline, not a template with your name on it.
 
-BROWSE PROGRAMS
-
-Four tabs, one flow
-
-Day — the session you're prescribed right now.
-Plan — the 7-day rhythm; browse other days from here.
-Record — training maxes, retests, trends, and every logged session.
-Profile — account, active plans, menu.
-
-More lives under Profile: Programs, Off-plan, Report, Guide and Evidence. The daily check is reached from Day when one is due.
-
-Got it — start the day
-DAY
+Browse programs
+TODAY
 PLAN
 RECORD
 PROFILE
@@ -103,26 +88,14 @@ url: https://app.terav.fit/programs/
 horizontal overflow: false
 
 Skip to content
-TERAV
+Back
 Pick your focus.
 
 Each program is one focus arc — an engine, a skill, a lift, a stubborn joint. The rest of your week stays yours. Personalised to your baseline, adaptive to how you respond.
 
-CITED = every claim references a study, simulator harness passes. VERIFIED = the citations have been audited against the literature in a documented review, with reviewer, date and scope on record.
+How we check programs
 
-Every program ships at least CITED. VERIFIED means a second, documented pass over the citations — currently Terav's own audit process, not an outside clinician. No program has yet been signed off by an independent specialist, and none has five completed field arcs. When one does, we will say so and name them. Personal programs (author's own clinical context) sit outside this ladder — see the “personal” badge instead.
-
-8 PROGRAMS · LIVE NOW
-
-ENDURANCE
-
-CITED
-
-Engine Builder — Block 1: Base
-
-Block 1 of a 3-block, ~6-month engine transformation. Eight weeks of Zone 1/2 base with a single weekly hard session added in week 4. Row, bike, ski-erg, or run.
-
-8 wks · beginner
+3 PROGRAMS · LIVE NOW
 
 SKILL
 
@@ -144,27 +117,62 @@ For lifters adding cardio without losing the squat. Explosive-strength cost boun
 
 8 wks · intermediate
 
-ENDURANCE
+SKILL
 
 CITED
 
-Rowing 
+First Strict Pull-Up
+
+Multi-tier skill program on the shared pull drill library. Grip → scap → negative → band → unassisted, then volume. Personalised sessions target your weakest sub-capability first.
+
+8 wks · multi-tier
+
+All
+Strength
+Gymnastics & skill
+Engine & endurance
+Mobility
+SORT
+Curated
+Shortest first
+Easiest first
+
+1 PROGRAM
+
+Strength
+
+Move heavier weight in a specific lift or pattern.
+
+Concurrent-Strength Maintenance
+CITED
+
+For lifters adding cardio without losing the squat. Explosive-strength cost bounded, cited, PR-banned.
+
+8 wk
+·
+~4-5 hr/week
+
+3 PROGRAMS
+
+Gymnastics & skill
+
+Unlock a specific movement — pull-up, HSPU, muscle-up, handstand walk.
+
+Handstand Walk
+CITED
+
+Multi-tiered handstand walk program from wall-supported beginner to advanced turns and obstacles. Personalised sessions target your specific weak capab
 
 ## 05-program-detail
 url: https://app.terav.fit/programs/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
-TERAV
-All programs
+Back
 First Strict Pull-Up
 CITED
 
 Multi-tier skill program on the shared pull drill library. Grip → scap → negative → band → unassisted, then volume. Personalised sessions target your weakest sub-capability first.
-
-Reviewed by Terav specialist audit agent · domain review · skill acquisition + concurrent endurance
-
-2026-09-02 · scope: citations (21 refs, 1 removed as unsupported, 2 used_for narrowed), readiness inputs, intake-driven deferrals, tier phase resolution, screen coherence at day 45 · 3 anchor files on record
 
 Levels:
 Hang
@@ -201,29 +209,53 @@ SECTION 4 OF 4
 
 How we prove it works
 
-Weekly max-rep retest (Tier C/
+Weekly max-rep retest (Tier C/D) or weekly hang-time retest (Tier A/B); every 4 weeks: full assessment (dead hang, scap pull, ring row, strict pull-up, negative control).
+
+Baseline setup — a few minutes on the wizard + a 3-day measurement window
+
+11 short questions and 5 benchmark tests to set your baseline. The rest of the program is generated from th
 
 ## 06-intake-01
 url: https://app.terav.fit/programs/first-strict-pullup/intake/
 horizontal overflow: false
 
 Skip to content
-TERAV
-Cancel intake
+Back
 Intake — First Strict Pull-Up
 
 INTAKE · FIRST STRICT PULL-UP
 
-SCREENING · STEP 1 OF 16
-Have you had shoulder pain during any overhead pressing, pull-down, or hanging work in the last 12 months?*
+WHERE YOU ARE NOW
+· STEP 1 OF 16
+How many strict pull-ups can you do right now — no kip, no swing, full range from dead hang to chin over the bar?*
 
-Includes press, pull-up attempts, hanging work, or overhead sports. If yes, we bias the plan toward closed-chain scap work and defer heavy dead hangs.
+Zero — I can't hang from the bar for 15 seconds
 
-Yes
-No
-BACK
+TIER A
+
+Zero — but I can dead hang 15+ seconds
+
+TIER A / B
+
+Only with a band or assisted machine
+
+TIER B
+
+Almost — I can do a partial rep or a slow negative
+
+TIER B / C
+
+1-2 strict reps
+
+TIER C
+
+3-5 strict reps
+
+TIER D
+
+Back
 1 / 16
-NEXT
+Next
 
 Answer this to continue.
 
@@ -232,72 +264,150 @@ url: https://app.terav.fit/programs/first-strict-pullup/intake/
 horizontal overflow: false
 
 Skip to content
-TERAV
-Cancel intake
+Back
 Intake — First Strict Pull-Up
 
 INTAKE · FIRST STRICT PULL-UP
 
-SCREENING · STEP 2 OF 16
-Do you have an acute shoulder injury (rotator cuff tear, labral tear, dislocation) in the last 6 months?*
+WHERE YOU ARE NOW
+· STEP 2 OF 16
+How long can you passively dead hang from a pull-up bar (arms straight, no scap engagement, just hanging)?*
 
-If yes, dead hangs and pull-up attempts are contraindicated until cleared.
+Under 10 seconds
 
-Yes
-No
-BACK
+TIER A ENTRY — GRIP IS LIMITING
+
+10-20 seconds
+
+TIER A / B BOUNDARY
+
+20-45 seconds
+
+TIER B ENTRY
+
+45-60 seconds
+
+TIER B / C BOUNDARY
+
+Over 60 seconds
+
+TIER C+
+
+Back
 2 / 16
-NEXT
+Next
 
 Answer this to continue.
 
-Step 2 of 16. Screening — Do you have an acute shoulder injury (rotator cuff tear, labral tear, dislocation) in the last 6 months?
+Step 2 of 16. Where you are now — How long can you passively dead hang from a pull-up bar (arms straight, no scap engagement, just hanging)?
 
 ## 06-intake-03
 url: https://app.terav.fit/programs/first-strict-pullup/intake/
 horizontal overflow: false
 
 Skip to content
-TERAV
-Cancel intake
+Back
 Intake — First Strict Pull-Up
 
 INTAKE · FIRST STRICT PULL-UP
 
-SCREENING · STEP 3 OF 16
-Persistent neck pain with numbness, tingling or weakness into the arm?*
+WHERE YOU ARE NOW
+· STEP 3 OF 16
+How many strict feet-elevated ring rows can you do (feet on a box, body horizontal, pull chest to rings)?*
 
-Radicular symptoms need their own workup. This program's foundation is the dead hang, which loads exactly that.
+This is a proxy for pulling strength at bodyweight. If you don't have rings, an inverted row from a barbell in a rack is a fine substitute.
 
-No
+Under 5 (or can't do them yet)
 
-Unsure / never checked
+TIER A
 
-Yes
+5-10
 
-BACK
+TIER A / B
+
+10-15
+
+TIER B / C
+
+Over 15
+
+TIER C+
+
+Back
 3 / 16
-NEXT
+Next
 
 Answer this to continue.
 
-Step 3 of 16. Screening — Persistent neck pain with numbness, tingling or weakness into the arm?
+Step 3 of 16. Where you are now — How many strict feet-elevated ring rows can you do (feet on a box, body horizontal, pull chest to rings)?
 
 ## 06-intake-04
 url: https://app.terav.fit/programs/first-strict-pullup/intake/
 horizontal overflow: false
 
 Skip to content
-TERAV
-Cancel intake
+Back
 Intake — First Strict Pull-Up
 
 INTAKE · FIRST STRICT PULL-UP
 
-SCREENING · STEP 4 OF 16
-Diagnosed high blood pressure that isn't currently controlled?*
+SCREENING
+· STEP 4 OF 16
+Have you had shoulder pain during any overhead pressing, pull-down, or hanging work in the last 12 months?*
 
-The top of a pull-up is a sustained braced effort, which raises blood pressure sharply.
+Includes press, pull-up attempts, hanging work, or overhead sports. If yes, we bias the plan toward closed-chain scap work and defer heavy dead hangs.
+
+Yes
+No
+Back
+4 / 16
+Next
+
+Answer this to continue.
+
+Step 4 of 16. Screening — Have you had shoulder pain during any overhead pressing, pull-down, or hanging work in the last 12 months?
+
+## 06-intake-05
+url: https://app.terav.fit/programs/first-strict-pullup/intake/
+horizontal overflow: false
+
+Skip to content
+Back
+Intake — First Strict Pull-Up
+
+INTAKE · FIRST STRICT PULL-UP
+
+SCREENING
+· STEP 5 OF 16
+Do you have an acute shoulder injury (rotator cuff tear, labral tear, dislocation) in the last 6 months?*
+
+If yes, hanging and pull-up attempts aren't safe to start yet. We'll tell you what to do next, and you can come back once it's been checked.
+
+Yes
+No
+Back
+5 / 16
+Next
+
+Answer this to continue.
+
+Step 5 of 16. Screening — Do you have an acute shoulder injury (rotator cuff tear, labral tear, dislocation) in the last 6 months?
+
+## 06-intake-06
+url: https://app.terav.fit/programs/first-strict-pullup/intake/
+horizontal overflow: false
+
+Skip to content
+Back
+Intake — First Strict Pull-Up
+
+INTAKE · FIRST STRICT PULL-UP
+
+SCREENING
+· STEP 6 OF 16
+Persistent neck pain with numbness, tingling or weakness into the arm?*
+
+Pain, numbness or tingling that runs down your arm needs a proper check first. This program is built on hanging, which loads exactly that. If yes, we'll explain what to do next.
 
 No
 
@@ -305,26 +415,56 @@ Unsure / never checked
 
 Yes
 
-BACK
-4 / 16
-NEXT
+Back
+6 / 16
+Next
 
 Answer this to continue.
 
-Step 4 of 16. Screening — Diagnosed high blood pressure that isn't currently controlled?
+Step 6 of 16. Screening — Persistent neck pain with numbness, tingling or weakness into the arm?
 
-## 06-intake-05
+## 06-intake-07
 url: https://app.terav.fit/programs/first-strict-pullup/intake/
 horizontal overflow: false
 
 Skip to content
-TERAV
-Cancel intake
+Back
 Intake — First Strict Pull-Up
 
 INTAKE · FIRST STRICT PULL-UP
 
-ABOUT YOU · STEP 5 OF 16
+SCREENING
+· STEP 7 OF 16
+Diagnosed high blood pressure that isn't currently controlled?*
+
+Holding the top of a pull-up is a hard braced effort that pushes your blood pressure up. If yes or not sure, we'll tell you what to check first.
+
+No
+
+Unsure / never checked
+
+Yes
+
+Back
+7 / 16
+Next
+
+Answer this to continue.
+
+Step 7 of 16. Screening — Diagnosed high blood pressure that isn't currently controlled?
+
+## 06-intake-08
+url: https://app.terav.fit/programs/first-strict-pullup/intake/
+horizontal overflow: false
+
+Skip to content
+Back
+Intake — First Strict Pull-Up
+
+INTAKE · FIRST STRICT PULL-UP
+
+ABOUT YOU
+· STEP 8 OF 16
 Realistically, how many days per week can you commit?*
 
 Honest answer wins. Pull-up work benefits from spacing — 3-5 sessions per week beats 2 big ones.
@@ -333,124 +473,26 @@ Honest answer wins. Pull-up work benefits from spacing — 3-5 sessions per week
 3 days
 4 days
 5 days
-BACK
-5 / 16
-NEXT
-
-Answer this to continue.
-
-Step 5 of 16. About you — Realistically, how many days per week can you commit?
-
-## 06-intake-06
-url: https://app.terav.fit/programs/first-strict-pullup/intake/
-horizontal overflow: false
-
-Skip to content
-TERAV
-Cancel intake
-Intake — First Strict Pull-Up
-
-INTAKE · FIRST STRICT PULL-UP
-
-ABOUT YOU · STEP 6 OF 16
-How many strict pull-ups can you do right now — no kip, no swing, full range from dead hang to chin over the bar?*
-
-Zero — I can't hang from the bar for 15 seconds
-
-Zero — but I can dead hang 15+ seconds
-
-Only with a band or assisted machine
-
-Almost — I can do a partial rep or a slow negative
-
-1-2 strict reps
-
-3-5 strict reps
-
-BACK
-6 / 16
-NEXT
-
-Answer this to continue.
-
-Step 6 of 16. About you — How many strict pull-ups can you do right now — no kip, no swing, full range from dead hang to chin over the bar?
-
-## 06-intake-07
-url: https://app.terav.fit/programs/first-strict-pullup/intake/
-horizontal overflow: false
-
-Skip to content
-TERAV
-Cancel intake
-Intake — First Strict Pull-Up
-
-INTAKE · FIRST STRICT PULL-UP
-
-ABOUT YOU · STEP 7 OF 16
-How long can you passively dead hang from a pull-up bar (arms straight, no scap engagement, just hanging)?*
-
-Under 10 seconds
-
-10-20 seconds
-
-20-45 seconds
-
-45-60 seconds
-
-Over 60 seconds
-
-BACK
-7 / 16
-NEXT
-
-Answer this to continue.
-
-Step 7 of 16. About you — How long can you passively dead hang from a pull-up bar (arms straight, no scap engagement, just hanging)?
-
-## 06-intake-08
-url: https://app.terav.fit/programs/first-strict-pullup/intake/
-horizontal overflow: false
-
-Skip to content
-TERAV
-Cancel intake
-Intake — First Strict Pull-Up
-
-INTAKE · FIRST STRICT PULL-UP
-
-ABOUT YOU · STEP 8 OF 16
-How many strict feet-elevated ring rows can you do (feet on a box, body horizontal, pull chest to rings)?*
-
-This is a proxy for pulling strength at bodyweight. If you don't have rings, an inverted row from a barbell in a rack is a fine substitute.
-
-Under 5 (or can't do them yet)
-
-5-10
-
-10-15
-
-Over 15
-
-BACK
+Back
 8 / 16
-NEXT
+Next
 
 Answer this to continue.
 
-Step 8 of 16. About you — How many strict feet-elevated ring rows can you do (feet on a box, body horizontal, pull chest to rings)?
+Step 8 of 16. About you — Realistically, how many days per week can you commit?
 
 ## 06-intake-09
 url: https://app.terav.fit/programs/first-strict-pullup/intake/
 horizontal overflow: false
 
 Skip to content
-TERAV
-Cancel intake
+Back
 Intake — First Strict Pull-Up
 
 INTAKE · FIRST STRICT PULL-UP
 
-ABOUT YOU · STEP 9 OF 16
+ABOUT YOU
+· STEP 9 OF 16
 Any elbow tendon pain (medial or lateral) currently or in the last 3 months?*
 
 Chinup / neutral-grip variants load medial elbow. If current, we defer heavy negatives and use scap-focused work first.
@@ -461,9 +503,9 @@ Resolved > 3 months ago
 
 Currently symptomatic
 
-BACK
+Back
 9 / 16
-NEXT
+Next
 
 Answer this to continue.
 
@@ -474,17 +516,17 @@ url: https://app.terav.fit/programs/first-strict-pullup/intake/
 horizontal overflow: false
 
 Skip to content
-TERAV
-Cancel intake
+Back
 Intake — First Strict Pull-Up
 
 INTAKE · FIRST STRICT PULL-UP
 
-ABOUT YOU · STEP 10 OF 16
+ABOUT YOU
+· STEP 10 OF 16
 Approximate bodyweight (kg) — used to shape band-tension progression*
-BACK
+Back
 10 / 16
-NEXT
+Next
 
 Answer this to continue.
 
@@ -492,16 +534,16 @@ Step 10 of 16. About you — Approximate bodyweight (kg) — used to shape band-
 
 ## 06-intake-11
 url: https://app.terav.fit/programs/first-strict-pullup/intake/
-horizontal overflow: true
+horizontal overflow: false
 
 Skip to content
-TERAV
-Cancel intake
+Back
 Intake — First Strict Pull-Up
 
 INTAKE · FIRST STRICT PULL-UP
 
-PHYSICAL TESTS · 1 OF 5 · OPTIONAL · STEP 11 OF 16
+PHYSICAL TESTS · 1 OF 5
+· STEP 11 OF 16
 Passive dead hang — max time
 
 Warm up shoulders 2-3 minutes (band pull-aparts, scap CARs). Grip a pull-up bar overhand, shoulder-width. Hang with arms fully extended, no scap engagement, until you lose grip. Record seconds. Stop early if shoulder pain appears.
@@ -512,24 +554,24 @@ seconds
 Physical tests are optional. Skip and we use your self-report as a proxy — you can retake these later on Retest.
 
 Skip physical tests →
-BACK
+Back
 11 / 16
-NEXT
+Next
 
-Step 11 of 16. Physical tests · 1 of 5 · optional — Passive dead hang — max time
+Step 11 of 16. Physical tests · 1 of 5 — Passive dead hang — max time
 
 ## 06-intake-12
 url: https://app.terav.fit/programs/first-strict-pullup/intake/
-horizontal overflow: true
+horizontal overflow: false
 
 Skip to content
-TERAV
-Cancel intake
+Back
 Intake — First Strict Pull-Up
 
 INTAKE · FIRST STRICT PULL-UP
 
-PHYSICAL TESTS · 2 OF 5 · OPTIONAL · STEP 12 OF 16
+PHYSICAL TESTS · 2 OF 5
+· STEP 12 OF 16
 Strict scapular pulls — max reps
 
 From a dead hang, initiate the pull with only your shoulder blades — pull chest up slightly by depressing and retracting the scapulae, without bending the elbows. Return to full hang. Record clean reps. Stop when reps degrade to elbow-bending.
@@ -537,72 +579,72 @@ From a dead hang, initiate the pull with only your shoulder blades — pull ches
 LOOK UP A DEMO ↗
 Strict scapular pulls — max reps (reps)
 reps
-BACK
+Back
 12 / 16
-NEXT
+Next
 
-Step 12 of 16. Physical tests · 2 of 5 · optional — Strict scapular pulls — max reps
+Step 12 of 16. Physical tests · 2 of 5 — Strict scapular pulls — max reps
 
 ## 06-intake-13
 url: https://app.terav.fit/programs/first-strict-pullup/intake/
-horizontal overflow: true
+horizontal overflow: false
 
 Skip to content
-TERAV
-Cancel intake
+Back
 Intake — First Strict Pull-Up
 
 INTAKE · FIRST STRICT PULL-UP
 
-PHYSICAL TESTS · 3 OF 5 · OPTIONAL · STEP 13 OF 16
+PHYSICAL TESTS · 3 OF 5
+· STEP 13 OF 16
 Strict feet-elevated ring row — max reps
 
 Set rings so feet on a box and body is roughly horizontal at the bottom. Row chest to rings, elbows track behind you. Record clean reps. Stop when hip sags or reps degrade.
 
 Strict feet-elevated ring row — max reps (reps)
 reps
-BACK
+Back
 13 / 16
-NEXT
+Next
 
-Step 13 of 16. Physical tests · 3 of 5 · optional — Strict feet-elevated ring row — max reps
+Step 13 of 16. Physical tests · 3 of 5 — Strict feet-elevated ring row — max reps
 
 ## 06-intake-14
 url: https://app.terav.fit/programs/first-strict-pullup/intake/
-horizontal overflow: true
+horizontal overflow: false
 
 Skip to content
-TERAV
-Cancel intake
+Back
 Intake — First Strict Pull-Up
 
 INTAKE · FIRST STRICT PULL-UP
 
-PHYSICAL TESTS · 4 OF 5 · OPTIONAL · STEP 14 OF 16
+PHYSICAL TESTS · 4 OF 5
+· STEP 14 OF 16
 Strict pull-up — max reps
 
 Dead hang start, chin clearly over the bar, controlled descent to full hang. No kip, no leg swing. Record reps. Zero counts if you can't do one.
 
 Strict pull-up — max reps (reps)
 reps
-BACK
+Back
 14 / 16
-NEXT
+Next
 
-Step 14 of 16. Physical tests · 4 of 5 · optional — Strict pull-up — max reps
+Step 14 of 16. Physical tests · 4 of 5 — Strict pull-up — max reps
 
 ## 06-intake-15
 url: https://app.terav.fit/programs/first-strict-pullup/intake/
-horizontal overflow: true
+horizontal overflow: false
 
 Skip to content
-TERAV
-Cancel intake
+Back
 Intake — First Strict Pull-Up
 
 INTAKE · FIRST STRICT PULL-UP
 
-PHYSICAL TESTS · 5 OF 5 · OPTIONAL · STEP 15 OF 16
+PHYSICAL TESTS · 5 OF 5
+· STEP 15 OF 16
 Slow negative — control time
 
 Only if you can get to the top position (jump / step up / assisted). From chin over bar, lower under control until arms are fully extended. Record seconds under control. If you drop or accelerate, that attempt doesn't count.
@@ -610,31 +652,31 @@ Only if you can get to the top position (jump / step up / assisted). From chin o
 LOOK UP A DEMO ↗
 Slow negative — control time (seconds)
 seconds
-BACK
+Back
 15 / 16
-NEXT
+Next
 
-Step 15 of 16. Physical tests · 5 of 5 · optional — Slow negative — control time
+Step 15 of 16. Physical tests · 5 of 5 — Slow negative — control time
 
 ## 06-intake-16
 url: https://app.terav.fit/programs/first-strict-pullup/intake/
 horizontal overflow: false
 
 Skip to content
-TERAV
-Cancel intake
+Back
 Intake — First Strict Pull-Up
 
 INTAKE · FIRST STRICT PULL-UP
 
-CONSENT · STEP 16 OF 16
+CONSENT
+· STEP 16 OF 16
 ConsentREQUIRED
 I understand this is a training template, not medical advice. I'll consult a clinician for shoulder or elbow pain that persists past a session.
 I agree to stop the session if shoulder pain appears during a hang or pull attempt — no training through it.
 Review my answers
-BACK
+Back
 16 / 16
-REVIEW
+Review
 
 Answer this to continue.
 
@@ -645,9 +687,9 @@ url: https://app.terav.fit/programs/first-strict-pullup/intake/
 horizontal overflow: false
 
 Skip to content
-TERAV
+Back
 Back to answers
-Your starting tier
+Where you start
 
 First Strict Pull-Up
 
@@ -665,7 +707,7 @@ We used: your intake answers plus your physical test results (dead hang max seco
 
 Physical tests carry the most weight because they're measured numbers. Intake answers confirm the direction. Confident pick.
 
-DON'T AGREE? PICK A DIFFERENT TIER
+DON'T AGREE? PICK A DIFFERENT STARTING POINT
 
 Tier A — No hang yet
 
@@ -683,7 +725,7 @@ Tier D — Multiple reps, adding volume
 
 By week 8: 8-10 strict pull-ups unbroken from a starting 3-5 rep max. Wide-grip and neutral-grip variants unlocked. Weighted pull-up prep starts at end of block.
 
-START PROGRAM WITH THIS TIER
+Start program
 Step 16 of 16. Consent — required
 
 ## 06-intake-18
@@ -691,52 +733,59 @@ url: https://app.terav.fit/
 horizontal overflow: false
 
 Skip to content
-TERAV
 
-TODAY · WEEK 1 OF 4 · ENDS 23 NOV
+TODAY · WEEK 1 OF 8
 
 First Strict Pull-Up
 FIRST STRICT PULL-UP
-1/4
+1/8
 
-YOUR PLAN
+Four tabs
 
-Your First Strict Pullup plan is built.
-
-2 sessions/wk
-
-Starting at Tier A — No hang yet — your intake put you here.
-
-· Weeks 1-4 — Build the grip + scap prerequisites. Dead hang to 25+ seconds, first clean scap pulls, ring rows built to 8-10 clean reps.
-· Weeks 1-8 — Groove the pull pattern via 5-10s negatives + heavy-band assistance. Test a strict rep from week 5 onward.
-· Weeks 1-8 — Extend 1-2 rep max to 3-5 unbroken. Introduce sub-maximal singles across the day.
-· Weeks 1-8 — 3-5 rep max → 8-10 unbroken. Wide-grip and neutral-grip variants unlocked. Weighted single-preview at end of block.
-
-Composed for: Dead hang max seconds at level 1
-
-Four tabs, one flow
-
-Day — the session you're prescribed right now.
-Plan — the 7-day rhythm; browse other days from here.
-Record — training maxes, retests, trends, and every logged session.
-Profile — account, active plans, menu.
-
-More lives under Profile: Programs, Off-plan, Report, Guide and Evidence. The daily check is reached from Day when one is due.
-
-Got it — start the day
-
-Weeks 1-4 — Hang, scap, row base (Tier A) · week 1 of 4 · ends 23 Nov
+Today — the session for today.
+Plan — your week; move or skip a day here.
+Record — your progress and every logged session.
+Profile — programs, settings and account.
+Got it
 
 SETUP · ONE MINUTE
 
-One focus, sharpened every session.
+Week 1. Start with your first session.
 
-Starts with a morning check — one minute of tapping calibrates today's load. Terav writes the focus arc; the rest of your week is still yours.
+Do it at an easy effort and log what you get. A morning check is optional.
 
-OPEN MORNING CHECK
-TIER GATE CLEARED
+Start your first session
+Do a morning check first
+Today
 
-Because: Your latest retest clears Tier D
+No check yet
+
+Save a morning check to calibrate today's load.
+
+Drills run in a set order while you learn them. Why?
+
+TODAY
+
+3 blocks · 6 exercises
+
+Hang, scap, row base · week 1 of 8 · ends 22 Dec
+
+· Row strength — closed-chain pull
+· Scapular pull ladder
+· Shoulder + grip prep — every session
+Open session
+
+Log extra session →
+
+Runs, rows, walks, classes, mobility — anything not in the prescribed block. Optional. Nothing here changes the plan.
+
+Log session
+Import GPX
+Step 16 of 16. Consent — required
+TODAY
+PLAN
+RECORD
+PROFILE
 
 Intake steps walked: 18
 
@@ -745,91 +794,151 @@ url: https://app.terav.fit/
 horizontal overflow: false
 
 Skip to content
-TERAV
 
-TODAY · WEEK 1 OF 4 · ENDS 23 NOV
+TODAY · WEEK 1 OF 8
 
 First Strict Pull-Up
 FIRST STRICT PULL-UP
-1/4
+1/8
 
-YOUR PLAN
+Four tabs
 
-Your First Strict Pullup plan is built.
-
-2 sessions/wk
-
-Starting at Tier A — No hang yet — your intake put you here.
-
-· Weeks 1-4 — Build the grip + scap prerequisites. Dead hang to 25+ seconds, first clean scap pulls, ring rows built to 8-10 clean reps.
-· Weeks 1-8 — Groove the pull pattern via 5-10s negatives + heavy-band assistance. Test a strict rep from week 5 onward.
-· Weeks 1-8 — Extend 1-2 rep max to 3-5 unbroken. Introduce sub-maximal singles across the day.
-· Weeks 1-8 — 3-5 rep max → 8-10 unbroken. Wide-grip and neutral-grip variants unlocked. Weighted single-preview at end of block.
-
-Composed for: Dead hang max seconds at level 1
-
-Four tabs, one flow
-
-Day — the session you're prescribed right now.
-Plan — the 7-day rhythm; browse other days from here.
-Record — training maxes, retests, trends, and every logged session.
-Profile — account, active plans, menu.
-
-More lives under Profile: Programs, Off-plan, Report, Guide and Evidence. The daily check is reached from Day when one is due.
-
-Got it — start the day
-
-Weeks 1-4 — Hang, scap, row base (Tier A) · week 1 of 4 · ends 23 Nov
+Today — the session for today.
+Plan — your week; move or skip a day here.
+Record — your progress and every logged session.
+Profile — programs, settings and account.
+Got it
 
 SETUP · ONE MINUTE
 
-One focus, sharpened every session.
+Week 1. Start with your first session.
 
-Starts with a morning check — one minute of tapping calibrates today's load. Terav writes the focus arc; the rest of your week is still yours.
+Do it at an easy effort and log what you get. A morning check is optional.
 
-OPEN MORNING CHECK
-TIER GATE CLEARED
+Start your first session
+Do a morning check first
+Today
 
-Because: Your latest retest clears Tier D
+No check yet
 
-## 08-first-session
-url: https://app.terav.fit/session/first-strict-pullup/
-horizontal overflow: false
+Save a morning check to calibrate today's load.
 
-Skip to content
-TERAV
-Rest day.
+Drills run in a set order while you learn them. Why?
 
-First Strict Pull-Up has no session scheduled today. If you trained anyway — a ride, a run, a class — log it below; it still counts toward your history.
+TODAY
+
+3 blocks · 6 exercises
+
+Hang, scap, row base · week 1 of 8 · ends 22 Dec
+
+· Row strength — closed-chain pull
+· Scapular pull ladder
+· Shoulder + grip prep — every session
+Open session
 
 Log extra session →
 
-Cross-modal work, walks, class attendance, mobility — anything not in the prescribed block. Optional. Nothing here changes the plan.
+Runs, rows, walks, classes, mobility — anything not in the prescribed block. Optional. Nothing here changes the plan.
 
 Log session
 Import GPX
-DAY
+TODAY
+PLAN
+RECORD
+PROFILE
+
+## 08-first-session
+url: https://app.terav.fit/session/first-strict-pullup/
+horizontal overflow: true
+
+Skip to content
+Wednesday
+FIRST STRICT PULL-UP
+
+5 exercises · about 32 min · +1 optional
+
+HOW TO RUN THIS
+
+Feet-elevated ring row / inverted row.
+
+The neuromuscular precursor to a pull-up. Retraction hold isolates the endpoint.
+
+Band pull-aparts + scap CARs + light forearm activation. 3-5 min before any bar-hang work. Non-optional in weeks 1-3.
+
+Follow along · Row strength — closed-chain pull
+3 moves · guided, one at a time, with a timer
+Ring row (incline, easy)
+3 sets
+Ring row (horizontal)
+4 sets
+Ring row (feet elevated)
+4 sets
+Follow along · Scapular pull ladder
+2 moves · guided, one at a time, with a timer
+Scapular pull-up
+4 sets
+Scap retraction hold at top
+3 sets
+OPTIONAL
+Follow along · Shoulder + grip prep — every session
+1 move · guided, one at a time, with a timer
+Band shoulder prep (I-Y-T + face pull)
+2 sets
+Log an extra session
+›
+
+HANG, SCAP, ROW BASE · WEEK 1 OF 8 · ENDS 22 DEC
+
+Start session
+TODAY
 PLAN
 RECORD
 PROFILE
 
 ## 09-first-session-bottom
 url: https://app.terav.fit/session/first-strict-pullup/
-horizontal overflow: false
+horizontal overflow: true
 
 Skip to content
-TERAV
-Rest day.
+Wednesday
+FIRST STRICT PULL-UP
 
-First Strict Pull-Up has no session scheduled today. If you trained anyway — a ride, a run, a class — log it below; it still counts toward your history.
+5 exercises · about 32 min · +1 optional
 
-Log extra session →
+HOW TO RUN THIS
 
-Cross-modal work, walks, class attendance, mobility — anything not in the prescribed block. Optional. Nothing here changes the plan.
+Feet-elevated ring row / inverted row.
 
-Log session
-Import GPX
-DAY
+The neuromuscular precursor to a pull-up. Retraction hold isolates the endpoint.
+
+Band pull-aparts + scap CARs + light forearm activation. 3-5 min before any bar-hang work. Non-optional in weeks 1-3.
+
+Follow along · Row strength — closed-chain pull
+3 moves · guided, one at a time, with a timer
+Ring row (incline, easy)
+3 sets
+Ring row (horizontal)
+4 sets
+Ring row (feet elevated)
+4 sets
+Follow along · Scapular pull ladder
+2 moves · guided, one at a time, with a timer
+Scapular pull-up
+4 sets
+Scap retraction hold at top
+3 sets
+OPTIONAL
+Follow along · Shoulder + grip prep — every session
+1 move · guided, one at a time, with a timer
+Band shoulder prep (I-Y-T + face pull)
+2 sets
+Log an extra session
+›
+
+HANG, SCAP, ROW BASE · WEEK 1 OF 8 · ENDS 22 DEC
+
+Start session
+TODAY
 PLAN
 RECORD
 PROFILE

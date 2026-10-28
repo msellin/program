@@ -36,6 +36,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { StatusPill } from "@/components/ui/StatusPill";
 import { InfoSheet, type ExplainSheetCitation, type ExplainSheetLogSignal } from "@/components/InfoSheet";
+import { cardClass } from "./Card";
 
 export type ProposalCardStatus = "pending" | "accepted" | "ignored";
 
@@ -84,8 +85,9 @@ export function ProposalCard({
       data-proposal-id={proposalId}
       aria-labelledby={`proposal-${proposalId}-title`}
       className={cn(
-        // Amber left stripe (proposal = state, not CTA). e1 fill.
-        "rounded-md border border-amber/40 border-l-4 border-l-amber bg-surface p-3 space-y-2",
+        // Amber left stripe (proposal = state, not CTA).
+        cardClass({ status: "amber" }),
+        "space-y-2",
         className,
       )}
     >
@@ -93,18 +95,18 @@ export function ProposalCard({
         <div className="min-w-0 flex-1 space-y-1">
           <h3
             id={`proposal-${proposalId}-title`}
-            className="text-[15px] font-semibold text-strong leading-snug"
+            className="text-body font-semibold text-strong leading-snug"
           >
             {title}
           </h3>
-          <p className="text-[14px] text-ink leading-snug">
+          <p className="text-small text-ink leading-snug">
             <span className="text-muted">Because: </span>
             {rationale}
           </p>
         </div>
         {canExplain ? (
           <span
-            className="font-mono text-[10px] uppercase tracking-widest text-bronze whitespace-nowrap"
+            className="font-mono text-eyebrow uppercase tracking-widest text-bronze whitespace-nowrap"
             aria-hidden
           >
             cited
@@ -117,10 +119,10 @@ export function ProposalCard({
           type="button"
           onClick={() => setSheetOpen(true)}
           className={cn(
-            "font-mono text-[11px] uppercase tracking-wider text-slate hover:text-ink active:text-strong",
+            "font-mono text-eyebrow uppercase tracking-wider text-slate hover:text-ink active:text-strong",
             "focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2",
             // Batch 36 P0 (visual-craft audit) — 44×44 tap target per §2.0.
-            "min-h-11 py-1 px-2 -mx-2 rounded inline-flex items-center",
+            "min-h-11 py-1 px-2 -mx-2 rounded-lg inline-flex items-center",
           )}
           aria-label={`Why ${title}?`}
         >
@@ -136,8 +138,8 @@ export function ProposalCard({
             type="button"
             onClick={onAccept}
             className={cn(
-              "flex-1 font-mono text-[11px] font-semibold uppercase tracking-wider",
-              "rounded bg-bronze text-ground hover:bg-bronze-hover active:bg-bronze-active",
+              "flex-1 font-mono text-eyebrow font-semibold uppercase tracking-wider",
+              "rounded-lg bg-bronze text-ground hover:bg-bronze-hover active:bg-bronze-active",
               "min-h-[44px] px-3 py-2",
               "focus-visible:outline focus-visible:outline-2 focus-visible:outline-strong focus-visible:outline-offset-2",
             )}
@@ -150,8 +152,8 @@ export function ProposalCard({
             type="button"
             onClick={onIgnore}
             className={cn(
-              "flex-1 font-mono text-[11px] font-semibold uppercase tracking-wider",
-              "rounded border border-line-strong text-ink hover:bg-line-soft",
+              "flex-1 font-mono text-eyebrow font-semibold uppercase tracking-wider",
+              "rounded-lg border border-line-strong text-ink hover:bg-line-soft",
               "min-h-[44px] px-3 py-2",
               "focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2",
             )}
@@ -170,7 +172,7 @@ export function ProposalCard({
               type="button"
               onClick={onUndo}
               className={cn(
-                "font-mono text-[11px] uppercase tracking-wider text-slate hover:text-ink",
+                "font-mono text-eyebrow uppercase tracking-wider text-slate hover:text-ink",
                 "focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2",
                 "min-h-[44px] px-2",
               )}

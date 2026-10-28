@@ -49,10 +49,10 @@ export function SessionDone({
 
   return (
     <div className="flex flex-col gap-5 pt-4" data-surface="SessionDone" data-end={end}>
-      <h1 className="text-[32px] font-semibold tracking-[-0.035em] text-strong leading-none">
+      <h1 className="text-h1 font-semibold tracking-[-0.035em] text-strong leading-none">
         {end === "finished" ? "Done" : "Session stopped"}
       </h1>
-      <p className="text-[15px] text-ink">
+      <p className="text-body text-ink">
         {end === "finished"
           ? totalSets > 0
             ? `${totalSets} ${totalSets === 1 ? "set" : "sets"} across ${movements.length} ${movements.length === 1 ? "movement" : "movements"}.`
@@ -60,18 +60,18 @@ export function SessionDone({
           : "Good call. What you logged is saved."}
       </p>
       {movements.length > 0 ? (
-        <ul className="rounded-[9px] border border-line-soft divide-y divide-line-soft">
+        <ul className="rounded-lg border border-line-soft divide-y divide-line-soft">
           {movements.map((m) => (
-            <li key={m.name} className="flex justify-between px-3.5 py-3 text-[14.5px]">
+            <li key={m.name} className="flex justify-between px-3.5 py-3 text-small">
               <span className="text-strong">{m.name}</span>
-              <span className="font-mono text-[12px] text-muted">{m.sets} sets</span>
+              <span className="font-mono text-caption text-muted">{m.sets} sets</span>
             </li>
           ))}
         </ul>
       ) : null}
       {end === "stopped" ? (
         <section aria-label="Where did it hurt?" className="space-y-2">
-          <p className="text-[14px] text-muted">
+          <p className="text-small text-muted">
             {recorded ? `Recorded — ${recorded}.` : "Where did it hurt? This goes on today’s record."}
           </p>
           {recorded
@@ -84,7 +84,7 @@ export function SessionDone({
                     report(date, r.id, IN_SESSION_HURT_SCORE);
                     setRecorded(r.label.toLowerCase());
                   }}
-                  className="flex min-h-[48px] w-full items-center justify-between rounded border border-line-soft px-3 py-3 text-left text-sm"
+                  className="flex min-h-[48px] w-full items-center justify-between rounded-lg border border-line-soft px-3 py-3 text-left text-small"
                 >
                   <span>{r.label}</span>
                   <span aria-hidden className="text-muted">›</span>

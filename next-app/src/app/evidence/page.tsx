@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { StatusPill } from "@/components/ui/StatusPill";
+import { cardClass } from "@/components/ui/Card";
 
 type Citation = {
   id: string;
@@ -50,25 +51,25 @@ export default function EvidencePage() {
 
   if (error) {
     return (
-      <div className="mt-8 rounded border border-red bg-surface p-4">
-        <h2 className="mb-2 text-lg font-semibold">Couldn&apos;t load evidence library</h2>
-        <p className="text-sm text-muted">{error}</p>
+      <div className={`${cardClass({ status: "red" })} mt-8`}>
+        <h2 className="mb-2 text-h3">Couldn&apos;t load evidence library</h2>
+        <p className="text-small text-muted">{error}</p>
       </div>
     );
   }
-  if (!citations) return <div className="mt-8 text-sm text-muted">Loading…</div>;
+  if (!citations) return <div className="mt-8 text-small text-muted">Loading…</div>;
 
   return (
     <div className="space-y-6 pt-4">
       <header>
-        <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">
+        <h1 className="text-h1 tracking-tight text-strong leading-none">
           Evidence
         </h1>
-        <p className="mt-2 text-sm text-muted">
+        <p className="mt-2 text-small text-muted">
           {citations.length} cited studies — the full bibliography behind every
           program, proposal, and progression rule in the app.
         </p>
-        <p className="mt-2 text-[13px] text-muted">
+        <p className="mt-2 text-caption text-muted">
           If a claim in the app can&apos;t be traced back to something here,
           it&apos;s engineering-choice, not cited. See{" "}
           <Link href="/guide" className="underline underline-offset-2 hover:text-ink">
@@ -78,7 +79,7 @@ export default function EvidencePage() {
         </p>
       </header>
 
-      <ul className="rounded border border-line-soft bg-surface divide-y divide-line-soft">
+      <ul className={`${cardClass({ flush: true })} divide-y divide-line-soft`}>
         {citations.map((c) => {
           // Batch 36 P0 (audit 2026-08-21 · app-copy-clarity) —
           // 2-tier ladder per v1.1.1 §7.5. REFERENCED → CITED (slate);
@@ -92,7 +93,7 @@ export default function EvidencePage() {
           return (
             <li key={c.id} className="px-4 py-3 space-y-1.5">
               <div className="flex items-start justify-between gap-3">
-                <p className="text-[14px] text-ink leading-snug min-w-0 flex-1">
+                <p className="text-small text-ink leading-snug min-w-0 flex-1">
                   <span className="font-semibold text-strong">
                     {c.authors} ({c.year}).
                   </span>{" "}

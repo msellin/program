@@ -13,7 +13,7 @@ import { Wordmark } from "@/components/ui/Wordmark";
 
 export default function SignInPage() {
   return (
-    <Suspense fallback={<div className="pt-8 text-sm text-muted">Loading…</div>}>
+    <Suspense fallback={<div className="pt-8 text-small text-muted">Loading…</div>}>
       <SignInInner />
     </Suspense>
   );
@@ -138,22 +138,22 @@ function SignInInner() {
         <Wordmark />
       </div>
       <header className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight text-strong">Sign in</h1>
-        <p className="text-sm text-muted">Continue your training.</p>
+        <h1 className="text-h1 tracking-tight text-strong">Sign in</h1>
+        <p className="text-small text-muted">Continue your training.</p>
       </header>
 
       <GoogleAuthButton nextPath={nextPath} />
 
       <div className="flex items-center gap-3">
         <span className="flex-1 h-px bg-line-soft" aria-hidden />
-        <span className="font-mono text-[10px] uppercase tracking-widest text-muted">
+        <span className="font-mono text-eyebrow uppercase tracking-widest text-muted">
           or with email
         </span>
         <span className="flex-1 h-px bg-line-soft" aria-hidden />
       </div>
 
       <form onSubmit={submit} className="space-y-3" noValidate>
-        <label htmlFor="signin-email" className="block text-[14px]">
+        <label htmlFor="signin-email" className="block text-small">
           <span className="block text-muted mb-1">Email</span>
           <input
             id="signin-email"
@@ -162,10 +162,10 @@ function SignInInner() {
             autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="block w-full text-[14px] px-3 py-2.5 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
+            className="block w-full text-small px-3 py-2.5 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
           />
         </label>
-        <label htmlFor="signin-password" className="block text-[14px]">
+        <label htmlFor="signin-password" className="block text-small">
           <span className="block text-muted mb-1">Password</span>
           <input
             id="signin-password"
@@ -174,14 +174,14 @@ function SignInInner() {
             autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="block w-full text-[14px] px-3 py-2.5 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
+            className="block w-full text-small px-3 py-2.5 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
           />
         </label>
         {error ? (
-          <p className="text-[14px] text-red border-l-4 border-red pl-2">{error}</p>
+          <p className="text-small text-red border-l-4 border-red pl-2">{error}</p>
         ) : null}
         {needsConfirmation ? (
-          <div className="text-[14px] border-l-4 border-amber pl-2 space-y-2">
+          <div className="text-small border-l-4 border-amber pl-2 space-y-2">
             <p className="text-ink">
               Your email hasn&apos;t been confirmed yet. Check the inbox for{" "}
               <strong>{email}</strong> (also the spam folder) — the link takes ~1 minute
@@ -194,7 +194,7 @@ function SignInInner() {
                 type="button"
                 onClick={resendConfirmation}
                 disabled={resending}
-                className="inline-flex items-center min-h-[44px] font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover disabled:opacity-50"
+                className="inline-flex items-center min-h-[44px] font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-bronze text-ground hover:bg-bronze-hover disabled:opacity-50"
               >
                 {resending ? "Sending…" : "Resend confirmation email"}
               </button>
@@ -212,7 +212,7 @@ function SignInInner() {
       </form>
 
       {resetSent ? (
-        <p className="text-[14px] text-green border-l-4 border-green pl-2">
+        <p className="text-small text-green border-l-4 border-green pl-2">
           Password reset email sent to <strong>{email}</strong>. Check inbox (and spam).
           The link opens a reset form.
         </p>
@@ -221,20 +221,20 @@ function SignInInner() {
           type="button"
           onClick={sendPasswordReset}
           disabled={resetting}
-          className="text-[14px] text-muted underline decoration-muted/40 underline-offset-4 hover:text-ink hover:decoration-ink/60 disabled:opacity-50"
+          className="text-small text-muted underline decoration-muted/40 underline-offset-4 hover:text-ink hover:decoration-ink/60 disabled:opacity-50"
         >
           {resetting ? "Sending…" : "Forgot password?"}
         </button>
       )}
 
-      <p className="text-[14px] text-muted">
+      <p className="text-small text-muted">
         No account?{" "}
         <Link href="/sign-up" className="text-slate border-b border-slate">
           Sign up
         </Link>
       </p>
 
-      <footer className="pt-6 border-t border-line-soft text-[11px] text-muted space-x-3">
+      <footer className="pt-6 border-t border-line-soft text-eyebrow text-muted space-x-3">
         <Link href="/legal/privacy" className="hover:text-ink">Privacy</Link>
         <Link href="/legal/terms" className="hover:text-ink">Terms</Link>
         <Link href="/legal/disclaimer" className="hover:text-ink">Medical disclaimer</Link>

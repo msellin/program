@@ -123,7 +123,7 @@ function AuthGatedShell({
   if (authState !== "authed") {
     return (
       <main className="max-w-[760px] mx-auto w-full px-4 sm:px-6 flex-1 py-6 flex items-center justify-center min-h-[50vh]">
-        <p className="text-sm text-muted">Loading…</p>
+        <p className="text-small text-muted">Loading…</p>
       </main>
     );
   }
@@ -141,7 +141,7 @@ function AuthGatedShell({
           `sr-only focus:not-sr-only` keeps it visually hidden until focused. */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-bronze focus:text-ground focus:px-3 focus:py-2 focus:rounded"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-bronze focus:text-ground focus:px-3 focus:py-2 focus:rounded-lg"
       >
         Skip to content
       </a>
@@ -163,8 +163,7 @@ function AuthGatedShell({
           of Today's dashboard, which is the primary signal now. */}
       {isTabRoot ? (
       <header
-          className="max-w-[760px] mx-auto w-full"
-          style={{ paddingTop: "env(safe-area-inset-top)" }}
+          className="max-w-[760px] mx-auto w-full pt-[env(safe-area-inset-top)]"
         >
           <div className="flex items-center justify-between px-4 pt-3 pb-2 sm:px-6">
             <Link
@@ -177,7 +176,7 @@ function AuthGatedShell({
             <Link
               href="/settings/"
               aria-label="Settings"
-              className="w-11 h-11 flex items-center justify-center rounded text-muted hover:text-ink hover:bg-line-soft focus-visible:text-ink focus-visible:bg-line-soft focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2 active:bg-surface-2"
+              className="w-11 h-11 flex items-center justify-center rounded-lg text-muted hover:text-ink hover:bg-line-soft focus-visible:text-ink focus-visible:bg-line-soft focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2 active:bg-surface-2"
             >
               <Settings size={18} strokeWidth={1.75} />
             </Link>
@@ -185,13 +184,12 @@ function AuthGatedShell({
         </header>
       ) : hasOwnTopRow ? null : (
         <div
-          className="max-w-[760px] mx-auto w-full px-4 sm:px-6"
-          style={{ paddingTop: "env(safe-area-inset-top)" }}
+          className="max-w-[760px] mx-auto w-full px-4 sm:px-6 pt-[env(safe-area-inset-top)]"
         >
           <button
             type="button"
             onClick={() => (window.history.length > 1 ? router.back() : router.push("/"))}
-            className="mt-2 -ml-2 inline-flex items-center gap-1 min-h-[44px] px-2 text-[14px] text-slate hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze"
+            className="mt-2 -ml-2 inline-flex items-center gap-1 min-h-[44px] px-2 text-small text-slate hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze"
           >
             <ChevronLeft size={18} aria-hidden />
             Back
@@ -207,11 +205,7 @@ function AuthGatedShell({
       <main
         id="main-content"
         tabIndex={-1}
-        className="max-w-[760px] mx-auto w-full px-4 sm:px-6 flex-1 focus:outline-none"
-        style={{
-          paddingBottom: "calc(64px + env(safe-area-inset-bottom) + 1rem)",
-          overscrollBehaviorY: isTodayRoute ? "contain" : undefined,
-        }}
+        className={`max-w-[760px] mx-auto w-full px-4 sm:px-6 flex-1 focus:outline-none pb-[calc(64px+env(safe-area-inset-bottom)+1rem)]${isTodayRoute ? " overscroll-y-contain" : ""}`}
       >
         {children}
       </main>

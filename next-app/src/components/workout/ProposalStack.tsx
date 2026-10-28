@@ -70,7 +70,7 @@ export function ProposalStack({ program, date }: { program: Program | null | und
   const undoToast = undoVisible ? (
     <div
       role="status"
-      className="flex items-center justify-between gap-3 rounded border border-line-soft bg-surface px-3 py-2 text-sm"
+      className="flex items-center justify-between gap-3 rounded-lg border border-line-soft bg-surface px-3 py-2 text-small"
     >
       <span className="text-ink">Applied.</span>
       <button
@@ -80,7 +80,7 @@ export function ProposalStack({ program, date }: { program: Program | null | und
           setUndoVisible(false);
           announce(what ? `Undone — ${what} put back.` : "Nothing to undo.");
         }}
-        className="min-h-[44px] px-2 font-mono text-[11px] uppercase tracking-wider text-bronze"
+        className="min-h-[44px] px-2 font-mono text-eyebrow uppercase tracking-wider text-bronze"
       >
         Undo
       </button>

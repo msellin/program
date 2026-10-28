@@ -66,7 +66,7 @@ export function ReadinessTrail({
     return (
       <p
         className={cn(
-          "text-[12px] text-muted italic min-h-11 flex items-center",
+          "text-caption text-muted italic min-h-11 flex items-center",
           className,
         )}
       >
@@ -91,7 +91,7 @@ export function ReadinessTrail({
             onClick={onCellTap ? () => onCellTap(c.date) : undefined}
             aria-label={cellAriaLabel(c, idx === cells.length - 1)}
             className={cn(
-              "min-h-[44px] min-w-[44px] flex items-center justify-center rounded",
+              "min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg",
               "focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2",
               onCellTap ? "hover:bg-line-soft" : "cursor-default",
             )}

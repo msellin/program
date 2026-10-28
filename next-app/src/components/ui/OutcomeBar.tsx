@@ -52,8 +52,8 @@ export function OutcomeBar({
       className={cn("space-y-2", className)}
     >
       <div className="flex items-baseline justify-between gap-3">
-        <span className="text-[14px] font-semibold text-strong">{metricName}</span>
-        <span className="font-mono text-[12px] tabular-nums text-muted">
+        <span className="text-small font-semibold text-strong">{metricName}</span>
+        <span className="font-mono text-caption tabular-nums text-muted">
           <span className="text-ink">{baselineValue}</span>
           <span className="mx-1.5 text-line-strong">→</span>
           <span className="text-strong">{targetValue}</span>
@@ -64,11 +64,10 @@ export function OutcomeBar({
             progress fill; this is a spec visualization, not a tracker. */}
         <div
           aria-hidden
-          className="h-full rounded-full bg-gradient-to-r from-slate/60 to-bronze"
-          style={{ width: "100%" }}
+          className="h-full rounded-full bg-gradient-to-r from-slate/60 to-bronze w-full"
         />
       </div>
-      <p className="font-mono text-[10px] uppercase tracking-widest text-muted">
+      <p className="font-mono text-eyebrow uppercase tracking-widest text-muted">
         {rangeCaption}
       </p>
     </div>

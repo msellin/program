@@ -123,12 +123,12 @@ export function HeroStateCard({ date }: { date: string }) {
                   type="button"
                   onClick={() => setSheetOpen(true)}
                   aria-label={`Why ${copy.pillLabel.toLowerCase()}?`}
-                  className="font-mono text-[11px] uppercase tracking-widest text-slate hover:text-ink active:text-strong min-h-11 min-w-11 px-2 py-1 rounded flex items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2"
+                  className="font-mono text-eyebrow uppercase tracking-widest text-slate hover:text-ink active:text-strong min-h-11 min-w-11 px-2 py-1 rounded-lg flex items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2"
                 >
                   Why?
                 </button>
               ) : null}
-              <span className="text-[14px] text-muted">{copy.sub}</span>
+              <span className="text-small text-muted">{copy.sub}</span>
             </div>
           </div>
           <ReadinessTrail logs={logs} activeDate={date} />
@@ -169,12 +169,12 @@ export function HeroStateCard({ date }: { date: string }) {
 
   const content = (
     <>
-      <div className="flex items-center gap-2 text-[14px] text-muted">
+      <div className="flex items-center gap-2 text-small text-muted">
         <span className={`w-2 h-2 rounded-full ${dotColour}`} />
         <span>{isToday ? "Today" : formatShort(date)}</span>
       </div>
-      <p className="text-2xl font-semibold mt-2 text-strong">{copy.title}</p>
-      <p className="text-[14px] text-muted mt-1">{copy.sub}</p>
+      <p className="text-h2 mt-2 text-strong">{copy.title}</p>
+      <p className="text-small text-muted mt-1">{copy.sub}</p>
     </>
   );
 

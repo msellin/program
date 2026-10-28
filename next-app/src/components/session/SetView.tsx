@@ -357,7 +357,7 @@ export function SetView({
             type="button"
             onClick={onBackToBrief}
             aria-label="Back to brief"
-            className="flex-shrink-0 w-[34px] h-[34px] rounded-[7px] border border-line-soft bg-surface text-ink text-[15px]"
+            className="flex-shrink-0 w-[34px] h-[34px] rounded-lg border border-line-soft bg-surface text-ink text-body"
           >
             ‹
           </button>
@@ -383,7 +383,7 @@ export function SetView({
                 ref={isActive ? activeRailRef : undefined}
                 onClick={() => onSelectExercise(r.key)}
                 className={
-                  "min-w-0 rounded-[7px] px-1 py-1.5 text-center border flex-shrink-0 " +
+                  "min-w-0 rounded-lg px-1 py-1.5 text-center border flex-shrink-0 " +
                   (isActive
                     ? "flex-[2] min-w-[104px] border-bronze bg-[rgba(200,150,102,.14)]"
                     : "flex-1 min-w-[74px] border-line-soft bg-surface")
@@ -391,13 +391,13 @@ export function SetView({
               >
                 <span
                   className={
-                    "block text-[12px] font-semibold truncate " + (isActive ? "text-strong" : "text-ink")
+                    "block text-caption font-semibold truncate " + (isActive ? "text-strong" : "text-ink")
                   }
                 >
                   {exerciseListName(r.exercise)}
                 </span>
                 <span
-                  className={"block font-mono text-[12px] mt-0.5 " + (isActive ? "text-bronze" : "text-muted")}
+                  className={"block font-mono text-caption mt-0.5 " + (isActive ? "text-bronze" : "text-muted")}
                 >
                   {logged}/{r.rowCount}
                 </span>
@@ -408,7 +408,7 @@ export function SetView({
           <button
             type="button"
             onClick={() => onOpenSheet("hurt")}
-            className="flex-shrink-0 h-[34px] rounded-[7px] border border-amber/60 bg-surface-2 px-2.5 text-[12px] font-semibold text-amber"
+            className="flex-shrink-0 h-[34px] rounded-lg border border-amber/60 bg-surface-2 px-2.5 text-caption font-semibold text-amber"
           >
             Something hurt
           </button>
@@ -416,7 +416,7 @@ export function SetView({
             type="button"
             onClick={() => onOpenSheet("overflow")}
             aria-label="More options"
-            className="flex-shrink-0 w-[34px] h-[34px] rounded-[7px] border border-line-strong bg-surface-2 text-strong text-[15px] font-semibold"
+            className="flex-shrink-0 w-[34px] h-[34px] rounded-lg border border-line-strong bg-surface-2 text-strong text-body font-semibold"
           >
             ⋯
           </button>
@@ -426,11 +426,11 @@ export function SetView({
             prep on floor · set 121 sets 1 of 2 left". The name is the
             part that can be shortened; the counters can't. */}
         <div className="flex items-baseline justify-between gap-3 mt-2.5 px-1.5">
-          <span className="min-w-0 truncate font-mono text-[12px] uppercase tracking-[.14em] text-ink">
+          <span className="min-w-0 truncate font-mono text-caption uppercase tracking-[.14em] text-ink">
             {active.exercise.name} · set {activeSetIndex + 1} of {active.rowCount}
             {isOptionalRow(active, activeSetIndex) ? " · optional" : ""}
           </span>
-          <span className="flex-shrink-0 font-mono text-[12px] uppercase tracking-[.14em] text-ink">
+          <span className="flex-shrink-0 font-mono text-caption uppercase tracking-[.14em] text-ink">
             {totalRemaining} {totalRemaining === 1 ? "set" : "sets"} left
           </span>
         </div>
@@ -468,7 +468,7 @@ export function SetView({
                       : `Set ${i + 1}${optionalRow ? ", optional" : ""}, not logged yet`
                   }
                   className={
-                    "flex-1 min-w-0 h-[34px] rounded-[7px] text-center " +
+                    "flex-1 min-w-0 h-[34px] rounded-lg text-center " +
                     (optionalRow && !done && !isCurrent ? "border border-dashed " : "border ") +
                     (isCurrent
                       ? "border-bronze bg-[rgba(200,150,102,.14)]"
@@ -479,7 +479,7 @@ export function SetView({
                 >
                   <span
                     className={
-                      "block font-mono text-[12px] leading-none " +
+                      "block font-mono text-caption leading-none " +
                       (isCurrent ? "text-bronze" : done ? "text-ink" : "text-muted")
                     }
                   >
@@ -487,7 +487,7 @@ export function SetView({
                   </span>
                   <span
                     className={
-                      "block font-mono text-[12px] leading-none mt-0.5 truncate " +
+                      "block font-mono text-caption leading-none mt-0.5 truncate " +
                       (isCurrent ? "text-strong" : done ? "text-ink" : "text-muted")
                     }
                   >
@@ -513,19 +513,19 @@ export function SetView({
       </div>
 
       <div className="flex-1 flex flex-col items-center justify-center px-6 text-center min-h-0">
-        <p className="font-mono text-[11px] uppercase tracking-[.18em] text-bronze mb-[18px] flex items-center gap-2">
+        <p className="font-mono text-eyebrow uppercase tracking-[.18em] text-bronze mb-[18px] flex items-center gap-2">
           {isEditingLoggedSet
             ? "Editing"
             : activeSetIndex === active.rowCount - 1
               ? "Top set"
               : "Set"}
           {setForRow.failed === true ? (
-            <span className="font-mono text-[12px] font-semibold uppercase tracking-[.12em] text-strong border border-line-strong rounded px-1.5 py-0.5">
+            <span className="font-mono text-caption font-semibold uppercase tracking-[.12em] text-strong border border-line-strong rounded-md px-1.5 py-0.5">
               Missed
             </span>
           ) : null}
           {wouldBePR ? (
-            <span className="font-mono text-[12px] font-semibold uppercase tracking-[.12em] text-ground bg-green rounded px-1.5 py-0.5">
+            <span className="font-mono text-caption font-semibold uppercase tracking-[.12em] text-ground bg-green rounded-md px-1.5 py-0.5">
               Rep PR
             </span>
           ) : null}
@@ -535,7 +535,7 @@ export function SetView({
             <span className="text-[92px] leading-[.9] font-semibold tracking-[-.05em] text-strong">
               {weight}
             </span>
-            <span className="text-[24px] font-medium text-muted">kg</span>
+            <span className="text-h1 font-medium text-muted">kg</span>
           </div>
         ) : null}
         {isHold ? (
@@ -543,7 +543,7 @@ export function SetView({
             <p className="text-[92px] leading-[.9] font-semibold tracking-[-.05em] text-strong mb-1">
               {Math.floor(remaining / 60)}:{String(remaining % 60).padStart(2, "0")}
             </p>
-            <p className="font-mono text-[11px] uppercase tracking-[.16em] text-muted mb-3">
+            <p className="font-mono text-eyebrow uppercase tracking-[.16em] text-muted mb-3">
               {running
                 ? isHoldShaped
                   ? "holding"
@@ -560,7 +560,7 @@ export function SetView({
           <p
             className={
               active.isLoadable
-                ? "text-[26px] leading-[1.2] font-semibold tracking-[-.02em] text-strong mb-3"
+                ? "text-h1 leading-[1.2] font-semibold tracking-[-.02em] text-strong mb-3"
                 : "text-[92px] leading-[.9] font-semibold tracking-[-.05em] text-strong mb-3"
             }
           >
@@ -568,23 +568,23 @@ export function SetView({
           </p>
         )}
         {!prev && !prescribed && authoredDose ? (
-          <div className="border border-line-soft rounded-[8px] overflow-hidden mb-3">
+          <div className="border border-line-soft rounded-lg overflow-hidden mb-3">
             <div className="px-4 py-2.5 bg-surface">
-              <p className="font-mono text-[12px] uppercase tracking-[.14em] text-muted mb-0.5">
+              <p className="font-mono text-caption uppercase tracking-[.14em] text-muted mb-0.5">
                 Programme asks for
               </p>
-              <p className="text-[15px] font-semibold text-ink">{authoredDose}</p>
+              <p className="text-body font-semibold text-ink">{authoredDose}</p>
             </div>
           </div>
         ) : null}
         {prev || prescribed ? (
-          <div className="flex items-stretch border border-line-soft rounded-[8px] overflow-hidden mb-3">
+          <div className="flex items-stretch border border-line-soft rounded-lg overflow-hidden mb-3">
             {prev ? (
               <div className="px-4 py-2.5 bg-surface">
-                <p className="font-mono text-[12px] uppercase tracking-[.14em] text-muted mb-0.5">
+                <p className="font-mono text-caption uppercase tracking-[.14em] text-muted mb-0.5">
                   Last time
                 </p>
-                <p className="text-[15px] font-semibold text-ink">
+                <p className="text-body font-semibold text-ink">
                   {active.isLoadable ? `${prev.weight_kg} × ${prev.reps}` : prev.reps}
                 </p>
               </div>
@@ -592,24 +592,24 @@ export function SetView({
             {prev && prescribed ? <div className="w-px bg-line-soft" /> : null}
             {prescribed ? (
               <div className="px-4 py-2.5 bg-surface">
-                <p className="font-mono text-[12px] uppercase tracking-[.14em] text-muted mb-0.5">
+                <p className="font-mono text-caption uppercase tracking-[.14em] text-muted mb-0.5">
                   Prescribed
                 </p>
-                <p className="text-[15px] font-semibold text-ink">
+                <p className="text-body font-semibold text-ink">
                   {active.isLoadable ? `${prescribed.kg} × ${prescribed.reps}` : prescribed.reps}
                 </p>
               </div>
             ) : null}
           </div>
         ) : null}
-        {plates ? <p className="font-mono text-[11px] text-muted">{plates}</p> : null}
+        {plates ? <p className="font-mono text-eyebrow text-muted">{plates}</p> : null}
       </div>
 
       <div className="flex-shrink-0 px-[22px] pb-[22px]">
         {isHold ? (
           <>
             {editingLoad ? (
-              <div className="border border-line-strong rounded-[10px] bg-surface p-3 mb-2.5 flex flex-col gap-2">
+              <div className="rounded-lg bg-surface-2 p-3 mb-2.5 flex flex-col gap-2">
                 <StepperRow
                   label={isHoldShaped ? "seconds" : "minutes"}
                   value={isHoldShaped ? seconds : Math.round(seconds / 60)}
@@ -671,7 +671,7 @@ export function SetView({
               <button
                 type="button"
                 onClick={() => onEditingLoad(!editingLoad)}
-                className="flex-1 h-10 text-ink text-[14px]"
+                className="flex-1 h-10 text-ink text-small"
               >
                 {editingLoad ? "Hide" : "Change the time"}
               </button>
@@ -688,14 +688,14 @@ export function SetView({
                   }
                   confirm(1);
                 }}
-                className="flex-1 h-10 text-ink text-[14px]"
+                className="flex-1 h-10 text-ink text-small"
               >
                 Log it now
               </button>
             </div>
             {confirmUntimed ? (
-              <div role="alertdialog" aria-label="Log an untimed hold" className="mt-2 rounded-[8px] border border-line-strong bg-surface p-3">
-                <p className="text-[14px] text-ink mb-2">
+              <div role="alertdialog" aria-label="Log an untimed hold" className="mt-2 rounded-lg bg-surface-2 p-3">
+                <p className="text-small text-ink mb-2">
                   The timer hasn&rsquo;t run. Log the full {seconds}s as held?
                 </p>
                 <div className="flex gap-2">
@@ -705,14 +705,14 @@ export function SetView({
                       setConfirmUntimed(false);
                       confirm(1, false, seconds);
                     }}
-                    className="flex-1 min-h-[44px] rounded-[8px] bg-bronze text-ground text-[14px] font-semibold"
+                    className="flex-1 min-h-[44px] rounded-lg bg-bronze text-ground text-small font-semibold"
                   >
                     Log {seconds}s
                   </button>
                   <button
                     type="button"
                     onClick={() => setConfirmUntimed(false)}
-                    className="flex-1 min-h-[44px] rounded-[8px] border border-line-strong text-ink text-[14px]"
+                    className="flex-1 min-h-[44px] rounded-lg border border-line-strong text-ink text-small"
                   >
                     Cancel
                   </button>
@@ -733,17 +733,17 @@ export function SetView({
                 straight into TM inference, which reads weight × reps. The
                 rep grid still confirms; this just lets the kg be right. */}
             {editingLoad && active.isLoadable ? (
-              <div className="border border-line-strong rounded-[10px] bg-surface p-3 mb-2.5 flex flex-col gap-2">
+              <div className="rounded-lg bg-surface-2 p-3 mb-2.5 flex flex-col gap-2">
                 <StepperRow label="kg" value={weight} step={2.5} onChange={setWeight} />
                 <div className="flex items-center justify-between pt-0.5">
-                  <span className="font-mono text-[12px] uppercase tracking-[.14em] text-ink">
+                  <span className="font-mono text-caption uppercase tracking-[.14em] text-ink">
                     Steps of 2.5 kg
                   </span>
                   {prescribed ? (
                     <button
                       type="button"
                       onClick={() => setWeight(prescribed.kg)}
-                      className="text-slate text-[13px]"
+                      className="text-slate text-caption"
                     >
                       Back to prescription
                     </button>
@@ -751,7 +751,7 @@ export function SetView({
                 </div>
               </div>
             ) : null}
-            <p className="font-mono text-[12px] uppercase tracking-[.14em] text-muted mb-2 text-center">
+            <p className="font-mono text-caption uppercase tracking-[.14em] text-muted mb-2 text-center">
               {isEditingLoggedSet
                 ? `Fix the reps on set ${activeSetIndex + 1}`
                 : `Reps you got on set ${activeSetIndex + 1}`}
@@ -768,20 +768,20 @@ export function SetView({
                 Grid keeps the fast taps; "10+" opens a stepper rather than
                 adding twenty tiles nobody scans. */}
             {repsOverflow ? (
-              <div className="border border-line-strong rounded-[10px] bg-surface p-3 flex flex-col gap-2">
+              <div className="rounded-lg bg-surface-2 p-3 flex flex-col gap-2">
                 <StepperRow label="reps" value={overflowReps} step={1} onChange={setOverflowReps} />
                 <div className="flex gap-2 pt-0.5">
                   <button
                     type="button"
                     onClick={() => setRepsOverflow(false)}
-                    className="flex-1 h-11 text-ink text-[14px]"
+                    className="flex-1 h-11 text-ink text-small"
                   >
                     Back to the grid
                   </button>
                   <button
                     type="button"
                     onClick={() => confirm(overflowReps)}
-                    className="flex-1 h-11 rounded-[10px] bg-bronze text-ground text-[15px] font-semibold"
+                    className="flex-1 h-11 rounded-lg bg-bronze text-ground text-body font-semibold"
                   >
                     Log {overflowReps} reps
                   </button>
@@ -794,7 +794,7 @@ export function SetView({
                     key={n}
                     type="button"
                     onClick={() => confirm(n)}
-                    className="flex-1 basis-[60px] h-[62px] rounded-[10px] border border-line-soft bg-surface text-strong text-[22px] font-semibold tracking-[-.02em]"
+                    className="flex-1 basis-[60px] h-[62px] rounded-lg border border-line-soft bg-surface text-strong text-h2 font-semibold tracking-[-.02em]"
                   >
                     {n}
                   </button>
@@ -805,7 +805,7 @@ export function SetView({
                     setOverflowReps((r) => (r >= 10 ? r : 10));
                     setRepsOverflow(true);
                   }}
-                  className="flex-1 basis-[60px] h-[62px] rounded-[10px] border border-line-strong bg-surface text-strong text-[18px] font-semibold tracking-[-.02em]"
+                  className="flex-1 basis-[60px] h-[62px] rounded-lg border border-line-strong bg-surface text-strong text-h3 font-semibold tracking-[-.02em]"
                   aria-label="Ten or more reps"
                 >
                   10+
@@ -817,7 +817,7 @@ export function SetView({
                 <button
                   type="button"
                   onClick={() => onEditingLoad(!editingLoad)}
-                  className="flex-1 h-10 text-ink text-[14px]"
+                  className="flex-1 h-10 text-ink text-small"
                 >
                   {editingLoad ? "Hide" : "Change the weight"}
                 </button>
@@ -828,7 +828,7 @@ export function SetView({
                 {canRecordMiss && !repsOverflow ? <button
                 type="button"
                 onClick={() => confirm(0, true)}
-                className="flex-1 h-10 text-ink text-[14px]"
+                className="flex-1 h-10 text-ink text-small"
               >
                 Missed {weight} kg
               </button> : null}
@@ -838,13 +838,13 @@ export function SetView({
         ) : (
           <>
             {editingLoad ? (
-              <div className="border border-line-strong rounded-[10px] bg-surface p-3 mb-2.5 flex flex-col gap-2">
+              <div className="rounded-lg bg-surface-2 p-3 mb-2.5 flex flex-col gap-2">
                 {active.isLoadable ? (
                   <StepperRow label="kg" value={weight} step={2.5} onChange={setWeight} />
                 ) : null}
                 <StepperRow label="reps" value={reps} step={1} onChange={setReps} />
                 <div className="flex items-center justify-between pt-0.5">
-                  <span className="font-mono text-[12px] uppercase tracking-[.14em] text-ink">
+                  <span className="font-mono text-caption uppercase tracking-[.14em] text-ink">
                     {active.isLoadable ? "Steps of 2.5 kg" : "Steps of 1 rep"}
                   </span>
                   {prescribed ? (
@@ -854,7 +854,7 @@ export function SetView({
                         if (active.isLoadable) setWeight(prescribed.kg);
                         setReps(parseInt(prescribed.reps, 10) || reps);
                       }}
-                      className="text-slate text-[13px]"
+                      className="text-slate text-caption"
                     >
                       Back to prescription
                     </button>
@@ -881,14 +881,14 @@ export function SetView({
               <button
                 type="button"
                 onClick={() => onEditingLoad(!editingLoad)}
-                className="flex-1 h-10 text-ink text-[14px]"
+                className="flex-1 h-10 text-ink text-small"
               >
                 {editingLoad ? "Hide" : active.isLoadable ? "Change the weight" : "Change the reps"}
               </button>
               {canRecordMiss ? <button
                 type="button"
                 onClick={() => confirm(0, true)}
-                className="flex-1 h-10 text-ink text-[14px]"
+                className="flex-1 h-10 text-ink text-small"
               >
                 Missed {weight} kg
               </button> : null}
@@ -978,7 +978,7 @@ function StepperRow({
       <button
         type="button"
         onClick={() => onChange(Math.max(0, round(value - step)))}
-        className="w-[58px] h-[52px] flex-shrink-0 rounded-[8px] border border-line-strong bg-surface-2 text-strong text-[24px] font-medium"
+        className="w-[58px] h-[52px] flex-shrink-0 rounded-lg border border-line-strong bg-surface-2 text-strong text-h1 font-medium"
       >
         −
       </button>
@@ -992,14 +992,14 @@ function StepperRow({
             if (Number.isFinite(v)) onChange(v);
           }}
           aria-label={label}
-          className="w-20 bg-transparent border-0 border-b border-dashed border-line-strong text-strong text-[22px] font-semibold tracking-[-.02em] text-center py-0.5 outline-none"
+          className="w-20 bg-transparent border-0 border-b border-dashed border-line-strong text-strong text-h2 font-semibold tracking-[-.02em] text-center py-0.5 outline-none"
         />
-        <span className="text-[14px] font-medium text-muted">{label}</span>
+        <span className="text-small font-medium text-muted">{label}</span>
       </span>
       <button
         type="button"
         onClick={() => onChange(round(value + step))}
-        className="w-[58px] h-[52px] flex-shrink-0 rounded-[8px] border border-line-strong bg-surface-2 text-strong text-[24px] font-medium"
+        className="w-[58px] h-[52px] flex-shrink-0 rounded-lg border border-line-strong bg-surface-2 text-strong text-h1 font-medium"
       >
         +
       </button>

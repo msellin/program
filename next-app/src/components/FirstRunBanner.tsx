@@ -48,7 +48,7 @@ export function FirstRunBanner() {
       className="rounded-lg border border-line-soft bg-surface p-4 space-y-2.5"
     >
       <div className="flex items-start justify-between gap-3">
-        <p id="firstrun-title" className="font-semibold text-strong text-[14px]">
+        <p id="firstrun-title" className="font-semibold text-strong text-small">
           Four tabs
         </p>
         <button
@@ -60,7 +60,7 @@ export function FirstRunBanner() {
           <X size={16} />
         </button>
       </div>
-      <ul className="text-[14px] text-muted space-y-1 leading-relaxed">
+      <ul className="text-small text-muted space-y-1 leading-relaxed">
         <li><span className="text-ink">Today</span> — the session for today.</li>
         <li><span className="text-ink">Plan</span> — your week; move or skip a day here.</li>
         <li><span className="text-ink">Record</span> — your progress and every logged session.</li>

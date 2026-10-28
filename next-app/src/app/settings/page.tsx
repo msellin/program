@@ -7,6 +7,7 @@ import { useHapticPref, useSoundPref } from "@/lib/useUserPrefs";
 import { useInstallPrompt } from "@/lib/useInstallPrompt";
 import { hapticTap } from "@/lib/utils";
 import { playConfirm } from "@/lib/sound";
+import { cardClass } from "@/components/ui/Card";
 
 /**
  * F8 Batch 29 · Settings v1.
@@ -36,7 +37,7 @@ export default function SettingsPage() {
           is a top-level route; carries the display H1 like Progress /
           Profile / Programs / History / Week. */}
       <h1
-        className="text-[32px] font-semibold tracking-tight text-strong leading-none"
+        className="text-h1 tracking-tight text-strong leading-none"
         tabIndex={-1}
       >
         Settings
@@ -113,9 +114,9 @@ export default function SettingsPage() {
           <button
             type="button"
             onClick={() => void promptInstall()}
-            className="w-full flex items-center justify-between gap-3 px-3 py-3 min-h-[48px] rounded border border-line-soft bg-surface active:bg-line-soft/50 text-left"
+            className={`${cardClass({ flush: true })} w-full flex items-center justify-between gap-3 px-3 py-3 min-h-[48px] active:bg-line-soft/50 text-left`}
           >
-            <span className="flex items-center gap-3 text-sm text-strong">
+            <span className="flex items-center gap-3 text-small text-strong">
               <Download size={16} className="text-muted" aria-hidden />
               Add to home screen
             </span>
@@ -130,7 +131,7 @@ export default function SettingsPage() {
 function Section({ eyebrow, children }: { eyebrow: string; children: React.ReactNode }) {
   return (
     <div className="space-y-2">
-      <p className="font-mono text-[10px] uppercase tracking-widest text-muted">
+      <p className="font-mono text-eyebrow uppercase tracking-widest text-muted">
         {eyebrow}
       </p>
       {children}
@@ -157,13 +158,13 @@ function ToggleRow({
       role="switch"
       aria-checked={value}
       onClick={() => onToggle(!value)}
-      className="w-full flex items-center justify-between gap-3 px-3 py-3 min-h-[56px] rounded border border-line-soft bg-surface active:bg-line-soft/50 text-left"
+      className={`${cardClass({ flush: true })} w-full flex items-center justify-between gap-3 px-3 py-3 min-h-[56px] active:bg-line-soft/50 text-left`}
     >
       <span className="flex items-start gap-3 min-w-0 flex-1">
         <span className="mt-0.5 flex-shrink-0">{icon}</span>
         <span className="min-w-0">
-          <span className="block text-sm text-strong">{label}</span>
-          <span className="block text-[12px] text-muted mt-0.5">{hint}</span>
+          <span className="block text-small text-strong">{label}</span>
+          <span className="block text-caption text-muted mt-0.5">{hint}</span>
         </span>
       </span>
       <span
@@ -196,15 +197,15 @@ function PlaceholderRow({
   hint: string;
 }) {
   return (
-    <div className="w-full flex items-center justify-between gap-3 px-3 py-3 min-h-[56px] rounded border border-line-soft bg-surface opacity-70">
+    <div className={`${cardClass({ flush: true })} w-full flex items-center justify-between gap-3 px-3 py-3 min-h-[56px] opacity-70`}>
       <span className="flex items-start gap-3 min-w-0 flex-1">
         <span className="mt-0.5 flex-shrink-0">{icon}</span>
         <span className="min-w-0">
-          <span className="block text-sm text-strong">{label}</span>
-          <span className="block text-[12px] text-muted mt-0.5">{hint}</span>
+          <span className="block text-small text-strong">{label}</span>
+          <span className="block text-caption text-muted mt-0.5">{hint}</span>
         </span>
       </span>
-      <span className="font-mono text-[12px] text-muted flex-shrink-0">{value}</span>
+      <span className="font-mono text-caption text-muted flex-shrink-0">{value}</span>
     </div>
   );
 }

@@ -33,6 +33,7 @@ import {
 import { resolveRetestReadings, readingsForMetric } from "@/lib/engine/retest-readings";
 import type { Program, Store } from "@/lib/schemas";
 import { cn } from "@/lib/utils";
+import { cardClass } from "@/components/ui/Card";
 
 export type CutCLatestRetestTileProps = {
   program: Program;
@@ -131,25 +132,25 @@ export function CutCLatestRetestTile({ program, store, className }: CutCLatestRe
   return (
     <div
       className={cn(
-        "rounded border border-line-soft bg-surface p-3 border-l-4 border-l-strong",
+        cardClass(),
         className,
       )}
     >
-      <p className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted mb-2">
+      <p className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted mb-2">
         Latest retest · {metric.display_name}
       </p>
 
       {/* Metric row: name + value + delta */}
       <div className="flex items-baseline justify-between gap-2 flex-wrap">
-        <span className="text-[14px] font-semibold text-strong">
+        <span className="text-small font-semibold text-strong">
           {metric.display_name}
         </span>
         <span className="inline-flex items-baseline gap-2">
-          <span className="text-[20px] font-semibold text-strong font-mono tabular-nums">
+          <span className="text-h2 text-strong font-mono tabular-nums">
             {formatMetric(metric.current, metric.unit)}
           </span>
           {delta ? (
-            <span className={`font-mono text-[14px] tabular-nums ${deltaColor}`}>
+            <span className={`font-mono text-small tabular-nums ${deltaColor}`}>
               {delta.value > 0 ? "+" : delta.value < 0 ? "−" : ""}
               {Math.abs(delta.value).toFixed(1)}
             </span>
@@ -159,20 +160,20 @@ export function CutCLatestRetestTile({ program, store, className }: CutCLatestRe
 
       {/* vs-previous line */}
       {prev ? (
-        <div className="mt-1 flex items-baseline justify-between text-[12px] text-muted">
+        <div className="mt-1 flex items-baseline justify-between text-caption text-muted">
           <span>vs previous ({prev.observed_at})</span>
           <span className="mono">{formatMetric(prev.value, metric.unit)}</span>
         </div>
       ) : null}
 
       {/* Since-baseline tenure line */}
-      <p className="mt-1 font-mono text-[11px] uppercase tracking-widest text-muted tabular-nums">
+      <p className="mt-1 font-mono text-eyebrow uppercase tracking-widest text-muted tabular-nums">
         {formatSinceBaseline(metric, retestCount)}
       </p>
 
       {/* Next-retest chip */}
       {nextRetestInDays != null ? (
-        <p className="mt-2 text-right text-[11px] text-muted font-mono tabular-nums">
+        <p className="mt-2 text-right text-eyebrow text-muted font-mono tabular-nums">
           Next test in {nextRetestInDays} day{nextRetestInDays === 1 ? "" : "s"}
         </p>
       ) : null}

@@ -65,9 +65,9 @@ export function CheckRegionRow({ label, lat, value, onChange }: CheckRegionRowPr
   return (
     <div className="py-3 border-b border-line-soft last:border-b-0">
       <div className="flex items-baseline justify-between mb-2">
-        <span className="text-[14px] font-medium text-strong">{label}</span>
+        <span className="text-small font-medium text-strong">{label}</span>
         {lat ? (
-          <span className="font-mono text-[10px] uppercase tracking-[0.06em] text-muted">
+          <span className="font-mono text-eyebrow uppercase tracking-[0.06em] text-muted">
             {lat}
           </span>
         ) : null}
@@ -96,7 +96,7 @@ export function CheckRegionRow({ label, lat, value, onChange }: CheckRegionRowPr
               tabIndex={isActive ? 0 : -1}
               onClick={() => onChange(BUCKET_TO_VALUE[opt.bucket])}
               className={cn(
-                "relative min-h-[44px] px-1.5 py-2 text-[12px] rounded border motion-reduce:transition-none transition-colors",
+                "relative min-h-[44px] px-1.5 py-2 text-caption rounded-lg border motion-reduce:transition-none transition-colors",
                 "focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-strong focus-visible:outline-offset-2",
                 isActive
                   ? cn(

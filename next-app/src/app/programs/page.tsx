@@ -10,6 +10,7 @@ import { DashboardBlock } from "@/components/DashboardBlock";
 import { InfoSheet } from "@/components/InfoSheet";
 import { StatusPill } from "@/components/ui/StatusPill";
 import type { ProgramManifest, ProgramManifestEntry } from "@/lib/schemas";
+import { cardClass } from "@/components/ui/Card";
 
 // F9 Batch 30 · category → accent tone mapping for the DashboardBlock left
 // stripe. Was previously duplicated in CATEGORY_META's borderClass.
@@ -22,17 +23,6 @@ const CATEGORY_ACCENT: Record<string, "slate" | "bronze" | "green" | "amber" | "
   hyrox: "amber",
   mobility: "slate",
   other: "default",
-};
-
-// Batch 36 Step 13 · same accent → left-stripe classname map used by the
-// "5 REFERENCED · Live now" strip card. Kept local so the strip doesn't
-// pull the whole CategoryTileGrid primitive when it only needs a stripe.
-const ACCENT_STRIPE: Record<string, string> = {
-  slate: "border-l-slate",
-  bronze: "border-l-bronze",
-  green: "border-l-green",
-  amber: "border-l-amber",
-  default: "border-l-line-strong",
 };
 
 // Batch 36 P0 (audit 2026-08-21 · app-copy-clarity) — collapse the
@@ -137,14 +127,14 @@ export default function ProgramCatalogPage() {
 
   if (error) {
     return (
-      <div className="mt-8 rounded border border-red bg-surface p-4">
-        <h2 className="mb-2 text-lg font-semibold">Couldn&apos;t load programs</h2>
-        <p className="text-sm text-muted">{error}</p>
+      <div className={`${cardClass({ status: "red" })} mt-8`}>
+        <h2 className="mb-2 text-h3">Couldn&apos;t load programs</h2>
+        <p className="text-small text-muted">{error}</p>
       </div>
     );
   }
   if (!manifest || !grouped) {
-    return <div className="mt-8 text-sm text-muted">Loading…</div>;
+    return <div className="mt-8 text-small text-muted">Loading…</div>;
   }
 
   const sortedCategories = Object.entries(manifest.categories).sort(
@@ -172,8 +162,8 @@ export default function ProgramCatalogPage() {
   return (
     <div className="space-y-8 pt-4">
       <header className="space-y-1">
-        <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">Pick your focus.</h1>
-        <p className="text-sm text-muted">
+        <h1 className="text-h1 tracking-tight text-strong leading-none">Pick your focus.</h1>
+        <p className="text-small text-muted">
           Each program is one focus arc — an engine, a skill, a lift, a stubborn joint.
           The rest of your week stays yours. Personalised to your baseline, adaptive to how you respond.
         </p>
@@ -192,9 +182,9 @@ export default function ProgramCatalogPage() {
             from `statusLabelOf` above (which never emits "REVIEWED"). One
             lexicon everywhere. Sheet still holds the historical 3-tier
             detail for anyone who wants it. */}
-        <details className="pt-1 text-[12px]">
+        <details className="pt-1 text-caption">
           <summary className="cursor-pointer text-muted underline-offset-2 hover:underline">How we check programs</summary>
-        <p className="text-[12px] text-ink pt-1 leading-relaxed">
+        <p className="text-caption text-ink pt-1 leading-relaxed">
           <button
             type="button"
             onClick={() => setLadderSheetOpen(true)}
@@ -213,7 +203,7 @@ export default function ProgramCatalogPage() {
           = the citations have been audited against the literature in a documented review,
           with reviewer, date and scope on record.
         </p>
-        <p className="text-[12px] text-muted pt-1 leading-relaxed italic">
+        <p className="text-caption text-muted pt-1 leading-relaxed italic">
           Every program ships at least CITED. VERIFIED means a second, documented
           pass over the citations — currently Terav&apos;s own audit process, not an
           outside clinician. No program has yet been signed off by an independent
@@ -239,7 +229,7 @@ export default function ProgramCatalogPage() {
                 "referenced" wording to "cited" per §7.5 2-tier ladder. */}
             <p
               id="live-now-eyebrow"
-              className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted"
+              className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted"
             >
               {/* Was "{n} cited · live now", using "cited" as the floor label —
                   true while some programs sat at that tier. As of 2026-09-02 all
@@ -254,21 +244,18 @@ export default function ProgramCatalogPage() {
             style={{ overscrollBehaviorX: "contain" }}
           >
             {openPrograms.map((p) => {
-              const accent = CATEGORY_ACCENT[p.category] ?? CATEGORY_ACCENT.other;
-              const stripeClass = ACCENT_STRIPE[accent];
               return (
                 <li key={p.slug} className="snap-start flex-shrink-0 w-[220px]">
                   <Link
                     href={`/programs/${p.slug}`}
                     className={cn(
-                      "block h-full rounded-lg border border-line-soft border-l-4 bg-surface-2 p-3 space-y-2",
+                      cardClass(), "block h-full space-y-2",
                       "hover:bg-surface-3 active:scale-[0.98] transition-transform duration-100 motion-reduce:transition-none",
                       "focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2",
-                      stripeClass,
                     )}
                   >
                     <div className="flex items-start justify-between gap-2">
-                      <p className="font-mono text-[10px] uppercase tracking-widest text-muted">
+                      <p className="font-mono text-eyebrow uppercase tracking-widest text-muted">
                         {p.category}
                       </p>
                       <StatusPill
@@ -276,13 +263,13 @@ export default function ProgramCatalogPage() {
                         tone={statusToneOf(p.status)}
                       />
                     </div>
-                    <p className="text-[14px] font-semibold text-strong leading-snug line-clamp-2">
+                    <p className="text-small font-semibold text-strong leading-snug line-clamp-2">
                       {p.name}
                     </p>
-                    <p className="text-[12px] text-muted leading-snug line-clamp-2">
+                    <p className="text-caption text-muted leading-snug line-clamp-2">
                       {p.short_description}
                     </p>
-                    <p className="font-mono text-[10px] tabular-nums text-muted">
+                    <p className="font-mono text-eyebrow tabular-nums text-muted">
                       <span className="whitespace-nowrap">{p.duration_weeks} wks</span> · {p.difficulty}
                     </p>
                   </Link>
@@ -304,7 +291,7 @@ export default function ProgramCatalogPage() {
             onClick={() => setFilter(f.id)}
             aria-pressed={filter === f.id}
             className={cn(
-              "min-h-[36px] px-3 py-1.5 rounded-full font-mono text-[11px]",
+              "min-h-[36px] px-3 py-1.5 rounded-full font-mono text-eyebrow",
               filter === f.id
                 ? "bg-bronze text-ground"
                 : "bg-line-soft text-muted hover:text-ink",
@@ -319,7 +306,7 @@ export default function ProgramCatalogPage() {
           reads native, keyboard works, no custom popover needed). Sits
           under the filter chips so the visual hierarchy stays: what
           category → then what order. */}
-      <div className="flex items-center gap-2 -mt-2 text-[11px] text-muted">
+      <div className="flex items-center gap-2 -mt-2 text-eyebrow text-muted">
         <label htmlFor="programs-sort" className="font-mono uppercase tracking-widest">
           Sort
         </label>
@@ -327,7 +314,7 @@ export default function ProgramCatalogPage() {
           id="programs-sort"
           value={sort}
           onChange={(e) => setSort(e.target.value as SortOrder)}
-          className="font-mono text-[11px] px-2 py-1 min-h-[36px] rounded border border-line-soft bg-surface text-ink focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
+          className="font-mono text-eyebrow px-2 py-1 min-h-[36px] rounded-lg border border-line-soft bg-surface text-ink focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
         >
           <option value="default">Curated</option>
           <option value="duration_asc">Shortest first</option>
@@ -336,7 +323,7 @@ export default function ProgramCatalogPage() {
       </div>
 
       {Array.from(grouped.entries()).length === 0 ? (
-        <p className="text-sm text-muted italic">
+        <p className="text-small text-muted italic">
           Nothing in this category yet. Try another, or check back — the catalog is growing.
         </p>
       ) : (
@@ -371,7 +358,7 @@ export default function ProgramCatalogPage() {
           })
       )}
 
-      <footer className="pt-6 border-t border-line-soft text-[14px] text-muted italic">
+      <footer className="pt-6 border-t border-line-soft text-small text-muted italic">
         More programs land as they&apos;re authored.
       </footer>
 
@@ -384,10 +371,10 @@ export default function ProgramCatalogPage() {
           onClose={() => setLadderSheetOpen(false)}
         >
           <section className="space-y-2">
-            <p className="font-mono text-[11px] uppercase tracking-widest text-slate">
+            <p className="font-mono text-eyebrow uppercase tracking-widest text-slate">
               Cited — the floor. Nothing ships below it.
             </p>
-            <ul className="list-disc pl-5 space-y-1 text-[14px]">
+            <ul className="list-disc pl-5 space-y-1 text-small">
               <li>Every claim in the program cites a peer-reviewed paper.</li>
               <li>
                 The adaptive engine passes the simulator harness across
@@ -397,10 +384,10 @@ export default function ProgramCatalogPage() {
             </ul>
           </section>
           <section className="space-y-2">
-            <p className="font-mono text-[11px] uppercase tracking-widest text-green">
+            <p className="font-mono text-eyebrow uppercase tracking-widest text-green">
               Verified — audited a second time, on the record
             </p>
-            <ul className="list-disc pl-5 space-y-1 text-[14px]">
+            <ul className="list-disc pl-5 space-y-1 text-small">
               <li>
                 Every citation re-checked against the current literature in a
                 separate, structured pass — not by the person who wrote the program.
@@ -412,11 +399,11 @@ export default function ProgramCatalogPage() {
               <li>Not endorsement — audit. It flags anything it would change.</li>
             </ul>
           </section>
-          <section className="space-y-2 rounded border border-line-soft bg-surface p-3">
-            <p className="font-mono text-[11px] uppercase tracking-widest text-muted">
+          <section className={`${cardClass()} space-y-2`}>
+            <p className="font-mono text-eyebrow uppercase tracking-widest text-muted">
               What verified does not mean
             </p>
-            <ul className="list-disc pl-5 space-y-1 text-[14px]">
+            <ul className="list-disc pl-5 space-y-1 text-small">
               <li>
                 <strong>Not an outside clinician.</strong> Terav&apos;s audits are run
                 by its own review process, working from published literature. No
@@ -435,7 +422,7 @@ export default function ProgramCatalogPage() {
               </li>
             </ul>
           </section>
-          <p className="text-[13px] text-muted italic pt-1 border-t border-line-soft">
+          <p className="text-caption text-muted italic pt-1 border-t border-line-soft">
             Personal programs (author&apos;s own clinical context) sit outside this
             ladder entirely — see the &ldquo;personal&rdquo; badge instead.
           </p>
@@ -493,7 +480,7 @@ function StatusChip({ status, personal }: { status?: string; personal?: boolean 
   if (!meta) return null;
   return (
     <span
-      className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5"
+      className="font-mono text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5"
       title={meta.title}
     >
       <span aria-hidden className={`h-1.5 w-1.5 rounded-full ${meta.dotClass}`} />
@@ -507,15 +494,15 @@ function StatusChip({ status, personal }: { status?: string; personal?: boolean 
  * Keeps the catalog readable at a glance. Categories the manifest doesn't
  * explicitly cover fall back to `other`.
  */
-const CATEGORY_META: Record<string, { icon: string; iconClass: string; borderClass: string }> = {
-  rehab: { icon: "◆", iconClass: "text-slate", borderClass: "border-l-slate" },
-  strength: { icon: "▮", iconClass: "text-bronze", borderClass: "border-l-bronze" },
-  skill: { icon: "△", iconClass: "text-slate", borderClass: "border-l-slate" },
-  gymnastics: { icon: "△", iconClass: "text-slate", borderClass: "border-l-slate" },
-  endurance: { icon: "○", iconClass: "text-green", borderClass: "border-l-green" },
-  hyrox: { icon: "☰", iconClass: "text-amber", borderClass: "border-l-amber" },
-  mobility: { icon: "◇", iconClass: "text-slate", borderClass: "border-l-slate" },
-  other: { icon: "·", iconClass: "text-muted", borderClass: "border-l-line" },
+const CATEGORY_META: Record<string, { icon: string; iconClass: string }> = {
+  rehab: { icon: "◆", iconClass: "text-slate" },
+  strength: { icon: "▮", iconClass: "text-bronze" },
+  skill: { icon: "△", iconClass: "text-slate" },
+  gymnastics: { icon: "△", iconClass: "text-slate" },
+  endurance: { icon: "○", iconClass: "text-green" },
+  hyrox: { icon: "☰", iconClass: "text-amber" },
+  mobility: { icon: "◇", iconClass: "text-slate" },
+  other: { icon: "·", iconClass: "text-muted" },
 };
 
 function ProgramCard({
@@ -542,23 +529,21 @@ function ProgramCard({
       className={cn(
         // F9 Batch 30 · when inside a category DashboardBlock, drop the
         // per-card border (block owns the container + accent stripe). Left
-        // border-l-2 keeps the category color as a subtle marker on the row.
-        "block rounded border-l-2 bg-line-soft/30 hover:bg-line-soft/60 transition-colors px-4 py-3.5",
-        cat.borderClass,
+        "block rounded-lg bg-line-soft/30 hover:bg-line-soft/60 transition-colors px-4 py-3.5",
         p.coming_soon && !isActive && "opacity-60",
       )}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
           <div className="flex items-baseline gap-2 flex-wrap">
-            <h3 className="text-sm font-semibold text-strong">{p.name}</h3>
+            <h3 className="text-small font-semibold text-strong">{p.name}</h3>
             {isActive ? (
-              <span className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-bronze text-ground">
+              <span className="font-mono text-eyebrow uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-bronze text-ground">
                 active
               </span>
             ) : null}
             {p.coming_soon && !isActive ? (
-              <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted">
+              <span className="font-mono text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted">
                 coming soon
               </span>
             ) : (
@@ -566,7 +551,7 @@ function ProgramCard({
             )}
             {p.personal ? (
               <span
-                className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5"
+                className="font-mono text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5"
                 title="Authored for one specific user's clinical context. Not general-purpose."
               >
                 <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-slate" />
@@ -575,7 +560,7 @@ function ProgramCard({
             ) : null}
           </div>
           <p
-            className="text-[14px] text-muted mt-1 leading-snug"
+            className="text-small text-muted mt-1 leading-snug"
             style={{
               display: "-webkit-box",
               WebkitLineClamp: 2,
@@ -585,7 +570,7 @@ function ProgramCard({
           >
             {p.short_description}
           </p>
-          <div className="mt-2 flex items-center gap-2 text-[11px] font-mono text-muted">
+          <div className="mt-2 flex items-center gap-2 text-eyebrow font-mono text-muted">
             <span className="whitespace-nowrap">{p.duration_weeks} wk</span>
             {p.load_hint ? (
               <>

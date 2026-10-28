@@ -34,7 +34,7 @@ export function Button({ variant = "primary", size = "md", block, href, classNam
   const cls = cn(
     BASE,
     VARIANT[variant],
-    variant === "tertiary" ? "min-h-[44px]" : size === "lg" ? "h-[60px] text-[17px]" : "h-12 px-5 text-[15px]",
+    variant === "tertiary" ? "min-h-[44px]" : size === "lg" ? "h-[60px] text-h3" : "h-12 px-5 text-body",
     block && "w-full",
     className,
   );

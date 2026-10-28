@@ -1,65 +1,101 @@
 e2e-persona-pullup-fast@example.test: no loadable session today (rest day or finished), skipped
 
-e2e-persona-pullup@example.test: no loadable session today (rest day or finished), skipped
-
-Red-day user: e2e-persona-strength@example.test (concurrent-strength-maintenance), session scheduled today
+Red-day user: e2e-persona-pullup@example.test (first-strict-pullup), session scheduled today
 
 ## 00-session-before-check
-url: https://app.terav.fit/session/concurrent-strength-maintenance/
+url: https://app.terav.fit/session/first-strict-pullup/
 horizontal overflow: true
 
 Skip to content
-TERAV
-Tuesday
-CONCURRENT-STRENGTH MAINTENANCE
+Wednesday
+FIRST STRICT PULL-UP
 
-About 60 min
+5 exercises · about 32 min · +1 optional
 
-TODAY'S SESSION
+HOW TO RUN THIS
 
-Zone 2 · Bike
+Feet-elevated ring row / inverted row.
 
-30–60 MIN
+The neuromuscular precursor to a pull-up. Retraction hold isolates the endpoint.
 
-HR at ~70-75% max. Bike preferred over run (Wilson 2012 modality bias).
+Band pull-aparts + scap CARs + light forearm activation. 3-5 min before any bar-hang work. Non-optional in weeks 1-3.
 
-Log a run, row, or class
+Follow along · Row strength — closed-chain pull
+3 moves · guided, one at a time, with a timer
+Ring row (incline, easy)
+3 sets
+HELD
+Ring row (horizontal)
+4 sets
+Ring row (feet elevated)
+4 sets
+Follow along · Scapular pull ladder
+2 moves · guided, one at a time, with a timer
+Scapular pull-up
+4 sets
+Scap retraction hold at top
+3 sets
+OPTIONAL
+Follow along · Shoulder + grip prep — every session
+1 move · guided, one at a time, with a timer
+Band shoulder prep (I-Y-T + face pull)
+2 sets
+Log an extra session
 ›
 
-INTERVALS · WEEKS 3–6 · WEEK 3 OF 4 · ENDS 7 NOV
+INTERLEAVED CONSOLIDATION · WEEK 7 OF 8 · ENDS 6 NOV
 
-Log this session
-DAY
+Start session
+TODAY
 PLAN
 RECORD
 PROFILE
 
 ## 00b-today-before-check
-url: https://app.terav.fit/session/concurrent-strength-maintenance/
+url: https://app.terav.fit/session/first-strict-pullup/
 horizontal overflow: true
 
 Skip to content
-TERAV
-Tuesday
-CONCURRENT-STRENGTH MAINTENANCE
+Wednesday
+FIRST STRICT PULL-UP
 
-About 60 min
+5 exercises · about 32 min · +1 optional
 
-TODAY'S SESSION
+HOW TO RUN THIS
 
-Zone 2 · Bike
+Feet-elevated ring row / inverted row.
 
-30–60 MIN
+The neuromuscular precursor to a pull-up. Retraction hold isolates the endpoint.
 
-HR at ~70-75% max. Bike preferred over run (Wilson 2012 modality bias).
+Band pull-aparts + scap CARs + light forearm activation. 3-5 min before any bar-hang work. Non-optional in weeks 1-3.
 
-Log a run, row, or class
+Follow along · Row strength — closed-chain pull
+3 moves · guided, one at a time, with a timer
+Ring row (incline, easy)
+3 sets
+HELD
+Ring row (horizontal)
+4 sets
+Ring row (feet elevated)
+4 sets
+Follow along · Scapular pull ladder
+2 moves · guided, one at a time, with a timer
+Scapular pull-up
+4 sets
+Scap retraction hold at top
+3 sets
+OPTIONAL
+Follow along · Shoulder + grip prep — every session
+1 move · guided, one at a time, with a timer
+Band shoulder prep (I-Y-T + face pull)
+2 sets
+Log an extra session
 ›
 
-INTERVALS · WEEKS 3–6 · WEEK 3 OF 4 · ENDS 7 NOV
+INTERLEAVED CONSOLIDATION · WEEK 7 OF 8 · ENDS 6 NOV
 
-Log this session
-DAY
+Start session
+TODAY
 PLAN
 RECORD
 PROFILE
@@ -69,35 +105,34 @@ url: https://app.terav.fit/check/
 horizontal overflow: false
 
 Skip to content
-TERAV
+Back
 Morning check
 
-TUESDAY 27 OCT
+WEDNESDAY 28 OCT
 
 WORKOUT READY
 
-Progress load — nothing above 3/10 and no flags.
+You’re good to train as planned.
 
-CITED
-Kellmann 2010 · pain-provocation thresholds
-→
-
-✓
-Saved. Today's prescription adjusts to this read.
-
+WHY?
+Prefilled from Tue's check.
+START FRESH
 REGIONS
-Low back
-None
-Mild
-Notable
-Severe
-Knee
-None
-Mild
-Notable
-Severe
+
+Mild: barely there. Notable: you notice it. Severe: it limits you.
+
 Shoulder
-None
+✓ None
+Mild
+Notable
+Severe
+Elbow
+✓ None
+Mild
+Notable
+Severe
+Low back
+✓ None
 Mild
 Notable
 Severe
@@ -105,21 +140,21 @@ FLAGS · TAP TO TOGGLE
 Woke me at night
 CONTEXT
 Morning stiffness
-None
+✓ None
 <15 min
 15-30
 >30
-Life load
+A heavy week outside training
 Fresh
 Normal
 Cooked
-Outside training yesterday
+Anything outside training lately?
 
-The engine reads these. Keywords like padel, hike, poor sleep feed today's proposal — no LLM, just a keyword parser, all done on-device.
+The engine reads these. Keywords like padel, hike, poor sleep feed today's proposal.
 
-Update check
+Save check
 →
-DAY
+TODAY
 PLAN
 RECORD
 PROFILE
@@ -129,31 +164,36 @@ url: https://app.terav.fit/check/
 horizontal overflow: false
 
 Skip to content
-TERAV
+Back
 Morning check
 
-TUESDAY 27 OCT
+WEDNESDAY 28 OCT
 
 BACK OFF
 
-Low back is above 5/10.
+Shoulder is above 5/10.
 
-CITED
-Kellmann 2010 · pain-provocation thresholds
-→
+Next step: skip hard training today. If this is night pain, a sudden change, or it isn't settling, talk to a doctor or physio. Terav isn't medical advice.
+
+WHY?
+Prefilled from Tue's check.
+START FRESH
 REGIONS
-Low back
-None
-Mild
-Notable
-Severe
-Knee
-None
-Mild
-Notable
-Severe
+
+Mild: barely there. Notable: you notice it. Severe: it limits you.
+
 Shoulder
 None
+Mild
+Notable
+✓ Severe
+Elbow
+✓ None
+Mild
+Notable
+Severe
+Low back
+✓ None
 Mild
 Notable
 Severe
@@ -161,21 +201,21 @@ FLAGS · TAP TO TOGGLE
 Woke me at night
 CONTEXT
 Morning stiffness
-None
+✓ None
 <15 min
 15-30
 >30
-Life load
+A heavy week outside training
 Fresh
 Normal
 Cooked
-Outside training yesterday
+Anything outside training lately?
 
-The engine reads these. Keywords like padel, hike, poor sleep feed today's proposal — no LLM, just a keyword parser, all done on-device.
+The engine reads these. Keywords like padel, hike, poor sleep feed today's proposal.
 
 Save check
 →
-DAY
+TODAY
 PLAN
 RECORD
 PROFILE
@@ -185,35 +225,16 @@ url: https://app.terav.fit/
 horizontal overflow: false
 
 Skip to content
-TERAV
-
-TODAY · WEEK 3 OF 4 · ENDS 7 NOV
-
-Concurrent-Strength Maintenance
-CONCURRENT-STRENGTH MAINTENANCE
-3/4
-BACK OFF
-WHY?
-Back off — something above 5/10 or a red flag noted.
-Escalate →
 
 TODAY
 
-1 block · about 60 min
+First Strict Pull-Up
+Rest today.
 
-Intervals · Weeks 3–6 · week 3 of 4 · ends 7 Nov
+Your shoulder is 8/10, so hard training waits. If it isn’t settling, see a physio or doctor.
 
-· Zone 2 · Bike
-Open session
-
-Log extra session →
-
-Cross-modal work, walks, class attendance, mobility — anything not in the prescribed block. Optional. Nothing here changes the plan.
-
-Row · threshold · 32 min · hard · avg HR 165 · max 178
-Log session
-Import GPX
-DAY
+Log how it feels
+TODAY
 PLAN
 RECORD
 PROFILE
@@ -223,35 +244,16 @@ url: https://app.terav.fit/
 horizontal overflow: false
 
 Skip to content
-TERAV
-
-TODAY · WEEK 3 OF 4 · ENDS 7 NOV
-
-Concurrent-Strength Maintenance
-CONCURRENT-STRENGTH MAINTENANCE
-3/4
-BACK OFF
-WHY?
-Back off — something above 5/10 or a red flag noted.
-Escalate →
 
 TODAY
 
-1 block · about 60 min
+First Strict Pull-Up
+Rest today.
 
-Intervals · Weeks 3–6 · week 3 of 4 · ends 7 Nov
+Your shoulder is 8/10, so hard training waits. If it isn’t settling, see a physio or doctor.
 
-· Zone 2 · Bike
-Open session
-
-Log extra session →
-
-Cross-modal work, walks, class attendance, mobility — anything not in the prescribed block. Optional. Nothing here changes the plan.
-
-Row · threshold · 32 min · hard · avg HR 165 · max 178
-Log session
-Import GPX
-DAY
+Log how it feels
+TODAY
 PLAN
 RECORD
 PROFILE
@@ -261,120 +263,53 @@ url: https://app.terav.fit/
 horizontal overflow: false
 
 Skip to content
-TERAV
-
-TODAY · WEEK 3 OF 4 · ENDS 7 NOV
-
-Concurrent-Strength Maintenance
-CONCURRENT-STRENGTH MAINTENANCE
-3/4
-BACK OFF
-WHY?
-Back off — something above 5/10 or a red flag noted.
-Escalate →
 
 TODAY
 
-1 block · about 60 min
+First Strict Pull-Up
+Rest today.
 
-Intervals · Weeks 3–6 · week 3 of 4 · ends 7 Nov
+Your shoulder is 8/10, so hard training waits. If it isn’t settling, see a physio or doctor.
 
-· Zone 2 · Bike
-Open session
-
-Log extra session →
-
-Cross-modal work, walks, class attendance, mobility — anything not in the prescribed block. Optional. Nothing here changes the plan.
-
-Row · threshold · 32 min · hard · avg HR 165 · max 178
-Log session
-Import GPX
-DAY
+Log how it feels
+TODAY
 PLAN
 RECORD
 PROFILE
 
 ## 06-session-on-red-day
-url: https://app.terav.fit/session/concurrent-strength-maintenance/
-horizontal overflow: true
+url: https://app.terav.fit/session/first-strict-pullup/
+horizontal overflow: false
 
 Skip to content
-TERAV
-Tuesday
-CONCURRENT-STRENGTH MAINTENANCE
 
-About 60 min
+TODAY
 
-TODAY'S SESSION
+First Strict Pull-Up
+Rest today.
 
-Zone 2 · Bike
+Your shoulder is 8/10, so hard training waits. If it isn’t settling, see a physio or doctor.
 
-30–60 MIN
-
-HR at ~70-75% max. Bike preferred over run (Wilson 2012 modality bias).
-
-Log a run, row, or class
-›
-
-INTERVALS · WEEKS 3–6 · WEEK 3 OF 4 · ENDS 7 NOV
-
-Log this session
-DAY
+Log how it feels
+Optional: Rest, or shoulder prep and hollow-body work only. No hanging.Back to Today
+TODAY
 PLAN
 RECORD
 PROFILE
 
-## 07-session-started-on-red
-url: https://app.terav.fit/session/concurrent-strength-maintenance/
-horizontal overflow: true
-
-Skip to content
-TERAV
-Tuesday
-CONCURRENT-STRENGTH MAINTENANCE
-
-About 60 min
-
-TODAY'S SESSION
-
-Zone 2 · Bike
-
-30–60 MIN
-
-HR at ~70-75% max. Bike preferred over run (Wilson 2012 modality bias).
-
-Log a run, row, or class
-›
-
-INTERVALS · WEEKS 3–6 · WEEK 3 OF 4 · ENDS 7 NOV
-
-Log this session
-
-Log an activity
-
-A run, a row, a class. Recorded against today — the engine reads duration, effort and heart rate.
-
-A run, a row, a class
-Time, effort, heart rate
-›
-Close
-DAY
-PLAN
-RECORD
-PROFILE
+No start button on the red-day session screen.
 
 ## 08-plan-on-red-day
 url: https://app.terav.fit/plan/
 horizontal overflow: false
 
 Skip to content
-TERAV
 Plan
 
 The 7-day rhythm. Browse other days, move sessions, skip a day — all from here.
 
-CONCURRENT STRENGTH MAINTENANCE
-3/4
+FIRST STRICT PULLUP
+7/8
 ‹
 
 26 Oct → 1 Nov
@@ -382,38 +317,38 @@ CONCURRENT STRENGTH MAINTENANCE
 This week
 
 ›
-Intervals · Weeks 3–6 · Add Norwegian 4×4 once/week. Hold strength at RPE ≤ 7. Week 4 is the deload.
-concurrent strength maintenance: planned
+Mixed practice · Post-acquisition: engine interleaves 2-3 drills per session across the weakest capabilities.
+first strict pullup: planned
 Mon
 26 Oct
-· 2 logged
-
-Strength · Heavy
-
-concurrent strength maintenance: done
-Tue
-27 Oct
-
-Zone 2 · Bike
-
-concurrent strength maintenance: planned
-Wed
-28 Oct
 · 1 logged
 
-Strength · Moderate
+Active hollow body — pull-shape isometrics + Dead-hang ladder + Shoulder + grip prep — every session
 
-concurrent strength maintenance: planned
+Tue
+27 Oct
+rest
+
+Rest / accessory day
+
+first strict pullup: planned
+Wed
+28 Oct
+TODAY
+
+Row strength — closed-chain pull + Scapular pull ladder + Shoulder + grip prep — every session
+
 Thu
 29 Oct
+rest
 
-Norwegian 4×4 · Row / Ski
+Rest / accessory day
 
-concurrent strength maintenance: planned
+first strict pullup: planned
 Fri
 30 Oct
 
-Zone 2 · Row / Ski
+Dead-hang ladder + Row strength — closed-chain pull + Shoulder + grip prep — every session
 
 Sat
 31 Oct
@@ -421,15 +356,15 @@ rest
 
 Rest / accessory day
 
-concurrent strength maintenance: planned
 Sun
 1 Nov
+rest
 
-Zone 2 · Bike
+Rest / accessory day
 
 ▸
 Show rules of the week
-DAY
+TODAY
 PLAN
 RECORD
 PROFILE

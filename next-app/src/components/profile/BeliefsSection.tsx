@@ -5,6 +5,8 @@ import { AlertTriangle, ChevronDown } from "lucide-react";
 import { useStore } from "@/lib/useStore";
 import { humanizeExerciseId } from "@/lib/humanize-metrics";
 import { checkTrainingMaxes } from "@/lib/engine/tm-plausibility";
+import { cardClass } from "@/components/ui/Card";
+import { cn } from "@/lib/utils";
 
 /**
  * Design package turn t2, screen 2b ("what Terav believes about you") —
@@ -70,10 +72,10 @@ export function BeliefsSection({ programLifts }: { programLifts?: string | null 
 
   return (
     <div>
-      <p className="font-mono text-[10px] uppercase tracking-widest text-muted mb-2">
+      <p className="font-mono text-eyebrow uppercase tracking-widest text-muted mb-2">
         Your working maxes
       </p>
-      <div className="rounded border border-line-soft bg-surface divide-y divide-line-soft">
+      <div className={cn(cardClass({ flush: true }), "divide-y divide-line-soft")}>
         {tmEntries.map(([exId, kg]) => {
           const isOpen = openRow === exId;
           const isEditing = editingTM === exId;
@@ -85,10 +87,10 @@ export function BeliefsSection({ programLifts }: { programLifts?: string | null 
                 aria-expanded={isOpen}
                 className="w-full flex items-baseline gap-3 px-3 py-3 min-h-[48px] text-left active:bg-line-soft/50"
               >
-                <span className="flex-1 min-w-0 text-[15px] text-ink truncate capitalize">
+                <span className="flex-1 min-w-0 text-body text-ink truncate capitalize">
                   {humanizeExerciseId(exId)}
                 </span>
-                <span className="text-[15px] font-semibold text-strong flex-shrink-0">{kg} kg</span>
+                <span className="text-body font-semibold text-strong flex-shrink-0">{kg} kg</span>
                 {findingFor(exId) ? (
                   <span
                     aria-label="This training max may not match your log"
@@ -105,15 +107,15 @@ export function BeliefsSection({ programLifts }: { programLifts?: string | null 
               </button>
               {isOpen ? (
                 <div className="px-3 pb-3 -mt-1">
-                  <p className="text-[13.5px] text-ink leading-snug mb-2.5">{tmWhy(exId)}</p>
+                  <p className="text-small text-ink leading-snug mb-2.5">{tmWhy(exId)}</p>
                   {(() => {
                     const f = findingFor(exId);
                     if (!f) return null;
                     return (
-                      <div className="mb-2.5 rounded border border-amber/40 bg-amber/10 px-3 py-2">
-                        <p className="text-[13.5px] text-strong leading-snug">{f.message}</p>
+                      <div className="mb-2.5 rounded-lg border border-amber/40 bg-amber/10 px-3 py-2">
+                        <p className="text-small text-strong leading-snug">{f.message}</p>
                         {f.suggestedTM != null ? (
-                          <p className="mt-1 text-[12.5px] text-muted">
+                          <p className="mt-1 text-caption text-muted">
                             Convention would put it near{" "}
                             <span className="font-mono text-ink">{f.suggestedTM} kg</span>. Edit
                             below if you agree — nothing changes on its own.
@@ -127,17 +129,17 @@ export function BeliefsSection({ programLifts }: { programLifts?: string | null 
                       <button
                         type="button"
                         onClick={() => setDraft((v) => Math.max(0, v - 2.5))}
-                        className="w-11 h-11 flex-shrink-0 rounded border border-line-strong bg-surface-2 text-strong text-[20px]"
+                        className="w-11 h-11 flex-shrink-0 rounded-lg border border-line-strong bg-surface-2 text-strong text-h2"
                       >
                         −
                       </button>
-                      <span className="flex-1 text-center font-mono text-[16px] font-semibold text-strong">
+                      <span className="flex-1 text-center font-mono text-body font-semibold text-strong">
                         {draft} kg
                       </span>
                       <button
                         type="button"
                         onClick={() => setDraft((v) => v + 2.5)}
-                        className="w-11 h-11 flex-shrink-0 rounded border border-line-strong bg-surface-2 text-strong text-[20px]"
+                        className="w-11 h-11 flex-shrink-0 rounded-lg border border-line-strong bg-surface-2 text-strong text-h2"
                       >
                         +
                       </button>
@@ -147,14 +149,14 @@ export function BeliefsSection({ programLifts }: { programLifts?: string | null 
                           setTM(exId, draft);
                           setEditingTM(null);
                         }}
-                        className="ml-1 px-3 py-2 min-h-[44px] rounded bg-bronze text-ground text-[13px] font-semibold"
+                        className="ml-1 px-3 py-2 min-h-[44px] rounded-lg bg-bronze text-ground text-caption font-semibold"
                       >
                         Save
                       </button>
                       <button
                         type="button"
                         onClick={() => setEditingTM(null)}
-                        className="px-2 py-2 min-h-[44px] text-muted text-[13px]"
+                        className="px-2 py-2 min-h-[44px] text-muted text-caption"
                       >
                         Cancel
                       </button>
@@ -166,7 +168,7 @@ export function BeliefsSection({ programLifts }: { programLifts?: string | null 
                         setDraft(kg);
                         setEditingTM(exId);
                       }}
-                      className="text-[13px] border border-line-strong rounded px-3 py-1.5 min-h-[36px] text-ink"
+                      className="text-caption border border-line-strong rounded-lg px-3 py-1.5 min-h-[36px] text-ink"
                     >
                       Change
                     </button>

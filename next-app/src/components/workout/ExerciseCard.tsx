@@ -23,6 +23,7 @@ import { ExerciseDetailsSheet } from "./ExerciseDetailsSheet";
 import { VideoModal } from "@/components/VideoModal";
 import type { Exercise, Program, Block } from "@/lib/schemas";
 import { today } from "@/lib/utils";
+import { cardClass } from "@/components/ui/Card";
 
 type Item = NonNullable<Block["items"]>[number];
 
@@ -113,14 +114,15 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
     <article
       data-exercise-card
       className={cn(
-        "bg-surface border border-line rounded-md overflow-hidden",
+        cardClass({ flush: true }),
+        "overflow-hidden",
         hasLaterality ? "grid grid-cols-[28px_1fr]" : "block",
         done && "opacity-90",
       )}
     >
       {/* Laterality spine — only rendered when the exercise emphasises a side. */}
       {hasLaterality ? (
-        <aside className="bg-line-soft flex flex-col items-center justify-center gap-0.5 py-2 font-mono text-[10px] font-semibold text-muted uppercase">
+        <aside className="bg-line-soft flex flex-col items-center justify-center gap-0.5 py-2 font-mono text-eyebrow font-semibold text-muted uppercase">
           {isLeftEmphasis ? (
             <>
               <span className="text-lat-left">L</span>
@@ -173,12 +175,12 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
           >
             <div className="flex-1 min-w-0">
               {/* P1-73 (F9 Batch 30) — `truncate` → `line-clamp-2 leading-snug
-                  text-[15px]` so "Active hang (scap-engaged)" and similar
+                  text-body` so "Active hang (scap-engaged)" and similar
                   parenthetical modifiers no longer clip. Line height tightens
                   to keep the two-line height under ~40px. */}
               <h3
                 className={cn(
-                  "text-[15px] font-semibold tracking-tight line-clamp-2 leading-snug",
+                  "text-body font-semibold tracking-tight line-clamp-2 leading-snug",
                   done && "line-through decoration-1 opacity-60",
                 )}
               >
@@ -192,7 +194,7 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
               {exercise.variant ? (
                 <p
                   className={cn(
-                    "text-[12px] text-muted mt-0.5 line-clamp-1",
+                    "text-caption text-muted mt-0.5 line-clamp-1",
                     done && "opacity-60",
                   )}
                 >
@@ -200,11 +202,11 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
                 </p>
               ) : null}
               {previewText ? (
-                <p className="font-mono text-[12px] text-slate mt-0.5 line-clamp-2">{previewText}</p>
+                <p className="font-mono text-caption text-slate mt-0.5 line-clamp-2">{previewText}</p>
               ) : null}
               {typeof (item as { note?: string }).note === "string" && (item as { note: string }).note.trim() ? (
-                <p className="text-[14px] text-muted italic mt-1 leading-snug">
-                  <span className="font-mono text-[10px] uppercase tracking-wider not-italic text-bronze mr-1.5">
+                <p className="text-small text-muted italic mt-1 leading-snug">
+                  <span className="font-mono text-eyebrow uppercase tracking-wider not-italic text-bronze mr-1.5">
                     cue
                   </span>
                   {(item as { note: string }).note}
@@ -230,7 +232,7 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
                 type="button"
                 onClick={() => setVideoOpen(true)}
                 aria-label="Watch demo"
-                className="w-11 h-11 flex items-center justify-center text-muted hover:text-ink hover:bg-line-soft rounded"
+                className="w-11 h-11 flex items-center justify-center text-muted hover:text-ink hover:bg-line-soft rounded-lg"
               >
                 <Play size={16} strokeWidth={1.75} />
               </button>
@@ -240,7 +242,7 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
               onClick={() => setDetailsOpen(true)}
               aria-label={hasWarning ? "Warning + details" : "Details"}
               className={cn(
-                "w-11 h-11 flex items-center justify-center rounded hover:bg-line-soft",
+                "w-11 h-11 flex items-center justify-center rounded-lg hover:bg-line-soft",
                 hasWarning ? "text-amber" : "text-muted hover:text-ink",
               )}
             >
@@ -260,13 +262,13 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
 
             {/* Sets */}
             {isLoadable ? (
-              <div className="rounded border border-line-soft overflow-hidden">
+              <div className="rounded-lg border border-line-soft overflow-hidden">
                 <div
                   className={cn(
                     // P2-10 — was `px-3 py-1.5` which doubled the outer
                     // `p-3` padding on the left. Outer owns horizontal;
                     // header row owns its vertical only.
-                    "grid gap-2 items-center py-1.5 bg-line-soft/50 text-[10px] font-mono uppercase tracking-wider text-muted",
+                    "grid gap-2 items-center py-1.5 bg-line-soft/50 text-eyebrow font-mono uppercase tracking-wider text-muted",
                     "grid-cols-[24px_minmax(60px,1fr)_minmax(70px,80px)_minmax(60px,70px)_50px_28px_28px]",
                   )}
                 >
@@ -314,7 +316,7 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
                     const toAdd = target - sets.length;
                     for (let n = 0; n < toAdd; n++) addSet(blockId, exercise.id, activeDate);
                   }}
-                  className="w-full flex items-center justify-center gap-1.5 py-2 min-h-[44px] text-[12px] font-mono uppercase tracking-wider text-muted hover:text-ink hover:bg-line-soft transition-colors"
+                  className="w-full flex items-center justify-center gap-1.5 py-2 min-h-[44px] text-caption font-mono uppercase tracking-wider text-muted hover:text-ink hover:bg-line-soft transition-colors"
                 >
                   <Plus size={14} />
                   Add set
@@ -336,7 +338,7 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
               <div>
                 <label
                   htmlFor={`notes-${blockId}-${exercise.id}`}
-                  className="block text-[11px] text-muted mb-1"
+                  className="block text-eyebrow text-muted mb-1"
                 >
                   Notes
                 </label>
@@ -346,7 +348,7 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
                   placeholder="How did it feel? Anything to flag?"
                   value={notes}
                   onChange={(e) => setNotes(blockId, exercise.id, e.target.value, activeDate)}
-                  className="block w-full max-w-full text-sm px-2 py-1.5 border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate resize-y min-h-[44px] break-words [overflow-wrap:anywhere] whitespace-pre-wrap"
+                  className="block w-full max-w-full text-small px-2 py-1.5 border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate resize-y min-h-[44px] break-words [overflow-wrap:anywhere] whitespace-pre-wrap"
                 />
                 <EngineReadsNotesHint variant="session" />
                 <NoteSignalHint text={notes} />
@@ -355,7 +357,7 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
               <button
                 type="button"
                 onClick={() => setNotesOpen(true)}
-                className="inline-flex items-center gap-1.5 text-[12px] text-slate hover:text-ink"
+                className="inline-flex items-center gap-1.5 text-caption text-slate hover:text-ink"
               >
                 <MessageSquare size={14} />
                 Add note
@@ -415,7 +417,7 @@ function TMSuggestionInline({
   const delta = est.suggestedTM - currentTM;
   if (Math.abs(delta) < 2.5) return null;
   return (
-    <div className="px-3 py-2 border-t border-line-soft text-[12px] font-mono text-muted flex items-center justify-between gap-2 flex-wrap">
+    <div className="px-3 py-2 border-t border-line-soft text-caption font-mono text-muted flex items-center justify-between gap-2 flex-wrap">
       <span>
         → est 1RM ~{est.est1RM} kg · suggested TM{" "}
         <strong className="text-slate">{est.suggestedTM} kg</strong>{" "}
@@ -427,7 +429,7 @@ function TMSuggestionInline({
       <button
         type="button"
         onClick={() => onAccept(est.suggestedTM)}
-        className="px-2 py-0.5 border border-slate rounded text-slate hover:bg-slate hover:text-surface transition-colors"
+        className="px-2 py-0.5 border border-slate rounded-lg text-slate hover:bg-slate hover:text-surface transition-colors"
       >
         Set TM
       </button>

@@ -9,6 +9,7 @@ import { parseGpx, intensityFromHr, observedMaxHrFrom } from "@/lib/gpx";
 import { parseFit } from "@/lib/fit";
 import { useIsSuperAdmin } from "@/lib/super-admin";
 import { cn } from "@/lib/utils";
+import { Card, cardClass } from "@/components/ui/Card";
 import type { RunLog } from "@/lib/schemas";
 
 type ActivityType = NonNullable<RunLog["activity_type"]>;
@@ -92,11 +93,7 @@ export function RunSlotCard({ date }: { date: string }) {
   // may still do a walk, mobility session, easy row, or class. The slot copy
   // adjusts to warn on ill-advised choices; nothing is blocked.
 
-  const toneClass = {
-    primary: "border-l-green bg-green/10 border-green/30",
-    optional: "border-l-slate bg-surface border-line-soft",
-    none: "border-l-line border-line-soft bg-surface",
-  }[slot.type];
+  const cardStatus = slot.type === "primary" ? "green" : undefined;
 
   const reset = () => {
     setActivity("run");
@@ -320,19 +317,19 @@ export function RunSlotCard({ date }: { date: string }) {
   return (
     <section
       aria-label="Extra session slot"
-      className={cn("border border-l-4 rounded-md p-3 space-y-2", toneClass)}
+      className={cn(cardClass({ status: cardStatus }), "space-y-2")}
     >
       <header className="flex items-center gap-2">
         <Footprints size={16} className="text-slate flex-shrink-0" aria-hidden />
         <div className="flex-1 min-w-0">
-          <p className="text-[14px] font-semibold text-strong">{slot.title}</p>
-          <p className="text-[14px] text-muted mt-0.5">{slot.detail}</p>
+          <p className="text-small font-semibold text-strong">{slot.title}</p>
+          <p className="text-small text-muted mt-0.5">{slot.detail}</p>
         </div>
         <button
           type="button"
           onClick={() => setPrimerOpen(true)}
           aria-label="Warm-up + cool-down"
-          className="w-11 h-11 flex items-center justify-center text-muted hover:text-ink rounded"
+          className="w-11 h-11 flex items-center justify-center text-muted hover:text-ink rounded-lg"
         >
           <Info size={16} strokeWidth={1.75} />
         </button>
@@ -343,7 +340,7 @@ export function RunSlotCard({ date }: { date: string }) {
           {runs.map((r, i) => (
             <li
               key={i}
-              className="flex items-baseline justify-between gap-2 text-[14px] px-2 py-1.5 rounded bg-line-soft/50"
+              className="flex items-baseline justify-between gap-2 text-small px-2 py-1.5 rounded-lg bg-line-soft/50"
             >
               <div className="font-mono text-slate min-w-0">
                 <span className="text-strong">{prettyActivity(r.activity_type)}</span>
@@ -369,7 +366,7 @@ export function RunSlotCard({ date }: { date: string }) {
                   .filter(Boolean)
                   .join(" · ")}
                 {r.source === "gpx" ? (
-                  <span className="ml-2 text-[10px] uppercase tracking-wider bg-slate/30 text-slate px-1 py-0.5 rounded">
+                  <span className="ml-2 text-eyebrow uppercase tracking-wider bg-slate/30 text-slate px-1 py-0.5 rounded-md">
                     gpx
                   </span>
                 ) : null}
@@ -401,7 +398,7 @@ export function RunSlotCard({ date }: { date: string }) {
                 onClick={() => setActivity(a)}
                 aria-pressed={activity === a}
                 className={cn(
-                  "px-2.5 py-1.5 min-h-[36px] rounded-full font-mono text-[11px]",
+                  "px-2.5 py-1.5 min-h-[36px] rounded-full font-mono text-eyebrow",
                   activity === a
                     ? "bg-slate text-surface"
                     : "bg-line-soft text-muted hover:text-ink",
@@ -413,7 +410,7 @@ export function RunSlotCard({ date }: { date: string }) {
           </div>
 
           {importedMeta ? (
-            <div className="rounded border border-line-soft bg-surface p-2 text-[12px] space-y-0.5">
+            <div className="rounded-lg bg-surface-2 p-3 text-caption space-y-0.5">
               <p className="text-slate font-mono">
                 Imported from {importedMeta.device_name ?? "device"}
               </p>
@@ -426,10 +423,10 @@ export function RunSlotCard({ date }: { date: string }) {
               </p>
               {fitDebug ? (
                 <details className="mt-2">
-                  <summary className="font-mono text-[10px] uppercase tracking-wider text-muted cursor-pointer">
+                  <summary className="font-mono text-eyebrow uppercase tracking-wider text-muted cursor-pointer">
                     FIT fields (admin) — check these against your device
                   </summary>
-                  <pre className="mt-1 text-[10px] leading-tight text-muted overflow-x-auto whitespace-pre">
+                  <pre className="mt-1 text-eyebrow leading-tight text-muted overflow-x-auto whitespace-pre">
 {fitDebug}
                   </pre>
                 </details>
@@ -452,7 +449,7 @@ export function RunSlotCard({ date }: { date: string }) {
             return (
               <div className={showDistance ? "grid grid-cols-2 gap-2" : ""}>
                 {showDistance ? (
-                  <label className="text-[12px] text-muted">
+                  <label className="text-caption text-muted">
                     Distance (km)
                     <input
                       type="number"
@@ -463,7 +460,7 @@ export function RunSlotCard({ date }: { date: string }) {
                       value={distance}
                       onChange={(e) => setDistance(e.target.value)}
                       placeholder="e.g. 5"
-                      className="mt-0.5 block w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+                      className="mt-0.5 block w-full font-mono text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
                     />
                   </label>
                 ) : null}
@@ -471,7 +468,7 @@ export function RunSlotCard({ date }: { date: string }) {
                     block Total time instead. Cycle keeps the top duration
                     because distance + duration is the natural bike pair. */}
                 {activity !== "row" && activity !== "ski_erg" ? (
-                  <div className="text-[12px] text-muted">
+                  <div className="text-caption text-muted">
                     Duration
                     <div className="mt-0.5 flex gap-1 items-center">
                       <input
@@ -484,7 +481,7 @@ export function RunSlotCard({ date }: { date: string }) {
                         onChange={(e) => setMinutes(e.target.value)}
                         placeholder="min"
                         aria-label="Minutes"
-                        className="block w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+                        className="block w-full font-mono text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
                       />
                       <span className="font-mono text-muted">:</span>
                       <input
@@ -497,7 +494,7 @@ export function RunSlotCard({ date }: { date: string }) {
                         onChange={(e) => setSeconds(e.target.value)}
                         placeholder="sec"
                         aria-label="Seconds"
-                        className="block w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+                        className="block w-full font-mono text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
                       />
                     </div>
                   </div>
@@ -517,7 +514,7 @@ export function RunSlotCard({ date }: { date: string }) {
               point of these fields; the activity label doesn't change that. */}
           {!importedMeta ? (
             <div className="grid grid-cols-2 gap-2">
-              <label className="text-[12px] text-muted">
+              <label className="text-caption text-muted">
                 Avg HR (bpm)
                 <input
                   type="number"
@@ -528,10 +525,10 @@ export function RunSlotCard({ date }: { date: string }) {
                   value={avgHr}
                   onChange={(e) => setAvgHr(e.target.value)}
                   placeholder="optional"
-                  className="mt-0.5 block w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+                  className="mt-0.5 block w-full font-mono text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
                 />
               </label>
-              <label className="text-[12px] text-muted">
+              <label className="text-caption text-muted">
                 Max HR (bpm)
                 <input
                   type="number"
@@ -542,7 +539,7 @@ export function RunSlotCard({ date }: { date: string }) {
                   value={maxHr}
                   onChange={(e) => setMaxHr(e.target.value)}
                   placeholder="optional"
-                  className="mt-0.5 block w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+                  className="mt-0.5 block w-full font-mono text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
                 />
               </label>
             </div>
@@ -555,7 +552,7 @@ export function RunSlotCard({ date }: { date: string }) {
                 onClick={() => setIntensity(v)}
                 aria-pressed={intensity === v}
                 className={cn(
-                  "flex-1 min-h-[36px] px-3 rounded font-mono text-[12px] uppercase tracking-wider",
+                  "flex-1 min-h-[36px] px-3 rounded-lg font-mono text-caption uppercase tracking-wider",
                   intensity === v
                     ? "bg-slate text-surface"
                     : "bg-line-soft text-muted hover:text-ink",
@@ -581,7 +578,7 @@ export function RunSlotCard({ date }: { date: string }) {
                       onClick={() => setSessionType(sessionType === t ? "" : t)}
                       aria-pressed={sessionType === t}
                       className={cn(
-                        "px-2.5 py-1.5 min-h-[36px] rounded-full font-mono text-[11px]",
+                        "px-2.5 py-1.5 min-h-[36px] rounded-full font-mono text-eyebrow",
                         sessionType === t
                           ? "bg-slate text-surface"
                           : "bg-line-soft text-muted hover:text-ink",
@@ -593,7 +590,7 @@ export function RunSlotCard({ date }: { date: string }) {
                 )}
               </div>
               <div className="grid grid-cols-2 gap-2">
-                <label className="text-[12px] text-muted">
+                <label className="text-caption text-muted">
                   Total time (mm:ss)
                   <input
                     type="text"
@@ -601,10 +598,10 @@ export function RunSlotCard({ date }: { date: string }) {
                     value={twoKTime}
                     onChange={(e) => setTwoKTime(e.target.value)}
                     placeholder="e.g. 7:35"
-                    className="mt-0.5 block w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+                    className="mt-0.5 block w-full font-mono text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
                   />
                 </label>
-                <label className="text-[12px] text-muted">
+                <label className="text-caption text-muted">
                   Avg watts
                   <input
                     type="number"
@@ -615,10 +612,10 @@ export function RunSlotCard({ date }: { date: string }) {
                     value={watts}
                     onChange={(e) => setWatts(e.target.value)}
                     placeholder="optional"
-                    className="mt-0.5 block w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+                    className="mt-0.5 block w-full font-mono text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
                   />
                 </label>
-                <label className="text-[12px] text-muted">
+                <label className="text-caption text-muted">
                   Drag factor
                   <input
                     type="number"
@@ -629,16 +626,16 @@ export function RunSlotCard({ date }: { date: string }) {
                     value={dragFactor}
                     onChange={(e) => setDragFactor(e.target.value)}
                     placeholder="e.g. 120"
-                    className="mt-0.5 block w-full font-mono text-sm px-2 py-2 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+                    className="mt-0.5 block w-full font-mono text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
                   />
-                  <span className="mt-0.5 block text-[11px] text-muted leading-snug">
+                  <span className="mt-0.5 block text-eyebrow text-muted leading-snug">
                     Menu &rarr; More Options &rarr; Display Drag Factor. Record it so your
                     retest is comparable to this one.
                   </span>
                 </label>
               </div>
               {twoKTime && parseTimeToSeconds(twoKTime) ? (
-                <p className="text-[11px] text-muted font-mono">
+                <p className="text-eyebrow text-muted font-mono">
                   ≈ {Math.round(parseTimeToSeconds(twoKTime)! / 4)}s per 500m split
                 </p>
               ) : null}
@@ -650,7 +647,7 @@ export function RunSlotCard({ date }: { date: string }) {
             value={note}
             onChange={(e) => setNote(e.target.value)}
             placeholder="Optional note — WOD name, felt like…"
-            className="block w-full text-[14px] px-2 py-1.5 border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate resize-y min-h-[44px] break-words [overflow-wrap:anywhere] whitespace-pre-wrap"
+            className="block w-full text-small px-2 py-1.5 border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate resize-y min-h-[44px] break-words [overflow-wrap:anywhere] whitespace-pre-wrap"
           />
           <EngineReadsNotesHint variant="run" />
 
@@ -662,27 +659,27 @@ export function RunSlotCard({ date }: { date: string }) {
           {intensity === "hard" &&
           (activeProgramSlug === "concurrent-strength-maintenance" ||
             activeProgramSlug === "engine-builder") ? (
-            <div className="rounded border border-amber/40 bg-amber/10 border-l-4 border-l-amber px-3 py-2 text-[11px]">
+            <Card status="amber" className="px-3 py-2 text-eyebrow">
               <p className="font-semibold text-amber">Heads up — interference window.</p>
               <p className="text-muted mt-0.5">
                 Hard cardio wants ≥6h between it and any heavy lift. If you have
                 a strength session on the schedule for today, log this only if
                 the two are that far apart.
               </p>
-            </div>
+            </Card>
           ) : null}
           <div className="flex gap-2 flex-wrap">
             <button
               type="button"
               onClick={submit}
-              className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-slate text-surface"
+              className="font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-slate text-surface"
             >
               Save session
             </button>
             <button
               type="button"
               onClick={reset}
-              className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-muted"
+              className="font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line text-muted"
             >
               Cancel
             </button>
@@ -693,7 +690,7 @@ export function RunSlotCard({ date }: { date: string }) {
           <button
             type="button"
             onClick={() => setOpen(true)}
-            className="inline-flex items-center gap-1.5 min-h-[44px] py-2 pr-2 text-[14px] text-slate hover:text-ink"
+            className="inline-flex items-center gap-1.5 min-h-[44px] py-2 pr-2 text-small text-slate hover:text-ink"
           >
             <Plus size={14} />
             Log session
@@ -701,7 +698,7 @@ export function RunSlotCard({ date }: { date: string }) {
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="inline-flex items-center gap-1.5 min-h-[44px] py-2 pr-2 text-[14px] text-slate hover:text-ink"
+            className="inline-flex items-center gap-1.5 min-h-[44px] py-2 pr-2 text-small text-slate hover:text-ink"
           >
             <Upload size={14} />
             Import GPX
@@ -719,7 +716,7 @@ export function RunSlotCard({ date }: { date: string }) {
       />
 
       {importError ? (
-        <p className="text-[14px] text-red">Couldn&apos;t import: {importError}</p>
+        <p className="text-small text-red">Couldn&apos;t import: {importError}</p>
       ) : null}
 
       {primerOpen ? (
@@ -813,7 +810,7 @@ function PrimerContent({
   })();
   return (
     <>
-      <p className="text-[14px] text-muted">
+      <p className="text-small text-muted">
         {activity === "crossfit_class"
           ? "The box's own warm-up replaces this."
           : "Session-specific primer + cool-down. Skip the ones that don't apply."}
@@ -833,7 +830,7 @@ function PrimerContent({
             <li key={line}>{line}</li>
           ))}
         </ul>
-        <p className="text-[14px] text-red mt-2">
+        <p className="text-small text-red mt-2">
           No aggressive static stretching straight after — tissue is warm and stretches too far.
         </p>
       </div>

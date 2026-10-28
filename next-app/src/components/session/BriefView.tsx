@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { cardClass } from "@/components/ui/Card";
 import { RacePlanCard } from "@/components/session/RacePlanCard";
 import { programProgress, endsLabel } from "@/lib/program-progress";
 import { humanPhaseName, programDisplayName, humanBlockName, exerciseListName } from "@/lib/day-format";
@@ -158,19 +159,19 @@ export function BriefView({
       : `Start — ${hero.exercise.name}`;
 
   return (
-    <div className="flex flex-col" style={{ minHeight: "calc(100dvh - 64px - env(safe-area-inset-bottom))" }}>
+    <div className="flex flex-col min-h-[calc(100dvh-64px-env(safe-area-inset-bottom))]">
       <div className="flex-1 space-y-5">
         <header className="flex items-baseline justify-between gap-3">
-          <h1 className="text-[32px] font-semibold tracking-[-0.035em] text-strong leading-none">
+          <h1 className="text-h1 font-semibold tracking-[-0.035em] text-strong leading-none">
             {dayName(activeDate)}
           </h1>
           {program.slug ? (
-            <span className="font-mono text-[12px] uppercase tracking-[.14em] text-bronze flex-shrink-0">
+            <span className="font-mono text-caption uppercase tracking-[.14em] text-bronze flex-shrink-0">
               {programDisplayName(program, program.slug)}
             </span>
           ) : null}
         </header>
-        <p className="text-[13.5px] text-muted -mt-3">{summary}</p>
+        <p className="text-small text-muted -mt-3">{summary}</p>
 
         {cycleGateProposal ? (
           <CycleStartCard proposal={cycleGateProposal} date={activeDate} />
@@ -186,7 +187,7 @@ export function BriefView({
                   key={p.id}
                   type="button"
                   onClick={() => setExpandedProposalId(p.id)}
-                  className={toneClasses(p.kind) + " w-full text-left rounded border px-3 py-2 text-[13.5px]"}
+                  className={toneClasses(p.kind) + " w-full text-left rounded-lg border px-3 py-2 text-small"}
                 >
                   {p.reason}
                 </button>
@@ -196,11 +197,11 @@ export function BriefView({
         ) : null}
 
         {hero ? (
-          <div className="rounded border-2 border-l-bronze border-line-strong bg-surface px-4 py-[15px]">
-            <p className="font-mono text-[12px] uppercase tracking-[.16em] text-muted mb-2.5">
+          <div className={cardClass()}>
+            <p className="font-mono text-caption uppercase tracking-[.16em] text-muted mb-2.5">
               {heroShape.kind === "top_set" ? "Today\u2019s top set" : "Today\u2019s working sets"}
             </p>
-            <p className="text-[16.5px] font-semibold text-strong mb-2 tracking-[-.015em]">
+            <p className="text-body font-semibold text-strong mb-2 tracking-[-.015em]">
               {hero.exercise.name}
             </p>
             {hero.suggestion && heroShape.kind !== "none" ? (
@@ -208,32 +209,32 @@ export function BriefView({
                 <div className="flex items-baseline gap-[7px] mb-2">
                   {heroShape.kind === "straight" ? (
                     <>
-                      <span className="text-[24px] leading-none font-semibold text-strong">{heroShape.sets}</span>
-                      <span className="text-[18px] text-muted">×</span>
-                      <span className="text-[24px] leading-none font-semibold text-strong">{heroShape.reps}</span>
-                      <span className="text-[18px] text-muted">at</span>
-                      <span className="text-[40px] leading-none font-semibold tracking-[-.04em] text-strong">{heroShape.kg}</span>
-                      <span className="text-[16px] font-medium text-muted">kg</span>
+                      <span className="text-h1 leading-none font-semibold text-strong">{heroShape.sets}</span>
+                      <span className="text-h3 text-muted">×</span>
+                      <span className="text-h1 leading-none font-semibold text-strong">{heroShape.reps}</span>
+                      <span className="text-h3 text-muted">at</span>
+                      <span className="text-metric leading-none font-semibold tracking-[-.04em] text-strong">{heroShape.kg}</span>
+                      <span className="text-body font-medium text-muted">kg</span>
                     </>
                   ) : heroShape.kind === "ladder" ? (
                     <>
-                      <span className="text-[32px] leading-none font-semibold tracking-[-.03em] text-strong">
+                      <span className="text-h1 leading-none font-semibold tracking-[-.03em] text-strong">
                         {heroShape.kgs.join(" · ")}
                       </span>
-                      <span className="text-[16px] font-medium text-muted">kg</span>
-                      <span className="text-[18px] text-muted">×</span>
-                      <span className="text-[24px] leading-none font-semibold text-strong">{heroShape.reps}</span>
+                      <span className="text-body font-medium text-muted">kg</span>
+                      <span className="text-h3 text-muted">×</span>
+                      <span className="text-h1 leading-none font-semibold text-strong">{heroShape.reps}</span>
                     </>
                   ) : (
                     <>
-                      <span className="text-[40px] leading-none font-semibold tracking-[-.04em] text-strong">{heroShape.kg}</span>
-                      <span className="text-[16px] font-medium text-muted">kg</span>
-                      <span className="text-[18px] text-muted">×</span>
-                      <span className="text-[24px] leading-none font-semibold text-strong">{heroShape.reps}</span>
+                      <span className="text-metric leading-none font-semibold tracking-[-.04em] text-strong">{heroShape.kg}</span>
+                      <span className="text-body font-medium text-muted">kg</span>
+                      <span className="text-h3 text-muted">×</span>
+                      <span className="text-h1 leading-none font-semibold text-strong">{heroShape.reps}</span>
                     </>
                   )}
                 </div>
-                <p className="text-[14px] leading-snug text-ink">
+                <p className="text-small leading-snug text-ink">
                   {heroShape.kind === "straight"
                     ? "No top set today \u2014 every set at the same weight."
                     : heroShape.kind === "ladder"
@@ -250,11 +251,11 @@ export function BriefView({
                           .join(" ") || null}
                 </p>
                 {basisLine(hero, store) ? (
-                  <p className="text-[14px] leading-snug text-ink">{basisLine(hero, store)}</p>
+                  <p className="text-small leading-snug text-ink">{basisLine(hero, store)}</p>
                 ) : null}
               </>
             ) : (
-              <p className="text-[14px] text-ink">{hero.rowCount} sets</p>
+              <p className="text-small text-ink">{hero.rowCount} sets</p>
             )}
           </div>
         ) : null}
@@ -278,16 +279,16 @@ export function BriefView({
 
         {guidanceBlocks.length > 0 ? (
           <div className="mb-4">
-            <p className="font-mono text-[12px] uppercase tracking-[.16em] text-muted mb-[9px]">
+            <p className="font-mono text-caption uppercase tracking-[.16em] text-muted mb-[9px]">
               How to run this
             </p>
             <div className="space-y-2">
               {guidanceBlocks.map((b) => (
                 <div
                   key={b.id}
-                  className="rounded border border-line-soft border-l-4 border-l-bronze bg-surface px-3.5 py-3"
+                  className={cardClass()}
                 >
-                  <p className="text-[13.5px] leading-relaxed text-ink whitespace-pre-line">
+                  <p className="text-small leading-relaxed text-ink whitespace-pre-line">
                     {b.note}
                   </p>
                 </div>
@@ -301,7 +302,7 @@ export function BriefView({
             {followBlocks.map((b) => {
               const moves = railExercises.filter((r) => r.blockId === b.id);
               return (
-                <div key={b.id} className="overflow-hidden rounded border border-line-soft bg-surface">
+                <div key={b.id} className={cardClass({ flush: true }) + " overflow-hidden"}>
                   <button
                     type="button"
                     onClick={() => onFollowAlong(b.id)}
@@ -311,8 +312,8 @@ export function BriefView({
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="#0e0f12"><polygon points="8 5 19 12 8 19 8 5" /></svg>
                     </span>
                     <span className="min-w-0 flex-grow">
-                      <span className="block text-[15px] font-semibold text-strong">Follow along · {humanBlockName(b.name)}</span>
-                      <span className="block text-[13px] text-muted">
+                      <span className="block text-body font-semibold text-strong">Follow along · {humanBlockName(b.name)}</span>
+                      <span className="block text-caption text-muted">
                         {b.count} {b.count === 1 ? "move" : "moves"} · guided, one at a time, with a timer
                       </span>
                     </span>
@@ -330,10 +331,10 @@ export function BriefView({
                             className="flex w-full items-center justify-between gap-3 px-3.5 py-2.5 text-left"
                           >
                             <span className="min-w-0">
-                              <span className="block truncate text-[14px] text-strong">{exerciseListName(r.exercise)}</span>
-                              <span className="block text-[12.5px] text-muted">{railScheme(r)}</span>
+                              <span className="block truncate text-small text-strong">{exerciseListName(r.exercise)}</span>
+                              <span className="block text-caption text-muted">{railScheme(r)}</span>
                             </span>
-                            <span className="flex-shrink-0 font-mono text-[12px] uppercase tracking-[.1em] text-muted">
+                            <span className="flex-shrink-0 font-mono text-caption uppercase tracking-[.1em] text-muted">
                               {logged >= r.rowCount ? "Done" : logged > 0 ? "Held" : isOptional ? "Optional" : ""}
                             </span>
                           </button>
@@ -348,26 +349,26 @@ export function BriefView({
         ) : null}
 
         <div className={allFollow && prescriptionBlocks.length === 0 && !escalation ? "hidden" : undefined}>
-          <p className="font-mono text-[12px] uppercase tracking-[.16em] text-muted mb-[9px]">
+          <p className="font-mono text-caption uppercase tracking-[.16em] text-muted mb-[9px]">
             {isPrescriptionSession ? "Today's session" : allFollow ? "Also today" : "The whole session"}
           </p>
           <div className="space-y-[7px]">
             {prescriptionBlocks.map((b) => (
               <div
                 key={b.id}
-                className="rounded border border-line-soft bg-surface px-3.5 py-[13px]"
+                className={cardClass()}
               >
-                <p className="text-[15px] font-semibold text-strong tracking-[-.01em] mb-0.5">
+                <p className="text-body font-semibold text-strong tracking-[-.01em] mb-0.5">
                   {humanBlockName(b.name)}
                 </p>
                 {b.duration_min ? (
-                  <p className="font-mono text-[12px] uppercase tracking-[.14em] text-muted mb-1">
+                  <p className="font-mono text-caption uppercase tracking-[.14em] text-muted mb-1">
                     {Array.isArray(b.duration_min)
                       ? `${b.duration_min[0]}–${b.duration_min[1]} min`
                       : `${b.duration_min} min`}
                   </p>
                 ) : null}
-                <p className="text-[13.5px] leading-snug text-ink">{b.note}</p>
+                <p className="text-small leading-snug text-ink">{b.note}</p>
               </div>
             ))}
             {/* Movements deferred because of an intake answer.
@@ -385,11 +386,11 @@ export function BriefView({
                 for why executing these six prose rules would be worse than
                 surfacing them. (2026-09-07) */}
             {escalation ? (
-              <div className="rounded border border-amber/40 bg-surface px-3.5 py-3">
-                <p className="font-mono text-[12px] uppercase tracking-widest text-amber mb-1">
+              <div className={cardClass({ status: "amber" })}>
+                <p className="font-mono text-caption uppercase tracking-widest text-amber mb-1">
                   {escalation.streak} red days in a row — your programme&rsquo;s rule
                 </p>
-                <p className="text-[13.5px] leading-snug text-ink">{escalation.text}</p>
+                <p className="text-small leading-snug text-ink">{escalation.text}</p>
               </div>
             ) : null}
             {exclusionNotices(
@@ -401,12 +402,12 @@ export function BriefView({
             ).map((note) => (
               <div
                 key={note}
-                className="rounded border border-line-soft bg-surface px-3.5 py-3"
+                className={cardClass()}
               >
-                <p className="font-mono text-[12px] uppercase tracking-widest text-slate mb-1">
+                <p className="font-mono text-caption uppercase tracking-widest text-slate mb-1">
                   Adjusted for you
                 </p>
-                <p className="text-[13.5px] leading-snug text-ink">{note}</p>
+                <p className="text-small leading-snug text-ink">{note}</p>
               </div>
             ))}
             {listRail.map((r) => {
@@ -430,15 +431,15 @@ export function BriefView({
                   type="button"
                   onClick={() => onSelectExercise(r.key)}
                   className={
-                    "w-full flex items-center justify-between gap-3 rounded bg-surface px-3.5 py-[13px] text-left " +
+                    "w-full flex items-center justify-between gap-3 rounded-lg bg-surface px-3.5 py-[13px] text-left " +
                     (isOptional ? "border border-dashed border-line-soft" : "border border-line-soft")
                   }
                 >
                   <span className="min-w-0">
-                    <span className="block text-[15px] font-semibold text-strong tracking-[-.01em] mb-0.5">
+                    <span className="block text-body font-semibold text-strong tracking-[-.01em] mb-0.5">
                       {exerciseListName(r.exercise)}
                     </span>
-                    <span className="block text-[13px] text-ink">
+                    <span className="block text-caption text-ink">
                       {railScheme(r)}
                       {hasOptionalTail ? (
                         <span className="text-muted">
@@ -456,14 +457,14 @@ export function BriefView({
                         (note-signals.ts), so an invisible note is a lost
                         engine input, not just lost prose. */}
                     {entry?.notes?.trim() ? (
-                      <span className="block text-[12.5px] italic text-slate mt-1 line-clamp-2">
+                      <span className="block text-caption italic text-slate mt-1 line-clamp-2">
                         “{entry.notes.trim()}”
                       </span>
                     ) : null}
                   </span>
                   <span
                     className={
-                      "flex-shrink-0 font-mono text-[12px] uppercase tracking-[.1em] " +
+                      "flex-shrink-0 font-mono text-caption uppercase tracking-[.1em] " +
                       (isDone ? "text-muted" : isMain ? "text-bronze" : "text-muted")
                     }
                   >
@@ -496,17 +497,17 @@ export function BriefView({
               and activity logging, which is the retest data source for
               four programs. Only the second survives here, so the line
               names it. */}
-          <span className="text-[13.5px] text-muted">Log an extra session</span>
-          <span className="flex-shrink-0 text-[14px] text-muted">›</span>
+          <span className="text-small text-muted">Log an extra session</span>
+          <span className="flex-shrink-0 text-small text-muted">›</span>
         </button>
         {progressLabel ? (
-          <p className="font-mono text-[12px] uppercase tracking-[.14em] text-muted">
+          <p className="font-mono text-caption uppercase tracking-[.14em] text-muted">
             {progressLabel}
             {progressDetail ? ` · ${progressDetail}` : ""}
           </p>
         ) : null}
         {gateUnresolved ? (
-          <p className="font-mono text-[12px] uppercase tracking-[.14em] text-muted">
+          <p className="font-mono text-caption uppercase tracking-[.14em] text-muted">
             Accept the numbers to start
           </p>
         ) : null}

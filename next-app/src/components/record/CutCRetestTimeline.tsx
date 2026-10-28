@@ -33,6 +33,7 @@ import {
 } from "@/lib/engine/retest-evaluator";
 import { resolveRetestReadings } from "@/lib/engine/retest-readings";
 import { cn } from "@/lib/utils";
+import { cardClass } from "@/components/ui/Card";
 
 export type CutCRetestTimelineProps = {
   program: Program;
@@ -125,11 +126,11 @@ export function CutCRetestTimeline({ program, store, className, onPinTap }: CutC
 
   if (!metric || events.length === 0) {
     return (
-      <div className={cn("rounded border border-line-soft bg-surface p-3", className)}>
-        <p className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted mb-1">
+      <div className={cn(cardClass(), className)}>
+        <p className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted mb-1">
           Retests · 0 events
         </p>
-        <p className="text-[12px] text-muted italic">
+        <p className="text-caption text-muted italic">
           Your retest history builds here — each reading tied to the study or log signal that triggered it.
         </p>
       </div>
@@ -153,17 +154,16 @@ export function CutCRetestTimeline({ program, store, className, onPinTap }: CutC
     <div
       role="group"
       aria-label={`${events.length} retest events for ${metric.display_name} · overall delta ${deltaSign}${deltaAbs} ${metric.unit}`}
-      className={cn("rounded border border-line-soft bg-surface p-3", className)}
+      className={cn(cardClass(), className)}
     >
-      <p className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted mb-2">
+      <p className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted mb-2">
         Retests · {events.length} events
       </p>
 
       {/* Pin row — horizontal scroll with 44px hitbox per pin, scroll-snap
           for tap-then-scroll comfort. */}
       <div
-        className="flex items-center gap-0 overflow-x-auto pb-2 pl-5 -ml-5"
-        style={{ scrollSnapType: "x mandatory" }}
+        className="flex items-center gap-0 overflow-x-auto pb-2 pl-5 -ml-5 snap-x snap-mandatory"
       >
         {events.map((ev, i) => {
           const pinBg =
@@ -174,12 +174,12 @@ export function CutCRetestTimeline({ program, store, className, onPinTap }: CutC
                 : "bg-[var(--dv-retest-hold)]";
           const pinSize = ev.isMilestone ? "w-3 h-3" : "w-2.5 h-2.5";
           return (
-            <div key={ev.observed_at + i} className="flex items-center flex-none" style={{ scrollSnapAlign: "center" }}>
+            <div key={ev.observed_at + i} className="flex items-center flex-none snap-center">
               <button
                 type="button"
                 aria-label={`Retest on ${ev.observed_at} · outcome ${ev.outcome} · value ${formatMetric(ev.value, metric.unit)}`}
                 onClick={() => onPinTap?.(metric.metric_id, ev.observed_at)}
-                className="min-h-[44px] w-[22px] flex items-center justify-center focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2 rounded"
+                className="min-h-[44px] w-[22px] flex items-center justify-center focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2 rounded-lg"
               >
                 <span
                   aria-hidden
@@ -193,7 +193,7 @@ export function CutCRetestTimeline({ program, store, className, onPinTap }: CutC
               {i < events.length - 1 ? (
                 <span aria-hidden className="w-3 h-px bg-line-strong flex-none" />
               ) : (
-                <span aria-hidden className="ml-1 text-strong text-[14px]">▲</span>
+                <span aria-hidden className="ml-1 text-strong text-small">▲</span>
               )}
             </div>
           );
@@ -201,20 +201,20 @@ export function CutCRetestTimeline({ program, store, className, onPinTap }: CutC
       </div>
 
       {/* Date range labels */}
-      <div className="mt-2 flex justify-between font-mono text-[10px] uppercase tracking-widest text-muted">
+      <div className="mt-2 flex justify-between font-mono text-eyebrow uppercase tracking-widest text-muted">
         <span>{first.observed_at}</span>
         <span>today</span>
       </div>
 
       {/* Base · Now · Delta summary — tabular-nums */}
-      <p className="mt-2 font-mono text-[12px] text-ink tabular-nums">
+      <p className="mt-2 font-mono text-caption text-ink tabular-nums">
         Base {baselineStr} · Now {nowStr}
         {rawDelta === 0 ? "" : ` · ${deltaSign}`}
         {rawDelta === 0 ? "" : deltaAbs} {isImprovement || rawDelta === 0 ? "" : "(direction check)"}
       </p>
 
       {/* Tap hint — points to Phase 3 wiring for per-event citation sheet */}
-      <p className="mt-1 text-[11px] text-muted italic">
+      <p className="mt-1 text-eyebrow text-muted italic">
         Tap a point to see why it moved.
       </p>
     </div>

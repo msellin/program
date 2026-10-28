@@ -63,8 +63,8 @@ export default function ResetPasswordPage() {
         <Wordmark />
       </div>
       <header className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight text-strong">Set a new password</h1>
-        <p className="text-sm text-muted">
+        <h1 className="text-h1 tracking-tight text-strong">Set a new password</h1>
+        <p className="text-small text-muted">
           {ready
             ? "Pick a new one. You'll be signed in on this device once you save."
             : "Waiting for the reset link to validate — hold on."}
@@ -72,9 +72,9 @@ export default function ResetPasswordPage() {
       </header>
 
       <form onSubmit={submit} className="space-y-3" noValidate>
-        <label htmlFor="reset-new-password" className="block text-[14px]">
+        <label htmlFor="reset-new-password" className="block text-small">
           <span className="block text-muted mb-1">
-            New password <span className="text-[11px] text-muted">(8+ characters)</span>
+            New password <span className="text-eyebrow text-muted">(8+ characters)</span>
           </span>
           <input
             id="reset-new-password"
@@ -85,10 +85,10 @@ export default function ResetPasswordPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             disabled={!ready}
-            className="block w-full text-[14px] px-3 py-2.5 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze disabled:opacity-50"
+            className="block w-full text-small px-3 py-2.5 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze disabled:opacity-50"
           />
         </label>
-        <label htmlFor="reset-confirm-password" className="block text-[14px]">
+        <label htmlFor="reset-confirm-password" className="block text-small">
           <span className="block text-muted mb-1">Repeat new password</span>
           <input
             id="reset-confirm-password"
@@ -98,22 +98,22 @@ export default function ResetPasswordPage() {
             value={confirm}
             onChange={(e) => setConfirm(e.target.value)}
             disabled={!ready}
-            className="block w-full text-[14px] px-3 py-2.5 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze disabled:opacity-50"
+            className="block w-full text-small px-3 py-2.5 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze disabled:opacity-50"
           />
         </label>
         {error ? (
-          <p className="text-[14px] text-red border-l-4 border-red pl-2">{error}</p>
+          <p className="text-small text-red border-l-4 border-red pl-2">{error}</p>
         ) : null}
         <button
           type="submit"
           disabled={submitting || !ready}
-          className="w-full font-mono text-[14px] uppercase tracking-wider py-3 rounded bg-bronze text-ground hover:bg-bronze/90 disabled:opacity-50 min-h-[44px]"
+          className="w-full font-mono text-small uppercase tracking-wider py-3 rounded-lg bg-bronze text-ground hover:bg-bronze/90 disabled:opacity-50 min-h-[44px]"
         >
           {submitting ? "Saving…" : "Save new password"}
         </button>
       </form>
 
-      <p className="text-[14px] text-muted">
+      <p className="text-small text-muted">
         Back to{" "}
         <Link href="/sign-in" className="text-slate border-b border-slate">
           sign in

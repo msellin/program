@@ -275,8 +275,7 @@ export function FollowAlong({
 
   return (
     <div
-      className="fixed inset-0 z-[60] flex justify-center bg-ground text-ink"
-      style={{ paddingTop: "env(safe-area-inset-top)", paddingBottom: "env(safe-area-inset-bottom)" }}
+      className="fixed inset-0 z-[60] flex justify-center bg-ground pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] text-ink"
     >
       <div className="flex h-full w-full max-w-[430px] flex-col">
         <div className="flex h-11 flex-shrink-0 items-center gap-3 px-4 pt-2">
@@ -298,10 +297,10 @@ export function FollowAlong({
 
         {phase === "done" ? (
           <div className="flex flex-grow flex-col items-center justify-center gap-3.5 px-6 text-center">
-            <h2 ref={doneHeading} tabIndex={-1} className="text-[28px] font-bold text-strong outline-none">
+            <h2 ref={doneHeading} tabIndex={-1} className="text-h1 font-bold text-strong outline-none">
               {hurt ? "Stopped" : `${title} done`}
             </h2>
-            <p className="text-[15px] text-muted">
+            <p className="text-body text-muted">
               {hurt
                 ? `${loggedSets} ${loggedSets === 1 ? "set" : "sets"} logged. Stopping early is fine.`
                 : `${loggedSets} ${loggedSets === 1 ? "set" : "sets"} logged.`}
@@ -309,7 +308,7 @@ export function FollowAlong({
             {hurt ? (
               <Link
                 href="/check"
-                className="mt-1 flex h-[52px] items-center rounded-[14px] bg-bronze px-7 font-bold text-ground"
+                className="mt-1 flex h-[52px] items-center rounded-xl bg-bronze px-7 font-bold text-ground"
               >
                 Log what hurt
               </Link>
@@ -319,8 +318,8 @@ export function FollowAlong({
               onClick={onExit}
               className={
                 hurt
-                  ? "flex h-11 items-center px-4 text-[15px] font-semibold text-ink"
-                  : "mt-1 flex h-[52px] items-center rounded-[14px] bg-bronze px-7 font-bold text-ground"
+                  ? "flex h-11 items-center px-4 text-body font-semibold text-ink"
+                  : "mt-1 flex h-[52px] items-center rounded-xl bg-bronze px-7 font-bold text-ground"
               }
             >
               {hurt ? "Back to Today" : "Back to session"}
@@ -329,7 +328,7 @@ export function FollowAlong({
         ) : (
           <>
             <div className="flex min-h-0 flex-grow flex-col px-4 pt-2">
-              <div className="relative aspect-video w-full flex-shrink-0 overflow-hidden rounded-[18px] bg-surface [@media(max-height:700px)]:aspect-[2.3]">
+              <div className="relative aspect-video w-full flex-shrink-0 overflow-hidden rounded-xl bg-surface [@media(max-height:700px)]:aspect-[2.3]">
                 {step.figure ? (
                   <ExerciseFigure
                     key={`${step.figure}-${step.side}`}
@@ -339,7 +338,7 @@ export function FollowAlong({
                     getElapsed={getElapsed}
                   />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center px-6 text-center text-[13px] text-muted">
+                  <div className="flex h-full w-full items-center justify-center px-6 text-center text-caption text-muted">
                     {step.cue ?? "Open the full tutorial for this move."}
                   </div>
                 )}
@@ -347,7 +346,7 @@ export function FollowAlong({
                   type="button"
                   onClick={() => setVideo(true)}
                   aria-label="Full tutorial video, opens a player"
-                  className="absolute left-2.5 top-2.5 h-11 rounded-full bg-ground/70 px-3.5 text-[13px] font-semibold text-ink"
+                  className="absolute left-2.5 top-2.5 h-11 rounded-full bg-ground/70 px-3.5 text-caption font-semibold text-ink"
                 >
                   Full tutorial <span aria-hidden="true">↗</span>
                 </button>
@@ -355,19 +354,19 @@ export function FollowAlong({
 
               <div className="mt-3.5 flex h-7 flex-shrink-0 items-center justify-between">
                 <span
-                  className="flex h-7 w-[92px] items-center justify-center rounded-full text-[12px] font-bold tracking-[.06em]"
+                  className="flex h-7 w-[92px] items-center justify-center rounded-full text-caption font-bold tracking-[.06em]"
                   style={{ background: chip.bg, color: chip.fg }}
                 >
                   {chip.label}
                 </span>
-                <span className="font-mono text-[12px] tabular-nums text-muted">
+                <span className="font-mono text-caption tabular-nums text-muted">
                   Set {step.set}/{step.of} · Step {idx + 1}/{steps.length}
                 </span>
               </div>
-              <h2 className="mt-2.5 line-clamp-2 h-[53px] flex-shrink-0 text-[22px] font-bold leading-[1.2] text-strong">
+              <h2 className="mt-2.5 line-clamp-2 h-[53px] flex-shrink-0 text-h2 font-bold leading-[1.2] text-strong">
                 {step.name}
               </h2>
-              <p className="mt-1 line-clamp-2 h-[44px] flex-shrink-0 text-[15px] leading-[1.45] text-ink">
+              <p className="mt-1 line-clamp-2 h-[44px] flex-shrink-0 text-body leading-[1.45] text-ink">
                 {step.cue ?? ""}
               </p>
 
@@ -400,12 +399,11 @@ export function FollowAlong({
                   </svg>
                   <span className="absolute inset-0 flex flex-col items-center justify-center gap-0.5">
                     <span
-                      className="font-mono text-[64px] font-semibold leading-none tabular-nums [@media(max-height:700px)]:text-[52px]"
-                      style={{ color: phase === "rest" ? "#93989f" : "#f4f5f7" }}
+                      className={`font-mono text-[64px] font-semibold leading-none tabular-nums [@media(max-height:700px)]:text-[52px] ${phase === "rest" ? "text-[#93989f]" : "text-[#f4f5f7]"}`}
                     >
                       {big}
                     </span>
-                    <span className="h-[18px] text-[13px] text-muted">{caption}</span>
+                    <span className="h-[18px] text-caption text-muted">{caption}</span>
                   </span>
                 </button>
                 <div className="flex h-11 w-full flex-shrink-0 items-center justify-center gap-2.5">
@@ -414,21 +412,21 @@ export function FollowAlong({
                       <button
                         type="button"
                         onClick={() => setCount((c) => Math.max(0, c - 1))}
-                        className="h-11 w-[64px] rounded-xl border border-line text-[15px] font-semibold text-ink"
+                        className="h-11 w-[64px] rounded-xl border border-line text-body font-semibold text-ink"
                       >
                         −1
                       </button>
                       <button
                         type="button"
                         onClick={() => setCount((c) => Math.min(step.reps ?? 1, c + 1))}
-                        className="h-11 w-[72px] rounded-xl border border-line text-[15px] font-semibold text-ink"
+                        className="h-11 w-[72px] rounded-xl border border-line text-body font-semibold text-ink"
                       >
                         +1
                       </button>
                       <button
                         type="button"
                         onClick={() => completeSet(step.reps ?? 1, null)}
-                        className="h-11 w-[120px] rounded-xl border border-line text-[15px] font-semibold text-ink"
+                        className="h-11 w-[120px] rounded-xl border border-line text-body font-semibold text-ink"
                       >
                         Log all {step.reps}
                       </button>
@@ -438,14 +436,14 @@ export function FollowAlong({
                       <button
                         type="button"
                         onClick={() => (paused ? setPausedLeft((p) => (p ?? 0) + 15000) : setEndAt((e) => e + 15000))}
-                        className="h-11 w-[72px] rounded-xl border border-line text-[15px] font-semibold text-ink"
+                        className="h-11 w-[72px] rounded-xl border border-line text-body font-semibold text-ink"
                       >
                         +15 s
                       </button>
-                      <span className="max-w-[240px] truncate text-[13px] text-muted">{nextLine}</span>
+                      <span className="max-w-[240px] truncate text-caption text-muted">{nextLine}</span>
                     </>
                   ) : (
-                    <span className="max-w-[300px] truncate text-[13px] text-muted">{nextLine}</span>
+                    <span className="max-w-[300px] truncate text-caption text-muted">{nextLine}</span>
                   )}
                 </div>
               </div>
@@ -459,7 +457,7 @@ export function FollowAlong({
                 setPhase("done");
                 announce("Stopped. Note what hurt in your check.");
               }}
-              className="min-h-[44px] w-auto px-5 flex-shrink-0 rounded-full border border-red-strong/45 text-[13px] font-semibold text-red-strong"
+              className="min-h-[44px] w-auto px-5 flex-shrink-0 rounded-full border border-red-strong/45 text-caption font-semibold text-red-strong"
             >
               Something hurts
             </button>
@@ -477,7 +475,7 @@ export function FollowAlong({
                     <polyline points="15 18 9 12 15 6" />
                   </svg>
                 </span>
-                <span className="text-[12px] text-muted">Back</span>
+                <span className="text-caption text-muted">Back</span>
               </button>
               <button type="button" onClick={onPrimary} className="-mt-2 flex flex-col items-center gap-1.5">
                 <span className="flex h-[72px] w-[72px] items-center justify-center rounded-full bg-bronze" aria-hidden="true">
@@ -489,7 +487,7 @@ export function FollowAlong({
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="#0e0f12"><polygon points="8 5 19 12 8 19 8 5" /></svg>
                   )}
                 </span>
-                <span className="w-24 text-center text-[12px] font-semibold text-ink">{primaryLabel}</span>
+                <span className="w-24 text-center text-caption font-semibold text-ink">{primaryLabel}</span>
               </button>
               <button
                 type="button"
@@ -513,7 +511,7 @@ export function FollowAlong({
                     <polyline points="9 18 15 12 9 6" />
                   </svg>
                 </span>
-                <span className="text-[12px] text-muted">{skipArmed ? "Tap again" : "Skip set"}</span>
+                <span className="text-caption text-muted">{skipArmed ? "Tap again" : "Skip set"}</span>
               </button>
             </div>
           </>

@@ -14,10 +14,12 @@ import { today as todayISO, iso } from "@/lib/utils";
 import type { Program, Exercise } from "@/lib/schemas";
 import { HIP_FLEXOR_PACK } from "@/lib/assessments-data";
 import { EmptyStateCard } from "@/components/EmptyStateCard";
+import { cardClass } from "@/components/ui/Card";
+import { cn } from "@/lib/utils";
 
 const SymptomLoadChart = dynamic(
   () => import("@/components/charts/SymptomLoadChart").then((m) => ({ default: m.SymptomLoadChart })),
-  { ssr: false, loading: () => <div className="h-[220px] text-[12px] text-muted italic">Loading chart…</div> },
+  { ssr: false, loading: () => <div className="h-[220px] text-caption text-muted italic">Loading chart…</div> },
 );
 
 type RangePreset = "4w" | "12w" | "26w" | "all";
@@ -100,13 +102,13 @@ export default function ReportPage() {
 
   if (error) {
     return (
-      <div className="mt-8 rounded border border-red bg-surface p-4">
-        <h2 className="mb-2 text-lg font-semibold">Couldn&apos;t load report data</h2>
-        <p className="text-sm text-muted">{error}</p>
+      <div className="mt-8 rounded-lg border border-red bg-surface p-4">
+        <h2 className="mb-2 text-h3">Couldn&apos;t load report data</h2>
+        <p className="text-small text-muted">{error}</p>
       </div>
     );
   }
-  if (!hydrated) return <div className="mt-8 text-sm text-muted">Loading…</div>;
+  if (!hydrated) return <div className="mt-8 text-small text-muted">Loading…</div>;
   if (!primarySlug) {
     return (
       <EmptyStateCard
@@ -116,7 +118,7 @@ export default function ReportPage() {
       />
     );
   }
-  if (!program || !report) return <div className="mt-8 text-sm text-muted">Loading…</div>;
+  if (!program || !report) return <div className="mt-8 text-small text-muted">Loading…</div>;
 
   // Anterior-hip-specific sections (hip assessments, groin/buttock/low-back
   // symptom series, provocative positions, rehab-adherence bar) only make
@@ -169,18 +171,18 @@ export default function ReportPage() {
         <div className="flex items-center gap-2">
           <Link
             href="/progress/"
-            className="inline-flex items-center gap-1 text-[14px] text-slate hover:text-ink"
+            className="inline-flex items-center gap-1 text-small text-slate hover:text-ink"
           >
             <ChevronLeft size={14} />
             Progress
           </Link>
         </div>
         <div className="flex items-baseline justify-between gap-3 flex-wrap">
-          <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">Training summary</h1>
+          <h1 className="text-h1 tracking-tight text-strong leading-none">Training summary</h1>
           <button
             type="button"
             onClick={() => window.print()}
-            className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground"
+            className="inline-flex items-center gap-1.5 font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-bronze text-ground"
           >
             <Printer size={14} />
             Print / save PDF
@@ -197,7 +199,7 @@ export default function ReportPage() {
               }}
               aria-pressed={preset === p}
               className={
-                "min-h-[36px] px-3 py-1.5 rounded font-mono text-[11px] uppercase tracking-wider " +
+                "min-h-[36px] px-3 py-1.5 rounded-lg font-mono text-eyebrow uppercase tracking-wider " +
                 (preset === p
                   ? "bg-slate text-surface"
                   : "bg-line-soft text-muted hover:text-ink")
@@ -210,22 +212,22 @@ export default function ReportPage() {
       </header>
 
       <section className="report-header space-y-1">
-        <h1 className="hidden print:block text-xl font-semibold text-strong">Training summary</h1>
-        <p className="text-[14px] text-muted">
+        <h1 className="hidden print:block text-h2 text-strong">Training summary</h1>
+        <p className="text-small text-muted">
           <strong className="text-ink">Program:</strong>{" "}
           {program.slug
             ?.split("-")
             .map((w) => (w.length ? w[0].toUpperCase() + w.slice(1) : w))
             .join(" ") ?? program.slug}
         </p>
-        <p className="text-[14px] text-muted">
+        <p className="text-small text-muted">
           <strong className="text-ink">Range:</strong> {startPretty} → {endPretty}
         </p>
-        <p className="text-[14px] text-muted">
+        <p className="text-small text-muted">
           <strong className="text-ink">Generated:</strong> {generatedPretty}
         </p>
         {extraSlugs.length > 0 ? (
-          <p className="text-[12px] text-muted italic pt-1">
+          <p className="text-caption text-muted italic pt-1">
             Also active for this user (not in this report yet):{" "}
             {extraSlugs
               .map((s) =>
@@ -238,7 +240,7 @@ export default function ReportPage() {
             .
           </p>
         ) : null}
-        <p className="text-[14px] text-muted italic pt-1">
+        <p className="text-small text-muted italic pt-1">
           {isHipProgram
             ? "This is a self-tracked training log, not a diagnosis. Symptom scores are the user's own 0–10 ratings from a daily morning check. Load values are logged workout data."
             : "This is a self-tracked training log, not medical advice. Values below are the user's own logged sessions, morning checks, and derived retest deltas."}
@@ -255,7 +257,7 @@ export default function ReportPage() {
 
       {/* Overview */}
       <ReportSection title="Overview">
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-[14px]">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-small">
           <Stat label="Days in range" value={String(report.overview.daysInRange)} />
           <Stat label="Days logged" value={String(report.overview.daysWithAnyLog)} />
           <Stat
@@ -303,11 +305,11 @@ export default function ReportPage() {
         subtitle="Peak morning symptom score alongside this program's daily training load."
       >
         {daysWithLogs > 0 ? (
-          <div className="rounded border border-line bg-surface p-3">
+          <div className={cardClass()}>
             <SymptomLoadChart days={chartDays} program={program} />
           </div>
         ) : (
-          <p className="text-[14px] text-muted italic">
+          <p className="text-small text-muted italic">
             No symptom or load data in this range.
           </p>
         )}
@@ -378,13 +380,13 @@ export default function ReportPage() {
                 a.weekStart.localeCompare(b.weekStart),
               );
               return (
-                <ul className="text-[14px] space-y-1.5">
+                <ul className="text-small space-y-1.5">
                   {rows.map((w) => (
                     <li
                       key={w.weekStart}
                       className="flex items-baseline gap-3 font-mono"
                     >
-                      <span className="text-muted text-[11px] w-28 flex-shrink-0">
+                      <span className="text-muted text-eyebrow w-28 flex-shrink-0">
                         wk of {w.weekStart}
                       </span>
                       <span className="text-ink flex-1">
@@ -463,13 +465,13 @@ export default function ReportPage() {
                       <p className="mono-caps mb-1 text-bronze">
                         {key.replace(/_/g, " ")} · {rows.length}
                       </p>
-                      <ul className="space-y-0.5 text-[14px]">
+                      <ul className="space-y-0.5 text-small">
                         {rows.map(({ date, run: r }, i) => (
                           <li
                             key={`${date}:${i}`}
                             className="flex items-baseline gap-2 flex-wrap font-mono"
                           >
-                            <span className="text-muted text-[11px] w-20 flex-shrink-0">
+                            <span className="text-muted text-eyebrow w-20 flex-shrink-0">
                               {date.slice(5)}
                             </span>
                             <span className="text-ink">
@@ -509,7 +511,7 @@ export default function ReportPage() {
         subtitle="Six-item self-scored check, cadence every 28 days. Lower = fewer symptoms. Individual scores below the overall."
       >
         {report.hipAssessments.length === 0 ? (
-          <p className="text-[14px] text-muted italic">No checks logged in this range.</p>
+          <p className="text-small text-muted italic">No checks logged in this range.</p>
         ) : (
           <>
             {/* Mobile: card per check-in. The 7-column table below only fits on
@@ -519,18 +521,18 @@ export default function ReportPage() {
               {report.hipAssessments.map((a) => (
                 <li
                   key={a.date}
-                  className="rounded border border-line-soft bg-surface p-3"
+                  className={cardClass()}
                 >
                   <div className="flex items-baseline justify-between">
-                    <span className="font-mono text-[12px] text-muted">{a.date}</span>
-                    <span className="font-mono text-[15px] font-semibold text-strong">
+                    <span className="font-mono text-caption text-muted">{a.date}</span>
+                    <span className="font-mono text-body font-semibold text-strong">
                       {a.overall.toFixed(1)}
                     </span>
                   </div>
                   {/* Mobile card layout — full test names on their own row so
                       "Hanging leg raise — click during the lowering phase" doesn't
                       truncate to "Hanging leg raise". The signal is IN the details. */}
-                  <dl className="mt-2 space-y-1.5 text-[12px]">
+                  <dl className="mt-2 space-y-1.5 text-caption">
                     {HIP_FLEXOR_PACK.questions.map((q) => {
                       const label = q.label.split("—")[0].split("(")[0].trim();
                       const detail = q.label.includes("—")
@@ -546,7 +548,7 @@ export default function ReportPage() {
                             <div className="min-w-0 flex-1">
                               <dt className="text-ink">{label}</dt>
                               {detail ? (
-                                <dt className="text-[10px] text-muted italic leading-tight mt-0.5">
+                                <dt className="text-eyebrow text-muted italic leading-tight mt-0.5">
                                   {detail}
                                 </dt>
                               ) : null}
@@ -563,7 +565,7 @@ export default function ReportPage() {
                           <div className="min-w-0 flex-1">
                             <dt className="text-ink">{label}</dt>
                             {detail ? (
-                              <dt className="text-[10px] text-muted italic leading-tight mt-0.5">
+                              <dt className="text-eyebrow text-muted italic leading-tight mt-0.5">
                                 {detail}
                               </dt>
                             ) : null}
@@ -579,9 +581,9 @@ export default function ReportPage() {
               ))}
             </ul>
             <div className="hidden sm:block overflow-x-auto">
-              <table className="w-full text-[14px] border-collapse">
+              <table className="w-full text-small border-collapse">
                 <thead>
-                  <tr className="text-left text-[11px] text-muted border-b border-line-soft">
+                  <tr className="text-left text-eyebrow text-muted border-b border-line-soft">
                     <th className="py-1.5 pr-2">Date</th>
                     <th className="py-1.5 pr-2">Overall</th>
                     {HIP_FLEXOR_PACK.questions.map((q) => (
@@ -603,7 +605,7 @@ export default function ReportPage() {
                           const l = a.byKey[`${q.id}:left`];
                           const r = a.byKey[`${q.id}:right`];
                           return (
-                            <td key={q.id} className="py-1.5 pr-2 font-mono text-[12px]">
+                            <td key={q.id} className="py-1.5 pr-2 font-mono text-caption">
                               {l != null ? `L${l}` : "—"}
                               {" / "}
                               {r != null ? `R${r}` : "—"}
@@ -612,7 +614,7 @@ export default function ReportPage() {
                         }
                         const v = a.byKey[q.id];
                         return (
-                          <td key={q.id} className="py-1.5 pr-2 font-mono text-[12px]">
+                          <td key={q.id} className="py-1.5 pr-2 font-mono text-caption">
                             {v != null ? v : "—"}
                           </td>
                         );
@@ -635,17 +637,17 @@ export default function ReportPage() {
         subtitle="Days where morning-check symptoms crossed a threshold or a note contained pain/click/flare keywords."
       >
         {report.provocateurIncidents.length === 0 ? (
-          <p className="text-[14px] text-muted italic">
+          <p className="text-small text-muted italic">
             Nothing crossed threshold in this range.
           </p>
         ) : (
-          <ul className="text-[14px] space-y-1.5">
+          <ul className="text-small space-y-1.5">
             {report.provocateurIncidents.map((i, idx) => (
               <li key={idx} className="flex items-baseline gap-2 flex-wrap">
-                <span className="font-mono text-[11px] text-muted w-24 flex-shrink-0">
+                <span className="font-mono text-eyebrow text-muted w-24 flex-shrink-0">
                   {i.date}
                 </span>
-                <span className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-line-soft text-muted flex-shrink-0">
+                <span className="font-mono text-eyebrow uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-line-soft text-muted flex-shrink-0">
                   {i.context === "check" ? "Morning check" : "Note"}
                 </span>
                 <span className="flex-1 min-w-0">
@@ -673,21 +675,21 @@ export default function ReportPage() {
         subtitle="Heaviest logged top-set per lift, chronological."
       >
         {report.loadProgression.length === 0 ? (
-          <p className="text-[14px] text-muted italic">Nothing logged in this range.</p>
+          <p className="text-small text-muted italic">Nothing logged in this range.</p>
         ) : (
           <div className="space-y-3">
             {report.loadProgression.map((l) => (
               <div key={l.exerciseId}>
-                <p className="font-semibold text-sm text-strong">
+                <p className="font-semibold text-small text-strong">
                   {byId[l.exerciseId]?.name ?? l.exerciseId}
-                  <span className="ml-2 text-[11px] font-normal text-muted font-mono">
+                  <span className="ml-2 text-eyebrow font-normal text-muted font-mono">
                     TM {store.training_maxes[l.exerciseId] ?? "—"} kg
                   </span>
                 </p>
-                <ul className="mt-1 grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-0.5 text-[14px] font-mono">
+                <ul className="mt-1 grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-0.5 text-small font-mono">
                   {l.entries.map((e) => (
                     <li key={e.date} className="text-muted">
-                      <span className="text-[11px] mr-1">{e.date}</span>
+                      <span className="text-eyebrow mr-1">{e.date}</span>
                       <span className="text-ink">
                         {e.top_kg} × {e.top_reps}
                       </span>
@@ -709,23 +711,23 @@ export default function ReportPage() {
         subtitle="Days per week the home hip-flexor rehab block was touched."
       >
         {report.weeklyRehabAdherence.length === 0 ? (
-          <p className="text-[14px] text-muted italic">No range data.</p>
+          <p className="text-small text-muted italic">No range data.</p>
         ) : (
-          <ul className="text-[14px] space-y-2 sm:space-y-1">
+          <ul className="text-small space-y-2 sm:space-y-1">
             {report.weeklyRehabAdherence.map((w) => (
               <li
                 key={w.weekStart}
                 className="sm:flex sm:items-baseline sm:gap-3"
               >
                 <div className="flex items-baseline justify-between sm:contents">
-                  <span className="font-mono text-[11px] text-muted sm:w-24 sm:flex-shrink-0">
+                  <span className="font-mono text-eyebrow text-muted sm:w-24 sm:flex-shrink-0">
                     Week of {w.weekStart}
                   </span>
-                  <span className="font-mono text-[11px] text-muted sm:order-3">
+                  <span className="font-mono text-eyebrow text-muted sm:order-3">
                     {w.done} / 7
                   </span>
                 </div>
-                <div className="mt-1 h-2 rounded bg-line-soft overflow-hidden sm:mt-0 sm:flex-1 sm:max-w-[240px]">
+                <div className="mt-1 h-2 rounded-full bg-line-soft overflow-hidden sm:mt-0 sm:flex-1 sm:max-w-[240px]">
                   <div
                     className="h-full bg-bronze"
                     style={{ width: `${Math.round((w.done / 7) * 100)}%` }}
@@ -745,7 +747,7 @@ export default function ReportPage() {
           title="Personal contraindications"
           subtitle="Movements / positions the user has flagged as painful or off-limits."
         >
-          <ul className="list-disc pl-5 text-[14px] space-y-1">
+          <ul className="list-disc pl-5 text-small space-y-1">
             {store.contraindications!.map((c) => (
               <li key={c.id}>
                 <span className="font-semibold">{c.label}</span>
@@ -756,7 +758,7 @@ export default function ReportPage() {
         </ReportSection>
       ) : null}
 
-      <footer className="text-[11px] text-muted italic pt-4 border-t border-line-soft">
+      <footer className="text-eyebrow text-muted italic pt-4 border-t border-line-soft">
         Generated by a self-tracking app. Not medical advice.
         {isHipProgram ? " Clinical decisions remain with the user's orthopaedist and physiatrist." : ""}
       </footer>
@@ -817,8 +819,8 @@ function ReportSection({
   return (
     <section className="space-y-2">
       <div>
-        <h2 className="text-[15px] font-semibold text-strong">{title}</h2>
-        {subtitle ? <p className="text-[14px] text-muted mt-0.5">{subtitle}</p> : null}
+        <h2 className="text-body font-semibold text-strong">{title}</h2>
+        {subtitle ? <p className="text-small text-muted mt-0.5">{subtitle}</p> : null}
       </div>
       {children}
     </section>
@@ -827,9 +829,9 @@ function ReportSection({
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded border border-line-soft bg-surface p-2.5">
-      <p className="text-[11px] text-muted uppercase tracking-wider">{label}</p>
-      <p className="text-[15px] font-mono font-semibold text-strong mt-0.5">{value}</p>
+    <div className={cardClass()}>
+      <p className="text-eyebrow text-muted uppercase tracking-wider">{label}</p>
+      <p className="text-body font-mono font-semibold text-strong mt-0.5">{value}</p>
     </div>
   );
 }
@@ -879,11 +881,11 @@ function ArcSummarySection({
     <ReportSection title="Arc summary">
       <div className="space-y-3">
         <div className="flex items-baseline justify-between gap-2 flex-wrap">
-          <p className="text-[14px] text-muted">
+          <p className="text-small text-muted">
             <strong className="text-ink">Status:</strong> graduated
           </p>
           {verdict ? (
-            <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
+            <span className="font-mono text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
               <span
                 aria-hidden
                 className={`h-1.5 w-1.5 rounded-full ${
@@ -899,8 +901,8 @@ function ArcSummarySection({
           ) : null}
         </div>
         {displayable.length ? (
-          <div className="rounded border border-line-soft bg-surface p-3 space-y-2">
-            <p className="font-mono text-[10px] uppercase tracking-wider text-muted">
+          <div className={cn(cardClass(), "space-y-2")}>
+            <p className="font-mono text-eyebrow uppercase tracking-wider text-muted">
               Retest deltas vs baseline
             </p>
             <ul className="space-y-1.5">
@@ -909,7 +911,7 @@ function ArcSummarySection({
                 return (
                   <li
                     key={m.metric_id}
-                    className="flex items-baseline justify-between gap-2 text-[14px]"
+                    className="flex items-baseline justify-between gap-2 text-small"
                   >
                     <span className="text-ink truncate">{m.display_name}</span>
                     <span className="font-mono flex items-baseline gap-2 flex-shrink-0">
@@ -940,17 +942,17 @@ function ArcSummarySection({
             </ul>
           </div>
         ) : (
-          <p className="text-[14px] text-muted italic">
+          <p className="text-small text-muted italic">
             No retest metrics recorded — log final readings on Progress to
             complete this section.
           </p>
         )}
         {feedback ? (
-          <div className="rounded border border-line-soft bg-surface p-3 space-y-1">
-            <p className="font-mono text-[10px] uppercase tracking-wider text-muted">
+          <div className={cn(cardClass(), "space-y-1")}>
+            <p className="font-mono text-eyebrow uppercase tracking-wider text-muted">
               User feedback
             </p>
-            <p className="text-[14px] text-ink">
+            <p className="text-small text-ink">
               Rated {feedback.rating}/5
               {feedback.note ? ` — "${feedback.note}"` : ""}
             </p>

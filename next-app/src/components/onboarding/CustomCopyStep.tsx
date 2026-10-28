@@ -13,10 +13,10 @@ type CustomCopyStepPayload = Extract<OnboardingStep, { kind: "custom_copy" }>;
 export function CustomCopyStep({ step }: { step: CustomCopyStepPayload }) {
   return (
     <div className="space-y-4 text-center">
-      <h2 id="onboarding-title" className="text-2xl font-semibold text-strong tracking-tight">
+      <h2 id="onboarding-title" className="text-h2 text-strong tracking-tight">
         {step.title}
       </h2>
-      <p className="text-[14px] text-muted whitespace-pre-line leading-relaxed">
+      <p className="text-small text-muted whitespace-pre-line leading-relaxed">
         {step.body_md}
       </p>
     </div>

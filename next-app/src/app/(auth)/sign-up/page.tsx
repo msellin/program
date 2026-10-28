@@ -10,6 +10,7 @@ import { TurnstileWidget, captchaRequired } from "@/components/auth/TurnstileWid
 import { captureAttribution, signupMetadata, stashPendingSignupMeta } from "@/lib/attribution";
 import { Button } from "@/components/ui/Button";
 import { Wordmark } from "@/components/ui/Wordmark";
+import { cardClass } from "@/components/ui/Card";
 
 /**
  * Sign-up requires:
@@ -22,7 +23,7 @@ import { Wordmark } from "@/components/ui/Wordmark";
  */
 export default function SignUpPage() {
   return (
-    <Suspense fallback={<div className="pt-8 text-sm text-muted">Loading…</div>}>
+    <Suspense fallback={<div className="pt-8 text-small text-muted">Loading…</div>}>
       <SignUpInner />
     </Suspense>
   );
@@ -127,41 +128,41 @@ function SignUpInner() {
   if (sent) {
     return (
       <div className="max-w-sm mx-auto pt-8 space-y-4">
-        <h1 className="text-2xl font-semibold text-strong">Check your email</h1>
-        <p className="text-sm text-ink">
+        <h1 className="text-h1 text-strong">Check your email</h1>
+        <p className="text-small text-ink">
           We sent a confirmation link to <strong>{email}</strong>. Tap it, then sign in.
         </p>
-        <div className="rounded border border-line-soft bg-surface p-3 space-y-1.5">
-          <p className="font-mono text-[10px] uppercase tracking-widest text-muted">What happens next</p>
-          <ol className="list-decimal pl-5 text-[13px] text-ink space-y-1">
+        <div className={`${cardClass()} space-y-1.5`}>
+          <p className="font-mono text-eyebrow uppercase tracking-widest text-muted">What happens next</p>
+          <ol className="list-decimal pl-5 text-caption text-ink space-y-1">
             <li>Tap the link in the email, then sign in.</li>
             <li>Answer a few questions about where you are now (a few minutes, one per screen). Physical tests are optional.</li>
             <li>Your first session is ready on Today. Terav sharpens it against your log as you go.</li>
           </ol>
-          <p className="text-[12px] text-muted">
+          <p className="text-caption text-muted">
             Terav is a training log, not a clinician or medical advice. Stop if something hurts.
           </p>
         </div>
-        <p className="text-[12px] text-muted">
+        <p className="text-caption text-muted">
           Nothing arrived after a couple of minutes? Check the spam folder, or resend below.
         </p>
-        {error ? <p className="text-[14px] text-red">{error}</p> : null}
+        {error ? <p className="text-small text-red">{error}</p> : null}
         <TurnstileWidget onToken={setCaptchaToken} resetKey={captchaReset} />
         {resent ? (
-          <p className="text-[14px] text-green">Sent again — check your inbox.</p>
+          <p className="text-small text-green">Sent again — check your inbox.</p>
         ) : null}
         <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={resendConfirmation}
             disabled={resending || resent || (captchaRequired && !captchaToken)}
-            className="inline-flex items-center gap-1.5 min-h-[44px] font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover disabled:opacity-40 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-1.5 min-h-[44px] font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-bronze text-ground hover:bg-bronze-hover disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {resending ? "Sending…" : resent ? "Sent" : "Resend confirmation"}
           </button>
           <Link
             href={signInHref}
-            className="inline-flex items-center min-h-[44px] font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line hover:bg-line-soft"
+            className="inline-flex items-center min-h-[44px] font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line hover:bg-line-soft"
           >
             Back to sign in
           </Link>
@@ -176,11 +177,11 @@ function SignUpInner() {
         <Wordmark />
       </div>
       <header className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight text-strong">Sign up</h1>
+        <h1 className="text-h1 tracking-tight text-strong">Sign up</h1>
       </header>
 
       <div className="space-y-3">
-        <label className="flex items-start gap-2 text-[14px] ">
+        <label className="flex items-start gap-2 text-small ">
           <input
             type="checkbox"
             checked={acceptTerms}
@@ -200,7 +201,7 @@ function SignUpInner() {
           </span>
         </label>
 
-        <label className="flex items-start gap-2 text-[14px]">
+        <label className="flex items-start gap-2 text-small">
           <input
             type="checkbox"
             checked={consentSymptom}
@@ -216,7 +217,7 @@ function SignUpInner() {
           </span>
         </label>
 
-        <label className="flex items-start gap-2 text-[14px]">
+        <label className="flex items-start gap-2 text-small">
           <input
             type="checkbox"
             checked={confirmAge}
@@ -233,19 +234,19 @@ function SignUpInner() {
         onBeforeRedirect={stashPendingSignupMeta}
       />
       {!consentsComplete ? (
-        <p className="text-[11px] text-muted -mt-2">Tick the three boxes above to continue with Google or email.</p>
+        <p className="text-eyebrow text-muted -mt-2">Tick the three boxes above to continue with Google or email.</p>
       ) : null}
 
       <div className="flex items-center gap-3 pt-1">
         <span className="flex-1 h-px bg-line-soft" aria-hidden />
-        <span className="font-mono text-[10px] uppercase tracking-widest text-muted">
+        <span className="font-mono text-eyebrow uppercase tracking-widest text-muted">
           or with email
         </span>
         <span className="flex-1 h-px bg-line-soft" aria-hidden />
       </div>
 
       <form onSubmit={submit} className="space-y-3" noValidate>
-        <label htmlFor="signup-email" className="block text-[14px]">
+        <label htmlFor="signup-email" className="block text-small">
           <span className="block text-muted mb-1">Email</span>
           <input
             id="signup-email"
@@ -254,12 +255,12 @@ function SignUpInner() {
             autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="block w-full text-[14px] px-3 py-2.5 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
+            className="block w-full text-small px-3 py-2.5 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
           />
         </label>
-        <label htmlFor="signup-password" className="block text-[14px]">
+        <label htmlFor="signup-password" className="block text-small">
           <span className="block text-muted mb-1">
-            Password <span className="text-[11px] text-muted">(8+ characters)</span>
+            Password <span className="text-eyebrow text-muted">(8+ characters)</span>
           </span>
           <input
             id="signup-password"
@@ -269,12 +270,12 @@ function SignUpInner() {
             minLength={8}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="block w-full text-[14px] px-3 py-2.5 min-h-[44px] border border-line rounded bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
+            className="block w-full text-small px-3 py-2.5 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
           />
         </label>
 
         {error ? (
-          <p className="text-[14px] text-red border-l-4 border-red pl-2">{error}</p>
+          <p className="text-small text-red border-l-4 border-red pl-2">{error}</p>
         ) : null}
 
         <TurnstileWidget onToken={setCaptchaToken} resetKey={captchaReset} />
@@ -288,7 +289,7 @@ function SignUpInner() {
         </Button>
       </form>
 
-      <p className="text-[14px] text-muted">
+      <p className="text-small text-muted">
         Already have an account?{" "}
         <Link href={signInHref} className="text-slate border-b border-slate">
           Sign in

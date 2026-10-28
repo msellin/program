@@ -69,7 +69,7 @@ export function BottomSheet({
       <div
         ref={panelRef}
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-[760px] mx-auto bg-surface border-t border-line-strong rounded-t-[16px] px-5 pt-[18px] pb-[calc(22px+env(safe-area-inset-bottom))] max-h-[85vh] overflow-y-auto"
+        className="w-full max-w-[760px] mx-auto bg-surface border-t border-line-strong rounded-t-2xl px-5 pt-[18px] pb-[calc(22px+env(safe-area-inset-bottom))] max-h-[85vh] overflow-y-auto"
       >
         {children}
       </div>

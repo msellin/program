@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { cardClass } from "@/components/ui/Card";
 
 /**
  * F2 Phase A — admin view of unmatched note tokens.
@@ -74,8 +75,8 @@ export default function AdminKeywordsPage() {
     <div className="space-y-5 pt-6">
       <header className="space-y-1">
         <p className="mono-caps">Admin</p>
-        <h1 className="text-2xl font-semibold text-strong">Unmatched note tokens</h1>
-        <p className="text-[14px] text-muted max-w-lg">
+        <h1 className="text-h1 text-strong">Unmatched note tokens</h1>
+        <p className="text-small text-muted max-w-lg">
           Tokens users typed in notes that <em>aren&apos;t</em> matched by the
           regex vocabulary in <code>note-signals.ts</code>. Sorted by frequency,
           filtered to ≥3 occurrences. Review + add promising tokens to the regex.
@@ -87,17 +88,17 @@ export default function AdminKeywordsPage() {
           type="button"
           onClick={fetchKeywords}
           disabled={loading}
-          className="inline-flex items-center min-h-[44px] font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover disabled:opacity-40"
+          className="inline-flex items-center min-h-[44px] font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-bronze text-ground hover:bg-bronze-hover disabled:opacity-40"
         >
           {loading ? "Loading…" : "Refresh"}
         </button>
-        <Link href="/" className="text-[14px] text-muted underline underline-offset-4">
+        <Link href="/" className="text-small text-muted underline underline-offset-4">
           Back to Today
         </Link>
       </div>
 
       {error ? (
-        <div className="rounded border border-red bg-red/10 p-3 text-[14px] text-red">
+        <div className="rounded-lg border border-red bg-red/10 p-3 text-small text-red">
           {error}
           {error.includes("Not admin") ? (
             <p className="mt-2 text-muted">
@@ -110,7 +111,7 @@ export default function AdminKeywordsPage() {
 
       {data ? (
         <div className="space-y-3">
-          <div className="rounded border border-line bg-surface p-3 text-[12px] text-muted space-y-0.5">
+          <div className={`${cardClass()} text-caption text-muted space-y-0.5`}>
             <p>
               <span className="text-strong">Scanned:</span> {data.scanned_users}{" "}
               user{data.scanned_users === 1 ? "" : "s"} · {data.scanned_notes}{" "}
@@ -130,14 +131,14 @@ export default function AdminKeywordsPage() {
           </div>
 
           {data.unmatched_tokens.length === 0 ? (
-            <p className="text-[14px] text-muted italic">
+            <p className="text-small text-muted italic">
               No unmatched tokens above the threshold. Either your regex already
               covers everything users wrote, or there aren&apos;t enough logs yet.
             </p>
           ) : (
-            <table className="w-full text-[14px] border border-line rounded overflow-hidden">
+            <table className="w-full text-small border border-line rounded-lg overflow-hidden">
               <thead>
-                <tr className="bg-surface text-muted text-[11px] uppercase tracking-widest">
+                <tr className="bg-surface text-muted text-eyebrow uppercase tracking-widest">
                   <th className="text-left px-3 py-2">Token</th>
                   <th className="text-right px-3 py-2 w-24">Count</th>
                   <th className="text-right px-3 py-2 w-24">Users</th>

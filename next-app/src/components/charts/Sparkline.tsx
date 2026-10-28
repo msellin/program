@@ -53,7 +53,7 @@ export function Sparkline({
   if (!values.length || values.length < 2) {
     // CLS-safe null-state — reserve height so late hydration doesn't
     // reflow siblings. Semantically equivalent to "nothing to show yet."
-    return <div aria-hidden style={{ minHeight: 20 }} className={className} />;
+    return <div aria-hidden className={`min-h-5 ${className ?? ""}`} />;
   }
 
   const dataMin = Math.min(...values);
@@ -101,7 +101,7 @@ export function Sparkline({
         role={isSrVisible ? "img" : undefined}
         aria-label={isSrVisible ? ariaLabel : undefined}
         aria-hidden={isSrVisible ? undefined : true}
-        style={{ pointerEvents: "none" }}
+        className="pointer-events-none"
       >
         {targetY != null ? (
           <line
@@ -125,7 +125,7 @@ export function Sparkline({
         <circle cx={lastX} cy={lastY} r={2} fill={stroke} />
       </svg>
       {caption ? (
-        <p className="font-mono text-[10px] uppercase tracking-widest text-muted mt-1">
+        <p className="font-mono text-eyebrow uppercase tracking-widest text-muted mt-1">
           {caption}
         </p>
       ) : null}

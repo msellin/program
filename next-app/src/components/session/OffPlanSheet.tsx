@@ -54,7 +54,7 @@ export function OffPlanSheet({
 
   return (
     <BottomSheet surface="OffPlanSheet" titleId="off-plan-title" onClose={onClose}>
-      <p id="off-plan-title" className="text-[16px] font-semibold text-strong mb-1 tracking-[-.015em]">
+      <p id="off-plan-title" className="text-body font-semibold text-strong mb-1 tracking-[-.015em]">
         Log an extra session
       </p>
       {/* Copy is deliberately neutral about whether this was prescribed.
@@ -67,7 +67,7 @@ export function OffPlanSheet({
           lands on past days). Logging Friday's class on Sunday read as if it
           would be filed under Sunday. Name the actual date when it isn't
           today. */}
-      <p className="text-[13.5px] leading-snug text-ink mb-[14px]">
+      <p className="text-small leading-snug text-ink mb-[14px]">
         A run, a row, a class. Recorded against {isToday ? "today" : humanDate} — the
         engine reads duration, effort and heart rate.
       </p>
@@ -80,35 +80,35 @@ export function OffPlanSheet({
         <button
           type="button"
           onClick={() => setLoggingActivity(true)}
-          className="w-full flex items-center justify-between gap-3 rounded border border-line-strong bg-surface-2 px-3.5 py-[13px] mb-[14px] text-left"
+          className="w-full flex items-center justify-between gap-3 rounded-lg border border-line-strong bg-surface-2 px-3.5 py-[13px] mb-[14px] text-left"
         >
           {/* Was also "Log an activity", which now duplicates the sheet
               title directly above it. Lead with the thing, not the verb. */}
           <span className="min-w-0">
-            <span className="block text-[14.5px] font-semibold text-strong mb-0.5 tracking-[-.01em]">
+            <span className="block text-small font-semibold text-strong mb-0.5 tracking-[-.01em]">
               A run, a row, a class
             </span>
-            <span className="block text-[13px] text-ink">Time, effort, heart rate</span>
+            <span className="block text-caption text-ink">Time, effort, heart rate</span>
           </span>
-          <span className="flex-shrink-0 text-[15px] text-muted">›</span>
+          <span className="flex-shrink-0 text-body text-muted">›</span>
         </button>
       )}
 
       {offPlanOn && drillBlocks.length ? (
         <>
-          <p className="font-mono text-[10px] uppercase tracking-[.16em] text-muted mb-2.5">
+          <p className="font-mono text-eyebrow uppercase tracking-[.16em] text-muted mb-2.5">
             Or pick a drill
           </p>
           <Link
             href="/off-plan/"
-            className="flex items-center justify-between gap-3 rounded border border-line-soft bg-ground px-3.5 py-3 mb-3"
+            className="flex items-center justify-between gap-3 rounded-lg border border-line-soft bg-ground px-3.5 py-3 mb-3"
           >
-            <span className="text-[14.5px] font-semibold text-strong tracking-[-.01em]">
+            <span className="text-small font-semibold text-strong tracking-[-.01em]">
               {drillCount} drill{drillCount === 1 ? "" : "s"} available
             </span>
-            <span className="flex-shrink-0 text-[15px] text-muted">›</span>
+            <span className="flex-shrink-0 text-body text-muted">›</span>
           </Link>
-          <ul className="text-[13px] text-ink space-y-0.5 mb-3">
+          <ul className="text-caption text-ink space-y-0.5 mb-3">
             {drillBlocks.slice(0, 4).map((b) => (
               <li key={b.id} className="truncate">
                 · {humanBlockName(b.name)}
@@ -121,7 +121,7 @@ export function OffPlanSheet({
       <button
         type="button"
         onClick={onClose}
-        className="w-full h-[50px] rounded-[10px] border border-line-strong text-ink text-[15px]"
+        className="w-full h-[50px] rounded-lg border border-line-strong text-ink text-body"
       >
         Close
       </button>

@@ -18,6 +18,7 @@ import { nextAfterSet } from "@/components/session/shared/advance";
 import { NoteSheet } from "@/components/session/NoteSheet";
 import type { RailExercise, SessionSheet } from "@/components/session/DaySession";
 import type { Exercise, Program } from "@/lib/schemas";
+import { Card, cardClass } from "@/components/ui/Card";
 
 /**
  * Off-plan redesign (2026-08-24) — brings /off-plan onto the same
@@ -238,7 +239,7 @@ export function OffPlanSession() {
     Boolean(program) && hydrated && railExercises.length > 0,
   );
 
-  if (!hydrated) return <div className="mt-8 text-sm text-muted">Loading…</div>;
+  if (!hydrated) return <div className="mt-8 text-small text-muted">Loading…</div>;
   // Off-plan ships dark for the public catalog (2026-08-24). The route
   // stays alive rather than 404ing — a bookmark or an installed-PWA
   // shortcut should explain itself, not break. Nothing is lost: every
@@ -262,7 +263,7 @@ export function OffPlanSession() {
       />
     );
   }
-  if (!program) return <div className="mt-8 text-sm text-muted">Loading…</div>;
+  if (!program) return <div className="mt-8 text-small text-muted">Loading…</div>;
 
   const activeIdx = activeKey ? railExercises.findIndex((r) => r.key === activeKey) : -1;
   const active = activeIdx >= 0 ? railExercises[activeIdx] : null;
@@ -393,8 +394,8 @@ export function OffPlanSession() {
   return (
     <div className="space-y-6 pt-4">
       <header>
-        <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">Extra session</h1>
-        <p className="mt-1 text-sm text-muted">
+        <h1 className="text-h1 tracking-tight text-strong leading-none">Extra session</h1>
+        <p className="mt-1 text-small text-muted">
           Anything outside your plan: a run, a class, mobility.{" "}
           {activeDate === todayISO() ? "Logging to today." : "Logging to the selected date."}
         </p>
@@ -413,8 +414,8 @@ export function OffPlanSession() {
             return (
               <section key={def.cat} className="space-y-3">
                 <header>
-                  <h2 className="font-mono text-[14px] uppercase tracking-widest">{def.title}</h2>
-                  <p className="mt-1 text-[14px] text-muted">{def.note}</p>
+                  <h2 className="font-mono text-small uppercase tracking-widest">{def.title}</h2>
+                  <p className="mt-1 text-small text-muted">{def.note}</p>
                 </header>
                 <div className="space-y-[7px]">
                   {rows.map((r) => {
@@ -426,10 +427,10 @@ export function OffPlanSession() {
                         key={r.key}
                         type="button"
                         onClick={() => jumpTo(r.key)}
-                        className="w-full flex items-center justify-between gap-3 rounded border border-line-soft bg-surface px-3.5 py-[13px] text-left"
+                        className={cardClass() + " w-full flex items-center justify-between gap-3 text-left"}
                       >
                         <span className="min-w-0">
-                          <span className="block text-[15px] font-semibold text-strong tracking-[-.01em] mb-0.5">
+                          <span className="block text-body font-semibold text-strong tracking-[-.01em] mb-0.5">
                             {/*
                               `exerciseListName` folds in `variant`, which
                               matters here in a way it did not before
@@ -442,11 +443,11 @@ export function OffPlanSession() {
                             */}
                             {exerciseListName(r.exercise)}
                           </span>
-                          <span className="block text-[13px] text-ink">{r.blockName} · {r.rowCount} sets</span>
+                          <span className="block text-caption text-ink">{r.blockName} · {r.rowCount} sets</span>
                         </span>
                         <span
                           className={
-                            "flex-shrink-0 font-mono text-[10px] uppercase tracking-[.1em] " +
+                            "flex-shrink-0 font-mono text-eyebrow uppercase tracking-[.1em] " +
                             (isDone ? "text-muted" : loggedCount > 0 ? "text-bronze" : "text-muted")
                           }
                         >
@@ -462,11 +463,11 @@ export function OffPlanSession() {
           .filter(Boolean);
         if (rendered.length === 0) {
           return (
-            <div className="rounded border border-line-soft bg-surface p-4 text-sm text-muted">
+            <Card className="text-small text-muted">
               This program has no extras — every prescribed session lives on Day. You can still log
               cross-modal work (cardio, class attendance, walks) from Day&apos;s off-plan sheet if you
               want it in your history.
-            </div>
+            </Card>
           );
         }
         return rendered;

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { cardClass } from "@/components/ui/Card";
 import Link from "next/link";
 import { loadProgramManifest } from "@/lib/data-loader";
 import { useStore } from "@/lib/useStore";
@@ -61,8 +62,8 @@ export function RestDayCard({
         })}`;
   if (variant === "test") {
     return (
-      <div className="rounded border border-bronze/30 border-l-4 border-l-bronze bg-bronze/10 p-4 text-sm">
-        <h1 className="text-[17px] font-semibold text-strong">Test day.</h1>
+      <div className={cardClass() + " text-small"}>
+        <h1 className="text-h3 font-semibold text-strong">Test day.</h1>
         <p className="mt-1 text-muted">
           The 2K test is on. Warm-up 15-20 min including 2-3 short race-pace pieces.
           Log the result via the session card below — the retest metric picks it up.
@@ -80,8 +81,8 @@ export function RestDayCard({
       : null;
     const isRowing = programSlug === "rowing-2k-test-prep";
     return (
-      <div className="rounded border border-line-soft border-l-4 border-l-bronze bg-surface p-4 text-sm">
-        <h1 className="text-[17px] font-semibold text-strong">
+      <div className={cardClass() + " text-small"}>
+        <h1 className="text-h3 font-semibold text-strong">
           {humanDate ? `First session on ${humanDate}.` : "Before the program starts."}
         </h1>
         <p className="mt-1 text-muted">
@@ -94,8 +95,8 @@ export function RestDayCard({
   }
   if (variant === "away") {
     return (
-      <div className="rounded border border-bronze/30 border-l-4 border-l-bronze bg-bronze/10 p-4 text-sm">
-        <h1 className="text-[17px] font-semibold text-strong">Away today.</h1>
+      <div className={cardClass() + " text-small"}>
+        <h1 className="text-h3 font-semibold text-strong">Away today.</h1>
         <p className="mt-1 text-muted">
           No prescribed session. If you do something anyway — a ride, a run, a
           class — log it below; the engine still reads it.
@@ -105,8 +106,8 @@ export function RestDayCard({
   }
   if (variant === "holiday") {
     return (
-      <div className="rounded border border-line-soft border-l-4 border-l-line bg-surface p-4 text-sm">
-        <h1 className="text-[17px] font-semibold text-strong">Holiday / light period.</h1>
+      <div className={cardClass() + " text-small"}>
+        <h1 className="text-h3 font-semibold text-strong">Holiday / light period.</h1>
         <p className="mt-1 text-muted">
           Documented light window between Phase 4 (test) and Phase 5 (Hatch). No prescribed strength session.
           Optional 60% TM movement work. If you train anyway, log it below — the engine still reads it.
@@ -115,8 +116,8 @@ export function RestDayCard({
     );
   }
   return (
-    <div className="rounded border border-line-soft border-l-4 border-l-line bg-surface p-4 text-sm">
-      <h1 className="text-[17px] font-semibold text-strong">Rest day.</h1>
+    <div className={cardClass() + " text-small"}>
+      <h1 className="text-h3 font-semibold text-strong">Rest day.</h1>
       {/* 2026-08-30 — this used to point at "the Extras tab", which stopped
           existing on 2026-08-21 when /extras became /off-plan and dropped out
           of the bottom nav. In an installed PWA (no address bar) that made the
@@ -201,8 +202,8 @@ export function RetestReminder({
   };
 
   return (
-    <div className="rounded border border-bronze/30 border-l-4 border-l-bronze bg-bronze/10 p-4 text-[14px] space-y-2">
-      <p className="font-mono text-[10px] uppercase tracking-widest text-bronze">
+    <div className={cardClass() + " text-small space-y-2"}>
+      <p className="font-mono text-eyebrow uppercase tracking-widest text-bronze">
         Retest window open
       </p>
       <p className="font-semibold text-strong">
@@ -214,12 +215,12 @@ export function RetestReminder({
       </p>
       {displayMetrics.length > 0 ? (
         <div>
-          <p className="font-mono text-[10px] uppercase tracking-widest text-muted mt-1">
+          <p className="font-mono text-eyebrow uppercase tracking-widest text-muted mt-1">
             Log these on Progress → Insights
           </p>
           <ul className="mt-1 space-y-0.5">
             {displayMetrics.map((m, idx) => (
-              <li key={idx} className="text-[13px] text-ink flex items-baseline gap-1.5">
+              <li key={idx} className="text-caption text-ink flex items-baseline gap-1.5">
                 <span aria-hidden className="text-muted">·</span>
                 <span>{m.display_name ?? "Metric"}</span>
               </li>
@@ -230,14 +231,14 @@ export function RetestReminder({
       <div className="flex flex-wrap gap-2 pt-1">
         <Link
           href="/progress"
-          className="text-[14px] font-semibold px-4 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover min-h-[44px] inline-flex items-center"
+          className="text-small font-semibold px-4 py-2 rounded-lg bg-bronze text-ground hover:bg-bronze-hover min-h-[44px] inline-flex items-center"
         >
           Log retest →
         </Link>
         <button
           type="button"
           onClick={onDismiss}
-          className="text-[14px] font-semibold px-4 py-2 rounded border border-line text-ink hover:bg-line-soft min-h-[44px]"
+          className="text-small font-semibold px-4 py-2 rounded-lg border border-line text-ink hover:bg-line-soft min-h-[44px]"
         >
           Not this week
         </button>
@@ -263,15 +264,15 @@ function VerbRow({
       onClick={onClick}
       className={
         variant === "primary"
-          ? "w-full text-left rounded bg-bronze text-ground active:bg-bronze-active px-3 py-2.5 min-h-[52px]"
-          : "w-full text-left rounded border border-line-soft bg-surface active:bg-line-soft/60 px-3 py-2.5 min-h-[52px]"
+          ? "w-full text-left rounded-lg bg-bronze text-ground active:bg-bronze-active px-3 py-2.5 min-h-[52px]"
+          : "w-full text-left rounded-lg border border-line-soft bg-surface active:bg-line-soft/60 px-3 py-2.5 min-h-[52px]"
       }
     >
       <p
         className={
           variant === "primary"
-            ? "text-[14px] font-semibold"
-            : "text-[14px] font-semibold text-ink"
+            ? "text-small font-semibold"
+            : "text-small font-semibold text-ink"
         }
       >
         {label}
@@ -279,8 +280,8 @@ function VerbRow({
       <p
         className={
           variant === "primary"
-            ? "text-[12px] text-ground/80 mt-0.5"
-            : "text-[12px] text-muted mt-0.5"
+            ? "text-caption text-ground/80 mt-0.5"
+            : "text-caption text-muted mt-0.5"
         }
       >
         {caption}
@@ -391,19 +392,19 @@ export function GraduationCard({ program }: { program: Program }) {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-lg border border-bronze/40 border-l-4 border-l-bronze bg-bronze/[0.06] p-4 space-y-3">
+      <div className={cardClass() + " space-y-3"}>
         <div className="flex items-baseline justify-between gap-2 flex-wrap">
           <div>
-            <p className="font-mono text-[10px] uppercase tracking-widest text-bronze">You finished</p>
-            <h2 className="text-lg font-semibold text-strong mt-1">{programName}</h2>
+            <p className="font-mono text-eyebrow uppercase tracking-widest text-bronze">You finished</p>
+            <h2 className="text-h3 font-semibold text-strong mt-1">{programName}</h2>
             {weeksIn ? (
-              <p className="text-[14px] text-muted mt-0.5">
+              <p className="text-small text-muted mt-0.5">
                 {weeksIn} weeks logged. Nice.
               </p>
             ) : null}
           </div>
           {arcVerdict ? (
-            <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
+            <span className="font-mono text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
               <span
                 aria-hidden
                 className={`h-1.5 w-1.5 rounded-full ${
@@ -419,13 +420,13 @@ export function GraduationCard({ program }: { program: Program }) {
           ) : null}
         </div>
         {displayable.length ? (
-          <div className="rounded border border-line-soft bg-surface p-3 space-y-2">
-            <p className="font-mono text-[10px] uppercase tracking-wider text-muted">Where you landed</p>
+          <div className="rounded-lg bg-surface-2 p-3 space-y-2">
+            <p className="font-mono text-eyebrow uppercase tracking-wider text-muted">Where you landed</p>
             <ul className="space-y-1.5">
               {displayable.map((m) => {
                 const delta = deltaFromBaseline(m);
                 return (
-                  <li key={m.metric_id} className="flex items-baseline justify-between gap-2 text-[14px]">
+                  <li key={m.metric_id} className="flex items-baseline justify-between gap-2 text-small">
                     <span className="text-ink truncate">{m.display_name}</span>
                     <span className="font-mono flex items-baseline gap-2 flex-shrink-0">
                       <span className="text-strong">{formatMetric(m.current, m.unit)}</span>
@@ -442,21 +443,21 @@ export function GraduationCard({ program }: { program: Program }) {
             </ul>
           </div>
         ) : (
-          <p className="text-[14px] text-muted italic">
+          <p className="text-small text-muted italic">
             No retest metrics recorded — head to Record to log your final numbers.
           </p>
         )}
         {nextBlockEntry ? (
           <Link
             href={`/programs/${nextBlockEntry.slug}`}
-            className="block rounded border border-slate/40 bg-slate/[0.06] p-3 hover:bg-slate/10 transition-colors"
+            className="block rounded-lg border border-slate/40 bg-slate/[0.06] p-3 hover:bg-slate/10 transition-colors"
           >
-            <p className="font-mono text-[10px] uppercase tracking-widest text-slate">Next block</p>
-            <p className="text-sm font-semibold text-strong mt-0.5">{nextBlockEntry.name}</p>
-            <p className="text-[12px] text-muted mt-1 line-clamp-2">
+            <p className="font-mono text-eyebrow uppercase tracking-widest text-slate">Next block</p>
+            <p className="text-small font-semibold text-strong mt-0.5">{nextBlockEntry.name}</p>
+            <p className="text-caption text-muted mt-1 line-clamp-2">
               {nextBlockEntry.short_description ?? "The next block in this program family."}
             </p>
-            <p className="text-[11px] font-mono uppercase tracking-wider text-slate mt-1.5">
+            <p className="text-eyebrow font-mono uppercase tracking-wider text-slate mt-1.5">
               Preview →
             </p>
           </Link>
@@ -474,7 +475,7 @@ export function GraduationCard({ program }: { program: Program }) {
             />
           ) : null}
           <details className="group">
-            <summary className="min-h-11 flex items-center cursor-pointer text-[14px] font-semibold text-ink list-none">
+            <summary className="min-h-11 flex items-center cursor-pointer text-small font-semibold text-ink list-none">
               Other options
             </summary>
             <div className="space-y-2 pt-1">
@@ -502,10 +503,10 @@ export function GraduationCard({ program }: { program: Program }) {
               ) : null}
               <Link
                 href="/programs"
-                className="block rounded border border-slate/40 bg-surface active:bg-slate/10 px-3 py-2.5 min-h-[52px]"
+                className="block rounded-lg border border-slate/40 bg-surface active:bg-slate/10 px-3 py-2.5 min-h-[52px]"
               >
-                <p className="text-[14px] font-semibold text-ink">Pick your next focus</p>
-                <p className="text-[12px] text-muted mt-0.5">
+                <p className="text-small font-semibold text-ink">Pick your next focus</p>
+                <p className="text-caption text-muted mt-0.5">
                   {nextBlockEntry ? "Preview the next block or browse the catalog" : "Browse the catalog"}
                 </p>
               </Link>
@@ -516,7 +517,7 @@ export function GraduationCard({ program }: { program: Program }) {
         <button
           type="button"
           onClick={() => setConfirmEnd(true)}
-          className="self-start min-h-11 inline-flex items-center px-3 -mx-3 text-[12px] text-red hover:text-red-strong hover:bg-line-soft rounded"
+          className="self-start min-h-11 inline-flex items-center px-3 -mx-3 text-caption text-red hover:text-red-strong hover:bg-line-soft rounded-md"
         >
           End this program
         </button>
@@ -549,7 +550,7 @@ function GraduationFeedback({ slug }: { slug: string | null }) {
 
   if (!open && stored) {
     return (
-      <p className="text-[12px] text-muted italic pt-1">
+      <p className="text-caption text-muted italic pt-1">
         You rated this program {stored.rating}/5.{" "}
         <button
           type="button"
@@ -563,8 +564,8 @@ function GraduationFeedback({ slug }: { slug: string | null }) {
   }
 
   return (
-    <div className="rounded border border-line-soft bg-surface p-3 space-y-2">
-      <p className="font-mono text-[10px] uppercase tracking-wider text-muted">
+    <div className={cardClass() + " space-y-2"}>
+      <p className="font-mono text-eyebrow uppercase tracking-wider text-muted">
         How was this program?
       </p>
       <div className="flex items-center gap-2">
@@ -574,7 +575,7 @@ function GraduationFeedback({ slug }: { slug: string | null }) {
             type="button"
             onClick={() => setRating(n)}
             aria-label={`Rate ${n} of 5`}
-            className={`w-11 h-11 rounded font-mono text-sm ${
+            className={`w-11 h-11 rounded-lg font-mono text-small ${
               rating === n
                 ? "bg-bronze text-ground"
                 : "border border-line text-muted hover:text-ink"
@@ -589,7 +590,7 @@ function GraduationFeedback({ slug }: { slug: string | null }) {
         value={note}
         onChange={(e) => setNote(e.target.value)}
         placeholder="Optional — what worked, what didn't, what surprised you"
-        className="w-full text-[14px] px-2 py-1.5 border border-line rounded bg-ground focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze resize-none"
+        className="w-full text-small px-2 py-1.5 border border-line rounded-lg bg-ground focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze resize-none"
       />
       <div className="flex gap-2">
         <button
@@ -600,7 +601,7 @@ function GraduationFeedback({ slug }: { slug: string | null }) {
             saveGraduationFeedback(slug, rating, note.trim() || undefined);
             setOpen(false);
           }}
-          className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover disabled:opacity-40 disabled:cursor-not-allowed min-h-[36px]"
+          className="font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-bronze text-ground hover:bg-bronze-hover disabled:opacity-40 disabled:cursor-not-allowed min-h-[36px]"
         >
           Save
         </button>
@@ -608,7 +609,7 @@ function GraduationFeedback({ slug }: { slug: string | null }) {
           <button
             type="button"
             onClick={() => setOpen(false)}
-            className="font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-muted hover:text-ink min-h-[36px]"
+            className="font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line text-muted hover:text-ink min-h-[36px]"
           >
             Cancel
           </button>

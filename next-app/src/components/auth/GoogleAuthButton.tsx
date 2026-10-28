@@ -70,7 +70,7 @@ export function GoogleAuthButton({
         type="button"
         onClick={onClick}
         disabled={submitting || disabled}
-        className="w-full flex items-center justify-center gap-3 py-3 min-h-[44px] rounded border border-line bg-surface hover:bg-line-soft text-strong text-[14px] font-medium disabled:opacity-50 transition-colors"
+        className="w-full flex items-center justify-center gap-3 py-3 min-h-[44px] rounded-lg border border-line bg-surface hover:bg-line-soft text-strong text-small font-medium disabled:opacity-50 transition-colors"
         aria-label="Continue with Google"
       >
         <GoogleGlyph />
@@ -79,7 +79,7 @@ export function GoogleAuthButton({
         </span>
       </button>
       {error ? (
-        <p className="text-[12px] text-red border-l-4 border-red pl-2">{error}</p>
+        <p className="text-caption text-red border-l-4 border-red pl-2">{error}</p>
       ) : null}
     </div>
   );

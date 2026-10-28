@@ -14,6 +14,8 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
+import { cardClass } from "@/components/ui/Card";
+import { cn } from "@/lib/utils";
 
 export default function ReportError({
   error,
@@ -30,41 +32,41 @@ export default function ReportError({
   return (
     <div className="space-y-6 pt-4">
       <header>
-        <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">
+        <h1 className="text-h1 tracking-tight text-strong leading-none">
           Training summary
         </h1>
-        <p className="mt-2 text-[14px] text-muted">
+        <p className="mt-2 text-small text-muted">
           Something on this page couldn&apos;t render.
         </p>
       </header>
 
-      <div className="rounded border border-line-soft bg-surface p-4 space-y-3">
-        <p className="text-[14px] text-ink">
+      <div className={cn(cardClass(), "space-y-3")}>
+        <p className="text-small text-ink">
           The report couldn&apos;t assemble. Your logs are safe. Try one of these:
         </p>
         <div className="flex flex-wrap gap-2">
           <button
             type="button"
             onClick={reset}
-            className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line-strong text-ink hover:bg-line-soft min-h-[44px]"
+            className="inline-flex items-center gap-1.5 font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line-strong text-ink hover:bg-line-soft min-h-[44px]"
           >
             Retry
           </button>
           <Link
             href="/"
-            className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line-strong text-ink hover:bg-line-soft min-h-[44px]"
+            className="inline-flex items-center gap-1.5 font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line-strong text-ink hover:bg-line-soft min-h-[44px]"
           >
             Back to Today
           </Link>
           <Link
             href="/progress"
-            className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line-strong text-ink hover:bg-line-soft min-h-[44px]"
+            className="inline-flex items-center gap-1.5 font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line-strong text-ink hover:bg-line-soft min-h-[44px]"
           >
             Open Progress
           </Link>
         </div>
         {error.digest ? (
-          <p className="font-mono text-[10px] text-muted uppercase tracking-widest">
+          <p className="font-mono text-eyebrow text-muted uppercase tracking-widest">
             Error ref: {error.digest}
           </p>
         ) : null}

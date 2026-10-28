@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/WeeklyHeatmap";
 import type { Store } from "@/lib/schemas";
 import { cn } from "@/lib/utils";
+import { cardClass } from "@/components/ui/Card";
 
 export type CutCActivityHeatmapProps = {
   store: Store;
@@ -114,8 +115,8 @@ export function CutCActivityHeatmap({ store, className }: CutCActivityHeatmapPro
 
   if (use12Week) {
     return (
-      <div className={cn("rounded border border-line-soft bg-surface p-3", className)}>
-        <p className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted mb-2">
+      <div className={cn(cardClass(), className)}>
+        <p className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted mb-2">
           Activity — last 12 weeks
         </p>
         <WeeklyHeatmap
@@ -157,9 +158,9 @@ function YearColumnHeatmap({
     <div
       role="img"
       aria-label={`Monthly session totals from ${rangeStart} to ${rangeEnd}. Max ${maxCount} sessions in a single month.`}
-      className={cn("rounded border border-line-soft bg-surface p-3", className)}
+      className={cn(cardClass(), className)}
     >
-      <p className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted mb-2">
+      <p className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted mb-2">
         Sessions per month — {rangeStart}{rangeStart !== rangeEnd ? ` · ${rangeEnd}` : ""}
       </p>
 
@@ -168,7 +169,7 @@ function YearColumnHeatmap({
         {MONTH_LETTERS.map((letter, i) => (
           <span
             key={i}
-            className="text-center font-mono text-[10px] uppercase text-muted"
+            className="text-center font-mono text-eyebrow uppercase text-muted"
           >
             {letter}
           </span>
@@ -208,7 +209,7 @@ function YearColumnHeatmap({
                   </div>
                 );
               })}
-              <span className="pl-2 font-mono text-[10px] text-muted self-end">{year}</span>
+              <span className="pl-2 font-mono text-eyebrow text-muted self-end">{year}</span>
             </div>
           );
         })}

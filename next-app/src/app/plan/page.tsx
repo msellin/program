@@ -19,6 +19,7 @@ import { humanizeExerciseId } from "@/lib/humanize-metrics";
 import { detectMissedWeek } from "@/lib/engine/missed-week";
 import { WeekRecoveryCard } from "@/components/plan/WeekRecoveryCard";
 import type { DayLog, Phase, Program, RunLog, ScheduledBlock, Store } from "@/lib/schemas";
+import { Card, cardClass } from "@/components/ui/Card";
 
 type WeekDayEntry = {
   dateISO: string;
@@ -110,7 +111,7 @@ export default function WeekPage() {
 
   const program = programs[0] ?? null;
 
-  if (!hydrated) return <div className="mt-8 text-sm text-muted">Loading…</div>;
+  if (!hydrated) return <div className="mt-8 text-small text-muted">Loading…</div>;
   if (!activeSlugs.length) {
     return (
       <EmptyStateCard
@@ -120,7 +121,7 @@ export default function WeekPage() {
       />
     );
   }
-  if (!program) return <div className="mt-8 text-sm text-muted">Loading…</div>;
+  if (!program) return <div className="mt-8 text-small text-muted">Loading…</div>;
 
   const wt = program.weekly_template as Wt | undefined;
   const programRules = ((program as unknown as { principles?: ProgramRule[] }).principles ?? [])
@@ -265,10 +266,10 @@ export default function WeekPage() {
           bottom-nav Programs tab a step away). Subtitle gets mt-2
           breathing room. */}
       <header>
-        <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">
+        <h1 className="text-h1 tracking-tight text-strong leading-none">
           Plan
         </h1>
-        <p className="mt-2 text-[14px] text-muted">
+        <p className="mt-2 text-small text-muted">
           The 7-day rhythm. Browse other days, move sessions, skip a day — all from here.
         </p>
       </header>
@@ -303,18 +304,18 @@ export default function WeekPage() {
           permanently-reserved slot (invisible on offset === 0). The row width
           stays constant across all offsets, so arrows and range label never
           move. */}
-      <div className="flex items-center gap-2 rounded border border-line bg-surface p-1">
+      <div className="flex items-center gap-2 rounded-lg border border-line bg-surface p-1">
         <button
           type="button"
           onClick={() => setOffset(offset - 1)}
           disabled={atPastEdge}
           aria-label="Previous week"
-          className="w-11 h-11 flex items-center justify-center rounded hover:bg-surface-2 text-muted hover:text-ink disabled:opacity-30 disabled:cursor-not-allowed"
+          className="w-11 h-11 flex items-center justify-center rounded-lg hover:bg-surface-2 text-muted hover:text-ink disabled:opacity-30 disabled:cursor-not-allowed"
         >
           ‹
         </button>
         <div className="flex-1 text-center">
-          <p className="text-[14px] font-semibold text-strong leading-tight">{rangeLabel}</p>
+          <p className="text-small font-semibold text-strong leading-tight">{rangeLabel}</p>
           <p className="mono-caps mt-0.5">
             {offset === 0
               ? "This week"
@@ -330,7 +331,7 @@ export default function WeekPage() {
           onClick={() => setOffset(offset + 1)}
           disabled={atFutureEdge}
           aria-label="Next week"
-          className="w-11 h-11 flex items-center justify-center rounded hover:bg-surface-2 text-muted hover:text-ink disabled:opacity-30 disabled:cursor-not-allowed"
+          className="w-11 h-11 flex items-center justify-center rounded-lg hover:bg-surface-2 text-muted hover:text-ink disabled:opacity-30 disabled:cursor-not-allowed"
         >
           ›
         </button>
@@ -342,7 +343,7 @@ export default function WeekPage() {
           aria-hidden={offset === 0}
           tabIndex={offset === 0 ? -1 : 0}
           className={cn(
-            "w-11 h-11 flex items-center justify-center rounded font-mono text-[11px]",
+            "w-11 h-11 flex items-center justify-center rounded-lg font-mono text-eyebrow",
             offset === 0
               ? "invisible pointer-events-none"
               : "hover:bg-surface-2 text-bronze",
@@ -353,24 +354,24 @@ export default function WeekPage() {
       </div>
 
       {weekPhase ? (
-        <div className="rounded border border-line-soft border-l-4 border-l-slate bg-surface px-3 py-2 text-[14px]">
+        <Card flush className="px-3 py-2 text-small">
           <span className="font-semibold text-strong">
             {humanPhaseName(weekPhase.name)
               .replace(/interleaved consolidation/i, "Mixed practice")
               .replace(/\s+for all tiers$/i, "")}
           </span>
           {weekPhase.goal ? <span className="text-muted"> · {weekPhase.goal}</span> : null}
-        </div>
+        </Card>
       ) : (
-        <div className="rounded border border-line-soft border-l-4 border-l-slate bg-surface px-3 py-2 text-[14px] text-muted">
+        <Card flush className="px-3 py-2 text-small text-muted">
           {program.slug === "anterior-hip-rebuild"
             ? "No phase covers this week — either before the program starts or in the Phase 4→5 light window."
             : "No phase covers this week — you're looking at a date before the program starts or after its final phase."}
-        </div>
+        </Card>
       )}
 
       {atFutureEdge ? (
-        <p className="text-[14px] text-muted italic">
+        <p className="text-small text-muted italic">
           Looking further ahead than {FUTURE_WEEKS} weeks isn&apos;t useful — the plan will have
           adapted by then. See milestones on Progress for the year-long shape.
         </p>
@@ -380,7 +381,7 @@ export default function WeekPage() {
           and 2+ programs are active so the multi-dot per day reads
           without hover. See §0.3 of the plan. */}
       {blockObjectOn && activeSlugs.length >= 2 ? (
-        <div className="flex items-center gap-3 flex-wrap font-mono text-[10px] text-muted uppercase tracking-widest">
+        <div className="flex items-center gap-3 flex-wrap font-mono text-eyebrow text-muted uppercase tracking-widest">
           <span className="inline-flex items-center gap-1">
             <span className="w-2 h-2 rounded-full bg-muted/60" aria-hidden /> planned
           </span>
@@ -424,7 +425,7 @@ export default function WeekPage() {
           or per-week overrides (engine-builder's week_1 / week_2 shape).
           The per-day loop below already handles missing `templateEntry`
           gracefully — no bail needed. */}
-      <div className="rounded border border-line bg-surface divide-y divide-line-soft">
+      <Card flush className="divide-y divide-line-soft">
           {DAY_NAMES.map((dayName, i) => {
             const dateForDay = new Date(viewedMon);
             dateForDay.setDate(viewedMon.getDate() + i);
@@ -594,10 +595,10 @@ export default function WeekPage() {
                         />
                       ))}
                       {/* Audit 2026-08-18 (visual-craft) — "+N" bumped
-                          from text-[10px] to text-[10px] to respect the
+                          from text-eyebrow to text-eyebrow to respect the
                           tokens.md typography floor. */}
                       {perProgramDots.dots.length > 4 ? (
-                        <span className="text-[10px] font-mono text-muted ml-0.5">
+                        <span className="text-eyebrow font-mono text-muted ml-0.5">
                           +{perProgramDots.dots.length - 4}
                         </span>
                       ) : null}
@@ -639,32 +640,32 @@ export default function WeekPage() {
                     <div className="flex items-baseline justify-between gap-3">
                       <div className="font-semibold flex items-baseline gap-2 flex-wrap">
                         <span className="inline-block w-9">{dayName}</span>
-                        <span className="font-mono text-[11px] text-muted font-normal">
+                        <span className="font-mono text-eyebrow text-muted font-normal">
                           {dateForDay.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
                         </span>
                         {isToday ? (
-                          <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full bg-bronze/15 text-bronze font-normal">
+                          <span className="text-eyebrow font-mono uppercase tracking-wider px-2 py-0.5 rounded-full bg-bronze/15 text-bronze font-normal">
                             Today
                           </span>
                         ) : null}
                         {doneCount > 0 && !isToday ? (
-                          <span className="text-[11px] text-green font-mono font-normal">
+                          <span className="text-eyebrow text-green font-mono font-normal">
                             · {doneCount} logged
                           </span>
                         ) : null}
                         {runCount > 0 && !isToday ? (
-                          <span className="text-[11px] text-green font-mono font-normal">
+                          <span className="text-eyebrow text-green font-mono font-normal">
                             · {runCount} {runCount === 1 ? "activity" : "activities"}
                           </span>
                         ) : null}
                         {contributingProgramCount > 1 ? (
-                          <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted font-normal inline-flex items-center gap-1.5">
+                          <span className="text-eyebrow font-mono uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted font-normal inline-flex items-center gap-1.5">
                             <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-amber" />
                             {contributingProgramCount} tracks
                           </span>
                         ) : null}
                       </div>
-                      <span className="font-mono text-[11px] text-muted text-right flex items-center gap-1">
+                      <span className="font-mono text-eyebrow text-muted text-right flex items-center gap-1">
                         {daySkipped ? (
                           <span className="text-amber">Skipped</span>
                         ) : isRest ? "rest" : names ? "" : "—"}
@@ -680,7 +681,7 @@ export default function WeekPage() {
                     </div>
                     <p
                       className={cn(
-                        "text-[14px] mt-1",
+                        "text-small mt-1",
                         skip ? "line-through text-muted" : "text-muted",
                         !isExpanded && "line-clamp-1",
                       )}
@@ -692,7 +693,7 @@ export default function WeekPage() {
                     <button
                       type="button"
                       onClick={() => clearSkip(dateISO)}
-                      className="mt-1 min-h-[44px] text-[13px] text-slate underline underline-offset-4 hover:text-ink"
+                      className="mt-1 min-h-[44px] text-caption text-slate underline underline-offset-4 hover:text-ink"
                     >
                       Unskip
                     </button>
@@ -700,20 +701,20 @@ export default function WeekPage() {
                   {isExpanded ? (
                     <div id={`weekday-${dateISO}`}>
                       {override?.reason ? (
-                        <p className="text-[12px] text-slate italic mt-1">↳ {override.reason}</p>
+                        <p className="text-caption text-slate italic mt-1">↳ {override.reason}</p>
                       ) : null}
                       {skip?.moved_to ? (
-                        <p className="text-[12px] text-muted italic mt-1">Moved to {skip.moved_to}</p>
+                        <p className="text-caption text-muted italic mt-1">Moved to {skip.moved_to}</p>
                       ) : null}
                       {templateEntry?.conditioning && !skip && !override ? (
-                        <p className="text-[12px] text-muted italic mt-1">{templateEntry.conditioning}</p>
+                        <p className="text-caption text-muted italic mt-1">{templateEntry.conditioning}</p>
                       ) : null}
                       {dayLog?.runs?.length ? (
                         <ul className="mt-1 space-y-0.5">
                           {dayLog.runs.map((r, idx) => (
                             <li
                               key={idx}
-                              className="text-[12px] font-mono text-green flex items-baseline gap-1.5"
+                              className="text-caption font-mono text-green flex items-baseline gap-1.5"
                             >
                               <span aria-hidden>✓</span>
                               <span>
@@ -730,7 +731,7 @@ export default function WeekPage() {
                         const topLift = topLoggedLift(dayLog);
                         if (!topLift) return null;
                         return (
-                          <p className="mt-1 text-[12px] font-mono text-green flex items-baseline gap-1.5">
+                          <p className="mt-1 text-caption font-mono text-green flex items-baseline gap-1.5">
                             <span aria-hidden>✓</span>
                             <span>{topLift}</span>
                           </p>
@@ -760,7 +761,7 @@ export default function WeekPage() {
               </div>
             );
           })}
-        </div>
+        </Card>
 
       {/* Programme rules — BOTH arrays (2026-09-05).
           `weekly_template.principles` is scheduling guidance ("48h between
@@ -867,7 +868,7 @@ function WeekDayActions({
         <button
           type="button"
           onClick={() => clearSkip(dateISO)}
-          className="w-full font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded border border-line text-muted hover:text-ink hover:bg-line-soft min-h-[44px]"
+          className="w-full font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line text-muted hover:text-ink hover:bg-line-soft min-h-[44px]"
         >
           {isOverride ? "Undo move" : "Unskip"}
         </button>
@@ -887,7 +888,7 @@ function WeekDayActions({
       <div className="mt-3">
         <Link
           href={`/session/${primarySlug}?date=${dateISO}`}
-          className="w-full text-[14px] font-semibold px-3 py-2 rounded border border-line text-ink hover:bg-line-soft min-h-[44px] flex items-center justify-center text-center"
+          className="w-full text-small font-semibold px-3 py-2 rounded-lg border border-line text-ink hover:bg-line-soft min-h-[44px] flex items-center justify-center text-center"
         >
           Log a session →
         </Link>
@@ -904,7 +905,7 @@ function WeekDayActions({
             <Link
               key={slug}
               href={`/session/${slug}?date=${dateISO}`}
-              className="w-full text-[14px] font-semibold px-3 py-2 rounded border border-line-strong text-ink hover:bg-line-soft min-h-[44px] flex items-center justify-center text-center"
+              className="w-full text-small font-semibold px-3 py-2 rounded-lg border border-line-strong text-ink hover:bg-line-soft min-h-[44px] flex items-center justify-center text-center"
             >
               Log {slug.replace(/-/g, " ")} →
             </Link>
@@ -927,14 +928,14 @@ function WeekDayActions({
         {isToday ? (
           <Link
             href="/"
-            className="text-[14px] font-semibold px-3 py-2 rounded bg-bronze text-ground hover:bg-bronze-hover min-h-[44px] flex items-center justify-center text-center"
+            className="text-small font-semibold px-3 py-2 rounded-lg bg-bronze text-ground hover:bg-bronze-hover min-h-[44px] flex items-center justify-center text-center"
           >
             Open Day
           </Link>
         ) : isPast && primarySlug ? (
           <Link
             href={`/session/${primarySlug}?date=${dateISO}`}
-            className="text-[14px] font-semibold px-3 py-2 rounded border border-line-strong text-ink hover:bg-line-soft min-h-[44px] flex items-center justify-center text-center"
+            className="text-small font-semibold px-3 py-2 rounded-lg border border-line-strong text-ink hover:bg-line-soft min-h-[44px] flex items-center justify-center text-center"
           >
             Log session →
           </Link>
@@ -947,7 +948,7 @@ function WeekDayActions({
           // is just exposing that.
           <Link
             href={`/session/${primarySlug}?date=${dateISO}`}
-            className="text-[14px] font-semibold px-3 py-2 rounded border border-line-strong text-ink hover:bg-line-soft min-h-[44px] flex items-center justify-center text-center"
+            className="text-small font-semibold px-3 py-2 rounded-lg border border-line-strong text-ink hover:bg-line-soft min-h-[44px] flex items-center justify-center text-center"
           >
             Preview →
           </Link>
@@ -958,7 +959,7 @@ function WeekDayActions({
           type="button"
           onClick={() => setMoveOpen(true)}
           disabled={!canMove}
-          className="text-[14px] font-semibold px-3 py-2 rounded border border-line text-ink hover:bg-line-soft min-h-[44px] disabled:opacity-40 disabled:cursor-not-allowed disabled:text-muted disabled:border-line-soft disabled:hover:bg-transparent"
+          className="text-small font-semibold px-3 py-2 rounded-lg border border-line text-ink hover:bg-line-soft min-h-[44px] disabled:opacity-40 disabled:cursor-not-allowed disabled:text-muted disabled:border-line-soft disabled:hover:bg-transparent"
         >
           Move…
         </button>
@@ -966,7 +967,7 @@ function WeekDayActions({
           type="button"
           onClick={() => setConfirmSkip(true)}
           disabled={!canSkip}
-          className="text-[14px] font-semibold px-3 py-2 rounded border border-line text-ink hover:bg-line-soft min-h-[44px] disabled:opacity-40 disabled:cursor-not-allowed disabled:text-muted disabled:border-line-soft disabled:hover:bg-transparent"
+          className="text-small font-semibold px-3 py-2 rounded-lg border border-line text-ink hover:bg-line-soft min-h-[44px] disabled:opacity-40 disabled:cursor-not-allowed disabled:text-muted disabled:border-line-soft disabled:hover:bg-transparent"
         >
           Skip
         </button>
@@ -1008,13 +1009,13 @@ function RulesAccordion({ principles }: { principles: string[] }) {
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="inline-flex items-center gap-1.5 text-[14px] text-slate hover:text-ink"
+        className="inline-flex items-center gap-1.5 text-small text-slate hover:text-ink"
       >
         <span aria-hidden>{open ? "▾" : "▸"}</span>
         {open ? "Hide" : "Show"} rules of the week
       </button>
       {open ? (
-        <ul className="mt-2 rounded border border-line bg-surface p-3 space-y-2 list-disc pl-6 text-sm">
+        <ul className={cardClass() + " mt-2 space-y-2 list-disc pl-6 text-small"}>
           {principles.map((p, i) => (
             <li key={i}>{p}</li>
           ))}

@@ -7,6 +7,7 @@ import { RetestLoggingSheet } from "@/components/workout/RetestLoggingSheet";
 import { useProposalActions } from "@/lib/proposals/useProposalActions";
 import { humanizeMetricId, humanizeVerdict, humanizeExerciseId } from "@/lib/humanize-metrics";
 import type { Proposal } from "@/lib/schemas";
+import { cardClass, type CardStatus } from "@/components/ui/Card";
 
 /**
  * A5 (Phase 3). One card per `Proposal` payload. Renders the reason /
@@ -34,7 +35,7 @@ export function ProposalCard({
     <section
       data-proposal-card
       aria-labelledby={`proposal-${proposal.id}`}
-      className={`rounded border ${tone.border} ${tone.borderLeft} ${tone.bg} p-3 space-y-2`}
+      className={`${cardClass({ status: tone.status })} space-y-2`}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
@@ -46,7 +47,7 @@ export function ProposalCard({
           {eyebrow ? (
             <h2
               id={`proposal-${proposal.id}`}
-              className={`font-mono text-[10px] uppercase tracking-widest ${tone.eyebrow} flex items-center gap-1.5 font-normal`}
+              className={`font-mono text-eyebrow uppercase tracking-widest ${tone.eyebrow} flex items-center gap-1.5 font-normal`}
             >
               {proposal.kind === "tm_bump" ||
               proposal.kind === "tier_advance" ||
@@ -61,11 +62,11 @@ export function ProposalCard({
               {eyebrow}
             </h2>
           ) : null}
-          <p className="text-[14px] text-ink mt-1 leading-snug">
+          <p className="text-small text-ink mt-1 leading-snug">
             <span className="text-muted">Because:</span> {proposal.reason}
           </p>
           {proposal.kind === "tm_bump" ? (
-            <ul className="text-[12px] font-mono text-ink mt-1 space-y-0.5">
+            <ul className="text-caption font-mono text-ink mt-1 space-y-0.5">
               {proposal.lifts.map((l) => (
                 <li key={l.exerciseId}>
                   {/* P1-66 (Batch 27) — was rendering raw exercise_id
@@ -81,7 +82,7 @@ export function ProposalCard({
               adjustment nothing would ever read. It now targets the next
               loaded day, and says so when that is not today. */}
           {proposal.kind === "day_adjustment_soften" && proposal.signalDate ? (
-            <p className="text-[12px] font-mono uppercase tracking-wider text-bronze mt-1">
+            <p className="text-caption font-mono uppercase tracking-wider text-bronze mt-1">
               Applies to{" "}
               {new Date(proposal.date + "T12:00:00Z").toLocaleDateString("en-GB", {
                 weekday: "long",
@@ -96,7 +97,7 @@ export function ProposalCard({
               {proposal.matches.map((m) => (
                 <span
                   key={m}
-                  className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5"
+                  className="font-mono text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5"
                 >
                   <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-amber" />
                   {/^life load/i.test(m) ? "A heavy week outside training" : m}
@@ -105,13 +106,13 @@ export function ProposalCard({
             </div>
           ) : null}
           {proposal.kind === "retest_due" ? (
-            <p className="text-[12px] font-mono text-ink mt-1">
+            <p className="text-caption font-mono text-ink mt-1">
               Week {proposal.currentWeek} · log {proposal.metricDisplayName}
               {proposal.metricUnit ? ` (${proposal.metricUnit})` : ""}
             </p>
           ) : null}
           {proposal.kind === "non_responder_recommendation" ? (
-            <ul className="text-[12px] font-mono text-ink mt-1 space-y-0.5">
+            <ul className="text-caption font-mono text-ink mt-1 space-y-0.5">
               {proposal.perMetric.map((m) => (
                 <li key={m.metric_id}>
                   {humanizeMetricId(m.metric_id)}
@@ -125,7 +126,7 @@ export function ProposalCard({
           ) : null}
           {proposal.kind === "readiness_after_layoff" ? (
             <>
-              <ul className="text-[12px] font-mono text-ink mt-1 space-y-0.5">
+              <ul className="text-caption font-mono text-ink mt-1 space-y-0.5">
                 {proposal.evidence.map((e) => (
                   <li key={e.date + e.exerciseId}>
                     {e.date} · {humanizeExerciseId(e.exerciseId)} · {e.weightKg} kg × {e.reps}
@@ -138,7 +139,7 @@ export function ProposalCard({
                   "2 most recent qualifying" + counts any non-qualifying
                   strength sessions skipped in between so the rule reads
                   honestly. */}
-              <p className="text-[11px] text-muted italic mt-1">
+              <p className="text-eyebrow text-muted italic mt-1">
                 2 most recent qualifying sessions
                 {proposal.nonQualifyingSessionsSkipped > 0
                   ? ` · ${proposal.nonQualifyingSessionsSkipped} lower-intensity session${proposal.nonQualifyingSessionsSkipped === 1 ? "" : "s"} in between didn't hit the threshold`
@@ -180,27 +181,21 @@ export function ProposalCard({
 }
 
 type Tone = {
-  border: string;
-  borderLeft: string;
-  bg: string;
+  status?: CardStatus;
   eyebrow: string;
 };
 
 function toneFor(p: Proposal): Tone {
-  // Rehab-safety amber left-border; engine-cited bronze/slate; opportunistic slate.
+  // Status bar only for amber/green/red; engine-cited and opportunistic proposals are plain cards.
   switch (p.kind) {
     case "day_adjustment_soften":
       return {
-        border: "border-amber/40",
-        borderLeft: "border-l-4 border-l-amber",
-        bg: "bg-amber/10",
+        status: "amber",
         eyebrow: "text-amber",
       };
     case "readiness_after_layoff":
       return {
-        border: "border-green/40",
-        borderLeft: "border-l-4 border-l-green",
-        bg: "bg-green/10",
+        status: "green",
         eyebrow: "text-green",
       };
     case "non_responder_recommendation":
@@ -209,24 +204,17 @@ function toneFor(p: Proposal): Tone {
       // signal to stop grinding.
       return p.verdict === "true_non_response"
         ? {
-            border: "border-red/40",
-            borderLeft: "border-l-4 border-l-red",
-            bg: "bg-red/10",
+        status: "red",
             eyebrow: "text-red",
           }
         : {
-            border: "border-amber/40",
-            borderLeft: "border-l-4 border-l-amber",
-            bg: "bg-amber/10",
+        status: "amber",
             eyebrow: "text-amber",
           };
     case "tier_advance":
     case "tm_bump":
     case "retest_due":
       return {
-        border: "border-slate/40",
-        borderLeft: "border-l-4 border-l-slate",
-        bg: "bg-slate/10",
         eyebrow: "text-slate",
       };
   }

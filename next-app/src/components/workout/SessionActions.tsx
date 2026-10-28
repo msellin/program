@@ -6,6 +6,7 @@ import { useStore } from "@/lib/useStore";
 import { useFocusTrap } from "@/lib/useFocusTrap";
 import { today as todayISO, iso } from "@/lib/utils";
 import type { Program } from "@/lib/schemas";
+import { Card } from "@/components/ui/Card";
 
 type Props = {
   blockIds: string[];
@@ -26,10 +27,10 @@ export function SessionActions({ blockIds, date, program }: Props) {
 
   if (skipped) {
     return (
-      <div className="rounded border border-line-soft border-l-4 border-l-amber bg-surface p-3 flex items-center justify-between gap-3">
-        <div className="text-sm">
+      <Card status="amber" className="flex items-center justify-between gap-3">
+        <div className="text-small">
           <p className="font-semibold text-strong">Session skipped today</p>
-          <p className="text-muted text-[14px] mt-0.5">
+          <p className="text-muted text-small mt-0.5">
             {skipped.moved_to
               ? `Moved to ${skipped.moved_to}`
               : (skipped.reason ?? "No reason logged")}
@@ -38,11 +39,11 @@ export function SessionActions({ blockIds, date, program }: Props) {
         <button
           type="button"
           onClick={() => (program ? undoSkip(active, program) : clearSkip(active))}
-          className="text-[12px] mono-caps text-bronze hover:text-bronze-hover"
+          className="text-caption mono-caps text-bronze hover:text-bronze-hover"
         >
           Undo
         </button>
-      </div>
+      </Card>
     );
   }
 
@@ -52,7 +53,7 @@ export function SessionActions({ blockIds, date, program }: Props) {
         <button
           type="button"
           onClick={() => setOpen("move")}
-          className="flex flex-col items-center justify-center gap-1 px-2 py-2 min-h-[52px] border border-line-strong rounded bg-surface hover:bg-surface-2 text-[12px]"
+          className="flex flex-col items-center justify-center gap-1 px-2 py-2 min-h-[52px] border border-line-strong rounded-lg bg-surface hover:bg-surface-2 text-caption"
         >
           <CalendarClock size={14} />
           <span>Move day</span>
@@ -60,7 +61,7 @@ export function SessionActions({ blockIds, date, program }: Props) {
         <button
           type="button"
           onClick={() => setOpen("skip")}
-          className="flex flex-col items-center justify-center gap-1 px-2 py-2 min-h-[52px] border border-line-strong rounded bg-surface hover:bg-surface-2 text-[12px]"
+          className="flex flex-col items-center justify-center gap-1 px-2 py-2 min-h-[52px] border border-line-strong rounded-lg bg-surface hover:bg-surface-2 text-caption"
         >
           <SkipForward size={14} />
           <span>Skip today</span>
@@ -68,7 +69,7 @@ export function SessionActions({ blockIds, date, program }: Props) {
         <button
           type="button"
           onClick={() => setOpen("week")}
-          className="flex flex-col items-center justify-center gap-1 px-2 py-2 min-h-[52px] border border-line-strong rounded bg-surface hover:bg-surface-2 text-[12px]"
+          className="flex flex-col items-center justify-center gap-1 px-2 py-2 min-h-[52px] border border-line-strong rounded-lg bg-surface hover:bg-surface-2 text-caption"
         >
           <CalendarX2 size={14} />
           <span>Whole week</span>
@@ -177,19 +178,19 @@ function WeekSheet({
             <X size={18} />
           </button>
         </div>
-        <p className="text-[14px] text-muted">
+        <p className="text-small text-muted">
           Every strength day in the week of <strong className="text-strong">{weekLabel}</strong> gets marked skipped and its session moves forward by seven days.
         </p>
-        <div className="rounded border border-line-soft bg-surface-2/40 p-3 text-[14px] leading-snug space-y-1.5">
+        <div className="rounded-lg bg-surface-2 p-3 text-small leading-snug space-y-1.5">
           <p><span className="text-ink font-semibold">Zero sessions lost.</span> Every strength day this week reappears next week.</p>
           <p><span className="text-ink font-semibold">Phase runs 1 week longer.</span> If your phase was 4 weeks, it&apos;s now 5.</p>
           <p><span className="text-ink font-semibold">Rest / accessory days unchanged.</span> Only strength blocks shift.</p>
         </div>
-        <p className="text-[12px] text-muted italic">
+        <p className="text-caption text-muted italic">
           Use this for travel, illness, or any planned week off — not a single missed day (use plain Skip for that).
         </p>
         {phaseEndsSoon ? (
-          <p className="text-[12px] text-amber border-l-4 border-amber pl-2">
+          <p className="text-caption text-amber">
             Shifting this week pushes some sessions past the current phase
             (&ldquo;{activePhase?.name}&rdquo;). Those sessions may collide with the
             next phase&apos;s prescription. Consider skipping day-by-day instead.
@@ -203,17 +204,17 @@ function WeekSheet({
             value={reason}
             onChange={(e) => setReason(e.target.value)}
             placeholder="travelling, sick, deload…"
-            className="w-full px-2 py-2 min-h-[44px] border border-line rounded bg-surface text-sm focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
+            className="w-full px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface text-small focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
           />
         </div>
         <div className="flex gap-2 pt-1">
-          <button type="button" onClick={onCancel} className="flex-1 border border-line-strong rounded py-2 min-h-[44px] text-sm hover:bg-surface-2">
+          <button type="button" onClick={onCancel} className="flex-1 border border-line-strong rounded-lg py-2 min-h-[44px] text-small hover:bg-surface-2">
             Cancel
           </button>
           <button
             type="button"
             onClick={() => onConfirm(reason || undefined)}
-            className="flex-1 bg-bronze text-ground rounded py-2 min-h-[44px] text-sm font-semibold hover:bg-bronze-hover"
+            className="flex-1 bg-bronze text-ground rounded-lg py-2 min-h-[44px] text-small font-semibold hover:bg-bronze-hover"
           >
             Shift whole week
           </button>
@@ -266,7 +267,7 @@ function ConfirmSheet({
             <X size={18} />
           </button>
         </div>
-        <p className="text-[14px] text-muted">{body}</p>
+        <p className="text-small text-muted">{body}</p>
         {askReason ? (
           <div>
             <label className="mono-caps block mb-1">Reason (optional)</label>
@@ -275,7 +276,7 @@ function ConfirmSheet({
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               placeholder="e.g. travelling, hip flared, tired"
-              className="w-full px-2 py-1.5 border border-line rounded bg-surface text-sm"
+              className="w-full px-2 py-1.5 border border-line rounded-lg bg-surface text-small"
             />
           </div>
         ) : null}
@@ -283,14 +284,14 @@ function ConfirmSheet({
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 border border-line-strong rounded py-2 text-sm hover:bg-surface-2"
+            className="flex-1 border border-line-strong rounded-lg py-2 text-small hover:bg-surface-2"
           >
             Cancel
           </button>
           <button
             type="button"
             onClick={() => onConfirm(reason || undefined)}
-            className="flex-1 bg-bronze text-ground rounded py-2 text-sm font-semibold hover:bg-bronze-hover"
+            className="flex-1 bg-bronze text-ground rounded-lg py-2 text-small font-semibold hover:bg-bronze-hover"
           >
             {confirmLabel}
           </button>
@@ -336,7 +337,7 @@ function SkipSheet({
             <X size={18} />
           </button>
         </div>
-        <p className="text-[14px] text-muted">
+        <p className="text-small text-muted">
           Pick how the rest of your week responds. No TM change either way; your trajectory continues from your last completed session.
         </p>
 
@@ -344,7 +345,7 @@ function SkipSheet({
           <button
             type="button"
             onClick={() => setShift(false)}
-            className={`w-full text-left rounded border p-3 space-y-1 ${
+            className={`w-full text-left rounded-lg border p-3 space-y-1 ${
               !shift
                 ? "border-bronze bg-bronze/10"
                 : "border-line hover:border-slate/40 bg-surface"
@@ -354,9 +355,9 @@ function SkipSheet({
               <span className={`w-4 h-4 rounded-full border flex-shrink-0 flex items-center justify-center ${!shift ? "border-bronze bg-bronze" : "border-line"}`}>
                 {!shift ? <span className="w-1.5 h-1.5 rounded-full bg-ground" /> : null}
               </span>
-              <p className="font-semibold text-sm text-strong">Skip only</p>
+              <p className="font-semibold text-small text-strong">Skip only</p>
             </div>
-            <p className="text-[12px] text-muted pl-6 leading-snug">
+            <p className="text-caption text-muted pl-6 leading-snug">
               This session is lost. Rest of the week runs as scheduled.
               <br />
               <span className="text-ink">Cost:</span> −1 session this week. If your program has an ordered progression (e.g. 5/3/1 waves), the sequence breaks.
@@ -366,7 +367,7 @@ function SkipSheet({
           <button
             type="button"
             onClick={() => setShift(true)}
-            className={`w-full text-left rounded border p-3 space-y-1 ${
+            className={`w-full text-left rounded-lg border p-3 space-y-1 ${
               shift
                 ? "border-bronze bg-bronze/10"
                 : "border-line hover:border-slate/40 bg-surface"
@@ -376,9 +377,9 @@ function SkipSheet({
               <span className={`w-4 h-4 rounded-full border flex-shrink-0 flex items-center justify-center ${shift ? "border-bronze bg-bronze" : "border-line"}`}>
                 {shift ? <span className="w-1.5 h-1.5 rounded-full bg-ground" /> : null}
               </span>
-              <p className="font-semibold text-sm text-strong">Skip & shift the week</p>
+              <p className="font-semibold text-small text-strong">Skip & shift the week</p>
             </div>
-            <p className="text-[12px] text-muted pl-6 leading-snug">
+            <p className="text-caption text-muted pl-6 leading-snug">
               This session takes over the next scheduled strength day. Everything cascades one slot forward.
               <br />
               <span className="text-ink">Cost:</span> −1 session (the last one of the week drops). Progression order preserved — recommended for programs with ordered waves.
@@ -394,7 +395,7 @@ function SkipSheet({
             value={reason}
             onChange={(e) => setReason(e.target.value)}
             placeholder="travelling, hip flared, tired…"
-            className="w-full px-2 py-2 min-h-[44px] border border-line rounded bg-surface text-sm focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
+            className="w-full px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface text-small focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
           />
         </div>
 
@@ -402,14 +403,14 @@ function SkipSheet({
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 border border-line-strong rounded py-2 min-h-[44px] text-sm hover:bg-surface-2"
+            className="flex-1 border border-line-strong rounded-lg py-2 min-h-[44px] text-small hover:bg-surface-2"
           >
             Cancel
           </button>
           <button
             type="button"
             onClick={() => onSkip(reason || undefined, shift)}
-            className="flex-1 bg-bronze text-ground rounded py-2 min-h-[44px] text-sm font-semibold hover:bg-bronze-hover"
+            className="flex-1 bg-bronze text-ground rounded-lg py-2 min-h-[44px] text-small font-semibold hover:bg-bronze-hover"
           >
             Skip session
           </button>
@@ -455,10 +456,10 @@ function MoveSheet({
             <X size={18} />
           </button>
         </div>
-        <p className="text-[14px] text-muted">
+        <p className="text-small text-muted">
           Session moves to the chosen date. Today is marked skipped-because-moved.
         </p>
-        <div className="rounded border border-line-soft bg-surface-2/40 p-3 text-[14px] leading-snug space-y-1.5">
+        <div className="rounded-lg bg-surface-2 p-3 text-small leading-snug space-y-1.5">
           <p><span className="text-ink font-semibold">Zero sessions lost.</span> This one just changes date.</p>
           <p><span className="text-ink font-semibold">Watch for collisions.</span> If the target date already has a session, both stack — check the calendar first.</p>
           <p><span className="text-ink font-semibold">Progression trajectory intact.</span> The wave continues from where the last completed session landed.</p>
@@ -470,17 +471,17 @@ function MoveSheet({
             value={date}
             min={iso(new Date())}
             onChange={(e) => setDate(e.target.value)}
-            className="w-full px-2 py-1.5 border border-line rounded bg-surface text-sm"
+            className="w-full px-2 py-1.5 border border-line rounded-lg bg-surface text-small"
           />
         </div>
         <div className="flex gap-2 pt-1">
-          <button type="button" onClick={onCancel} className="flex-1 border border-line-strong rounded py-2 text-sm hover:bg-surface-2">
+          <button type="button" onClick={onCancel} className="flex-1 border border-line-strong rounded-lg py-2 text-small hover:bg-surface-2">
             Cancel
           </button>
           <button
             type="button"
             onClick={() => onConfirm(date)}
-            className="flex-1 bg-bronze text-ground rounded py-2 text-sm font-semibold hover:bg-bronze-hover"
+            className="flex-1 bg-bronze text-ground rounded-lg py-2 text-small font-semibold hover:bg-bronze-hover"
           >
             Move session
           </button>

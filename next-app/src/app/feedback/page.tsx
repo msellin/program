@@ -76,15 +76,15 @@ export default function FeedbackPage() {
   if (sent) {
     return (
       <div className="mt-8 space-y-4">
-        <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">Sent</h1>
-        <p className="text-sm text-muted">
+        <h1 className="text-h1 tracking-tight text-strong leading-none">Sent</h1>
+        <p className="text-small text-muted">
           Thanks — it goes straight to Margus, and replies come back to the address you
           signed up with.
         </p>
         <button
           type="button"
           onClick={() => router.push("/profile")}
-          className="min-h-[44px] rounded border border-line-soft px-4 py-2 text-sm"
+          className="min-h-[44px] rounded-lg border border-line-soft px-4 py-2 text-small"
         >
           Back to Profile
         </button>
@@ -95,14 +95,14 @@ export default function FeedbackPage() {
   return (
     <div className="mt-8 space-y-4">
       <header>
-        <h1 className="text-[32px] font-semibold tracking-tight text-strong leading-none">Send feedback</h1>
-        <p className="mt-1 text-sm text-muted">
+        <h1 className="text-h1 tracking-tight text-strong leading-none">Send feedback</h1>
+        <p className="mt-1 text-small text-muted">
           Bugs, confusing copy, a proposal that made no sense. It reaches a person, not a
           queue.
         </p>
       </header>
 
-      <label htmlFor="feedback-message" className="block text-sm text-ink">
+      <label htmlFor="feedback-message" className="block text-small text-ink">
         What happened?
       </label>
       <textarea
@@ -112,15 +112,15 @@ export default function FeedbackPage() {
         rows={8}
         maxLength={4000}
         placeholder="The bit that didn't work, and what you expected instead."
-        className="w-full rounded border border-line-soft bg-surface p-3 text-sm"
+        className="w-full rounded-lg border border-line-soft bg-surface p-3 text-small"
       />
-      <p className="text-[12px] text-muted">
+      <p className="text-caption text-muted">
         Your email and which programme you&rsquo;re on are attached automatically. Nothing from
         your log is sent.
       </p>
 
       {error ? (
-        <p role="alert" className="text-sm text-red">
+        <p role="alert" className="text-small text-red">
           {error}
         </p>
       ) : null}
@@ -129,7 +129,7 @@ export default function FeedbackPage() {
         type="button"
         onClick={() => void send()}
         disabled={sending || !message.trim()}
-        className="min-h-[48px] w-full rounded bg-bronze px-4 py-3 text-sm font-semibold text-ink-inverse disabled:opacity-50"
+        className="min-h-[48px] w-full rounded-lg bg-bronze px-4 py-3 text-small font-semibold text-ink-inverse disabled:opacity-50"
       >
         {sending ? "Sending…" : "Send"}
       </button>

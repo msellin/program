@@ -32,6 +32,7 @@ import { computeRollingAvg, capToWindow, type CurvePoint } from "@/lib/engine/ro
 import { resolveRetestReadings } from "@/lib/engine/retest-readings";
 import type { WindowTier } from "./CutCWindowTierControl";
 import { cn } from "@/lib/utils";
+import { cardClass } from "@/components/ui/Card";
 
 // Lazy Recharts — same chunk that SymptomLoadChart uses. Zero incremental cost.
 const RechartsChart = dynamic(
@@ -39,7 +40,7 @@ const RechartsChart = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-[200px] flex items-center justify-center text-[12px] text-muted italic">
+      <div className="h-[200px] flex items-center justify-center text-caption text-muted italic">
         Loading chart…
       </div>
     ),
@@ -113,11 +114,11 @@ export function CutCProgramCurveCard({
 
   if (!metric || points.length === 0) {
     return (
-      <div className={cn("rounded border border-line-soft bg-surface p-3", className)}>
-        <p className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted mb-2">
+      <div className={cn(cardClass(), className)}>
+        <p className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted mb-2">
           Rolling {ROLLING_WINDOW_DAYS[zoomTier]}-day avg
         </p>
-        <p className="text-[12px] text-muted italic">
+        <p className="text-caption text-muted italic">
           The trend curve builds here once you have two or more retest readings for the same metric.
         </p>
       </div>
@@ -132,12 +133,12 @@ export function CutCProgramCurveCard({
   const deltaAbs = deltaAvg == null ? "" : Math.abs(deltaAvg).toFixed(1);
 
   return (
-    <div className={cn("rounded border border-line-soft bg-surface p-3", className)}>
-      <p className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted mb-2">
+    <div className={cn(cardClass(), className)}>
+      <p className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted mb-2">
         {ROLLING_WINDOW_DAYS[zoomTier]}-day rolling {metric.display_name} · {higherBetter ? "higher is better" : "lower is better"}
       </p>
 
-      <div style={{ height: 200 }}>
+      <div className="h-[200px]">
         <RechartsChart
           points={allInWindow}
           showRaw={effectiveShowRaw}
@@ -147,7 +148,7 @@ export function CutCProgramCurveCard({
       </div>
 
       {/* Legend row */}
-      <div className="mt-2 flex flex-wrap gap-3 text-[11px] text-muted">
+      <div className="mt-2 flex flex-wrap gap-3 text-eyebrow text-muted">
         <span className="inline-flex items-center gap-1.5">
           <span aria-hidden className="inline-block w-3.5 h-0.5 bg-[var(--dv-curve-primary)] align-middle" />
           {ROLLING_WINDOW_DAYS[zoomTier]}-day rolling avg
@@ -165,7 +166,7 @@ export function CutCProgramCurveCard({
             type="button"
             onClick={() => setShowRaw((v) => !v)}
             aria-pressed={showRaw}
-            className="border border-line-strong rounded px-3 py-2 min-h-[44px] font-mono text-[11px] uppercase tracking-widest text-ink motion-reduce:transition-none transition-colors hover:bg-line-soft focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2"
+            className="border border-line-strong rounded-lg px-3 py-2 min-h-[44px] font-mono text-eyebrow uppercase tracking-widest text-ink motion-reduce:transition-none transition-colors hover:bg-line-soft focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2"
           >
             {showRaw ? "Hide raw" : "Show raw"}
           </button>
@@ -174,7 +175,7 @@ export function CutCProgramCurveCard({
 
       {/* Delta callout */}
       {deltaAvg != null ? (
-        <p className="mt-2 font-mono text-[12px] text-ink tabular-nums">
+        <p className="mt-2 font-mono text-caption text-ink tabular-nums">
           Avg {formatMetric(currentAvg, metric.unit)}   {deltaSign}
           {deltaAbs} since {points[0].date}
         </p>

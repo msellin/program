@@ -94,7 +94,7 @@ export function RestTimer({ autoStartSeconds, onClose }: Props) {
     // the remaining time 90+ times per timer. Live region removed; the
     // announce() calls above fire at start / 30 s / complete instead.
     <div className="fixed left-3 right-3 bottom-[calc(60px+env(safe-area-inset-bottom))] z-40 mx-auto max-w-[760px]">
-      <div className="rounded-lg border border-line bg-surface shadow-xl overflow-hidden">
+      <div className="rounded-xl border border-line bg-surface shadow-xl overflow-hidden">
         {/* Progress bar */}
         <div className="h-1 bg-line-soft relative">
           <div
@@ -114,13 +114,13 @@ export function RestTimer({ autoStartSeconds, onClose }: Props) {
               setHit(false);
             }}
             aria-label="Reset timer"
-            className="w-11 h-11 flex items-center justify-center rounded hover:bg-surface-2 text-muted hover:text-ink"
+            className="w-11 h-11 flex items-center justify-center rounded-lg hover:bg-surface-2 text-muted hover:text-ink"
           >
             <RotateCcw size={16} />
           </button>
           <div
             className={cn(
-              "flex-1 text-center font-mono text-2xl font-semibold tabular-nums leading-none",
+              "flex-1 text-center font-mono text-h2 tabular-nums leading-none",
               hit ? "text-green" : "text-strong",
             )}
             aria-hidden="true"
@@ -148,7 +148,7 @@ export function RestTimer({ autoStartSeconds, onClose }: Props) {
               type="button"
               onClick={onClose}
               aria-label="Close timer"
-              className="w-11 h-11 flex items-center justify-center rounded hover:bg-surface-2 text-muted"
+              className="w-11 h-11 flex items-center justify-center rounded-lg hover:bg-surface-2 text-muted"
             >
               <X size={16} />
             </button>
@@ -166,7 +166,7 @@ export function RestTimer({ autoStartSeconds, onClose }: Props) {
                 setRunning(true);
               }}
               className={cn(
-                "px-2.5 py-1 rounded font-mono text-[11px]",
+                "px-2.5 py-1 rounded-lg font-mono text-eyebrow",
                 target === p.seconds
                   ? "bg-ink text-ground"
                   : "bg-line-soft text-muted hover:text-ink",

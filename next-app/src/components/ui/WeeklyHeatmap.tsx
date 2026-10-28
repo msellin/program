@@ -73,7 +73,7 @@ export function WeeklyHeatmap({
   const anyState = cells.some((c) => c.sessionState !== "none");
   if (!cells.length || !anyState) {
     return (
-      <p className={cn("text-[12px] text-muted italic min-h-11 flex items-center", className)}>
+      <p className={cn("text-caption text-muted italic min-h-11 flex items-center", className)}>
         No session history yet — log a session or morning check to start the trail.
       </p>
     );
@@ -87,7 +87,7 @@ export function WeeklyHeatmap({
       <div
         role="group"
         aria-label={ariaLabel}
-        className="overflow-hidden rounded"
+        className="overflow-hidden rounded-lg"
         style={{
           contentVisibility: "auto",
           containIntrinsicSize: `${weeks.length * 20}px 200px`,
@@ -104,7 +104,7 @@ export function WeeklyHeatmap({
                   onClick={() => onRowTap(wIdx)}
                   aria-label={summary}
                   className={cn(
-                    "flex flex-col gap-1 min-h-11 flex-1 rounded p-0.5",
+                    "flex flex-col gap-1 min-h-11 flex-1 rounded-lg p-0.5",
                     "focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2",
                     "hover:bg-line-soft",
                   )}
@@ -162,7 +162,7 @@ function Legend() {
       {items.map((it) => (
         <li key={it.label} className="flex items-center gap-1.5">
           <span aria-hidden className={cn("h-2 w-2 rounded-sm", it.cls)} />
-          <span className="font-mono text-[10px] uppercase tracking-widest text-muted">
+          <span className="font-mono text-eyebrow uppercase tracking-widest text-muted">
             {it.label}
           </span>
         </li>

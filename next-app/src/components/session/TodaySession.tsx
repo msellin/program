@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { cardClass } from "@/components/ui/Card";
 import Link from "next/link";
 import { loadProgram, loadProgramManifest, loadExercises, applyProgramExerciseOverrides } from "@/lib/data-loader";
 import { HeroStateCard } from "@/components/workout/HeroStateCard";
@@ -146,15 +147,15 @@ export function TodaySession({
 
   if (error) {
     return (
-      <div className="mt-8 rounded border border-red bg-surface p-4">
-        <h2 className="mb-2 text-lg font-semibold">Couldn&apos;t load your program</h2>
-        <p className="text-sm text-muted">
+      <div className={cardClass({ status: "red" }) + " mt-8"}>
+        <h2 className="mb-2 text-h3 font-semibold">Couldn&apos;t load your program</h2>
+        <p className="text-small text-muted">
           Check your connection and reload. Your logs are safe.
         </p>
         <button
           type="button"
           onClick={() => window.location.reload()}
-          className="mt-3 min-h-[44px] px-4 rounded border border-line-strong text-[14px] text-ink"
+          className="mt-3 min-h-[44px] px-4 rounded-lg border border-line-strong text-small text-ink"
         >
           Reload
         </button>
@@ -163,7 +164,7 @@ export function TodaySession({
   }
   if (!programs.length || !hydrated) {
     if (!activeProgramSlug && hydrated) return <NoActiveProgram />;
-    return <div className="mt-8 text-sm text-muted">Loading…</div>;
+    return <div className="mt-8 text-small text-muted">Loading…</div>;
   }
 
   // Primary program: drives the phase header, SignalsStrip, RestDayCard variant,
@@ -245,8 +246,8 @@ export function TodaySession({
     return (
       <div className="space-y-6 pt-4">
         <header className="space-y-1">
-          <p className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted">TODAY</p>
-          <h1 className="text-[32px] font-semibold tracking-[-0.03em] text-strong leading-none">
+          <p className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted">TODAY</p>
+          <h1 className="text-h1 font-semibold tracking-[-0.03em] text-strong leading-none">
             {primary.slug ? programDisplayName(primary, primary.slug) : "Day"}
           </h1>
         </header>
@@ -265,10 +266,10 @@ export function TodaySession({
           display name is the H1; concurrent tracks render below in their
           own DashboardBlock groups. */}
       <header className="space-y-1">
-        <p className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted">
+        <p className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted">
           {todayEyebrow(activeDate, programProgress(primary, activeDate, userProfile))}
         </p>
-        <h1 className="text-[32px] font-semibold tracking-[-0.03em] text-strong leading-none">
+        <h1 className="text-h1 font-semibold tracking-[-0.03em] text-strong leading-none">
           {primary.slug ? programDisplayName(primary, primary.slug) : "Day"}
         </h1>
       </header>
@@ -331,7 +332,7 @@ export function TodaySession({
       {phase &&
       !isPastProgramEnd(primary, activeDate, userProfile) &&
       allBlocks.length === 0 ? (
-        <p className="-mt-3 text-[14px] text-muted leading-tight">
+        <p className="-mt-3 text-small text-muted leading-tight">
           {/* Week N of M lives in the eyebrow and the ring above; a third copy here is noise. */}
           <span className="text-strong">{humanPhaseName(phase.name)}</span>
         </p>
@@ -377,7 +378,7 @@ export function TodaySession({
           isn't read as an error. Read the phase's is_taper flag which we set
           for test-prep programs (currently just rowing-2k-test-prep). */}
       {phase && (phase as unknown as { is_taper?: boolean }).is_taper ? (
-        <div className="rounded border border-slate/40 bg-slate/10 border-l-4 border-l-slate px-3 py-2 text-[14px]">
+        <div className={cardClass() + " text-small"}>
           <p className="font-semibold text-slate">Taper week.</p>
           <p className="text-muted mt-0.5">
             Volume drops ~45%, intensity holds. This is where the ~3% peak uplift comes from — resist the urge to add sessions.
@@ -409,7 +410,7 @@ export function TodaySession({
           const strengthToday = allBlocks.some((b) => (b.category ?? "strength") === "strength");
           if (!(hardYesterday && strengthToday)) return null;
           return (
-            <div className="rounded border border-amber/40 bg-amber/10 border-l-4 border-l-amber px-3 py-2 text-[14px]">
+            <div className={cardClass({ status: "amber" }) + " text-small"}>
               <p className="font-semibold text-amber">Interference window.</p>
               <p className="text-muted mt-0.5">
                 Yesterday had a hard aerobic session. The concurrent-training
@@ -425,7 +426,7 @@ export function TodaySession({
           shoulder pain stops the session. Surface it on Today so it's not just
           buried in intake. */}
       {primary.slug === "handstand-walk" ? (
-        <div className="rounded border border-amber/40 bg-amber/10 border-l-4 border-l-amber px-3 py-2 text-[14px]">
+        <div className={cardClass({ status: "amber" }) + " text-small"}>
           <p className="font-semibold text-amber">Shoulder pain stops the session.</p>
           <p className="text-muted mt-0.5">
             Any sharp shoulder pain during handstand work — end the block, log it on
@@ -459,7 +460,7 @@ export function TodaySession({
           const week = Math.floor(daysIn / 7) + 1; // program week, only picks the mode; never shown
           const mode = week <= 2 ? "blocked practice — drills in the composed order" : "random practice — order varies each session";
           return (
-            <p className="text-[11px] text-muted font-mono">
+            <p className="text-eyebrow text-muted font-mono">
               {/* "Program week" not "Week": the header above already reads
                   "WEEK 3 OF 4" (position within the current phase) and the
                   phase line repeats it. An unqualified "Week 7" next to those
@@ -517,7 +518,7 @@ export function TodaySession({
               "Multiple tracks today. If it's too much, snooze one from Profile.";
           }
           return (
-            <div className="rounded border border-amber/40 bg-amber/10 px-3 py-2.5 text-[14px]">
+            <div className="rounded-lg border border-amber/40 bg-amber/10 px-3 py-2.5 text-small">
               <p className="text-amber-strong">
                 <span className="font-semibold">
                   {groupsWithBlocks.length} tracks scheduled today.
@@ -653,7 +654,7 @@ export function TodaySession({
                     : undefined
                 }
               >
-                <ul className="text-[13px] text-muted space-y-0.5">
+                <ul className="text-caption text-muted space-y-0.5">
                   {g.blocks.slice(0, 5).map((b) => (
                     <li key={b.id} className="truncate">
                       · {humanBlockName(b.name)}

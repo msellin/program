@@ -46,22 +46,22 @@ export function VideoModal({
       <div
         ref={panelRef}
         onClick={(e) => e.stopPropagation()}
-        className="bg-surface border border-line rounded max-w-2xl w-full max-h-[90vh] overflow-auto"
+        className="bg-surface border border-line rounded-lg max-w-2xl w-full max-h-[90vh] overflow-auto"
       >
         <header className="flex items-center justify-between px-4 py-3 border-b border-line gap-3">
-          <h3 id={titleId} className="font-mono text-[14px] uppercase tracking-widest truncate">
+          <h3 id={titleId} className="font-mono text-small uppercase tracking-widest truncate">
             {title}
           </h3>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="text-muted hover:text-ink w-11 h-11 flex items-center justify-center text-xl leading-none rounded flex-shrink-0"
+            className="text-muted hover:text-ink w-11 h-11 flex items-center justify-center text-h2 leading-none rounded-lg flex-shrink-0"
           >
             ×
           </button>
         </header>
-        <div className="text-sm text-muted">
+        <div className="text-small text-muted">
           {embedSrc ? (
             <>
               <iframe
@@ -78,7 +78,7 @@ export function VideoModal({
                     href={videoUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1 text-[14px] text-slate hover:text-ink"
+                    className="inline-flex items-center gap-1 text-small text-slate hover:text-ink"
                   >
                     <ExternalLink size={12} />
                     Open on YouTube
@@ -88,10 +88,10 @@ export function VideoModal({
             </>
           ) : searchHref ? (
             <div className="p-5 text-center space-y-3">
-              <p className="text-sm text-ink">
+              <p className="text-small text-ink">
                 No embedded demo yet for this exercise.
               </p>
-              <p className="text-[14px] text-muted">
+              <p className="text-small text-muted">
                 Search YouTube for &quot;<span className="text-ink">{searchQuery}</span>&quot; —
                 opens in a new tab.
               </p>
@@ -100,7 +100,7 @@ export function VideoModal({
                 target="_blank"
                 rel="noreferrer"
                 onClick={onClose}
-                className="inline-flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-wider px-4 py-3 rounded bg-bronze text-ground"
+                className="inline-flex items-center gap-1.5 font-mono text-caption uppercase tracking-wider px-4 py-3 rounded-lg bg-bronze text-ground"
               >
                 <ExternalLink size={14} />
                 Search on YouTube

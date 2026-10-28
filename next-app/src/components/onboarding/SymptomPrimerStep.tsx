@@ -1,6 +1,7 @@
 "use client";
 
 import type { OnboardingStep } from "@/lib/schemas";
+import { cardClass } from "@/components/ui/Card";
 
 type SymptomPrimerStepPayload = Extract<OnboardingStep, { kind: "symptom_primer" }>;
 
@@ -16,20 +17,20 @@ type SymptomPrimerStepPayload = Extract<OnboardingStep, { kind: "symptom_primer"
 export function SymptomPrimerStep({ step }: { step: SymptomPrimerStepPayload }) {
   return (
     <div className="space-y-4">
-      <h2 id="onboarding-title" className="text-2xl font-semibold text-strong tracking-tight text-center">
+      <h2 id="onboarding-title" className="text-h2 text-strong tracking-tight text-center">
         {step.title}
       </h2>
-      <p className="text-[14px] text-muted whitespace-pre-line text-center">{step.body_md}</p>
-      <ul className="space-y-1.5 text-left border border-line-soft rounded p-3 bg-surface">
+      <p className="text-small text-muted whitespace-pre-line text-center">{step.body_md}</p>
+      <ul className={`${cardClass()} space-y-1.5 text-left`}>
         {step.fields.map((f) => (
-          <li key={f} className="text-[14px] text-ink flex items-start gap-2">
+          <li key={f} className="text-small text-ink flex items-start gap-2">
             <span aria-hidden="true" className="text-slate mt-0.5">·</span>
             <span>{f}</span>
           </li>
         ))}
       </ul>
       {step.gdpr_note ? (
-        <p className="text-[11px] text-muted italic leading-snug text-center">{step.gdpr_note}</p>
+        <p className="text-eyebrow text-muted italic leading-snug text-center">{step.gdpr_note}</p>
       ) : null}
     </div>
   );

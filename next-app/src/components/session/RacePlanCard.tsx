@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { cardClass } from "@/components/ui/Card";
 import { buildRacePlan, formatSplit } from "@/lib/engine/race-plan";
 import { readingsForMetric } from "@/lib/engine/retest-readings";
 import type { Program, Store } from "@/lib/schemas";
@@ -59,21 +60,21 @@ export function RacePlanCard({
   if (!plan) return null;
 
   return (
-    <div className="rounded border border-line-soft border-l-4 border-l-bronze bg-surface px-3.5 py-3 space-y-3">
+    <div className={cardClass() + " space-y-3"}>
       <div>
-        <p className="font-mono text-[10px] uppercase tracking-[.16em] text-muted">
+        <p className="font-mono text-eyebrow uppercase tracking-[.16em] text-muted">
           Your plan for today
         </p>
-        <p className="text-[15px] font-semibold text-strong tracking-[-.01em] mt-0.5">
+        <p className="text-body font-semibold text-strong tracking-[-.01em] mt-0.5">
           {formatSplit(plan.goal_total_s)} — average {formatSplit(plan.goal_average_split_s)}/500m
         </p>
-        <p className="text-[12px] text-muted italic mt-0.5">{plan.basis}</p>
+        <p className="text-caption text-muted italic mt-0.5">{plan.basis}</p>
       </div>
 
       <div className="overflow-x-auto">
-        <table className="w-full text-[13px] border-collapse">
+        <table className="w-full text-caption border-collapse">
           <thead>
-            <tr className="text-left text-muted border-b border-line-soft font-mono text-[10px] uppercase tracking-[.14em]">
+            <tr className="text-left text-muted border-b border-line-soft font-mono text-eyebrow uppercase tracking-[.14em]">
               <th className="py-1.5 pr-3 font-normal">Through</th>
               <th className="py-1.5 pr-3 font-normal">Split</th>
               <th className="py-1.5 pr-3 font-normal">Rate</th>
@@ -93,7 +94,7 @@ export function RacePlanCard({
         </table>
       </div>
 
-      <ul className="space-y-1 text-[13px] text-ink">
+      <ul className="space-y-1 text-caption text-ink">
         {plan.splits.map((s) => (
           <li key={s.piece}>
             <span className="font-mono text-muted">{s.through_m}m</span> · {s.cue}
@@ -102,7 +103,7 @@ export function RacePlanCard({
       </ul>
 
       {/* Decided in advance on purpose. Nobody makes this call well at 1200m. */}
-      <p className="rounded border border-amber/40 bg-amber/10 px-3 py-2 text-[13px] text-strong">
+      <p className="rounded-lg border border-amber/40 bg-amber/10 px-3 py-2 text-caption text-strong">
         {plan.failure_branch}
       </p>
     </div>

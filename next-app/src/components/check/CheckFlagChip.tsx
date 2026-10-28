@@ -30,7 +30,7 @@ export function CheckFlagChip({ label, on, onToggle }: CheckFlagChipProps) {
       aria-checked={on}
       onClick={onToggle}
       className={cn(
-        "inline-flex items-center gap-2 min-h-[44px] px-3.5 py-2 rounded-full border text-[13px] motion-reduce:transition-none transition-colors",
+        "inline-flex items-center gap-2 min-h-[44px] px-3.5 py-2 rounded-full border text-caption motion-reduce:transition-none transition-colors",
         "focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2",
         on
           ? "text-strong border-amber bg-amber/10"

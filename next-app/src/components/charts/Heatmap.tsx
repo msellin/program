@@ -123,7 +123,7 @@ export function Heatmap({ store, onDayClick }: { store: Store; onDayClick?: (dat
         <p className="mono-caps">
           Last {WEEKS} weeks
         </p>
-        <p className="font-mono text-[11px] text-muted">
+        <p className="font-mono text-eyebrow text-muted">
           {totalStrengthDays} strength · {totalActiveDays} active total
         </p>
       </div>
@@ -141,7 +141,7 @@ export function Heatmap({ store, onDayClick }: { store: Store; onDayClick?: (dat
           {rowLabels.map((r) => (
             <span
               key={r}
-              className="mono-caps text-[10px] h-4 leading-4 flex items-center pr-1"
+              className="mono-caps text-eyebrow h-4 leading-4 flex items-center pr-1"
             >
               {r[0]}
             </span>
@@ -167,7 +167,7 @@ export function Heatmap({ store, onDayClick }: { store: Store; onDayClick?: (dat
                   aria-label={cellAria(c)}
                   title={cellAria(c)}
                   className={cn(
-                    "aspect-square rounded-[2px] transition-colors cursor-pointer hover:ring-1 hover:ring-slate/60",
+                    "aspect-square rounded-sm transition-colors cursor-pointer hover:ring-1 hover:ring-slate/60",
                     c.state === "green" && "bg-green",
                     c.state === "amber" && "bg-amber",
                     c.state === "red" && "bg-red",
@@ -186,7 +186,7 @@ export function Heatmap({ store, onDayClick }: { store: Store; onDayClick?: (dat
                 aria-hidden
                 title={c.isFuture ? `${c.date}: not yet` : cellAria(c)}
                 className={cn(
-                  "aspect-square rounded-[2px] transition-colors",
+                  "aspect-square rounded-sm transition-colors",
                   c.isFuture ? "bg-line-soft/40 opacity-50" : null,
                   !c.isFuture && c.state === "green" && "bg-green",
                   !c.isFuture && c.state === "amber" && "bg-amber",
@@ -225,7 +225,7 @@ function cellAria(c: Cell): string {
 
 function Legend() {
   return (
-    <div className="flex flex-wrap gap-3 text-[11px] text-muted">
+    <div className="flex flex-wrap gap-3 text-eyebrow text-muted">
       <LegendItem colorClass="bg-green" label="green" />
       <LegendItem colorClass="bg-amber" label="amber" />
       <LegendItem colorClass="bg-red" label="red" />
@@ -242,7 +242,7 @@ function Legend() {
 function LegendItem({ colorClass, label }: { colorClass: string; label: string }) {
   return (
     <span className="inline-flex items-center gap-1">
-      <span className={`inline-block w-3 h-3 rounded-[2px] ${colorClass}`} aria-hidden />
+      <span className={`inline-block w-3 h-3 rounded-sm ${colorClass}`} aria-hidden />
       {label}
     </span>
   );

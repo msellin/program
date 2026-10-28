@@ -6,6 +6,7 @@ import { useStore } from "@/lib/useStore";
 import { today as todayISO } from "@/lib/utils";
 import { firstSessionOffer, FIRST_SESSION_MOVE_REASON } from "@/lib/engine/first-session";
 import { Button } from "@/components/ui/Button";
+import { cardClass } from "@/components/ui/Card";
 
 /**
  * Day-1 empty-state card. Fix for Bug #3 from the 2026-08-17 flow-review
@@ -28,15 +29,15 @@ export function Day1EmptyState({ sessionHref, slug }: { sessionHref?: string; sl
   return (
     <section
       aria-labelledby="day1-title"
-      className="rounded-md border border-bronze/30 bg-bronze/5 p-4 space-y-3"
+      className={`${cardClass()} space-y-3`}
     >
-      <p className="font-mono text-[10px] uppercase tracking-widest text-bronze">
+      <p className="font-mono text-eyebrow uppercase tracking-widest text-bronze">
         Setup · one minute
       </p>
-      <h2 id="day1-title" className="text-lg font-semibold text-strong leading-snug">
+      <h2 id="day1-title" className="text-h3 text-strong leading-snug">
         Week 1. Start with your first session.
       </h2>
-      <p className="text-[14px] text-muted leading-relaxed">
+      <p className="text-small text-muted leading-relaxed">
         {sessionHref || offer
           ? "Do it at an easy effort and log what you get. A morning check is optional."
           : "Start with a morning check. It takes a minute and sets today's load."}

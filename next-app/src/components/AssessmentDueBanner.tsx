@@ -31,15 +31,15 @@ export function AssessmentDueBanner({ date }: { date: string }) {
       aria-label="Assessment due"
       className="border border-slate/40 bg-slate/10 rounded-md p-3 space-y-2"
     >
-      <p className="font-mono text-[10px] uppercase tracking-widest text-slate">
+      <p className="font-mono text-eyebrow uppercase tracking-widest text-slate">
         Monthly check · due
       </p>
-      <p className="font-semibold text-strong text-[15px]">{headline}</p>
-      <p className="text-[14px] text-ink leading-snug">{subheadline}</p>
+      <p className="font-semibold text-strong text-body">{headline}</p>
+      <p className="text-small text-ink leading-snug">{subheadline}</p>
       <div className="pt-1">
         <Link
           href="/check/hip"
-          className="inline-block font-mono text-[11px] uppercase tracking-wider px-3 py-2 rounded bg-slate text-surface hover:bg-slate/90"
+          className="inline-block font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-slate text-surface hover:bg-slate/90"
         >
           Start check →
         </Link>

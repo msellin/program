@@ -5,6 +5,7 @@ import { X, Sparkles } from "lucide-react";
 import { useStore } from "@/lib/useStore";
 import { buildRevealCopy } from "@/lib/personalization/reveal-copy";
 import type { Program } from "@/lib/schemas";
+import { cardClass } from "@/components/ui/Card";
 
 /**
  * The "your plan is built" reveal card. Renders on Today for a user who has
@@ -75,13 +76,13 @@ export function YourPlanCard({ program }: { program: Program }) {
   return (
     <section
       aria-label="Your plan is built"
-      className="relative overflow-hidden rounded border border-bronze/30 bg-bronze/[0.06] px-4 py-4"
+      className={`${cardClass()} relative overflow-hidden`}
     >
       <button
         type="button"
         onClick={dismiss}
         aria-label="Dismiss"
-        className="absolute right-2 top-2 w-11 h-11 flex items-center justify-center rounded text-muted hover:text-ink"
+        className="absolute right-2 top-2 w-11 h-11 flex items-center justify-center rounded-lg text-muted hover:text-ink"
       >
         <X size={14} />
       </button>
@@ -89,20 +90,20 @@ export function YourPlanCard({ program }: { program: Program }) {
         <Sparkles size={16} className="mt-0.5 text-bronze flex-shrink-0" aria-hidden />
         <div className="min-w-0 flex-1 space-y-2">
           <div>
-            <p className="font-mono text-[10px] uppercase tracking-widest text-bronze">
+            <p className="font-mono text-eyebrow uppercase tracking-widest text-bronze">
               Your plan
             </p>
-            <h2 className="mt-1 text-[15px] font-semibold text-strong leading-snug">
+            <h2 className="mt-1 text-body font-semibold text-strong leading-snug">
               {copy.headline}
             </h2>
           </div>
-          <p className="text-[14px] text-ink leading-relaxed">{copy.schedule_line}</p>
+          <p className="text-small text-ink leading-relaxed">{copy.schedule_line}</p>
           {copy.phase_lines.length ? (
             <details>
-              <summary className="min-h-11 flex items-center cursor-pointer text-[14px] font-semibold text-ink list-none">
+              <summary className="min-h-11 flex items-center cursor-pointer text-small font-semibold text-ink list-none">
                 See plan
               </summary>
-              <ul className="space-y-0.5 text-[14px] text-muted">
+              <ul className="space-y-0.5 text-small text-muted">
                 {copy.phase_lines.map((line, i) => (
                   <li key={i} className="pl-3 -indent-3">
                     <span className="text-bronze">·</span>{" "}

@@ -128,19 +128,19 @@ export function InfoSheet({
           <div className="h-1 w-10 rounded-full bg-line-strong" />
         </div>
         <header className="sticky top-0 flex items-center justify-between gap-3 px-4 py-3 border-b border-line bg-surface">
-          <h3 id={titleId} className="text-[15px] font-semibold text-strong">
+          <h3 id={titleId} className="text-body font-semibold text-strong">
             {title}
           </h3>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="text-muted hover:text-ink w-11 h-11 -my-2 flex items-center justify-center rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2"
+            className="text-muted hover:text-ink w-11 h-11 -my-2 flex items-center justify-center rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2"
           >
             <X size={18} />
           </button>
         </header>
-        <div className="p-4 text-sm leading-relaxed space-y-3">
+        <div className="p-4 text-small leading-relaxed space-y-3">
           {children}
           {citation ? <CitationBlock citation={citation} /> : null}
           {logSignal ? <LogSignalBlock logSignal={logSignal} /> : null}
@@ -161,11 +161,11 @@ function CitationBlock({ citation }: { citation: ExplainSheetCitation }) {
       aria-label="Cited study"
       className="rounded-md border border-line-soft bg-surface-2 p-3 space-y-1"
     >
-      <p className="font-mono text-[10px] uppercase tracking-widest text-bronze">Cited</p>
+      <p className="font-mono text-eyebrow uppercase tracking-widest text-bronze">Cited</p>
       {/* Batch 36 P0 (visual-craft audit) — bumped 13px → 14px to stay on the
           v1.1.1 §1 typography ramp (10/11/12/14/15/20/26/32). */}
-      <p className="text-[14px] leading-snug text-ink">{citation.study}</p>
-      <p className="text-[12px] leading-snug text-muted">
+      <p className="text-small leading-snug text-ink">{citation.study}</p>
+      <p className="text-caption leading-snug text-muted">
         Threshold: <span className="font-mono">{citation.threshold}</span>
       </p>
     </aside>
@@ -182,10 +182,10 @@ function LogSignalBlock({ logSignal }: { logSignal: ExplainSheetLogSignal }) {
       aria-label="Log signal"
       className="rounded-md border border-line-soft bg-surface-2 p-3 space-y-1"
     >
-      <p className="font-mono text-[10px] uppercase tracking-widest text-slate">Signal</p>
+      <p className="font-mono text-eyebrow uppercase tracking-widest text-slate">Signal</p>
       {/* Batch 36 P0 — same 13px → 14px ramp compliance as CitationBlock. */}
-      <p className="text-[14px] leading-snug text-ink">{logSignal.signal}</p>
-      <p className="text-[12px] leading-snug text-muted">Source: {logSignal.source}</p>
+      <p className="text-small leading-snug text-ink">{logSignal.signal}</p>
+      <p className="text-caption leading-snug text-muted">Source: {logSignal.source}</p>
     </aside>
   );
 }

@@ -56,15 +56,15 @@ export function ArcProgressBar({
     <div className={cn("space-y-2", className)}>
       <div className="flex items-baseline justify-between gap-3">
         <div className="flex items-baseline gap-2 min-w-0">
-          <span className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted">
+          <span className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted">
             {programName}
           </span>
-          <span className="font-mono text-[14px] tabular-nums text-strong">
+          <span className="font-mono text-small tabular-nums text-strong">
             {weekCurrent}/{weekTotal}
           </span>
         </div>
         {nextMilestone && (
-          <span className="font-mono text-[10px] uppercase tracking-widest text-muted truncate">
+          <span className="font-mono text-eyebrow uppercase tracking-widest text-muted truncate">
             Next: {nextMilestone}
           </span>
         )}
@@ -118,7 +118,7 @@ export function ArcProgressBar({
                     aria-label={`Retest week ${wp.weekIndex}: ${wp.label}`}
                     className={cn(
                       "absolute min-h-[44px] min-w-[44px] flex items-center justify-center pointer-events-auto",
-                      "focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2 rounded",
+                      "focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2 rounded-lg",
                     )}
                     style={{ left: `calc(${leftPct}% - 22px)` }}
                   >

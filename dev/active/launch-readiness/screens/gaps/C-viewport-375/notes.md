@@ -1,135 +1,54 @@
 ## 01-today-top
-url: https://app.terav.fit/
+url: http://localhost:3000/
 horizontal overflow: false
 
 Skip to content
 
-How Terav reads you · 1 of 3
-
-The 0-10 scale
-
-Shoulder and elbow readiness matter more here than global fatigue. Rate what you notice this morning, not what you fear.
-
-HOW THE SCALE READS
-
-0-3
-
-Shoulders and elbows quiet
-
-4-6
-
-Some ache or stiffness
-
-7-10
-
-Pain on load — pause and reroute
-
-SKIP SETUP
-Next
-TERAV
-
-TODAY · WEEK 3 OF 4 · ENDS 6 NOV
+TODAY
 
 First Strict Pull-Up
-FIRST STRICT PULL-UP
-3/4
+Rest today.
 
-Weeks 5-8 — Interleaved consolidation for all tiers · week 3 of 4 · ends 6 Nov
+Your shoulder is 8/10, so hard training waits. If it isn’t settling, see a physio or doctor.
 
-WORKOUT READY
-WHY?
-Progress load — nothing above 3/10 today.
-
-Program week 7 · random practice — order shuffled by the seed. Shea & Morgan 1979.
-
-Rest day.
-
-First Strict Pull-Up has no session scheduled today. If you trained anyway — a ride, a run, a class — log it below; it still counts toward your history.
-
-Log extra session →
-
-Cross-modal work, walks, class attendance, mobility — anything not in the prescribed block. Optional. Nothing here changes the plan.
-
-Log session
-Import GPX
-DAY
+Log how it feels
+TODAY
 PLAN
 RECORD
 PROFILE
 
 ## 01-today-bottom
-url: https://app.terav.fit/
+url: http://localhost:3000/
 horizontal overflow: false
 
 Skip to content
 
-How Terav reads you · 1 of 3
-
-The 0-10 scale
-
-Shoulder and elbow readiness matter more here than global fatigue. Rate what you notice this morning, not what you fear.
-
-HOW THE SCALE READS
-
-0-3
-
-Shoulders and elbows quiet
-
-4-6
-
-Some ache or stiffness
-
-7-10
-
-Pain on load — pause and reroute
-
-SKIP SETUP
-Next
-TERAV
-
-TODAY · WEEK 3 OF 4 · ENDS 6 NOV
+TODAY
 
 First Strict Pull-Up
-FIRST STRICT PULL-UP
-3/4
+Rest today.
 
-Weeks 5-8 — Interleaved consolidation for all tiers · week 3 of 4 · ends 6 Nov
+Your shoulder is 8/10, so hard training waits. If it isn’t settling, see a physio or doctor.
 
-WORKOUT READY
-WHY?
-Progress load — nothing above 3/10 today.
-
-Program week 7 · random practice — order shuffled by the seed. Shea & Morgan 1979.
-
-Rest day.
-
-First Strict Pull-Up has no session scheduled today. If you trained anyway — a ride, a run, a class — log it below; it still counts toward your history.
-
-Log extra session →
-
-Cross-modal work, walks, class attendance, mobility — anything not in the prescribed block. Optional. Nothing here changes the plan.
-
-Log session
-Import GPX
-DAY
+Log how it feels
+TODAY
 PLAN
 RECORD
 PROFILE
 
-fixed/sticky on 01-today: div.fixed inset-0 z-[60] bg-ground/95 backdr @y=0 h=667 | nav.fixed left-0 right-0 bottom-0 z-40 borde @y=613 h=54
+fixed/sticky on 01-today: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=614 h=53
 
 ## 02-plan-top
-url: https://app.terav.fit/plan/
+url: http://localhost:3000/plan/
 horizontal overflow: false
 
 Skip to content
-TERAV
 Plan
 
 The 7-day rhythm. Browse other days, move sessions, skip a day — all from here.
 
 FIRST STRICT PULLUP
-3/4
+7/8
 ‹
 
 26 Oct → 1 Nov
@@ -137,13 +56,13 @@ FIRST STRICT PULLUP
 This week
 
 ›
-Weeks 5-8 — Interleaved consolidation for all tiers · Post-acquisition: engine interleaves 2-3 drills per session across the weakest capabilities.
+Mixed practice · Post-acquisition: engine interleaves 2-3 drills per session across the weakest capabilities.
 first strict pullup: planned
 Mon
 26 Oct
 · 1 logged
 
-Active hollow body — pull-shape isometrics + Dead-hang ladder (Tier A/B) + Shoulder + grip prep — every session
+Active hollow body — pull-shape isometrics + Dead-hang ladder + Shoulder + grip prep — every session
 
 Tue
 27 Oct
@@ -154,9 +73,9 @@ Rest / accessory day
 first strict pullup: planned
 Wed
 28 Oct
-· 1 logged
+TODAY
 
-Row strength — closed-chain pull + Scapular pull ladder (Tier A/B) + Shoulder + grip prep — every session
+Row strength — closed-chain pull + Scapular pull ladder + Shoulder + grip prep — every session
 
 Thu
 29 Oct
@@ -167,9 +86,8 @@ Rest / accessory day
 first strict pullup: planned
 Fri
 30 Oct
-· 1 logged
 
-Dead-hang ladder (Tier A/B) + Row strength — closed-chain pull + Shoulder + grip prep — every session
+Dead-hang ladder + Row strength — closed-chain pull + Shoulder + grip prep — every session
 
 Sat
 31 Oct
@@ -185,23 +103,22 @@ Rest / accessory day
 
 ▸
 Show rules of the week
-DAY
+TODAY
 PLAN
 RECORD
 PROFILE
 
 ## 02-plan-bottom
-url: https://app.terav.fit/plan/
+url: http://localhost:3000/plan/
 horizontal overflow: false
 
 Skip to content
-TERAV
 Plan
 
 The 7-day rhythm. Browse other days, move sessions, skip a day — all from here.
 
 FIRST STRICT PULLUP
-3/4
+7/8
 ‹
 
 26 Oct → 1 Nov
@@ -209,13 +126,13 @@ FIRST STRICT PULLUP
 This week
 
 ›
-Weeks 5-8 — Interleaved consolidation for all tiers · Post-acquisition: engine interleaves 2-3 drills per session across the weakest capabilities.
+Mixed practice · Post-acquisition: engine interleaves 2-3 drills per session across the weakest capabilities.
 first strict pullup: planned
 Mon
 26 Oct
 · 1 logged
 
-Active hollow body — pull-shape isometrics + Dead-hang ladder (Tier A/B) + Shoulder + grip prep — every session
+Active hollow body — pull-shape isometrics + Dead-hang ladder + Shoulder + grip prep — every session
 
 Tue
 27 Oct
@@ -226,9 +143,9 @@ Rest / accessory day
 first strict pullup: planned
 Wed
 28 Oct
-· 1 logged
+TODAY
 
-Row strength — closed-chain pull + Scapular pull ladder (Tier A/B) + Shoulder + grip prep — every session
+Row strength — closed-chain pull + Scapular pull ladder + Shoulder + grip prep — every session
 
 Thu
 29 Oct
@@ -239,9 +156,8 @@ Rest / accessory day
 first strict pullup: planned
 Fri
 30 Oct
-· 1 logged
 
-Dead-hang ladder (Tier A/B) + Row strength — closed-chain pull + Shoulder + grip prep — every session
+Dead-hang ladder + Row strength — closed-chain pull + Shoulder + grip prep — every session
 
 Sat
 31 Oct
@@ -257,72 +173,64 @@ Rest / accessory day
 
 ▸
 Show rules of the week
-DAY
+TODAY
 PLAN
 RECORD
 PROFILE
 
-fixed/sticky on 02-plan: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=613 h=54
+fixed/sticky on 02-plan: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=614 h=53
 
 ## 03-session-top
-url: https://app.terav.fit/session/first-strict-pullup/
+url: http://localhost:3000/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
-TERAV
-Rest day.
 
-First Strict Pull-Up has no session scheduled today. If you trained anyway — a ride, a run, a class — log it below; it still counts toward your history.
+TODAY
 
-Log extra session →
+First Strict Pull-Up
+Rest today.
 
-Cross-modal work, walks, class attendance, mobility — anything not in the prescribed block. Optional. Nothing here changes the plan.
+Your shoulder is 8/10, so hard training waits. If it isn’t settling, see a physio or doctor.
 
-Log session
-Import GPX
-DAY
+Log how it feels
+Optional: Rest, or shoulder prep and hollow-body work only. No hanging.Back to Today
+TODAY
 PLAN
 RECORD
 PROFILE
 
 ## 03-session-bottom
-url: https://app.terav.fit/session/first-strict-pullup/
+url: http://localhost:3000/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
-TERAV
-Rest day.
 
-First Strict Pull-Up has no session scheduled today. If you trained anyway — a ride, a run, a class — log it below; it still counts toward your history.
+TODAY
 
-Log extra session →
+First Strict Pull-Up
+Rest today.
 
-Cross-modal work, walks, class attendance, mobility — anything not in the prescribed block. Optional. Nothing here changes the plan.
+Your shoulder is 8/10, so hard training waits. If it isn’t settling, see a physio or doctor.
 
-Log session
-Import GPX
-DAY
+Log how it feels
+Optional: Rest, or shoulder prep and hollow-body work only. No hanging.Back to Today
+TODAY
 PLAN
 RECORD
 PROFILE
 
-fixed/sticky on 03-session: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=613 h=54
+fixed/sticky on 03-session: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=614 h=53
 
 ## 04-record-top
-url: https://app.terav.fit/record/
+url: http://localhost:3000/record/
 horizontal overflow: false
 
 Skip to content
-TERAV
 Record
-EXPORT
-Every change here cites its source
+Export
 
-Record shows your program's trend, retests, and log — but the piece Terav does differently is on every retest pin.
-
-Tap any pin on the timeline or curve to see the study OR the log signal that triggered that reading. Every proposed change carries its citation inline — no black-box coach, no autonomous score.
-
-Your record is portable — the Export button in the header downloads the whole thing as JSON, citations included, whenever you want it.
+Tap a point to see why it moved. Every change cites a study or a signal from your log.
 
 NOW
 Now
@@ -333,34 +241,28 @@ DONE
 AMBER
 RED-FLAG
 REST OR MISSED
-green day
-amber (check first)
 Week of 26 Oct
 
 This week so far
 
 Sessions
-0 / 0
+2 / 2
 Morning check
-1 green · 1 amber
+1 green · 1 amber · 1 red
 Signals
-2 fatigue
+1 fatigue
 
 LATEST RETEST · STRICT PULL-UP MAX REPS
 
 Strict pull-up max reps
-0 reps
-0.0
+112 reps
++12.0
 vs previous (2026-10-10)
 106 reps
 
-0.0 REPS SINCE BASELINE · 3 RETESTS
++12.0 REPS SINCE BASELINE · 3 RETESTS
 
-Basis · 3 readings logged
-
-Signal-cited · no study reference for this metric.
-
-Next retest in 25d
+Next test in 24 days
 
 TREND
 Trend
@@ -392,7 +294,7 @@ TODAY
 
 Base 100 reps · Now 112 reps · +12.0
 
-Tap any pin for the source behind that retest →
+Tap a point to see why it moved.
 
 LOG
 Log
@@ -404,12 +306,10 @@ AMBER
 RED-FLAG
 REST OR MISSED
 
-47 active days · showing last 30
+46 active days · showing last 30
 
-Fri 30 Oct
-1 done
 Wed 28 Oct
-1 done · 1 note
+1 done
 Tue 27 Oct
 logged
 Mon 26 Oct
@@ -417,22 +317,75 @@ Mon 26 Oct
 Sun 25 Oct
 logged
 Sat 24 Oct
+logged
+Fri 23 Oct
+3 done
+Thu 22 Oct
+logged
+Wed 21 Oct
+logged
+Tue 20 Oct
+logged
+Mon 19 Oct
+1 done
+Sun 18 Oct
+logged
+Sat 17 Oct
+logged
+Fri 16 Oct
+3 done
+Thu 15 Oct
+logged
+Wed 14 Oct
+logged
+Tue 13 Oct
+logged
+Mon 12 Oct
+logged
+Sun 11 Oct
+logged
+Sat 10 Oct
+logged
+Fri 9 Oct
+2 done
+Thu 8 Oct
+logged
+Wed 7 Oct
+logged
+Tue 6 Oct
+logged
+Mon 5 Oct
+1 done
+Sun 4 Oct
+logged
+Sat 3 Oct
+logged
+Fri 2 Oct
+2 done
+Thu 1 Oct
+logged
+Wed 30 Sept
+logged
+Tue 29 Sept
+logged
+LOAD 30 MORE
+Terav — Record
+FEEDBACK? →
+TODAY
+PLAN
+RECORD
+PROFILE
+100
 
 ## 04-record-bottom
-url: https://app.terav.fit/record/
+url: http://localhost:3000/record/
 horizontal overflow: false
 
 Skip to content
-TERAV
 Record
-EXPORT
-Every change here cites its source
+Export
 
-Record shows your program's trend, retests, and log — but the piece Terav does differently is on every retest pin.
-
-Tap any pin on the timeline or curve to see the study OR the log signal that triggered that reading. Every proposed change carries its citation inline — no black-box coach, no autonomous score.
-
-Your record is portable — the Export button in the header downloads the whole thing as JSON, citations included, whenever you want it.
+Tap a point to see why it moved. Every change cites a study or a signal from your log.
 
 NOW
 Now
@@ -443,34 +396,28 @@ DONE
 AMBER
 RED-FLAG
 REST OR MISSED
-green day
-amber (check first)
 Week of 26 Oct
 
 This week so far
 
 Sessions
-0 / 0
+2 / 2
 Morning check
-1 green · 1 amber
+1 green · 1 amber · 1 red
 Signals
-2 fatigue
+1 fatigue
 
 LATEST RETEST · STRICT PULL-UP MAX REPS
 
 Strict pull-up max reps
-0 reps
-0.0
+112 reps
++12.0
 vs previous (2026-10-10)
 106 reps
 
-0.0 REPS SINCE BASELINE · 3 RETESTS
++12.0 REPS SINCE BASELINE · 3 RETESTS
 
-Basis · 3 readings logged
-
-Signal-cited · no study reference for this metric.
-
-Next retest in 25d
+Next test in 24 days
 
 TREND
 Trend
@@ -502,7 +449,7 @@ TODAY
 
 Base 100 reps · Now 112 reps · +12.0
 
-Tap any pin for the source behind that retest →
+Tap a point to see why it moved.
 
 LOG
 Log
@@ -514,12 +461,10 @@ AMBER
 RED-FLAG
 REST OR MISSED
 
-47 active days · showing last 30
+46 active days · showing last 30
 
-Fri 30 Oct
-1 done
 Wed 28 Oct
-1 done · 1 note
+1 done
 Tue 27 Oct
 logged
 Mon 26 Oct
@@ -527,43 +472,105 @@ Mon 26 Oct
 Sun 25 Oct
 logged
 Sat 24 Oct
+logged
+Fri 23 Oct
+3 done
+Thu 22 Oct
+logged
+Wed 21 Oct
+logged
+Tue 20 Oct
+logged
+Mon 19 Oct
+1 done
+Sun 18 Oct
+logged
+Sat 17 Oct
+logged
+Fri 16 Oct
+3 done
+Thu 15 Oct
+logged
+Wed 14 Oct
+logged
+Tue 13 Oct
+logged
+Mon 12 Oct
+logged
+Sun 11 Oct
+logged
+Sat 10 Oct
+logged
+Fri 9 Oct
+2 done
+Thu 8 Oct
+logged
+Wed 7 Oct
+logged
+Tue 6 Oct
+logged
+Mon 5 Oct
+1 done
+Sun 4 Oct
+logged
+Sat 3 Oct
+logged
+Fri 2 Oct
+2 done
+Thu 1 Oct
+logged
+Wed 30 Sept
+logged
+Tue 29 Sept
+logged
+LOAD 30 MORE
+Terav — Record
+FEEDBACK? →
+TODAY
+PLAN
+RECORD
+PROFILE
+100
 
-fixed/sticky on 04-record: div.fixed inset-0 z-50 flex items-end sm:ite @y=0 h=635 | header.sticky top-0 flex items-center justify-b @y=267 h=53 | nav.fixed left-0 right-0 bottom-0 z-40 borde @y=613 h=54
+fixed/sticky on 04-record: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=614 h=53
 
 ## 05-check-top
-url: https://app.terav.fit/check/
+url: http://localhost:3000/check/
 horizontal overflow: false
 
 Skip to content
-TERAV
+Back
 Morning check
 
-TUESDAY 27 OCT
+WEDNESDAY 28 OCT
 
-WORKOUT READY
+BACK OFF
 
-Progress load — nothing above 3/10 and no flags.
+Shoulder is above 5/10.
 
-CITED
-Kellmann 2010 · pain-provocation thresholds
-→
+Next step: skip hard training today. If this is night pain, a sudden change, or it isn't settling, talk to a doctor or physio. Terav isn't medical advice.
+
+WHY?
 
 ✓
-Saved. Today's prescription adjusts to this read.
+Saved. Today's plan is adjusted.
 
 REGIONS
+
+Mild: barely there. Notable: you notice it. Severe: it limits you.
+
 Shoulder
 None
 Mild
 Notable
-Severe
+✓ Severe
 Elbow
-None
+✓ None
 Mild
 Notable
 Severe
 Low back
-None
+✓ None
 Mild
 Notable
 Severe
@@ -571,59 +578,62 @@ FLAGS · TAP TO TOGGLE
 Woke me at night
 CONTEXT
 Morning stiffness
-None
+✓ None
 <15 min
 15-30
 >30
-Life load
+A heavy week outside training
 Fresh
 Normal
 Cooked
-Outside training yesterday
+Anything outside training lately?
 
-The engine reads these. Keywords like padel, hike, poor sleep feed today's proposal — no LLM, just a keyword parser, all done on-device.
+The engine reads these. Keywords like padel, hike, poor sleep feed today's proposal.
 
 Update check
 →
-DAY
+TODAY
 PLAN
 RECORD
 PROFILE
 
 ## 05-check-bottom
-url: https://app.terav.fit/check/
+url: http://localhost:3000/check/
 horizontal overflow: false
 
 Skip to content
-TERAV
+Back
 Morning check
 
-TUESDAY 27 OCT
+WEDNESDAY 28 OCT
 
-WORKOUT READY
+BACK OFF
 
-Progress load — nothing above 3/10 and no flags.
+Shoulder is above 5/10.
 
-CITED
-Kellmann 2010 · pain-provocation thresholds
-→
+Next step: skip hard training today. If this is night pain, a sudden change, or it isn't settling, talk to a doctor or physio. Terav isn't medical advice.
+
+WHY?
 
 ✓
-Saved. Today's prescription adjusts to this read.
+Saved. Today's plan is adjusted.
 
 REGIONS
+
+Mild: barely there. Notable: you notice it. Severe: it limits you.
+
 Shoulder
 None
 Mild
 Notable
-Severe
+✓ Severe
 Elbow
-None
+✓ None
 Mild
 Notable
 Severe
 Low back
-None
+✓ None
 Mild
 Notable
 Severe
@@ -631,52 +641,40 @@ FLAGS · TAP TO TOGGLE
 Woke me at night
 CONTEXT
 Morning stiffness
-None
+✓ None
 <15 min
 15-30
 >30
-Life load
+A heavy week outside training
 Fresh
 Normal
 Cooked
-Outside training yesterday
+Anything outside training lately?
 
-The engine reads these. Keywords like padel, hike, poor sleep feed today's proposal — no LLM, just a keyword parser, all done on-device.
+The engine reads these. Keywords like padel, hike, poor sleep feed today's proposal.
 
 Update check
 →
-DAY
+TODAY
 PLAN
 RECORD
 PROFILE
 
-fixed/sticky on 05-check: div.fixed left-0 right-0 z-50 border-t borde @y=526 h=77 | nav.fixed left-0 right-0 bottom-0 z-40 borde @y=613 h=54
+fixed/sticky on 05-check: div.fixed left-0 right-0 z-50 border-t borde @y=530 h=73 | nav.fixed left-0 right-0 bottom-0 z-40 borde @y=614 h=53
 
 ## 06-programs-top
-url: https://app.terav.fit/programs/
+url: http://localhost:3000/programs/
 horizontal overflow: false
 
 Skip to content
-TERAV
+Back
 Pick your focus.
 
 Each program is one focus arc — an engine, a skill, a lift, a stubborn joint. The rest of your week stays yours. Personalised to your baseline, adaptive to how you respond.
 
-CITED = every claim references a study, simulator harness passes. VERIFIED = the citations have been audited against the literature in a documented review, with reviewer, date and scope on record.
+How we check programs
 
-Every program ships at least CITED. VERIFIED means a second, documented pass over the citations — currently Terav's own audit process, not an outside clinician. No program has yet been signed off by an independent specialist, and none has five completed field arcs. When one does, we will say so and name them. Personal programs (author's own clinical context) sit outside this ladder — see the “personal” badge instead.
-
-8 PROGRAMS · LIVE NOW
-
-ENDURANCE
-
-CITED
-
-Engine Builder — Block 1: Base
-
-Block 1 of a 3-block, ~6-month engine transformation. Eight weeks of Zone 1/2 base with a single weekly hard session added in week 4. Row, bike, ski-erg, or run.
-
-8 wks · beginner
+3 PROGRAMS · LIVE NOW
 
 SKILL
 
@@ -698,37 +696,65 @@ For lifters adding cardio without losing the squat. Explosive-strength cost boun
 
 8 wks · intermediate
 
-ENDURANCE
+SKILL
 
 CITED
 
-Rowing 
+First Strict Pull-Up
+
+Multi-tier skill program on the shared pull drill library. Grip → scap → negative → band → unassisted, then volume. Personalised sessions target your weakest sub-capability first.
+
+8 wks · multi-tier
+
+All
+Strength
+Gymnastics & skill
+Engine & endurance
+Mobility
+SORT
+Curated
+Shortest first
+Easiest first
+
+1 PROGRAM
+
+Strength
+
+Move heavier weight in a specific lift or pattern.
+
+Concurrent-Strength Maintenance
+CITED
+
+For lifters adding cardio without losing the squat. Explosive-strength cost bounded, cited, PR-banned.
+
+8 wk
+·
+~4-5 hr/week
+
+3 PROGRAMS
+
+Gymnastics & skill
+
+Unlock a specific movement — pull-up, HSPU, muscle-up, handstand walk.
+
+Handstand Walk
+CITED
+
+Multi-tiered handstand walk program from wall-supported beginner to advanced turns and obstacles. Personalised sessions target your specific weak capab
 
 ## 06-programs-bottom
-url: https://app.terav.fit/programs/
+url: http://localhost:3000/programs/
 horizontal overflow: false
 
 Skip to content
-TERAV
+Back
 Pick your focus.
 
 Each program is one focus arc — an engine, a skill, a lift, a stubborn joint. The rest of your week stays yours. Personalised to your baseline, adaptive to how you respond.
 
-CITED = every claim references a study, simulator harness passes. VERIFIED = the citations have been audited against the literature in a documented review, with reviewer, date and scope on record.
+How we check programs
 
-Every program ships at least CITED. VERIFIED means a second, documented pass over the citations — currently Terav's own audit process, not an outside clinician. No program has yet been signed off by an independent specialist, and none has five completed field arcs. When one does, we will say so and name them. Personal programs (author's own clinical context) sit outside this ladder — see the “personal” badge instead.
-
-8 PROGRAMS · LIVE NOW
-
-ENDURANCE
-
-CITED
-
-Engine Builder — Block 1: Base
-
-Block 1 of a 3-block, ~6-month engine transformation. Eight weeks of Zone 1/2 base with a single weekly hard session added in week 4. Row, bike, ski-erg, or run.
-
-8 wks · beginner
+3 PROGRAMS · LIVE NOW
 
 SKILL
 
@@ -750,20 +776,59 @@ For lifters adding cardio without losing the squat. Explosive-strength cost boun
 
 8 wks · intermediate
 
-ENDURANCE
+SKILL
 
 CITED
 
-Rowing 
+First Strict Pull-Up
 
-fixed/sticky on 06-programs: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=613 h=54
+Multi-tier skill program on the shared pull drill library. Grip → scap → negative → band → unassisted, then volume. Personalised sessions target your weakest sub-capability first.
+
+8 wks · multi-tier
+
+All
+Strength
+Gymnastics & skill
+Engine & endurance
+Mobility
+SORT
+Curated
+Shortest first
+Easiest first
+
+1 PROGRAM
+
+Strength
+
+Move heavier weight in a specific lift or pattern.
+
+Concurrent-Strength Maintenance
+CITED
+
+For lifters adding cardio without losing the squat. Explosive-strength cost bounded, cited, PR-banned.
+
+8 wk
+·
+~4-5 hr/week
+
+3 PROGRAMS
+
+Gymnastics & skill
+
+Unlock a specific movement — pull-up, HSPU, muscle-up, handstand walk.
+
+Handstand Walk
+CITED
+
+Multi-tiered handstand walk program from wall-supported beginner to advanced turns and obstacles. Personalised sessions target your specific weak capab
+
+fixed/sticky on 06-programs: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=614 h=53
 
 ## 07-profile-top
-url: https://app.terav.fit/profile/
+url: http://localhost:3000/profile/
 horizontal overflow: false
 
 Skip to content
-TERAV
 Profile
 E
 
@@ -771,25 +836,9 @@ e2e-persona-pullup@example.test
 
 JOINED OCT 2026
 
-WHAT TERAV BELIEVES
-
-Front Squat
-85 kg
-Trap-Bar DL (Floor)
-145 kg
-Back Squat (High Bar)
-110 kg
-Block Pull (Midshin)
-140 kg
-Conventional Deadlift
-150 kg
-Program tier
-Hang
-
 YOUR PROGRAMS
 
 First Strict Pull-Up
-GRADUATED
 
 8 weeks · multi-tier
 
@@ -807,7 +856,7 @@ Add
 
 MORE
 
-Off-plan
+Extra session
 Send feedback
 Re-run intake
 Report
@@ -818,18 +867,17 @@ Privacy
 Terms
 ·
 Medical disclaimer
-SIGN OUT
-DAY
+Sign out
+TODAY
 PLAN
 RECORD
 PROFILE
 
 ## 07-profile-bottom
-url: https://app.terav.fit/profile/
+url: http://localhost:3000/profile/
 horizontal overflow: false
 
 Skip to content
-TERAV
 Profile
 E
 
@@ -837,25 +885,9 @@ e2e-persona-pullup@example.test
 
 JOINED OCT 2026
 
-WHAT TERAV BELIEVES
-
-Front Squat
-85 kg
-Trap-Bar DL (Floor)
-145 kg
-Back Squat (High Bar)
-110 kg
-Block Pull (Midshin)
-140 kg
-Conventional Deadlift
-150 kg
-Program tier
-Hang
-
 YOUR PROGRAMS
 
 First Strict Pull-Up
-GRADUATED
 
 8 weeks · multi-tier
 
@@ -873,7 +905,7 @@ Add
 
 MORE
 
-Off-plan
+Extra session
 Send feedback
 Re-run intake
 Report
@@ -884,21 +916,20 @@ Privacy
 Terms
 ·
 Medical disclaimer
-SIGN OUT
-DAY
+Sign out
+TODAY
 PLAN
 RECORD
 PROFILE
 
-fixed/sticky on 07-profile: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=613 h=54
+fixed/sticky on 07-profile: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=614 h=53
 
 ## 08-account-top
-url: https://app.terav.fit/account/
+url: http://localhost:3000/account/
 horizontal overflow: false
 
 Skip to content
-TERAV
-Profile
+Back
 Account
 E
 
@@ -921,18 +952,17 @@ Privacy
 Terms
 ·
 Medical disclaimer
-DAY
+TODAY
 PLAN
 RECORD
 PROFILE
 
 ## 08-account-bottom
-url: https://app.terav.fit/account/
+url: http://localhost:3000/account/
 horizontal overflow: false
 
 Skip to content
-TERAV
-Profile
+Back
 Account
 E
 
@@ -955,19 +985,18 @@ Privacy
 Terms
 ·
 Medical disclaimer
-DAY
+TODAY
 PLAN
 RECORD
 PROFILE
 
-fixed/sticky on 08-account: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=613 h=54
+fixed/sticky on 08-account: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=614 h=53
 
 ## 09-settings-top
-url: https://app.terav.fit/settings/
+url: http://localhost:3000/settings/
 horizontal overflow: false
 
 Skip to content
-TERAV
 Back
 Settings
 
@@ -981,10 +1010,10 @@ HAPTICS
 Haptic feedback
 Buzz on tap, accept, skip.
 
-OFF-PLAN
+EXTRA SESSION
 
-Off-plan drills
-Accessory and mobility work outside the schedule. Your plan already puts these on specific days.
+Extra session drills
+Extra drills and mobility work outside the schedule. Your plan already puts these on specific days.
 
 APPEARANCE
 
@@ -997,17 +1026,16 @@ LANGUAGE
 Language
 Estonian, Finnish coming soon.
 English
-DAY
+TODAY
 PLAN
 RECORD
 PROFILE
 
 ## 09-settings-bottom
-url: https://app.terav.fit/settings/
+url: http://localhost:3000/settings/
 horizontal overflow: false
 
 Skip to content
-TERAV
 Back
 Settings
 
@@ -1021,10 +1049,10 @@ HAPTICS
 Haptic feedback
 Buzz on tap, accept, skip.
 
-OFF-PLAN
+EXTRA SESSION
 
-Off-plan drills
-Accessory and mobility work outside the schedule. Your plan already puts these on specific days.
+Extra session drills
+Extra drills and mobility work outside the schedule. Your plan already puts these on specific days.
 
 APPEARANCE
 
@@ -1037,125 +1065,135 @@ LANGUAGE
 Language
 Estonian, Finnish coming soon.
 English
-DAY
+TODAY
 PLAN
 RECORD
 PROFILE
 
-fixed/sticky on 09-settings: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=613 h=54
+fixed/sticky on 09-settings: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=614 h=53
 
 ## 10-off-plan-top
-url: https://app.terav.fit/off-plan/
+url: http://localhost:3000/off-plan/
 horizontal overflow: false
 
 Skip to content
-TERAV
-Off-plan
+Back
+Extra session
 
-Accessory work, home rehab, around-runs. Logging to today.
+Anything outside your plan: a run, a class, mobility. Logging to today.
 
-Tuesday 27 Oct
+Wednesday 28 Oct
 
 Today
 
-ACCESSORIES & HOME REHAB
+ACCESSORY WORK
 
 Do these when you can — no calendar constraint.
 
 Band shoulder prep (I-Y-T + face pull)
 Shoulder + grip prep — every session · 2 sets
 Dead hang (passive)
-Dead-hang ladder (Tier A/B) · 4 sets
+Dead-hang ladder · 4 sets
 Active hang (scap-engaged)
-Dead-hang ladder (Tier A/B) · 3 sets
+Dead-hang ladder · 3 sets
 Scapular pull-up
-Scapular pull ladder (Tier A/B) · 4 sets
+Scapular pull ladder · 4 sets
 Scap retraction hold at top
-Scapular pull ladder (Tier A/B) · 3 sets
+Scapular pull ladder · 3 sets
 Ring row (incline, easy)
 Row strength — closed-chain pull · 3 sets
+HELD
 Ring row (horizontal)
 Row strength — closed-chain pull · 4 sets
 Ring row (feet elevated)
 Row strength — closed-chain pull · 4 sets
 Negative pull-up (5s eccentric)
-Negative ladder (Tier B) · 4 sets
+Negative ladder · 4 sets
 Negative pull-up (10s eccentric)
-Negative ladder (Tier B) · 3 sets
+Negative ladder · 3 sets
 Isometric hold at top (chin over bar)
-Negative ladder (Tier B) · 3 sets
+Negative ladder · 3 sets
 Band-assisted pull-up (heavy band)
-Band-assisted pull ladder (Tier B) · 4 sets
+Band-assisted pull ladder · 4 sets
 Band-assisted pull-up (light band)
-Band-assisted pull ladder (Tier B) · 4 sets
+Band-assisted pull ladder · 4 sets
 First strict pull-up attempt
-Band-assisted pull ladder (Tier B) · 1 sets
+Band-assisted pull ladder · 1 sets
 First strict pull-up attempt
-Sub-max pull-up sets (Tier C/D) · 1 sets
+Sub-max pull-up sets · 1 sets
 Partial-ROM pull-up (top half)
-Sub-max pull-up sets (Tier C/D) · 5 sets
+Sub-max pull-up sets · 5 sets
 Slow tempo pull-up (3-1-3)
-Tempo pull-up (Tier C) · 3 sets
+Tempo pull-up · 3 sets
 Isometric hold at mid-range (90° elbow)
-Tempo pull-up (Tier C) · 3 sets
+Tempo pull-up · 3 sets
 Grease-the-groove single pull-ups
-Grease the groove — sub-max singles 
+Grease the groove — sub-max singles · 5 sets
+First strict pull-up attempt
+Grip-width variety · 1 sets
+Partial-ROM pull-up (top half)
+Grip-width variety · 4 sets
 
 ## 10-off-plan-bottom
-url: https://app.terav.fit/off-plan/
+url: http://localhost:3000/off-plan/
 horizontal overflow: false
 
 Skip to content
-TERAV
-Off-plan
+Back
+Extra session
 
-Accessory work, home rehab, around-runs. Logging to today.
+Anything outside your plan: a run, a class, mobility. Logging to today.
 
-Tuesday 27 Oct
+Wednesday 28 Oct
 
 Today
 
-ACCESSORIES & HOME REHAB
+ACCESSORY WORK
 
 Do these when you can — no calendar constraint.
 
 Band shoulder prep (I-Y-T + face pull)
 Shoulder + grip prep — every session · 2 sets
 Dead hang (passive)
-Dead-hang ladder (Tier A/B) · 4 sets
+Dead-hang ladder · 4 sets
 Active hang (scap-engaged)
-Dead-hang ladder (Tier A/B) · 3 sets
+Dead-hang ladder · 3 sets
 Scapular pull-up
-Scapular pull ladder (Tier A/B) · 4 sets
+Scapular pull ladder · 4 sets
 Scap retraction hold at top
-Scapular pull ladder (Tier A/B) · 3 sets
+Scapular pull ladder · 3 sets
 Ring row (incline, easy)
 Row strength — closed-chain pull · 3 sets
+HELD
 Ring row (horizontal)
 Row strength — closed-chain pull · 4 sets
 Ring row (feet elevated)
 Row strength — closed-chain pull · 4 sets
 Negative pull-up (5s eccentric)
-Negative ladder (Tier B) · 4 sets
+Negative ladder · 4 sets
 Negative pull-up (10s eccentric)
-Negative ladder (Tier B) · 3 sets
+Negative ladder · 3 sets
 Isometric hold at top (chin over bar)
-Negative ladder (Tier B) · 3 sets
+Negative ladder · 3 sets
 Band-assisted pull-up (heavy band)
-Band-assisted pull ladder (Tier B) · 4 sets
+Band-assisted pull ladder · 4 sets
 Band-assisted pull-up (light band)
-Band-assisted pull ladder (Tier B) · 4 sets
+Band-assisted pull ladder · 4 sets
 First strict pull-up attempt
-Band-assisted pull ladder (Tier B) · 1 sets
+Band-assisted pull ladder · 1 sets
 First strict pull-up attempt
-Sub-max pull-up sets (Tier C/D) · 1 sets
+Sub-max pull-up sets · 1 sets
 Partial-ROM pull-up (top half)
-Sub-max pull-up sets (Tier C/D) · 5 sets
+Sub-max pull-up sets · 5 sets
 Slow tempo pull-up (3-1-3)
-Tempo pull-up (Tier C) · 3 sets
+Tempo pull-up · 3 sets
 Isometric hold at mid-range (90° elbow)
-Tempo pull-up (Tier C) · 3 sets
+Tempo pull-up · 3 sets
 Grease-the-groove single pull-ups
-Grease the groove — sub-max singles 
+Grease the groove — sub-max singles · 5 sets
+First strict pull-up attempt
+Grip-width variety · 1 sets
+Partial-ROM pull-up (top half)
+Grip-width variety · 4 sets
 
-fixed/sticky on 10-off-plan: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=613 h=54
+fixed/sticky on 10-off-plan: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=614 h=53

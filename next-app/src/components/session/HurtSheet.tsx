@@ -73,7 +73,7 @@ export function HurtSheet({
         id="hurt-title"
         ref={titleRef}
         tabIndex={-1}
-        className="mb-3 text-[16px] font-semibold tracking-[-.015em] text-strong outline-none"
+        className="mb-3 text-body font-semibold tracking-[-.015em] text-strong outline-none"
       >
         {step === "menu" ? "Something hurt" : step === "where" ? "Where did it hurt?" : "Recorded"}
       </h2>
@@ -88,14 +88,14 @@ export function HurtSheet({
           <button
             type="button"
             onClick={onStopSession}
-            className="min-h-[48px] w-full rounded bg-amber px-4 py-3 text-sm font-semibold text-ground"
+            className="min-h-[48px] w-full rounded-lg bg-amber px-4 py-3 text-small font-semibold text-ground"
           >
             Stop session
           </button>
         </div>
       ) : step === "where" ? (
         <div className="space-y-2 p-1">
-          <p className="text-sm text-muted">Where? This goes on today&rsquo;s record.</p>
+          <p className="text-small text-muted">Where? This goes on today&rsquo;s record.</p>
           {regions.map((r) => (
             <MenuButton
               key={r.id}
@@ -108,28 +108,28 @@ export function HurtSheet({
               {r.label}
             </MenuButton>
           ))}
-          {regions.length === 0 ? <p className="text-sm text-muted">Loading…</p> : null}
+          {regions.length === 0 ? <p className="text-small text-muted">Loading…</p> : null}
         </div>
       ) : (
         <div className="space-y-3 p-1">
-          <p className="text-sm text-ink">
+          <p className="text-small text-ink">
             Recorded — {recorded}. Today&rsquo;s readiness has been updated, so tomorrow&rsquo;s
             session already knows.
           </p>
-          <p className="text-sm text-muted">
+          <p className="text-small text-muted">
             You agreed at intake to stop rather than train through it. That is still the advice.
           </p>
           <button
             type="button"
             onClick={onStopSession}
-            className="min-h-[48px] w-full rounded bg-bronze px-4 py-3 text-sm font-semibold text-ink-inverse"
+            className="min-h-[48px] w-full rounded-lg bg-bronze px-4 py-3 text-small font-semibold text-ink-inverse"
           >
             Stop session
           </button>
           <button
             type="button"
             onClick={onClose}
-            className="min-h-[48px] w-full rounded border border-line-soft px-4 py-3 text-sm"
+            className="min-h-[48px] w-full rounded-lg border border-line-soft px-4 py-3 text-small"
           >
             Keep going
           </button>
@@ -144,7 +144,7 @@ function MenuButton({ onClick, children }: { onClick: () => void; children: Reac
     <button
       type="button"
       onClick={onClick}
-      className="flex min-h-[48px] w-full items-center justify-between rounded border border-line-soft px-3 py-3 text-left text-sm active:bg-line-soft/50"
+      className="flex min-h-[48px] w-full items-center justify-between rounded-lg border border-line-soft px-3 py-3 text-left text-small active:bg-line-soft/50"
     >
       <span>{children}</span>
       <span aria-hidden className="text-muted">›</span>

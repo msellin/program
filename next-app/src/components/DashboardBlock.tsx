@@ -4,6 +4,7 @@ import { useState, type ReactNode } from "react";
 import Link from "next/link";
 import { ChevronDown, ChevronRight, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { cardClass } from "@/components/ui/Card";
 
 /**
  * F9 Batch 30 · DashboardBlock primitive.
@@ -57,15 +58,6 @@ const EYEBROW_TONE: Record<EyebrowTone, string> = {
   slate: "text-slate",
 };
 
-const ACCENT_STRIPE: Record<EyebrowTone, string> = {
-  default: "",
-  amber: "border-l-4 border-l-amber",
-  red: "border-l-4 border-l-red",
-  bronze: "border-l-4 border-l-bronze",
-  green: "border-l-4 border-l-green",
-  slate: "border-l-4 border-l-slate",
-};
-
 export function DashboardBlock({
   eyebrow,
   eyebrowTone = "default",
@@ -95,9 +87,7 @@ export function DashboardBlock({
         // Batch 33 · M8 · shadow-plus-line elevation. Two-part shadow:
         // 0/1/2 rgba(0,0,0,0.4) tight rim + 0/4/12/-6 halo for float.
         // Reads as a genuine surface, not a bordered rectangle.
-        "rounded-lg border border-line-soft bg-surface-2 px-4 py-4",
-        "shadow-[0_1px_2px_rgba(0,0,0,0.4),0_4px_12px_-6px_rgba(0,0,0,0.5)]",
-        accent ? ACCENT_STRIPE[accent] : null,
+        cardClass({ status: accent === "red" || accent === "amber" || accent === "green" ? accent : undefined }),
         className,
       )}
     >
@@ -126,18 +116,18 @@ export function DashboardBlock({
           {eyebrow ? (
             <p
               className={cn(
-                "font-mono text-[10px] uppercase tracking-widest",
+                "font-mono text-eyebrow uppercase tracking-widest",
                 EYEBROW_TONE[eyebrowTone],
               )}
             >
               {eyebrow}
             </p>
           ) : null}
-          <h2 className="text-[18px] font-semibold text-strong tracking-[-0.02em] leading-snug">
+          <h2 className="text-h3 text-strong">
             {title}
           </h2>
           {lede && showBody ? (
-            <p className="text-[14px] text-muted leading-relaxed">{lede}</p>
+            <p className="text-small text-muted leading-relaxed">{lede}</p>
           ) : null}
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
@@ -179,7 +169,7 @@ export function DashboardBlock({
                 primaryCta.href ? (
                   <Link
                     href={primaryCta.href}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-bronze bg-bronze text-ground px-3.5 py-2 text-[14px] font-semibold hover:bg-bronze-hover active:bg-bronze-active min-h-[44px] shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_1px_2px_rgba(0,0,0,0.4)]"
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-bronze bg-bronze text-ground px-3.5 py-2 text-small font-semibold hover:bg-bronze-hover active:bg-bronze-active min-h-[44px] shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_1px_2px_rgba(0,0,0,0.4)]"
                   >
                     {primaryCta.label}
                     <ChevronRight size={14} />
@@ -188,7 +178,7 @@ export function DashboardBlock({
                   <button
                     type="button"
                     onClick={primaryCta.onClick}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-bronze bg-bronze text-ground px-3.5 py-2 text-[14px] font-semibold hover:bg-bronze-hover active:bg-bronze-active min-h-[44px] shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_1px_2px_rgba(0,0,0,0.4)]"
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-bronze bg-bronze text-ground px-3.5 py-2 text-small font-semibold hover:bg-bronze-hover active:bg-bronze-active min-h-[44px] shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_1px_2px_rgba(0,0,0,0.4)]"
                   >
                     {primaryCta.label}
                     <ChevronRight size={14} />

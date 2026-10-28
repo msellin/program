@@ -14,6 +14,7 @@ import { useStore } from "@/lib/useStore";
 import { today as todayISO } from "@/lib/utils";
 import { Sparkline } from "@/components/charts/Sparkline";
 import type { Program, Store } from "@/lib/schemas";
+import { cardClass } from "@/components/ui/Card";
 
 /**
  * The load-bearing "how am I doing?" surface for every non-hip program.
@@ -50,8 +51,8 @@ export function RetestMetricsPanel({
   return (
     <section className="space-y-3">
       <div className="flex items-baseline justify-between gap-3">
-        <h2 className="text-[15px] font-semibold text-strong">Retest metrics</h2>
-        <span className="text-[11px] text-muted">
+        <h2 className="text-body font-semibold text-strong">Retest metrics</h2>
+        <span className="text-eyebrow text-muted">
           {userTier ? `Tier target: ${userTier}` : "Program targets"}
         </span>
       </div>
@@ -66,7 +67,7 @@ export function RetestMetricsPanel({
           />
         ))}
       </ul>
-      <p className="text-[11px] text-muted italic">
+      <p className="text-eyebrow text-muted italic">
         Current = latest logged value. Baseline = first. Delta measured in the
         metric&apos;s direction (lower is better for times, higher for kg).
       </p>
@@ -176,26 +177,26 @@ function RetestCard({
   };
 
   return (
-    <li className="rounded border border-line-soft bg-surface p-3">
+    <li className={cardClass()}>
       <div className="flex items-baseline justify-between gap-2 flex-wrap">
-        <p className="font-semibold text-sm text-strong flex items-center gap-1.5">
+        <p className="font-semibold text-small text-strong flex items-center gap-1.5">
           {m.display_name}
           {due && canRetest ? (
-            <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
+            <span className="font-mono text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
               <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-bronze" />
               retest due
             </span>
           ) : null}
         </p>
         {m.at_week ? (
-          <span className="font-mono text-[10px] text-muted uppercase tracking-wider">
+          <span className="font-mono text-eyebrow text-muted uppercase tracking-wider">
             check at week {m.at_week}
           </span>
         ) : null}
       </div>
 
       {!m.supported ? (
-        <p className="mt-1 text-[14px] text-muted italic">
+        <p className="mt-1 text-small text-muted italic">
           {m.note ?? "Not yet trackable in the app."}
         </p>
       ) : m.baseline == null && m.current == null && canRetest ? (
@@ -203,29 +204,29 @@ function RetestCard({
         // actually log them. Was rendering `— · — · —` in a silent grid;
         // comprehensive audit 2026-08-18 P1-5 flagged that users don't
         // realize physical-test metrics need their own log input.
-        <p className="mt-2 text-[14px] text-muted italic">
+        <p className="mt-2 text-small text-muted italic">
           No readings yet. Log your baseline below so the delta has something to track against.
         </p>
       ) : (
         <div className="mt-2 space-y-2">
-          <div className="grid grid-cols-3 gap-2 text-[14px]">
+          <div className="grid grid-cols-3 gap-2 text-small">
             <div>
-              <p className="text-muted text-[10px] uppercase tracking-wider">Baseline</p>
+              <p className="text-muted text-eyebrow uppercase tracking-wider">Baseline</p>
               <p className="font-mono text-ink">{formatMetric(m.baseline, m.unit)}</p>
             </div>
             <div>
-              <p className="text-muted text-[10px] uppercase tracking-wider">Current</p>
-              <p className="font-mono text-[20px] leading-tight text-strong font-semibold tracking-tight">
+              <p className="text-muted text-eyebrow uppercase tracking-wider">Current</p>
+              <p className="font-mono text-h2 leading-tight text-strong tracking-tight">
                 {formatMetric(m.current, m.unit)}
               </p>
             </div>
             <div>
-              <p className="text-muted text-[10px] uppercase tracking-wider">Δ</p>
+              <p className="text-muted text-eyebrow uppercase tracking-wider">Δ</p>
               <p className={`font-mono ${deltaColor}`}>
                 {delta ? formatDelta(delta.value, m.unit) : "—"}
               </p>
               {delta?.withinError && m.minimal_detectable_change != null ? (
-                <p className="text-[10px] leading-tight text-muted mt-0.5">
+                <p className="text-eyebrow leading-tight text-muted mt-0.5">
                   within measurement error (±
                   {formatMetric(m.minimal_detectable_change, m.unit)})
                 </p>
@@ -249,7 +250,7 @@ function RetestCard({
       )}
 
       {m.supported && (m.target != null || m.stretch != null) ? (
-        <p className="mt-2 text-[11px] text-muted">
+        <p className="mt-2 text-eyebrow text-muted">
           Target {formatMetric(m.target, m.unit)}
           {m.stretch != null ? ` · stretch ${formatMetric(m.stretch, m.unit)}` : ""}
         </p>
@@ -259,7 +260,7 @@ function RetestCard({
         <div className="mt-3 pt-2 border-t border-line-soft">
           {retestOpen ? (
             <div className="space-y-2">
-              <label className="block text-[12px] text-muted">
+              <label className="block text-caption text-muted">
                 New reading ({m.unit})
                 <input
                   type="number"
@@ -270,16 +271,16 @@ function RetestCard({
                     setValue(e.target.value);
                     setError(null);
                   }}
-                  className="mt-1 w-full px-2 py-2 min-h-[40px] border border-line rounded bg-surface text-sm focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze font-mono"
+                  className="mt-1 w-full px-2 py-2 min-h-[40px] border border-line rounded-lg bg-surface text-small focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze font-mono"
                   autoFocus
                 />
               </label>
-              {error ? <p className="text-[11px] text-red">{error}</p> : null}
+              {error ? <p className="text-eyebrow text-red">{error}</p> : null}
               <div className="flex gap-2">
                 <button
                   type="button"
                   onClick={submit}
-                  className="flex-1 bg-bronze text-ground rounded py-2 min-h-[40px] text-[12px] font-mono uppercase tracking-wider hover:bg-bronze-hover"
+                  className="flex-1 bg-bronze text-ground rounded-lg py-2 min-h-[40px] text-caption font-mono uppercase tracking-wider hover:bg-bronze-hover"
                 >
                   Save
                 </button>
@@ -290,7 +291,7 @@ function RetestCard({
                     setValue("");
                     setError(null);
                   }}
-                  className="border border-line rounded py-2 px-3 min-h-[40px] text-[12px] font-mono uppercase tracking-wider hover:bg-line-soft"
+                  className="border border-line rounded-lg py-2 px-3 min-h-[40px] text-caption font-mono uppercase tracking-wider hover:bg-line-soft"
                 >
                   Cancel
                 </button>
@@ -300,7 +301,7 @@ function RetestCard({
             <button
               type="button"
               onClick={() => setRetestOpen(true)}
-              className="inline-flex items-center gap-1.5 text-[12px] font-mono uppercase tracking-wider text-slate hover:text-ink"
+              className="inline-flex items-center gap-1.5 text-caption font-mono uppercase tracking-wider text-slate hover:text-ink"
             >
               <RefreshCw size={11} />
               {due
