@@ -56,15 +56,17 @@ describe("figure rig", () => {
     for (const id of Object.keys(FIGS))
       for (const side of ["L", "R", "B"] as const) {
         const b = figureBounds(id, side), sc = FIGS[id].scale || 1;
+        // Collect the extremes, then assert once: an expect per point timed out on CI.
+        let out = 0;
         for (const t of TIMES.filter((_, i) => i % 3 === 0))
           for (const s of used(drawFigure(id, side, t, false)).filter((s) => !s.bg))
             for (const [x, y] of pts(s.pts)) {
               const X = 179 + sc * (x - 179), Y = 160 + sc * (y - 168);
-              expect(X, id).toBeGreaterThanOrEqual(b.x); expect(X, id).toBeLessThanOrEqual(b.x + b.w);
-              expect(Y, id).toBeGreaterThanOrEqual(b.y); expect(Y, id).toBeLessThanOrEqual(b.y + b.h);
+              out = Math.max(out, b.x - X, X - b.x - b.w, b.y - Y, Y - b.y - b.h);
             }
+        expect(out, id + side).toBeLessThanOrEqual(0);
       }
-  });
+  }, 20000);
 
   it("strokes are sized for the size drawn: heavier in px on the tile than in a thumbnail, working limb heaviest", () => {
     expect(strokePx(8, 40, false)).toBeCloseTo(2.72, 1);
