@@ -5,7 +5,7 @@ import { cardClass } from "@/components/ui/Card";
 import Link from "next/link";
 import { loadProgram, loadProgramManifest, loadExercises, applyProgramExerciseOverrides } from "@/lib/data-loader";
 import { HeroStateCard } from "@/components/workout/HeroStateCard";
-import { FirstRunBanner } from "@/components/FirstRunBanner";
+import { FindLevelCard } from "@/components/program/FindLevelCard";
 import { EmptyStateCard } from "@/components/EmptyStateCard";
 import { DashboardBlock } from "@/components/DashboardBlock";
 import { RedRestCard } from "@/components/workout/RedRestCard";
@@ -301,8 +301,6 @@ export function TodaySession({
         <YourPlanCard program={primary} />
       ) : null}
 
-      <FirstRunBanner />
-
       {/* MissedSessionPrompt removed 2026-08-23 — its job (a single-day
           "yesterday was missed" nudge) is superseded by WeekRecoveryCard
           on /plan, which generalizes it to the whole week and is where
@@ -363,6 +361,14 @@ export function TodaySession({
           {allBlocks.length > 0 ? <HeroStateCard date={activeDate} /> : null}
           <SignalsStrip program={primary} date={activeDate} />
           <RetestReminder program={primary} profile={userProfile} activeDate={activeDate} />
+          {/* The quick start skips the physical tests. Offer them here, never on a red day
+              (that path returns the rest card above) and only while no baseline exists. */}
+          {!redToday?.hold &&
+          primary.slug &&
+          (primary.intake?.physical_tests?.length ?? 0) > 0 &&
+          Object.keys(userProfile?.program_states?.[primary.slug]?.baseline_capabilities ?? {}).length === 0 ? (
+            <FindLevelCard slug={primary.slug} />
+          ) : null}
         </>
       ) : null}
       {/* Batch 38 (2026-08-21) — HeroStateCard no longer renders on

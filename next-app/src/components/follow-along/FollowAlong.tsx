@@ -7,6 +7,7 @@ import { announce } from "@/lib/announce";
 import { playCountdownTick, playTimerComplete } from "@/lib/sound";
 import { VideoModal } from "@/components/VideoModal";
 import { ExerciseFigure } from "./ExerciseFigure";
+import { DemoVideo } from "./DemoVideo";
 import type { FollowStep, StepSide } from "@/lib/follow-along/steps";
 
 /**
@@ -64,6 +65,7 @@ export function FollowAlong({
   const [results, setResults] = useState<Record<number, "done" | "skip">>({});
   const [hurt, setHurt] = useState(false);
   const [video, setVideo] = useState(false);
+  const [demoOpen, setDemoOpen] = useState(false);
   const [skipArmed, setSkipArmed] = useState(false);
   const anim = useRef({ start: 0, frozen: 0 });
   const [now, setNow] = useState(() => Date.now());
@@ -328,29 +330,31 @@ export function FollowAlong({
         ) : (
           <>
             <div className="flex min-h-0 flex-grow flex-col px-4 pt-2">
-              <div className="relative aspect-video w-full flex-shrink-0 overflow-hidden rounded-xl bg-surface [@media(max-height:700px)]:aspect-[2.3]">
-                {step.figure ? (
-                  <ExerciseFigure
-                    key={`${step.figure}-${step.side}`}
-                    figure={step.figure}
-                    side={step.side}
-                    playing={phase === "work" && !paused}
-                    getElapsed={getElapsed}
-                  />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center px-6 text-center text-caption text-muted">
-                    {step.cue ?? "Open the full tutorial for this move."}
-                  </div>
-                )}
-                <button
-                  type="button"
-                  onClick={() => setVideo(true)}
-                  aria-label="Full tutorial video, opens a player"
-                  className="absolute left-2.5 top-2.5 h-11 rounded-full bg-ground/70 px-3.5 text-caption font-semibold text-ink"
-                >
-                  Full tutorial <span aria-hidden="true">↗</span>
-                </button>
-              </div>
+              {step.figure || step.videoUrl ? (
+                <div className="relative aspect-video w-full flex-shrink-0 overflow-hidden rounded-xl bg-surface [@media(max-height:700px)]:aspect-[2.3]">
+                  {step.figure ? (
+                    <ExerciseFigure
+                      key={`${step.figure}-${step.side}`}
+                      figure={step.figure}
+                      side={step.side}
+                      playing={phase === "work" && !paused && !demoOpen}
+                      getElapsed={getElapsed}
+                    />
+                  ) : null}
+                  {step.videoUrl ? (
+                    <DemoVideo key={step.key} url={step.videoUrl} start={step.videoStart} end={step.videoEnd} title={step.name} onOpenChange={setDemoOpen} hasFigure={!!step.figure} />
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setVideo(true)}
+                      aria-label="Find a demo video, opens a search"
+                      className="absolute left-2.5 top-2.5 h-11 rounded-full bg-ground/70 px-3.5 text-caption font-semibold text-ink"
+                    >
+                      Find a demo <span aria-hidden="true">↗</span>
+                    </button>
+                  )}
+                </div>
+              ) : null}
 
               <div className="mt-3.5 flex h-7 flex-shrink-0 items-center justify-between">
                 <span
@@ -369,6 +373,15 @@ export function FollowAlong({
               <p className="mt-1 line-clamp-2 h-[44px] flex-shrink-0 text-body leading-[1.45] text-ink">
                 {step.cue ?? ""}
               </p>
+              {!step.figure && !step.videoUrl ? (
+                <button
+                  type="button"
+                  onClick={() => setVideo(true)}
+                  className="flex h-11 flex-shrink-0 items-center self-start text-caption font-semibold text-slate"
+                >
+                  Find a demo <span aria-hidden="true">↗</span>
+                </button>
+              ) : null}
 
               <div className="flex min-h-0 flex-grow flex-col items-center justify-center gap-2">
                 <button

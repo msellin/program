@@ -15,6 +15,10 @@ import type { Block, Phase, Program, Proposal, Store } from "@/lib/schemas";
 import { escalationNoticeFor } from "@/lib/engine/escalation";
 import { activeExclusions, exclusionNotices, exclusionsAffectingDay } from "@/lib/engine/intake-exclusions";
 import { Button } from "@/components/ui/Button";
+import { ExerciseFigure } from "@/components/follow-along/ExerciseFigure";
+import { figureFor } from "@/lib/figures/exercise-figures";
+
+const ZERO = () => 0;
 
 /**
  * Screen 4a (single track) from the Day redesign. Never scrolls past one
@@ -433,11 +437,21 @@ export function BriefView({
                   type="button"
                   onClick={() => onSelectExercise(r.key)}
                   className={
-                    "w-full flex items-center justify-between gap-3 rounded-lg bg-surface px-3.5 py-[13px] text-left " +
+                    "w-full flex items-center gap-3 rounded-lg bg-surface px-3.5 py-[13px] text-left " +
                     (isOptional ? "border border-dashed border-line-soft" : "border border-line-soft")
                   }
                 >
-                  <span className="min-w-0">
+                  {figureFor(r.exercise.id) ? (
+                    <span className="h-12 w-[68px] flex-shrink-0 overflow-hidden rounded-md bg-ground" aria-hidden="true">
+                      <ExerciseFigure
+                        figure={figureFor(r.exercise.id)!}
+                        side="B"
+                        playing={false}
+                        getElapsed={ZERO}
+                      />
+                    </span>
+                  ) : null}
+                  <span className="min-w-0 flex-grow">
                     <span className="block text-body font-semibold text-strong tracking-[-.01em] mb-0.5">
                       {exerciseListName(r.exercise)}
                     </span>
@@ -466,7 +480,7 @@ export function BriefView({
                   </span>
                   <span
                     className={
-                      "flex-shrink-0 font-mono text-caption uppercase tracking-[.1em] " +
+                      "ml-auto flex-shrink-0 font-mono text-caption uppercase tracking-[.1em] " +
                       (isDone ? "text-muted" : isMain ? "text-bronze" : "text-muted")
                     }
                   >

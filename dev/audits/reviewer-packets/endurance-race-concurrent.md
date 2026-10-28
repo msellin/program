@@ -1,10 +1,10 @@
 # Reviewer packet — Race prep & concurrent training
 
-**Generated 2026-10-27 from the shipping program data.** Regenerate with
+**Generated 2026-10-28 from the shipping program data.** Regenerate with
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: 1aade6817e2a9a50 -->
+<!-- source-fingerprint: a32813de4002d72a -->
 
 ## What we are asking
 
@@ -127,7 +127,7 @@ Printed against the questions above so you can see which are actually detectable
 
 **Goal the program sells:** Submax HR reduction at fixed pace — target -10 bpm, stretch -15.
 
-**What it tells users it does:** For lifters adding cardio without losing the squat. Explosive-strength cost bounded, cited, PR-banned.
+**What it tells users it does:** Keep your squat strong while you add cardio. Strength is held, not chased.
 
 **What it promises by the end:** Your back squat, block pull and front squat held near your pre-block training max while conditioning goes in alongside, at an RPE ceiling of 7. Strength and heart rate at a fixed pace are retested against your own baseline.
 

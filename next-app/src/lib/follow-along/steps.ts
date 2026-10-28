@@ -26,6 +26,9 @@ export type FollowStep = {
   cue: string | null;
   figure: string | null;
   videoUrl: string | null;
+  /** The vetted clip window of `videoUrl`, in seconds. */
+  videoStart?: number;
+  videoEnd?: number;
   videoSearch: string;
   kind: "hold" | "reps";
   seconds: number | null;
@@ -92,6 +95,8 @@ export function buildSteps(inputs: FollowInput[]): FollowStep[] {
           cue: exercise.cues?.[0] ?? null,
           figure: figureFor(exercise.id),
           videoUrl: exercise.video_url ?? null,
+          videoStart: exercise.video_start,
+          videoEnd: exercise.video_end,
           videoSearch: exercise.video_search ?? `${exercise.name} exercise form`,
           kind,
           seconds: kind === "hold" ? hold : null,

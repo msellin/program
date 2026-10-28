@@ -1094,9 +1094,9 @@ function WizardQuestionScreen({
           };
           if (useOptionRows) {
             // components.md#buttons#7 (option row) — canonical implementation.
-            // Calibration tone: opt.hint renders as the row's secondary line,
-            // so users see the tier mapping inline instead of buried in a
-            // disclosure.
+            // opt.hint is deliberately not rendered here: on calibration
+            // questions it carried "TIER A / B-C" — the engine's internal
+            // levels, which the user never chose. (Redesign P0, 2026-10-28.)
             return (
               <ul
                 role="radiogroup"
@@ -1106,7 +1106,6 @@ function WizardQuestionScreen({
                 {q.options.map((opt, idx) => {
                   const picked = currentValue === opt.value;
                   const unsafePicked = picked && isGateUnsafe(safetyGates, q.id, opt.value);
-                  const showHint = step.tone === "calibration" && opt.hint;
                   return (
                     <li key={opt.value}>
                       <button
@@ -1149,11 +1148,6 @@ function WizardQuestionScreen({
                           >
                             {opt.label ?? opt.value.replace(/_/g, " ")}
                           </p>
-                          {showHint ? (
-                            <p className="text-eyebrow font-mono text-muted uppercase tracking-widest mt-0.5">
-                              {opt.hint}
-                            </p>
-                          ) : null}
                         </div>
                       </button>
                     </li>

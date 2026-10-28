@@ -135,6 +135,11 @@ export default function PrivacyPage() {
           sends it your message, your account email and your user id. We do not
           keep a mailing list there.
         </li>
+        <li>
+          Demo videos (optional): <strong>YouTube</strong> (Google), via the privacy-enhanced
+          youtube-nocookie.com player. Nothing is requested from YouTube until you tap
+          &quot;Watch demo&quot;; then YouTube receives your IP address and device details.
+        </li>
         <li>Payment data (when paid tier launches): handled entirely by <strong>Stripe</strong>. We never see card numbers.</li>
       </ul>
       <p className="text-small text-muted">

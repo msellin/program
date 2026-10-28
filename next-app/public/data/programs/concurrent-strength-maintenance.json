@@ -58,7 +58,8 @@
       "typical_outcome": "By week 8: submax HR down 5-10 bpm at fixed pace, back squat / bench / deadlift maintained within 2.5 kg of pre-block TM.",
       "outcome_confidence": "realistic",
       "full_goal_weeks_estimate": 8,
-      "starting_phase_id": "phase_1_intro"
+      "starting_phase_id": "phase_1_intro",
+      "level_summary": "Under 3 hours of cardio a week"
     },
     {
       "id": "progression",
@@ -67,7 +68,8 @@
       "typical_outcome": "Submax HR down 8-15 bpm, strength held or +2.5 kg on any lift (only via green cycle-end).",
       "outcome_confidence": "realistic",
       "full_goal_weeks_estimate": 8,
-      "starting_phase_id": "phase_1_intro"
+      "starting_phase_id": "phase_1_intro",
+      "level_summary": "3–6 hours of cardio a week"
     },
     {
       "id": "push",
@@ -76,7 +78,8 @@
       "typical_outcome": "VO2max +2-4%; strength floor held. Above this bar, concurrent gains become stochastic per HERITAGE non-response data.",
       "outcome_confidence": "stretch",
       "full_goal_weeks_estimate": 8,
-      "starting_phase_id": "phase_1_intro"
+      "starting_phase_id": "phase_1_intro",
+      "level_summary": "6+ hours of cardio a week"
     }
   ],
   "program_goal": {

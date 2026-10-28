@@ -52,6 +52,7 @@ BASELINE = {
     "functions/api/state.ts": "STALE CLAIM — ticked in saas-launch, never existed; the KV design it belonged to was replaced by Postgres",
     "middleware.ts": "STALE CLAIM — ticked in saas-launch for the Clerk design that was replaced by Supabase",
     "src/lib/sync.ts": "STALE CLAIM — ticked in saas-launch, no such module",
+    "next-app/src/components/FirstRunBanner.tsx": "deleted 2026-10-28 — the 'Four tabs' tour pushed day 1's session below the fold (redesign P0, MASTER-LIST M-001)",
 }
 
 

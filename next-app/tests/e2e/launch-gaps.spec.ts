@@ -75,9 +75,13 @@ async function answerStep(page: Page): Promise<boolean> {
     await page.waitForTimeout(600);
     return true;
   }
+  // Quick start's safety screen: one "None of these" answers every row.
+  const none = page.getByRole("button", { name: /^none of these$/i });
   // Screening questions are Yes/No buttons: answer "No" (healthy athlete).
   const no = page.getByRole("radio", { name: /^no$/i });
-  if ((await no.count()) > 0) {
+  if ((await none.count()) > 0) {
+    await none.first().click().catch(() => {});
+  } else if ((await no.count()) > 0) {
     await no.first().click().catch(() => {});
   } else {
     const radios = page.locator('[role="radio"][aria-checked="false"], input[type="radio"]:not(:checked)');

@@ -9,10 +9,14 @@ import { useStore } from "@/lib/useStore";
 import { useIsSuperAdmin } from "@/lib/super-admin";
 import { cn, iso as isoDate } from "@/lib/utils";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
-import { DashboardBlock } from "@/components/DashboardBlock";
 import { StatusPill } from "@/components/ui/StatusPill";
 import type { Program, ProgramManifest, ProgramManifestEntry } from "@/lib/schemas";
 import { cardClass } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
+import { StickyCta } from "@/components/ui/StickyCta";
+import { LevelLadder } from "@/components/program/LevelLadder";
+import { StatTiles, rangeText } from "@/components/program/StatTiles";
+import { ProgramFigure, heroFigureId } from "@/components/program/ProgramFigure";
 
 type Props = {
   slug: string;
@@ -186,6 +190,15 @@ export function ProgramPreviewClient({ slug }: Props) {
     commitStart();
   };
 
+  const sc = program.schedule_constraints;
+  const sessionsText = rangeText(sc?.session_count_per_week_range);
+  const minutesText = rangeText(sc?.session_length_min_range);
+  const statTiles = [
+    { value: String(entry.duration_weeks), label: "weeks" },
+    ...(sessionsText ? [{ value: sessionsText, label: "days / week" }] : []),
+    ...(minutesText ? [{ value: minutesText, label: "minutes" }] : []),
+  ];
+
   // startAlongside intentionally removed for launch: 1 main track at a time.
   // Multi-main-track support in the store is dormant behind MULTI_MAIN_ENABLED
   // in useStore.ts. Re-add here when we flip that flag.
@@ -201,36 +214,71 @@ export function ProgramPreviewClient({ slug }: Props) {
           tone. Personal chip stays slate. Ladder chip collapses to
           CITED/VERIFIED per v1.1.1 §7.5 (REFERENCED shows as CITED
           slate; REVIEWED+VERIFIED show as VERIFIED green). */}
-      <header className="space-y-2">
-        <div className="flex items-baseline gap-2 flex-wrap">
-          <h1 className="text-h1 tracking-tight text-strong leading-tight">
-            {entry.name}
-          </h1>
-          {isActive ? (
-            <StatusPill label="active" tone="green" className="flex-shrink-0" />
-          ) : null}
-          {(() => {
-            if (entry.personal) return null;
-            const s = entry.status;
-            if (!s || s === "draft" || s === "DRAFT" || s === "PROVISIONAL") return null;
-            // §7.5 collapse: REFERENCED → CITED slate; REVIEWED + VERIFIED
-            // + stable → VERIFIED green. Prior 3-tier chip collapses to 2
-            // per the copy jury caveat.
-            const isVerified = s === "REVIEWED" || s === "VERIFIED" || s === "stable";
-            return (
+      <header className="-mx-4 space-y-4 border-b border-line-soft bg-surface px-4 pb-4 pt-5 sm:-mx-6 sm:px-6">
+        {heroFigureId(slug) ? (
+          <ProgramFigure slug={slug} className="mx-auto aspect-[358/201] w-full max-w-[420px] overflow-hidden rounded-xl bg-ground" />
+        ) : null}
+        <div className="space-y-1.5">
+          <div className="flex flex-wrap items-center gap-2">
+            {isActive ? <StatusPill label="active" tone="green" className="flex-shrink-0" /> : null}
+            {entry.personal ? <StatusPill label="personal" tone="slate" className="flex-shrink-0" /> : null}
+            {!entry.personal && !isDraft ? (
               <StatusPill
-                label={isVerified ? "verified" : "cited"}
-                tone={isVerified ? "green" : "slate"}
+                label={entry.status === "REVIEWED" || entry.status === "VERIFIED" || entry.status === "stable" ? "verified" : "cited"}
+                tone={entry.status === "REVIEWED" || entry.status === "VERIFIED" || entry.status === "stable" ? "green" : "slate"}
                 className="flex-shrink-0"
               />
-            );
-          })()}
+            ) : null}
+          </div>
+          <h1 className="text-h1 tracking-tight text-strong leading-tight">{entry.name}</h1>
+          <p className="text-small text-muted">{entry.short_description}</p>
           {entry.personal ? (
-            <StatusPill label="personal" tone="slate" className="flex-shrink-0" />
+            <p className="text-caption text-muted italic">
+              Authored for one specific clinical context. Use only if your situation resembles the author&apos;s.
+            </p>
           ) : null}
         </div>
-        <p className="text-small text-muted">{entry.short_description}</p>
-        {/* F10 Batch 31 · attribution row for REVIEWED programs. Names the
+        <StatTiles tiles={statTiles} />
+        {hasTiers ? (
+          <LevelLadder levels={program.plan_tiers!.map((t) => ({ id: t.id, label: t.label }))} activeId={effectiveTier} />
+        ) : null}
+      </header>
+
+      {/* P1-74 remaining (2026-08-19) — full section reorder per
+          design-lead brief §Decision 2. Reading flow is
+          "is it for me? → what do I get? → what does it cost? → why
+          should I trust it? → how do we prove it?"
+          Adapts-to-you was in the header (top-loaded before Who/What);
+          moved down between Commitment and Proves-it-works so it lands
+          after the user has decided "yes, this is for me". */}
+      <details className={`${cardClass()} group`}>
+        <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between text-small font-semibold text-strong">
+          How it works
+          <span aria-hidden className="text-muted transition-transform group-open:rotate-90 motion-reduce:transition-none">›</span>
+        </summary>
+        <div className="mt-3 space-y-4 text-small leading-relaxed text-ink">
+          <div>
+            <p className="font-mono text-eyebrow uppercase tracking-widest text-muted">Who this is for</p>
+            <p>{entry.who_this_is_for}</p>
+          </div>
+          <div>
+            <p className="font-mono text-eyebrow uppercase tracking-widest text-muted">What you&apos;ll achieve</p>
+            <p>{entry.what_youll_achieve}</p>
+          </div>
+          {entry.adapts ? (
+            <div>
+              <p className="font-mono text-eyebrow uppercase tracking-widest text-muted">Adapts to you</p>
+              <p>{entry.adapts} Every session sharpens further from your logs.</p>
+            </div>
+          ) : null}
+          {entry.retest ? (
+            <div>
+              <p className="font-mono text-eyebrow uppercase tracking-widest text-muted">How we prove it works</p>
+              <p>{entry.retest}</p>
+            </div>
+          ) : null}
+          {entry.load_hint ? <p className="text-muted">{entry.load_hint}</p> : null}
+          {/* F10 Batch 31 · attribution row for REVIEWED programs. Names the
             reviewer + date + scope so the trust tier isn't a bare chip —
             it's an audit trail. review_evidence[] entries are audit files
             in the repo; we don't link them (privacy) but we name them.
@@ -266,111 +314,12 @@ export function ProgramPreviewClient({ slug }: Props) {
             not in a public references list. Use only if your situation resembles the author&apos;s.
           </p>
         ) : null}
-        {/* Levels chain — only for multi-tier programs. Replaces the bare
-            "beginner" tag so a Tier-C user doesn't think this program is
-            below their level. */}
-        {entry.levels?.length ? (
-          <div className="flex flex-wrap items-center gap-1 pt-1 text-caption font-mono">
-            <span className="text-muted">Levels:</span>
-            {entry.levels.map((lvl, i) => (
-              <span key={lvl} className="flex items-center gap-1">
-                <span className="text-slate">{lvl}</span>
-                {i < (entry.levels?.length ?? 0) - 1 ? (
-                  <span className="text-muted/60">→</span>
-                ) : null}
-              </span>
-            ))}
-          </div>
-        ) : null}
-      </header>
 
-      {/* P1-74 remaining (2026-08-19) — full section reorder per
-          design-lead brief §Decision 2. Reading flow is
-          "is it for me? → what do I get? → what does it cost? → why
-          should I trust it? → how do we prove it?"
-          Adapts-to-you was in the header (top-loaded before Who/What);
-          moved down between Commitment and Proves-it-works so it lands
-          after the user has decided "yes, this is for me". */}
-      <DashboardBlock
-        eyebrow="Section 1 of 4"
-        title="Who this is for"
-      >
-        <p className="text-small leading-relaxed text-ink">{entry.who_this_is_for}</p>
-      </DashboardBlock>
-
-      <DashboardBlock
-        eyebrow="Section 2 of 4"
-        title="What you'll achieve"
-      >
-        <p className="text-small leading-relaxed text-ink">{entry.what_youll_achieve}</p>
-      </DashboardBlock>
-
-      <DashboardBlock
-        eyebrow="Section 3 of 4"
-        title="What it takes"
-      >
-        <ul className="text-small leading-relaxed text-ink space-y-1">
-          <li>
-            <span className="font-mono text-slate">{entry.duration_weeks} weeks</span>
-            {entry.load_hint ? (
-              <span className="text-muted"> · {entry.load_hint}</span>
-            ) : null}
-          </li>
-          {entry.difficulty !== "multi-tier" ? (
-            <li className="text-muted">
-              Difficulty · <span className="text-ink">{entry.difficulty}</span>
-            </li>
-          ) : null}
-          {entry.levels?.length ? (
-            <li className="text-muted">
-              Levels ·{" "}
-              {entry.levels.map((lvl, i) => (
-                <span key={lvl}>
-                  <span className="text-slate">{lvl}</span>
-                  {i < (entry.levels?.length ?? 0) - 1 ? (
-                    <span className="text-muted/60"> → </span>
-                  ) : null}
-                </span>
-              ))}
-            </li>
-          ) : null}
           {entry.positioning === "side_track" ? (
-            <li className="text-slate text-caption">
-              Layers on any main track — safe to run alongside your existing week.
-            </li>
+            <p className="text-slate">Layers on any main track, safe to run alongside your existing week.</p>
           ) : null}
-          {entry.prerequisites?.length ? (
-            <li className="text-amber text-caption">
-              Recommended background — see the amber card below.
-            </li>
-          ) : null}
-        </ul>
-      </DashboardBlock>
-
-      {/* Adapts-to-you dropped down here per design-lead reorder — was
-          in the header. Lands AFTER the user has decided "yes, this is
-          for me" (Who + What + What it takes) — so the differentiator
-          reads as "and here's what's special about it" not "before we
-          even tell you what it is." Bronze accent economy locked. */}
-      {entry.adapts ? (
-        <div className={cardClass()}>
-          <p className="font-mono text-eyebrow uppercase tracking-widest text-bronze mb-1">
-            Adapts to you
-          </p>
-          <p className="text-small text-strong leading-snug">
-            {entry.adapts} Every session sharpens further from your logs.
-          </p>
         </div>
-      ) : null}
-
-      {entry.retest ? (
-        <DashboardBlock
-          eyebrow="Section 4 of 4"
-          title="How we prove it works"
-        >
-          <p className="text-small leading-relaxed text-ink">{entry.retest}</p>
-        </DashboardBlock>
-      ) : null}
+      </details>
 
       {entry.prerequisites?.length ? (
         <section className="rounded-lg border border-amber/40 bg-amber/10 p-3 text-small space-y-1">
@@ -548,51 +497,49 @@ export function ProgramPreviewClient({ slug }: Props) {
               </div>
             ) : null}
 
-            <div className="flex flex-wrap gap-2">
-              {hasOtherActive ? (
-                <>
-                  <button
-                    type="button"
-                    onClick={startAlone}
-                    disabled={starting || !canStart}
-                    className="inline-flex items-center gap-1.5 font-mono text-caption uppercase tracking-wider px-4 py-3 rounded-lg bg-bronze text-ground hover:bg-bronze/90 disabled:opacity-40 disabled:cursor-not-allowed"
-                  >
-                    <Play size={14} />
-                    {starting ? "Starting…" : draftBlocked ? "Not published yet" : comingSoonBlocked ? "Coming soon" : requiresTierPick && !effectiveTier ? "Pick a tier" : "Make this my focus (replace current)"}
-                  </button>
-                  {isSuperAdmin ? (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (entry.personal && !personalGate.acknowledged) {
-                          setPersonalGate({ open: true, acknowledged: false });
-                          return;
-                        }
-                        saveTierIfNeeded();
-                        setStarting(true);
-                        addSecondaryProgramForce(slug);
-                        writeTraceOnStart();
-                        router.push("/");
-                      }}
-                      disabled={starting || !canStart}
-                      className="inline-flex items-center gap-1.5 font-mono text-caption uppercase tracking-wider px-4 py-3 rounded-lg border border-slate/60 text-slate hover:bg-slate/10 disabled:opacity-40 disabled:cursor-not-allowed"
-                    >
-                      + Add alongside (admin)
-                    </button>
-                  ) : null}
-                </>
-              ) : (
-                <button
-                  type="button"
+            <StickyCta>
+              <div className="flex flex-col gap-2">
+                <Button
+                  size="lg"
+                  block
                   onClick={startAlone}
                   disabled={starting || !canStart}
-                  className="inline-flex items-center gap-1.5 font-mono text-caption uppercase tracking-wider px-4 py-3 rounded-lg bg-bronze text-ground hover:bg-bronze/90 disabled:opacity-40 disabled:cursor-not-allowed"
                 >
-                  <Play size={14} />
-                  {starting ? "Starting…" : draftBlocked ? "Not published yet" : comingSoonBlocked ? "Coming soon" : requiresTierPick && !effectiveTier ? "Pick a tier to start" : "Make this my focus"}
-                </button>
-              )}
-            </div>
+                  <Play size={16} />
+                  {starting
+                    ? "Starting…"
+                    : draftBlocked
+                      ? "Not published yet"
+                      : comingSoonBlocked
+                        ? "Coming soon"
+                        : requiresTierPick && !effectiveTier
+                          ? "Pick a level to start"
+                          : hasOtherActive
+                            ? "Make this my focus"
+                            : "Start free"}
+                </Button>
+                {hasOtherActive && isSuperAdmin ? (
+                  <Button
+                    variant="secondary"
+                    block
+                    onClick={() => {
+                      if (entry.personal && !personalGate.acknowledged) {
+                        setPersonalGate({ open: true, acknowledged: false });
+                        return;
+                      }
+                      saveTierIfNeeded();
+                      setStarting(true);
+                      addSecondaryProgramForce(slug);
+                      writeTraceOnStart();
+                      router.push("/");
+                    }}
+                    disabled={starting || !canStart}
+                  >
+                    + Add alongside (admin)
+                  </Button>
+                ) : null}
+              </div>
+            </StickyCta>
           </div>
         )}
       </div>

@@ -55,6 +55,11 @@ export const exerciseSchema = z.object({
   flags: z.array(z.string()).optional(),
   video_search: z.string().optional(),
   video_url: z.string().optional(),
+  // The clip of `video_url` that shows the movement, in seconds. The demo
+  // embed plays only this window, muted and looping (vetted list:
+  // dev/active/redesign-p0/demo-clips.md).
+  video_start: z.number().int().nonnegative().optional(),
+  video_end: z.number().int().positive().optional(),
   progression: z.string().nullable().optional(),
   regression: z.string().nullable().optional(),
   prerequisite: z.string().optional(),
@@ -384,6 +389,10 @@ export const planTierSchema = z.object({
   label: z.string(),
   condition: z.string(),
   typical_outcome: z.string(), // "1-3 heavy-band assisted pull-ups"
+  // One-line plain "who this level is for" on the quick-start level card. Only
+  // needed when `condition` reads intake questions (whose labels are whole
+  // sentences); conditions on physical tests are read automatically.
+  level_summary: z.string().optional(),
   outcome_confidence: z.enum(["realistic", "fair", "stretch"]).optional(),
   full_goal_weeks_estimate: z.number().optional(),
   starting_phase_id: z.string().optional(), // which phase in the program's phases[] to start at

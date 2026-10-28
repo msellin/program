@@ -1,10 +1,10 @@
 # Reviewer packet — Gymnastics & upper-body skill
 
-**Generated 2026-10-27 from the shipping program data.** Regenerate with
+**Generated 2026-10-28 from the shipping program data.** Regenerate with
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: 7356bd71d6f152cd -->
+<!-- source-fingerprint: ab5abe06658b3523 -->
 
 ## What we are asking
 
@@ -52,7 +52,7 @@ is published too, not quietly dropped.
 
 **Goal the program sells:** Strict pull-up max reps — target 1 reps, stretch 5.
 
-**What it tells users it does:** Multi-tier skill program on the shared pull drill library. Grip → scap → negative → band → unassisted, then volume. Personalised sessions target your weakest sub-capability first.
+**What it tells users it does:** From a dead hang to your first strict pull-up, then more. Each session trains your weakest link.
 
 **What it promises by the end:** Beginners: 25-45 second dead hang, clean scap pulls, first ring rows. Assisted-only lifters: first strict rep from a 10-second negative. First-repper: 3-5 unbroken. Volume tier: 8-10 unbroken with wide-grip variety unlocked.
 
@@ -218,7 +218,7 @@ Printed against the questions above so you can see which are actually detectable
 
 **Goal the program sells:** Handstand composite (Block 1) — target 1 z-score composite of hold + walk + wrist tolerance, stretch 1.5.
 
-**What it tells users it does:** Multi-tiered handstand walk program from wall-supported beginner to advanced turns and obstacles. Personalised sessions target your specific weak capabilities.
+**What it tells users it does:** From wall holds to walking on your hands. Each session trains what holds you back.
 
 **What it promises by the end:** Block 1 of a multi-block arc. Beginners: consistent wall handstand + brief freestand attempts. Wall-holders: first freestand hold + first walk step. Freestanders: 3-5 continuous walk steps. Advanced: first pirouette or obstacle traverse.
 

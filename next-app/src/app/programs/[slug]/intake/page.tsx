@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import { IntakeClient } from "./IntakeClient";
+import { IntakeEntry } from "./IntakeEntry";
 
 export function generateStaticParams(): Array<{ slug: string }> {
   const manifestPath = path.join(
@@ -23,5 +23,5 @@ export default async function ProgramIntakePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  return <IntakeClient slug={slug} />;
+  return <IntakeEntry slug={slug} />;
 }

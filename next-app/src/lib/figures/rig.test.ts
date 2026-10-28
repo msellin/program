@@ -151,4 +151,31 @@ describe("exercise → figure map", () => {
       expect(FIGS[fig], fig).toBeDefined();
     }
   });
+
+  // Every drill on the ad path (first-strict-pullup, handstand-walk, concurrent
+  // strength) has a figure, except the few with no meaningful side-view pose.
+  const NO_FIGURE_YET = new Set([
+    "deliberate_mat_falls",
+    "hs_video_review",
+    "tuck_forward_roll_from_crow",
+    "wall_cartwheel_exit",
+  ]);
+  it("every ad-path exercise has a figure", () => {
+    const seen = new Set<string>();
+    const walk = (o: unknown) => {
+      if (Array.isArray(o)) o.forEach(walk);
+      else if (o && typeof o === "object") {
+        for (const [k, v] of Object.entries(o)) {
+          if (k === "exercise_id" && typeof v === "string") seen.add(v);
+          else walk(v);
+        }
+      }
+    };
+    for (const prog of ["first-strict-pullup", "handstand-walk", "concurrent-strength-maintenance"]) {
+      walk(JSON.parse(fs.readFileSync(path.resolve(__dirname, `../../../public/data/programs/${prog}.json`), "utf8")));
+    }
+    expect(seen.size).toBeGreaterThan(40);
+    const missing = [...seen].filter((id) => !EXERCISE_FIGURES[id] && !NO_FIGURE_YET.has(id));
+    expect(missing).toEqual([]);
+  });
 });

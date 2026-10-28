@@ -1,10 +1,10 @@
 # Reviewer packet — Shoulder mobility
 
-**Generated 2026-10-27 from the shipping program data.** Regenerate with
+**Generated 2026-10-28 from the shipping program data.** Regenerate with
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: 00a823f8f7df5864 -->
+<!-- source-fingerprint: b14c8bd221418f27 -->
 
 ## What we are asking
 

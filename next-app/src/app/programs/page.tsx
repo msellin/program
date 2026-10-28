@@ -11,19 +11,7 @@ import { InfoSheet } from "@/components/InfoSheet";
 import { StatusPill } from "@/components/ui/StatusPill";
 import type { ProgramManifest, ProgramManifestEntry } from "@/lib/schemas";
 import { cardClass } from "@/components/ui/Card";
-
-// F9 Batch 30 · category → accent tone mapping for the DashboardBlock left
-// stripe. Was previously duplicated in CATEGORY_META's borderClass.
-const CATEGORY_ACCENT: Record<string, "slate" | "bronze" | "green" | "amber" | "default"> = {
-  rehab: "slate",
-  strength: "bronze",
-  skill: "slate",
-  gymnastics: "slate",
-  endurance: "green",
-  hyrox: "amber",
-  mobility: "slate",
-  other: "default",
-};
+import { ProgramFigure, heroFigureId } from "@/components/program/ProgramFigure";
 
 // Batch 36 P0 (audit 2026-08-21 · app-copy-clarity) — collapse the
 // 3-tier ladder (REFERENCED / REVIEWED / VERIFIED) to 2 tiers per
@@ -254,6 +242,9 @@ export default function ProgramCatalogPage() {
                       "focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2",
                     )}
                   >
+                    {heroFigureId(p.slug) ? (
+                      <ProgramFigure slug={p.slug} className="aspect-[358/201] w-full overflow-hidden rounded-lg bg-ground" />
+                    ) : null}
                     <div className="flex items-start justify-between gap-2">
                       <p className="font-mono text-eyebrow uppercase tracking-widest text-muted">
                         {p.category}
@@ -269,8 +260,9 @@ export default function ProgramCatalogPage() {
                     <p className="text-caption text-muted leading-snug line-clamp-2">
                       {p.short_description}
                     </p>
-                    <p className="font-mono text-eyebrow tabular-nums text-muted">
-                      <span className="whitespace-nowrap">{p.duration_weeks} wks</span> · {p.difficulty}
+                    <p className="flex items-center gap-2 font-mono text-eyebrow tabular-nums text-muted">
+                      <span className="whitespace-nowrap">{p.duration_weeks} wks</span>
+                      <DifficultyChip difficulty={p.difficulty} />
                     </p>
                   </Link>
                 </li>
@@ -332,7 +324,7 @@ export default function ProgramCatalogPage() {
           .map(([category, programs]) => {
             const meta = manifest.categories[category];
             const label = meta?.label ?? category;
-            const accent = CATEGORY_ACCENT[category] ?? CATEGORY_ACCENT.other;
+            const accent = "default" as const;
             const count = programs.length;
             return (
               <DashboardBlock
@@ -534,6 +526,9 @@ function ProgramCard({
       )}
     >
       <div className="flex items-start justify-between gap-3">
+        {heroFigureId(p.slug) ? (
+          <ProgramFigure slug={p.slug} className="h-14 w-24 flex-shrink-0 overflow-hidden rounded-lg bg-ground" />
+        ) : null}
         <div className="flex-1 min-w-0">
           <div className="flex items-baseline gap-2 flex-wrap">
             <h3 className="text-small font-semibold text-strong">{p.name}</h3>
@@ -572,6 +567,7 @@ function ProgramCard({
           </p>
           <div className="mt-2 flex items-center gap-2 text-eyebrow font-mono text-muted">
             <span className="whitespace-nowrap">{p.duration_weeks} wk</span>
+            <DifficultyChip difficulty={p.difficulty} />
             {p.load_hint ? (
               <>
                 <span aria-hidden="true">·</span>
@@ -583,5 +579,14 @@ function ProgramCard({
         <ChevronRight size={16} className="text-muted flex-shrink-0 mt-1" aria-hidden />
       </div>
     </Link>
+  );
+}
+
+function DifficultyChip({ difficulty }: { difficulty: string | undefined }) {
+  if (!difficulty) return null;
+  return (
+    <span className="rounded-full border border-line-soft px-2 py-0.5 font-mono text-eyebrow uppercase tracking-wider text-muted">
+      {difficulty === "multi-tier" ? "all levels" : difficulty}
+    </span>
   );
 }
