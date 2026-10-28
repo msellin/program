@@ -686,7 +686,10 @@ Log
 
 ACTIVITY — LAST 12 WEEKS
 
-No session history yet — log a session or morning check to start the trail.
+DONE
+AMBER
+RED-FLAG
+REST OR MISSED
 
 1 active day · showing last 1
 

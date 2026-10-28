@@ -10,4 +10,4 @@
 - [x] Found: Record "Activity" heatmap said "No session history yet" after session 1 — it coloured days only from the
       morning check. A trained day without a check now counts as Done.
 - [x] Lead: personas (31/31), verify (1250/1250), deploy
-- [ ] Re-shoot + rescore (1–10)
+- [x] Re-shoot + rescore (1–10): density 8.3, size 7.8, richness 7.7, consistency 8.0 (rescore-p3-00-summary.md)
