@@ -1,16 +1,16 @@
 import { describe, it, expect } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
-import { FIGS, ACCENT, drawFigure, FIGURE_SLOTS, type FigureFrame } from "./rig";
+import { FIGS, ACCENT, drawFigure, figureBounds, FIGURE_COLORS, FIGURE_SLOTS, strokePx, type FigureFrame } from "./rig";
 import { EXERCISE_FIGURES } from "./exercise-figures";
 
 // The review panel's rules (2026-10-19), as tests. Each one is a defect an
 // earlier draft actually had.
 
-const TEAL = "#5fa3b0";
-const PURPLE = "#b58dbb";
+const TEAL = FIGURE_COLORS.L;
+const PURPLE = FIGURE_COLORS.R;
 const BOTH = ACCENT;
-const FAR = "#6b717d";
+const FAR = FIGURE_COLORS.FAR;
 const TIMES = Array.from({ length: 60 }, (_, i) => i * 250); // 0..15 s
 
 const pts = (s: string) => s.split(" ").map((p) => p.split(",").map(Number));
@@ -43,12 +43,39 @@ describe("figure rig", () => {
     }
   });
 
-  it("keeps every meaningful stroke at 3:1 or better on the card background (WCAG 1.4.11)", () => {
+  it("keeps every meaningful stroke at 3:1 or better on the card AND the Today tile tint (WCAG 1.4.11)", () => {
     const colors = new Set<string>();
     for (const id of Object.keys(FIGS))
       for (const reduced of [false, true])
         for (const s of used(drawFigure(id, "L", 3000, reduced))) colors.add(s.color);
-    for (const c of colors) expect(contrast(c, "#16181c"), c).toBeGreaterThanOrEqual(3);
+    // #2a231f = the tile's bronze/15 over the ground; props and floor failed it before the 2026-10-28 review.
+    for (const c of colors) for (const bg of ["#16181c", "#2a231f"]) expect(contrast(c, bg), c + " on " + bg).toBeGreaterThanOrEqual(3);
+  });
+
+  it("the fitted frame holds every frame of the cycle, so the figure never leaves it or makes it jump", () => {
+    for (const id of Object.keys(FIGS))
+      for (const side of ["L", "R", "B"] as const) {
+        const b = figureBounds(id, side), sc = FIGS[id].scale || 1;
+        for (const t of TIMES.filter((_, i) => i % 3 === 0))
+          for (const s of used(drawFigure(id, side, t, false)).filter((s) => !s.bg))
+            for (const [x, y] of pts(s.pts)) {
+              const X = 179 + sc * (x - 179), Y = 160 + sc * (y - 168);
+              expect(X, id).toBeGreaterThanOrEqual(b.x); expect(X, id).toBeLessThanOrEqual(b.x + b.w);
+              expect(Y, id).toBeGreaterThanOrEqual(b.y); expect(Y, id).toBeLessThanOrEqual(b.y + b.h);
+            }
+      }
+  });
+
+  it("strokes are sized for the size drawn: heavier in px on the tile than in a thumbnail, working limb heaviest", () => {
+    expect(strokePx(8, 40, false)).toBeCloseTo(2.72, 1);
+    expect(strokePx(8, 144, false)).toBeCloseTo(5.04, 1);
+    expect(strokePx(8, 144, true)).toBeGreaterThan(strokePx(8, 144, false));
+    expect(strokePx(2, 40, false)).toBeGreaterThanOrEqual(1.25);
+  });
+
+  it("a still figure shows its poster pose: the pull-up thumbnail is chin over the bar, not a dead hang", () => {
+    const head = (f: FigureFrame) => pts(used(f).find((s) => s.w === 22)!.pts)[0][1];
+    expect(head(drawFigure("pullup", "B", 0, false, true))).toBeLessThan(head(drawFigure("pullup", "B", 0, false)) - 20);
   });
 
   it("every pose draws an accent limb (bronze, or side teal/purple for sided figures)", () => {
@@ -140,6 +167,45 @@ describe("figure rig", () => {
     }
   });
 
+  // anterior-hip-rebuild: the program's provocative positions, as geometry (see the note above HIP_FIGS).
+  const legOf = (id: string, color: string, t: number) => used(drawFigure(id, "B", t, false)).filter((s) => s.color === color && s.w === 8).map((s) => pts(s.pts)).find((p) => p.length === 3)!;
+  const thighDeg = ([H, K]: number[][]) => (Math.atan2(K[1] - H[1], K[0] - H[0]) * 180) / Math.PI; // 90 = straight down, 0 = level forward
+
+  it("squats stop at about parallel: the hip never drops below the knee", () => {
+    for (const id of ["squat", "frontsquat", "airsquat", "goblet"])
+      for (const t of TIMES) {
+        const [, K, H] = used(drawFigure(id, "B", t, false)).filter((s) => s.color === FIGURE_COLORS.BODY && s.w === 8).map((s) => pts(s.pts)).find((p) => p.length === 3)!;
+        expect(H[1], id).toBeLessThanOrEqual(K[1] + 6);
+      }
+  });
+
+  it("A-march stops at a level thigh and leg swings stay small with a soft knee", () => {
+    for (const t of TIMES) {
+      const m = legOf("amarch", BOTH, t);
+      if (m) expect(thighDeg(m)).toBeGreaterThanOrEqual(-0.5);
+      const [H, K, F] = legOf("legswing", TEAL, t);
+      expect(thighDeg([H, K])).toBeGreaterThanOrEqual(59.5); // at most ~30° of flexion
+      expect(Math.abs(thighDeg([H, K]) - thighDeg([K, F]))).toBeGreaterThan(4); // never a locked straight leg
+    }
+  });
+
+  it("hip thrust and bridge finish in one line with the shoulder: never arched past it", () => {
+    for (const id of ["hipthrust", "bridge2"])
+      for (const t of TIMES) {
+        const f = used(drawFigure(id, "B", t, false));
+        const [S, H] = pts(f.find((s) => s.w === 12)!.pts), [, K] = legOf(id, BOTH, t);
+        // Hip at or below the shoulder-knee line (y grows downward).
+        const lineY = S[1] + ((K[1] - S[1]) * (H[0] - S[0])) / (K[0] - S[0]);
+        expect(H[1], id + "@" + t).toBeGreaterThanOrEqual(lineY - 1.5);
+      }
+  });
+
+  it("hollow_hold is drawn tucked: the knees stay bent (no straight-leg-raise hold)", () => {
+    expect(EXERCISE_FIGURES.hollow_hold).toBe("hollowtuck");
+    const [H, K, F] = used(drawFigure("hollowtuck", "B", 2000, false)).filter((s) => s.color === FIGURE_COLORS.BODY && s.w === 8).map((s) => pts(s.pts)).find((p) => p.length === 3)!;
+    expect(Math.abs(thighDeg([H, K]) - thighDeg([K, F]))).toBeGreaterThan(60);
+  });
+
   it("every text alternative names the side for one-sided figures", () => {
     expect(drawFigure("bridge", "L", 0, false).label).toContain("left foot planted");
     expect(drawFigure("kneel", "R", 0, false).label).toContain("right knee down");
@@ -168,6 +234,21 @@ describe("exercise → figure map", () => {
     "tuck_forward_roll_from_crow",
     "wall_cartwheel_exit",
   ]);
+  it("every anterior-hip-rebuild exercise has a figure", () => {
+    const seen = new Set<string>();
+    const walk = (o: unknown) => {
+      if (Array.isArray(o)) o.forEach(walk);
+      else if (o && typeof o === "object")
+        for (const [k, v] of Object.entries(o)) {
+          if (k === "exercise_id" && typeof v === "string") seen.add(v);
+          else walk(v);
+        }
+    };
+    walk(JSON.parse(fs.readFileSync(path.resolve(__dirname, "../../../public/data/programs/anterior-hip-rebuild.json"), "utf8")));
+    // Only real library ids: the program's schema block documents `"exercise_id": "string"`.
+    expect([...seen].filter((id) => ids.has(id) && !EXERCISE_FIGURES[id])).toEqual([]);
+  });
+
   it("every ad-path exercise has a figure", () => {
     const seen = new Set<string>();
     const walk = (o: unknown) => {

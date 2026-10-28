@@ -1,0 +1,3 @@
+sheet-01: bridge2, hipthrust, splitsquat, slrdl, pallof, nordic
+sheet-02: sled, suitcase, farmer, airsquat, goblet, amarch
+sheet-03: legswing, hollowtuck

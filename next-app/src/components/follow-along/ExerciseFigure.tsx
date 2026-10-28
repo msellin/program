@@ -1,11 +1,20 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef } from "react";
-import { drawFigure, figureIsStatic, FIGURE_SLOTS, type FigureFrame, type FigureSide } from "@/lib/figures/rig";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  ACCENTS,
+  drawFigure,
+  figureBounds,
+  figureIsStatic,
+  FIGURE_SLOTS,
+  strokePx,
+  type FigureFrame,
+  type FigureSide,
+} from "@/lib/figures/rig";
 import { usePrefersReducedMotion } from "@/lib/use-reduced-motion";
 
-/** Heavier than the rig's authored widths (hero and 40-56px thumbs both read as a figure, not a wireframe). */
-const weight = (w: number) => (w <= 4 ? w * 1.25 : w * 1.2);
+/** Below this drawn height (a brief thumbnail) the L/R badges are noise: the name row says the side. */
+const BADGE_MIN_PX = 64;
 
 /**
  * Renders one exercise illustration (see lib/figures/rig.ts).
@@ -19,6 +28,12 @@ const weight = (w: number) => (w <= 4 ? w * 1.25 : w * 1.2);
  * The loop runs only while `playing`. Time comes from the player's clock
  * (`getElapsed`), never accumulated frame deltas, so resuming after a pause or
  * a backgrounded app never jumps. rAF itself stops while the page is hidden.
+ *
+ * Figure review (2026-10-28): the viewBox is fitted to the figure's whole
+ * cycle instead of a fixed 358x201, and strokes are sized in SCREEN px for the
+ * size the figure is actually drawn at (`strokePx`), so a 40px brief thumbnail
+ * and the 144px Today tile both read as a figure. A figure that is not playing
+ * and has not started shows its poster pose (chin over the bar, not a dead hang).
  */
 export function ExerciseFigure({
   figure,
@@ -33,12 +48,34 @@ export function ExerciseFigure({
 }) {
   const reduced = usePrefersReducedMotion();
   const svgRef = useRef<SVGSVGElement>(null);
-  const first: FigureFrame = useMemo(() => drawFigure(figure, side, 0, reduced), [figure, side, reduced]);
+  const box = figureBounds(figure, side);
+  // Drawn height of the fitted box in px; the tile is the default until measured.
+  const [drawnPx, setDrawnPx] = useState(144);
+  useEffect(() => {
+    const svg = svgRef.current;
+    if (!svg) return;
+    const measure = () => {
+      const r = svg.getBoundingClientRect();
+      if (r.width > 0 && r.height > 0) setDrawnPx(Math.round(Math.min(r.width / box.w, r.height / box.h) * box.h));
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(svg);
+    return () => ro.disconnect();
+  }, [box.w, box.h]);
+  const width = useCallback(
+    (w: number, color: string) => String(strokePx(w, drawnPx, ACCENTS.includes(color))),
+    [drawnPx],
+  );
+  const showBadges = drawnPx >= BADGE_MIN_PX;
+  const still = !playing && getElapsed() <= 0;
+  const first: FigureFrame = useMemo(() => drawFigure(figure, side, 0, reduced, still), [figure, side, reduced, still]);
 
   const paint = useCallback(() => {
     const svg = svgRef.current;
     if (!svg) return;
-    const f = drawFigure(figure, side, getElapsed(), reduced);
+    const t = getElapsed();
+    const f = drawFigure(figure, side, t, reduced, !playing && t <= 0);
     const set = (el: Element | null, name: string, value: string) => {
       if (el && el.getAttribute(name) !== value) el.setAttribute(name, value);
     };
@@ -49,7 +86,7 @@ export function ExerciseFigure({
       const el = polys[i];
       set(el, "points", s.pts);
       set(el, "stroke", s.color);
-      set(el, "stroke-width", String(weight(s.w)));
+      set(el, "stroke-width", width(s.w, s.color));
       set(el, "opacity", String(s.op));
       set(el, "fill", s.fill);
       set(el, "stroke-dasharray", s.dash);
@@ -60,13 +97,13 @@ export function ExerciseFigure({
       set(circles[j], "cx", String(b.x));
       set(circles[j], "cy", String(b.y));
       set(circles[j], "fill", b.color);
-      set(circles[j], "opacity", String(b.op));
+      set(circles[j], "opacity", String(showBadges ? b.op : 0));
       set(texts[j], "x", String(b.x));
       set(texts[j], "y", String(b.y));
-      set(texts[j], "opacity", String(b.op));
+      set(texts[j], "opacity", String(showBadges ? b.op : 0));
       if (texts[j] && texts[j].textContent !== b.letter) texts[j].textContent = b.letter;
     });
-  }, [figure, side, reduced, getElapsed]);
+  }, [figure, side, reduced, getElapsed, playing, width, showBadges]);
 
   useEffect(() => {
     paint();
@@ -88,13 +125,12 @@ export function ExerciseFigure({
   return (
     <svg
       ref={svgRef}
-      viewBox="0 0 358 201"
+      viewBox={`${box.x} ${box.y} ${box.w} ${box.h}`}
       className="h-full w-full"
       role="img"
       aria-label={first.label}
     >
       <g transform={first.tf || undefined}>
-        {first.floor && <ellipse cx={179} cy={169} rx={118} ry={5} fill="#c89666" opacity={0.14} />}
         {Array.from({ length: FIGURE_SLOTS }, (_, i) => {
           const s = first.slots[i];
           return (
@@ -102,7 +138,8 @@ export function ExerciseFigure({
               key={i}
               points={s.pts}
               stroke={s.color}
-              strokeWidth={weight(s.w)}
+              strokeWidth={width(s.w, s.color)}
+              vectorEffect="non-scaling-stroke"
               opacity={s.op}
               fill={s.fill}
               strokeDasharray={s.dash}
@@ -112,7 +149,7 @@ export function ExerciseFigure({
           );
         })}
         {first.badges.map((b, j) => (
-          <circle key={`c${j}`} cx={b.x} cy={b.y} r={10} fill={b.color} opacity={b.op} />
+          <circle key={`c${j}`} cx={b.x} cy={b.y} r={10} fill={b.color} opacity={showBadges ? b.op : 0} />
         ))}
         {first.badges.map((b, j) => (
           <text
@@ -124,7 +161,7 @@ export function ExerciseFigure({
             fontSize={12}
             fontWeight={800}
             fill="#0e0f12"
-            opacity={b.op}
+            opacity={showBadges ? b.op : 0}
           >
             {b.letter}
           </text>
