@@ -1,0 +1,161 @@
+# Sweep 04: strength-states (round 2, 2026-10-28)
+
+Screen paths are relative to `next-app/tests/e2e/artifacts/personas/`. Items marked "(text)" come from the `.txt` extract beside the PNG.
+
+Method: all 79 csm-red PNGs (mobile + flows) were read. Five other personas were read at the screens that differ from the csm-red baseline (109 PNGs). Images were viewed as contact sheets at 0.75 scale, so small mono labels are less legible than on device. Tall full-page captures were cropped to their top 852px. Every `.txt` extract was read, de-duplicated across personas. `desktop/` and `dom/` were not reviewed.
+
+## Findings
+
+- [B] persona-recover/mobile/01-today.png — Rehab Today's primary CTA advances to loading with no physio check → gate "Advance to Cycle 1" behind clinician sign-off.
+- [B] persona-strength/flows/hip-check/02-answered.png — Owner's clinical hip check (groin at rest, click on lowering) shows to non-rehab users → gate to rehab program; same in graduate/retest 02-answered.
+- [B] persona-recover/flows/program-preview/02-expanded.png — Personal program phases show "birthday waypoint" and "Sept 12 comp" (text) → unlist personal program; scrub personal milestones.
+- [H] persona-recover/mobile/14-check-hip.png — "you already have an orthopaedist and physiatrist" assumes a clinician → make clinician line conditional.
+- [H] persona-recover/mobile/10-report.png — "Provocateur incidents" heading and unlabelled "low back 6" rows (text) → rename heading; label each row.
+- [H] persona-recover/flows/session-overflow-sheet/03-form-cues.png — "Bertolotti", "this user", "pathology" in a user-facing sheet (text) → keep in personal override; write "you".
+- [H] persona-csm-red/mobile/10-report.png — "sim: shoulder flagged during intake" leaks simulator tag into report → rewrite as plain user copy.
+- [H] persona-csm-red/mobile/13-check.png — Sticky "Update check" bar covers the Shoulder row → add bottom padding above the bar.
+- [H] persona-csm-red/mobile/12b-extras-redirect.png — "Back to Day" while the tab says TODAY → one name everywhere.
+- [H] persona-csm-red/flows/cold-load-resume/03-day-tab-respected.png — Bottom nav reads DAY here, TODAY on other screens → use one tab label.
+- [H] persona-strength/mobile/01-today.png — Tab bar changes per page (DAY/PLAN/RECORD/PROFILE vs TODAY/WEEK/PROGRESS/HISTORY) → fixed nav set on every screen.
+- [H] persona-csm-red/mobile/01-day.png — Red-day Today is one card then empty space; no next step → add next session date and a plan link.
+- [H] persona-csm-red/mobile/17-session-past.png — Header scrolled off, no Back; "About 60 min" vs "30–60 min" → restore header; reconcile duration.
+- [H] persona-csm-red/mobile/17-session-past.png — "Wilson 2012 modality bias" cited for bike-over-run (text) → check the citation supports the claim.
+- [H] persona-csm-red/mobile/20-evidence.png — Placeholder citations shown: "Int J Exerc Sci 16(x)", "Scientific Reports 16, s4159" (text) → fix or remove before ads traffic.
+- [H] persona-csm-red/mobile/20-evidence.png — "Preprint / conference — verification required" shown to users (text) → verify or drop the entry.
+- [H] persona-csm-red/flows/cold-load-resume/03-day-tab-respected.png — "Week 3 of 4 · ends 7 Nov" vs session "week 5 of 8 · ends 22 Nov" → one program week count.
+- [H] persona-csm-red/flows/cold-load-resume/01-in-session.png — Today says "Rest today" but this session shows Thursday's session → one state per day.
+- [H] persona-csm-red/flows/cold-load-resume/03-day-tab-respected.png — "Fatigue flagged · applies to Wednesday" on a Thursday session → name the correct day.
+- [H] persona-csm-red/flows/plan-move-commit/02-moved.png — Tue 27 Oct shows Skipped and "Moved to 2026-10-26" at once → show one status; use "26 Oct".
+- [H] persona-csm-red/flows/plan-skip-confirm/01-skip-confirm.png — Body says "Marked as skipped" before user confirms → ask "Mark as skipped?" and explain.
+- [H] persona-csm-red/flows/program-preview/02-expanded.png — END PROGRAM sits beside GO TO TODAY with no confirm → move apart; confirm before ending.
+- [H] persona-csm-red/flows/programs-info-sheet/01-info-sheet.png — "simulator harness", "archetypes", "author's clinical context" in a trust sheet → plain-language rewrite; drop personal line.
+- [H] persona-csm-red/mobile/07-programs-active.png — "cost bounded, cited, PR-banned" hero copy → plain sentence a stranger can parse.
+- [H] persona-csm-red/flows/session-controls/01-set.png — Exercise chips truncated and overlapped ("High-bar ba…", "Block p") → shorter names or horizontal scroll.
+- [H] persona-csm-red/flows/session-controls/01-set.png — "9 SETS LEFT" under a 5-set exercise (session total) → per-exercise count or relabel.
+- [H] persona-csm-red/flows/session-log-set/02-set.png — "10 SETS LEFT" while brief says 5 × 5 → one count for the same exercise.
+- [H] persona-csm-red/flows/session-overflow-sheet/02-after-add-set.png — "8 SETS LEFT" with 3 sets remaining → same count fix.
+- [H] persona-strength/flows/session-rest-extend/02d-after-jump.png — "9 SETS LEFT" on a 6-set exercise → same count fix.
+- [H] persona-recover/flows/session-edit-past-set/03-stepper-open.png — "17 SETS LEFT" on a 6-set exercise → same count fix.
+- [H] persona-csm-red/flows/session-overflow-sheet/05-form-cues.png — "PROVOCATEUR" flag chip is meaningless to users → plain warning label.
+- [H] persona-recover/flows/session-follow-along/05-guided-done.png — "Home rehab and activation done" beside "34 skipped", 0 sets → completion screen reads as failure.
+- [H] persona-recover/flows/session-follow-along/04-guided-after-first-set.png — Step counter stuck at "Step 1/34" across frames 02–04 → advance the counter.
+- [H] persona-recover/mobile/05-progress.png — Italic caption collides with "Week of 17 Aug" card; raw "block_pull_midshin" → fix overlap; show lift name.
+- [H] persona-strength/mobile/05-progress.png — Same caption collision as recover; raw "block_pull_midshin · 125 kg" → fix overlap; show lift name.
+- [H] persona-strength/mobile/03-coach.png — Dead route renders unstyled white 404 in dark app → dark 404 with home link (also 15-events, graduate 03-coach).
+- [H] persona-strength-long/mobile/10-report.png — "target 0 kg" and "target -5 bp" clipped at card edge → wrap or stack values.
+- [H] persona-graduate/mobile/10-report.png — Same clipping; "1/2 on track" here vs "Targets hit" on Today → one status word.
+- [H] persona-graduate/mobile/01-today.png — "Repeat this arc" is primary; the next block is secondary → promote Block 2 as primary.
+- [H] persona-graduate/mobile/01-today.png — Two identical "Submax HR — easy-eff…" rows with truncated labels → show full label and date.
+- [H] persona-graduate/mobile/04-history.png — Submax HR 118 bpm (−22) here, 139 bpm (−2) on the report → one source for the number.
+- [H] persona-graduate/mobile/05-progress.png — "No readings yet. Log your baseline" while History shows 19 retests → fix empty-state logic.
+- [H] persona-graduate/flows/session-rest-extend/02-rest-extended.png — Rest screen reads "Logged · 0 kg × 0" for cardio (text) → show duration or nothing.
+- [H] persona-retest/flows/session-exercise-details/01-exercise-details.png — Cardio block uses set/rep actions ("Logs 0 of 3", "Mark all 3 as prescribed") → cardio-specific actions.
+- [H] persona-retest/flows/session-stop/01-note-sheet.png — 45-min steady cardio shows "SET 1 OF 3" and "SETS LEFT" → cardio labels.
+- [H] persona-retest/flows/session-edit-past-set/04-after-save.png — Cardio shows "0×0 · bar only (20 kg)" and "1 SETS LEFT" (text) → hide lift fields; fix plural.
+- [H] persona-retest/flows/session-finish-here/02-finished-here.png — Engine user told "prioritising rehab work" (text) → make rehab copy conditional.
+- [H] persona-retest/flows/session-follow-along/01-brief.png — Raw ids shown: "phase week_by_week / weekly_template" (text) → plain sentence.
+- [H] persona-retest/flows/session-follow-along/01-brief.png — Brief says Zone 1/2 cardio; Today says Norwegian 4×4 (mobile/01-day) → one plan per day.
+- [H] persona-retest/flows/retest-logging/01-retest-proposal.png — "week 1 of 1 · ends 29 Oct" vs "week 4 of 8 · ends 27 Nov" on Today → one week count.
+- [H] persona-retest/mobile/04-history-redirect.png — "+1.0" beside "vs previous 142 bpm" (a −2 change); "(direction check)" label (text) → fix delta; drop dev label.
+- [H] persona-strength/mobile/01-today.png — "1 block · 0 exercises" under a block card; "week 3 of 4 · ends 31 Aug" vs "week 5 of 8" elsewhere → one program timeline.
+- [H] persona-strength/mobile/01-today.png — "Apply bump / Ignore" vs "Do it / Not now" vs "Apply 5% lighter / Not now" → one accept/dismiss pair.
+- [H] persona-strength/flows/retest-logging/00-no-proposal.png — "Lighter lifts next session?" conflicts with the "bump" on Today the same day → one proposal per day.
+- [H] persona-strength-long/mobile/08-profile.png — Profile lists the finished program as active → mark as finished.
+- [H] persona-strength-long/flows/activity-log-sheet/01-activity-sheet.png — Toast: "back_squat_highbar +2.5 kg" (text) → show lift name.
+- [H] persona-strength-long/mobile/02-week.png — "This week" is 17–23 Aug here, 26 Oct on Record, 21 Aug on Extras → one date anchor.
+- [H] persona-strength-long/mobile/04-history-redirect.png — "(direction check)" dev label on the retest chart (text) → remove label.
+- [H] persona-recover/mobile/01-today.png — "Mechanically you're done with Phase 1"; TM, RPE and raw ISO dates → plain wording; drop raw logs.
+- [H] persona-recover/mobile/01-today.png — "1 block · 5 exercises" vs "6 exercises" and week 3 of 4 vs week 1 of 8 (cold-load/03) → one plan state.
+- [H] persona-recover/mobile/07-programs-active.png — Not-found copy: "Today became Day" exposes the rename (text) → drop rename copy; redirect old routes.
+- [M] persona-csm-red/mobile/01-day.png — Today has no sign that red is a daily state; "Log how it feels" only → add a one-line "why red" link.
+- [M] persona-csm-red/mobile/02-plan.png — Skipped rows strike through body text; Unskip is a tiny underlined link → muted label; real button.
+- [M] persona-csm-red/mobile/02b-week-redirect.png — Week route is a duplicate of Plan → retire the route.
+- [M] persona-csm-red/mobile/04-history-redirect.png — Record shows 106 kg retest; Profile shows 110 kg working max → explain the gap in copy.
+- [M] persona-csm-red/mobile/06-programs.png — Carousel title clipped ("Concurrent-Strengt"); sort select unstyled → clean card edge; style select.
+- [M] persona-csm-red/mobile/08-profile.png — ⚠ icons beside working maxes with no legend → add a legend or drop icons.
+- [M] persona-csm-red/mobile/08-profile.png — Away-day dates show 28.10.2026 format; calendar icon crowded → use app date format.
+- [M] persona-csm-red/mobile/08-profile.png — "FOUNDATION" tier chip is jargon for a stranger → plain label.
+- [M] persona-csm-red/mobile/10-report.png — "12 · 0 km" for endurance reads as no data → show time only.
+- [M] persona-csm-red/mobile/10-report.png — "Back" and "Progress" stacked as two back links → keep one.
+- [M] persona-csm-red/mobile/10-report.png — "Tier target: foundation" retest label (text) → plain label.
+- [M] persona-csm-red/mobile/11-guide.png — Guide lists a "Data" item that the Profile menu lacks (text) → add item or remove copy.
+- [M] persona-csm-red/mobile/11-guide.png — Guide's 0–10 effort scale does not match the four rating buttons → align the scale.
+- [M] persona-csm-red/mobile/11-guide.png — Long dense paragraphs in small type → break into short scannable sections.
+- [M] persona-csm-red/mobile/12-off-plan.png — Retired "Extra drills" page still reachable → redirect to Today.
+- [M] persona-csm-red/mobile/16-session-today.png — Rest-day session screen repeats the red banner, one "Back to Today" button → add a next step.
+- [M] persona-csm-red/mobile/18-session-future.png — Future rest day: one card on an empty screen, no header → add context or a plan link.
+- [M] persona-csm-red/mobile/19-intake.png — "yes" wraps alone on a second row; answer labels lowercase → tidy the grid; sentence case.
+- [M] persona-csm-red/mobile/19-intake.png — Mono eyebrow "INTAKE · CONCURRENT-STRENGTH MAINTENAN…" truncated → shorten.
+- [M] persona-csm-red/mobile/20-evidence.png — Repeated "CITED" chip on every row is visual noise → one legend at top.
+- [M] persona-csm-red/mobile/20-evidence.png — Duplicate entries (Mujika & Padilla 2000 ×3; Brandt K and N) (text) → dedupe.
+- [M] persona-csm-red/mobile/21-legal-privacy.png — ISO dates "2026-10-27" vs "28 Oct" elsewhere → one date format.
+- [M] persona-csm-red/mobile/22-legal-terms.png — "lawyer-reviewed before public launch" shown to every visitor → soften or move behind beta note.
+- [M] persona-csm-red/mobile/15-settings.png — "Theme" and "Language" rows are dead ends ("coming soon") → hide until shipped.
+- [M] persona-csm-red/flows/cold-load-resume/03-day-tab-respected.png — Logo reads "TERAV" here, "terav." elsewhere → one wordmark.
+- [M] persona-csm-red/flows/cold-load-resume/03-day-tab-respected.png — "Because: Signal: life load 4/10" doubles the label and uses jargon → "Your load was high."
+- [M] persona-csm-red/flows/onboarding-first-run/01-first-run.png — First-run screen is the red-day Today: injury alarm for a new user → show onboarding first.
+- [M] persona-csm-red/flows/plan-move-sheet/01-move-sheet.png — Move targets include skipped days, unexplained → exclude skipped days or label them.
+- [M] persona-csm-red/flows/plan-skip-commit/01-skipped.png — "Log session →" wraps; three row buttons cramped → shorter labels; one row of icons.
+- [M] persona-csm-red/flows/profile-link-walk/01-profile.png — "Block Pull (Midshin)" and "Back Squat (High Bar)" differ from session names → one lift naming.
+- [M] persona-csm-red/flows/program-preview/01-program-detail.png — "Not enforced" and "Recommended background" card wording is dense → shorter lines.
+- [M] persona-csm-red/flows/session-controls/05-back-to-brief.png — "HELD" badge unexplained; "RPE", "FSL", "PRs" jargon (text) → explain or remove.
+- [M] persona-csm-red/flows/session-log-set/01-brief.png — "How to run this: RPE 6-7 top set. No PRs. FSL 5×5 @ 65%" → plain sentence.
+- [M] persona-csm-red/flows/session-log-set/03-rest.png — "Right ~2 more" rating is ambiguous next to Easy and Too hard → "Just right" or similar.
+- [M] persona-csm-red/flows/session-note-sheet/01-note-sheet.png — "Something hurt" chip duplicates the hurt flow → keep one route.
+- [M] persona-csm-red/flows/session-overflow-sheet/01-overflow-sheet.png — "I already did this" / "Mark all as prescribed" logs fake data; "Takes the empty row out" unclear → clearer labels.
+- [M] persona-csm-red/flows/session-finish-here/01-marked-all-prescribed.png — Overflow descriptors are tiny right-aligned mono, nearly unreadable → larger, left-aligned.
+- [M] persona-csm-red/flows/session-hurt-stop/02-hurt-sheet.png — "Stop session" in gold as primary within an option list → secondary style.
+- [M] persona-csm-red/flows/session-stop/02-session-stopped.png — Stop path leaves the note sheet open; no "Session stopped" screen (verify flow) → confirm stop reaches the stopped screen.
+- [M] persona-csm-red/flows/session-overflow-sheet/03-note-chips.png — Selected chips are low-contrast → stronger selected state.
+- [M] persona-csm-red/flows/cold-load-resume/01-in-session.png — Header clipped at the top on session view → restore title spacing.
+- [M] persona-strength/mobile/04-history.png — History repeats Progress's readiness grid, no legend → merge or label.
+- [M] persona-strength/mobile/12-extras.png — "around-runs", "session-log card", "cross-modal" jargon; empty page → plain copy, clear next step.
+- [M] persona-strength/flows/activity-log-sheet/02-activity-form.png — "no LLM, just a keyword parser, all done on-device" is implementation detail → plain privacy line.
+- [M] persona-strength/flows/activity-log-sheet/03-activity-options.png — "Session-specific primer + cool-down" jargon → "Warm up and cool down".
+- [M] persona-strength/flows/activity-log-commit/01-activity-logged.png — Sheet title "Log an activity" beside row "Log extra session" → one label.
+- [M] persona-strength/flows/session-rest-extend/03-effort-logged.png — "Pain or tweak" vs "Something hurt" for the same action → one name.
+- [M] persona-strength/flows/session-rest-extend/02c-jump-sheet.png — "Order isn't sacred" is flippant copy → "Order you did them".
+- [M] persona-strength/flows/session-rest-extend/02d-after-jump.png — "88 kg" prescribed but plate math shows "→ 87.5 kg (−0.50)" → round to loadable weight.
+- [M] persona-recover/flows/session-rest-jump/02-after-jump.png — "71 kg" plate math shows "→ 70 kg (−1.00)" → same rounding fix.
+- [M] persona-strength/flows/hip-check/02-answered.png — "Score: 2" items with no scale legend → state the scale.
+- [M] persona-strength-long/mobile/05b-record.png — Trend tabs "TOP / 90D / 1Y / ALL" cut at fold → keep chart controls visible.
+- [M] persona-strength-long/mobile/01-today.png — "Repeat this arc" and "Restart · keep intake + baselines" → "Start over" plain copy.
+- [M] persona-strength-long/mobile/10-report.png — "24 · 0 km" zero distance → show time only.
+- [M] persona-graduate/mobile/05-progress.png — "Signals 5 fatigue" beside all-green readiness; "RESPONDING" chip unclear → reconcile; explain chip.
+- [M] persona-graduate/mobile/12-extras.png — "home rehab" copy on an engine program → program-specific copy.
+- [M] persona-graduate/mobile/19-intake.png — "STEP 1 OF 23" intake, far longer than csm's 9 → shorten or split.
+- [M] persona-graduate/mobile/07-programs-active.png — "wizard + 5-day window" copy on a finished program → hide setup after graduation.
+- [M] persona-graduate/flows/session-exercise-details/01-exercise-details.png — "PROGRAMME ASKS FOR" label (text) → "Prescribed" in one spelling.
+- [M] persona-graduate/mobile/01-today.png — "9 weeks logged" vs "8-week arc" in program copy → one length.
+- [M] persona-recover/mobile/04-history.png — Readiness grid has no colour legend → add legend.
+- [M] persona-recover/mobile/17-session-past.png — "Preserved from prior programme" and "at the box" (text) → "program", plain copy.
+- [M] persona-recover/mobile/19-intake.png — "BACK TO ANTERIOR HIP + STRENGTH REBUILD" vs "Anterior Hip Rebuild" → one program name.
+- [M] persona-recover/flows/session-follow-along/02-guided-ready.png — Right arrow labelled "Skip set"; step counter ambiguous → relabel controls.
+- [M] persona-recover/flows/session-follow-along-stop/03-guided-stopped.png — "Stopped" with "Back to session" and "Note what hurt" → one next step.
+- [M] persona-recover/flows/session-rest-extend/05-rest-skipped.png — "SET 4 OF 6 · OPTIONAL" unexplained → explain or drop the label.
+- [M] persona-recover/flows/session-rest-extend/02b-rest-note.png — "Save to Block pull, mid-shin height" wraps to two lines → shorter button text.
+- [M] persona-recover/flows/session-edit-past-set/07-back-to-brief.png — After editing set 5, "Next up: Set 4 of 5" (text) → next-up counter fix.
+- [M] persona-recover/flows/session-log-missed-attempt/02-after-miss.png — "FIX THE REPS ON SET 3" unclear → "Correct the reps for set 3".
+- [M] persona-recover/flows/activity-log-sheet/01-activity-sheet.png — Set notation "82.5 · 95 · 107.5 × 5+ · 5 × 82.5" hard to read → one format.
+- [M] persona-recover/mobile/18-session-future.png — Future day shows only "Saturday" → add plan detail.
+- [M] persona-retest/flows/retest-logging/02-retest-sheet.png — "Recorded 2026-10-27" ISO date; placeholder cut off → friendly date; full placeholder.
+- [M] persona-retest/flows/retest-logging/01-retest-proposal.png — "Not feeling 100% · ×0.95 applied" jargon → plain sentence.
+- [M] persona-retest/flows/retest-logging/01-retest-proposal.png — Retest proposal sits above a "Rest day" card (text) → one state for the day.
+- [M] persona-retest/mobile/16-session-today.png — "About 90 min" header vs "40–90 min" card → one duration.
+- [M] persona-retest/mobile/10-report.png — "Morning check 17 green · 8 amber" wraps awkwardly → shorter labels.
+- [M] persona-retest/mobile/07-programs-active.png — "metcon", "~6-month", "3-block" jargon → plain copy.
+- [L] persona-csm-red/mobile/13-check.png — "WHY?" link is tiny and low-contrast → larger tap target.
+- [L] persona-csm-red/mobile/06-programs.png — Program name in a card cut at the edge reads as an error → clearer scroll cue.
+- [L] persona-csm-red/flows/session-overflow-sheet/04-video.png — Third-party YouTube embed with no context line → add "External video" note.
+- [L] persona-recover/flows/session-overflow-sheet/03-form-cues.png — Next.js dev "N" overlay sits over the flags → confirm absent in production builds.
+- [L] persona-graduate/mobile/04-history.png — Activity heatmap has no legend → add legend.
+- [L] persona-graduate/flows/session-stop/02-session-stopped.png — Faint "PROGRAMME AREA TBD" under the timer (verify text) → remove placeholder.
+- [L] persona-graduate/mobile/12-extras.png — "Norwegian 4x4" vs "4×4" across screens (text) → one multiplication sign.
+
+## Scores (10 = best)
+
+Text density 4 · text size 5 · visual richness 5 · consistency 3
+
+## Checked
+
+Checked: 188 screenshots (79 csm-red mobile and flows, 109 across the five other personas), plus all `.txt` extracts.

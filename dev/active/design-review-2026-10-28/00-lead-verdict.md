@@ -11,17 +11,17 @@
 The lead checked the disputed claims against code and the latest captures.
 
 ## Verdict
-The visual system worked. Every reviewer scored consistency 4–4.5 and text size 4, and the 16px body with a 32px H1 reads well. The product still sells with paragraphs where its peers sell with pictures and short paths:
+The visual system worked. Every reviewer scored consistency 4–4.5 and text size 4, and the 16px body with a 32px H1 reads well. Scores are on a 1–10 scale (reviewers scored 1–5; doubled 2026-10-28 at the owner's request). The product still sells with paragraphs where its peers sell with pictures and short paths:
 
 | reviewer | text density | text size | visual richness | consistency |
 |---|---|---|---|---|
-| visual | 2 | 4 | 2 | 4 |
-| mobile | 3 | 4 | 3 | 4 |
-| copy | 3 | 4 | 3 | 3 |
-| a11y | 4 | 3 | 3 | 4 |
-| design lead | 3 | 4 | 1.5 | 4.5 |
-| stranger | 3 | 4 | 2 | 4 |
-| **mean** | **3.0** | **3.8** | **2.4** | **3.9** |
+| visual | 4 | 8 | 4 | 8 |
+| mobile | 6 | 8 | 6 | 8 |
+| copy | 6 | 8 | 6 | 6 |
+| a11y | 8 | 6 | 6 | 8 |
+| design lead | 6 | 8 | 3 | 9 |
+| stranger | 6 | 8 | 4 | 8 |
+| **mean** | **6** | **7.6** | **4.8** | **7.8** |
 
 Weakest areas: visuals, then text volume on the ad path. Not type size, and not consistency.
 

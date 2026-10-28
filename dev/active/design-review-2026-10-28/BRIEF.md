@@ -43,7 +43,7 @@ UI defects.
 - Don't change any code.
 - Write your report to `dev/active/design-review-2026-10-28/<NN>-<lens>.md`, at most 40 lines:
   - a one-line verdict;
-  - scores 1–5 for text density, text size, visual richness and consistency;
+  - scores 1–10 (10 = best) for text density, text size, visual richness and consistency;
   - findings;
   - what to keep.
 - Reply to the lead with the same report.

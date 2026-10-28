@@ -1,0 +1,95 @@
+# Sweep 02: first-strict-pullup persona family (2026-10-28)
+
+Paths are relative to `next-app/tests/e2e/artifacts/personas/`. Screens byte-identical to `persona-pullup` were not re-viewed; the other three personas were checked only where they differ.
+
+- [B] persona-pullup/flows/hip-check/02-answered.png — personal hip-check items (groin, hanging leg raise) reach all pull-up users → gate the check to the personal program.
+- [H] persona-pullup/mobile/10-report.png — Retest baseline and current read 0 reps; Record shows 112 → one data source.
+- [H] persona-pullup/mobile/10-report.png — Targets "0 reps, stretch 1" for a pull-up program → show real tier targets or hide.
+- [H] persona-pullup/mobile/10-report.png — "Tier target: tier_a_hang" and "sim:" leak into printable report → plain labels, no internal ids.
+- [H] persona-pullup-fast/mobile/10-report.png — "Status: graduated" beside red "BELOW TARGET" → one verdict from one rule.
+- [H] persona-pullup-fast/mobile/04-history-redirect.png — Record shows 118 reps and 4 retests; Report shows 0 → align Report with Record.
+- [H] persona-pullup-fast/mobile/01-day.png — "YOU FINISHED … Nice." beside "0 reps, +0 reps" → show real change or neutral copy.
+- [H] persona-pullup-fast/mobile/02-plan.png — Finished program still shows a live week plan → show an ended-program plan state.
+- [H] persona-pullup-fast/flows/cold-load-resume/01-in-session.png — Finished program still offers a Friday session with Start → hide sessions after program end.
+- [H] persona-pullup/flows/hip-check/03-saved.png — Copy says "Progress page" but the tab is Record → rename to Record.
+- [H] persona-pullup/flows/session-controls/05-back-to-brief.png — Spaced "TERAV" wordmark; Today uses lowercase "terav." → one wordmark everywhere.
+- [H] persona-pullup/flows/hip-check/02-answered.png — Bottom tab reads "DAY" here but "TODAY" on Today → one tab label.
+- [H] persona-pullup/mobile/18-session-future.png — "Trained anyway? Log it." on a future rest day → hide the prompt for future dates.
+- [H] persona-pullup/mobile/21-legal-privacy.png — Three-column data table crushed at 393px, unreadable → stack each row as a card.
+- [H] persona-pullup/flows/cold-load-resume/03-day-tab-respected.png — "Week 3 of 4 · ends 6 Nov" vs "week 7 of 8 · ends 7 Nov" → one program week counter.
+- [H] persona-pullup-elbow/flows/cold-load-resume/03-day-tab-respected.png — "Week 4 of 4 · ends 2 Nov" vs "week 4 of 8 · ends 1 Dec" → one calendar and end date.
+- [H] persona-pullup-erratic-shoulder/flows/cold-load-resume/03-day-tab-respected.png — "Week 1 of 4 · ends 21 Nov" vs "week 5 of 8" elsewhere → same single-counter fix.
+- [H] persona-pullup/flows/session-follow-along/02-guided-ready.png — Empty tutorial box fills the top half of the set screen → show the illustration or drop the panel.
+- [H] persona-pullup/flows/session-log-set/02-set.png — Pain action says "This hurts"; guided screens say "Something hurts" → one label everywhere.
+- [H] persona-pullup/flows/session-rest-extend/02d-after-jump.png — Jumped to dead hang shows "1 rep", not a 20s hold → show hold units.
+- [H] persona-pullup-elbow/flows/session-rest-jump/02-after-jump.png — Jumped to dead hang again shows "1 rep" → same hold-units fix.
+- [H] persona-pullup/flows/session-rest-extend/02c-jump-sheet.png — Three identical "Ring row" rows with no set numbers → label each row by set.
+- [H] persona-pullup/flows/plan-move-commit/02-moved.png — Moved session sits under a Skipped Mon; raw ISO date shown → clear moved-to state, human date.
+- [H] persona-pullup-elbow/mobile/02-plan.png — Mon 26 shows "1 logged" and "Skipped" together → one state per day.
+- [H] persona-pullup-erratic-shoulder/mobile/01-day.png — Morning check says shoulder Notable and "plan adjusted"; Today unchanged → show what changed or fix the claim.
+- [H] persona-pullup/flows/programs-info-sheet/01-info-sheet.png — "simulator harness, archetypes" shown to users → rewrite as a plain evidence claim.
+- [H] persona-pullup-fast/flows/session-follow-along/05-guided-done.png — "Dead-hang ladder done" beside "0 sets logged" → fix the count or the copy.
+- [H] persona-pullup/flows/session-cold-reload/01-mid-set.png — Exercise chips truncated; last chip hidden under the menu button → fix chip strip overflow.
+- [H] persona-pullup/mobile/07-programs-active.png — "END PROGRAM" sits beside "GO TO TODAY" at equal weight → demote to a text link.
+- [M] persona-pullup/mobile/01-day.png — "Progress load — nothing above 3/10 today." is unclear → say what the 3/10 measures.
+- [M] persona-pullup/mobile/01-day.png — Row of 15 dots has no legend → label it or remove it.
+- [M] persona-pullup/mobile/02-plan.png — "Post-acquisition: engine interleaves" in week banner is jargon → "Mixed practice: 2-3 drills per session, weakest first."
+- [M] persona-pullup/mobile/02-plan.png — Lowercase raw status "first strict pullup: planned" → sentence-case "Planned".
+- [M] persona-pullup/mobile/16-session-today.png — Block caption wraps, leaving "8" alone → shorter caption or no wrap.
+- [M] persona-pullup/mobile/19-intake.png — "STEP 1 OF 16" but program page promises 11 questions → make the counts agree.
+- [M] persona-pullup/mobile/19-intake.png — "TIER A / TIER B" printed under each answer → plain descriptions, tier hidden.
+- [M] persona-pullup/mobile/19-intake.png — "WHERE YOU ARE …" section label truncated → show full label or shorten it.
+- [M] persona-pullup/mobile/04-history-redirect.png — "Loading chart…" placeholder captured as the chart → confirm it renders; no stuck state.
+- [M] persona-pullup/mobile/04-history-redirect.png — Thirty tiny mono rows mixing "logged" and "done" → one size, one word.
+- [M] persona-pullup/mobile/05b-record.png — "Sessions 0 / 0" in this-week card reads as empty → "No sessions this week" or hide.
+- [M] persona-pullup/mobile/08-profile.png — Away-day fields show 28.10.2026; elsewhere "26 Oct" → one date format.
+- [M] persona-pullup/mobile/06-programs.png — "8 wks", "8 wk", "8 weeks" and "Personalised" mixed → one unit and spelling.
+- [M] persona-pullup/mobile/06-programs.png — "Explosive-strength cost bounded, cited, PR-banned" is jargon → one plain sentence.
+- [M] persona-pullup/mobile/07-programs-active.png — "ACTIVE" and "CITED" pills wrap onto two rows → keep both on one line.
+- [M] persona-pullup/mobile/07-programs-active.png — "SECTION 1 OF 4" numbering on an info page → drop the numbering.
+- [M] persona-pullup/mobile/11-guide.png — Wall of method jargon (5/3/1, Z2, FSL), mostly irrelevant here → trim to terms this program uses.
+- [M] persona-pullup/mobile/12-off-plan.png — Forty-plus "Lifts you did elsewhere" for a pull-up user → collapse by default.
+- [M] persona-pullup/mobile/12-off-plan.png — "First strict pull-up attempt" listed three times; "1 sets" → merge duplicates, fix plural.
+- [M] persona-pullup/mobile/12-off-plan.png — "HELD" tag appears with no explanation → add legend or drop the tag.
+- [M] persona-pullup/mobile/13-check.png — "A heavy week outside training" reads as a label, and "Cooked" is slang → question wording, plain scale word.
+- [M] persona-pullup/mobile/13-check.png — "Update check" sits mid-form above the flags → move to the bottom of the form.
+- [M] persona-pullup/mobile/14-check-hip.png — Hip-check route silently shows Today → show "no hip check in this program" note.
+- [M] persona-pullup/mobile/17-session-past.png — "Import GPX" offered on a pull-up rest day → show only for endurance programs.
+- [M] persona-pullup/mobile/20-evidence.png — "CITED" repeated on 125 mono rows, no grouping → group by program, show tag once.
+- [M] persona-pullup/mobile/20-evidence.png — "engineering-choice, not cited" is jargon → "a design choice, not from the literature."
+- [M] persona-pullup/mobile/23-legal-disclaimer.png — "programme" and "program" on one page → use "program".
+- [M] persona-pullup/mobile/24-reset-password.png — "SAVE NEW PASSWORD" in caps; other buttons sentence case → one button style.
+- [M] persona-pullup/flows/offplan-drill-library/01-drill-library.png — Date says "Tuesday 27 Oct · Today"; session says Wednesday 28 → fix the date.
+- [M] persona-pullup/flows/session-cold-reload/01-mid-set.png — "PROGRAMME ASKS FOR" on the set screen; "program" elsewhere → one spelling.
+- [M] persona-pullup/flows/session-controls/03-pips-walked.png — "TOP SET" label on ring row set 3 of 3 → "Set 3 of 3".
+- [M] persona-pullup/flows/session-rest-extend/01-rest-before.png — "NEXT UP 4 sets" drops the set number other rest screens show → "Set 2 of 4 · Ring row".
+- [M] persona-pullup/flows/session-rest-extend/01-rest-before.png — "Steady" effort option missing here, present on other rest screens → restore full five-step scale.
+- [M] persona-pullup/flows/session-rest-extend/05-rest-skipped.png — Fresh set reads "1 rep", not the prescribed 10 → default to prescription.
+- [M] persona-pullup/flows/session-follow-along/02-guided-ready.png — "BOTH" pill and "Set 1/3 · Step 1/11" unexplained → explain or hide for non-sided moves.
+- [M] persona-pullup/flows/session-overflow-sheet/04-video.png — YouTube fallback with a guessed query opens a new tab → in-app cue or drop the fallback.
+- [M] persona-pullup/flows/session-overflow-sheet/01-overflow-sheet.png — "Something hurt" wraps and crowds its sub-label → use the same pain label as elsewhere.
+- [M] persona-pullup/flows/activity-log-sheet/02-activity-form.png — "no LLM, just a keyword parser" is internals; "WOD" is jargon → plain line, "workout name".
+- [M] persona-pullup/flows/activity-log-sheet/01-activity-sheet.png — Second "Log extra session" card repeats the Today card inside the sheet → remove duplicate.
+- [M] persona-pullup/flows/plan-skip-commit/01-skipped.png — "Skipped 3 sessions on 2026-10-28" is raw ISO; other personas show 26 Oct → human date, correct day.
+- [M] persona-pullup/flows/program-preview/02-expanded.png — "Tier C/D", "wizard", "+" in setup copy → plain words.
+- [M] persona-pullup/flows/program-preview/01-program-detail.png — "pull drill library", "Personalised" are jargon → plain copy.
+- [M] persona-pullup/flows/session-controls/05-back-to-brief.png — Cue card carries study citations the Today brief omits → one cue copy source.
+- [M] persona-pullup-fast/mobile/16-session-today.png — "HOW WAS THIS PROGRAM?" 1-5 scale has no end labels → "1 = poor, 5 = great".
+- [M] persona-pullup-fast/flows/plan-expand-day/02-day-expanded.png — "Move…" truncated, "Log session →" wraps → full labels, wider buttons.
+- [M] persona-pullup-elbow/mobile/10-report.png — Contraindication lists overhead pressing; elbow flag absent → show the elbow flag.
+- [M] persona-pullup-elbow/flows/plan-move-sheet/01-move-sheet.png — Logged session offered for moving → block moving logged sessions.
+- [M] persona-pullup-elbow/mobile/13-check.png — "Life load in the middle-high range" vs "Hold load" elsewhere → one phrase, drop "life load".
+- [M] persona-pullup-erratic-shoulder/mobile/01-day.png — "CHECK FIRST: Hold load…" never names the shoulder → name the region in the banner.
+- [L] persona-pullup/mobile/01-day.png — Program name repeated as eyebrow and progress label → keep one.
+- [L] persona-pullup/mobile/06-programs.png — Strength card cut mid-word at right edge → add peek or wrap.
+- [L] persona-pullup/mobile/15-settings.png — "coming soon" rows for theme and language → hide until shipped.
+- [L] persona-pullup/flows/plan-move-commit/01-move-filled.png — "harness: moved for coverage" prefilled in Why field → confirm test value, not shipped copy.
+- [L] persona-pullup/flows/session-note-sheet/02-note-typed.png — "harness: felt solid" in typed note → test artefact, check the seed.
+- [L] persona-pullup/flows/session-follow-along/04-guided-after-first-set.png — "+15 s" spacing differs from "+30s"; pause icon on "Skip rest" → match spacing, use skip icon.
+- [L] persona-pullup/flows/session-cold-reload/02-after-cold-reload.png — "Very easy" wraps to two lines in effort chips → widen chips or shorten label.
+- [L] persona-pullup-elbow/mobile/04-history-redirect.png — "RETESTS · 1 EVENTS" → "1 event".
+- [L] persona-pullup-elbow/mobile/04-history-redirect.png — Chart silently switches 14-day to 7-day → state the window in the chart title.
+- [L] persona-pullup-erratic-shoulder/mobile/03-account.png — Email truncated mid-domain → wrap or show full address.
+
+Scores (10 = best): text density 3, text size 4, visual richness 6, consistency 3.
+Checked: 207 screenshots (94 persona-pullup; 42 persona-pullup-fast, 40 persona-pullup-elbow, 31 persona-pullup-erratic-shoulder differing from the baseline), viewed as 37 labelled contact sheets of six screens each. All persona text extracts read for persona-pullup; differing text and flow extracts diffed for the other three.
