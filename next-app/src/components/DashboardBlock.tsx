@@ -116,7 +116,7 @@ export function DashboardBlock({
           {eyebrow ? (
             <p
               className={cn(
-                "font-mono text-eyebrow uppercase tracking-widest",
+                "text-eyebrow uppercase tracking-widest",
                 EYEBROW_TONE[eyebrowTone],
               )}
             >

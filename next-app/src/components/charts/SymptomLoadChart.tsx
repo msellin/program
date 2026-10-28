@@ -179,7 +179,7 @@ export function SymptomLoadChart({
           Data table
         </summary>
         <div className="mt-1 overflow-x-auto">
-          <table className="w-full text-caption font-mono border-collapse">
+          <table className="font-mono w-full text-caption border-collapse">
             <thead>
               <tr className="text-left text-muted border-b border-line-soft">
                 <th className="py-1.5 pr-3 font-normal">Date</th>

@@ -31,7 +31,7 @@ export function Day1EmptyState({ sessionHref, slug }: { sessionHref?: string; sl
       aria-labelledby="day1-title"
       className={`${cardClass()} space-y-3`}
     >
-      <p className="font-mono text-eyebrow uppercase tracking-widest text-bronze">
+      <p className="text-eyebrow uppercase tracking-widest text-bronze">
         Setup · one minute
       </p>
       <h2 id="day1-title" className="text-h3 text-strong leading-snug">

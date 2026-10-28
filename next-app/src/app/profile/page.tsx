@@ -128,7 +128,7 @@ export default function ProfilePage() {
           </p>
           <p className="text-eyebrow text-muted mt-0.5 flex items-center gap-2 flex-wrap">
             {memberSince ? (
-              <span className="font-mono uppercase tracking-wider">
+              <span className="uppercase tracking-wider">
                 joined {memberSince}
               </span>
             ) : null}
@@ -155,7 +155,7 @@ export default function ProfilePage() {
           the eventual list. */}
       {activeSlugs.length && !manifest ? (
         <div>
-          <p className="font-mono text-eyebrow uppercase tracking-widest text-muted mb-2">
+          <p className="text-eyebrow uppercase tracking-widest text-muted mb-2">
             Your programs
           </p>
           <div
@@ -167,7 +167,7 @@ export default function ProfilePage() {
       ) : null}
       {activePrograms.length ? (
         <div>
-          <p className="font-mono text-eyebrow uppercase tracking-widest text-muted mb-2">
+          <p className="text-eyebrow uppercase tracking-widest text-muted mb-2">
             Your programs
           </p>
         <ul className={cn(cardClass({ flush: true }), "divide-y divide-line-soft")}>
@@ -280,7 +280,7 @@ export default function ProfilePage() {
           multi-track makes adding a program a repeated action. */}
       <Link
         href="/programs"
-        className="inline-flex items-center min-h-[44px] py-3 font-mono text-eyebrow uppercase tracking-wider text-bronze hover:text-bronze-hover"
+        className="inline-flex items-center min-h-[44px] py-3 text-eyebrow uppercase tracking-wider text-bronze hover:text-bronze-hover"
       >
         {activePrograms.length ? "Browse all programs →" : "Pick your focus →"}
       </Link>
@@ -288,7 +288,7 @@ export default function ProfilePage() {
       <AwayDays />
 
       <div>
-        <p className="font-mono text-eyebrow uppercase tracking-widest text-muted mb-2">
+        <p className="text-eyebrow uppercase tracking-widest text-muted mb-2">
           More
         </p>
       <nav aria-label="More" className={cn(cardClass({ flush: true }), "divide-y divide-line-soft")}>

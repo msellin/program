@@ -19,7 +19,7 @@ export function NoteSignalHint({ text }: { text: string | null | undefined }) {
       {sig.matches.map((m) => (
         <span
           key={m}
-          className="font-mono text-eyebrow uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-slate/15 text-slate"
+          className="text-eyebrow uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-slate/15 text-slate"
         >
           {m}
         </span>

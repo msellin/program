@@ -237,7 +237,7 @@
     "consent": [
       {
         "id": "not_medical_advice",
-        "label": "I understand this is training programming, not medical advice.",
+        "label": "I understand this is training, not medical advice.",
         "required": true
       }
     ],

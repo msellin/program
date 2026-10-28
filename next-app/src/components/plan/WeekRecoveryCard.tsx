@@ -95,7 +95,7 @@ export function WeekRecoveryCard({
     <Card status="amber" className="space-y-3">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="font-mono text-eyebrow uppercase tracking-widest text-amber">This week</p>
+          <p className="text-eyebrow uppercase tracking-widest text-amber">This week</p>
           <p className="text-h3 text-strong mt-0.5 leading-snug">{headline}</p>
           {remainingScheduledCount > 0 ? (
             <p className="text-caption text-muted mt-0.5">
@@ -154,7 +154,7 @@ export function WeekRecoveryCard({
       </div>
 
       <div>
-        <p className="font-mono text-eyebrow uppercase tracking-widest text-muted mb-1.5">
+        <p className="text-eyebrow uppercase tracking-widest text-muted mb-1.5">
           Or tell Terav why — optional
         </p>
         <div className="flex gap-2 flex-wrap">
@@ -177,7 +177,7 @@ export function WeekRecoveryCard({
       </div>
 
       <div className="rounded-lg bg-surface-2 p-3">
-        <p className="font-mono text-eyebrow uppercase tracking-widest text-muted mb-1">
+        <p className="text-eyebrow uppercase tracking-widest text-muted mb-1">
           What a skipped week does
         </p>
         <p className="text-small leading-snug text-ink">

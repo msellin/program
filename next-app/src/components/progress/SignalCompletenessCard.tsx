@@ -48,7 +48,7 @@ export function SignalCompletenessCard({
     <div className="space-y-4">
       <div className="space-y-2">
         {inline ? null : (
-          <p className="font-mono text-eyebrow uppercase tracking-widest text-muted flex items-center gap-1.5">
+          <p className="text-eyebrow uppercase tracking-widest text-muted flex items-center gap-1.5">
             <Eye size={12} aria-hidden="true" />
             The engine sees
           </p>
@@ -65,7 +65,7 @@ export function SignalCompletenessCard({
 
       {hasGaps ? (
         <div className="space-y-2">
-          <p className="font-mono text-eyebrow uppercase tracking-widest text-muted flex items-center gap-1.5">
+          <p className="text-eyebrow uppercase tracking-widest text-muted flex items-center gap-1.5">
             <Plus size={12} aria-hidden="true" />
             To sharpen more, add:
           </p>
@@ -110,7 +110,7 @@ export function SignalCompletenessCard({
         className="w-full flex items-start justify-between gap-3 text-left"
       >
         <div className="min-w-0 flex-1">
-          <p className="font-mono text-eyebrow uppercase tracking-widest text-muted">
+          <p className="text-eyebrow uppercase tracking-widest text-muted">
             What the engine reads
           </p>
           {/* P1-57 (Batch 26) — demoted from h3 → h2. Progress page had

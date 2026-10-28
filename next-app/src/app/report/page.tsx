@@ -182,7 +182,7 @@ export default function ReportPage() {
           <button
             type="button"
             onClick={() => window.print()}
-            className="inline-flex items-center gap-1.5 font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-bronze text-ground"
+            className="inline-flex items-center gap-1.5 text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-bronze text-ground"
           >
             <Printer size={14} />
             Print / save PDF
@@ -199,7 +199,7 @@ export default function ReportPage() {
               }}
               aria-pressed={preset === p}
               className={
-                "min-h-[36px] px-3 py-1.5 rounded-lg font-mono text-eyebrow uppercase tracking-wider " +
+                "min-h-[36px] px-3 py-1.5 rounded-lg text-eyebrow uppercase tracking-wider " +
                 (preset === p
                   ? "bg-slate text-surface"
                   : "bg-line-soft text-muted hover:text-ink")
@@ -384,7 +384,7 @@ export default function ReportPage() {
                   {rows.map((w) => (
                     <li
                       key={w.weekStart}
-                      className="flex items-baseline gap-3 font-mono"
+                      className="flex items-baseline gap-3"
                     >
                       <span className="text-muted text-eyebrow w-28 flex-shrink-0">
                         wk of {w.weekStart}
@@ -462,14 +462,14 @@ export default function ReportPage() {
                   const rows = byType.get(key)!;
                   return (
                     <div key={key}>
-                      <p className="mono-caps mb-1 text-bronze">
+                      <p className="mb-1 text-bronze text-caption font-medium">
                         {key.replace(/_/g, " ")} · {rows.length}
                       </p>
                       <ul className="space-y-0.5 text-small">
                         {rows.map(({ date, run: r }, i) => (
                           <li
                             key={`${date}:${i}`}
-                            className="flex items-baseline gap-2 flex-wrap font-mono"
+                            className="flex items-baseline gap-2 flex-wrap"
                           >
                             <span className="text-muted text-eyebrow w-20 flex-shrink-0">
                               {date.slice(5)}
@@ -596,8 +596,8 @@ export default function ReportPage() {
                 <tbody>
                   {report.hipAssessments.map((a) => (
                     <tr key={a.date} className="border-b border-line-soft/50">
-                      <td className="py-1.5 pr-2 font-mono">{a.date}</td>
-                      <td className="py-1.5 pr-2 font-mono font-semibold">
+                      <td className="font-mono py-1.5 pr-2">{a.date}</td>
+                      <td className="font-mono py-1.5 pr-2 font-semibold">
                         {a.overall.toFixed(1)}
                       </td>
                       {HIP_FLEXOR_PACK.questions.map((q) => {
@@ -605,7 +605,7 @@ export default function ReportPage() {
                           const l = a.byKey[`${q.id}:left`];
                           const r = a.byKey[`${q.id}:right`];
                           return (
-                            <td key={q.id} className="py-1.5 pr-2 font-mono text-caption">
+                            <td key={q.id} className="font-mono py-1.5 pr-2 text-caption">
                               {l != null ? `L${l}` : "—"}
                               {" / "}
                               {r != null ? `R${r}` : "—"}
@@ -614,7 +614,7 @@ export default function ReportPage() {
                         }
                         const v = a.byKey[q.id];
                         return (
-                          <td key={q.id} className="py-1.5 pr-2 font-mono text-caption">
+                          <td key={q.id} className="font-mono py-1.5 pr-2 text-caption">
                             {v != null ? v : "—"}
                           </td>
                         );
@@ -647,12 +647,12 @@ export default function ReportPage() {
                 <span className="font-mono text-eyebrow text-muted w-24 flex-shrink-0">
                   {i.date}
                 </span>
-                <span className="font-mono text-eyebrow uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-line-soft text-muted flex-shrink-0">
+                <span className="text-eyebrow uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-line-soft text-muted flex-shrink-0">
                   {i.context === "check" ? "Morning check" : "Note"}
                 </span>
                 <span className="flex-1 min-w-0">
                   {i.exercise ? (
-                    <span className="font-mono text-slate mr-2">
+                    <span className="text-slate mr-2">
                       {i.exercise}
                       {i.weight_kg != null && i.reps != null
                         ? ` ${i.weight_kg} × ${i.reps}`
@@ -682,11 +682,11 @@ export default function ReportPage() {
               <div key={l.exerciseId}>
                 <p className="font-semibold text-small text-strong">
                   {byId[l.exerciseId]?.name ?? l.exerciseId}
-                  <span className="ml-2 text-eyebrow font-normal text-muted font-mono">
+                  <span className="font-mono ml-2 text-eyebrow font-normal text-muted">
                     TM {store.training_maxes[l.exerciseId] ?? "—"} kg
                   </span>
                 </p>
-                <ul className="mt-1 grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-0.5 text-small font-mono">
+                <ul className="font-mono mt-1 grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-0.5 text-small">
                   {l.entries.map((e) => (
                     <li key={e.date} className="text-muted">
                       <span className="text-eyebrow mr-1">{e.date}</span>
@@ -720,7 +720,7 @@ export default function ReportPage() {
                 className="sm:flex sm:items-baseline sm:gap-3"
               >
                 <div className="flex items-baseline justify-between sm:contents">
-                  <span className="font-mono text-eyebrow text-muted sm:w-24 sm:flex-shrink-0">
+                  <span className="text-eyebrow text-muted sm:w-24 sm:flex-shrink-0">
                     Week of {w.weekStart}
                   </span>
                   <span className="font-mono text-eyebrow text-muted sm:order-3">
@@ -831,7 +831,7 @@ function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div className={cardClass()}>
       <p className="text-eyebrow text-muted uppercase tracking-wider">{label}</p>
-      <p className="text-body font-mono font-semibold text-strong mt-0.5">{value}</p>
+      <p className="text-body font-semibold text-strong mt-0.5">{value}</p>
     </div>
   );
 }
@@ -885,7 +885,7 @@ function ArcSummarySection({
             <strong className="text-ink">Status:</strong> graduated
           </p>
           {verdict ? (
-            <span className="font-mono text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
+            <span className="text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
               <span
                 aria-hidden
                 className={`h-1.5 w-1.5 rounded-full ${
@@ -902,7 +902,7 @@ function ArcSummarySection({
         </div>
         {displayable.length ? (
           <div className={cn(cardClass(), "space-y-2")}>
-            <p className="font-mono text-eyebrow uppercase tracking-wider text-muted">
+            <p className="text-eyebrow uppercase tracking-wider text-muted">
               Retest deltas vs baseline
             </p>
             <ul className="space-y-1.5">
@@ -949,7 +949,7 @@ function ArcSummarySection({
         )}
         {feedback ? (
           <div className={cn(cardClass(), "space-y-1")}>
-            <p className="font-mono text-eyebrow uppercase tracking-wider text-muted">
+            <p className="text-eyebrow uppercase tracking-wider text-muted">
               User feedback
             </p>
             <p className="text-small text-ink">

@@ -59,7 +59,7 @@ export function CitationRef({ id }: { id: string }) {
           className="mt-1 pl-3 border-l border-line space-y-1 text-caption text-muted"
         >
           <p className="text-ink">{citation.title}</p>
-          <p className="font-mono text-eyebrow">{citation.display_line}</p>
+          <p className="text-eyebrow">{citation.display_line}</p>
           {citation.url ? (
             <p>
               <a

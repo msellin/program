@@ -28,7 +28,7 @@ export type Pt = number[]; // [x, y]; a plain array so literal coordinates need 
 export type FigureSide = "L" | "R" | "B";
 export type FigureSlot = { pts: string; color: string; w: number; op: number; fill: string; dash: string };
 export type FigureBadge = { x: number; y: number; color: string; letter: string; op: number };
-export type FigureFrame = { label: string; tf: string; slots: FigureSlot[]; badges: FigureBadge[] };
+export type FigureFrame = { label: string; tf: string; floor: boolean; slots: FigureSlot[]; badges: FigureBadge[] };
 type Kind = "hold" | "move" | "move2";
 type Fig = {
   kind: Kind;
@@ -39,8 +39,12 @@ type Fig = {
   build: (sc: Scene, side: FigureSide, p: number, rep?: number) => string;
 };
 
-const COL: Record<FigureSide, string> = { L: "#5fa3b0", R: "#b58dbb", B: "#d6d9de" };
-const BODY = "#9aa0a8", FAR = "#6b717d", FLOOR = "#60656f", PROP = "#5f6570", WOOD = "#8a6f55";
+// Brand bronze (--color-bronze in brand/tokens.css). SVG stroke attributes cannot read the CSS var, so the
+// hex is mirrored here; 7:1 on the card. Working limb / implement of every unsided figure.
+export const ACCENT = "#c89666";
+// Ground line: muted bronze-tinted, 3.5:1 on the card (was grey #60656f).
+const COL: Record<FigureSide, string> = { L: "#5fa3b0", R: "#b58dbb", B: ACCENT };
+const BODY = "#9aa0a8", FAR = "#6b717d", FLOOR = "#7d6a54", PROP = "#5f6570", WOOD = "#8a6f55";
 const TORSO = 12;
 const SLOTS = 20;
 function ease(x: number) { return 0.5 - 0.5 * Math.cos(Math.PI * x); }
@@ -69,6 +73,7 @@ class Scene {
   items: FigureSlot[] = [];
   badges: FigureBadge[] = [];
   scale = 1;
+  hasFloor = false;
   line(a: Pt[], color: string, w?: number, op?: number | null, fill?: string) {
     this.items.push({ pts: fmt(a), color, w: w || 8, op: op == null ? 1 : op, fill: fill || "none", dash: "none" });
   }
@@ -82,6 +87,7 @@ class Scene {
     this.badges.push({ x: Math.round(p[0]), y: Math.round(p[1]), color, letter, op: 1 });
   }
   floor() {
+    this.hasFloor = true;
 // Floor inset 24px from the card edge at every scale (lying figures are drawn scaled up).
     const k = this.scale || 1, x0 = 179 - (179 - 24) / k, x1 = 179 + (334 - 179) / k;
     this.line([[x0, 168], [x1, 168]], FLOOR, 2);
@@ -484,6 +490,7 @@ export function drawFigure(id: string, side: FigureSide | "E", elapsed: number, 
   return {
     label,
     tf: tf(f.scale || 1),
+    floor: sc.hasFloor,
     slots: Array.from({ length: SLOTS }, (_, i) => sc.items[i] ?? empty),
     badges: [0, 1].map((j) => sc.badges[j] ?? noBadge),
   };

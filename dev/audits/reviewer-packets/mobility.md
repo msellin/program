@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: b14c8bd221418f27 -->
+<!-- source-fingerprint: 25edb2577ad280f7 -->
 
 ## What we are asking
 

@@ -122,14 +122,14 @@ export function MissedSessionPrompt({
               dismiss();
               onLogYesterday();
             }}
-            className="font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-bronze text-ground hover:bg-bronze-hover min-h-[36px]"
+            className="text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-bronze text-ground hover:bg-bronze-hover min-h-[36px]"
           >
             Log yesterday now
           </button>
           <button
             type="button"
             onClick={() => setStage("skipChoice")}
-            className="font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line text-ink hover:bg-line-soft min-h-[36px]"
+            className="text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line text-ink hover:bg-line-soft min-h-[36px]"
           >
             Mark yesterday skipped
           </button>

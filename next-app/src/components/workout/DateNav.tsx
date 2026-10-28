@@ -34,7 +34,7 @@ export function DateNav({ date, onChange }: Props) {
       </button>
       <div className="flex-1 text-center">
         <p className="text-body font-semibold text-strong leading-tight">{label}</p>
-        <p className="mono-caps mt-0.5">
+        <p className="mt-0.5 text-caption font-medium text-muted">
           {isToday ? "Today" : offsetLabel(date)}
         </p>
       </div>

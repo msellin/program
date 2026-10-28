@@ -39,7 +39,7 @@ export function SessionActions({ blockIds, date, program }: Props) {
         <button
           type="button"
           onClick={() => (program ? undoSkip(active, program) : clearSkip(active))}
-          className="text-caption mono-caps text-bronze hover:text-bronze-hover"
+          className="text-caption text-bronze hover:text-bronze-hover font-medium"
         >
           Undo
         </button>
@@ -197,7 +197,7 @@ function WeekSheet({
           </p>
         ) : null}
         <div>
-          <label className="mono-caps block mb-1" htmlFor="week-reason">Reason (optional)</label>
+          <label className="block mb-1 text-caption font-medium text-muted" htmlFor="week-reason">Reason (optional)</label>
           <input
             id="week-reason"
             type="text"
@@ -270,7 +270,7 @@ function ConfirmSheet({
         <p className="text-small text-muted">{body}</p>
         {askReason ? (
           <div>
-            <label className="mono-caps block mb-1">Reason (optional)</label>
+            <label className="block mb-1 text-caption font-medium text-muted">Reason (optional)</label>
             <input
               type="text"
               value={reason}
@@ -388,7 +388,7 @@ function SkipSheet({
         </div>
 
         <div>
-          <label className="mono-caps block mb-1" htmlFor="skip-reason">Reason (optional)</label>
+          <label className="block mb-1 text-caption font-medium text-muted" htmlFor="skip-reason">Reason (optional)</label>
           <input
             id="skip-reason"
             type="text"
@@ -465,7 +465,7 @@ function MoveSheet({
           <p><span className="text-ink font-semibold">Progression trajectory intact.</span> The wave continues from where the last completed session landed.</p>
         </div>
         <div>
-          <label className="mono-caps block mb-1">Move to</label>
+          <label className="block mb-1 text-caption font-medium text-muted">Move to</label>
           <input
             type="date"
             value={date}

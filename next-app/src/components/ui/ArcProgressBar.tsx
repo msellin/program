@@ -56,7 +56,7 @@ export function ArcProgressBar({
     <div className={cn("space-y-2", className)}>
       <div className="flex items-baseline justify-between gap-3">
         <div className="flex items-baseline gap-2 min-w-0">
-          <span className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted">
+          <span className="text-eyebrow font-medium uppercase tracking-widest text-muted">
             {programName}
           </span>
           <span className="font-mono text-small tabular-nums text-strong">
@@ -64,7 +64,7 @@ export function ArcProgressBar({
           </span>
         </div>
         {nextMilestone && (
-          <span className="font-mono text-eyebrow uppercase tracking-widest text-muted truncate">
+          <span className="text-eyebrow uppercase tracking-widest text-muted truncate">
             Next: {nextMilestone}
           </span>
         )}

@@ -63,7 +63,7 @@ export function LevelLadder({
             </span>
             <span
               className={cn(
-                "mt-1.5 block text-eyebrow leading-tight line-clamp-3",
+                "mt-1.5 block text-eyebrow leading-tight break-words hyphens-auto",
                 lit ? "font-semibold text-strong" : "text-muted",
               )}
             >

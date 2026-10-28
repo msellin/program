@@ -127,7 +127,7 @@ export function CutCRetestTimeline({ program, store, className, onPinTap }: CutC
   if (!metric || events.length === 0) {
     return (
       <div className={cn(cardClass(), className)}>
-        <p className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted mb-1">
+        <p className="text-eyebrow font-medium uppercase tracking-widest text-muted mb-1">
           Retests · 0 events
         </p>
         <p className="text-caption text-muted italic">
@@ -156,7 +156,7 @@ export function CutCRetestTimeline({ program, store, className, onPinTap }: CutC
       aria-label={`${events.length} retest events for ${metric.display_name} · overall delta ${deltaSign}${deltaAbs} ${metric.unit}`}
       className={cn(cardClass(), className)}
     >
-      <p className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted mb-2">
+      <p className="text-eyebrow font-medium uppercase tracking-widest text-muted mb-2">
         Retests · {events.length} events
       </p>
 
@@ -201,7 +201,7 @@ export function CutCRetestTimeline({ program, store, className, onPinTap }: CutC
       </div>
 
       {/* Date range labels */}
-      <div className="mt-2 flex justify-between font-mono text-eyebrow uppercase tracking-widest text-muted">
+      <div className="mt-2 flex justify-between text-eyebrow uppercase tracking-widest text-muted">
         <span>{first.observed_at}</span>
         <span>today</span>
       </div>

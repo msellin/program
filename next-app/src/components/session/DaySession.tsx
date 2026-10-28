@@ -242,7 +242,7 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
     return (
       <div className="space-y-4 pt-4" data-surface="RedDayHold">
         <header className="space-y-1">
-          <p className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted">TODAY</p>
+          <p className="text-eyebrow font-medium uppercase tracking-widest text-muted">TODAY</p>
           <h1 className="text-h1 font-semibold tracking-[-0.03em] text-strong leading-none">
             {programDisplayName(program, slug)}
           </h1>

@@ -38,7 +38,7 @@ export function CycleStartCard({
 
   return (
     <div className={cardClass()}>
-      <p className="font-mono text-eyebrow uppercase tracking-[.16em] text-slate mb-[9px]">
+      <p className="text-eyebrow uppercase tracking-[.16em] text-slate mb-[9px]">
         New numbers — your training max goes up
       </p>
       <div className="flex flex-col gap-[9px] mb-[14px]">

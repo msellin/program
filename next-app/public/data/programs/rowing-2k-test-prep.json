@@ -285,12 +285,12 @@
     "consent": [
       {
         "id": "not_medical_advice",
-        "label": "I understand this is training programming, not medical advice.",
+        "label": "I understand this is training, not medical advice.",
         "required": true
       },
       {
         "id": "erg_form_stop_rule",
-        "label": "I agree to stop the session if low-back pain appears during rowing (technique-driven risk).",
+        "label": "I'll stop if low-back pain appears while rowing.",
         "required": true
       }
     ],

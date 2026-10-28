@@ -125,7 +125,7 @@ export function Sparkline({
         <circle cx={lastX} cy={lastY} r={2} fill={stroke} />
       </svg>
       {caption ? (
-        <p className="font-mono text-eyebrow uppercase tracking-widest text-muted mt-1">
+        <p className="text-eyebrow uppercase tracking-widest text-muted mt-1">
           {caption}
         </p>
       ) : null}

@@ -120,10 +120,10 @@ export function Heatmap({ store, onDayClick }: { store: Store; onDayClick?: (dat
   return (
     <div className="space-y-3">
       <div className="flex items-baseline justify-between">
-        <p className="mono-caps">
+        <p className="text-caption font-medium text-muted">
           Last {WEEKS} weeks
         </p>
-        <p className="font-mono text-eyebrow text-muted">
+        <p className="text-eyebrow text-muted">
           {totalStrengthDays} strength · {totalActiveDays} active total
         </p>
       </div>
@@ -141,7 +141,7 @@ export function Heatmap({ store, onDayClick }: { store: Store; onDayClick?: (dat
           {rowLabels.map((r) => (
             <span
               key={r}
-              className="mono-caps text-eyebrow h-4 leading-4 flex items-center pr-1"
+              className="text-eyebrow h-4 leading-4 flex items-center pr-1 font-medium text-muted"
             >
               {r[0]}
             </span>

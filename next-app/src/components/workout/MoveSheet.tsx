@@ -183,7 +183,7 @@ export function MoveSheet({
           <div>
             <label
               htmlFor="movesheet-reason"
-              className="block font-mono text-eyebrow uppercase tracking-widest text-muted mb-1"
+              className="block text-eyebrow uppercase tracking-widest text-muted mb-1"
             >
               Why? (optional)
             </label>
@@ -231,7 +231,7 @@ function DayList({
 }) {
   return (
     <fieldset className="min-w-0">
-      <legend className="font-mono text-eyebrow uppercase tracking-widest text-muted mb-1.5">
+      <legend className="text-eyebrow uppercase tracking-widest text-muted mb-1.5">
         {heading}
       </legend>
       <ul className={`${cardClass({ flush: true })} divide-y divide-line-soft`}>
@@ -265,13 +265,13 @@ function DayList({
                   </p>
                 </div>
                 {d.hasSession && !isSource ? (
-                  <span className="font-mono text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted flex-shrink-0 inline-flex items-center gap-1.5">
+                  <span className="text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted flex-shrink-0 inline-flex items-center gap-1.5">
                     <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-amber" />
                     has session
                   </span>
                 ) : null}
                 {d.isLogged ? (
-                  <span className="font-mono text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted flex-shrink-0 inline-flex items-center gap-1.5">
+                  <span className="text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted flex-shrink-0 inline-flex items-center gap-1.5">
                     <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-green" />
                     logged
                   </span>

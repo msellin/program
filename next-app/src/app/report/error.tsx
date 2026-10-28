@@ -48,25 +48,25 @@ export default function ReportError({
           <button
             type="button"
             onClick={reset}
-            className="inline-flex items-center gap-1.5 font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line-strong text-ink hover:bg-line-soft min-h-[44px]"
+            className="inline-flex items-center gap-1.5 text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line-strong text-ink hover:bg-line-soft min-h-[44px]"
           >
             Retry
           </button>
           <Link
             href="/"
-            className="inline-flex items-center gap-1.5 font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line-strong text-ink hover:bg-line-soft min-h-[44px]"
+            className="inline-flex items-center gap-1.5 text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line-strong text-ink hover:bg-line-soft min-h-[44px]"
           >
             Back to Today
           </Link>
           <Link
             href="/progress"
-            className="inline-flex items-center gap-1.5 font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line-strong text-ink hover:bg-line-soft min-h-[44px]"
+            className="inline-flex items-center gap-1.5 text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line-strong text-ink hover:bg-line-soft min-h-[44px]"
           >
             Open Progress
           </Link>
         </div>
         {error.digest ? (
-          <p className="font-mono text-eyebrow text-muted uppercase tracking-widest">
+          <p className="text-eyebrow text-muted uppercase tracking-widest">
             Error ref: {error.digest}
           </p>
         ) : null}

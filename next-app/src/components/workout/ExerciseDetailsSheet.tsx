@@ -141,7 +141,7 @@ export function ExerciseDetailsSheet({
                   return (
                     <span
                       key={f}
-                      className="font-mono text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5"
+                      className="text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5"
                     >
                       <span
                         aria-hidden

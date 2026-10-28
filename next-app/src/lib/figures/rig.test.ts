@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
-import { FIGS, drawFigure, FIGURE_SLOTS, type FigureFrame } from "./rig";
+import { FIGS, ACCENT, drawFigure, FIGURE_SLOTS, type FigureFrame } from "./rig";
 import { EXERCISE_FIGURES } from "./exercise-figures";
 
 // The review panel's rules (2026-10-19), as tests. Each one is a defect an
@@ -9,7 +9,7 @@ import { EXERCISE_FIGURES } from "./exercise-figures";
 
 const TEAL = "#5fa3b0";
 const PURPLE = "#b58dbb";
-const BOTH = "#d6d9de";
+const BOTH = ACCENT;
 const FAR = "#6b717d";
 const TIMES = Array.from({ length: 60 }, (_, i) => i * 250); // 0..15 s
 
@@ -49,6 +49,14 @@ describe("figure rig", () => {
       for (const reduced of [false, true])
         for (const s of used(drawFigure(id, "L", 3000, reduced))) colors.add(s.color);
     for (const c of colors) expect(contrast(c, "#16181c"), c).toBeGreaterThanOrEqual(3);
+  });
+
+  it("every pose draws an accent limb (bronze, or side teal/purple for sided figures)", () => {
+    for (const id of Object.keys(FIGS))
+      for (const side of ["L", "R", "B"] as const) {
+        const hit = used(drawFigure(id, side, 3000, false)).filter((s) => s.w >= 3 && [ACCENT, TEAL, PURPLE].includes(s.color));
+        expect(hit.length, id + side).toBeGreaterThan(0);
+      }
   });
 
   it("dead bug moves the OPPOSITE arm and leg, and switches pairs on the second rep", () => {

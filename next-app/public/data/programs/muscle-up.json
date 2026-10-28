@@ -375,12 +375,12 @@
     "consent": [
       {
         "id": "not_medical_advice",
-        "label": "I understand this is a training template, not medical advice. I'll consult a clinician for shoulder or elbow pain that persists past a session.",
+        "label": "Not medical advice. I'll see a clinician for shoulder or elbow pain that lasts past a session.",
         "required": true
       },
       {
         "id": "shoulder_pain_stop_rule",
-        "label": "I agree to stop the session if shoulder pain appears during a hang, transition, or support hold — no training through it.",
+        "label": "I'll stop if shoulder pain appears in a hang, transition or support hold. No training through it.",
         "required": true
       }
     ],

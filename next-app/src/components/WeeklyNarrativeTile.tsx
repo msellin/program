@@ -181,7 +181,7 @@ export function WeeklyNarrativeTile({
             aria-expanded={expanded}
             className="w-full flex items-center justify-between gap-2 py-1 text-left"
           >
-            <span className="font-mono text-eyebrow uppercase tracking-widest text-muted">
+            <span className="text-eyebrow uppercase tracking-widest text-muted">
               How the engine reads you
             </span>
             <span aria-hidden className="text-muted">

@@ -47,7 +47,7 @@ export function ProposalCard({
           {eyebrow ? (
             <h2
               id={`proposal-${proposal.id}`}
-              className={`font-mono text-eyebrow uppercase tracking-widest ${tone.eyebrow} flex items-center gap-1.5 font-normal`}
+              className={`text-eyebrow uppercase tracking-widest ${tone.eyebrow} flex items-center gap-1.5 font-normal`}
             >
               {proposal.kind === "tm_bump" ||
               proposal.kind === "tier_advance" ||
@@ -66,7 +66,7 @@ export function ProposalCard({
             <span className="text-muted">Because:</span> {proposal.reason}
           </p>
           {proposal.kind === "tm_bump" ? (
-            <ul className="text-caption font-mono text-ink mt-1 space-y-0.5">
+            <ul className="font-mono text-caption text-ink mt-1 space-y-0.5">
               {proposal.lifts.map((l) => (
                 <li key={l.exerciseId}>
                   {/* P1-66 (Batch 27) — was rendering raw exercise_id
@@ -82,7 +82,7 @@ export function ProposalCard({
               adjustment nothing would ever read. It now targets the next
               loaded day, and says so when that is not today. */}
           {proposal.kind === "day_adjustment_soften" && proposal.signalDate ? (
-            <p className="text-caption font-mono uppercase tracking-wider text-bronze mt-1">
+            <p className="text-caption uppercase tracking-wider text-bronze mt-1">
               Applies to{" "}
               {new Date(proposal.date + "T12:00:00Z").toLocaleDateString("en-GB", {
                 weekday: "long",
@@ -97,7 +97,7 @@ export function ProposalCard({
               {proposal.matches.map((m) => (
                 <span
                   key={m}
-                  className="font-mono text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5"
+                  className="text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5"
                 >
                   <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-amber" />
                   {/^life load/i.test(m) ? "A heavy week outside training" : m}
@@ -106,13 +106,13 @@ export function ProposalCard({
             </div>
           ) : null}
           {proposal.kind === "retest_due" ? (
-            <p className="text-caption font-mono text-ink mt-1">
+            <p className="text-caption text-ink mt-1">
               Week {proposal.currentWeek} · log {proposal.metricDisplayName}
               {proposal.metricUnit ? ` (${proposal.metricUnit})` : ""}
             </p>
           ) : null}
           {proposal.kind === "non_responder_recommendation" ? (
-            <ul className="text-caption font-mono text-ink mt-1 space-y-0.5">
+            <ul className="font-mono text-caption text-ink mt-1 space-y-0.5">
               {proposal.perMetric.map((m) => (
                 <li key={m.metric_id}>
                   {humanizeMetricId(m.metric_id)}
@@ -126,7 +126,7 @@ export function ProposalCard({
           ) : null}
           {proposal.kind === "readiness_after_layoff" ? (
             <>
-              <ul className="text-caption font-mono text-ink mt-1 space-y-0.5">
+              <ul className="font-mono text-caption text-ink mt-1 space-y-0.5">
                 {proposal.evidence.map((e) => (
                   <li key={e.date + e.exerciseId}>
                     {e.date} · {humanizeExerciseId(e.exerciseId)} · {e.weightKg} kg × {e.reps}

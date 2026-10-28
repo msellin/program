@@ -82,7 +82,7 @@ export function CutCLogList({ store, className }: CutCLogListProps) {
         <button
           type="button"
           onClick={() => setVisible((v) => v + PAGE_SIZE)}
-          className="w-full min-h-[44px] py-2.5 rounded-lg border border-line-strong font-mono text-caption uppercase tracking-widest text-ink motion-reduce:transition-none transition-colors hover:bg-line-soft focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2"
+          className="w-full min-h-[44px] py-2.5 rounded-lg border border-line-strong text-caption uppercase tracking-widest text-ink motion-reduce:transition-none transition-colors hover:bg-line-soft focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2"
         >
           Load {PAGE_SIZE} more
         </button>
@@ -118,7 +118,7 @@ function LogRow({ day, byId }: { day: DayLog; byId: Record<string, Exercise> }) 
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="w-full px-3 py-2.5 flex items-center justify-between gap-3 font-mono text-caption text-left hover:bg-line-soft/40 min-h-[44px] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2"
+        className="w-full px-3 py-2.5 flex items-center justify-between gap-3 text-caption text-left hover:bg-line-soft/40 min-h-[44px] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2"
       >
         <span className="flex items-center gap-2">
           {open ? (
@@ -163,7 +163,7 @@ function LogRow({ day, byId }: { day: DayLog; byId: Record<string, Exercise> }) 
           )}
           {day.notes ? (
             <p className="text-caption text-muted">
-              <span className="mono-caps mr-1">Day note:</span>
+              <span className="mr-1 text-caption font-medium text-muted">Day note:</span>
               {day.notes}
             </p>
           ) : null}
@@ -194,12 +194,12 @@ function ExerciseRow({
     <div className="rounded-lg bg-surface-2 p-3">
       <div className="flex items-baseline justify-between gap-2">
         <p className="text-small font-medium">{ex?.name ?? exId}</p>
-        <p className="mono-caps text-eyebrow">
+        <p className="text-eyebrow font-medium text-muted">
           {validSets.length} set{validSets.length === 1 ? "" : "s"}
         </p>
       </div>
       {validSets.length ? (
-        <ul className="mt-1 space-y-0.5 font-mono text-eyebrow text-muted">
+        <ul className="font-mono mt-1 space-y-0.5 text-eyebrow text-muted">
           {validSets.map((s, i) => (
             <li key={i} className="flex gap-2 items-center">
               <span className="w-5 text-center">#{i + 1}</span>
@@ -237,7 +237,7 @@ function RunRow({ run }: { run: NonNullable<DayLog["runs"]>[number] }) {
   if (run.distance_km) parts.push(`${run.distance_km.toFixed(1)} km`);
   if (run.avg_hr) parts.push(`${run.avg_hr} bpm`);
   return (
-    <div className="rounded-lg bg-surface-2 p-3 font-mono text-caption text-ink">
+    <div className="rounded-lg bg-surface-2 p-3 text-caption text-ink">
       <span className="tabular-nums">{parts.join(" · ") || "run"}</span>
       {run.note ? <p className="mt-1 text-eyebrow italic text-muted">{run.note}</p> : null}
     </div>
@@ -258,7 +258,7 @@ function SymptomsSummary({ symptoms }: { symptoms: NonNullable<DayLog["symptoms"
   if (symptoms.click_present) items.push(symptoms.click_painful ? "painful click" : "click (painless)");
   return (
     <p className="text-eyebrow text-muted">
-      <span className="mono-caps mr-1">Check:</span>
+      <span className="mr-1 text-caption font-medium text-muted">Check:</span>
       {items.length ? items.join(" · ") : "all zero"}
     </p>
   );

@@ -50,7 +50,7 @@ Eccentric training produces great
 CTA href from the pull-up landing page: https://app.terav.fit/sign-up?next=%2Fprograms%2Ffirst-strict-pullup&utm_campaign=gap-test
 
 ## 02-sign-up-page-not-submitted
-url: https://app.terav.fit/sign-up/
+url: http://localhost:3000/sign-up/
 horizontal overflow: false
 
 Sign up
@@ -69,7 +69,7 @@ Create account
 Already have an account? Sign in
 
 ## 03-first-screen-after-sign-in
-url: https://app.terav.fit/
+url: http://localhost:3000/
 horizontal overflow: false
 
 Skip to content
@@ -78,13 +78,13 @@ Pick your focus.
 Each program starts with a short intake so the plan is calibrated to your baseline, not a template with your name on it.
 
 Browse programs
-TODAY
-PLAN
-RECORD
-PROFILE
+Today
+Plan
+Record
+Profile
 
 ## 04-programs
-url: https://app.terav.fit/programs/
+url: http://localhost:3000/programs/
 horizontal overflow: false
 
 Skip to content
@@ -183,7 +183,7 @@ ALL LEVELS
 Mus
 
 ## 05-program-detail
-url: https://app.terav.fit/programs/first-strict-pullup/
+url: http://localhost:3000/programs/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
@@ -216,13 +216,13 @@ Baseline setup — a few minutes on the wizard + a 3-day measurement window
 
 Start free
 Program shape (peek inside)
-TODAY
-PLAN
-RECORD
-PROFILE
+Today
+Plan
+Record
+Profile
 
 ## 06-intake-01
-url: https://app.terav.fit/programs/first-strict-pullup/intake/
+url: http://localhost:3000/programs/first-strict-pullup/intake/
 horizontal overflow: false
 
 Skip to content
@@ -244,7 +244,7 @@ Continue
 Detailed setup (about 5 min)
 
 ## 06-intake-02
-url: https://app.terav.fit/programs/first-strict-pullup/intake/
+url: http://localhost:3000/programs/first-strict-pullup/intake/
 horizontal overflow: false
 
 Skip to content
@@ -291,7 +291,7 @@ Continue
 Detailed setup (about 5 min)
 
 ## 06-intake-03
-url: https://app.terav.fit/programs/first-strict-pullup/intake/
+url: http://localhost:3000/programs/first-strict-pullup/intake/
 horizontal overflow: false
 
 Skip to content
@@ -331,14 +331,14 @@ DAYS / WEEK
 
 Typically by week 8: 25-45 second dead hang, first clean scapular pulls, and 5-10 strict feet-elevated ring rows.
 
-I understand this is a training template, not medical advice. I'll consult a clinician for shoulder or elbow pain that persists past a session.
-I agree to stop the session if shoulder pain appears during a hang or pull attempt — no training through it.
+Not medical advice. I'll see a clinician for shoulder or elbow pain that lasts past a session.
+I'll stop if shoulder pain appears in a hang or pull. No training through it.
 Start
 
 Detailed setup (about 5 min)
 
 ## 06-intake-04
-url: https://app.terav.fit/
+url: http://localhost:3000/
 horizontal overflow: false
 
 Skip to content
@@ -377,9 +377,18 @@ TODAY
 
 Hang, scap, row base · week 1 of 8 · ends 22 Dec
 
+ABOUT 32 MIN
+
 · Row strength — closed-chain pull
 · Scapular pull ladder
 · Shoulder + grip prep — every session
+M
+T
+W
+T
+F
+S
+S
 Open session
 
 Log extra session →
@@ -388,15 +397,15 @@ Runs, rows, walks, classes, mobility — anything not in the prescribed block. O
 
 Log session
 Import GPX
-TODAY
-PLAN
-RECORD
-PROFILE
+Today
+Plan
+Record
+Profile
 
 Intake steps walked: 4
 
 ## 07-today-day-1
-url: https://app.terav.fit/
+url: http://localhost:3000/
 horizontal overflow: false
 
 Skip to content
@@ -435,9 +444,18 @@ TODAY
 
 Hang, scap, row base · week 1 of 8 · ends 22 Dec
 
+ABOUT 32 MIN
+
 · Row strength — closed-chain pull
 · Scapular pull ladder
 · Shoulder + grip prep — every session
+M
+T
+W
+T
+F
+S
+S
 Open session
 
 Log extra session →
@@ -446,13 +464,13 @@ Runs, rows, walks, classes, mobility — anything not in the prescribed block. O
 
 Log session
 Import GPX
-TODAY
-PLAN
-RECORD
-PROFILE
+Today
+Plan
+Record
+Profile
 
 ## 08-first-session
-url: https://app.terav.fit/session/first-strict-pullup/
+url: http://localhost:3000/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
@@ -463,16 +481,10 @@ Wednesday
 
 5 exercises · about 32 min · +1 optional
 
-HOW TO RUN THIS
-
-Feet-elevated ring row / inverted row.
-
-The neuromuscular precursor to a pull-up. Retraction hold isolates the endpoint.
-
-Band pull-aparts + scap CARs + light forearm activation. 3-5 min before any bar-hang work. Non-optional in weeks 1-3.
+Hang, scap, row base · week 1 of 8 · ends 22 Dec
 
 Follow along · Row strength — closed-chain pull
-3 moves · guided, one at a time, with a timer
+3 moves · with a timer
 Ring row (incline, easy)
 3 sets
 Ring row (horizontal)
@@ -480,29 +492,28 @@ Ring row (horizontal)
 Ring row (feet elevated)
 4 sets
 Follow along · Scapular pull ladder
-2 moves · guided, one at a time, with a timer
+2 moves · with a timer
 Scapular pull-up
 4 sets
 Scap retraction hold at top
 3 sets
 OPTIONAL
 Follow along · Shoulder + grip prep — every session
-1 move · guided, one at a time, with a timer
+1 move · with a timer
 Band shoulder prep (I-Y-T + face pull)
 2 sets
+How to run this
+›
 Log an extra session
 ›
-
-HANG, SCAP, ROW BASE · WEEK 1 OF 8 · ENDS 22 DEC
-
 Start session
-TODAY
-PLAN
-RECORD
-PROFILE
+Today
+Plan
+Record
+Profile
 
 ## 09-first-session-bottom
-url: https://app.terav.fit/session/first-strict-pullup/
+url: http://localhost:3000/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
@@ -513,16 +524,10 @@ Wednesday
 
 5 exercises · about 32 min · +1 optional
 
-HOW TO RUN THIS
-
-Feet-elevated ring row / inverted row.
-
-The neuromuscular precursor to a pull-up. Retraction hold isolates the endpoint.
-
-Band pull-aparts + scap CARs + light forearm activation. 3-5 min before any bar-hang work. Non-optional in weeks 1-3.
+Hang, scap, row base · week 1 of 8 · ends 22 Dec
 
 Follow along · Row strength — closed-chain pull
-3 moves · guided, one at a time, with a timer
+3 moves · with a timer
 Ring row (incline, easy)
 3 sets
 Ring row (horizontal)
@@ -530,23 +535,22 @@ Ring row (horizontal)
 Ring row (feet elevated)
 4 sets
 Follow along · Scapular pull ladder
-2 moves · guided, one at a time, with a timer
+2 moves · with a timer
 Scapular pull-up
 4 sets
 Scap retraction hold at top
 3 sets
 OPTIONAL
 Follow along · Shoulder + grip prep — every session
-1 move · guided, one at a time, with a timer
+1 move · with a timer
 Band shoulder prep (I-Y-T + face pull)
 2 sets
+How to run this
+›
 Log an extra session
 ›
-
-HANG, SCAP, ROW BASE · WEEK 1 OF 8 · ENDS 22 DEC
-
 Start session
-TODAY
-PLAN
-RECORD
-PROFILE
+Today
+Plan
+Record
+Profile

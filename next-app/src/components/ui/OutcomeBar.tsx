@@ -67,7 +67,7 @@ export function OutcomeBar({
           className="h-full rounded-full bg-gradient-to-r from-slate/60 to-bronze w-full"
         />
       </div>
-      <p className="font-mono text-eyebrow uppercase tracking-widest text-muted">
+      <p className="text-eyebrow uppercase tracking-widest text-muted">
         {rangeCaption}
       </p>
     </div>

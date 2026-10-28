@@ -271,10 +271,10 @@ export default function CheckPage() {
   };
 
   return (
-    <div className="space-y-5 pt-4 pb-28">
+    <div className="space-y-5 pt-4 pb-[calc(10rem+env(safe-area-inset-bottom))]">
       <header>
         <h1 className="text-h1 tracking-tight text-strong leading-none">Morning check</h1>
-        <p className="mt-1 font-mono text-eyebrow uppercase tracking-[0.06em] text-muted">
+        <p className="mt-1 text-caption text-muted">
           {new Date(today + "T12:00:00").toLocaleDateString("en-GB", {
             weekday: "long",
             day: "numeric",
@@ -299,7 +299,7 @@ export default function CheckPage() {
           <button
             type="button"
             onClick={startFresh}
-            className="min-h-[44px] py-2 font-mono text-eyebrow uppercase tracking-[0.06em] text-slate hover:text-ink motion-reduce:transition-none transition-colors focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2 rounded-lg"
+            className="min-h-[44px] py-2 text-caption text-slate hover:text-ink motion-reduce:transition-none transition-colors focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2 rounded-lg"
           >
             Start fresh
           </button>
@@ -310,7 +310,7 @@ export default function CheckPage() {
       <section aria-labelledby="check-regions">
         <div className="flex items-center gap-2 mb-2">
           <span aria-hidden className="h-px flex-none w-5 bg-linear-to-l from-line-soft to-transparent"  />
-          <span id="check-regions" className="font-mono text-eyebrow uppercase tracking-[0.06em] text-muted">Regions</span>
+          <span id="check-regions" className="text-caption text-muted">Regions</span>
           <span aria-hidden className="h-px flex-1 bg-linear-to-r from-line-soft to-transparent"  />
         </div>
         <p className="mb-2 text-caption text-muted">
@@ -344,7 +344,7 @@ export default function CheckPage() {
       <section aria-labelledby="check-flags">
         <div className="flex items-center gap-2 mb-2">
           <span aria-hidden className="h-px flex-none w-5 bg-linear-to-l from-line-soft to-transparent"  />
-          <span id="check-flags" className="font-mono text-eyebrow uppercase tracking-[0.06em] text-muted">Flags · tap to toggle</span>
+          <span id="check-flags" className="text-caption text-muted">Flags · tap to toggle</span>
           <span aria-hidden className="h-px flex-1 bg-linear-to-r from-line-soft to-transparent"  />
         </div>
         <div className="flex flex-wrap gap-2">
@@ -378,7 +378,7 @@ export default function CheckPage() {
       <section aria-labelledby="check-context">
         <div className="flex items-center gap-2 mb-2">
           <span aria-hidden className="h-px flex-none w-5 bg-linear-to-l from-line-soft to-transparent"  />
-          <span id="check-context" className="font-mono text-eyebrow uppercase tracking-[0.06em] text-muted">Context</span>
+          <span id="check-context" className="text-caption text-muted">Context</span>
           <span aria-hidden className="h-px flex-1 bg-linear-to-r from-line-soft to-transparent"  />
         </div>
         <Card flush className="px-3">

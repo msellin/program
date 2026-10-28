@@ -123,7 +123,7 @@ export function HeroStateCard({ date }: { date: string }) {
                   type="button"
                   onClick={() => setSheetOpen(true)}
                   aria-label={`Why ${copy.pillLabel.toLowerCase()}?`}
-                  className="font-mono text-eyebrow uppercase tracking-widest text-slate hover:text-ink active:text-strong min-h-11 min-w-11 px-2 py-1 rounded-lg flex items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2"
+                  className="text-eyebrow uppercase tracking-widest text-slate hover:text-ink active:text-strong min-h-11 min-w-11 px-2 py-1 rounded-lg flex items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2"
                 >
                   Why?
                 </button>

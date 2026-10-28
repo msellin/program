@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: ab5abe06658b3523 -->
+<!-- source-fingerprint: acd538d887f829d6 -->
 
 ## What we are asking
 
@@ -77,7 +77,7 @@ is published too, not quietly dropped.
   - Method note: Interleaved from week 1 (past acquisition stage). Sub-maximal doubles/triples at ~60-70% max as primary driver. Grease-the-groove singles daily.
 - **Weeks 1-8 — Volume + variety (Tier D)** (8 wks) — 3-5 rep max → 8-10 unbroken. Wide-grip and neutral-grip variants unlocked. Weighted single-preview at end of block.
   - Method note: Fully interleaved (random CI) from week 1. Variety of practice (Schmidt 1975 schema theory) via grip-width rotation.
-- **Weeks 5-8 — Interleaved consolidation for all tiers** (4 wks) — Post-acquisition: engine interleaves 2-3 drills per session across the weakest capabilities.
+- **Weeks 5-8 — Interleaved consolidation for all tiers** (4 wks) — After your first rep: each session mixes 2–3 drills for the parts still holding you back.
   - Method note: Multi-dimensional generator picks from drill_library filtered by capability_profile. Weakest first (Henry 1968).
 
 ### What it retests, and how often

@@ -17,7 +17,7 @@ export function StatTiles({ tiles }: { tiles: Tile[] }) {
           >
             {t.value}
           </dd>
-          <dt className="mt-1.5 font-mono text-eyebrow uppercase tracking-widest text-muted">{t.label}</dt>
+          <dt className="mt-1.5 text-eyebrow uppercase tracking-widest text-muted">{t.label}</dt>
         </div>
       ))}
     </dl>

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { cardClass } from "@/components/ui/Card";
+import { cn } from "@/lib/utils";
 import { RacePlanCard } from "@/components/session/RacePlanCard";
 import { programProgress, endsLabel } from "@/lib/program-progress";
 import { humanPhaseName, programDisplayName, humanBlockName, exerciseListName } from "@/lib/day-format";
@@ -169,7 +170,7 @@ export function BriefView({
             beside a 32px day name it ran off the edge at 375. */}
         <header className="space-y-1">
           {program.slug ? (
-            <p className="font-mono text-eyebrow uppercase text-bronze">
+            <p className="text-eyebrow uppercase text-bronze">
               {programDisplayName(program, program.slug)}
             </p>
           ) : null}
@@ -177,7 +178,15 @@ export function BriefView({
             {dayName(activeDate)}
           </h1>
         </header>
-        <p className="text-small text-muted -mt-3">{summary}</p>
+        <div className="-mt-3 space-y-0.5">
+          <p className="text-small text-muted">{summary}</p>
+          {progressLabel ? (
+            <p className="text-caption text-muted">
+              {progressLabel}
+              {progressDetail ? ` · ${progressDetail}` : ""}
+            </p>
+          ) : null}
+        </div>
 
         {cycleGateProposal ? (
           <CycleStartCard proposal={cycleGateProposal} date={activeDate} />
@@ -202,107 +211,6 @@ export function BriefView({
           </div>
         ) : null}
 
-        {hero ? (
-          <div className={cardClass()}>
-            <p className="font-mono text-caption uppercase tracking-[.16em] text-muted mb-2.5">
-              {heroShape.kind === "top_set" ? "Today\u2019s top set" : "Today\u2019s working sets"}
-            </p>
-            <p className="text-body font-semibold text-strong mb-2 tracking-[-.015em]">
-              {hero.exercise.name}
-            </p>
-            {hero.suggestion && heroShape.kind !== "none" ? (
-              <>
-                <div className="flex items-baseline gap-[7px] mb-2">
-                  {heroShape.kind === "straight" ? (
-                    <>
-                      <span className="text-h1 leading-none font-semibold text-strong">{heroShape.sets}</span>
-                      <span className="text-h3 text-muted">×</span>
-                      <span className="text-h1 leading-none font-semibold text-strong">{heroShape.reps}</span>
-                      <span className="text-h3 text-muted">at</span>
-                      <span className="text-metric leading-none font-semibold tracking-[-.04em] text-strong">{heroShape.kg}</span>
-                      <span className="text-body font-medium text-muted">kg</span>
-                    </>
-                  ) : heroShape.kind === "ladder" ? (
-                    <>
-                      <span className="text-h1 leading-none font-semibold tracking-[-.03em] text-strong">
-                        {heroShape.kgs.join(" · ")}
-                      </span>
-                      <span className="text-body font-medium text-muted">kg</span>
-                      <span className="text-h3 text-muted">×</span>
-                      <span className="text-h1 leading-none font-semibold text-strong">{heroShape.reps}</span>
-                    </>
-                  ) : (
-                    <>
-                      <span className="text-metric leading-none font-semibold tracking-[-.04em] text-strong">{heroShape.kg}</span>
-                      <span className="text-body font-medium text-muted">kg</span>
-                      <span className="text-h3 text-muted">×</span>
-                      <span className="text-h1 leading-none font-semibold text-strong">{heroShape.reps}</span>
-                    </>
-                  )}
-                </div>
-                <p className="text-small leading-snug text-ink">
-                  {heroShape.kind === "straight"
-                    ? "No top set today \u2014 every set at the same weight."
-                    : heroShape.kind === "ladder"
-                      ? "No top set today \u2014 one set at each weight, lightest first."
-                      : [
-                          heroShape.ramp.length
-                            ? `After ${heroShape.ramp.map((w) => `${w.kg} \u00d7 ${w.reps}`).join(", ")}.`
-                            : null,
-                          heroShape.backoff
-                            ? `Then ${heroShape.backoff.sets} \u00d7 ${heroShape.backoff.kg} kg.`
-                            : null,
-                        ]
-                          .filter(Boolean)
-                          .join(" ") || null}
-                </p>
-                {basisLine(hero, store) ? (
-                  <p className="text-small leading-snug text-ink">{basisLine(hero, store)}</p>
-                ) : null}
-              </>
-            ) : (
-              <p className="text-small text-ink">{hero.rowCount} sets</p>
-            )}
-          </div>
-        ) : null}
-
-        {/* How to run today's work (2026-08-27).
-            A block's `note` only ever rendered for blocks with NO items —
-            so the evaluation session, whose note IS the protocol ("ramp in
-            fives to a clean 5RM, stop at the first grinder, set TM = 5RM x
-            0.90"), showed nothing but a list of exercises. You could open
-            the session and still not know how to run it. Any block that
-            carries guidance now shows it, exercises or not. */}
-        {/* Test-day pacing. Rendered above "how to run this" because on the
-            day the user opens this screen to find four numbers, not prose.
-            The card returns null unless the session actually contains the 2K
-            test AND the user has a baseline to compute against. */}
-        {blocks.some((b) => b.id === "block_open_2k") ? (
-          <div className="mb-4">
-            <RacePlanCard program={program} store={store} />
-          </div>
-        ) : null}
-
-        {guidanceBlocks.length > 0 ? (
-          <div className="mb-4">
-            <p className="font-mono text-caption uppercase tracking-[.16em] text-muted mb-[9px]">
-              How to run this
-            </p>
-            <div className="space-y-2">
-              {guidanceBlocks.map((b) => (
-                <div
-                  key={b.id}
-                  className={cardClass()}
-                >
-                  <p className="text-small leading-relaxed text-ink whitespace-pre-line">
-                    {b.note}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        ) : null}
-
         {onFollowAlong && followBlocks.length > 0 ? (
           <div className="space-y-2">
             {followBlocks.map((b) => {
@@ -320,7 +228,7 @@ export function BriefView({
                     <span className="min-w-0 flex-grow">
                       <span className="block text-body font-semibold text-strong">Follow along · {humanBlockName(b.name)}</span>
                       <span className="block text-caption text-muted">
-                        {b.count} {b.count === 1 ? "move" : "moves"} · guided, one at a time, with a timer
+                        {b.count} {b.count === 1 ? "move" : "moves"} · with a timer
                       </span>
                     </span>
                   </button>
@@ -340,7 +248,7 @@ export function BriefView({
                               <span className="block truncate text-small text-strong">{exerciseListName(r.exercise)}</span>
                               <span className="block text-caption text-muted">{railScheme(r)}</span>
                             </span>
-                            <span className="flex-shrink-0 font-mono text-caption uppercase tracking-[.1em] text-muted">
+                            <span className="flex-shrink-0 text-caption uppercase tracking-[.1em] text-muted">
                               {logged >= r.rowCount ? "Done" : logged > 0 ? "Held" : isOptional ? "Optional" : ""}
                             </span>
                           </button>
@@ -353,9 +261,17 @@ export function BriefView({
             })}
           </div>
         ) : null}
-
+        {/* Test-day pacing. Rendered above "how to run this" because on the
+            day the user opens this screen to find four numbers, not prose.
+            The card returns null unless the session actually contains the 2K
+            test AND the user has a baseline to compute against. */}
+        {blocks.some((b) => b.id === "block_open_2k") ? (
+          <div className="mb-4">
+            <RacePlanCard program={program} store={store} />
+          </div>
+        ) : null}
         <div className={allFollow && prescriptionBlocks.length === 0 && !escalation ? "hidden" : undefined}>
-          <p className="font-mono text-caption uppercase tracking-[.16em] text-muted mb-[9px]">
+          <p className="text-caption uppercase tracking-[.16em] text-muted mb-[9px]">
             {isPrescriptionSession ? "Today's session" : allFollow ? "Also today" : "The whole session"}
           </p>
           <div className="space-y-[7px]">
@@ -368,7 +284,7 @@ export function BriefView({
                   {humanBlockName(b.name)}
                 </p>
                 {b.duration_min ? (
-                  <p className="font-mono text-caption uppercase tracking-[.14em] text-muted mb-1">
+                  <p className="text-caption uppercase tracking-[.14em] text-muted mb-1">
                     {Array.isArray(b.duration_min)
                       ? `${b.duration_min[0]}–${b.duration_min[1]} min`
                       : `${b.duration_min} min`}
@@ -393,7 +309,7 @@ export function BriefView({
                 surfacing them. (2026-09-07) */}
             {escalation ? (
               <div className={cardClass({ status: "amber" })}>
-                <p className="font-mono text-caption uppercase tracking-widest text-amber mb-1">
+                <p className="text-caption uppercase tracking-widest text-amber mb-1">
                   {escalation.streak} red days in a row — your programme&rsquo;s rule
                 </p>
                 <p className="text-small leading-snug text-ink">{escalation.text}</p>
@@ -410,7 +326,7 @@ export function BriefView({
                 key={note}
                 className={cardClass()}
               >
-                <p className="font-mono text-caption uppercase tracking-widest text-slate mb-1">
+                <p className="text-caption uppercase tracking-widest text-slate mb-1">
                   Adjusted for you
                 </p>
                 <p className="text-small leading-snug text-ink">{note}</p>
@@ -480,7 +396,7 @@ export function BriefView({
                   </span>
                   <span
                     className={
-                      "ml-auto flex-shrink-0 font-mono text-caption uppercase tracking-[.1em] " +
+                      "ml-auto flex-shrink-0 text-caption uppercase tracking-[.1em] " +
                       (isDone ? "text-muted" : isMain ? "text-bronze" : "text-muted")
                     }
                   >
@@ -499,57 +415,121 @@ export function BriefView({
             })}
           </div>
         </div>
-      </div>
-
-      <div className="sticky bottom-[calc(64px+env(safe-area-inset-bottom))] z-10 flex-shrink-0 border-t border-line-soft bg-ground pt-2 pb-1 mt-5 space-y-2">
+        {hero ? (
+          <div className={cardClass()}>
+            <p className="text-caption uppercase tracking-[.16em] text-muted mb-2.5">
+              {heroShape.kind === "top_set" ? "Today\u2019s top set" : "Today\u2019s working sets"}
+            </p>
+            <p className="text-body font-semibold text-strong mb-2 tracking-[-.015em]">
+              {hero.exercise.name}
+            </p>
+            {hero.suggestion && heroShape.kind !== "none" ? (
+              <>
+                <div className="flex items-baseline gap-[7px] mb-2">
+                  {heroShape.kind === "straight" ? (
+                    <>
+                      <span className="text-h1 leading-none font-semibold text-strong">{heroShape.sets}</span>
+                      <span className="text-h3 text-muted">×</span>
+                      <span className="text-h1 leading-none font-semibold text-strong">{heroShape.reps}</span>
+                      <span className="text-h3 text-muted">at</span>
+                      <span className="text-metric leading-none font-semibold tracking-[-.04em] text-strong">{heroShape.kg}</span>
+                      <span className="text-body font-medium text-muted">kg</span>
+                    </>
+                  ) : heroShape.kind === "ladder" ? (
+                    <>
+                      <span className="text-h1 leading-none font-semibold tracking-[-.03em] text-strong">
+                        {heroShape.kgs.join(" · ")}
+                      </span>
+                      <span className="text-body font-medium text-muted">kg</span>
+                      <span className="text-h3 text-muted">×</span>
+                      <span className="text-h1 leading-none font-semibold text-strong">{heroShape.reps}</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="text-metric leading-none font-semibold tracking-[-.04em] text-strong">{heroShape.kg}</span>
+                      <span className="text-body font-medium text-muted">kg</span>
+                      <span className="text-h3 text-muted">×</span>
+                      <span className="text-h1 leading-none font-semibold text-strong">{heroShape.reps}</span>
+                    </>
+                  )}
+                </div>
+                <p className="text-small leading-snug text-ink">
+                  {heroShape.kind === "straight"
+                    ? "No top set today \u2014 every set at the same weight."
+                    : heroShape.kind === "ladder"
+                      ? "No top set today \u2014 one set at each weight, lightest first."
+                      : [
+                          heroShape.ramp.length
+                            ? `After ${heroShape.ramp.map((w) => `${w.kg} \u00d7 ${w.reps}`).join(", ")}.`
+                            : null,
+                          heroShape.backoff
+                            ? `Then ${heroShape.backoff.sets} \u00d7 ${heroShape.backoff.kg} kg.`
+                            : null,
+                        ]
+                          .filter(Boolean)
+                          .join(" ") || null}
+                </p>
+                {basisLine(hero, store) ? (
+                  <p className="text-small leading-snug text-ink">{basisLine(hero, store)}</p>
+                ) : null}
+              </>
+            ) : (
+              <p className="text-small text-ink">{hero.rowCount} sets</p>
+            )}
+          </div>
+        ) : null}
+        {guidanceBlocks.length > 0 ? (
+          <details className="group">
+            <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between text-small text-muted [&::-webkit-details-marker]:hidden">
+              <span>How to run this</span>
+              <span className="transition-transform group-open:rotate-90 motion-reduce:transition-none" aria-hidden="true">›</span>
+            </summary>
+            <div className={cn(cardClass(), "space-y-2")}>
+              {guidanceBlocks.map((b) => (
+                <p key={b.id} className="text-small leading-relaxed text-ink whitespace-pre-line">
+                  {b.note}
+                </p>
+              ))}
+            </div>
+          </details>
+        ) : null}
         <button
           type="button"
           onClick={() => onOpenSheet("off-plan")}
-          className="w-full flex items-center justify-between gap-2.5 py-0.5 text-left"
+          className="flex min-h-[44px] w-full items-center justify-between gap-2.5 text-left"
         >
-          {/* Renamed 2026-08-24. "Off-plan work" bundled two unrelated
-              things under one vague label: the program's own accessory
-              drills (now behind a flag — the plan already schedules them)
-              and activity logging, which is the retest data source for
-              four programs. Only the second survives here, so the line
-              names it. */}
           <span className="text-small text-muted">Log an extra session</span>
-          <span className="flex-shrink-0 text-small text-muted">›</span>
+          <span className="flex-shrink-0 text-small text-muted" aria-hidden="true">›</span>
         </button>
-        {progressLabel ? (
-          <p className="font-mono text-caption uppercase tracking-[.14em] text-muted">
-            {progressLabel}
-            {progressDetail ? ` · ${progressDetail}` : ""}
-          </p>
-        ) : null}
+      </div>
+
+      <div className="sticky bottom-[calc(64px+env(safe-area-inset-bottom))] z-10 flex-shrink-0 border-t border-line-soft bg-ground pt-2 pb-2 mt-4">
         {gateUnresolved ? (
-          <p className="font-mono text-caption uppercase tracking-[.14em] text-muted">
-            Accept the numbers to start
-          </p>
+          <p className="mb-1.5 text-caption text-muted">Accept the numbers to start</p>
         ) : null}
-        <Button
-          type="button"
-          disabled={gateUnresolved}
-          onClick={() => {
-            // A prescription-only session has no sets to step through —
-            // the row IS the session, and it is recorded as an activity,
-            // which is also where the program's retest metric reads from
-            // (`runs[].total_seconds where activity_type == 'row'`).
-            // Starting the set flow here opened an empty shell.
-            if (isPrescriptionSession) onOpenSheet("off-plan");
-            else if (allFollow) onFollowAlong?.(followBlocks[0].id);
-            else onStart();
-          }}
-          size="lg"
-          block
-        >
-          {startLabel}
-        </Button>
-        {heroLoggedCount > 0 && onFinishSession ? (
-          <Button variant="secondary" block onClick={onFinishSession}>
-            Finish session
+        <div className="flex gap-2">
+          {heroLoggedCount > 0 && onFinishSession ? (
+            <Button variant="secondary" onClick={onFinishSession} className="flex-shrink-0">
+              Finish session
+            </Button>
+          ) : null}
+          <Button
+            type="button"
+            disabled={gateUnresolved}
+            onClick={() => {
+              // A prescription-only session has no sets to step through —
+              // the row IS the session, recorded as an activity (the retest
+              // metric reads `runs[]`). Starting the set flow opened an empty shell.
+              if (isPrescriptionSession) onOpenSheet("off-plan");
+              else if (allFollow) onFollowAlong?.(followBlocks[0].id);
+              else onStart();
+            }}
+            block
+            className="min-w-0 flex-1"
+          >
+            <span className="truncate">{startLabel}</span>
           </Button>
-        ) : null}
+        </div>
       </div>
 
       {sheet === "off-plan" ? (

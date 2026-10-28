@@ -122,7 +122,7 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
     >
       {/* Laterality spine — only rendered when the exercise emphasises a side. */}
       {hasLaterality ? (
-        <aside className="bg-line-soft flex flex-col items-center justify-center gap-0.5 py-2 font-mono text-eyebrow font-semibold text-muted uppercase">
+        <aside className="bg-line-soft flex flex-col items-center justify-center gap-0.5 py-2 text-eyebrow font-semibold text-muted uppercase">
           {isLeftEmphasis ? (
             <>
               <span className="text-lat-left">L</span>
@@ -202,11 +202,11 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
                 </p>
               ) : null}
               {previewText ? (
-                <p className="font-mono text-caption text-slate mt-0.5 line-clamp-2">{previewText}</p>
+                <p className="text-caption text-slate mt-0.5 line-clamp-2">{previewText}</p>
               ) : null}
               {typeof (item as { note?: string }).note === "string" && (item as { note: string }).note.trim() ? (
                 <p className="text-small text-muted italic mt-1 leading-snug">
-                  <span className="font-mono text-eyebrow uppercase tracking-wider not-italic text-bronze mr-1.5">
+                  <span className="text-eyebrow uppercase tracking-wider not-italic text-bronze mr-1.5">
                     cue
                   </span>
                   {(item as { note: string }).note}
@@ -268,7 +268,7 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
                     // P2-10 — was `px-3 py-1.5` which doubled the outer
                     // `p-3` padding on the left. Outer owns horizontal;
                     // header row owns its vertical only.
-                    "grid gap-2 items-center py-1.5 bg-line-soft/50 text-eyebrow font-mono uppercase tracking-wider text-muted",
+                    "grid gap-2 items-center py-1.5 bg-line-soft/50 text-eyebrow uppercase tracking-wider text-muted",
                     "grid-cols-[24px_minmax(60px,1fr)_minmax(70px,80px)_minmax(60px,70px)_50px_28px_28px]",
                   )}
                 >
@@ -316,7 +316,7 @@ export function ExerciseCard({ blockId, item, exercise, program, date }: Props) 
                     const toAdd = target - sets.length;
                     for (let n = 0; n < toAdd; n++) addSet(blockId, exercise.id, activeDate);
                   }}
-                  className="w-full flex items-center justify-center gap-1.5 py-2 min-h-[44px] text-caption font-mono uppercase tracking-wider text-muted hover:text-ink hover:bg-line-soft transition-colors"
+                  className="w-full flex items-center justify-center gap-1.5 py-2 min-h-[44px] text-caption uppercase tracking-wider text-muted hover:text-ink hover:bg-line-soft transition-colors"
                 >
                   <Plus size={14} />
                   Add set
@@ -417,7 +417,7 @@ function TMSuggestionInline({
   const delta = est.suggestedTM - currentTM;
   if (Math.abs(delta) < 2.5) return null;
   return (
-    <div className="px-3 py-2 border-t border-line-soft text-caption font-mono text-muted flex items-center justify-between gap-2 flex-wrap">
+    <div className="px-3 py-2 border-t border-line-soft text-caption text-muted flex items-center justify-between gap-2 flex-wrap">
       <span>
         → est 1RM ~{est.est1RM} kg · suggested TM{" "}
         <strong className="text-slate">{est.suggestedTM} kg</strong>{" "}

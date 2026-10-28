@@ -350,12 +350,12 @@
     "consent": [
       {
         "id": "not_medical_advice",
-        "label": "I understand this is a training template, not medical advice. I'll consult a clinician for shoulder or elbow pain that persists past a session.",
+        "label": "Not medical advice. I'll see a clinician for shoulder or elbow pain that lasts past a session.",
         "required": true
       },
       {
         "id": "shoulder_pain_stop_rule",
-        "label": "I agree to stop the session if shoulder pain appears during a hang or pull attempt — no training through it.",
+        "label": "I'll stop if shoulder pain appears in a hang or pull. No training through it.",
         "required": true
       }
     ],
@@ -633,7 +633,7 @@
         "block_row_strength",
         "block_active_hollow"
       ],
-      "goal": "Post-acquisition: engine interleaves 2-3 drills per session across the weakest capabilities.",
+      "goal": "After your first rep: each session mixes 2–3 drills for the parts still holding you back.",
       "template_note": "Multi-dimensional generator picks from drill_library filtered by capability_profile. Weakest first (Henry 1968).",
       "test_at_end": "Week 8: full re-assessment (dead hang max, scap pull max, ring row max, strict pull-up max reps, negative control seconds).",
       "notes": [

@@ -397,7 +397,7 @@ export function SetView({
                   {exerciseListName(r.exercise)}
                 </span>
                 <span
-                  className={"block font-mono text-caption mt-0.5 " + (isActive ? "text-bronze" : "text-muted")}
+                  className={"font-mono block text-caption mt-0.5 " + (isActive ? "text-bronze" : "text-muted")}
                 >
                   {logged}/{r.rowCount}
                 </span>
@@ -426,11 +426,11 @@ export function SetView({
             prep on floor · set 121 sets 1 of 2 left". The name is the
             part that can be shortened; the counters can't. */}
         <div className="flex items-baseline justify-between gap-3 mt-2.5 px-1.5">
-          <span className="min-w-0 truncate font-mono text-caption uppercase tracking-[.14em] text-ink">
+          <span className="min-w-0 truncate text-caption uppercase tracking-[.14em] text-ink">
             {active.exercise.name} · set {activeSetIndex + 1} of {active.rowCount}
             {isOptionalRow(active, activeSetIndex) ? " · optional" : ""}
           </span>
-          <span className="flex-shrink-0 font-mono text-caption uppercase tracking-[.14em] text-ink">
+          <span className="flex-shrink-0 text-caption uppercase tracking-[.14em] text-ink">
             {totalRemaining} {totalRemaining === 1 ? "set" : "sets"} left
           </span>
         </div>
@@ -479,7 +479,7 @@ export function SetView({
                 >
                   <span
                     className={
-                      "block font-mono text-caption leading-none " +
+                      "block text-caption leading-none " +
                       (isCurrent ? "text-bronze" : done ? "text-ink" : "text-muted")
                     }
                   >
@@ -487,7 +487,7 @@ export function SetView({
                   </span>
                   <span
                     className={
-                      "block font-mono text-caption leading-none mt-0.5 truncate " +
+                      "block text-caption leading-none mt-0.5 truncate " +
                       (isCurrent ? "text-strong" : done ? "text-ink" : "text-muted")
                     }
                   >
@@ -513,19 +513,19 @@ export function SetView({
       </div>
 
       <div className="flex-1 flex flex-col items-center justify-center px-6 text-center min-h-0">
-        <p className="font-mono text-eyebrow uppercase tracking-[.18em] text-bronze mb-[18px] flex items-center gap-2">
+        <p className="text-eyebrow uppercase tracking-[.18em] text-bronze mb-[18px] flex items-center gap-2">
           {isEditingLoggedSet
             ? "Editing"
             : activeSetIndex === active.rowCount - 1
               ? "Top set"
               : "Set"}
           {setForRow.failed === true ? (
-            <span className="font-mono text-caption font-semibold uppercase tracking-[.12em] text-strong border border-line-strong rounded-md px-1.5 py-0.5">
+            <span className="text-caption font-semibold uppercase tracking-[.12em] text-strong border border-line-strong rounded-md px-1.5 py-0.5">
               Missed
             </span>
           ) : null}
           {wouldBePR ? (
-            <span className="font-mono text-caption font-semibold uppercase tracking-[.12em] text-ground bg-green rounded-md px-1.5 py-0.5">
+            <span className="text-caption font-semibold uppercase tracking-[.12em] text-ground bg-green rounded-md px-1.5 py-0.5">
               Rep PR
             </span>
           ) : null}
@@ -543,7 +543,7 @@ export function SetView({
             <p className="text-[92px] leading-[.9] font-semibold tracking-[-.05em] text-strong mb-1">
               {Math.floor(remaining / 60)}:{String(remaining % 60).padStart(2, "0")}
             </p>
-            <p className="font-mono text-eyebrow uppercase tracking-[.16em] text-muted mb-3">
+            <p className="text-eyebrow uppercase tracking-[.16em] text-muted mb-3">
               {running
                 ? isHoldShaped
                   ? "holding"
@@ -570,7 +570,7 @@ export function SetView({
         {!prev && !prescribed && authoredDose ? (
           <div className="border border-line-soft rounded-lg overflow-hidden mb-3">
             <div className="px-4 py-2.5 bg-surface">
-              <p className="font-mono text-caption uppercase tracking-[.14em] text-muted mb-0.5">
+              <p className="text-caption uppercase tracking-[.14em] text-muted mb-0.5">
                 Programme asks for
               </p>
               <p className="text-body font-semibold text-ink">{authoredDose}</p>
@@ -581,7 +581,7 @@ export function SetView({
           <div className="flex items-stretch border border-line-soft rounded-lg overflow-hidden mb-3">
             {prev ? (
               <div className="px-4 py-2.5 bg-surface">
-                <p className="font-mono text-caption uppercase tracking-[.14em] text-muted mb-0.5">
+                <p className="text-caption uppercase tracking-[.14em] text-muted mb-0.5">
                   Last time
                 </p>
                 <p className="text-body font-semibold text-ink">
@@ -592,7 +592,7 @@ export function SetView({
             {prev && prescribed ? <div className="w-px bg-line-soft" /> : null}
             {prescribed ? (
               <div className="px-4 py-2.5 bg-surface">
-                <p className="font-mono text-caption uppercase tracking-[.14em] text-muted mb-0.5">
+                <p className="text-caption uppercase tracking-[.14em] text-muted mb-0.5">
                   Prescribed
                 </p>
                 <p className="text-body font-semibold text-ink">
@@ -602,7 +602,7 @@ export function SetView({
             ) : null}
           </div>
         ) : null}
-        {plates ? <p className="font-mono text-eyebrow text-muted">{plates}</p> : null}
+        {plates ? <p className="text-eyebrow text-muted">{plates}</p> : null}
       </div>
 
       <div className="flex-shrink-0 px-[22px] pb-[22px]">
@@ -736,7 +736,7 @@ export function SetView({
               <div className="rounded-lg bg-surface-2 p-3 mb-2.5 flex flex-col gap-2">
                 <StepperRow label="kg" value={weight} step={2.5} onChange={setWeight} />
                 <div className="flex items-center justify-between pt-0.5">
-                  <span className="font-mono text-caption uppercase tracking-[.14em] text-ink">
+                  <span className="text-caption uppercase tracking-[.14em] text-ink">
                     Steps of 2.5 kg
                   </span>
                   {prescribed ? (
@@ -751,7 +751,7 @@ export function SetView({
                 </div>
               </div>
             ) : null}
-            <p className="font-mono text-caption uppercase tracking-[.14em] text-muted mb-2 text-center">
+            <p className="text-caption uppercase tracking-[.14em] text-muted mb-2 text-center">
               {isEditingLoggedSet
                 ? `Fix the reps on set ${activeSetIndex + 1}`
                 : `Reps you got on set ${activeSetIndex + 1}`}
@@ -844,7 +844,7 @@ export function SetView({
                 ) : null}
                 <StepperRow label="reps" value={reps} step={1} onChange={setReps} />
                 <div className="flex items-center justify-between pt-0.5">
-                  <span className="font-mono text-caption uppercase tracking-[.14em] text-ink">
+                  <span className="text-caption uppercase tracking-[.14em] text-ink">
                     {active.isLoadable ? "Steps of 2.5 kg" : "Steps of 1 rep"}
                   </span>
                   {prescribed ? (

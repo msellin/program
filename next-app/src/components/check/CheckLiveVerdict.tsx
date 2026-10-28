@@ -49,7 +49,7 @@ export function CheckLiveVerdict({ state, reason }: CheckLiveVerdictProps) {
   return (
     <>
       <Card status={state}>
-        <span className="inline-flex items-center gap-2 font-mono text-eyebrow uppercase tracking-[0.04em] text-strong font-medium">
+        <span className="inline-flex items-center gap-2 text-caption text-strong font-medium">
           <span
             aria-hidden
             className={cn(
@@ -74,7 +74,7 @@ export function CheckLiveVerdict({ state, reason }: CheckLiveVerdictProps) {
           className="mt-1 inline-flex items-center gap-1.5 min-h-[44px] py-2 text-caption text-ink cursor-pointer motion-reduce:transition-none transition-colors hover:text-strong focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2 rounded-lg"
           aria-label="Why this result?"
         >
-          <span className="font-mono text-eyebrow uppercase tracking-[0.06em] text-strong font-medium">
+          <span className="text-caption text-strong font-medium">
             Why?
           </span>
         </button>

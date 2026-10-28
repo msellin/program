@@ -72,7 +72,7 @@ export function BeliefsSection({ programLifts }: { programLifts?: string | null 
 
   return (
     <div>
-      <p className="font-mono text-eyebrow uppercase tracking-widest text-muted mb-2">
+      <p className="text-eyebrow uppercase tracking-widest text-muted mb-2">
         Your working maxes
       </p>
       <div className={cn(cardClass({ flush: true }), "divide-y divide-line-soft")}>
@@ -133,7 +133,7 @@ export function BeliefsSection({ programLifts }: { programLifts?: string | null 
                       >
                         −
                       </button>
-                      <span className="flex-1 text-center font-mono text-body font-semibold text-strong">
+                      <span className="font-mono flex-1 text-center text-body font-semibold text-strong">
                         {draft} kg
                       </span>
                       <button

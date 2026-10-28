@@ -34,14 +34,14 @@ export function ProposalStickyActionBar({
           <button
             type="button"
             onClick={(e) => onAccept(e.currentTarget)}
-            className="flex-1 font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-bronze text-ground hover:bg-bronze-hover active:bg-bronze-active min-h-[44px]"
+            className="flex-1 text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-bronze text-ground hover:bg-bronze-hover active:bg-bronze-active min-h-[44px]"
           >
             {acceptVerb}
           </button>
           <button
             type="button"
             onClick={onIgnore}
-            className="font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line text-ink hover:bg-line-soft active:bg-line-soft min-h-[44px]"
+            className="text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line text-ink hover:bg-line-soft active:bg-line-soft min-h-[44px]"
           >
             Not now
           </button>

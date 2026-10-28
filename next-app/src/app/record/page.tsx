@@ -59,7 +59,7 @@ function SectionAnchor({ label }: { label: string }) {
         aria-hidden
         className="h-px flex-none w-5 bg-gradient-to-l from-line-soft to-transparent"
       />
-      <span className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted">{label}</span>
+      <span className="text-eyebrow font-medium uppercase tracking-widest text-muted">{label}</span>
       <span
         aria-hidden
         className="h-px flex-1 bg-gradient-to-r from-line-soft to-transparent"
@@ -152,7 +152,7 @@ export default function RecordPage() {
         <span id="record-now" className="sr-only">Now</span>
         <div className="space-y-3">
           <div className={cardClass()}>
-            <p className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted mb-2">
+            <p className="text-eyebrow font-medium uppercase tracking-widest text-muted mb-2">
               Readiness — 12 weeks
             </p>
             {cells.some((c) => c.sessionState !== "none") ? (
@@ -199,7 +199,7 @@ export default function RecordPage() {
               recommendation #11 (category vacancy) — no peer does this. */}
           {hasRehabTrack ? (
             <div className="space-y-3">
-              <p className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted pt-2">
+              <p className="text-eyebrow font-medium uppercase tracking-widest text-muted pt-2">
                 Rehab
               </p>
               <ErrorBoundary fallback={<p className="text-caption text-muted italic">Hip tile unavailable.</p>}>
@@ -240,7 +240,7 @@ export default function RecordPage() {
         <span>Terav — Record</span>
         <a
           href="mailto:sellinmargus@gmail.com?subject=Terav%20feedback"
-          className="inline-flex items-center gap-1 font-mono text-eyebrow uppercase tracking-widest text-slate hover:text-ink motion-reduce:transition-none transition-colors min-h-[44px] py-2"
+          className="inline-flex items-center gap-1 text-eyebrow uppercase tracking-widest text-slate hover:text-ink motion-reduce:transition-none transition-colors min-h-[44px] py-2"
           aria-label="Send feedback to Terav founder"
         >
           Feedback? →

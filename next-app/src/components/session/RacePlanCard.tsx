@@ -62,7 +62,7 @@ export function RacePlanCard({
   return (
     <div className={cardClass() + " space-y-3"}>
       <div>
-        <p className="font-mono text-eyebrow uppercase tracking-[.16em] text-muted">
+        <p className="text-eyebrow uppercase tracking-[.16em] text-muted">
           Your plan for today
         </p>
         <p className="text-body font-semibold text-strong tracking-[-.01em] mt-0.5">
@@ -74,7 +74,7 @@ export function RacePlanCard({
       <div className="overflow-x-auto">
         <table className="w-full text-caption border-collapse">
           <thead>
-            <tr className="text-left text-muted border-b border-line-soft font-mono text-eyebrow uppercase tracking-[.14em]">
+            <tr className="text-left text-muted border-b border-line-soft text-eyebrow uppercase tracking-[.14em]">
               <th className="py-1.5 pr-3 font-normal">Through</th>
               <th className="py-1.5 pr-3 font-normal">Split</th>
               <th className="py-1.5 pr-3 font-normal">Rate</th>
@@ -83,11 +83,11 @@ export function RacePlanCard({
           <tbody>
             {plan.splits.map((s) => (
               <tr key={s.piece} className="border-b border-line-soft/50 align-top">
-                <td className="py-1.5 pr-3 font-mono text-ink whitespace-nowrap">{s.through_m}m</td>
-                <td className="py-1.5 pr-3 font-mono text-strong whitespace-nowrap">
+                <td className="font-mono py-1.5 pr-3 text-ink whitespace-nowrap">{s.through_m}m</td>
+                <td className="font-mono py-1.5 pr-3 text-strong whitespace-nowrap">
                   {formatSplit(s.target_split_s)}
                 </td>
-                <td className="py-1.5 pr-3 font-mono text-ink whitespace-nowrap">{s.target_spm}</td>
+                <td className="font-mono py-1.5 pr-3 text-ink whitespace-nowrap">{s.target_spm}</td>
               </tr>
             ))}
           </tbody>
@@ -97,7 +97,7 @@ export function RacePlanCard({
       <ul className="space-y-1 text-caption text-ink">
         {plan.splits.map((s) => (
           <li key={s.piece}>
-            <span className="font-mono text-muted">{s.through_m}m</span> · {s.cue}
+            <span className="text-muted">{s.through_m}m</span> · {s.cue}
           </li>
         ))}
       </ul>

@@ -110,7 +110,7 @@ export function OnboardingRunner() {
     >
       <div ref={panelRef} className="w-full max-w-md space-y-6">
         <div className="text-center space-y-1">
-          <p className="mono-caps" aria-live="polite">
+          <p className="text-caption font-medium text-muted" aria-live="polite">
             How Terav reads you · {step + 1} of {totalSteps}
           </p>
         </div>

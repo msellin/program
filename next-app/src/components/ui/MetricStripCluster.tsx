@@ -92,7 +92,7 @@ export function MetricStripCluster({
           className="min-w-0"
           aria-label={item.ariaLabel}
         >
-          <dt className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted">
+          <dt className="text-eyebrow font-medium uppercase tracking-widest text-muted">
             {item.label}
           </dt>
           <dd

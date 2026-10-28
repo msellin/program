@@ -286,7 +286,7 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
                     ) : null}
                     {snap ? (
                       <p className="text-caption text-muted mt-2">
-                        <span className="font-mono uppercase tracking-wider text-muted">Source:</span>{" "}
+                        <span className="uppercase tracking-wider text-muted">Source:</span>{" "}
                         {snap.display_short}
                       </p>
                     ) : null}

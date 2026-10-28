@@ -182,14 +182,14 @@ function RetestCard({
         <p className="font-semibold text-small text-strong flex items-center gap-1.5">
           {m.display_name}
           {due && canRetest ? (
-            <span className="font-mono text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
+            <span className="text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
               <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-bronze" />
               retest due
             </span>
           ) : null}
         </p>
         {m.at_week ? (
-          <span className="font-mono text-eyebrow text-muted uppercase tracking-wider">
+          <span className="text-eyebrow text-muted uppercase tracking-wider">
             check at week {m.at_week}
           </span>
         ) : null}
@@ -271,7 +271,7 @@ function RetestCard({
                     setValue(e.target.value);
                     setError(null);
                   }}
-                  className="mt-1 w-full px-2 py-2 min-h-[40px] border border-line rounded-lg bg-surface text-small focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze font-mono"
+                  className="mt-1 w-full px-2 py-2 min-h-[40px] border border-line rounded-lg bg-surface text-small focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
                   autoFocus
                 />
               </label>
@@ -280,7 +280,7 @@ function RetestCard({
                 <button
                   type="button"
                   onClick={submit}
-                  className="flex-1 bg-bronze text-ground rounded-lg py-2 min-h-[40px] text-caption font-mono uppercase tracking-wider hover:bg-bronze-hover"
+                  className="flex-1 bg-bronze text-ground rounded-lg py-2 min-h-[40px] text-caption uppercase tracking-wider hover:bg-bronze-hover"
                 >
                   Save
                 </button>
@@ -291,7 +291,7 @@ function RetestCard({
                     setValue("");
                     setError(null);
                   }}
-                  className="border border-line rounded-lg py-2 px-3 min-h-[40px] text-caption font-mono uppercase tracking-wider hover:bg-line-soft"
+                  className="border border-line rounded-lg py-2 px-3 min-h-[40px] text-caption uppercase tracking-wider hover:bg-line-soft"
                 >
                   Cancel
                 </button>
@@ -301,7 +301,7 @@ function RetestCard({
             <button
               type="button"
               onClick={() => setRetestOpen(true)}
-              className="inline-flex items-center gap-1.5 text-caption font-mono uppercase tracking-wider text-slate hover:text-ink"
+              className="inline-flex items-center gap-1.5 text-caption uppercase tracking-wider text-slate hover:text-ink"
             >
               <RefreshCw size={11} />
               {due

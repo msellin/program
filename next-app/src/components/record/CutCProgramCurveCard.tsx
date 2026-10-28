@@ -115,7 +115,7 @@ export function CutCProgramCurveCard({
   if (!metric || points.length === 0) {
     return (
       <div className={cn(cardClass(), className)}>
-        <p className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted mb-2">
+        <p className="text-eyebrow font-medium uppercase tracking-widest text-muted mb-2">
           Rolling {ROLLING_WINDOW_DAYS[zoomTier]}-day avg
         </p>
         <p className="text-caption text-muted italic">
@@ -134,7 +134,7 @@ export function CutCProgramCurveCard({
 
   return (
     <div className={cn(cardClass(), className)}>
-      <p className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted mb-2">
+      <p className="text-eyebrow font-medium uppercase tracking-widest text-muted mb-2">
         {ROLLING_WINDOW_DAYS[zoomTier]}-day rolling {metric.display_name} · {higherBetter ? "higher is better" : "lower is better"}
       </p>
 
@@ -166,7 +166,7 @@ export function CutCProgramCurveCard({
             type="button"
             onClick={() => setShowRaw((v) => !v)}
             aria-pressed={showRaw}
-            className="border border-line-strong rounded-lg px-3 py-2 min-h-[44px] font-mono text-eyebrow uppercase tracking-widest text-ink motion-reduce:transition-none transition-colors hover:bg-line-soft focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2"
+            className="border border-line-strong rounded-lg px-3 py-2 min-h-[44px] text-eyebrow uppercase tracking-widest text-ink motion-reduce:transition-none transition-colors hover:bg-line-soft focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2"
           >
             {showRaw ? "Hide raw" : "Show raw"}
           </button>

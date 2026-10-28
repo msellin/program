@@ -41,7 +41,7 @@ export default function PrimitivesStory() {
     <div className="min-h-screen bg-ground text-ink pb-24">
       <div className="max-w-[760px] mx-auto px-4 py-6 space-y-10">
         <header className="space-y-1">
-          <p className="font-mono text-eyebrow uppercase tracking-widest text-bronze">
+          <p className="text-eyebrow uppercase tracking-widest text-bronze">
             /dev/primitives
           </p>
           <h1 className="text-h1 text-strong tracking-[-0.03em] leading-tight">
@@ -116,7 +116,7 @@ export default function PrimitivesStory() {
         </Section>
 
         <Section title="WeeklySessionStrip · §2.5">
-          <p className="font-mono text-eyebrow uppercase tracking-widest text-muted">
+          <p className="text-eyebrow uppercase tracking-widest text-muted">
             Display variant (Today hero)
           </p>
           <WeeklySessionStrip
@@ -131,7 +131,7 @@ export default function PrimitivesStory() {
               { dayLetter: "S", scheduled: false, completed: false, isToday: false, isRest: true },
             ]}
           />
-          <p className="font-mono text-eyebrow uppercase tracking-widest text-muted pt-2">
+          <p className="text-eyebrow uppercase tracking-widest text-muted pt-2">
             Interactive variant (/week)
           </p>
           <WeeklySessionStrip
@@ -239,7 +239,7 @@ export default function PrimitivesStory() {
           <button
             type="button"
             onClick={() => setSheetOpen(true)}
-            className="font-mono text-caption uppercase tracking-wider text-slate underline"
+            className="text-caption uppercase tracking-wider text-slate underline"
           >
             Open sheet
           </button>
@@ -269,7 +269,7 @@ export default function PrimitivesStory() {
           <button
             type="button"
             onClick={() => setStickyDemo((v) => !v)}
-            className="font-mono text-caption uppercase tracking-wider text-slate underline"
+            className="text-caption uppercase tracking-wider text-slate underline"
           >
             {stickyDemo ? "Hide" : "Show"} sticky CTA demo
           </button>

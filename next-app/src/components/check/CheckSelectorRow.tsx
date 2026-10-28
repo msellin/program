@@ -65,7 +65,7 @@ export function CheckSelectorRow<T extends string | number>({
               tabIndex={tabStop ? 0 : -1}
               onClick={() => onChange(opt.value)}
               className={cn(
-                "min-h-[44px] px-1 py-2 text-caption rounded-lg motion-reduce:transition-none transition-colors",
+                "min-h-[44px] min-w-[44px] px-1 py-2 text-caption rounded-lg motion-reduce:transition-none transition-colors",
                 "focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-strong focus-visible:outline-offset-2",
                 isActive
                   ? "bg-surface-2 text-strong font-semibold ring-1 ring-strong"

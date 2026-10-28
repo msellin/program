@@ -7,7 +7,7 @@ import { loadProgram, loadProgramManifest, loadExercises, applyProgramExerciseOv
 import { HeroStateCard } from "@/components/workout/HeroStateCard";
 import { FindLevelCard } from "@/components/program/FindLevelCard";
 import { EmptyStateCard } from "@/components/EmptyStateCard";
-import { DashboardBlock } from "@/components/DashboardBlock";
+import { TodayHero } from "@/components/today/TodayHero";
 import { RedRestCard } from "@/components/workout/RedRestCard";
 import { redDayDirective } from "@/lib/engine/red-day";
 import { YourPlanCard } from "@/components/workout/YourPlanCard";
@@ -32,6 +32,7 @@ import { migrateLegacyToBlocks, needsBlockMigration } from "@/lib/migrations/leg
 import { RestDayCard, RetestReminder, GraduationCard } from "@/components/session/shared/StatusCards";
 import { programProgress, endsLabel, type ProgramProgress } from "@/lib/program-progress";
 import { programDisplayName, humanPhaseName, humanBlockName } from "@/lib/day-format";
+import type { WeeklySessionStripDay } from "@/components/ui/WeeklySessionStrip";
 import type { Program, Block, Exercise, Phase, Store, ScheduledBlock, ProgramManifest } from "@/lib/schemas";
 /**
  * F8-second (2026-08-19/20), trimmed for the Day redesign (2026-08-23) —
@@ -246,7 +247,7 @@ export function TodaySession({
     return (
       <div className="space-y-6 pt-4">
         <header className="space-y-1">
-          <p className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted">TODAY</p>
+          <p className="text-eyebrow font-medium uppercase tracking-widest text-muted">TODAY</p>
           <h1 className="text-h1 font-semibold tracking-[-0.03em] text-strong leading-none">
             {primary.slug ? programDisplayName(primary, primary.slug) : "Day"}
           </h1>
@@ -256,17 +257,18 @@ export function TodaySession({
     );
   }
   const groupsWithBlocks = groups.filter((g) => g.blocks.length > 0);
+  const weekDays = blockObjectOn ? weekStripFor(activeDate, scheduledBlocksMap) : null;
   const multipleProgramsToday = groupsWithBlocks.length >= 2;
 
   return (
     <div className="space-y-6 pt-4">
       {/* Batch 36 Step 10 · H1 inversion per v1.1.1 §5 + landing C1
           (Aug 2026). The workout name is the H1; the route scope moves to
-          a mono-caps eyebrow above. Multi-track: primary program's
+          an eyebrow above. Multi-track: primary program's
           display name is the H1; concurrent tracks render below in their
           own DashboardBlock groups. */}
       <header className="space-y-1">
-        <p className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted">
+        <p className="text-eyebrow font-medium uppercase tracking-widest text-muted">
           {todayEyebrow(activeDate, programProgress(primary, activeDate, userProfile))}
         </p>
         <h1 className="text-h1 font-semibold tracking-[-0.03em] text-strong leading-none">
@@ -466,7 +468,7 @@ export function TodaySession({
           const week = Math.floor(daysIn / 7) + 1; // program week, only picks the mode; never shown
           const mode = week <= 2 ? "blocked practice — drills in the composed order" : "random practice — order varies each session";
           return (
-            <p className="text-eyebrow text-muted font-mono">
+            <p className="text-eyebrow text-muted ">
               {/* "Program week" not "Week": the header above already reads
                   "WEEK 3 OF 4" (position within the current phase) and the
                   phase line repeats it. An unqualified "Week 7" next to those
@@ -632,9 +634,9 @@ export function TodaySession({
                       ? "slate"
                       : "default";
             return (
-              <DashboardBlock
+              <TodayHero
                 key={`summary:${g.program.schema_version}:${gi}`}
-                accent={accent}
+                accent={accent === "amber" || accent === "green" ? accent : undefined}
                 eyebrow={
                   groupsWithBlocks.length > 1
                     ? `Today · ${programDisplayName(g.program, activeSlugs[gi])}`
@@ -646,19 +648,10 @@ export function TodaySession({
                     ? `${humanPhaseName(groupPhase.name)}${(() => { const pp = programProgress(g.program, activeDate, userProfile); return pp ? ` · week ${pp.weekN} of ${pp.totalWeeks} · ends ${endsLabel(pp.endsOn)}` : ""; })()}`
                     : undefined
                 }
-                primaryCta={
-                  g.program.slug
-                    ? {
-                        label: "Open session",
-                        // 2026-08-21 fix — pass activeDate so tomorrow /
-                        // yesterday navigation on Today is preserved when
-                        // opening the session. Was `/session/${slug}`
-                        // which always landed on todayISO() regardless
-                        // of what the user was browsing.
-                        href: `/session/${g.program.slug}?date=${activeDate}`,
-                      }
-                    : undefined
-                }
+                blocks={g.blocks}
+                startHref={g.program.slug ? `/session/${g.program.slug}?date=${activeDate}` : undefined}
+                weekStart={gi === 0 && weekDays ? weekDays.start : undefined}
+                weekDays={gi === 0 && weekDays ? weekDays.days : undefined}
               >
                 <ul className="text-caption text-muted space-y-0.5">
                   {g.blocks.slice(0, 5).map((b) => (
@@ -670,7 +663,7 @@ export function TodaySession({
                     <li className="text-muted/60">+ {g.blocks.length - 5} more</li>
                   ) : null}
                 </ul>
-              </DashboardBlock>
+              </TodayHero>
             );
           })}
           {/* Day's off-plan card removed 2026-08-24. It was the third
@@ -705,6 +698,35 @@ function todayEyebrow(
   const scopeToken = activeDate === iso ? "TODAY" : shortDateToken(activeDate);
   const progressToken = prog ? `WEEK ${prog.weekN} OF ${prog.totalWeeks}` : null;
   return progressToken ? `${scopeToken} · ${progressToken}` : scopeToken;
+}
+
+/** Mon-Sun strip from the materialized blocks of the primary program; null when none exist this week. */
+function weekStripFor(
+  activeDate: string,
+  map: Record<string, ScheduledBlock> | undefined,
+): { start: string; days: WeeklySessionStripDay[] } | null {
+  const blocks = Object.values(map ?? {});
+  if (!blocks.length) return null;
+  const d0 = new Date(activeDate + "T12:00:00");
+  d0.setDate(d0.getDate() - ((d0.getDay() + 6) % 7));
+  const letters = ["M", "T", "W", "T", "F", "S", "S"];
+  const days: WeeklySessionStripDay[] = [];
+  let start = "";
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(d0);
+    d.setDate(d0.getDate() + i);
+    const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    if (i === 0) start = iso;
+    const onDay = blocks.filter((b) => b.actual_date === iso && b.state !== "skipped" && b.state !== "moved");
+    days.push({
+      dayLetter: letters[i],
+      scheduled: onDay.length > 0,
+      completed: onDay.length > 0 && onDay.every((b) => b.state === "done"),
+      isToday: iso === activeDate,
+      isRest: onDay.length === 0,
+    });
+  }
+  return days.some((d) => d.scheduled) ? { start, days } : null;
 }
 
 function shortDateToken(iso: string): string {

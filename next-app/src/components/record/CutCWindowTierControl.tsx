@@ -120,7 +120,7 @@ export function CutCWindowTierControl({ dataDays, onChange, className }: CutCWin
             aria-selected={isActive}
             onClick={() => handleClick(tier.value)}
             className={cn(
-              "relative min-h-[44px] py-3.5 font-mono text-caption uppercase tracking-widest",
+              "relative min-h-[44px] py-3.5 text-caption uppercase tracking-widest",
               "motion-reduce:transition-none transition-colors",
               isActive ? "text-strong" : "text-muted",
               "focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2 rounded-lg",

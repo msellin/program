@@ -133,7 +133,7 @@ function SignUpInner() {
           We sent a confirmation link to <strong>{email}</strong>. Tap it, then sign in.
         </p>
         <div className={`${cardClass()} space-y-1.5`}>
-          <p className="font-mono text-eyebrow uppercase tracking-widest text-muted">What happens next</p>
+          <p className="text-eyebrow uppercase tracking-widest text-muted">What happens next</p>
           <ol className="list-decimal pl-5 text-caption text-ink space-y-1">
             <li>Tap the link in the email, then sign in.</li>
             <li>Answer a few questions about where you are now (a few minutes, one per screen). Physical tests are optional.</li>
@@ -156,13 +156,13 @@ function SignUpInner() {
             type="button"
             onClick={resendConfirmation}
             disabled={resending || resent || (captchaRequired && !captchaToken)}
-            className="inline-flex items-center gap-1.5 min-h-[44px] font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-bronze text-ground hover:bg-bronze-hover disabled:opacity-40 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-1.5 min-h-[44px] text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-bronze text-ground hover:bg-bronze-hover disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {resending ? "Sending…" : resent ? "Sent" : "Resend confirmation"}
           </button>
           <Link
             href={signInHref}
-            className="inline-flex items-center min-h-[44px] font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line hover:bg-line-soft"
+            className="inline-flex items-center min-h-[44px] text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line hover:bg-line-soft"
           >
             Back to sign in
           </Link>
@@ -239,7 +239,7 @@ function SignUpInner() {
 
       <div className="flex items-center gap-3 pt-1">
         <span className="flex-1 h-px bg-line-soft" aria-hidden />
-        <span className="font-mono text-eyebrow uppercase tracking-widest text-muted">
+        <span className="text-eyebrow uppercase tracking-widest text-muted">
           or with email
         </span>
         <span className="flex-1 h-px bg-line-soft" aria-hidden />

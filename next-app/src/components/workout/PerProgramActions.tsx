@@ -77,7 +77,7 @@ export function PerProgramActions({ programSlug, programName, date, scheduledBlo
               restoreBlock(id);
             }
           }}
-          className="text-caption mono-caps text-bronze hover:text-bronze-hover"
+          className="text-caption text-bronze hover:text-bronze-hover font-medium"
         >
           Undo
         </button>
@@ -185,7 +185,7 @@ function ConfirmSheet({
         <p className="text-small text-muted">{body}</p>
         {askReason ? (
           <div>
-            <label className="mono-caps block mb-1" htmlFor="ppa-skip-reason">
+            <label className="block mb-1 text-caption font-medium text-muted" htmlFor="ppa-skip-reason">
               Reason (optional)
             </label>
             <input
@@ -262,7 +262,7 @@ function MoveSheet({
           today are unaffected.
         </p>
         <div>
-          <label className="mono-caps block mb-1" htmlFor="ppa-move-date">
+          <label className="block mb-1 text-caption font-medium text-muted" htmlFor="ppa-move-date">
             Move to
           </label>
           <input

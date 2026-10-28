@@ -106,7 +106,7 @@ export function ProposalCard({
         </div>
         {canExplain ? (
           <span
-            className="font-mono text-eyebrow uppercase tracking-widest text-bronze whitespace-nowrap"
+            className="text-eyebrow uppercase tracking-widest text-bronze whitespace-nowrap"
             aria-hidden
           >
             cited
@@ -119,7 +119,7 @@ export function ProposalCard({
           type="button"
           onClick={() => setSheetOpen(true)}
           className={cn(
-            "font-mono text-eyebrow uppercase tracking-wider text-slate hover:text-ink active:text-strong",
+            "text-eyebrow uppercase tracking-wider text-slate hover:text-ink active:text-strong",
             "focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2",
             // Batch 36 P0 (visual-craft audit) — 44×44 tap target per §2.0.
             "min-h-11 py-1 px-2 -mx-2 rounded-lg inline-flex items-center",
@@ -138,7 +138,7 @@ export function ProposalCard({
             type="button"
             onClick={onAccept}
             className={cn(
-              "flex-1 font-mono text-eyebrow font-semibold uppercase tracking-wider",
+              "flex-1 text-eyebrow font-semibold uppercase tracking-wider",
               "rounded-lg bg-bronze text-ground hover:bg-bronze-hover active:bg-bronze-active",
               "min-h-[44px] px-3 py-2",
               "focus-visible:outline focus-visible:outline-2 focus-visible:outline-strong focus-visible:outline-offset-2",
@@ -152,7 +152,7 @@ export function ProposalCard({
             type="button"
             onClick={onIgnore}
             className={cn(
-              "flex-1 font-mono text-eyebrow font-semibold uppercase tracking-wider",
+              "flex-1 text-eyebrow font-semibold uppercase tracking-wider",
               "rounded-lg border border-line-strong text-ink hover:bg-line-soft",
               "min-h-[44px] px-3 py-2",
               "focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2",
@@ -172,7 +172,7 @@ export function ProposalCard({
               type="button"
               onClick={onUndo}
               className={cn(
-                "font-mono text-eyebrow uppercase tracking-wider text-slate hover:text-ink",
+                "text-eyebrow uppercase tracking-wider text-slate hover:text-ink",
                 "focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2",
                 "min-h-[44px] px-2",
               )}

@@ -414,7 +414,7 @@ export function OffPlanSession() {
             return (
               <section key={def.cat} className="space-y-3">
                 <header>
-                  <h2 className="font-mono text-small uppercase tracking-widest">{def.title}</h2>
+                  <h2 className="text-small uppercase tracking-widest">{def.title}</h2>
                   <p className="mt-1 text-small text-muted">{def.note}</p>
                 </header>
                 <div className="space-y-[7px]">
@@ -447,7 +447,7 @@ export function OffPlanSession() {
                         </span>
                         <span
                           className={
-                            "flex-shrink-0 font-mono text-eyebrow uppercase tracking-[.1em] " +
+                            "flex-shrink-0 text-eyebrow uppercase tracking-[.1em] " +
                             (isDone ? "text-muted" : loggedCount > 0 ? "text-bronze" : "text-muted")
                           }
                         >

@@ -71,7 +71,7 @@ export function HeritageClusterChip({
         type="button"
         onClick={() => setOpen(true)}
         aria-label={`${label.text}. Tap to see why.`}
-        className={`inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 font-mono text-eyebrow uppercase tracking-widest ${label.tone} hover:brightness-110`}
+        className={`inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-eyebrow uppercase tracking-widest ${label.tone} hover:brightness-110`}
       >
         <span aria-hidden className="w-1.5 h-1.5 rounded-full bg-current" />
         {label.text}
@@ -86,7 +86,7 @@ export function HeritageClusterChip({
               verdicts the same way ProposalCard does (P1-40). */}
           {result.composite_copy ? <p>{result.composite_copy}</p> : null}
           {result.per_metric.length > 0 ? (
-            <ul className="mt-3 space-y-1 font-mono text-caption">
+            <ul className="font-mono mt-3 space-y-1 text-caption">
               {result.per_metric.map((m) => (
                 <li key={m.metric_id}>
                   <span className="text-muted">{humanizeMetricId(m.metric_id)}:</span>{" "}

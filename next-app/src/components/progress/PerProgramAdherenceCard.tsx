@@ -122,7 +122,7 @@ export function PerProgramAdherenceCard() {
     <section className={cn(cardClass(), "space-y-3")}>
       <header className="flex items-baseline justify-between gap-2">
         <h2 className="text-body font-semibold text-strong">Per-track adherence</h2>
-        <span className="text-eyebrow font-mono uppercase tracking-widest text-muted">
+        <span className="text-eyebrow uppercase tracking-widest text-muted">
           last {WINDOW_DAYS} days
         </span>
       </header>
@@ -162,7 +162,7 @@ export function PerProgramAdherenceCard() {
                 aria-hidden
               />
             </div>
-            <p className="text-eyebrow font-mono text-muted uppercase tracking-widest">
+            <p className="text-eyebrow text-muted uppercase tracking-widest">
               {r.done > 0 ? `${r.done} done` : ""}
               {r.planned > 0 ? ` · ${r.planned} upcoming` : ""}
               {r.skipped > 0 ? ` · ${r.skipped} skipped` : ""}

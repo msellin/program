@@ -136,7 +136,7 @@ export function CutCLatestRetestTile({ program, store, className }: CutCLatestRe
         className,
       )}
     >
-      <p className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted mb-2">
+      <p className="text-eyebrow font-medium uppercase tracking-widest text-muted mb-2">
         Latest retest · {metric.display_name}
       </p>
 

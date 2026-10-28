@@ -285,7 +285,7 @@ export function RestTakeover({
         </div>
       </div>
       <div className="flex-1 flex flex-col items-center justify-center px-6 text-center min-h-0">
-        <p className="font-mono text-eyebrow uppercase tracking-[.18em] text-slate mb-[18px]">Rest</p>
+        <p className="text-eyebrow uppercase tracking-[.18em] text-slate mb-[18px]">Rest</p>
         {restoredExpired ? (
           /* Honest about a rest that ended while the app was gone. A
              resurrected countdown would be the app inventing time the user
@@ -314,7 +314,7 @@ export function RestTakeover({
           </p>
         ) : upNext.kind !== "done" ? (
           <>
-            <p className="font-mono text-caption uppercase tracking-[.16em] text-muted mb-2">Next up</p>
+            <p className="text-caption uppercase tracking-[.16em] text-muted mb-2">Next up</p>
             <p className="text-h2 font-semibold text-strong mb-1 tracking-[-.02em]">
               {upNext.kind === "set"
                 ? `Set ${upNext.setIndex + 1} of ${upNext.rail.rowCount}`
@@ -370,7 +370,7 @@ export function RestTakeover({
                   <span className="block text-caption font-semibold text-strong leading-snug">{effort.label}</span>
                   <span
                     className={
-                      "block font-mono text-caption mt-0.5 leading-snug " +
+                      "block text-caption mt-0.5 leading-snug " +
                       (selectedEffort === effort.label ? "text-bronze" : "text-muted")
                     }
                   >
@@ -405,7 +405,7 @@ export function RestTakeover({
           >
             +30s
             {extra > 0 ? (
-              <span className="block font-mono text-caption text-muted leading-none mt-0.5">
+              <span className="font-mono block text-caption text-muted leading-none mt-0.5">
                 +{extra}s added
               </span>
             ) : null}

@@ -162,7 +162,7 @@ function Legend() {
       {items.map((it) => (
         <li key={it.label} className="flex items-center gap-1.5">
           <span aria-hidden className={cn("h-2 w-2 rounded-sm", it.cls)} />
-          <span className="font-mono text-eyebrow uppercase tracking-widest text-muted">
+          <span className="text-eyebrow uppercase tracking-widest text-muted">
             {it.label}
           </span>
         </li>

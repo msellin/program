@@ -203,7 +203,7 @@ export function RetestReminder({
 
   return (
     <div className={cardClass() + " text-small space-y-2"}>
-      <p className="font-mono text-eyebrow uppercase tracking-widest text-bronze">
+      <p className="text-eyebrow uppercase tracking-widest text-bronze">
         Retest window open
       </p>
       <p className="font-semibold text-strong">
@@ -215,7 +215,7 @@ export function RetestReminder({
       </p>
       {displayMetrics.length > 0 ? (
         <div>
-          <p className="font-mono text-eyebrow uppercase tracking-widest text-muted mt-1">
+          <p className="text-eyebrow uppercase tracking-widest text-muted mt-1">
             Log these on Progress → Insights
           </p>
           <ul className="mt-1 space-y-0.5">
@@ -395,7 +395,7 @@ export function GraduationCard({ program }: { program: Program }) {
       <div className={cardClass() + " space-y-3"}>
         <div className="flex items-baseline justify-between gap-2 flex-wrap">
           <div>
-            <p className="font-mono text-eyebrow uppercase tracking-widest text-bronze">You finished</p>
+            <p className="text-eyebrow uppercase tracking-widest text-bronze">You finished</p>
             <h2 className="text-h3 font-semibold text-strong mt-1">{programName}</h2>
             {weeksIn ? (
               <p className="text-small text-muted mt-0.5">
@@ -404,7 +404,7 @@ export function GraduationCard({ program }: { program: Program }) {
             ) : null}
           </div>
           {arcVerdict ? (
-            <span className="font-mono text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
+            <span className="text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
               <span
                 aria-hidden
                 className={`h-1.5 w-1.5 rounded-full ${
@@ -421,7 +421,7 @@ export function GraduationCard({ program }: { program: Program }) {
         </div>
         {displayable.length ? (
           <div className="rounded-lg bg-surface-2 p-3 space-y-2">
-            <p className="font-mono text-eyebrow uppercase tracking-wider text-muted">Where you landed</p>
+            <p className="text-eyebrow uppercase tracking-wider text-muted">Where you landed</p>
             <ul className="space-y-1.5">
               {displayable.map((m) => {
                 const delta = deltaFromBaseline(m);
@@ -452,12 +452,12 @@ export function GraduationCard({ program }: { program: Program }) {
             href={`/programs/${nextBlockEntry.slug}`}
             className="block rounded-lg border border-slate/40 bg-slate/[0.06] p-3 hover:bg-slate/10 transition-colors"
           >
-            <p className="font-mono text-eyebrow uppercase tracking-widest text-slate">Next block</p>
+            <p className="text-eyebrow uppercase tracking-widest text-slate">Next block</p>
             <p className="text-small font-semibold text-strong mt-0.5">{nextBlockEntry.name}</p>
             <p className="text-caption text-muted mt-1 line-clamp-2">
               {nextBlockEntry.short_description ?? "The next block in this program family."}
             </p>
-            <p className="text-eyebrow font-mono uppercase tracking-wider text-slate mt-1.5">
+            <p className="text-eyebrow uppercase tracking-wider text-slate mt-1.5">
               Preview →
             </p>
           </Link>
@@ -565,7 +565,7 @@ function GraduationFeedback({ slug }: { slug: string | null }) {
 
   return (
     <div className={cardClass() + " space-y-2"}>
-      <p className="font-mono text-eyebrow uppercase tracking-wider text-muted">
+      <p className="text-eyebrow uppercase tracking-wider text-muted">
         How was this program?
       </p>
       <div className="flex items-center gap-2">
@@ -575,7 +575,7 @@ function GraduationFeedback({ slug }: { slug: string | null }) {
             type="button"
             onClick={() => setRating(n)}
             aria-label={`Rate ${n} of 5`}
-            className={`w-11 h-11 rounded-lg font-mono text-small ${
+            className={`font-mono w-11 h-11 rounded-lg text-small ${
               rating === n
                 ? "bg-bronze text-ground"
                 : "border border-line text-muted hover:text-ink"
@@ -601,7 +601,7 @@ function GraduationFeedback({ slug }: { slug: string | null }) {
             saveGraduationFeedback(slug, rating, note.trim() || undefined);
             setOpen(false);
           }}
-          className="font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-bronze text-ground hover:bg-bronze-hover disabled:opacity-40 disabled:cursor-not-allowed min-h-[36px]"
+          className="text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-bronze text-ground hover:bg-bronze-hover disabled:opacity-40 disabled:cursor-not-allowed min-h-[36px]"
         >
           Save
         </button>
@@ -609,7 +609,7 @@ function GraduationFeedback({ slug }: { slug: string | null }) {
           <button
             type="button"
             onClick={() => setOpen(false)}
-            className="font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line text-muted hover:text-ink min-h-[36px]"
+            className="text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line text-muted hover:text-ink min-h-[36px]"
           >
             Cancel
           </button>

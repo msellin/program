@@ -41,16 +41,16 @@ export function HipProgressTile() {
   return (
     <section className="space-y-3">
       <div className="flex items-baseline justify-between gap-3">
-        <h2 className="font-mono text-small uppercase tracking-widest">Hip flexor & balance</h2>
+        <h2 className="text-small uppercase tracking-widest">Hip flexor & balance</h2>
         {dueStatus.due ? (
           <Link
             href="/check/hip"
-            className="font-mono text-eyebrow uppercase tracking-widest px-2 py-1 rounded-lg bg-slate text-surface"
+            className="text-eyebrow uppercase tracking-widest px-2 py-1 rounded-lg bg-slate text-surface"
           >
             Check due →
           </Link>
         ) : (
-          <span className="font-mono text-eyebrow text-muted">
+          <span className="text-eyebrow text-muted">
             Next check in {Math.max(0, dueStatus.cadence - (dueStatus.daysSince ?? 0))} days
           </span>
         )}
@@ -64,7 +64,7 @@ export function HipProgressTile() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {/* Monthly self-check score */}
         <div className={cardClass()}>
-          <p className="mono-caps text-muted">Monthly check (lower = better)</p>
+          <p className="text-muted text-caption font-medium">Monthly check (lower = better)</p>
           {latest ? (
             <div className="mt-1 flex items-baseline gap-2">
               <span className="text-h2 font-mono tabular-nums text-strong">
@@ -93,7 +93,7 @@ export function HipProgressTile() {
               </p>
               <Link
                 href="/check/hip"
-                className="inline-flex items-center gap-1 font-mono text-eyebrow uppercase tracking-widest text-slate hover:text-ink"
+                className="inline-flex items-center gap-1 text-eyebrow uppercase tracking-widest text-slate hover:text-ink"
               >
                 Start check →
               </Link>
@@ -101,7 +101,7 @@ export function HipProgressTile() {
           )}
           <MiniSpark points={scoreSeries.map((p) => p.overall)} max={10} />
           {scoreSeries.length > 0 ? (
-            <p className="mt-1 font-mono text-eyebrow text-muted">
+            <p className="mt-1 text-eyebrow text-muted">
               {scoreSeries.length} entr{scoreSeries.length === 1 ? "y" : "ies"} · latest {latest?.date}
             </p>
           ) : null}
@@ -109,7 +109,7 @@ export function HipProgressTile() {
 
         {/* Rehab adherence */}
         <div className={cardClass()}>
-          <p className="mono-caps text-muted">Rehab · last 30d</p>
+          <p className="text-muted text-caption font-medium">Rehab · last 30d</p>
           <div className="mt-1 flex items-baseline gap-2">
             <span className="text-h2 font-mono tabular-nums text-strong">
               {adherence.doneDays}/{adherence.totalDays}

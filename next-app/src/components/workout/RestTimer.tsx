@@ -166,7 +166,7 @@ export function RestTimer({ autoStartSeconds, onClose }: Props) {
                 setRunning(true);
               }}
               className={cn(
-                "px-2.5 py-1 rounded-lg font-mono text-eyebrow",
+                "font-mono px-2.5 py-1 rounded-lg text-eyebrow",
                 target === p.seconds
                   ? "bg-ink text-ground"
                   : "bg-line-soft text-muted hover:text-ink",

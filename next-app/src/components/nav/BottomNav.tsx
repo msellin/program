@@ -77,7 +77,7 @@ export function BottomNav() {
                   // (c) 2-3px bronze top-edge indicator (rendered as absolute
                   // ::before above). SC 1.4.1 (color-alone fail) resolved.
                   // Passes protanopia/deuteranopia simulation.
-                  "flex flex-col items-center justify-center gap-0.5 py-2 px-0.5 text-eyebrow tracking-[0.08em] uppercase min-h-[52px]",
+                  "flex flex-col items-center justify-center gap-0.5 py-2 px-0.5 text-caption min-h-[52px]",
                   active
                     ? "text-strong font-bold"
                     : "text-muted font-normal hover:text-ink",

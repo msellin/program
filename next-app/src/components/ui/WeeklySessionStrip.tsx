@@ -75,7 +75,7 @@ export function WeeklySessionStrip({
             )}
             disabled={!onCellTap}
           >
-            <span className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted">
+            <span className="text-eyebrow font-medium uppercase tracking-widest text-muted">
               {d.dayLetter}
             </span>
             <StateDot day={d} />
@@ -103,7 +103,7 @@ export function WeeklySessionStrip({
         >
           <span
             aria-hidden
-            className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted"
+            className="text-eyebrow font-medium uppercase tracking-widest text-muted"
           >
             {d.dayLetter}
           </span>

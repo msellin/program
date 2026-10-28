@@ -131,7 +131,7 @@ export default function SettingsPage() {
 function Section({ eyebrow, children }: { eyebrow: string; children: React.ReactNode }) {
   return (
     <div className="space-y-2">
-      <p className="font-mono text-eyebrow uppercase tracking-widest text-muted">
+      <p className="text-eyebrow uppercase tracking-widest text-muted">
         {eyebrow}
       </p>
       {children}
@@ -205,7 +205,7 @@ function PlaceholderRow({
           <span className="block text-caption text-muted mt-0.5">{hint}</span>
         </span>
       </span>
-      <span className="font-mono text-caption text-muted flex-shrink-0">{value}</span>
+      <span className="text-caption text-muted flex-shrink-0">{value}</span>
     </div>
   );
 }

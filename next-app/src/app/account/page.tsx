@@ -115,7 +115,7 @@ export default function AccountPage() {
           so SR users get a landmark to jump between. */}
       {/* Sign-in section — currently just email, change deferred. */}
       <section aria-labelledby="acct-signin">
-        <p id="acct-signin" className="font-mono text-eyebrow uppercase tracking-widest text-muted mb-2">
+        <p id="acct-signin" className="text-eyebrow uppercase tracking-widest text-muted mb-2">
           Sign-in
         </p>
         <button
@@ -135,7 +135,7 @@ export default function AccountPage() {
           Single-program users have nothing to pick from. */}
       {multiProgram && manifest ? (
         <section aria-labelledby="acct-programs">
-          <p id="acct-programs" className="font-mono text-eyebrow uppercase tracking-widest text-muted mb-2">
+          <p id="acct-programs" className="text-eyebrow uppercase tracking-widest text-muted mb-2">
             Programs
           </p>
           <button
@@ -160,7 +160,7 @@ export default function AccountPage() {
           undo home so the graduation card stays celebratory. */}
       {extendedPrograms.length > 0 ? (
         <section aria-labelledby="acct-extensions">
-          <p id="acct-extensions" className="font-mono text-eyebrow uppercase tracking-widest text-muted mb-2">
+          <p id="acct-extensions" className="text-eyebrow uppercase tracking-widest text-muted mb-2">
             Extensions
           </p>
           <ul className={`${cardClass({ flush: true })} divide-y divide-line-soft`}>
@@ -205,7 +205,7 @@ export default function AccountPage() {
       {/* Data & privacy — Export + Delete. Delete lives here exclusively;
           the prior Profile-footer Danger-zone disclosure is gone. */}
       <section aria-labelledby="acct-data">
-        <p id="acct-data" className="font-mono text-eyebrow uppercase tracking-widest text-muted mb-2">
+        <p id="acct-data" className="text-eyebrow uppercase tracking-widest text-muted mb-2">
           Data & privacy
         </p>
         <div className={`${cardClass({ flush: true })} divide-y divide-line-soft`}>
@@ -361,7 +361,7 @@ export default function AccountPage() {
                     >
                       <span className="text-small text-strong">{p.name}</span>
                       {isCurrent ? (
-                        <span className="font-mono text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
+                        <span className="text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
                           <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-bronze" />
                           current
                         </span>

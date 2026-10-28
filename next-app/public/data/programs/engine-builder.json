@@ -364,12 +364,12 @@
     "consent": [
       {
         "id": "not_medical_advice",
-        "label": "I understand this is a training template, not medical advice. I'll consult a clinician for any joint issue that worsens under load, chest pain, or unexplained shortness of breath.",
+        "label": "Not medical advice. I'll see a clinician for chest pain, unexplained breathlessness, or a joint that worsens under load.",
         "required": true
       },
       {
         "id": "symptom_logging",
-        "label": "I consent to storing my logged symptoms and training metrics locally in this app. Data stays on my device / account and isn't shared.",
+        "label": "I consent to Terav storing my symptom and training logs in my account. They aren't shared.",
         "required": true
       }
     ],

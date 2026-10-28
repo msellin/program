@@ -71,7 +71,7 @@ export function RetestLoggingSheet({
     >
       <div className="w-full max-w-md rounded-xl border border-line bg-surface p-4 space-y-4">
         <div>
-          <p className="font-mono text-eyebrow uppercase tracking-widest text-slate">
+          <p className="text-eyebrow uppercase tracking-widest text-slate">
             Week {proposal.atWeek} · {proposal.cadenceKind === "mid_block" ? "mid-block" : "end-of-block"}
           </p>
           <h2 id="retest-log-title" className="text-h3 text-strong mt-1">
@@ -97,7 +97,7 @@ export function RetestLoggingSheet({
               setError(null);
             }}
             aria-invalid={error != null}
-            className="w-full font-mono text-small px-3 py-2 border border-line rounded-lg bg-ground text-ink focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze min-h-[44px]"
+            className="font-mono w-full text-small px-3 py-2 border border-line rounded-lg bg-ground text-ink focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze min-h-[44px]"
           />
         </label>
 
@@ -116,7 +116,7 @@ export function RetestLoggingSheet({
               setError(null);
             }}
             placeholder="e.g. 90 (you hit ~90% of the prescribed intensity). Blank = skip."
-            className="w-full font-mono text-small px-3 py-2 border border-line rounded-lg bg-ground text-ink placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze min-h-[44px]"
+            className="font-mono w-full text-small px-3 py-2 border border-line rounded-lg bg-ground text-ink placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze min-h-[44px]"
           />
         </label>
 
@@ -130,7 +130,7 @@ export function RetestLoggingSheet({
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 min-h-[44px] border border-line text-ink rounded-lg font-mono text-eyebrow uppercase tracking-wider hover:bg-line-soft"
+            className="px-4 py-2 min-h-[44px] border border-line text-ink rounded-lg text-eyebrow uppercase tracking-wider hover:bg-line-soft"
           >
             Cancel
           </button>
@@ -138,7 +138,7 @@ export function RetestLoggingSheet({
             type="button"
             onClick={submit}
             disabled={value.trim() === ""}
-            className="px-4 py-2 min-h-[44px] bg-bronze text-ground rounded-lg font-mono text-eyebrow uppercase tracking-wider hover:bg-bronze-hover disabled:opacity-40 disabled:cursor-not-allowed"
+            className="px-4 py-2 min-h-[44px] bg-bronze text-ground rounded-lg text-eyebrow uppercase tracking-wider hover:bg-bronze-hover disabled:opacity-40 disabled:cursor-not-allowed"
           >
             Log reading
           </button>

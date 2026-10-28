@@ -49,7 +49,7 @@ export function VideoModal({
         className="bg-surface border border-line rounded-lg max-w-2xl w-full max-h-[90vh] overflow-auto"
       >
         <header className="flex items-center justify-between px-4 py-3 border-b border-line gap-3">
-          <h3 id={titleId} className="font-mono text-small uppercase tracking-widest truncate">
+          <h3 id={titleId} className="text-small uppercase tracking-widest truncate">
             {title}
           </h3>
           <button
@@ -100,7 +100,7 @@ export function VideoModal({
                 target="_blank"
                 rel="noreferrer"
                 onClick={onClose}
-                className="inline-flex items-center gap-1.5 font-mono text-caption uppercase tracking-wider px-4 py-3 rounded-lg bg-bronze text-ground"
+                className="inline-flex items-center gap-1.5 text-caption uppercase tracking-wider px-4 py-3 rounded-lg bg-bronze text-ground"
               >
                 <ExternalLink size={14} />
                 Search on YouTube

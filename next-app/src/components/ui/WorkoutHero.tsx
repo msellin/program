@@ -162,7 +162,7 @@ export function WorkoutHero({
       >
         {/* Eyebrow row — scope + status pill + optional "Why this?" trigger */}
         <header className="flex items-start justify-between gap-3">
-          <p className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted">
+          <p className="text-eyebrow font-medium uppercase tracking-widest text-muted">
             {eyebrow}
           </p>
           {(status || onExplain) && (
@@ -174,7 +174,7 @@ export function WorkoutHero({
                   onClick={onExplain}
                   aria-label="Why this?"
                   className={cn(
-                    "font-mono text-eyebrow uppercase tracking-widest text-slate hover:text-ink active:text-strong",
+                    "text-eyebrow uppercase tracking-widest text-slate hover:text-ink active:text-strong",
                     // Batch 36 P0 (visual-craft audit) — bumped from min-h-[24px]
                     // to min-h-11 per §2.0 invariant 2 (44×44 tap target).
                     "min-h-11 min-w-11 py-1 px-2 rounded-lg flex items-center justify-center",
@@ -212,7 +212,7 @@ export function WorkoutHero({
                 key={block.number}
                 className="flex items-start gap-3 border-t border-line-soft pt-2 first:border-t-0 first:pt-0"
               >
-                <span className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted mt-0.5 flex-shrink-0 w-8">
+                <span className="text-eyebrow font-medium uppercase tracking-widest text-muted mt-0.5 flex-shrink-0 w-8">
                   {blockLetter(block.number)}
                 </span>
                 <div className="flex-1 min-w-0 space-y-0.5">
@@ -230,7 +230,7 @@ export function WorkoutHero({
                       onClick={() => onBlockCite(block.number)}
                       aria-label={`Show ${block.citationCount} citation${block.citationCount === 1 ? "" : "s"} for ${block.name}`}
                       className={cn(
-                        "font-mono text-eyebrow uppercase tracking-widest text-bronze hover:text-bronze-hi active:text-bronze-active",
+                        "text-eyebrow uppercase tracking-widest text-bronze hover:text-bronze-hi active:text-bronze-active",
                         // Batch 36 P0 (visual-craft audit) — 44×44 tap target
                         // per §2.0 invariant 2. Visual chip stays 10px inline;
                         // hit-slop provided by flex-centered min-h-11 wrapper.
@@ -243,7 +243,7 @@ export function WorkoutHero({
                   ) : (
                     <span
                       aria-hidden
-                      className="font-mono text-eyebrow uppercase tracking-widest text-bronze flex-shrink-0"
+                      className="text-eyebrow uppercase tracking-widest text-bronze flex-shrink-0"
                     >
                       [cited]
                     </span>

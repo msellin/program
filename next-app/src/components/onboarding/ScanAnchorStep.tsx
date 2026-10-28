@@ -21,7 +21,7 @@ export function ScanAnchorStep({ step }: { step: ScanAnchorStepPayload }) {
       {step.cta_href && step.cta_label ? (
         <Link
           href={step.cta_href}
-          className="inline-block px-4 py-2 min-h-[44px] border border-bronze text-bronze rounded-lg font-mono text-eyebrow uppercase tracking-wider hover:bg-bronze/10"
+          className="inline-block px-4 py-2 min-h-[44px] border border-bronze text-bronze rounded-lg text-eyebrow uppercase tracking-wider hover:bg-bronze/10"
         >
           {step.cta_label}
         </Link>

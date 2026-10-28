@@ -74,7 +74,7 @@ export default function AdminKeywordsPage() {
   return (
     <div className="space-y-5 pt-6">
       <header className="space-y-1">
-        <p className="mono-caps">Admin</p>
+        <p className="text-caption font-medium text-muted">Admin</p>
         <h1 className="text-h1 text-strong">Unmatched note tokens</h1>
         <p className="text-small text-muted max-w-lg">
           Tokens users typed in notes that <em>aren&apos;t</em> matched by the
@@ -88,7 +88,7 @@ export default function AdminKeywordsPage() {
           type="button"
           onClick={fetchKeywords}
           disabled={loading}
-          className="inline-flex items-center min-h-[44px] font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-bronze text-ground hover:bg-bronze-hover disabled:opacity-40"
+          className="inline-flex items-center min-h-[44px] text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-bronze text-ground hover:bg-bronze-hover disabled:opacity-40"
         >
           {loading ? "Loading…" : "Refresh"}
         </button>
@@ -147,7 +147,7 @@ export default function AdminKeywordsPage() {
               <tbody>
                 {data.unmatched_tokens.map((t) => (
                   <tr key={t.token} className="border-t border-line">
-                    <td className="px-3 py-2 font-mono text-ink">{t.token}</td>
+                    <td className="font-mono px-3 py-2 text-ink">{t.token}</td>
                     <td className="px-3 py-2 text-right text-strong">{t.count}</td>
                     <td className="px-3 py-2 text-right text-muted">
                       {t.distinct_users}

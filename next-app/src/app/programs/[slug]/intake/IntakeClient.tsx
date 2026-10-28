@@ -539,7 +539,7 @@ export function IntakeClient({ slug }: Props) {
         </p>
         <Link
           href={`/programs/${slug}`}
-          className="inline-block font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-bronze text-ground"
+          className="inline-block text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-bronze text-ground"
         >
           Back to {manifestEntry?.name ?? slug}
         </Link>
@@ -623,7 +623,7 @@ export function IntakeClient({ slug }: Props) {
             return (
               <>
                 <section className="rounded-lg border border-bronze/40 bg-bronze/10 p-4 space-y-2">
-                  <p className="text-eyebrow font-mono uppercase tracking-wider text-bronze">
+                  <p className="text-eyebrow uppercase tracking-wider text-bronze">
                     Recommended
                   </p>
                   <p className="text-body font-semibold text-strong">
@@ -696,7 +696,7 @@ export function IntakeClient({ slug }: Props) {
         ) : null}
 
         <section className="space-y-2">
-          <p className="text-eyebrow font-mono uppercase tracking-wider text-muted">
+          <p className="text-eyebrow uppercase tracking-wider text-muted">
             Don&apos;t agree? Pick a different starting point
           </p>
           <ul className="space-y-1.5">
@@ -977,7 +977,7 @@ function WizardProgress({
           P1-83 (2026-08-19) — bumped program-name eyebrow 10 → 12 px so
           the intake header reads as intent, not chrome. */}
       {programName ? (
-        <p className="font-mono text-caption uppercase tracking-widest text-muted mb-1.5 truncate">
+        <p className="text-caption uppercase tracking-widest text-muted mb-1.5 truncate">
           Intake · <span className="text-strong">{programName}</span>
         </p>
       ) : null}
@@ -998,7 +998,7 @@ function WizardProgress({
             a real signal, not chrome. Keep "Step N of M" form (do NOT
             switch to %) per audit + a11y warning (only one progressbar
             role per view). */}
-        <span className="flex min-w-0 max-w-[70%] items-baseline justify-end gap-1 text-right leading-tight font-mono text-caption text-muted uppercase tracking-wider sm:tracking-widest">
+        <span className="flex min-w-0 max-w-[70%] items-baseline justify-end gap-1 text-right leading-tight text-caption text-muted uppercase tracking-wider sm:tracking-widest">
           {/* The gap between label and counter was a CSS margin only, so the
               text layer read "SCREENING· Step 1 of 9" — fine on screen, wrong
               for anything reading the DOM. Real separator character instead. */}
@@ -1379,7 +1379,7 @@ function WizardPhysicalTestScreen({
           href={t.video_url}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex items-center gap-1.5 text-caption font-mono uppercase tracking-wider text-slate hover:text-ink underline underline-offset-4"
+          className="inline-flex items-center gap-1.5 text-caption uppercase tracking-wider text-slate hover:text-ink underline underline-offset-4"
         >
           Watch demo ↗
         </a>
@@ -1388,7 +1388,7 @@ function WizardPhysicalTestScreen({
           href={`https://www.google.com/search?q=${encodeURIComponent(t.video_search)}&tbm=vid`}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex items-center gap-1.5 text-caption font-mono uppercase tracking-wider text-slate hover:text-ink underline underline-offset-4"
+          className="inline-flex items-center gap-1.5 text-caption uppercase tracking-wider text-slate hover:text-ink underline underline-offset-4"
         >
           Look up a demo ↗
         </a>
@@ -1461,7 +1461,7 @@ function WizardPhysicalTestScreen({
             }}
             className="flex-1 min-w-0 text-body px-3 py-3 min-h-[48px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
           />
-          <span className="text-caption text-muted font-mono w-16 shrink-0 text-right">{t.unit}</span>
+          <span className="text-caption text-muted w-16 shrink-0 text-right">{t.unit}</span>
         </div>
       )}
       {step.indexInSection === 0 ? (
@@ -1480,7 +1480,7 @@ function WizardPhysicalTestScreen({
           <button
             type="button"
             onClick={onSkipAll}
-            className="text-eyebrow mono-caps text-muted hover:text-ink underline underline-offset-4"
+            className="text-eyebrow text-muted hover:text-ink underline underline-offset-4 font-medium"
           >
             Skip physical tests →
           </button>
@@ -1507,7 +1507,7 @@ function WizardConsentScreen({
     <section className="space-y-5 py-2">
       <h2 className="text-h3 text-h2 text-strong">
         Consent
-        <span className={cn("ml-2 text-eyebrow font-mono uppercase tracking-widest align-middle", SECTION_TONE_META.required.badgeClass)}>
+        <span className={cn("ml-2 text-eyebrow uppercase tracking-widest align-middle", SECTION_TONE_META.required.badgeClass)}>
           required
         </span>
       </h2>
@@ -1604,7 +1604,7 @@ function WizardFooter({
           Back
         </Button>
         <span
-          className="flex-1 text-center font-mono text-eyebrow text-muted uppercase tracking-widest"
+          className="flex-1 text-center text-eyebrow text-muted uppercase tracking-widest"
           aria-hidden
         >
           {stepIndex + 1} / {total}

@@ -4,6 +4,9 @@ import { useCallback, useEffect, useMemo, useRef } from "react";
 import { drawFigure, figureIsStatic, FIGURE_SLOTS, type FigureFrame, type FigureSide } from "@/lib/figures/rig";
 import { usePrefersReducedMotion } from "@/lib/use-reduced-motion";
 
+/** Heavier than the rig's authored widths (hero and 40-56px thumbs both read as a figure, not a wireframe). */
+const weight = (w: number) => (w <= 4 ? w * 1.25 : w * 1.2);
+
 /**
  * Renders one exercise illustration (see lib/figures/rig.ts).
  *
@@ -46,7 +49,7 @@ export function ExerciseFigure({
       const el = polys[i];
       set(el, "points", s.pts);
       set(el, "stroke", s.color);
-      set(el, "stroke-width", String(s.w));
+      set(el, "stroke-width", String(weight(s.w)));
       set(el, "opacity", String(s.op));
       set(el, "fill", s.fill);
       set(el, "stroke-dasharray", s.dash);
@@ -91,6 +94,7 @@ export function ExerciseFigure({
       aria-label={first.label}
     >
       <g transform={first.tf || undefined}>
+        {first.floor && <ellipse cx={179} cy={169} rx={118} ry={5} fill="#c89666" opacity={0.14} />}
         {Array.from({ length: FIGURE_SLOTS }, (_, i) => {
           const s = first.slots[i];
           return (
@@ -98,7 +102,7 @@ export function ExerciseFigure({
               key={i}
               points={s.pts}
               stroke={s.color}
-              strokeWidth={s.w}
+              strokeWidth={weight(s.w)}
               opacity={s.op}
               fill={s.fill}
               strokeDasharray={s.dash}

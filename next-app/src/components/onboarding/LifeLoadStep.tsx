@@ -45,12 +45,12 @@ export function LifeLoadStep({ step, onWritten }: { step: LifeLoadStepPayload; o
               aria-pressed={isActive}
               className={
                 isActive
-                  ? "aspect-square rounded-lg font-mono text-body font-semibold bg-bronze text-ground"
+                  ? "font-mono aspect-square rounded-lg text-body font-semibold bg-bronze text-ground"
                   : n >= 7
-                    ? "aspect-square rounded-lg font-mono text-body font-semibold border border-red/40 text-red hover:bg-red/10"
+                    ? "font-mono aspect-square rounded-lg text-body font-semibold border border-red/40 text-red hover:bg-red/10"
                     : n >= 4
-                      ? "aspect-square rounded-lg font-mono text-body font-semibold border border-amber/40 text-amber hover:bg-amber/10"
-                      : "aspect-square rounded-lg font-mono text-body font-semibold border border-line text-muted hover:bg-surface-2 hover:text-ink"
+                      ? "font-mono aspect-square rounded-lg text-body font-semibold border border-amber/40 text-amber hover:bg-amber/10"
+                      : "font-mono aspect-square rounded-lg text-body font-semibold border border-line text-muted hover:bg-surface-2 hover:text-ink"
               }
             >
               {n === 0 ? "—" : n}

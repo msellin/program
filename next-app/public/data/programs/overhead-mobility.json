@@ -309,12 +309,12 @@
     "consent": [
       {
         "id": "not_medical_advice",
-        "label": "I understand this is training programming, not medical advice. Real shoulder pain goes to a physio.",
+        "label": "Not medical advice. Real shoulder pain goes to a physio.",
         "required": true
       },
       {
         "id": "pain_stop_rule",
-        "label": "I agree to stop the session if sharp shoulder pain appears during overhead work.",
+        "label": "I'll stop if sharp shoulder pain appears during overhead work.",
         "required": true
       }
     ],

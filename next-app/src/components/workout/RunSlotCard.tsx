@@ -342,7 +342,7 @@ export function RunSlotCard({ date }: { date: string }) {
               key={i}
               className="flex items-baseline justify-between gap-2 text-small px-2 py-1.5 rounded-lg bg-line-soft/50"
             >
-              <div className="font-mono text-slate min-w-0">
+              <div className="text-slate min-w-0">
                 <span className="text-strong">{prettyActivity(r.activity_type)}</span>
                 {" · "}
                 {[
@@ -398,7 +398,7 @@ export function RunSlotCard({ date }: { date: string }) {
                 onClick={() => setActivity(a)}
                 aria-pressed={activity === a}
                 className={cn(
-                  "px-2.5 py-1.5 min-h-[36px] rounded-full font-mono text-eyebrow",
+                  "px-2.5 py-1.5 min-h-[36px] rounded-full text-eyebrow",
                   activity === a
                     ? "bg-slate text-surface"
                     : "bg-line-soft text-muted hover:text-ink",
@@ -411,7 +411,7 @@ export function RunSlotCard({ date }: { date: string }) {
 
           {importedMeta ? (
             <div className="rounded-lg bg-surface-2 p-3 text-caption space-y-0.5">
-              <p className="text-slate font-mono">
+              <p className="text-slate">
                 Imported from {importedMeta.device_name ?? "device"}
               </p>
               <p className="text-muted">
@@ -423,7 +423,7 @@ export function RunSlotCard({ date }: { date: string }) {
               </p>
               {fitDebug ? (
                 <details className="mt-2">
-                  <summary className="font-mono text-eyebrow uppercase tracking-wider text-muted cursor-pointer">
+                  <summary className="text-eyebrow uppercase tracking-wider text-muted cursor-pointer">
                     FIT fields (admin) — check these against your device
                   </summary>
                   <pre className="mt-1 text-eyebrow leading-tight text-muted overflow-x-auto whitespace-pre">
@@ -460,7 +460,7 @@ export function RunSlotCard({ date }: { date: string }) {
                       value={distance}
                       onChange={(e) => setDistance(e.target.value)}
                       placeholder="e.g. 5"
-                      className="mt-0.5 block w-full font-mono text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+                      className="font-mono mt-0.5 block w-full text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
                     />
                   </label>
                 ) : null}
@@ -481,7 +481,7 @@ export function RunSlotCard({ date }: { date: string }) {
                         onChange={(e) => setMinutes(e.target.value)}
                         placeholder="min"
                         aria-label="Minutes"
-                        className="block w-full font-mono text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+                        className="font-mono block w-full text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
                       />
                       <span className="font-mono text-muted">:</span>
                       <input
@@ -494,7 +494,7 @@ export function RunSlotCard({ date }: { date: string }) {
                         onChange={(e) => setSeconds(e.target.value)}
                         placeholder="sec"
                         aria-label="Seconds"
-                        className="block w-full font-mono text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+                        className="font-mono block w-full text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
                       />
                     </div>
                   </div>
@@ -525,7 +525,7 @@ export function RunSlotCard({ date }: { date: string }) {
                   value={avgHr}
                   onChange={(e) => setAvgHr(e.target.value)}
                   placeholder="optional"
-                  className="mt-0.5 block w-full font-mono text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+                  className="font-mono mt-0.5 block w-full text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
                 />
               </label>
               <label className="text-caption text-muted">
@@ -539,7 +539,7 @@ export function RunSlotCard({ date }: { date: string }) {
                   value={maxHr}
                   onChange={(e) => setMaxHr(e.target.value)}
                   placeholder="optional"
-                  className="mt-0.5 block w-full font-mono text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+                  className="font-mono mt-0.5 block w-full text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
                 />
               </label>
             </div>
@@ -552,7 +552,7 @@ export function RunSlotCard({ date }: { date: string }) {
                 onClick={() => setIntensity(v)}
                 aria-pressed={intensity === v}
                 className={cn(
-                  "flex-1 min-h-[36px] px-3 rounded-lg font-mono text-caption uppercase tracking-wider",
+                  "flex-1 min-h-[36px] px-3 rounded-lg text-caption uppercase tracking-wider",
                   intensity === v
                     ? "bg-slate text-surface"
                     : "bg-line-soft text-muted hover:text-ink",
@@ -578,7 +578,7 @@ export function RunSlotCard({ date }: { date: string }) {
                       onClick={() => setSessionType(sessionType === t ? "" : t)}
                       aria-pressed={sessionType === t}
                       className={cn(
-                        "px-2.5 py-1.5 min-h-[36px] rounded-full font-mono text-eyebrow",
+                        "px-2.5 py-1.5 min-h-[36px] rounded-full text-eyebrow",
                         sessionType === t
                           ? "bg-slate text-surface"
                           : "bg-line-soft text-muted hover:text-ink",
@@ -598,7 +598,7 @@ export function RunSlotCard({ date }: { date: string }) {
                     value={twoKTime}
                     onChange={(e) => setTwoKTime(e.target.value)}
                     placeholder="e.g. 7:35"
-                    className="mt-0.5 block w-full font-mono text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+                    className="font-mono mt-0.5 block w-full text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
                   />
                 </label>
                 <label className="text-caption text-muted">
@@ -612,7 +612,7 @@ export function RunSlotCard({ date }: { date: string }) {
                     value={watts}
                     onChange={(e) => setWatts(e.target.value)}
                     placeholder="optional"
-                    className="mt-0.5 block w-full font-mono text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+                    className="font-mono mt-0.5 block w-full text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
                   />
                 </label>
                 <label className="text-caption text-muted">
@@ -626,7 +626,7 @@ export function RunSlotCard({ date }: { date: string }) {
                     value={dragFactor}
                     onChange={(e) => setDragFactor(e.target.value)}
                     placeholder="e.g. 120"
-                    className="mt-0.5 block w-full font-mono text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
+                    className="font-mono mt-0.5 block w-full text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate"
                   />
                   <span className="mt-0.5 block text-eyebrow text-muted leading-snug">
                     Menu &rarr; More Options &rarr; Display Drag Factor. Record it so your
@@ -635,7 +635,7 @@ export function RunSlotCard({ date }: { date: string }) {
                 </label>
               </div>
               {twoKTime && parseTimeToSeconds(twoKTime) ? (
-                <p className="text-eyebrow text-muted font-mono">
+                <p className="font-mono text-eyebrow text-muted">
                   ≈ {Math.round(parseTimeToSeconds(twoKTime)! / 4)}s per 500m split
                 </p>
               ) : null}
@@ -672,14 +672,14 @@ export function RunSlotCard({ date }: { date: string }) {
             <button
               type="button"
               onClick={submit}
-              className="font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-slate text-surface"
+              className="text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-slate text-surface"
             >
               Save session
             </button>
             <button
               type="button"
               onClick={reset}
-              className="font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line text-muted"
+              className="text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line text-muted"
             >
               Cancel
             </button>

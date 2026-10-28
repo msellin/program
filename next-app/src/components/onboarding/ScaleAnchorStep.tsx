@@ -22,20 +22,20 @@ export function ScaleAnchorStep({ step }: { step: ScaleAnchorStepPayload }) {
         {step.title}
       </h2>
       <p className="text-small text-muted whitespace-pre-line">{step.body_md}</p>
-      <p className="font-mono text-eyebrow uppercase tracking-widest text-muted mt-1">
+      <p className="text-eyebrow uppercase tracking-widest text-muted mt-1">
         How the scale reads
       </p>
       <ul className="grid grid-cols-3 gap-2 text-left">
         <li className="rounded-lg bg-line-soft/40 p-3">
-          <p className="font-mono text-eyebrow uppercase tracking-widest text-slate">0-3</p>
+          <p className="text-eyebrow uppercase tracking-widest text-slate">0-3</p>
           <p className="text-small text-strong mt-0.5">{step.anchors.low}</p>
         </li>
         <li className="rounded-lg bg-line-soft/40 p-3">
-          <p className="font-mono text-eyebrow uppercase tracking-widest text-amber">4-6</p>
+          <p className="text-eyebrow uppercase tracking-widest text-amber">4-6</p>
           <p className="text-small text-strong mt-0.5">{step.anchors.mid}</p>
         </li>
         <li className="rounded-lg bg-line-soft/40 p-3">
-          <p className="font-mono text-eyebrow uppercase tracking-widest text-red">7-10</p>
+          <p className="text-eyebrow uppercase tracking-widest text-red">7-10</p>
           <p className="text-small text-strong mt-0.5">{step.anchors.high}</p>
         </li>
       </ul>

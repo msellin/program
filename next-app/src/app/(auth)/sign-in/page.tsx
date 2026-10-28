@@ -146,7 +146,7 @@ function SignInInner() {
 
       <div className="flex items-center gap-3">
         <span className="flex-1 h-px bg-line-soft" aria-hidden />
-        <span className="font-mono text-eyebrow uppercase tracking-widest text-muted">
+        <span className="text-eyebrow uppercase tracking-widest text-muted">
           or with email
         </span>
         <span className="flex-1 h-px bg-line-soft" aria-hidden />
@@ -194,7 +194,7 @@ function SignInInner() {
                 type="button"
                 onClick={resendConfirmation}
                 disabled={resending}
-                className="inline-flex items-center min-h-[44px] font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-bronze text-ground hover:bg-bronze-hover disabled:opacity-50"
+                className="inline-flex items-center min-h-[44px] text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-bronze text-ground hover:bg-bronze-hover disabled:opacity-50"
               >
                 {resending ? "Sending…" : "Resend confirmation email"}
               </button>

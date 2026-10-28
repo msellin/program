@@ -161,7 +161,7 @@ function CitationBlock({ citation }: { citation: ExplainSheetCitation }) {
       aria-label="Cited study"
       className="rounded-md border border-line-soft bg-surface-2 p-3 space-y-1"
     >
-      <p className="font-mono text-eyebrow uppercase tracking-widest text-bronze">Cited</p>
+      <p className="text-eyebrow uppercase tracking-widest text-bronze">Cited</p>
       {/* Batch 36 P0 (visual-craft audit) — bumped 13px → 14px to stay on the
           v1.1.1 §1 typography ramp (10/11/12/14/15/20/26/32). */}
       <p className="text-small leading-snug text-ink">{citation.study}</p>
@@ -182,7 +182,7 @@ function LogSignalBlock({ logSignal }: { logSignal: ExplainSheetLogSignal }) {
       aria-label="Log signal"
       className="rounded-md border border-line-soft bg-surface-2 p-3 space-y-1"
     >
-      <p className="font-mono text-eyebrow uppercase tracking-widest text-slate">Signal</p>
+      <p className="text-eyebrow uppercase tracking-widest text-slate">Signal</p>
       {/* Batch 36 P0 — same 13px → 14px ramp compliance as CitationBlock. */}
       <p className="text-small leading-snug text-ink">{logSignal.signal}</p>
       <p className="text-caption leading-snug text-muted">Source: {logSignal.source}</p>

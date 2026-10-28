@@ -258,22 +258,22 @@ export function ProgramPreviewClient({ slug }: Props) {
         </summary>
         <div className="mt-3 space-y-4 text-small leading-relaxed text-ink">
           <div>
-            <p className="font-mono text-eyebrow uppercase tracking-widest text-muted">Who this is for</p>
+            <p className="text-eyebrow uppercase tracking-widest text-muted">Who this is for</p>
             <p>{entry.who_this_is_for}</p>
           </div>
           <div>
-            <p className="font-mono text-eyebrow uppercase tracking-widest text-muted">What you&apos;ll achieve</p>
+            <p className="text-eyebrow uppercase tracking-widest text-muted">What you&apos;ll achieve</p>
             <p>{entry.what_youll_achieve}</p>
           </div>
           {entry.adapts ? (
             <div>
-              <p className="font-mono text-eyebrow uppercase tracking-widest text-muted">Adapts to you</p>
+              <p className="text-eyebrow uppercase tracking-widest text-muted">Adapts to you</p>
               <p>{entry.adapts} Every session sharpens further from your logs.</p>
             </div>
           ) : null}
           {entry.retest ? (
             <div>
-              <p className="font-mono text-eyebrow uppercase tracking-widest text-muted">How we prove it works</p>
+              <p className="text-eyebrow uppercase tracking-widest text-muted">How we prove it works</p>
               <p>{entry.retest}</p>
             </div>
           ) : null}
@@ -349,7 +349,7 @@ export function ProgramPreviewClient({ slug }: Props) {
         const compact = refs.slice(0, 4);
         return (
           <section className={`${cardClass()} text-caption space-y-1`}>
-            <p className="font-mono text-eyebrow uppercase tracking-widest text-muted">
+            <p className="text-eyebrow uppercase tracking-widest text-muted">
               Cites
             </p>
             <p className="text-ink leading-snug">
@@ -412,14 +412,14 @@ export function ProgramPreviewClient({ slug }: Props) {
             <div className="flex flex-wrap gap-2 pt-1">
               <Link
                 href="/"
-                className="inline-flex items-center gap-1.5 font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-bronze text-ground"
+                className="inline-flex items-center gap-1.5 text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-bronze text-ground"
               >
                 Go to Today
               </Link>
               <button
                 type="button"
                 onClick={() => setConfirmEnd(true)}
-                className="inline-flex items-center gap-1.5 font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-red/40 text-red hover:bg-red/10"
+                className="inline-flex items-center gap-1.5 text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-red/40 text-red hover:bg-red/10"
               >
                 End program
               </button>
@@ -622,7 +622,7 @@ export function ProgramPreviewClient({ slug }: Props) {
                   <li key={ph.id} className="text-ink">
                     <div className="flex items-center gap-2 flex-wrap">
                       {tierTag ? (
-                        <span className="font-mono text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
+                        <span className="text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
                           <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-slate" />
                           {tierTag}
                         </span>
@@ -735,7 +735,7 @@ function PersonalAcknowledgementModal({
           <button
             type="button"
             onClick={onCancel}
-            className="font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line text-muted hover:bg-line-soft min-h-[40px]"
+            className="text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line text-muted hover:bg-line-soft min-h-[40px]"
           >
             Not for me
           </button>
@@ -743,7 +743,7 @@ function PersonalAcknowledgementModal({
             type="button"
             onClick={onConfirm}
             disabled={!ack}
-            className="font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-bronze text-ground disabled:opacity-40 disabled:cursor-not-allowed min-h-[40px]"
+            className="text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg bg-bronze text-ground disabled:opacity-40 disabled:cursor-not-allowed min-h-[40px]"
           >
             Continue
           </button>

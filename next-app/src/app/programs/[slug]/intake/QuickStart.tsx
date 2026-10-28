@@ -173,7 +173,7 @@ export function QuickStart({
         </button>
       ) : null}
 
-      <p className="text-eyebrow font-mono uppercase tracking-wider text-muted">
+      <p className="text-eyebrow uppercase tracking-wider text-muted">
         Step {idx + 1} of {STEPS.length}
       </p>
 
@@ -323,7 +323,7 @@ export function QuickStart({
             <Stat label="Weeks" value={stats.weeks != null ? String(stats.weeks) : "—"} />
             <Stat label="Minutes" value={stats.minutes ?? "—"} />
             <div className={cn(cardClass(), "!p-3")}>
-              <p id="qs-days" className="text-eyebrow font-mono uppercase tracking-wider text-muted">
+              <p id="qs-days" className="text-eyebrow uppercase tracking-wider text-muted">
                 Days / week
               </p>
               <div role="radiogroup" aria-labelledby="qs-days" className="mt-1 flex flex-wrap gap-1">
@@ -400,7 +400,7 @@ function Dot({ on }: { on: boolean }) {
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div className={cn(cardClass(), "!p-3")}>
-      <p className="text-eyebrow font-mono uppercase tracking-wider text-muted">{label}</p>
+      <p className="text-eyebrow uppercase tracking-wider text-muted">{label}</p>
       <p className="mt-1 text-h3 text-strong">{value}</p>
     </div>
   );

@@ -84,7 +84,7 @@ export default function GuidePage() {
         <Term term="Effort (0–10) — how many reps were left">
           How hard the set felt = how many reps you had left in the tank.
           <br /><br />
-          <span className="font-mono text-caption text-muted">
+          <span className="text-caption text-muted">
             10 = failure · 9 = one rep left · 8 = two left · 7 = three · 6 = four · 5 = half-effort
           </span>
           <br /><br />
@@ -165,7 +165,7 @@ export default function GuidePage() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="space-y-3">
-      <h2 className="font-mono text-small uppercase tracking-widest">{title}</h2>
+      <h2 className="text-small uppercase tracking-widest">{title}</h2>
       <div className={`${cardClass()} space-y-3 text-small leading-relaxed`}>
         {children}
       </div>

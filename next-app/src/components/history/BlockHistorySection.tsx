@@ -102,7 +102,7 @@ export function BlockHistorySection() {
 
   return (
     <section className="space-y-3">
-      <h2 className="font-mono text-small uppercase tracking-widest">
+      <h2 className="text-small uppercase tracking-widest">
         Recent sessions · last {WINDOW_DAYS} days
       </h2>
       <Card flush className="divide-y divide-line-soft">
@@ -137,7 +137,7 @@ export function BlockHistorySection() {
                         {b.actual_date}
                       </span>
                       <span className="flex-1 text-strong">{blockName}</span>
-                      <span className="font-mono text-eyebrow uppercase tracking-widest px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
+                      <span className="text-eyebrow uppercase tracking-widest px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5">
                         {chip.dotClass ? (
                           <span aria-hidden className={`h-1.5 w-1.5 rounded-full ${chip.dotClass}`} />
                         ) : null}

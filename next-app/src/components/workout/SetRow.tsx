@@ -36,8 +36,8 @@ export function SetRow({ index, set, prev, prescribed, isPR, restSeconds, onChan
         "grid-cols-[24px_minmax(60px,1fr)_minmax(70px,80px)_minmax(60px,70px)_50px_28px_28px]",
       )}
     >
-      <span className="text-caption font-mono text-muted text-center">{index + 1}</span>
-      <div className="text-eyebrow font-mono text-muted overflow-hidden">
+      <span className="font-mono text-caption text-muted text-center">{index + 1}</span>
+      <div className="font-mono text-eyebrow text-muted overflow-hidden">
         {prescribed ? (
           <span className="text-slate">
             {prescribed.kg}×{prescribed.reps}
@@ -80,7 +80,7 @@ export function SetRow({ index, set, prev, prescribed, isPR, restSeconds, onChan
           const v = raw === "" ? null : clamp(Number(raw), 0, 500);
           onChange({ weight_kg: v });
         }}
-        className="w-full font-mono text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze placeholder:text-muted"
+        className="font-mono w-full text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze placeholder:text-muted"
       />
       <input
         type="number"
@@ -108,7 +108,7 @@ export function SetRow({ index, set, prev, prescribed, isPR, restSeconds, onChan
           const v = raw === "" ? null : clampInt(Number(raw), 0, 50);
           onChange({ reps: v });
         }}
-        className="w-full font-mono text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze placeholder:text-muted"
+        className="font-mono w-full text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze placeholder:text-muted"
       />
       <input
         type="number"
@@ -124,7 +124,7 @@ export function SetRow({ index, set, prev, prescribed, isPR, restSeconds, onChan
           const v = raw === "" ? null : clamp(Number(raw), 0, 10);
           onChange({ rpe: v });
         }}
-        className="w-full font-mono text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
+        className="font-mono w-full text-small px-2 py-2 min-h-[44px] border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
       />
       <button
         type="button"
@@ -156,7 +156,7 @@ export function SetRow({ index, set, prev, prescribed, isPR, restSeconds, onChan
       {isPR ? (
         <output
           aria-label={`Personal record: ${set.weight_kg} kilograms for ${set.reps} reps`}
-          className="col-span-7 flex items-center justify-end gap-1 mt-1 mono-caps text-green motion-safe:animate-[tag-in_260ms_cubic-bezier(0.16,1,0.3,1)]"
+          className="col-span-7 flex items-center justify-end gap-1 mt-1 text-green motion-safe:animate-[tag-in_260ms_cubic-bezier(0.16,1,0.3,1)] text-caption font-medium"
         >
           <span aria-hidden className="inline-block w-1.5 h-1.5 rounded-full bg-green" />
           <span aria-hidden>PR · {set.weight_kg} × {set.reps}</span>
@@ -166,7 +166,7 @@ export function SetRow({ index, set, prev, prescribed, isPR, restSeconds, onChan
       ) : null}
       {notesOpen ? (
         <div className="col-span-7 mt-1 min-w-0">
-          <label className="mono-caps block mb-1" htmlFor={`set-note-${index}`}>Set {index + 1} note</label>
+          <label className="block mb-1 text-caption font-medium text-muted" htmlFor={`set-note-${index}`}>Set {index + 1} note</label>
           <textarea
             id={`set-note-${index}`}
             rows={2}

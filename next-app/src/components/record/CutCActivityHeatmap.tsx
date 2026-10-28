@@ -116,7 +116,7 @@ export function CutCActivityHeatmap({ store, className }: CutCActivityHeatmapPro
   if (use12Week) {
     return (
       <div className={cn(cardClass(), className)}>
-        <p className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted mb-2">
+        <p className="text-eyebrow font-medium uppercase tracking-widest text-muted mb-2">
           Activity — last 12 weeks
         </p>
         <WeeklyHeatmap
@@ -160,7 +160,7 @@ function YearColumnHeatmap({
       aria-label={`Monthly session totals from ${rangeStart} to ${rangeEnd}. Max ${maxCount} sessions in a single month.`}
       className={cn(cardClass(), className)}
     >
-      <p className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted mb-2">
+      <p className="text-eyebrow font-medium uppercase tracking-widest text-muted mb-2">
         Sessions per month — {rangeStart}{rangeStart !== rangeEnd ? ` · ${rangeEnd}` : ""}
       </p>
 
@@ -169,7 +169,7 @@ function YearColumnHeatmap({
         {MONTH_LETTERS.map((letter, i) => (
           <span
             key={i}
-            className="text-center font-mono text-eyebrow uppercase text-muted"
+            className="text-center text-eyebrow uppercase text-muted"
           >
             {letter}
           </span>
@@ -209,7 +209,7 @@ function YearColumnHeatmap({
                   </div>
                 );
               })}
-              <span className="pl-2 font-mono text-eyebrow text-muted self-end">{year}</span>
+              <span className="font-mono pl-2 text-eyebrow text-muted self-end">{year}</span>
             </div>
           );
         })}

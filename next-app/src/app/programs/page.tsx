@@ -176,7 +176,7 @@ export default function ProgramCatalogPage() {
           <button
             type="button"
             onClick={() => setLadderSheetOpen(true)}
-            className="font-mono uppercase text-slate underline-offset-2 hover:underline"
+            className="uppercase text-slate underline-offset-2 hover:underline"
           >
             cited
           </button>{" "}
@@ -184,7 +184,7 @@ export default function ProgramCatalogPage() {
           <button
             type="button"
             onClick={() => setLadderSheetOpen(true)}
-            className="font-mono uppercase text-green underline-offset-2 hover:underline"
+            className="uppercase text-green underline-offset-2 hover:underline"
           >
             verified
           </button>{" "}
@@ -217,7 +217,7 @@ export default function ProgramCatalogPage() {
                 "referenced" wording to "cited" per §7.5 2-tier ladder. */}
             <p
               id="live-now-eyebrow"
-              className="font-mono text-eyebrow font-medium uppercase tracking-widest text-muted"
+              className="text-eyebrow font-medium uppercase tracking-widest text-muted"
             >
               {/* Was "{n} cited · live now", using "cited" as the floor label —
                   true while some programs sat at that tier. As of 2026-09-02 all
@@ -246,7 +246,7 @@ export default function ProgramCatalogPage() {
                       <ProgramFigure slug={p.slug} className="aspect-[358/201] w-full overflow-hidden rounded-lg bg-ground" />
                     ) : null}
                     <div className="flex items-start justify-between gap-2">
-                      <p className="font-mono text-eyebrow uppercase tracking-widest text-muted">
+                      <p className="text-eyebrow uppercase tracking-widest text-muted">
                         {p.category}
                       </p>
                       <StatusPill
@@ -283,7 +283,7 @@ export default function ProgramCatalogPage() {
             onClick={() => setFilter(f.id)}
             aria-pressed={filter === f.id}
             className={cn(
-              "min-h-[36px] px-3 py-1.5 rounded-full font-mono text-eyebrow",
+              "min-h-[36px] px-3 py-1.5 rounded-full text-eyebrow",
               filter === f.id
                 ? "bg-bronze text-ground"
                 : "bg-line-soft text-muted hover:text-ink",
@@ -299,14 +299,14 @@ export default function ProgramCatalogPage() {
           under the filter chips so the visual hierarchy stays: what
           category → then what order. */}
       <div className="flex items-center gap-2 -mt-2 text-eyebrow text-muted">
-        <label htmlFor="programs-sort" className="font-mono uppercase tracking-widest">
+        <label htmlFor="programs-sort" className="uppercase tracking-widest">
           Sort
         </label>
         <select
           id="programs-sort"
           value={sort}
           onChange={(e) => setSort(e.target.value as SortOrder)}
-          className="font-mono text-eyebrow px-2 py-1 min-h-[36px] rounded-lg border border-line-soft bg-surface text-ink focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
+          className="text-eyebrow px-2 py-1 min-h-[36px] rounded-lg border border-line-soft bg-surface text-ink focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
         >
           <option value="default">Curated</option>
           <option value="duration_asc">Shortest first</option>
@@ -363,7 +363,7 @@ export default function ProgramCatalogPage() {
           onClose={() => setLadderSheetOpen(false)}
         >
           <section className="space-y-2">
-            <p className="font-mono text-eyebrow uppercase tracking-widest text-slate">
+            <p className="text-eyebrow uppercase tracking-widest text-slate">
               Cited — the floor. Nothing ships below it.
             </p>
             <ul className="list-disc pl-5 space-y-1 text-small">
@@ -376,7 +376,7 @@ export default function ProgramCatalogPage() {
             </ul>
           </section>
           <section className="space-y-2">
-            <p className="font-mono text-eyebrow uppercase tracking-widest text-green">
+            <p className="text-eyebrow uppercase tracking-widest text-green">
               Verified — audited a second time, on the record
             </p>
             <ul className="list-disc pl-5 space-y-1 text-small">
@@ -392,7 +392,7 @@ export default function ProgramCatalogPage() {
             </ul>
           </section>
           <section className={`${cardClass()} space-y-2`}>
-            <p className="font-mono text-eyebrow uppercase tracking-widest text-muted">
+            <p className="text-eyebrow uppercase tracking-widest text-muted">
               What verified does not mean
             </p>
             <ul className="list-disc pl-5 space-y-1 text-small">
@@ -472,7 +472,7 @@ function StatusChip({ status, personal }: { status?: string; personal?: boolean 
   if (!meta) return null;
   return (
     <span
-      className="font-mono text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5"
+      className="text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5"
       title={meta.title}
     >
       <span aria-hidden className={`h-1.5 w-1.5 rounded-full ${meta.dotClass}`} />
@@ -533,12 +533,12 @@ function ProgramCard({
           <div className="flex items-baseline gap-2 flex-wrap">
             <h3 className="text-small font-semibold text-strong">{p.name}</h3>
             {isActive ? (
-              <span className="font-mono text-eyebrow uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-bronze text-ground">
+              <span className="text-eyebrow uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-bronze text-ground">
                 active
               </span>
             ) : null}
             {p.coming_soon && !isActive ? (
-              <span className="font-mono text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted">
+              <span className="text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted">
                 coming soon
               </span>
             ) : (
@@ -546,7 +546,7 @@ function ProgramCard({
             )}
             {p.personal ? (
               <span
-                className="font-mono text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5"
+                className="text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted inline-flex items-center gap-1.5"
                 title="Authored for one specific user's clinical context. Not general-purpose."
               >
                 <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-slate" />
@@ -565,7 +565,7 @@ function ProgramCard({
           >
             {p.short_description}
           </p>
-          <div className="mt-2 flex items-center gap-2 text-eyebrow font-mono text-muted">
+          <div className="mt-2 flex items-center gap-2 text-eyebrow text-muted">
             <span className="whitespace-nowrap">{p.duration_weeks} wk</span>
             <DifficultyChip difficulty={p.difficulty} />
             {p.load_hint ? (
@@ -585,7 +585,7 @@ function ProgramCard({
 function DifficultyChip({ difficulty }: { difficulty: string | undefined }) {
   if (!difficulty) return null;
   return (
-    <span className="rounded-full border border-line-soft px-2 py-0.5 font-mono text-eyebrow uppercase tracking-wider text-muted">
+    <span className="rounded-full border border-line-soft px-2 py-0.5 text-eyebrow uppercase tracking-wider text-muted">
       {difficulty === "multi-tier" ? "all levels" : difficulty}
     </span>
   );

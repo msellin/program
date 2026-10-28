@@ -49,7 +49,7 @@ export function AwayDays() {
 
   return (
     <div>
-      <p className="font-mono text-eyebrow uppercase tracking-widest text-muted mb-2">
+      <p className="text-eyebrow uppercase tracking-widest text-muted mb-2">
         Away days
       </p>
       <div className={cn(cardClass(), "space-y-3")}>
@@ -86,7 +86,7 @@ export function AwayDays() {
 
         <div className="flex flex-wrap items-end gap-2">
           <label className="flex-1 min-w-[120px]">
-            <span className="block font-mono text-eyebrow uppercase tracking-widest text-muted mb-1">
+            <span className="block text-eyebrow uppercase tracking-widest text-muted mb-1">
               From
             </span>
             <input
@@ -100,7 +100,7 @@ export function AwayDays() {
             />
           </label>
           <label className="flex-1 min-w-[120px]">
-            <span className="block font-mono text-eyebrow uppercase tracking-widest text-muted mb-1">
+            <span className="block text-eyebrow uppercase tracking-widest text-muted mb-1">
               To
             </span>
             <input
@@ -112,7 +112,7 @@ export function AwayDays() {
             />
           </label>
           <label className="flex-[2] min-w-[140px]">
-            <span className="block font-mono text-eyebrow uppercase tracking-widest text-muted mb-1">
+            <span className="block text-eyebrow uppercase tracking-widest text-muted mb-1">
               Why (optional)
             </span>
             <input

@@ -90,7 +90,7 @@ export function YourPlanCard({ program }: { program: Program }) {
         <Sparkles size={16} className="mt-0.5 text-bronze flex-shrink-0" aria-hidden />
         <div className="min-w-0 flex-1 space-y-2">
           <div>
-            <p className="font-mono text-eyebrow uppercase tracking-widest text-bronze">
+            <p className="text-eyebrow uppercase tracking-widest text-bronze">
               Your plan
             </p>
             <h2 className="mt-1 text-body font-semibold text-strong leading-snug">

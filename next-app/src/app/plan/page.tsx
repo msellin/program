@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
-import { loadProgram } from "@/lib/data-loader";
+import { loadProgram, loadProgramManifest } from "@/lib/data-loader";
 import { EmptyStateCard } from "@/components/EmptyStateCard";
 import { useStore } from "@/lib/useStore";
 import { today as todayISO, iso, cn } from "@/lib/utils";
@@ -110,6 +110,13 @@ export default function WeekPage() {
   }, [activeSlugsKey]);
 
   const program = programs[0] ?? null;
+
+  const [manifestNames, setManifestNames] = useState<Record<string, string>>({});
+  useEffect(() => {
+    void loadProgramManifest()
+      .then((m) => setManifestNames(Object.fromEntries(m.programs.map((p) => [p.slug, p.name]))))
+      .catch(() => {});
+  }, []);
 
   if (!hydrated) return <div className="mt-8 text-small text-muted">Loading…</div>;
   if (!activeSlugs.length) {
@@ -284,9 +291,11 @@ export default function WeekPage() {
         (() => {
           const prog = programProgress(program, todayISO(), userProfile)!;
           const pair = { current: prog.weekN, total: prog.totalWeeks };
-          const programName = program.slug
-            ? program.slug.split("-").map((w) => w[0].toUpperCase() + w.slice(1)).join(" ")
-            : "Program";
+          const programName =
+            (program.slug ? manifestNames[program.slug] : undefined) ??
+            (program.slug
+              ? program.slug.split("-").map((w) => w[0].toUpperCase() + w.slice(1)).join(" ")
+              : "Program");
           return (
             <ArcProgressBar
               programName={programName}
@@ -316,7 +325,7 @@ export default function WeekPage() {
         </button>
         <div className="flex-1 text-center">
           <p className="text-small font-semibold text-strong leading-tight">{rangeLabel}</p>
-          <p className="mono-caps mt-0.5">
+          <p className="mt-0.5 text-caption font-medium text-muted">
             {offset === 0
               ? "This week"
               : offset === 1
@@ -343,7 +352,7 @@ export default function WeekPage() {
           aria-hidden={offset === 0}
           tabIndex={offset === 0 ? -1 : 0}
           className={cn(
-            "w-11 h-11 flex items-center justify-center rounded-lg font-mono text-eyebrow",
+            "w-11 h-11 flex items-center justify-center rounded-lg text-eyebrow",
             offset === 0
               ? "invisible pointer-events-none"
               : "hover:bg-surface-2 text-bronze",
@@ -360,7 +369,9 @@ export default function WeekPage() {
               .replace(/interleaved consolidation/i, "Mixed practice")
               .replace(/\s+for all tiers$/i, "")}
           </span>
-          {weekPhase.goal ? <span className="text-muted"> · {weekPhase.goal}</span> : null}
+          {weekPhase.goal ? (
+            <span className="text-muted"> · {weekPhase.goal}</span>
+          ) : null}
         </Card>
       ) : (
         <Card flush className="px-3 py-2 text-small text-muted">
@@ -381,7 +392,7 @@ export default function WeekPage() {
           and 2+ programs are active so the multi-dot per day reads
           without hover. See §0.3 of the plan. */}
       {blockObjectOn && activeSlugs.length >= 2 ? (
-        <div className="flex items-center gap-3 flex-wrap font-mono text-eyebrow text-muted uppercase tracking-widest">
+        <div className="flex items-center gap-3 flex-wrap text-eyebrow text-muted uppercase tracking-widest">
           <span className="inline-flex items-center gap-1">
             <span className="w-2 h-2 rounded-full bg-muted/60" aria-hidden /> planned
           </span>
@@ -452,7 +463,7 @@ export default function WeekPage() {
             const dayLog = logs?.[dateISO];
             // One status per day: legacy skip map OR every block skipped.
             const dayBlocks = Object.values(blocksTodayByProgram).flat();
-            const daySkipped = !!skip || (dayBlocks.length > 0 && dayBlocks.every((b) => b.state === "skipped"));
+            const rawSkipped = !!skip || (dayBlocks.length > 0 && dayBlocks.every((b) => b.state === "skipped"));
             const doneCount = dayLog
               ? Object.values(dayLog.exercises).filter((e) => e.done).length
               : 0;
@@ -523,6 +534,8 @@ export default function WeekPage() {
 
             const names = displayBlocks.map((b) => humanBlockName(b.name)).join(" + ");
             const isRest = displayBlocks.length === 0 && !override;
+            // A skip on a day with nothing scheduled is a rest day, not a skipped session.
+            const daySkipped = rawSkipped && !(isRest && dayBlocks.length === 0);
 
             // Pick a single status the leading dot represents. Priority order picks
             // the most action-relevant state; the rest goes into the subline text.
@@ -539,7 +552,7 @@ export default function WeekPage() {
               | "planned" =
               isToday
                 ? "today"
-                : skip
+                : skip && daySkipped
                   ? "skipped"
                   : override
                     ? "moved"
@@ -598,7 +611,7 @@ export default function WeekPage() {
                           from text-eyebrow to text-eyebrow to respect the
                           tokens.md typography floor. */}
                       {perProgramDots.dots.length > 4 ? (
-                        <span className="text-eyebrow font-mono text-muted ml-0.5">
+                        <span className="text-eyebrow text-muted ml-0.5">
                           +{perProgramDots.dots.length - 4}
                         </span>
                       ) : null}
@@ -640,35 +653,35 @@ export default function WeekPage() {
                     <div className="flex items-baseline justify-between gap-3">
                       <div className="font-semibold flex items-baseline gap-2 flex-wrap">
                         <span className="inline-block w-9">{dayName}</span>
-                        <span className="font-mono text-eyebrow text-muted font-normal">
+                        <span className="text-eyebrow text-muted font-normal">
                           {dateForDay.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
                         </span>
                         {isToday ? (
-                          <span className="text-eyebrow font-mono uppercase tracking-wider px-2 py-0.5 rounded-full bg-bronze/15 text-bronze font-normal">
+                          <span className="text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full bg-bronze/15 text-bronze font-normal">
                             Today
                           </span>
                         ) : null}
                         {doneCount > 0 && !isToday ? (
-                          <span className="text-eyebrow text-green font-mono font-normal">
+                          <span className="text-eyebrow text-green font-normal">
                             · {doneCount} logged
                           </span>
                         ) : null}
                         {runCount > 0 && !isToday ? (
-                          <span className="text-eyebrow text-green font-mono font-normal">
+                          <span className="text-eyebrow text-green font-normal">
                             · {runCount} {runCount === 1 ? "activity" : "activities"}
                           </span>
                         ) : null}
                         {contributingProgramCount > 1 ? (
-                          <span className="text-eyebrow font-mono uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted font-normal inline-flex items-center gap-1.5">
+                          <span className="text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted font-normal inline-flex items-center gap-1.5">
                             <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-amber" />
                             {contributingProgramCount} tracks
                           </span>
                         ) : null}
                       </div>
-                      <span className="font-mono text-eyebrow text-muted text-right flex items-center gap-1">
+                      <span className="text-eyebrow text-muted text-right flex items-center gap-1">
                         {daySkipped ? (
                           <span className="text-amber">Skipped</span>
-                        ) : isRest ? "rest" : names ? "" : "—"}
+                        ) : isRest ? "Rest" : names ? "" : "—"}
                         <ChevronDown
                           size={14}
                           aria-hidden
@@ -682,7 +695,7 @@ export default function WeekPage() {
                     <p
                       className={cn(
                         "text-small mt-1",
-                        skip ? "line-through text-muted" : "text-muted",
+                        skip && daySkipped ? "line-through text-muted" : "text-muted",
                         !isExpanded && "line-clamp-1",
                       )}
                     >
@@ -714,7 +727,7 @@ export default function WeekPage() {
                           {dayLog.runs.map((r, idx) => (
                             <li
                               key={idx}
-                              className="text-caption font-mono text-green flex items-baseline gap-1.5"
+                              className="text-caption text-green flex items-baseline gap-1.5"
                             >
                               <span aria-hidden>✓</span>
                               <span>
@@ -731,7 +744,7 @@ export default function WeekPage() {
                         const topLift = topLoggedLift(dayLog);
                         if (!topLift) return null;
                         return (
-                          <p className="mt-1 text-caption font-mono text-green flex items-baseline gap-1.5">
+                          <p className="mt-1 text-caption text-green flex items-baseline gap-1.5">
                             <span aria-hidden>✓</span>
                             <span>{topLift}</span>
                           </p>
@@ -868,7 +881,7 @@ function WeekDayActions({
         <button
           type="button"
           onClick={() => clearSkip(dateISO)}
-          className="w-full font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line text-muted hover:text-ink hover:bg-line-soft min-h-[44px]"
+          className="w-full text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line text-muted hover:text-ink hover:bg-line-soft min-h-[44px]"
         >
           {isOverride ? "Undo move" : "Unskip"}
         </button>
@@ -913,7 +926,7 @@ function WeekDayActions({
         </div>
       ) : null}
       {/* P1-63 (Batch 27) — 3-verb action grid migrated from 11 px
-          mono-caps to 14 px sentence-case. Verb labels shouldn't read
+           mono-caps to 14 px sentence-case. Verb labels shouldn't read
           as chip pills.
           Week 4d (2026-08-21) — past-day verb was "History →" pointing
           to /history?date=..., which now redirects to /record (read-

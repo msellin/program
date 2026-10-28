@@ -1,12 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useStore, entrySets } from "@/lib/useStore";
 import { countLoggedSets } from "@/lib/set-progress";
 import { IN_SESSION_HURT_SCORE, useSessionRegions } from "@/components/session/HurtSheet";
 import type { RailExercise } from "@/components/session/DaySession";
 import { Button } from "@/components/ui/Button";
+import { humanBlockName } from "@/lib/day-format";
+import { loadProgram } from "@/lib/data-loader";
+import type { Program } from "@/lib/schemas";
+import { BestSetCard, DoneLadder, DoneStats, NextSessionCard } from "./done/DoneSections";
+import { bestSetOfSession, nextPlanned, sessionTotals } from "./done/session-stats";
 
 export type SessionEnd = "finished" | "stopped";
 
@@ -46,6 +51,24 @@ export function SessionDone({
   const [recorded, setRecorded] = useState<string | null>(null);
   const regions = useSessionRegions(slug, end === "stopped");
   const { movements, totalSets } = summarizeSession(rail, logs, date);
+  const scheduled = useStore((s) => s.store.scheduled_blocks);
+  const tierId = useStore((s) => s.store.user_profile?.program_states?.[slug]?.tier);
+  const [program, setProgram] = useState<Program | null>(null);
+  useEffect(() => {
+    let live = true;
+    void loadProgram(slug)
+      .then((p) => live && setProgram(p as Program))
+      .catch(() => {});
+    return () => {
+      live = false;
+    };
+  }, [slug]);
+  const finished = end === "finished" && totalSets > 0;
+  const totals = sessionTotals(rail, logs, date);
+  const best = finished ? bestSetOfSession(rail, logs, date) : null;
+  const next = nextPlanned(scheduled, slug, date);
+  const nextFocus = next ? program?.blocks.find((b) => b.id === next.blockId)?.name : undefined;
+  const tiers = program?.plan_tiers?.map((t) => ({ id: t.id, label: t.label })) ?? [];
 
   return (
     <div className="flex flex-col gap-5 pt-4" data-surface="SessionDone" data-end={end}>
@@ -59,12 +82,27 @@ export function SessionDone({
             : "Nothing logged this time."
           : "Good call. What you logged is saved."}
       </p>
+      {finished ? (
+        <DoneStats sets={totalSets} movements={movements.length} reps={totals.reps} holdSeconds={totals.holdSeconds} />
+      ) : null}
+      {best ? <BestSetCard best={best} /> : null}
+      {finished && tierId && tiers.length > 1 ? <DoneLadder levels={tiers} activeId={tierId} /> : null}
+      {next ? (
+        <NextSessionCard
+          dayLabel={new Date(next.date + "T12:00:00").toLocaleDateString("en-GB", {
+            weekday: "long",
+            day: "numeric",
+            month: "short",
+          })}
+          focus={nextFocus ? humanBlockName(nextFocus) : undefined}
+        />
+      ) : null}
       {movements.length > 0 ? (
-        <ul className="rounded-lg border border-line-soft divide-y divide-line-soft">
+        <ul className="rounded-xl border border-line-soft divide-y divide-line-soft">
           {movements.map((m) => (
             <li key={m.name} className="flex justify-between px-3.5 py-3 text-small">
               <span className="text-strong">{m.name}</span>
-              <span className="font-mono text-caption text-muted">{m.sets} sets</span>
+              <span className="text-caption text-muted">{m.sets} sets</span>
             </li>
           ))}
         </ul>

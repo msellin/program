@@ -80,7 +80,7 @@ export function ProposalStack({ program, date }: { program: Program | null | und
           setUndoVisible(false);
           announce(what ? `Undone — ${what} put back.` : "Nothing to undo.");
         }}
-        className="min-h-[44px] px-2 font-mono text-eyebrow uppercase tracking-wider text-bronze"
+        className="min-h-[44px] px-2 text-eyebrow uppercase tracking-wider text-bronze"
       >
         Undo
       </button>

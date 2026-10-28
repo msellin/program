@@ -96,7 +96,7 @@ export function OffPlanSheet({
 
       {offPlanOn && drillBlocks.length ? (
         <>
-          <p className="font-mono text-eyebrow uppercase tracking-[.16em] text-muted mb-2.5">
+          <p className="text-eyebrow uppercase tracking-[.16em] text-muted mb-2.5">
             Or pick a drill
           </p>
           <Link

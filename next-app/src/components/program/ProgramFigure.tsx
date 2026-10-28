@@ -38,8 +38,11 @@ export function ProgramFigure({ slug, className }: { slug: string; className?: s
   const getElapsed = useCallback(() => Date.now() - start, [start]);
   if (!figure) return null;
   return (
-    <div className={className}>
-      <ExerciseFigure figure={figure} side="B" playing getElapsed={getElapsed} />
+    <div className={`relative ${className ?? ""}`}>
+      <div aria-hidden className="absolute inset-0 bg-bronze/10" />
+      <div className="relative h-full w-full">
+        <ExerciseFigure figure={figure} side="B" playing getElapsed={getElapsed} />
+      </div>
     </div>
   );
 }
