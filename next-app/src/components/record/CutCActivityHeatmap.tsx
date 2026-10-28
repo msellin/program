@@ -25,6 +25,7 @@
 import { useMemo } from "react";
 import {
   WeeklyHeatmap,
+  dayCellState,
   type WeeklyHeatmapCell,
   type WeeklyHeatmapCellState,
 } from "@/components/ui/WeeklyHeatmap";
@@ -51,11 +52,7 @@ function build12WeekCells(store: Store): WeeklyHeatmapCell[] {
     d.setDate(now.getDate() - i);
     const iso = d.toISOString().slice(0, 10);
     const log = logs[iso];
-    const state = (log?.derived_state ?? null) as WeeklyHeatmapCellState | null;
-    cells.push({
-      date: iso,
-      sessionState: state ?? "none",
-    });
+    cells.push({ date: iso, sessionState: dayCellState(log) });
   }
   return cells;
 }

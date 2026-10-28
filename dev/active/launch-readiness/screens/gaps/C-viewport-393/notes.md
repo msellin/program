@@ -1,5 +1,5 @@
 ## 01-today-top
-url: http://localhost:3000/off-plan/
+url: https://app.terav.fit/off-plan/
 horizontal overflow: false
 
 Skip to content
@@ -25,9 +25,9 @@ Active hang (scap-engaged)
 Dead hangs — build grip time · 3 sets
 HELD
 Scapular pull-up
-Shoulder-blade pulls (scap pull-ups) · 4 sets
+Shoulder-blade pulls — scap pull-ups · 4 sets
 Scap retraction hold at top
-Shoulder-blade pulls (scap pull-ups) · 3 sets
+Shoulder-blade pulls — scap pull-ups · 3 sets
 Ring row (incline, easy)
 Ring rows — pulling with feet down · 3 sets
 HELD
@@ -48,20 +48,20 @@ Band-assisted pull-ups · 4 sets
 First strict pull-up attempt
 Band-assisted pull-ups · 1 sets
 First strict pull-up attempt
-Sub-max pull-up sets · 1 sets
+Easy pull-up sets · 1 sets
 Partial-ROM pull-up (top half)
-Sub-max pull-up sets · 5 sets
+Easy pull-up sets · 5 sets
 Slow tempo pull-up (3-1-3)
-Tempo pull-up · 3 sets
+Slow-tempo pull-ups · 3 sets
 Isometric hold at mid-range (90° elbow)
-Tempo pull-up · 3 sets
+Slow-tempo pull-ups · 3 sets
 Grease-the-groove single pull-ups
-Grease the groove — sub-max singles · 5 sets
+Single pull-ups — through the day · 5 sets
 First strict pull-up attempt
-Pull
+
 
 ## 01-today-bottom
-url: http://localhost:3000/off-plan/
+url: https://app.terav.fit/off-plan/
 horizontal overflow: false
 
 Skip to content
@@ -87,9 +87,9 @@ Active hang (scap-engaged)
 Dead hangs — build grip time · 3 sets
 HELD
 Scapular pull-up
-Shoulder-blade pulls (scap pull-ups) · 4 sets
+Shoulder-blade pulls — scap pull-ups · 4 sets
 Scap retraction hold at top
-Shoulder-blade pulls (scap pull-ups) · 3 sets
+Shoulder-blade pulls — scap pull-ups · 3 sets
 Ring row (incline, easy)
 Ring rows — pulling with feet down · 3 sets
 HELD
@@ -110,22 +110,22 @@ Band-assisted pull-ups · 4 sets
 First strict pull-up attempt
 Band-assisted pull-ups · 1 sets
 First strict pull-up attempt
-Sub-max pull-up sets · 1 sets
+Easy pull-up sets · 1 sets
 Partial-ROM pull-up (top half)
-Sub-max pull-up sets · 5 sets
+Easy pull-up sets · 5 sets
 Slow tempo pull-up (3-1-3)
-Tempo pull-up · 3 sets
+Slow-tempo pull-ups · 3 sets
 Isometric hold at mid-range (90° elbow)
-Tempo pull-up · 3 sets
+Slow-tempo pull-ups · 3 sets
 Grease-the-groove single pull-ups
-Grease the groove — sub-max singles · 5 sets
+Single pull-ups — through the day · 5 sets
 First strict pull-up attempt
-Pull
+
 
 fixed/sticky on 01-today: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57
 
 ## 02-plan-top
-url: http://localhost:3000/plan/
+url: https://app.terav.fit/plan/
 horizontal overflow: false
 
 Skip to content
@@ -162,7 +162,7 @@ Wed
 28 Oct
 TODAY
 
-Ring rows — pulling with feet down + Shoulder-blade pulls (scap pull-ups) + Shoulder and grip prep
+Ring rows — pulling with feet down + Shoulder-blade pulls — scap pull-ups + Shoulder and grip prep
 
 Thu
 29 Oct
@@ -196,7 +196,7 @@ Record
 Profile
 
 ## 02-plan-bottom
-url: http://localhost:3000/plan/
+url: https://app.terav.fit/plan/
 horizontal overflow: false
 
 Skip to content
@@ -233,7 +233,7 @@ Wed
 28 Oct
 TODAY
 
-Ring rows — pulling with feet down + Shoulder-blade pulls (scap pull-ups) + Shoulder and grip prep
+Ring rows — pulling with feet down + Shoulder-blade pulls — scap pull-ups + Shoulder and grip prep
 
 Thu
 29 Oct
@@ -269,7 +269,7 @@ Profile
 fixed/sticky on 02-plan: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57
 
 ## 03-session-top
-url: http://localhost:3000/session/first-strict-pullup/
+url: https://app.terav.fit/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
@@ -293,7 +293,7 @@ Ring row (horizontal)
 Ring row (feet elevated)
 4 sets
 Follow along ·
-Shoulder-blade pulls (scap pull-ups)
+Shoulder-blade pulls
 2 moves · with a timer
 Scapular pull-up
 4 sets
@@ -317,7 +317,7 @@ Record
 Profile
 
 ## 03-session-bottom
-url: http://localhost:3000/session/first-strict-pullup/
+url: https://app.terav.fit/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
@@ -341,7 +341,7 @@ Ring row (horizontal)
 Ring row (feet elevated)
 4 sets
 Follow along ·
-Shoulder-blade pulls (scap pull-ups)
+Shoulder-blade pulls
 2 moves · with a timer
 Scapular pull-up
 4 sets
@@ -367,7 +367,7 @@ Profile
 fixed/sticky on 03-session: div.sticky bottom-[calc(64px+env(safe-area-i @y=723 h=65 | nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57
 
 ## 04-record-top
-url: http://localhost:3000/record/
+url: https://app.terav.fit/record/
 horizontal overflow: false
 
 Skip to content
@@ -522,7 +522,7 @@ Profile
 100
 
 ## 04-record-bottom
-url: http://localhost:3000/record/
+url: https://app.terav.fit/record/
 horizontal overflow: false
 
 Skip to content
@@ -679,7 +679,7 @@ Profile
 fixed/sticky on 04-record: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57
 
 ## 05-check-top
-url: http://localhost:3000/check/
+url: https://app.terav.fit/check/
 horizontal overflow: false
 
 Skip to content
@@ -741,7 +741,7 @@ Record
 Profile
 
 ## 05-check-bottom
-url: http://localhost:3000/check/
+url: https://app.terav.fit/check/
 horizontal overflow: false
 
 Skip to content
@@ -805,7 +805,7 @@ Profile
 fixed/sticky on 05-check: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57
 
 ## 06-programs-top
-url: http://localhost:3000/programs/
+url: https://app.terav.fit/programs/
 horizontal overflow: false
 
 Skip to content
@@ -904,7 +904,7 @@ ALL LEVELS
 ~1.5 hr/week (3-4 sessions/wk, 20-35 min ea
 
 ## 06-programs-bottom
-url: http://localhost:3000/programs/
+url: https://app.terav.fit/programs/
 horizontal overflow: false
 
 Skip to content
@@ -1005,7 +1005,7 @@ ALL LEVELS
 fixed/sticky on 06-programs: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57
 
 ## 07-profile-top
-url: http://localhost:3000/profile/
+url: https://app.terav.fit/profile/
 horizontal overflow: false
 
 Skip to content
@@ -1054,7 +1054,7 @@ Record
 Profile
 
 ## 07-profile-bottom
-url: http://localhost:3000/profile/
+url: https://app.terav.fit/profile/
 horizontal overflow: false
 
 Skip to content
@@ -1105,7 +1105,7 @@ Profile
 fixed/sticky on 07-profile: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57
 
 ## 08-account-top
-url: http://localhost:3000/account/
+url: https://app.terav.fit/account/
 horizontal overflow: false
 
 Skip to content
@@ -1138,7 +1138,7 @@ Record
 Profile
 
 ## 08-account-bottom
-url: http://localhost:3000/account/
+url: https://app.terav.fit/account/
 horizontal overflow: false
 
 Skip to content
@@ -1173,7 +1173,7 @@ Profile
 fixed/sticky on 08-account: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57
 
 ## 09-settings-top
-url: http://localhost:3000/settings/
+url: https://app.terav.fit/settings/
 horizontal overflow: false
 
 Skip to content
@@ -1212,7 +1212,7 @@ Record
 Profile
 
 ## 09-settings-bottom
-url: http://localhost:3000/settings/
+url: https://app.terav.fit/settings/
 horizontal overflow: false
 
 Skip to content
@@ -1253,7 +1253,7 @@ Profile
 fixed/sticky on 09-settings: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57
 
 ## 10-off-plan-top
-url: http://localhost:3000/off-plan/
+url: https://app.terav.fit/off-plan/
 horizontal overflow: false
 
 Skip to content
@@ -1279,9 +1279,9 @@ Active hang (scap-engaged)
 Dead hangs — build grip time · 3 sets
 HELD
 Scapular pull-up
-Shoulder-blade pulls (scap pull-ups) · 4 sets
+Shoulder-blade pulls — scap pull-ups · 4 sets
 Scap retraction hold at top
-Shoulder-blade pulls (scap pull-ups) · 3 sets
+Shoulder-blade pulls — scap pull-ups · 3 sets
 Ring row (incline, easy)
 Ring rows — pulling with feet down · 3 sets
 HELD
@@ -1302,20 +1302,20 @@ Band-assisted pull-ups · 4 sets
 First strict pull-up attempt
 Band-assisted pull-ups · 1 sets
 First strict pull-up attempt
-Sub-max pull-up sets · 1 sets
+Easy pull-up sets · 1 sets
 Partial-ROM pull-up (top half)
-Sub-max pull-up sets · 5 sets
+Easy pull-up sets · 5 sets
 Slow tempo pull-up (3-1-3)
-Tempo pull-up · 3 sets
+Slow-tempo pull-ups · 3 sets
 Isometric hold at mid-range (90° elbow)
-Tempo pull-up · 3 sets
+Slow-tempo pull-ups · 3 sets
 Grease-the-groove single pull-ups
-Grease the groove — sub-max singles · 5 sets
+Single pull-ups — through the day · 5 sets
 First strict pull-up attempt
-Pull
+
 
 ## 10-off-plan-bottom
-url: http://localhost:3000/off-plan/
+url: https://app.terav.fit/off-plan/
 horizontal overflow: false
 
 Skip to content
@@ -1341,9 +1341,9 @@ Active hang (scap-engaged)
 Dead hangs — build grip time · 3 sets
 HELD
 Scapular pull-up
-Shoulder-blade pulls (scap pull-ups) · 4 sets
+Shoulder-blade pulls — scap pull-ups · 4 sets
 Scap retraction hold at top
-Shoulder-blade pulls (scap pull-ups) · 3 sets
+Shoulder-blade pulls — scap pull-ups · 3 sets
 Ring row (incline, easy)
 Ring rows — pulling with feet down · 3 sets
 HELD
@@ -1364,16 +1364,16 @@ Band-assisted pull-ups · 4 sets
 First strict pull-up attempt
 Band-assisted pull-ups · 1 sets
 First strict pull-up attempt
-Sub-max pull-up sets · 1 sets
+Easy pull-up sets · 1 sets
 Partial-ROM pull-up (top half)
-Sub-max pull-up sets · 5 sets
+Easy pull-up sets · 5 sets
 Slow tempo pull-up (3-1-3)
-Tempo pull-up · 3 sets
+Slow-tempo pull-ups · 3 sets
 Isometric hold at mid-range (90° elbow)
-Tempo pull-up · 3 sets
+Slow-tempo pull-ups · 3 sets
 Grease-the-groove single pull-ups
-Grease the groove — sub-max singles · 5 sets
+Single pull-ups — through the day · 5 sets
 First strict pull-up attempt
-Pull
+
 
 fixed/sticky on 10-off-plan: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57

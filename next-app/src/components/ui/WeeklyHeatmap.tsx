@@ -47,6 +47,25 @@ export type WeeklyHeatmapProps = {
   className?: string;
 };
 
+/**
+ * One day's cell: the morning check colours the day; a day trained without a
+ * check still counts as done (it read "No session history yet" after session 1).
+ */
+export function dayCellState(
+  log:
+    | {
+        derived_state?: WeeklyHeatmapCellState | string | null;
+        exercises?: Record<string, { done?: boolean }>;
+        runs?: unknown[];
+      }
+    | undefined,
+): WeeklyHeatmapCellState {
+  if (log?.derived_state) return log.derived_state as WeeklyHeatmapCellState;
+  const trained =
+    Object.values(log?.exercises ?? {}).some((e) => e.done) || (log?.runs?.length ?? 0) > 0;
+  return trained ? "green" : "none";
+}
+
 // Batch 36 P0 fix (visual-craft audit) — "green" was mapped to bg-bronze
 // which paints every "session done" cell CTA-bronze and violates R2/V4
 // (bronze is CTA-only). Green cells now use bg-green as the semantic

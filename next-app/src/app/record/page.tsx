@@ -24,7 +24,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { loadProgram, loadExercises, applyProgramExerciseOverrides } from "@/lib/data-loader";
 import { useStore } from "@/lib/useStore";
-import { WeeklyHeatmap, type WeeklyHeatmapCell, type WeeklyHeatmapCellState } from "@/components/ui/WeeklyHeatmap";
+import { WeeklyHeatmap, dayCellState, type WeeklyHeatmapCell, type WeeklyHeatmapCellState } from "@/components/ui/WeeklyHeatmap";
 import { WeeklyNarrativeTile } from "@/components/WeeklyNarrativeTile";
 import { HipProgressTile } from "@/components/HipProgressTile";
 import { EmptyStateCard } from "@/components/EmptyStateCard";
@@ -284,14 +284,7 @@ function buildReadinessHeatmap(
     d.setDate(now.getDate() - i);
     const iso = d.toISOString().slice(0, 10);
     const log = logs?.[iso];
-    // A check colours the day; a day trained without a check still counts as done.
-    const trained =
-      Object.values(log?.exercises ?? {}).some((e) => e.done) || (log?.runs?.length ?? 0) > 0;
-    const state = (log?.derived_state ?? (trained ? "green" : null)) as WeeklyHeatmapCellState | null;
-    cells.push({
-      date: iso,
-      sessionState: state ?? "none",
-    });
+    cells.push({ date: iso, sessionState: dayCellState(log) });
   }
   return cells;
 }
