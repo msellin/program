@@ -5,6 +5,6 @@
 - [x] Lane P: program page hero, figure, stat tiles, level ladder, "How it works" disclosure, sticky Start; catalog figures; "Four tabs" tour removed; "Find your exact level" card on Today
 - [x] Lane R: licensed-media research (`licensed-media.md`)
 - [x] Plain program pitches in the manifest; the stat-tile range no longer wraps; no double back in the quick start
-- [ ] Demo clips: vetted short clips with start/end (`demo-clips.md`, curator running), then fill `exercises.json`
+- [x] Demo clips: 39 vetted clips applied (29 approved, 10 close variants; 12 weak matches and 3 gaps left for owner filming). The window loops through the IFrame API (YouTube's own loop restarts at 0:00).
 - [ ] Session brief prose cards and the heavy sticky footer (MASTER-LIST M-008): P1
 - [ ] Re-shoot from live, then the 1–10 rescore

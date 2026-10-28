@@ -342,7 +342,9 @@
         "shoulder_load:front_rack"
       ],
       "video_search": "front squat technique straps",
-      "video_url": "https://www.youtube.com/watch?v=I5BkhSnHhbs"
+      "video_url": "https://www.youtube.com/watch?v=uYumuL_G_V0",
+      "video_start": 22,
+      "video_end": 31
     },
     {
       "id": "back_squat_highbar",
@@ -368,7 +370,9 @@
         "shoulder_load:grip"
       ],
       "video_search": "high bar back squat technique",
-      "video_url": "https://www.youtube.com/watch?v=7v_V6xiA_AA"
+      "video_url": "https://www.youtube.com/watch?v=QmZAiBqPvZw",
+      "video_start": 24,
+      "video_end": 32
     },
     {
       "id": "back_squat_ssb",
@@ -976,7 +980,8 @@
       "default": {
         "sets": 2,
         "reps": 10
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=NFApuRZf24w"
     },
     {
       "id": "hs_finger_raises",
@@ -1096,7 +1101,10 @@
       "default": {
         "sets": 3,
         "hold_seconds": 20
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=QgVOvBM96eE",
+      "video_start": 4,
+      "video_end": 14
     },
     {
       "id": "hs_hollow_rock",
@@ -1400,7 +1408,10 @@
       "default": {
         "sets": 3,
         "reps": 3
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=NK_OcHEm8yM",
+      "video_start": 1,
+      "video_end": 12
     },
     {
       "id": "hs_wall_hs_hold_chest",
@@ -1466,7 +1477,8 @@
       "default": {
         "sets": 3,
         "hold_seconds": 30
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=NJK3wLJAWEQ"
     },
     {
       "id": "hs_wall_hs_hold_belly",
@@ -1517,7 +1529,8 @@
       "default": {
         "sets": 3,
         "hold_seconds": 20
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=KImFtIzAtm4"
     },
     {
       "id": "hs_wall_supported_shrugs",
@@ -1566,7 +1579,8 @@
       "default": {
         "sets": 3,
         "reps": 8
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=3Phj6B2r3tk"
     },
     {
       "id": "hs_wall_shoulder_taps",
@@ -1618,7 +1632,8 @@
         "sets": 3,
         "reps": 6,
         "per_side": true
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=1bNOGG3Dpow"
     },
     {
       "id": "hs_kickup_practice",
@@ -1666,7 +1681,10 @@
       "default": {
         "sets": 3,
         "reps": 5
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=FdgJ9jZIT-Q",
+      "video_start": 8,
+      "video_end": 15
     },
     {
       "id": "hs_freestand_attempt",
@@ -1715,7 +1733,10 @@
       "default": {
         "sets": 5,
         "hold_seconds": 10
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=_-9_46by2JI",
+      "video_start": 6,
+      "video_end": 22
     },
     {
       "id": "hs_tuck_freestand",
@@ -1762,7 +1783,10 @@
       "default": {
         "sets": 5,
         "hold_seconds": 10
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=3M7ARCWUBXc",
+      "video_start": 8,
+      "video_end": 22
     },
     {
       "id": "hs_single_step_attempt",
@@ -1812,7 +1836,10 @@
       "default": {
         "sets": 3,
         "reps": 5
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=I5p2VVDupq8",
+      "video_start": 1,
+      "video_end": 15
     },
     {
       "id": "hs_walk_shuttle_2_3",
@@ -1863,7 +1890,10 @@
       "default": {
         "sets": 3,
         "reps": 5
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=I5p2VVDupq8",
+      "video_start": 1,
+      "video_end": 15
     },
     {
       "id": "hs_walk_continuous_line",
@@ -1910,7 +1940,10 @@
       "default": {
         "sets": 5,
         "reps": 1
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=I5p2VVDupq8",
+      "video_start": 1,
+      "video_end": 15
     },
     {
       "id": "hs_walk_marker_path",
@@ -1959,7 +1992,10 @@
       "default": {
         "sets": 5,
         "reps": 1
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=I5p2VVDupq8",
+      "video_start": 1,
+      "video_end": 15
     },
     {
       "id": "hs_half_pirouette_wall",
@@ -2065,7 +2101,10 @@
       "default": {
         "sets": 3,
         "reps": 3
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=tTnvKzRLCUk",
+      "video_start": 3,
+      "video_end": 10
     },
     {
       "id": "hs_full_pirouette_free",
@@ -2162,7 +2201,8 @@
       "default": {
         "sets": 5,
         "reps": 1
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=jH0TpLF46Ao"
     },
     {
       "id": "hs_walk_through_cones",
@@ -2263,7 +2303,10 @@
       "default": {
         "sets": 5,
         "reps": 1
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=I5p2VVDupq8",
+      "video_start": 1,
+      "video_end": 15
     },
     {
       "id": "hs_wrist_downdog_recovery",
@@ -2343,7 +2386,8 @@
       "default": {
         "sets": 2,
         "hold_seconds": 30
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=2wTvL6pr-k8"
     },
     {
       "id": "hs_video_review",
@@ -2408,7 +2452,8 @@
         "First few reps: do it deliberately from a controlled hold; don't wait for a real over-tip"
       ],
       "safety": "Do NOT try to catch yourself on the wall as you come down — the wall is not where the escape route lives; you exit sideways.",
-      "video_demo_url_placeholder": true
+      "video_demo_url_placeholder": true,
+      "video_url": "https://www.youtube.com/watch?v=-dpuo8uMqNA"
     },
     {
       "id": "quarter_pirouette_exit",
@@ -2431,7 +2476,8 @@
         "External-focus cue: 'point your chest at the wall to your left/right'"
       ],
       "safety": "If you feel any wrist twinge on the twist itself — stop. This is a shoulder + hip rotation, not a wrist rotation.",
-      "video_demo_url_placeholder": true
+      "video_demo_url_placeholder": true,
+      "video_url": "https://www.youtube.com/watch?v=4gENFVqsYbg"
     },
     {
       "id": "tuck_forward_roll_from_crow",
@@ -3016,7 +3062,8 @@
       "default": {
         "sets": 3,
         "hold_seconds": 30
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=Nc-JGSZZMAQ"
     },
     {
       "id": "pu_active_hang",
@@ -3051,7 +3098,8 @@
       "default": {
         "sets": 3,
         "hold_seconds": 20
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=dwZHDc5AfMs"
     },
     {
       "id": "pu_scap_pull",
@@ -3091,7 +3139,8 @@
       "default": {
         "sets": 3,
         "reps": 8
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=LIUwd3NFUI8"
     },
     {
       "id": "pu_scap_retraction_hold",
@@ -3132,7 +3181,8 @@
       "default": {
         "sets": 3,
         "reps": 5
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=hJ3bxPQonJI"
     },
     {
       "id": "pu_ring_row_incline",
@@ -3166,7 +3216,10 @@
       "default": {
         "sets": 3,
         "reps": 10
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=sEAOZc77wk8",
+      "video_start": 21,
+      "video_end": 37
     },
     {
       "id": "pu_ring_row_horizontal",
@@ -3207,7 +3260,8 @@
       "default": {
         "sets": 3,
         "reps": 8
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=gHFQlKpkvz8"
     },
     {
       "id": "pu_ring_row_feet_elevated",
@@ -3248,7 +3302,10 @@
       "default": {
         "sets": 3,
         "reps": 6
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=VgtpCc1k7zQ",
+      "video_start": 1,
+      "video_end": 18
     },
     {
       "id": "pu_dumbbell_row",
@@ -3365,7 +3422,8 @@
       "default": {
         "sets": 3,
         "reps": 4
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=EkpJkHpJXmM"
     },
     {
       "id": "pu_negative_pullup_10s",
@@ -3407,7 +3465,8 @@
       "default": {
         "sets": 3,
         "reps": 3
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=EkpJkHpJXmM"
     },
     {
       "id": "pu_isometric_top_hold",
@@ -3594,7 +3653,10 @@
       "default": {
         "sets": 3,
         "hold_seconds": 20
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=QgVOvBM96eE",
+      "video_start": 4,
+      "video_end": 14
     },
     {
       "id": "pu_hollow_body_pullover",
@@ -3635,7 +3697,8 @@
       "default": {
         "sets": 3,
         "reps": 8
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=Dqezpo1Sgpk"
     },
     {
       "id": "pu_band_pullup_heavy",
@@ -3676,7 +3739,8 @@
       "default": {
         "sets": 3,
         "reps": 6
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=MoPr7O-r7YM"
     },
     {
       "id": "pu_band_pullup_light",
@@ -3716,7 +3780,8 @@
       "default": {
         "sets": 3,
         "reps": 5
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=MoPr7O-r7YM"
     },
     {
       "id": "pu_first_strict_attempt",
@@ -3761,7 +3826,10 @@
       "default": {
         "sets": 3,
         "reps": 1
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=HRV5YKKaeVw",
+      "video_start": 21,
+      "video_end": 37
     },
     {
       "id": "pu_partial_rom_pullup",
@@ -3803,7 +3871,8 @@
       "default": {
         "sets": 3,
         "reps": 5
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=sXnHke9jNwY"
     },
     {
       "id": "pu_slow_tempo_pullup",
@@ -3884,7 +3953,10 @@
       "default": {
         "sets": 5,
         "reps": 1
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=HRV5YKKaeVw",
+      "video_start": 21,
+      "video_end": 37
     },
     {
       "id": "pu_farmers_carry",
@@ -3951,7 +4023,8 @@
       "default": {
         "sets": 4,
         "reps": 10
-      }
+      },
+      "video_url": "https://www.youtube.com/watch?v=n2ANjs4QrU4"
     },
     {
       "id": "pu_video_review",
