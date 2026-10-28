@@ -1,5 +1,5 @@
 ## 01-today-top
-url: http://localhost:3000/off-plan/
+url: https://app.terav.fit/off-plan/
 horizontal overflow: false
 
 Skip to content
@@ -63,7 +63,7 @@ Partial-ROM pull-up (top half)
 Grip-width variet
 
 ## 01-today-bottom
-url: http://localhost:3000/off-plan/
+url: https://app.terav.fit/off-plan/
 horizontal overflow: false
 
 Skip to content
@@ -129,7 +129,7 @@ Grip-width variet
 fixed/sticky on 01-today: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57
 
 ## 02-plan-top
-url: http://localhost:3000/plan/
+url: https://app.terav.fit/plan/
 horizontal overflow: false
 
 Skip to content
@@ -200,7 +200,7 @@ Record
 Profile
 
 ## 02-plan-bottom
-url: http://localhost:3000/plan/
+url: https://app.terav.fit/plan/
 horizontal overflow: false
 
 Skip to content
@@ -273,49 +273,105 @@ Profile
 fixed/sticky on 02-plan: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57
 
 ## 03-session-top
-url: http://localhost:3000/session/first-strict-pullup/
+url: https://app.terav.fit/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
 
-TODAY
+FIRST STRICT PULL-UP
 
-First Strict Pull-Up
-Rest today.
+Wednesday
 
-Your shoulder is 8/10, so hard training waits. If it isn’t settling, see a physio or doctor.
+5 exercises · 25–30 min · +1 optional
 
-Log how it feels
-Optional: Rest, or shoulder prep and hollow-body work only. No hanging.Back to Today
+Interleaved consolidation · week 7 of 8 · ends 7 Nov
+
+Follow along ·
+Row strength
+3 moves · with a timer
+Ring row (incline, easy)
+3 sets
+HELD
+Ring row (horizontal)
+4 sets
+Ring row (feet elevated)
+4 sets
+Follow along ·
+Scapular pull ladder
+2 moves · with a timer
+Scapular pull-up
+4 sets
+Scap retraction hold at top
+3 sets
+OPTIONAL
+Follow along ·
+Shoulder + grip prep
+1 move · with a timer
+Band shoulder prep (I-Y-T + face pull)
+2 sets
+How to run this
+›
+Log an extra session
+›
+Finish session
+Continue session
 Today
 Plan
 Record
 Profile
 
 ## 03-session-bottom
-url: http://localhost:3000/session/first-strict-pullup/
+url: https://app.terav.fit/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
 
-TODAY
+FIRST STRICT PULL-UP
 
-First Strict Pull-Up
-Rest today.
+Wednesday
 
-Your shoulder is 8/10, so hard training waits. If it isn’t settling, see a physio or doctor.
+5 exercises · 25–30 min · +1 optional
 
-Log how it feels
-Optional: Rest, or shoulder prep and hollow-body work only. No hanging.Back to Today
+Interleaved consolidation · week 7 of 8 · ends 7 Nov
+
+Follow along ·
+Row strength
+3 moves · with a timer
+Ring row (incline, easy)
+3 sets
+HELD
+Ring row (horizontal)
+4 sets
+Ring row (feet elevated)
+4 sets
+Follow along ·
+Scapular pull ladder
+2 moves · with a timer
+Scapular pull-up
+4 sets
+Scap retraction hold at top
+3 sets
+OPTIONAL
+Follow along ·
+Shoulder + grip prep
+1 move · with a timer
+Band shoulder prep (I-Y-T + face pull)
+2 sets
+How to run this
+›
+Log an extra session
+›
+Finish session
+Continue session
 Today
 Plan
 Record
 Profile
 
-fixed/sticky on 03-session: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57
+fixed/sticky on 03-session: div.sticky bottom-[calc(64px+env(safe-area-i @y=723 h=65 | nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57
 
 ## 04-record-top
-url: http://localhost:3000/record/
+url: https://app.terav.fit/record/
 horizontal overflow: false
 
 Skip to content
@@ -340,7 +396,7 @@ This week so far
 Sessions
 1 / 1
 Morning check
-2 amber · 1 red
+1 green · 2 amber
 Signals
 2 fatigue
 
@@ -470,7 +526,7 @@ Profile
 100
 
 ## 04-record-bottom
-url: http://localhost:3000/record/
+url: https://app.terav.fit/record/
 horizontal overflow: false
 
 Skip to content
@@ -495,7 +551,7 @@ This week so far
 Sessions
 1 / 1
 Morning check
-2 amber · 1 red
+1 green · 2 amber
 Signals
 2 fatigue
 
@@ -627,7 +683,7 @@ Profile
 fixed/sticky on 04-record: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57
 
 ## 05-check-top
-url: http://localhost:3000/check/
+url: https://app.terav.fit/check/
 horizontal overflow: false
 
 Skip to content
@@ -636,11 +692,9 @@ Morning check
 
 Wednesday 28 Oct
 
-Back off
+Workout ready
 
-Shoulder is above 5/10.
-
-Next step: skip hard training today. If this is night pain, a sudden change, or it isn't settling, talk to a doctor or physio. Terav isn't medical advice.
+You’re good to train as planned.
 
 Why?
 
@@ -652,10 +706,10 @@ Regions
 Mild: barely there. Notable: you notice it. Severe: it limits you.
 
 Shoulder
-None
+✓ None
 Mild
 Notable
-✓ Severe
+Severe
 Elbow
 ✓ None
 Mild
@@ -690,7 +744,7 @@ Record
 Profile
 
 ## 05-check-bottom
-url: http://localhost:3000/check/
+url: https://app.terav.fit/check/
 horizontal overflow: false
 
 Skip to content
@@ -699,11 +753,9 @@ Morning check
 
 Wednesday 28 Oct
 
-Back off
+Workout ready
 
-Shoulder is above 5/10.
-
-Next step: skip hard training today. If this is night pain, a sudden change, or it isn't settling, talk to a doctor or physio. Terav isn't medical advice.
+You’re good to train as planned.
 
 Why?
 
@@ -715,10 +767,10 @@ Regions
 Mild: barely there. Notable: you notice it. Severe: it limits you.
 
 Shoulder
-None
+✓ None
 Mild
 Notable
-✓ Severe
+Severe
 Elbow
 ✓ None
 Mild
@@ -755,7 +807,7 @@ Profile
 fixed/sticky on 05-check: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57
 
 ## 06-programs-top
-url: http://localhost:3000/programs/
+url: https://app.terav.fit/programs/
 horizontal overflow: false
 
 Skip to content
@@ -854,7 +906,7 @@ ALL LEVELS
 ~1.5 hr/week (3-4 sessions/wk, 20-35 min ea
 
 ## 06-programs-bottom
-url: http://localhost:3000/programs/
+url: https://app.terav.fit/programs/
 horizontal overflow: false
 
 Skip to content
@@ -955,7 +1007,7 @@ ALL LEVELS
 fixed/sticky on 06-programs: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57
 
 ## 07-profile-top
-url: http://localhost:3000/profile/
+url: https://app.terav.fit/profile/
 horizontal overflow: false
 
 Skip to content
@@ -1004,7 +1056,7 @@ Record
 Profile
 
 ## 07-profile-bottom
-url: http://localhost:3000/profile/
+url: https://app.terav.fit/profile/
 horizontal overflow: false
 
 Skip to content
@@ -1055,7 +1107,7 @@ Profile
 fixed/sticky on 07-profile: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57
 
 ## 08-account-top
-url: http://localhost:3000/account/
+url: https://app.terav.fit/account/
 horizontal overflow: false
 
 Skip to content
@@ -1088,7 +1140,7 @@ Record
 Profile
 
 ## 08-account-bottom
-url: http://localhost:3000/account/
+url: https://app.terav.fit/account/
 horizontal overflow: false
 
 Skip to content
@@ -1123,7 +1175,7 @@ Profile
 fixed/sticky on 08-account: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57
 
 ## 09-settings-top
-url: http://localhost:3000/settings/
+url: https://app.terav.fit/settings/
 horizontal overflow: false
 
 Skip to content
@@ -1162,7 +1214,7 @@ Record
 Profile
 
 ## 09-settings-bottom
-url: http://localhost:3000/settings/
+url: https://app.terav.fit/settings/
 horizontal overflow: false
 
 Skip to content
@@ -1203,7 +1255,7 @@ Profile
 fixed/sticky on 09-settings: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57
 
 ## 10-off-plan-top
-url: http://localhost:3000/off-plan/
+url: https://app.terav.fit/off-plan/
 horizontal overflow: false
 
 Skip to content
@@ -1267,7 +1319,7 @@ Partial-ROM pull-up (top half)
 Grip-width variet
 
 ## 10-off-plan-bottom
-url: http://localhost:3000/off-plan/
+url: https://app.terav.fit/off-plan/
 horizontal overflow: false
 
 Skip to content

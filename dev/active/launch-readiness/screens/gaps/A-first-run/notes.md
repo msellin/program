@@ -16,7 +16,7 @@ WHAT IT'S FOR
 You want a strict pull-up — not a kipping one. That's a different skill.
 You can't dead-hang 15 seconds yet, or you get 1-2 and want 5.
 You'd rather train the weakest link than just do more pull-ups.
-You have a bar and a band, and 15-30 minutes, three or four times a week.
+You have a bar and a band, and 20-35 minutes, three or four times a week.
 THE ARC
 
 Four tiers — Hang, Assisted, First Rep, Volume. Intake places you, then each week targets whichever sub-capability is furthest behind: grip, scapular control, row strength, or negative control. A beginner spends weeks on hangs and scap pulls before touching a full rep; a first-repper goes straight to volume work.
@@ -50,7 +50,7 @@ Eccentric training produces great
 CTA href from the pull-up landing page: https://app.terav.fit/sign-up?next=%2Fprograms%2Ffirst-strict-pullup&utm_campaign=gap-test
 
 ## 02-sign-up-page-not-submitted
-url: http://localhost:3000/sign-up/
+url: https://app.terav.fit/sign-up/
 horizontal overflow: false
 
 Sign up
@@ -69,7 +69,7 @@ Create account
 Already have an account? Sign in
 
 ## 03-first-screen-after-sign-in
-url: http://localhost:3000/
+url: https://app.terav.fit/
 horizontal overflow: false
 
 Skip to content
@@ -84,7 +84,7 @@ Record
 Profile
 
 ## 04-programs
-url: http://localhost:3000/programs/
+url: https://app.terav.fit/programs/
 horizontal overflow: false
 
 Skip to content
@@ -183,7 +183,7 @@ ALL LEVELS
 Mus
 
 ## 05-program-detail
-url: http://localhost:3000/programs/first-strict-pullup/
+url: https://app.terav.fit/programs/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
@@ -222,7 +222,7 @@ Record
 Profile
 
 ## 06-intake-01
-url: http://localhost:3000/programs/first-strict-pullup/intake/
+url: https://app.terav.fit/programs/first-strict-pullup/intake/
 horizontal overflow: false
 
 Skip to content
@@ -246,7 +246,7 @@ Pick the one closest to you
 Detailed setup (about 5 min)
 
 ## 06-intake-02
-url: http://localhost:3000/programs/first-strict-pullup/intake/
+url: https://app.terav.fit/programs/first-strict-pullup/intake/
 horizontal overflow: false
 
 Skip to content
@@ -293,7 +293,7 @@ Continue
 Detailed setup (about 5 min)
 
 ## 06-intake-03
-url: http://localhost:3000/programs/first-strict-pullup/intake/
+url: https://app.terav.fit/programs/first-strict-pullup/intake/
 horizontal overflow: false
 
 Skip to content
@@ -340,7 +340,7 @@ Start
 Detailed setup (about 5 min)
 
 ## 06-intake-04
-url: http://localhost:3000/
+url: https://app.terav.fit/
 horizontal overflow: false
 
 Skip to content
@@ -393,7 +393,7 @@ Profile
 Intake steps walked: 4
 
 ## 07-today-day-1
-url: http://localhost:3000/
+url: https://app.terav.fit/
 horizontal overflow: false
 
 Skip to content
@@ -444,7 +444,7 @@ Record
 Profile
 
 ## 08-first-session
-url: http://localhost:3000/session/first-strict-pullup/
+url: https://app.terav.fit/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
@@ -490,7 +490,7 @@ Record
 Profile
 
 ## 09-first-session-bottom
-url: http://localhost:3000/session/first-strict-pullup/
+url: https://app.terav.fit/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
@@ -536,7 +536,7 @@ Record
 Profile
 
 ## 10-session-done
-url: http://localhost:3000/session/first-strict-pullup/
+url: https://app.terav.fit/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
@@ -589,7 +589,7 @@ Record
 Profile
 
 ## 10-session-done-bottom
-url: http://localhost:3000/session/first-strict-pullup/
+url: https://app.terav.fit/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
