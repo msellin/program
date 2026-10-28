@@ -468,7 +468,7 @@ export function TodaySession({
           const week = Math.floor(daysIn / 7) + 1; // program week, only picks the mode; never shown
           const mode = week <= 2 ? "blocked practice — drills in the composed order" : "random practice — order varies each session";
           return (
-            <p className="text-eyebrow text-muted ">
+            <div className="text-eyebrow text-muted">
               {/* "Program week" not "Week": the header above already reads
                   "WEEK 3 OF 4" (position within the current phase) and the
                   phase line repeats it. An unqualified "Week 7" next to those
@@ -482,7 +482,7 @@ export function TodaySession({
                 <summary className="inline cursor-pointer underline underline-offset-2">Why?</summary>{" "}
                 {mode.charAt(0).toUpperCase() + mode.slice(1)}. Shea &amp; Morgan 1979.
               </details>
-            </p>
+            </div>
           );
         })()
       ) : null}

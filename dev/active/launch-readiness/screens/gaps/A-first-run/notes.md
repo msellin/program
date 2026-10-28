@@ -50,7 +50,7 @@ Eccentric training produces great
 CTA href from the pull-up landing page: https://app.terav.fit/sign-up?next=%2Fprograms%2Ffirst-strict-pullup&utm_campaign=gap-test
 
 ## 02-sign-up-page-not-submitted
-url: http://localhost:3000/sign-up/
+url: https://app.terav.fit/sign-up/
 horizontal overflow: false
 
 Sign up
@@ -69,7 +69,7 @@ Create account
 Already have an account? Sign in
 
 ## 03-first-screen-after-sign-in
-url: http://localhost:3000/
+url: https://app.terav.fit/
 horizontal overflow: false
 
 Skip to content
@@ -84,7 +84,7 @@ Record
 Profile
 
 ## 04-programs
-url: http://localhost:3000/programs/
+url: https://app.terav.fit/programs/
 horizontal overflow: false
 
 Skip to content
@@ -183,7 +183,7 @@ ALL LEVELS
 Mus
 
 ## 05-program-detail
-url: http://localhost:3000/programs/first-strict-pullup/
+url: https://app.terav.fit/programs/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
@@ -222,7 +222,7 @@ Record
 Profile
 
 ## 06-intake-01
-url: http://localhost:3000/programs/first-strict-pullup/intake/
+url: https://app.terav.fit/programs/first-strict-pullup/intake/
 horizontal overflow: false
 
 Skip to content
@@ -244,7 +244,7 @@ Continue
 Detailed setup (about 5 min)
 
 ## 06-intake-02
-url: http://localhost:3000/programs/first-strict-pullup/intake/
+url: https://app.terav.fit/programs/first-strict-pullup/intake/
 horizontal overflow: false
 
 Skip to content
@@ -291,7 +291,7 @@ Continue
 Detailed setup (about 5 min)
 
 ## 06-intake-03
-url: http://localhost:3000/programs/first-strict-pullup/intake/
+url: https://app.terav.fit/programs/first-strict-pullup/intake/
 horizontal overflow: false
 
 Skip to content
@@ -338,7 +338,7 @@ Start
 Detailed setup (about 5 min)
 
 ## 06-intake-04
-url: http://localhost:3000/
+url: https://app.terav.fit/
 horizontal overflow: false
 
 Skip to content
@@ -405,7 +405,7 @@ Profile
 Intake steps walked: 4
 
 ## 07-today-day-1
-url: http://localhost:3000/
+url: https://app.terav.fit/
 horizontal overflow: false
 
 Skip to content
@@ -470,7 +470,7 @@ Record
 Profile
 
 ## 08-first-session
-url: http://localhost:3000/session/first-strict-pullup/
+url: https://app.terav.fit/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
@@ -513,7 +513,7 @@ Record
 Profile
 
 ## 09-first-session-bottom
-url: http://localhost:3000/session/first-strict-pullup/
+url: https://app.terav.fit/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
