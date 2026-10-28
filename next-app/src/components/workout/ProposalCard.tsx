@@ -1,5 +1,6 @@
 "use client";
 
+import { plainReason } from "@/components/today/plain-reason";
 import { ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { CitationRef } from "@/components/citations/CitationRef";
@@ -63,7 +64,7 @@ export function ProposalCard({
             </h2>
           ) : null}
           <p className="text-small text-ink mt-1 leading-snug">
-            <span className="text-muted">Because:</span> {proposal.reason}
+            {plainReason(proposal.reason)}
           </p>
           {proposal.kind === "tm_bump" ? (
             <ul className="font-mono text-caption text-ink mt-1 space-y-0.5">

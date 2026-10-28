@@ -235,7 +235,9 @@ export function FollowAlong({
     onPrimary = paused ? resume : pause;
   } else if (repWork) {
     primaryLabel = "Set done";
-    onPrimary = () => completeSet(count, null);
+    // Not counting reps is normal: "Set done" with an untouched counter means the
+    // set as prescribed. Logging nothing here lost every set a user didn't count.
+    onPrimary = () => completeSet(count > 0 ? count : (step.reps ?? 1), null);
   } else if (phase === "rest") {
     primaryLabel = paused ? "Resume" : "Skip rest";
     onPrimary = paused ? resume : () => goTo(idx + 1);
@@ -383,7 +385,7 @@ export function FollowAlong({
                 </button>
               ) : null}
 
-              <div className="flex min-h-0 flex-grow flex-col items-center justify-center gap-2">
+              <div className="flex min-h-0 flex-grow flex-col items-center justify-center-safe gap-2 overflow-y-auto">
                 <button
                   type="button"
                   onClick={repWork ? () => {
@@ -393,7 +395,7 @@ export function FollowAlong({
                   } : undefined}
                   disabled={!repWork}
                   aria-label={repWork ? `Rep ${count} of ${step.reps}. Tap to count the next rep` : `${big} ${caption}`}
-                  className="relative h-[176px] w-[176px] flex-shrink-0 disabled:cursor-default [@media(max-height:700px)]:h-[148px] [@media(max-height:700px)]:w-[148px]"
+                  className="relative h-[176px] w-[176px] flex-shrink-0 disabled:cursor-default [@media(max-height:700px)]:h-[124px] [@media(max-height:700px)]:w-[124px]"
                 >
                   <svg width="100%" height="100%" viewBox="0 0 176 176" aria-hidden="true" className="absolute inset-0">
                     <circle cx="88" cy="88" r="80" fill="#16181c" stroke="#24272f" strokeWidth="10" />

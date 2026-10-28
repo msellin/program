@@ -286,7 +286,7 @@
       },
       {
         "id": "hypertension_unmanaged",
-        "label": "Do you have high blood pressure that isn't under control? (Over 160/100 at rest, or diagnosed but not on medication — uncontrolled hypertension.)",
+        "label": "High blood pressure that isn't controlled? (Over 160/100 at rest, or untreated.)",
         "type": "select",
         "required": true,
         "options": [
@@ -321,7 +321,7 @@
       },
       {
         "id": "flaring_joint_tendon",
-        "label": "Do you currently have a joint or tendon condition that flares under load (Achilles, patellar, hip)?",
+        "label": "Does a joint or tendon (Achilles, patellar, hip) flare under load right now?",
         "type": "boolean",
         "required": true
       }

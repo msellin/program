@@ -1,5 +1,6 @@
 "use client";
 
+import { formatMinutes, sessionMinutes } from "@/lib/session-duration";
 import { useState } from "react";
 import { cardClass } from "@/components/ui/Card";
 import { cn } from "@/lib/utils";
@@ -20,6 +21,9 @@ import { ExerciseFigure } from "@/components/follow-along/ExerciseFigure";
 import { figureFor } from "@/lib/figures/exercise-figures";
 
 const ZERO = () => 0;
+
+/** Compact block title: drop the subtitle after an em dash. */
+const shortBlockTitle = (name: string) => humanBlockName(name).split(/\s+[—–]\s+/)[0].trim();
 
 /**
  * Screen 4a (single track) from the Day redesign. Never scrolls past one
@@ -80,11 +84,7 @@ export function BriefView({
   const allFollow = followIds.size > 0 && listRail.length === 0;
   const hero = listRail[0];
   const heroShape: SetShape = hero ? setShape(hero) : { kind: "none" };
-  const totalMinutes = blocks.reduce((sum, b) => {
-    if (!b.duration_min) return sum;
-    const d = Array.isArray(b.duration_min) ? b.duration_min[1] : b.duration_min;
-    return sum + d;
-  }, 0);
+  const totalMinutes = formatMinutes(sessionMinutes(blocks));
   // Count REQUIRED exercises (2026-09-03). "5 exercises" when two of them
   // are a taper week's optional backoff overstates the session and makes
   // the day look heavier than it is — the exact thing the taper is for.
@@ -98,9 +98,9 @@ export function BriefView({
   // duration IS the summary.
   const summary =
     railExercises.length === 0 && totalMinutes
-      ? `About ${totalMinutes} min`
+      ? totalMinutes.charAt(0).toUpperCase() + totalMinutes.slice(1)
       : totalMinutes
-        ? `${requiredRail.length} ${exWord} · about ${totalMinutes} min${optionalSuffix}`
+        ? `${requiredRail.length} ${exWord} · ${totalMinutes}${optionalSuffix}`
         : `${requiredRail.length} ${exWord}${optionalSuffix}`;
 
   const progressLabel = phase ? humanPhaseName(phase.name) : null;
@@ -121,6 +121,17 @@ export function BriefView({
         hero.isLoadable,
       )
     : 0;
+  // Guided days (2026-10-28). A day that is all follow-along has no `hero`,
+  // so heroLoggedCount stayed 0: Start re-opened block 1 after it was done and
+  // "Finish session" never appeared — a finished guided session had no way to
+  // end. Track progress per follow-along block instead.
+  const loggedFor = (r: (typeof railExercises)[number]) =>
+    countLoggedSets(entrySets(store.logs[activeDate]?.exercises[r.key] ?? null), r.isLoadable);
+  const anyLogged = railExercises.some((r) => loggedFor(r) > 0);
+  const nextFollow = followBlocks.find((b) =>
+    railExercises.some((r) => r.blockId === b.id && requiredRowCount(r) > 0 && loggedFor(r) < requiredRowCount(r)),
+  );
+  const guidedAllDone = allFollow && anyLogged && !nextFollow;
   // Prescription-only sessions (2026-08-26).
   //
   // Rowing's six blocks author ZERO items — they are described by a `note`
@@ -156,7 +167,7 @@ export function BriefView({
   const startLabel = isPrescriptionSession
     ? "Log this session"
     : allFollow
-    ? "Start session"
+    ? anyLogged ? "Continue session" : "Start session"
     : !hero
     ? "Start"
     : heroLoggedCount > 0
@@ -165,7 +176,7 @@ export function BriefView({
 
   return (
     <div className="flex flex-col min-h-[calc(100dvh-64px-env(safe-area-inset-bottom))]">
-      <div className="flex-1 space-y-5">
+      <div className="flex-1 space-y-5 pb-2">
         {/* Program name as the eyebrow above the day (same order as Today):
             beside a 32px day name it ran off the edge at 375. */}
         <header className="space-y-1">
@@ -220,13 +231,16 @@ export function BriefView({
                   <button
                     type="button"
                     onClick={() => onFollowAlong(b.id)}
-                    className="flex w-full items-center gap-3 px-3.5 py-3 text-left"
+                    className="flex w-full items-center gap-3 px-3.5 py-2.5 text-left"
                   >
-                    <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-bronze" aria-hidden="true">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="#0e0f12"><polygon points="8 5 19 12 8 19 8 5" /></svg>
+                    <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-bronze" aria-hidden="true">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="#0e0f12"><polygon points="8 5 19 12 8 19 8 5" /></svg>
                     </span>
                     <span className="min-w-0 flex-grow">
-                      <span className="block text-body font-semibold text-strong">Follow along · {humanBlockName(b.name)}</span>
+                      <span className="block truncate text-body font-semibold text-strong">
+                        <span className="sr-only">Follow along · </span>
+                        {shortBlockTitle(b.name)}
+                      </span>
                       <span className="block text-caption text-muted">
                         {b.count} {b.count === 1 ? "move" : "moves"} · with a timer
                       </span>
@@ -242,9 +256,14 @@ export function BriefView({
                             type="button"
                             onClick={() => onFollowAlong(b.id, r.key)}
                             aria-label={`Follow along from ${exerciseListName(r.exercise)}`}
-                            className="flex w-full items-center justify-between gap-3 px-3.5 py-2.5 text-left"
+                            className="flex w-full items-center gap-3 px-3.5 py-2 text-left"
                           >
-                            <span className="min-w-0">
+                            {figureFor(r.exercise.id) ? (
+                              <span className="h-10 w-14 flex-shrink-0 overflow-hidden rounded-md bg-ground" aria-hidden="true">
+                                <ExerciseFigure figure={figureFor(r.exercise.id)!} side="B" playing={false} getElapsed={ZERO} />
+                              </span>
+                            ) : null}
+                            <span className="min-w-0 flex-grow">
                               <span className="block truncate text-small text-strong">{exerciseListName(r.exercise)}</span>
                               <span className="block text-caption text-muted">{railScheme(r)}</span>
                             </span>
@@ -508,11 +527,17 @@ export function BriefView({
           <p className="mb-1.5 text-caption text-muted">Accept the numbers to start</p>
         ) : null}
         <div className="flex gap-2">
-          {heroLoggedCount > 0 && onFinishSession ? (
+          {(heroLoggedCount > 0 || (allFollow && anyLogged)) && onFinishSession && !guidedAllDone ? (
             <Button variant="secondary" onClick={onFinishSession} className="flex-shrink-0">
               Finish session
             </Button>
           ) : null}
+          {guidedAllDone && onFinishSession ? (
+            <Button type="button" onClick={onFinishSession} block>
+              Finish session
+            </Button>
+          ) : null}
+          {guidedAllDone ? null : (
           <Button
             type="button"
             disabled={gateUnresolved}
@@ -521,7 +546,7 @@ export function BriefView({
               // the row IS the session, recorded as an activity (the retest
               // metric reads `runs[]`). Starting the set flow opened an empty shell.
               if (isPrescriptionSession) onOpenSheet("off-plan");
-              else if (allFollow) onFollowAlong?.(followBlocks[0].id);
+              else if (allFollow) onFollowAlong?.((nextFollow ?? followBlocks[0]).id);
               else onStart();
             }}
             block
@@ -529,6 +554,7 @@ export function BriefView({
           >
             <span className="truncate">{startLabel}</span>
           </Button>
+          )}
         </div>
       </div>
 

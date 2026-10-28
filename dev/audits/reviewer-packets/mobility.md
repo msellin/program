@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: 25edb2577ad280f7 -->
+<!-- source-fingerprint: 79594b796ba46675 -->
 
 ## What we are asking
 
@@ -99,11 +99,11 @@ is published too, not quietly dropped.
 - **Recent neck flare or radicular pain into the arm?**  
   `cervical_flare_recent`
   - BLOCKS on ['true'] → "Settle the neck first"
-- **Has one shoulder lost range in ALL directions over weeks or months — including when someone else moves it for you?**  
+- **Has one shoulder lost range in all directions over weeks, even when someone moves it?**  
   `frozen_shoulder` — answers: no, unsure, yes
   - BLOCKS on ['yes'] → "That needs its own protocol"
   - warns, then continues on ['unsure'] → "Worth having that pattern checked"
-- **Sharp, well-localised pain right on top of the shoulder, where the collarbone meets the shoulder blade?**  
+- **Sharp pain right on top of the shoulder, where collarbone meets shoulder blade?**  
   `ac_joint_pain` — answers: no, unsure, yes
   - warns, then continues on ['yes'] → "End-range work can stir that up"
   - warns, then continues on ['unsure'] → "Watch that spot as you load overhead"

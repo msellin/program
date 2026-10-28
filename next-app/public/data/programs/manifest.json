@@ -83,7 +83,7 @@
       "status": "REFERENCED",
       "featured": false,
       "positioning": "main_track",
-      "load_hint": "~1.5-2 hr/week (5 sessions/wk, 4 on Foundation, 15-18 min each)"
+      "load_hint": "~1.5-2 hr/week (5 sessions/wk, 4 on Foundation, 20-30 min each)"
     },
     {
       "id": "concurrent-strength-maintenance",
@@ -205,7 +205,7 @@
       "status": "REFERENCED",
       "featured": false,
       "positioning": "main_track",
-      "load_hint": "~1.5 hr/week (3-4 sessions/wk, 15-30 min each)"
+      "load_hint": "~1.5 hr/week (3-4 sessions/wk, 20-35 min each)"
     },
     {
       "id": "muscle-up",
@@ -242,7 +242,7 @@
       "featured": false,
       "coming_soon": true,
       "positioning": "main_track",
-      "load_hint": "~2-2.5 hr/week (3-4 sessions/wk, 20-35 min each)"
+      "load_hint": "~1.5-2 hr/week (3-4 sessions/wk, 20-30 min each)"
     },
     {
       "id": "engine-builder-block-2",

@@ -1,5 +1,5 @@
 ## 01-today-top
-url: https://app.terav.fit/
+url: http://localhost:3000/
 horizontal overflow: false
 
 Skip to content
@@ -18,7 +18,7 @@ Record
 Profile
 
 ## 01-today-bottom
-url: https://app.terav.fit/
+url: http://localhost:3000/
 horizontal overflow: false
 
 Skip to content
@@ -39,7 +39,7 @@ Profile
 fixed/sticky on 01-today: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=610 h=57
 
 ## 02-plan-top
-url: https://app.terav.fit/plan/
+url: http://localhost:3000/plan/
 horizontal overflow: false
 
 Skip to content
@@ -62,7 +62,7 @@ Mon
 26 Oct
 Skipped
 
-Rest / accessory day
+Skipped session
 
 Unskip
 Tue
@@ -110,7 +110,7 @@ Record
 Profile
 
 ## 02-plan-bottom
-url: https://app.terav.fit/plan/
+url: http://localhost:3000/plan/
 horizontal overflow: false
 
 Skip to content
@@ -133,7 +133,7 @@ Mon
 26 Oct
 Skipped
 
-Rest / accessory day
+Skipped session
 
 Unskip
 Tue
@@ -183,7 +183,7 @@ Profile
 fixed/sticky on 02-plan: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=610 h=57
 
 ## 03-session-top
-url: https://app.terav.fit/session/first-strict-pullup/
+url: http://localhost:3000/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
@@ -203,7 +203,7 @@ Record
 Profile
 
 ## 03-session-bottom
-url: https://app.terav.fit/session/first-strict-pullup/
+url: http://localhost:3000/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
@@ -225,7 +225,7 @@ Profile
 fixed/sticky on 03-session: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=610 h=57
 
 ## 04-record-top
-url: https://app.terav.fit/record/
+url: http://localhost:3000/record/
 horizontal overflow: false
 
 Skip to content
@@ -380,7 +380,7 @@ Profile
 100
 
 ## 04-record-bottom
-url: https://app.terav.fit/record/
+url: http://localhost:3000/record/
 horizontal overflow: false
 
 Skip to content
@@ -537,7 +537,7 @@ Profile
 fixed/sticky on 04-record: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=610 h=57
 
 ## 05-check-top
-url: https://app.terav.fit/check/
+url: http://localhost:3000/check/
 horizontal overflow: false
 
 Skip to content
@@ -600,7 +600,7 @@ Record
 Profile
 
 ## 05-check-bottom
-url: https://app.terav.fit/check/
+url: http://localhost:3000/check/
 horizontal overflow: false
 
 Skip to content
@@ -662,10 +662,10 @@ Plan
 Record
 Profile
 
-fixed/sticky on 05-check: div.fixed left-0 right-0 z-50 border-t borde @y=530 h=73 | nav.fixed left-0 right-0 bottom-0 z-40 borde @y=610 h=57
+fixed/sticky on 05-check: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=610 h=57
 
 ## 06-programs-top
-url: https://app.terav.fit/programs/
+url: http://localhost:3000/programs/
 horizontal overflow: false
 
 Skip to content
@@ -751,7 +751,7 @@ From wall holds to walking on your hands. Each session trains what holds you bac
 8 wk
 ALL LEVELS
 ·
-~1.5-2 hr/week (5 sessions/wk, 4 on Foundation, 15-18 min each)
+~1.5-2 hr/week (5 sessions/wk, 4 on Foundation, 20-30 min each)
 First Strict Pull-Up
 ACTIVE
 CITED
@@ -761,10 +761,10 @@ From a dead hang to your first strict pull-up, then more. Each session trains yo
 8 wk
 ALL LEVELS
 ·
-~1.5 hr/week (3-4 sessions/wk, 15-30 min ea
+~1.5 hr/week (3-4 sessions/wk, 20-35 min ea
 
 ## 06-programs-bottom
-url: https://app.terav.fit/programs/
+url: http://localhost:3000/programs/
 horizontal overflow: false
 
 Skip to content
@@ -850,7 +850,7 @@ From wall holds to walking on your hands. Each session trains what holds you bac
 8 wk
 ALL LEVELS
 ·
-~1.5-2 hr/week (5 sessions/wk, 4 on Foundation, 15-18 min each)
+~1.5-2 hr/week (5 sessions/wk, 4 on Foundation, 20-30 min each)
 First Strict Pull-Up
 ACTIVE
 CITED
@@ -860,12 +860,12 @@ From a dead hang to your first strict pull-up, then more. Each session trains yo
 8 wk
 ALL LEVELS
 ·
-~1.5 hr/week (3-4 sessions/wk, 15-30 min ea
+~1.5 hr/week (3-4 sessions/wk, 20-35 min ea
 
 fixed/sticky on 06-programs: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=610 h=57
 
 ## 07-profile-top
-url: https://app.terav.fit/profile/
+url: http://localhost:3000/profile/
 horizontal overflow: false
 
 Skip to content
@@ -914,7 +914,7 @@ Record
 Profile
 
 ## 07-profile-bottom
-url: https://app.terav.fit/profile/
+url: http://localhost:3000/profile/
 horizontal overflow: false
 
 Skip to content
@@ -965,7 +965,7 @@ Profile
 fixed/sticky on 07-profile: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=610 h=57
 
 ## 08-account-top
-url: https://app.terav.fit/account/
+url: http://localhost:3000/account/
 horizontal overflow: false
 
 Skip to content
@@ -998,7 +998,7 @@ Record
 Profile
 
 ## 08-account-bottom
-url: https://app.terav.fit/account/
+url: http://localhost:3000/account/
 horizontal overflow: false
 
 Skip to content
@@ -1033,7 +1033,7 @@ Profile
 fixed/sticky on 08-account: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=610 h=57
 
 ## 09-settings-top
-url: https://app.terav.fit/settings/
+url: http://localhost:3000/settings/
 horizontal overflow: false
 
 Skip to content
@@ -1072,7 +1072,7 @@ Record
 Profile
 
 ## 09-settings-bottom
-url: https://app.terav.fit/settings/
+url: http://localhost:3000/settings/
 horizontal overflow: false
 
 Skip to content
@@ -1113,7 +1113,7 @@ Profile
 fixed/sticky on 09-settings: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=610 h=57
 
 ## 10-off-plan-top
-url: https://app.terav.fit/off-plan/
+url: http://localhost:3000/off-plan/
 horizontal overflow: false
 
 Skip to content
@@ -1177,7 +1177,7 @@ Partial-ROM pull-up (top half)
 Grip-width variet
 
 ## 10-off-plan-bottom
-url: https://app.terav.fit/off-plan/
+url: http://localhost:3000/off-plan/
 horizontal overflow: false
 
 Skip to content

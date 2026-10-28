@@ -50,7 +50,7 @@ Eccentric training produces great
 CTA href from the pull-up landing page: https://app.terav.fit/sign-up?next=%2Fprograms%2Ffirst-strict-pullup&utm_campaign=gap-test
 
 ## 02-sign-up-page-not-submitted
-url: https://app.terav.fit/sign-up/
+url: http://localhost:3000/sign-up/
 horizontal overflow: false
 
 Sign up
@@ -69,7 +69,7 @@ Create account
 Already have an account? Sign in
 
 ## 03-first-screen-after-sign-in
-url: https://app.terav.fit/
+url: http://localhost:3000/
 horizontal overflow: false
 
 Skip to content
@@ -84,7 +84,7 @@ Record
 Profile
 
 ## 04-programs
-url: https://app.terav.fit/programs/
+url: http://localhost:3000/programs/
 horizontal overflow: false
 
 Skip to content
@@ -170,7 +170,7 @@ From wall holds to walking on your hands. Each session trains what holds you bac
 8 wk
 ALL LEVELS
 ·
-~1.5-2 hr/week (5 sessions/wk, 4 on Foundation, 15-18 min each)
+~1.5-2 hr/week (5 sessions/wk, 4 on Foundation, 20-30 min each)
 First Strict Pull-Up
 CITED
 
@@ -179,11 +179,11 @@ From a dead hang to your first strict pull-up, then more. Each session trains yo
 8 wk
 ALL LEVELS
 ·
-~1.5 hr/week (3-4 sessions/wk, 15-30 min each)
+~1.5 hr/week (3-4 sessions/wk, 20-35 min each)
 Mus
 
 ## 05-program-detail
-url: https://app.terav.fit/programs/first-strict-pullup/
+url: http://localhost:3000/programs/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
@@ -197,7 +197,7 @@ From a dead hang to your first strict pull-up, then more. Each session trains yo
 WEEKS
 2–5
 DAYS / WEEK
-15–30
+20–35
 MINUTES
 1
 No hang yet
@@ -222,7 +222,7 @@ Record
 Profile
 
 ## 06-intake-01
-url: https://app.terav.fit/programs/first-strict-pullup/intake/
+url: http://localhost:3000/programs/first-strict-pullup/intake/
 horizontal overflow: false
 
 Skip to content
@@ -241,10 +241,12 @@ Multiple reps, adding volume
 Strict pull-up at least 3 reps
 Continue
 
+Pick the one closest to you
+
 Detailed setup (about 5 min)
 
 ## 06-intake-02
-url: https://app.terav.fit/programs/first-strict-pullup/intake/
+url: http://localhost:3000/programs/first-strict-pullup/intake/
 horizontal overflow: false
 
 Skip to content
@@ -270,7 +272,7 @@ No
 Resolved > 3 months ago
 Currently symptomatic
 
-Do you have an acute shoulder injury (rotator cuff tear, labral tear, dislocation) in the last 6 months?
+Acute shoulder injury (cuff or labral tear, dislocation) in the last 6 months?
 
 No
 Yes
@@ -291,7 +293,7 @@ Continue
 Detailed setup (about 5 min)
 
 ## 06-intake-03
-url: https://app.terav.fit/programs/first-strict-pullup/intake/
+url: http://localhost:3000/programs/first-strict-pullup/intake/
 horizontal overflow: false
 
 Skip to content
@@ -320,7 +322,7 @@ WEEKS
 
 MINUTES
 
-15
+25
 
 DAYS / WEEK
 
@@ -329,7 +331,7 @@ DAYS / WEEK
 4
 5
 
-Typically by week 8: 25-45 second dead hang, first clean scapular pulls, and 5-10 strict feet-elevated ring rows.
+Often by week 8: 25-45 second dead hang, first clean scapular pulls, and 5-10 strict feet-elevated ring rows.
 
 Not medical advice. I'll see a clinician for shoulder or elbow pain that lasts past a session.
 I'll stop if shoulder pain appears in a hang or pull. No training through it.
@@ -338,7 +340,7 @@ Start
 Detailed setup (about 5 min)
 
 ## 06-intake-04
-url: https://app.terav.fit/
+url: http://localhost:3000/
 horizontal overflow: false
 
 Skip to content
@@ -349,35 +351,13 @@ First Strict Pull-Up
 FIRST STRICT PULL-UP
 1/8
 
-SETUP · ONE MINUTE
-
-Week 1. Start with your first session.
-
-Do it at an easy effort and log what you get. A morning check is optional.
-
-Start your first session
-Do a morning check first
-Today
-
-No check yet
-
-Save a morning check to calibrate today's load.
-
-Find your exact level
-
-A few quick tests sharpen your plan.
-
-Start tests
-
-Drills run in a set order while you learn them. Why?
-
 TODAY
 
 3 blocks · 6 exercises
 
-Hang, scap, row base · week 1 of 8 · ends 22 Dec
+Week 1. Start with your first session at an easy effort.
 
-ABOUT 32 MIN
+25–30 MIN
 
 · Row strength — closed-chain pull
 · Scapular pull ladder
@@ -389,7 +369,15 @@ T
 F
 S
 S
-Open session
+Start your first session
+Do a morning check first
+
+Find your exact level
+
+A few quick tests sharpen your plan.
+
+Start tests
+Drills run in a set order while you learn them. Why?
 
 Log extra session →
 
@@ -405,7 +393,7 @@ Profile
 Intake steps walked: 4
 
 ## 07-today-day-1
-url: https://app.terav.fit/
+url: http://localhost:3000/
 horizontal overflow: false
 
 Skip to content
@@ -416,35 +404,13 @@ First Strict Pull-Up
 FIRST STRICT PULL-UP
 1/8
 
-SETUP · ONE MINUTE
-
-Week 1. Start with your first session.
-
-Do it at an easy effort and log what you get. A morning check is optional.
-
-Start your first session
-Do a morning check first
-Today
-
-No check yet
-
-Save a morning check to calibrate today's load.
-
-Find your exact level
-
-A few quick tests sharpen your plan.
-
-Start tests
-
-Drills run in a set order while you learn them. Why?
-
 TODAY
 
 3 blocks · 6 exercises
 
-Hang, scap, row base · week 1 of 8 · ends 22 Dec
+Week 1. Start with your first session at an easy effort.
 
-ABOUT 32 MIN
+25–30 MIN
 
 · Row strength — closed-chain pull
 · Scapular pull ladder
@@ -456,7 +422,15 @@ T
 F
 S
 S
-Open session
+Start your first session
+Do a morning check first
+
+Find your exact level
+
+A few quick tests sharpen your plan.
+
+Start tests
+Drills run in a set order while you learn them. Why?
 
 Log extra session →
 
@@ -470,7 +444,7 @@ Record
 Profile
 
 ## 08-first-session
-url: https://app.terav.fit/session/first-strict-pullup/
+url: http://localhost:3000/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
@@ -479,11 +453,12 @@ FIRST STRICT PULL-UP
 
 Wednesday
 
-5 exercises · about 32 min · +1 optional
+5 exercises · 25–30 min · +1 optional
 
 Hang, scap, row base · week 1 of 8 · ends 22 Dec
 
-Follow along · Row strength — closed-chain pull
+Follow along ·
+Row strength
 3 moves · with a timer
 Ring row (incline, easy)
 3 sets
@@ -491,14 +466,16 @@ Ring row (horizontal)
 4 sets
 Ring row (feet elevated)
 4 sets
-Follow along · Scapular pull ladder
+Follow along ·
+Scapular pull ladder
 2 moves · with a timer
 Scapular pull-up
 4 sets
 Scap retraction hold at top
 3 sets
 OPTIONAL
-Follow along · Shoulder + grip prep — every session
+Follow along ·
+Shoulder + grip prep
 1 move · with a timer
 Band shoulder prep (I-Y-T + face pull)
 2 sets
@@ -513,7 +490,7 @@ Record
 Profile
 
 ## 09-first-session-bottom
-url: https://app.terav.fit/session/first-strict-pullup/
+url: http://localhost:3000/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
@@ -522,11 +499,12 @@ FIRST STRICT PULL-UP
 
 Wednesday
 
-5 exercises · about 32 min · +1 optional
+5 exercises · 25–30 min · +1 optional
 
 Hang, scap, row base · week 1 of 8 · ends 22 Dec
 
-Follow along · Row strength — closed-chain pull
+Follow along ·
+Row strength
 3 moves · with a timer
 Ring row (incline, easy)
 3 sets
@@ -534,14 +512,16 @@ Ring row (horizontal)
 4 sets
 Ring row (feet elevated)
 4 sets
-Follow along · Scapular pull ladder
+Follow along ·
+Scapular pull ladder
 2 moves · with a timer
 Scapular pull-up
 4 sets
 Scap retraction hold at top
 3 sets
 OPTIONAL
-Follow along · Shoulder + grip prep — every session
+Follow along ·
+Shoulder + grip prep
 1 move · with a timer
 Band shoulder prep (I-Y-T + face pull)
 2 sets
@@ -550,6 +530,112 @@ How to run this
 Log an extra session
 ›
 Start session
+Today
+Plan
+Record
+Profile
+
+## 10-session-done
+url: http://localhost:3000/session/first-strict-pullup/
+horizontal overflow: false
+
+Skip to content
+Done
+
+11 sets across 3 movements.
+
+11
+SETS
+3
+MOVEMENTS
+86
+REPS
+
+BEST SET
+
+10 reps
+
+Ring row
+
+1
+No hang yet
+(you are here)
+2
+Hang established, no strict rep yet
+3
+One strict rep, building the second
+4
+Multiple reps, adding volume
+
+Next level: Hang established, no strict rep yet.
+
+NEXT SESSION
+
+Friday 30 Oct
+
+Row strength — closed-chain pull
+
+Ring row
+3 sets
+Ring row
+4 sets
+Ring row
+4 sets
+Back to Today
+Session done.
+Today
+Plan
+Record
+Profile
+
+## 10-session-done-bottom
+url: http://localhost:3000/session/first-strict-pullup/
+horizontal overflow: false
+
+Skip to content
+Done
+
+11 sets across 3 movements.
+
+11
+SETS
+3
+MOVEMENTS
+86
+REPS
+
+BEST SET
+
+10 reps
+
+Ring row
+
+1
+No hang yet
+(you are here)
+2
+Hang established, no strict rep yet
+3
+One strict rep, building the second
+4
+Multiple reps, adding volume
+
+Next level: Hang established, no strict rep yet.
+
+NEXT SESSION
+
+Friday 30 Oct
+
+Row strength — closed-chain pull
+
+Ring row
+3 sets
+Ring row
+4 sets
+Ring row
+4 sets
+Back to Today
+Session done.
 Today
 Plan
 Record

@@ -83,15 +83,15 @@ export function readCondition(program: Program, condition: string): string | nul
   return out.charAt(0).toUpperCase() + out.slice(1);
 }
 
-/** "By week 8-10: first rep" -> "Typically by week 8-10: first rep". Never a promise. */
+/** "By week 8-10: first rep" -> "Often by week 8-10: first rep". Never a promise. */
 export function outcomeLine(tier: PlanTier, fallbackWeeks: number | undefined): string {
   const text = tier.typical_outcome.trim();
   const m = text.match(/^by\s+(weeks?\s+[\d\s\-–]+?)\s*:\s*(.+)$/i);
   if (m) {
-    return `Typically by ${m[1].trim().toLowerCase()}: ${m[2].charAt(0).toLowerCase()}${m[2].slice(1)}`;
+    return `Often by ${m[1].trim().toLowerCase()}: ${m[2].charAt(0).toLowerCase()}${m[2].slice(1)}`;
   }
   const body = text.charAt(0).toLowerCase() + text.slice(1);
-  return fallbackWeeks ? `Typically by week ${fallbackWeeks}: ${body}` : `Typically: ${body}`;
+  return fallbackWeeks ? `Often by week ${fallbackWeeks}: ${body}` : `Often: ${body}`;
 }
 
 function adj(tier: PlanTier, key: string): number | undefined {

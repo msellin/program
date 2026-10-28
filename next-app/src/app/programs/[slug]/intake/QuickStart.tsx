@@ -216,6 +216,11 @@ export function QuickStart({
           <Button block disabled={!tier} onClick={() => setStep("safety")}>
             Continue
           </Button>
+          {!tier ? (
+            <p className="text-center text-small text-muted" role="status">
+              Pick the one closest to you
+            </p>
+          ) : null}
         </section>
       ) : null}
 
@@ -374,8 +379,8 @@ export function QuickStart({
         </section>
       ) : null}
 
-      <p className="pt-2 text-center">
-        <Link href={fullHref} className="text-caption text-muted underline underline-offset-2 hover:text-ink">
+      <p className="text-center">
+        <Link href={fullHref} className="inline-flex min-h-[44px] items-center px-3 text-caption text-muted underline underline-offset-2 hover:text-ink">
           Detailed setup (about 5 min)
         </Link>
       </p>

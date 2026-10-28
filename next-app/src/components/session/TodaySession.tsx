@@ -1,5 +1,6 @@
 "use client";
 
+import { formatMinutes, sessionMinutes } from "@/lib/session-duration";
 import { useEffect, useState } from "react";
 import { cardClass } from "@/components/ui/Card";
 import Link from "next/link";
@@ -240,6 +241,14 @@ export function TodaySession({
     return { program: p, blocks: composed, scheduled: [] as ScheduledBlock[] };
   });
   const allBlocks = groups.flatMap((g) => g.blocks);
+  // Day 1: a fresh sign-up with a session today sees the hero, not a setup card.
+  const day1Hero =
+    !hasHistory &&
+    !logs[activeDate]?.symptoms &&
+    activeDate === todayISO() &&
+    allBlocks.length > 0 &&
+    !!primary?.slug;
+  const showHero = allBlocks.length > 0 && !isPastProgramEnd(primary, activeDate, userProfile);
   // P-01/P-02: on a red day Today is one rest card. Display only; the gate is unchanged.
   const redToday =
     activeDate === todayISO() ? redDayDirective(primary, logs, activeDate) : null;
@@ -338,9 +347,91 @@ export function TodaySession({
         </p>
       ) : null}
 
+      {showHero ? (
+        <>
+          {groups.map((g, gi) => {
+            if (g.blocks.length === 0) return null;
+            const groupPhase = gi === 0 ? phase : activePhaseFor(g.program, activeDate, userProfile);
+            const totalExercises = g.blocks.reduce(
+              (n, b) => n + (b.items?.length ?? 0),
+              0,
+            );
+            const blockWord = g.blocks.length === 1 ? "block" : "blocks";
+            const exWord = totalExercises === 1 ? "exercise" : "exercises";
+            // Blocks that prescribe in prose rather than sets — every
+            // rowing block is one — counted as zero exercises, so Day
+            // announced "1 block · 0 exercises" for a 40-minute threshold
+            // row. Give the duration those blocks actually author.
+            const prescriptionMinutes = formatMinutes(
+              sessionMinutes(g.blocks.filter((b) => (b.items?.length ?? 0) === 0)),
+            );
+            const summary =
+              totalExercises === 0 && prescriptionMinutes
+                ? `${g.blocks.length} ${blockWord} · ${prescriptionMinutes}`
+                : `${g.blocks.length} ${blockWord} · ${totalExercises} ${exWord}`;
+            // Batch 33 · M6 · category accent stripe on the workout summary
+            // block. Same DashboardBlock `accent` prop already used on the
+            // Programs catalog. Mapping cribbed from CATEGORY_ACCENT in
+            // src/app/programs/page.tsx — rehab/skill/mobility=slate,
+            // strength=bronze, endurance=green, hyrox=amber. Falls back
+            // to "default" (no stripe) for unknown categories.
+            const category = programManifest?.programs.find(
+              (p) => p.slug === g.program.slug,
+            )?.category;
+            const accent: "slate" | "bronze" | "green" | "amber" | "default" =
+              category === "strength"
+                ? "bronze"
+                : category === "endurance"
+                  ? "green"
+                  : category === "hyrox"
+                    ? "amber"
+                    : category === "rehab" ||
+                        category === "skill" ||
+                        category === "asymmetry"
+                      ? "slate"
+                      : "default";
+            return (
+              <TodayHero
+                day1={day1Hero && gi === 0}
+                key={`summary:${g.program.schema_version}:${gi}`}
+                accent={accent === "amber" || accent === "green" ? accent : undefined}
+                eyebrow={
+                  groupsWithBlocks.length > 1
+                    ? `Today · ${programDisplayName(g.program, activeSlugs[gi])}`
+                    : "Today"
+                }
+                title={summary}
+                lede={
+                  day1Hero && gi === 0
+                    ? "Week 1. Start with your first session at an easy effort."
+                    : groupPhase
+                    ? `${humanPhaseName(groupPhase.name)}${(() => { const pp = programProgress(g.program, activeDate, userProfile); return pp ? ` · week ${pp.weekN} of ${pp.totalWeeks} · ends ${endsLabel(pp.endsOn)}` : ""; })()}`
+                    : undefined
+                }
+                blocks={g.blocks}
+                startHref={g.program.slug ? `/session/${g.program.slug}?date=${activeDate}` : undefined}
+                weekStart={gi === 0 && weekDays ? weekDays.start : undefined}
+                weekDays={gi === 0 && weekDays ? weekDays.days : undefined}
+              >
+                <ul className="text-caption text-muted space-y-0.5">
+                  {g.blocks.slice(0, 5).map((b) => (
+                    <li key={b.id} className="truncate">
+                      · {humanBlockName(b.name)}
+                    </li>
+                  ))}
+                  {g.blocks.length > 5 ? (
+                    <li className="text-muted/60">+ {g.blocks.length - 5} more</li>
+                  ) : null}
+                </ul>
+              </TodayHero>
+            );
+          })}
+        </>
+      ) : null}
+
       {(() => {
         const noCheckToday = !logs[activeDate]?.symptoms;
-        if (!hasHistory && noCheckToday && activeDate === todayISO()) {
+        if (!day1Hero && !hasHistory && noCheckToday && activeDate === todayISO()) {
           return (
             <Day1EmptyState
               slug={primary?.slug}
@@ -360,7 +451,7 @@ export function TodaySession({
           {/* A fresh sign-up has no log for the engine to propose against. */}
           {hasHistory ? <ProposalStack program={primary} date={activeDate} /> : null}
           {/* A-UX-03: no readiness hero ("Workout ready") on a rest day. */}
-          {allBlocks.length > 0 ? <HeroStateCard date={activeDate} /> : null}
+          {allBlocks.length > 0 && !day1Hero ? <HeroStateCard date={activeDate} /> : null}
           <SignalsStrip program={primary} date={activeDate} />
           <RetestReminder program={primary} profile={userProfile} activeDate={activeDate} />
           {/* The quick start skips the physical tests. Offer them here, never on a red day
@@ -589,83 +680,6 @@ export function TodaySession({
            workout at a glance and dive into the focused session
            (/session/[slug], DaySession.tsx) only when ready to work. */
         <>
-          {groups.map((g, gi) => {
-            if (g.blocks.length === 0) return null;
-            const groupPhase = gi === 0 ? phase : activePhaseFor(g.program, activeDate, userProfile);
-            const totalExercises = g.blocks.reduce(
-              (n, b) => n + (b.items?.length ?? 0),
-              0,
-            );
-            const blockWord = g.blocks.length === 1 ? "block" : "blocks";
-            const exWord = totalExercises === 1 ? "exercise" : "exercises";
-            // Blocks that prescribe in prose rather than sets — every
-            // rowing block is one — counted as zero exercises, so Day
-            // announced "1 block · 0 exercises" for a 40-minute threshold
-            // row. Give the duration those blocks actually author.
-            const prescriptionMinutes = g.blocks.reduce((n, b) => {
-              if ((b.items?.length ?? 0) > 0) return n;
-              const d = (b as unknown as { duration_min?: number | number[] }).duration_min;
-              if (Array.isArray(d)) return n + (d[1] ?? d[0] ?? 0);
-              return n + (typeof d === "number" ? d : 0);
-            }, 0);
-            const summary =
-              totalExercises === 0 && prescriptionMinutes > 0
-                ? `${g.blocks.length} ${blockWord} · about ${prescriptionMinutes} min`
-                : `${g.blocks.length} ${blockWord} · ${totalExercises} ${exWord}`;
-            // Batch 33 · M6 · category accent stripe on the workout summary
-            // block. Same DashboardBlock `accent` prop already used on the
-            // Programs catalog. Mapping cribbed from CATEGORY_ACCENT in
-            // src/app/programs/page.tsx — rehab/skill/mobility=slate,
-            // strength=bronze, endurance=green, hyrox=amber. Falls back
-            // to "default" (no stripe) for unknown categories.
-            const category = programManifest?.programs.find(
-              (p) => p.slug === g.program.slug,
-            )?.category;
-            const accent: "slate" | "bronze" | "green" | "amber" | "default" =
-              category === "strength"
-                ? "bronze"
-                : category === "endurance"
-                  ? "green"
-                  : category === "hyrox"
-                    ? "amber"
-                    : category === "rehab" ||
-                        category === "skill" ||
-                        category === "asymmetry"
-                      ? "slate"
-                      : "default";
-            return (
-              <TodayHero
-                key={`summary:${g.program.schema_version}:${gi}`}
-                accent={accent === "amber" || accent === "green" ? accent : undefined}
-                eyebrow={
-                  groupsWithBlocks.length > 1
-                    ? `Today · ${programDisplayName(g.program, activeSlugs[gi])}`
-                    : "Today"
-                }
-                title={summary}
-                lede={
-                  groupPhase
-                    ? `${humanPhaseName(groupPhase.name)}${(() => { const pp = programProgress(g.program, activeDate, userProfile); return pp ? ` · week ${pp.weekN} of ${pp.totalWeeks} · ends ${endsLabel(pp.endsOn)}` : ""; })()}`
-                    : undefined
-                }
-                blocks={g.blocks}
-                startHref={g.program.slug ? `/session/${g.program.slug}?date=${activeDate}` : undefined}
-                weekStart={gi === 0 && weekDays ? weekDays.start : undefined}
-                weekDays={gi === 0 && weekDays ? weekDays.days : undefined}
-              >
-                <ul className="text-caption text-muted space-y-0.5">
-                  {g.blocks.slice(0, 5).map((b) => (
-                    <li key={b.id} className="truncate">
-                      · {humanBlockName(b.name)}
-                    </li>
-                  ))}
-                  {g.blocks.length > 5 ? (
-                    <li className="text-muted/60">+ {g.blocks.length - 5} more</li>
-                  ) : null}
-                </ul>
-              </TodayHero>
-            );
-          })}
           {/* Day's off-plan card removed 2026-08-24. It was the third
               surface for the same thing (Profile row + the Brief's
               activity footer being the others), and it advertised

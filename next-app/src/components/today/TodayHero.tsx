@@ -1,5 +1,6 @@
 "use client";
 
+import { formatMinutes, sessionMinutes } from "@/lib/session-duration";
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
@@ -22,17 +23,6 @@ export function leadFigureId(blocks: Block[]): string | null {
   return null;
 }
 
-/** Authored minutes for the day: block duration, else its segments. Null when nothing is authored. */
-export function estimatedMinutes(blocks: Block[]): number | null {
-  let total = 0;
-  for (const b of blocks) {
-    const d = b.duration_min;
-    if (Array.isArray(d)) total += d[1] ?? d[0] ?? 0;
-    else if (typeof d === "number") total += d;
-    else total += (b.segments ?? []).reduce((n, s) => n + (s.duration_min ?? 0), 0);
-  }
-  return total > 0 ? Math.round(total) : null;
-}
 
 function LeadFigure({ figure }: { figure: string }) {
   const [start, setStart] = useState(0);
@@ -55,6 +45,8 @@ type Props = {
   startHref?: string;
   weekStart?: string;
   weekDays?: WeeklySessionStripDay[];
+  /** First run: the primary button reads "Start your first session" and a morning check is offered beside it. */
+  day1?: boolean;
   /** Short block list under the title; kept so the plan stays scannable. */
   children?: ReactNode;
 };
@@ -63,9 +55,9 @@ type Props = {
  * One hero card for a training day: lead figure, title, minutes and the Start
  * button. Never rendered on a red day; TodaySession returns the rest card first.
  */
-export function TodayHero({ eyebrow, title, lede, blocks, accent, startHref, weekStart, weekDays, children }: Props) {
+export function TodayHero({ eyebrow, title, lede, blocks, accent, startHref, weekStart, weekDays, day1, children }: Props) {
   const figure = leadFigureId(blocks);
-  const minutes = estimatedMinutes(blocks);
+  const minutes = formatMinutes(sessionMinutes(blocks));
   return (
     <section className={cn(cardClass({ status: accent }), "space-y-4")}>
       <div className="flex items-start gap-4">
@@ -76,7 +68,7 @@ export function TodayHero({ eyebrow, title, lede, blocks, accent, startHref, wee
           {lede ? <p className="text-small text-muted">{lede}</p> : null}
           {minutes ? (
             <p className="font-mono text-eyebrow uppercase tracking-widest text-muted tabular-nums">
-              About {minutes} min
+              {minutes}
             </p>
           ) : null}
         </div>
@@ -88,8 +80,13 @@ export function TodayHero({ eyebrow, title, lede, blocks, accent, startHref, wee
           href={startHref}
           className="inline-flex min-h-[44px] w-full items-center justify-center gap-1.5 rounded-lg border border-bronze bg-bronze px-3.5 py-2 text-small font-semibold text-ground hover:bg-bronze-hover active:bg-bronze-active"
         >
-          Open session
+          {day1 ? "Start your first session" : "Open session"}
           <ChevronRight size={14} />
+        </Link>
+      ) : null}
+      {startHref && day1 ? (
+        <Link href="/check/" className="block text-center text-small text-slate underline underline-offset-2">
+          Do a morning check first
         </Link>
       ) : null}
     </section>

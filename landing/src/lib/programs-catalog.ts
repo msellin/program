@@ -282,7 +282,7 @@ export const PROGRAMS: LandingProgram[] = [
       "You want a strict pull-up — not a kipping one. That's a different skill.",
       "You can't dead-hang 15 seconds yet, or you get 1-2 and want 5.",
       "You'd rather train the weakest link than just do more pull-ups.",
-      "You have a bar and a band, and 15-30 minutes, three or four times a week.",
+      "You have a bar and a band, and 20-35 minutes, three or four times a week.",
     ],
     arcSummary:
       "Four tiers — Hang, Assisted, First Rep, Volume. Intake places you, then each week targets whichever sub-capability is furthest behind: grip, scapular control, row strength, or negative control. A beginner spends weeks on hangs and scap pulls before touching a full rep; a first-repper goes straight to volume work.",
@@ -328,7 +328,7 @@ export const PROGRAMS: LandingProgram[] = [
       "You have strict pull-ups and ring dips, and the muscle-up still isn't there.",
       "You've worked out it's not the pull and not the dip — it's the bit between.",
       "You want the strict ring version, built deliberately.",
-      "You have rings and 20-35 minutes, three or four times a week.",
+      "You have rings and 20-30 minutes, three or four times a week.",
     ],
     arcSummary:
       "Three tiers — Prep, Transition, First Rep. The transition gets isolated and drilled on its own: seated-band, low-ring negatives, then full attempts, while false-grip strength and ring-dip capacity are built alongside so the rep isn't gated on them.",

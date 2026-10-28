@@ -86,7 +86,7 @@
     "questions": [
       {
         "id": "block_1_completed",
-        "label": "Did you complete Engine Builder Block 1 (or a comparable 8-week aerobic base) within the last 4 weeks?",
+        "label": "Finished Engine Builder Block 1 (or a similar base) in the last 4 weeks?",
         "type": "select",
         "required": true,
         "help": "Block 2 assumes a base. Without one, you'll under-adapt and over-fatigue. If you finished Block 1 recently, this is the natural next step.",

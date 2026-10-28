@@ -152,6 +152,48 @@ test("A · stranger first run at 375×667", async ({ page }) => {
   await shot(page, "A-first-run", "08-first-session", notes);
   await page.mouse.wheel(0, 4000);
   await shot(page, "A-first-run", "09-first-session-bottom", notes);
+
+  // Complete session 1 the way a user would. Day 1 is guided follow-along, so
+  // play it: Start, count reps, Set done, skip rests; holds run their timer.
+  // Back on the Brief, start the next block, then "Finish session". Fails
+  // loudly if no done screen appears.
+  await page.goto("/session/first-strict-pullup/");
+  await page.waitForTimeout(1200);
+  const done = page.getByRole("button", { name: /back to today/i }).or(page.getByRole("link", { name: /back to today/i }));
+  const deadline = Date.now() + 240_000;
+  while (Date.now() < deadline && (await done.count()) === 0) {
+    const btn = (re: RegExp) => page.getByRole("button", { name: re }).first();
+    if (await btn(/^Set done$/).isVisible().catch(() => false)) {
+      const logAll = btn(/^Log all \d+$/);
+      if (await logAll.isVisible().catch(() => false)) {
+        await logAll.click();
+        await page.waitForTimeout(300);
+      }
+      if (await btn(/^Set done$/).isVisible().catch(() => false)) await btn(/^Set done$/).click();
+    } else if (await btn(/^Skip rest$/).isVisible().catch(() => false)) {
+      await btn(/^Skip rest$/).click();
+    } else if (await btn(/^Start$/).isVisible().catch(() => false)) {
+      await btn(/^Start$/).click();
+      await page.waitForTimeout(3300);
+      continue;
+    } else if (await btn(/^Pause$/).isVisible().catch(() => false)) {
+      await page.waitForTimeout(1000);
+      continue;
+    } else if (await btn(/^Back to session$/).isVisible().catch(() => false)) {
+      await btn(/^Back to session$/).click();
+      await page.waitForTimeout(800);
+    } else if (await btn(/^Finish session$/).isVisible().catch(() => false)) {
+      await btn(/^Finish session$/).click();
+    } else if (await btn(/^(Start|Continue) —|^Start session$|^Continue session$/).isVisible().catch(() => false)) {
+      await btn(/^(Start|Continue) —|^Start session$|^Continue session$/).click();
+    }
+    await page.waitForTimeout(500);
+  }
+  await page.getByRole("button", { name: /back to today/i }).or(page.getByRole("link", { name: /back to today/i }))
+    .first().waitFor({ state: "visible", timeout: 10_000 });
+  await shot(page, "A-first-run", "10-session-done", notes);
+  await page.mouse.wheel(0, 4000);
+  await shot(page, "A-first-run", "10-session-done-bottom", notes);
   fs.writeFileSync(path.join(dir("A-first-run"), "notes.md"), notes.join("\n"));
 });
 

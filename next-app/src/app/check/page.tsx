@@ -36,7 +36,6 @@ import { useStore } from "@/lib/useStore";
 import { today as todayISO } from "@/lib/utils";
 import type { Symptoms } from "@/lib/schemas";
 import { EngineReadsNotesHint } from "@/components/workout/EngineReadsNotesHint";
-import { StickyCta } from "@/components/ui/StickyCta";
 import { CheckRegionRow, BUCKET_TO_VALUE } from "@/components/check/CheckRegionRow";
 import { CheckFlagChip } from "@/components/check/CheckFlagChip";
 import { CheckSelectorRow } from "@/components/check/CheckSelectorRow";
@@ -271,7 +270,7 @@ export default function CheckPage() {
   };
 
   return (
-    <div className="space-y-5 pt-4 pb-[calc(10rem+env(safe-area-inset-bottom))]">
+    <div className="space-y-5 pt-4 pb-[calc(6rem+env(safe-area-inset-bottom))]">
       <header>
         <h1 className="text-h1 tracking-tight text-strong leading-none">Morning check</h1>
         <p className="mt-1 text-caption text-muted">
@@ -426,12 +425,11 @@ export default function CheckPage() {
         </Button>
       )}
 
-      {/* Sticky Save — keyboard-aware primitive lifts above iOS keyboard */}
-      <StickyCta keyboardAware>
-        <Button block onClick={save} disabled={!canSave}>
-          {saved ? "Update check" : "Save check"} <span aria-hidden>→</span>
-        </Button>
-      </StickyCta>
+      {/* Save sits in flow at the end: a fixed bar covered the first severity
+          rows at first view (rescore P1), so no input can be under it now. */}
+      <Button block onClick={save} disabled={!canSave}>
+        {saved ? "Update check" : "Save check"} <span aria-hidden>→</span>
+      </Button>
     </div>
   );
 }

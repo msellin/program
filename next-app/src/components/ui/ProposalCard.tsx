@@ -32,6 +32,7 @@
 
 "use client";
 
+import { plainReason } from "@/components/today/plain-reason";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { StatusPill } from "@/components/ui/StatusPill";
@@ -100,8 +101,7 @@ export function ProposalCard({
             {title}
           </h3>
           <p className="text-small text-ink leading-snug">
-            <span className="text-muted">Because: </span>
-            {rationale}
+            {plainReason(rationale)}
           </p>
         </div>
         {canExplain ? (

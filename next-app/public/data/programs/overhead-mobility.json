@@ -83,8 +83,8 @@
     "available_days_min": 4,
     "available_days_max": 7,
     "session_length_min_range": [
-      10,
-      20
+      5,
+      30
     ],
     "session_count_per_week_range": [
       4,
@@ -259,7 +259,7 @@
       },
       {
         "id": "frozen_shoulder",
-        "label": "Has one shoulder lost range in ALL directions over weeks or months — including when someone else moves it for you?",
+        "label": "Has one shoulder lost range in all directions over weeks, even when someone moves it?",
         "type": "select",
         "required": true,
         "options": [
@@ -280,7 +280,7 @@
       },
       {
         "id": "ac_joint_pain",
-        "label": "Sharp, well-localised pain right on top of the shoulder, where the collarbone meets the shoulder blade?",
+        "label": "Sharp pain right on top of the shoulder, where collarbone meets shoulder blade?",
         "type": "select",
         "required": true,
         "options": [

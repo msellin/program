@@ -72,6 +72,8 @@ body {
 }
 html {
   font-feature-settings: "ss01", "cv11", "tnum";
+  /* Keep focused fields clear of the fixed bottom nav (WCAG 2.4.11). */
+  scroll-padding-bottom: calc(5rem + env(safe-area-inset-bottom));
 }
 body {
   background: var(--color-ground);

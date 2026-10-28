@@ -60,7 +60,7 @@ export default function HipCheckPage() {
         <div className="flex gap-2">
           <Link
             href="/progress"
-            className="font-mono text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line hover:bg-line-soft"
+            className="text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line-strong hover:bg-line-soft"
           >
             View progress
           </Link>
@@ -122,7 +122,7 @@ export default function HipCheckPage() {
           <button
             type="button"
             onClick={() => setStepIdx(stepIdx - 1)}
-            className="font-mono text-eyebrow uppercase tracking-wider inline-flex items-center gap-1 px-3 py-2 rounded-lg border border-line hover:bg-line-soft"
+            className="text-eyebrow uppercase tracking-wider inline-flex items-center gap-1 px-3 py-2 rounded-lg border border-line-strong hover:bg-line-soft"
           >
             <ChevronLeft size={14} />
             Back
@@ -391,7 +391,7 @@ function ReviewPanel({
           placeholder="Anything unusual? Skipped a test? Note it here."
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
-          className="block w-full max-w-full text-small px-2 py-1.5 border border-line rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate resize-y min-h-[44px] break-words [overflow-wrap:anywhere] whitespace-pre-wrap"
+          className="block w-full max-w-full text-small px-2 py-1.5 border border-line-strong rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-slate/40 focus:border-slate resize-y min-h-[44px] break-words [overflow-wrap:anywhere] whitespace-pre-wrap"
         />
         <EngineReadsNotesHint variant="check" />
       </div>

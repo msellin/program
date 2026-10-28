@@ -229,7 +229,7 @@
       },
       {
         "id": "wrist_pain_12mo",
-        "label": "Have you had wrist pain in the last 12 months during handstand or upper-body weight-bearing work?",
+        "label": "Wrist pain in the last 12 months during handstands or weight-bearing?",
         "type": "select",
         "required": true,
         "options": [
@@ -249,7 +249,7 @@
       },
       {
         "id": "shoulder_pain_overhead",
-        "label": "Have you had shoulder pain during any overhead pressing or overhead hold in the last 12 months?",
+        "label": "Shoulder pain during overhead pressing or holds in the last 12 months?",
         "type": "boolean",
         "required": true,
         "help": "Includes press, jerk, snatch, overhead squat, or any handstand attempt. If yes we will flag it before you start — this arc loads the shoulder overhead in every position, so it cannot route around one."
@@ -302,7 +302,7 @@
       },
       {
         "id": "hypertension_uncontrolled",
-        "label": "Do you have high blood pressure that isn't under control? (Over 160/100 at rest, or diagnosed but not on medication — uncontrolled hypertension.)",
+        "label": "High blood pressure that isn't controlled? (Over 160/100 at rest, or untreated.)",
         "type": "select",
         "required": true,
         "options": [
@@ -323,7 +323,7 @@
       },
       {
         "id": "acute_wrist_injury",
-        "label": "Do you have an acute wrist injury (sprain, TFCC, ligament tear) in the last 6 weeks?",
+        "label": "Acute wrist injury (sprain, TFCC, ligament tear) in the last 6 weeks?",
         "type": "boolean",
         "required": true,
         "help": "If yes, wrist-load drills are prohibited until cleared. The plan will offer hollow-body and shoulder-endurance drills only, with a note to clear with a clinician."
@@ -622,8 +622,8 @@
           "wrist_extension_mobility": 1
         },
         "sessions_per_week": 4,
-        "session_length_min": 12,
-        "note": "Foundation tier is a 4-session/week, 12-minute-per-session load. Kinoshita position ladder + wrist prep dominate weeks 1-3. First wall-walk lands week 2. First chest-to-wall hold attempt week 4. No freestand attempts this block."
+        "session_length_min": 20,
+        "note": "Foundation tier is a 4-session/week, 20-minute-per-session load. Kinoshita position ladder + wrist prep dominate weeks 1-3. First wall-walk lands week 2. First chest-to-wall hold attempt week 4. No freestand attempts this block."
       }
     },
     {
@@ -646,7 +646,7 @@
           "wrist_extension_mobility": 2
         },
         "sessions_per_week": 5,
-        "session_length_min": 15,
+        "session_length_min": 25,
         "note": "Reference tier. Weekly template runs as written. Wall-supported balance-search (belly-to-wall) starts week 1, freestand attempts staged in from week 3."
       }
     },
@@ -670,7 +670,7 @@
           "wrist_extension_mobility": 2
         },
         "sessions_per_week": 5,
-        "session_length_min": 15,
+        "session_length_min": 25,
         "note": "Single-step attempts and 2-3-step shuttles dominate. Freestand hold retested weekly (KPI). Wall shoulder taps as a bridge drill in week 1-2."
       }
     },
@@ -694,7 +694,7 @@
           "wrist_extension_mobility": 3
         },
         "sessions_per_week": 5,
-        "session_length_min": 18,
+        "session_length_min": 25,
         "note": "Variability + obstacles dominate. Turns on wall week 1, first free half-pirouette attempts week 4+. Plate traversal from week 3. User self-selects turn vs obstacle emphasis at intake question (implicit via which capability is weakest)."
       }
     }
@@ -1662,7 +1662,7 @@
       "15s freestand as pirouette gate — no evidence. Program uses handstand_turns_level explicitly, not seconds.",
       "5-drill freestand set count, 30s attempt cap — spacing-derived, not directly tested.",
       "4-6 sessions per week — daily-short-beats-long inference from Karni 1998 + Walker 2003 + Shea 2000. No direct handstand-frequency RCT.",
-      "10-18 min per session — engineering choice matching adult recreational-practitioner attention span. Not dose-response validated.",
+      "20-30 min per session — engineering choice matching adult recreational-practitioner attention span. Not dose-response validated.",
       "Blocked practice weeks 1-2 threshold — Wulf & Shea 2002 supports blocked in acquisition but doesn't specify the exact week to switch. Two-week floor is pragmatic.",
       "Tier D self-selection of obstacles vs turns via weakest-capability rule — theoretically supported by Henry 1968 / Proteau 1992 but not directly RCT'd.",
       "Weakest-capability-first drill selection across all tiers — the engine biases each session toward the user's lowest-scoring sub-skill (wrist load, hollow-shape, turns, obstacle nav, etc.). This is coaching-consensus, theoretically supported by specificity of adaptation but not RCT-validated at the sub-skill granularity we operate at."

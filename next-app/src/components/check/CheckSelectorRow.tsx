@@ -42,7 +42,7 @@ export function CheckSelectorRow<T extends string | number>({
       <div
         role="radiogroup"
         aria-label={label}
-        className="grid gap-1 border border-line-soft rounded-md p-1"
+        className="grid gap-1 border border-line-strong rounded-md p-1"
         style={{ gridTemplateColumns: `repeat(${options.length}, 1fr)` }}
         onKeyDown={(e) =>
           rovingKeyDown(

@@ -57,14 +57,14 @@ describe("quick start: model", () => {
 
   it("phrases the outcome as a tendency, never a promise", () => {
     const t = program.plan_tiers![0];
-    expect(outcomeLine(t, 8)).toMatch(/^Typically by week 8: /);
+    expect(outcomeLine(t, 8)).toMatch(/^Often by week 8: /);
   });
 
   it("defaults days to the tier's own value, inside the program's range", () => {
     const stats = planStats(program, program.plan_tiers![3], 8);
     expect(stats.defaultDays).toBe(4);
     expect(stats.dayOptions).toEqual(["2", "3", "4", "5"]);
-    expect(stats.minutes).toBe("25");
+    expect(stats.minutes).toBe("30");
   });
 
   it("every plan-tier program yields a level title for every tier and no raw 'Tier X'", () => {

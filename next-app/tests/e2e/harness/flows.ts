@@ -279,6 +279,27 @@ async function openBrief(ctx: FlowContext, opts?: { requireSetFlow?: boolean }):
 }
 
 /**
+ * Open the Brief's "Log an extra session" control (bottom of the content
+ * column) and wait for the OffPlanSheet. openBrief only returns on a Brief
+ * with a Start/Log CTA, i.e. one with exercises, and every such Brief renders
+ * this control — so a missing control is a regression and FAILS the flow.
+ * (A stale selector here silently skipped three flows for every persona.)
+ */
+async function openActivitySheet(ctx: FlowContext): Promise<void> {
+  const footer = ctx.page.getByRole("button", { name: /^log an extra session/i });
+  if ((await footer.count()) === 0) {
+    throw new Error('Brief has exercises but no "Log an extra session" control');
+  }
+  await footer.first().scrollIntoViewIfNeeded({ timeout: CLICK_TIMEOUT_MS });
+  await footer.first().click({ timeout: CLICK_TIMEOUT_MS });
+  await ctx.page
+    .locator('[data-surface="OffPlanSheet"]')
+    .first()
+    .waitFor({ state: "visible", timeout: 8000 });
+  await ctx.page.waitForTimeout(300);
+}
+
+/**
  * Enter the set flow, or skip when this session has none.
  *
  * A prescription-only session (rowing, any run-category block) opens the
@@ -1043,9 +1064,7 @@ export const FLOWS: Flow[] = [
     desc: "The Brief footer's activity sheet — run / row / class",
     async run(ctx) {
       await openBrief(ctx);
-      const footer = ctx.page.getByRole("button", { name: /log a run, row, or class/i });
-      if ((await footer.count()) === 0) throw new SkipFlow("no activity footer on the Brief");
-      await footer.click({ timeout: CLICK_TIMEOUT_MS });
+      await openActivitySheet(ctx);
       await ctx.page.waitForTimeout(400);
       await ctx.capture("01-activity-sheet");
       await ctx.probe("OffPlanSheet", '[data-surface="OffPlanSheet"]');
@@ -1085,9 +1104,7 @@ export const FLOWS: Flow[] = [
     desc: "Activity sheet → N drills available → the off-plan drill library",
     async run(ctx) {
       await openBrief(ctx);
-      const footer = ctx.page.getByRole("button", { name: /log a run, row, or class/i });
-      if ((await footer.count()) === 0) throw new SkipFlow("no activity footer on the Brief");
-      await footer.click({ timeout: CLICK_TIMEOUT_MS });
+      await openActivitySheet(ctx);
       await ctx.page.waitForTimeout(400);
       await ctx.probe("OffPlanSheet", '[data-surface="OffPlanSheet"]');
 
@@ -1711,9 +1728,7 @@ export const FLOWS: Flow[] = [
     destructive: true,
     async run(ctx) {
       await openBrief(ctx);
-      const footer = ctx.page.getByRole("button", { name: /log a run, row, or class/i });
-      if ((await footer.count()) === 0) throw new SkipFlow("no activity footer on the Brief");
-      await footer.click({ timeout: CLICK_TIMEOUT_MS });
+      await openActivitySheet(ctx);
       await ctx.page.waitForTimeout(400);
       if (!(await ctx.tap("OffPlanSheet", /a run, a row, a class/i))) {
         throw new SkipFlow("activity form did not open");

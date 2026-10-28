@@ -24,17 +24,17 @@ export function LevelLadder({
   if (levels.length < 2) return null;
   const activeIdx = activeId ? levels.findIndex((l) => l.id === activeId) : -1;
   return (
-    <ol className={cn("flex items-start", className)} aria-label="Levels">
+    <ol className={cn("flex flex-col gap-2 sm:flex-row sm:items-start sm:gap-0", className)} aria-label="Levels">
       {levels.map((l, i) => {
         const lit = i === activeIdx;
         const passed = activeIdx >= 0 && i < activeIdx;
         return (
-          <li key={l.id} className="relative min-w-0 flex-1 px-0.5 text-center">
+          <li key={l.id} className="relative flex min-w-0 items-center gap-2 sm:block sm:flex-1 sm:px-0.5 sm:text-center">
             {i > 0 ? (
               <span
                 aria-hidden
                 className={cn(
-                  "absolute left-0 right-1/2 top-[11px] h-0.5 -translate-y-1/2",
+                  "absolute left-0 right-1/2 top-[11px] hidden sm:block h-0.5 -translate-y-1/2",
                   i <= activeIdx ? "bg-bronze" : "bg-line",
                 )}
               />
@@ -43,7 +43,7 @@ export function LevelLadder({
               <span
                 aria-hidden
                 className={cn(
-                  "absolute left-1/2 right-0 top-[11px] h-0.5 -translate-y-1/2",
+                  "absolute left-1/2 right-0 top-[11px] hidden sm:block h-0.5 -translate-y-1/2",
                   i < activeIdx ? "bg-bronze" : "bg-line",
                 )}
               />
@@ -51,7 +51,7 @@ export function LevelLadder({
             <span
               aria-hidden
               className={cn(
-                "relative mx-auto flex h-[22px] w-[22px] items-center justify-center rounded-full border-2 font-mono text-eyebrow tabular-nums",
+                "relative flex shrink-0 sm:mx-auto h-[22px] w-[22px] items-center justify-center rounded-full border-2 font-mono text-eyebrow tabular-nums",
                 lit
                   ? "border-bronze bg-bronze text-ground"
                   : passed
@@ -63,7 +63,7 @@ export function LevelLadder({
             </span>
             <span
               className={cn(
-                "mt-1.5 block text-eyebrow leading-tight break-words hyphens-auto",
+                "min-w-0 text-small leading-snug sm:mt-1.5 sm:block sm:text-eyebrow sm:leading-tight",
                 lit ? "font-semibold text-strong" : "text-muted",
               )}
             >

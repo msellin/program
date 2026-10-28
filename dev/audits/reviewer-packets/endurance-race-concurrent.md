@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: 7704108bd100be77 -->
+<!-- source-fingerprint: 371468e973eb6e61 -->
 
 ## What we are asking
 
@@ -86,7 +86,7 @@ is published too, not quietly dropped.
   `erg_familiar` — answers: novice, occasional, regular
 - **Do you have a target test date? (approximate is fine)**  
   `target_test_date`
-- **Do you have high blood pressure that isn't under control? (Over 160/100 at rest, or diagnosed but not on medication — uncontrolled hypertension.)**  
+- **High blood pressure that isn't controlled? (Over 160/100 at rest, or untreated.)**  
   `hypertension_unmanaged` — answers: no, unsure, yes
   - BLOCKS on ['yes'] → "See your clinician first"
   - warns, then continues on ['unsure'] → "Worth getting a blood-pressure reading"
@@ -159,7 +159,7 @@ Printed against the questions above so you can see which are actually detectable
   `cardio_hours_per_week` — answers: under_1, 1_3, 3_6, over_6
 - **Do you have a current back-squat 5RM you'd rather not lose?**  
   `has_squat_prs`
-- **Do you have high blood pressure that isn't under control? (Over 160/100 at rest, or diagnosed but not on medication — uncontrolled hypertension.)**  
+- **High blood pressure that isn't controlled? (Over 160/100 at rest, or untreated.)**  
   `hypertension_unmanaged` — answers: no, unsure, yes
   - BLOCKS on ['yes'] → "See your clinician first"
   - warns, then continues on ['unsure'] → "Worth getting a blood-pressure reading"

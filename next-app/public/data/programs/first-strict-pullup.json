@@ -239,7 +239,7 @@
       },
       {
         "id": "acute_shoulder_injury",
-        "label": "Do you have an acute shoulder injury (rotator cuff tear, labral tear, dislocation) in the last 6 months?",
+        "label": "Acute shoulder injury (cuff or labral tear, dislocation) in the last 6 months?",
         "type": "boolean",
         "required": true,
         "help": "If yes, hanging and pull-up attempts aren't safe to start yet. We'll tell you what to do next, and you can come back once it's been checked."
@@ -413,8 +413,8 @@
     "available_days_min": 2,
     "available_days_max": 5,
     "session_length_min_range": [
-      15,
-      30
+      20,
+      35
     ],
     "session_count_per_week_range": [
       2,
@@ -441,8 +441,8 @@
           "pu_full_pullup_volume": 1
         },
         "sessions_per_week": 3,
-        "session_length_min": 15,
-        "note": "Foundation tier is 3 sessions/week × 15 min. Dead hang + scap pull ladder + ring rows dominate. No pull-up attempts this block. Band-assisted work does NOT start until dead hang is 25+ seconds AND scap pulls are 5 clean reps."
+        "session_length_min": 25,
+        "note": "Foundation tier is 3 sessions/week × 20-30 min. Dead hang + scap pull ladder + ring rows dominate. No pull-up attempts this block. Band-assisted work does NOT start until dead hang is 25+ seconds AND scap pulls are 5 clean reps."
       }
     },
     {
@@ -463,7 +463,7 @@
           "pu_full_pullup_volume": 1
         },
         "sessions_per_week": 3,
-        "session_length_min": 20,
+        "session_length_min": 25,
         "note": "Reference tier. Negatives (5-10s controlled) as the primary driver. Band-assisted reps come in from week 3 at heavy band, taper to lighter bands by week 6. First strict pull-up attempt from week 5 as a weekly test."
       }
     },
@@ -485,7 +485,7 @@
           "pu_full_pullup_volume": 2
         },
         "sessions_per_week": 4,
-        "session_length_min": 20,
+        "session_length_min": 25,
         "note": "Volume-oriented. Doubles and triples at 60-70% max, submax singles daily (GtG). Tempo work introduces the slow-eccentric groove. Retest max reps weekly."
       }
     },
@@ -507,7 +507,7 @@
           "pu_full_pullup_volume": 3
         },
         "sessions_per_week": 4,
-        "session_length_min": 25,
+        "session_length_min": 30,
         "note": "Volume block. Sub-max sets across the day (Reg Park heuristic + Shea 2000 spacing). Wide-grip variant from week 3 (Youdas 2010 higher lat EMG). Weighted preview (+2.5 to +5 kg singles) week 7-8."
       }
     }

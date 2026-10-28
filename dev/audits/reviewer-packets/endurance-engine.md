@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: 7f68ef78ae134ba9 -->
+<!-- source-fingerprint: 7d5a8ef6d6d60c5f -->
 
 ## What we are asking
 
@@ -121,7 +121,7 @@ is published too, not quietly dropped.
   `baseline_resting_hr`
 - **Optional submax HR baseline — if you did a 10-minute steady effort in the last week, enter the average HR you saw.**  
   `baseline_submax_hr_at_pace`
-- **Do you have high blood pressure that isn't under control? (Over 160/100 at rest, or diagnosed but not on medication — uncontrolled hypertension.)**  
+- **High blood pressure that isn't controlled? (Over 160/100 at rest, or untreated.)**  
   `hypertension_unmanaged` — answers: no, unsure, yes
   - BLOCKS on ['yes'] → "See your clinician first"
   - warns, then continues on ['unsure'] → "Worth getting a blood-pressure reading"
@@ -134,7 +134,7 @@ is published too, not quietly dropped.
 - **Are you recovering from COVID and still have elevated resting HR or exercise intolerance?**  
   `post_covid_hr_elevated`
   - BLOCKS on ['true'] → "Wait for baseline HR to normalise"
-- **Do you currently have a joint or tendon condition that flares under load (Achilles, patellar, hip)?**  
+- **Does a joint or tendon (Achilles, patellar, hip) flare under load right now?**  
   `flaring_joint_tendon`
   - BLOCKS on ['true'] → "Stay on low-impact modality"
 
@@ -197,7 +197,7 @@ Printed against the questions above so you can see which are actually detectable
 
 ### What it asks, and what each answer does
 
-- **Did you complete Engine Builder Block 1 (or a comparable 8-week aerobic base) within the last 4 weeks?**  
+- **Finished Engine Builder Block 1 (or a similar base) in the last 4 weeks?**  
   `block_1_completed` — answers: yes_recent, yes_lapsed, no_but_equivalent, no
   - BLOCKS on ['no'] → "Build the base first"
 - **Realistically, how many days per week can you commit?**  

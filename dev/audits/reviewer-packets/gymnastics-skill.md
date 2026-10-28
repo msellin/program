@@ -4,7 +4,7 @@
 `python3 dev/scripts/build-reviewer-packet.py`; do not edit by hand, or it
 will start describing a program that no longer ships.
 
-<!-- source-fingerprint: acd538d887f829d6 -->
+<!-- source-fingerprint: 9bc8e3ed9d9722e1 -->
 
 ## What we are asking
 
@@ -99,7 +99,7 @@ is published too, not quietly dropped.
   `shoulder_pain_overhead`
 - **Any elbow tendon pain (medial or lateral) currently or in the last 3 months?**  
   `elbow_tendon_pain` — answers: no, resolved, current
-- **Do you have an acute shoulder injury (rotator cuff tear, labral tear, dislocation) in the last 6 months?**  
+- **Acute shoulder injury (cuff or labral tear, dislocation) in the last 6 months?**  
   `acute_shoulder_injury`
   - BLOCKS on ['true'] → "Wait for the acute injury to resolve"
 - **Approximate bodyweight (kg) — used to shape band-tension progression**  
@@ -166,10 +166,10 @@ Printed against the questions above so you can see which are actually detectable
 
 - **Realistically, how many days per week can you commit?**  
   `days_per_week` — answers: 3, 4, 5
-- **How many strict pull-ups can you do right now (no kip, no swing, dead hang to chin over bar)?**  
+- **How many strict pull-ups can you do from a dead hang, no kip?**  
   `strict_pullup_count` — answers: under_3, 3_5, 6_10, over_10
   - BLOCKS on ['under_3'] → "Build the pull-up base first"
-- **How many strict ring dips can you do (support position → full lockout → depth at 90° elbow → lockout)?**  
+- **How many strict ring dips can you do, full lockout and 90° depth?**  
   `ring_dip_count` — answers: under_3, 3_5, 6_10, over_10
   - BLOCKS on ['under_3'] → "Build the ring-dip base first"
 - **How long can you hold a false-grip dead hang (wrist on top of the ring, no thumb over)?**  
@@ -180,14 +180,14 @@ Printed against the questions above so you can see which are actually detectable
   `shoulder_pain_overhead`
 - **Any elbow tendon pain (medial or lateral) currently or in the last 3 months?**  
   `elbow_tendon_pain` — answers: no, resolved, current
-- **Do you have an acute shoulder injury (rotator cuff tear, labral tear, dislocation) in the last 6 months?**  
+- **Acute shoulder injury (cuff or labral tear, dislocation) in the last 6 months?**  
   `acute_shoulder_injury`
   - BLOCKS on ['true'] → "Wait for the acute injury to resolve"
 - **Persistent neck pain with numbness, tingling or weakness into the arm?**  
   `cervical_radiculopathy` — answers: no, unsure, yes
   - BLOCKS on ['yes'] → "Get the neck looked at first"
   - warns, then continues on ['unsure'] → "Worth finding out which it is"
-- **Wrist injury in the last 6 weeks — TFCC tear, ligament instability, or a sprain still settling?**  
+- **Wrist injury in the last 6 weeks (TFCC, ligament, or a sprain)?**  
   `acute_wrist_injury` — answers: no, unsure, yes
   - BLOCKS on ['yes'] → "Let the wrist settle first"
   - warns, then continues on ['unsure'] → "Ramp the false grip, don't rush it"
@@ -263,10 +263,10 @@ Printed against the questions above so you can see which are actually detectable
   `freestand_hold_seconds_selfreport` — answers: never, brief, 2_5s, 5_15s, 15_30s, over_30s
 - **How far can you handstand walk continuously?**  
   `walk_distance_selfreport` — answers: never, few_steps, 5m_plus, 10m_plus, 20m_plus
-- **Have you had wrist pain in the last 12 months during handstand or upper-body weight-bearing work?**  
+- **Wrist pain in the last 12 months during handstands or weight-bearing?**  
   `wrist_pain_12mo` — answers: no, occasional, yes
   - warns, then continues on ['yes'] → "Ramp the wrists, don't chase the calendar"
-- **Have you had shoulder pain during any overhead pressing or overhead hold in the last 12 months?**  
+- **Shoulder pain during overhead pressing or holds in the last 12 months?**  
   `shoulder_pain_overhead`
   - warns, then continues on ['true'] → "This programme cannot route around your shoulder"
 - **Age band**  
@@ -275,11 +275,11 @@ Printed against the questions above so you can see which are actually detectable
   `osteoporosis_dx` — answers: no, unsure, yes
   - BLOCKS on ['yes'] → "See your clinician first"
   - warns, then continues on ['unsure'] → "Worth knowing before you load the wrists"
-- **Do you have high blood pressure that isn't under control? (Over 160/100 at rest, or diagnosed but not on medication — uncontrolled hypertension.)**  
+- **High blood pressure that isn't controlled? (Over 160/100 at rest, or untreated.)**  
   `hypertension_uncontrolled` — answers: no, unsure, yes
   - BLOCKS on ['yes'] → "See your clinician first"
   - warns, then continues on ['unsure'] → "Worth getting a blood-pressure reading"
-- **Do you have an acute wrist injury (sprain, TFCC, ligament tear) in the last 6 weeks?**  
+- **Acute wrist injury (sprain, TFCC, ligament tear) in the last 6 weeks?**  
   `acute_wrist_injury`
   - BLOCKS on ['true'] → "Wait for the acute injury to resolve"
 - **If your handstand tips past vertical, what happens?**  

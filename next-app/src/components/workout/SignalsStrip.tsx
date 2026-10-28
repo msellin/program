@@ -1,5 +1,6 @@
 "use client";
 
+import { plainReason } from "@/components/today/plain-reason";
 import { useMemo, useState } from "react";
 import { AlertTriangle, Info, ChevronDown, ChevronUp } from "lucide-react";
 import Link from "next/link";
@@ -281,7 +282,7 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
                     </p>
                     {accepted.reason ? (
                       <p className="text-small text-muted mt-0.5">
-                        Because: {accepted.reason}
+                        {plainReason(accepted.reason)}
                       </p>
                     ) : null}
                     {snap ? (

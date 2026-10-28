@@ -536,6 +536,8 @@ export default function WeekPage() {
             const isRest = displayBlocks.length === 0 && !override;
             // A skip on a day with nothing scheduled is a rest day, not a skipped session.
             const daySkipped = rawSkipped && !(isRest && dayBlocks.length === 0);
+            // A skipped training day is not a rest day, even though its blocks are gone from the list.
+            if (daySkipped && displayLabel === "Rest / accessory day") displayLabel = "Skipped session";
 
             // Pick a single status the leading dot represents. Priority order picks
             // the most action-relevant state; the rest goes into the subline text.
