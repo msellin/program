@@ -9,5 +9,5 @@
 - [x] L5 record, report, progress, profile, charts, ui, root components
 - [x] type-scale.test.ts guard
 - [x] npm run verify
-- [ ] persona sweep + ad-path re-shoot + gallery
-- [ ] commit, deploy, live check
+- [x] ad-path re-shoot from live (A, C) + gallery; persona sweep still to run
+- [x] commit, deploy (70351e8), live check: session H1 crowded the program name, moved to eyebrow

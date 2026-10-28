@@ -161,15 +161,17 @@ export function BriefView({
   return (
     <div className="flex flex-col min-h-[calc(100dvh-64px-env(safe-area-inset-bottom))]">
       <div className="flex-1 space-y-5">
-        <header className="flex items-baseline justify-between gap-3">
-          <h1 className="text-h1 font-semibold tracking-[-0.035em] text-strong leading-none">
+        {/* Program name as the eyebrow above the day (same order as Today):
+            beside a 32px day name it ran off the edge at 375. */}
+        <header className="space-y-1">
+          {program.slug ? (
+            <p className="font-mono text-eyebrow uppercase text-bronze">
+              {programDisplayName(program, program.slug)}
+            </p>
+          ) : null}
+          <h1 className="text-h1 tracking-[-0.035em] text-strong leading-none">
             {dayName(activeDate)}
           </h1>
-          {program.slug ? (
-            <span className="font-mono text-caption uppercase tracking-[.14em] text-bronze flex-shrink-0">
-              {programDisplayName(program, program.slug)}
-            </span>
-          ) : null}
         </header>
         <p className="text-small text-muted -mt-3">{summary}</p>
 

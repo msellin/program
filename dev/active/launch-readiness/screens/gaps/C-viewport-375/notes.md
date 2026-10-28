@@ -1,5 +1,5 @@
 ## 01-today-top
-url: http://localhost:3000/
+url: https://app.terav.fit/
 horizontal overflow: false
 
 Skip to content
@@ -18,7 +18,7 @@ RECORD
 PROFILE
 
 ## 01-today-bottom
-url: http://localhost:3000/
+url: https://app.terav.fit/
 horizontal overflow: false
 
 Skip to content
@@ -39,7 +39,7 @@ PROFILE
 fixed/sticky on 01-today: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=614 h=53
 
 ## 02-plan-top
-url: http://localhost:3000/plan/
+url: https://app.terav.fit/plan/
 horizontal overflow: false
 
 Skip to content
@@ -109,7 +109,7 @@ RECORD
 PROFILE
 
 ## 02-plan-bottom
-url: http://localhost:3000/plan/
+url: https://app.terav.fit/plan/
 horizontal overflow: false
 
 Skip to content
@@ -181,7 +181,7 @@ PROFILE
 fixed/sticky on 02-plan: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=614 h=53
 
 ## 03-session-top
-url: http://localhost:3000/session/first-strict-pullup/
+url: https://app.terav.fit/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
@@ -201,7 +201,7 @@ RECORD
 PROFILE
 
 ## 03-session-bottom
-url: http://localhost:3000/session/first-strict-pullup/
+url: https://app.terav.fit/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
@@ -223,7 +223,7 @@ PROFILE
 fixed/sticky on 03-session: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=614 h=53
 
 ## 04-record-top
-url: http://localhost:3000/record/
+url: https://app.terav.fit/record/
 horizontal overflow: false
 
 Skip to content
@@ -378,7 +378,7 @@ PROFILE
 100
 
 ## 04-record-bottom
-url: http://localhost:3000/record/
+url: https://app.terav.fit/record/
 horizontal overflow: false
 
 Skip to content
@@ -535,7 +535,7 @@ PROFILE
 fixed/sticky on 04-record: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=614 h=53
 
 ## 05-check-top
-url: http://localhost:3000/check/
+url: https://app.terav.fit/check/
 horizontal overflow: false
 
 Skip to content
@@ -598,7 +598,7 @@ RECORD
 PROFILE
 
 ## 05-check-bottom
-url: http://localhost:3000/check/
+url: https://app.terav.fit/check/
 horizontal overflow: false
 
 Skip to content
@@ -663,7 +663,7 @@ PROFILE
 fixed/sticky on 05-check: div.fixed left-0 right-0 z-50 border-t borde @y=530 h=73 | nav.fixed left-0 right-0 bottom-0 z-40 borde @y=614 h=53
 
 ## 06-programs-top
-url: http://localhost:3000/programs/
+url: https://app.terav.fit/programs/
 horizontal overflow: false
 
 Skip to content
@@ -743,7 +743,7 @@ CITED
 Multi-tiered handstand walk program from wall-supported beginner to advanced turns and obstacles. Personalised sessions target your specific weak capab
 
 ## 06-programs-bottom
-url: http://localhost:3000/programs/
+url: https://app.terav.fit/programs/
 horizontal overflow: false
 
 Skip to content
@@ -825,7 +825,7 @@ Multi-tiered handstand walk program from wall-supported beginner to advanced tur
 fixed/sticky on 06-programs: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=614 h=53
 
 ## 07-profile-top
-url: http://localhost:3000/profile/
+url: https://app.terav.fit/profile/
 horizontal overflow: false
 
 Skip to content
@@ -874,7 +874,7 @@ RECORD
 PROFILE
 
 ## 07-profile-bottom
-url: http://localhost:3000/profile/
+url: https://app.terav.fit/profile/
 horizontal overflow: false
 
 Skip to content
@@ -925,7 +925,7 @@ PROFILE
 fixed/sticky on 07-profile: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=614 h=53
 
 ## 08-account-top
-url: http://localhost:3000/account/
+url: https://app.terav.fit/account/
 horizontal overflow: false
 
 Skip to content
@@ -958,7 +958,7 @@ RECORD
 PROFILE
 
 ## 08-account-bottom
-url: http://localhost:3000/account/
+url: https://app.terav.fit/account/
 horizontal overflow: false
 
 Skip to content
@@ -993,7 +993,7 @@ PROFILE
 fixed/sticky on 08-account: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=614 h=53
 
 ## 09-settings-top
-url: http://localhost:3000/settings/
+url: https://app.terav.fit/settings/
 horizontal overflow: false
 
 Skip to content
@@ -1032,7 +1032,7 @@ RECORD
 PROFILE
 
 ## 09-settings-bottom
-url: http://localhost:3000/settings/
+url: https://app.terav.fit/settings/
 horizontal overflow: false
 
 Skip to content
@@ -1073,7 +1073,7 @@ PROFILE
 fixed/sticky on 09-settings: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=614 h=53
 
 ## 10-off-plan-top
-url: http://localhost:3000/off-plan/
+url: https://app.terav.fit/off-plan/
 horizontal overflow: false
 
 Skip to content
@@ -1135,7 +1135,7 @@ Partial-ROM pull-up (top half)
 Grip-width variety · 4 sets
 
 ## 10-off-plan-bottom
-url: http://localhost:3000/off-plan/
+url: https://app.terav.fit/off-plan/
 horizontal overflow: false
 
 Skip to content
