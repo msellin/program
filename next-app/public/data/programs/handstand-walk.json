@@ -606,7 +606,7 @@
       "id": "tier_a_foundation",
       "label": "Tier A — Foundation (no handstand yet)",
       "condition": "wall_hold_max_seconds < 15 && freestand_hold_max_seconds < 5",
-      "typical_outcome": "By week 8: stable Kinoshita position 3 hold, first assisted wall handstand hold of 10-20 seconds, and 2-3 wall walks in a session without wrist symptoms.",
+      "typical_outcome": "By week 8: a steady floor handstand shape, a 10-20 second wall handstand, and 2-3 wall walks per session without wrist pain.",
       "outcome_confidence": "realistic",
       "full_goal_weeks_estimate": 32,
       "starting_phase_id": "phase_1_foundation_prep",
@@ -630,7 +630,7 @@
       "id": "tier_b_wall_handstand",
       "label": "Tier B — Wall handstand established",
       "condition": "wall_hold_max_seconds >= 15 && freestand_hold_max_seconds < 5",
-      "typical_outcome": "By week 8: first 5-15 second freestand hold, first walk attempts on the wall, wall handstand hold up to 45-60 seconds.",
+      "typical_outcome": "By week 8: a first 5-15 second free handstand, first walking attempts on the wall, and wall holds up to 45-60 seconds.",
       "outcome_confidence": "realistic",
       "full_goal_weeks_estimate": 24,
       "starting_phase_id": "phase_2_wall_to_free",
@@ -654,7 +654,7 @@
       "id": "tier_c_freestand",
       "label": "Tier C — Freestanding, learning to walk",
       "condition": "freestand_hold_max_seconds >= 5 && walk_distance_max_metres < 10",
-      "typical_outcome": "By week 8: 3-5 continuous handstand walk steps, freestand hold pushed to 15-25 seconds, first short shuttles chained.",
+      "typical_outcome": "By week 8: 3-5 handstand steps in a row, free holds of 15-25 seconds, and first short walks back and forth.",
       "outcome_confidence": "realistic",
       "full_goal_weeks_estimate": 20,
       "starting_phase_id": "phase_3_first_steps",
@@ -678,7 +678,7 @@
       "id": "tier_d_advanced",
       "label": "Tier D — Advanced (walks 10m+, wants turns / obstacles)",
       "condition": "walk_distance_max_metres >= 10",
-      "typical_outcome": "By week 8: first clean 180 pirouette OR first traverse over a 5kg plate OR consistent narrow-lane precision path. Continuous walk distance extended by 20-40%.",
+      "typical_outcome": "By week 8: a first clean half-turn, or a walk over a 5 kg plate, or a steady walk in a narrow lane. Walking distance often 20-40% longer.",
       "outcome_confidence": "fair",
       "full_goal_weeks_estimate": 16,
       "starting_phase_id": "phase_4_variability",
@@ -839,7 +839,7 @@
   "blocks": [
     {
       "id": "block_wrist_prep",
-      "name": "Wrist prep — every session",
+      "name": "Wrist warm-up",
       "category": "accessory",
       "location": "anywhere",
       "duration_min": 5,
@@ -874,7 +874,7 @@
     },
     {
       "id": "block_skill_A_kinoshita",
-      "name": "Skill session A — Kinoshita position ladder",
+      "name": "Floor handstand shape — session A",
       "category": "accessory",
       "location": "gym",
       "duration_min": [
@@ -912,7 +912,7 @@
     },
     {
       "id": "block_skill_A_wall_hold",
-      "name": "Skill session A — wall handstand hold + shrugs (Tier A/B)",
+      "name": "Wall handstand holds — session A",
       "category": "accessory",
       "location": "gym",
       "duration_min": [
@@ -958,7 +958,7 @@
     },
     {
       "id": "block_skill_B_freestand_search",
-      "name": "Skill session B — kick-up + freestand attempts (Tier B)",
+      "name": "Kick-ups and free holds — session B",
       "category": "accessory",
       "location": "gym",
       "duration_min": [
@@ -1003,7 +1003,7 @@
     },
     {
       "id": "block_skill_A_freestand_hold",
-      "name": "Skill session A — freestand hold (Tier C)",
+      "name": "Free handstand holds — session A",
       "category": "accessory",
       "location": "gym",
       "duration_min": [
@@ -1046,7 +1046,7 @@
     },
     {
       "id": "block_skill_B_walk_attempts",
-      "name": "Skill session B — single-step walks + shuttles (Tier C)",
+      "name": "First walking steps — session B",
       "category": "accessory",
       "location": "gym",
       "duration_min": [
@@ -1091,7 +1091,7 @@
     },
     {
       "id": "block_skill_A_variability",
-      "name": "Skill session A — variability walks (Tier D)",
+      "name": "Varied walking — session A",
       "category": "accessory",
       "location": "gym",
       "duration_min": [
@@ -1134,7 +1134,7 @@
     },
     {
       "id": "block_skill_B_obstacles_or_turns",
-      "name": "Skill session B — obstacles or turns (Tier D, weakest-first)",
+      "name": "Obstacles and turns — session B",
       "category": "accessory",
       "location": "gym",
       "duration_min": [
@@ -1198,7 +1198,7 @@
     },
     {
       "id": "block_recovery",
-      "name": "Wrist + shoulder recovery flush",
+      "name": "Wrist and shoulder cool-down",
       "category": "accessory",
       "location": "anywhere",
       "duration_min": 5,

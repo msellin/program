@@ -427,7 +427,7 @@
       "id": "tier_a_hang",
       "label": "Tier A — No hang yet",
       "condition": "dead_hang_max_seconds < 15",
-      "typical_outcome": "By week 8: 25-45 second dead hang, first clean scapular pulls, and 5-10 strict feet-elevated ring rows.",
+      "typical_outcome": "By week 8: hang from the bar for 25-45 seconds, do clean shoulder-blade pulls, and 5-10 ring rows with your feet raised.",
       "outcome_confidence": "realistic",
       "full_goal_weeks_estimate": 20,
       "starting_phase_id": "phase_1_hang_and_row_base",
@@ -449,7 +449,7 @@
       "id": "tier_b_assisted",
       "label": "Tier B — Hang established, no strict rep yet",
       "condition": "dead_hang_max_seconds >= 15 && strict_pullup_max_reps < 1",
-      "typical_outcome": "By week 8-10: first strict pull-up OR a clean 10-second slow negative + a heavy-band assisted rep at low band tension. Dead hang at 45-60 seconds.",
+      "typical_outcome": "By week 8-10: a first strict pull-up, or a 10-second slow lowering plus a band-assisted rep. Hang for 45-60 seconds.",
       "outcome_confidence": "realistic",
       "full_goal_weeks_estimate": 12,
       "starting_phase_id": "phase_2_negatives_and_assist",
@@ -471,7 +471,7 @@
       "id": "tier_c_first_rep",
       "label": "Tier C — One strict rep, building the second",
       "condition": "strict_pullup_max_reps >= 1 && strict_pullup_max_reps < 3",
-      "typical_outcome": "By week 8: 3-5 strict pull-ups unbroken. Grease-the-groove daily singles unlock. First tempo pull-ups (3s up, 3s hold, 3s down).",
+      "typical_outcome": "By week 8: 3-5 strict pull-ups in a row, plus your first slow-tempo pull-ups.",
       "outcome_confidence": "realistic",
       "full_goal_weeks_estimate": 10,
       "starting_phase_id": "phase_3_first_reps",
@@ -493,7 +493,7 @@
       "id": "tier_d_volume",
       "label": "Tier D — Multiple reps, adding volume",
       "condition": "strict_pullup_max_reps >= 3",
-      "typical_outcome": "By week 8: 8-10 strict pull-ups unbroken from a starting 3-5 rep max. Wide-grip and neutral-grip variants unlocked. Weighted pull-up prep starts at end of block.",
+      "typical_outcome": "By week 8: 8-10 strict pull-ups in a row, starting from 3-5. Other grips open up.",
       "outcome_confidence": "fair",
       "full_goal_weeks_estimate": 10,
       "starting_phase_id": "phase_4_volume_variety",
@@ -645,7 +645,7 @@
   "blocks": [
     {
       "id": "block_shoulder_prep",
-      "name": "Shoulder + grip prep — every session",
+      "name": "Shoulder and grip prep",
       "category": "accessory",
       "location": "anywhere",
       "duration_min": 5,
@@ -664,7 +664,7 @@
     },
     {
       "id": "block_hang_ladder",
-      "name": "Dead-hang ladder (Tier A/B)",
+      "name": "Dead hangs — build grip time",
       "category": "accessory",
       "location": "gym",
       "duration_min": [
@@ -695,7 +695,7 @@
     },
     {
       "id": "block_scap_pull_ladder",
-      "name": "Scapular pull ladder (Tier A/B)",
+      "name": "Shoulder-blade pulls — scap pull-ups",
       "category": "accessory",
       "location": "gym",
       "duration_min": [
@@ -725,7 +725,7 @@
     },
     {
       "id": "block_row_strength",
-      "name": "Row strength — closed-chain pull",
+      "name": "Ring rows — pulling with feet down",
       "category": "accessory",
       "location": "gym",
       "duration_min": [
@@ -764,7 +764,7 @@
     },
     {
       "id": "block_negative_ladder",
-      "name": "Negative ladder (Tier B)",
+      "name": "Slow lowering from the bar",
       "category": "accessory",
       "location": "gym",
       "duration_min": [
@@ -804,7 +804,7 @@
     },
     {
       "id": "block_band_assist",
-      "name": "Band-assisted pull ladder (Tier B)",
+      "name": "Band-assisted pull-ups",
       "category": "accessory",
       "location": "gym",
       "duration_min": [
@@ -845,7 +845,7 @@
     },
     {
       "id": "block_pullup_sets_submax",
-      "name": "Sub-max pull-up sets (Tier C/D)",
+      "name": "Easy pull-up sets",
       "category": "accessory",
       "location": "gym",
       "duration_min": [
@@ -876,7 +876,7 @@
     },
     {
       "id": "block_tempo_pullup",
-      "name": "Tempo pull-up (Tier C)",
+      "name": "Slow-tempo pull-ups",
       "category": "accessory",
       "location": "gym",
       "duration_min": [
@@ -907,7 +907,7 @@
     },
     {
       "id": "block_gtg_singles",
-      "name": "Grease the groove — sub-max singles (Tier C/D)",
+      "name": "Single pull-ups — through the day",
       "category": "accessory",
       "location": "anywhere",
       "duration_min": 3,
@@ -927,7 +927,7 @@
     },
     {
       "id": "block_pullup_variety",
-      "name": "Grip-width variety (Tier D)",
+      "name": "Grip variety — wider and narrower",
       "category": "accessory",
       "location": "gym",
       "duration_min": [
@@ -959,7 +959,7 @@
     },
     {
       "id": "block_active_hollow",
-      "name": "Active hollow body — pull-shape isometrics",
+      "name": "Hollow-body holds",
       "category": "accessory",
       "location": "anywhere",
       "duration_min": [

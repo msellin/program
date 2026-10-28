@@ -490,7 +490,7 @@
       "id": "tier_a_prep",
       "label": "Tier A — Prerequisites met, ring dips + false grip building",
       "condition": "strict_pullup_max_reps >= 3 && ring_dip_max_reps < 3",
-      "typical_outcome": "By week 8: 3-5 strict ring dips, 15-second false-grip hang, first false-grip ring rows.",
+      "typical_outcome": "By week 8: 3-5 strict ring dips, a 15-second false-grip hang, and first false-grip ring rows.",
       "outcome_confidence": "realistic",
       "full_goal_weeks_estimate": 20,
       "starting_phase_id": "phase_1_dip_and_false_grip_base",
@@ -511,7 +511,7 @@
       "id": "tier_b_transition",
       "label": "Tier B — Transition drills unlocked",
       "condition": "strict_pullup_max_reps >= 3 && ring_dip_max_reps >= 3 && muscle_up_experience == 'never'",
-      "typical_outcome": "By week 10-12: seated-band transition mastered, low-ring transition mastered, first jump-assisted muscle-up.",
+      "typical_outcome": "By week 10-12: getting over the rings from a seated band and from low rings, and a first jump-assisted muscle-up.",
       "outcome_confidence": "realistic",
       "full_goal_weeks_estimate": 16,
       "starting_phase_id": "phase_2_transition_and_low_ring",
@@ -532,7 +532,7 @@
       "id": "tier_c_first_rep",
       "label": "Tier C — First strict rep hunt",
       "condition": "muscle_up_experience == 'one_sometimes' || muscle_up_experience == 'one_reliable'",
-      "typical_outcome": "By week 8: 2-3 strict ring muscle-ups unbroken, or 1 reliable + reduced set-up time.",
+      "typical_outcome": "By week 8: 2-3 strict ring muscle-ups in a row, or 1 reliable one.",
       "outcome_confidence": "fair",
       "full_goal_weeks_estimate": 12,
       "starting_phase_id": "phase_3_first_rep_consolidation",
@@ -634,7 +634,7 @@
   "blocks": [
     {
       "id": "block_shoulder_prep",
-      "name": "Shoulder + wrist prep — every session",
+      "name": "Shoulder and wrist warm-up",
       "category": "accessory",
       "location": "anywhere",
       "duration_min": 5,
@@ -701,7 +701,7 @@
     },
     {
       "id": "block_false_grip_ladder",
-      "name": "False-grip ladder (Tier A/B)",
+      "name": "False-grip hangs on rings",
       "category": "accessory",
       "location": "gym",
       "duration_min": [
@@ -740,7 +740,7 @@
     },
     {
       "id": "block_false_grip_pullup",
-      "name": "False-grip pull-up sets (Tier B/C)",
+      "name": "False-grip pull-ups",
       "category": "accessory",
       "location": "gym",
       "duration_min": [
@@ -762,7 +762,7 @@
     },
     {
       "id": "block_transition_progression",
-      "name": "Transition drills (Tier B/C)",
+      "name": "Getting over the rings",
       "category": "accessory",
       "location": "gym",
       "duration_min": [
@@ -802,7 +802,7 @@
     },
     {
       "id": "block_low_ring_practice",
-      "name": "Low-ring muscle-up practice (Tier B/C)",
+      "name": "Low-ring muscle-up practice",
       "category": "accessory",
       "location": "gym",
       "duration_min": [
@@ -843,7 +843,7 @@
     },
     {
       "id": "block_pullup_sets_submax",
-      "name": "Strict pull-up sub-max sets (Tier B/C)",
+      "name": "Strict pull-ups, easy sets",
       "category": "accessory",
       "location": "gym",
       "duration_min": [
@@ -865,7 +865,7 @@
     },
     {
       "id": "block_pullup_maintenance",
-      "name": "Pull-up maintenance (Tier A)",
+      "name": "Keeping pull-ups sharp",
       "category": "accessory",
       "location": "gym",
       "duration_min": [
@@ -887,7 +887,7 @@
     },
     {
       "id": "block_active_hollow",
-      "name": "Active hollow + straight-arm shoulder integrity",
+      "name": "Hollow holds — straight-arm shoulders",
       "category": "accessory",
       "location": "anywhere",
       "duration_min": [

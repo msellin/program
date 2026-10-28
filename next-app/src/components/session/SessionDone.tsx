@@ -7,7 +7,7 @@ import { countLoggedSets } from "@/lib/set-progress";
 import { IN_SESSION_HURT_SCORE, useSessionRegions } from "@/components/session/HurtSheet";
 import type { RailExercise } from "@/components/session/DaySession";
 import { Button } from "@/components/ui/Button";
-import { humanBlockName } from "@/lib/day-format";
+import { exerciseListName, humanBlockName } from "@/lib/day-format";
 import { loadProgram } from "@/lib/data-loader";
 import type { Program } from "@/lib/schemas";
 import { BestSetCard, DoneLadder, DoneStats, NextSessionCard } from "./done/DoneSections";
@@ -20,10 +20,12 @@ export function summarizeSession(
   rail: RailExercise[],
   logs: Record<string, { exercises?: Record<string, unknown> } | undefined>,
   date: string,
-): { movements: { name: string; sets: number }[]; totalSets: number } {
+): { movements: { key: string; name: string; sets: number }[]; totalSets: number } {
   const movements = rail
     .map((r) => ({
-      name: r.exercise.name,
+      key: r.key,
+      // Variant included: three "Ring row" rows are three different movements.
+      name: exerciseListName(r.exercise),
       sets: countLoggedSets(entrySets((logs[date]?.exercises?.[r.key] ?? null) as never), r.isLoadable),
     }))
     .filter((m) => m.sets > 0);
@@ -100,7 +102,7 @@ export function SessionDone({
       {movements.length > 0 ? (
         <ul className="rounded-xl border border-line-soft divide-y divide-line-soft">
           {movements.map((m) => (
-            <li key={m.name} className="flex justify-between px-3.5 py-3 text-small">
+            <li key={m.key} className="flex justify-between px-3.5 py-3 text-small">
               <span className="text-strong">{m.name}</span>
               <span className="text-caption text-muted">{m.sets} sets</span>
             </li>

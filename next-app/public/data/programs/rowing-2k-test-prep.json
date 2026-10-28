@@ -46,7 +46,7 @@
       "id": "foundation",
       "label": "Foundation — 2K > 9:00",
       "condition": "current_2k_seconds >= 540",
-      "typical_outcome": "By week 6: 2K time down 15-30 seconds. Submax HR down 5-10 bpm at threshold.",
+      "typical_outcome": "By week 6: 2K time 15-30 seconds faster, and heart rate at a hard steady pace 5-10 bpm lower.",
       "outcome_confidence": "realistic",
       "full_goal_weeks_estimate": 6,
       "starting_phase_id": "phase_1_base_check"
@@ -55,7 +55,7 @@
       "id": "progression",
       "label": "Progression — 2K 8:00–9:00",
       "condition": "current_2k_seconds >= 480 && current_2k_seconds < 540",
-      "typical_outcome": "2K down 8-15 seconds. Split consistency across all four 500s.",
+      "typical_outcome": "Often: 2K time 8-15 seconds faster, with even splits across all four 500s.",
       "outcome_confidence": "realistic",
       "full_goal_weeks_estimate": 6,
       "starting_phase_id": "phase_1_base_check"
@@ -64,7 +64,7 @@
       "id": "push",
       "label": "Push — 2K < 8:00",
       "condition": "current_2k_seconds < 480",
-      "typical_outcome": "2K down 3-8 seconds. HERITAGE-style non-response distribution begins to dominate — genetic ceiling in view.",
+      "typical_outcome": "Often: 2K time 3-8 seconds faster. At this level gains get smaller and vary between people.",
       "outcome_confidence": "stretch",
       "full_goal_weeks_estimate": 6,
       "starting_phase_id": "phase_1_base_check"
@@ -442,7 +442,7 @@
     },
     {
       "id": "block_threshold_row",
-      "name": "Threshold · Row",
+      "name": "Hard steady · Row",
       "category": "run",
       "frequency": "1×/wk",
       "duration_min": 40,

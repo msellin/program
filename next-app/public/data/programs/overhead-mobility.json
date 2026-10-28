@@ -46,7 +46,7 @@
       "id": "foundation",
       "label": "Foundation — Wall-arm-raise fails / can't reach vertical",
       "condition": "shoulder_flexion_supine_deg < 165",
-      "typical_outcome": "By week 10: supine shoulder flexion 165-175°, empty-bar OHS to parallel without heel lift, first snatch-grip Sotts press.",
+      "typical_outcome": "By week 10: arms overhead to 165-175° lying down, an empty-bar overhead squat to parallel with heels down, and a first snatch-grip Sots press.",
       "outcome_confidence": "realistic",
       "full_goal_weeks_estimate": 10,
       "starting_phase_id": "phase_1_kinematic_base",
@@ -56,7 +56,7 @@
       "id": "progression",
       "label": "Progression — Vertical passive, loaded overhead is stiff",
       "condition": "shoulder_flexion_supine_deg >= 165 && shoulder_flexion_supine_deg < 180",
-      "typical_outcome": "By week 10: 180° passive + loaded OHS at 50% BW to parallel, snatch-grip Sotts at bar weight for reps.",
+      "typical_outcome": "By week 10: arms fully overhead (180°), an overhead squat to parallel with half bodyweight, and snatch-grip Sots presses with the bar for reps.",
       "outcome_confidence": "realistic",
       "full_goal_weeks_estimate": 10,
       "starting_phase_id": "phase_1_kinematic_base"
@@ -65,7 +65,7 @@
       "id": "push",
       "label": "Push — Vertical loaded, chasing efficiency + endurance",
       "condition": "shoulder_flexion_supine_deg >= 180 && tgu_hold_max_seconds >= 30",
-      "typical_outcome": "Overhead endurance (Turkish get-up hold ≥ 30s each side at 24kg), snatch balance to 60% snatch 1RM without sequencing errors.",
+      "typical_outcome": "Often: a 30-second overhead hold each side with a 24 kg kettlebell, and snatch balances at 60% of your snatch max with clean technique.",
       "outcome_confidence": "fair",
       "full_goal_weeks_estimate": 10,
       "starting_phase_id": "phase_1_kinematic_base"
@@ -506,7 +506,7 @@
     },
     {
       "id": "block_scap_activation",
-      "name": "Scap activation",
+      "name": "Shoulder-blade activation",
       "category": "accessory",
       "frequency": "3×/wk",
       "duration_min": 8,
@@ -516,7 +516,7 @@
     },
     {
       "id": "block_passive_flexion",
-      "name": "Passive shoulder flexion",
+      "name": "Shoulder reach, passive",
       "category": "accessory",
       "frequency": "5×/wk",
       "duration_min": 8,
@@ -526,7 +526,7 @@
     },
     {
       "id": "block_active_flexion",
-      "name": "Active shoulder flexion",
+      "name": "Shoulder reach, active",
       "category": "accessory",
       "frequency": "3×/wk",
       "duration_min": 10,

@@ -21,6 +21,19 @@ describe("Stop is not Finish", () => {
     expect(s.totalSets).toBe(1);
   });
 
+  it("same-named variants stay distinguishable", () => {
+    const r = ["incline, easy", "horizontal", "feet elevated"].map((variant, i) => ({
+      key: `b${i}:row${i}`,
+      exercise: { id: `row${i}`, name: "Ring row", variant },
+      isLoadable: false,
+      rowCount: 1,
+    })) as unknown as RailExercise[];
+    const logs = { d: { exercises: Object.fromEntries(r.map((x) => [x.key, { sets: [{ reps: 8 }] }])) } };
+    const names = summarizeSession(r, logs as never, "d").movements.map((m) => m.name);
+    expect(new Set(names).size).toBe(3);
+    expect(names[1]).toBe("Ring row (horizontal)");
+  });
+
   it("Finish shows Done with no symptom prompt", () => {
     render(<SessionDone end="finished" rail={rail} date="2026-10-27" slug="first-strict-pullup" />);
     expect(screen.getByRole("heading", { name: "Done" })).toBeTruthy();

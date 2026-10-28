@@ -61,7 +61,9 @@ export function CheckLiveVerdict({ state, reason }: CheckLiveVerdictProps) {
           />
           {copy.pill}
         </span>
-        <p className="mt-1.5 text-small text-ink leading-relaxed">{reason}</p>
+        {reason.trim() ? (
+          <p className="mt-1.5 text-small text-ink leading-relaxed">{reason}</p>
+        ) : null}
         {state === "red" && (
           <p className="mt-1.5 text-caption text-ink leading-relaxed">
             Next step: skip hard training today. If this is night pain, a sudden change, or
@@ -71,12 +73,10 @@ export function CheckLiveVerdict({ state, reason }: CheckLiveVerdictProps) {
         <button
           type="button"
           onClick={() => setSheetOpen(true)}
-          className="mt-1 inline-flex items-center gap-1.5 min-h-[44px] py-2 text-caption text-ink cursor-pointer motion-reduce:transition-none transition-colors hover:text-strong focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2 rounded-lg"
-          aria-label="Why this result?"
+          className="mt-1 -mb-2 inline-flex items-center gap-1 min-h-[44px] py-2 text-caption text-strong font-medium underline underline-offset-4 decoration-line cursor-pointer motion-reduce:transition-none transition-colors hover:decoration-bronze focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-bronze focus-visible:outline-offset-2 rounded-lg"
         >
-          <span className="text-caption text-strong font-medium">
-            Why?
-          </span>
+          Why this result?
+          <span aria-hidden>›</span>
         </button>
       </Card>
       {sheetOpen ? (

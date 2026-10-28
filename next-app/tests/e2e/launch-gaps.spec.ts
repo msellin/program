@@ -38,9 +38,9 @@ function dir(part: string): string {
   return d;
 }
 
-async function shot(page: Page, part: string, name: string, notes: string[]): Promise<void> {
+async function shot(page: Page, part: string, name: string, notes: string[], fullPage = false): Promise<void> {
   await page.waitForTimeout(700);
-  await page.screenshot({ path: path.join(dir(part), `${name}.png`) });
+  await page.screenshot({ path: path.join(dir(part), `${name}.png`), fullPage });
   const text = (await page.locator("body").innerText({ timeout: 5000 }).catch(() => "")).slice(0, 1500);
   const overflow = await page.evaluate(
     () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
@@ -194,6 +194,10 @@ test("A · stranger first run at 375×667", async ({ page }) => {
   await shot(page, "A-first-run", "10-session-done", notes);
   await page.mouse.wheel(0, 4000);
   await shot(page, "A-first-run", "10-session-done-bottom", notes);
+  // The trend chart was never captured with data; the session just logged feeds it.
+  await page.goto("/record/");
+  await page.waitForLoadState("networkidle").catch(() => {});
+  await shot(page, "A-first-run", "11-record-after-session", notes, true);
   fs.writeFileSync(path.join(dir("A-first-run"), "notes.md"), notes.join("\n"));
 });
 

@@ -7,6 +7,8 @@ import { Check, ChevronLeft, ShieldAlert } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { cardClass } from "@/components/ui/Card";
 import { LevelLadder } from "@/components/program/LevelLadder";
+import { ExerciseFigure } from "@/components/follow-along/ExerciseFigure";
+import { levelFigures } from "./level-figure";
 import { useStore } from "@/lib/useStore";
 import { cn, iso as isoDate } from "@/lib/utils";
 import {
@@ -24,6 +26,8 @@ import {
   safetyQuestions,
   stripTierPrefix,
 } from "./quick-start-model";
+
+const ZERO = () => 0;
 
 type Step = "level" | "safety" | "plan";
 const STEPS: Step[] = ["level", "safety", "plan"];
@@ -48,6 +52,7 @@ export function QuickStart({
 }) {
   const router = useRouter();
   const tiers = useMemo(() => program.plan_tiers ?? [], [program]);
+  const figures = useMemo(() => levelFigures(program, tiers), [program, tiers]);
   const intake = program.intake;
   const [step, setStep] = useState<Step>("level");
   const [tierId, setTierId] = useState<string | null>(null);
@@ -186,6 +191,7 @@ export function QuickStart({
             {tiers.map((t) => {
               const { title, reading } = levelCopy(program, t);
               const picked = tierId === t.id;
+              const figure = figures?.get(t.id) ?? null;
               return (
                 <li key={t.id}>
                   <button
@@ -208,6 +214,11 @@ export function QuickStart({
                         <span className="block text-caption text-muted mt-0.5">{reading}</span>
                       ) : null}
                     </span>
+                    {figure ? (
+                      <span aria-hidden className="h-12 w-12 shrink-0 rounded-lg border border-bronze/30 bg-bronze/15 p-0.5">
+                        <ExerciseFigure figure={figure} side="B" playing={false} getElapsed={ZERO} />
+                      </span>
+                    ) : null}
                   </button>
                 </li>
               );
@@ -380,7 +391,7 @@ export function QuickStart({
       ) : null}
 
       <p className="text-center">
-        <Link href={fullHref} className="inline-flex min-h-[44px] items-center px-3 text-caption text-muted underline underline-offset-2 hover:text-ink">
+        <Link href={fullHref} className="inline-flex min-h-11 min-w-11 items-center justify-center px-3 text-caption text-muted underline underline-offset-2 hover:text-ink">
           Detailed setup (about 5 min)
         </Link>
       </p>

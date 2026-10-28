@@ -29,7 +29,7 @@ function LeadFigure({ figure }: { figure: string }) {
   useEffect(() => setStart(Date.now()), []);
   const getElapsed = useCallback(() => Date.now() - start, [start]);
   return (
-    <div aria-hidden className="h-28 w-28 shrink-0 rounded-xl bg-ground p-1.5">
+    <div aria-hidden className="h-36 w-36 shrink-0 rounded-xl border border-bronze/30 bg-bronze/15 p-1">
       <ExerciseFigure figure={figure} side="B" playing getElapsed={getElapsed} />
     </div>
   );
@@ -85,7 +85,7 @@ export function TodayHero({ eyebrow, title, lede, blocks, accent, startHref, wee
         </Link>
       ) : null}
       {startHref && day1 ? (
-        <Link href="/check/" className="block text-center text-small text-slate underline underline-offset-2">
+        <Link href="/check/" className="flex min-h-11 w-full items-center justify-center text-small text-slate underline underline-offset-2">
           Do a morning check first
         </Link>
       ) : null}

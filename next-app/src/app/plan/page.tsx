@@ -277,7 +277,7 @@ export default function WeekPage() {
           Plan
         </h1>
         <p className="mt-2 text-small text-muted">
-          The 7-day rhythm. Browse other days, move sessions, skip a day — all from here.
+          Your week at a glance. Tap a day to see it, move it or skip it.
         </p>
       </header>
 

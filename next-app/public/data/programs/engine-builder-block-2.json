@@ -441,7 +441,7 @@
       "id": "foundation",
       "label": "Foundation",
       "condition": "block_1_completed == 'yes_lapsed' || block_1_completed == 'no_but_equivalent' && current_cardio_hours_per_week < 4",
-      "typical_outcome": "By week 8-12: submax HR at intake pace drops 3-6 bpm, VO2max +4-7%. Threshold pace should move; no percentage is promised, because no citation in this programme measures one. If you re-entered after a lapse, the 2-week ramp catches you up.",
+      "typical_outcome": "By week 8-12: your heart rate at your usual pace is 3-6 bpm lower and fitness is up about 4-7%. Your hard pace should improve; no amount is promised. After a lapse, a 2-week ramp catches you up.",
       "outcome_confidence": "realistic",
       "full_goal_weeks_estimate": 12,
       "starting_phase_id": "phase_0_re_entry_ramp",
@@ -453,7 +453,7 @@
       "id": "progression",
       "label": "Progression",
       "condition": "block_1_completed == 'yes_recent' && current_cardio_hours_per_week >= 3 && current_cardio_hours_per_week < 6",
-      "typical_outcome": "By week 8-10: submax HR drops 5-8 bpm, VO2max +6-9%. Threshold pace should move; no percentage is promised, because no citation in this programme measures one. This is the reference tier — Block 1 into Block 2 is the assumed path.",
+      "typical_outcome": "By week 8-10: your heart rate at your usual pace is 5-8 bpm lower and fitness is up about 6-9%. Your hard pace should improve; no amount is promised.",
       "outcome_confidence": "realistic",
       "full_goal_weeks_estimate": 10,
       "starting_phase_id": "phase_1_intro_week",
@@ -465,7 +465,7 @@
       "id": "push",
       "label": "Push",
       "condition": "block_1_completed == 'yes_recent' && (current_cardio_hours_per_week >= 6 || block_1_submax_hr_delta <= -8)",
-      "typical_outcome": "By week 8-10: submax HR drops 5-10 bpm, VO2max +4-8% (ceiling effect for well-adapted users). Threshold pace should move; no percentage is promised, because no citation in this programme measures one. Adds a third weekly hard session as an optional Z3/threshold cruise from week 5.",
+      "typical_outcome": "By week 8-10: your heart rate at your usual pace is 5-10 bpm lower and fitness is up about 4-8%. Your hard pace should improve; no amount is promised. A third hard session is optional from week 5.",
       "outcome_confidence": "fair",
       "full_goal_weeks_estimate": 10,
       "starting_phase_id": "phase_1_intro_week",
@@ -647,7 +647,7 @@
     },
     {
       "id": "block_sustained_tempo",
-      "name": "Sustained tempo — sub-threshold cruise",
+      "name": "Steady tempo — just under hard",
       "category": "run",
       "location": "anywhere",
       "duration_min": [
@@ -666,7 +666,7 @@
     },
     {
       "id": "block_threshold_cruise",
-      "name": "Threshold cruise intervals (primary Block 2 driver)",
+      "name": "Hard-but-steady intervals",
       "category": "run",
       "location": "anywhere",
       "duration_min": [
@@ -685,7 +685,7 @@
     },
     {
       "id": "block_norwegian_4x4",
-      "name": "Norwegian 4×4 VO2max intervals",
+      "name": "4x4 hard intervals",
       "category": "run",
       "location": "anywhere",
       "duration_min": [
@@ -708,7 +708,7 @@
     },
     {
       "id": "block_short_intervals",
-      "name": "Short-interval VO2max (5×3 or 8×2)",
+      "name": "Short hard intervals",
       "category": "run",
       "location": "anywhere",
       "duration_min": [
@@ -728,7 +728,7 @@
     },
     {
       "id": "block_z3_optional_push",
-      "name": "Optional Z3 tempo (Push tier third hard session)",
+      "name": "Optional third hard session",
       "category": "run",
       "location": "anywhere",
       "duration_min": [
@@ -764,7 +764,7 @@
     },
     {
       "id": "block_20min_tt_or_confirm",
-      "name": "20-min TT — baseline or retest",
+      "name": "20-minute time trial",
       "category": "run",
       "location": "anywhere",
       "duration_min": [

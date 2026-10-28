@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { Footprints, Waves, Dumbbell } from "lucide-react";
 import { BottomSheet } from "@/components/session/shared/BottomSheet";
 import { RunSlotCard } from "@/components/workout/RunSlotCard";
 import { humanBlockName } from "@/lib/day-format";
@@ -84,11 +85,18 @@ export function OffPlanSheet({
         >
           {/* Was also "Log an activity", which now duplicates the sheet
               title directly above it. Lead with the thing, not the verb. */}
-          <span className="min-w-0">
+          <span className="flex min-w-0 items-center gap-3">
+            <span className="flex flex-shrink-0 gap-1.5 text-bronze" aria-hidden="true">
+              <Footprints size={18} strokeWidth={1.75} />
+              <Waves size={18} strokeWidth={1.75} />
+              <Dumbbell size={18} strokeWidth={1.75} />
+            </span>
+            <span className="min-w-0">
             <span className="block text-small font-semibold text-strong mb-0.5 tracking-[-.01em]">
               A run, a row, a class
             </span>
             <span className="block text-caption text-ink">Time, effort, heart rate</span>
+            </span>
           </span>
           <span className="flex-shrink-0 text-body text-muted">›</span>
         </button>

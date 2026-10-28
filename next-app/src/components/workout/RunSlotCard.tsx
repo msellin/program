@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Info, X, Plus, Footprints, Upload } from "lucide-react";
+import { Info, X, Plus, Footprints, Upload, Bike, Waves, Dumbbell, Timer, Snowflake, PersonStanding, Activity, type LucideIcon } from "lucide-react";
 import { useStore } from "@/lib/useStore";
 import { InfoSheet } from "@/components/InfoSheet";
 import { EngineReadsNotesHint } from "./EngineReadsNotesHint";
@@ -398,12 +398,13 @@ export function RunSlotCard({ date }: { date: string }) {
                 onClick={() => setActivity(a)}
                 aria-pressed={activity === a}
                 className={cn(
-                  "px-2.5 py-1.5 min-h-[36px] rounded-full text-eyebrow",
+                  "inline-flex items-center gap-1.5 px-3 py-1.5 min-h-11 rounded-full text-caption",
                   activity === a
                     ? "bg-slate text-surface"
                     : "bg-line-soft text-muted hover:text-ink",
                 )}
               >
+                <ActivityIcon activity={a} />
                 {prettyActivity(a)}
               </button>
             ))}
@@ -848,6 +849,22 @@ const ACTIVITY_ORDER: ActivityType[] = [
   "walk",
   "other",
 ];
+
+const ACTIVITY_ICON: Record<ActivityType, LucideIcon> = {
+  run: Footprints,
+  hyrox: Timer,
+  crossfit_class: Dumbbell,
+  cycle: Bike,
+  row: Waves,
+  ski_erg: Snowflake,
+  walk: PersonStanding,
+  other: Activity,
+};
+
+function ActivityIcon({ activity }: { activity: ActivityType }) {
+  const Icon = ACTIVITY_ICON[activity];
+  return <Icon size={16} strokeWidth={1.75} aria-hidden="true" className="shrink-0" />;
+}
 
 function prettyActivity(a: ActivityType | undefined): string {
   const map: Record<ActivityType, string> = {

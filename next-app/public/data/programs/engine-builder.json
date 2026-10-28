@@ -469,7 +469,7 @@
       "id": "foundation",
       "label": "Foundation",
       "condition": "cardio_hours_per_week < 1 || !can_sustain_20min_easy || recent_z1_max_minutes < 25",
-      "typical_outcome": "By week 8: comfortable holding 60 minutes of Z1 continuously. Resting HR drop of 3-8 bpm. Submax HR at your intake pace 3-6 bpm lower. VO2max improvement modest in Block 1 (~3-6%) — the transformation lands in Blocks 2 and 3 once the base is in.",
+      "typical_outcome": "By week 8: 60 easy minutes feel comfortable, and your heart rate at your usual pace is 3-6 bpm lower. Fitness gains are modest in Block 1 (about 3-6%); most of the change comes in Blocks 2 and 3.",
       "outcome_confidence": "realistic",
       "full_goal_weeks_estimate": 36,
       "starting_phase_id": "phase_1_week_1",
@@ -483,7 +483,7 @@
       "id": "progression",
       "label": "Progression",
       "condition": "cardio_hours_per_week >= 1 && cardio_hours_per_week < 4 && can_sustain_20min_easy && recent_z1_max_minutes >= 25",
-      "typical_outcome": "By week 8: comfortable at 75-90 minute Z1 sessions. Resting HR drop of 5-10 bpm. Submax HR 5-10 bpm lower at the intake pace, or same HR at a faster pace. VO2max improvement 5-8% in Block 1. This is where most non-endurance-trained CrossFit / strength users start.",
+      "typical_outcome": "By week 8: 75-90 easy minutes feel comfortable, and your heart rate at your usual pace is 5-10 bpm lower (or the same rate at a faster pace). Fitness gains of about 5-8%.",
       "outcome_confidence": "realistic",
       "full_goal_weeks_estimate": 28,
       "starting_phase_id": "phase_1_week_1",
@@ -495,7 +495,7 @@
       "id": "push",
       "label": "Push",
       "condition": "cardio_hours_per_week >= 4 && can_sustain_20min_easy && recent_z1_max_minutes >= 45 && days_per_week >= 4",
-      "typical_outcome": "By week 8: 90+ minute Z1 sessions comfortable, threshold pace clearly established, Norwegian 4x4 hitting the top HR zone consistently. Resting HR drop of 5-10 bpm (smaller absolute drop because you started lower). VO2max improvement 4-7% (ceiling effect). Bigger gains come from the volume expansion that follows this block.",
+      "typical_outcome": "By week 8: 90+ easy minutes feel comfortable, your hard pace is clearly set, and the 4x4 intervals reach the top heart-rate zone each time. Fitness gains of about 4-7%; bigger gains follow in the next block.",
       "outcome_confidence": "fair",
       "full_goal_weeks_estimate": 24,
       "starting_phase_id": "phase_1_week_1",
@@ -656,7 +656,7 @@
     },
     {
       "id": "block_sustained_tempo",
-      "name": "Sustained tempo — sub-threshold cruise",
+      "name": "Steady tempo — just under hard",
       "category": "run",
       "location": "anywhere",
       "duration_min": [
@@ -675,7 +675,7 @@
     },
     {
       "id": "block_threshold_cruise",
-      "name": "Threshold cruise intervals",
+      "name": "Hard-but-steady intervals",
       "category": "run",
       "location": "anywhere",
       "duration_min": [
@@ -694,7 +694,7 @@
     },
     {
       "id": "block_norwegian_4x4",
-      "name": "Norwegian 4x4 VO2max intervals",
+      "name": "4x4 hard intervals",
       "category": "run",
       "location": "anywhere",
       "duration_min": [

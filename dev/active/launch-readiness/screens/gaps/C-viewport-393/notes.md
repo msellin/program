@@ -1,5 +1,5 @@
 ## 01-today-top
-url: https://app.terav.fit/off-plan/
+url: http://localhost:3000/off-plan/
 horizontal overflow: false
 
 Skip to content
@@ -17,36 +17,36 @@ ACCESSORY WORK
 Do these when you can — no calendar constraint.
 
 Band shoulder prep (I-Y-T + face pull)
-Shoulder + grip prep — every session · 2 sets
+Shoulder and grip prep · 2 sets
 Dead hang (passive)
-Dead-hang ladder · 4 sets
+Dead hangs — build grip time · 4 sets
 HELD
 Active hang (scap-engaged)
-Dead-hang ladder · 3 sets
+Dead hangs — build grip time · 3 sets
 HELD
 Scapular pull-up
-Scapular pull ladder · 4 sets
+Shoulder-blade pulls (scap pull-ups) · 4 sets
 Scap retraction hold at top
-Scapular pull ladder · 3 sets
+Shoulder-blade pulls (scap pull-ups) · 3 sets
 Ring row (incline, easy)
-Row strength — closed-chain pull · 3 sets
+Ring rows — pulling with feet down · 3 sets
 HELD
 Ring row (horizontal)
-Row strength — closed-chain pull · 4 sets
+Ring rows — pulling with feet down · 4 sets
 Ring row (feet elevated)
-Row strength — closed-chain pull · 4 sets
+Ring rows — pulling with feet down · 4 sets
 Negative pull-up (5s eccentric)
-Negative ladder · 4 sets
+Slow lowering from the bar · 4 sets
 Negative pull-up (10s eccentric)
-Negative ladder · 3 sets
+Slow lowering from the bar · 3 sets
 Isometric hold at top (chin over bar)
-Negative ladder · 3 sets
+Slow lowering from the bar · 3 sets
 Band-assisted pull-up (heavy band)
-Band-assisted pull ladder · 4 sets
+Band-assisted pull-ups · 4 sets
 Band-assisted pull-up (light band)
-Band-assisted pull ladder · 4 sets
+Band-assisted pull-ups · 4 sets
 First strict pull-up attempt
-Band-assisted pull ladder · 1 sets
+Band-assisted pull-ups · 1 sets
 First strict pull-up attempt
 Sub-max pull-up sets · 1 sets
 Partial-ROM pull-up (top half)
@@ -58,12 +58,10 @@ Tempo pull-up · 3 sets
 Grease-the-groove single pull-ups
 Grease the groove — sub-max singles · 5 sets
 First strict pull-up attempt
-Grip-width variety · 1 sets
-Partial-ROM pull-up (top half)
-Grip-width variet
+Pull
 
 ## 01-today-bottom
-url: https://app.terav.fit/off-plan/
+url: http://localhost:3000/off-plan/
 horizontal overflow: false
 
 Skip to content
@@ -81,36 +79,36 @@ ACCESSORY WORK
 Do these when you can — no calendar constraint.
 
 Band shoulder prep (I-Y-T + face pull)
-Shoulder + grip prep — every session · 2 sets
+Shoulder and grip prep · 2 sets
 Dead hang (passive)
-Dead-hang ladder · 4 sets
+Dead hangs — build grip time · 4 sets
 HELD
 Active hang (scap-engaged)
-Dead-hang ladder · 3 sets
+Dead hangs — build grip time · 3 sets
 HELD
 Scapular pull-up
-Scapular pull ladder · 4 sets
+Shoulder-blade pulls (scap pull-ups) · 4 sets
 Scap retraction hold at top
-Scapular pull ladder · 3 sets
+Shoulder-blade pulls (scap pull-ups) · 3 sets
 Ring row (incline, easy)
-Row strength — closed-chain pull · 3 sets
+Ring rows — pulling with feet down · 3 sets
 HELD
 Ring row (horizontal)
-Row strength — closed-chain pull · 4 sets
+Ring rows — pulling with feet down · 4 sets
 Ring row (feet elevated)
-Row strength — closed-chain pull · 4 sets
+Ring rows — pulling with feet down · 4 sets
 Negative pull-up (5s eccentric)
-Negative ladder · 4 sets
+Slow lowering from the bar · 4 sets
 Negative pull-up (10s eccentric)
-Negative ladder · 3 sets
+Slow lowering from the bar · 3 sets
 Isometric hold at top (chin over bar)
-Negative ladder · 3 sets
+Slow lowering from the bar · 3 sets
 Band-assisted pull-up (heavy band)
-Band-assisted pull ladder · 4 sets
+Band-assisted pull-ups · 4 sets
 Band-assisted pull-up (light band)
-Band-assisted pull ladder · 4 sets
+Band-assisted pull-ups · 4 sets
 First strict pull-up attempt
-Band-assisted pull ladder · 1 sets
+Band-assisted pull-ups · 1 sets
 First strict pull-up attempt
 Sub-max pull-up sets · 1 sets
 Partial-ROM pull-up (top half)
@@ -122,20 +120,18 @@ Tempo pull-up · 3 sets
 Grease-the-groove single pull-ups
 Grease the groove — sub-max singles · 5 sets
 First strict pull-up attempt
-Grip-width variety · 1 sets
-Partial-ROM pull-up (top half)
-Grip-width variet
+Pull
 
 fixed/sticky on 01-today: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57
 
 ## 02-plan-top
-url: https://app.terav.fit/plan/
+url: http://localhost:3000/plan/
 horizontal overflow: false
 
 Skip to content
 Plan
 
-The 7-day rhythm. Browse other days, move sessions, skip a day — all from here.
+Your week at a glance. Tap a day to see it, move it or skip it.
 
 FIRST STRICT PULL-UP
 7/8
@@ -166,7 +162,7 @@ Wed
 28 Oct
 TODAY
 
-Row strength — closed-chain pull + Scapular pull ladder + Shoulder + grip prep — every session
+Ring rows — pulling with feet down + Shoulder-blade pulls (scap pull-ups) + Shoulder and grip prep
 
 Thu
 29 Oct
@@ -178,7 +174,7 @@ first strict pullup: planned
 Fri
 30 Oct
 
-Dead-hang ladder + Row strength — closed-chain pull + Shoulder + grip prep — every session
+Dead hangs — build grip time + Ring rows — pulling with feet down + Shoulder and grip prep
 
 Sat
 31 Oct
@@ -200,13 +196,13 @@ Record
 Profile
 
 ## 02-plan-bottom
-url: https://app.terav.fit/plan/
+url: http://localhost:3000/plan/
 horizontal overflow: false
 
 Skip to content
 Plan
 
-The 7-day rhythm. Browse other days, move sessions, skip a day — all from here.
+Your week at a glance. Tap a day to see it, move it or skip it.
 
 FIRST STRICT PULL-UP
 7/8
@@ -237,7 +233,7 @@ Wed
 28 Oct
 TODAY
 
-Row strength — closed-chain pull + Scapular pull ladder + Shoulder + grip prep — every session
+Ring rows — pulling with feet down + Shoulder-blade pulls (scap pull-ups) + Shoulder and grip prep
 
 Thu
 29 Oct
@@ -249,7 +245,7 @@ first strict pullup: planned
 Fri
 30 Oct
 
-Dead-hang ladder + Row strength — closed-chain pull + Shoulder + grip prep — every session
+Dead hangs — build grip time + Ring rows — pulling with feet down + Shoulder and grip prep
 
 Sat
 31 Oct
@@ -273,7 +269,7 @@ Profile
 fixed/sticky on 02-plan: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57
 
 ## 03-session-top
-url: https://app.terav.fit/session/first-strict-pullup/
+url: http://localhost:3000/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
@@ -287,7 +283,7 @@ Wednesday
 Interleaved consolidation · week 7 of 8 · ends 7 Nov
 
 Follow along ·
-Row strength
+Ring rows
 3 moves · with a timer
 Ring row (incline, easy)
 3 sets
@@ -297,7 +293,7 @@ Ring row (horizontal)
 Ring row (feet elevated)
 4 sets
 Follow along ·
-Scapular pull ladder
+Shoulder-blade pulls (scap pull-ups)
 2 moves · with a timer
 Scapular pull-up
 4 sets
@@ -305,7 +301,7 @@ Scap retraction hold at top
 3 sets
 OPTIONAL
 Follow along ·
-Shoulder + grip prep
+Shoulder and grip prep
 1 move · with a timer
 Band shoulder prep (I-Y-T + face pull)
 2 sets
@@ -321,7 +317,7 @@ Record
 Profile
 
 ## 03-session-bottom
-url: https://app.terav.fit/session/first-strict-pullup/
+url: http://localhost:3000/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
@@ -335,7 +331,7 @@ Wednesday
 Interleaved consolidation · week 7 of 8 · ends 7 Nov
 
 Follow along ·
-Row strength
+Ring rows
 3 moves · with a timer
 Ring row (incline, easy)
 3 sets
@@ -345,7 +341,7 @@ Ring row (horizontal)
 Ring row (feet elevated)
 4 sets
 Follow along ·
-Scapular pull ladder
+Shoulder-blade pulls (scap pull-ups)
 2 moves · with a timer
 Scapular pull-up
 4 sets
@@ -353,7 +349,7 @@ Scap retraction hold at top
 3 sets
 OPTIONAL
 Follow along ·
-Shoulder + grip prep
+Shoulder and grip prep
 1 move · with a timer
 Band shoulder prep (I-Y-T + face pull)
 2 sets
@@ -371,7 +367,7 @@ Profile
 fixed/sticky on 03-session: div.sticky bottom-[calc(64px+env(safe-area-i @y=723 h=65 | nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57
 
 ## 04-record-top
-url: https://app.terav.fit/record/
+url: http://localhost:3000/record/
 horizontal overflow: false
 
 Skip to content
@@ -526,7 +522,7 @@ Profile
 100
 
 ## 04-record-bottom
-url: https://app.terav.fit/record/
+url: http://localhost:3000/record/
 horizontal overflow: false
 
 Skip to content
@@ -683,7 +679,7 @@ Profile
 fixed/sticky on 04-record: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57
 
 ## 05-check-top
-url: https://app.terav.fit/check/
+url: http://localhost:3000/check/
 horizontal overflow: false
 
 Skip to content
@@ -696,7 +692,8 @@ Workout ready
 
 You’re good to train as planned.
 
-Why?
+Why this result?
+›
 
 ✓
 Saved. Today's plan is adjusted.
@@ -744,7 +741,7 @@ Record
 Profile
 
 ## 05-check-bottom
-url: https://app.terav.fit/check/
+url: http://localhost:3000/check/
 horizontal overflow: false
 
 Skip to content
@@ -757,7 +754,8 @@ Workout ready
 
 You’re good to train as planned.
 
-Why?
+Why this result?
+›
 
 ✓
 Saved. Today's plan is adjusted.
@@ -807,7 +805,7 @@ Profile
 fixed/sticky on 05-check: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57
 
 ## 06-programs-top
-url: https://app.terav.fit/programs/
+url: http://localhost:3000/programs/
 horizontal overflow: false
 
 Skip to content
@@ -906,7 +904,7 @@ ALL LEVELS
 ~1.5 hr/week (3-4 sessions/wk, 20-35 min ea
 
 ## 06-programs-bottom
-url: https://app.terav.fit/programs/
+url: http://localhost:3000/programs/
 horizontal overflow: false
 
 Skip to content
@@ -1007,7 +1005,7 @@ ALL LEVELS
 fixed/sticky on 06-programs: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57
 
 ## 07-profile-top
-url: https://app.terav.fit/profile/
+url: http://localhost:3000/profile/
 horizontal overflow: false
 
 Skip to content
@@ -1056,7 +1054,7 @@ Record
 Profile
 
 ## 07-profile-bottom
-url: https://app.terav.fit/profile/
+url: http://localhost:3000/profile/
 horizontal overflow: false
 
 Skip to content
@@ -1107,7 +1105,7 @@ Profile
 fixed/sticky on 07-profile: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57
 
 ## 08-account-top
-url: https://app.terav.fit/account/
+url: http://localhost:3000/account/
 horizontal overflow: false
 
 Skip to content
@@ -1140,7 +1138,7 @@ Record
 Profile
 
 ## 08-account-bottom
-url: https://app.terav.fit/account/
+url: http://localhost:3000/account/
 horizontal overflow: false
 
 Skip to content
@@ -1175,7 +1173,7 @@ Profile
 fixed/sticky on 08-account: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57
 
 ## 09-settings-top
-url: https://app.terav.fit/settings/
+url: http://localhost:3000/settings/
 horizontal overflow: false
 
 Skip to content
@@ -1214,7 +1212,7 @@ Record
 Profile
 
 ## 09-settings-bottom
-url: https://app.terav.fit/settings/
+url: http://localhost:3000/settings/
 horizontal overflow: false
 
 Skip to content
@@ -1255,7 +1253,7 @@ Profile
 fixed/sticky on 09-settings: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57
 
 ## 10-off-plan-top
-url: https://app.terav.fit/off-plan/
+url: http://localhost:3000/off-plan/
 horizontal overflow: false
 
 Skip to content
@@ -1273,36 +1271,36 @@ ACCESSORY WORK
 Do these when you can — no calendar constraint.
 
 Band shoulder prep (I-Y-T + face pull)
-Shoulder + grip prep — every session · 2 sets
+Shoulder and grip prep · 2 sets
 Dead hang (passive)
-Dead-hang ladder · 4 sets
+Dead hangs — build grip time · 4 sets
 HELD
 Active hang (scap-engaged)
-Dead-hang ladder · 3 sets
+Dead hangs — build grip time · 3 sets
 HELD
 Scapular pull-up
-Scapular pull ladder · 4 sets
+Shoulder-blade pulls (scap pull-ups) · 4 sets
 Scap retraction hold at top
-Scapular pull ladder · 3 sets
+Shoulder-blade pulls (scap pull-ups) · 3 sets
 Ring row (incline, easy)
-Row strength — closed-chain pull · 3 sets
+Ring rows — pulling with feet down · 3 sets
 HELD
 Ring row (horizontal)
-Row strength — closed-chain pull · 4 sets
+Ring rows — pulling with feet down · 4 sets
 Ring row (feet elevated)
-Row strength — closed-chain pull · 4 sets
+Ring rows — pulling with feet down · 4 sets
 Negative pull-up (5s eccentric)
-Negative ladder · 4 sets
+Slow lowering from the bar · 4 sets
 Negative pull-up (10s eccentric)
-Negative ladder · 3 sets
+Slow lowering from the bar · 3 sets
 Isometric hold at top (chin over bar)
-Negative ladder · 3 sets
+Slow lowering from the bar · 3 sets
 Band-assisted pull-up (heavy band)
-Band-assisted pull ladder · 4 sets
+Band-assisted pull-ups · 4 sets
 Band-assisted pull-up (light band)
-Band-assisted pull ladder · 4 sets
+Band-assisted pull-ups · 4 sets
 First strict pull-up attempt
-Band-assisted pull ladder · 1 sets
+Band-assisted pull-ups · 1 sets
 First strict pull-up attempt
 Sub-max pull-up sets · 1 sets
 Partial-ROM pull-up (top half)
@@ -1314,12 +1312,10 @@ Tempo pull-up · 3 sets
 Grease-the-groove single pull-ups
 Grease the groove — sub-max singles · 5 sets
 First strict pull-up attempt
-Grip-width variety · 1 sets
-Partial-ROM pull-up (top half)
-Grip-width variet
+Pull
 
 ## 10-off-plan-bottom
-url: https://app.terav.fit/off-plan/
+url: http://localhost:3000/off-plan/
 horizontal overflow: false
 
 Skip to content
@@ -1337,36 +1333,36 @@ ACCESSORY WORK
 Do these when you can — no calendar constraint.
 
 Band shoulder prep (I-Y-T + face pull)
-Shoulder + grip prep — every session · 2 sets
+Shoulder and grip prep · 2 sets
 Dead hang (passive)
-Dead-hang ladder · 4 sets
+Dead hangs — build grip time · 4 sets
 HELD
 Active hang (scap-engaged)
-Dead-hang ladder · 3 sets
+Dead hangs — build grip time · 3 sets
 HELD
 Scapular pull-up
-Scapular pull ladder · 4 sets
+Shoulder-blade pulls (scap pull-ups) · 4 sets
 Scap retraction hold at top
-Scapular pull ladder · 3 sets
+Shoulder-blade pulls (scap pull-ups) · 3 sets
 Ring row (incline, easy)
-Row strength — closed-chain pull · 3 sets
+Ring rows — pulling with feet down · 3 sets
 HELD
 Ring row (horizontal)
-Row strength — closed-chain pull · 4 sets
+Ring rows — pulling with feet down · 4 sets
 Ring row (feet elevated)
-Row strength — closed-chain pull · 4 sets
+Ring rows — pulling with feet down · 4 sets
 Negative pull-up (5s eccentric)
-Negative ladder · 4 sets
+Slow lowering from the bar · 4 sets
 Negative pull-up (10s eccentric)
-Negative ladder · 3 sets
+Slow lowering from the bar · 3 sets
 Isometric hold at top (chin over bar)
-Negative ladder · 3 sets
+Slow lowering from the bar · 3 sets
 Band-assisted pull-up (heavy band)
-Band-assisted pull ladder · 4 sets
+Band-assisted pull-ups · 4 sets
 Band-assisted pull-up (light band)
-Band-assisted pull ladder · 4 sets
+Band-assisted pull-ups · 4 sets
 First strict pull-up attempt
-Band-assisted pull ladder · 1 sets
+Band-assisted pull-ups · 1 sets
 First strict pull-up attempt
 Sub-max pull-up sets · 1 sets
 Partial-ROM pull-up (top half)
@@ -1378,8 +1374,6 @@ Tempo pull-up · 3 sets
 Grease-the-groove single pull-ups
 Grease the groove — sub-max singles · 5 sets
 First strict pull-up attempt
-Grip-width variety · 1 sets
-Partial-ROM pull-up (top half)
-Grip-width variet
+Pull
 
 fixed/sticky on 10-off-plan: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57

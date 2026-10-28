@@ -263,7 +263,17 @@ function ErrorBox({ msg }: { msg: string }) {
  * Same shape the Cut C mockup uses — 12 columns × 7 rows.
  */
 function buildReadinessHeatmap(
-  logs: Record<string, { derived_state?: WeeklyHeatmapCellState | null } | undefined> | undefined,
+  logs:
+    | Record<
+        string,
+        | {
+            derived_state?: WeeklyHeatmapCellState | null;
+            exercises?: Record<string, { done?: boolean }>;
+            runs?: unknown[];
+          }
+        | undefined
+      >
+    | undefined,
   weeks: number,
 ): WeeklyHeatmapCell[] {
   const cells: WeeklyHeatmapCell[] = [];
@@ -274,7 +284,10 @@ function buildReadinessHeatmap(
     d.setDate(now.getDate() - i);
     const iso = d.toISOString().slice(0, 10);
     const log = logs?.[iso];
-    const state = (log?.derived_state ?? null) as WeeklyHeatmapCellState | null;
+    // A check colours the day; a day trained without a check still counts as done.
+    const trained =
+      Object.values(log?.exercises ?? {}).some((e) => e.done) || (log?.runs?.length ?? 0) > 0;
+    const state = (log?.derived_state ?? (trained ? "green" : null)) as WeeklyHeatmapCellState | null;
     cells.push({
       date: iso,
       sessionState: state ?? "none",

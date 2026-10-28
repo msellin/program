@@ -176,7 +176,7 @@ export function BriefView({
 
   return (
     <div className="flex flex-col min-h-[calc(100dvh-64px-env(safe-area-inset-bottom))]">
-      <div className="flex-1 space-y-5 pb-2">
+      <div className="flex-1 space-y-5 pb-6">
         {/* Program name as the eyebrow above the day (same order as Today):
             beside a 32px day name it ran off the edge at 375. */}
         <header className="space-y-1">
@@ -523,6 +523,8 @@ export function BriefView({
       </div>
 
       <div className="sticky bottom-[calc(64px+env(safe-area-inset-bottom))] z-10 flex-shrink-0 border-t border-line-soft bg-ground pt-2 pb-2 mt-4">
+        {/* Fade, so a card scrolling under the bar dissolves instead of being cut. */}
+        <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 -top-6 h-6 bg-gradient-to-t from-ground to-transparent" />
         {gateUnresolved ? (
           <p className="mb-1.5 text-caption text-muted">Accept the numbers to start</p>
         ) : null}

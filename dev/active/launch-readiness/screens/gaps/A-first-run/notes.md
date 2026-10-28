@@ -50,7 +50,7 @@ Eccentric training produces great
 CTA href from the pull-up landing page: https://app.terav.fit/sign-up?next=%2Fprograms%2Ffirst-strict-pullup&utm_campaign=gap-test
 
 ## 02-sign-up-page-not-submitted
-url: https://app.terav.fit/sign-up/
+url: http://localhost:3000/sign-up/
 horizontal overflow: false
 
 Sign up
@@ -69,7 +69,7 @@ Create account
 Already have an account? Sign in
 
 ## 03-first-screen-after-sign-in
-url: https://app.terav.fit/
+url: http://localhost:3000/
 horizontal overflow: false
 
 Skip to content
@@ -84,7 +84,7 @@ Record
 Profile
 
 ## 04-programs
-url: https://app.terav.fit/programs/
+url: http://localhost:3000/programs/
 horizontal overflow: false
 
 Skip to content
@@ -183,7 +183,7 @@ ALL LEVELS
 Mus
 
 ## 05-program-detail
-url: https://app.terav.fit/programs/first-strict-pullup/
+url: http://localhost:3000/programs/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
@@ -222,7 +222,7 @@ Record
 Profile
 
 ## 06-intake-01
-url: https://app.terav.fit/programs/first-strict-pullup/intake/
+url: http://localhost:3000/programs/first-strict-pullup/intake/
 horizontal overflow: false
 
 Skip to content
@@ -246,7 +246,7 @@ Pick the one closest to you
 Detailed setup (about 5 min)
 
 ## 06-intake-02
-url: https://app.terav.fit/programs/first-strict-pullup/intake/
+url: http://localhost:3000/programs/first-strict-pullup/intake/
 horizontal overflow: false
 
 Skip to content
@@ -293,7 +293,7 @@ Continue
 Detailed setup (about 5 min)
 
 ## 06-intake-03
-url: https://app.terav.fit/programs/first-strict-pullup/intake/
+url: http://localhost:3000/programs/first-strict-pullup/intake/
 horizontal overflow: false
 
 Skip to content
@@ -331,7 +331,7 @@ DAYS / WEEK
 4
 5
 
-Often by week 8: 25-45 second dead hang, first clean scapular pulls, and 5-10 strict feet-elevated ring rows.
+Often by week 8: hang from the bar for 25-45 seconds, do clean shoulder-blade pulls, and 5-10 ring rows with your feet raised.
 
 Not medical advice. I'll see a clinician for shoulder or elbow pain that lasts past a session.
 I'll stop if shoulder pain appears in a hang or pull. No training through it.
@@ -340,7 +340,7 @@ Start
 Detailed setup (about 5 min)
 
 ## 06-intake-04
-url: https://app.terav.fit/
+url: http://localhost:3000/
 horizontal overflow: false
 
 Skip to content
@@ -359,9 +359,9 @@ Week 1. Start with your first session at an easy effort.
 
 25–30 MIN
 
-· Row strength — closed-chain pull
-· Scapular pull ladder
-· Shoulder + grip prep — every session
+· Ring rows — pulling with feet down
+· Shoulder-blade pulls (scap pull-ups)
+· Shoulder and grip prep
 M
 T
 W
@@ -393,7 +393,7 @@ Profile
 Intake steps walked: 4
 
 ## 07-today-day-1
-url: https://app.terav.fit/
+url: http://localhost:3000/
 horizontal overflow: false
 
 Skip to content
@@ -412,9 +412,9 @@ Week 1. Start with your first session at an easy effort.
 
 25–30 MIN
 
-· Row strength — closed-chain pull
-· Scapular pull ladder
-· Shoulder + grip prep — every session
+· Ring rows — pulling with feet down
+· Shoulder-blade pulls (scap pull-ups)
+· Shoulder and grip prep
 M
 T
 W
@@ -444,7 +444,7 @@ Record
 Profile
 
 ## 08-first-session
-url: https://app.terav.fit/session/first-strict-pullup/
+url: http://localhost:3000/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
@@ -458,7 +458,7 @@ Wednesday
 Hang, scap, row base · week 1 of 8 · ends 22 Dec
 
 Follow along ·
-Row strength
+Ring rows
 3 moves · with a timer
 Ring row (incline, easy)
 3 sets
@@ -467,7 +467,7 @@ Ring row (horizontal)
 Ring row (feet elevated)
 4 sets
 Follow along ·
-Scapular pull ladder
+Shoulder-blade pulls (scap pull-ups)
 2 moves · with a timer
 Scapular pull-up
 4 sets
@@ -475,7 +475,7 @@ Scap retraction hold at top
 3 sets
 OPTIONAL
 Follow along ·
-Shoulder + grip prep
+Shoulder and grip prep
 1 move · with a timer
 Band shoulder prep (I-Y-T + face pull)
 2 sets
@@ -490,7 +490,7 @@ Record
 Profile
 
 ## 09-first-session-bottom
-url: https://app.terav.fit/session/first-strict-pullup/
+url: http://localhost:3000/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
@@ -504,7 +504,7 @@ Wednesday
 Hang, scap, row base · week 1 of 8 · ends 22 Dec
 
 Follow along ·
-Row strength
+Ring rows
 3 moves · with a timer
 Ring row (incline, easy)
 3 sets
@@ -513,7 +513,7 @@ Ring row (horizontal)
 Ring row (feet elevated)
 4 sets
 Follow along ·
-Scapular pull ladder
+Shoulder-blade pulls (scap pull-ups)
 2 moves · with a timer
 Scapular pull-up
 4 sets
@@ -521,7 +521,7 @@ Scap retraction hold at top
 3 sets
 OPTIONAL
 Follow along ·
-Shoulder + grip prep
+Shoulder and grip prep
 1 move · with a timer
 Band shoulder prep (I-Y-T + face pull)
 2 sets
@@ -536,7 +536,7 @@ Record
 Profile
 
 ## 10-session-done
-url: https://app.terav.fit/session/first-strict-pullup/
+url: http://localhost:3000/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
@@ -573,13 +573,13 @@ NEXT SESSION
 
 Friday 30 Oct
 
-Row strength — closed-chain pull
+Ring rows — pulling with feet down
 
-Ring row
+Ring row (incline, easy)
 3 sets
-Ring row
+Ring row (horizontal)
 4 sets
-Ring row
+Ring row (feet elevated)
 4 sets
 Back to Today
 Session done.
@@ -589,7 +589,7 @@ Record
 Profile
 
 ## 10-session-done-bottom
-url: https://app.terav.fit/session/first-strict-pullup/
+url: http://localhost:3000/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
@@ -626,16 +626,72 @@ NEXT SESSION
 
 Friday 30 Oct
 
-Row strength — closed-chain pull
+Ring rows — pulling with feet down
 
-Ring row
+Ring row (incline, easy)
 3 sets
-Ring row
+Ring row (horizontal)
 4 sets
-Ring row
+Ring row (feet elevated)
 4 sets
 Back to Today
 Session done.
+Today
+Plan
+Record
+Profile
+
+## 11-record-after-session
+url: http://localhost:3000/record/
+horizontal overflow: false
+
+Skip to content
+Record
+Export
+
+Tap a point to see why it moved. Every change cites a study or a signal from your log.
+
+NOW
+Now
+
+READINESS — 12 WEEKS
+
+Check in a few mornings to see this.
+
+Week of 26 Oct
+
+This week so far
+
+Sessions
+1 / 1
+TREND
+Trend
+30D
+90D
+1Y
+ALL
+
+ROLLING 7-DAY AVG
+
+The trend curve builds here once you have two or more retest readings for the same metric.
+
+RETESTS · 0 EVENTS
+
+Your retest history builds here — each reading tied to the study or log signal that triggered it.
+
+LOG
+Log
+
+ACTIVITY — LAST 12 WEEKS
+
+No session history yet — log a session or morning check to start the trail.
+
+1 active day · showing last 1
+
+Wed 28 Oct
+3 done
+Terav — Record
+FEEDBACK? →
 Today
 Plan
 Record
