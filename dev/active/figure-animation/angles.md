@@ -128,8 +128,8 @@ Label: Foam roller thoracic extension: roller under the upper back, hands behind
 | angle | start | 25% | 50% | 75% | min..max |
 |---|---|---|---|---|---|
 | trunk | 62 | 74 | 84 | 78 | 62..84 |
-| body arm shoulder | 138 | 142 | 143 | 142 | 138..143 |
-| body arm elbow | 13 | 16 | 18 | 17 | 13..18 |
+| body arm shoulder | 133 | 137 | 138 | 137 | 133..138 |
+| body arm elbow | 15 | 17 | 19 | 18 | 15..19 |
 
 ## pullup (move, 5200 ms, tempo drive/control)
 Exercises: pu_first_strict_attempt
@@ -206,7 +206,7 @@ Label: Negative pull-up, 5 seconds: start with the chin over the bar and lower s
 ## pullup_top (hold)
 Exercises: pu_scap_retraction_hold, pu_isometric_top_hold
 
-Label: Top hold: chin over the bar, elbows tucked in, shoulder blades pulled down and back, body still
+Label: Top hold: chin over the bar, shoulder blades pulled down and back, body still
 
 | angle | start | 25% | 50% | 75% | min..max |
 |---|---|---|---|---|---|
@@ -300,7 +300,7 @@ Label: Hollow body pullover: holding the hollow, lower back pressed down, the ar
 | trunk | 76 | 76 | 76 | 76 | 76..76 |
 
 ## wristprep (move, 6000 ms)
-Exercises: hs_wrist_ext_prep, hs_wrist_pushups_floor
+Exercises: hs_wrist_ext_prep
 
 Label: Wrist prep on hands and knees: hands flat on the floor, fingers forward; the shoulders rock slowly forward over the hands, then back
 
@@ -315,6 +315,18 @@ Label: Wrist prep on hands and knees: hands flat on the floor, fingers forward; 
 Exercises: hs_finger_raises
 
 Label: Finger raises: on hands and knees with the hands flat, lift the fingers off the floor while the palm stays down, then set them back
+
+| angle | start | 25% | 50% | 75% | min..max |
+|---|---|---|---|---|---|
+| trunk | 74 | 74 | 74 | 74 | 74..74 |
+| body leg hip | 109 | 109 | 109 | 109 | 109..109 |
+| body leg knee | 102 | 102 | 102 | 102 | 102..102 |
+| body leg shin | 81 | 81 | 81 | 81 | 81..81 |
+
+## wristback (move, 4500 ms)
+Exercises: hs_wrist_pushups_floor
+
+Label: Wrist push-ups, palms up: kneeling with the backs of the hands flat on the floor, fingers pointing toward the knees; press slowly onto the knuckles for three seconds, then ease back in one
 
 | angle | start | 25% | 50% | 75% | min..max |
 |---|---|---|---|---|---|
@@ -351,7 +363,7 @@ Label: Wall handstand, chest to the wall: hands a little off the wall, arms stra
 
 | angle | start | 25% | 50% | 75% | min..max |
 |---|---|---|---|---|---|
-| trunk | 6 | 6 | 6 | 6 | 6..6 |
+| trunk | 6 | 6 | 6 | 6 | 6..7 |
 
 ## wallhs_90 (hold)
 Exercises: hs_incline_90_hold
@@ -360,7 +372,7 @@ Label: Incline hold, first step: hands a step further from the wall than the che
 
 | angle | start | 25% | 50% | 75% | min..max |
 |---|---|---|---|---|---|
-| trunk | 22 | 22 | 22 | 22 | 22..22 |
+| trunk | 27 | 27 | 27 | 28 | 27..28 |
 
 ## wallhs_lean (hold)
 Exercises: hs_incline_135_hold
@@ -369,7 +381,7 @@ Label: Incline hold, steeper step: hands about a metre from the wall, one straig
 
 | angle | start | 25% | 50% | 75% | min..max |
 |---|---|---|---|---|---|
-| trunk | 45 | 45 | 45 | 45 | 45..45 |
+| trunk | 45 | 45 | 45 | 46 | 45..46 |
 
 ## wallhs_shrug (move, 4000 ms, tempo drive/control)
 Exercises: hs_wall_supported_shrugs
@@ -388,8 +400,8 @@ Label: Wall handstand shoulder taps: chest to the wall, shift onto one arm and t
 | angle | start | 25% | 50% | 75% | min..max |
 |---|---|---|---|---|---|
 | trunk | 6 | 9 | 6 | 9 | 6..9 |
-| work arm shoulder | 179 | 46 | 179 | 46 | 20..179 |
-| work arm elbow | 178 | 19 | 178 | 19 | 18..178 |
+| work arm shoulder | 179 | 42 | 179 | 42 | 20..179 |
+| work arm elbow | 178 | 22 | 178 | 22 | 22..178 |
 
 ## hsfree (move, 6000 ms)
 Exercises: hs_freestand_attempt, hs_half_pirouette_free, hs_full_pirouette_free
@@ -398,7 +410,7 @@ Label: Freestanding handstand: hands shoulder-width on the floor, arms straight,
 
 | angle | start | 25% | 50% | 75% | min..max |
 |---|---|---|---|---|---|
-| trunk | 0 | 2 | 3 | 2 | 0..3 |
+| trunk | 0 | 1 | 3 | 2 | 0..4 |
 
 ## hstuck (move, 6000 ms)
 Exercises: hs_tuck_freestand
@@ -408,9 +420,9 @@ Label: Tuck handstand: arms straight, knees drawn in toward the chest, hips stac
 | angle | start | 25% | 50% | 75% | min..max |
 |---|---|---|---|---|---|
 | trunk | 0 | 2 | 4 | 2 | 0..4 |
-| work leg hip | 180 | 145 | 65 | 145 | 65..180 |
-| work leg knee | 180 | 53 | 35 | 53 | 35..180 |
-| work leg shin | 0 | 87 | 34 | 87 | 0..87 |
+| work leg hip | 180 | 158 | 65 | 158 | 65..180 |
+| work leg knee | 180 | 35 | 35 | 35 | 35..180 |
+| work leg shin | 0 | 55 | 34 | 55 | 0..85 |
 
 ## hswalk (gait, 3600 ms)
 Exercises: hs_single_step_attempt, hs_walk_shuttle_2_3, hs_walk_continuous_line, hs_walk_marker_path, hs_walk_precision_path, hs_walk_through_cones, hs_walk_over_plate
@@ -420,10 +432,10 @@ Label: Handstand walking: from a balanced handstand, shift the weight over one h
 | angle | start | 25% | 50% | 75% | min..max |
 |---|---|---|---|---|---|
 | trunk | 1 | 6 | 1 | 6 | 1..6 |
-| far arm shoulder | 178 | 157 | 167 | 170 | 149..179 |
-| far arm elbow | 167 | 135 | 178 | 178 | 134..178 |
-| work arm shoulder | 167 | 174 | 178 | 152 | 147..180 |
-| work arm elbow | 178 | 178 | 167 | 134 | 134..178 |
+| far arm shoulder | 176 | 173 | 167 | 170 | 162..179 |
+| far arm elbow | 171 | 171 | 178 | 178 | 171..178 |
+| work arm shoulder | 167 | 174 | 176 | 170 | 161..180 |
+| work arm elbow | 178 | 178 | 171 | 171 | 171..178 |
 
 ## kickup (gait, 4500 ms)
 Exercises: hs_kickup_practice
@@ -432,19 +444,19 @@ Label: Kick-up: hands on the floor, one leg swings up straight and over the hips
 
 | angle | start | 25% | 50% | 75% | min..max |
 |---|---|---|---|---|---|
-| trunk | 76 | 0 | 1 | 48 | 0..76 |
-| far leg hip | 55 | 173 | 174 | 160 | 55..180 |
-| far leg knee | 129 | 162 | 162 | 162 | 106..162 |
-| far leg shin | 30 | 11 | 13 | 87 | 11..87 |
+| trunk | 80 | 0 | 1 | 51 | 0..86 |
+| far leg hip | 46 | 173 | 174 | 162 | 45..179 |
+| far leg knee | 112 | 162 | 162 | 162 | 98..162 |
+| far leg shin | 35 | 11 | 13 | 87 | 11..87 |
 
 ## wallwalk (move, 9000 ms)
 Exercises: hs_wall_walk
 
-Label: Wall walk: start in a plank with the feet at the wall; walk the feet up the wall while the hands walk in toward it, as far as you can hold with a tight body
+Label: Wall walk: start in a plank with the feet just up the wall; walk the feet up the wall while the hands walk in toward it, as far as you can hold with a tight body
 
 | angle | start | 25% | 50% | 75% | min..max |
 |---|---|---|---|---|---|
-| trunk | 64 | 89 | 20 | 20 | 20..89 |
+| trunk | 70 | 78 | 20 | 19 | 6..90 |
 
 ## squat (move, 5500 ms, tempo control/drive)
 Exercises: back_squat_highbar
@@ -477,14 +489,14 @@ Label: Front squat: bar resting on the front of the shoulders, elbows high; sit 
 ## deadlift (move, 5200 ms, tempo drive/control)
 Exercises: block_pull_midshin
 
-Label: Block pull: bar at mid-shin, hips back, flat back and straight arms; push the floor away and stand tall with the bar close to the legs, then lower it back to the blocks
+Label: Block pull: bar at mid-shin on low blocks, hips back, flat back and straight arms; push the floor away and stand tall with the bar close to the legs, then lower it back to the blocks
 
 | angle | start | 25% | 50% | 75% | min..max |
 |---|---|---|---|---|---|
-| trunk | 59 | 33 | 14 | 58 | 3..59 |
-| body leg hip | 51 | 121 | 158 | 59 | 51..180 |
-| body leg knee | 96 | 147 | 158 | 105 | 96..177 |
-| body leg shin | 14 | 7 | 14 | 12 | 5..14 |
+| trunk | 55 | 30 | 13 | 53 | 3..55 |
+| body leg hip | 70 | 129 | 161 | 76 | 70..180 |
+| body leg knee | 115 | 151 | 160 | 121 | 115..177 |
+| body leg shin | 10 | 7 | 14 | 9 | 5..14 |
 
 ## bridge2 (move, 4500 ms, tempo drive/control)
 Exercises: glute_bridge
@@ -509,12 +521,12 @@ Label: Barbell hip thrust: upper back on a bench, bar across the hips, feet flat
 | angle | start | 25% | 50% | 75% | min..max |
 |---|---|---|---|---|---|
 | trunk | 58 | 79 | 90 | 79 | 58..90 |
-| far leg hip | 109 | 155 | 179 | 154 | 109..179 |
-| far leg knee | 70 | 77 | 89 | 77 | 70..89 |
-| far leg shin | 17 | 1 | 0 | 1 | 0..17 |
-| work leg hip | 111 | 156 | 179 | 155 | 111..179 |
-| work leg knee | 70 | 77 | 89 | 77 | 70..89 |
-| work leg shin | 17 | 1 | 0 | 1 | 0..17 |
+| far leg hip | 110 | 155 | 179 | 154 | 110..179 |
+| far leg knee | 77 | 83 | 95 | 83 | 76..95 |
+| far leg shin | 22 | 6 | 6 | 6 | 5..22 |
+| work leg hip | 113 | 156 | 179 | 155 | 113..179 |
+| work leg knee | 77 | 83 | 95 | 83 | 76..95 |
+| work leg shin | 22 | 6 | 6 | 6 | 5..22 |
 
 ## splitsquat (move, 5000 ms, tempo control/drive)
 Exercises: bulgarian_split_squat_db
@@ -524,12 +536,12 @@ Label: Bulgarian split squat, left leg in front: rear foot on a bench, dumbbells
 | angle | start | 25% | 50% | 75% | min..max |
 |---|---|---|---|---|---|
 | trunk | 8 | 13 | 18 | 13 | 8..18 |
-| body leg hip | 123 | 139 | 133 | 139 | 123..139 |
-| body leg knee | 158 | 107 | 87 | 107 | 87..158 |
-| body leg shin | 88 | 52 | 23 | 53 | 23..89 |
-| left leg hip | 148 | 106 | 72 | 106 | 72..148 |
-| left leg knee | 153 | 105 | 87 | 106 | 87..153 |
-| left leg shin | 3 | 13 | 3 | 13 | 3..13 |
+| body leg hip | 119 | 144 | 142 | 144 | 119..145 |
+| body leg knee | 178 | 113 | 90 | 113 | 90..178 |
+| body leg shin | 71 | 64 | 34 | 64 | 34..89 |
+| left leg hip | 160 | 114 | 80 | 115 | 80..160 |
+| left leg knee | 178 | 118 | 93 | 119 | 93..178 |
+| left leg shin | 11 | 8 | 5 | 8 | 0..12 |
 
 ## slrdl (move, 5500 ms, tempo control/drive)
 Exercises: single_leg_rdl
@@ -555,33 +567,33 @@ Label: Pallof press: standing side-on to a band anchored at chest height; press 
 |---|---|---|---|---|---|
 | trunk | 0 | 0 | 0 | 0 | 0..0 |
 
-## nordic (move, 7000 ms, tempo control/drive)
+## nordic (move, 8000 ms, tempo control/drive)
 Exercises: nordic_curl
 
 Label: Nordic curl: kneeling with the ankles held down; keep knee, hip and shoulder in one line and lower forward as slowly as you can, catch with the hands, push back up
 
 | angle | start | 25% | 50% | 75% | min..max |
 |---|---|---|---|---|---|
-| trunk | 2 | 29 | 76 | 68 | 2..85 |
-| body arm shoulder | 29 | 29 | 19 | 6 | 4..32 |
-| body arm elbow | 178 | 178 | 101 | 117 | 91..178 |
+| trunk | 2 | 36 | 85 | 42 | 2..85 |
+| body arm shoulder | 29 | 29 | 31 | 29 | 3..32 |
+| body arm elbow | 178 | 178 | 91 | 178 | 91..178 |
 
-## sled (gait, 2600 ms)
+## sled (gait, 2000 ms)
 Exercises: sled_push
 
-Label: Heavy sled push: hands high on the sled posts, trunk leaning in at about 45°, arms long; drive one knee through at a time with short powerful steps
+Label: Heavy sled push: hands high on the sled posts, trunk leaning in at about 45°, arms long; drive one knee through at a time with short, heavy steps of about a second each
 
 | angle | start | 25% | 50% | 75% | min..max |
 |---|---|---|---|---|---|
 | trunk | 48 | 48 | 48 | 48 | 48..48 |
-| far leg hip | 145 | 129 | 86 | 109 | 81..172 |
-| far leg knee | 135 | 103 | 100 | 99 | 82..178 |
-| far leg shin | 58 | 74 | 34 | 58 | 34..74 |
+| far leg hip | 138 | 121 | 101 | 113 | 95..153 |
+| far leg knee | 147 | 112 | 125 | 121 | 102..168 |
+| far leg shin | 39 | 56 | 24 | 40 | 24..56 |
 | far arm shoulder | 110 | 110 | 110 | 110 | 110..110 |
 | far arm elbow | 160 | 160 | 160 | 160 | 160..160 |
-| work leg hip | 86 | 109 | 145 | 129 | 81..172 |
-| work leg knee | 100 | 99 | 135 | 103 | 82..178 |
-| work leg shin | 34 | 58 | 58 | 74 | 34..74 |
+| work leg hip | 101 | 113 | 138 | 121 | 95..153 |
+| work leg knee | 125 | 121 | 147 | 112 | 102..168 |
+| work leg shin | 24 | 40 | 39 | 56 | 24..56 |
 | body arm shoulder | 115 | 115 | 115 | 115 | 115..115 |
 | body arm elbow | 178 | 178 | 178 | 178 | 178..178 |
 
@@ -618,15 +630,15 @@ Label: Air squat: feet shoulder-width, slow tempo; sit down between the hips to 
 ## goblet (move, 5500 ms, tempo control/drive)
 Exercises: goblet_squat
 
-Label: Goblet squat: a dumbbell or kettlebell held at the chest, elbows down; sit down between the hips keeping the chest tall and the knees out, then stand
+Label: Goblet squat: a dumbbell or kettlebell held at the chest, elbows down; sit down between the hips keeping the chest tall, pressing the knees out with the elbows inside them, then stand
 
 | angle | start | 25% | 50% | 75% | min..max |
 |---|---|---|---|---|---|
 | trunk | 0 | 19 | 26 | 6 | 0..26 |
-| body leg hip | 179 | 102 | 69 | 156 | 69..179 |
-| body leg knee | 178 | 89 | 62 | 146 | 62..178 |
-| body leg shin | 1 | 31 | 33 | 16 | 1..33 |
-| work arm shoulder | 9 | 28 | 35 | 15 | 9..35 |
+| body leg hip | 179 | 103 | 71 | 156 | 71..179 |
+| body leg knee | 178 | 88 | 60 | 146 | 60..178 |
+| body leg shin | 1 | 34 | 38 | 16 | 1..38 |
+| work arm shoulder | 9 | 28 | 35 | 14 | 9..35 |
 | work arm elbow | 65 | 65 | 65 | 65 | 65..65 |
 
 ## amarch (move2, 3000 ms)
@@ -639,17 +651,17 @@ Label: A-march: standing tall, drive one knee up until the thigh is level, no hi
 | trunk | 0 | 0 | 0 | 0 | 0..0 |
 | far leg hip | 178 | 178 |  |  | 19..178 |
 | far leg knee | 176 | 176 |  |  | 144..176 |
-| far leg shin | 2 | 2 |  |  | 2..17 |
-| far arm shoulder | 0 | 65 | 0 | 28 | 0..65 |
-| far arm elbow | 150 | 90 | 150 | 140 | 90..150 |
+| far leg shin | 2 | 2 |  |  | 2..16 |
+| far arm shoulder | 0 | 65 | 0 | 40 | 0..65 |
+| far arm elbow | 150 | 90 | 150 | 135 | 90..150 |
 | work leg hip | 178 | 90 | 178 | 90 | 90..178 |
 | work leg knee | 178 | 94 | 178 | 94 | 94..178 |
 | work leg shin | 4 | 4 | 4 | 4 | 0..4 |
-| body arm shoulder | 0 | 28 | 0 | 65 | 0..65 |
-| body arm elbow | 150 | 140 | 150 | 90 | 90..150 |
+| body arm shoulder | 0 | 40 | 0 | 65 | 0..65 |
+| body arm elbow | 150 | 135 | 150 | 90 | 90..150 |
 | body leg hip |  |  | 178 | 178 | 19..178 |
 | body leg knee |  |  | 176 | 176 | 144..176 |
-| body leg shin |  |  | 2 | 2 | 2..17 |
+| body leg shin |  |  | 2 | 2 | 2..16 |
 
 ## legswing (move, 2600 ms)
 Exercises: leg_swing_controlled
@@ -676,6 +688,6 @@ Label: Hollow hold, tucked: lying on the back with knees bent over the hips, low
 | angle | start | 25% | 50% | 75% | min..max |
 |---|---|---|---|---|---|
 | trunk | 90 | 88 | 82 | 76 | 74..90 |
-| body leg hip | 100 | 98 | 92 | 86 | 84..100 |
+| body leg hip | 106 | 104 | 98 | 92 | 90..106 |
 | body leg knee | 108 | 108 | 108 | 108 | 108..108 |
-| body leg shin | 82 | 82 | 82 | 82 | 82..82 |
+| body leg shin | 88 | 88 | 88 | 88 | 88..88 |

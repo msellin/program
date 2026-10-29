@@ -3,8 +3,8 @@ sheet-02: ninety, hang, pullover, roller, pullup, pullup_single
 sheet-03: pullup_slow, pullup_band, pullup_band_light, pullup_partial, pullup_negative, pullup_negative5
 sheet-04: pullup_top, pullup_mid, scappull, activehang, rowflat, rowincline
 sheet-05: rowfeet, pullapart, hollow, hollowpull, wristprep, fingerraise
-sheet-06: downdog, child, wallhs, wallhs_90, wallhs_lean, wallhs_shrug
-sheet-07: wallhs_taps, hsfree, hstuck, hswalk, kickup, wallwalk
-sheet-08: squat, frontsquat, deadlift, bridge2, hipthrust, splitsquat
-sheet-09: slrdl, pallof, nordic, sled, suitcase, farmer
-sheet-10: airsquat, goblet, amarch, legswing, hollowtuck
+sheet-06: wristback, downdog, child, wallhs, wallhs_90, wallhs_lean
+sheet-07: wallhs_shrug, wallhs_taps, hsfree, hstuck, hswalk, kickup
+sheet-08: wallwalk, squat, frontsquat, deadlift, bridge2, hipthrust
+sheet-09: splitsquat, slrdl, pallof, nordic, sled, suitcase
+sheet-10: farmer, airsquat, goblet, amarch, legswing, hollowtuck
