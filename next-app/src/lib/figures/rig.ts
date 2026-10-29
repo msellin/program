@@ -626,9 +626,9 @@ function adductorFig(extended: boolean, label: string): Fig {
     const off = [lerp(-12, -9, q), -3];
     sc.floor();
     sc.line([add(H, off), add(K, off), add(F, off)], FAR, 8);
-    const ball: Pt[] = []; const r = lerp(12, 9.5, q), c = add(K, [off[0] / 2, off[1] / 2]);
+    const ball: Pt[] = []; const r = lerp(14, 11, q), c = add(K, [off[0] / 2, off[1] / 2]);
     for (let i = 0; i <= 24; i++) ball.push(P(c, r, i * 15));
-    sc.line(ball, PROP, 3, 1, BOX);
+    sc.line(ball, BODY, 3.5, 1, PROP);   // light rim on a mid-grey disc: legible at the 56x40 tile
     sc.line([S, [S[0] + ARMLY, 166]], BODY, 8);
     sc.line([S, H], BODY, TORSO); sc.line([[98, 154], S], BODY, 8); sc.dot([90, 151], 11, BODY);
     sc.line([H, K, F], COL.B, 8);
@@ -1019,10 +1019,10 @@ const HIP_FIGS: Record<string, Fig> = {
     sc.line([[158, 24], [200, 24]], BODY, 8);
     sc.dot([179, 4], 11, BODY);
     sc.line([[40, 30], [40, 167]], PROP, 4);
-    sc.line([[42, 54], hand], BAND, lerp(4.5, 2.5, p));
+    sc.line([[42, 54], hand], BAND, lerp(6, 3.5, p)); sc.dot([42, 54], 6, BAND);   // heavier band and an anchor knob: readable at 56x40
     sc.line(arm([158, 24, 0], -1), COL.B, 8);
     sc.line(arm([200, 24, 0], 1), COL.B, 8);
-    sc.dot(hand, lerp(6, 9, p), BODY);
+    sc.dot(hand, lerp(7, 10, p), BODY);
     return "Pallof press: standing side-on to a band anchored at chest height; press the hands straight out from the chest and hold, the trunk refusing to turn toward the anchor, then bring them back";
   } },
   nordic: { dur: 7000, kind: "move", k: [0.05, 0.6, 0.68, 0.94], poster: 0.7, sided: false, tempo: ["control", "drive"], cues: [{ align: ["knee", "hip", "shoulder"] }], build(sc, _s, p) {
@@ -1129,6 +1129,7 @@ const HIP_FIGS: Record<string, Fig> = {
     const K = P(H, 44, a), swing = [H, K, P(K, 42, a + 16)], stand = [H, [176, 124], [176, 166]];
     sc.floor();
     sc.line([[222, 54], [222, 167]], PROP, 4);
+    for (const ga of [105, 60]) { const gk = P(H, 44, ga); sc.line([H, gk, P(gk, 42, ga + 16)], work, 6, 0.22); }   // faint ghosts of both ends of the range
     if (side === "L") sc.line(stand, BODY, 8); else sc.line(swing, work, 8);
     sc.line([H, S], BODY, TORSO); sc.dot([180, 3], 11, BODY);
     if (side === "L") sc.line(swing, work, 8); else sc.line(stand, FAR, 8);

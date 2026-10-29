@@ -5,6 +5,10 @@ Source: 31-r1-physio.md "Order of next fixes", 35 animator (amarch arm), 36 illu
 - roller: elbows now a narrow V up and forward of the ears (hand 5,7 from head, bend side as before); roller disc outlined in the brand tone (r 19 over a grey r 16) so it is not grey on grey at the 56x40 tile.
 - kneel: pelvic-tuck arc redrawn in the builder at w 5 (the shared cue arc is thin and left untouched), readable at 56x40.
 - amarch: back arm 28 -> 40 deg behind (forward arm 65 unchanged); well above the animator's +-12. Stroke already 8 px = other arms.
+Follow-up (same round, thumb legibility):
+- adductor / adductor_ext: ball r 12..9.5 -> 14..11, light BODY rim on a mid-grey disc (was a dark outline), clearly a ball at 56x40 and on the 144 tile (looked at).
+- pallof: band 4.5..2.5 -> 6..3.5 px (still thins on the press, test holds), anchor knob r 6 on the post, hand dot 7..10. Visible at 56x40.
+- legswing: faint ghosts (w 6, op .22) of both ends of the swing (105 / 60 deg), no angle change.
 Not done / out of scope:
 - hollow straight-leg gating is program data (hollow before hollowtuck in the rehab program): not changed here.
 - adductor / adductor_ext ball ring, pallof band at thumb, legswing ghost end positions: not attempted (all [L]; the physio scored them 8 on legibility only). Adductor ball is the remaining gap to 9.
