@@ -24,3 +24,10 @@ Movement lenses ≥ 9 on 58/60 figures for every lens. The two exceptions are ca
 - fingerraise (hand-balance 8): the finger lift is < 2 px at thumbnail size; the coach accepts 8 as a scale cap.
 Visual lenses (optional polish): illustrator 47/60 ≥ 9 (13 drawing-only items in 77), animator mean 7.8 (phase
 beats; flat-rig ceiling). Strips were re-rendered to span whole cycles (they had covered only the first 2 s).
+
+## Visual polish (owner: "also polish visuals", live 30090f9)
+Still thumbnails are framed to their poster pose (`figureBounds(id, side, "poster")` for still figures under
+64 px); filled kettlebell; end-on dumbbell plate on the split squat. Illustrator: 47 → 56/60 at ≥ 9. The four at 8
+are drawing limits: pullup / pullup_single / pullup_slow are one movement at different tempos (a still can't show
+tempo; the glyph carries it), and the wall-handstand shrug's 13-unit rise is below thumbnail resolution.
+Owner accepted the bridge (start hip 137) and finger-raise (scale) caps. Figure round closed.

@@ -22,3 +22,9 @@ Not fixed: nordic tile, kickup tile/thumb mismatch, splitsquat clutter, hang bar
 
 ## Safety/geometry caps
 None found in my lens. Bridge2 84/15, hollow straight leg, squat ascent and depth caps taken as settled.
+
+## Polish pass (30090f9; sheets-all + thumbs-actual-size read; tile judged from its loop, not the one-moment column)
+Seen: poster-framed thumbs are larger and show the key pose (nordic diagonal, kickup vertical, partial/negative bent arms, band loop thick); filled kettlebell on suitcase/farmer/slrdl; end-on plate on splitsquat; hang bar no longer crops.
+Now 9: nordic (tile moment is flat but the loop and thumb are right), kickup, splitsquat, hang, suitcase, pullup_partial, pullup_negative, pullup_negative5, wallhs_taps.
+Still 8: pullup, pullup_single, pullup_slow (thumbs near-twins: same body at the same height, only the arrow chevrons differ; route: draw pullup/slow at chin-over-bar, single at hang) and wallhs_shrug (3 px shrug invisible at 56x40; geometry, accent chevron too small; route: 4 px accent at the shoulder).
+Count >= 9: 56 of 60. Under 9: pullup 8, pullup_single 8, pullup_slow 8, wallhs_shrug 8.
