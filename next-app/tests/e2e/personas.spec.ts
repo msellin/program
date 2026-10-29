@@ -1,3 +1,4 @@
+import { signInViaApi } from "./helpers/auth";
 import { test, expect } from "@playwright/test";
 import * as fs from "node:fs";
 import * as path from "node:path";
@@ -109,19 +110,12 @@ for (const persona of PERSONAS) {
     // cookie left over from a prior run makes /sign-in/ redirect straight
     // to Day, so the form never renders. Nothing downstream can recover
     // from that, and the persona dies before a single flow runs.
+    // A minted session, not the form (2026-10-29): with Supabase captcha on, the form needs a Turnstile token a
+    // headless run cannot earn. Cookies are cleared first, as before, so a stale session from a prior run cannot
+    // stand in for this persona's.
     await page.context().clearCookies();
-    await page.goto("/sign-in/");
-    // Bounded so a non-rendering form fails fast and legibly instead of
-    // consuming the whole budget.
-    await page
-      .locator('input[type="email"]')
-      .waitFor({ state: "visible", timeout: 30_000 });
-    await page.fill('input[type="email"]', persona.email);
-    await page.fill('input[type="password"]', persona.password);
-    await Promise.all([
-      page.waitForURL((url) => !url.pathname.startsWith("/sign-in"), { timeout: 20_000 }),
-      page.click('button[type="submit"]'),
-    ]);
+    await signInViaApi(page, persona.email);
+    await page.goto("/");
 
     // Dismiss onboarding modal if present.
     const skip = page

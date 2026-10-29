@@ -1,3 +1,4 @@
+import { signInViaApi } from "./helpers/auth";
 import { test, expect } from "@playwright/test";
 import * as fs from "node:fs";
 import * as path from "node:path";
@@ -23,13 +24,9 @@ async function signInWithPersona(
   mutate?: (store: Record<string, unknown>) => void,
 ): Promise<Seeded> {
   const { uid } = await ensureTestUser();
-  await page.goto("/sign-in/");
-  await page.fill('input[type="email"]', TEST_EMAIL);
-  await page.fill('input[type="password"]', TEST_PASSWORD);
-  await Promise.all([
-    page.waitForURL((u) => !u.pathname.startsWith("/sign-in"), { timeout: 20_000 }),
-    page.click('button[type="submit"]'),
-  ]);
+  // Minted session, not the form: captcha (SG-08) blocks the form in a headless run.
+  await signInViaApi(page, TEST_EMAIL);
+  await page.goto("/");
   const seed = JSON.parse(
     fs.readFileSync(path.join(__dirname, "artifacts", "personas", persona, "final-store.json"), "utf8"),
   ) as Record<string, unknown>;

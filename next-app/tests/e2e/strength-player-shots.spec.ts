@@ -1,3 +1,4 @@
+import { signInViaApi } from "./helpers/auth";
 import { test, expect, type Page } from "@playwright/test";
 import * as fs from "node:fs";
 import * as path from "node:path";
@@ -26,13 +27,9 @@ async function signInAndSeed(page: Page) {
   const { uid } = await ensureTestUser();
   const seedPath = path.join(__dirname, "artifacts", "personas", "persona-recover", "final-store.json");
   const seed = JSON.parse(fs.readFileSync(seedPath, "utf8")) as Record<string, unknown>;
-  await page.goto("/sign-in/");
-  await page.fill('input[type="email"]', TEST_EMAIL);
-  await page.fill('input[type="password"]', TEST_PASSWORD);
-  await Promise.all([
-    page.waitForURL((url) => !url.pathname.startsWith("/sign-in"), { timeout: 20_000 }),
-    page.click('button[type="submit"]'),
-  ]);
+  // Minted session, not the form: captcha (SG-08) blocks the form in a headless run.
+  await signInViaApi(page, TEST_EMAIL);
+  await page.goto("/");
   await page.evaluate(
     (args) => {
       const store = args.seed as { user_profile?: Record<string, unknown>; updated_at?: number; logs?: Record<string, unknown> };

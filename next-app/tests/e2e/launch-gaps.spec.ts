@@ -1,3 +1,4 @@
+import { signInViaApi } from "./helpers/auth";
 import { test, type Page } from "@playwright/test";
 import * as fs from "node:fs";
 import * as path from "node:path";
@@ -51,14 +52,9 @@ async function shot(page: Page, part: string, name: string, notes: string[], ful
 
 async function signIn(page: Page, email: string): Promise<void> {
   await page.context().clearCookies();
-  await page.goto("/sign-in/");
-  await page.locator('input[type="email"]').waitFor({ state: "visible", timeout: 30_000 });
-  await page.fill('input[type="email"]', email);
-  await page.fill('input[type="password"]', PASSWORD);
-  await Promise.all([
-    page.waitForURL((url) => !url.pathname.startsWith("/sign-in"), { timeout: 20_000 }),
-    page.click('button[type="submit"]'),
-  ]);
+  // Minted session, not the form: captcha (SG-08) blocks the form in a headless run.
+  await signInViaApi(page, email);
+  await page.goto("/");
 }
 
 const ADVANCE = /^(next|continue|review|start|start program|start this program|begin|get started|done|finish|save|confirm|let'?s go|choose|use this)\b/i;
@@ -218,10 +214,12 @@ test("A · stranger first run at 375×667", async ({ page }) => {
 const RED_DAY_CANDIDATES = [
   ["e2e-persona-pullup-fast@example.test", "first-strict-pullup"],
   ["e2e-persona-pullup@example.test", "first-strict-pullup"],
-  ["e2e-persona-strength@example.test", "concurrent-strength-maintenance"],
-  ["e2e-persona-strength-slow@example.test", "concurrent-strength-maintenance"],
+  // Loaded skill days before strength (G-14): CSM's bike session already proved red holds it; the open question
+  // was a loaded pull-up or handstand day.
   ["e2e-persona-handstand@example.test", "handstand-walk"],
   ["e2e-persona-handstand-fast@example.test", "handstand-walk"],
+  ["e2e-persona-strength@example.test", "concurrent-strength-maintenance"],
+  ["e2e-persona-strength-slow@example.test", "concurrent-strength-maintenance"],
 ] as const;
 
 async function dismissOnboarding(page: Page): Promise<void> {
@@ -241,6 +239,48 @@ async function hasSessionToday(page: Page, slug: string): Promise<boolean> {
   return /today'?s session|log this session|start session|open session|\bset 1\b/i.test(text);
 }
 
+async function moveNextSessionToToday(
+  page: Page,
+  notes: string[],
+): Promise<(typeof RED_DAY_CANDIDATES)[number] | undefined> {
+  const iso = (d: Date) =>
+    `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  const today = iso(new Date());
+  for (const candidate of RED_DAY_CANDIDATES.filter((c) => c[1] !== "concurrent-strength-maintenance")) {
+    await signIn(page, candidate[0]);
+    await page.goto("/plan/");
+    await dismissOnboarding(page);
+    await page.locator("button[aria-controls^='weekday-']").first().waitFor({ timeout: 15_000 }).catch(() => {});
+    for (let ahead = 1; ahead <= 3; ahead++) {
+      const day = iso(new Date(Date.now() + ahead * 864e5));
+      const row = page.locator(`button[aria-controls="weekday-${day}"]`);
+      if (!(await row.count())) continue;
+      await row.click();
+      const move = page.locator(`#weekday-${day}`).getByRole("button", { name: /^Move/ });
+      if (!(await move.isVisible({ timeout: 2000 }).catch(() => false))) continue;
+      await move.click();
+      const target = page.locator(`#movesheet-day-${today}`);
+      if (!(await target.isEnabled({ timeout: 3000 }).catch(() => false))) {
+        await page.keyboard.press("Escape");
+        continue;
+      }
+      await target.check();
+      const commit = page.getByRole("button", { name: /^(Move session|Confirm — stack the session)/ });
+      await commit.click();
+      if (await commit.isVisible({ timeout: 1000 }).catch(() => false)) await commit.click();
+      await page.waitForTimeout(1500);
+      const ok = await hasSessionToday(page, candidate[1]);
+      notes.push(`${candidate[0]}: moved ${day} → today; session page: ${(await page.locator("main").innerText().catch(() => "")).slice(0, 160).replace(/\n/g, " / ")}\n`);
+      if (ok) {
+        notes.push(`${candidate[0]}: moved the ${day} session to today via Plan → Move…\n`);
+        return candidate;
+      }
+    }
+    notes.push(`${candidate[0]}: no session in the next 3 days could be moved to today\n`);
+  }
+  return undefined;
+}
+
 test("B · red day against a scheduled session at 375×667", async ({ page }) => {
   test.setTimeout(420_000);
   await page.setViewportSize(SMALL);
@@ -253,6 +293,12 @@ test("B · red day against a scheduled session at 375×667", async ({ page }) =>
       break;
     }
     notes.push(`${candidate[0]}: no loadable session today (rest day or finished), skipped\n`);
+  }
+  if (!chosen || chosen[1] === "concurrent-strength-maintenance") {
+    // G-14: a loaded skill day. Pull-up and handstand train on fixed weekdays, so on their rest days move the next
+    // session onto today through Plan → Move…, the way a user would, and test red against that.
+    const skill = await moveNextSessionToToday(page, notes);
+    if (skill) chosen = skill;
   }
   if (!chosen) {
     notes.push("No advertised-program persona has a session today. Re-run `npm run e2e:personas` or try tomorrow.\n");

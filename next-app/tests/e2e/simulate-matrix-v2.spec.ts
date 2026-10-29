@@ -1,3 +1,4 @@
+import { signInViaApi } from "./helpers/auth";
 import { test as base, expect } from "./fixtures";
 import { resetTestUser } from "./setup-test-user";
 import { runSimulationV2 } from "./harness/simulator-v2";
@@ -61,13 +62,9 @@ const MATRIX_PASSWORD = "TestPassword123!";
 const test = base.extend<{ freshPage: Page }>({
   freshPage: async ({ page }, use) => {
     await resetTestUser(MATRIX_EMAIL, MATRIX_PASSWORD);
-    await page.goto("/sign-in/");
-    await page.fill('input[type="email"]', MATRIX_EMAIL);
-    await page.fill('input[type="password"]', MATRIX_PASSWORD);
-    await Promise.all([
-      page.waitForURL((url) => !url.pathname.startsWith("/sign-in"), { timeout: 15_000 }),
-      page.click('button[type="submit"]'),
-    ]);
+    // Minted session, not the form: captcha (SG-08) blocks the form in a headless run.
+    await signInViaApi(page, MATRIX_EMAIL);
+    await page.goto("/");
     const skip = page
       .getByRole("button", { name: /^skip setup$/i })
       .or(page.getByRole("link", { name: /^skip setup$/i }));

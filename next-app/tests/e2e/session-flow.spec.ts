@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { ensureTestUser, TEST_EMAIL, TEST_PASSWORD } from "./setup-test-user";
-import { gotoSessionWithWork } from "./helpers/session";
+import { signInViaApi } from "./helpers/auth";
 
 /**
  * Post-ship flow checks (2026-08-24), all three founder-reported gaps:
@@ -18,13 +18,9 @@ async function signInWithPersona(
   mutate?: (store: Record<string, unknown>) => void,
 ) {
   const { uid } = await ensureTestUser();
-  await page.goto("/sign-in/");
-  await page.fill('input[type="email"]', TEST_EMAIL);
-  await page.fill('input[type="password"]', TEST_PASSWORD);
-  await Promise.all([
-    page.waitForURL((u) => !u.pathname.startsWith("/sign-in"), { timeout: 20_000 }),
-    page.click('button[type="submit"]'),
-  ]);
+  // Minted session, not the form: captcha (SG-08) blocks the form in a headless run.
+  await signInViaApi(page, TEST_EMAIL);
+  await page.goto("/");
   const seed = JSON.parse(
     fs.readFileSync(path.join(__dirname, "artifacts", "personas", persona, "final-store.json"), "utf8"),
   ) as Record<string, unknown>;
@@ -64,9 +60,22 @@ test("morning check returns to Day on save", async ({ page }) => {
 
 test("Set CTA names the set, and rest announces the set the timer lands on", async ({ page }) => {
   await signInWithPersona(page, "persona-recover");
-  expect(await gotoSessionWithWork(page, "anterior-hip-rebuild")).toBe(true);
-  await page.getByRole("button", { name: /^(Start session|Continue —)/ }).click({ timeout: 20_000 });
-  await expect(page.getByText(/\bset 1 of \d+/i)).toBeVisible();
+  // The set player, not the guided one: on days whose session opens with a guided block (the daily reset), Start
+  // lands in the follow-along player. Walk nearby days until Start opens sets, as gotoSessionWithWork walks for work.
+  let onSets = false;
+  for (const offset of [0, 1, 2, 3, 4, 5, 6, -1, -2, -3]) {
+    const iso = new Date(Date.now() + offset * 864e5).toISOString().slice(0, 10);
+    await page.goto(offset === 0 ? "/session/anterior-hip-rebuild/" : `/session/anterior-hip-rebuild/?date=${iso}`);
+    await page.waitForTimeout(1200);
+    const start = page.getByRole("button", { name: /^(Start session|Continue —)/ });
+    if (!(await start.count())) continue;
+    await start.first().click();
+    if (await page.getByText(/\bset 1 of \d+/i).isVisible({ timeout: 4000 }).catch(() => false)) {
+      onSets = true;
+      break;
+    }
+  }
+  expect(onSets, "a nearby hip day whose session starts with sets").toBe(true);
   const cta = page.getByRole("button", { name: /^Done — set 1 · \d/ });
   await expect(cta).toBeVisible();
   await cta.click();

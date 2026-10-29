@@ -1,4 +1,5 @@
 import { test as base, expect, Page } from "@playwright/test";
+import { signInViaApi } from "./helpers/auth";
 import { ensureTestUser, TEST_EMAIL, TEST_PASSWORD } from "./setup-test-user";
 
 type AuthFixtures = {
@@ -22,13 +23,9 @@ type AuthFixtures = {
 export const test = base.extend<AuthFixtures>({
   authedPage: async ({ page }, use) => {
     await ensureTestUser();
-    await page.goto("/sign-in/");
-    await page.fill('input[type="email"]', TEST_EMAIL);
-    await page.fill('input[type="password"]', TEST_PASSWORD);
-    await Promise.all([
-      page.waitForURL((url) => !url.pathname.startsWith("/sign-in"), { timeout: 15_000 }),
-      page.click('button[type="submit"]'),
-    ]);
+    // Minted session, not the form: captcha (SG-08) blocks the form in a headless run.
+    await signInViaApi(page, TEST_EMAIL);
+    await page.goto("/");
     // First-run onboarding modal — dismiss so tests can actually see the UI.
     // Presents a 3-step symptom baseline; "Skip setup" bypasses it. Idempotent:
     // if the modal isn't there (returning user), the click times out fast and
