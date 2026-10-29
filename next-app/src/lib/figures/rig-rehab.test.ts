@@ -41,6 +41,15 @@ describe("rehab figures", () => {
     }
   });
 
+  it("adductor: the ball pulses 14 -> 12.5 px over 1 s of a 2 s cycle while the legs stay put", () => {
+    for (const id of ["adductor", "adductor_ext"]) {
+      const ball = (t: number) => { const s = used(drawFigure(id, "B", t, false)).find((q) => q.fill !== "none" && pts(q.pts).length > 20)!; const p = pts(s.pts); return (Math.max(...p.map((x) => x[0])) - Math.min(...p.map((x) => x[0]))) / 2; };
+      const r = [3000, 3250, 3500, 3750, 4000, 4500, 5000].map(ball);
+      expect(Math.max(...r)).toBeGreaterThan(13.8); expect(Math.min(...r)).toBeLessThan(12.7); expect(Math.min(...r)).toBeGreaterThan(12.4);
+      expect(JSON.stringify(chains(drawFigure(id, "B", 3000, false), ACCENT))).toBe(JSON.stringify(chains(drawFigure(id, "B", 4000, false), ACCENT)));
+    }
+  });
+
   it("bridge: knee ~80-90 at the start and 90-100 at the top, hip ends in one line (175-180)", () => {
     const at = (t: number) => { const f = drawFigure("bridge", "L", t, false); const [H, S] = trunk(f); const [, K, F] = chains(f, FIGURE_COLORS.L)[0]; return { knee: ang(H, K, F), hip: ang(S, H, K) }; };
     const start = at(0), top = at(2000);
