@@ -90,6 +90,15 @@ test("off-plan runs the same Set/Rest pattern", async ({ page }) => {
   const row = page.locator("button", { hasText: /\d+ sets/ }).first();
   await row.click({ timeout: 20_000 });
   await expect(page.getByText(/\bset 1 of \d+/i)).toBeVisible({ timeout: 10_000 });
-  await page.getByRole("button", { name: /^Done — set 1/ }).click();
+  // The first row may be counted work or a timed hold; both end the set
+  // on the same rest screen.
+  const holdCta = page.getByRole("button", { name: /start the hold · \d+s/i });
+  if (await holdCta.count()) {
+    await holdCta.click();
+    await page.waitForTimeout(2600);
+    await page.getByRole("button", { name: /log it now/i }).click();
+  } else {
+    await page.getByRole("button", { name: /^Done — set 1/ }).click();
+  }
   await expect(page.getByText("Next up")).toBeVisible({ timeout: 10_000 });
 });

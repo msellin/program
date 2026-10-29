@@ -102,7 +102,7 @@ test("public account: the three off-plan surfaces are gone", async ({ page }) =>
 
   // The route explains itself rather than 404ing or showing a drill list.
   await page.goto("/off-plan/");
-  await expect(page.getByText(/lives in your sessions now/i)).toBeVisible({ timeout: 20_000 });
+  await expect(page.getByText(/live in your sessions now/i)).toBeVisible({ timeout: 20_000 });
 });
 
 test("public account: activity logging survives and is named", async ({ page }) => {
@@ -111,10 +111,10 @@ test("public account: activity logging survives and is named", async ({ page }) 
   // because hip-rebuild prescribes work most days, so the Brief is reachable.
   await signInWithPersona(page, "persona-recover");
   expect(await gotoSessionWithWork(page, "anterior-hip-rebuild")).toBe(true);
-  const footer = page.getByRole("button", { name: /log a run, row, or class/i });
+  const footer = page.getByRole("button", { name: /log an extra session/i });
   await expect(footer).toBeVisible({ timeout: 20_000 });
   await footer.click();
-  await expect(page.locator("#off-plan-title")).toHaveText("Log an activity");
+  await expect(page.locator("#off-plan-title")).toHaveText("Log an extra session");
   // Drill list is gated; the run/row/class form is not.
   await expect(page.getByText(/or pick a drill/i)).toHaveCount(0);
   await expect(page.getByRole("button", { name: /a run, a row, a class/i })).toBeVisible();
@@ -140,7 +140,7 @@ test("grandfathered account: off-plan survives and is recoverable in Settings", 
 
   // The drill page works.
   await page.goto("/off-plan/");
-  await expect(page.getByRole("heading", { name: /off-plan/i })).toBeVisible({ timeout: 20_000 });
+  await expect(page.getByRole("heading", { name: /^extra session$/i })).toBeVisible({ timeout: 20_000 });
 
   // And the toggle exists — the only in-app way back, since the installed
   // PWA has no URL bar to carry a query-string escape hatch.

@@ -249,7 +249,7 @@ export function OffPlanSession() {
     return (
       <EmptyStateCard
         title="Extra drills live in your sessions now."
-        body="Mobility drills, activation and around-run work are scheduled into the days your plan puts them on, so there's no separate list to keep up with. To log a run, a row or a class, use “Log a run, row, or class” at the bottom of any session."
+        body="Mobility drills, activation and around-run work are scheduled into the days your plan puts them on, so there's no separate list to keep up with. To log a run, a row or a class, use “Log an extra session” at the bottom of any session."
         cta={{ href: "/", label: "Back to Day" }}
       />
     );
