@@ -191,4 +191,14 @@ describe("handstand family (trainer lane, 2026-10-29)", () => {
     expect(runs).toBeGreaterThanOrEqual(10);
     expect(rng(fx, 0, ts.length - 1)).toBeLessThanOrEqual(0.5);
   });
+
+  it("r3: shrug head sinks 11 px with a chevron; taps ring at the tap; wallhs_90 ghost is heavy; child arm is relaxed", () => {
+    const shrug = used("wallhs_shrug", T("wallhs_shrug") * 0.35);
+    expect(shrug.some((x) => x.color === ACCENT && x.w === 3 && pts(x.pts).length === 3)).toBe(true);
+    expect(used("wallhs_taps", T("wallhs_taps") * 0.2).some((x) => x.color === ACCENT && x.w === 2)).toBe(true);
+    const ghost = drawFigure("wallhs_90", "B", 3000, false).slots.filter((x) => x.cue && x.dash !== "none");
+    expect(ghost.length).toBeGreaterThan(0); expect(ghost.every((x) => x.w === 3 && x.op >= 0.7)).toBe(true);
+    const arm = pts(used("child", 3000).find((x) => x.color === ACCENT && x.w === 8 && pts(x.pts).length === 3)!.pts);
+    expect(inc(arm[0], arm[1], arm[2])).toBeLessThan(170); expect(inc(arm[0], arm[1], arm[2])).toBeGreaterThan(135);
+  });
 });

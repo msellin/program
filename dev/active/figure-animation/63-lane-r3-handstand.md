@@ -9,3 +9,11 @@ Route (53/54/55/57 r2) -> done -> numbers. Tests in `rig-handstand.test.ts`; sti
 - wallwalk 8: test only (as asked). 10 ms timeline: no step where hands and feet both move; in every run of one pair moving, the other pair's position range <= 0.5 px; foot x range <= 0.5 over the whole walk; >= 10 runs. Passes with no rig change. Not done: hand-balance coach's "compress the first two steps".
 - Not touched: child, wristprep, wallhs_90/shrug/taps (53 [L]/[M] ghost-line, chevron ideas not in my brief).
 Note: knee 125 test range in kickup updated 120-130; the old fingerraise/hstuck tests re-pointed at the split segments.
+
+## Second pass (the remaining 8s)
+- child 8: 1 px rib breath (4.5 s) + relaxed arm (hand chord 60, elbow ~150) -> done, tested (elbow 135-170).
+- wristprep 8: ease hold at the front end + hip following -> shoulder lean 10 -> 11.5 deg on a doubled ease (ends linger longer); hips follow through the ik; shoulders still < 13 px past the wrists (test). The 3 px hip number is a consequence of the lean, not a separate term.
+- wallhs_90 8: heavier ghost -> new `ladderBold` flag: ghost 3 px / op 0.7 (others stay 2 px / 0.4), tested.
+- wallhs_shrug 8: head dip + chevron -> head distance 18 -> 7 (11 px), accent chevron beside the shoulders fading in with the rise.
+- wallhs_taps 8: route was "accept"; added a small accent ring at the tap point fading in over p 0.7-1.
+- wallwalk 8: first steps compressed -> foot-height progress front-loaded (i/N)^0.7, so step 1-2 are the largest; the planted-pair test still passes. Rendered at 0.9/1.8/2.7/4.5 s: plank, pike, and the hand-walk-in now differ by step.
