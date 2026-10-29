@@ -32,8 +32,11 @@ git show <rev>:next-app/src/lib/figures/rig.ts > /tmp/oldrig.ts && node ../dev/a
 - `angles.md`: joint angles measured from the skeleton (included hip, knee and elbow angles; trunk and shin
   from vertical) at start, 25%, 50% and 75%, plus min..max.
 - Contact sheets: frames through one cycle, the reduced-motion frame, the 144 px tile and the thumbnail.
-- `render-motion.mjs`: before | after clips (mp4 + gif) at 30 fps. Make frame strips for agents with
-  `ffmpeg -i x.mp4 -vf "select='not(mod(n\,6))',scale=360:-1,tile=2x5" -frames:v 1 strip-x.png`.
+- `render-motion.mjs`: before | after clips (mp4 + gif) at 30 fps. Frame strips for agents must span the WHOLE
+  cycle: a fixed every-6th-frame step covers only the first 2 s, and through rescore 3 (2026-10-29) the
+  reviewers judged the wall walk and squat from their opening seconds. Spread 10 frames evenly:
+  `n=$(ffprobe -v error -count_frames -select_streams v:0 -show_entries stream=nb_read_frames -of csv=p=0 x.mp4);
+  ffmpeg -i x.mp4 -vf "select='not(mod(n\,$(( (n+9)/10 ))))',scale=360:-1,tile=2x5" -frames:v 1 strip-x.png`.
 
 ## The loop
 1. Refresh the evidence (above).
