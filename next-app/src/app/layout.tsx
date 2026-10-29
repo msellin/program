@@ -1,30 +1,17 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 import { AuthGate } from "@/components/AuthGate";
 import { AppShell } from "@/components/AppShell";
 import "./globals.css";
 import { SPLASH_SCREENS } from "@/lib/brand-splash";
+import { sans, mono } from "./fonts";
 
 // P1-26 — Inter 700 dropped; one fewer woff2 per subset.
 // 2026-09-01: the original note said `font-bold` was "only used on font-mono",
 // implying it was safe. It was not — JetBrains Mono is loaded at 400/500 too,
 // so mono `font-bold` synthesised as well. Every `font-bold` in the app has
 // been moved to `font-semibold`; there is no 700 face for either family, so
-// adding one back means adding the weight here first.
-const sans = Inter({
-  variable: "--font-sans",
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["400", "500", "600"],
-});
-
-const mono = JetBrains_Mono({
-  variable: "--font-mono",
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["400", "500"],
-});
+// adding one back means widening the weight range in ./fonts.ts first.
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://app.terav.fit"),

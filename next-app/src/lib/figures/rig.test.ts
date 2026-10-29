@@ -406,3 +406,14 @@ describe("exercise → figure map", () => {
     expect(missing).toEqual([]);
   });
 });
+
+describe("thumbnail framing", () => {
+  it("a still thumbnail is framed to its poster pose, so a pull-up's body is bigger than in the whole-cycle frame", () => {
+    for (const id of ["pullup", "pullup_negative", "squat", "deadlift"]) {
+      const cycle = figureBounds(id, "B"), poster = figureBounds(id, "B", "poster");
+      expect(poster.h * poster.w, id).toBeLessThanOrEqual(cycle.h * cycle.w);
+    }
+    const c = figureBounds("pullup", "B"), p = figureBounds("pullup", "B", "poster");
+    expect(Math.max(p.w, p.h)).toBeLessThan(Math.max(c.w, c.h));
+  });
+});

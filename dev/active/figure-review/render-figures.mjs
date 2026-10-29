@@ -28,8 +28,9 @@ fs.mkdirSync(out, { recursive: true });
 
 const SURFACE = "#16181c", GROUND = "#0e0f12", TILE = "#2a241e"; // tile ≈ bronze/15 over ground
 
-function figSvg(f, x, y, w, h, bg, id, side, zoom = 1) {
-  const box = fitted ? rig.figureBounds(id, side) : { x: 0, y: 0, w: 358, h: 201 };
+function figSvg(f, x, y, w, h, bg, id, side, zoom = 1, fit = "cycle") {
+  // Thumbnails are framed to their poster pose in the app since 2026-10-29 (ExerciseFigure, figureBounds "poster").
+  const box = fitted ? rig.figureBounds(id, side, fit) : { x: 0, y: 0, w: 358, h: 201 };
   const scale = Math.min(w / box.w, h / box.h), drawn = (scale * box.h) / zoom;
   const sw = (s) => fitted ? (rig.strokePx(s.w, drawn, rig.ACCENTS.includes(s.color)) * zoom) / scale : (s.w <= 4 ? s.w * 1.25 : s.w * 1.2);
   const polys = f.slots
@@ -74,9 +75,9 @@ async function sheet(name, ids) {
     x += FW + 20;
     // Today tile: 144px square (before: the 358x201 box letterboxed to 144x81), drawn 2x. Brief thumb: 56x40, drawn 2x.
     body += figSvg(drawFigure(id, side, ts[2] ?? 2000, false), x, y + 22 + 40, fitted ? 288 : 288, fitted ? 288 : 162, TILE, id, side, 2);
-    body += `<text x="${x}" y="${y + 50}" font-family="Helvetica" font-size="11" fill="#6b717d">Today tile 144px (2x)</text>`;
+    body += `<text x="${x}" y="${y + 50}" font-family="Helvetica" font-size="11" fill="#6b717d">Today tile 144px (2x, one moment: the app animates it)</text>`;
     x += 300;
-    body += figSvg(drawFigure(id, side, 0, false, true), x, y + 22 + 40, 112, 80, GROUND, id, side, 2);
+    body += figSvg(drawFigure(id, side, 0, false, true), x, y + 22 + 40, 112, 80, GROUND, id, side, 2, "poster");
     body += `<text x="${x}" y="${y + 50}" font-family="Helvetica" font-size="11" fill="#6b717d">brief 56x40 (2x)</text>`;
     y += Math.max(rowH, 40 + (fitted ? 288 : 162) + 34);
   }
@@ -93,7 +94,7 @@ async function thumbs(ids) {
   ids.forEach((id, i) => {
     const x = 8 + (i % per) * (cw + gap + 40), y = 8 + Math.floor(i / per) * (ch + lab + gap);
     const sd = FIGS[id].sided ? "L" : "B";
-    body += figSvg(drawFigure(id, sd, 0, false, true), x, y, cw, ch, GROUND, id, sd);
+    body += figSvg(drawFigure(id, sd, 0, false, true), x, y, cw, ch, GROUND, id, sd, 1, "poster");
     body += `<text x="${x}" y="${y + ch + 11}" font-family="Helvetica" font-size="9" fill="#9aa0a8">${id}</text>`;
   });
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${8 + per * (cw + gap + 40)}" height="${16 + rows * (ch + lab + gap)}"><rect width="100%" height="100%" fill="#16181c"/>${body}</svg>`;

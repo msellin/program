@@ -929,13 +929,13 @@ const AD_FIGS: Record<string, Fig> = {
 // - no heavy axial load drawn on the spine (none of these put a bar on the back).
 // Standing figures use the squat proportions: shin 42, thigh 44, trunk 56, arm 54.
 // ---------------------------------------------------------------------------
-const dumbbell = (sc: Scene, c: Pt) => {
-  sc.line([add(c, [-8, 0]), add(c, [8, 0])], PROP, 5);
-  sc.dot(add(c, [-9, 0]), 6, PROP); sc.dot(add(c, [9, 0]), 6, PROP);
-};
 const kettlebell = (sc: Scene, hand: Pt) => {
   sc.ring(add(hand, [0, 4]), 4, PROP, 3);
-  sc.ring(add(hand, [0, 15]), 8, PROP, 3);
+  // The bell is filled (visual polish, 2026-10-29): an outline ring vanished in the 56x40 thumbnail, so a
+  // suitcase carry read as a person with one thin arm. It hangs at the hip, so it never reads as a head.
+  const body: Pt[] = [];
+  for (let i = 0; i <= 24; i++) body.push(P(add(hand, [0, 15]), 8, i * 15));
+  sc.line(body, PROP, 3, 1, PROP);
 };
 /** Standing, facing right: stance foot `F`, hip `H`, knee bent forward. */
 const leg = (H: Pt, F: Pt): Pt[] => [H, ikSide(H, F, 44, 42, 1), F];
@@ -1053,7 +1053,8 @@ const HIP_FIGS: Record<string, Fig> = {
     if (side === "L") rest();
     sc.line(front, work, 8);
     const hand = P(S, ARM86[0] + ARM86[1], 90);
-    sc.line([S, hand], BODY, 8); dumbbell(sc, hand);
+    // Seen from the side a dumbbell is end-on: one plate ring, not a bar with two blobs (illustrator r3).
+    sc.line([S, hand], BODY, 8); sc.plate(hand, 7);
     sc.badge(beyond(front[1], F, 14), work, side);
     return "Bulgarian split squat, " + sideWord(side) + " leg in front: rear foot on a bench, dumbbells at the sides; lower straight down with the front shin close to vertical, then stand";
   } },
@@ -1559,14 +1560,21 @@ const boxCache = new Map<string, FigureBox>();
  * still while the figure moves. Floor, bars and walls (`bg`) are left out: they run past the frame
  * and get cropped, which is how a floor should look.
  */
-export function figureBounds(id: string, side: FigureSide | "E"): FigureBox {
-  const key = id + side;
+/**
+ * `fit: "poster"` (visual polish, 2026-10-29): a still thumbnail is fitted to its poster pose alone. Fitted to
+ * the whole cycle, a pull-up's 56x40 thumbnail had to hold the dead hang AND the top, so every variant was the
+ * same ~10 px figure (illustrator r2/r3). Only for figures that never play at that size: a playing figure keeps
+ * the cycle box so it never leaves the frame or makes it jump. Badges are hidden in thumbnails, so they don't
+ * size this box.
+ */
+export function figureBounds(id: string, side: FigureSide | "E", fit: "cycle" | "poster" = "cycle"): FigureBox {
+  const key = id + side + fit;
   const hit = boxCache.get(key);
   if (hit) return hit;
   const f = FIGS[id];
   const cycle = f.kind === "hold" ? 900 : f.dur!;
-  const frames = [drawFigure(id, side, 0, true), drawFigure(id, side, 0, false, true)];
-  for (let i = 0; i <= 32; i++) frames.push(drawFigure(id, side, (cycle * i) / 32, false));
+  const frames = fit === "poster" ? [drawFigure(id, side, 0, false, true)] : [drawFigure(id, side, 0, true), drawFigure(id, side, 0, false, true)];
+  if (fit === "cycle") for (let i = 0; i <= 32; i++) frames.push(drawFigure(id, side, (cycle * i) / 32, false));
   const sc = f.scale || 1;
   let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
   const grow = (x: number, y: number, r: number) => {
@@ -1583,12 +1591,12 @@ export function figureBounds(id: string, side: FigureSide | "E"): FigureBox {
       for (const [x, y] of pts) grow(x, y, r);
       if (s.shape) for (const [x, y] of parse(s.shape)) grow(x, y, 1.5);
     }
-    for (const b of fr.badges) if (b.op > 0) grow(b.x, b.y, 11);
+    if (fit === "cycle") for (const b of fr.badges) if (b.op > 0) grow(b.x, b.y, 11);
   }
   const span = Math.max(x1 - x0, y1 - y0), pad = span * 0.08 + 6;
   let box = { x: x0 - pad, y: y0 - pad, w: x1 - x0 + 2 * pad, h: y1 - y0 + 2 * pad };
   // A minimum span, so a small pose is not blown up past the others.
-  const min = 120;
+  const min = fit === "poster" ? 100 : 120;
   if (box.w < min) box = { ...box, x: box.x - (min - box.w) / 2, w: min };
   if (box.h < min) box = { ...box, y: box.y - (min - box.h) / 2, h: min };
   const round = (v: number) => Math.round(v * 10) / 10;

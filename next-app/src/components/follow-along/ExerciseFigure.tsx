@@ -51,7 +51,10 @@ export function ExerciseFigure({
 }) {
   const reduced = usePrefersReducedMotion();
   const svgRef = useRef<SVGSVGElement>(null);
-  const box = figureBounds(figure, side);
+  // A still figure drawn at thumbnail size is framed to its own pose, not the whole cycle (see `figureBounds`).
+  // Judged by the element's own height, which does not depend on the box, so the choice cannot loop.
+  const [thumb, setThumb] = useState(false);
+  const box = figureBounds(figure, side, thumb && !playing ? "poster" : "cycle");
   // Drawn height of the fitted box in px; the tile is the default until measured.
   const [drawnPx, setDrawnPx] = useState(144);
   useEffect(() => {
@@ -59,7 +62,10 @@ export function ExerciseFigure({
     if (!svg) return;
     const measure = () => {
       const r = svg.getBoundingClientRect();
-      if (r.width > 0 && r.height > 0) setDrawnPx(Math.round(Math.min(r.width / box.w, r.height / box.h) * box.h));
+      if (r.width > 0 && r.height > 0) {
+        setThumb(r.height < BADGE_MIN_PX);
+        setDrawnPx(Math.round(Math.min(r.width / box.w, r.height / box.h) * box.h));
+      }
     };
     measure();
     const ro = new ResizeObserver(measure);
