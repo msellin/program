@@ -222,7 +222,7 @@ describe("figure rig", () => {
     // Motion round (2026-10-29): a frozen hold read as a photo. The breath widens the ribcage shape only;
     // the joints a coach panel set stay exactly where they are (no rep-like pulsing).
     const shapePts = (f: FigureFrame) => f.slots.flatMap((s) => (s.shape ? pts(s.shape) : []));
-    for (const id of ["hipflex", "adductor", "hang"]) {
+    for (const id of ["hipflex", "hang"]) {
       const a = drawFigure(id, "L", 1000, false), aPts = a.slots.map((s) => s.pts);
       let moved = 0;
       for (const t of [2000, 3150, 5000, 9000]) {

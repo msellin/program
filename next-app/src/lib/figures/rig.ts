@@ -337,9 +337,14 @@ export const FIGS: Record<string, Fig> = {
     const toRight = function (ux: number, uy: number): Pt { return [uy, -ux]; };   // perpendicular pointing to the viewer's right for both legs
     const left = leg(hL, [108, 172], toRight);
     const right = leg(hR, [250, 172], toRight);   // so one knee falls in while the other falls out
-    sc.line([[160, 66], [150, 91]], BODY, 8); sc.line([[198, 66], [208, 91]], BODY, 8);
-    sc.line([[179, 96], [179, 68]], BODY, TORSO); sc.line([[158, 66], [200, 66]], BODY, 8);
-    sc.dot([179, 52], 11, BODY);
+    // Shoulder line 20% narrower (42 -> 33) so the top-down torso reads as a trunk, not a T; the trunk turns
+    // +-5 degrees with the knee sweep as the rotation cue (physio r2).
+    const rot = lerp(-5, 5, p) * Math.PI / 180, pv: Pt = [179, 96];
+    const rt = function (x: number, y: number): Pt { const dx = x - pv[0], dy = y - pv[1]; return [pv[0] + dx * Math.cos(rot) - dy * Math.sin(rot), pv[1] + dx * Math.sin(rot) + dy * Math.cos(rot)]; };
+    const sL = rt(162.5, 66), sR = rt(195.5, 66);
+    sc.line([sL, [150, 91]], BODY, 8); sc.line([sR, [208, 91]], BODY, 8);
+    sc.line([pv, rt(179, 68)], BODY, TORSO); sc.line([sL, sR], BODY, 8);
+    sc.dot(rt(179, 52), 11, BODY);
     sc.line([hL, hR], BODY, 10);
     sc.line(left, COL.B, 8); sc.line(right, COL.B, 8);
     return "90/90 hip switches, seen from above: sitting with feet wide and hands behind, both knees rotate slowly from one side to the other within a comfortable range";
@@ -643,7 +648,7 @@ function wristBackFig(): Fig {
 }
 
 function adductorFig(extended: boolean, label: string): Fig {
-  return { kind: "hold", sided: false, scale: 1.15, build(sc, _s, q) {
+  return { kind: "hold", sided: false, scale: 1.15, build(sc, _s, q, _rep, t = 0) {
     // Both knees drawn (the far one a step behind), the ball squeezed between them: a filled disc that sits
     // in front of the far leg and behind the near one, and compresses as the knees press in. The foot
     // sits where the knee angle puts it (about 92 included, or 122 for the longer lever); the hip angle
@@ -653,7 +658,7 @@ function adductorFig(extended: boolean, label: string): Fig {
     const off = [lerp(-12, -9, q), -3];
     sc.floor();
     sc.line([add(H, off), add(K, off), add(F, off)], FAR, 8);
-    const ball: Pt[] = []; const r = lerp(14, 11, q), c = add(K, [off[0] / 2, off[1] / 2]);
+    const ball: Pt[] = []; const pulse = t > 0 ? 0.5 - 0.5 * Math.cos(2 * Math.PI * t / 2000) : q, r = 14 - 1.5 * pulse * (t > 0 ? Math.min(1, t / 900) : 1), c = add(K, [off[0] / 2, off[1] / 2]);
     for (let i = 0; i <= 24; i++) ball.push(P(c, r, i * 15));
     sc.line(ball, BODY, 3.5, 1, PROP);   // light rim on a mid-grey disc: legible at the 56x40 tile
     sc.line([S, [S[0] + ARMLY, 166]], BODY, 8);
@@ -675,6 +680,7 @@ function hollowFig(pull: boolean, label: string): Fig {
     sc.floor();
     sc.line([H, foot], BODY, 8);
     sc.line([S, H], BODY, TORSO);
+    if (pull) { const M = lerpP(H, S, 0.2), nrm = a * Math.PI / 180; sc.line([add(M, [-9 * Math.sin(nrm), -9 * Math.cos(nrm)]), add(M, [9 * Math.sin(nrm), 9 * Math.cos(nrm)])], ACCENT, 4, 0.9); }   // belt-line tick: ribs down, low back flat (as the kneel's tuck arc)
     sc.dot(P(S, 26, 180 + a), 11, BODY);
     sc.line([S, hand], COL.B, 8);
     sc.ring([H[0], 166], 6, COL.B, 2, pull ? 1 : q);
@@ -1189,7 +1195,7 @@ const HIP_FIGS: Record<string, Fig> = {
     const work = COL[side], H = [176, 80], S = [178, 24], a = lerp(105, 60, p), grip = [222, 56];
     const K = P(H, 44, a), swing = [H, K, P(K, 42, a + 16)], stand = [H, [176, 124], [176, 166]];
     sc.floor();
-    sc.line([[222, 54], [222, 167]], PROP, 4);
+    sc.line([[222, 54], [222, 167]], PROP, 4, 0.6);   // rail 40% lighter than the leg (illustrator r2)
     for (const ga of [105, 60]) { const gk = P(H, 44, ga); sc.line([H, gk, P(gk, 42, ga + 16)], work, 6, 0.22); }   // faint ghosts of both ends of the range
     if (side === "L") sc.line(stand, BODY, 8); else sc.line(swing, work, 8);
     sc.line([H, S], BODY, TORSO); sc.dot([180, 3], 11, BODY);
