@@ -319,8 +319,8 @@ Label: Finger raises: on hands and knees with the hands flat, lift the fingers o
 | angle | start | 25% | 50% | 75% | min..max |
 |---|---|---|---|---|---|
 | trunk | 74 | 74 | 74 | 74 | 74..74 |
-| grey near leg hip | 109 | 109 | 109 | 109 | 109..109 |
-| grey near leg knee | 102 | 102 | 102 | 102 | 102..102 |
+| grey near leg hip | 109 | 111 | 111 | 109 | 109..111 |
+| grey near leg knee | 102 | 104 | 104 | 103 | 102..104 |
 | grey near leg shin | 81 | 81 | 81 | 81 | 81..81 |
 
 ## wristback (move, 4500 ms)
@@ -430,10 +430,10 @@ Label: Handstand walking: from a balanced handstand, shift the weight over one h
 
 | angle | start | 25% | 50% | 75% | min..max |
 |---|---|---|---|---|---|
-| trunk | 1 | 6 | 1 | 6 | 0..6 |
-| grey far arm shoulder | 174 | 173 | 169 | 170 | 162..179 |
+| trunk | 2 | 6 | 2 | 6 | 0..6 |
+| grey far arm shoulder | 173 | 173 | 170 | 170 | 162..179 |
 | grey far arm elbow | 171 | 171 | 178 | 178 | 171..178 |
-| accent arm shoulder | 169 | 174 | 174 | 169 | 160..180 |
+| accent arm shoulder | 170 | 174 | 173 | 169 | 160..180 |
 | accent arm elbow | 178 | 178 | 171 | 171 | 171..178 |
 
 ## kickup (gait, 4500 ms)
@@ -455,7 +455,7 @@ Label: Wall walk: start in a plank with the feet just up the wall; walk the feet
 
 | angle | start | 25% | 50% | 75% | min..max |
 |---|---|---|---|---|---|
-| trunk | 70 | 72 | 14 | 19 | 3..88 |
+| trunk | 70 | 52 | 19 | 19 | 5..90 |
 
 ## squat (move, 5500 ms, tempo control/drive)
 Exercises: back_squat_highbar
