@@ -25,7 +25,7 @@ export const EXERCISE_FIGURES: Record<string, keyof typeof FIGS> = {
   pu_scap_retraction_hold: "pullup_top",
   pu_scap_pull: "scappull",
   pu_band_pullup_heavy: "pullup_band",
-  pu_band_pullup_light: "pullup_band",
+  pu_band_pullup_light: "pullup_band_light",
   pu_negative_pullup_5s: "pullup_negative5",
   pu_negative_pullup_10s: "pullup_negative",
   pu_partial_rom_pullup: "pullup_partial",

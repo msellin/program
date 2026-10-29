@@ -120,3 +120,46 @@ The founder asked for round A from [ideas-00-synthesis.md](ideas-00-synthesis.md
   - Variant distinctness is unchanged by flesh (visual 4.5). Several pull-up and wall-handstand variants still
     look alike; that belongs to round C (cue overlays, ladder ghosts).
   - The 90/90 top view still uses thin far arms.
+
+## Round C: teaching (2026-10-29)
+
+The founder picked round C (three of the four experts ranked it first). Everything is drawn from named joints
+(`sc.mark`) and declared per figure as data (`cues`, `ladder`, `glyph`). Cues and ghosts are hidden below 64px;
+glyphs show at every size.
+
+- **One cue per drill**, thin bronze, behind the body:
+  - **Plumb:** bar over mid-foot on the back squat and block pull; front shin on the split squat; hands on the
+    midline on the Pallof press; trunk upright on the suitcase carry.
+  - **Level with a hatched limit:** "no deeper than parallel" on all four squats. It is a ceiling, never a target.
+  - **Angle arcs:** elbow 90° on the mid and partial pull-up holds; hip on the A-march.
+  - **Alignment lines** (dashed until in line, then solid):
+    - shoulder–hip–knee on bridges and the hip thrust
+    - foot–hip–shoulder on ring rows
+    - hand–shoulder–hip–foot on handstands
+    - knee–hip–shoulder on the nordic
+    - shoulder–hip–rear foot on the single-leg RDL
+  - **Pelvis-tuck arrow** on the half-kneeling stretch. A shoulder-over-hip plumb was tried and dropped: leaning
+    back into lumbar extension also satisfies it.
+- **Variant glyphs** on the pull-up family, so the 13 bar figures no longer share one thumbnail (tested):
+  - up arrow: pull; with a rest dot: single; with tempo ticks: slow; short: partial
+  - down arrow with 3 or 1 tempo ticks: 10 s or 5 s negative
+  - two bars: hold, high or mid
+  - chevron: scap pull; chevron with bars: active hang
+- **Heavy vs light band** is drawn as band thickness, and `pu_band_pullup_light` has its own figure.
+- **Ladder ghosts**: the next-harder rung as a faint dotted outline with no head. Ring rows go
+  incline → flat → feet-up; the inclined wall handstand goes → 90° → chest to wall.
+- **Shoulders slide in** (retraction) toward the top of a pull-up.
+- **Reviews:**
+  - [07-coach-round-c.md](07-coach-round-c.md): "teaches correctly" 6 → 7.5. Its three must-fix items are
+    applied: the kneel cue, the squat line as a ceiling, and no mid-foot plumb where the bar isn't over
+    mid-foot (front and goblet squat).
+  - [08-visual-round-c.md](08-visual-round-c.md): distinctness at 56x40 4.5 → 6.5, clutter 7.5, professional 7.
+    Its fixes are applied: glyph weight 9 with filled heads, arc r20, plumb and level lines at 2px, ghosts
+    0.4 opacity and dotted.
+- **Still open:**
+  - The `air_squat_daily` and `goblet_squat` cues in `exercises.json` say "full depth", while the figures and
+    their new limit line say "no deeper than parallel". Changing the copy is a data edit outside `lib/figures/`.
+    The figure's own text alternative now says "to about parallel and no deeper".
+  - Alignment lines mostly show the target, not feedback, because the figures are drawn straight.
+  - No cue yet for: neutral back on the block pull; shoulder-to-ear distance on the hangs; low back flat on
+    the hollow and dead bug.

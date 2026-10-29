@@ -62,7 +62,7 @@ describe("figure rig", () => {
         // Collect the extremes, then assert once: an expect per point timed out on CI.
         let out = 0;
         for (const t of TIMES.filter((_, i) => i % 3 === 0))
-          for (const s of used(drawFigure(id, side, t, false)).filter((s) => !s.bg))
+          for (const s of used(drawFigure(id, side, t, false)).filter((s) => !s.bg && !s.cue))
             for (const [x, y] of pts(s.pts)) {
               const X = 179 + sc * (x - 179), Y = 160 + sc * (y - 168);
               out = Math.max(out, b.x - X, X - b.x - b.w, b.y - Y, Y - b.y - b.h);
@@ -105,6 +105,41 @@ describe("figure rig", () => {
     const arms = f.slots.filter((s) => s.shape && s.w === 8 && s.color === BOTH);
     expect(legs.length).toBe(2); expect(arms.length).toBe(2);
     for (const a of arms) for (const l of legs) expect(rProx(a)).toBeLessThan(rProx(l) * 0.8);
+  });
+
+  it("round C: every cue resolves to joints the figure names, so no cue silently disappears", () => {
+    for (const [id, f] of Object.entries(FIGS))
+      for (const side of ["L", "R"] as const) {
+        // At least one bronze slot per declared cue (a limit line adds hatch ticks, a tuck an arrowhead).
+        const n = (f.cues ?? []).length;
+        const cues = drawFigure(id, side, 2000, false).slots.filter((s) => s.cue && s.color === ACCENT);
+        expect(cues.length, id + side).toBeGreaterThanOrEqual(n);
+        if (n === 0) expect(cues.length, id + side).toBe(0);
+      }
+  });
+
+  it("round C: the squat's parallel line sits at knee height in the bottom position", () => {
+    for (const id of ["squat", "frontsquat", "airsquat", "goblet"]) {
+      const f = drawFigure(id, "B", 0, false, true);
+      const level = f.slots.filter((s) => s.cue).map((s) => pts(s.pts)).find((q) => q.length === 2 && Math.abs(q[0][1] - q[1][1]) < 0.01)!;
+      // The knee at the bottom (p = 1) is the joint between the shin and thigh of the leg chain.
+      const bottom = drawFigure(id, "B", 0, true);
+      expect(level, id).toBeDefined();
+      const leg = pts(bottom.slots.find((s) => s.w === 8 && s.color === FIGURE_COLORS.BODY && pts(s.pts).length === 3)!.pts);
+      expect(level[0][1]).toBeLessThanOrEqual(Math.max(leg[1][1], leg[2][1]) + 0.5);
+    }
+  });
+
+  it("round C: every pull-up variant's thumbnail is different from every other", () => {
+    const fam = ["pullup", "pullup_single", "pullup_slow", "pullup_band", "pullup_band_light", "pullup_partial", "pullup_negative", "pullup_negative5", "pullup_top", "pullup_mid", "scappull", "activehang", "hang"];
+    // What a thumbnail shows: the still pose without cues (cues are hidden below 64px).
+    const thumb = (id: string) => JSON.stringify(drawFigure(id, "B", 0, false, true).slots.filter((s) => !s.cue && (s.w > 0 || s.shape)).map((s) => [s.pts, s.w, s.color]));
+    const seen = new Map<string, string>();
+    for (const id of fam) {
+      const t = thumb(id);
+      expect(seen.get(t), id).toBeUndefined();
+      seen.set(t, id);
+    }
   });
 
   it("a still figure shows its poster pose: the pull-up thumbnail is chin over the bar, not a dead hang", () => {

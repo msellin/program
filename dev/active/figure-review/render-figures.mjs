@@ -34,7 +34,7 @@ function figSvg(f, x, y, w, h, bg, id, side, zoom = 1) {
   const sw = (s) => fitted ? (rig.strokePx(s.w, drawn, rig.ACCENTS.includes(s.color)) * zoom) / scale : (s.w <= 4 ? s.w * 1.25 : s.w * 1.2);
   const polys = f.slots
     .filter((s) => s.w > 0 || s.shape)
-    .map((s) => `<polyline points="${s.shape ?? s.pts}" stroke="${s.w <= 0 ? "none" : s.shape && rig.shapeEdge ? rig.shapeEdge(s.color, drawn).color : s.color}" stroke-width="${s.shape ? (rig.shapeEdge ? rig.shapeEdge(s.color, drawn).px : 1) * zoom / scale : sw(s)}" opacity="${s.op}" fill="${s.shape ? s.color : s.fill}" stroke-dasharray="${s.dash}" stroke-linecap="round" stroke-linejoin="round"/>`)
+    .map((s) => `<polyline points="${s.shape ?? s.pts}" stroke="${s.w <= 0 ? "none" : s.shape && rig.shapeEdge ? rig.shapeEdge(s.color, drawn).color : s.color}" stroke-width="${s.shape ? (rig.shapeEdge ? rig.shapeEdge(s.color, drawn).px : 1) * zoom / scale : sw(s)}" opacity="${s.cue && drawn < 64 ? 0 : s.op}" fill="${s.shape ? s.color : s.fill}" stroke-dasharray="${s.dash === "none" ? "none" : s.dash.split(" ").map((d) => (d * zoom) / scale).join(" ")}" stroke-linecap="round" stroke-linejoin="round"/>`)
     .join("");
   const badges = f.badges
     .filter((b) => b.op > 0 && (!fitted || drawn >= 64))

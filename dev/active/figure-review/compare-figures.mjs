@@ -23,7 +23,7 @@ function svgFor(rig, id, side, x, y, w, h, bg, still) {
   const box = fitted ? rig.figureBounds(id, side) : { x: 0, y: 0, w: 358, h: 201 };
   const s = Math.min(w / box.w, h / box.h), drawn = s * box.h;
   const sw = (q) => (fitted ? rig.strokePx(q.w, drawn, rig.ACCENTS.includes(q.color)) / s : q.w <= 4 ? q.w * 1.25 : q.w * 1.2);
-  const polys = f.slots.filter((q) => q.w > 0 || q.shape).map((q) => `<polyline points="${q.shape ?? q.pts}" stroke="${q.w <= 0 ? "none" : q.shape && rig.shapeEdge ? rig.shapeEdge(q.color, drawn / 2).color : q.color}" stroke-width="${q.shape ? (rig.shapeEdge ? rig.shapeEdge(q.color, drawn / 2).px * 2 : 1) / s : sw(q)}" opacity="${q.op}" fill="${q.shape ? q.color : q.fill}" stroke-linecap="round" stroke-linejoin="round"/>`).join("");
+  const polys = f.slots.filter((q) => q.w > 0 || q.shape).map((q) => `<polyline points="${q.shape ?? q.pts}" stroke="${q.w <= 0 ? "none" : q.shape && rig.shapeEdge ? rig.shapeEdge(q.color, drawn / 2).color : q.color}" stroke-width="${q.shape ? (rig.shapeEdge ? rig.shapeEdge(q.color, drawn / 2).px * 2 : 1) / s : sw(q)}" opacity="${q.cue && drawn / 2 < 64 ? 0 : q.op}" fill="${q.shape ? q.color : q.fill}" stroke-dasharray="${!q.dash || q.dash === "none" ? "none" : q.dash.split(" ").map((d) => (d * 2) / s).join(" ")}" stroke-linecap="round" stroke-linejoin="round"/>`).join("");
   const badges = f.badges.filter((b) => b.op > 0 && (!fitted || drawn >= 64)).map((b) => `<circle cx="${b.x}" cy="${b.y}" r="10" fill="${b.color}"/>`).join("");
   return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="8" fill="${bg}"/><svg x="${x}" y="${y}" width="${w}" height="${h}" viewBox="${box.x} ${box.y} ${box.w} ${box.h}"><g transform="${f.tf}">${polys}${badges}</g></svg>`;
 }

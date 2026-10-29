@@ -77,6 +77,8 @@ export function ExerciseFigure({
     [drawnPx],
   );
   const showBadges = drawnPx >= BADGE_MIN_PX;
+  // Coaching cues and ladder ghosts are for the tile and the player; in a thumbnail they are noise.
+  const opacity = useCallback((s: FigureSlot) => String(s.cue && drawnPx < BADGE_MIN_PX ? 0 : s.op), [drawnPx]);
   const still = !playing && getElapsed() <= 0;
   const first: FigureFrame = useMemo(() => drawFigure(figure, side, 0, reduced, still), [figure, side, reduced, still]);
 
@@ -96,7 +98,7 @@ export function ExerciseFigure({
       set(el, "points", s.shape ?? s.pts);
       set(el, "stroke", edge(s));
       set(el, "stroke-width", width(s));
-      set(el, "opacity", String(s.op));
+      set(el, "opacity", opacity(s));
       set(el, "fill", s.shape ? s.color : s.fill);
       set(el, "stroke-dasharray", s.dash);
     });
@@ -112,7 +114,7 @@ export function ExerciseFigure({
       set(texts[j], "opacity", String(showBadges ? b.op : 0));
       if (texts[j] && texts[j].textContent !== b.letter) texts[j].textContent = b.letter;
     });
-  }, [figure, side, reduced, getElapsed, playing, width, edge, showBadges]);
+  }, [figure, side, reduced, getElapsed, playing, width, edge, opacity, showBadges]);
 
   useEffect(() => {
     paint();
@@ -149,7 +151,7 @@ export function ExerciseFigure({
               stroke={edge(s)}
               strokeWidth={width(s)}
               vectorEffect="non-scaling-stroke"
-              opacity={s.op}
+              opacity={opacity(s)}
               fill={s.shape ? s.color : s.fill}
               strokeDasharray={s.dash}
               strokeLinecap="round"
