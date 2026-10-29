@@ -23,3 +23,19 @@
   coach, illustrator, front-end engineer) on more human-like, step-by-step motion with excellent form; consider
   open-source options (e.g. Google MediaPipe pose data, mocap-driven rigs) vs the current rig. Experts decide what and
   whether; owner sees the recommendation before any build. Owner likes the current figures: "really precise and nice".
+
+## Handover (2026-10-29 ~19:45, context limit)
+**Live on main (CI green):** 2de491e Plan Move/Unskip fix · 1e18ab0 + 7afcd3f + 425dd10 Record redesign (rescored
+3 → 7–7.5, fixes applied) and bottom-nav padding fix · cd5abde rounds 2–3 (logging kinds, guided figure before
+Start, Plan header + one dot/day, Profile MVP trim). G-14 done (b6197f1).
+**Live captures for the next rescore:** `shots/r23/` — set-sled.png (20 m · — kg · Done · set 1 · 20 m), set-nordic,
+set-bulgarian, hip-brief, plan.png + plan-row-open.png (hip persona), profile.png + profile-full.png.
+**Next steps (owner approved "build all", then animations):**
+1. Rescore rounds 2–3 with the same lenses (coach/design lead/copy for set screens `BRIEF-2.md`; design lead/mobile
+   UX/copy/visual for Profile + Plan `BRIEF-3.md`) on `shots/r23/` only; fix any H items; deploy; re-shoot.
+2. Known small leftovers: Record "Check due" shows twice when the hip section is open; long names wrap in Heaviest
+   set; `contributingProgramCount` unused in plan/page.tsx (lint warning); Guide still has an "Extra session" row.
+3. Animation expert round (queued above): 3–4 experts (animator, biomechanist/coach, illustrator, front-end) on
+   more human-like step-by-step motion with excellent form; consider open-source (e.g. MediaPipe pose data,
+   mocap-driven rigs) vs the current rig in `lib/figures/rig.ts`; experts decide; owner sees the recommendation
+   before any build.
