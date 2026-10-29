@@ -109,4 +109,12 @@ describe("pull family", () => {
     expect(Math.abs(b1[2][0] - b1[0][0])).toBeGreaterThan(2 * 26);
     expect(Math.abs(b0[2][0] - b0[0][0])).toBeLessThan(40);
   });
+
+  it("r2: looping pull-ups end in their start pose (no reset pop) and hands grip wider than the shoulders", () => {
+    for (const id of ["pullup", "pullup_single", "pullup_slow", "pullup_band"]) {
+      const a = drawFigure(id, "B", 0, false), b = drawFigure(id, "B", FIGS[id].dur! * 0.9999, false);
+      expect(b.slots.map((x) => x.pts), id).toEqual(a.slots.map((x) => x.pts));
+    }
+    for (const [h, , s] of arms(drawFigure("pullup", "B", 0, false))) expect(Math.abs(h[0] - s[0])).toBeGreaterThan(12);
+  });
 });
