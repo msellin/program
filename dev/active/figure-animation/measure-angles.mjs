@@ -25,7 +25,11 @@ const inc = (a, b, c) => {
   return (Math.acos(Math.max(-1, Math.min(1, cos))) * 180) / Math.PI;
 };
 const fromVert = (a, b) => (Math.atan2(Math.abs(b[0] - a[0]), Math.abs(b[1] - a[1])) * 180) / Math.PI;
-const colorName = (c) => (c === ACCENT ? "work" : c === FIGURE_COLORS.L ? "left" : c === FIGURE_COLORS.R ? "right" : c === FIGURE_COLORS.FAR ? "far" : c === FIGURE_COLORS.BODY ? "body" : "other");
+// Limbs are named by how they are DRAWN, not by their role: "accent" = the bronze working limb, "left-side" /
+// "right-side" = a sided figure's coloured working limb, "grey near" = drawn in the body colour in front, "grey
+// far" = drawn behind. Which one stands and which one moves depends on the figure (single-leg RDL: the coloured
+// leg stands, the grey near leg is the free leg); read the label.
+const colorName = (c) => (c === ACCENT ? "accent" : c === FIGURE_COLORS.L ? "left-side" : c === FIGURE_COLORS.R ? "right-side" : c === FIGURE_COLORS.FAR ? "grey far" : c === FIGURE_COLORS.BODY ? "grey near" : "other");
 
 function measure(frame) {
   const sk = frame.slots.filter((s) => s.w > 0 && !s.bg && !s.cue);
