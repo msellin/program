@@ -73,7 +73,7 @@ export function SignalsStrip({ program, date }: { program: Program; date: string
       const dueStatus = isDue(store, HIP_FLEXOR_PACK.id, date);
       if (dueStatus.due) {
         // "Monthly" is misleading on day 1 when the pack has never been done.
-        const label = dueStatus.lastDate ? "Monthly hip check due" : "First hip check";
+        const label = dueStatus.lastDate ? "Monthly hip check due" : "Hip check due";
         list.push({ id: "hip-check-due", tone: "slate", label });
       }
     }

@@ -146,7 +146,9 @@ export function SetView({
   useEffect(() => {
     mountedAt.current = performance.now();
   }, []);
-  const elapsed = useCallback(() => (performance.now() - mountedAt.current) / 1000, []);
+  // Milliseconds, like every other ExerciseFigure caller. This returned seconds until 2026-10-29, so one
+  // 5 s rep took 80 minutes and the set player's figure looked frozen on the founder's phone.
+  const elapsed = useCallback(() => performance.now() - mountedAt.current, []);
 
   const prevSets = lastSessionSetsFor(store, active.exercise.id, date);
   const setForRow = sets[activeSetIndex] ?? { weight_kg: null, reps: null, rpe: null };

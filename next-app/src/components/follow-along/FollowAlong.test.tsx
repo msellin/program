@@ -154,3 +154,74 @@ describe("FollowAlong during a rest", () => {
     expect(screen.getByText(/1 set logged\./)).toBeTruthy();
   });
 });
+
+describe("FollowAlong non-destructive Back", () => {
+  beforeEach(() => vi.useFakeTimers({ now: new Date("2026-10-20T08:00:00Z") }));
+  afterEach(() => {
+    cleanup();
+    vi.useRealTimers();
+  });
+
+  const finishL = () => {
+    fireEvent.click(screen.getByText("Start"));
+    advance(3_300);
+    advance(20_500); // L hold done, rest begins
+  };
+
+  it("Back during rest shows the logged values read-only; 'Back to set' restores the rest", () => {
+    const { updateSet } = setup();
+    finishL();
+    advance(1_000);
+    const restLabel = () => screen.getByRole("button", { name: /^\d+ rest$/ }).getAttribute("aria-label");
+    const before = restLabel();
+    fireEvent.click(screen.getByText("Back"));
+    expect(screen.getByTestId("review-result").textContent).toBe("Logged: 20 seconds held");
+    const calls = updateSet.mock.calls.length;
+    advance(30_000); // clock frozen while reviewing
+    expect(screen.queryByText("Home rehab done")).toBeNull();
+    fireEvent.click(screen.getByText(/^Back to set/));
+    expect(screen.getByText("rest")).toBeTruthy();
+    expect(restLabel()).toBe(before);
+    expect(updateSet).toHaveBeenCalledTimes(calls);
+  });
+
+  it("Back from a ready set reviews the previous set (done or skipped) and returns to the same set", () => {
+    const { updateSet } = setup();
+    finishL();
+    fireEvent.click(screen.getByText("Skip rest")); // now on R, ready
+    fireEvent.click(screen.getByText("Back"));
+    expect(screen.getByTestId("review-result").textContent).toBe("Logged: 20 seconds held");
+    fireEvent.click(screen.getByText("Back to set 1"));
+    expect(screen.getByText("seconds")).toBeTruthy();
+    expect(screen.getByText(/Step 2\/3/)).toBeTruthy();
+    fireEvent.click(screen.getByText("Skip set")); // skip R -> bridge
+    fireEvent.click(screen.getByText("Back"));
+    expect(screen.getByTestId("review-result").textContent).toBe("Skipped");
+    fireEvent.click(screen.getByText("Back")); // step further back
+    expect(screen.getByTestId("review-result").textContent).toBe("Logged: 20 seconds held");
+    expect(updateSet.mock.calls.every((c) => c[1] === "hip_flexor_iso_seated")).toBe(true);
+  });
+
+  it("'Redo this set' resets only that set", () => {
+    setup();
+    finishL();
+    fireEvent.click(screen.getByText("Skip rest"));
+    fireEvent.click(screen.getByText("Back"));
+    fireEvent.click(screen.getByText("Redo this set"));
+    expect(screen.getByText(/Step 1\/3/)).toBeTruthy();
+    expect(screen.getByText("Start")).toBeTruthy();
+    fireEvent.click(screen.getByText("Something hurts"));
+    expect(screen.getByText(/0 sets logged\./)).toBeTruthy();
+  });
+
+  it("Back is a no-op on the first set and 'Something hurts' still ends from a review", () => {
+    setup();
+    fireEvent.click(screen.getByText("Back"));
+    expect(screen.queryByTestId("review-result")).toBeNull();
+    finishL();
+    fireEvent.click(screen.getByText("Back"));
+    fireEvent.click(screen.getByText("Something hurts"));
+    expect(screen.getByText("Stopped")).toBeTruthy();
+    expect(screen.getByText(/1 set logged\./)).toBeTruthy();
+  });
+});

@@ -9,6 +9,7 @@ import type { RailExercise } from "@/components/session/DaySession";
 import { Button } from "@/components/ui/Button";
 import { exerciseListName, humanBlockName } from "@/lib/day-format";
 import { loadProgram } from "@/lib/data-loader";
+import { sessionInsights } from "@/lib/insights/session-insights";
 import { selectProposals } from "@/lib/proposals/select";
 import { lastSessionFor } from "@/lib/engine/history";
 import { shortDate } from "@/lib/prescription-line";
@@ -167,6 +168,30 @@ export function SessionDone({
                 <p className="text-caption text-muted mt-0.5">Changes only when a top set earns it. You decide.</p>
               </section>
             );
+          })()
+        : null}
+      {finished
+        ? (() => {
+            const lines = sessionInsights(
+              rail.map((r) => ({
+                key: r.key,
+                exerciseId: r.exercise.id,
+                name: exerciseListName(r.exercise),
+                isLoadable: r.isLoadable,
+                planned: true,
+              })),
+              store,
+              date,
+            );
+            return lines.length ? (
+              <ul aria-label="From your log" className="space-y-1.5 rounded-xl border border-line-soft px-3.5 py-3">
+                {lines.map((l) => (
+                  <li key={l} className="text-small text-ink">
+                    {l}
+                  </li>
+                ))}
+              </ul>
+            ) : null;
           })()
         : null}
       {finished && tierId && tiers.length > 1 ? <DoneLadder levels={tiers} activeId={tierId} /> : null}

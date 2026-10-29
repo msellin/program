@@ -356,7 +356,6 @@ export function TodaySession({
               (n, b) => n + (b.items?.length ?? 0),
               0,
             );
-            const blockWord = g.blocks.length === 1 ? "block" : "blocks";
             const exWord = totalExercises === 1 ? "exercise" : "exercises";
             // Blocks that prescribe in prose rather than sets — every
             // rowing block is one — counted as zero exercises, so Day
@@ -367,8 +366,8 @@ export function TodaySession({
             );
             const summary =
               totalExercises === 0 && prescriptionMinutes
-                ? `${g.blocks.length} ${blockWord} · ${prescriptionMinutes}`
-                : `${g.blocks.length} ${blockWord} · ${totalExercises} ${exWord}`;
+                ? prescriptionMinutes
+                : `${totalExercises} ${exWord}`;
             // Batch 33 · M6 · category accent stripe on the workout summary
             // block. Same DashboardBlock `accent` prop already used on the
             // Programs catalog. Mapping cribbed from CATEGORY_ACCENT in
@@ -599,7 +598,7 @@ export function TodaySession({
           const hasSkill = has("skill") || has("gymnastics");
           const hasMobility = has("asymmetry") || has("mobility");
           const hasRehab = has("rehab");
-          let interference: string;
+          let interference: string | null;
           if (hasStrengthAndAerobic) {
             interference =
               "Concurrent endurance + strength has known interference effects. Aim for ≥6 hours between sessions if you do both.";
@@ -610,22 +609,17 @@ export function TodaySession({
             interference =
               "Rehab + endurance: watch symptom score after cardio. Any groin / hip flare-up = tomorrow's rehab session is symptom-gated.";
           } else if (hasMobility) {
-            interference =
-              "Mobility runs alongside the rest without interference. Optional to sequence — do mobility after strength/skill when time permits.";
+            interference = null; // mobility runs alongside; nothing to warn about
           } else {
-            interference =
-              "Multiple tracks today. If it's too much, snooze one from Profile.";
+            interference = null;
           }
           return (
-            <div className="rounded-lg border border-amber/40 bg-amber/10 px-3 py-2.5 text-small">
-              <p className="text-amber-strong">
-                <span className="font-semibold">
-                  {groupsWithBlocks.length} tracks scheduled today.
-                </span>{" "}
-                If it&apos;s too much, snooze one from{" "}
-                <Link href="/profile" className="underline">Profile</Link>.
+            <div className="space-y-0.5 text-caption text-muted">
+              <p>
+                {groupsWithBlocks.length} tracks today ·{" "}
+                <Link href="/profile" className="underline">snooze one in Profile</Link>
               </p>
-              <p className="text-muted mt-1">{interference}</p>
+              {interference ? <p>{interference}</p> : null}
             </div>
           );
         })()

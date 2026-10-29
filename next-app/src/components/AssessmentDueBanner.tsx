@@ -18,7 +18,7 @@ export function AssessmentDueBanner({ date }: { date: string }) {
 
   const headline =
     status.lastDate == null
-      ? "First hip check"
+      ? "Hip check due"
       : `Hip check due (${status.daysSince} days since last)`;
 
   const subheadline =

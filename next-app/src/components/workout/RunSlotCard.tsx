@@ -94,6 +94,10 @@ export function RunSlotCard({ date }: { date: string }) {
   // adjusts to warn on ill-advised choices; nothing is blocked.
 
   const cardStatus = slot.type === "primary" ? "green" : undefined;
+  // Advisory-only slots ("heavy squat day", "rest day") are one muted line,
+  // not a framed card; the ⓘ reveals the reason inline.
+  const quiet = slot.type === "none";
+  const [whyOpen, setWhyOpen] = useState(false);
 
   const reset = () => {
     setActivity("run");
@@ -317,8 +321,25 @@ export function RunSlotCard({ date }: { date: string }) {
   return (
     <section
       aria-label="Extra session slot"
-      className={cn(cardClass({ status: cardStatus }), "space-y-2")}
+      className={quiet ? "space-y-1" : cn(cardClass({ status: cardStatus }), "space-y-2")}
     >
+      {quiet ? (
+        <header>
+          <div className="flex items-center gap-1">
+            <p className="flex-1 text-caption text-muted">{slot.title}</p>
+            <button
+              type="button"
+              onClick={() => setWhyOpen((v) => !v)}
+              aria-expanded={whyOpen}
+              aria-label="Why?"
+              className="w-11 h-11 flex items-center justify-center text-muted hover:text-ink rounded-lg"
+            >
+              <Info size={16} strokeWidth={1.75} />
+            </button>
+          </div>
+          {whyOpen ? <p className="text-caption text-muted">{slot.detail}</p> : null}
+        </header>
+      ) : (
       <header className="flex items-center gap-2">
         <Footprints size={16} className="text-slate flex-shrink-0" aria-hidden />
         <div className="flex-1 min-w-0">
@@ -334,6 +355,7 @@ export function RunSlotCard({ date }: { date: string }) {
           <Info size={16} strokeWidth={1.75} />
         </button>
       </header>
+      )}
 
       {runs.length > 0 ? (
         <ul className="space-y-1.5 pt-1">

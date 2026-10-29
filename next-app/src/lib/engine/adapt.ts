@@ -435,6 +435,9 @@ export type PerformanceSignal = {
 const EASY_TOP_SET_RPE = 7;
 /** Reps beyond the prescribed floor before we read it as headroom. */
 const REP_SURPLUS = 3;
+/** A set this low-rep and this close to the limit reads as a rep-max test. */
+const REP_MAX_TEST_MAX_REPS = 3;
+const REP_MAX_TEST_MIN_RPE = 9;
 
 export function performanceSignals(
   program: Program,
@@ -451,6 +454,25 @@ export function performanceSignals(
       if (!exId || !tms[exId]) continue;
       const top = pickHeaviest(entry);
       if (!top) continue;
+
+      // A rep-max test: heavy, low-rep, near-limit, on any exercise that has
+      // a training max. It is judged on its own numbers, not against the
+      // prescription -- a 3RM is not an AMRAP and is never "prescribed", so
+      // the reps-over-floor and load-over-prescription reads below could not
+      // see it (a front squat 115 x 3 @ RPE 10 produced no signal at all).
+      // Only counts when the set's estimated TM clears the current TM by the
+      // normal step; sizing stays in `evaluateOverperformer`.
+      if (top.reps <= REP_MAX_TEST_MAX_REPS && top.rpe != null && top.rpe >= REP_MAX_TEST_MIN_RPE) {
+        const inf = inferTMFromSet(top.weight_kg, top.reps, top.rpe, tms[exId]);
+        if (inf && floorToLoadable(inf.est1RM * 0.85) >= tms[exId] + bumpFor(exId)) {
+          out.set(exId, {
+            liftId: exId,
+            reason: `${top.weight_kg} kg × ${top.reps} at RPE ${top.rpe} (a rep-max test)`,
+            top,
+          });
+          continue;
+        }
+      }
 
       const prescribed = suggestForExercise(exId, blockId, program, store, day.date);
       if (!prescribed) continue;

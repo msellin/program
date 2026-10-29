@@ -67,6 +67,11 @@ export function FollowAlong({
   const [video, setVideo] = useState(false);
   const [demoOpen, setDemoOpen] = useState(false);
   const [skipArmed, setSkipArmed] = useState(false);
+  // What each finished set recorded, so Back can show it read-only.
+  const [logged, setLogged] = useState<Record<number, { reps: number; seconds: number | null }>>({});
+  // Read-only look at an earlier set. The live position (idx/phase/count) is
+  // untouched; the clock is frozen with `leftMs` and re-armed on return.
+  const [review, setReview] = useState<{ target: number; leftMs: number | null; frozen: number } | null>(null);
   const anim = useRef({ start: 0, frozen: 0 });
   const [now, setNow] = useState(() => Date.now());
   const doneHeading = useRef<HTMLHeadingElement>(null);
@@ -145,6 +150,10 @@ export function FollowAlong({
     (reps: number, seconds: number | null) => {
       const s = steps[idx];
       if (reps > 0) log(s, reps, seconds);
+      setLogged((l) => {
+        const { [idx]: _drop, ...rest } = l;
+        return reps > 0 ? { ...rest, [idx]: { reps, seconds } } : rest;
+      });
       setResults((r) => ({ ...r, [idx]: reps > 0 ? "done" : "skip" }));
       const n = steps[idx + 1];
       if (!n) {
@@ -169,7 +178,7 @@ export function FollowAlong({
   const lastTick = useRef<number | null>(null);
   useEffect(() => {
     tick.current = (t: number) => {
-      if (paused) return;
+      if (paused || review) return;
       const left = Math.max(0, endAt - t);
       const sec = Math.ceil(left / 1000);
       if (phase === "count") {
@@ -197,7 +206,7 @@ export function FollowAlong({
         goTo(idx + 1);
       }
     };
-  }, [paused, endAt, phase, step, idx, completeSet, goTo]);
+  }, [paused, review, endAt, phase, step, idx, completeSet, goTo]);
 
   useEffect(() => {
     if (phase === "done") doneHeading.current?.focus();
@@ -217,6 +226,40 @@ export function FollowAlong({
     setEndAt(Date.now() + (pausedLeft ?? 0));
     setPausedLeft(null);
   };
+
+  const startReview = () => {
+    setSkipArmed(false);
+    const target = phase === "rest" ? idx : idx - 1;
+    if (target < 0) return;
+    setReview({ target, leftMs: paused || phase === "ready" ? null : msLeft, frozen: Date.now() - anim.current.start });
+  };
+  const stepReviewBack = () => setReview((r) => (r && r.target > 0 ? { ...r, target: r.target - 1 } : r));
+  const returnFromReview = () => {
+    if (!review) return;
+    if (review.leftMs != null) {
+      setEndAt(Date.now() + review.leftMs);
+      setNow(Date.now());
+    }
+    anim.current.start = Date.now() - review.frozen;
+    setReview(null);
+  };
+  const redoReviewed = () => {
+    if (!review) return;
+    const t = review.target;
+    setResults((r) => {
+      const { [t]: _drop, ...rest } = r;
+      return rest;
+    });
+    setLogged((l) => {
+      const { [t]: _drop, ...rest } = l;
+      return rest;
+    });
+    setReview(null);
+    goTo(t);
+  };
+  const reviewed = review ? steps[review.target] : null;
+  const reviewedResult = review ? results[review.target] : undefined;
+  const reviewedLog = review ? logged[review.target] : undefined;
 
   const repWork = phase === "work" && step.kind === "reps";
   const chip = CHIP[step.side];
@@ -331,6 +374,38 @@ export function FollowAlong({
           </div>
         ) : (
           <>
+            {review && reviewed ? (
+              <div className="flex min-h-0 flex-grow flex-col items-center justify-center gap-3 px-6 text-center">
+                <span className="font-mono text-caption tabular-nums text-muted">
+                  Set {reviewed.set}/{reviewed.of} · Step {review.target + 1}/{steps.length}
+                </span>
+                <h2 className="text-h2 font-bold leading-[1.2] text-strong">{reviewed.name}</h2>
+                <p className="text-small text-muted">{CHIP[reviewed.side].speak}</p>
+                <p data-testid="review-result" className="text-body font-semibold text-ink">
+                  {reviewedResult === "done" && reviewedLog
+                    ? reviewedLog.seconds != null
+                      ? `Logged: ${reviewedLog.seconds} seconds held`
+                      : `Logged: ${reviewedLog.reps} ${reviewedLog.reps === 1 ? "rep" : "reps"}`
+                    : reviewedResult === "skip"
+                      ? "Skipped"
+                      : "Not done"}
+                </p>
+                <button
+                  type="button"
+                  onClick={returnFromReview}
+                  className="mt-2 flex h-[52px] items-center rounded-xl bg-bronze px-7 font-bold text-ground"
+                >
+                  Back to set {step.set}
+                </button>
+                <button
+                  type="button"
+                  onClick={redoReviewed}
+                  className="flex h-11 items-center px-4 text-body font-semibold text-ink"
+                >
+                  Redo this set
+                </button>
+              </div>
+            ) : (
             <div className="flex min-h-0 flex-grow flex-col px-4 pt-2">
               {step.figure || step.videoUrl ? (
                 <div className="relative aspect-video w-full flex-shrink-0 overflow-hidden rounded-xl bg-surface [@media(max-height:700px)]:aspect-[2.3]">
@@ -463,6 +538,7 @@ export function FollowAlong({
                 </div>
               </div>
             </div>
+            )}
 
             <div className="flex flex-shrink-0 justify-center px-7 pt-1">
             <button
@@ -480,9 +556,8 @@ export function FollowAlong({
             <div className="grid flex-shrink-0 grid-cols-3 items-start px-7 pb-4 pt-2.5">
               <button
                 type="button"
-                // During a rest the cursor still points at the set just finished:
-                // Back returns to it rather than two steps back.
-                onClick={() => goTo(phase === "rest" ? idx : Math.max(0, idx - 1))}
+                // Back only looks: it never resets a set or changes a result.
+                onClick={review ? stepReviewBack : startReview}
                 className="flex flex-col items-center gap-1.5"
               >
                 <span className="flex h-14 w-14 items-center justify-center rounded-full bg-surface">
@@ -492,7 +567,7 @@ export function FollowAlong({
                 </span>
                 <span className="text-caption text-muted">Back</span>
               </button>
-              <button type="button" onClick={onPrimary} className="-mt-2 flex flex-col items-center gap-1.5">
+              <button type="button" onClick={onPrimary} disabled={!!review} className="-mt-2 flex flex-col items-center gap-1.5 disabled:opacity-40">
                 <span className="flex h-[72px] w-[72px] items-center justify-center rounded-full bg-bronze" aria-hidden="true">
                   {primaryLabel === "Pause" || primaryLabel === "Skip rest" || primaryLabel === "Cancel" ? (
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="#0e0f12"><rect x="6" y="5" width="4" height="14" rx="1" /><rect x="14" y="5" width="4" height="14" rx="1" /></svg>
@@ -519,7 +594,8 @@ export function FollowAlong({
                   setResults((r) => ({ ...r, [target]: "skip" }));
                   goTo(target + 1);
                 }}
-                className="flex flex-col items-center gap-1.5"
+                disabled={!!review}
+                className="flex flex-col items-center gap-1.5 disabled:opacity-40"
               >
                 <span className="flex h-14 w-14 items-center justify-center rounded-full bg-surface">
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d6d9de" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

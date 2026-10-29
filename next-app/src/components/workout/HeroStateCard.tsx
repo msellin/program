@@ -148,7 +148,23 @@ export function HeroStateCard({ date }: { date: string }) {
     );
   }
 
-  // FULL card — only when today has no check yet, OR when viewing another day.
+  // Today with no check: one compact row, not a bordered card.
+  if (isToday) {
+    return (
+      <div className="flex items-center gap-2 text-small text-muted">
+        <span className="w-2 h-2 rounded-full bg-muted flex-shrink-0" aria-hidden />
+        <span className="flex-1">{copy.title}</span>
+        <Link
+          href="/check/"
+          className="inline-flex min-h-11 items-center px-3 text-small font-semibold text-slate underline underline-offset-2"
+        >
+          Check
+        </Link>
+      </div>
+    );
+  }
+
+  // FULL card — only when viewing another day without a check.
   const toneRing =
     copy.tone === "green"
       ? "ring-1 ring-green/30 bg-green/10"

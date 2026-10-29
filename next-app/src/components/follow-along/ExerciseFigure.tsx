@@ -46,6 +46,7 @@ export function ExerciseFigure({
   figure: string;
   side: FigureSide | "E";
   playing: boolean;
+  /** Milliseconds since the figure started (a seconds clock makes a 5 s rep last 80 minutes). */
   getElapsed: () => number;
 }) {
   const reduced = usePrefersReducedMotion();

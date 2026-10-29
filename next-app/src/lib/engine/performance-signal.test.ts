@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
 import { performanceSignals } from "./adapt";
+import { selectProposals } from "../proposals/select";
 import type { Program, Store, DayLog } from "../schemas";
 
 /**
@@ -93,5 +94,41 @@ describe("performanceSignals — the founder's own sessions", () => {
     ]);
     const out = performanceSignals(program, { ...store, logs: { "2026-09-02": d } }, [d]);
     expect(out).toHaveLength(1);
+  });
+});
+
+describe("performanceSignals — rep-max test", () => {
+  const tmStore = { ...store, training_maxes: { ...store.training_maxes, front_squat: 107.5 } } as Store;
+
+  it("115x3 @ RPE 10 equals a 107.5 TM (Epley x 0.85): no headroom, no signal", () => {
+    const d = day("2026-10-27", "block_squat_variant:front_squat", [[80, 5, 6], [115, 3, 10]]);
+    expect(performanceSignals(program, { ...tmStore, logs: { "2026-10-27": d } }, [d])).toEqual([]);
+  });
+
+  it("120x3 @ RPE 10 is read as a rep-max test and feeds a tm_bump proposal", () => {
+    const d = day("2026-10-27", "block_squat_variant:front_squat", [[80, 5, 6], [120, 3, 10]]);
+    const s = { ...tmStore, logs: { "2026-10-27": d } } as Store;
+    const out = performanceSignals(program, s, [d]);
+    expect(out.map((x) => x.liftId)).toEqual(["front_squat"]);
+    expect(out[0].reason).toMatch(/rep-max test/);
+    const tm = selectProposals(s, program, "2026-10-27").find((p) => p.kind === "tm_bump");
+    expect(tm).toBeTruthy();
+    // 120 x (1 + 3/30) = 132 est 1RM; x 0.85 = 112.2, floored to a loadable 110
+    expect((tm as unknown as { lifts: { newTM: number }[] }).lifts[0].newTM).toBe(110);
+  });
+
+  it("respects a dismissed tm-bump", () => {
+    const d = day("2026-10-27", "block_squat_variant:front_squat", [[120, 3, 10]]);
+    const s = {
+      ...tmStore,
+      logs: { "2026-10-27": d },
+      dismissed_proposals: { "2026-10-27": ["tm-bump:front_squat"] },
+    } as unknown as Store;
+    expect(selectProposals(s, program, "2026-10-27").find((p) => p.kind === "tm_bump")).toBeUndefined();
+  });
+
+  it("a heavy single at RPE 8 is not a test", () => {
+    const d = day("2026-10-27", "block_squat_variant:front_squat", [[125, 3, 8]]);
+    expect(performanceSignals(program, { ...tmStore, logs: { "2026-10-27": d } }, [d])).toEqual([]);
   });
 });

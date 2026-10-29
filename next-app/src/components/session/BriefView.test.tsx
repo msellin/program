@@ -335,3 +335,38 @@ describe("follow-along on the Brief (2026-10-20)", () => {
     expect(onStart).toHaveBeenCalled();
   });
 });
+
+describe("all-done state (2026-10-29)", () => {
+  const second = () =>
+    rail({ key: "b:front_squat", exercise: exercise("front_squat", "Front squat"), rowCount: 2, suggestion: null });
+  const logged = (n: number) => Array.from({ length: n }, () => ({ weight_kg: 50, reps: 5, done: true }));
+  const storeFor = (counts: Record<string, number>) =>
+    emptyStore({
+      logs: {
+        "2026-09-02": {
+          exercises: Object.fromEntries(Object.entries(counts).map(([k, n]) => [k, { sets: logged(n), done: true }])),
+        },
+      },
+    } as unknown as Partial<Store>);
+  const links = () => [screen.queryByText("Log an extra session"), screen.queryByText("How to run this")];
+
+  it("shows the confirmation line and hides the extra-session link when everything is done", () => {
+    renderBrief({
+      rails: [rail({ rowCount: 1 }), second()],
+      store: storeFor({ "b:back_squat_highbar": 1, "b:front_squat": 2 }),
+    });
+    expect(screen.getByText(/All done · 2 of 2\. Finish to save\./)).toBeTruthy();
+    expect(links()[0]).toBeNull();
+    expect(screen.getAllByText("Done").length).toBe(2);
+  });
+
+  it("keeps both links and omits the line while something is left", () => {
+    renderBrief({
+      rails: [rail({ rowCount: 1 }), second()],
+      store: storeFor({ "b:back_squat_highbar": 1 }),
+    });
+    expect(screen.queryByText(/All done/)).toBeNull();
+    expect(links()[0]).toBeTruthy();
+    expect(screen.getAllByText("Done").length).toBe(1);
+  });
+});

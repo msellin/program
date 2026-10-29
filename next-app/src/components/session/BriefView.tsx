@@ -2,6 +2,7 @@
 
 import { formatMinutes, sessionMinutes } from "@/lib/session-duration";
 import { useState } from "react";
+import { Check } from "lucide-react";
 import { cardClass } from "@/components/ui/Card";
 import { cn } from "@/lib/utils";
 import { RacePlanCard } from "@/components/session/RacePlanCard";
@@ -130,6 +131,8 @@ export function BriefView({
   const nextFollow = followBlocks.find((b) =>
     railExercises.some((r) => r.blockId === b.id && requiredRowCount(r) > 0 && loggedFor(r) < requiredRowCount(r)),
   );
+  const doneRequired = requiredRail.filter((r) => loggedFor(r) >= r.rowCount).length;
+  const allDone = requiredRail.length > 0 && doneRequired === requiredRail.length;
   const guidedAllDone = allFollow && anyLogged && !nextFollow;
   // Prescription-only sessions (2026-08-26).
   //
@@ -281,7 +284,7 @@ export function BriefView({
                               <span className="block text-caption text-muted">{railScheme(r)}</span>
                             </span>
                             <span className="flex-shrink-0 text-caption uppercase tracking-[.1em] text-muted">
-                              {logged >= r.rowCount ? "Done" : logged > 0 ? "Held" : isOptional ? "Optional" : ""}
+                              {logged >= r.rowCount ? <DoneMark /> : logged > 0 ? "Held" : isOptional ? "Optional" : ""}
                             </span>
                           </button>
                         </li>
@@ -412,7 +415,7 @@ export function BriefView({
                     </span>
                     {isDone || loggedCount > 0 || isOptional ? (
                       <span className="ml-auto flex-shrink-0 text-caption text-muted">
-                        {isDone ? "Done" : loggedCount > 0 ? `${loggedCount}/${r.rowCount}` : "Optional"}
+                        {isDone ? <DoneMark /> : loggedCount > 0 ? `${loggedCount}/${r.rowCount}` : "Optional"}
                       </span>
                     ) : null}
                   </span>
@@ -438,6 +441,7 @@ export function BriefView({
           </div>
         </div>
         {/* One quiet list for the two secondary links (round 6). */}
+        {allDone ? null : (
         <div className="rounded-2xl border border-line-soft divide-y divide-line-soft px-3.5">
         {guidanceBlocks.length > 0 ? (
           <details className="group">
@@ -463,11 +467,17 @@ export function BriefView({
           <span className="flex-shrink-0 text-small text-muted" aria-hidden="true">›</span>
         </button>
         </div>
+        )}
       </div>
 
       <div className="sticky bottom-[calc(64px+env(safe-area-inset-bottom))] z-10 flex-shrink-0 border-t border-line-soft bg-ground pt-2 pb-2 mt-4">
         {/* Fade, so a card scrolling under the bar dissolves instead of being cut. */}
         <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 -top-6 h-6 bg-gradient-to-t from-ground to-transparent" />
+        {allDone ? (
+          <p className="mb-1.5 text-caption text-muted">
+            All done · {doneRequired} of {requiredRail.length}. Finish to save.
+          </p>
+        ) : null}
         {gateUnresolved ? (
           <p className="mb-1.5 text-caption text-muted">Accept the numbers to start</p>
         ) : null}
@@ -510,6 +520,15 @@ export function BriefView({
         <OffPlanSheet program={program} date={activeDate} onClose={onCloseSheet} />
       ) : null}
     </div>
+  );
+}
+
+function DoneMark() {
+  return (
+    <>
+      <Check className="h-4 w-4 text-bronze" aria-hidden="true" />
+      <span className="sr-only">Done</span>
+    </>
   );
 }
 
