@@ -921,7 +921,7 @@ const SWING_OVER = 0.025;
 const breathe = (t: number) => -0.9 * Math.sin((2 * Math.PI * t) / 4000);
 /** Front-view carry: foot lifts, and the trunk shifting over the standing foot and rising a little on it. */
 function carryGait(phi: number): { lift: [number, number]; shift: Pt } {
-  const lift = (q: number) => { const st = stride(q); return st.stance ? 0 : Math.sin(st.u * Math.PI) * 9; };
+  const lift = (q: number) => { const st = stride(q); return st.stance ? 0 : Math.sin(st.u * Math.PI) * 6; };   // carries keep the feet low (S&C r1: 9 px read as marching)
   // Right foot swings around phi 0.8, left around 0.3: the weight is over the other foot then.
   const dx = 2.5 * Math.cos(2 * Math.PI * (phi - 0.8)), dy = -1.2 * Math.cos(4 * Math.PI * (phi - 0.8));
   return { lift: [lift(phi), lift(phi + 0.5)], shift: [dx, dy] };
