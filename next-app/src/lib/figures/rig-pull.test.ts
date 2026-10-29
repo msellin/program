@@ -118,3 +118,15 @@ describe("pull family", () => {
     for (const [h, , s] of arms(drawFigure("pullup", "B", 0, false))) expect(Math.abs(h[0] - s[0])).toBeGreaterThan(12);
   });
 });
+
+describe("pull family round 3", () => {
+  it("the scap lift is 10 px and the head stays clear of the bar", () => {
+    const hang = head(drawFigure("hang", "B", 5000, false))[1], sc = head(still("scappull"))[1];
+    expect(hang - sc).toBeGreaterThanOrEqual(10);
+    expect(sc - HEAD_R).toBeGreaterThan(BAR_BOTTOM + 3);
+  });
+  it("heavy band is drawn at least twice as thick as the light one", () => {
+    const w = (id: string) => Math.max(...still(id).slots.filter((s) => s.color !== ACCENT && pts(s.pts).length === 6).map((s) => s.w));
+    expect(w("pullup_band")).toBeGreaterThanOrEqual(2 * w("pullup_band_light") - 1);
+  });
+});
