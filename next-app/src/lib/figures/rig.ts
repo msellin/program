@@ -314,6 +314,9 @@ export const FIGS: Record<string, Fig> = {
     if (side === "L") front();
     back();
     sc.ring(lerpP(KB, H, 0.8), 9, work, 2, p);
+    // Pelvic tuck arc behind the hip, drawn heavy so it still reads on the 56x40 tile.
+    const tk: Pt[] = []; for (let i = 0; i <= 10; i++) tk.push(P(H, 18, lerp(-150, -250, i / 10)));
+    sc.line(tk, ACCENT, 5, 0.9);
     sc.badge(beyond(KB, BF, 16), work, side);
     return "Half-kneeling hip-flexor stretch, " + sideWord(side) + " knee down: tuck the pelvis, squeeze the back glute and shift the hips gently forward, trunk upright, then hold";
   } },
@@ -334,7 +337,7 @@ export const FIGS: Record<string, Fig> = {
     const toRight = function (ux: number, uy: number): Pt { return [uy, -ux]; };   // perpendicular pointing to the viewer's right for both legs
     const left = leg(hL, [108, 172], toRight);
     const right = leg(hR, [250, 172], toRight);   // so one knee falls in while the other falls out
-    sc.line([[160, 66], [132, 90]], BODY, 8); sc.line([[198, 66], [226, 90]], BODY, 8);
+    sc.line([[160, 66], [150, 91]], BODY, 8); sc.line([[198, 66], [208, 91]], BODY, 8);
     sc.line([[179, 96], [179, 68]], BODY, TORSO); sc.line([[158, 66], [200, 66]], BODY, 8);
     sc.dot([179, 52], 11, BODY);
     sc.line([hL, hR], BODY, 10);
@@ -371,9 +374,9 @@ export const FIGS: Record<string, Fig> = {
     // 11: the measured trunk never moved). The upper segment is drawn first so it is the one that is read.
     const C = [136, 133], H = [186, 160], F = [272, 166], K = ik(H, F, 62, 58, true);
     const ang = lerp(-152, -174, p), Sh = P(C, 36, ang), head = P(Sh, 20, ang);
-    const hand = add(head, [6, 8]), E = ik(Sh, hand, ARMLY / 2 + 2, ARMLY / 2 - 2, true);   // elbow up, hand cupping the back of the head
+    const hand = add(head, [5, 7]), E = ik(Sh, hand, ARMLY / 2 + 2, ARMLY / 2 - 2, true);   // elbow up, hand cupping the back of the head
     sc.floor();
-    sc.dot([136, 151], 17, PROP);
+    sc.dot([136, 151], 19, COL.B); sc.dot([136, 151], 16, PROP);   // outlined so it is not grey on grey
     sc.line([C, Sh], COL.B, TORSO);
     sc.line([C, H], BODY, TORSO); sc.line([H, K, F], BODY, 8);
     sc.dot(head, 11, BODY);
@@ -1100,13 +1103,13 @@ const HIP_FIGS: Record<string, Fig> = {
   goblet: { kind: "move", dur: 5500, k: [0.05, 0.4, 0.5, 0.8], poster: 0.9, sided: false, tempo: ["control", "drive"], cues: [{ level: "knee", span: ["hip", "knee"], limit: true }], build(sc, _s, p) { return squatPose(sc, p, 26, "goblet", 134, 127); } },
   amarch: { dur: 3000, kind: "move2", k: [0.05, 0.4, 0.62], sided: false, cues: [{ angle: ["knee", "hip", "shoulder"] }], build(sc, _s, p, rep = 0) {
     // Knee to a level thigh (90°) and no higher; the opposite arm drives forward to ~65° of shoulder flexion
-    // with the elbow at ~90, the other arm swings back ~28° (ARM86; trainer review 11).
+    // with the elbow at ~90, the other arm swings back ~40° (ARM86; trainer review 11).
     const H = [178, 80], S = [178, 24];
     const up = (q: number): Pt[] => { const K = P(H, 44, lerp(92, 0, q)); return [H, K, P(K, 42, 90 - lerp(-4, 4, q))]; };
     const down = (): Pt[] => { const K = P(H, 44, 92); return [H, K, P(K, 42, 88)]; };
     const arm = (q: number, fwd: boolean): Pt[] => {
-      const a = fwd ? lerp(90, 25, q) : lerp(90, 118, q), E = P(S, ARM86[0], a);
-      return [S, E, P(E, ARM86[1], a - (fwd ? lerp(30, 90, q) : lerp(30, 40, q)))];
+      const a = fwd ? lerp(90, 25, q) : lerp(90, 130, q), E = P(S, ARM86[0], a);
+      return [S, E, P(E, ARM86[1], a - (fwd ? lerp(30, 90, q) : lerp(30, 45, q)))];
     };
     const nearLeg = rep === 0 ? up(p) : down(), farLeg = rep === 0 ? down() : up(p);
     sc.mark("hip", H); sc.mark("shoulder", S); sc.mark("knee", (rep === 0 ? nearLeg : farLeg)[1]);
@@ -1135,10 +1138,10 @@ const HIP_FIGS: Record<string, Fig> = {
   } },
   hollowtuck: { kind: "hold", sided: false, scale: 1.15, build(sc, _s, q) {
     // Tuck hollow: knees bent over the hips (short lever, not a straight-leg-raise hold), lower back
-    // pressed down, shoulders curled up off the floor. Hip flexion is capped near 96 degrees (included
-    // 84): deeper than ~100 is FADIR range (trainer review 11: it reached 114).
+    // pressed down, shoulders curled up off the floor. Hip flexion is capped at 90 degrees (included >= 90
+    // even at the end of the shoulder lift): FADIR-positive hips must not cross it by default (physio r1).
     const H = [196, 160], a = lerp(0, 16, q), S = P(H, 80, 180 + a);
-    const K = P(H, 62, -80), F = P(K, 58, -8);
+    const K = P(H, 62, -74), F = P(K, 58, -2);
     sc.floor();
     sc.line([H, K, F], BODY, 8);
     sc.line([S, H], BODY, TORSO);

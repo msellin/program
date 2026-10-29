@@ -157,3 +157,14 @@ describe("rehab figures", () => {
     expect(pts(arm.pts)[1][0]).toBeLessThan(60);
   });
 });
+
+describe("rehab round 2", () => {
+  it("hollowtuck: hip included angle stays >= 90 (flexion <= 90) through the whole hold", () => {
+    for (const t of [0, 900, 2000, 4000]) {
+      const f = drawFigure("hollowtuck", "B", t, false);
+      const [H, S] = trunk(f);
+      const leg = chains(f, FIGURE_COLORS.BODY)[0];
+      expect(ang(S, H, leg[1])).toBeGreaterThanOrEqual(89.5);
+    }
+  });
+});
