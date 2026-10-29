@@ -19,3 +19,7 @@
 - Insights line capped at two missing names + "and N more" (the stranger run listed four).
 - Not done: the five-lens rescore. The captures cover the pull-up stranger path, not the founder's two-track hip Today;
   his phone is the real check.
+- **Queued (owner 2026-10-29):** after rounds 2–4 are built, an animation round: 3–4 experts (animator, biomechanist /
+  coach, illustrator, front-end engineer) on more human-like, step-by-step motion with excellent form; consider
+  open-source options (e.g. Google MediaPipe pose data, mocap-driven rigs) vs the current rig. Experts decide what and
+  whether; owner sees the recommendation before any build. Owner likes the current figures: "really precise and nice".
