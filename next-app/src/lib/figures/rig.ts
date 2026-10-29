@@ -229,15 +229,18 @@ function sideWord(s: string) { return s === "L" ? "left" : s === "R" ? "right" :
 // so right limbs are near (drawn in front) and left limbs are far (drawn behind).
 export const FIGS: Record<string, Fig> = {
   hipflex: { kind: "hold", sided: true, build(sc, side, q) {
-    const work = COL[side], H = [176, 122], S = [171, 62];
-    const wAng = lerp(-8, -14, q), wK = P(H, 64, wAng), wF = P(wK, 54, wAng + 98);
-    const rK = P(H, 62, 2), rF = [rK[0] + 4, 166];
-    const hand = add(lerpP(H, wK, 0.74), [0, -6]), elbow = ik(S, hand, 36, 34, false);
+    // Seated on a chair set-up: hip and knee both near 90, trunk upright. The thigh presses UP into the hand
+    // and the hand does not give (3 degrees of thigh, none of hand), so the hip never goes past 90 of flexion
+    // (FADIR range, trainer review 11). Standard leg 44 + 42 and ARM86 like the other upright figures.
+    const work = COL[side], H = [176, 123], S = [176, 65];
+    const wAng = lerp(3, 0, q), wK = P(H, 44, wAng), wF = P(wK, 42, wAng + 87);
+    const rK = P(H, 44, 4), rF = P(rK, 42, 90);
+    const hand = add(lerpP(H, P(H, 44, 0), 0.72), [0, -6]), elbow = ikSide(S, hand, ARM86[0], ARM86[1], -1);
     const workLeg = function () { sc.line([H, wK, wF], work, 8); };
     const restLeg = function () { sc.line([H, rK, rF], side === "R" ? FAR : BODY, 8); };
-    sc.box(108, 128, 196, 167);
+    sc.box(116, 128, 212, 167);
     if (side === "L") { workLeg(); } else { restLeg(); }
-    sc.line([H, S], BODY, TORSO); sc.line([S, [172, 52]], BODY, 8); sc.dot([173, 44], 11, BODY);
+    sc.line([H, S], BODY, TORSO); sc.line([S, [176, 56]], BODY, 8); sc.dot([176, 48], 11, BODY);
     if (side === "L") { restLeg(); } else { workLeg(); }
     sc.line([S, elbow, hand], BODY, 8);
     const top = add(wK, [0, -16]);
@@ -249,16 +252,19 @@ export const FIGS: Record<string, Fig> = {
   adductor: adductorFig(false, "Adductor squeeze: lying on the back with knees bent, squeezing a ball between the knees at about 60% and holding"),
   adductor_ext: adductorFig(true, "Adductor squeeze, longer lever: lying on the back with the feet further out, squeezing a ball between the knees at about 60% and holding"),
   bridge: { dur: 5000, kind: "move", k: [0.08, 0.32, 0.64], sided: true, tempo: ["drive", "control"], scale: 1.15, cues: [{ align: ["shoulder", "hip", "knee"] }], build(sc, side, p) {
-    // Foot under the knee at the top (vertical shin, no hamstring cramp). The free leg is held
-    // bent (short lever): a straight raised leg is a resisted straight-leg-raise hold.
-    const S = [120, 158], T = 78, F = [258, 164], th = lerp(0, 22.7, p) * Math.PI / 180;
+    // Shoulder, hip and knee end in ONE line (never past it), 20 degrees up. The foot is placed so that line
+    // and the floor agree: knee about 82 included at the start and 95 at the top, shin ~25 off vertical
+    // (trainer review 11: the foot was too close, knee 56 to 72). The free leg is held bent (short lever):
+    // a straight raised leg is a resisted straight-leg-raise hold.
+    const S = [120, 158], T = 78, SL = 20.3 * Math.PI / 180, th = lerp(0, 20.3, p) * Math.PI / 180;
+    const F = [S[0] + 144 * Math.cos(SL) + 62 * Math.cos(85 * Math.PI / 180 - SL), S[1] - 144 * Math.sin(SL) + 62 * Math.sin(85 * Math.PI / 180 - SL)];
     const H = [S[0] + T * Math.cos(th), S[1] - T * Math.sin(th)], K = ik(H, F, 66, 62, true);
-    const thDeg = lerp(0, 22.7, p), FK = P(H, 60, -78 - thDeg * 0.5), FF = P(FK, 52, -78 - thDeg * 0.5 + 90);
+    const thDeg = lerp(0, 20.3, p), FK = P(H, 60, -78 - thDeg * 0.5), FF = P(FK, 52, -78 - thDeg * 0.5 + 90);
     const planted = [H, K, F], free = [H, FK, FF];
     sc.mark("shoulder", S); sc.mark("hip", H); sc.mark("knee", K);
     sc.floor();
     if (side === "R") sc.line(free, FAR, 8);
-    sc.line([[122, 162], [198, 166]], BODY, 8);
+    sc.line([[122, 162], [S[0] + ARMLY, 166]], BODY, 8);
     sc.line([[98, 154], S], BODY, 8); sc.dot([90, 151], 11, BODY);
     sc.line([S, H], BODY, TORSO);
     if (side === "L") { sc.line(free, BODY, 8); sc.line(planted, COL.L, 8); }   // working limb drawn last
@@ -267,9 +273,13 @@ export const FIGS: Record<string, Fig> = {
     return "Single-leg glute bridge, " + sideWord(side) + " foot planted: hips lift until shoulder, hip and knee form one straight line, the other knee stays bent and lifted";
   } },
   deadbug: { dur: 12000, kind: "move2", k: [0.06, 0.4, 0.52, 0.94], sided: false, build(sc, side, p, rep = 0) {
+    // Default is the bent-knee heel tap: the opposite leg lowers with the knee bent (hip ~150, knee ~112 at
+    // the lowest point, heel just touching the floor), never the straight low leg, which is a long-lever
+    // resisted straight-leg-raise hold on the iliopsoas (trainer review 11; CLAUDE.md). Arms are the
+    // anthropometric length (ARMLY) and reach to about 168 of shoulder flexion.
     const S = [128, 157], H = [208, 160], off = [-12, -8], fS = add(S, off), fH = add(H, off);
-    const arm = function (o: Pt, q: number) { return [o, P(o, 78, lerp(-90, -160, q))]; };
-    const leg = function (o: Pt, q: number) { const a = lerp(-90, -10, q), K = P(o, 62, a); return [o, K, P(K, 58, a + lerp(90, 0, q))]; };
+    const arm = function (o: Pt, q: number) { return [o, P(o, ARMLY, lerp(-90, -168, q))]; };
+    const leg = function (o: Pt, q: number) { const a = lerp(-90, -30, q), K = P(o, 62, a); return [o, K, P(K, 58, a + lerp(90, 68, q))]; };
     const nA = arm(S, rep === 0 ? p : 0), fA = arm(fS, rep === 1 ? p : 0), nL = leg(H, rep === 1 ? p : 0), fL = leg(fH, rep === 0 ? p : 0);
     sc.floor();
     sc.line(fA, rep === 1 ? COL.L : FAR, 8); sc.line(fL, rep === 0 ? COL.L : FAR, 8);
@@ -278,21 +288,23 @@ export const FIGS: Record<string, Fig> = {
     sc.line([[108, 155], S], BODY, 8); sc.dot([98, 153], 11, BODY);   // head in front: the arm passes behind it
     const wa = rep === 0 ? nA : fA, wl = rep === 0 ? fL : nL, as = rep === 0 ? "R" : "L", ls = rep === 0 ? "L" : "R";
     sc.badge(beyond(wa[0], wa[1], 14), COL[as], as); sc.badge(beyond(wl[1], wl[2], 14), COL[ls], ls);
-    return "Dead bug: lying on the back, arms up, knees over hips. The " + sideWord(as) + " arm reaches overhead while the " + sideWord(ls) + " leg straightens low, then return and switch to the other pair";
+    return "Dead bug: lying on the back, arms up, knees over hips. The " + sideWord(as) + " arm reaches overhead while the " + sideWord(ls) + " heel lowers toward the floor with the knee bent, then return and switch to the other pair";
   } },
   kneel: { dur: 12000, kind: "move", k: [0.05, 0.25, 0.85], sided: true, cues: [{ tuck: "hip" }], build(sc, side, p) {
-    // Trunk stays upright (never leans back: that cues lumbar extension). Start with the hip over the
-    // back knee, end about 20° of hip extension: gentle, never couch-stretch depth.
-    const work = COL[side], KB = [146, 164], BF = [94, 166], FF = [236, 166];
-    const H = lerpP([148, 112], [164, 114], p), FK = ik(H, FF, 64, 56, true);
-    const S = P(H, 58, lerp(-90, -88, p)), head = P(S, 20, -90);
+    // Standard leg 44 + 42. Trunk stays upright (never leans back: that cues lumbar extension). The hip
+    // starts over the back knee and travels 8 px (about 10 degrees of rear-hip extension): gentle, never
+    // couch-stretch depth. Front shin near vertical, front hip ~95 (trainer review 11: the front leg was
+    // 64 + 56 and folded to a 31 degree hip). The back thigh keeps its length (a circle about the knee).
+    const work = COL[side], KB = [146, 164], BF = [KB[0] - Math.sqrt(42 * 42 - 4), 166], FF = [200, 166];
+    const ext = lerp(0, Math.asin(8 / 44), p), H = [KB[0] + 44 * Math.sin(ext), KB[1] - 44 * Math.cos(ext)], FK = ik(H, FF, 44, 42, true);
+    const S = P(H, 56, lerp(-90, -88, p)), head = P(S, 20, -90), hand = add(H, [-3, -9]);
     sc.mark("hip", H); sc.mark("shoulder", S);
     const back = function () { sc.line([BF, KB, H], work, 8); };
     const front = function () { sc.line([H, FK, FF], side === "R" ? FAR : BODY, 8); };
     sc.floor();
     if (side === "R") front();
     sc.line([H, S], BODY, TORSO); sc.line([S, add(S, [0, -8])], BODY, 8); sc.dot(head, 11, BODY);
-    sc.line([S, add(S, [-18, 28]), add(H, [-4, -4])], BODY, 8);
+    sc.line([S, ikSide(S, hand, ARM86[0], ARM86[1], -1), hand], BODY, 8);
     if (side === "L") front();
     back();
     sc.ring(lerpP(KB, H, 0.8), 9, work, 2, p);
@@ -301,9 +313,11 @@ export const FIGS: Record<string, Fig> = {
   } },
   ninety: { dur: 8000, kind: "move", k: [0.1, 0.4, 0.6], sided: false, build(sc, side, p) {
     // Seen from ABOVE: the knee rotates about the hip-foot axis with fixed 3D limb lengths, so in
-    // this view it sweeps across the axis. Range clamped so the inward knee never crosses its own
-    // hip line (no deep flexion + adduction + internal rotation).
-    const phi = lerp(-55, 55, p) * Math.PI / 180, L = 58;
+    // this view it sweeps across the axis. Range capped at +-38 degrees (the thigh turns about 23 degrees
+    // either side of the hip-foot line): a comfortable range, not a full 90/90, and the inward knee never
+    // crosses its own hip line (no deep flexion + adduction + internal rotation). Hands are on the floor
+    // behind the hips, arms straight (trainer review 11).
+    const phi = lerp(-38, 38, p) * Math.PI / 180, L = 58;
     const leg = function (h: Pt, f: Pt, toRight: (ux: number, uy: number) => Pt) {
       const dx = f[0] - h[0], dy = f[1] - h[1], d = Math.hypot(dx, dy), m = lerpP(h, f, 0.5);
       const r = Math.sqrt(Math.max(0, L * L - d * d / 4)), ux = dx / d, uy = dy / d;
@@ -314,7 +328,7 @@ export const FIGS: Record<string, Fig> = {
     const toRight = function (ux: number, uy: number): Pt { return [uy, -ux]; };   // perpendicular pointing to the viewer's right for both legs
     const left = leg(hL, [108, 172], toRight);
     const right = leg(hR, [250, 172], toRight);   // so one knee falls in while the other falls out
-    sc.line([[160, 66], [148, 34]], FAR, 6); sc.line([[198, 66], [210, 34]], FAR, 6);
+    sc.line([[160, 66], [132, 90]], BODY, 8); sc.line([[198, 66], [226, 90]], BODY, 8);
     sc.line([[179, 96], [179, 68]], BODY, TORSO); sc.line([[158, 66], [200, 66]], BODY, 8);
     sc.dot([179, 52], 11, BODY);
     sc.line([hL, hR], BODY, 10);
@@ -334,9 +348,11 @@ export const FIGS: Record<string, Fig> = {
     sc.bg([[-600, 28], [960, 28]], PROP, 6);   // last: the hands wrap the bar
     return "Passive bar hang: hanging from the bar with straight arms, shoulders relaxed toward the ears, body long and still";
   } },
-  pullover: { dur: 9000, kind: "move", k: [0.06, 0.33, 0.78], sided: false, scale: 1.15, build(sc, side, p) {
-    const S = [128, 157], H = [208, 160], F = [280, 166], K = ik(H, F, 62, 58, true);
-    const hand = P(S, 78, lerp(-90, -166, p));
+  pullover: { dur: 9000, kind: "move", k: [0.06, 0.34, 0.56, 0.96], sided: false, scale: 1.15, build(sc, side, p) {
+    // Arms travel from vertical (90 of shoulder flexion) to ~170 and stop there: past it the ribs flare. A 2 s
+    // hold at the end. Knees about 90 (trainer review 11: they were tight at 74).
+    const S = [128, 157], H = [208, 160], F = [293, 166], K = ik(H, F, 62, 58, true);
+    const hand = P(S, ARMLY, lerp(-90, -170, p));
     sc.floor();
     sc.line([S, H], BODY, TORSO); sc.line([H, K, F], BODY, 8);
     sc.line([S, hand], COL.B, 8); sc.dot(hand, 8.5, COL.B); sc.dot(hand, 7, WOOD);
@@ -344,13 +360,16 @@ export const FIGS: Record<string, Fig> = {
     return "Supine dowel pullover: lying on the back, knees bent, both hands on a dowel; the arms travel slowly overhead toward the floor and hold";
   } },
   roller: { dur: 7000, kind: "move", k: [0.08, 0.4, 0.62], sided: false, scale: 1.15, build(sc, side, p) {
+    // The upper back really extends: the segment above the roller turns 22 degrees past the line of the
+    // lower back (straight at the start), the head heads toward the floor, hips stay down (trainer review
+    // 11: the measured trunk never moved). The upper segment is drawn first so it is the one that is read.
     const C = [136, 133], H = [186, 160], F = [272, 166], K = ik(H, F, 62, 58, true);
-    const ang = lerp(-172, -200, p), Sh = P(C, 36, ang), head = P(Sh, 20, ang);
-    const E = P(Sh, 30, ang + 118), hand = P(head, 10, ang + 165);   // elbow up, hand cupping the back of the head
+    const ang = lerp(-152, -174, p), Sh = P(C, 36, ang), head = P(Sh, 20, ang);
+    const hand = add(head, [6, 8]), E = ik(Sh, hand, ARMLY / 2 + 2, ARMLY / 2 - 2, true);   // elbow up, hand cupping the back of the head
     sc.floor();
     sc.dot([136, 151], 17, PROP);
-    sc.line([C, H], BODY, TORSO); sc.line([H, K, F], BODY, 8);
     sc.line([C, Sh], COL.B, TORSO);
+    sc.line([C, H], BODY, TORSO); sc.line([H, K, F], BODY, 8);
     sc.dot(head, 11, BODY);
     sc.line([Sh, E, hand], BODY, 8);
     return "Foam roller thoracic extension: roller under the upper back, hands behind the head with elbows up; the upper back extends slowly over the roller and returns";
@@ -398,6 +417,9 @@ const LEG = 80;
  */
 const ARM86: [number, number] = [35, 32];   // standing figures, leg 44 + 42
 const ARM80: [number, number] = [32, 30];   // bar and handstand figures, leg 80
+
+/** Arm length of a LYING figure (leg 62 + 58 = 120, so 0.78 x 120): the old 70-78 was ~18% short. */
+const ARMLY = 94;
 
 type Glyph = "up" | "single" | "slow" | "short" | "down" | "downShort" | "hold" | "holdMid" | "lift" | "liftHold";
 /**
@@ -586,26 +608,34 @@ function wristFig(fingers: boolean, label: string): Fig {
 
 function adductorFig(extended: boolean, label: string): Fig {
   return { kind: "hold", sided: false, scale: 1.15, build(sc, _s, q) {
-    // Both knees drawn (the far one a step behind), the ball squeezed between them.
-    const S = [118, 158], H = [196, 160], F = extended ? [296, 166] : [266, 166], K = ik(H, F, 66, 62, true);
-    const off = [-12, -3];
+    // Both knees drawn (the far one a step behind), the ball squeezed between them: a filled disc that sits
+    // in front of the far leg and behind the near one, and compresses as the knees press in. The foot
+    // sits where the knee angle puts it (about 92 included, or 122 for the longer lever); the hip angle
+    // follows from feet on the floor (trainer review 11: heel almost at the buttock, knee 66).
+    const S = [118, 158], H = [196, 160], kn = (extended ? 122 : 92) * Math.PI / 180;
+    const d = Math.sqrt(66 * 66 + 62 * 62 - 2 * 66 * 62 * Math.cos(kn)), F = [H[0] + Math.sqrt(d * d - 36), 166], K = ik(H, F, 66, 62, true);
+    const off = [lerp(-12, -9, q), -3];
     sc.floor();
     sc.line([add(H, off), add(K, off), add(F, off)], FAR, 8);
-    sc.line([S, [194, 166]], BODY, 8);
+    const ball: Pt[] = []; const r = lerp(12, 9.5, q), c = add(K, [off[0] / 2, off[1] / 2]);
+    for (let i = 0; i <= 24; i++) ball.push(P(c, r, i * 15));
+    sc.line(ball, PROP, 3, 1, BOX);
+    sc.line([S, [S[0] + ARMLY, 166]], BODY, 8);
     sc.line([S, H], BODY, TORSO); sc.line([[98, 154], S], BODY, 8); sc.dot([90, 151], 11, BODY);
-    const ball = add(K, [-6, 0]), r = lerp(10, 7, q);
-    sc.ring(ball, r, PROP, 3);
     sc.line([H, K, F], COL.B, 8);
     return label;
   } };
 }
 
 function hollowFig(pull: boolean, label: string): Fig {
-  return { kind: pull ? "move" : "hold", dur: pull ? 6000 : undefined, k: [0.1, 0.42, 0.55, 0.9], sided: false, scale: 1.15, build(sc, _s, q) {
+  const k: [number, number, number, number] = pull ? [0.04, 0.37, 0.45, 0.78] : [0.1, 0.42, 0.55, 0.9];
+  return { kind: pull ? "move" : "hold", dur: pull ? 9000 : undefined, k, sided: false, scale: 1.15, build(sc, _s, q) {
     const a = pull ? 14 : lerp(0, 14, q), H = [190, 158];
     const S = P(H, 80, 180 + a), foot = P(H, 120, -a);
-    // Pullover: the body holds the hollow while the arms travel from over the chest to overhead.
-    const hand = pull ? P(S, 75, lerp(-80, 180 + a * 0.8, q)) : P(S, 75, 180 + a * 0.8);
+    // Pullover: the body holds the hollow while the arms travel in ONE arc, 90 -> 175 of shoulder flexion
+    // (measured from the trunk), 3 s out and 3 s back: from vertical over the chest to overhead in line
+    // with the trunk, never sweeping through the torso (trainer review 11). The hold keeps them overhead.
+    const hand = P(S, ARMLY, a - (pull ? lerp(90, 175, q) : 172));
     sc.floor();
     sc.line([H, foot], BODY, 8);
     sc.line([S, H], BODY, TORSO);
@@ -956,19 +986,34 @@ const HIP_FIGS: Record<string, Fig> = {
     sc.badge([F[0] + 18, F[1] - 8], work, side);
     return "Single-leg Romanian deadlift, standing on the " + sideWord(side) + " leg: weight in the opposite hand; hinge at the hip with a long spine while the free leg rises behind in one line, then stand";
   } },
-  pallof: { dur: 5000, kind: "move", k: [0.1, 0.36, 0.64, 0.9], sided: false, front: true, cues: [{ plumb: "mid", to: "chest" }], build(sc, _s, p) {
-    // Seen from the front with the band anchored to the viewer's left: the hands press straight out
-    // (toward us, so the arms foreshorten) and stay on the midline while the trunk refuses to turn.
-    // The hand dot grows as it comes toward us: that, and the arms straightening, is the press.
-    const hand = [179, lerp(62, 46, p)], d = p;
+  pallof: { dur: 7000, kind: "move", k: [0.06, 0.26, 0.57, 0.84], sided: false, front: true, cues: [{ plumb: "mid", to: "chest" }], build(sc, _s, p) {
+    // Seen from the front with the band anchored to the viewer's left; the press goes TOWARD the viewer, so
+    // depth is drawn as an oblique offset (down and right) and the arms are solved in 3D (upper arm 35,
+    // forearm 32): the hands travel ~35 px straight out from the sternum, elbows 72 -> ~173, trunk and
+    // pelvis square, feet hip-width, knees ~170. The band is anchored at ONE height on the post and runs
+    // slightly slanted to the hands; it thins as it stretches (trainer + physics reviews).
+    const OB = [0.3, 0.38], proj = (q: number[]): Pt => [q[0] + OB[0] * q[2], q[1] + OB[1] * q[2]];
+    const z = lerp(23.5, 58.7, p), hand3 = [179, 50, z], hand = proj(hand3);
+    const arm = function (s3: number[], out: number): Pt[] {
+      const v = [hand3[0] - s3[0], hand3[1] - s3[1], hand3[2] - s3[2]], L = Math.hypot(v[0], v[1], v[2]), d = Math.min(L, ARM86[0] + ARM86[1] - 0.01);
+      const u = v.map((x) => x / L), a = (ARM86[0] ** 2 - ARM86[1] ** 2 + d * d) / (2 * d), hh = Math.sqrt(Math.max(0, ARM86[0] ** 2 - a * a));
+      const pole = [out * 0.5, 1, 0], dot = pole[0] * u[0] + pole[1] * u[1] + pole[2] * u[2], n = pole.map((x, i) => x - dot * u[i]), nl = Math.hypot(n[0], n[1], n[2]);
+      const e3 = [0, 1, 2].map((i) => s3[i] + u[i] * a + (n[i] / nl) * hh);
+      return [proj(s3), proj(e3), hand];
+    };
     sc.mark("mid", [179, 88]); sc.mark("chest", hand);
-    frontBody(sc, [0, 0], {});
+    const hR = [170, 80.4], hL = [188, 80.4], fR = [168, 166], fL = [190, 166];
+    sc.floor();
+    sc.line([hR, ikSide(hR, fR, 44, 42, -1), fR], BODY, 8);
+    sc.line([hL, ikSide(hL, fL, 44, 42, 1), fL], BODY, 8);
+    sc.line([[179, 80.4], [179, 24]], BODY, TORSO);
+    sc.line([[158, 24], [200, 24]], BODY, 8);
+    sc.dot([179, 4], 11, BODY);
     sc.line([[40, 30], [40, 167]], PROP, 4);
-    sc.line([[42, hand[1]], hand], BAND, lerp(3, 5, p));
-    const sR = [158, 36], sL = [200, 36];
-    sc.line([sR, lerpP([156, 66], lerpP(sR, hand, 0.5), d), hand], COL.B, 8);
-    sc.line([sL, lerpP([202, 66], lerpP(sL, hand, 0.5), d), hand], COL.B, 8);
-    sc.dot(hand, lerp(5, 8.5, p), BODY);
+    sc.line([[42, 54], hand], BAND, lerp(4.5, 2.5, p));
+    sc.line(arm([158, 24, 0], -1), COL.B, 8);
+    sc.line(arm([200, 24, 0], 1), COL.B, 8);
+    sc.dot(hand, lerp(6, 9, p), BODY);
     return "Pallof press: standing side-on to a band anchored at chest height; press the hands straight out from the chest and hold, the trunk refusing to turn toward the anchor, then bring them back";
   } },
   nordic: { dur: 7000, kind: "move", k: [0.05, 0.6, 0.68, 0.94], poster: 0.7, sided: false, tempo: ["control", "drive"], cues: [{ align: ["knee", "hip", "shoulder"] }], build(sc, _s, p) {
@@ -1048,48 +1093,51 @@ const HIP_FIGS: Record<string, Fig> = {
   airsquat: { kind: "move", dur: 5500, k: [0.05, 0.4, 0.5, 0.8], poster: 0.9, sided: false, tempo: ["control", "drive"], cues: [{ level: "knee", span: ["hip", "knee"], limit: true }], build(sc, _s, p) { return squatPose(sc, p, 30, "air", 134, 119); } },
   goblet: { kind: "move", dur: 5500, k: [0.05, 0.4, 0.5, 0.8], poster: 0.9, sided: false, tempo: ["control", "drive"], cues: [{ level: "knee", span: ["hip", "knee"], limit: true }], build(sc, _s, p) { return squatPose(sc, p, 26, "goblet", 134, 127); } },
   amarch: { dur: 3000, kind: "move2", k: [0.05, 0.4, 0.62], sided: false, cues: [{ angle: ["knee", "hip", "shoulder"] }], build(sc, _s, p, rep = 0) {
-    // Knee to a level thigh (90°) and no higher; the opposite arm drives forward.
-    const H = [178, 82], S = [178, 26];
+    // Knee to a level thigh (90°) and no higher; the opposite arm drives forward to ~65° of shoulder flexion
+    // with the elbow at ~90, the other arm swings back ~28° (ARM86; trainer review 11).
+    const H = [178, 80], S = [178, 24];
     const up = (q: number): Pt[] => { const K = P(H, 44, lerp(92, 0, q)); return [H, K, P(K, 42, 90 - lerp(-4, 4, q))]; };
-    const down = (): Pt[] => [H, P(H, 44, 92), [176, 166]];
+    const down = (): Pt[] => { const K = P(H, 44, 92); return [H, K, P(K, 42, 88)]; };
     const arm = (q: number, fwd: boolean): Pt[] => {
-      const a = fwd ? lerp(92, 50, q) : lerp(92, 128, q), E = P(S, 28, a);
-      return [S, E, P(E, 26, a - 70)];
+      const a = fwd ? lerp(90, 25, q) : lerp(90, 118, q), E = P(S, ARM86[0], a);
+      return [S, E, P(E, ARM86[1], a - (fwd ? lerp(30, 90, q) : lerp(30, 40, q)))];
     };
     const nearLeg = rep === 0 ? up(p) : down(), farLeg = rep === 0 ? down() : up(p);
     sc.mark("hip", H); sc.mark("shoulder", S); sc.mark("knee", (rep === 0 ? nearLeg : farLeg)[1]);
     sc.floor();
     sc.line(farLeg, rep === 1 ? COL.B : FAR, 8);
     sc.line(arm(p, rep === 0), FAR, 8);
-    sc.line([H, S], BODY, TORSO); sc.dot([180, 4], 11, BODY);
+    sc.line([H, S], BODY, TORSO); sc.dot([180, 3], 11, BODY);
     sc.line(nearLeg, rep === 0 ? COL.B : BODY, 8);
     sc.line(arm(p, rep === 1), BODY, 8);
     return "A-march: standing tall, drive one knee up until the thigh is level, no higher, with the opposite arm forward; set it down and switch";
   } },
-  legswing: { dur: 2600, kind: "move", k: [0, 0.5, 0.5], poster: 0.5, sided: true, build(sc, side, p) {
+  legswing: { dur: 2600, kind: "move", k: [0, 0.5, 0.5], poster: 1, sided: true, build(sc, side, p) {
     // Small range with a soft knee: about 15° behind to 30° in front. A primer, not a stretch,
-    // and never a held straight-leg raise.
-    const work = COL[side], H = [176, 82], S = [178, 26], a = lerp(104, 60, p);
+    // and never a held straight-leg raise. The still frame is the forward end (it was the middle of the
+    // swing, where both legs overlap and the amplitude read as 3 px; trainer review 11).
+    const work = COL[side], H = [176, 80], S = [178, 24], a = lerp(105, 60, p), grip = [222, 56];
     const K = P(H, 44, a), swing = [H, K, P(K, 42, a + 16)], stand = [H, [176, 124], [176, 166]];
     sc.floor();
     sc.line([[222, 54], [222, 167]], PROP, 4);
     if (side === "L") sc.line(stand, BODY, 8); else sc.line(swing, work, 8);
-    sc.line([H, S], BODY, TORSO); sc.dot([180, 4], 11, BODY);
+    sc.line([H, S], BODY, TORSO); sc.dot([180, 3], 11, BODY);
     if (side === "L") sc.line(swing, work, 8); else sc.line(stand, FAR, 8);
-    sc.line([S, [204, 50], [221, 58]], BODY, 8);
+    sc.line([S, ik(S, grip, ARM86[0], ARM86[1], false), grip], BODY, 8);
     sc.badge(beyond(K, swing[2], 14), work, side);
     return "Controlled leg swings, " + sideWord(side) + " leg: one hand on a support, the " + sideWord(side) + " leg swings front to back through a small, easy range with a soft knee";
   } },
   hollowtuck: { kind: "hold", sided: false, scale: 1.15, build(sc, _s, q) {
     // Tuck hollow: knees bent over the hips (short lever, not a straight-leg-raise hold), lower back
-    // pressed down, shoulders curled up off the floor.
+    // pressed down, shoulders curled up off the floor. Hip flexion is capped near 96 degrees (included
+    // 84): deeper than ~100 is FADIR range (trainer review 11: it reached 114).
     const H = [196, 160], a = lerp(0, 16, q), S = P(H, 80, 180 + a);
-    const K = P(H, 62, -98), F = P(K, 58, -8);
+    const K = P(H, 62, -80), F = P(K, 58, -8);
     sc.floor();
     sc.line([H, K, F], BODY, 8);
     sc.line([S, H], BODY, TORSO);
     sc.dot(P(S, 26, 180 + a + 6), 11, BODY);
-    sc.line([S, P(S, 70, -26 + a * 0.3)], COL.B, 8);
+    sc.line([S, P(S, ARMLY, -20 + a * 0.3)], COL.B, 8);
     return "Hollow hold, tucked: lying on the back with knees bent over the hips, lower back pressed into the floor, shoulders curled up and arms reaching toward the knees";
   } },
 };
