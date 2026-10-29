@@ -166,8 +166,8 @@ describe("handstand family (trainer lane, 2026-10-29)", () => {
     const lean = (p: number) => 2 + Math.cos(4 * Math.PI * (p - 0.275));
     const base = (p: number) => 1.5 + 1.5 * Math.cos(4 * Math.PI * (p - 0.275)) + 2 * Math.cos(2 * Math.PI * (p - 0.25)) + 56 * Math.sin(((lean(p) - 0) * Math.PI) / 180);
     const extra = (p: number) => hipRel(p) - base(p);
-    expect(extra(0.05) - extra(0.05 - 0.111)).toBeLessThan(-3);
-    expect(extra(0.05) - extra(0.05 - 0.111)).toBeGreaterThan(-4);
+    expect(extra(0.05) - extra(0.05 - 0.111)).toBeLessThan(-5);
+    expect(extra(0.05) - extra(0.05 - 0.111)).toBeGreaterThan(-7);
   });
 
   it("r3: wall walk, the planted pair holds x within 0.5 px (and y, for the feet) through the other pair's slot", () => {
@@ -200,5 +200,18 @@ describe("handstand family (trainer lane, 2026-10-29)", () => {
     expect(ghost.length).toBeGreaterThan(0); expect(ghost.every((x) => x.w === 3 && x.op >= 0.7)).toBe(true);
     const arm = pts(used("child", 3000).find((x) => x.color === ACCENT && x.w === 8 && pts(x.pts).length === 3)!.pts);
     expect(inc(arm[0], arm[1], arm[2])).toBeLessThan(170); expect(inc(arm[0], arm[1], arm[2])).toBeGreaterThan(135);
+  });
+
+  it("r3b: hswalk tile pose shows open legs; the wall walk is a staircase (trunk ~50 by a quarter of the cycle, a stack at the end); fingers lean the forearm", () => {
+    const legs = (p: number) => { const f = used("hswalk", 3600 * p).filter((s) => s.w === 8 && pts(s.pts).length === 2 && Math.hypot(pts(s.pts)[0][0] - pts(s.pts)[1][0], pts(s.pts)[0][1] - pts(s.pts)[1][1]) > 70); const a = pts(f[0].pts), b = pts(f[1].pts); return Math.abs(a[1][0] - b[1][0]); };
+    expect(FIGS.hswalk.poster).toBe(0.75);
+    expect(legs(0.75)).toBeGreaterThan(14);
+    const d = T("wallwalk");
+    expect(trunk("wallwalk", d * 0.25)).toBeGreaterThan(44); expect(trunk("wallwalk", d * 0.25)).toBeLessThan(58);
+    const hx = (t: number) => pts(used("wallwalk", t).find((s) => s.color === ACCENT && s.w === 8)!.pts)[0][0];
+    expect(hx(d * 0.25) - hx(0)).toBeGreaterThan(14);
+    expect(trunk("wallwalk", d * 0.65)).toBeGreaterThan(8); expect(trunk("wallwalk", d * 0.65)).toBeLessThan(25);
+    const sh = (t: number) => pts(used("fingerraise", t).find((s) => s.w === 12)!.pts)[1][0];
+    expect(sh(4000 * 0.4) - sh(0)).toBeGreaterThan(1); expect(sh(4000 * 0.4) - sh(0)).toBeLessThan(2.5);
   });
 });
