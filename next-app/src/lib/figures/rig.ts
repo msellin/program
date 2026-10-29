@@ -500,51 +500,72 @@ function ringRow(yHand: number, feetUp: boolean, label: string, anchorY = 24, la
   } };
 }
 
-type HsOpts = { lean: number; kind: Kind; tuck?: boolean; wall?: boolean; hx?: number; act?: "shrug" | "taps"; ladder?: string; label: string };
+type HsOpts = { lean: number; kind: Kind; tuck?: boolean; wall?: boolean; act?: "shrug" | "taps"; ladder?: string; label: string };
 function handstand(o: HsOpts): Fig {
   const moving = o.kind === "move";
+  const taps = o.act === "taps";
   const cues: Cue[] | undefined = o.tuck ? undefined : [{ align: ["hand", "shoulder", "hip", "foot"] }];
-  return { kind: o.kind, dur: moving ? (o.act ? 4000 : 6000) : undefined, k: [0.1, 0.4, 0.6, 0.9], sided: false, ladder: o.ladder, cues, build(sc, _s, p) {
-    const lean = o.lean + (o.wall || o.act ? 0 : lerp(0, 3, p)), a = -90 + lean;
-    const hand = [o.hx ?? 180, 168];
-    // Shrug: arms stay full length, the trunk rises 8 out of the shoulders (the shoulders push to the ears).
-    const S = P(hand, 46, a), rise = o.act === "shrug" ? lerp(0, 8, p) : 0, T = P(S, rise, a), H = P(T, 56, a);
+  // Trainer lane (2026-10-29): shrug 1 s up / 0.5 s hold / 1.5 s down; a tap and its return ~1 s each and
+  // the two arms alternate (`move2`); the tuck holds ~1 s. Arms are ARM80 and stay locked everywhere.
+  const k: Fig["k"] = o.act === "shrug" ? [0.05, 0.3, 0.425, 0.8] : taps ? [0.08, 0.33, 0.45, 0.78] : [0.1, 0.4, 0.6, 0.9];
+  return { kind: taps ? "move2" : o.kind, dur: moving ? (o.act === "shrug" ? 4000 : taps ? 8000 : 6000) : undefined, k, sided: false, ladder: o.ladder, cues,
+    tempo: o.act === "shrug" ? ["drive", "control"] : taps ? ["control", "control"] : undefined, build(sc, _s, p, rep = 0) {
+    const arm = ARM80[0] + ARM80[1];
+    // Free tuck: the knees come in ahead of the chest, so the whole line leans back 4 degrees to keep the
+    // hips over the hands. Taps: the shoulders press forward over the support hand before the other lifts.
+    const lean = o.lean + (o.wall || o.act ? 0 : o.tuck ? lerp(0, -4, p) : lerp(0, 3, p)) + (taps ? 3 * Math.min(1, p / 0.4) : 0), a = -90 + lean;
+    const hand: Pt = [180, 168];
+    // Shrug: arms stay full length and the trunk rises 9 (15% of the arm) out of the shoulders: the shoulders push the floor away.
+    const S = P(hand, arm, a), rise = o.act === "shrug" ? lerp(0, 9, p) : 0, T = P(S, rise, a), H = P(T, 56, a);
     sc.floor();
     if (o.tuck) {
-      // In and out of the tuck: the knees come down toward the chest and the shins fold back.
-      const th = a + lerp(0, 75, p), K = P(H, 41, th);
-      sc.line([H, K, P(K, 39, th - lerp(0, 150, p))], COL.B, 8);
+      // Knees close first (knee 180 -> 35), then the hips fold (hip 180 -> 65): thighs end 25 deg below
+      // level toward the chest, shins about 30 deg from vertical, heels by the seat.
+      const kp = ease(clamp01(p / 0.65)), hp = ease(clamp01((p - 0.2) / 0.8));
+      const th = a + lerp(0, 115, hp), K = P(H, 41, th);
+      sc.mark("hip", H);
+      sc.line([H, K, P(K, 39, th - lerp(0, 145, kp))], COL.B, 8);
     } else {
       const F = P(H, LEG, a);
       sc.mark("hand", hand); sc.mark("shoulder", S); sc.mark("hip", H); sc.mark("foot", F);
       if (o.wall) sc.bg([[F[0] + 5, 168], [F[0] + 5, -600]], PROP, 4);
       sc.line([H, F], BODY, 8);
     }
+    if (rise > 0.5) sc.line([S, T], BODY, 8);
     sc.line([T, H], BODY, TORSO);
     sc.dot(P(T, 18, a + 155), 10, BODY);
-    if (o.act === "taps") {
-      // One hand lifts to tap the opposite shoulder while the other arm holds the body.
-      sc.line([[hand[0] - 3, 168], S], FAR, 8);
+    if (taps) {
+      // The support arm is locked throughout; the other hand leaves the floor and taps the opposite
+      // shoulder (elbow 180 -> ~25), rep 0 with the near arm, rep 1 with the far one.
       const tap = lerpP(hand, P(S, 10, a + 90), p);
-      sc.line([S, ikSide(S, tap, 24, 24, 1), tap], COL.B, 8);
-    } else sc.line([hand, S], COL.B, 8);
-    sc.line([[hand[0] - 3, 167], [hand[0] + 13, 167]], BODY, 4);
+      const work: Pt[] = [S, ikSide(S, tap, ARM80[0], ARM80[1], 1), tap], support: Pt[] = [hand, S];
+      if (rep === 0) { sc.line(support, FAR, 8); sc.line([[hand[0] - 3, 167], [hand[0] + 13, 167]], FAR, 4); sc.line(work, COL.B, 8); }
+      else { sc.line(work, COL.B, 8); sc.line(support, BODY, 8); sc.line([[hand[0] - 3, 167], [hand[0] + 13, 167]], BODY, 4); }
+    } else {
+      sc.line([hand, S], COL.B, 8);
+      // Freestanding: the fingertips press a hair at the end of the sway (the visible correction).
+      const press = o.wall || o.act || o.tuck ? 0 : 1.2 * p;
+      sc.line([[hand[0] - 3, 167 - press], [hand[0] + 13, 167]], BODY, 4);
+    }
     return o.label;
   } };
 }
 
 function wristFig(fingers: boolean, label: string): Fig {
-  return { kind: "move", dur: fingers ? 4000 : 6000, k: [0.1, 0.45, 0.6], sided: false, build(sc, _s, p) {
-    // The knees stay planted: the hip turns about the knee as the shoulders rock over the hands.
-    const hand = [208, 166], a = fingers ? 8 : lerp(0, 26, p), S = P(hand, 52, -90 + a);
-    const K = [112, 166], H = ik(K, S, 52, 98, true);
+  // Wrist prep: shoulders travel ~11 px (about 10 deg of arm) past the wrists and the hips follow, the
+  // trunk keeps its angle. Finger raises: 1 s up, 1 s hold, ~1.5 s down, fingers 40 deg off the floor.
+  return { kind: "move", dur: fingers ? 4000 : 6000, k: fingers ? [0.05, 0.3, 0.55, 0.92] : [0.08, 0.4, 0.62, 0.94], sided: false, build(sc, _s, p) {
+    const hand: Pt = [208, 166], arm = ARM80[0] + ARM80[1], a = fingers ? 0 : lerp(0, 10, p), S = P(hand, arm, -90 + a);
+    const K: Pt = [152, 160], H = ik(K, S, 41, 56, true);
     sc.floor();
-    sc.line([[K[0] - 50, 166], K, H], BODY, 8);
+    sc.line([[K[0] - 39, 166], K, H], BODY, 8);
     sc.line([H, S], BODY, TORSO);
-    sc.dot(add(S, [18, -10]), 11, BODY);
+    sc.dot(add(S, [16, -8]), 11, BODY);
     sc.line([hand, S], COL.B, 8);
-    const lift = fingers ? lerp(0, 7, p) : 0;
-    sc.line([[hand[0] - 14, 167], [hand[0] + 2, 167], [hand[0] + 14, 167 - lift]], BODY, 4);
+    if (fingers) {
+      const base: Pt = [hand[0] + 2, 167];
+      sc.line([[hand[0] - 14, 167], base, P(base, 14, -lerp(0, 40, p))], BODY, 4);
+    } else sc.line([[hand[0] - 14, 167], [hand[0] + 14, 167]], BODY, 4);
     if (!fingers) sc.ring(hand, 9, COL.B, 2, p);
     return label;
   } };
@@ -621,68 +642,110 @@ const AD_FIGS: Record<string, Fig> = {
   wristprep: wristFig(false, "Wrist prep on hands and knees: hands flat on the floor, fingers forward; the shoulders rock slowly forward over the hands, then back"),
   fingerraise: wristFig(true, "Finger raises: on hands and knees with the hands flat, lift the fingers off the floor while the palm stays down, then set them back"),
   downdog: { kind: "hold", sided: false, build(sc, _s, q) {
-    const hand = [120, 166], hip = [190, 70], foot = [260, 166], S = lerpP(hand, hip, 0.45);
+    // Arms and trunk are one straight line (shoulder ~180) rising 40 deg to the hips; the legs are the library's 80
+    // (the old 119 was a 40% longer limb) and steep, heels reaching down, head hanging between the arms.
+    const arm = ARM80[0] + ARM80[1], hand: Pt = [120, 166], up = 40 * Math.PI / 180;
+    const hip: Pt = [hand[0] + (arm + 56) * Math.cos(up), hand[1] - (arm + 56) * Math.sin(up)];
+    const foot: Pt = [hip[0] + Math.sqrt(LEG * LEG - (166 - hip[1]) ** 2), 166], S = lerpP(hand, hip, arm / (arm + 56));
     sc.floor();
     sc.line([hip, foot], BODY, 8);
     sc.line([S, hip], BODY, TORSO);
-    sc.dot(add(S, [4, 17]), 10, BODY);
+    sc.dot(add(S, [2, 19]), 10, BODY);
     sc.line([hand, S], COL.B, 8);
     sc.ring(hand, 9, COL.B, 2, q);
     return "Downward dog: hands and feet on the floor, hips high in an upside-down V, arms straight; breathe and let the wrists settle";
   } },
   child: { kind: "hold", sided: false, build(sc, _s, q) {
-    const K = [210, 164], F = [268, 166], H = [258, 142], S = [186, 150], hand = [136, 164];
+    // Hips to the heels, chest low, arms (62) reaching forward, forehead resting on the floor between and ahead of the arms.
+    const K = [210, 164], F = [268, 166], H = [258, 142], S = [186, 150], hand = P(S, ARM80[0] + ARM80[1], 164);
     sc.floor();
     sc.line([F, K, H], BODY, 8);
     sc.line([H, S], BODY, TORSO);
-    sc.dot([166, 152], 10, BODY);
+    sc.dot([164, 158], 10, BODY);
     sc.line([S, hand], COL.B, 8);
     sc.ring(hand, 8, COL.B, 2, q);
     return "Child's pose: kneeling, hips back toward the heels, chest low and arms stretched forward on the floor; breathe slowly";
   } },
   wallhs: handstand({ lean: 6, kind: "hold", wall: true, label: "Wall handstand, chest to the wall: hands a little off the wall, arms straight, body in one line with the chest facing the wall" }),
-  wallhs_90: handstand({ lean: 15, hx: 168, kind: "hold", wall: true, ladder: "wallhs", label: "Wall handstand hold: hands a step from the wall, arms straight and shoulders open, body leaning slightly into the wall" }),
-  wallhs_lean: handstand({ lean: 38, hx: 120, kind: "hold", wall: true, ladder: "wallhs_90", label: "Inclined handstand hold: hands well away from the wall, body leaning into it at an angle, arms straight and shoulders open" }),
+  wallhs_90: handstand({ lean: 22, kind: "hold", wall: true, ladder: "wallhs", label: "Incline hold, first step: hands a step further from the wall than the chest-to-wall hold, one straight line from hands to feet, arms straight and shoulders open" }),
+  wallhs_lean: handstand({ lean: 45, kind: "hold", wall: true, ladder: "wallhs_90", label: "Incline hold, steeper step: hands about a metre from the wall, one straight line from hands to feet leaning at an angle, arms straight and shoulders open" }),
   wallhs_shrug: handstand({ lean: 6, kind: "move", wall: true, act: "shrug", label: "Wall handstand shrugs: arms locked, push the floor away so the shoulders rise to the ears, then sink back a little" }),
   wallhs_taps: handstand({ lean: 6, kind: "move", wall: true, act: "taps", label: "Wall handstand shoulder taps: chest to the wall, shift onto one arm and tap the opposite shoulder, then switch" }),
   hsfree: handstand({ lean: 0, kind: "move", label: "Freestanding handstand: hands shoulder-width on the floor, arms straight, body stacked over the hands, small balance corrections through the fingers" }),
   hstuck: handstand({ lean: 0, kind: "move", tuck: true, label: "Tuck handstand: arms straight, knees drawn in toward the chest, hips stacked over the hands" }),
   hswalk: { kind: "gait", dur: 3600, k: [0, 1, 1], poster: 0.8, sided: false, scale: 0.95, build(sc, _s, p) {
-    // One hand steps while the other stays planted; then they swap. The body holds its place and the
-    // planted hand moves back under it, as on a treadmill, so the loop never jumps. The shoulders lean
-    // over the planted hand (motion round): that weight shift is what frees the other hand to step.
+    // One hand steps (24 px, ~25 cm) while the other stays planted; then they swap. The body holds its place
+    // and the planted hand moves back under it, as on a treadmill, so the loop never jumps. The line leans
+    // 1 -> 6 deg toward the step as a hand leaves the floor (weight shift) and returns after; the legs scissor
+    // a little to counterbalance; arms stay straight and shoulders open (trainer lane, 2026-10-29).
+    const arm = ARM80[0] + ARM80[1], STEP = 24;
     const hand = (q: number): Pt => {
       const st = stride(q, 0.55);
-      return st.stance ? [lerp(189, 171, st.u), 168] : [lerp(171, 189, swingPos(st.u, 0.55)), 168 - Math.sin(st.u * Math.PI) * 8];
+      return st.stance ? [lerp(180 + STEP / 2, 180 - STEP / 2, st.u), 168] : [lerp(180 - STEP / 2, 180 + STEP / 2, swingPos(st.u, 0.55)), 168 - Math.sin(st.u * Math.PI) * 5];
     };
     const near = hand(p), far = hand(p + 0.5);
-    const S = [180 + 2 * Math.cos(2 * Math.PI * (p - 0.25)), 122], a = -88, H = P(S, 56, a);
+    const lean = 3.5 + 2.5 * Math.cos(4 * Math.PI * (p - 0.275)), a = -90 + lean;
+    const sx = 180 + 2 * Math.cos(2 * Math.PI * (p - 0.25));
+    // Shoulder height: the arm of the hand that is on the floor is straight (the one further from under the shoulder fixes it).
+    const planted = [near, far].filter((h) => h[1] > 167.9), dx = Math.max(...planted.map((h) => Math.abs(h[0] - sx)));
+    const S: Pt = [sx, 168 - Math.sqrt(arm * arm - dx * dx)], H = P(S, 56, a);
+    const split = 7 * Math.sin(2 * Math.PI * p);
+    const armOf = (h: Pt): Pt[] => [S, ikSide(S, h, ARM80[0], ARM80[1], 1), h];
     sc.floor();
-    sc.ground(p * 18 / 0.55, 18 / 1.1);
-    sc.line([far, S], FAR, 8);
-    sc.line([H, P(H, LEG, a - 3)], BODY, 8); sc.line([S, H], BODY, TORSO);
+    sc.ground(p * STEP / 0.55, STEP / 1.1);
+    sc.line(armOf(far), FAR, 8);
+    sc.line([H, P(H, LEG, a - split)], FAR, 8);
+    sc.line([H, P(H, LEG, a + split)], BODY, 8); sc.line([S, H], BODY, TORSO);
     sc.dot(P(S, 18, a + 155), 10, BODY);
-    sc.line([near, S], COL.B, 8);
+    sc.line(armOf(near), COL.B, 8);
     return "Handstand walking: from a balanced handstand, shift the weight over one hand and take a small step forward with the other, then the other hand follows";
   } },
-  kickup: { kind: "move", dur: 4500, k: [0.06, 0.28, 0.45, 0.9], poster: 0.5, sided: false, scale: 0.95, build(sc, _s, p) {
-    // The swing leg goes up straight and leads; the push leg leaves the floor bent, a beat later,
-    // and straightens to meet it over the hands.
-    const hand = [190, 168], S = P(hand, 46, -90), H = P(S, 56, lerp(-150, -92, p));
-    const swing = P(H, LEG, lerp(-178, -92, p)), q = clamp01((p - 0.25) / 0.75);
-    const push = lerpP([168, 166], P(H, LEG - 1, -92), ease(q));
+  kickup: { kind: "gait", dur: 4500, k: [0, 1, 1], poster: 0.45, sided: false, scale: 0.95, build(sc, _s, p) {
+    // Lunge start (front knee ~130, swing leg low behind), then a quick drive of the swing leg (~0.5 s) with
+    // the push leg leaving the floor bent a beat later and joining over the hands; the stack is held ~1.3 s;
+    // the way down is a step-down with the legs together, the push leg landing first as the front foot.
+    // A gait cycle so the way down can differ from the way up (a `move` retraces its path).
+    const arm = ARM80[0] + ARM80[1], hand: Pt = [190, 168];
+    const S0 = P(hand, arm, -102), S1 = P(hand, arm, -90), F: Pt = [118, 166], H0: Pt = [123, 94];
+    const D = Math.PI / 180, ph0 = Math.atan2(H0[1] - S0[1], H0[0] - S0[0]) / D + 360;   // hips behind and a little above the shoulders
+    const kick = (x: number) => clamp01(x), r = (x: number) => ease(clamp01(x));
+    let g: number, back = 0;
+    if (p < 0.05) g = 0;
+    else if (p < 0.17) g = TEMPO.drive(kick((p - 0.05) / 0.12));
+    else if (p < 0.47) g = 1;
+    else if (p < 0.93) { back = TEMPO.control(kick((p - 0.47) / 0.46)); g = 1 - back; }
+    else g = 0;
+    const S = lerpP(S0, S1, g), phi = lerp(ph0, 270, g) * D, H: Pt = [S[0] + 56 * Math.cos(phi), S[1] + 56 * Math.sin(phi)];
+    const swing = P(H, LEG, lerp(155, 268, g));
+    // Push foot: planted until the hip is a leg's length away, then it follows the hip up (or, coming down, lands last).
+    const dF = Math.hypot(H[0] - F[0], H[1] - F[1]);
+    let push: Pt;
+    if (back > 0) {
+      const together = P(H, 79, lerp(155, 268, g) - 6 * (1 - g)), w = r((back - 0.7) / 0.3);
+      push = lerpP(together, F, w);
+    } else if (dF <= 78.5) push = F;
+    else {
+      // r2: how far the push leg has travelled from the floor to the stack; reuse the swing leg's progress after the foot leaves.
+      let gL = 0; for (let i = 0; i <= 100; i++) { const gg = i / 100, SS = lerpP(S0, S1, gg), ff = lerp(ph0, 270, gg) * D; if (Math.hypot(SS[0] + 56 * Math.cos(ff) - F[0], SS[1] + 56 * Math.sin(ff) - F[1]) > 78.5) { gL = gg; break; } }
+      const r2 = clamp01((g - gL) / (1 - gL)), SL = lerpP(S0, S1, gL), fl = lerp(ph0, 270, gL) * D, HL: Pt = [SL[0] + 56 * Math.cos(fl), SL[1] + 56 * Math.sin(fl)];
+      const dirL = Math.atan2(F[1] - HL[1], F[0] - HL[0]) / D, dir = lerp(dirL, 268, ease(r2));
+      push = P(H, 79 - 16 * Math.sin(Math.PI * r2), dir);
+    }
     sc.floor();
     sc.line([H, ikSide(H, push, 41, 39, 1), push], FAR, 8);
     sc.line([S, H], BODY, TORSO);
     sc.line([H, swing], COL.B, 8);
-    sc.dot(P(S, 18, -90 + 155), 10, BODY);
+    sc.dot(P(S, 18, phi / D - 180 + lerp(5, -25, g)), 10, BODY);
     sc.line([hand, S], BODY, 8);
     return "Kick-up: hands on the floor, one leg swings up straight and over the hips and the other follows, finishing stacked over the hands";
   } },
   wallwalk: { kind: "move", dur: 9000, k: [0.08, 0.6, 0.72], poster: 0.8, sided: false, scale: 0.85, build(sc, _s, p) {
-    // Starts as a plank with the feet at the foot of the wall; the feet climb as the hands walk in.
-    const L = 56 + LEG, fy = lerp(166, 122 - Math.sqrt(L * L - 46 * 46), p);
-    const dx = Math.sqrt(Math.max(1, L * L - (122 - fy) ** 2)), hx = 300 - dx, S = [hx, 122], F = [300, fy];
+    // Starts as a plank with the feet at the foot of the wall (straight body, trunk ~64 deg from vertical: the
+    // arms are 62 high); then six steps, each a quick move and a pause, the feet climb as the hands walk in.
+    const arm = ARM80[0] + ARM80[1], L = 56 + LEG, N = 6, sy = 168 - arm;
+    const sN = p * N, i = Math.min(N - 1, Math.floor(sN)), q = (i + ease(clamp01((sN - i) / 0.4))) / N, qq = p >= 1 ? 1 : q;
+    const fy = lerp(166, sy - Math.sqrt(L * L - 46 * 46), qq);
+    const dx = Math.sqrt(Math.max(1, L * L - (sy - fy) ** 2)), hx = 300 - dx, S = [hx, sy], F = [300, fy];
     const u = [(F[0] - S[0]) / L, (F[1] - S[1]) / L], H = [S[0] + u[0] * 56, S[1] + u[1] * 56];
     sc.floor();
     sc.bg([[306, 168], [306, -600]], PROP, 4);
