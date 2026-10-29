@@ -440,11 +440,11 @@ type Glyph = "up" | "single" | "slow" | "short" | "down" | "downShort" | "hold" 
  */
 function glyph(sc: Scene, g: Glyph) {
   // Visual round-C review: W 6 -> 9, a filled head, closer to the body so it reads as part of the drawing.
-  const x = 224, W = 6, c = ACCENT;
+  const x = 226, W = 7, c = ACCENT;
   const arrow = (y0: number, y1: number) => {
     const d = y1 < y0 ? -1 : 1;
     sc.line([[x, y0], [x, y1 - d * 6]], c, W);
-    sc.line([[x - 6, y1 - d * 8], [x, y1 + d * 2], [x + 6, y1 - d * 8], [x - 6, y1 - d * 8]], c, 2, 1, c);
+    sc.line([[x - 9, y1 - d * 10], [x, y1 + d * 2], [x + 9, y1 - d * 10], [x - 9, y1 - d * 10]], c, 2, 1, c);
   };
   if (g === "up" || g === "single" || g === "slow") arrow(136, 104);
   if (g === "single") sc.dot([x, 150], 4, c);
@@ -480,7 +480,7 @@ function pullFig(o: PullOpts): Fig {
     // Scapular work: the arms stay straight and full length; the trunk rises 7 away from the
     // shoulder joints, which is what "shoulders away from the ears" looks like.
     const jy = o.scap ? PULL_SY0 : h <= 0.12 ? PULL_SY0 : h <= 0.35 ? lerp(PULL_SY0, 71.2, (h - 0.12) / 0.23) : lerp(71.2, 41, (h - 0.35) / 0.65);
-    const lift = o.scap ? lerp(0, 7, h) : lerp(6, 2, clamp01((h - 0.35) / 0.65)) * clamp01(h / 0.12);
+    const lift = o.scap ? lerp(0, 10, h) : lerp(6, 2, clamp01((h - 0.35) / 0.65)) * clamp01(h / 0.12);
     const Sy = jy, top = Sy - lift;
     // Toward the top the shoulder blades draw together (retraction), so the shoulders slide in a little.
     const r = o.scap ? 0 : 2 * h, hL = [PULL_HL, 30], hR = [PULL_HR, 30], sL = [166 + r, Sy], sR = [192 - r, Sy];
@@ -488,8 +488,9 @@ function pullFig(o: PullOpts): Fig {
     // Band (assistance): looped over the bar OUTSIDE the arms and under both knees. It is stretched at the bottom
     // (thinner, straight) and slackens, bowing outward, as the knees rise toward the bar.
     if (o.band) {
-      const kn = hip + 44, t = clamp01((kn - 30 - 108) / 50), bow = (1 - t) * 9;
-      sc.line([[138, 30], [138 - bow, (30 + kn) / 2], [142, kn + 6], [216, kn + 6], [220 + bow, (30 + kn) / 2], [220, 30]], BAND, o.band * lerp(1, 0.78, t), 1);
+      // Narrow at the top (r3): the loop hugs the knees (x 148/210 at the knee line) instead of wrapping the arm span.
+      const kn = hip + 44, t = clamp01((kn - 30 - 108) / 50), bow = (1 - t) * 2, xe = lerp(148, 144, t);
+      sc.line([[138, 30], [xe - 2 - bow, (30 + kn) / 2], [xe, kn + 6], [358 - xe, kn + 6], [358 - xe + 2 + bow, (30 + kn) / 2], [220, 30]], BAND, o.band * lerp(1, 0.85, t), 1);
     }
     sc.line([[179, top + 2], [179, hip]], BODY, TORSO);
     sc.line([[172, hip], [171, hip + LEG]], BODY, 8); sc.line([[186, hip], [187, hip + LEG]], BODY, 8);
@@ -540,7 +541,9 @@ function ringRow(yHand: number, feetUp: boolean, label: string, anchorY = 24, la
     // upper arm points down the body toward them at the top (shoulder angle ~25-45), never overhead.
     const e1 = ik(S, hand, ARM80[0], ARM80[1], true), e2 = ik(S, hand, ARM80[0], ARM80[1], false);
     const toward = (e: Pt) => (e[0] - S[0]) * -u[0] + (e[1] - S[1]) * -u[1];
-    sc.line([S, toward(e1) >= toward(e2) ? e1 : e2, hand], COL.B, 8);
+    const el = toward(e1) >= toward(e2) ? e1 : e2;
+    sc.line([S, el, hand], COL.B, 8);
+    sc.ring(el, 6, WOOD, 3);   // elbow pointer: its path behind the torso reads at 56x40
     sc.ring(hand, 7, WOOD, 3);
     return label;
   } };
@@ -686,8 +689,8 @@ const AD_FIGS: Record<string, Fig> = {
   pullup: pullUp(5200, [0.02, 0.27, 0.37, 0.82], "Pull-up: hanging from the bar with straight arms, pull the chest up until the chin clears the bar, elbows driving down, then lower under control", { glyph: "up" }),
   pullup_single: pullUp(7000, [0.02, 0.2, 0.26, 0.6], "Single pull-up: one crisp rep with the chin over the bar, lower under control, then hang and rest", { glyph: "single" }),
   pullup_slow: pullUp(9000, [0.02, 0.35, 0.46, 0.9], "Slow tempo pull-up: pull up smoothly until the chin clears the bar, pause, then lower slowly, arms fully straight at the bottom", { glyph: "slow" }),
-  pullup_band: pullUp(5500, [0.02, 0.27, 0.36, 0.82], "Band-assisted pull-up: a band looped under the knees takes part of the load while you pull the chin over the bar and lower under control", { band: 9 }),
-  pullup_band_light: pullUp(5500, [0.02, 0.27, 0.36, 0.82], "Light band-assisted pull-up: a thinner band under the knees takes a little of the load while you pull the chin over the bar and lower under control", { band: 4 }),
+  pullup_band: pullUp(5500, [0.02, 0.27, 0.36, 0.82], "Band-assisted pull-up: a band looped under the knees takes part of the load while you pull the chin over the bar and lower under control", { band: 12 }),
+  pullup_band_light: pullUp(5500, [0.02, 0.27, 0.36, 0.82], "Light band-assisted pull-up: a thinner band under the knees takes a little of the load while you pull the chin over the bar and lower under control", { band: 6 }),
   pullup_partial: pullUp(4600, [0.02, 0.26, 0.34, 0.8], "Partial-range pull-up: pull from straight arms to about halfway, elbows at a right angle, then lower under control", { to: 0.35, glyph: "short" }),
   pullup_negative: negative(10000, "Negative pull-up, 10 seconds: start with the chin over the bar and lower as slowly as you can all the way to straight arms; step back up to the top"),
   pullup_negative5: negative(5000, "Negative pull-up, 5 seconds: start with the chin over the bar and lower slowly all the way to straight arms; step back up to the top"),
@@ -695,7 +698,7 @@ const AD_FIGS: Record<string, Fig> = {
   pullup_mid: pullFig({ kind: "hold", from: 0.35, to: 0.35, glyph: "holdMid", label: "Mid-range hold: elbows at a right angle, shoulders pulled down, body still" }),
   scappull: pullFig({ kind: "move", dur: 4500, k: [0.02, 0.24, 0.46, 0.9], from: 0, to: 1, scap: true, glyph: "lift", label: "Scapular pull-up: hanging with straight arms, pull the shoulder blades down so the body rises a few centimetres, then relax back" }),
   activehang: pullFig({ kind: "hold", from: 1, to: 1, scap: true, glyph: "liftHold", label: "Active hang: straight arms, shoulder blades pulled down and away from the ears, body long and still" }),
-  rowflat: ringRow(90, false, "Ring row, body horizontal: hanging under the rings with straight arms, pull the chest to the rings keeping the body in one line, then lower", 24, "rowfeet"),
+  rowflat: ringRow(86, false, "Ring row, body horizontal: hanging under the rings with straight arms, pull the chest to the rings keeping the body in one line, then lower", 24, "rowfeet"),
   rowincline: ringRow(42, false, "Ring row, inclined: the body leans back at a steep angle under high rings; pull the chest to the rings keeping the body straight, then lower", -26, "rowflat", 228),
   rowfeet: ringRow(80, true, "Ring row, feet elevated: feet on a box, body level under the rings; pull the chest to the rings, then lower"),
   pullapart: { kind: "move", dur: 5000, k: [0.1, 0.45, 0.6], sided: false, front: true, tempo: ["drive", "control"], build(sc, _s, p) {
