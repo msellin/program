@@ -83,3 +83,40 @@ The provocative positions are encoded as tests in `rig.test.ts`:
   - Several `hswalk` drills (cones, plate, marker path) share one figure.
 - **No in-app screenshots of signed-in screens:** sign-in needs a CAPTCHA. The public program page was checked
   in the dev server: fitted viewBox, measured height and px strokes all live.
+
+## Round A: body v2 (2026-10-28, same day)
+
+The founder asked for round A from [ideas-00-synthesis.md](ideas-00-synthesis.md).
+
+- **Flesh over the skeleton.** Every figure still builds the same joint skeleton. Poses, limb-length rules and
+  every earlier test are unchanged. `flesh()` in `rig.ts` then draws filled shapes over it:
+  - **Tapered limbs.** Thigh radius 0.12T tapers to 0.055T at the ankle; upper arm 0.085T to 0.048T. Knees and
+    elbows are pinched a little.
+  - **Trunk.** A pelvis, waist and ribcage shape. It is flatter when the trunk is near horizontal, so bridges
+    and hollows don't read as an arched back. Front views get their own wide shape with shoulders.
+  - **Head.** Radius 0.21T.
+  - **Contact shadow.**
+
+  Roles (trunk, shoulder end, arm vs leg) are read from the skeleton, so no figure needed annotating. T is the
+  figure's trunk length.
+- **One set of proportions.** The floor figures had a trunk ~40% too long and short arms. Trunk went 100 → 78
+  and arms 60 → 78 on the bridge, glute bridge, dead bug, pullover, adductor and hip thrust; the hollow legs went
+  100 → 120. The bridge's in-line top angle was re-solved (19.7° → 22.7°).
+- **Edges.** On the tile and in the player, a thin near-black edge separates overlapping parts: near over far
+  limb, arm over trunk, head over arms. In thumbnails the edge is the part's own colour, so it thickens the shape
+  instead of eating into it.
+- **Draw order and accents.**
+  - Pull-up and hang: the head is drawn in front of the arms and the bar in front of the head, so chin over the
+    bar reads.
+  - Hollow tuck: the accent moved from the trunk to the reaching arms.
+  - Hip thrust: the head is lower, so it no longer reads as neck flexion.
+- **Re-checks.**
+  - [05-coach-body-v2.md](05-coach-body-v2.md): 7 → 7.5, no safety issues.
+  - [06-visual-body-v2.md](06-visual-body-v2.md): 56x40 4 → 6, tile 6 → 8, player 6.5 → 8, "looks
+    professional" 4 → 6.5.
+  - All their top fixes were applied afterwards. Those reviews predate the fixes.
+- **Sheets.** `after-body-v2/` and `before-after-body-v2.png`.
+- **Still open.**
+  - Variant distinctness is unchanged by flesh (visual 4.5). Several pull-up and wall-handstand variants still
+    look alike; that belongs to round C (cue overlays, ladder ghosts).
+  - The 90/90 top view still uses thin far arms.

@@ -75,6 +75,35 @@ describe("figure rig", () => {
     expect(strokePx(2, 40, false)).toBeGreaterThanOrEqual(1.25);
   });
 
+  it("body v2: every figure is drawn with a trunk and a head, and every body shape covers its skeleton", () => {
+    for (const id of Object.keys(FIGS))
+      for (const side of ["L", "R"] as const) {
+        const f = drawFigure(id, side, 2000, false);
+        expect(f.slots.some((s) => s.shape && s.w === 12), id + " trunk").toBe(true);
+        expect(f.slots.some((s) => s.shape && s.w >= 18 && s.w <= 24), id + " head").toBe(true);
+        for (const s of f.slots.filter((s) => s.shape && s.w > 0)) {
+          const sh = pts(s.shape!), xs = sh.map((q) => q[0]), ys = sh.map((q) => q[1]);
+          for (const [x, y] of pts(s.pts)) {
+            expect(x, id).toBeGreaterThanOrEqual(Math.min(...xs) - 0.1); expect(x, id).toBeLessThanOrEqual(Math.max(...xs) + 0.1);
+            expect(y, id).toBeGreaterThanOrEqual(Math.min(...ys) - 0.1); expect(y, id).toBeLessThanOrEqual(Math.max(...ys) + 0.1);
+          }
+        }
+      }
+  });
+
+  it("body v2: an arm is drawn slimmer than a leg (roles read from the skeleton)", () => {
+    // A part's radius at an end = nearest shape vertex to that skeleton joint; the larger end is proximal.
+    const rProx = (s: { pts: string; shape?: string }) => {
+      const q = pts(s.shape!), k = pts(s.pts);
+      return Math.max(...[k[0], k[k.length - 1]].map((j) => Math.min(...q.map((v) => len(v, j)))));
+    };
+    const f = drawFigure("pullup", "B", 0, false, true);
+    const legs = f.slots.filter((s) => s.shape && s.w === 8 && s.color === FIGURE_COLORS.BODY && pts(s.pts).length === 2 && len(...(pts(s.pts) as [number[], number[]])) > 60);
+    const arms = f.slots.filter((s) => s.shape && s.w === 8 && s.color === BOTH);
+    expect(legs.length).toBe(2); expect(arms.length).toBe(2);
+    for (const a of arms) for (const l of legs) expect(rProx(a)).toBeLessThan(rProx(l) * 0.8);
+  });
+
   it("a still figure shows its poster pose: the pull-up thumbnail is chin over the bar, not a dead hang", () => {
     const head = (f: FigureFrame) => pts(used(f).find((s) => s.w === 22)!.pts)[0][1];
     expect(head(drawFigure("pullup", "B", 0, false, true))).toBeLessThan(head(drawFigure("pullup", "B", 0, false)) - 20);

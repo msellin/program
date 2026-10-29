@@ -7,9 +7,11 @@ import {
   figureBounds,
   figureIsStatic,
   FIGURE_SLOTS,
+  shapeEdge,
   strokePx,
   type FigureFrame,
   type FigureSide,
+  type FigureSlot,
 } from "@/lib/figures/rig";
 import { usePrefersReducedMotion } from "@/lib/use-reduced-motion";
 
@@ -63,8 +65,15 @@ export function ExerciseFigure({
     ro.observe(svg);
     return () => ro.disconnect();
   }, [box.w, box.h]);
+  // A filled body part (`shape`) takes its mass from geometry; its stroke is only a thin edge that keeps
+  // a thumbnail from breaking up. A skeleton-only slot (prop, ring, ghost) keeps px-sized strokes.
   const width = useCallback(
-    (w: number, color: string) => String(strokePx(w, drawnPx, ACCENTS.includes(color))),
+    (s: FigureSlot) =>
+      s.w <= 0 ? "0" : s.shape ? String(shapeEdge(s.color, drawnPx).px) : String(strokePx(s.w, drawnPx, ACCENTS.includes(s.color))),
+    [drawnPx],
+  );
+  const edge = useCallback(
+    (s: FigureSlot) => (s.w <= 0 ? "none" : s.shape ? shapeEdge(s.color, drawnPx).color : s.color),
     [drawnPx],
   );
   const showBadges = drawnPx >= BADGE_MIN_PX;
@@ -84,11 +93,11 @@ export function ExerciseFigure({
     const polys = svg.querySelectorAll("polyline");
     f.slots.forEach((s, i) => {
       const el = polys[i];
-      set(el, "points", s.pts);
-      set(el, "stroke", s.color);
-      set(el, "stroke-width", width(s.w, s.color));
+      set(el, "points", s.shape ?? s.pts);
+      set(el, "stroke", edge(s));
+      set(el, "stroke-width", width(s));
       set(el, "opacity", String(s.op));
-      set(el, "fill", s.fill);
+      set(el, "fill", s.shape ? s.color : s.fill);
       set(el, "stroke-dasharray", s.dash);
     });
     const circles = svg.querySelectorAll("circle");
@@ -103,7 +112,7 @@ export function ExerciseFigure({
       set(texts[j], "opacity", String(showBadges ? b.op : 0));
       if (texts[j] && texts[j].textContent !== b.letter) texts[j].textContent = b.letter;
     });
-  }, [figure, side, reduced, getElapsed, playing, width, showBadges]);
+  }, [figure, side, reduced, getElapsed, playing, width, edge, showBadges]);
 
   useEffect(() => {
     paint();
@@ -136,12 +145,12 @@ export function ExerciseFigure({
           return (
             <polyline
               key={i}
-              points={s.pts}
-              stroke={s.color}
-              strokeWidth={width(s.w, s.color)}
+              points={s.shape ?? s.pts}
+              stroke={edge(s)}
+              strokeWidth={width(s)}
               vectorEffect="non-scaling-stroke"
               opacity={s.op}
-              fill={s.fill}
+              fill={s.shape ? s.color : s.fill}
               strokeDasharray={s.dash}
               strokeLinecap="round"
               strokeLinejoin="round"

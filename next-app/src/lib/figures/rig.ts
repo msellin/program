@@ -40,6 +40,12 @@
  * - Equipment is an outline (boxes, plates, balls are rings), so a bar end
  *   never reads as a second head; every colour >= 3:1 on the tile tint too.
  *
+ * Body v2 (round A, same day): every figure still builds a SKELETON (the
+ * rules above are about it, and the tests read it); `flesh` then gives it
+ * tapered limbs, a pelvis–waist–ribcage trunk and a head sized to the trunk,
+ * plus a contact shadow. Floor figures were re-proportioned to match (trunk
+ * 100 -> 78, arms -> 78). Front views (`front: true`) get a wide trunk.
+ *
  * Everything is a polyline in a fixed slot list so draw order (what is in
  * front) is exact and the renderer can update attributes in place.
  */
@@ -47,7 +53,11 @@
 export type Pt = number[]; // [x, y]; a plain array so literal coordinates need no casts
 export type FigureSide = "L" | "R" | "B";
 /** `bg`: floor, bar or wall: drawn long and left out of the figure's bounds, so the fitted frame crops it. */
-export type FigureSlot = { pts: string; color: string; w: number; op: number; fill: string; dash: string; bg?: boolean };
+/**
+ * `pts` is the skeleton (joints; what the tests and limb-length rules read). `shape`, when set, is the
+ * filled body drawn over it: a tapered limb, the trunk, the head (body v2, 2026-10-28).
+ */
+export type FigureSlot = { pts: string; color: string; w: number; op: number; fill: string; dash: string; bg?: boolean; shape?: string };
 export type FigureBadge = { x: number; y: number; color: string; letter: string; op: number };
 export type FigureFrame = { label: string; tf: string; floor: boolean; slots: FigureSlot[]; badges: FigureBadge[] };
 type Kind = "hold" | "move" | "move2";
@@ -60,6 +70,8 @@ type Fig = {
   poster?: number;
   sided: boolean;
   scale?: number;
+  /** Seen from the front (bar hangs, carries, Pallof): the trunk is drawn wide, the legs apart. */
+  front?: boolean;
   build: (sc: Scene, side: FigureSide, p: number, rep?: number) => string;
 };
 
@@ -71,13 +83,13 @@ export const ACCENT = "#c89666";
 const COL: Record<FigureSide, string> = { L: "#6db8c6", R: "#c79fcd", B: ACCENT };
 const BODY = "#c9ced6", FAR = "#8a909c", FLOOR = "#9a8164", PROP = "#7d8590", WOOD = "#a8855f";
 /** Fill for boxes and benches: equipment is an outline, so it never competes with the body. */
-const BOX = "#23262c";
+const BOX = "#2f333a";
 /** Working-limb colours; the renderer draws these heavier. */
 export const ACCENTS = [ACCENT, COL.L, COL.R];
 /** For tests: side colours, the far-limb grey and the ground line. */
 export const FIGURE_COLORS = { L: COL.L, R: COL.R, FAR, BODY, FLOOR, PROP };
 const TORSO = 12;
-const SLOTS = 24;
+const SLOTS = 28;
 function ease(x: number) { return 0.5 - 0.5 * Math.cos(Math.PI * x); }
 // rest → move → hold → return → rest, as 0..1
 function prog(t: number, k: number[]) {
@@ -163,14 +175,14 @@ export const FIGS: Record<string, Fig> = {
   bridge: { dur: 5000, kind: "move", k: [0.08, 0.32, 0.64], sided: true, scale: 1.15, build(sc, side, p) {
     // Foot under the knee at the top (vertical shin, no hamstring cramp). The free leg is held
     // bent (short lever): a straight raised leg is a resisted straight-leg-raise hold.
-    const S = [98, 158], T = 100, F = [258, 164], th = lerp(0, 19.7, p) * Math.PI / 180;
+    const S = [120, 158], T = 78, F = [258, 164], th = lerp(0, 22.7, p) * Math.PI / 180;
     const H = [S[0] + T * Math.cos(th), S[1] - T * Math.sin(th)], K = ik(H, F, 66, 62, true);
-    const thDeg = lerp(0, 19.7, p), FK = P(H, 60, -78 - thDeg * 0.5), FF = P(FK, 52, -78 - thDeg * 0.5 + 90);
+    const thDeg = lerp(0, 22.7, p), FK = P(H, 60, -78 - thDeg * 0.5), FF = P(FK, 52, -78 - thDeg * 0.5 + 90);
     const planted = [H, K, F], free = [H, FK, FF];
     sc.floor();
     if (side === "R") sc.line(free, FAR, 8);
-    sc.line([[100, 162], [164, 166]], BODY, 8);
-    sc.line([[76, 154], S], BODY, 8); sc.dot([68, 151], 11, BODY);
+    sc.line([[122, 162], [198, 166]], BODY, 8);
+    sc.line([[98, 154], S], BODY, 8); sc.dot([90, 151], 11, BODY);
     sc.line([S, H], BODY, TORSO);
     if (side === "L") { sc.line(free, BODY, 8); sc.line(planted, COL.L, 8); }   // working limb drawn last
     else sc.line(planted, COL.R, 8);
@@ -178,15 +190,15 @@ export const FIGS: Record<string, Fig> = {
     return "Single-leg glute bridge, " + sideWord(side) + " foot planted: hips lift until shoulder, hip and knee form one straight line, the other knee stays bent and lifted";
   } },
   deadbug: { dur: 12000, kind: "move2", k: [0.06, 0.4, 0.52, 0.94], sided: false, build(sc, side, p, rep = 0) {
-    const S = [112, 157], H = [208, 160], off = [-12, -8], fS = add(S, off), fH = add(H, off);
-    const arm = function (o: Pt, q: number) { return [o, P(o, 62, lerp(-90, -160, q))]; };
+    const S = [128, 157], H = [208, 160], off = [-12, -8], fS = add(S, off), fH = add(H, off);
+    const arm = function (o: Pt, q: number) { return [o, P(o, 78, lerp(-90, -160, q))]; };
     const leg = function (o: Pt, q: number) { const a = lerp(-90, -10, q), K = P(o, 62, a); return [o, K, P(K, 58, a + lerp(90, 0, q))]; };
     const nA = arm(S, rep === 0 ? p : 0), fA = arm(fS, rep === 1 ? p : 0), nL = leg(H, rep === 1 ? p : 0), fL = leg(fH, rep === 0 ? p : 0);
     sc.floor();
     sc.line(fA, rep === 1 ? COL.L : FAR, 8); sc.line(fL, rep === 0 ? COL.L : FAR, 8);
     sc.line([S, H], BODY, TORSO);
     sc.line(nA, rep === 0 ? COL.R : BODY, 8); sc.line(nL, rep === 1 ? COL.R : BODY, 8);
-    sc.line([[92, 155], S], BODY, 8); sc.dot([82, 153], 11, BODY);   // head in front: the arm passes behind it
+    sc.line([[108, 155], S], BODY, 8); sc.dot([98, 153], 11, BODY);   // head in front: the arm passes behind it
     const wa = rep === 0 ? nA : fA, wl = rep === 0 ? fL : nL, as = rep === 0 ? "R" : "L", ls = rep === 0 ? "L" : "R";
     sc.badge(beyond(wa[0], wa[1], 14), COL[as], as); sc.badge(beyond(wl[1], wl[2], 14), COL[ls], ls);
     return "Dead bug: lying on the back, arms up, knees over hips. The " + sideWord(as) + " arm reaches overhead while the " + sideWord(ls) + " leg straightens low, then return and switch to the other pair";
@@ -231,29 +243,29 @@ export const FIGS: Record<string, Fig> = {
     sc.line(left, COL.B, 8); sc.line(right, COL.B, 8);
     return "90/90 hip switches, seen from above: sitting with feet wide and hands behind, both knees rotate slowly from one side to the other within a comfortable range";
   } },
-  hang: { kind: "hold", sided: false, build(sc, side, q) {
+  hang: { kind: "hold", sided: false, front: true, build(sc, side, q) {
     // Arms keep their length: the shoulders stay put and the body sinks below them (4px), which is
     // what shoulders rising toward the ears looks like.
     const dn = 4 * q, sL = [166, 78], sR = [192, 78];
-    sc.bg([[-600, 28], [960, 28]], PROP, 6);
     sc.line([[179, 80 + dn], [179, 136 + dn]], BODY, TORSO);
-    sc.line([[175, 136 + dn], [174, 216 + dn]], BODY, 8); sc.line([[183, 136 + dn], [184, 216 + dn]], BODY, 8);
-    sc.dot([179, 64 + dn], 11, BODY);
-    sc.line([[152, 30], sL], COL.B, 8); sc.line([[206, 30], sR], COL.B, 8);
+    sc.line([[172, 136 + dn], [171, 216 + dn]], BODY, 8); sc.line([[186, 136 + dn], [187, 216 + dn]], BODY, 8);
     sc.line([sL, sR], BODY, 8);
+    sc.line([[152, 30], sL], COL.B, 8); sc.line([[206, 30], sR], COL.B, 8);
+    sc.dot([179, 64 + dn], 11, BODY);
+    sc.bg([[-600, 28], [960, 28]], PROP, 6);   // last: the hands wrap the bar
     return "Passive bar hang: hanging from the bar with straight arms, shoulders relaxed toward the ears, body long and still";
   } },
   pullover: { dur: 9000, kind: "move", k: [0.06, 0.33, 0.78], sided: false, scale: 1.15, build(sc, side, p) {
-    const S = [112, 157], H = [208, 160], F = [280, 166], K = ik(H, F, 62, 58, true);
-    const hand = P(S, 60, lerp(-90, -166, p));
+    const S = [128, 157], H = [208, 160], F = [280, 166], K = ik(H, F, 62, 58, true);
+    const hand = P(S, 78, lerp(-90, -166, p));
     sc.floor();
     sc.line([S, H], BODY, TORSO); sc.line([H, K, F], BODY, 8);
     sc.line([S, hand], COL.B, 8); sc.dot(hand, 8.5, COL.B); sc.dot(hand, 7, WOOD);
-    sc.line([[92, 155], S], BODY, 8); sc.dot([82, 153], 11, BODY);
+    sc.line([[108, 155], S], BODY, 8); sc.dot([98, 153], 11, BODY);
     return "Supine dowel pullover: lying on the back, knees bent, both hands on a dowel; the arms travel slowly overhead toward the floor and hold";
   } },
   roller: { dur: 7000, kind: "move", k: [0.08, 0.4, 0.62], sided: false, scale: 1.15, build(sc, side, p) {
-    const C = [136, 133], H = [222, 160], F = [290, 166], K = ik(H, F, 62, 58, true);
+    const C = [136, 133], H = [186, 160], F = [272, 166], K = ik(H, F, 62, 58, true);
     const ang = lerp(-172, -200, p), Sh = P(C, 36, ang), head = P(Sh, 20, ang);
     const E = P(Sh, 30, ang + 118), hand = P(head, 10, ang + 165);   // elbow up, hand cupping the back of the head
     sc.floor();
@@ -293,7 +305,7 @@ type PullOpts = {
   from: number; to: number; band?: boolean; scap?: boolean; label: string;
 };
 function pullFig(o: PullOpts): Fig {
-  return { kind: o.kind, dur: o.dur, k: o.k, poster: o.poster, sided: false, build(sc, _side, q) {
+  return { kind: o.kind, dur: o.dur, k: o.k, poster: o.poster, sided: false, front: true, build(sc, _side, q) {
     const h = o.kind === "hold" ? o.to : lerp(o.from, o.to, q);
     // Chin over the bar at the top with the shoulders BELOW it, so the elbows point down and in
     // (the shoulders used to reach bar height and the elbows winged out level with it).
@@ -302,18 +314,19 @@ function pullFig(o: PullOpts): Fig {
     const lift = o.scap ? lerp(0, 12, h) : 0;
     const Sy = o.scap ? 80 : lerp(78, 46, h), top = Sy - lift;
     const hL = [152, 30], hR = [206, 30], sL = [166, Sy], sR = [192, Sy];
-    sc.bg([[-600, 28], [960, 28]], PROP, 6);
     const hip = top + 58;
     if (o.band) sc.line([[164, 30], [164, hip + 44], [194, hip + 44], [194, 30]], BAND, 3);
     sc.line([[179, top + 2], [179, hip]], BODY, TORSO);
-    sc.line([[175, hip], [174, hip + LEG]], BODY, 8); sc.line([[183, hip], [184, hip + LEG]], BODY, 8);
+    sc.line([[172, hip], [171, hip + LEG]], BODY, 8); sc.line([[186, hip], [187, hip + LEG]], BODY, 8);
     sc.line([sL, sR], BODY, 8);
-    sc.dot([179, top - 24], 11, BODY);
     if (o.scap) { sc.line([hL, sL], COL.B, 8); sc.line([hR, sR], COL.B, 8); }
     else {
       sc.line([hL, ikSide(hL, sL, 26, 26, -1), sL], COL.B, 8);
       sc.line([hR, ikSide(hR, sR, 26, 26, 1), sR], COL.B, 8);
     }
+    // Head in front of the arms, bar in front of everything: chin over the bar has to read.
+    sc.dot([179, top - 28], 11, BODY);
+    sc.bg([[-600, 28], [960, 28]], PROP, 6);
     return o.label;
   } };
 }
@@ -396,12 +409,12 @@ function wristFig(fingers: boolean, label: string): Fig {
 function adductorFig(extended: boolean, label: string): Fig {
   return { kind: "hold", sided: false, scale: 1.15, build(sc, _s, q) {
     // Both knees drawn (the far one a step behind), the ball squeezed between them.
-    const S = [98, 158], H = [196, 160], F = extended ? [296, 166] : [266, 166], K = ik(H, F, 66, 62, true);
+    const S = [118, 158], H = [196, 160], F = extended ? [296, 166] : [266, 166], K = ik(H, F, 66, 62, true);
     const off = [-12, -3];
     sc.floor();
     sc.line([add(H, off), add(K, off), add(F, off)], FAR, 8);
-    sc.line([S, [164, 166]], BODY, 8);
-    sc.line([S, H], BODY, TORSO); sc.line([[76, 154], S], BODY, 8); sc.dot([68, 151], 11, BODY);
+    sc.line([S, [194, 166]], BODY, 8);
+    sc.line([S, H], BODY, TORSO); sc.line([[98, 154], S], BODY, 8); sc.dot([90, 151], 11, BODY);
     const ball = add(K, [-6, 0]), r = lerp(10, 7, q);
     sc.ring(ball, r, PROP, 3);
     sc.line([H, K, F], COL.B, 8);
@@ -412,13 +425,13 @@ function adductorFig(extended: boolean, label: string): Fig {
 function hollowFig(pull: boolean, label: string): Fig {
   return { kind: pull ? "move" : "hold", dur: pull ? 6000 : undefined, k: [0.1, 0.42, 0.55, 0.9], sided: false, scale: 1.15, build(sc, _s, q) {
     const a = pull ? 14 : lerp(0, 14, q), H = [190, 158];
-    const S = P(H, 80, 180 + a), foot = P(H, 100, -a);
+    const S = P(H, 80, 180 + a), foot = P(H, 120, -a);
     // Pullover: the body holds the hollow while the arms travel from over the chest to overhead.
-    const hand = pull ? P(S, 56, lerp(-80, 180 + a * 0.8, q)) : P(S, 56, 180 + a * 0.8);
+    const hand = pull ? P(S, 75, lerp(-80, 180 + a * 0.8, q)) : P(S, 75, 180 + a * 0.8);
     sc.floor();
     sc.line([H, foot], BODY, 8);
     sc.line([S, H], BODY, TORSO);
-    sc.dot(P(S, 20, 180 + a), 11, BODY);
+    sc.dot(P(S, 26, 180 + a), 11, BODY);
     sc.line([S, hand], COL.B, 8);
     sc.ring([H[0], 166], 6, COL.B, 2, pull ? 1 : q);
     return label;
@@ -440,7 +453,7 @@ const AD_FIGS: Record<string, Fig> = {
   rowflat: ringRow(90, false, "Ring row, body horizontal: hanging under the rings with straight arms, pull the chest to the rings keeping the body in one line, then lower"),
   rowincline: ringRow(36, false, "Ring row, inclined: the body leans back at a steep angle under high rings; pull the chest to the rings keeping the body straight, then lower", -20),
   rowfeet: ringRow(80, true, "Ring row, feet elevated: feet on a box, body level under the rings; pull the chest to the rings, then lower"),
-  pullapart: { kind: "move", dur: 5000, k: [0.1, 0.45, 0.6], sided: false, build(sc, _s, p) {
+  pullapart: { kind: "move", dur: 5000, k: [0.1, 0.45, 0.6], sided: false, front: true, build(sc, _s, p) {
     const a = lerp(20, 90, p) * Math.PI / 180, sL = [166, 78], sR = [192, 78], r = 52 * Math.sin(a);
     const hL = [sL[0] - r, 80], hR = [sR[0] + r, 80];
     sc.floor();
@@ -579,12 +592,12 @@ function frontBody(sc: Scene, lift: [number, number], work: { l?: string; r?: st
 
 const HIP_FIGS: Record<string, Fig> = {
   bridge2: { dur: 4500, kind: "move", k: [0.08, 0.36, 0.6], sided: false, scale: 1.15, build(sc, _s, p) {
-    const S = [98, 158], T = 100, F = [258, 164], th = lerp(0, 19.7, p) * Math.PI / 180;
+    const S = [120, 158], T = 78, F = [258, 164], th = lerp(0, 22.7, p) * Math.PI / 180;
     const H = [S[0] + T * Math.cos(th), S[1] - T * Math.sin(th)];
     sc.floor();
     sc.line([H, ik(add(H, [-6, 0]), add(F, [-6, 0]), 66, 62, true), add(F, [-6, 0])], FAR, 8);
-    sc.line([[100, 162], [164, 166]], BODY, 8);
-    sc.line([[76, 154], S], BODY, 8); sc.dot([68, 151], 11, BODY);
+    sc.line([[122, 162], [198, 166]], BODY, 8);
+    sc.line([[98, 154], S], BODY, 8); sc.dot([90, 151], 11, BODY);
     sc.line([S, H], BODY, TORSO);
     sc.line([H, ik(H, F, 66, 62, true), F], COL.B, 8);
     return "Glute bridge: lying on the back, knees bent and feet flat; ribs down, the hips lift until shoulder, hip and knee form one line, then lower";
@@ -592,14 +605,14 @@ const HIP_FIGS: Record<string, Fig> = {
   hipthrust: { dur: 4500, kind: "move", k: [0.08, 0.36, 0.6], sided: false, scale: 1.1, build(sc, _s, p) {
     // Upper back pivots on the bench edge. At the top the trunk and thigh are level and in one line
     // with the shoulder: finished with the glutes, never arched past it.
-    const S = [118, 106], F = [280, 166], th = lerp(36, 0, p);
-    const H = P(S, 96, th), K = ik(H, F, 66, 62, true);
+    const S = [118, 106], F = [262, 167], th = lerp(40, 0, p);
+    const H = P(S, 78, th), K = ik(H, F, 66, 62, true);
     sc.floor();
     sc.box(52, 114, 126, 167);
     sc.line([add(H, [-6, 0]), ik(add(H, [-6, 0]), add(F, [-6, 0]), 66, 62, true), add(F, [-6, 0])], FAR, 8);
     sc.line([S, [84, 110]], BODY, 8);
     sc.line([S, H], BODY, TORSO);
-    sc.dot(P(S, 22, -128 + th), 11, BODY);
+    sc.dot(P(S, 26, -150 + th), 11, BODY);
     sc.line([H, K, F], COL.B, 8);
     const bar = add(H, [0, -16]);
     sc.plate(bar, 12);
@@ -638,7 +651,7 @@ const HIP_FIGS: Record<string, Fig> = {
     sc.badge([F[0] + 18, F[1] - 8], work, side);
     return "Single-leg Romanian deadlift, standing on the " + sideWord(side) + " leg: weight in the opposite hand; hinge at the hip with a long spine while the free leg rises behind in one line, then stand";
   } },
-  pallof: { dur: 5000, kind: "move", k: [0.1, 0.36, 0.64, 0.9], sided: false, build(sc, _s, p) {
+  pallof: { dur: 5000, kind: "move", k: [0.1, 0.36, 0.64, 0.9], sided: false, front: true, build(sc, _s, p) {
     // Seen from the front with the band anchored to the viewer's left: the hands press straight out
     // (toward us, so the arms foreshorten) and stay on the midline while the trunk refuses to turn.
     // The hand dot grows as it comes toward us: that, and the arms straightening, is the press.
@@ -649,7 +662,7 @@ const HIP_FIGS: Record<string, Fig> = {
     const sR = [158, 36], sL = [200, 36];
     sc.line([sR, lerpP([156, 66], lerpP(sR, hand, 0.5), d), hand], COL.B, 8);
     sc.line([sL, lerpP([202, 66], lerpP(sL, hand, 0.5), d), hand], COL.B, 8);
-    sc.dot(hand, lerp(6, 11, p), BODY);
+    sc.dot(hand, lerp(5, 8.5, p), BODY);
     return "Pallof press: standing side-on to a band anchored at chest height; press the hands straight out from the chest and hold, the trunk refusing to turn toward the anchor, then bring them back";
   } },
   nordic: { dur: 8000, kind: "move", k: [0.05, 0.72, 0.8, 0.94], poster: 0.7, sided: false, build(sc, _s, p) {
@@ -684,7 +697,7 @@ const HIP_FIGS: Record<string, Fig> = {
     sc.line([S, ikSide(S, add(hand, [0, 4]), 28, 26, -1), add(hand, [0, 4])], BODY, 8);
     return "Heavy sled push: hands high on the sled posts, trunk leaning in at about 45°, arms long; drive one knee through at a time with short powerful steps";
   } },
-  suitcase: { dur: 2400, kind: "move2", k: [0.05, 0.5, 0.55], poster: 0.5, sided: true, build(sc, side, p, rep = 0) {
+  suitcase: { dur: 2400, kind: "move2", k: [0.05, 0.5, 0.55], poster: 0.5, sided: true, front: true, build(sc, side, p, rep = 0) {
     // Front view: the loaded arm hangs straight, the trunk stays vertical and does not lean toward it.
     const lift = Math.sin(p * Math.PI) * 10, work = COL[side];
     frontBody(sc, rep === 0 ? [lift, 0] : [0, lift], {});
@@ -696,7 +709,7 @@ const HIP_FIGS: Record<string, Fig> = {
     sc.badge(add(hand, [-fs * 22, 4]), work, side);
     return "Suitcase carry, weight in the " + sideWord(side) + " hand: walk tall with small steps, ribs down, the trunk staying upright instead of leaning toward the load";
   } },
-  farmer: { dur: 2400, kind: "move2", k: [0.05, 0.5, 0.55], poster: 0.5, sided: false, build(sc, _s, p, rep = 0) {
+  farmer: { dur: 2400, kind: "move2", k: [0.05, 0.5, 0.55], poster: 0.5, sided: false, front: true, build(sc, _s, p, rep = 0) {
     const lift = Math.sin(p * Math.PI) * 10;
     frontBody(sc, rep === 0 ? [lift, 0] : [0, lift], {});
     for (const [s, dx] of [[[158, 36], -6], [[200, 36], 6]] as [Pt, number][]) {
@@ -742,13 +755,13 @@ const HIP_FIGS: Record<string, Fig> = {
   hollowtuck: { kind: "hold", sided: false, scale: 1.15, build(sc, _s, q) {
     // Tuck hollow: knees bent over the hips (short lever, not a straight-leg-raise hold), lower back
     // pressed down, shoulders curled up off the floor.
-    const H = [196, 160], a = lerp(0, 16, q), S = P(H, 90, 180 + a);
+    const H = [196, 160], a = lerp(0, 16, q), S = P(H, 80, 180 + a);
     const K = P(H, 62, -98), F = P(K, 58, -8);
     sc.floor();
     sc.line([H, K, F], BODY, 8);
-    sc.line([S, H], COL.B, TORSO);
-    sc.dot(P(S, 22, 180 + a + 6), 11, BODY);
-    sc.line([S, P(S, 52, -26 + a * 0.3)], BODY, 8);
+    sc.line([S, H], BODY, TORSO);
+    sc.dot(P(S, 26, 180 + a + 6), 11, BODY);
+    sc.line([S, P(S, 70, -26 + a * 0.3)], COL.B, 8);
     return "Hollow hold, tucked: lying on the back with knees bent over the hips, lower back pressed into the floor, shoulders curled up and arms reaching toward the knees";
   } },
 };
@@ -791,6 +804,113 @@ function squatPose(sc: Scene, p: number, leanDeg: number, load: "back" | "front"
 Object.assign(FIGS, AD_FIGS, HIP_FIGS);
 
 export const FIGURE_SLOTS = SLOTS;
+
+// ---------------------------------------------------------------------------
+// Body v2 (2026-10-28, dev/active/figure-review/ideas-00-synthesis.md round A): the skeleton every
+// figure builds is given flesh AFTER the pose is solved, so no pose, test or limb-length rule changes.
+// Roles are read from the skeleton: the trunk is the torso-width line, its shoulder end is the end
+// nearest the head, a limb belongs to whichever end of the trunk it starts at. Every width is a
+// fraction of the trunk length T (illustrator + biomechanist specs: thigh radius 0.12T tapering to
+// 0.055T at the ankle, upper arm 0.085T to 0.048T, chest wider than waist, head radius 0.21T).
+// ---------------------------------------------------------------------------
+const FLESH = new Set([BODY, FAR, ACCENT, COL.L, COL.R]);
+const parse = (s: string): Pt[] => s.split(" ").map((q) => q.split(",").map(Number));
+const dist = (a: Pt, b: Pt) => Math.hypot(a[0] - b[0], a[1] - b[1]);
+const angOf = (a: Pt, b: Pt) => Math.atan2(b[1] - a[1], b[0] - a[0]) * 180 / Math.PI;
+
+/**
+ * One tapered capsule per segment as ONE polygon: each capsule is a closed loop traced the same way
+ * round (so overlaps at the joints fill, nonzero), joined by connectors that are walked back at the end
+ * and so enclose nothing.
+ */
+function fleshChain(pts: Pt[], radii: number[]): Pt[] {
+  const out: Pt[] = [], starts: Pt[] = [];
+  for (let i = 0; i + 1 < pts.length; i++) {
+    const a = pts[i], b = pts[i + 1], ra = radii[i], rb = radii[i + 1], g = angOf(a, b);
+    const loop: Pt[] = [];
+    for (let j = 0; j <= 4; j++) loop.push(P(a, ra, g + 90 + 45 * j));
+    for (let j = 0; j <= 4; j++) loop.push(P(b, rb, g - 90 + 45 * j));
+    out.push(...loop, loop[0]);
+    starts.push(loop[0]);
+  }
+  for (let i = starts.length - 2; i >= 0; i--) out.push(starts[i]);
+  return out;
+}
+
+/** Trunk from hip to shoulder: pelvis, a narrower waist, a wider ribcage, rounded at both ends. */
+function fleshTrunk(H: Pt, S: Pt, front: boolean): Pt[] {
+  const T = dist(H, S), g = angOf(H, S);
+  // Near-horizontal trunks get a flatter ribcage: the full chest-waist step read as a sagging or
+  // arched low back on bridges and hollows (coach, body v2 re-check). Front views are wider.
+  // Front views: hips, a waist, then shoulders wide enough that the arms hang from the trunk itself.
+  const flat = Math.abs(Math.sin(g * Math.PI / 180)) < 0.5 ? 0.5 : 1;
+  const prof: [number, number][] = front
+    ? [[0, 0.21], [0.2, 0.2], [0.45, 0.17], [0.72, 0.25], [0.9, 0.35], [1, 0.3]]
+    : ([[0, 0.16], [0.18, 0.15], [0.42, 0.125], [0.7, 0.19], [0.9, 0.18], [1, 0.14]] as [number, number][])
+      .map(([t, r]) => [t, 0.16 + (r - 0.16) * flat]);
+  const at = (t: number) => P(H, T * t, g);
+  const right = prof.map(([t, r]) => P(at(t), r * T, g + 90));
+  const left = prof.slice().reverse().map(([t, r]) => P(at(t), r * T, g - 90));
+  const top: Pt[] = [1, 2, 3].map((j) => P(S, prof[5][1] * T, g + 90 - 45 * j));
+  const bottom: Pt[] = [1, 2, 3].map((j) => P(H, prof[0][1] * T, g - 90 - 45 * j));
+  return [...right, ...top, ...left, ...bottom, right[0]];
+}
+
+function circle(c: Pt, r: number): Pt[] { const a: Pt[] = []; for (let i = 0; i <= 16; i++) a.push(P(c, r, i * 22.5)); return a; }
+
+function flesh(items: FigureSlot[], floor: boolean, front: boolean): FigureSlot[] {
+  const body = items.filter((it) => !it.bg && FLESH.has(it.color));
+  const isHead = (it: FigureSlot) => it.w >= 18 && it.w <= 24 && dist(...(parse(it.pts) as [Pt, Pt])) < 1;
+  const heads = body.filter(isHead).map((it) => parse(it.pts)[0]);
+  const trunks = body.filter((it) => it.w === TORSO && it.pts.split(" ").length === 2);
+  if (!trunks.length || !heads.length) return items;
+  const head = heads[0];
+  // The trunk whose end is nearest the head; that end is the shoulder.
+  let best = trunks[0], S: Pt = [0, 0], H: Pt = [0, 0], dBest = Infinity;
+  for (const t of trunks) {
+    const [a, b] = parse(t.pts);
+    for (const [s0, h0] of [[a, b], [b, a]]) if (dist(s0, head) < dBest) { dBest = dist(s0, head); best = t; S = s0; H = h0; }
+  }
+  const T = Math.max(45, Math.min(120, dist(S, H)));
+  const out = items.map((it) => {
+    if (it.bg || !FLESH.has(it.color)) return it;
+    const pts = parse(it.pts);
+    if (it === best || (it.w === TORSO && pts.length === 2)) {
+      const [a, b] = it === best ? [H, S] : pts;
+      return { ...it, shape: fmt(fleshTrunk(a, b, front)) };
+    }
+    if (it.w >= 18 && pts.length === 2 && dist(pts[0], head) < 1) return { ...it, shape: fmt(circle(pts[0], Math.max(9, Math.min(16, 0.21 * T)))) };
+    if (it.w !== 8 || pts.length < 2) return it;
+    const len = pts.slice(1).reduce((s0, q, i) => s0 + dist(pts[i], q), 0);
+    const first = pts[0], last = pts[pts.length - 1];
+    const dS = Math.min(dist(first, S), dist(last, S)), dH = Math.min(dist(first, H), dist(last, H));
+    const near = dS <= dH ? S : H;
+    const chain = dist(last, near) < dist(first, near) ? pts.slice().reverse() : pts;
+    let r0: number, r1: number, r2: number;
+    // Front views: the shoulder girdle is inside the wide trunk, so its bar is not drawn.
+    if (front && pts.length === 2 && Math.max(dist(first, S), dist(last, S)) < 0.45 * T) return { ...it, op: 0 };
+    if (len < 0.55 * T) { r0 = r1 = r2 = 0.075 * T; }                                 // neck, shoulder girdle
+    // Knee and elbow pinch a little (r1), so a bent limb reads as two segments, not a sausage.
+    // Front views slim the arms a little against the wider trunk.
+    else if (dS <= dH && dS < 0.45 * T) { const k = front ? 0.85 : 1; r0 = 0.085 * T * k; r1 = 0.058 * T * k; r2 = 0.048 * T * k; }  // arm
+    else if (dH < 0.45 * T) { r0 = 0.12 * T; r1 = 0.07 * T; r2 = 0.055 * T; }                // leg
+    else { r0 = 0.09 * T; r1 = 0.07 * T; r2 = 0.05 * T; }
+    const radii = chain.length === 2 ? [r0, r2] : chain.map((_, i) => (i === 0 ? r0 : i === chain.length - 1 ? r2 : r1));
+    return { ...it, shape: fmt(fleshChain(chain, radii)) };
+  });
+  if (floor) {
+    // Contact shadow under whatever touches the floor; not a meaningful stroke (w 0), not in the bounds.
+    const xs = body.flatMap((it) => parse(it.pts)).filter((q) => q[1] >= 158).map((q) => q[0]);
+    if (xs.length) {
+      const x0 = Math.min(...xs), x1 = Math.max(...xs), c: Pt = [(x0 + x1) / 2, 169.5], rx = (x1 - x0) / 2 + 0.25 * T, ry = 0.05 * T;
+      const e: Pt[] = []; for (let i = 0; i <= 20; i++) { const a = i * Math.PI / 10; e.push([c[0] + rx * Math.cos(a), c[1] + ry * Math.sin(a)]); }
+      const shadow: FigureSlot = { pts: fmt([c, c]), color: "#000000", w: 0, op: 0.28, fill: "#000000", dash: "none", bg: true, shape: fmt(e) };
+      const fi = out.findIndex((it) => it.bg && it.color === FLOOR);
+      out.splice(fi + 1, 0, shadow);
+    }
+  }
+  return out;
+}
 
 /** The pose a still figure shows: the drill's defining frame, not the rest pose (dead hangs all look alike). */
 function posterOf(f: Fig) { return f.poster ?? 1; }
@@ -839,6 +959,7 @@ export function drawFigure(id: string, side: FigureSide | "E", elapsed: number, 
       sc.items = [sc.items[0], ...ghosts, ...sc.items.slice(1)];
     }
   }
+  sc.items = flesh(sc.items, sc.hasFloor, !!f.front);
   const empty: FigureSlot = { pts: "0,0", color: "none", w: 0, op: 0, fill: "none", dash: "none" };
   const noBadge: FigureBadge = { x: -50, y: -50, color: "none", letter: "", op: 0 };
   return {
@@ -887,6 +1008,7 @@ export function figureBounds(id: string, side: FigureSide | "E"): FigureBox {
       const pts = s.pts.split(" ").map((q) => q.split(",").map(Number));
       const r = pts.length === 2 && Math.hypot(pts[0][0] - pts[1][0], pts[0][1] - pts[1][1]) < 1 ? s.w / 2 : 5;
       for (const [x, y] of pts) grow(x, y, r);
+      if (s.shape) for (const [x, y] of parse(s.shape)) grow(x, y, 1.5);
     }
     for (const b of fr.badges) if (b.op > 0) grow(b.x, b.y, 11);
   }
@@ -900,6 +1022,15 @@ export function figureBounds(id: string, side: FigureSide | "E"): FigureBox {
   const out = { x: round(box.x), y: round(box.y), w: round(box.w), h: round(box.h) };
   boxCache.set(key, out);
   return out;
+}
+
+/**
+ * Edge of a filled body part. On the tile and in the player a thin near-black edge separates
+ * overlapping parts (near limb over far limb, arm over trunk, head over arms: body v2 re-check). In a
+ * thumbnail the edge is the part's own colour instead, which thickens it rather than eating into it.
+ */
+export function shapeEdge(color: string, heightPx: number): { color: string; px: number } {
+  return heightPx <= 64 ? { color, px: 1.75 } : { color: "#0f1114", px: 1.25 };
 }
 
 /**
