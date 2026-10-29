@@ -92,7 +92,13 @@ type Fig = {
    * lowering is `control`, its effort is `drive` (motion round, 2026-10-29).
    */
   tempo?: [Tempo, Tempo];
-  build: (sc: Scene, side: FigureSide, p: number, rep?: number) => string;
+  /**
+   * A one-frame cut in the cycle (start, end as fractions), e.g. a negative's reset to the top: the figure
+   * fades out over ~80 ms before it and back in after, so the cut reads as a cut, not a glitch (physics r1).
+   */
+  fade?: [number, number];
+  /** `t`: ms into the set, for motion that is not a function of p (a hold's balance corrections). 0 when still. */
+  build: (sc: Scene, side: FigureSide, p: number, rep?: number, t?: number) => string;
 };
 
 // Brand bronze (--color-bronze in brand/tokens.css). SVG stroke attributes cannot read the CSS var, so the
@@ -452,7 +458,7 @@ function glyph(sc: Scene, g: Glyph) {
 /** Shoulder-joint height at a dead hang: hand (y 30) to shoulder = 62 = ARM80, so the elbow is straight. */
 const PULL_SY0 = 90.4;
 type PullOpts = {
-  kind: Kind; dur?: number; k?: Fig["k"]; poster?: number;
+  kind: Kind; dur?: number; k?: Fig["k"]; poster?: number; fade?: Fig["fade"];
   /** Shoulder height as 0 = dead hang .. 1 = chin over bar, at the pose's start and end. */
   from: number; to: number; band?: number; scap?: boolean; glyph?: Glyph; label: string;
 };
@@ -460,7 +466,7 @@ function pullFig(o: PullOpts): Fig {
   const cues: Cue[] | undefined = o.to > 0 && o.to < 1 ? [{ angle: ["hand", "elbow", "shoulder"] }] : undefined;
   // Up is the effort, down is controlled; a negative's way out IS the lowering (its reset is a cut).
   const tempo: [Tempo, Tempo] | undefined = o.kind === "move" ? (o.from < o.to ? ["drive", "control"] : ["control", "control"]) : undefined;
-  return { kind: o.kind, dur: o.dur, k: o.k, poster: o.poster, sided: false, front: true, cues, tempo, build(sc, _side, q) {
+  return { kind: o.kind, dur: o.dur, k: o.k, poster: o.poster, fade: o.fade, sided: false, front: true, cues, tempo, build(sc, _side, q) {
     const h = o.kind === "hold" ? o.to : lerp(o.from, o.to, q);
     // Shoulder-joint height by phase (arms ARM80 = 32 + 30, hands on the bar at y 30): straight arms to h = 0.12
     // (the scapular start: the trunk rises, the arms do not bend), elbow ~90 deg at h = 0.35, and at h = 1 the
@@ -505,7 +511,7 @@ const pullUp = (dur: number, k: Fig["k"], label: string, extra: Partial<PullOpts
 /** A negative is lowered, then RESET to the top in one cut: animating the way back up taught a fast pull-up. */
 const negative = (lowerMs: number, label: string) => {
   const dur = lowerMs + 1500, k1 = (lowerMs + 200) / dur;
-  return pullFig({ kind: "move", dur, k: [200 / dur, k1, 0.97, 0.975], poster: 0.4, from: 1, to: 0, glyph: lowerMs > 6000 ? "down" : "downShort", label });
+  return pullFig({ kind: "move", dur, k: [200 / dur, k1, 0.97, 0.975], fade: [0.97, 0.975], poster: 0.4, from: 1, to: 0, glyph: lowerMs > 6000 ? "down" : "downShort", label });
 };
 
 function ringRow(yHand: number, feetUp: boolean, label: string, anchorY = 24, ladder?: string, feetX = 268): Fig {
@@ -1378,7 +1384,7 @@ export function drawFigure(id: string, side: FigureSide | "E", elapsed: number, 
     p = reduced || still ? 1 : ease(Math.min(1, elapsed / 900));
     // Then breathe (motion round, 2026-10-29): a slow 4.5 s cycle in the ribcage only, so the pose that a
     // coach panel set never moves and a hold no longer reads as a photo.
-    label = f.build(sc, s, p);
+    label = f.build(sc, s, p, 0, reduced || still ? 0 : elapsed);
     // Not on a hold that cues ribs down (hollow, dead-bug family): a widening ribcage there would read as
     // the rib flare the cue is against (coach check).
     if (!reduced && !still && elapsed > 900 && !/ribs down|hollow/i.test(label)) breath = 0.5 - 0.5 * Math.cos((2 * Math.PI * (elapsed - 900)) / 4500);
@@ -1389,7 +1395,14 @@ export function drawFigure(id: string, side: FigureSide | "E", elapsed: number, 
     // the same moment half a stride on: the other foot forward).
     const poster = posterOf(f), ghostP = f.kind === "gait" ? (poster + 0.5) % 1 : poster >= 0.5 ? 0 : 1;
     p = reduced || still ? poster : f.kind === "gait" ? (elapsed % dur) / dur : prog((elapsed % dur) / dur, f.k!, f.tempo);
-    label = f.build(sc, s, p, rep);
+    label = f.build(sc, s, p, rep, reduced || still ? 0 : elapsed);
+    if (f.fade && !reduced && !still) {
+      const x = (elapsed % dur) / dur, w = 80 / dur, [c0, c1] = f.fade;
+      const gap = x < c0 ? c0 - x : x > c1 ? x - c1 : 0;
+      const op = Math.min(1, 0.15 + 0.85 * (gap / w));
+      if (op < 1) for (const it of sc.items) if (!it.bg) it.op *= op;
+      for (const b of sc.badges) b.op *= op;
+    }
     if (reduced) {
       // The other pose as a thin solid outline in FAR, behind the body: thin enough never to read
       // as a second figure, solid enough for 3:1. Dots become rings.
