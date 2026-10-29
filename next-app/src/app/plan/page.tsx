@@ -715,19 +715,22 @@ export default function WeekPage() {
           })}
         </Card>
 
-      <p className="flex items-center gap-x-3 gap-y-1 flex-wrap text-eyebrow text-muted">
-        <span className="inline-flex items-center gap-1">
-          <span className="w-2 h-2 rounded-full bg-muted/60" aria-hidden /> Planned
-        </span>
-        <span className="inline-flex items-center gap-1">
-          <span className="w-2 h-2 rounded-full bg-green" aria-hidden /> Done
-        </span>
-        <span className="inline-flex items-center gap-1">
-          <span className="w-2 h-2 rounded-full bg-amber" aria-hidden /> Skipped
-        </span>
-        <span className="inline-flex items-center gap-1">
-          <span className="w-2 h-2 rounded-full bg-slate" aria-hidden /> Moved
-        </span>
+      {/* The key reuses the row markers themselves (r23b: the old coloured
+          dots no longer matched the rows). */}
+      <p className="flex items-center gap-x-3 gap-y-1.5 flex-wrap text-eyebrow text-muted">
+        {(
+          [
+            ["planned", "Planned"],
+            ["logged-full", "Done"],
+            ["missed", "Missed"],
+            ["skipped", "Skipped"],
+            ["moved", "Moved"],
+          ] as const
+        ).map(([st, label]) => (
+          <span key={st} className="inline-flex items-center gap-1.5">
+            <DayMarker status={st} className="" /> {label}
+          </span>
+        ))}
       </p>
 
       {/* Programme rules — BOTH arrays (2026-09-05).
@@ -1112,8 +1115,8 @@ type DayStatus = "skipped" | "moved" | "logged-full" | "logged-partial" | "misse
  * Done is a filled check, planned an empty ring, missed a dashed amber ring
  * that the row also names, skipped a minus, moved an arrow, rest a dash.
  */
-function DayMarker({ status }: { status: DayStatus }) {
-  const base = "mt-0.5 w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center";
+function DayMarker({ status, className = "mt-0.5" }: { status: DayStatus; className?: string }) {
+  const base = cn(className, "w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center");
   if (status === "logged-full") {
     return (
       <span aria-hidden className={cn(base, "bg-green text-ground")}>
