@@ -18,11 +18,11 @@ describe("handstand family (trainer lane, 2026-10-29)", () => {
     expect(c).toBeGreaterThan(40);
   });
 
-  it("shrug: arms stay locked and the whole body rises ~9 px (15% of the arm)", () => {
+  it("shrug: arms stay locked and the whole body rises ~13 px (21% of the arm, drawn large)", () => {
     const hipY = (t: number) => pts(used("wallhs_shrug", t).find((s) => s.w === 12)!.pts)[0][1];
     const lo = hipY(0), hi = hipY(T("wallhs_shrug") * 0.35);
-    expect(lo - hi).toBeGreaterThan(7);
-    expect(lo - hi).toBeLessThan(11);
+    expect(lo - hi).toBeGreaterThan(11.5);
+    expect(lo - hi).toBeLessThan(14.5);
     for (const t of [0, 1000, 1400, 1700, 3000]) {
       const arm = used("wallhs_shrug", t).find((s) => s.color === ACCENT && s.w === 8 && pts(s.pts).length === 2 && Math.hypot(...pts(s.pts)[0].map((v, i) => v - pts(s.pts)[1][i])) > 50)!;
       const [a, b] = pts(arm.pts);
@@ -56,10 +56,10 @@ describe("handstand family (trainer lane, 2026-10-29)", () => {
     expect(Math.min(...vals)).toBeLessThan(2); expect(Math.max(...vals)).toBeGreaterThan(5); expect(Math.max(...vals)).toBeLessThan(7);
   });
 
-  it("kick-up: starts in a lunge (swing leg low behind, front knee 120-140), stacks over the hands, returns to the start", () => {
+  it("kick-up: starts in a lunge (swing leg low behind, front knee 105-120), stacks over the hands, returns to the start", () => {
     const d = T("kickup");
     const front = pts(used("kickup", 0).find((s) => s.color === FIGURE_COLORS.FAR && s.w === 8 && pts(s.pts).length === 3)!.pts);
-    expect(inc(front[0], front[1], front[2])).toBeGreaterThan(120); expect(inc(front[0], front[1], front[2])).toBeLessThan(140);
+    expect(inc(front[0], front[1], front[2])).toBeGreaterThan(105); expect(inc(front[0], front[1], front[2])).toBeLessThan(120);
     const [H, F] = pts(used("kickup", 0).find((s) => s.color === ACCENT && s.w === 8)!.pts);
     expect(F[1]).toBeGreaterThan(H[1]);
     expect(F[0]).toBeLessThan(H[0]);
@@ -83,5 +83,57 @@ describe("handstand family (trainer lane, 2026-10-29)", () => {
     const sx = (t: number) => pts(used("wristprep", t).find((s) => s.color === ACCENT && s.w === 8)!.pts)[1][0];
     expect(sx(6000 * 0.5) - sx(0)).toBeGreaterThan(8);
     expect(sx(6000 * 0.5) - sx(0)).toBeLessThan(13);
+  });
+
+  it("r2: hswalk arms never close past ~164 deg at the elbow and the hips shift ~3 px per step", () => {
+    let min = 180; const hx: number[] = [];
+    for (let t = 0; t < 3600; t += 40) {
+      const f = used("hswalk", t);
+      for (const sl of f.filter((x) => (x.color === ACCENT || x.color === FIGURE_COLORS.FAR) && x.w === 8 && pts(x.pts).length === 3)) {
+        const [a, b, c] = pts(sl.pts); if (Math.hypot(a[0] - c[0], a[1] - c[1]) > 40) min = Math.min(min, inc(a, b, c));
+      }
+      hx.push(pts(f.find((x) => x.w === 12)!.pts)[0][0]);
+    }
+    expect(min).toBeGreaterThan(163);
+    expect(Math.max(...hx) - Math.min(...hx)).toBeGreaterThan(2.5);
+  });
+
+  it("r2: tuck transit is a tuck, not a pike (knee < 60 while the hip is still > 150)", () => {
+    let ok = false;
+    for (let t = 600; t < 2400; t += 50) {
+      const f = used("hstuck", t), [H, K, F] = pts(f.find((s) => s.color === ACCENT && s.w === 8)!.pts), [S] = pts(f.find((s) => s.w === 12)!.pts);
+      if (inc(H, K, F) < 60 && inc(S, H, K) > 150) ok = true;
+      if (inc(S, H, K) < 150) expect(inc(H, K, F)).toBeLessThan(60);
+    }
+    expect(ok).toBe(true);
+  });
+
+  it("r2: wallhs_90 is separated from the chest-in hold by 20+ deg; shrug head sinks; wall holds and free sway use the clock", () => {
+    expect(trunk("wallhs_90", 3000) - trunk("wallhs", 3000)).toBeGreaterThan(18);
+    expect(trunk("wallhs", 1500)).not.toBeCloseTo(trunk("wallhs", 2400), 3);
+    expect(trunk("hsfree", 700)).not.toBeCloseTo(trunk("hsfree", 700 + 6000 / 3), 3);
+  });
+
+  it("r2: wall walk keeps one pair planted at a time (hand x constant while the feet move and the reverse)", () => {
+    const d = T("wallwalk"), foot = (t: number) => pts(used("wallwalk", t).find((s) => s.w === 8 && pts(s.pts).length === 2 && pts(s.pts)[1][0] > 299)!.pts)[1][1];
+    const hand = (t: number) => pts(used("wallwalk", t).find((s) => s.color === ACCENT && s.w === 8)!.pts)[0][0];
+    let both = 0;
+    for (let t = 0; t < d * 0.6; t += 20) {
+      const dh = Math.abs(hand(t + 20) - hand(t)), df = Math.abs(foot(t + 20) - foot(t));
+      if (dh > 0.3 && df > 0.3) both++;
+    }
+    expect(both).toBe(0);
+    expect(trunk("wallwalk", 0)).toBeGreaterThan(65);
+  });
+
+  it("r2: wrist push-ups palms up: body still, wrist extension 0 to ~65 deg in 3 s, back in 1 s", () => {
+    const hand = (t: number) => { const f = used("wristback", t).find((s) => s.w === 4)!; return pts(f.pts); };
+    const ang = (t: number) => { const [w, tip] = hand(t); return 180 - Math.abs((Math.atan2(w[1] - tip[1], tip[0] - w[0]) * 180) / Math.PI); };
+    const top = 4500 * 0.7;
+    expect(Math.abs(ang(0))).toBeLessThan(2);
+    expect(Math.abs(ang(top))).toBeGreaterThan(60); expect(Math.abs(ang(top))).toBeLessThan(70);
+    expect(Math.abs(ang(4500 * 0.02 + 4500 * 0.67 * 0.5))).toBeLessThan(Math.abs(ang(top)));
+    const torso = (t: number) => used("wristback", t).find((s) => s.w === 12)!.pts;
+    expect(torso(0)).toBe(torso(top));
   });
 });

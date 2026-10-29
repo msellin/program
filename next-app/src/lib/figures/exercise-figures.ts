@@ -42,7 +42,7 @@ export const EXERCISE_FIGURES: Record<string, keyof typeof FIGS> = {
   hs_hollow_body_hold: "hollow",
   pu_hollow_body_pullover: "hollowpull",
   hs_wrist_ext_prep: "wristprep",
-  hs_wrist_pushups_floor: "wristprep",
+  hs_wrist_pushups_floor: "wristback",
   hs_finger_raises: "fingerraise",
   hs_wrist_downdog_recovery: "downdog",
   hs_wrist_childs_recovery: "child",
