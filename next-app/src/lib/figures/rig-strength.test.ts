@@ -62,7 +62,7 @@ describe("strength figures", () => {
     expect(trunkLean("squat", t130)).toBeGreaterThan(10);
   });
 
-  it("the block pull starts at floor height, reaches lockout and keeps the knee clear of the bar", () => {
+  it("the block pull starts at mid-shin on low blocks, reaches lockout and keeps the knee clear of the bar", () => {
     const dl = (t: number) => {
       const sl = used("deadlift", t);
       const leg = pts(sl.find((s) => s.w === 8 && s.color === FIGURE_COLORS.BODY && pts(s.pts).length === 3)!.pts);
@@ -77,10 +77,10 @@ describe("strength figures", () => {
     expect(top.knee).toBeGreaterThanOrEqual(174);
     expect(deg(Math.atan2(Math.abs(top.S[0] - top.H[0]), top.H[1] - top.S[1]))).toBeLessThanOrEqual(4);
     const bottom = dl(0);
-    expect(bottom.knee).toBeGreaterThan(92); expect(bottom.knee).toBeLessThan(112);
-    expect(bottom.hip).toBeGreaterThan(48); expect(bottom.hip).toBeLessThan(70);
-    expect(bottom.shin).toBeGreaterThan(10); expect(bottom.shin).toBeLessThan(18);
-    expect(166 - bottom.B[1]).toBeLessThan(22);   // a plate on the floor: bar centre ~18 px up
+    expect(bottom.knee).toBeGreaterThan(110); expect(bottom.knee).toBeLessThan(126);
+    expect(bottom.hip).toBeGreaterThan(62); expect(bottom.hip).toBeLessThan(78);
+    expect(bottom.shin).toBeGreaterThan(6); expect(bottom.shin).toBeLessThan(18);
+    expect(166 - bottom.B[1]).toBeGreaterThan(28); expect(166 - bottom.B[1]).toBeLessThan(36);   // plate on ~14 px blocks: bar centre ~32 px up
     for (const t of times("deadlift", 120)) { const f = dl(t); expect(Math.hypot(f.B[0] - f.K[0], f.B[1] - f.K[1]), `knee@${t}`).toBeGreaterThanOrEqual(9); }
   });
 
@@ -140,5 +140,36 @@ describe("strength figures", () => {
     expect(shinFromVert(front)).toBeLessThan(10);
     expect(inc(rear[0], rear[1], rear[2])).toBeGreaterThanOrEqual(78);
     expect(shinFromVert(rear)).toBeGreaterThan(18);
+  });
+
+  it("round 2: sled steps are ~1 s, the carries breathe, the nordic pushes before the hands let go", () => {
+    expect(FIGS.sled.dur! / 2).toBeGreaterThanOrEqual(900);
+    expect(FIGS.sled.dur! / 2).toBeLessThanOrEqual(1100);
+    let maxShin = 0;
+    for (const t of times("sled", 80)) for (const s of used("sled", t)) {
+      const p = pts(s.pts);
+      if (s.w === 8 && p.length === 3 && p[2][1] > 150 && (s.color === ACCENT || s.color === FIGURE_COLORS.FAR)) maxShin = Math.max(maxShin, deg(Math.atan2(Math.abs(p[1][0] - p[2][0]), Math.abs(p[1][1] - p[2][1]))));
+    }
+    expect(maxShin).toBeLessThan(62);
+    // Breathing: the whole upper body moves about 1 px over 4 s without changing the step.
+    const y = (t: number) => pts(used("farmer", t).find((s) => s.w === 12)!.pts)[0][1];
+    expect(Math.abs(y(1000 + 4400) - y(1000 + 400))).toBeGreaterThan(0);
+    // Nordic: the elbow never jumps more than 45 deg between 40 ms frames.
+    let prev = 0;
+    for (let t = 0; t <= FIGS.nordic.dur!; t += 40) {
+      const arm = used("nordic", t).filter((s) => s.w === 8 && s.color === FIGURE_COLORS.BODY && pts(s.pts).length === 3).pop()!;
+      const q = pts(arm.pts), e = inc(q[0], q[1], q[2]);
+      if (t > 0) expect(Math.abs(e - prev), `elbow@${t}`).toBeLessThan(45);
+      prev = e;
+    }
+  });
+
+  it("round 2: the split squat has both legs long on top, a ~90 degree rear knee and a ~30 degree rear shin at depth", () => {
+    const top = used("splitsquat", 0, "L"), bot = used("splitsquat", endT("splitsquat"), "L");
+    const legs = (sl: ReturnType<typeof used>) => sl.filter((s) => s.w === 8 && pts(s.pts).length === 3 && (s.color === FIGURE_COLORS.L || (s.color === FIGURE_COLORS.BODY && pts(s.pts)[2][0] < 120))).map((s) => pts(s.pts));
+    for (const c of legs(top)) expect(inc(c[0], c[1], c[2])).toBeGreaterThanOrEqual(160);
+    const rear = legs(bot).find((c) => c[2][0] < 120)!;
+    expect(inc(rear[0], rear[1], rear[2])).toBeGreaterThan(84); expect(inc(rear[0], rear[1], rear[2])).toBeLessThan(100);
+    expect(deg(Math.atan2(Math.abs(rear[1][0] - rear[2][0]), Math.abs(rear[1][1] - rear[2][1])))).toBeGreaterThan(28);
   });
 });

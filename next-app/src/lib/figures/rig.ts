@@ -811,15 +811,17 @@ const AD_FIGS: Record<string, Fig> = {
   squat: { kind: "move", dur: 5500, k: [0.05, 0.4, 0.5, 0.8], poster: 0.9, sided: false, tempo: ["control", "drive"], cues: [{ level: "knee", span: ["hip", "knee"], limit: true }, { plumb: "midfoot", to: "bar" }], build(sc, _s, p) { return squatPose(sc, p, 37, "back", 133, 127); } },
   frontsquat: { kind: "move", dur: 5500, k: [0.05, 0.4, 0.5, 0.8], poster: 0.9, sided: false, tempo: ["control", "drive"], cues: [{ level: "knee", span: ["hip", "knee"], limit: true }], build(sc, _s, p) { return squatPose(sc, p, 22, "front", 135, 127); } },
   deadlift: { kind: "move", dur: 5200, k: [0.05, 0.33, 0.43, 0.82], poster: 0, sided: false, tempo: ["drive", "control"], cues: [{ plumb: "midfoot", to: "bar" }], build(sc, _s, p) {
-    // Floor-height setup (trainer + physics review, 2026-10-29): the bar starts 18 px up (a plate on the floor,
+    // Round 2: the exercise is a block pull "mid-shin, ~10-15 cm elevated": the plate sits on 14 px blocks, bar
+    // centre 32 px up, which solves to hip ~70, knee ~115, trunk ~55, shin 10 (floor height gave 52/97/59/14).
+    // Earlier note: floor-height setup (trainer + physics review, 2026-10-29): the bar started 18 px up (a plate on the floor,
     // about mid-shin), the arms are ARM86 long and vertical, so the bar x never moves. With the arms that long a
     // mid-shin pull solves to hip ~53, knee ~97, trunk ~58, shin ~14; the trainer's knee 110-130 is for a higher
     // bar and is not reachable here. The knee is driven, not left to the hips: the shin stands up to ~5 deg while
     // the bar rises past it, so the knee travels back and clears the bar by 10+ px (it used to pass through it).
     // Trunk angle is the result, and holds ~55-59 until the bar is past the knees; then the hips drive through.
     const BX = 172 + 17, arm = ARM86[0] + ARM86[1];
-    const F = [172, 166], S0 = [BX, lerp(148, 92.5, p) - arm];
-    const shin = pwl(p, [[0, 14], [0.3, 7], [0.5, 5], [0.75, 7], [1, 9.4]]);
+    const F = [172, 166], S0 = [BX, lerp(134, 92.5, p) - arm];
+    const shin = pwl(p, [[0, 10], [0.3, 6], [0.5, 5], [0.75, 7], [1, 9.4]]);
     const K0 = [F[0] + 42 * Math.sin(shin * Math.PI / 180), 166 - 42 * Math.cos(shin * Math.PI / 180)];
     const H0 = circleHit(K0, 44, S0, 56), w = ease(clamp01((p - 0.8) / 0.2));
     const H = lerpP(H0, [F[0] + 14.2, 166 - 84.79], w);
@@ -828,13 +830,15 @@ const AD_FIGS: Record<string, Fig> = {
     const B = [S[0], S[1] + arm], K = ikSide(H, F, 44, 42, 1);
     sc.mark("midfoot", [BX, 166]); sc.mark("bar", B);
     sc.floor();
+    // The blocks and the plate sit behind the legs (far plane): the plate used to be drawn over the knee.
+    sc.box(BX - 22, 152, BX + 22, 167);
+    sc.plate(B, 18);
     sc.line([[F[0] - 6, 166], [F[0] + 28, 166]], BODY, 6);
     sc.line([F, K, H], BODY, 8);
     sc.line([H, S], BODY, TORSO);
     sc.dot([S[0] + 14 * Math.sin(lean) + 8, S[1] - 14 * Math.cos(lean)], 11, BODY);
     sc.line([S, B], COL.B, 8);
-    sc.plate(B, 18);
-    return "Block pull: bar at mid-shin, hips back, flat back and straight arms; push the floor away and stand tall with the bar close to the legs, then lower it back to the blocks";
+    return "Block pull: bar at mid-shin on low blocks, hips back, flat back and straight arms; push the floor away and stand tall with the bar close to the legs, then lower it back to the blocks";
   } },
 };
 
@@ -913,6 +917,8 @@ function swingPos(u: number, duty: number) {
   return m * (2 * u ** 3 - 3 * u ** 2 + u) + (3 * u ** 2 - 2 * u ** 3);
 }
 const SWING_OVER = 0.025;
+/** A loaded carry breathes: the ribcage rises about 1 px on a 4 s cycle (trainer r1: the label says controlled breathing). */
+const breathe = (t: number) => -0.9 * Math.sin((2 * Math.PI * t) / 4000);
 /** Front-view carry: foot lifts, and the trunk shifting over the standing foot and rising a little on it. */
 function carryGait(phi: number): { lift: [number, number]; shift: Pt } {
   const lift = (q: number) => { const st = stride(q); return st.stance ? 0 : Math.sin(st.u * Math.PI) * 9; };
@@ -941,7 +947,7 @@ const HIP_FIGS: Record<string, Fig> = {
     // shin vertical); at the bottom the shoulder slides 7 px down the bench and the trunk is 32 deg (was 40), so
     // the shin is ~18 deg (was 32). Knee 100-110 at the bottom is not reachable with the feet fixed: the hips
     // are nearer the feet at the bottom than at the top, so the knee closes, it cannot open.
-    const S = [lerp(125, 118, p), 106], F = [262, 167], th = lerp(32, 0, p);
+    const S = [lerp(125, 118, p), 106], F = [268, 167], th = lerp(32, 0, p);
     const H = P(S, 78, th), K = ik(H, F, 66, 62, true);
     sc.mark("shoulder", S); sc.mark("hip", H); sc.mark("knee", K);
     sc.floor();
@@ -957,15 +963,15 @@ const HIP_FIGS: Record<string, Fig> = {
   } },
   splitsquat: { dur: 5000, kind: "move", k: [0.08, 0.42, 0.54], sided: true, tempo: ["control", "drive"], cues: [{ plumb: "ankle", to: "knee" }], build(sc, side, p) {
     // Front shin stays close to vertical (knee-forward drive loads the front of the hip).
-    // Trainer review: the rear foot sits on a taller bench, further back, so the rear knee flexes to ~75 and
-    // the rear shin leans ~40 at the bottom (it was 57 and 14); the standing top has the front leg nearly
-    // straight and the rear leg soft. About 45% of the load sits on the rear foot: a real split squat
-    // is 15-30%, but a lower rear share needs the hips further forward, which pushes the front shin off vertical.
-    const work = COL[side], F = [192, 166], R = [94, 104], H = lerpP([176, 84], [150, 124], p);
+    // Round 2 (searched numerically over bench height, stance and hip path): the stance is 100 px, the hip
+    // ends 40 px behind the front foot (a forward trunk, 18 deg), so with the front shin at ~5 deg the rear knee
+    // is ~90 and the rear shin ~34 at the bottom, the standing top has both legs ~178 (front knee was 153)
+    // and the rear foot carries ~34% of the load (was ~45%; a real split squat is 15-35%).
+    const work = COL[side], F = [192, 166], R = [92, 108], H = lerpP([174, 78], [152, 118], p);
     const ta = lerp(-82, -72, p), S = P(H, 56, ta), front = leg(H, F), rear = [H, ik(H, R, 44, 42, false), R];
     sc.mark("ankle", F); sc.mark("knee", front[1]);
     sc.floor();
-    sc.box(58, 110, 124, 167);
+    sc.box(58, 114, 124, 167);
     const rest = () => sc.line(rear, side === "R" ? FAR : BODY, 8);
     sc.line([S, P(S, ARM86[0] + ARM86[1], 92)], FAR, 8);
     if (side === "R") rest();
@@ -1027,7 +1033,7 @@ const HIP_FIGS: Record<string, Fig> = {
     sc.dot(hand, lerp(7, 10, p), BODY);
     return "Pallof press: standing side-on to a band anchored at chest height; press the hands straight out from the chest and hold, the trunk refusing to turn toward the anchor, then bring them back";
   } },
-  nordic: { dur: 7000, kind: "move", k: [0.05, 0.6, 0.68, 0.94], poster: 0.7, sided: false, tempo: ["control", "drive"], cues: [{ align: ["knee", "hip", "shoulder"] }], build(sc, _s, p) {
+  nordic: { dur: 8000, kind: "move", k: [0.05, 0.52, 0.58, 0.95], poster: 0.7, sided: false, tempo: ["control", "drive"], cues: [{ align: ["knee", "hip", "shoulder"] }], build(sc, _s, p) {
     // The eccentric is the exercise: ~3.9 s down (was 5.4 s of an 8 s cycle), then a quick push back up with the
     // hands. The body falls to ~85 deg from vertical (trainer review: it stopped at 68), the chest ~13 px off
     // the floor, and the hands catch there, elbows bent like the bottom of a push-up; they stay planted from
@@ -1037,7 +1043,12 @@ const HIP_FIGS: Record<string, Fig> = {
     const free = (q: number): Pt => { const aq = lerp(-88, -5, q), Sq = P(P(K, 44, aq), 56, aq); return P(Sq, arm[0] + arm[1], aq + 150); };
     let pc = 1;   // first moment the swinging hand reaches the floor
     for (let i = 0; i <= 100; i++) if (free(i / 100)[1] >= 166) { pc = i / 100; break; }
-    const hc = free(pc), hand: Pt = p >= pc ? [hc[0], 166] : free(p);
+    const hc = free(pc), plant: Pt = [hc[0], 166];
+    // On the way back up the hands stay planted and push until the arm is straight, then let go and hang
+    // (they used to be released the instant the body passed the catch point: elbow 117 -> 178 in one frame).
+    let pr = 0;
+    for (let i = Math.round(pc * 100); i >= 0; i--) { const q = i / 100, aq = lerp(-88, -5, q), Sq = P(P(K, 44, aq), 56, aq); if (Math.hypot(Sq[0] - plant[0], Sq[1] - plant[1]) >= (arm[0] + arm[1]) * 0.97) { pr = q; break; } }
+    const hand: Pt = p >= pr ? plant : lerpP(plant, free(p), ease(clamp01((pr - p) / 0.15)));
     sc.mark("knee", K); sc.mark("hip", H); sc.mark("shoulder", S);
     sc.floor();
     sc.line([K, A, [92, 166]], BODY, 8);
@@ -1047,18 +1058,21 @@ const HIP_FIGS: Record<string, Fig> = {
     sc.line([S, ikSide(S, hand, arm[0], arm[1], -1), hand], BODY, 8);
     return "Nordic curl: kneeling with the ankles held down; keep knee, hip and shoulder in one line and lower forward as slowly as you can, catch with the hands, push back up";
   } },
-  sled: { dur: 2600, kind: "gait", k: [0, 1, 1], poster: 0.8, sided: false, build(sc, _s, p) {
+  sled: { dur: 2000, kind: "gait", k: [0, 1, 1], poster: 0.8, sided: false, build(sc, _s, p) {
     // Low drive into the sled: trunk about 45°, arms long, one knee drives through while the
     // other leg pushes back straight.
     // Front foot capped under the hip (about 90° hip flexion under load, not deeper).
     // A walk, not a toggle (motion round): each foot pushes back along the floor, then swings through
     // low and lands under the hip; the hips dip a little as the weight passes over each foot.
-    // Trainer + physics review (2026-10-29): the push-off foot sits 57 px behind the hip, so the drive leg
+    // Round 2: ~1.0 s a step (cycle 2.0 s, was 1.3 s a step), a short stride (46 px between the feet, was 67) with
+    // the hips higher (91 px up), so the trailing shin tops at ~56 deg, the swing knee never drives deeper than
+    // hip ~95 / knee ~102, and the drive leg still reaches knee ~168.
+    // Trainer + physics review (2026-10-29): the push-off foot sat 57 px behind the hip, so the drive leg
     // reaches knee ~170 with ankle, hip and shoulder nearly in one line (it stopped at knee 133); the arms are
     // ARM86 long and reach the posts at elbow ~165 (they were bent ~110, 43 px for a 67 px arm); the swing foot
     // clears the ground by 8 px, a short heavy step (it was 18, a shin up to 85 deg).
-    const H = [150, 102 + 1.5 * Math.cos(4 * Math.PI * (p - 0.8))], S = P(H, 56, -42), hand = P(S, 66, 19);
-    const back = 92.5 + 56 * SWING_OVER, front = 160 - 56 * SWING_OVER;   // the swing's drift stays inside 92.5..160
+    const H = [150, 91 + 1.5 * Math.cos(4 * Math.PI * (p - 0.8))], S = P(H, 56, -42), hand = P(S, 66, 19);
+    const back = 110 + 47 * SWING_OVER, front = 157 - 47 * SWING_OVER;   // the swing's drift stays inside 110..157
     const foot2 = (q: number): Pt[] => {
       const st = stride(q);
       return leg(H, st.stance ? [lerp(front, back, st.u), 166] : [lerp(back, front, swingPos(st.u, 0.6)), 166 - Math.sin(st.u * Math.PI) * 8]);
@@ -1066,7 +1080,7 @@ const HIP_FIGS: Record<string, Fig> = {
     const near = foot2(p), far = foot2(p + 0.5);
     sc.floor();
     sc.ground(p * (front - back) / 0.6, (front - back) / 1.2);
-    sc.line([[hand[0] - 4, 76], [hand[0] + 8, 166]], PROP, 5);
+    sc.line([[hand[0] - 4, 66], [hand[0] + 8, 166]], PROP, 5);
     sc.box(hand[0] + 8, 136, hand[0] + 80, 166);
     sc.line(far, FAR, 8);
     sc.line([S, ikSide(S, hand, ARM86[0], ARM86[1], -1), hand], FAR, 8);
@@ -1074,14 +1088,14 @@ const HIP_FIGS: Record<string, Fig> = {
     sc.line(near, COL.B, 8);
     const h2 = add(hand, [0, 4]);
     sc.line([S, ikSide(S, h2, ARM86[0], ARM86[1], -1), h2], BODY, 8);
-    return "Heavy sled push: hands high on the sled posts, trunk leaning in at about 45°, arms long; drive one knee through at a time with short powerful steps";
+    return "Heavy sled push: hands high on the sled posts, trunk leaning in at about 45°, arms long; drive one knee through at a time with short, heavy steps of about a second each";
   } },
-  suitcase: { dur: 1100, kind: "gait", k: [0, 1, 1], poster: 0.8, sided: true, front: true, cues: [{ plumb: "mid", to: "head" }], build(sc, side, p) {
+  suitcase: { dur: 1100, kind: "gait", k: [0, 1, 1], poster: 0.8, sided: true, front: true, cues: [{ plumb: "mid", to: "head" }], build(sc, side, p, _r, t = 0) {
     // Front view: the loaded arm hangs straight, the trunk stays vertical and does not lean toward it.
     // It shifts sideways over the standing foot as a whole, upright, which is not a lean.
     // Cadence ~0.55 s a step (trainer review; it was 1.2 s), feet at hip width and the trunk swaying
     // +-7 px so the weight is over the stance foot in single support (physics review).
-    const work = COL[side], g = carryGait(p), sh: Pt = [g.shift[0] * 2.8, g.shift[1]];
+    const work = COL[side], g = carryGait(p), sh: Pt = [g.shift[0] * 2.8, g.shift[1] + breathe(t)];
     sc.mark("mid", [179, 88]); sc.mark("head", [179, 6]);
     carryBody(sc, g.lift, sh);
     const loaded = add(side === "R" ? [158, 36] : [200, 36], sh), free = add(side === "R" ? [200, 36] : [158, 36], sh);
@@ -1092,8 +1106,8 @@ const HIP_FIGS: Record<string, Fig> = {
     sc.badge(add(hand, [-fs * 22, 4]), work, side);
     return "Suitcase carry, weight in the " + sideWord(side) + " hand: walk tall with small steps, ribs down, the trunk staying upright instead of leaning toward the load";
   } },
-  farmer: { dur: 1100, kind: "gait", k: [0, 1, 1], poster: 0.8, sided: false, front: true, build(sc, _s, p) {
-    const g = carryGait(p), sh: Pt = [g.shift[0] * 2.8, g.shift[1]];
+  farmer: { dur: 1100, kind: "gait", k: [0, 1, 1], poster: 0.8, sided: false, front: true, build(sc, _s, p, _r, t = 0) {
+    const g = carryGait(p), sh: Pt = [g.shift[0] * 2.8, g.shift[1] + breathe(t)];
     carryBody(sc, g.lift, sh);
     for (const [s0, dx] of [[[158, 36], -5], [[200, 36], 5]] as [Pt, number][]) {
       const s = add(s0, sh), hand = add(s, [dx, ARM86[0] + ARM86[1]]);
@@ -1102,7 +1116,7 @@ const HIP_FIGS: Record<string, Fig> = {
     return "Farmer's carry: a heavy weight in each hand, arms long; walk tall with small fast steps and controlled breathing";
   } },
   airsquat: { kind: "move", dur: 5500, k: [0.05, 0.4, 0.5, 0.8], poster: 0.9, sided: false, tempo: ["control", "drive"], cues: [{ level: "knee", span: ["hip", "knee"], limit: true }], build(sc, _s, p) { return squatPose(sc, p, 30, "air", 134, 119); } },
-  goblet: { kind: "move", dur: 5500, k: [0.05, 0.4, 0.5, 0.8], poster: 0.9, sided: false, tempo: ["control", "drive"], cues: [{ level: "knee", span: ["hip", "knee"], limit: true }], build(sc, _s, p) { return squatPose(sc, p, 26, "goblet", 134, 127); } },
+  goblet: { kind: "move", dur: 5500, k: [0.05, 0.4, 0.5, 0.8], poster: 0.9, sided: false, tempo: ["control", "drive"], cues: [{ level: "knee", span: ["hip", "knee"], limit: true }], build(sc, _s, p) { return squatPose(sc, p, 26, "goblet", 137, 127); } },
   amarch: { dur: 3000, kind: "move2", k: [0.05, 0.4, 0.62], sided: false, cues: [{ angle: ["knee", "hip", "shoulder"] }], build(sc, _s, p, rep = 0) {
     // Knee to a level thigh (90°) and no higher; the opposite arm drives forward to ~65° of shoulder flexion
     // with the elbow at ~90, the other arm swings back ~40° (ARM86; trainer review 11).
@@ -1182,8 +1196,8 @@ function squatPose(sc: Scene, p: number, leanDeg: number, load: "back" | "front"
     const bell = [S[0] + 16, S[1] + 18];
     sc.mark("bar", bell);
     sc.line([S, [S[0] + 4, S[1] + 26], bell], COL.B, 8);
-    sc.ring(bell, 9, PROP, 3); sc.ring(add(bell, [0, -11]), 4, PROP, 3);
-    return "Goblet squat: a dumbbell or kettlebell held at the chest, elbows down; sit down between the hips keeping the chest tall and the knees out, then stand";
+    sc.ring(bell, 11, PROP, 3); sc.ring(add(bell, [0, -13]), 5, PROP, 3);
+    return "Goblet squat: a dumbbell or kettlebell held at the chest, elbows down; sit down between the hips keeping the chest tall, pressing the knees out with the elbows inside them, then stand";
   }
   if (load === "front") {
     // Front rack: the upper arm points forward, nearly level (elbows high), the hand back at the bar.
