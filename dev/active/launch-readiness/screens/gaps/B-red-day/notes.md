@@ -2,59 +2,105 @@ e2e-persona-pullup-fast@example.test: no loadable session today (rest day or fin
 
 e2e-persona-pullup@example.test: no loadable session today (rest day or finished), skipped
 
-Red-day user: e2e-persona-strength@example.test (concurrent-strength-maintenance), session scheduled today
+e2e-persona-handstand@example.test: no loadable session today (rest day or finished), skipped
+
+e2e-persona-handstand-fast@example.test: no loadable session today (rest day or finished), skipped
+
+e2e-persona-strength@example.test: no loadable session today (rest day or finished), skipped
+
+e2e-persona-strength-slow@example.test: no loadable session today (rest day or finished), skipped
+
+e2e-persona-pullup-fast@example.test: moved 2026-10-30 → today; session page: YOU FINISHED /  / First Strict Pull-Up /  / 8 weeks logged. Nice. /  / WHERE YOU LANDED /  / Strict pull-up max reps / 0 reps / +0 reps / Dead hang (max seconds) / 11s / +0s /  / Keep going 
+
+e2e-persona-pullup-fast@example.test: no session in the next 3 days could be moved to today
+
+e2e-persona-pullup@example.test: moved 2026-10-30 → today; session page: FIRST STRICT PULL-UP /  / Thursday /  / 6 exercises · 25–30 min · week 7 of 8 /  / Follow along · / Dead hangs / 2 moves · with a timer / Dead hang (passive) / 4 sets / Active hang (
+
+e2e-persona-pullup@example.test: moved the 2026-10-30 session to today via Plan → Move…
+
+Red-day user: e2e-persona-pullup@example.test (first-strict-pullup), session scheduled today
 
 ## 00-session-before-check
-url: https://app.terav.fit/session/concurrent-strength-maintenance/
+url: https://app.terav.fit/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
 
-CONCURRENT-STRENGTH MAINTENANCE
+FIRST STRICT PULL-UP
 
 Thursday
 
-About 30 min · week 5 of 8
+6 exercises · 25–30 min · week 7 of 8
 
-Today's session
-
-Norwegian 4×4 · Row / Ski
-
-32 MIN
-
-4×4 min @ 90-95% max HR, 3 min active recovery. ≥6h from any lift (Robineau 2016).
-
+Follow along ·
+Dead hangs
+2 moves · with a timer
+Dead hang (passive)
+4 sets
+Active hang (scap-engaged)
+3 sets
+Follow along ·
+Ring rows
+3 moves · with a timer
+Ring row (incline, easy)
+3 sets
+Ring row (horizontal)
+4 sets
+Ring row (feet elevated)
+4 sets
+Follow along ·
+Shoulder and grip prep
+1 move · with a timer
+Band shoulder prep (I-Y-T + face pull)
+2 sets
+How to run this
+›
 Log an extra session
 ›
-Log this session
+Start session
 Today
 Plan
 Record
 Profile
 
 ## 00b-today-before-check
-url: https://app.terav.fit/session/concurrent-strength-maintenance/
+url: https://app.terav.fit/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
 
-CONCURRENT-STRENGTH MAINTENANCE
+FIRST STRICT PULL-UP
 
 Thursday
 
-About 30 min · week 5 of 8
+6 exercises · 25–30 min · week 7 of 8
 
-Today's session
-
-Norwegian 4×4 · Row / Ski
-
-32 MIN
-
-4×4 min @ 90-95% max HR, 3 min active recovery. ≥6h from any lift (Robineau 2016).
-
+Follow along ·
+Dead hangs
+2 moves · with a timer
+Dead hang (passive)
+4 sets
+Active hang (scap-engaged)
+3 sets
+Follow along ·
+Ring rows
+3 moves · with a timer
+Ring row (incline, easy)
+3 sets
+Ring row (horizontal)
+4 sets
+Ring row (feet elevated)
+4 sets
+Follow along ·
+Shoulder and grip prep
+1 move · with a timer
+Band shoulder prep (I-Y-T + face pull)
+2 sets
+How to run this
+›
 Log an extra session
 ›
-Log this session
+Start session
 Today
 Plan
 Record
@@ -84,17 +130,17 @@ Regions
 
 Mild: barely there. Notable: you notice it. Severe: it limits you.
 
-Low back
-✓ None
-Mild
-Notable
-Severe
-Knee
-✓ None
-Mild
-Notable
-Severe
 Shoulder
+✓ None
+Mild
+Notable
+Severe
+Elbow
+✓ None
+Mild
+Notable
+Severe
+Low back
 ✓ None
 Mild
 Notable
@@ -134,7 +180,7 @@ Thursday 29 Oct
 
 Back off
 
-Low back is above 5/10.
+Shoulder is above 5/10.
 
 Next step: skip hard training today. If this is night pain, a sudden change, or it isn't settling, talk to a doctor or physio. Terav isn't medical advice.
 
@@ -144,17 +190,17 @@ Regions
 
 Mild: barely there. Notable: you notice it. Severe: it limits you.
 
-Low back
+Shoulder
 None
 Mild
 Notable
 ✓ Severe
-Knee
+Elbow
 ✓ None
 Mild
 Notable
 Severe
-Shoulder
+Low back
 ✓ None
 Mild
 Notable
@@ -190,10 +236,10 @@ Skip to content
 
 TODAY
 
-Concurrent-Strength Maintenance
+First Strict Pull-Up
 Rest today.
 
-Your low back is 8/10, so hard training waits. If it isn’t settling, see a physio or doctor.
+Your shoulder is 8/10, so hard training waits. If it isn’t settling, see a physio or doctor.
 
 Log how it feels
 Today
@@ -209,10 +255,10 @@ Skip to content
 
 TODAY
 
-Concurrent-Strength Maintenance
+First Strict Pull-Up
 Rest today.
 
-Your low back is 8/10, so hard training waits. If it isn’t settling, see a physio or doctor.
+Your shoulder is 8/10, so hard training waits. If it isn’t settling, see a physio or doctor.
 
 Log how it feels
 Today
@@ -228,10 +274,10 @@ Skip to content
 
 TODAY
 
-Concurrent-Strength Maintenance
+First Strict Pull-Up
 Rest today.
 
-Your low back is 8/10, so hard training waits. If it isn’t settling, see a physio or doctor.
+Your shoulder is 8/10, so hard training waits. If it isn’t settling, see a physio or doctor.
 
 Log how it feels
 Today
@@ -240,20 +286,20 @@ Record
 Profile
 
 ## 06-session-on-red-day
-url: https://app.terav.fit/session/concurrent-strength-maintenance/
+url: https://app.terav.fit/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
 
 TODAY
 
-Concurrent-Strength Maintenance
+First Strict Pull-Up
 Rest today.
 
-Your low back is 8/10, so hard training waits. If it isn’t settling, see a physio or doctor.
+Your shoulder is 8/10, so hard training waits. If it isn’t settling, see a physio or doctor.
 
 Log how it feels
-Back to Today
+Optional: Rest, or shoulder prep and hollow-body work only. No hanging.Back to Today
 Today
 Plan
 Record
@@ -270,8 +316,8 @@ Plan
 
 Your week at a glance. Tap a day to see it, move it or skip it.
 
-CONCURRENT-STRENGTH MAINTENANCE
-5/8
+FIRST STRICT PULL-UP
+7/8
 ‹
 
 26 Oct → 1 Nov
@@ -279,70 +325,38 @@ CONCURRENT-STRENGTH MAINTENANCE
 This week
 
 ›
-Intervals · Weeks 3–6 · Add Norwegian 4×4 once/week. Hold strength at RPE ≤ 7. Week 4 is the deload.
-
-THIS WEEK
-
-You've missed 1 of 2 this week.
-
-×
-
-Nothing here is a failure — the plan reads a missed week the same way it reads a good one. Pick whichever of these matches what actually happened.
-
-Skip what's missed
-
-Marks that day skipped. Rest of the week runs as scheduled — progression order breaks if you're on a wave.
-
-Shift the week
-
-Each remaining session moves up to cover the gap. The last scheduled day this week drops. Recommended if you're mid-wave.
-
-Push the week out
-
-Every remaining session this week moves out exactly 7 days. This week becomes a rest week.
-
-OR TELL TERAV WHY — OPTIONAL
-
-Ill
-Something hurts
-Just busy
-
-WHAT A SKIPPED WEEK DOES
-
-Nothing punitive. Your training max holds where it is, and the record shows the gap honestly rather than silently backfilling it.
-
-concurrent strength maintenance: planned
+Mixed practice · After your first rep: each session mixes 2–3 drills for the parts still holding you back.
+first strict pullup: planned
 Mon
 26 Oct
-· 2 logged
+· 1 logged
 
-Strength · Heavy
+Hollow-body holds + Dead hangs — build grip time + Shoulder and grip prep
 
-concurrent strength maintenance: done
 Tue
 27 Oct
-· 1 activity
+Rest
 
-Zone 2 · Bike
+Rest / accessory day
 
-concurrent strength maintenance: planned
+first strict pullup: planned
 Wed
 28 Oct
 
-Strength · Moderate
+Ring rows — pulling with feet down + Shoulder-blade pulls — scap pull-ups + Shoulder and grip prep
 
-concurrent strength maintenance: done
+first strict pullup: moved
 Thu
 29 Oct
 TODAY
 
-Norwegian 4×4 · Row / Ski
+Dead hangs — build grip time + Ring rows — pulling with feet down + Shoulder and grip prep
 
-concurrent strength maintenance: planned
 Fri
 30 Oct
+Rest
 
-Zone 2 · Row / Ski
+Rest / accessory day
 
 Sat
 31 Oct
@@ -350,4 +364,15 @@ Rest
 
 Rest / accessory day
 
-concurrent strength mai
+Sun
+1 Nov
+Rest
+
+Rest / accessory day
+
+▸
+Show rules of the week
+Today
+Plan
+Record
+Profile
