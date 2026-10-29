@@ -272,6 +272,22 @@ describe("figure rig", () => {
     expect(Math.abs(early - start)).toBeLessThan(12);
   });
 
+  it("a planted foot or hand sits on one ground mark for its whole stance (no moonwalk)", () => {
+    // Camera follows the athlete; the ground marks scroll back at stance speed (physics review).
+    for (const [id, dur] of [["sled", 2600], ["hswalk", 3600]] as const) {
+      const at = (t: number) => {
+        const f = drawFigure(id, "B", t, false);
+        const marks = f.slots.find((s) => s.bg && s.dash !== "none")!;
+        const near = used(f).filter((s) => s.color === BOTH && s.w === 8).map((s) => pts(s.pts)).find((p) => p[p.length - 1][1] >= 165.5 || p[0][1] >= 165.5)!;
+        const contact = near[near.length - 1][1] >= 165.5 ? near[near.length - 1] : near[0];
+        return contact[0] - pts(marks.pts)[0][0];
+      };
+      // The near limb is planted for the first ~55-60% of the cycle.
+      const ref = at(dur * 0.05);
+      for (const q of [0.15, 0.25, 0.35, 0.45]) expect(at(dur * q), `${id}@${q}`).toBeCloseTo(ref, 0);
+    }
+  });
+
   it("walks and carries always have a foot (or a hand) on the ground", () => {
     const grounded = (id: string, t: number) =>
       used(drawFigure(id, "B", t, false)).filter((s) => s.w === 8).some((s) => pts(s.pts).some((q) => q[1] >= 165.5));

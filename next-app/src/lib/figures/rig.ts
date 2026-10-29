@@ -210,6 +210,17 @@ class Scene {
     this.hasFloor = true;
     this.bg([[-600, 168], [960, 168]], FLOOR, 2);
   }
+  /**
+   * Ground marks under the floor line that scroll backward by `scroll` (physics review, 2026-10-29): the
+   * camera follows a walking figure, so a planted foot moves back with the ground and sits on one mark for
+   * its whole stance. A plain line under a sliding foot read as a moonwalk. `gap` must divide the scroll of
+   * one cycle so the loop is seamless.
+   */
+  ground(scroll: number, gap: number) {
+    const off = ((scroll % gap) + gap) % gap;
+    this.bg([[-600 - off, 172], [960, 172]], FLOOR, 2);
+    this.items[this.items.length - 1].dash = `6 ${gap - 6}`;
+  }
 }
 function tf(scale: number) { return scale === 1 ? "" : "translate(179 160) scale(" + scale + ") translate(-179 -168)"; }
 function sideWord(s: string) { return s === "L" ? "left" : s === "R" ? "right" : "both"; }
@@ -365,6 +376,14 @@ const foot = (sc: Scene, F: Pt, color = BODY) => sc.line([[F[0] - 4, 166], [F[0]
 // Upright proportions (2026-10-28 review: legs were 58 on the bar and in handstands, 86 standing):
 // leg 80 (41 + 39) under a 56-58 trunk on every bar and handstand figure.
 const LEG = 80;
+/**
+ * Arm lengths from anthropometry (Winter, Biomechanics and Motor Control of Human Movement: shoulder to grip
+ * is about 0.78 of hip to ankle). Upright arms had been 52-54 under an 86 leg (0.62), which put a farmer's
+ * kettlebells at hip height, bent the sled pusher's elbows and made a mid-shin deadlift unreachable
+ * (trainer + physics review, 2026-10-29). Upper arm, then forearm to the grip centre.
+ */
+const ARM86: [number, number] = [35, 32];   // standing figures, leg 44 + 42
+const ARM80: [number, number] = [32, 30];   // bar and handstand figures, leg 80
 
 type Glyph = "up" | "single" | "slow" | "short" | "down" | "downShort" | "hold" | "holdMid" | "lift" | "liftHold";
 /**
@@ -614,6 +633,7 @@ const AD_FIGS: Record<string, Fig> = {
     const near = hand(p), far = hand(p + 0.5);
     const S = [180 + 2 * Math.cos(2 * Math.PI * (p - 0.25)), 122], a = -88, H = P(S, 56, a);
     sc.floor();
+    sc.ground(p * 18 / 0.55, 18 / 1.1);
     sc.line([far, S], FAR, 8);
     sc.line([H, P(H, LEG, a - 3)], BODY, 8); sc.line([S, H], BODY, TORSO);
     sc.dot(P(S, 18, a + 155), 10, BODY);
@@ -846,6 +866,7 @@ const HIP_FIGS: Record<string, Fig> = {
     };
     const near = foot2(p), far = foot2(p + 0.5);
     sc.floor();
+    sc.ground(p * (front - back) / 0.6, (front - back) / 1.2);
     sc.line([[238, 76], [250, 166]], PROP, 5);
     sc.box(246, 136, 318, 166);
     sc.line(far, FAR, 8);
