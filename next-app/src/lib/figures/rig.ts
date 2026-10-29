@@ -622,7 +622,7 @@ function wristFig(fingers: boolean, label: string): Fig {
   // Wrist prep: shoulders travel ~11 px (about 10 deg of arm) past the wrists and the hips follow, the
   // trunk keeps its angle. Finger raises: 1 s up, 1 s hold, ~1.5 s down, fingers 40 deg off the floor.
   return { kind: "move", dur: fingers ? 4000 : 6000, k: fingers ? [0.05, 0.3, 0.55, 0.92] : [0.08, 0.4, 0.62, 0.94], sided: false, build(sc, _s, p) {
-    const hand: Pt = [208, 166], arm = ARM80[0] + ARM80[1], a = fingers ? 0 : lerp(0, 11.5, ease(p)), S = P(hand, arm, -90 + a);
+    const hand: Pt = [208, 166], arm = ARM80[0] + ARM80[1], a = fingers ? 1.4 * p : lerp(0, 11.5, ease(p)), S   /* r3b: fingers: the forearm leans ~1.5 px forward as they lift */ = P(hand, arm, -90 + a);
     const K: Pt = [152, 160], H = ik(K, S, 41, 56, true);
     sc.floor();
     sc.line([[K[0] - 39, 166], K, H], BODY, 8);
@@ -773,7 +773,7 @@ const AD_FIGS: Record<string, Fig> = {
   wallhs_taps: handstand({ lean: 6, kind: "move", wall: true, act: "taps", label: "Wall handstand shoulder taps: chest to the wall, shift onto one arm and tap the opposite shoulder, then switch" }),
   hsfree: handstand({ lean: 0, kind: "move", label: "Freestanding handstand: hands shoulder-width on the floor, arms straight, body stacked over the hands, small balance corrections through the fingers" }),
   hstuck: handstand({ lean: 0, kind: "move", tuck: true, label: "Tuck handstand: arms straight, knees drawn in toward the chest, hips stacked over the hands" }),
-  hswalk: { kind: "gait", dur: 3600, k: [0, 1, 1], poster: 0.8, sided: false, scale: 0.95, build(sc, _s, p) {
+  hswalk: { kind: "gait", dur: 3600, k: [0, 1, 1], poster: 0.75, sided: false, scale: 0.95, build(sc, _s, p) {
     // One hand steps (24 px, ~25 cm) while the other stays planted; then they swap. The body holds its place
     // and the planted hand moves back under it, as on a treadmill, so the loop never jumps. The line leans
     // 1 -> 6 deg toward the step as a hand leaves the floor (weight shift) and returns after; the legs scissor
@@ -790,10 +790,10 @@ const AD_FIGS: Record<string, Fig> = {
     const planted = [near, far].filter((h) => h[1] > 167.9), dx = Math.max(...planted.map((h) => Math.abs(h[0] - sx)));
     const S: Pt = [sx, 168 - Math.sqrt(arm * arm - dx * dx)];
     // Weight shift: the hips drift 3 px toward the step as the lean peaks (r2 animator), the legs scissor ~12 deg.
-    // r3 (biomechanist): over the 0.4 s before each lift (0.11 of the cycle) the hip also counter-drifts 3.5 px toward the
+    // r3 (biomechanist): over the 0.4 s before each lift (0.11 of the cycle) the hip also counter-drifts 6 px toward the
     // hand that stays planted, and lets go once the other hand is off the floor.
     const v = (p - 0.05 + 1) % 0.5, wl = v >= 0.389 ? ease((v - 0.389) / 0.111) : v < 0.1 ? 1 - ease(v / 0.1) : 0;
-    const H = add(P(S, 56, a), [1.5 + 1.5 * Math.cos(4 * Math.PI * (p - 0.275)) - 3.5 * wl, 0]);
+    const H = add(P(S, 56, a), [1.5 + 1.5 * Math.cos(4 * Math.PI * (p - 0.275)) - 6 * wl, 0]);
     const split = 12 * Math.sin(2 * Math.PI * p);
     // A walking hand leaves the floor with a locked elbow: the arm hangs from the shoulder, which lifts up to
     // 7 px on the free side (shoulder-girdle elevation), so the elbow never closes past ~165 (r2 trainer).
@@ -862,8 +862,11 @@ const AD_FIGS: Record<string, Fig> = {
     // planted: the feet climb with the hands fixed (the hips pike up), then the hands walk in (the body
     // straightens), or hands first when the feet would otherwise have to stretch past the body length.
     const arm = ARM80[0] + ARM80[1], L = 56 + LEG, N = 6, sy = 168 - arm, fy0 = 154, fyN = sy - Math.sqrt(L * L - 46 * 46);
-    // r3: the first two steps are the biggest (front-loaded), so the hand-walk-in and the pike show from the first step.
-    const fyAt = (i: number) => lerp(fy0, fyN, Math.pow(i / N, 0.7)), hxAt = (i: number) => 300 - Math.sqrt(Math.max(1, L * L - (sy - fyAt(i)) ** 2));
+    // r3b (hand-balance rescore 3): steps 1-2 are the big ones. The feet climb 54 and 45 px and the body PIKES (chord
+    // shortens to 112 then 100 of the 136) so the hands walk in 17 and 24 px; the later steps lengthen the body again
+    // back to the stack against the wall. Trunk is ~50 by a quarter of the cycle.
+    const FY = [fy0, 115, 80, 55, 30, 5, fyN], LC = [L, 118, 114, 116, 122, 130, L];
+    const fyAt = (i: number) => FY[i], hxAt = (i: number) => 300 - Math.sqrt(Math.max(1, LC[i] * LC[i] - (sy - FY[i]) ** 2));
     const i = p >= 1 ? N - 1 : Math.min(N - 1, Math.floor(p * N)), x = p >= 1 ? 1 : p * N - i;
     const feetFirst = Math.abs(sy - fyAt(i + 1)) <= Math.abs(sy - fyAt(i));
     const m1 = ease(clamp01(x / 0.3)), m2 = ease(clamp01((x - 0.45) / 0.3));

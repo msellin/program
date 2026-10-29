@@ -17,3 +17,8 @@ Note: knee 125 test range in kickup updated 120-130; the old fingerraise/hstuck 
 - wallhs_shrug 8: head dip + chevron -> head distance 18 -> 7 (11 px), accent chevron beside the shoulders fading in with the rise.
 - wallhs_taps 8: route was "accept"; added a small accent ring at the tap point fading in over p 0.7-1.
 - wallwalk 8: first steps compressed -> foot-height progress front-loaded (i/N)^0.7, so step 1-2 are the largest; the planted-pair test still passes. Rendered at 0.9/1.8/2.7/4.5 s: plank, pike, and the hand-walk-in now differ by step.
+
+## Third pass (rescore 3: 73-r3-handbalance.md)
+- hswalk 8: poster 0.8 -> 0.75 (mid-step, legs open about +-12 deg: tile shows the V, tested, leg gap > 14 px); planted-side hip counter-drift 3.5 -> 6 px (test window -5..-7 after the 0.95 scale). Elbow > 163 and ground-mark tests unchanged.
+- wallwalk 8: waypoint table instead of the power curve: feet y 154,115,80,55,30,5,-22 (steps 1-2 climb 39 and 35 px) and body chord 136,118,114,116,122,130,136 so the body pikes then lengthens. Trunk 70 -> 52 at 25% of the cycle (tested 44-58), hands walk in 16 px by then (about 9 and 7 per step: under the 15+ per step ask; a deeper pike dropped trunk to 22 at 25%, the two numbers trade off), staircase visible in rendered strips at 0/0.9/1.8/2.25/2.7/3.6/4.5/6 s, final pose a near-vertical stack against the wall (trunk 19, hands 46 from the wall). Planted-pair test (one pair per slot, 0.5 px hold, >= 10 runs) still green.
+- fingerraise 8: shoulder leans 1.4 deg (1.5 px) forward as the fingers lift, tested 1-2.5 px.
