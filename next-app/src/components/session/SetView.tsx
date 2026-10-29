@@ -19,6 +19,7 @@ import { BottomSheet } from "@/components/session/shared/BottomSheet";
 import { ExerciseFigure } from "@/components/follow-along/ExerciseFigure";
 import { DemoVideo } from "@/components/follow-along/DemoVideo";
 import { figureFor } from "@/lib/figures/exercise-figures";
+import { loggingKind, type LoggingKind } from "@/lib/logging-kind";
 import { lastComparison, setRole } from "@/lib/prescription-line";
 import { demoAutoplayAsked, readDemoAutoplayPref, useDemoAutoplayPref } from "@/lib/useUserPrefs";
 
@@ -237,6 +238,15 @@ export function SetView({
     active.schemeRowCount != null && activeSetIndex >= active.schemeRowCount
       ? sets.slice(0, activeSetIndex).reverse().find((s) => s.weight_kg != null && s.failed !== true) ?? null
       : null;
+  // What a set of this exercise records. Rails that predate `kind` fall back to
+  // the old category proxy, so OffPlanSession is unchanged.
+  const kind: LoggingKind = active.kind ?? (active.isLoadable ? "load_reps" : loggingKind(active.exercise));
+  const isDistance = kind === "distance_load";
+  const loadOptional = kind === "load_optional";
+  const hasLoad = kind === "load_reps" || loadOptional || isDistance;
+  const [distance, setDistance] = useState<number>(
+    () => setForRow.distance_m ?? active.item?.distance_m ?? num("distance_m") ?? 20,
+  );
   const [weight, setWeight] = useState<number>(
     () => setForRow.weight_kg ?? prescribed?.kg ?? priorRowToday?.weight_kg ?? prev?.weight_kg ?? 0,
   );
@@ -386,7 +396,10 @@ export function SetView({
       active.exercise.id,
       activeSetIndex,
       {
-        weight_kg: active.isLoadable ? weight : null,
+        // load_reps always records its weight; the optional kinds record a
+        // load only when there is one, so bodyweight is null, never 0.
+        weight_kg: active.isLoadable ? weight : hasLoad && weight > 0 ? weight : null,
+        ...(isDistance ? { distance_m: distance } : {}),
         // `failed` is written explicitly either way. Undefined would leave a
         // stale `true` in place when a mis-tapped miss is corrected back to
         // a made set through the pips — `updateSet` merges.
@@ -651,9 +664,11 @@ export function SetView({
                         ? `Set ${i + 1}, missed ${logged.weight_kg} kilos. Edit.`
                         : logged.seconds != null
                           ? `Set ${i + 1}, held ${logged.seconds} seconds. Edit.`
-                          : active.isLoadable
-                            ? `Set ${i + 1}, logged ${logged.weight_kg} kilos by ${logged.reps} reps. Edit.`
-                            : `Set ${i + 1}, logged ${logged.reps} reps. Edit.`
+                          : isDistance
+                            ? `Set ${i + 1}, logged ${logged.distance_m ?? distance} metres${logged.weight_kg != null ? ` at ${logged.weight_kg} kilos` : ""}. Edit.`
+                            : active.isLoadable || logged.weight_kg != null
+                              ? `Set ${i + 1}, logged ${logged.weight_kg} kilos by ${logged.reps} reps. Edit.`
+                              : `Set ${i + 1}, logged ${logged.reps} reps. Edit.`
                       : `Set ${i + 1}${optionalRow ? ", optional" : ""}, not logged yet`
                   }
                   className={
@@ -686,9 +701,13 @@ export function SetView({
                           "miss"
                         : logged.seconds != null
                           ? `${logged.seconds}s`
-                          : active.isLoadable
-                            ? `${logged.weight_kg}×${logged.reps}`
-                            : `${logged.reps}`
+                          : isDistance
+                            ? logged.weight_kg != null
+                              ? `${logged.weight_kg} kg`
+                              : `${logged.distance_m ?? distance} m`
+                            : active.isLoadable || logged.weight_kg != null
+                              ? `${logged.weight_kg}×${logged.reps}`
+                              : `${logged.reps}`
                       : planned && active.isLoadable
                         ? `${planned.kg}`
                         : "·"}
@@ -734,6 +753,22 @@ export function SetView({
               <span className="text-h3 font-medium text-muted">kg</span>
             </p>
           ) : null}
+          {loadOptional ? (
+            weight > 0 ? (
+              <p className="flex items-baseline gap-1.5">
+                <span className="text-metric leading-none font-semibold tracking-[-.04em] tabular-nums text-strong">{weight}</span>
+                <span className="text-h3 font-medium text-muted">kg</span>
+              </p>
+            ) : (
+              <p className="text-h2 font-semibold tracking-[-.02em] text-strong">Bodyweight</p>
+            )
+          ) : null}
+          {isDistance ? (
+            <>
+              <p className="text-metric leading-none font-semibold tracking-[-.04em] tabular-nums text-strong">{`${distance} m`}</p>
+              <p className="text-h3 font-medium text-muted mt-1">{weight > 0 ? `${weight} kg` : "— kg"}</p>
+            </>
+          ) : null}
           {isHold ? (
             <>
               <p className="text-[64px] [@media(max-height:700px)]:text-[52px] leading-none font-semibold tracking-[-.04em] tabular-nums text-strong">
@@ -752,16 +787,16 @@ export function SetView({
                 {perSide ? ` · side ${sideIndex + 1} of 2` : ""}
               </p>
             </>
-          ) : (
+          ) : isDistance ? null : (
             <p
               className={
-                active.isLoadable
+                active.isLoadable || loadOptional
                   ? "text-h2 font-semibold tracking-[-.02em] text-strong mt-0.5"
                   : "text-[64px] [@media(max-height:700px)]:text-[52px] leading-none font-semibold tracking-[-.04em] text-strong"
               }
             >
-              {active.isLoadable ? "× " : ""}
-              {isAmrap ? `${reps} or more` : active.isLoadable ? reps : `${reps} ${reps === 1 ? "rep" : "reps"}`}
+              {active.isLoadable || loadOptional ? "× " : ""}
+              {isAmrap ? `${reps} or more` : active.isLoadable || loadOptional ? reps : `${reps} ${reps === 1 ? "rep" : "reps"}`}
             </p>
           )}
           {plates ? (
@@ -905,7 +940,7 @@ export function SetView({
                 note, and the set logged at 93.5 — feeding the wrong number
                 straight into TM inference, which reads weight × reps. The
                 rep grid still confirms; this just lets the kg be right. */}
-            {editingLoad && active.isLoadable ? (
+            {editingLoad && hasLoad && !isDistance ? (
               <div className="rounded-lg bg-surface-2 p-3 mb-2.5 flex flex-col gap-2">
                 <StepperRow label="kg" value={weight} step={2.5} onChange={setWeight} />
                 <div className="flex items-center justify-between pt-0.5">
@@ -982,14 +1017,14 @@ export function SetView({
                 </button>
               </div>
             )}
-            {active.isLoadable ? (
+            {hasLoad && !isDistance ? (
               <div className="flex gap-2 mt-2">
                 <button
                   type="button"
                   onClick={() => onEditingLoad(!editingLoad)}
                   className="flex-1 h-11 rounded-xl border border-line-strong bg-surface-2 text-ink text-small font-medium"
                 >
-                  {editingLoad ? "Hide" : "Change weight"}
+                  {editingLoad ? "Hide" : loadOptional && weight === 0 ? "Add weight" : "Change weight"}
                 </button>
                 {/* Every 5/3/1 top set is an AMRAP, so the heavy single a
                     person actually misses lands in THIS branch, not the
@@ -1009,20 +1044,23 @@ export function SetView({
           <>
             {editingLoad ? (
               <div className="rounded-lg bg-surface-2 p-3 mb-2.5 flex flex-col gap-2">
-                {active.isLoadable ? (
+                {isDistance ? (
+                  <StepperRow label="m" value={distance} step={5} onChange={setDistance} />
+                ) : null}
+                {hasLoad ? (
                   <StepperRow label="kg" value={weight} step={2.5} onChange={setWeight} />
                 ) : null}
-                <StepperRow label="reps" value={reps} step={1} onChange={setReps} />
+                {isDistance ? null : <StepperRow label="reps" value={reps} step={1} onChange={setReps} />}
                 <div className="flex items-center justify-between pt-0.5">
                   <span className="text-caption uppercase tracking-[.14em] text-ink">
-                    {active.isLoadable ? "Steps of 2.5 kg" : "Steps of 1 rep"}
+                    {isDistance ? "Steps of 5 m" : hasLoad ? "Steps of 2.5 kg" : "Steps of 1 rep"}
                   </span>
                   {prescribed ? (
                     <button
                       type="button"
                       onClick={() => {
                         if (active.isLoadable) setWeight(prescribed.kg);
-                        setReps(parseInt(prescribed.reps, 10) || reps);
+                        if (!isDistance) setReps(parseInt(prescribed.reps, 10) || reps);
                       }}
                       className="text-slate text-caption"
                     >
@@ -1045,7 +1083,13 @@ export function SetView({
             >
               {active.isLoadable
                 ? `${isEditingLoggedSet ? "Save" : "Done"} — set ${activeSetIndex + 1} · ${weight} kg`
-                : `${isEditingLoggedSet ? "Save" : "Done"} — set ${activeSetIndex + 1}`}
+                : `${isEditingLoggedSet ? "Save" : "Done"} · set ${activeSetIndex + 1} · ${
+                    isDistance
+                      ? `${distance} m${weight > 0 ? ` · ${weight} kg` : ""}`
+                      : loadOptional && weight > 0
+                        ? `${weight} kg`
+                        : `${reps} ${reps === 1 ? "rep" : "reps"}`
+                  }`}
             </Button>
             <div className="flex gap-2 mt-2">
               <button
@@ -1053,7 +1097,13 @@ export function SetView({
                 onClick={() => onEditingLoad(!editingLoad)}
                 className="flex-1 h-11 rounded-xl border border-line-strong bg-surface-2 text-ink text-small font-medium"
               >
-                {editingLoad ? "Hide" : active.isLoadable ? "Change weight" : "Change reps"}
+                {editingLoad
+                  ? "Hide"
+                  : isDistance
+                    ? "Change load"
+                    : loadOptional
+                      ? weight === 0 ? "Add weight" : "Change weight"
+                      : active.isLoadable ? "Change weight" : "Change reps"}
               </button>
               {canRecordMiss ? <button
                 type="button"

@@ -2389,3 +2389,41 @@ describe("a blocking safety gate does not offer a way through", () => {
    * settle. Whether a refusal explains itself well is a copy review.
    */
 });
+
+describe("per-exercise logging kind", () => {
+  const VALID = ["load_reps", "bodyweight_reps", "load_optional", "distance_load", "time_hold"];
+  const EXPECTED: Record<string, string> = {
+    sled_push: "distance_load",
+    farmer_carry: "distance_load",
+    pu_farmers_carry: "distance_load",
+    nordic_curl: "bodyweight_reps",
+    hs_wrist_pushups_floor: "bodyweight_reps",
+    hs_wall_supported_shrugs: "bodyweight_reps",
+    banded_march_standing: "bodyweight_reps",
+    copenhagen_short: "time_hold",
+    split_squat_rfe: "load_optional",
+    single_leg_rdl: "load_optional",
+    bulgarian_split_squat_db: "load_optional",
+    weighted_pullup: "load_optional",
+    dip_weighted: "load_optional",
+  };
+
+  it("every logging value is a known kind", () => {
+    for (const e of library.exercises) {
+      if (e.logging !== undefined) expect(VALID, e.id).toContain(e.logging);
+    }
+  });
+
+  it("the audited exercises resolve and carry the expected kind", () => {
+    for (const [id, kind] of Object.entries(EXPECTED)) {
+      expect(byId[id], id).toBeDefined();
+      expect(byId[id].logging, id).toBe(kind);
+    }
+  });
+
+  it("a distance_load exercise has a distance to show", () => {
+    for (const e of library.exercises.filter((x) => x.logging === "distance_load")) {
+      expect(typeof e.default?.distance_m, e.id).toBe("number");
+    }
+  });
+});

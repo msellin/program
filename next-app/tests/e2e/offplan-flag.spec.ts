@@ -87,11 +87,6 @@ test("public account: the three off-plan surfaces are gone", async ({ page }) =>
   await page.waitForSelector("text=/Open session|Rest|rest/", { timeout: 20_000 });
   await expect(page.getByText(/drills? available/i)).toHaveCount(0);
 
-  // Profile carries no off-plan row.
-  await page.goto("/profile/");
-  await page.waitForSelector("text=More", { timeout: 20_000 });
-  await expect(page.getByRole("link", { name: /^Extra session$/ })).toHaveCount(0);
-
   // Settings carries no off-plan toggle — the flag was never set.
   await page.goto("/settings/");
   await page.waitForSelector("text=Sound effects", { timeout: 20_000 });
@@ -133,7 +128,7 @@ test("grandfathered account: off-plan survives and is recoverable in Settings", 
       { timeout: 15_000 },
     )
     .toBe(true);
-  await expect(page.getByRole("link", { name: /^Extra session$/ })).toBeVisible();
+  // (Profile no longer carries an Extra session row — Today's sheet is the entry.)
 
   // The drill page works.
   await page.goto("/off-plan/");
@@ -149,9 +144,9 @@ test("an incidental single use does not grandfather", async ({ page }) => {
   await signInWithPersona(page, "persona-recover", (store) => {
     (store.logs as Record<string, unknown>)["2026-07-01"] = offPlanDay("2026-07-01");
   });
-  await page.goto("/profile/");
-  await page.waitForSelector("text=More", { timeout: 20_000 });
-  await expect(page.getByRole("link", { name: /^Extra session$/ })).toHaveCount(0);
+  await page.goto("/settings/");
+  await page.waitForSelector("text=Sound effects", { timeout: 20_000 });
+  await expect(page.getByText("Extra session drills")).toHaveCount(0);
 });
 
 test("accessory exercises seed their authored reps, not zero", async ({ page }) => {

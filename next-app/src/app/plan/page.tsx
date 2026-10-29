@@ -267,7 +267,7 @@ export default function WeekPage() {
   }
 
   return (
-    <div className="space-y-6 pt-4">
+    <div className="space-y-4 pt-4">
       {/* Design-lead brief 2026-08-19 §1.1: H1 promoted to 32 px semibold
           + Programs pill dropped off the header row (redundant with the
           bottom-nav Programs tab a step away). Subtitle gets mt-2
@@ -276,9 +276,6 @@ export default function WeekPage() {
         <h1 className="text-h1 tracking-tight text-strong leading-none">
           Plan
         </h1>
-        <p className="mt-2 text-small text-muted">
-          Your week at a glance. Tap a day to see it, move it or skip it.
-        </p>
       </header>
 
       {/* Batch 36 Step 14e · ArcProgressBar above the week nav when a
@@ -324,15 +321,21 @@ export default function WeekPage() {
           ‹
         </button>
         <div className="flex-1 text-center">
-          <p className="text-small font-semibold text-strong leading-tight">{rangeLabel}</p>
-          <p className="mt-0.5 text-caption font-medium text-muted">
-            {offset === 0
+          <p className="text-small font-semibold text-strong leading-tight">
+            {rangeLabel} · {offset === 0
               ? "This week"
               : offset === 1
                 ? "Next week"
                 : offset === -1
                   ? "Last week"
                   : `${offset > 0 ? "+" : ""}${offset} weeks`}
+          </p>
+          <p className="mt-0.5 text-caption font-medium text-muted">
+            {weekPhase
+              ? humanPhaseName(weekPhase.name)
+                  .replace(/interleaved consolidation/i, "Mixed practice")
+                  .replace(/\s+for all tiers$/i, "")
+              : "No phase this week"}
           </p>
         </div>
         <button
@@ -362,50 +365,11 @@ export default function WeekPage() {
         </button>
       </div>
 
-      {weekPhase ? (
-        <Card flush className="px-3 py-2 text-small">
-          <span className="font-semibold text-strong">
-            {humanPhaseName(weekPhase.name)
-              .replace(/interleaved consolidation/i, "Mixed practice")
-              .replace(/\s+for all tiers$/i, "")}
-          </span>
-          {weekPhase.goal ? (
-            <span className="text-muted"> · {weekPhase.goal}</span>
-          ) : null}
-        </Card>
-      ) : (
-        <Card flush className="px-3 py-2 text-small text-muted">
-          {program.slug === "anterior-hip-rebuild"
-            ? "No phase covers this week — either before the program starts or in the Phase 4→5 light window."
-            : "No phase covers this week — you're looking at a date before the program starts or after its final phase."}
-        </Card>
-      )}
-
       {atFutureEdge ? (
         <p className="text-small text-muted italic">
           Looking further ahead than {FUTURE_WEEKS} weeks isn&apos;t useful — the plan will have
           adapted by then. See milestones on Progress for the year-long shape.
         </p>
-      ) : null}
-
-      {/* Phase D · block-object legend — appears only when the flag is on
-          and 2+ programs are active so the multi-dot per day reads
-          without hover. See §0.3 of the plan. */}
-      {blockObjectOn && activeSlugs.length >= 2 ? (
-        <div className="flex items-center gap-3 flex-wrap text-eyebrow text-muted uppercase tracking-widest">
-          <span className="inline-flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-muted/60" aria-hidden /> planned
-          </span>
-          <span className="inline-flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-green" aria-hidden /> done
-          </span>
-          <span className="inline-flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-amber" aria-hidden /> skipped
-          </span>
-          <span className="inline-flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-slate" aria-hidden /> moved
-          </span>
-        </div>
       ) : null}
 
       {/* Design package t3/3b ("the week going wrong"), 2026-08-23 —
@@ -543,8 +507,8 @@ export default function WeekPage() {
             // the most action-relevant state; the rest goes into the subline text.
             // TrainingPeaks-style compliance colouring: partial completion gets
             // its own shade, missed-past-day gets muted red.
+            const blockDone = dayBlocks.some((b) => b.state === "done");
             const status:
-              | "today"
               | "skipped"
               | "moved"
               | "logged-full"
@@ -552,14 +516,12 @@ export default function WeekPage() {
               | "missed"
               | "rest"
               | "planned" =
-              isToday
-                ? "today"
-                : skip && daySkipped
+              skip && daySkipped
                   ? "skipped"
                   : override
                     ? "moved"
-                    : doneCount > 0
-                      ? complianceRatio >= 1
+                    : doneCount > 0 || blockDone
+                      ? complianceRatio >= 1 || (totalPrescribed === 0 && dayBlocks.every((b) => b.state === "done"))
                         ? "logged-full"
                         : "logged-partial"
                       : isRest
@@ -568,7 +530,6 @@ export default function WeekPage() {
                           ? "missed"
                           : "planned";
             const dotColor = {
-              today: "bg-bronze",
               skipped: "bg-amber",
               moved: "bg-slate",
               "logged-full": "bg-green",
@@ -578,13 +539,20 @@ export default function WeekPage() {
               planned: "bg-muted/60",
             }[status];
 
-            // Phase D · when block-object is on, render one dot per program
-            // colored by that program's dominant state on the date. Capped at
-            // 4 dots then collapses to "+N" per §0.3 of the plan. Otherwise
-            // fall back to the legacy single-status dot.
+            // One aggregate status dot per row; the per-program breakdown
+            // lives in the expanded detail. Today is marked by tint + chip.
             const perProgramDots = blockObjectOn
-              ? perProgramDayStates(blocksTodayByProgram, activeSlugs, isToday)
+              ? perProgramDayStates(blocksTodayByProgram, activeSlugs)
               : null;
+            const statusLabel = {
+              skipped: "Skipped",
+              moved: "Moved",
+              "logged-full": "Done",
+              "logged-partial": "Partly done",
+              missed: "Missed",
+              rest: "Rest",
+              planned: "Planned",
+            }[status];
 
             const isExpanded = expandedDays.has(dateISO);
             return (
@@ -596,43 +564,11 @@ export default function WeekPage() {
                   skip && "opacity-70",
                 )}
               >
-                {perProgramDots ? (
-                  <>
-                    <span
-                      aria-hidden
-                      className="mt-2 flex items-center gap-0.5 flex-shrink-0"
-                    >
-                      {perProgramDots.dots.slice(0, 4).map((d, idx) => (
-                        <span
-                          key={idx}
-                          className={cn("w-2 h-2 rounded-full", d.className)}
-                          title={`${d.programName}: ${d.state}`}
-                        />
-                      ))}
-                      {/* Audit 2026-08-18 (visual-craft) — "+N" bumped
-                          from text-eyebrow to text-eyebrow to respect the
-                          tokens.md typography floor. */}
-                      {perProgramDots.dots.length > 4 ? (
-                        <span className="text-eyebrow text-muted ml-0.5">
-                          +{perProgramDots.dots.length - 4}
-                        </span>
-                      ) : null}
-                    </span>
-                    {/* Audit 2026-08-18 (a11y P1) — SR-only summary so
-                        screen-reader users get the per-track state
-                        information the dots convey visually. */}
-                    <span className="sr-only">
-                      {perProgramDots.dots
-                        .map((d) => `${d.programName}: ${d.state}`)
-                        .join("; ")}
-                    </span>
-                  </>
-                ) : (
-                  <span
-                    aria-hidden
-                    className={cn("mt-2 w-2 h-2 rounded-full flex-shrink-0", dotColor)}
-                  />
-                )}
+                <span
+                  aria-hidden
+                  className={cn("mt-2 w-2 h-2 rounded-full flex-shrink-0", dotColor)}
+                />
+                <span className="sr-only">{statusLabel}</span>
                 {/* F6 (Batch 24) — the row is a <div> so the expanded
                     content can contain interactive buttons (Open in
                     Today / Move… / Skip) without nesting them inside
@@ -673,12 +609,6 @@ export default function WeekPage() {
                             · {runCount} {runCount === 1 ? "activity" : "activities"}
                           </span>
                         ) : null}
-                        {contributingProgramCount > 1 ? (
-                          <span className="text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full border border-line-soft text-muted font-normal inline-flex items-center gap-1.5">
-                            <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-amber" />
-                            {contributingProgramCount} tracks
-                          </span>
-                        ) : null}
                       </div>
                       <span className="text-eyebrow text-muted text-right flex items-center gap-1">
                         {daySkipped ? (
@@ -715,6 +645,20 @@ export default function WeekPage() {
                   ) : null}
                   {isExpanded ? (
                     <div id={`weekday-${dateISO}`}>
+                      {perProgramDots && perProgramDots.dots.length > 0 ? (
+                        <ul className="mt-2 space-y-1" aria-label="Sessions by program">
+                          {perProgramDots.dots.map((d) => (
+                            <li
+                              key={d.programSlug}
+                              className="flex items-center gap-2 text-caption text-muted"
+                            >
+                              <span aria-hidden className={cn("w-2 h-2 rounded-full flex-shrink-0", d.className)} />
+                              <span className="capitalize">{d.programName}</span>
+                              <span>· {d.state.replace(/_/g, " ")}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : null}
                       {override?.reason ? (
                         <p className="text-caption text-slate italic mt-1">↳ {override.reason}</p>
                       ) : null}
@@ -777,6 +721,21 @@ export default function WeekPage() {
             );
           })}
         </Card>
+
+      <p className="flex items-center gap-x-3 gap-y-1 flex-wrap text-eyebrow text-muted">
+        <span className="inline-flex items-center gap-1">
+          <span className="w-2 h-2 rounded-full bg-muted/60" aria-hidden /> Planned
+        </span>
+        <span className="inline-flex items-center gap-1">
+          <span className="w-2 h-2 rounded-full bg-green" aria-hidden /> Done
+        </span>
+        <span className="inline-flex items-center gap-1">
+          <span className="w-2 h-2 rounded-full bg-amber" aria-hidden /> Skipped
+        </span>
+        <span className="inline-flex items-center gap-1">
+          <span className="w-2 h-2 rounded-full bg-slate" aria-hidden /> Moved
+        </span>
+      </p>
 
       {/* Programme rules — BOTH arrays (2026-09-05).
           `weekly_template.principles` is scheduling guidance ("48h between
@@ -1063,7 +1022,6 @@ type DayDot = {
 function perProgramDayStates(
   blocksByProgram: Record<string, ScheduledBlock[]>,
   activeSlugs: string[],
-  isToday: boolean,
 ): { dots: DayDot[] } {
   const dots: DayDot[] = [];
   for (const slug of activeSlugs) {
@@ -1077,8 +1035,7 @@ function perProgramDayStates(
     else if (states.has("done")) state = "done";
     else if (states.has("amber_downshifted")) state = "amber_downshifted";
     let className: string;
-    if (isToday && state === "planned") className = "bg-bronze";
-    else if (state === "skipped") className = "bg-amber";
+    if (state === "skipped") className = "bg-amber";
     else if (state === "moved") className = "bg-slate";
     else if (state === "done") className = "bg-green";
     else if (state === "amber_downshifted") className = "bg-amber/60";

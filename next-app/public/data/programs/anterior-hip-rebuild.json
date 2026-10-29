@@ -843,7 +843,8 @@
           "exercise_id": "sled_push",
           "order": "C1",
           "role": "conditioning_strength",
-          "scheme": "6 × 20 m heavy"
+          "scheme": "6 × 20 m heavy",
+          "distance_m": 20
         }
       ],
       "substitutions": {

@@ -212,7 +212,15 @@ export function FollowAlong({
     if (phase === "done") doneHeading.current?.focus();
   }, [phase]);
 
+  // Before Start the figure demonstrates the movement on its own clock (founder-feedback round 2, 2026-10-29: a
+  // still pose until Start read as "this one doesn't animate"); Start resets it so the set's own clock begins at 0.
+  // Rest and pause stay still; reduced motion is handled inside ExerciseFigure.
+  const preview = useRef(0);
+  useEffect(() => {
+    if (phase === "ready") preview.current = Date.now();
+  }, [phase, idx]);
   const getElapsed = useCallback(() => {
+    if (phase === "ready") return Date.now() - preview.current;
     if (phase !== "work") return 0;
     return paused ? anim.current.frozen : Date.now() - anim.current.start;
   }, [phase, paused]);
@@ -414,7 +422,7 @@ export function FollowAlong({
                       key={`${step.figure}-${step.side}`}
                       figure={step.figure}
                       side={step.side}
-                      playing={phase === "work" && !paused && !demoOpen}
+                      playing={(phase === "ready" || (phase === "work" && !paused)) && !demoOpen}
                       getElapsed={getElapsed}
                     />
                   ) : null}

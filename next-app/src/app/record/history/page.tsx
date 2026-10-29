@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useStore } from "@/lib/useStore";
 import { CutCLogList } from "@/components/record/CutCLogList";
 import { downloadRecordExport } from "@/lib/engine/record-export";
@@ -17,9 +18,17 @@ export default function RecordHistoryPage() {
     <div className="space-y-6">
       <header className="flex items-baseline justify-between gap-3">
         <h1 className="text-h1 tracking-[-0.03em] text-strong leading-none">All sessions</h1>
-        <Button variant="tertiary" onClick={() => downloadRecordExport(store)} aria-label="Export your record as JSON">
-          Export
-        </Button>
+        <div className="flex items-center gap-1">
+          <Link
+            href="/report"
+            className="inline-flex items-center min-h-11 px-3 text-small text-bronze hover:text-bronze-hover"
+          >
+            Training summary
+          </Link>
+          <Button variant="tertiary" onClick={() => downloadRecordExport(store)} aria-label="Export your record as JSON">
+            Export
+          </Button>
+        </div>
       </header>
       <CutCLogList store={store} />
     </div>

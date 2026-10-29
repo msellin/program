@@ -435,3 +435,52 @@ describe("the programme's own reps beat the library default (BUG-42)", () => {
     expect(screen.getByText((_c, n) => n?.textContent?.replace(/\s+/g, " ").trim() === "× 6" && n.tagName === "P")).toBeDefined();
   });
 });
+
+describe("logging kind decides what the set player shows", () => {
+  const noWeights = () => useStore.getState().replaceStore({ version: 2, logs: {}, training_maxes: {} } as Store);
+  const plain = { suggestion: null, isLoadable: false } as Partial<RailExercise>;
+
+  it("bodyweight_reps shows reps and never a kg figure", () => {
+    noWeights();
+    renderSet({
+      ...plain,
+      kind: "bodyweight_reps",
+      exercise: exercise({ id: "nordic_curl", name: "Nordic curl", logging: "bodyweight_reps" }),
+      item: { exercise_id: "nordic_curl", sets: 3, reps: 5 },
+      rowCount: 3,
+    });
+    expect(screen.getByText("5 reps")).toBeDefined();
+    expect(document.body.textContent).not.toMatch(/kg/i);
+    expect(screen.getByRole("button", { name: "Done · set 1 · 5 reps" })).toBeDefined();
+    expect(screen.queryByRole("button", { name: /Change weight/ })).toBeNull();
+  });
+
+  it("distance_load shows the distance, a blank load as an em dash, and no 0 kg", () => {
+    noWeights();
+    renderSet({
+      ...plain,
+      kind: "distance_load",
+      exercise: exercise({ id: "sled_push", name: "Sled push", logging: "distance_load" }),
+      item: { exercise_id: "sled_push", distance_m: 20 },
+      rowCount: 6,
+    });
+    expect(screen.getByText("20 m")).toBeDefined();
+    expect(screen.getByText("— kg")).toBeDefined();
+    expect(document.body.textContent).not.toMatch(/\b0 kg/);
+    expect(screen.getByRole("button", { name: "Done · set 1 · 20 m" })).toBeDefined();
+  });
+
+  it("load_optional reads Bodyweight with an Add weight action", () => {
+    noWeights();
+    renderSet({
+      ...plain,
+      kind: "load_optional",
+      exercise: exercise({ id: "weighted_pullup", name: "Weighted pull-up", logging: "load_optional" }),
+      item: { exercise_id: "weighted_pullup", sets: 4, reps: 4 },
+      rowCount: 4,
+    });
+    expect(screen.getByText("Bodyweight")).toBeDefined();
+    expect(screen.getByRole("button", { name: "Add weight" })).toBeDefined();
+    expect(document.body.textContent).not.toMatch(/\b0 kg/);
+  });
+});

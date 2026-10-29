@@ -75,7 +75,6 @@ const BASELINE: Record<string, string> = {
   "components/record/CutCActivityHeatmap.tsx": "heatmap cell label",
   "components/history/BlockHistorySection.tsx": "history grouping label",
   "components/progress/PerProgramAdherenceCard.tsx": "adherence window label",
-  "components/profile/AwayDays.tsx": "away-period boundaries in the picker",
   "components/session/TodaySession.tsx": "display date on the Today read path",
   "components/workout/MissedSessionPrompt.tsx": "yesterday's label",
   "components/workout/PerProgramActions.tsx": "date label behind the per-track verbs",

@@ -80,6 +80,7 @@
       "id": "banded_march_standing",
       "name": "Standing banded march",
       "category": "strength",
+      "logging": "bodyweight_reps",
       "targets": [
         "hip_flexor"
       ],
@@ -141,6 +142,7 @@
       "id": "copenhagen_short",
       "name": "Copenhagen plank, short lever",
       "category": "strength",
+      "logging": "time_hold",
       "targets": [
         "adductor",
         "trunk_anti_rotation"
@@ -265,6 +267,7 @@
       "id": "split_squat_rfe",
       "name": "Rear-foot-elevated split squat",
       "category": "unilateral",
+      "logging": "load_optional",
       "targets": [
         "quad",
         "glute_max"
@@ -289,6 +292,7 @@
       "id": "sled_push",
       "name": "Heavy sled push or drag",
       "category": "strength",
+      "logging": "distance_load",
       "targets": [
         "quad",
         "glute_max",
@@ -307,6 +311,7 @@
       "name": "Nordic curl",
       "variant": "or GHR, or slider leg curl",
       "category": "strength",
+      "logging": "bodyweight_reps",
       "targets": [
         "hamstring",
         "posterior_chain"
@@ -400,6 +405,7 @@
       "id": "bulgarian_split_squat_db",
       "name": "Bulgarian split squat, dumbbells",
       "category": "unilateral",
+      "logging": "load_optional",
       "targets": [
         "quad",
         "glute_max",
@@ -427,6 +433,7 @@
       "id": "single_leg_rdl",
       "name": "Single-leg Romanian deadlift",
       "category": "unilateral",
+      "logging": "load_optional",
       "targets": [
         "hamstring",
         "glute_max",
@@ -569,6 +576,7 @@
       "id": "farmer_carry",
       "name": "Farmer's carry",
       "category": "strength",
+      "logging": "distance_load",
       "targets": [
         "trunk_anti_extension",
         "general"
@@ -941,6 +949,7 @@
       "id": "hs_wrist_pushups_floor",
       "name": "Wrist push-ups on floor",
       "category": "strength",
+      "logging": "bodyweight_reps",
       "targets": [
         "general"
       ],
@@ -1540,6 +1549,7 @@
       "id": "hs_wall_supported_shrugs",
       "name": "Wall-supported handstand shrugs",
       "category": "strength",
+      "logging": "bodyweight_reps",
       "targets": [
         "general"
       ],
@@ -3967,6 +3977,7 @@
       "name": "Farmer's carry",
       "variant": "grip endurance",
       "category": "strength",
+      "logging": "distance_load",
       "targets": [
         "general"
       ],
@@ -4884,6 +4895,7 @@
       "id": "weighted_pullup",
       "name": "Weighted pull-up",
       "category": "strength",
+      "logging": "load_optional",
       "targets": [
         "lat",
         "biceps",
@@ -4909,6 +4921,7 @@
       "name": "Dip",
       "variant": "bar or ring, loadable",
       "category": "strength",
+      "logging": "load_optional",
       "targets": [
         "pec",
         "triceps",

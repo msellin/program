@@ -44,6 +44,14 @@ export const exerciseSchema = z.object({
   variant: z.string().optional(),
   name_et: z.string().optional(),
   category: z.string(),
+  /**
+   * What a set of this exercise records, set only where the category default
+   * (strength/unilateral -> load_reps, everything else -> bodyweight_reps) is
+   * wrong. Read through `loggingKind` in lib/logging-kind.ts, never directly.
+   */
+  logging: z
+    .enum(["load_reps", "bodyweight_reps", "load_optional", "distance_load", "time_hold"])
+    .optional(),
   targets: z.array(z.string()).optional(),
   default: z.record(z.string(), z.unknown()).optional(),
   setup: z.string().optional(),
@@ -1073,6 +1081,8 @@ export const setLogSchema = z.object({
    * the same commit as this field.
    */
   failed: z.boolean().optional(),
+  /** Metres covered, for `distance_load` work (sled, carries). Additive; `reps` is still written. */
+  distance_m: z.number().nullable().optional(),
   notes: z.string().optional(),
 });
 

@@ -30,6 +30,7 @@ import { FollowAlong } from "@/components/follow-along/FollowAlong";
 import { buildSteps } from "@/lib/follow-along/steps";
 import type { Block, Exercise, Program, Store } from "@/lib/schemas";
 import { Button } from "@/components/ui/Button";
+import { loggingKind, type LoggingKind } from "@/lib/logging-kind";
 
 /**
  * Day redesign (2026-08-23) — the /session/[slug] shell.
@@ -66,6 +67,14 @@ export type RailExercise = {
   // ever selects strength blocks); OffPlanSession's accessory/run rail
   // is where this actually varies.
   isLoadable: boolean;
+  /**
+   * What a set records (lib/logging-kind). `isLoadable` stays the narrow
+   * "a weight must be present for the set to count as logged" flag, so it is
+   * true for `load_reps` only: a `load_optional` or `distance_load` set with no
+   * load is still a logged set, and a null weight must not read as unlogged.
+   * Undefined on rails that predate it (OffPlanSession); SetView falls back.
+   */
+  kind?: LoggingKind;
   /**
    * Whole-exercise opt-out — mirrors the block item's `optional: true`
    * (schemas.ts). Optional work still renders and still logs; it is
@@ -595,7 +604,8 @@ function useMemoRail(
           // kilo counter and a 2.5 kg stepper for work that is never
           // loaded. Founder hit it on 2026-08-26. Same rule OffPlanSession
           // has always used.
-          isLoadable: ["strength", "unilateral"].includes(exercise.category),
+          isLoadable: loggingKind(exercise) === "load_reps",
+          kind: loggingKind(exercise),
           optional: item.optional === true,
           // FSL rows sit AFTER the ramp sets and the top set (see
           // `prescriptionRows`), so the optional rows are exactly the

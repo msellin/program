@@ -2,21 +2,19 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { BookOpen, ChevronRight, ClipboardList, FileText, Library, ListPlus, LogOut, MessageSquare } from "lucide-react";
+import { BookOpen, ChevronRight, LogOut, MessageSquare } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useStore } from "@/lib/useStore";
 import { createClient } from "@/lib/supabase/client";
-import { useIsSuperAdmin } from "@/lib/super-admin";
-import { isOffPlanOn } from "@/lib/features";
 import { loadProgram, loadProgramManifest } from "@/lib/data-loader";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
 import { StatusPill } from "@/components/ui/StatusPill";
 import { BeliefsSection } from "@/components/profile/BeliefsSection";
-import { AwayDays } from "@/components/profile/AwayDays";
+import { TimeOffLine } from "@/components/profile/TimeOffLine";
 import type { ProgramManifest } from "@/lib/schemas";
 import { Button } from "@/components/ui/Button";
 import { cardClass } from "@/components/ui/Card";
-import { cn } from "@/lib/utils";
+import { cn, today as todayKey } from "@/lib/utils";
 
 /**
  * Profile — switchboard (not dashboard) for identity, active programs, and
@@ -32,8 +30,6 @@ import { cn } from "@/lib/utils";
  */
 export default function ProfilePage() {
   const store = useStore((s) => s.store);
-  const offPlanOn = useStore((s) => isOffPlanOn(s.store));
-  const isSuperAdmin = useIsSuperAdmin();
   // P2-8 — Add to Home Screen from Profile when Chrome/Edge fires
   // beforeinstallprompt. iOS Safari never fires the event so the button
   // stays hidden there; direct-URL "Add to Home Screen" from Share is
@@ -84,6 +80,7 @@ export default function ProfilePage() {
   const activePrograms = activeSlugs
     .map((slug) => manifest?.programs.find((p) => p.slug === slug))
     .filter((p): p is NonNullable<typeof p> => !!p);
+  const todayISO = todayKey();
   const [signOutOpen, setSignOutOpen] = useState(false);
   const [removeOpen, setRemoveOpen] = useState<
     (typeof activePrograms)[number] | null
@@ -132,18 +129,10 @@ export default function ProfilePage() {
                 joined {memberSince}
               </span>
             ) : null}
-            {isSuperAdmin ? (
-              <StatusPill label="staff" tone="slate" />
-            ) : null}
           </p>
         </div>
         <ChevronRight size={16} className="text-muted flex-shrink-0" aria-hidden />
       </Link>
-
-      {/* Design package t2/2b ("what Terav believes about you"), scoped
-          to two rows — see dev/active/profile-beliefs-plan.md. Renders
-          null when there's nothing to show yet (no TM, no active tier). */}
-      <BeliefsSection programLifts={activeProgramJson} />
 
       {/* Active plan(s). No inline × — removal happens on the program page
           (see product-design-lead brief). Row is chevron → deep link. */}
@@ -177,6 +166,24 @@ export default function ProfilePage() {
             const hasIntake =
               !!state?.tier || !!state?.intake_answers || !!state?.baseline_capabilities;
             const graduated = !!state?.graduated_at;
+            // INTAKE PENDING only when nothing has been logged on this program.
+            const hasLogged =
+              Object.values(store.scheduled_blocks ?? {}).some(
+                (b) => b.program_slug === p.slug && b.state === "done",
+              ) ||
+              (isPrimary &&
+                Object.values(store.logs ?? {}).some(
+                  (d) => Object.keys(d.exercises ?? {}).length > 0 || (d.runs?.length ?? 0) > 0,
+                ));
+            const weekNo = (() => {
+              const started = state?.started_at?.slice(0, 10);
+              if (!started) return null;
+              const days = Math.floor(
+                (new Date(todayISO + "T00:00:00Z").getTime() - new Date(started + "T00:00:00Z").getTime()) / 864e5,
+              );
+              if (!Number.isFinite(days) || days < 0) return 1;
+              return Math.min(Math.floor(days / 7) + 1, p.duration_weeks);
+            })();
             // F5 (Batch 23) — pause + extension surface as pills on the
             // program row. Paused arcs get an inline Resume link.
             const paused = !!state?.paused_at;
@@ -213,17 +220,14 @@ export default function ProfilePage() {
                       <span className="truncate">{p.name}</span>
                     </p>
                     <p className="text-eyebrow text-muted mt-0.5 flex items-center gap-1.5 flex-wrap">
-                      <span>{p.duration_weeks} weeks · {p.difficulty}</span>
+                      <span>{weekNo ? `Week ${weekNo} of ${p.duration_weeks}` : `${p.duration_weeks} weeks`} · {p.difficulty}</span>
                       {isPrimary && activePrograms.length > 1 && !graduated && !paused ? (
-                        // Batch 36 · migrated from inline bronze-dot pill to
-                        // StatusPill tone="slate" — bronze is CTA-only per R2.
-                        // "Today's" is a state indicator, not an invitation.
-                        <StatusPill label="today's" tone="slate" />
+                        <StatusPill label="main" tone="slate" />
                       ) : null}
                       {tierLabel && !graduated && !paused ? (
                         <StatusPill label={tierLabel} tone="slate" />
                       ) : null}
-                      {!hasIntake && !graduated && !paused ? (
+                      {!hasIntake && !hasLogged && !graduated && !paused ? (
                         <StatusPill label="intake pending" tone="amber" />
                       ) : null}
                       {paused ? (
@@ -248,8 +252,14 @@ export default function ProfilePage() {
                     Resume
                   </button>
                 ) : null}
-                {canRemoveHere ? (
-                  <div className="flex justify-end pr-3 pb-1 -mt-1">
+                <div className="flex items-center justify-end gap-3 pr-3 pb-1 -mt-1">
+                  <Link
+                    href={`/programs/${p.slug}/intake/`}
+                    className="min-h-11 inline-flex items-center px-1 text-eyebrow text-muted hover:text-ink underline decoration-line"
+                  >
+                    Update my answers
+                  </Link>
+                  {canRemoveHere ? (
                     <button
                       type="button"
                       onClick={() => setRemoveOpen(p)}
@@ -257,8 +267,8 @@ export default function ProfilePage() {
                     >
                       {isPrimary ? "End this program" : "Remove"}
                     </button>
-                  </div>
-                ) : null}
+                  ) : null}
+                </div>
               </li>
             );
           })}
@@ -285,48 +295,15 @@ export default function ProfilePage() {
         {activePrograms.length ? "Browse all programs →" : "Pick your focus →"}
       </Link>
 
-      <AwayDays />
+      <TimeOffLine />
+
+      <BeliefsSection programLifts={activeProgramJson} />
 
       <div>
         <p className="text-eyebrow uppercase tracking-widest text-muted mb-2">
           More
         </p>
       <nav aria-label="More" className={cn(cardClass({ flush: true }), "divide-y divide-line-soft")}>
-        {/* S1 (Batch 25) — Coach shelved until N ≥ 50 users. AI-token
-            costs don't pencil at beta scale. Row removed from Profile,
-            /coach route + coach-client.ts deleted. R12 covers the
-            explicit "don't reopen without paid user base" call.
-            F8 Batch 29 (2026-08-19) — Extras / Report / Evidence relocated
-            here from the deleted HeaderQuickLinks ⋮ menu. Header now only
-            has TERAV + Settings. Install prompt relocated to Settings. */}
-        {/* Off-plan ships dark for the public catalog (2026-08-24) — no
-            program has off-plan-ONLY content, so the page was a second
-            door into work the plan already schedules. Kept for accounts
-            grandfathered from real usage; see lib/features.ts. */}
-        {offPlanOn ? (
-          <Link
-            href="/off-plan/"
-            className="flex items-center justify-between gap-3 px-3 py-3 min-h-[48px] active:bg-line-soft/50"
-          >
-            <span className="flex items-center gap-3 text-small">
-              <ListPlus size={16} className="text-muted" />
-              Extra session
-            </span>
-            <ChevronRight size={16} className="text-muted flex-shrink-0" />
-          </Link>
-        ) : null}
-        {/* Re-run intake (2026-09-11).
-            Intake answers drive safety gates, tier placement and which drills
-            compose — and they were answerable exactly once, at the moment a
-            user knew least about the programme. `restartProgram` deliberately
-            PRESERVES them, so restarting was not a way back in either.
-            Nothing in the app cleared or re-collected them.
-            The route already exists and a commit overwrites the stored
-            answers, so this is a missing door rather than missing machinery.
-            It needs to be a real row: an installed PWA has no address bar, so
-            "/programs/{slug}/intake" is not something a user can reach by
-            typing it. Primary programme only — a picker here would be a
-            second catalog, and the per-programme pages already deep-link. */}
         {/* Feedback (2026-09-11). Beta users had no channel at all: the app
             asks for a symptom score every morning and an Accept or Ignore on
             every proposal, and offered nowhere to say a proposal made no
@@ -342,28 +319,6 @@ export default function ProfilePage() {
           </span>
           <ChevronRight size={16} className="text-muted flex-shrink-0" />
         </Link>
-        {activeProgramId ? (
-          <Link
-            href={`/programs/${activeProgramId}/intake/`}
-            className="flex items-center justify-between gap-3 px-3 py-3 min-h-[48px] active:bg-line-soft/50"
-          >
-            <span className="flex items-center gap-3 text-small">
-              <ClipboardList size={16} className="text-muted" />
-              Re-run intake
-            </span>
-            <ChevronRight size={16} className="text-muted flex-shrink-0" />
-          </Link>
-        ) : null}
-        <Link
-          href="/report"
-          className="flex items-center justify-between gap-3 px-3 py-3 min-h-[48px] active:bg-line-soft/50"
-        >
-          <span className="flex items-center gap-3 text-small">
-            <FileText size={16} className="text-muted" />
-            Report
-          </span>
-          <ChevronRight size={16} className="text-muted flex-shrink-0" />
-        </Link>
         <Link
           href="/guide"
           className="flex items-center justify-between gap-3 px-3 py-3 min-h-[48px] active:bg-line-soft/50"
@@ -371,16 +326,6 @@ export default function ProfilePage() {
           <span className="flex items-center gap-3 text-small">
             <BookOpen size={16} className="text-muted" />
             Guide
-          </span>
-          <ChevronRight size={16} className="text-muted flex-shrink-0" />
-        </Link>
-        <Link
-          href="/evidence"
-          className="flex items-center justify-between gap-3 px-3 py-3 min-h-[48px] active:bg-line-soft/50"
-        >
-          <span className="flex items-center gap-3 text-small">
-            <Library size={16} className="text-muted" />
-            Evidence
           </span>
           <ChevronRight size={16} className="text-muted flex-shrink-0" />
         </Link>

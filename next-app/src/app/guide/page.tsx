@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { cardClass } from "@/components/ui/Card";
 
 export default function GuidePage() {
@@ -121,11 +122,12 @@ export default function GuidePage() {
         <Row label="Programs">The catalog. Browse, preview, start a program.</Row>
         <Row label="Check">Morning symptom scoring. Save it and today&apos;s prescription auto-adjusts (amber −5%, red −10%).</Row>
         <Row label="Extra session">Extra drills, home rehab, cardio / conditioning blocks — no calendar pressure.</Row>
-        <Row label="Report">Specialist-facing summary. Print / save as PDF for a clinician or coach.</Row>
+        <Row label="Training summary">Specialist-facing summary, from Record → All sessions. Print / save as PDF for a clinician or coach.</Row>
         <Row label="Data">Manage data — import, export, wipe local.</Row>
         <Row label="Evidence">
           The full bibliography behind every program, proposal, and progression rule
-          in the app. If a claim can&apos;t be traced back to something here, it&apos;s an engineering choice, not cited.
+          in the app. If a claim can&apos;t be traced back to something here, it&apos;s an engineering choice, not cited.{" "}
+          <Link href="/evidence" className="text-bronze hover:text-bronze-hover underline">Open the evidence →</Link>
         </Row>
         <Row label="Guide">This page.</Row>
       </Section>
