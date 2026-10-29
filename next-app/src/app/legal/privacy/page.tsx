@@ -138,7 +138,8 @@ export default function PrivacyPage() {
         <li>
           Demo videos (optional): <strong>YouTube</strong> (Google), via the privacy-enhanced
           youtube-nocookie.com player. Nothing is requested from YouTube until you tap
-          &quot;Watch demo&quot;; then YouTube receives your IP address and device details.
+          &quot;Watch demo&quot;, or until you turn on &quot;Play demo clips automatically&quot;
+          (off unless you say yes); then YouTube receives your IP address and device details.
         </li>
         <li>Payment data (when paid tier launches): handled entirely by <strong>Stripe</strong>. We never see card numbers.</li>
       </ul>
@@ -174,8 +175,9 @@ export default function PrivacyPage() {
       <p>
         One exception worth naming: technique demonstrations are YouTube videos, and
         opening one connects your browser to Google, which receives your IP address.
-        We use the no-cookie player and the video only loads when you tap to watch it —
-        never in the background — so if you don&apos;t open a demo, no connection is made.
+        We use the no-cookie player and a video loads only when you tap to watch it, or
+        after you have said yes to playing demo clips automatically (Settings, off by
+        default) — so if you do neither, no connection is made.
       </p>
 
       <h2 className="text-h3 text-strong pt-2">Automated decisions</h2>

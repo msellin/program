@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useElapsedSeconds } from "@/lib/wall-clock";
 import { countLoggedSets, isSetLogged, requiredRowCount, isOptionalRow } from "@/lib/set-progress";
 import { announce } from "@/lib/announce";
@@ -15,6 +15,23 @@ import { OverflowSheet } from "@/components/session/OverflowSheet";
 import { HurtSheet } from "@/components/session/HurtSheet";
 import type { RailExercise, SessionSheet } from "@/components/session/DaySession";
 import { Button } from "@/components/ui/Button";
+import { BottomSheet } from "@/components/session/shared/BottomSheet";
+import { ExerciseFigure } from "@/components/follow-along/ExerciseFigure";
+import { DemoVideo } from "@/components/follow-along/DemoVideo";
+import { figureFor } from "@/lib/figures/exercise-figures";
+import { lastComparison, setRole } from "@/lib/prescription-line";
+import { demoAutoplayAsked, readDemoAutoplayPref, useDemoAutoplayPref } from "@/lib/useUserPrefs";
+
+const ZERO = () => 0;
+/** Exercises whose demo clip the user has tapped open this session. */
+const OPENED_DEMOS = new Set<string>();
+/** Exercises whose clip the user hid this session: autoplay leaves them shut. */
+const CLOSED_DEMOS = new Set<string>();
+
+function prescribedIsAmrap(r: RailExercise, index: number): boolean {
+  if (!r.suggestion) return false;
+  return !!prescriptionRows(r.suggestion, r.schemeRowCount ?? r.rowCount)[index]?.reps?.includes("+");
+}
 
 /**
  * Screen 3 ("Set" / 4a work state / 6b) from the Day redesign. One set at
@@ -39,6 +56,7 @@ export function SetView({
   onOpenSheet,
   onCloseSheet,
   date,
+  resting = false,
 }: {
   railExercises: RailExercise[];
   active: RailExercise;
@@ -79,6 +97,8 @@ export function SetView({
   onOpenSheet: (s: SessionSheet) => void;
   onCloseSheet: () => void;
   date: string;
+  /** The rest takeover covers this screen; an open clip is taken down under it. */
+  resting?: boolean;
 }) {
   const store = useStore((s) => s.store);
   const updateSet = useStore((s) => s.updateSet);
@@ -90,13 +110,44 @@ export function SetView({
   // could land on item 20 of 34. Pull it into view on mount. SetView is
   // keyed on exercise + set index by both shells, so this runs on every
   // move without needing to watch anything.
-  const activeRailRef = useRef<HTMLButtonElement | null>(null);
-  useEffect(() => {
-    activeRailRef.current?.scrollIntoView({ block: "nearest", inline: "center" });
-  }, []);
-
   const entry = useDayExercise(active.blockId, active.exercise.id, date);
   const sets = entrySets(entry);
+  const currentChipRef = useRef<HTMLButtonElement | null>(null);
+  const stripRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    // Centre the current set in the strip without scrolling the page.
+    const strip = stripRef.current;
+    const chip = currentChipRef.current;
+    if (strip && chip) strip.scrollLeft = chip.offsetLeft - strip.clientWidth / 2 + chip.clientWidth / 2;
+  }, []);
+  const [switcherOpen, setSwitcherOpen] = useState(false);
+  // A clip the user opened stays open across sets of that exercise (SetView
+  // remounts per set). In memory only: a reload asks for the tap again.
+  const [autoplay, setAutoplay] = useDemoAutoplayPref();
+  const [askAutoplay, setAskAutoplay] = useState(false);
+  const [demoOpen, setDemoOpen] = useState(() => {
+    const id = active.exercise.id;
+    if (OPENED_DEMOS.has(id)) return true;
+    // Autoplay (owner decision, 2026-10-29): only once the user has said yes,
+    // only on the first set of an exercise, never under reduced motion, and
+    // only where the band is on screen anyway.
+    if (!active.exercise.video_url || !readDemoAutoplayPref() || CLOSED_DEMOS.has(id)) return false;
+    if (countLoggedSets(entrySets(entry), active.isLoadable) > 0) return false;
+    if (typeof window === "undefined" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
+    return window.matchMedia("(min-height: 760px)").matches || !(prescribedIsAmrap(active, activeSetIndex));
+  });
+  const openDemo = () => {
+    OPENED_DEMOS.add(active.exercise.id);
+    CLOSED_DEMOS.delete(active.exercise.id);
+    setDemoOpen(true);
+    if (!demoAutoplayAsked() && !autoplay) setAskAutoplay(true);
+  };
+  const mountedAt = useRef(0);
+  useEffect(() => {
+    mountedAt.current = performance.now();
+  }, []);
+  const elapsed = useCallback(() => (performance.now() - mountedAt.current) / 1000, []);
+
   const prevSets = lastSessionSetsFor(store, active.exercise.id, date);
   const setForRow = sets[activeSetIndex] ?? { weight_kg: null, reps: null, rpe: null };
   // Last time's matching row — or, when this index has no counterpart
@@ -285,8 +336,17 @@ export function SetView({
     announce("Hold complete.");
   }, [running, remaining, seconds]);
 
+  // A would-be PR, and only once: a set already logged today at this weight
+  // and reps has claimed it, so set 4 at the same load is not "PR" again.
   const wouldBePR =
-    active.isLoadable && weight > 0 && reps > 0 && isSetPR(store, active.exercise.id, weight, reps, date);
+    active.isLoadable &&
+    weight > 0 &&
+    reps > 0 &&
+    isSetPR(store, active.exercise.id, weight, reps, date) &&
+    !sets.some(
+      (s, i) =>
+        i !== activeSetIndex && s.failed !== true && (s.weight_kg ?? 0) >= weight && (s.reps ?? 0) >= reps,
+    );
   const plates = active.isLoadable ? platesLabel(weight) : null;
 
   // "Sets left" means REQUIRED sets left (2026-09-03). Optional work — a
@@ -349,66 +409,61 @@ export function SetView({
     else onConfirmed(restSecondsFor(active.exercise));
   };
 
+  const railIndex = railExercises.findIndex((r) => r.key === active.key);
+  // The rep grid needs the height the media band would take, so on short
+  // phones an AMRAP set shows a thumbnail and a "Watch demo" pill instead.
+  const compactMedia = isAmrap && !isEditingLoggedSet;
+  // Short phones keep the band for the first set of an exercise, then hand
+  // the height back to the set (round-3 vote, X1): by set 6 you know the lift.
+  const shortBandGone = compactMedia || countLoggedSets(sets, active.isLoadable) > 0;
+  const figure = figureFor(active.exercise.id);
+  const videoUrl = active.exercise.video_url ?? null;
+  const role = isEditingLoggedSet ? `Editing set ${activeSetIndex + 1}` : setRole(active, activeSetIndex);
+  const comparison = lastComparison(store, active, activeSetIndex, date, active.isLoadable ? weight : null);
+  // "Next" only when it tells you something the strip does not: a weight
+  // change you have to load, or the next exercise (strength-coach vote).
+  const nextLine = (() => {
+    if (activeSetIndex + 1 < active.rowCount) {
+      const nextRow = active.suggestion
+        ? prescriptionRows(active.suggestion, active.schemeRowCount ?? active.rowCount)[activeSetIndex + 1]
+        : null;
+      return nextRow && active.isLoadable && nextRow.kg !== weight
+        ? `Next: set ${activeSetIndex + 2} · ${nextRow.kg} kg × ${nextRow.reps}`
+        : null;
+    }
+    const nextEx = railExercises[railIndex + 1];
+    return nextEx ? `Next: ${exerciseListName(nextEx.exercise)}` : null;
+  })();
+
   return (
     <>
-      <div className="flex-shrink-0 px-4 pt-1">
-        <div className="flex items-center gap-1.5">
+      <div className="flex-shrink-0 px-4 pt-[max(env(safe-area-inset-top),6px)]">
+        <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={onBackToBrief}
             aria-label="Back to brief"
-            className="flex-shrink-0 w-[34px] h-[34px] rounded-lg border border-line-soft bg-surface text-ink text-body"
+            className="flex-shrink-0 w-11 h-11 rounded-full bg-surface text-ink text-h3"
           >
             ‹
           </button>
-          {/* Rail scrolls (2026-08-24). It used to be a plain flex row of
-              `flex: 1` buttons with no minimum, sized to fit whatever the
-              rail held. Fine on Day, where a session is 2-5 exercises —
-              but off-plan flattens EVERY accessory and cardio block into
-              one rail: 16 exercises for anterior-hip-rebuild, 23 for
-              first-strict-pullup, 34 for handstand-walk. At 393px that's
-              roughly 11px per tab, i.e. clickable but not tappable. A
-              minimum width plus horizontal scroll keeps every target
-              thumb-sized no matter how long the rail gets. Back and `⋯`
-              sit outside the scroller so they never drift off-screen. */}
-          <div className="flex-1 min-w-0 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-          {railExercises.map((r) => {
-            const rEntry = store.logs[date]?.exercises[r.key] ?? null;
-            const logged = countLoggedSets(entrySets(rEntry), r.isLoadable);
-            const isActive = r.key === active.key;
-            return (
-              <button
-                key={r.key}
-                type="button"
-                ref={isActive ? activeRailRef : undefined}
-                onClick={() => onSelectExercise(r.key)}
-                className={
-                  "min-w-0 rounded-lg px-1 py-1.5 text-center border flex-shrink-0 " +
-                  (isActive
-                    ? "flex-[2] min-w-[104px] border-bronze bg-[rgba(200,150,102,.14)]"
-                    : "flex-1 min-w-[74px] border-line-soft bg-surface")
-                }
-              >
-                <span
-                  className={
-                    "block text-caption font-semibold truncate " + (isActive ? "text-strong" : "text-ink")
-                  }
-                >
-                  {exerciseListName(r.exercise)}
+          {/* One segment per exercise, filling by its sets — the guided
+              player's bar, so both players read as one app. */}
+          <div className="flex-1 min-w-0 flex gap-1" aria-hidden="true">
+            {railExercises.map((r) => {
+              const logged = countLoggedSets(entrySets(store.logs[date]?.exercises[r.key] ?? null), r.isLoadable);
+              const frac = r.rowCount ? Math.min(1, logged / r.rowCount) : 0;
+              return (
+                <span key={r.key} className="h-1.5 flex-1 overflow-hidden rounded-full bg-surface-3">
+                  <span className="block h-full bg-ink" style={{ width: `${frac * 100}%` }} />
                 </span>
-                <span
-                  className={"font-mono block text-caption mt-0.5 " + (isActive ? "text-bronze" : "text-muted")}
-                >
-                  {logged}/{r.rowCount}
-                </span>
-              </button>
-            );
-          })}
+              );
+            })}
           </div>
           <button
             type="button"
             onClick={() => onOpenSheet("hurt")}
-            className="flex-shrink-0 h-[34px] rounded-lg border border-amber/60 bg-surface-2 px-2.5 text-caption font-semibold text-amber"
+            className="flex-shrink-0 h-11 rounded-full border border-amber/60 px-3.5 text-caption font-semibold text-amber"
           >
             Something hurt
           </button>
@@ -416,44 +471,176 @@ export function SetView({
             type="button"
             onClick={() => onOpenSheet("overflow")}
             aria-label="More options"
-            className="flex-shrink-0 w-[34px] h-[34px] rounded-lg border border-line-strong bg-surface-2 text-strong text-body font-semibold"
+            className="flex-shrink-0 w-11 h-11 rounded-full bg-surface text-strong text-body font-semibold"
           >
             ⋯
           </button>
         </div>
-        {/* min-w-0 + truncate: long exercise names used to wrap and
-            interleave with the "N sets left" counter — "wrist extension
-            prep on floor · set 121 sets 1 of 2 left". The name is the
-            part that can be shortened; the counters can't. */}
-        <div className="flex items-baseline justify-between gap-3 mt-2.5 px-1.5">
-          <span className="min-w-0 truncate text-caption uppercase tracking-[.14em] text-ink">
-            {active.exercise.name} · set {activeSetIndex + 1} of {active.rowCount}
+        {/* Exercise switcher (2026-10-28). The tab rail could not fit: at
+            375px it showed "Block pull, m…" and "Barbel 0/4" beside the two
+            action buttons. The name now gets the full width, wraps rather
+            than truncates, and every exercise is one tap away in the sheet. */}
+        <div className="mt-2.5 flex items-center gap-3">
+          {figure && shortBandGone && !demoOpen ? (
+            <span
+              className="h-12 w-16 flex-shrink-0 overflow-hidden rounded-lg bg-surface [@media(min-height:760px)]:hidden"
+              aria-hidden="true"
+            >
+              <ExerciseFigure figure={figure} side="B" playing={false} getElapsed={ZERO} />
+            </span>
+          ) : null}
+          <button
+            type="button"
+            onClick={() => setSwitcherOpen(true)}
+            aria-label={`${exerciseListName(active.exercise)}, exercise ${railIndex + 1} of ${railExercises.length}. Switch exercise`}
+            className="min-w-0 flex-1 text-left"
+          >
+            <span className="block text-h3 font-semibold leading-tight tracking-[-.015em] text-strong line-clamp-2">
+              {exerciseListName(active.exercise)} <span aria-hidden="true" className="text-muted">▾</span>
+            </span>
+            <span className="block text-caption text-muted mt-0.5">
+              Exercise {railIndex + 1} of {railExercises.length}
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <div className="flex-1 min-h-0 overflow-y-auto px-4 flex flex-col">
+        {/* Media band. A vetted clip or figure is the movement, so it leads
+            on phones tall enough to hold it with the set and the button
+            (≥ 760px); on shorter ones for the first set of an exercise.
+            YouTube is contacted only after a tap on "Watch demo", or when the
+            user has said yes to playing clips automatically. An open clip
+            gets the full 16:9 frame — capped, YouTube's own controls covered
+            the picture and our close button. */}
+        {figure || videoUrl ? (
+          <div
+            className={
+              "relative mt-3 w-full flex-shrink-0 overflow-hidden rounded-2xl bg-surface aspect-video " +
+              (demoOpen
+                ? // An open clip on a short phone stays short enough that the
+                  // weight and Done both fit under it (round 8: it hid the weight).
+                  "[@media(max-height:760px)]:max-h-[24vh] "
+                : "max-h-[20vh] " +
+                  // The rep grid needs ~110px more than Done, so a top set keeps
+                  // the band shorter on tall phones too.
+                  (compactMedia
+                    ? "[@media(min-height:760px)]:max-h-[22vh] "
+                    : "[@media(min-height:760px)]:aspect-square [@media(min-height:760px)]:max-h-[44vh] ") +
+                  (shortBandGone ? "hidden [@media(min-height:760px)]:block" : ""))
+            }
+          >
+            {figure ? (
+              <ExerciseFigure figure={figure} side="B" playing={!demoOpen} getElapsed={elapsed} />
+            ) : null}
+            {videoUrl && !resting ? (
+              <DemoVideo
+                key={demoOpen ? "open" : "closed"}
+                url={videoUrl}
+                start={active.exercise.video_start}
+                end={active.exercise.video_end}
+                title={active.exercise.name}
+                hasFigure={!!figure}
+                wholeArea
+                hideClose
+                initialOpen={demoOpen}
+                onUserToggle={(open) => {
+                  if (open) openDemo();
+                }}
+              />
+            ) : null}
+          </div>
+        ) : null}
+        {demoOpen ? (
+          <>
+            <div className="mt-2 flex items-center justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  OPENED_DEMOS.delete(active.exercise.id);
+                  CLOSED_DEMOS.add(active.exercise.id);
+                  setDemoOpen(false);
+                  setAskAutoplay(false);
+                }}
+                className="flex-shrink-0 h-11 rounded-full bg-surface-2 border border-line-strong px-3.5 text-caption font-semibold text-ink"
+              >
+                Hide demo
+              </button>
+            </div>
+            {askAutoplay ? (
+              <div className="mt-2 flex items-center justify-between gap-2 rounded-xl border border-line-soft px-3 py-1.5">
+                <span className="min-w-0 text-caption text-ink">Autoplay clips? They load from YouTube.</span>
+                <span className="flex flex-shrink-0 gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAutoplay(true);
+                      setAskAutoplay(false);
+                    }}
+                    className="h-11 rounded-full bg-surface-2 border border-line-strong px-3.5 text-caption font-semibold text-ink"
+                  >
+                    Yes
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAutoplay(false);
+                      setAskAutoplay(false);
+                    }}
+                    className="h-11 rounded-full border border-line-soft px-3 text-caption text-ink"
+                  >
+                    Not now
+                  </button>
+                </span>
+              </div>
+            ) : null}
+          </>
+        ) : null}
+        {videoUrl && !demoOpen && shortBandGone ? (
+          <button
+            type="button"
+            onClick={openDemo}
+            aria-label={`Watch demo video of ${active.exercise.name}. Loads from YouTube`}
+            className="mt-3 self-start flex h-11 items-center gap-1.5 rounded-full border border-line-strong bg-surface-2 px-4 text-caption font-semibold text-ink [@media(min-height:760px)]:hidden"
+          >
+            <span aria-hidden="true">▶</span> Watch demo
+          </button>
+        ) : null}
+
+        {/* "Set N of M" sits on its own line with nothing that can push it
+            out: it used to share a truncating line with the exercise name,
+            which is how "set 1 of 8" disappeared at 375px. */}
+        <div className="flex items-baseline justify-between gap-3 mt-4">
+          <span className="text-small font-semibold text-ink">
+            Set {activeSetIndex + 1} of {active.rowCount}
+            {role === "Set" ? "" : ` · ${role}`}
             {isOptionalRow(active, activeSetIndex) ? " · optional" : ""}
           </span>
-          <span className="flex-shrink-0 text-caption uppercase tracking-[.14em] text-ink">
-            {totalRemaining} {totalRemaining === 1 ? "set" : "sets"} left
+          <span className="flex-shrink-0 text-small text-muted">
+            {totalRemaining} {totalRemaining === 1 ? "set" : "sets"} left today
           </span>
         </div>
-        {/* Set pips (2026-08-24). The set counter above used to be the
-            only place a set index appeared, and it was plain text — so
-            once a set was logged there was no way back to it, and a
-            mis-tapped weight was permanent. These are the backwards
-            affordance: every set on this exercise, one tap away, logged
-            ones showing what they hold. */}
+        {/* Set strip (2026-10-28, voted 4–1 over a table). The pips were one
+            non-wrapping row of flex-1 tiles: 20 sets made them 13px wide.
+            Fixed 56px chips scroll sideways instead, so 8 and 20 sets look
+            the same, and every set — logged ones included — is still one tap
+            away. Accessible names are unchanged; the harness walks them. */}
         {active.rowCount > 1 ? (
-          <div className="flex items-center gap-1 mt-1.5">
+          <div className="relative mt-2 -mx-4 flex-shrink-0">
+          <div ref={stripRef} className="px-4 flex gap-2 overflow-x-auto no-scrollbar">
             {Array.from({ length: active.rowCount }, (_, i) => {
               const done = loggedAt(i);
               const isCurrent = i === activeSetIndex;
               const logged = sets[i];
-              // Optional rows read as offered, not owed: dashed edge, and
-              // the screen reader is told so rather than left to infer it
-              // from a border style it cannot see.
               const optionalRow = isOptionalRow(active, i);
+              const planned = active.suggestion
+                ? prescriptionRows(active.suggestion, active.schemeRowCount ?? active.rowCount)[i]
+                : null;
               return (
                 <button
                   key={i}
                   type="button"
+                  ref={isCurrent ? currentChipRef : undefined}
                   onClick={() => onSelectSetIndex(i)}
                   aria-current={isCurrent ? "step" : undefined}
                   aria-label={
@@ -468,144 +655,128 @@ export function SetView({
                       : `Set ${i + 1}${optionalRow ? ", optional" : ""}, not logged yet`
                   }
                   className={
-                    "flex-1 min-w-0 h-[34px] rounded-lg text-center " +
+                    "flex-shrink-0 min-w-[56px] h-11 px-2 rounded-xl text-center " +
                     (optionalRow && !done && !isCurrent ? "border border-dashed " : "border ") +
                     (isCurrent
-                      ? "border-bronze bg-[rgba(200,150,102,.14)]"
+                      ? "border-bronze bg-surface-2"
                       : done
-                        ? "border-line-strong bg-surface-2"
-                        : "border-line-soft bg-surface")
+                        ? "border-transparent bg-surface-2"
+                        : "border-line-soft bg-transparent")
                   }
                 >
-                  <span
-                    className={
-                      "block text-caption leading-none " +
-                      (isCurrent ? "text-bronze" : done ? "text-ink" : "text-muted")
-                    }
-                  >
+                  <span className={"flex items-center justify-center gap-1 text-caption leading-none " + (isCurrent ? "text-bronze" : "text-muted")}>
+                    {done && logged && logged.failed !== true ? "✓" : ""}
                     {i + 1}
+                    {/* The top set is the one that moves the training max. */}
+                    {setRole(active, i) === "Top set" ? (
+                      <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-bronze" />
+                    ) : null}
                   </span>
                   <span
                     className={
-                      "block text-caption leading-none mt-0.5 truncate " +
+                      "block text-caption font-semibold leading-none mt-1 tabular-nums whitespace-nowrap " +
                       (isCurrent ? "text-strong" : done ? "text-ink" : "text-muted")
                     }
                   >
                     {done && logged
                       ? logged.failed === true
-                        ? // "122×0" reads as a logging mistake. The pip is
-                          // ~40px wide, so the weight is dropped rather than
-                          // truncated — the number is still on the screen the
-                          // pip navigates to.
+                        ? // "122×0" reads as a logging mistake.
                           "miss"
                         : logged.seconds != null
                           ? `${logged.seconds}s`
                           : active.isLoadable
                             ? `${logged.weight_kg}×${logged.reps}`
                             : `${logged.reps}`
-                      : "·"}
+                      : planned && active.isLoadable
+                        ? `${planned.kg}`
+                        : "·"}
                   </span>
                 </button>
               );
             })}
           </div>
-        ) : null}
-      </div>
-
-      <div className="flex-1 flex flex-col items-center justify-center px-6 text-center min-h-0">
-        <p className="text-eyebrow uppercase tracking-[.18em] text-bronze mb-[18px] flex items-center gap-2">
-          {isEditingLoggedSet
-            ? "Editing"
-            : activeSetIndex === active.rowCount - 1
-              ? "Top set"
-              : "Set"}
-          {setForRow.failed === true ? (
-            <span className="text-caption font-semibold uppercase tracking-[.12em] text-strong border border-line-strong rounded-md px-1.5 py-0.5">
-              Missed
-            </span>
-          ) : null}
-          {wouldBePR ? (
-            <span className="text-caption font-semibold uppercase tracking-[.12em] text-ground bg-green rounded-md px-1.5 py-0.5">
-              Rep PR
-            </span>
-          ) : null}
-        </p>
-        {active.isLoadable ? (
-          <div className="flex items-baseline gap-1.5 mb-3">
-            <span className="text-[92px] leading-[.9] font-semibold tracking-[-.05em] text-strong">
-              {weight}
-            </span>
-            <span className="text-h1 font-medium text-muted">kg</span>
+          {/* Fade at the right edge: the strip scrolls, and a chip cut off at
+              the screen edge did not say so. */}
+          <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-ground to-transparent" />
           </div>
         ) : null}
-        {isHold ? (
-          <>
-            <p className="text-[92px] leading-[.9] font-semibold tracking-[-.05em] text-strong mb-1">
-              {Math.floor(remaining / 60)}:{String(remaining % 60).padStart(2, "0")}
+
+        {/* The target sits centred in the space between the set strip and
+            Done (round 8): one spacer above it left a dead band at 375. */}
+        <div className="flex-1 min-h-3" />
+        {/* The target sits just above Done (2026-10-28): it used to float
+            mid-screen, 92px, with empty space on both sides of it. */}
+        <div className="flex flex-col items-center text-center pb-3">
+          <div className={"flex items-center gap-2 mb-1" + (demoOpen ? " [@media(max-height:760px)]:hidden" : "")}>
+            {setForRow.failed === true ? (
+              <span className="text-caption font-semibold text-strong border border-line-strong rounded-md px-1.5 py-0.5">
+                Missed
+              </span>
+            ) : null}
+            {wouldBePR ? (
+              <span className="text-caption font-semibold text-ground bg-green rounded-md px-1.5 py-0.5">{`PR at ${reps}`}</span>
+            ) : null}
+          </div>
+          {active.isLoadable ? (
+            <p className="flex items-baseline gap-1.5">
+              <span
+                className={
+                  // An open clip takes the band's full 16:9; on a short phone
+                  // the weight steps down so it stays above the fold.
+                  (demoOpen ? "text-metric [@media(min-height:760px)]:text-[64px] " : "text-[64px] [@media(max-height:700px)]:text-[52px] ") +
+                  "leading-none font-semibold tracking-[-.04em] tabular-nums text-strong"
+                }
+              >
+                {weight}
+              </span>
+              <span className="text-h3 font-medium text-muted">kg</span>
             </p>
-            <p className="text-eyebrow uppercase tracking-[.16em] text-muted mb-3">
-              {running
-                ? isHoldShaped
-                  ? "holding"
-                  : "running"
-                : remaining === 0
-                  ? awaitingOtherSide
-                    ? "first side done"
-                    : "done"
-                  : durationLabel}
-              {perSide ? ` · side ${sideIndex + 1} of 2` : ""}
-            </p>
-          </>
-        ) : (
-          <p
-            className={
-              active.isLoadable
-                ? "text-h1 leading-[1.2] font-semibold tracking-[-.02em] text-strong mb-3"
-                : "text-[92px] leading-[.9] font-semibold tracking-[-.05em] text-strong mb-3"
-            }
-          >
-            {isAmrap ? `${reps}+ reps` : `${reps} ${reps === 1 ? "rep" : "reps"}`}
-          </p>
-        )}
-        {!prev && !prescribed && authoredDose ? (
-          <div className="border border-line-soft rounded-lg overflow-hidden mb-3">
-            <div className="px-4 py-2.5 bg-surface">
-              <p className="text-caption uppercase tracking-[.14em] text-muted mb-0.5">
-                Programme asks for
+          ) : null}
+          {isHold ? (
+            <>
+              <p className="text-[64px] [@media(max-height:700px)]:text-[52px] leading-none font-semibold tracking-[-.04em] tabular-nums text-strong">
+                {Math.floor(remaining / 60)}:{String(remaining % 60).padStart(2, "0")}
               </p>
-              <p className="text-body font-semibold text-ink">{authoredDose}</p>
-            </div>
-          </div>
-        ) : null}
-        {prev || prescribed ? (
-          <div className="flex items-stretch border border-line-soft rounded-lg overflow-hidden mb-3">
-            {prev ? (
-              <div className="px-4 py-2.5 bg-surface">
-                <p className="text-caption uppercase tracking-[.14em] text-muted mb-0.5">
-                  Last time
-                </p>
-                <p className="text-body font-semibold text-ink">
-                  {active.isLoadable ? `${prev.weight_kg} × ${prev.reps}` : prev.reps}
-                </p>
-              </div>
-            ) : null}
-            {prev && prescribed ? <div className="w-px bg-line-soft" /> : null}
-            {prescribed ? (
-              <div className="px-4 py-2.5 bg-surface">
-                <p className="text-caption uppercase tracking-[.14em] text-muted mb-0.5">
-                  Prescribed
-                </p>
-                <p className="text-body font-semibold text-ink">
-                  {active.isLoadable ? `${prescribed.kg} × ${prescribed.reps}` : prescribed.reps}
-                </p>
-              </div>
-            ) : null}
-          </div>
-        ) : null}
-        {plates ? <p className="text-eyebrow text-muted">{plates}</p> : null}
+              <p className="text-small text-muted mt-1">
+                {running
+                  ? isHoldShaped
+                    ? "holding"
+                    : "running"
+                  : remaining === 0
+                    ? awaitingOtherSide
+                      ? "first side done"
+                      : "done"
+                    : durationLabel}
+                {perSide ? ` · side ${sideIndex + 1} of 2` : ""}
+              </p>
+            </>
+          ) : (
+            <p
+              className={
+                active.isLoadable
+                  ? "text-h2 font-semibold tracking-[-.02em] text-strong mt-0.5"
+                  : "text-[64px] [@media(max-height:700px)]:text-[52px] leading-none font-semibold tracking-[-.04em] text-strong"
+              }
+            >
+              {active.isLoadable ? "× " : ""}
+              {isAmrap ? `${reps} or more` : active.isLoadable ? reps : `${reps} ${reps === 1 ? "rep" : "reps"}`}
+            </p>
+          )}
+          {plates ? (
+            <p className="text-small text-muted mt-2">
+              {plates.includes("/side") ? `Per side ${plates.replace(" kg /side", " kg")}` : plates}
+            </p>
+          ) : null}
+          {comparison ? <p className="text-small text-ink mt-1">{comparison}</p> : null}
+          {!comparison && !prescribed && authoredDose && role !== "Extra set" ? (
+            <p className="text-small text-ink mt-1">Plan: {authoredDose}</p>
+          ) : null}
+          {nextLine ? <p className="text-caption text-muted mt-2">{nextLine}</p> : null}
+        </div>
+        <div className="flex-1 min-h-0" />
       </div>
 
-      <div className="flex-shrink-0 px-[22px] pb-[22px]">
+      <div className="flex-shrink-0 px-4 pt-1 pb-[max(env(safe-area-inset-bottom),16px)]">
         {isHold ? (
           <>
             {editingLoad ? (
@@ -667,13 +838,13 @@ export function SetView({
                       ? `Start the hold · ${seconds}s`
                       : `Start the timer · ${Math.round(seconds / 60)} min`}
             </Button>
-            <div className="flex gap-2 mt-1.5">
+            <div className="flex gap-2 mt-2">
               <button
                 type="button"
                 onClick={() => onEditingLoad(!editingLoad)}
-                className="flex-1 h-10 text-ink text-small"
+                className="flex-1 h-11 rounded-xl border border-line-strong bg-surface-2 text-ink text-small font-medium"
               >
-                {editingLoad ? "Hide" : "Change the time"}
+                {editingLoad ? "Hide" : "Change time"}
               </button>
               {/* Held it without the timer running, or cut it short — log
                   whatever was actually held rather than forcing the clock
@@ -688,7 +859,7 @@ export function SetView({
                   }
                   confirm(1);
                 }}
-                className="flex-1 h-10 text-ink text-small"
+                className="flex-1 h-11 rounded-xl border border-line-strong bg-surface-2 text-ink text-small font-medium"
               >
                 Log it now
               </button>
@@ -751,11 +922,8 @@ export function SetView({
                 </div>
               </div>
             ) : null}
-            <p className="text-caption uppercase tracking-[.14em] text-muted mb-2 text-center">
-              {isEditingLoggedSet
-                ? `Fix the reps on set ${activeSetIndex + 1}`
-                : `Reps you got on set ${activeSetIndex + 1}`}
-              {active.isLoadable ? ` · ${weight} kg` : ""}
+            <p className="text-small text-muted mb-2 text-center">
+              {isEditingLoggedSet ? `Fix the reps on set ${activeSetIndex + 1}` : "How many reps did you get?"}
             </p>
             {/* BUG-32 (founder, 2026-09-02): this grid ran 1-9 and stopped.
                 An AMRAP is unbounded by definition — that is the whole point of
@@ -788,13 +956,13 @@ export function SetView({
                 </div>
               </div>
             ) : (
-              <div className="flex flex-wrap gap-2">
+              <div className="grid grid-cols-5 gap-1.5">
                 {Array.from({ length: 9 }, (_, i) => i + 1).map((n) => (
                   <button
                     key={n}
                     type="button"
                     onClick={() => confirm(n)}
-                    className="flex-1 basis-[60px] h-[62px] rounded-lg border border-line-soft bg-surface text-strong text-h2 font-semibold tracking-[-.02em]"
+                    className="h-[52px] rounded-xl border border-line-soft bg-surface text-strong text-h2 font-semibold tracking-[-.02em]"
                   >
                     {n}
                   </button>
@@ -805,7 +973,7 @@ export function SetView({
                     setOverflowReps((r) => (r >= 10 ? r : 10));
                     setRepsOverflow(true);
                   }}
-                  className="flex-1 basis-[60px] h-[62px] rounded-lg border border-line-strong bg-surface text-strong text-h3 font-semibold tracking-[-.02em]"
+                  className="h-[52px] rounded-xl border border-line-strong bg-surface text-strong text-h3 font-semibold tracking-[-.02em]"
                   aria-label="Ten or more reps"
                 >
                   10+
@@ -813,13 +981,13 @@ export function SetView({
               </div>
             )}
             {active.isLoadable ? (
-              <div className="flex gap-2 mt-1.5">
+              <div className="flex gap-2 mt-2">
                 <button
                   type="button"
                   onClick={() => onEditingLoad(!editingLoad)}
-                  className="flex-1 h-10 text-ink text-small"
+                  className="flex-1 h-11 rounded-xl border border-line-strong bg-surface-2 text-ink text-small font-medium"
                 >
-                  {editingLoad ? "Hide" : "Change the weight"}
+                  {editingLoad ? "Hide" : "Change weight"}
                 </button>
                 {/* Every 5/3/1 top set is an AMRAP, so the heavy single a
                     person actually misses lands in THIS branch, not the
@@ -828,7 +996,7 @@ export function SetView({
                 {canRecordMiss && !repsOverflow ? <button
                 type="button"
                 onClick={() => confirm(0, true)}
-                className="flex-1 h-10 text-ink text-small"
+                className="flex-1 h-11 rounded-xl border border-line-strong bg-surface-2 text-ink text-small font-medium"
               >
                 Missed {weight} kg
               </button> : null}
@@ -877,18 +1045,18 @@ export function SetView({
                 ? `${isEditingLoggedSet ? "Save" : "Done"} — set ${activeSetIndex + 1} · ${weight} kg`
                 : `${isEditingLoggedSet ? "Save" : "Done"} — set ${activeSetIndex + 1}`}
             </Button>
-            <div className="flex gap-2 mt-1.5">
+            <div className="flex gap-2 mt-2">
               <button
                 type="button"
                 onClick={() => onEditingLoad(!editingLoad)}
-                className="flex-1 h-10 text-ink text-small"
+                className="flex-1 h-11 rounded-xl border border-line-strong bg-surface-2 text-ink text-small font-medium"
               >
-                {editingLoad ? "Hide" : active.isLoadable ? "Change the weight" : "Change the reps"}
+                {editingLoad ? "Hide" : active.isLoadable ? "Change weight" : "Change reps"}
               </button>
               {canRecordMiss ? <button
                 type="button"
                 onClick={() => confirm(0, true)}
-                className="flex-1 h-10 text-ink text-small"
+                className="flex-1 h-11 rounded-xl border border-line-strong bg-surface-2 text-ink text-small font-medium"
               >
                 Missed {weight} kg
               </button> : null}
@@ -897,6 +1065,55 @@ export function SetView({
         )}
       </div>
 
+      {switcherOpen ? (
+        <BottomSheet titleId="exercise-switcher-title" onClose={() => setSwitcherOpen(false)} surface="ExerciseSwitcher">
+          <p id="exercise-switcher-title" className="text-h3 font-semibold text-strong mb-3">
+            Today&rsquo;s exercises
+          </p>
+          <div className="flex flex-col gap-1.5 mb-3 max-h-[60vh] overflow-y-auto">
+            {railExercises.map((r, i) => {
+              const logged = countLoggedSets(entrySets(store.logs[date]?.exercises[r.key] ?? null), r.isLoadable);
+              const isActive = r.key === active.key;
+              const fig = figureFor(r.exercise.id);
+              return (
+                <button
+                  key={r.key}
+                  type="button"
+                  onClick={() => {
+                    setSwitcherOpen(false);
+                    if (!isActive) onSelectExercise(r.key);
+                  }}
+                  aria-current={isActive ? "true" : undefined}
+                  className={
+                    "flex min-h-[56px] w-full items-center gap-3 rounded-xl px-3 py-2 text-left " +
+                    (isActive ? "bg-surface-2 border border-bronze" : "bg-surface-2 border border-transparent")
+                  }
+                >
+                  {fig ? (
+                    <span className="h-10 w-14 flex-shrink-0 overflow-hidden rounded-md bg-ground" aria-hidden="true">
+                      <ExerciseFigure figure={fig} side="B" playing={false} getElapsed={ZERO} />
+                    </span>
+                  ) : null}
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-body font-semibold text-strong">{exerciseListName(r.exercise)}</span>
+                    <span className="block text-caption text-muted">Exercise {i + 1}</span>
+                  </span>
+                  <span className="flex-shrink-0 font-mono text-small tabular-nums text-ink">
+                    {logged}/{r.rowCount}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+          <button
+            type="button"
+            onClick={() => setSwitcherOpen(false)}
+            className="w-full h-[52px] rounded-lg border border-line-strong text-ink text-body"
+          >
+            Close
+          </button>
+        </BottomSheet>
+      ) : null}
       {sheet === "hurt" ? (
         <HurtSheet
           slug={programSlug ?? store.user_profile?.active_program_id}

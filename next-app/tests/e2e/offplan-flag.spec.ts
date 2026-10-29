@@ -170,7 +170,7 @@ test("accessory exercises seed their authored reps, not zero", async ({ page }) 
   await page.goto("/off-plan/");
   const row = page.locator("button", { hasText: /\d+ sets/ }).first();
   await row.click({ timeout: 20_000 });
-  await expect(page.getByText(/· set 1 of \d+/i)).toBeVisible({ timeout: 10_000 });
+  await expect(page.getByText(/\bset 1 of \d+/i)).toBeVisible({ timeout: 10_000 });
 
   // `reps?` — a set seeded at 1 renders "1 rep", not "1 reps".
   // Two shapes now. Counted work shows "N reps"; held work (isometrics,
@@ -183,7 +183,7 @@ test("accessory exercises seed their authored reps, not zero", async ({ page }) 
     const clock = await page.locator("p").filter({ hasText: /^\d+:\d\d$/ }).first().textContent();
     const [m, sec] = (clock ?? "0:00").split(":").map(Number);
     expect(m * 60 + sec).toBeGreaterThan(0);
-    await expect(page.getByText(/Programme asks for/i)).toBeVisible();
+    await expect(page.getByText(/Programme asks for|^Plan: /i)).toBeVisible();
   } else {
     const shown = await page.locator("p").filter({ hasText: /^\d+\+? reps?$/ }).first().textContent();
     expect(Number((shown ?? "").match(/\d+/)?.[0] ?? "0")).toBeGreaterThan(0);

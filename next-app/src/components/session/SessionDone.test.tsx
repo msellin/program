@@ -36,7 +36,7 @@ describe("Stop is not Finish", () => {
 
   it("Finish shows Done with no symptom prompt", () => {
     render(<SessionDone end="finished" rail={rail} date="2026-10-27" slug="first-strict-pullup" />);
-    expect(screen.getByRole("heading", { name: "Done" })).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "Session done" })).toBeTruthy();
     expect(screen.queryByText(/Where did it hurt/)).toBeNull();
     expect(screen.getByRole("link", { name: "Back to Today" })).toBeTruthy();
     expect(screen.queryByText(/Continue/)).toBeNull();

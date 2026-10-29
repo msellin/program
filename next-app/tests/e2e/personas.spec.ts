@@ -474,8 +474,12 @@ for (const persona of PERSONAS) {
              * assertion that holds on some days and not others is the date
              * fragility this whole check has been fighting.
              */
-            const haystack = [subName, rule.reason]
+            // Block titles too: muscle-up's "Ring dip ladder" block is still
+            // scheduled with the substitute in it, and its title is not the
+            // deferred exercise (found 2026-10-29 once the reason card showed).
+            const haystack = [subName, rule.reason, ...(prog.blocks ?? []).map((b) => blockName(b))]
               .filter((t): t is string => !!t)
+              .sort((x, y) => y.length - x.length)
               .reduce((acc, t) => acc.split(t).join(" "), captured);
             for (const eid of rule.exclude_exercise_ids) {
               const name = nameOf(eid);

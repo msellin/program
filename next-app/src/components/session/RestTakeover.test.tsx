@@ -68,7 +68,7 @@ describe("the effort picker", () => {
   it("offers three plain choices that map onto reps in reserve", () => {
     renderRest();
     const names = screen.getAllByRole("radio").map((r) => r.getAttribute("aria-label"));
-    expect(names).toEqual(["Easy — 4+ more", "Right — ~2 more", "Too hard — 0-1 more"]);
+    expect(names).toEqual(["Easy — 4+ left", "Right — ~2 left", "Too hard — 0–1 left"]);
   });
 
   it("records Easy as RPE 6 on the set just logged", () => {

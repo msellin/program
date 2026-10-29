@@ -62,15 +62,18 @@ describe("the exercise rail's scheme line (BUG-29)", () => {
     // Read "6 sets · 93.5 kg" while sets 2-6 are FSL at 65-75% TM — the one
     // screen a person scans before loading a bar.
     renderBrief();
-    expect(screen.getByText("1 × 93.5 kg · 5 × 71.5 kg")).toBeDefined();
-    expect(screen.queryByText(/6 sets · 93\.5 kg/)).toBeNull();
+    // 2026-10-28: one line names the top set; the chips carry the back-offs.
+    expect(screen.getByText(/top set 93\.5 kg/)).toBeDefined();
+    expect(screen.getByText("back-offs 5 × 71.5 kg")).toBeDefined();
+    expect(screen.queryByText(/6 sets · 93\.5 kg$/)).toBeNull();
   });
 
   it("shows one weight for a straight-sets day, where every set is at it", () => {
     renderBrief({
       rails: [rail({ rowCount: 5, suggestion: { top_set: { kg: 60, reps: "5" }, fsl: null, reasoning: "" } })],
     });
-    expect(screen.getByText("5 sets · 60 kg")).toBeDefined();
+    // No FSL: the prescription is ramp-to-one-top-set, and the line says so.
+    expect(screen.getByText("5 sets · top set 60 kg × 5")).toBeDefined();
   });
 
   it("falls back to a bare count when there is no suggestion", () => {
@@ -109,23 +112,21 @@ describe("the day says whether there is a top set (BUG-38)", () => {
 
   it("a straight-sets day reads as five sets at one weight, with no top set", () => {
     renderBrief({ rails: [rail(straight)] });
-    expect(screen.getByText("5 × 75 kg")).toBeDefined();
+    expect(screen.getByText("5×5 · 75 kg")).toBeDefined();
     expect(screen.queryByText(/1 × 75 kg/)).toBeNull();
-    expect(screen.queryByText(/today.s top set/i)).toBeNull();
-    expect(screen.getByText(/No top set today/)).toBeDefined();
-    expect(screen.getByText(/working sets/i)).toBeDefined();
+    expect(screen.queryByText(/top set/i)).toBeNull();
   });
 
   it("a deload ladder reads as its three weights, with no top set", () => {
     renderBrief({ rails: [rail(ladder)] });
-    expect(screen.getByText("3 sets · 62.5 / 77.5 / 92.5 kg")).toBeDefined();
-    expect(screen.queryByText(/today.s top set/i)).toBeNull();
+    expect(screen.getByText("3×5 · 62.5 / 77.5 / 92.5 kg")).toBeDefined();
+    expect(screen.queryByText(/top set/i)).toBeNull();
   });
 
   it("a 5/3/1 day still says top set, and names the back-offs", () => {
     renderBrief();
     expect(screen.getAllByText(/top set/i).length).toBeGreaterThan(0);
-    expect(screen.getByText("Then 5 × 71.5 kg.")).toBeDefined();
+    expect(screen.getByText("back-offs 5 × 71.5 kg")).toBeDefined();
   });
 });
 
@@ -262,9 +263,11 @@ describe("optional work is visible as optional (comp-week taper)", () => {
     expect(screen.queryByText("Main")).toBeNull();
   });
 
-  it("still calls required work Main", () => {
+  it("does not mark required work optional", () => {
+    // The "Main" tag went in the 2026-10-28 redesign (accent economy); the
+    // main lift is marked by its bronze edge instead.
     renderBrief({ rails: [rail()] });
-    expect(screen.getByText("Main")).toBeTruthy();
+    expect(screen.queryByText("Optional")).toBeNull();
   });
 });
 
@@ -328,7 +331,7 @@ describe("follow-along on the Brief (2026-10-20)", () => {
   it("keeps barbell work in the session list and on the Start button on a mixed day", () => {
     const { onStart } = renderFollow([rail(), homeRail("adductor_iso_bent", "Adductor squeeze")]);
     expect(screen.getByText("The whole session")).toBeDefined();
-    screen.getByText(/^Start — Back squat/).click();
+    screen.getByText("Start session").click();
     expect(onStart).toHaveBeenCalled();
   });
 });

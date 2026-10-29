@@ -18,7 +18,7 @@ export async function gotoSessionWithWork(page: Page, slug: string): Promise<boo
     const iso = new Date(Date.now() + offset * 864e5).toISOString().slice(0, 10);
     await page.goto(offset === 0 ? `/session/${slug}/` : `/session/${slug}/?date=${iso}`);
     await page.waitForTimeout(1200);
-    if ((await page.getByRole("button", { name: /^(Start|Continue) —/ }).count()) > 0) return true;
+    if ((await page.getByRole("button", { name: /^(Start session|Continue —)/ }).count()) > 0) return true;
   }
   return false;
 }

@@ -1,9 +1,9 @@
 "use client";
 
-import { ChevronLeft, Volume2, Vibrate, Palette, Languages, Download, ListPlus } from "lucide-react";
+import { ChevronLeft, Volume2, Vibrate, Palette, Languages, Download, ListPlus, PlayCircle } from "lucide-react";
 import { useStore } from "@/lib/useStore";
 import { hasOffPlanSetting, isOffPlanOn } from "@/lib/features";
-import { useHapticPref, useSoundPref } from "@/lib/useUserPrefs";
+import { useDemoAutoplayPref, useHapticPref, useSoundPref } from "@/lib/useUserPrefs";
 import { useInstallPrompt } from "@/lib/useInstallPrompt";
 import { hapticTap } from "@/lib/utils";
 import { playConfirm } from "@/lib/sound";
@@ -29,6 +29,7 @@ export default function SettingsPage() {
   const offPlan = useStore((st) => isOffPlanOn(st.store));
   const setFeatureFlag = useStore((st) => st.setFeatureFlag);
   const [haptic, setHaptic] = useHapticPref();
+  const [demoAutoplay, setDemoAutoplay] = useDemoAutoplayPref();
   const { canInstall, promptInstall } = useInstallPrompt();
 
   return (
@@ -72,6 +73,19 @@ export default function SettingsPage() {
           onToggle={(v) => {
             setHaptic(v);
             if (v) hapticTap("medium");
+          }}
+        />
+      </Section>
+
+      <Section eyebrow="Demo clips">
+        <ToggleRow
+          icon={<PlayCircle size={16} className="text-muted" aria-hidden />}
+          label="Play demo clips automatically"
+          hint="Muted, on the first set of an exercise. They load from YouTube, which then receives your IP address."
+          value={demoAutoplay}
+          onToggle={(v) => {
+            setDemoAutoplay(v);
+            hapticTap("light");
           }}
         />
       </Section>

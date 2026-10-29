@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 const KEYS = {
   sound: "terav.pref.sound",
   haptic: "terav.pref.haptic",
+  demoAutoplay: "terav.pref.demo-autoplay",
 } as const;
 
 function readBool(key: string, fallback: boolean): boolean {
@@ -54,4 +55,21 @@ export function readSoundPref(): boolean {
 
 export function readHapticPref(): boolean {
   return readBool(KEYS.haptic, true);
+}
+
+/**
+ * Demo clips play on their own (owner decision, 2026-10-29). OFF until the
+ * user says yes: the prompt after their first "Watch demo" tap, or Settings.
+ * An unset key means "never asked", which is the only time we ask.
+ */
+export function useDemoAutoplayPref() {
+  return useBoolPref(KEYS.demoAutoplay, false);
+}
+
+export function demoAutoplayAsked(): boolean {
+  return typeof window !== "undefined" && window.localStorage.getItem(KEYS.demoAutoplay) != null;
+}
+
+export function readDemoAutoplayPref(): boolean {
+  return readBool(KEYS.demoAutoplay, false);
 }

@@ -19,6 +19,12 @@ export function ytEmbedSrc(url: string, clip?: { start?: number; end?: number })
     q.set("autoplay", "1");
     q.set("mute", "1");
     q.set("enablejsapi", "1");
+    // A loop of the movement, not a video to browse: YouTube's own controls,
+    // annotations and fullscreen sat over the picture in a 16:9 band.
+    q.set("controls", "0");
+    q.set("iv_load_policy", "3");
+    q.set("fs", "0");
+    q.set("disablekb", "1");
     if (typeof window !== "undefined") q.set("origin", window.location.origin);
     if (clip.start != null) q.set("start", String(clip.start));
     if (clip.end != null) q.set("end", String(clip.end));
@@ -33,6 +39,10 @@ export function DemoVideo({
   title,
   hasFigure,
   onOpenChange,
+  initialOpen = false,
+  onUserToggle,
+  wholeArea = false,
+  hideClose = false,
 }: {
   url: string;
   start?: number;
@@ -41,8 +51,21 @@ export function DemoVideo({
   /** With a figure the control is a small chip over it; without, it fills the box. */
   hasFigure: boolean;
   onOpenChange?: (open: boolean) => void;
+  /**
+   * Start already loaded. Only for a clip the user has ALREADY tapped open in
+   * this session (the set player remounts per set, and a loop that closed
+   * itself between sets would make "Watch demo" a per-set chore). Never set it
+   * for a clip nobody tapped: that would request YouTube unasked.
+   */
+  initialOpen?: boolean;
+  /** Fires only on a tap (open or close), never on unmount — unlike `onOpenChange`. */
+  onUserToggle?: (open: boolean) => void;
+  /** With a figure: the whole figure is the tap target, not only the chip in its corner. */
+  wholeArea?: boolean;
+  /** The caller renders its own close control outside the frame (YouTube's chrome sits on the frame's edges). */
+  hideClose?: boolean;
 }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(initialOpen);
   const frame = useRef<HTMLIFrameElement>(null);
   const src = ytEmbedSrc(url, { start, end });
   const clipped = start != null || end != null;
@@ -81,11 +104,14 @@ export function DemoVideo({
   const toggle = (v: boolean) => {
     setOpen(v);
     onOpenChange?.(v);
+    onUserToggle?.(v);
   };
 
   if (open) {
     return (
-      <div className="absolute inset-0 bg-ground">
+      // Transparent until the frame paints, so the figure underneath shows
+      // instead of a black box while the clip loads.
+      <div className="absolute inset-0">
         <iframe
           ref={frame}
           src={src}
@@ -102,13 +128,13 @@ export function DemoVideo({
           allowFullScreen
           referrerPolicy="strict-origin-when-cross-origin"
         />
-        <button
+        {hideClose ? null : <button
           type="button"
           onClick={() => toggle(false)}
-          className="absolute right-2 top-2 flex h-11 items-center rounded-full bg-ground/80 px-3.5 text-caption font-semibold text-ink"
+          className="absolute bottom-2 left-2 flex h-11 items-center rounded-full bg-ground/80 px-3.5 text-caption font-semibold text-ink"
         >
-          Close video
-        </button>
+          Hide demo
+        </button>}
       </div>
     );
   }
@@ -119,13 +145,23 @@ export function DemoVideo({
       onClick={() => toggle(true)}
       aria-label={`Watch demo video of ${title}. Loads from YouTube`}
       className={
-        hasFigure
+        hasFigure && wholeArea
+          ? "absolute inset-0 text-ink"
+          : hasFigure
           ? "absolute left-2.5 top-2.5 flex h-11 items-center gap-1.5 rounded-full bg-ground/70 px-3.5 text-caption font-semibold text-ink"
           : "absolute inset-0 flex flex-col items-center justify-center gap-2 text-ink"
       }
     >
-      <span aria-hidden="true">▶</span>
-      <span className={hasFigure ? "" : "text-small font-semibold"}>Watch demo</span>
+      {hasFigure && wholeArea ? (
+        <span className="absolute left-2.5 top-2.5 flex h-11 items-center gap-1.5 rounded-full border border-line-strong bg-ground/80 px-3.5 text-caption font-semibold">
+          <span aria-hidden="true">▶</span> Watch demo
+        </span>
+      ) : (
+        <>
+          <span aria-hidden="true">▶</span>
+          <span className={hasFigure ? "" : "text-small font-semibold"}>Watch demo</span>
+        </>
+      )}
       {hasFigure ? null : <span className="text-caption text-muted">Loads from YouTube when you tap</span>}
     </button>
   );

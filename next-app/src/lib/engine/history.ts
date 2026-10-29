@@ -16,6 +16,15 @@ export function lastSessionSetsFor(
   exerciseId: string,
   todayISO: string,
 ): SetLog[] | null {
+  return lastSessionFor(store, exerciseId, todayISO)?.sets ?? null;
+}
+
+/** Same as `lastSessionSetsFor`, with the date, so "Last time" can say when. */
+export function lastSessionFor(
+  store: Store,
+  exerciseId: string,
+  todayISO: string,
+): { date: string; sets: SetLog[] } | null {
   const dates = Object.keys(store.logs)
     .filter((d) => d < todayISO)
     .sort()
@@ -35,7 +44,7 @@ export function lastSessionSetsFor(
       const anyLogged = madeSets.some(
         (s) => s.weight_kg != null && s.weight_kg > 0 && s.reps != null && s.reps > 0,
       );
-      if (anyLogged) return madeSets;
+      if (anyLogged) return { date: d, sets: madeSets };
       // Legacy single-value entry (pre-sets migration) — synthesise a single set.
       if (
         entry.weight_kg != null &&
@@ -43,13 +52,16 @@ export function lastSessionSetsFor(
         entry.reps != null &&
         entry.reps > 0
       ) {
-        return [
-          {
-            weight_kg: entry.weight_kg,
-            reps: entry.reps,
-            rpe: entry.rpe ?? null,
-          },
-        ];
+        return {
+          date: d,
+          sets: [
+            {
+              weight_kg: entry.weight_kg,
+              reps: entry.reps,
+              rpe: entry.rpe ?? null,
+            },
+          ],
+        };
       }
     }
   }

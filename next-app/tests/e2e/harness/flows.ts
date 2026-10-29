@@ -589,7 +589,7 @@ export const FLOWS: Flow[] = [
         },
       );
 
-      const change = ctx.page.getByRole("button", { name: /change the (weight|reps|time)/i });
+      const change = ctx.page.getByRole("button", { name: /^change (the )?(weight|reps|time)$/i });
       if (await change.count()) {
         await change.click({ timeout: CLICK_TIMEOUT_MS });
         await ctx.page.waitForTimeout(300);
@@ -621,32 +621,28 @@ export const FLOWS: Flow[] = [
       }
       await ctx.capture("03-pips-walked");
 
-      await ctx.tap("SetView", /change the weight/i);
+      await ctx.tap("SetView", /^change (the )?weight$/i);
       await ctx.tap("SetView", /^(Done|Save) — set/);
 
-      const railCount = Math.min(
-        await ctx.page.locator('[data-surface="SetView"] div.overflow-x-auto button').count(),
-        6,
-      );
+      // The tab rail became an exercise switcher (2026-10-28): the name is a
+      // button that opens a sheet listing every exercise. Walk it the same
+      // way, recorded under the same stable alias so coverage stays comparable.
+      const switcher = ctx.page.getByRole("button", { name: /Switch exercise$/ });
+      const railCount = (await switcher.count()) > 0 ? 6 : 0;
       for (let i = 0; i < railCount; i++) {
-        const tab = ctx.page.locator('[data-surface="SetView"] div.overflow-x-auto button').nth(i);
-        if ((await tab.count()) === 0) break;
-        // Clicked through the locator we already hold, then recorded
-        // under a stable alias.
-        //
-        // Two faults in one line before this: the regex was built from
-        // `textContent`, which glues the tab's label to its set counter
-        // ("High-bar back squat2/6") and never matches the accessible
-        // name; and filing the hit under the exercise's own name made
-        // SetView's denominator a function of session content, so a
-        // program with twelve drills scored worse than one with four for
-        // doing exactly the same thing. Same class as G6, which was only
-        // ever fixed for the "Save — set N · N kg" family.
         try {
-          await tab.click({ timeout: CLICK_TIMEOUT_MS });
+          await switcher.first().click({ timeout: CLICK_TIMEOUT_MS });
+          const rows = ctx.page.locator('[data-surface="ExerciseSwitcher"] div.overflow-y-auto button');
+          await rows.first().waitFor({ state: "visible", timeout: CLICK_TIMEOUT_MS });
+          const n = await rows.count();
+          if (i >= n) {
+            await ctx.page.locator('[data-surface="ExerciseSwitcher"]').getByRole("button", { name: /^Close$/ }).click();
+            break;
+          }
+          await rows.nth(i).click({ timeout: CLICK_TIMEOUT_MS });
           ctx.record("SetView", "rail tab");
         } catch {
-          /* a tab that will not take a click is the rail's problem, not the walk's */
+          /* a row that will not take a click is the switcher's problem, not the walk's */
         }
         await ctx.page.waitForTimeout(400);
       }
@@ -742,7 +738,7 @@ export const FLOWS: Flow[] = [
       await ctx.capture("01-mid-set");
       const before = await ctx.page
         .locator('[data-surface="SetView"] span')
-        .filter({ hasText: /· set \d+ of \d+/ })
+        .filter({ hasText: /\bset \d+ of \d+/i })
         .first()
         .textContent({ timeout: TEXT_TIMEOUT_MS })
         .catch(() => null);
@@ -789,7 +785,7 @@ export const FLOWS: Flow[] = [
   },
   {
     id: "session-rest-jump",
-    desc: "Rest takeover → Do something else next → jump to another exercise",
+    desc: "Rest takeover → Switch exercise → jump to another exercise",
     async run(ctx) {
       /**
        * Split out of `session-rest-extend` on 2026-09-04.
@@ -812,7 +808,7 @@ export const FLOWS: Flow[] = [
       if ((await ctx.page.locator('[data-surface="RestTakeover"]').count()) === 0) {
         throw new SkipFlow("rest takeover did not open");
       }
-      if (!(await ctx.tap("RestTakeover", /do something else next/i))) {
+      if (!(await ctx.tap("RestTakeover", /^switch exercise$/i))) {
         throw new SkipFlow("no jump affordance on this rest");
       }
       await ctx.page.waitForTimeout(450);
@@ -896,7 +892,7 @@ export const FLOWS: Flow[] = [
         }
         await ctx.page.waitForTimeout(300);
       }
-      if (await ctx.tap("RestTakeover", /do something else next/i)) {
+      if (await ctx.tap("RestTakeover", /^switch exercise$/i)) {
         await ctx.page.waitForTimeout(450);
         await ctx.probe("RestTakeover", '[data-surface="RestTakeover"] [role="dialog"]');
         await ctx.capture("02c-jump-sheet");
@@ -1653,7 +1649,7 @@ export const FLOWS: Flow[] = [
       await ctx.capture("01-hold-idle");
       await ctx.check(
         "a held exercise shows its authored dose",
-        async () => (await ctx.page.getByText(/Programme asks for/i).count()) > 0,
+        async () => (await ctx.page.getByText(/Programme asks for|^Plan: /i).count()) > 0,
       );
       await start.click({ timeout: CLICK_TIMEOUT_MS });
       await ctx.page.waitForTimeout(2600);
@@ -1881,12 +1877,12 @@ export const FLOWS: Flow[] = [
     async run(ctx) {
       await openGuided(ctx);
       await ctx.capture("02-guided-ready");
-      await ctx.page.getByRole("button", { name: /^This hurts$/ }).click({ timeout: CLICK_TIMEOUT_MS });
+      await ctx.page.getByRole("button", { name: /^(This hurts|Something hurts)$/ }).click({ timeout: CLICK_TIMEOUT_MS });
       const stopped = ctx.page.getByRole("heading", { name: /^Stopped$/ });
       await stopped.waitFor({ state: "visible", timeout: 5000 });
       await ctx.capture("03-guided-stopped");
-      if ((await ctx.page.getByRole("link", { name: /Log how it feels/ }).count()) === 0) {
-        throw new Error("Stopped screen has no 'Log how it feels' link");
+      if ((await ctx.page.getByRole("link", { name: /Log how it feels|Log what hurt/ }).count()) === 0) {
+        throw new Error("Stopped screen has no 'Log what hurt' link");
       }
     },
   },

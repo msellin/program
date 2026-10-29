@@ -44,20 +44,20 @@ async function signInWithPersona(page: import("@playwright/test").Page, persona:
 test("a logged set can be reopened and corrected from the set pips", async ({ page }) => {
   await signInWithPersona(page, "persona-recover");
   expect(await gotoSessionWithWork(page, "anterior-hip-rebuild")).toBe(true);
-  await page.getByRole("button", { name: /^(Start|Continue) —/ }).click({ timeout: 20_000 });
+  await page.getByRole("button", { name: /^(Start session|Continue —)/ }).click({ timeout: 20_000 });
 
-  await expect(page.getByText(/· set 1 of \d+/i)).toBeVisible();
+  await expect(page.getByText(/\bset 1 of \d+/i)).toBeVisible();
   await page.getByRole("button", { name: /^Done — set 1 · \d/ }).click();
   await page.getByRole("button", { name: /skip rest/i }).click();
-  await expect(page.getByText(/· set 2 of \d+/i)).toBeVisible({ timeout: 5_000 });
+  await expect(page.getByText(/\bset 2 of \d+/i)).toBeVisible({ timeout: 5_000 });
 
   // The whole point: go BACK to a set that is already logged.
   await page.getByRole("button", { name: /^Set 1, logged .* Edit\.$/ }).click();
-  await expect(page.getByText(/· set 1 of \d+/i)).toBeVisible();
+  await expect(page.getByText(/\bset 1 of \d+/i)).toBeVisible();
   await expect(page.getByText("Editing")).toBeVisible();
 
   // Correcting it must not start a rest timer, and must persist.
-  await page.getByRole("button", { name: /change the weight/i }).click();
+  await page.getByRole("button", { name: /^change (the )?weight$/i }).click();
   const kg = page.getByLabel("kg", { exact: true });
   await kg.fill("42.5");
   const save = page.getByRole("button", { name: /^Save — set 1 · 42\.5 kg$/ });
@@ -142,7 +142,7 @@ test("Day renders tracks that were never materialized", async ({ page }) => {
 test("+30s extends the rest timer instead of resetting it", async ({ page }) => {
   await signInWithPersona(page, "persona-recover");
   expect(await gotoSessionWithWork(page, "anterior-hip-rebuild")).toBe(true);
-  await page.getByRole("button", { name: /^(Start|Continue) —/ }).click({ timeout: 20_000 });
+  await page.getByRole("button", { name: /^(Start session|Continue —)/ }).click({ timeout: 20_000 });
   await page.getByRole("button", { name: /^Done — set 1 · \d/ }).click();
 
   const clock = page.locator("p").filter({ hasText: /^\d+:\d\d$/ }).first();

@@ -51,11 +51,12 @@ test("Brief: tapping an exercise row opens the Set view", async ({ page }) => {
   expect(await gotoSessionWithWork(page, SLUG)).toBe(true);
   // Brief renders: "The whole session" list of exercise rows.
   await expect(page.getByText("The whole session")).toBeVisible({ timeout: 20_000 });
-  const rows = page.locator('button:has-text("sets")').filter({ hasNotText: "Start" });
+  // Rows carry one prescription line ("5×5 · 60 kg", "8 sets · top set …").
+  const rows = page.getByRole("button").filter({ hasText: /×|\bsets\b/ }).filter({ hasNotText: /Start|Continue/ });
   const first = rows.first();
   await expect(first).toBeVisible();
   await first.click();
   // Set view header: "<exercise> · set 1 of N" + "N sets left".
-  await expect(page.getByText(/sets left/i)).toBeVisible({ timeout: 5_000 });
-  await expect(page.getByText(/· set \d+ of \d+/i)).toBeVisible();
+  await expect(page.getByText(/left today/i)).toBeVisible({ timeout: 5_000 });
+  await expect(page.getByText(/\bset \d+ of \d+/i)).toBeVisible();
 });

@@ -5,8 +5,8 @@ import { useState } from "react";
 import { cardClass } from "@/components/ui/Card";
 import { cn } from "@/lib/utils";
 import { RacePlanCard } from "@/components/session/RacePlanCard";
-import { programProgress, endsLabel } from "@/lib/program-progress";
-import { humanPhaseName, programDisplayName, humanBlockName, exerciseListName } from "@/lib/day-format";
+import { programProgress } from "@/lib/program-progress";
+import { programDisplayName, humanBlockName, exerciseListName } from "@/lib/day-format";
 import { entrySets } from "@/lib/useStore";
 import { ProposalCard } from "@/components/workout/ProposalCard";
 import { CycleStartCard } from "@/components/session/CycleStartCard";
@@ -18,6 +18,7 @@ import { escalationNoticeFor } from "@/lib/engine/escalation";
 import { activeExclusions, exclusionNotices, exclusionsAffectingDay } from "@/lib/engine/intake-exclusions";
 import { Button } from "@/components/ui/Button";
 import { ExerciseFigure } from "@/components/follow-along/ExerciseFigure";
+import { prescriptionChips, prescriptionLine } from "@/lib/prescription-line";
 import { figureFor } from "@/lib/figures/exercise-figures";
 
 const ZERO = () => 0;
@@ -103,10 +104,8 @@ export function BriefView({
         ? `${requiredRail.length} ${exWord} · ${totalMinutes}${optionalSuffix}`
         : `${requiredRail.length} ${exWord}${optionalSuffix}`;
 
-  const progressLabel = phase ? humanPhaseName(phase.name) : null;
   // P-06: week N of M comes from the same whole-program selector as Today and Plan.
   const prog = program.phases?.length ? programProgress(program, activeDate, store.user_profile) : null;
-  const progressDetail = prog ? `week ${prog.weekN} of ${prog.totalWeeks} · ends ${endsLabel(prog.endsOn)}` : null;
   const escalation = escalationNoticeFor(program, store, activeDate);
 
   const gateUnresolved = !!cycleGateProposal;
@@ -171,12 +170,12 @@ export function BriefView({
     : !hero
     ? "Start"
     : heroLoggedCount > 0
-      ? `Continue — ${hero.exercise.name}, set ${Math.min(heroLoggedCount + 1, hero.rowCount)}`
-      : `Start — ${hero.exercise.name}`;
+      ? `Continue — set ${Math.min(heroLoggedCount + 1, hero.rowCount)}`
+      : "Start session";
 
   return (
     <div className="flex flex-col min-h-[calc(100dvh-64px-env(safe-area-inset-bottom))]">
-      <div className="flex-1 space-y-5 pb-6">
+      <div className="flex-1 space-y-5 pb-28 [@media(max-height:700px)]:pb-32">
         {/* Program name as the eyebrow above the day (same order as Today):
             beside a 32px day name it ran off the edge at 375. */}
         <header className="space-y-1">
@@ -189,15 +188,29 @@ export function BriefView({
             {dayName(activeDate)}
           </h1>
         </header>
-        <div className="-mt-3 space-y-0.5">
-          <p className="text-small text-muted">{summary}</p>
-          {progressLabel ? (
-            <p className="text-caption text-muted">
-              {progressLabel}
-              {progressDetail ? ` · ${progressDetail}` : ""}
-            </p>
-          ) : null}
-        </div>
+        {/* One plain line (2026-10-28). The phase name ("Cycles 3 + 4 (with
+            1RM test)") was programme-author jargon on the day card; the week
+            is what a person tracks. */}
+        <p className="-mt-3 text-small text-muted">
+          {summary}
+          {prog ? ` · week ${prog.weekN} of ${prog.totalWeeks}` : ""}
+        </p>
+        {/* Why these numbers — Terav's core: every load names its basis.
+            This line was the bottom of the deleted top-set card, under the
+            sticky bar where nobody saw it. */}
+        {hero && basisLine(hero, store) ? (
+          <a
+            href="/plan/"
+            className="-mt-1 flex min-h-[48px] items-center justify-between gap-3 rounded-2xl border border-line-soft bg-surface px-3.5 py-2 text-small text-ink"
+          >
+            <span>
+              <span className="block text-caption text-muted">Why these weights</span>
+              {heroShape.kind === "top_set" ? "Top set at " : "Working sets at "}
+              {basisLine(hero, store)}
+            </span>
+            <span className="flex-shrink-0 text-muted" aria-hidden="true">›</span>
+          </a>
+        ) : null}
 
         {cycleGateProposal ? (
           <CycleStartCard proposal={cycleGateProposal} date={activeDate} />
@@ -289,8 +302,29 @@ export function BriefView({
             <RacePlanCard program={program} store={store} />
           </div>
         ) : null}
+        {/* Intake deferrals sit outside the session list, which a guided-only
+            day hides: the reason for a swap must show on every day it applies. */}
+        <div className="space-y-[7px] empty:hidden">
+          {exclusionNotices(
+            exclusionsAffectingDay(
+              program,
+              blocks.map((b) => b.id),
+              activeExclusions(program, store.user_profile),
+            ),
+          ).map((note) => (
+            <div
+              key={note}
+              className={cardClass()}
+            >
+              <p className="text-caption uppercase tracking-widest text-slate mb-1">
+                Adjusted for you
+              </p>
+              <p className="text-small leading-snug text-ink">{note}</p>
+            </div>
+          ))}
+        </div>
         <div className={allFollow && prescriptionBlocks.length === 0 && !escalation ? "hidden" : undefined}>
-          <p className="text-caption uppercase tracking-[.16em] text-muted mb-[9px]">
+          <p className="text-small font-semibold text-ink mb-2">
             {isPrescriptionSession ? "Today's session" : allFollow ? "Also today" : "The whole session"}
           </p>
           <div className="space-y-[7px]">
@@ -334,23 +368,6 @@ export function BriefView({
                 <p className="text-small leading-snug text-ink">{escalation.text}</p>
               </div>
             ) : null}
-            {exclusionNotices(
-              exclusionsAffectingDay(
-                program,
-                blocks.map((b) => b.id),
-                activeExclusions(program, store.user_profile),
-              ),
-            ).map((note) => (
-              <div
-                key={note}
-                className={cardClass()}
-              >
-                <p className="text-caption uppercase tracking-widest text-slate mb-1">
-                  Adjusted for you
-                </p>
-                <p className="text-small leading-snug text-ink">{note}</p>
-              </div>
-            ))}
             {listRail.map((r) => {
               const entry = store.logs[activeDate]?.exercises[r.key] ?? null;
               const loggedCount = countLoggedSets(entrySets(entry), r.isLoadable);
@@ -366,144 +383,69 @@ export function BriefView({
               // still opt in — see dev/active/optional-items/plan.md.
               const isOptional = requiredRowCount(r) === 0;
               const hasOptionalTail = !isOptional && (r.optionalRows ?? 0) > 0;
+              const chips = isMain ? prescriptionChips(r) : [];
               return (
                 <button
                   key={r.key}
                   type="button"
                   onClick={() => onSelectExercise(r.key)}
                   className={
-                    "w-full flex items-center gap-3 rounded-lg bg-surface px-3.5 py-[13px] text-left " +
-                    (isOptional ? "border border-dashed border-line-soft" : "border border-line-soft")
+                    "w-full rounded-2xl bg-surface px-3.5 py-3 text-left " +
+                    (isOptional ? "border border-dashed border-line-soft" : "border border-line-soft") +
+                    (isMain && !isDone ? " border-bronze" : "")
                   }
                 >
-                  {figureFor(r.exercise.id) ? (
-                    <span className="h-12 w-[68px] flex-shrink-0 overflow-hidden rounded-md bg-ground" aria-hidden="true">
-                      <ExerciseFigure
-                        figure={figureFor(r.exercise.id)!}
-                        side="B"
-                        playing={false}
-                        getElapsed={ZERO}
-                      />
+                  <span className="flex items-center gap-3">
+                    {figureFor(r.exercise.id) ? (
+                      <span className="h-12 w-16 flex-shrink-0 overflow-hidden rounded-lg bg-ground" aria-hidden="true">
+                        <ExerciseFigure figure={figureFor(r.exercise.id)!} side="B" playing={false} getElapsed={ZERO} />
+                      </span>
+                    ) : null}
+                    <span className="min-w-0 flex-grow">
+                      <span className="block text-body font-semibold text-strong tracking-[-.01em]">
+                        {exerciseListName(r.exercise)}
+                      </span>
+                      <span className="block text-small text-muted tabular-nums">
+                        {prescriptionLine(r, store, activeDate)}
+                        {hasOptionalTail ? ` · last ${r.optionalRows} optional` : ""}
+                      </span>
                     </span>
-                  ) : null}
-                  <span className="min-w-0 flex-grow">
-                    <span className="block text-body font-semibold text-strong tracking-[-.01em] mb-0.5">
-                      {exerciseListName(r.exercise)}
-                    </span>
-                    <span className="block text-caption text-ink">
-                      {railScheme(r)}
-                      {hasOptionalTail ? (
-                        <span className="text-muted">
-                          {" "}
-                          · last {r.optionalRows} optional
-                        </span>
-                      ) : null}
-                    </span>
-                    {/* A7 (2026-08-26): notes were WRITE-ONLY. Two buried
-                        entry points, and no screen ever showed one back —
-                        so there was no reason to write one, and the
-                        founder's 24 Aug session recorded eight exercises,
-                        five sets at RPE 9, and not a single note. The
-                        engine mines these for fatigue and pain signals
-                        (note-signals.ts), so an invisible note is a lost
-                        engine input, not just lost prose. */}
-                    {entry?.notes?.trim() ? (
-                      <span className="block text-caption italic text-slate mt-1 line-clamp-2">
-                        “{entry.notes.trim()}”
+                    {isDone || loggedCount > 0 || isOptional ? (
+                      <span className="ml-auto flex-shrink-0 text-caption text-muted">
+                        {isDone ? "Done" : loggedCount > 0 ? `${loggedCount}/${r.rowCount}` : "Optional"}
                       </span>
                     ) : null}
                   </span>
-                  <span
-                    className={
-                      "ml-auto flex-shrink-0 text-caption uppercase tracking-[.1em] " +
-                      (isDone ? "text-muted" : isMain ? "text-bronze" : "text-muted")
-                    }
-                  >
-                    {isDone
-                      ? "Done"
-                      : loggedCount > 0
-                        ? "Held"
-                        : isOptional
-                          ? "Optional"
-                          : isMain
-                            ? "Main"
-                            : ""}
-                  </span>
+                  {chips.length ? (
+                    <span className="mt-2.5 -mr-3.5 flex gap-1.5 overflow-x-auto no-scrollbar whitespace-nowrap pr-3.5">
+                      {chips.map((c, i) => (
+                        <span key={i} className="flex-shrink-0 rounded-full border border-line-soft px-2.5 py-1 text-caption font-medium tabular-nums text-ink">
+                          {c}
+                        </span>
+                      ))}
+                    </span>
+                  ) : null}
+                  {/* A7 (2026-08-26): notes were WRITE-ONLY — an invisible note
+                      is a lost engine input (note-signals.ts), not just prose. */}
+                  {entry?.notes?.trim() ? (
+                    <span className="block text-caption italic text-slate mt-1.5 line-clamp-2">
+                      “{entry.notes.trim()}”
+                    </span>
+                  ) : null}
                 </button>
               );
             })}
           </div>
         </div>
-        {hero ? (
-          <div className={cardClass()}>
-            <p className="text-caption uppercase tracking-[.16em] text-muted mb-2.5">
-              {heroShape.kind === "top_set" ? "Today\u2019s top set" : "Today\u2019s working sets"}
-            </p>
-            <p className="text-body font-semibold text-strong mb-2 tracking-[-.015em]">
-              {hero.exercise.name}
-            </p>
-            {hero.suggestion && heroShape.kind !== "none" ? (
-              <>
-                <div className="flex items-baseline gap-[7px] mb-2">
-                  {heroShape.kind === "straight" ? (
-                    <>
-                      <span className="text-h1 leading-none font-semibold text-strong">{heroShape.sets}</span>
-                      <span className="text-h3 text-muted">×</span>
-                      <span className="text-h1 leading-none font-semibold text-strong">{heroShape.reps}</span>
-                      <span className="text-h3 text-muted">at</span>
-                      <span className="text-metric leading-none font-semibold tracking-[-.04em] text-strong">{heroShape.kg}</span>
-                      <span className="text-body font-medium text-muted">kg</span>
-                    </>
-                  ) : heroShape.kind === "ladder" ? (
-                    <>
-                      <span className="text-h1 leading-none font-semibold tracking-[-.03em] text-strong">
-                        {heroShape.kgs.join(" · ")}
-                      </span>
-                      <span className="text-body font-medium text-muted">kg</span>
-                      <span className="text-h3 text-muted">×</span>
-                      <span className="text-h1 leading-none font-semibold text-strong">{heroShape.reps}</span>
-                    </>
-                  ) : (
-                    <>
-                      <span className="text-metric leading-none font-semibold tracking-[-.04em] text-strong">{heroShape.kg}</span>
-                      <span className="text-body font-medium text-muted">kg</span>
-                      <span className="text-h3 text-muted">×</span>
-                      <span className="text-h1 leading-none font-semibold text-strong">{heroShape.reps}</span>
-                    </>
-                  )}
-                </div>
-                <p className="text-small leading-snug text-ink">
-                  {heroShape.kind === "straight"
-                    ? "No top set today \u2014 every set at the same weight."
-                    : heroShape.kind === "ladder"
-                      ? "No top set today \u2014 one set at each weight, lightest first."
-                      : [
-                          heroShape.ramp.length
-                            ? `After ${heroShape.ramp.map((w) => `${w.kg} \u00d7 ${w.reps}`).join(", ")}.`
-                            : null,
-                          heroShape.backoff
-                            ? `Then ${heroShape.backoff.sets} \u00d7 ${heroShape.backoff.kg} kg.`
-                            : null,
-                        ]
-                          .filter(Boolean)
-                          .join(" ") || null}
-                </p>
-                {basisLine(hero, store) ? (
-                  <p className="text-small leading-snug text-ink">{basisLine(hero, store)}</p>
-                ) : null}
-              </>
-            ) : (
-              <p className="text-small text-ink">{hero.rowCount} sets</p>
-            )}
-          </div>
-        ) : null}
+        {/* One quiet list for the two secondary links (round 6). */}
+        <div className="rounded-2xl border border-line-soft divide-y divide-line-soft px-3.5">
         {guidanceBlocks.length > 0 ? (
           <details className="group">
             <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between text-small text-muted [&::-webkit-details-marker]:hidden">
               <span>How to run this</span>
               <span className="transition-transform group-open:rotate-90 motion-reduce:transition-none" aria-hidden="true">›</span>
             </summary>
-            <div className={cn(cardClass(), "space-y-2")}>
+            <div className="space-y-2 pb-3">
               {guidanceBlocks.map((b) => (
                 <p key={b.id} className="text-small leading-relaxed text-ink whitespace-pre-line">
                   {b.note}
@@ -520,6 +462,7 @@ export function BriefView({
           <span className="text-small text-muted">Log an extra session</span>
           <span className="flex-shrink-0 text-small text-muted" aria-hidden="true">›</span>
         </button>
+        </div>
       </div>
 
       <div className="sticky bottom-[calc(64px+env(safe-area-inset-bottom))] z-10 flex-shrink-0 border-t border-line-soft bg-ground pt-2 pb-2 mt-4">
@@ -554,6 +497,9 @@ export function BriefView({
             block
             className="min-w-0 flex-1"
           >
+            {!isPrescriptionSession && !allFollow && heroLoggedCount === 0 ? (
+              <span aria-hidden="true" className="mr-2 text-caption">▶</span>
+            ) : null}
             <span className="truncate">{startLabel}</span>
           </Button>
           )}

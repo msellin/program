@@ -443,7 +443,9 @@
       ],
       "rationale": "Unilateral posterior-chain loading — teaches the hip hinge with a stable spine and closes left-right glute-max gaps.",
       "video_search": "single leg romanian deadlift form",
-      "video_url": "https://www.youtube.com/watch?v=Zfr6wizR8rs"
+      "video_url": "https://www.youtube.com/watch?v=Zfr6wizR8rs",
+      "video_start": 374,
+      "video_end": 384
     },
     {
       "id": "block_pull_midshin",
@@ -469,7 +471,9 @@
       "progression": "deadlift_conventional",
       "regression": "trap_bar_dl_blocks",
       "video_search": "block pull deadlift technique",
-      "video_url": "https://www.youtube.com/watch?v=jfSxbT-65ow"
+      "video_url": "https://www.youtube.com/watch?v=jfSxbT-65ow",
+      "video_start": 103,
+      "video_end": 114
     },
     {
       "id": "deadlift_conventional",

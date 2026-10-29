@@ -65,17 +65,17 @@ test("morning check returns to Day on save", async ({ page }) => {
 test("Set CTA names the set, and rest announces the set the timer lands on", async ({ page }) => {
   await signInWithPersona(page, "persona-recover");
   expect(await gotoSessionWithWork(page, "anterior-hip-rebuild")).toBe(true);
-  await page.getByRole("button", { name: /^(Start|Continue) —/ }).click({ timeout: 20_000 });
-  await expect(page.getByText(/· set 1 of \d+/i)).toBeVisible();
+  await page.getByRole("button", { name: /^(Start session|Continue —)/ }).click({ timeout: 20_000 });
+  await expect(page.getByText(/\bset 1 of \d+/i)).toBeVisible();
   const cta = page.getByRole("button", { name: /^Done — set 1 · \d/ });
   await expect(cta).toBeVisible();
   await cta.click();
   // Rest takeover: the timer advances to set 2 of the SAME exercise, so
   // that — not the next exercise — is what "Next up" must say.
   await expect(page.getByText("Next up")).toBeVisible({ timeout: 5_000 });
-  await expect(page.getByText(/^Set 2 of \d+$/)).toBeVisible();
+  await expect(page.getByText(/^Set 2 of \d+( · .+)?$/)).toBeVisible();
   await page.getByRole("button", { name: /skip rest/i }).click();
-  await expect(page.getByText(/· set 2 of \d+/i)).toBeVisible({ timeout: 5_000 });
+  await expect(page.getByText(/\bset 2 of \d+/i)).toBeVisible({ timeout: 5_000 });
   await expect(page.getByRole("button", { name: /^Done — set 2 · \d/ })).toBeVisible();
 });
 
@@ -89,7 +89,7 @@ test("off-plan runs the same Set/Rest pattern", async ({ page }) => {
   await page.goto("/off-plan/");
   const row = page.locator("button", { hasText: /\d+ sets/ }).first();
   await row.click({ timeout: 20_000 });
-  await expect(page.getByText(/· set 1 of \d+/i)).toBeVisible({ timeout: 10_000 });
+  await expect(page.getByText(/\bset 1 of \d+/i)).toBeVisible({ timeout: 10_000 });
   await page.getByRole("button", { name: /^Done — set 1/ }).click();
   await expect(page.getByText("Next up")).toBeVisible({ timeout: 10_000 });
 });

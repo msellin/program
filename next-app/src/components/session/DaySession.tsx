@@ -470,6 +470,7 @@ export function DaySession({ slug, initialDate }: { slug: string; initialDate?: 
         onOpenSheet={setSheet}
         onCloseSheet={() => setSheet(null)}
         date={activeDate}
+        resting={resting}
       />
       {resting ? (
         <RestTakeover

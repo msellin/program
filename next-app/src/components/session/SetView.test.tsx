@@ -109,7 +109,7 @@ describe("AMRAP top set — the weight (BUG-28)", () => {
     // The AMRAP is the set most likely to run off prescription — the founder
     // squatted 95 against a prescribed 93.5 and could only record it in prose.
     renderSet();
-    expect(screen.getByRole("button", { name: /change the weight/i })).toBeDefined();
+    expect(screen.getByRole("button", { name: /^change weight$/i })).toBeDefined();
   });
 });
 
@@ -182,7 +182,7 @@ describe("per-side hold timer (BUG-30)", () => {
 function setsLeftText(): string {
   const el = screen.getByText((_content, node) => {
     const t = node?.textContent?.replace(/\s+/g, " ").trim() ?? "";
-    return /^\d+ sets? left$/.test(t) && !node?.querySelector("*");
+    return /^\d+ sets? left today$/.test(t) && !node?.querySelector("*");
   });
   return el.textContent!.replace(/\s+/g, " ").trim();
 }
@@ -197,14 +197,14 @@ describe("\"sets left\" counts required work only (2026-09-03)", () => {
 
   it("an ordinary heavy day counts every set", () => {
     renderSet();
-    expect(setsLeftText()).toBe("6 sets left");
+    expect(setsLeftText()).toBe("6 sets left today");
   });
 
   it("a taper day counts the top set, not the optional backoff", () => {
     // rowCount 6 = top set + 5 FSL. On a taper day the five are optional,
     // so one set stands between the user and a finished session.
     renderSet({ optionalRows: 5 });
-    expect(setsLeftText()).toBe("1 set left");
+    expect(setsLeftText()).toBe("1 set left today");
   });
 
   it("the optional rows are still THERE — reachable, loggable, six pips", () => {
@@ -214,7 +214,12 @@ describe("\"sets left\" counts required work only (2026-09-03)", () => {
 
   it("labels the current row optional when you opt into it", () => {
     renderSet({ optionalRows: 5 }, 3);
-    expect(screen.getByText(/set 4 of 6 · optional/i)).toBeTruthy();
+    expect(
+      screen.getByText((_c, node) =>
+        /^Set 4 of 6( · [A-Za-z-]+)? · optional$/.test(node?.textContent?.replace(/\s+/g, " ").trim() ?? "") &&
+        !node?.querySelector("*"),
+      ),
+    ).toBeTruthy();
   });
 
   it("does not label the required top set optional", () => {
@@ -426,6 +431,7 @@ describe("the programme's own reps beat the library default (BUG-42)", () => {
       },
       0,
     );
-    expect(screen.getByText("6 reps")).toBeDefined();
+    // Loadable work reads "× 6" under the weight (2026-10-28 player redesign).
+    expect(screen.getByText((_c, n) => n?.textContent?.replace(/\s+/g, " ").trim() === "× 6" && n.tagName === "P")).toBeDefined();
   });
 });

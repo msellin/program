@@ -11,6 +11,7 @@ import type { UpNext } from "@/components/session/shared/advance";
 import { ProposalCard } from "@/components/workout/ProposalCard";
 import type { Proposal } from "@/lib/schemas";
 import { prescriptionRows } from "@/lib/engine/suggest";
+import { platesLabel } from "@/lib/plates";
 
 /**
  * The scale bottomed out at RPE 7 until 2026-09-01, and that cost real
@@ -33,9 +34,9 @@ import { prescriptionRows } from "@/lib/engine/suggest";
  * the new 4-in-reserve slot; the 3-in-reserve tile it used to be is "Steady".
  */
 const EFFORTS = [
-  { label: "Easy", rir: "4+ more", rpe: 6 },
-  { label: "Right", rir: "~2 more", rpe: 8 },
-  { label: "Too hard", rir: "0-1 more", rpe: 9 },
+  { label: "Easy", rir: "4+ left", rpe: 6 },
+  { label: "Right", rir: "~2 left", rpe: 8 },
+  { label: "Too hard", rir: "0–1 left", rpe: 9 },
 ] as const;
 
 /**
@@ -285,7 +286,7 @@ export function RestTakeover({
         </div>
       </div>
       <div className="flex-1 flex flex-col items-center justify-center px-6 text-center min-h-0">
-        <p className="text-eyebrow uppercase tracking-[.18em] text-slate mb-[18px]">Rest</p>
+        <p className="sr-only">Rest</p>
         {restoredExpired ? (
           /* Honest about a rest that ended while the app was gone. A
              resurrected countdown would be the app inventing time the user
@@ -297,7 +298,28 @@ export function RestTakeover({
               : `${Math.round(overdueSeconds / 60)} min ago`}
           </p>
         ) : (
-          <p className="text-[104px] leading-[.9] font-semibold tracking-[-.05em] text-strong mb-2">{fmt}</p>
+          /* The guided player's ring (2026-10-28), so a rest reads the same in
+             both players. The number is not shrunk to make room for it. */
+          <div className="relative mb-3 flex h-[256px] w-[256px] items-center justify-center [@media(max-height:700px)]:h-[184px] [@media(max-height:700px)]:w-[184px]">
+            <svg viewBox="0 0 176 176" className="absolute inset-0 h-full w-full -rotate-90" aria-hidden="true">
+              <circle cx="88" cy="88" r="82" fill="none" stroke="currentColor" strokeWidth="5" className="text-line-soft" />
+              <circle
+                cx="88"
+                cy="88"
+                r="82"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="5"
+                strokeLinecap="round"
+                className="text-bronze"
+                strokeDasharray={2 * Math.PI * 82}
+                strokeDashoffset={2 * Math.PI * 82 * (pct / 100)}
+              />
+            </svg>
+            <p className="text-[64px] [@media(max-height:700px)]:text-[52px] leading-none font-semibold tracking-[-.05em] tabular-nums text-strong">
+              {fmt}
+            </p>
+          </div>
         )}
         {effortAnswered && selectedEffort ? (
           <p className="text-small text-muted">
@@ -314,10 +336,20 @@ export function RestTakeover({
           </p>
         ) : upNext.kind !== "done" ? (
           <>
-            <p className="text-caption uppercase tracking-[.16em] text-muted mb-2">Next up</p>
+            <p className="text-small text-muted mb-1">Next up</p>
             <p className="text-h2 font-semibold text-strong mb-1 tracking-[-.02em]">
               {upNext.kind === "set"
-                ? `Set ${upNext.setIndex + 1} of ${upNext.rail.rowCount}`
+                ? (() => {
+                    // The weight to load, not just the set number: the one
+                    // fact a lifter needs while resting (round-3 vote).
+                    const row = prescriptionRows(
+                      upNext.rail.suggestion,
+                      upNext.rail.schemeRowCount ?? upNext.rail.rowCount,
+                    )[upNext.setIndex];
+                    return row
+                      ? `Set ${upNext.setIndex + 1} of ${upNext.rail.rowCount} · ${row.kg} kg × ${row.reps}`
+                      : `Set ${upNext.setIndex + 1} of ${upNext.rail.rowCount}`;
+                  })()
                 : (() => {
                     // The first row, not the top set: on a 5/3/1 day the
                     // next exercise opens on its lightest ramp set.
@@ -329,6 +361,18 @@ export function RestTakeover({
                   })()}
             </p>
             <p className="text-small text-ink">{upNext.rail.exercise.name}</p>
+            {(() => {
+              const row =
+                upNext.kind === "set"
+                  ? prescriptionRows(upNext.rail.suggestion, upNext.rail.schemeRowCount ?? upNext.rail.rowCount)[
+                      upNext.setIndex
+                    ]
+                  : null;
+              const plates = row && upNext.rail.isLoadable ? platesLabel(row.kg) : null;
+              return plates?.includes("/side") ? (
+                <p className="text-small text-muted mt-0.5">Per side {plates.replace(" kg /side", " kg")}</p>
+              ) : null;
+            })()}
           </>
         ) : (
           <p className="text-small text-muted">{summary ?? ""}</p>
@@ -345,11 +389,10 @@ export function RestTakeover({
             about: it is where an AMRAP lands and where fatigue shows. The
             picker now renders independently of what comes next. */}
         {!effortAnswered ? (
-          <div className={cardClass()}>
-            <p className="text-body font-semibold text-strong mb-1 tracking-[-.01em]">How was that?</p>
-            <p className="text-caption text-ink mb-3">
-              How many more could you have done?{" "}
-              {hasTrainingMax ? "This sets your training max." : "We'll use it next week."}
+          <div>
+            <p className="text-body font-semibold text-strong mb-0.5 tracking-[-.01em]">Reps left in the tank?</p>
+            <p className="text-caption text-muted mb-2.5">
+              {hasTrainingMax ? "May suggest a new training max. You decide." : "We'll use it next week."}
             </p>
             <div className="flex gap-1.5" role="radiogroup" aria-label="How hard was that set?">
               {EFFORTS.map((effort) => (
@@ -427,7 +470,7 @@ export function RestTakeover({
         <button
           type="button"
           onClick={onOpenNoteSheet}
-          className="w-full flex items-center justify-between gap-2.5 rounded-lg border border-line-soft bg-surface px-3.5 py-2.5 text-left"
+          className="w-full min-h-11 flex items-center justify-between gap-2.5 rounded-lg border border-line-soft bg-surface px-3.5 py-2.5 text-left"
         >
           <span className="min-w-0">
             <span className="block text-small text-ink">
@@ -444,9 +487,9 @@ export function RestTakeover({
         <button
           type="button"
           onClick={() => setJumpOpen(true)}
-          className="w-full min-h-11 text-ink text-small"
+          className="w-full h-11 rounded-lg border border-line-strong text-ink text-small"
         >
-          Do something else next
+          Switch exercise
         </button>
       </div>
 

@@ -3,25 +3,51 @@ import { LevelLadder, stripTierPrefix } from "@/components/program/LevelLadder";
 import { StatTiles } from "@/components/program/StatTiles";
 import type { BestSet } from "./session-stats";
 
-export function DoneStats({ sets, movements, reps, holdSeconds }: { sets: number; movements: number; reps: number; holdSeconds: number }) {
+export function DoneStats({
+  sets,
+  planned,
+  movements,
+  reps,
+  holdSeconds,
+}: {
+  sets: number;
+  /** Required sets the day prescribed; shown as "3/5" when the day ended short. */
+  planned?: number;
+  movements: number;
+  reps: number;
+  holdSeconds: number;
+}) {
+  const short = planned != null && planned > sets;
   const tiles = [
-    { value: String(sets), label: sets === 1 ? "Set" : "Sets" },
-    { value: String(movements), label: movements === 1 ? "Movement" : "Movements" },
+    { value: short ? `${sets}/${planned}` : String(sets), label: short ? "Sets done" : sets === 1 ? "Set" : "Sets" },
+    { value: String(movements), label: movements === 1 ? "Exercise" : "Exercises" },
     holdSeconds > 0 && reps <= 0
       ? { value: `${holdSeconds}s`, label: "Held" }
       : { value: String(reps), label: reps === 1 ? "Rep" : "Reps" },
   ];
-  return <StatTiles tiles={tiles} />;
+  // Borderless with hairline dividers (round 6): three boxed tiles out-shouted
+  // the best set, which is the screen's point.
+  return (
+    <dl className="grid grid-cols-3 divide-x divide-line-soft border-y border-line-soft py-3">
+      {tiles.map((t) => (
+        <div key={t.label} className="text-center">
+          <dd className="text-h2 font-semibold tabular-nums leading-none text-strong">{t.value}</dd>
+          <dt className="mt-1 text-caption text-muted">{t.label}</dt>
+        </div>
+      ))}
+    </dl>
+  );
 }
 
-export function BestSetCard({ best }: { best: BestSet }) {
+export function BestSetCard({ best, lastTime }: { best: BestSet; lastTime?: string | null }) {
   return (
-    <Card as="section" aria-label="Best set" className={best.isPB ? "border-bronze" : undefined}>
+    <Card as="section" aria-label="Best set" className="border-bronze/70">
       <p className="text-eyebrow uppercase tracking-widest text-muted">
         {best.isPB ? "New personal best" : "Best set"}
       </p>
-      <p className="mt-1 text-h3 font-semibold text-strong">{best.label}</p>
+      <p className="mt-1 text-h1 font-semibold tabular-nums tracking-[-.03em] text-strong">{best.label}</p>
       <p className="text-small text-muted">{best.name}</p>
+      {lastTime ? <p className="mt-2 border-t border-line-soft pt-2 text-small text-ink">{lastTime}</p> : null}
     </Card>
   );
 }
