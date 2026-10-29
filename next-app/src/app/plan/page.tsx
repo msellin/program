@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Check, ChevronDown, Minus } from "lucide-react";
+import { ArrowRight, Check, ChevronDown, ChevronRight, Minus, MoreHorizontal } from "lucide-react";
 import { loadProgram, loadProgramManifest } from "@/lib/data-loader";
 import { EmptyStateCard } from "@/components/EmptyStateCard";
 import { useStore } from "@/lib/useStore";
@@ -14,6 +14,8 @@ import { blocksForDate } from "@/lib/engine/plan-generator";
 import { getBlocksForDate, isBlockObjectOn, DAY_VISIBLE_BLOCK_STATES } from "@/lib/engine/block-selectors";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
 import { MoveSheet } from "@/components/workout/MoveSheet";
+import { useFocusTrap } from "@/lib/useFocusTrap";
+import { dayTracks, TRACK_STATE_LABEL, type TrackState } from "@/lib/plan-day-tracks";
 import { ArcProgressBar } from "@/components/ui/ArcProgressBar";
 import { humanizeExerciseId } from "@/lib/humanize-metrics";
 import { detectMissedWeek } from "@/lib/engine/missed-week";
@@ -61,17 +63,12 @@ type ProgramRule = { id?: string; rule: string; detail?: string };
 export default function WeekPage() {
   const [programs, setPrograms] = useState<Program[]>([]);
   const [offset, setOffset] = useState(0);
-  // Per-day expand state — Week defaults to compact (Runna-style,
-  // founder request 2026-08-19). Tap a day to reveal runs / top-lift /
-  // reason / conditioning. Otherwise header + one-line name only.
-  const [expandedDays, setExpandedDays] = useState<Set<string>>(new Set());
+  // One day open at a time, today on load (plan-tab-review 2026-10-29: every
+  // opened day stayed open, and a few opened days filled the screen with
+  // buttons). Tapping the open day closes it.
+  const [openDay, setOpenDay] = useState<string | null>(() => todayISO());
   const toggleDay = (dateISO: string) => {
-    setExpandedDays((prev) => {
-      const next = new Set(prev);
-      if (next.has(dateISO)) next.delete(dateISO);
-      else next.add(dateISO);
-      return next;
-    });
+    setOpenDay((prev) => (prev === dateISO ? null : dateISO));
   };
   const hydrated = useStore((s) => s.hydrated);
   const store = useStore((s) => s.store);
@@ -533,11 +530,25 @@ export default function WeekPage() {
                           ? "missed"
                           : "planned";
 
-            // One aggregate status dot per row; the per-program breakdown
+            // One aggregate status dot per row; the per-track breakdown
             // lives in the expanded detail. Today is marked by tint + chip.
-            const perProgramDots = blockObjectOn
-              ? perProgramDayStates(blocksTodayByProgram, activeSlugs)
-              : null;
+            const tracks = dayTracks({
+              activeSlugs,
+              displayBlocks,
+              blocksByProgram: blocksTodayByProgram,
+              dayLog,
+              isPast,
+              names: manifestNames,
+            });
+            const dayLogged = status === "logged-full" || status === "logged-partial" || tracks.some((t) => t.state === "done");
+            // With 2+ tracks on a day the track lines are the entry points;
+            // the single button exists only where there is one thing to open
+            // (today, or a one-track day). A day never offers both.
+            const trackEntries = tracks.length >= 2 && !isToday && !daySkipped && !override;
+            // Move or Skip on a partly logged day would drag the done track too.
+            const canMove = !isRest && !daySkipped && !override && !dayLogged;
+            const canSkip = !isRest && !daySkipped && !dayLogged;
+            const dayLabel = `${dayName} ${dateForDay.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}`;
             const statusLabel = {
               skipped: "Skipped",
               moved: "Moved",
@@ -548,14 +559,13 @@ export default function WeekPage() {
               planned: "Planned",
             }[status];
 
-            const isExpanded = expandedDays.has(dateISO);
+            const isExpanded = openDay === dateISO;
             return (
               <div
                 key={dayName + i}
                 className={cn(
                   "px-4 py-4 flex items-start gap-3",
                   isToday && "bg-bronze/8",
-                  skip && "opacity-70",
                 )}
               >
                 <DayMarker status={status} />
@@ -572,10 +582,11 @@ export default function WeekPage() {
                       enough; aria-expanded announces the state. Letting
                       the accessible name compute from visible text keeps
                       SR + visible content in sync. */}
+                  <div className="flex items-start gap-1">
                   <button
                     type="button"
                     onClick={() => toggleDay(dateISO)}
-                    className="w-full text-left"
+                    className="flex-1 min-w-0 text-left"
                     aria-expanded={isExpanded}
                     aria-controls={`weekday-${dateISO}`}
                   >
@@ -588,11 +599,6 @@ export default function WeekPage() {
                         {isToday ? (
                           <span className="text-eyebrow uppercase tracking-wider px-2 py-0.5 rounded-full bg-bronze/15 text-bronze font-normal">
                             Today
-                          </span>
-                        ) : null}
-                        {doneCount > 0 && !isToday ? (
-                          <span className="text-eyebrow text-green font-normal">
-                            · {doneCount} logged
                           </span>
                         ) : null}
                         {runCount > 0 && !isToday ? (
@@ -627,6 +633,20 @@ export default function WeekPage() {
                       {names || displayLabel}
                     </p>
                   </button>
+                  {/* Move / Skip live behind "⋯" on the open day, not in the
+                      content column (plan-tab-review D3). */}
+                  {isExpanded && (canMove || canSkip) ? (
+                    <DayMenu
+                      dateISO={dateISO}
+                      dayLabel={dayLabel}
+                      sessionSummary={names || displayLabel}
+                      canMove={canMove}
+                      canSkip={canSkip}
+                      blockIds={displayBlocks.map((b) => b.id)}
+                      weekDaysCatalog={weekDaysCatalog}
+                    />
+                  ) : null}
+                  </div>
                   {daySkipped && !isExpanded ? (
                     <button
                       type="button"
@@ -638,18 +658,37 @@ export default function WeekPage() {
                   ) : null}
                   {isExpanded ? (
                     <div id={`weekday-${dateISO}`}>
-                      {perProgramDots && perProgramDots.dots.length > 0 ? (
-                        <ul className="mt-2 space-y-1" aria-label="Sessions by program">
-                          {perProgramDots.dots.map((d) => (
-                            <li
-                              key={d.programSlug}
-                              className="flex items-center gap-2 text-caption text-muted"
-                            >
-                              <span aria-hidden className={cn("w-2 h-2 rounded-full flex-shrink-0", d.className)} />
-                              <span className="capitalize">{d.programName}</span>
-                              <span>· {d.state.replace(/_/g, " ")}</span>
-                            </li>
-                          ))}
+                      {tracks.length >= 2 ? (
+                        <ul className="mt-2 space-y-0.5" aria-label="Tracks">
+                          {tracks.map((t) => {
+                            const line = (
+                              <>
+                                <TrackMarker state={t.state} />
+                                <span className="min-w-0 truncate">
+                                  <span className="text-ink">{t.name}</span>
+                                  <span className={cn(t.state === "done" ? "text-green" : "text-muted")}>
+                                    {" "}· {TRACK_STATE_LABEL[t.state]}
+                                  </span>
+                                </span>
+                              </>
+                            );
+                            const opens = trackEntries && t.state !== "skipped" && t.state !== "moved";
+                            return (
+                              <li key={t.slug}>
+                                {opens ? (
+                                  <Link
+                                    href={`/session/${t.slug}?date=${dateISO}`}
+                                    className="flex items-center gap-2 min-h-[44px] text-small hover:bg-line-soft rounded-lg -mx-2 px-2"
+                                  >
+                                    {line}
+                                    <ChevronRight size={16} aria-hidden className="ml-auto text-muted flex-shrink-0" />
+                                  </Link>
+                                ) : (
+                                  <p className="flex items-center gap-2 py-1 text-small">{line}</p>
+                                )}
+                              </li>
+                            );
+                          })}
                         </ul>
                       ) : null}
                       {override?.reason ? (
@@ -692,20 +731,14 @@ export default function WeekPage() {
 
                       <WeekDayActions
                         dateISO={dateISO}
-                        dayLabel={`${dayName} ${dateForDay.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}`}
-                        sessionSummary={names || displayLabel}
+                        dayLabel={dayLabel}
                         isToday={isToday}
                         isPast={isPast}
-                        isFuture={dateISO > todayISO()}
                         hasSession={!isRest}
                         isSkipped={daySkipped}
                         isOverride={!!override}
-                        primarySlug={primarySlug}
-                        programSlugs={Array.from(
-                          new Set(displayBlocks.map((b) => b.programSlug).filter((x): x is string => !!x)),
-                        )}
-                        blockIds={displayBlocks.map((b) => b.id)}
-                        weekDaysCatalog={weekDaysCatalog}
+                        isLogged={dayLogged}
+                        openSlug={trackEntries ? undefined : (tracks[0]?.slug ?? primarySlug)}
                       />
                     </div>
                   ) : null}
@@ -772,74 +805,52 @@ export default function WeekPage() {
 }
 
 /**
- * F6 (Batch 24) — the 3-verb action row inside the expanded Week day.
+ * The one action inside an open day (plan-tab-review 2026-10-29). It used to
+ * be a 3-column grid (open / Move… / Skip) plus a full-width "Log <track> →"
+ * per secondary track: four buttons on a past two-track day, "Log session →"
+ * wrapping to three lines. Now:
  *
- * Verbs:
- *   Open in Today  — visible only for today's row. Past days show a
- *                    History → link instead; future days show nothing.
- *   Move…          — opens MoveSheet. Hidden when the day is already
- *                    skipped or an override is in place (there's
- *                    nothing to move).
- *   Skip           — opens ConfirmSheet. Hidden when the day is
- *                    already skipped.
+ *   today            — "Open day" (bronze)
+ *   past, one track  — "Log", or "Edit log" once something is logged
+ *   future, one track — "Preview" (PWA: no URL bar, so this is the only way
+ *                      to reach a future day's brief)
+ *   two+ tracks      — nothing here; the track lines open each session
+ *   rest day         — "Log a session" today or earlier (off-plan work)
+ *   skipped / moved  — "Unskip" / "Undo move" (clearSkip inverts both)
  *
- * Skipped rows get an inline "Unskip" affordance; overridden rows get
- * "Undo move." Both call `clearSkip` (which the store handles as the
- * inverse of both skipDay and moveSession — see useStore.ts:668).
+ * Move / Skip moved to DayMenu ("⋯" on the open day's header).
  */
 function WeekDayActions({
   dateISO,
   dayLabel,
-  sessionSummary,
   isToday,
   isPast,
-  isFuture,
   hasSession,
   isSkipped,
   isOverride,
-  primarySlug,
-  programSlugs = [],
-  blockIds,
-  weekDaysCatalog,
+  isLogged,
+  openSlug,
 }: {
   dateISO: string;
   dayLabel: string;
-  sessionSummary: string;
   isToday: boolean;
   isPast: boolean;
-  isFuture: boolean;
   hasSession: boolean;
   isSkipped: boolean;
   isOverride: boolean;
-  primarySlug: string | undefined;
-  /**
-   * Every active programme with blocks on this day, primary first (BUG-41).
-   * "Log session →" opened only the primary's session, which does not render
-   * a secondary programme's blocks — so the founder could backfill Wed 30
-   * Sep's hip session but not that day's overhead-mobility block.
-   */
-  programSlugs?: string[];
-  blockIds: string[];
-  weekDaysCatalog: WeekDayEntry[];
+  isLogged: boolean;
+  /** The programme whose session the button opens; undefined when the track lines are the entry points. */
+  openSlug: string | undefined;
 }) {
-  const skipDay = useStore((s) => s.skipDay);
   const clearSkip = useStore((s) => s.clearSkip);
-  const [moveOpen, setMoveOpen] = useState(false);
-  const [confirmSkip, setConfirmSkip] = useState(false);
+  const buttonClass =
+    "inline-flex items-center justify-center min-h-[44px] px-5 rounded-lg text-small font-semibold";
+  const outline = "border border-line-strong text-ink hover:bg-line-soft";
 
-  const canMove = hasSession && !isSkipped && !isOverride;
-  const canSkip = hasSession && !isSkipped;
-
-  // "Unskip" / "Undo move" replaces the whole row when the day is in
-  // one of those states. Single affordance, single tap.
   if (isSkipped || isOverride) {
     return (
       <div className="mt-3">
-        <button
-          type="button"
-          onClick={() => clearSkip(dateISO)}
-          className="w-full text-eyebrow uppercase tracking-wider px-3 py-2 rounded-lg border border-line text-muted hover:text-ink hover:bg-line-soft min-h-[44px]"
-        >
+        <button type="button" onClick={() => clearSkip(dateISO)} className={cn(buttonClass, outline)}>
           {isOverride ? "Undo move" : "Unskip"}
         </button>
       </div>
@@ -847,101 +858,137 @@ function WeekDayActions({
   }
 
   if (!hasSession) {
-    // Bug fix 2026-08-22 · founder report — on rest days there was zero
-    // path to log ad-hoc off-plan work (a Friday evening run, a CrossFit
-    // class). The 3-verb grid was hidden entirely. Today + past rest days
-    // now get a single "Log a session →" verb that lands on the session
-    // route in RestDayCard + RunSlotCard mode. Future rest days stay
-    // silent (nothing to log yet).
-    if (isFuture || !primarySlug) return null;
+    // Rest days: a path to log ad-hoc off-plan work (founder report
+    // 2026-08-22). Future rest days have nothing to log yet.
+    if (!(isToday || isPast) || !openSlug) return null;
     return (
       <div className="mt-3">
-        <Link
-          href={`/session/${primarySlug}?date=${dateISO}`}
-          className="w-full text-small font-semibold px-3 py-2 rounded-lg border border-line text-ink hover:bg-line-soft min-h-[44px] flex items-center justify-center text-center"
-        >
-          Log a session →
+        <Link href={`/session/${openSlug}?date=${dateISO}`} className={cn(buttonClass, outline)}>
+          Log a session
         </Link>
       </div>
     );
   }
 
-  const secondarySlugs = programSlugs.filter((slug) => slug !== primarySlug);
+  if (isToday) {
+    return (
+      <div className="mt-3">
+        <Link
+          href="/"
+          aria-label={`Open day, ${dayLabel}`}
+          className={cn(buttonClass, "bg-bronze text-ground hover:bg-bronze-hover")}
+        >
+          Open day
+        </Link>
+      </div>
+    );
+  }
+
+  if (!openSlug) return null;
+  // Past days open the session editable for that date (SessionClient reads
+  // ?date=); future days open the same route as a preview.
+  const label = isPast ? (isLogged ? "Edit log" : "Log") : "Preview";
+  return (
+    <div className="mt-3">
+      <Link
+        href={`/session/${openSlug}?date=${dateISO}`}
+        aria-label={`${label}, ${dayLabel}`}
+        className={cn(buttonClass, outline)}
+      >
+        {label}
+      </Link>
+    </div>
+  );
+}
+
+/**
+ * "⋯" on the open day's header: a small sheet with Move… and Skip
+ * (plan-tab-review D3 — session verbs stay out of the content column).
+ * Focus moves into the sheet, Esc closes it, focus returns to "⋯".
+ */
+function DayMenu({
+  dateISO,
+  dayLabel,
+  sessionSummary,
+  canMove,
+  canSkip,
+  blockIds,
+  weekDaysCatalog,
+}: {
+  dateISO: string;
+  dayLabel: string;
+  sessionSummary: string;
+  canMove: boolean;
+  canSkip: boolean;
+  blockIds: string[];
+  weekDaysCatalog: WeekDayEntry[];
+}) {
+  const skipDay = useStore((s) => s.skipDay);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [moveOpen, setMoveOpen] = useState(false);
+  const [confirmSkip, setConfirmSkip] = useState(false);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const closeMenu = () => setMenuOpen(false);
+  useFocusTrap(panelRef, closeMenu, menuOpen);
+  const itemClass =
+    "w-full text-left min-h-[48px] px-3 rounded-lg text-body text-ink hover:bg-line-soft";
+
   return (
     <>
-      {isPast && secondarySlugs.length > 0 ? (
-        <div className="mt-3 flex flex-col gap-2">
-          {secondarySlugs.map((slug) => (
-            <Link
-              key={slug}
-              href={`/session/${slug}?date=${dateISO}`}
-              className="w-full text-small font-semibold px-3 py-2 rounded-lg border border-line-strong text-ink hover:bg-line-soft min-h-[44px] flex items-center justify-center text-center"
-            >
-              Log {slug.replace(/-/g, " ")} →
-            </Link>
-          ))}
+      <button
+        type="button"
+        onClick={() => setMenuOpen(true)}
+        aria-label={`More for ${dayLabel}`}
+        aria-haspopup="dialog"
+        className="w-11 h-11 -my-2.5 -mr-2 flex items-center justify-center rounded-lg text-muted hover:text-ink hover:bg-line-soft flex-shrink-0"
+      >
+        <MoreHorizontal size={20} aria-hidden />
+      </button>
+
+      {menuOpen ? (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={dayLabel}
+          onClick={closeMenu}
+          className="fixed inset-0 z-50 bg-ground/80 flex items-end sm:items-center justify-center p-3"
+        >
+          <div
+            ref={panelRef}
+            onClick={(e) => e.stopPropagation()}
+            className="w-full sm:max-w-md bg-surface-2 border border-line rounded-lg p-2"
+          >
+            <p className="px-3 pt-2 pb-1 text-caption text-muted">{dayLabel}</p>
+            {canMove ? (
+              <button
+                type="button"
+                className={itemClass}
+                onClick={() => {
+                  closeMenu();
+                  setMoveOpen(true);
+                }}
+              >
+                Move…
+              </button>
+            ) : null}
+            {canSkip ? (
+              <button
+                type="button"
+                className={itemClass}
+                onClick={() => {
+                  closeMenu();
+                  setConfirmSkip(true);
+                }}
+              >
+                Skip
+              </button>
+            ) : null}
+            <button type="button" className={cn(itemClass, "text-muted")} onClick={closeMenu}>
+              Cancel
+            </button>
+          </div>
         </div>
       ) : null}
-      {/* P1-63 (Batch 27) — 3-verb action grid migrated from 11 px
-           mono-caps to 14 px sentence-case. Verb labels shouldn't read
-          as chip pills.
-          Week 4d (2026-08-21) — past-day verb was "History →" pointing
-          to /history?date=..., which now redirects to /record (read-
-          only Record surface). Founder use-case ("did workout
-          yesterday, forgot to log"): they need to LOG the past day,
-          not just view it. Repoint to /session/[slug]?date=... which
-          renders the session in an editable state (SessionClient
-          reads ?date=, seeds activeDate, SetRow inputs write to
-          logs[activeDate]). Verb changed to "Log session →" to make
-          the action affordance obvious. */}
-      <div className="mt-3 grid grid-cols-3 gap-2">
-        {isToday ? (
-          <Link
-            href="/"
-            className="text-small font-semibold px-3 py-2 rounded-lg bg-bronze text-ground hover:bg-bronze-hover min-h-[44px] flex items-center justify-center text-center"
-          >
-            Open Day
-          </Link>
-        ) : isPast && primarySlug ? (
-          <Link
-            href={`/session/${primarySlug}?date=${dateISO}`}
-            className="text-small font-semibold px-3 py-2 rounded-lg border border-line-strong text-ink hover:bg-line-soft min-h-[44px] flex items-center justify-center text-center"
-          >
-            Log session →
-          </Link>
-        ) : primarySlug ? (
-          // 2026-08-23 — future days used to render nothing here. Real
-          // gap: the app is used as an installed PWA (no address bar),
-          // so there was no way to actually reach a future day's Brief
-          // screen short of hand-typing a URL, which isn't a real
-          // affordance. DaySession already accepts any ?date=, so this
-          // is just exposing that.
-          <Link
-            href={`/session/${primarySlug}?date=${dateISO}`}
-            className="text-small font-semibold px-3 py-2 rounded-lg border border-line-strong text-ink hover:bg-line-soft min-h-[44px] flex items-center justify-center text-center"
-          >
-            Preview →
-          </Link>
-        ) : (
-          <span aria-hidden />
-        )}
-        <button
-          type="button"
-          onClick={() => setMoveOpen(true)}
-          disabled={!canMove}
-          className="text-small font-semibold px-3 py-2 rounded-lg border border-line text-ink hover:bg-line-soft min-h-[44px] disabled:opacity-40 disabled:cursor-not-allowed disabled:text-muted disabled:border-line-soft disabled:hover:bg-transparent"
-        >
-          Move…
-        </button>
-        <button
-          type="button"
-          onClick={() => setConfirmSkip(true)}
-          disabled={!canSkip}
-          className="text-small font-semibold px-3 py-2 rounded-lg border border-line text-ink hover:bg-line-soft min-h-[44px] disabled:opacity-40 disabled:cursor-not-allowed disabled:text-muted disabled:border-line-soft disabled:hover:bg-transparent"
-        >
-          Skip
-        </button>
-      </div>
 
       <ConfirmSheet
         open={confirmSkip}
@@ -965,8 +1012,6 @@ function WeekDayActions({
         weekDays={weekDaysCatalog}
         onClose={() => setMoveOpen(false)}
       />
-
-      {isFuture ? null : null}
     </>
   );
 }
@@ -995,55 +1040,10 @@ function RulesAccordion({ principles }: { principles: string[] }) {
   );
 }
 
-/**
- * Phase D · block-object per-program day-state resolver.
- *
- * For each active program on a given date, compute a "dominant state"
- * from that program's scheduled blocks. Multiple blocks per program per
- * day is possible (e.g. strength + accessory) — we pick the loudest
- * signal: skipped > moved > done > amber_downshifted > planned. Returns
- * an ordered array matching activeSlugs so dots stay stable across
- * renders. Programs with no blocks that day are omitted.
- *
- * Dot color mapping matches the legend rendered at the top of the week
- * (see `tokens.md#colors` semantic states + `bronze` for today).
- */
-type DayDot = {
-  programSlug: string;
-  programName: string;
-  state: string;
-  className: string;
-};
-
-function perProgramDayStates(
-  blocksByProgram: Record<string, ScheduledBlock[]>,
-  activeSlugs: string[],
-): { dots: DayDot[] } {
-  const dots: DayDot[] = [];
-  for (const slug of activeSlugs) {
-    const blocks = blocksByProgram[slug];
-    if (!blocks?.length) continue;
-    const states = new Set(blocks.map((b) => b.state));
-    // Precedence: skipped > moved > done > amber > planned.
-    let state: string = "planned";
-    if (states.has("skipped")) state = "skipped";
-    else if (states.has("moved")) state = "moved";
-    else if (states.has("done")) state = "done";
-    else if (states.has("amber_downshifted")) state = "amber_downshifted";
-    let className: string;
-    if (state === "skipped") className = "bg-amber";
-    else if (state === "moved") className = "bg-slate";
-    else if (state === "done") className = "bg-green";
-    else if (state === "amber_downshifted") className = "bg-amber/60";
-    else className = "bg-muted/60";
-    dots.push({
-      programSlug: slug,
-      programName: slug.replace(/-/g, " "),
-      state,
-      className,
-    });
-  }
-  return { dots };
+function TrackMarker({ state }: { state: TrackState }) {
+  const status: DayStatus =
+    state === "done" ? "logged-full" : state === "notLogged" ? "missed" : state;
+  return <DayMarker status={status} className="scale-75" />;
 }
 
 /**

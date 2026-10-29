@@ -255,9 +255,16 @@ async function moveNextSessionToToday(
       const day = iso(new Date(Date.now() + ahead * 864e5));
       const row = page.locator(`button[aria-controls="weekday-${day}"]`);
       if (!(await row.count())) continue;
-      await row.click();
-      const move = page.locator(`#weekday-${day}`).getByRole("button", { name: /^Move/ });
-      if (!(await move.isVisible({ timeout: 2000 }).catch(() => false))) continue;
+      if ((await row.getAttribute("aria-expanded")) !== "true") await row.click();
+      // Move… sits behind "⋯" on the open day (plan-tab-review 2026-10-29).
+      const more = page.getByRole("button", { name: /^More for / });
+      if (!(await more.isVisible({ timeout: 2000 }).catch(() => false))) continue;
+      await more.click();
+      const move = page.getByRole("button", { name: /^Move…$/ });
+      if (!(await move.isVisible({ timeout: 2000 }).catch(() => false))) {
+        await page.keyboard.press("Escape");
+        continue;
+      }
       await move.click();
       const target = page.locator(`#movesheet-day-${today}`);
       if (!(await target.isEnabled({ timeout: 3000 }).catch(() => false))) {

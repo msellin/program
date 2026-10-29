@@ -168,6 +168,25 @@ const FOLLOW_EXIT = { name: "End follow-along" } as const;
  * True when the guided follow-along player (no `data-surface` of its own —
  * selectors are its "End follow-along" button and "This hurts" chip) is up.
  */
+/**
+ * Plan keeps one day open at a time (today on load) and puts Move… / Skip
+ * behind "⋯" on the open day (plan-tab-review 2026-10-29). Opens row `i`
+ * unless it is already open, then its "⋯" menu. False when the day offers
+ * neither verb (rest, skipped, logged).
+ */
+async function openPlanDayMenu(ctx: FlowContext, i: number): Promise<boolean> {
+  const row = ctx.page.locator("button[aria-controls^='weekday-']").nth(i);
+  if ((await row.getAttribute("aria-expanded")) !== "true") {
+    await row.click({ timeout: CLICK_TIMEOUT_MS });
+    await ctx.page.waitForTimeout(350);
+  }
+  const more = ctx.page.getByRole("button", { name: /^More for / });
+  if (!(await more.count())) return false;
+  await more.first().click({ timeout: CLICK_TIMEOUT_MS });
+  await ctx.page.waitForTimeout(300);
+  return true;
+}
+
 async function guidedUp(ctx: FlowContext, timeoutMs = 0): Promise<boolean> {
   const exit = ctx.page.getByRole("button", FOLLOW_EXIT);
   try {
@@ -1403,13 +1422,12 @@ export const FLOWS: Flow[] = [
     async run(ctx) {
       await ctx.page.goto("/plan/", { waitUntil: "domcontentloaded" });
       await ctx.page.waitForTimeout(1200);
-      const row = ctx.page.locator("button[aria-expanded]");
+      const row = ctx.page.locator("button[aria-controls^='weekday-']");
       if ((await row.count()) === 0) throw new SkipFlow("no expandable day rows on Plan");
-      // Walk the rows until one offers Move — past and rest days do not.
+      // Walk the rows until one offers Move — rest, skipped and logged days do not.
       const rowCount = Math.min(await row.count(), 7);
       for (let i = 0; i < rowCount; i++) {
-        await row.nth(i).click({ timeout: CLICK_TIMEOUT_MS });
-        await ctx.page.waitForTimeout(350);
+        if (!(await openPlanDayMenu(ctx, i))) continue;
         const move = ctx.page.getByRole("button", { name: /^Move…$/ });
         if ((await move.count()) > 0 && (await move.first().isEnabled())) {
           await move.first().click({ timeout: CLICK_TIMEOUT_MS });
@@ -1428,7 +1446,7 @@ export const FLOWS: Flow[] = [
           }
           return;
         }
-        await row.nth(i).click({ timeout: CLICK_TIMEOUT_MS });
+        await ctx.page.keyboard.press("Escape").catch(() => {});
         await ctx.page.waitForTimeout(200);
       }
       throw new SkipFlow("no day in the visible week offers Move");
@@ -1444,8 +1462,7 @@ export const FLOWS: Flow[] = [
       if ((await row.count()) === 0) throw new SkipFlow("no expandable day rows on Plan");
       const rowCount = Math.min(await row.count(), 7);
       for (let i = 0; i < rowCount; i++) {
-        await row.nth(i).click({ timeout: CLICK_TIMEOUT_MS });
-        await ctx.page.waitForTimeout(350);
+        if (!(await openPlanDayMenu(ctx, i))) continue;
         const skip = ctx.page.getByRole("button", { name: /^Skip$/ });
         if ((await skip.count()) > 0 && (await skip.first().isEnabled())) {
           await skip.first().click({ timeout: CLICK_TIMEOUT_MS });
@@ -1456,7 +1473,7 @@ export const FLOWS: Flow[] = [
           if (await keep.count()) await keep.first().click({ timeout: CLICK_TIMEOUT_MS });
           return;
         }
-        await row.nth(i).click({ timeout: CLICK_TIMEOUT_MS });
+        await ctx.page.keyboard.press("Escape").catch(() => {});
         await ctx.page.waitForTimeout(200);
       }
       throw new SkipFlow("no day in the visible week offers Skip");
@@ -1896,8 +1913,7 @@ export const FLOWS: Flow[] = [
       const row = ctx.page.locator("button[aria-expanded]");
       const rowCount = Math.min(await row.count(), 7);
       for (let i = 0; i < rowCount; i++) {
-        await row.nth(i).click({ timeout: CLICK_TIMEOUT_MS });
-        await ctx.page.waitForTimeout(350);
+        if (!(await openPlanDayMenu(ctx, i))) continue;
         const skip = ctx.page.getByRole("button", { name: /^Skip$/ });
         if ((await skip.count()) > 0 && (await skip.first().isEnabled())) {
           await skip.first().click({ timeout: CLICK_TIMEOUT_MS });
@@ -1911,6 +1927,8 @@ export const FLOWS: Flow[] = [
           // the sheet's confirm, so before the sheets carried a
           // `data-surface` the tap resolved to the row behind the scrim
           // and timed out. `tap` scopes to the sheet now.
+          await ctx.page.getByRole("button", { name: /^More for / }).first().click({ timeout: CLICK_TIMEOUT_MS }).catch(() => {});
+          await ctx.page.waitForTimeout(300);
           const again = ctx.page.locator("button").filter({ hasText: /^Skip$/ });
           if (await again.count()) {
             await again.first().click({ timeout: CLICK_TIMEOUT_MS }).catch(() => {});
@@ -1935,7 +1953,7 @@ export const FLOWS: Flow[] = [
           );
           return;
         }
-        await row.nth(i).click({ timeout: CLICK_TIMEOUT_MS });
+        await ctx.page.keyboard.press("Escape").catch(() => {});
         await ctx.page.waitForTimeout(200);
       }
       throw new SkipFlow("no day in the visible week offers Skip");
@@ -1951,8 +1969,7 @@ export const FLOWS: Flow[] = [
       const row = ctx.page.locator("button[aria-expanded]");
       const rowCount = Math.min(await row.count(), 7);
       for (let i = 0; i < rowCount; i++) {
-        await row.nth(i).click({ timeout: CLICK_TIMEOUT_MS });
-        await ctx.page.waitForTimeout(350);
+        if (!(await openPlanDayMenu(ctx, i))) continue;
         const move = ctx.page.getByRole("button", { name: /^Move…$/ });
         if ((await move.count()) > 0 && (await move.first().isEnabled())) {
           await move.first().click({ timeout: CLICK_TIMEOUT_MS });
@@ -1990,6 +2007,8 @@ export const FLOWS: Flow[] = [
           await ctx.page.waitForTimeout(900);
           await ctx.capture("02-moved");
           // Now the dismiss control, on a fresh open.
+          await ctx.page.getByRole("button", { name: /^More for / }).first().click({ timeout: CLICK_TIMEOUT_MS }).catch(() => {});
+          await ctx.page.waitForTimeout(300);
           const reMove = ctx.page.getByRole("button", { name: /^Move…$/ });
           if (await reMove.count()) {
             await reMove.first().click({ timeout: CLICK_TIMEOUT_MS }).catch(() => {});
@@ -2013,7 +2032,7 @@ export const FLOWS: Flow[] = [
           );
           return;
         }
-        await row.nth(i).click({ timeout: CLICK_TIMEOUT_MS });
+        await ctx.page.keyboard.press("Escape").catch(() => {});
         await ctx.page.waitForTimeout(200);
       }
       throw new SkipFlow("no day in the visible week offers Move");

@@ -91,3 +91,25 @@ The rule: a day never has two controls that open the same thing. With 1 track, t
 - **Unchanged:** `BottomNav.tsx` and Record.
 - **Tests:** the e2e specs (`next-app/tests/e2e/launch-gaps.spec.ts`, `tests/e2e/harness/flows.ts`) reference the "Log
   session →" / "Move…" buttons and need updating. Then rescore on live screenshots per the consensus rule.
+
+## Built (2026-10-29, owner said "Build it")
+- `next-app/src/app/plan/page.tsx`:
+  - `openDay` holds one day (today on load).
+  - `WeekDayActions` renders a single button: "Open day" / "Log" / "Edit log" / "Preview" / "Log a session" / "Unskip".
+  - New `DayMenu`: a "⋯" sheet with Move… / Skip, using `useFocusTrap` (Esc closes it, focus returns to "⋯").
+  - Track lines are `Link` rows on non-today 2-track days.
+  - The "· N logged" suffix and the skipped-day `opacity-70` are gone.
+- `next-app/src/lib/plan-day-tracks.ts` (+ test): per-track state. A track counts as done when the day's log has
+  a done exercise under one of its blocks. The block state alone missed the founder's Mon squat and Wed pull,
+  because exercise keys carry the session's block id, which is not always the scheduled instance id.
+- e2e harness (`flows.ts`, `launch-gaps.spec.ts`): Move/Skip flows open the day, then "⋯", then the verb.
+- Not changed:
+  - Bottom padding. Mobile's D9 was a false alarm: `AppShell.tsx:213` already pads 64 px plus the safe area,
+    and phone-3 only caught a row mid-scroll.
+  - "Edit log" is used for a logged past day on a 1-track user; copy may still rename it.
+- Local captures (dev server + seeded throwaway 2-track user, since deleted): `shots/build/`.
+- Still to do: rescore on live screenshots once CI deploys.
+- Seen in passing, not touched:
+  - The `e2e-persona-concurrent` week renders all Rest on live too (persona data).
+  - The orphan "None. This is the second squat day…" conditioning line (r23 [M]).
+  - A past day with an unlogged log row still reads "planned" in the day marker (Wed in one-track shots).
