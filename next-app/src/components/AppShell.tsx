@@ -1,5 +1,7 @@
 "use client";
 
+import { cn } from "@/lib/utils";
+
 import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
@@ -205,7 +207,12 @@ function AuthGatedShell({
       <main
         id="main-content"
         tabIndex={-1}
-        className={`max-w-[760px] mx-auto w-full px-4 sm:px-6 flex-1 focus:outline-none pb-[calc(64px+env(safe-area-inset-bottom)+1rem)]${isTodayRoute ? " overscroll-y-contain" : ""}`}
+        // The padding class must stand alone as a token: glued to `${…}` in a template string, Tailwind never
+        // generated it (2026-10-28 → 10-29), and the last card on every tab page sat under the bottom nav.
+        className={cn(
+          "max-w-[760px] mx-auto w-full px-4 sm:px-6 flex-1 focus:outline-none pb-[calc(64px+env(safe-area-inset-bottom)+1rem)]",
+          isTodayRoute && "overscroll-y-contain",
+        )}
       >
         {children}
       </main>

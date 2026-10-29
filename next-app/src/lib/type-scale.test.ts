@@ -59,4 +59,16 @@ describe("one type scale", () => {
     }
     expect(hits, "a left bar is green, amber or red — use <Card status>").toEqual([]);
   });
+
+  it("no class glued to a ${…} in a className template", () => {
+    // Tailwind extracts classes as whitespace-separated tokens; `pb-[…]${x}` is one token and never generated.
+    // AppShell's bottom-nav padding vanished this way (2026-10-28 → 10-29).
+    const hits: string[] = [];
+    for (const f of files) {
+      for (const m of fs.readFileSync(f, "utf8").matchAll(/className=\{`[^`]*[^\s`]\$\{/g)) {
+        hits.push(`${path.relative(SRC, f)}: ${m[0].slice(-40)}`);
+      }
+    }
+    expect(hits, "put a space before ${…} or use cn()").toEqual([]);
+  });
 });
