@@ -1,43 +1,30 @@
 "use client";
 
-import { useMemo, useState, type ReactNode } from "react";
-import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useStore } from "@/lib/useStore";
 import { computeWeekSummary, weekDates } from "@/lib/engine/weekly-narrative";
+import { loadExercises } from "@/lib/data-loader";
+import { exerciseListName } from "@/lib/day-format";
 import { today as todayISO, iso, cn } from "@/lib/utils";
-import type { Program } from "@/lib/schemas";
+import type { Exercise, Program } from "@/lib/schemas";
 import { cardClass } from "@/components/ui/Card";
 
 /**
- * Deterministic weekly summary tile — no AI. Pure aggregate of what happened.
+ * Record's headline: this week (founder-feedback round 4, 2026-10-29).
  *
- * Lives on Progress > Insights. Defaults to the current week; arrows step back
- * up to 12 weeks (matches the Week-tab back-look). Reads like a coach's Sunday
- * note without the coach: sessions, states, top lift, PRs, endurance, rehab,
- * fatigue signals.
+ * A sessions ring and a plain "on track / N behind" lead; then only the lines that have something to say: the
+ * heaviest set by exercise NAME (it showed the raw id), real new bests (it counted lifts trained), outside sessions,
+ * and a one-line note after an amber or red check. No AI — a pure aggregate of the log. Arrows step back 12 weeks.
  */
-export function WeeklyNarrativeTile({
-  program,
-  headerChip,
-  expandableSlot,
-}: {
-  program: Program;
-  /**
-   * Progress rebuild 2026-08-18 — an inline chip rendered right of the
-   * week label. HERITAGE cluster (Phase 3 of #63) uses this slot;
-   * anything categorical + non-directional can render here.
-   */
-  headerChip?: ReactNode;
-  /**
-   * Progress rebuild 2026-08-18 — an expandable disclosure at the
-   * bottom of the tile. Progress folds the standalone "How the engine
-   * reads you" card into this slot to halve the visible cards.
-   */
-  expandableSlot?: ReactNode;
-}) {
+export function WeeklyNarrativeTile({ program }: { program: Program }) {
   const store = useStore((s) => s.store);
   const [offset, setOffset] = useState(0);
-  const [expanded, setExpanded] = useState(false);
+  const [byId, setById] = useState<Record<string, Exercise>>({});
+
+  useEffect(() => {
+    void loadExercises().then((x) => setById(x.byId));
+  }, []);
 
   const anchorDate = useMemo(() => {
     const t = new Date(todayISO() + "T00:00:00");
@@ -45,32 +32,33 @@ export function WeeklyNarrativeTile({
     return iso(t);
   }, [offset]);
 
-  const summary = useMemo(
-    () => computeWeekSummary(store, program, anchorDate),
-    [store, program, anchorDate],
-  );
+  const summary = useMemo(() => computeWeekSummary(store, program, anchorDate), [store, program, anchorDate]);
 
   const isCurrentWeek = weekDates(todayISO())[0] === summary.weekStart;
-  const atFutureEdge = offset >= 0;
-  const atPastEdge = offset <= -12;
+  const { completed, scheduled, dueSoFar } = summary.sessions;
+  const behind = Math.max(0, dueSoFar - completed);
+  const status = !isCurrentWeek
+    ? completed >= scheduled
+      ? "All planned sessions done"
+      : `${completed} of ${scheduled} planned sessions done`
+    : behind === 0
+      ? "On track"
+      : `${behind} session${behind === 1 ? "" : "s"} behind`;
+  const top = summary.training.topLift;
+  const topName = top ? (byId[top.exerciseId] ? exerciseListName(byId[top.exerciseId]) : top.exerciseId.replace(/_/g, " ")) : null;
+  const flagged = summary.states.red + summary.states.amber;
 
   return (
-    <section className={cn(cardClass(), "space-y-3")}>
+    <section className={cn(cardClass(), "space-y-4")} aria-labelledby="week-headline">
       <header className="flex items-center justify-between gap-2">
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 flex-wrap">
-            <h3 className="text-body font-semibold text-strong">{summary.label}</h3>
-            {headerChip}
-          </div>
-          <p className="text-caption text-muted">
-            {isCurrentWeek ? "This week so far" : "Completed week"}
-          </p>
-        </div>
+        <h2 id="week-headline" className="text-body font-semibold text-strong">
+          {isCurrentWeek ? "This week" : summary.label}
+        </h2>
         <div className="flex items-center gap-0.5">
           <button
             type="button"
             onClick={() => setOffset(offset - 1)}
-            disabled={atPastEdge}
+            disabled={offset <= -12}
             aria-label="Previous week"
             className="w-11 h-11 flex items-center justify-center rounded-lg hover:bg-line-soft text-muted hover:text-ink disabled:opacity-30 disabled:cursor-not-allowed"
           >
@@ -79,7 +67,7 @@ export function WeeklyNarrativeTile({
           <button
             type="button"
             onClick={() => setOffset(offset + 1)}
-            disabled={atFutureEdge}
+            disabled={offset >= 0}
             aria-label="Next week"
             className="w-11 h-11 flex items-center justify-center rounded-lg hover:bg-line-soft text-muted hover:text-ink disabled:opacity-30 disabled:cursor-not-allowed"
           >
@@ -88,131 +76,84 @@ export function WeeklyNarrativeTile({
         </div>
       </header>
 
-      {!summary.hasAnyActivity ? (
-        <p className="text-small text-muted italic">
-          Nothing logged this week yet. Come back Sunday for a summary.
-        </p>
-      ) : (
-        <ul className="space-y-1.5 text-small">
-          <SummaryLine
-            label="Sessions"
-            value={`${summary.sessions.completed} / ${summary.sessions.scheduled}`}
-            tone={
-              summary.sessions.completionRatio >= 0.75
-                ? "good"
-                : summary.sessions.completionRatio >= 0.5
-                  ? "neutral"
-                  : "warn"
-            }
-          />
-          {summary.training.topLift ? (
-            <SummaryLine
-              label="Top lift"
-              value={`${summary.training.topLift.exerciseId} · ${summary.training.topLift.weight_kg} kg × ${summary.training.topLift.reps}`}
-              tone="good"
-            />
+      <div className="flex items-center gap-5">
+        <SessionsRing done={completed} of={scheduled} />
+        <div className="min-w-0 space-y-1">
+          <p className="text-h3 font-semibold text-strong leading-tight">{status}</p>
+          <p className="text-small text-muted">
+            {completed} of {scheduled} session{scheduled === 1 ? "" : "s"} {isCurrentWeek ? "so far" : "done"}
+          </p>
+        </div>
+      </div>
+
+      {summary.hasAnyActivity ? (
+        <ul className="space-y-2 border-t border-line-soft pt-3 text-small">
+          {top && topName ? (
+            <Line label="Heaviest set" value={`${topName} · ${top.weight_kg} kg × ${top.reps}`} />
           ) : null}
-          {summary.training.prsHit > 0 ? (
-            <SummaryLine
-              label="Weekly bests"
-              value={`${summary.training.prsHit} lift${summary.training.prsHit === 1 ? "" : "s"}`}
-              tone="good"
-            />
-          ) : null}
+          {summary.training.newBests > 0 ? <Line label="New bests" value={String(summary.training.newBests)} /> : null}
           {summary.endurance.runsCount > 0 ? (
-            <SummaryLine
-              label="Endurance"
-              value={
-                [
-                  `${summary.endurance.runsCount} session${summary.endurance.runsCount === 1 ? "" : "s"}`,
-                  summary.endurance.totalKm > 0 ? `${summary.endurance.totalKm} km` : null,
-                  summary.endurance.totalMinutes > 0 ? `${summary.endurance.totalMinutes} min` : null,
-                ]
-                  .filter(Boolean)
-                  .join(" · ")
-              }
-              tone="neutral"
-            />
-          ) : null}
-          {summary.rehab.daysWithBlockADone > 0 ? (
-            <SummaryLine
-              label="Rehab"
-              value={`${summary.rehab.daysWithBlockADone} of 7 days`}
-              tone={summary.rehab.daysWithBlockADone >= 5 ? "good" : "neutral"}
-            />
-          ) : null}
-          {(summary.states.green + summary.states.amber + summary.states.red) > 0 ? (
-            <SummaryLine
-              label="Morning check"
+            <Line
+              label="Outside sessions"
               value={[
-                summary.states.green ? `${summary.states.green} green` : null,
-                summary.states.amber ? `${summary.states.amber} amber` : null,
-                summary.states.red ? `${summary.states.red} red` : null,
+                String(summary.endurance.runsCount),
+                summary.endurance.totalKm > 0 ? `${summary.endurance.totalKm} km` : null,
+                summary.endurance.totalMinutes > 0 ? `${summary.endurance.totalMinutes} min` : null,
               ]
                 .filter(Boolean)
                 .join(" · ")}
-              tone={summary.states.red > 0 ? "warn" : summary.states.amber > 0 ? "neutral" : "good"}
             />
           ) : null}
-          {summary.signals.fatigueDaysHighOrElevated + summary.signals.painDays + summary.signals.externalLoadDays > 0 ? (
-            <SummaryLine
-              label="Signals"
-              value={[
-                summary.signals.painDays ? `${summary.signals.painDays} pain-day` : null,
-                summary.signals.fatigueDaysHighOrElevated
-                  ? `${summary.signals.fatigueDaysHighOrElevated} fatigue`
-                  : null,
-                summary.signals.externalLoadDays
-                  ? `${summary.signals.externalLoadDays} outside load`
-                  : null,
-              ]
-                .filter(Boolean)
-                .join(" · ")}
-              tone={summary.signals.painDays > 0 ? "warn" : "neutral"}
-            />
+          {flagged > 0 ? (
+            <li className="text-small text-amber">
+              {summary.states.red > 0
+                ? `${summary.states.red} red check${summary.states.red === 1 ? "" : "s"}`
+                : `${summary.states.amber} amber check${summary.states.amber === 1 ? "" : "s"}`}{" "}
+              this week.
+            </li>
           ) : null}
         </ul>
+      ) : (
+        <p className="text-small text-muted">Your week shows up here after your first session.</p>
       )}
-      {expandableSlot ? (
-        <div className="border-t border-line-soft pt-2">
-          <button
-            type="button"
-            onClick={() => setExpanded((v) => !v)}
-            aria-expanded={expanded}
-            className="w-full flex items-center justify-between gap-2 py-1 text-left"
-          >
-            <span className="text-eyebrow uppercase tracking-widest text-muted">
-              How the engine reads you
-            </span>
-            <span aria-hidden className="text-muted">
-              {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-            </span>
-          </button>
-          {expanded ? <div className="pt-3">{expandableSlot}</div> : null}
-        </div>
-      ) : null}
     </section>
   );
 }
 
-function SummaryLine({
-  label,
-  value,
-  tone,
-}: {
-  label: string;
-  value: string;
-  tone: "good" | "neutral" | "warn";
-}) {
-  const toneClass = {
-    good: "text-green",
-    neutral: "text-ink",
-    warn: "text-amber",
-  }[tone];
+/** Done of planned, as a ring. Bronze fill; a full ring when everything planned is done. */
+function SessionsRing({ done, of }: { done: number; of: number }) {
+  const r = 34;
+  const c = 2 * Math.PI * r;
+  const frac = of > 0 ? Math.min(1, done / of) : 0;
+  return (
+    <div className="relative h-24 w-24 flex-shrink-0" role="img" aria-label={`${done} of ${of} sessions`}>
+      <svg viewBox="0 0 80 80" className="h-full w-full -rotate-90" aria-hidden>
+        <circle cx="40" cy="40" r={r} fill="none" stroke="currentColor" strokeWidth="7" className="text-line-soft" />
+        <circle
+          cx="40"
+          cy="40"
+          r={r}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="7"
+          strokeLinecap="round"
+          strokeDasharray={c}
+          strokeDashoffset={c * (1 - frac)}
+          className="text-bronze transition-[stroke-dashoffset] duration-500 motion-reduce:transition-none"
+        />
+      </svg>
+      <span className="absolute inset-0 flex items-center justify-center font-mono text-h3 tabular-nums text-strong" aria-hidden>
+        {done}/{of}
+      </span>
+    </div>
+  );
+}
+
+function Line({ label, value }: { label: string; value: string }) {
   return (
     <li className="flex items-baseline justify-between gap-3">
-      <span className="text-muted text-small">{label}</span>
-      <span className={cn("font-mono text-small text-right", toneClass)}>{value}</span>
+      <span className="text-muted">{label}</span>
+      <span className="text-right text-ink">{value}</span>
     </li>
   );
 }

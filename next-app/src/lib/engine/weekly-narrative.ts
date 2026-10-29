@@ -20,6 +20,11 @@ export type WeekSummary = {
     scheduled: number;
     completed: number;
     completionRatio: number;
+    /**
+     * Planned sessions on days up to the anchor date (2026-10-29), minus days held by a red check — a red-day rest
+     * is the plan working, not a miss. "N behind" = dueSoFar − completed, never negative.
+     */
+    dueSoFar: number;
   };
   states: {
     green: number;
@@ -29,6 +34,11 @@ export type WeekSummary = {
   };
   training: {
     prsHit: number;
+    /**
+     * Lifts whose heaviest set this week beats every earlier logged set of that lift (2026-10-29). `prsHit` counts
+     * lifts TRAINED this week, which Record showed as "Weekly bests" — it was never a best.
+     */
+    newBests: number;
     tmChanges: Array<{ lift: string; delta: number }>;
     topLift: { exerciseId: string; weight_kg: number; reps: number; date: string } | null;
   };
@@ -176,6 +186,30 @@ export function computeWeekSummary(
     }
   }
   prsHit = bestByLift.size;
+  let newBests = 0;
+  for (const [exId, best] of bestByLift) {
+    let prior = 0;
+    let seen = false;
+    for (const [d, day] of Object.entries(store.logs)) {
+      if (d >= weekStart || !day) continue;
+      for (const [key, entry] of Object.entries(day.exercises)) {
+        if (key.split(":")[1] !== exId) continue;
+        for (const s of entry.sets ?? []) {
+          if (s.weight_kg != null && s.reps != null && s.reps > 0) {
+            seen = true;
+            prior = Math.max(prior, s.weight_kg);
+          }
+        }
+      }
+    }
+    if (seen && best.weight_kg > prior) newBests++;
+  }
+  let dueSoFar = 0;
+  dates.forEach((d, i) => {
+    if (d > anchorDateISO) return;
+    if (store.logs[d]?.derived_state === "red") return;
+    dueSoFar += strengthCountsPerDay[i] ?? 0;
+  });
 
   // TM at start of week vs end — from training_maxes snapshot (best we can do
   // without a per-day snapshot). Report delta only if it changed vs same week
@@ -202,9 +236,10 @@ export function computeWeekSummary(
       scheduled,
       completed,
       completionRatio: scheduled > 0 ? completed / scheduled : 0,
+      dueSoFar: Math.min(dueSoFar, scheduled),
     },
     states,
-    training: { prsHit, tmChanges, topLift },
+    training: { prsHit, newBests, tmChanges, topLift },
     endurance: {
       runsCount,
       totalKm: Math.round(totalKm * 10) / 10,

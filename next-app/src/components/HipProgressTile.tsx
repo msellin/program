@@ -6,7 +6,6 @@ import { HIP_FLEXOR_PACK } from "@/lib/assessments-data";
 import {
   isDue,
   packScoreSeries,
-  rehabAdherence,
 } from "@/lib/engine/assessment-engine";
 import { today } from "@/lib/utils";
 import { cardClass } from "@/components/ui/Card";
@@ -20,7 +19,6 @@ import { cardClass } from "@/components/ui/Card";
  * chart, per the density-brief decision).
  *
  *   1. Monthly hip-check overall score (from the self-scored pack)
- *   2. Rehab adherence — % of days in the last 30 that block_a_home was touched
  *
  * Zero medical claims. Every visualisation is a straight readout of what the
  * user logged. If nothing has been logged yet, tile prompts the user to start.
@@ -32,7 +30,6 @@ export function HipProgressTile() {
 
   const dueStatus = isDue(store, pack.id, todayISO);
   const scoreSeries = packScoreSeries(store, pack);
-  const adherence = rehabAdherence(store, "block_a_home", 30, todayISO);
 
   const latest = scoreSeries[scoreSeries.length - 1];
   const previous = scoreSeries.length >= 2 ? scoreSeries[scoreSeries.length - 2] : null;
@@ -55,11 +52,6 @@ export function HipProgressTile() {
           </span>
         )}
       </div>
-
-      <p className="text-small text-muted">
-        Trend for the sub-track from the clinical reports — subjective self-checks, morning
-        symptoms, and daily rehab consistency. No claims about diagnosis.
-      </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {/* Monthly self-check score */}
@@ -107,29 +99,8 @@ export function HipProgressTile() {
           ) : null}
         </div>
 
-        {/* Rehab adherence */}
-        <div className={cardClass()}>
-          <p className="text-muted text-caption font-medium">Rehab · last 30d</p>
-          <div className="mt-1 flex items-baseline gap-2">
-            <span className="text-h2 font-mono tabular-nums text-strong">
-              {adherence.doneDays}/{adherence.totalDays}
-            </span>
-            <span className="font-mono text-caption text-muted">
-              {Math.round(adherence.ratio * 100)}%
-            </span>
-          </div>
-          <div className="mt-2 h-1.5 rounded-full bg-line-soft overflow-hidden">
-            <div
-              className="h-full bg-bronze"
-              style={{ width: `${Math.round(adherence.ratio * 100)}%` }}
-              aria-hidden
-            />
-          </div>
-          <p className="mt-2 text-caption text-muted">
-            Home rehab is the daily consistency layer the clinical file leans on. High
-            adherence here is what protects everything else.
-          </p>
-        </div>
+        {/* The "Rehab · last 30d" adherence card was cut (founder-feedback round 4, 2026-10-29): 0/30 beside a
+            paragraph about the clinical file read as noise on Record; Plan and the week headline count sessions. */}
       </div>
     </section>
   );

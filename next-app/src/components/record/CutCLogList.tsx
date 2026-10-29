@@ -17,6 +17,7 @@
  */
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { loadExercises } from "@/lib/data-loader";
 import type { DayLog, Exercise, ExerciseLog, Store } from "@/lib/schemas";
@@ -29,9 +30,15 @@ const PAGE_SIZE = 30;
 export type CutCLogListProps = {
   store: Store;
   className?: string;
+  /**
+   * Record shows only the most recent days (founder-feedback round 4, 2026-10-29: a 30-row list took up the page);
+   * the full, paginated list lives at `moreHref`.
+   */
+  recent?: number;
+  moreHref?: string;
 };
 
-export function CutCLogList({ store, className }: CutCLogListProps) {
+export function CutCLogList({ store, className, recent, moreHref }: CutCLogListProps) {
   const [byId, setById] = useState<Record<string, Exercise>>({});
   const [visible, setVisible] = useState(PAGE_SIZE);
 
@@ -53,8 +60,8 @@ export function CutCLogList({ store, className }: CutCLogListProps) {
   }, [store.logs]);
 
   const totalActive = activeDays.length;
-  const shown = activeDays.slice(0, visible);
-  const hasMore = totalActive > visible;
+  const shown = activeDays.slice(0, recent ?? visible);
+  const hasMore = recent == null && totalActive > visible;
 
   if (totalActive === 0) {
     return (
@@ -68,9 +75,13 @@ export function CutCLogList({ store, className }: CutCLogListProps) {
 
   return (
     <div className={cn("space-y-3", className)}>
-      <p className="text-caption text-muted">
-        {totalActive} active day{totalActive === 1 ? "" : "s"} · showing last {Math.min(visible, totalActive)}
-      </p>
+      {recent == null ? (
+        <p className="text-caption text-muted">
+          {totalActive} active day{totalActive === 1 ? "" : "s"} · showing last {Math.min(visible, totalActive)}
+        </p>
+      ) : (
+        <h2 className="text-body font-semibold text-strong">Recent</h2>
+      )}
 
       <div className={cn(cardClass({ flush: true }), "divide-y divide-line-soft/50")}>
         {shown.map((day) => (
@@ -78,6 +89,15 @@ export function CutCLogList({ store, className }: CutCLogListProps) {
         ))}
       </div>
 
+      {recent != null && moreHref ? (
+        <Link
+          href={moreHref}
+          className="flex min-h-11 items-center justify-between rounded-lg px-1 text-small font-semibold text-ink hover:text-strong"
+        >
+          <span>All sessions · {totalActive} days</span>
+          <span aria-hidden>›</span>
+        </Link>
+      ) : null}
       {hasMore ? (
         <button
           type="button"
@@ -140,7 +160,7 @@ function LogRow({ day, byId }: { day: DayLog; byId: Record<string, Exercise> }) 
           ) : null}
           <span>{label}</span>
         </span>
-        <span className="text-muted">{summary || "logged"}</span>
+        <span className="text-muted">{summary || (day.symptoms ? "Morning check" : "Notes")}</span>
       </button>
       {open ? (
         <div className="px-3 pb-3 pt-1 space-y-2 border-t border-line-soft/50">
