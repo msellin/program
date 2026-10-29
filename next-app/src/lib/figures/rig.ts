@@ -64,7 +64,14 @@ export type FigureSide = "L" | "R" | "B";
 export type FigureSlot = { pts: string; color: string; w: number; op: number; fill: string; dash: string; bg?: boolean; shape?: string; cue?: boolean };
 export type FigureBadge = { x: number; y: number; color: string; letter: string; op: number };
 export type FigureFrame = { label: string; tf: string; floor: boolean; slots: FigureSlot[]; badges: FigureBadge[] };
-type Kind = "hold" | "move" | "move2";
+/**
+ * `gait` (motion round, 2026-10-29): a continuous walking cycle, `p` runs 0..1 over the whole `dur`
+ * and each leg (or hand) takes its own stance and swing phase half a cycle apart. `move2` alternated
+ * two poses, so carries and the sled read as a leg toggling rather than a walk.
+ */
+type Kind = "hold" | "move" | "move2" | "gait";
+/** How a phase of a rep moves through time; see `TEMPO`. */
+type Tempo = "control" | "drive";
 type Fig = {
   kind: Kind;
   dur?: number;
@@ -80,6 +87,11 @@ type Fig = {
   cues?: Cue[];
   /** The next rung of this drill's progression, drawn as a faint outline behind it (round C). */
   ladder?: string;
+  /**
+   * Tempo of the way out (k0 to k1) and the way back (k2 to k3). Unset = the cosine both ways. A rep's
+   * lowering is `control`, its effort is `drive` (motion round, 2026-10-29).
+   */
+  tempo?: [Tempo, Tempo];
   build: (sc: Scene, side: FigureSide, p: number, rep?: number) => string;
 };
 
@@ -99,15 +111,42 @@ export const FIGURE_COLORS = { L: COL.L, R: COL.R, FAR, BODY, FLOOR, PROP };
 const TORSO = 12;
 const SLOTS = 28;
 function ease(x: number) { return 0.5 - 0.5 * Math.cos(Math.PI * x); }
+/**
+ * A monotone 0..1 curve from a velocity profile (>= 0), tabulated once. Every joint already moved on one
+ * cosine, so lowering and effort were mirror images and nothing showed where a rep is hard (motion round,
+ * 2026-10-29, dev/active/figure-animation/: all four experts).
+ */
+function curve(v: (x: number) => number): (x: number) => number {
+  const N = 96, acc = [0];
+  for (let i = 1; i <= N; i++) acc.push(acc[i - 1] + v((i - 0.5) / N));
+  const tot = acc[N];
+  return (x) => {
+    const u = Math.max(0, Math.min(1, x)) * N, i = Math.min(N - 1, Math.floor(u));
+    return (acc[i] + (acc[i + 1] - acc[i]) * (u - i)) / tot;
+  };
+}
+export const TEMPO: Record<Tempo, (x: number) => number> = {
+  // Lowering under control: builds speed over the first fifth, steady through the middle, settles over the
+  // last fifth. Never a drop, never a bounce at the bottom.
+  control: curve((x) => Math.min(1, x / 0.2, (1 - x) / 0.2)),
+  // Effort: quick out of the bottom, slows through a sticking point a little past halfway, then finishes and
+  // settles into the lockout. The velocity never reaches zero, so there is no stall and never an overshoot.
+  drive: curve((x) => Math.sin(Math.PI * x) * (1 - 0.6 * Math.exp(-(((x - 0.58) / 0.11) ** 2)))),
+};
 // rest → move → hold → return → rest, as 0..1
-function prog(t: number, k: number[]) {
-  const k3 = k[3] ?? 1;
+function prog(t: number, k: number[], tempo?: [Tempo, Tempo]) {
+  const k3 = k[3] ?? 1, out = tempo ? TEMPO[tempo[0]] : ease, back = tempo ? TEMPO[tempo[1]] : ease;
   if (t < k[0]) return 0;
-  if (t < k[1]) return ease((t - k[0]) / (k[1] - k[0]));
+  if (t < k[1]) return out((t - k[0]) / (k[1] - k[0]));
   if (t < k[2]) return 1;
-  if (t < k3) return 1 - ease((t - k[2]) / (k3 - k[2]));
+  if (t < k3) return 1 - back((t - k[2]) / (k3 - k[2]));
   return 0;
 }
+/**
+ * A joint that moves ahead of the rest: reaches most of its travel early, all of it by the end. Used for the
+ * hips going back first in a squat, which also makes them come forward last on the way up.
+ */
+function lead(p: number, k = 1.6) { return 1 - (1 - p) ** k; }
 function lerp(a: number, b: number, p: number) { return a + (b - a) * p; }
 function lerpP(a: Pt, b: Pt, p: number): Pt { return [lerp(a[0], b[0], p), lerp(a[1], b[1], p)]; }
 function P(o: Pt, len: number, deg: number): Pt { const r = deg * Math.PI / 180; return [o[0] + len * Math.cos(r), o[1] + len * Math.sin(r)]; }
@@ -198,7 +237,7 @@ export const FIGS: Record<string, Fig> = {
   } },
   adductor: adductorFig(false, "Adductor squeeze: lying on the back with knees bent, squeezing a ball between the knees at about 60% and holding"),
   adductor_ext: adductorFig(true, "Adductor squeeze, longer lever: lying on the back with the feet further out, squeezing a ball between the knees at about 60% and holding"),
-  bridge: { dur: 5000, kind: "move", k: [0.08, 0.32, 0.64], sided: true, scale: 1.15, cues: [{ align: ["shoulder", "hip", "knee"] }], build(sc, side, p) {
+  bridge: { dur: 5000, kind: "move", k: [0.08, 0.32, 0.64], sided: true, tempo: ["drive", "control"], scale: 1.15, cues: [{ align: ["shoulder", "hip", "knee"] }], build(sc, side, p) {
     // Foot under the knee at the top (vertical shin, no hamstring cramp). The free leg is held
     // bent (short lever): a straight raised leg is a resisted straight-leg-raise hold.
     const S = [120, 158], T = 78, F = [258, 164], th = lerp(0, 22.7, p) * Math.PI / 180;
@@ -362,7 +401,9 @@ type PullOpts = {
 };
 function pullFig(o: PullOpts): Fig {
   const cues: Cue[] | undefined = o.to > 0 && o.to < 1 ? [{ angle: ["hand", "elbow", "shoulder"] }] : undefined;
-  return { kind: o.kind, dur: o.dur, k: o.k, poster: o.poster, sided: false, front: true, cues, build(sc, _side, q) {
+  // Up is the effort, down is controlled; a negative's way out IS the lowering (its reset is a cut).
+  const tempo: [Tempo, Tempo] | undefined = o.kind === "move" ? (o.from < o.to ? ["drive", "control"] : ["control", "control"]) : undefined;
+  return { kind: o.kind, dur: o.dur, k: o.k, poster: o.poster, sided: false, front: true, cues, tempo, build(sc, _side, q) {
     const h = o.kind === "hold" ? o.to : lerp(o.from, o.to, q);
     // Chin over the bar at the top with the shoulders BELOW it, so the elbows point down and in
     // (the shoulders used to reach bar height and the elbows winged out level with it).
@@ -562,12 +603,16 @@ const AD_FIGS: Record<string, Fig> = {
   wallhs_taps: handstand({ lean: 6, kind: "move", wall: true, act: "taps", label: "Wall handstand shoulder taps: chest to the wall, shift onto one arm and tap the opposite shoulder, then switch" }),
   hsfree: handstand({ lean: 0, kind: "move", label: "Freestanding handstand: hands shoulder-width on the floor, arms straight, body stacked over the hands, small balance corrections through the fingers" }),
   hstuck: handstand({ lean: 0, kind: "move", tuck: true, label: "Tuck handstand: arms straight, knees drawn in toward the chest, hips stacked over the hands" }),
-  hswalk: { kind: "move2", dur: 3600, k: [0, 1, 1, 1], poster: 0.5, sided: false, scale: 0.95, build(sc, _s, p, rep = 0) {
-    // One hand steps while the other stays planted; on the next step they swap. The body holds its
-    // place and the planted hand moves back under it, as on a treadmill, so the loop never jumps.
-    const step = (q: number): Pt => [lerp(171, 189, q), 168 - Math.sin(q * Math.PI) * 8], plant = (q: number): Pt => [lerp(189, 171, q), 168];
-    const near = rep === 0 ? step(p) : plant(p), far = rep === 0 ? plant(p) : step(p);
-    const S = [180 + lerp(-2, 2, Math.sin(p * Math.PI)), 122], a = -88, H = P(S, 56, a);
+  hswalk: { kind: "gait", dur: 3600, k: [0, 1, 1], poster: 0.8, sided: false, scale: 0.95, build(sc, _s, p) {
+    // One hand steps while the other stays planted; then they swap. The body holds its place and the
+    // planted hand moves back under it, as on a treadmill, so the loop never jumps. The shoulders lean
+    // over the planted hand (motion round): that weight shift is what frees the other hand to step.
+    const hand = (q: number): Pt => {
+      const st = stride(q, 0.55);
+      return st.stance ? [lerp(189, 171, st.u), 168] : [lerp(171, 189, swingPos(st.u, 0.55)), 168 - Math.sin(st.u * Math.PI) * 8];
+    };
+    const near = hand(p), far = hand(p + 0.5);
+    const S = [180 + 2 * Math.cos(2 * Math.PI * (p - 0.25)), 122], a = -88, H = P(S, 56, a);
     sc.floor();
     sc.line([far, S], FAR, 8);
     sc.line([H, P(H, LEG, a - 3)], BODY, 8); sc.line([S, H], BODY, TORSO);
@@ -601,11 +646,16 @@ const AD_FIGS: Record<string, Fig> = {
     sc.line([[hx, 168], S], COL.B, 8);
     return "Wall walk: start in a plank with the feet at the wall; walk the feet up the wall while the hands walk in toward it, as far as you can hold with a tight body";
   } },
-  squat: { kind: "move", dur: 5500, k: [0.05, 0.4, 0.46, 0.78], poster: 0.9, sided: false, cues: [{ level: "knee", span: ["hip", "knee"], limit: true }, { plumb: "midfoot", to: "bar" }], build(sc, _s, p) { return squatPose(sc, p, 33, "back"); } },
-  frontsquat: { kind: "move", dur: 5500, k: [0.05, 0.4, 0.46, 0.78], poster: 0.9, sided: false, cues: [{ level: "knee", span: ["hip", "knee"], limit: true }], build(sc, _s, p) { return squatPose(sc, p, 12, "front"); } },
-  deadlift: { kind: "move", dur: 5200, k: [0.05, 0.33, 0.43, 0.82], poster: 0, sided: false, cues: [{ plumb: "midfoot", to: "bar" }], build(sc, _s, p) {
+  squat: { kind: "move", dur: 5500, k: [0.05, 0.4, 0.46, 0.78], poster: 0.9, sided: false, tempo: ["control", "drive"], cues: [{ level: "knee", span: ["hip", "knee"], limit: true }, { plumb: "midfoot", to: "bar" }], build(sc, _s, p) { return squatPose(sc, p, 33, "back"); } },
+  frontsquat: { kind: "move", dur: 5500, k: [0.05, 0.4, 0.46, 0.78], poster: 0.9, sided: false, tempo: ["control", "drive"], cues: [{ level: "knee", span: ["hip", "knee"], limit: true }], build(sc, _s, p) { return squatPose(sc, p, 12, "front"); } },
+  deadlift: { kind: "move", dur: 5200, k: [0.05, 0.33, 0.43, 0.82], poster: 0, sided: false, tempo: ["drive", "control"], cues: [{ plumb: "midfoot", to: "bar" }], build(sc, _s, p) {
     // Start: hips above the knees, trunk about 35° above horizontal (a block pull, not an RDL).
-    const F = [172, 166], H = lerpP([134, 124], [172, 82], p), lean = lerp(55, 0, p) * Math.PI / 180;
+    // Two phases (biomechanist, motion round): the knees straighten first and the hips and shoulders rise
+    // together at one back angle; once the bar is past the knees the hips drive through to stand. The
+    // bar stays over the foot until the lockout. Hips rising alone first would be the fault, not the lift.
+    // 1.4, not steeper: mid-pull read RDL-ish at 1.7 (coach check, 05-check-coach.md).
+    const late = p ** 1.4;
+    const F = [172, 166], H = [lerp(134, 172, late), lerp(124, 82, lead(p, 1.7))], lean = lerp(55, 0, late) * Math.PI / 180;
     const S = [H[0] + 56 * Math.sin(lean), H[1] - 56 * Math.cos(lean)], B = [S[0], S[1] + 54];
     const K = ikSide(H, F, 44, 42, 1);
     sc.mark("midfoot", [F[0] + 4, 166]); sc.mark("bar", B);
@@ -645,20 +695,50 @@ const kettlebell = (sc: Scene, hand: Pt) => {
 const leg = (H: Pt, F: Pt): Pt[] => [H, ikSide(H, F, 44, 42, 1), F];
 
 /** Front view, standing tall, for the carries and the Pallof press. Shoulders at y 34, hips at y 88. */
-function frontBody(sc: Scene, lift: [number, number], work: { l?: string; r?: string }) {
-  // The figure faces us, so its RIGHT side is on the viewer's LEFT.
-  const hR = [170, 88], hL = [188, 88];
+function frontBody(sc: Scene, lift: [number, number], work: { l?: string; r?: string }, shift: Pt = [0, 0]) {
+  // The figure faces us, so its RIGHT side is on the viewer's LEFT. `shift` moves everything above the
+  // feet: the weight moving over the standing foot as a carry walks.
+  const o = (q: Pt) => add(q, shift);
+  const hR = o([170, 88]), hL = o([188, 88]);
   const fR = [164, 166 - lift[0]], fL = [194, 166 - lift[1]];
   sc.floor();
   sc.line([hR, ikSide(hR, fR, 40, 40, -1), fR], work.r ?? BODY, 8);
   sc.line([hL, ikSide(hL, fL, 40, 40, 1), fL], work.l ?? BODY, 8);
-  sc.line([[179, 90], [179, 36]], BODY, TORSO);
-  sc.line([[158, 36], [200, 36]], BODY, 8);
-  sc.dot([179, 16], 11, BODY);
+  sc.line([o([179, 90]), o([179, 36])], BODY, TORSO);
+  sc.line([o([158, 36]), o([200, 36])], BODY, 8);
+  sc.dot(o([179, 16]), 11, BODY);
+}
+
+/**
+ * One foot's place in a walking cycle (motion round, 2026-10-29): planted for the first `duty` of it,
+ * then a swing. `u` runs 0..1 through each part. The two feet run half a cycle apart, so there is
+ * always a foot on the ground and, with `duty` > 0.5, a moment with both down.
+ */
+function stride(phi: number, duty = 0.6): { stance: boolean; u: number } {
+  const x = ((phi % 1) + 1) % 1;
+  return x < duty ? { stance: true, u: x / duty } : { stance: false, u: (x - duty) / (1 - duty) };
+}
+/**
+ * Where a swinging foot is, 0 (back) to 1 (front), leaving and landing at the speed the planted foot travels
+ * (animator check: an eased swing stopped dead at toe-off and touchdown). A Hermite curve with that end
+ * speed runs about 2% past both ends, the way a real foot drifts back before it lands, so callers shrink
+ * the span by `SWING_OVER` at each end to keep the extreme where it was.
+ */
+function swingPos(u: number, duty: number) {
+  const m = -(1 - duty) / duty;
+  return m * (2 * u ** 3 - 3 * u ** 2 + u) + (3 * u ** 2 - 2 * u ** 3);
+}
+const SWING_OVER = 0.025;
+/** Front-view carry: foot lifts, and the trunk shifting over the standing foot and rising a little on it. */
+function carryGait(phi: number): { lift: [number, number]; shift: Pt } {
+  const lift = (q: number) => { const st = stride(q); return st.stance ? 0 : Math.sin(st.u * Math.PI) * 9; };
+  // Right foot swings around phi 0.8, left around 0.3: the weight is over the other foot then.
+  const dx = 2.5 * Math.cos(2 * Math.PI * (phi - 0.8)), dy = -1.2 * Math.cos(4 * Math.PI * (phi - 0.8));
+  return { lift: [lift(phi), lift(phi + 0.5)], shift: [dx, dy] };
 }
 
 const HIP_FIGS: Record<string, Fig> = {
-  bridge2: { dur: 4500, kind: "move", k: [0.08, 0.36, 0.6], sided: false, scale: 1.15, cues: [{ align: ["shoulder", "hip", "knee"] }], build(sc, _s, p) {
+  bridge2: { dur: 4500, kind: "move", k: [0.08, 0.36, 0.6], sided: false, tempo: ["drive", "control"], scale: 1.15, cues: [{ align: ["shoulder", "hip", "knee"] }], build(sc, _s, p) {
     const S = [120, 158], T = 78, F = [258, 164], th = lerp(0, 22.7, p) * Math.PI / 180;
     const H = [S[0] + T * Math.cos(th), S[1] - T * Math.sin(th)];
     sc.mark("shoulder", S); sc.mark("hip", H); sc.mark("knee", ik(H, F, 66, 62, true));
@@ -670,7 +750,7 @@ const HIP_FIGS: Record<string, Fig> = {
     sc.line([H, ik(H, F, 66, 62, true), F], COL.B, 8);
     return "Glute bridge: lying on the back, knees bent and feet flat; ribs down, the hips lift until shoulder, hip and knee form one line, then lower";
   } },
-  hipthrust: { dur: 4500, kind: "move", k: [0.08, 0.36, 0.6], sided: false, scale: 1.1, cues: [{ align: ["shoulder", "hip", "knee"] }], build(sc, _s, p) {
+  hipthrust: { dur: 4500, kind: "move", k: [0.08, 0.36, 0.6], sided: false, tempo: ["drive", "control"], scale: 1.1, cues: [{ align: ["shoulder", "hip", "knee"] }], build(sc, _s, p) {
     // Upper back pivots on the bench edge. At the top the trunk and thigh are level and in one line
     // with the shoulder: finished with the glutes, never arched past it.
     const S = [118, 106], F = [262, 167], th = lerp(40, 0, p);
@@ -687,7 +767,7 @@ const HIP_FIGS: Record<string, Fig> = {
     sc.plate(bar, 12);
     return "Barbell hip thrust: upper back on a bench, bar across the hips, feet flat; chin tucked and ribs down, drive the hips up until the thighs and trunk are level, then lower";
   } },
-  splitsquat: { dur: 5000, kind: "move", k: [0.08, 0.42, 0.54], sided: true, cues: [{ plumb: "ankle", to: "knee" }], build(sc, side, p) {
+  splitsquat: { dur: 5000, kind: "move", k: [0.08, 0.42, 0.54], sided: true, tempo: ["control", "drive"], cues: [{ plumb: "ankle", to: "knee" }], build(sc, side, p) {
     // Front shin stays close to vertical (knee-forward drive loads the front of the hip).
     const work = COL[side], F = [192, 166], R = [110, 116], H = lerpP([162, 86], [150, 124], p);
     const S = P(H, 56, -80), front = leg(H, F), rear = [H, ik(H, R, 44, 42, false), R];
@@ -705,7 +785,7 @@ const HIP_FIGS: Record<string, Fig> = {
     sc.badge(beyond(front[1], F, 14), work, side);
     return "Bulgarian split squat, " + sideWord(side) + " leg in front: rear foot on a bench, dumbbells at the sides; lower straight down with the front shin close to vertical, then stand";
   } },
-  slrdl: { dur: 5500, kind: "move", k: [0.08, 0.44, 0.56], sided: true, cues: [{ align: ["shoulder", "hip", "foot"] }], build(sc, side, p) {
+  slrdl: { dur: 5500, kind: "move", k: [0.08, 0.44, 0.56], sided: true, tempo: ["control", "drive"], cues: [{ align: ["shoulder", "hip", "foot"] }], build(sc, side, p) {
     // Hinge to about 70°: the rear leg rises in one line with the trunk, spine long.
     const work = COL[side], F = [196, 166], lean = lerp(0, 70, p), H = lerpP([194, 82], [178, 90], p);
     const S = P(H, 56, -90 + lean), rearF = P(H, 86, 90 + lean), hand = P(S, 50, 90);
@@ -737,7 +817,7 @@ const HIP_FIGS: Record<string, Fig> = {
     sc.dot(hand, lerp(5, 8.5, p), BODY);
     return "Pallof press: standing side-on to a band anchored at chest height; press the hands straight out from the chest and hold, the trunk refusing to turn toward the anchor, then bring them back";
   } },
-  nordic: { dur: 8000, kind: "move", k: [0.05, 0.72, 0.8, 0.94], poster: 0.7, sided: false, cues: [{ align: ["knee", "hip", "shoulder"] }], build(sc, _s, p) {
+  nordic: { dur: 8000, kind: "move", k: [0.05, 0.72, 0.8, 0.94], poster: 0.7, sided: false, tempo: ["control", "drive"], cues: [{ align: ["knee", "hip", "shoulder"] }], build(sc, _s, p) {
     // Slow lowering (the eccentric is the exercise), quick push back up with the hands.
     const K = [152, 162], A = [100, 162], a = lerp(-88, -22, p);
     // The hands land ON the floor at the bottom: the arm's end angle is solved from the lowest shoulder.
@@ -752,14 +832,19 @@ const HIP_FIGS: Record<string, Fig> = {
     sc.line([S, hand], BODY, 8);
     return "Nordic curl: kneeling with the ankles held down; keep knee, hip and shoulder in one line and lower forward as slowly as you can, catch with the hands, push back up";
   } },
-  sled: { dur: 2600, kind: "move2", k: [0.05, 0.5, 0.55], poster: 0.5, sided: false, build(sc, _s, p, rep = 0) {
+  sled: { dur: 2600, kind: "gait", k: [0, 1, 1], poster: 0.8, sided: false, build(sc, _s, p) {
     // Low drive into the sled: trunk about 45°, arms long, one knee drives through while the
     // other leg pushes back straight.
     // Front foot capped under the hip (about 90° hip flexion under load, not deeper).
-    const H = [150, 102], S = P(H, 56, -42), hand = [232, 80];
-    const drive = (q: number): Pt[] => leg(H, [lerp(104, 160, q), 166 - Math.sin(q * Math.PI) * 18]);
-    const back = (q: number): Pt[] => leg(H, [lerp(160, 104, q), 166]);
-    const near = rep === 0 ? drive(p) : back(p), far = rep === 0 ? back(p) : drive(p);
+    // A walk, not a toggle (motion round): each foot pushes back along the floor, then swings through
+    // low and lands under the hip; the hips dip a little as the weight passes over each foot.
+    const H = [150, 102 + 1.5 * Math.cos(4 * Math.PI * (p - 0.8))], S = P(H, 56, -42), hand = [232, 80];
+    const back = 104 + 56 * SWING_OVER, front = 160 - 56 * SWING_OVER;   // the swing's drift stays inside 104..160
+    const foot2 = (q: number): Pt[] => {
+      const st = stride(q);
+      return leg(H, st.stance ? [lerp(front, back, st.u), 166] : [lerp(back, front, swingPos(st.u, 0.6)), 166 - Math.sin(st.u * Math.PI) * 18]);
+    };
+    const near = foot2(p), far = foot2(p + 0.5);
     sc.floor();
     sc.line([[238, 76], [250, 166]], PROP, 5);
     sc.box(246, 136, 318, 166);
@@ -770,12 +855,13 @@ const HIP_FIGS: Record<string, Fig> = {
     sc.line([S, ikSide(S, add(hand, [0, 4]), 28, 26, -1), add(hand, [0, 4])], BODY, 8);
     return "Heavy sled push: hands high on the sled posts, trunk leaning in at about 45°, arms long; drive one knee through at a time with short powerful steps";
   } },
-  suitcase: { dur: 2400, kind: "move2", k: [0.05, 0.5, 0.55], poster: 0.5, sided: true, front: true, cues: [{ plumb: "mid", to: "head" }], build(sc, side, p, rep = 0) {
+  suitcase: { dur: 2400, kind: "gait", k: [0, 1, 1], poster: 0.8, sided: true, front: true, cues: [{ plumb: "mid", to: "head" }], build(sc, side, p) {
     // Front view: the loaded arm hangs straight, the trunk stays vertical and does not lean toward it.
-    const lift = Math.sin(p * Math.PI) * 10, work = COL[side];
+    // It shifts sideways over the standing foot as a whole, upright, which is not a lean.
+    const work = COL[side], g = carryGait(p);
     sc.mark("mid", [179, 88]); sc.mark("head", [179, 6]);
-    frontBody(sc, rep === 0 ? [lift, 0] : [0, lift], {});
-    const loaded = side === "R" ? [158, 36] : [200, 36], free = side === "R" ? [200, 36] : [158, 36];
+    frontBody(sc, g.lift, {}, g.shift);
+    const loaded = add(side === "R" ? [158, 36] : [200, 36], g.shift), free = add(side === "R" ? [200, 36] : [158, 36], g.shift);
     const fs = side === "R" ? 1 : -1;
     sc.line([free, add(free, [fs * 6, 50])], BODY, 8);
     const hand = add(loaded, [-fs * 6, 52]);
@@ -783,17 +869,17 @@ const HIP_FIGS: Record<string, Fig> = {
     sc.badge(add(hand, [-fs * 22, 4]), work, side);
     return "Suitcase carry, weight in the " + sideWord(side) + " hand: walk tall with small steps, ribs down, the trunk staying upright instead of leaning toward the load";
   } },
-  farmer: { dur: 2400, kind: "move2", k: [0.05, 0.5, 0.55], poster: 0.5, sided: false, front: true, build(sc, _s, p, rep = 0) {
-    const lift = Math.sin(p * Math.PI) * 10;
-    frontBody(sc, rep === 0 ? [lift, 0] : [0, lift], {});
-    for (const [s, dx] of [[[158, 36], -6], [[200, 36], 6]] as [Pt, number][]) {
-      const hand = add(s, [dx, 52]);
+  farmer: { dur: 2400, kind: "gait", k: [0, 1, 1], poster: 0.8, sided: false, front: true, build(sc, _s, p) {
+    const g = carryGait(p);
+    frontBody(sc, g.lift, {}, g.shift);
+    for (const [s0, dx] of [[[158, 36], -6], [[200, 36], 6]] as [Pt, number][]) {
+      const s = add(s0, g.shift), hand = add(s, [dx, 52]);
       sc.line([s, hand], COL.B, 8); kettlebell(sc, hand);
     }
     return "Farmer's carry: a heavy weight in each hand, arms long; walk tall with small fast steps and controlled breathing";
   } },
-  airsquat: { kind: "move", dur: 5500, k: [0.05, 0.4, 0.46, 0.78], poster: 0.9, sided: false, cues: [{ level: "knee", span: ["hip", "knee"], limit: true }], build(sc, _s, p) { return squatPose(sc, p, 30, "air"); } },
-  goblet: { kind: "move", dur: 5500, k: [0.05, 0.4, 0.46, 0.78], poster: 0.9, sided: false, cues: [{ level: "knee", span: ["hip", "knee"], limit: true }], build(sc, _s, p) { return squatPose(sc, p, 22, "goblet"); } },
+  airsquat: { kind: "move", dur: 5500, k: [0.05, 0.4, 0.46, 0.78], poster: 0.9, sided: false, tempo: ["control", "drive"], cues: [{ level: "knee", span: ["hip", "knee"], limit: true }], build(sc, _s, p) { return squatPose(sc, p, 30, "air"); } },
+  goblet: { kind: "move", dur: 5500, k: [0.05, 0.4, 0.46, 0.78], poster: 0.9, sided: false, tempo: ["control", "drive"], cues: [{ level: "knee", span: ["hip", "knee"], limit: true }], build(sc, _s, p) { return squatPose(sc, p, 22, "goblet"); } },
   amarch: { dur: 3000, kind: "move2", k: [0.05, 0.4, 0.62], sided: false, cues: [{ angle: ["knee", "hip", "shoulder"] }], build(sc, _s, p, rep = 0) {
     // Knee to a level thigh (90°) and no higher; the opposite arm drives forward.
     const H = [178, 82], S = [178, 26];
@@ -844,7 +930,12 @@ const HIP_FIGS: Record<string, Fig> = {
 function squatPose(sc: Scene, p: number, leanDeg: number, load: "back" | "front" | "air" | "goblet"): string {
   // Depth stops at about parallel (no deep flexion with the knees caving: a documented provocateur).
   // Hips sit back behind the heel and the shin tilts ~25° (it stood near vertical before review).
-  const F = [155, 166], H = lerpP([155, 80], [129, 127], p), lean = lerp(0, leanDeg, p) * Math.PI / 180;
+  // Sequenced (motion round, 2026-10-29): the hips start back before they go down, so they also come
+  // forward last on the way up; the trunk angle is solved so the shoulders (and the bar) travel a straight
+  // line between their two end positions instead of drifting.
+  const F = [155, 166], H = [lerp(155, 129, lead(p)), lerp(80, 127, p)];
+  const sx = lerp(155, 129 + 56 * Math.sin(leanDeg * Math.PI / 180), p);
+  const lean = Math.asin(Math.max(0, Math.min(1, (sx - H[0]) / 56)));
   const K = ikSide(H, F, 44, 42, 1), S = [H[0] + 56 * Math.sin(lean), H[1] - 56 * Math.cos(lean)];
   sc.mark("midfoot", [F[0] + 4, 166]); sc.mark("hip", H); sc.mark("knee", K);
   sc.floor();
@@ -917,7 +1008,7 @@ function fleshChain(pts: Pt[], radii: number[]): Pt[] {
 }
 
 /** Trunk from hip to shoulder: pelvis, a narrower waist, a wider ribcage, rounded at both ends. */
-function fleshTrunk(H: Pt, S: Pt, front: boolean): Pt[] {
+function fleshTrunk(H: Pt, S: Pt, front: boolean, breath = 0): Pt[] {
   const T = dist(H, S), g = angOf(H, S);
   // Near-horizontal trunks get a flatter ribcage: the full chest-waist step read as a sagging or
   // arched low back on bridges and hollows (coach, body v2 re-check). Front views are wider.
@@ -927,6 +1018,8 @@ function fleshTrunk(H: Pt, S: Pt, front: boolean): Pt[] {
     ? [[0, 0.21], [0.2, 0.2], [0.45, 0.17], [0.72, 0.25], [0.9, 0.35], [1, 0.3]]
     : ([[0, 0.16], [0.18, 0.15], [0.42, 0.125], [0.7, 0.19], [0.9, 0.18], [1, 0.14]] as [number, number][])
       .map(([t, r]) => [t, 0.16 + (r - 0.16) * flat]);
+  // A held breath cycle widens the ribcage (the upper part of the trunk) by up to 8%: the skeleton never moves.
+  if (breath) for (const q of prof) if (q[0] >= 0.6) q[1] *= 1 + 0.08 * breath;
   const at = (t: number) => P(H, T * t, g);
   const right = prof.map(([t, r]) => P(at(t), r * T, g + 90));
   const left = prof.slice().reverse().map(([t, r]) => P(at(t), r * T, g - 90));
@@ -937,7 +1030,7 @@ function fleshTrunk(H: Pt, S: Pt, front: boolean): Pt[] {
 
 function circle(c: Pt, r: number): Pt[] { const a: Pt[] = []; for (let i = 0; i <= 16; i++) a.push(P(c, r, i * 22.5)); return a; }
 
-function flesh(items: FigureSlot[], floor: boolean, front: boolean): FigureSlot[] {
+function flesh(items: FigureSlot[], floor: boolean, front: boolean, breath = 0): FigureSlot[] {
   const body = items.filter((it) => !it.bg && FLESH.has(it.color));
   const isHead = (it: FigureSlot) => it.w >= 18 && it.w <= 24 && dist(...(parse(it.pts) as [Pt, Pt])) < 1;
   const heads = body.filter(isHead).map((it) => parse(it.pts)[0]);
@@ -956,7 +1049,7 @@ function flesh(items: FigureSlot[], floor: boolean, front: boolean): FigureSlot[
     const pts = parse(it.pts);
     if (it === best || (it.w === TORSO && pts.length === 2)) {
       const [a, b] = it === best ? [H, S] : pts;
-      return { ...it, shape: fmt(fleshTrunk(a, b, front)) };
+      return { ...it, shape: fmt(fleshTrunk(a, b, front, it === best ? breath : 0)) };
     }
     if (it.w >= 18 && pts.length === 2 && dist(pts[0], head) < 1) return { ...it, shape: fmt(circle(pts[0], Math.max(9, Math.min(16, 0.21 * T)))) };
     if (it.w !== 8 || pts.length < 2) return it;
@@ -1061,18 +1154,24 @@ export function drawFigure(id: string, side: FigureSide | "E", elapsed: number, 
   if (f.sided && s === "B") s = "L";
   const sc = new Scene();
   sc.scale = f.scale || 1;
-  let label: string, rep = 0, p: number;
+  let label: string, rep = 0, p: number, breath = 0;
   if (f.kind === "hold") {
     // Isometric: ease into the effort once (0.9 s, cosine: no jolt on the first frame), then hold.
     // Reduced motion and stills show full effort.
     p = reduced || still ? 1 : ease(Math.min(1, elapsed / 900));
+    // Then breathe (motion round, 2026-10-29): a slow 4.5 s cycle in the ribcage only, so the pose that a
+    // coach panel set never moves and a hold no longer reads as a photo.
     label = f.build(sc, s, p);
+    // Not on a hold that cues ribs down (hollow, dead-bug family): a widening ribcage there would read as
+    // the rib flare the cue is against (coach check).
+    if (!reduced && !still && elapsed > 900 && !/ribs down|hollow/i.test(label)) breath = 0.5 - 0.5 * Math.cos((2 * Math.PI * (elapsed - 900)) / 4500);
   } else {
     const dur = f.kind === "move2" ? f.dur! / 2 : f.dur!;
     rep = f.kind === "move2" && !reduced && !still ? Math.floor(elapsed / dur) % 2 : 0;
-    // Reduced motion: the poster pose, solid, with the opposite extreme as a thin outline.
-    const poster = posterOf(f), ghostP = poster >= 0.5 ? 0 : 1;
-    p = reduced || still ? poster : prog((elapsed % dur) / dur, f.k!);
+    // Reduced motion: the poster pose, solid, with the opposite extreme as a thin outline (for a gait,
+    // the same moment half a stride on: the other foot forward).
+    const poster = posterOf(f), ghostP = f.kind === "gait" ? (poster + 0.5) % 1 : poster >= 0.5 ? 0 : 1;
+    p = reduced || still ? poster : f.kind === "gait" ? (elapsed % dur) / dur : prog((elapsed % dur) / dur, f.k!, f.tempo);
     label = f.build(sc, s, p, rep);
     if (reduced) {
       // The other pose as a thin solid outline in FAR, behind the body: thin enough never to read
@@ -1102,7 +1201,7 @@ export function drawFigure(id: string, side: FigureSide | "E", elapsed: number, 
     const at = sc.items.findIndex((it) => !it.bg) < 0 ? sc.items.length : sc.items.findIndex((it) => !it.bg);
     sc.items.splice(at, 0, ...behind);
   }
-  sc.items = flesh(sc.items, sc.hasFloor, !!f.front);
+  sc.items = flesh(sc.items, sc.hasFloor, !!f.front, breath);
   const empty: FigureSlot = { pts: "0,0", color: "none", w: 0, op: 0, fill: "none", dash: "none" };
   const noBadge: FigureBadge = { x: -50, y: -50, color: "none", letter: "", op: 0 };
   return {
@@ -1114,10 +1213,9 @@ export function drawFigure(id: string, side: FigureSide | "E", elapsed: number, 
   };
 }
 
-/** True when the frame can no longer change (a hold that reached full effort). */
-export function figureIsStatic(id: string, elapsed: number, reduced: boolean): boolean {
-  const f = FIGS[id];
-  return reduced || (f.kind === "hold" && elapsed >= 900);
+/** True when the frame can no longer change. Holds breathe since the motion round, so only reduced motion. */
+export function figureIsStatic(_id: string, _elapsed: number, reduced: boolean): boolean {
+  return reduced;
 }
 
 export type FigureBox = { x: number; y: number; w: number; h: number };

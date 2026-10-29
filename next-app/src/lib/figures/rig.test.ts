@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
-import { FIGS, ACCENT, drawFigure, figureBounds, FIGURE_COLORS, FIGURE_SLOTS, strokePx, type FigureFrame } from "./rig";
+import { FIGS, ACCENT, TEMPO, drawFigure, figureBounds, FIGURE_COLORS, FIGURE_SLOTS, strokePx, type FigureFrame } from "./rig";
 import { EXERCISE_FIGURES } from "./exercise-figures";
 
 // The review panel's rules (2026-10-19), as tests. Each one is a defect an
@@ -218,11 +218,64 @@ describe("figure rig", () => {
     }
   });
 
-  it("holds ease into effort once and then stay still (no rep-like pulsing)", () => {
+  it("holds ease into effort once, then only breathe: the skeleton never moves and the body barely does", () => {
+    // Motion round (2026-10-29): a frozen hold read as a photo. The breath widens the ribcage shape only;
+    // the joints a coach panel set stay exactly where they are (no rep-like pulsing).
+    const shapePts = (f: FigureFrame) => f.slots.flatMap((s) => (s.shape ? pts(s.shape) : []));
     for (const id of ["hipflex", "adductor", "hang"]) {
-      const a = JSON.stringify(drawFigure(id, "L", 1000, false));
-      for (const t of [2000, 5000, 9000]) expect(JSON.stringify(drawFigure(id, "L", t, false))).toBe(a);
+      const a = drawFigure(id, "L", 1000, false), aPts = a.slots.map((s) => s.pts);
+      let moved = 0;
+      for (const t of [2000, 3150, 5000, 9000]) {
+        const f = drawFigure(id, "L", t, false);
+        expect(f.slots.map((s) => s.pts), id).toEqual(aPts);
+        const sp = shapePts(f), ap = shapePts(a);
+        sp.forEach((q, i) => { const d = len(q, ap[i]); moved = Math.max(moved, d); expect(d, id).toBeLessThan(1.6); });
+      }
+      expect(moved, id + " breathes").toBeGreaterThan(0.2);
     }
+  });
+
+  it("tempo curves run 0 to 1 and never go back: no overshoot past an end pose, no bounce", () => {
+    for (const [name, c] of Object.entries(TEMPO)) {
+      expect(c(0), name).toBeCloseTo(0, 6);
+      expect(c(1), name).toBeCloseTo(1, 6);
+      let prev = 0;
+      for (let i = 1; i <= 200; i++) { const v = c(i / 200); expect(v, name).toBeGreaterThanOrEqual(prev - 1e-9); expect(v).toBeLessThanOrEqual(1 + 1e-9); prev = v; }
+    }
+    // Lowering is steadier than the effort, which slows through a sticking point past halfway.
+    const speed = (c: (x: number) => number, x: number) => (c(x + 0.01) - c(x - 0.01)) / 0.02;
+    expect(speed(TEMPO.drive, 0.58)).toBeLessThan(speed(TEMPO.drive, 0.35));
+    expect(speed(TEMPO.control, 0.3)).toBeCloseTo(speed(TEMPO.control, 0.7), 1);
+  });
+
+  it("sequenced lifts keep every limb its length at every moment, and the squat bar never drifts", () => {
+    const limbLens = (id: string, t: number) =>
+      used(drawFigure(id, "B", t, false))
+        .filter((s) => s.w === 8 && pts(s.pts).length === 3)
+        .map((s) => { const p = pts(s.pts); return [len(p[0], p[1]), len(p[1], p[2])]; })
+        .flat();
+    for (const id of ["squat", "frontsquat", "airsquat", "goblet", "deadlift", "sled"]) {
+      const first = limbLens(id, 0);
+      for (const t of TIMES) limbLens(id, t).forEach((l, i) => expect(l, `${id}@${t}`).toBeCloseTo(first[i], 0));
+    }
+    // Back squat: the bar's x moves monotonically between its two end positions (a straight path), so the
+    // hips going back first never pushes the bar out over the toes.
+    const barX = (t: number) => { const ring = used(drawFigure("squat", "B", t, false)).find((s) => s.color === FIGURE_COLORS.PROP)!; const p = pts(ring.pts); return p.reduce((a, q) => a + q[0], 0) / p.length; };
+    const xs = TIMES.map(barX);
+    const lo = Math.min(barX(0), barX(2200)), hi = Math.max(barX(0), barX(2200));
+    for (const x of xs) { expect(x).toBeGreaterThanOrEqual(lo - 1); expect(x).toBeLessThanOrEqual(hi + 1); }
+  });
+
+  it("the deadlift's hips and shoulders rise together first: the back angle holds until the bar is past the knees", () => {
+    const trunk = (t: number) => { const [H, S] = pts(used(drawFigure("deadlift", "B", t, false)).find((s) => s.w === 12)!.pts); return (Math.atan2(H[1] - S[1], S[0] - H[0]) * 180) / Math.PI; };
+    const start = trunk(260), early = trunk(260 + 0.28 * 5200 * 0.35); // a third of the way up
+    expect(Math.abs(early - start)).toBeLessThan(12);
+  });
+
+  it("walks and carries always have a foot (or a hand) on the ground", () => {
+    const grounded = (id: string, t: number) =>
+      used(drawFigure(id, "B", t, false)).filter((s) => s.w === 8).some((s) => pts(s.pts).some((q) => q[1] >= 165.5));
+    for (const id of ["sled", "farmer", "suitcase", "hswalk"]) for (const t of TIMES) expect(grounded(id, t), `${id}@${t}`).toBe(true);
   });
 
   it("reduced motion freezes on the start pose and draws the end pose as a thin outline", () => {
