@@ -115,7 +115,8 @@ export default function RecordPage() {
           <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3">
             <span className="text-body font-semibold text-strong">Hip check and symptoms</span>
             <span className="flex items-center gap-2 text-small">
-              {hipDue ? <span className="text-slate">Check due</span> : null}
+              {/* Hidden once open: the tile inside carries its own "Check due →". */}
+              {hipDue ? <span className="text-slate group-open:hidden">Check due</span> : null}
               <span aria-hidden className="text-muted transition-transform group-open:rotate-90">›</span>
             </span>
           </summary>

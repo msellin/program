@@ -87,18 +87,17 @@ export function BeliefsSection({ programLifts }: { programLifts?: string | null 
                 aria-expanded={isOpen}
                 className="w-full flex items-baseline gap-3 px-3 py-3 min-h-[48px] text-left active:bg-line-soft/50"
               >
-                <span className="flex-1 min-w-0 text-body text-ink truncate capitalize">
-                  {humanizeExerciseId(exId)}
+                <span className="flex-1 min-w-0">
+                  <span className="block text-body text-ink truncate capitalize">{humanizeExerciseId(exId)}</span>
+                  {/* The triangle alone said nothing (copy, r23): name it. */}
+                  {findingFor(exId) ? (
+                    <span className="flex items-center gap-1 text-caption text-amber mt-0.5">
+                      <AlertTriangle size={12} aria-hidden />
+                      Doesn&apos;t match your log
+                    </span>
+                  ) : null}
                 </span>
                 <span className="text-body font-semibold text-strong flex-shrink-0">{kg} kg</span>
-                {findingFor(exId) ? (
-                  <span
-                    aria-label="This training max may not match your log"
-                    className="flex-shrink-0 text-amber"
-                  >
-                    <AlertTriangle size={14} aria-hidden />
-                  </span>
-                ) : null}
                 <ChevronDown
                   size={14}
                   aria-hidden

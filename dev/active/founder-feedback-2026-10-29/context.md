@@ -39,3 +39,7 @@ set-bulgarian, hip-brief, plan.png + plan-row-open.png (hip persona), profile.pn
    more human-like step-by-step motion with excellent form; consider open-source (e.g. MediaPipe pose data,
    mocap-driven rigs) vs the current rig in `lib/figures/rig.ts`; experts decide; owner sees the recommendation
    before any build.
+
+## R23 rescore (2026-10-29 ~20:30)
+Seven lenses rescored `shots/r23/` (`23`–`29`, consensus `00-summary-r23-rescore.md`): Plan 6 → 6–7, Profile
+6 → 7.5–8, set screens 6.5–9, no [B]. All [H] items and the four leftovers built; re-shoot to `shots/r23b/`.

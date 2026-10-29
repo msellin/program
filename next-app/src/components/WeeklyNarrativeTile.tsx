@@ -160,9 +160,10 @@ function Line({ label, value, figure }: { label: string; value: string; figure?:
   return (
     <li className="flex items-baseline justify-between gap-3">
       <span className="flex-shrink-0 text-muted">{label}</span>
-      <span className="text-right text-ink">
-        {value}
-        {figure ? <span className="whitespace-nowrap tabular-nums"> · {figure}</span> : null}
+      {/* A long exercise name truncates; the figure never wraps under it. */}
+      <span className="flex min-w-0 items-baseline justify-end text-ink">
+        <span className="truncate" title={value}>{value}</span>
+        {figure ? <span className="flex-shrink-0 whitespace-nowrap tabular-nums">&nbsp;· {figure}</span> : null}
       </span>
     </li>
   );

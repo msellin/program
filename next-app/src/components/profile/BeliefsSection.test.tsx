@@ -40,19 +40,19 @@ describe("BeliefsSection — training-max warnings", () => {
   it("warns when a training max is above the user's demonstrated single", () => {
     mockStore.current = storeWith({ front_squat: 110 }, [["front_squat", 80, 9]]);
     render(<BeliefsSection />);
-    expect(screen.getByLabelText(/may not match your log/i)).toBeTruthy();
+    expect(screen.getByText(/match your log/i)).toBeTruthy();
   });
 
   it("stays silent when the training max is where convention puts it", () => {
     // A warning that fires on a correct number trains the user to ignore it.
     mockStore.current = storeWith({ block_pull_midshin: 145 }, [["block_pull_midshin", 140, 5]]);
     render(<BeliefsSection />);
-    expect(screen.queryByLabelText(/may not match your log/i)).toBeNull();
+    expect(screen.queryByText(/match your log/i)).toBeNull();
   });
 
   it("stays silent for a lift with no logged history", () => {
     mockStore.current = storeWith({ front_squat: 110 }, []);
     render(<BeliefsSection />);
-    expect(screen.queryByLabelText(/may not match your log/i)).toBeNull();
+    expect(screen.queryByText(/match your log/i)).toBeNull();
   });
 });

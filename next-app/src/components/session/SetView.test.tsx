@@ -455,7 +455,7 @@ describe("logging kind decides what the set player shows", () => {
     expect(screen.queryByRole("button", { name: /Change weight/ })).toBeNull();
   });
 
-  it("distance_load shows the distance, a blank load as an em dash, and no 0 kg", () => {
+  it("distance_load shows the distance, an empty load as a plain line with Add load, and no 0 kg", () => {
     noWeights();
     renderSet({
       ...plain,
@@ -465,12 +465,13 @@ describe("logging kind decides what the set player shows", () => {
       rowCount: 6,
     });
     expect(screen.getByText("20 m")).toBeDefined();
-    expect(screen.getByText("— kg")).toBeDefined();
+    expect(screen.getByText("No load logged yet")).toBeDefined();
+    expect(screen.getByRole("button", { name: "Add load" })).toBeDefined();
     expect(document.body.textContent).not.toMatch(/\b0 kg/);
     expect(screen.getByRole("button", { name: "Done · set 1 · 20 m" })).toBeDefined();
   });
 
-  it("load_optional reads Bodyweight with an Add weight action", () => {
+  it("load_optional leads with the reps, Bodyweight under it, and an Add weight action", () => {
     noWeights();
     renderSet({
       ...plain,
@@ -479,8 +480,10 @@ describe("logging kind decides what the set player shows", () => {
       item: { exercise_id: "weighted_pullup", sets: 4, reps: 4 },
       rowCount: 4,
     });
+    expect(screen.getByText("4 reps")).toBeDefined();
     expect(screen.getByText("Bodyweight")).toBeDefined();
     expect(screen.getByRole("button", { name: "Add weight" })).toBeDefined();
+    expect(screen.getByRole("button", { name: "Done · set 1 · 4 reps" })).toBeDefined();
     expect(document.body.textContent).not.toMatch(/\b0 kg/);
   });
 });

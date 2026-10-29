@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ChevronDown } from "lucide-react";
+import { ArrowRight, Check, ChevronDown, Minus } from "lucide-react";
 import { loadProgram, loadProgramManifest } from "@/lib/data-loader";
 import { EmptyStateCard } from "@/components/EmptyStateCard";
 import { useStore } from "@/lib/useStore";
@@ -322,15 +322,19 @@ export default function WeekPage() {
         </button>
         <div className="flex-1 text-center">
           <p className="text-small font-semibold text-strong leading-tight">
-            {rangeLabel} · {offset === 0
-              ? "This week"
-              : offset === 1
-                ? "Next week"
-                : offset === -1
-                  ? "Last week"
-                  : `${offset > 0 ? "+" : ""}${offset} weeks`}
+            {rangeLabel}{" "}
+            <span className="font-normal text-muted">
+              · {offset === 0
+                ? "This week"
+                : offset === 1
+                  ? "Next week"
+                  : offset === -1
+                    ? "Last week"
+                    : `${offset > 0 ? "+" : ""}${offset} weeks`}
+            </span>
           </p>
-          <p className="mt-0.5 text-caption font-medium text-muted">
+          {/* One line: the phase wrapped to two in the switcher (r23). */}
+          <p className="mt-0.5 text-caption font-medium text-muted truncate">
             {weekPhase
               ? humanPhaseName(weekPhase.name)
                   .replace(/interleaved consolidation/i, "Mixed practice")
@@ -450,14 +454,12 @@ export default function WeekPage() {
             // can show a "×N programs" hint when multiple contribute.
             let displayBlocks: { id: string; name: string; programSlug?: string }[];
             let displayLabel: string;
-            let contributingProgramCount = 0;
             if (override) {
               displayBlocks = override.blocks
                 .map((id) => program.blocks.find((b) => b.id === id))
                 .filter((b): b is NonNullable<typeof b> => !!b)
                 .map((b) => ({ id: b.id, name: b.name }));
               displayLabel = "Moved-in session";
-              contributingProgramCount = displayBlocks.length ? 1 : 0;
             } else {
               // 2026-08-24 — Plan used to derive every day's blocks from
               // phase math even when `block_object` was on, while Day read
@@ -489,14 +491,15 @@ export default function WeekPage() {
                   ),
                 };
               });
-              contributingProgramCount = perProgram.filter((g) => g.blocks.length > 0).length;
               displayBlocks = perProgram.flatMap((g) =>
                 g.blocks.map((b) => ({ id: b.id, name: b.name, programSlug: g.slug })),
               );
               displayLabel = displayBlocks.length ? "" : "Rest / accessory day";
             }
 
-            const names = displayBlocks.map((b) => humanBlockName(b.name)).join(" + ");
+            // The row already says the day: "Mon — heavy squat day" under
+            // "Mon" said it twice (copy, r23).
+            const names = displayBlocks.map((b) => withoutDayPrefix(humanBlockName(b.name))).join(" + ");
             const isRest = displayBlocks.length === 0 && !override;
             // A skip on a day with nothing scheduled is a rest day, not a skipped session.
             const daySkipped = rawSkipped && !(isRest && dayBlocks.length === 0);
@@ -529,15 +532,6 @@ export default function WeekPage() {
                         : isPast && !isRest && totalPrescribed === 0 && displayBlocks.length > 0
                           ? "missed"
                           : "planned";
-            const dotColor = {
-              skipped: "bg-amber",
-              moved: "bg-slate",
-              "logged-full": "bg-green",
-              "logged-partial": "bg-green/50",
-              missed: "bg-transparent border border-line",
-              rest: "bg-line",
-              planned: "bg-muted/60",
-            }[status];
 
             // One aggregate status dot per row; the per-program breakdown
             // lives in the expanded detail. Today is marked by tint + chip.
@@ -564,10 +558,7 @@ export default function WeekPage() {
                   skip && "opacity-70",
                 )}
               >
-                <span
-                  aria-hidden
-                  className={cn("mt-2 w-2 h-2 rounded-full flex-shrink-0", dotColor)}
-                />
+                <DayMarker status={status} />
                 <span className="sr-only">{statusLabel}</span>
                 {/* F6 (Batch 24) — the row is a <div> so the expanded
                     content can contain interactive buttons (Open in
@@ -613,6 +604,8 @@ export default function WeekPage() {
                       <span className="text-eyebrow text-muted text-right flex items-center gap-1">
                         {daySkipped ? (
                           <span className="text-amber">Skipped</span>
+                        ) : status === "missed" ? (
+                          <span className="text-amber">Missed</span>
                         ) : isRest ? "Rest" : names ? "" : "—"}
                         <ChevronDown
                           size={14}
@@ -1104,4 +1097,58 @@ function topLoggedLift(day: DayLog | undefined): string | null {
   }
   if (!best) return null;
   return `${best.name} · ${best.weight} kg × ${best.reps}`;
+}
+
+function withoutDayPrefix(name: string): string {
+  const stripped = name.replace(/^(mon|tue|wed|thu|fri|sat|sun)[a-z]*\.?\s*[—–-]\s*/i, "");
+  return stripped === name ? name : stripped.charAt(0).toUpperCase() + stripped.slice(1);
+}
+
+type DayStatus = "skipped" | "moved" | "logged-full" | "logged-partial" | "missed" | "rest" | "planned";
+
+/**
+ * A day's state by SHAPE, not hue alone (r23 rescore: grey "planned" and
+ * hollow "missed" dots were indistinguishable and nothing explained them).
+ * Done is a filled check, planned an empty ring, missed a dashed amber ring
+ * that the row also names, skipped a minus, moved an arrow, rest a dash.
+ */
+function DayMarker({ status }: { status: DayStatus }) {
+  const base = "mt-0.5 w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center";
+  if (status === "logged-full") {
+    return (
+      <span aria-hidden className={cn(base, "bg-green text-ground")}>
+        <Check size={12} strokeWidth={3} />
+      </span>
+    );
+  }
+  if (status === "logged-partial") {
+    return (
+      <span aria-hidden className={cn(base, "border-2 border-green text-green")}>
+        <Check size={11} strokeWidth={3} />
+      </span>
+    );
+  }
+  if (status === "skipped") {
+    return (
+      <span aria-hidden className={cn(base, "border-2 border-amber text-amber")}>
+        <Minus size={12} strokeWidth={3} />
+      </span>
+    );
+  }
+  if (status === "moved") {
+    return (
+      <span aria-hidden className={cn(base, "border-2 border-slate text-slate")}>
+        <ArrowRight size={11} strokeWidth={3} />
+      </span>
+    );
+  }
+  if (status === "missed") return <span aria-hidden className={cn(base, "border-2 border-dashed border-amber")} />;
+  if (status === "rest") {
+    return (
+      <span aria-hidden className={cn(base, "text-muted")}>
+        <Minus size={12} />
+      </span>
+    );
+  }
+  return <span aria-hidden className={cn(base, "border-2 border-line-strong")} />;
 }

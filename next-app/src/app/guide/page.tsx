@@ -107,13 +107,15 @@ export default function GuidePage() {
           Strength shows exercises with weight, reps, effort per set, plate
           breakdown and a bar visual. Aerobic / rowing shows the block
           prescription plus a session-log card (duration, HR, splits, watts).
-          To browse tomorrow or yesterday, go to Plan.
+          To browse tomorrow or yesterday, go to Plan. Extra drills, home
+          rehab or conditioning go in an extra session from Today, with no
+          calendar pressure.
         </Row>
         <Row label="Plan">The 7-day rhythm plus date browsing. Tap any date to view or open its session; move / skip / reschedule from here.</Row>
         <Row label="Record">
-          Rolling-average trend, retest events (each one cited to a study or
-          your log signal), and the full activity log. Same surface at day 30
-          and day 400 — the zoom control up top adjusts the window.
+          This week first, a 12-week grid, your focus metric once it has
+          readings, and the last few days. Every session sits behind
+          &ldquo;All sessions&rdquo;.
         </Row>
         <Row label="Profile">Signed-in identity, active plan(s), and a compact menu.</Row>
         <p className="text-small text-muted italic pt-2">
@@ -121,7 +123,6 @@ export default function GuidePage() {
         </p>
         <Row label="Programs">The catalog. Browse, preview, start a program.</Row>
         <Row label="Check">Morning symptom scoring. Save it and today&apos;s prescription auto-adjusts (amber −5%, red −10%).</Row>
-        <Row label="Extra session">Extra drills, home rehab, cardio / conditioning blocks — no calendar pressure.</Row>
         <Row label="Training summary">Specialist-facing summary, from Record → All sessions. Print / save as PDF for a clinician or coach.</Row>
         <Row label="Data">Manage data — import, export, wipe local.</Row>
         <Row label="Evidence">

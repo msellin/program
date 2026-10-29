@@ -39,6 +39,10 @@ export function WeekRecoveryCard({
   const blockObjectOn = isBlockObjectOn(store);
 
   const [reason, setReason] = useState<(typeof REASONS)[number] | null>(null);
+  // Collapsed by default (r23 rescore, all four lenses): open, the card was
+  // ~650px and pushed every day row below the fold on the screen meant to
+  // show the week.
+  const [open, setOpen] = useState(false);
   const [applied, setApplied] = useState<string | null>(null);
 
   const { missedDates, totalScheduledThisWeek, remainingScheduledCount } = signal;
@@ -88,20 +92,40 @@ export function WeekRecoveryCard({
   const dayWord = missedCount === 1 ? "day" : "days";
   const headline =
     totalScheduledThisWeek > 0
-      ? `You've missed ${missedCount} of ${totalScheduledThisWeek} this week.`
-      : `You've missed ${missedCount} scheduled ${dayWord} this week.`;
+      ? `${missedCount} of ${totalScheduledThisWeek} missed this week`
+      : `${missedCount} ${dayWord} missed this week`;
+  const left =
+    remainingScheduledCount > 0
+      ? ` · ${remainingScheduledCount} ${remainingScheduledCount === 1 ? "day" : "days"} left`
+      : "";
+
+  if (!open) {
+    return (
+      <Card status="amber" flush className="px-3 py-2 flex items-center justify-between gap-3">
+        <p className="text-small text-strong min-w-0">
+          {headline}
+          <span className="text-muted">{left}</span>
+        </p>
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          aria-expanded={false}
+          className="text-small font-semibold text-strong flex-shrink-0 min-h-11 px-1"
+        >
+          Fix the week ›
+        </button>
+      </Card>
+    );
+  }
 
   return (
     <Card status="amber" className="space-y-3">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-eyebrow uppercase tracking-widest text-amber">This week</p>
-          <p className="text-h3 text-strong mt-0.5 leading-snug">{headline}</p>
-          {remainingScheduledCount > 0 ? (
-            <p className="text-caption text-muted mt-0.5">
-              {remainingScheduledCount} scheduled {remainingScheduledCount === 1 ? "day" : "days"} left.
-            </p>
-          ) : null}
+          <p className="text-h3 text-strong leading-snug">{headline}</p>
+          <p className="text-caption text-muted mt-0.5">
+            Nothing here is a failure. Pick what matches what happened.
+          </p>
         </div>
         <button
           type="button"
@@ -112,11 +136,6 @@ export function WeekRecoveryCard({
           ×
         </button>
       </div>
-
-      <p className="text-small leading-snug text-muted">
-        Nothing here is a failure — the plan reads a missed week the same way it reads a good one. Pick
-        whichever of these matches what actually happened.
-      </p>
 
       <div className="space-y-2">
         <button
@@ -176,15 +195,9 @@ export function WeekRecoveryCard({
         </div>
       </div>
 
-      <div className="rounded-lg bg-surface-2 p-3">
-        <p className="text-eyebrow uppercase tracking-widest text-muted mb-1">
-          What a skipped week does
-        </p>
-        <p className="text-small leading-snug text-ink">
-          Nothing punitive. Your training max holds where it is, and the record shows the gap honestly
-          rather than silently backfilling it.
-        </p>
-      </div>
+      <p className="text-caption text-muted leading-snug">
+        Your training max holds either way, and the record shows the gap as it is.
+      </p>
     </Card>
   );
 }

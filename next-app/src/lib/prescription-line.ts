@@ -22,7 +22,7 @@ export function prescriptionLine(r: RailExercise, store: Store, date: string): s
   }
   const dose = authoredDose(r);
   // No authored reps: say the set count rather than invent "×1".
-  const parts = [dose.each ? `${sets}×${dose.each}${dose.perSide ? " each side" : ""}` : `${sets} sets`];
+  const parts = [dose.each ? `${sets}${dose.kind === "distance" ? " × " : "×"}${dose.each}${dose.perSide ? " each side" : ""}` : `${sets} sets`];
   if (r.isLoadable && dose.kind === "reps") {
     const last = heaviestLast(store, r.exercise.id, date);
     if (last != null) parts.push(`last ${last} kg`);
@@ -39,7 +39,7 @@ export function prescriptionChips(r: RailExercise): string[] {
 }
 
 export function authoredDose(r: RailExercise): {
-  kind: "hold" | "minutes" | "reps";
+  kind: "hold" | "minutes" | "reps" | "distance";
   each: string;
   perSide: boolean;
 } {
@@ -49,6 +49,9 @@ export function authoredDose(r: RailExercise): {
     return typeof v === "number" ? v : null;
   };
   const perSide = d.per_side === true;
+  // A sled read "6 sets" with the metres nowhere on the brief (coach, r23).
+  const distance = num("distance_m");
+  if (distance != null && num("reps") == null) return { kind: "distance", each: `${distance} m`, perSide };
   const hold = num("hold_seconds");
   const reps = num("reps");
   if (hold != null && reps == null) return { kind: "hold", each: `${hold} s hold`, perSide };

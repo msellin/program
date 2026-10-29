@@ -511,9 +511,14 @@ export function SetView({
             className="min-w-0 flex-1 text-left"
           >
             <span className="block text-h3 font-semibold leading-tight tracking-[-.015em] text-strong line-clamp-2">
-              {exerciseListName(active.exercise)} <span aria-hidden="true" className="text-muted">▾</span>
+              {active.exercise.name} <span aria-hidden="true" className="text-muted">▾</span>
             </span>
+            {/* The variant on its own quiet line: "Nordic curl (or GHR, or
+                slider leg curl)" wrapped the title to two lines (copy, r23). */}
             <span className="block text-caption text-muted mt-0.5">
+              {active.exercise.variant
+                ? `${active.exercise.variant.charAt(0).toUpperCase()}${active.exercise.variant.slice(1)} · `
+                : ""}
               Exercise {railIndex + 1} of {railExercises.length}
             </span>
           </button>
@@ -753,20 +758,26 @@ export function SetView({
               <span className="text-h3 font-medium text-muted">kg</span>
             </p>
           ) : null}
-          {loadOptional ? (
-            weight > 0 ? (
-              <p className="flex items-baseline gap-1.5">
-                <span className="text-metric leading-none font-semibold tracking-[-.04em] tabular-nums text-strong">{weight}</span>
-                <span className="text-h3 font-medium text-muted">kg</span>
+          {/* Optional load leads with the reps; "Bodyweight" big with "× 6"
+              under it demoted the number you count (design lead + copy, r23). */}
+          {loadOptional && !isHold ? (
+            <>
+              <p className="text-[64px] [@media(max-height:700px)]:text-[52px] leading-none font-semibold tracking-[-.04em] tabular-nums text-strong">
+                {isAmrap ? `${reps}+` : `${reps} ${reps === 1 ? "rep" : "reps"}`}
               </p>
-            ) : (
-              <p className="text-h2 font-semibold tracking-[-.02em] text-strong">Bodyweight</p>
-            )
+              <p className="text-h3 font-medium text-muted mt-1">{weight > 0 ? `+ ${weight} kg` : "Bodyweight"}</p>
+            </>
           ) : null}
           {isDistance ? (
             <>
               <p className="text-metric leading-none font-semibold tracking-[-.04em] tabular-nums text-strong">{`${distance} m`}</p>
-              <p className="text-h3 font-medium text-muted mt-1">{weight > 0 ? `${weight} kg` : "— kg"}</p>
+              {weight > 0 ? (
+                <p className="text-h3 font-medium text-muted mt-1">{`${weight} kg`}</p>
+              ) : (
+                // "— kg" read as a missing field (design lead + copy, r23).
+                // No suggested load: the engine never proposes a sled weight.
+                <p className="text-small text-muted mt-1.5">No load logged yet</p>
+              )}
             </>
           ) : null}
           {isHold ? (
@@ -787,16 +798,16 @@ export function SetView({
                 {perSide ? ` · side ${sideIndex + 1} of 2` : ""}
               </p>
             </>
-          ) : isDistance ? null : (
+          ) : isDistance || loadOptional ? null : (
             <p
               className={
-                active.isLoadable || loadOptional
+                active.isLoadable
                   ? "text-h2 font-semibold tracking-[-.02em] text-strong mt-0.5"
                   : "text-[64px] [@media(max-height:700px)]:text-[52px] leading-none font-semibold tracking-[-.04em] text-strong"
               }
             >
-              {active.isLoadable || loadOptional ? "× " : ""}
-              {isAmrap ? `${reps} or more` : active.isLoadable || loadOptional ? reps : `${reps} ${reps === 1 ? "rep" : "reps"}`}
+              {active.isLoadable ? "× " : ""}
+              {isAmrap ? `${reps} or more` : active.isLoadable ? reps : `${reps} ${reps === 1 ? "rep" : "reps"}`}
             </p>
           )}
           {plates ? (
@@ -1086,9 +1097,7 @@ export function SetView({
                 : `${isEditingLoggedSet ? "Save" : "Done"} · set ${activeSetIndex + 1} · ${
                     isDistance
                       ? `${distance} m${weight > 0 ? ` · ${weight} kg` : ""}`
-                      : loadOptional && weight > 0
-                        ? `${weight} kg`
-                        : `${reps} ${reps === 1 ? "rep" : "reps"}`
+                      : `${reps} ${reps === 1 ? "rep" : "reps"}${loadOptional && weight > 0 ? ` · ${weight} kg` : ""}`
                   }`}
             </Button>
             <div className="flex gap-2 mt-2">
@@ -1100,7 +1109,7 @@ export function SetView({
                 {editingLoad
                   ? "Hide"
                   : isDistance
-                    ? "Change load"
+                    ? weight === 0 ? "Add load" : "Change load"
                     : loadOptional
                       ? weight === 0 ? "Add weight" : "Change weight"
                       : active.isLoadable ? "Change weight" : "Change reps"}
