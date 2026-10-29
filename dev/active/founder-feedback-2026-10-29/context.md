@@ -42,4 +42,9 @@ set-bulgarian, hip-brief, plan.png + plan-row-open.png (hip persona), profile.pn
 
 ## R23 rescore (2026-10-29 ~20:30)
 Seven lenses rescored `shots/r23/` (`23`–`29`, consensus `00-summary-r23-rescore.md`): Plan 6 → 6–7, Profile
-6 → 7.5–8, set screens 6.5–9, no [B]. All [H] items and the four leftovers built; re-shoot to `shots/r23b/`.
+6 → 7.5–8, set screens 6.5–9, no [B]. All [H] items and the four leftovers built.
+Live 81ba3b1 + 56f45e3 + 80dd42c (CI green); live re-shoot in `shots/r23b/` (hip persona: plan, plan-fix-open,
+plan-row-open, profile(-full), record(-hip-open), hip-brief, set-sled/nordic/bulgarian; throwaway spec deleted).
+**Animation round done:** `dev/active/figure-animation/00-recommendation.md`. 4/4 experts: improve the rig's motion
+(sequenced joints, per-phase easing, breathing holds, real gait); no MediaPipe/mocap. Awaiting owner approval.
+**Open [M]:** "Cycles 3 and 4" phase name (copy wants plainer); Plan rows still say "Home rehab and activation" x4.
