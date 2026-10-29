@@ -1020,7 +1020,8 @@ function cueSlots(id: string, side: FigureSide, f: Fig, sc: Scene, p: number): F
     } else if ("angle" in c) {
       const [a, b, d] = c.angle.map((n) => now[n]);
       if (!a || !b || !d) continue;
-      let a0 = angOf(b, a), a1 = angOf(b, d);
+      const a0 = angOf(b, a);
+      let a1 = angOf(b, d);
       while (a1 - a0 > 180) a1 -= 360;
       while (a0 - a1 > 180) a1 += 360;
       const arc: Pt[] = []; for (let i = 0; i <= 12; i++) arc.push(P(b, ARC_R, lerp(a0, a1, i / 12)));
