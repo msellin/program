@@ -373,6 +373,19 @@
         "Brace hard, neutral spine, lats engaged, drive the floor away",
         "Any left SI or groin symptom in the next-morning check means back to block pulls"
       ]
+    },
+    "air_squat_daily": {
+      "cues": [
+        "Bodyweight or empty bar only",
+        "Slow tempo, down to about parallel and no deeper, pain-free; knees tracking over the toes",
+        "This is technique work and joint nutrition, NOT stimulus — do not chase fatigue"
+      ]
+    },
+    "goblet_squat": {
+      "cues": [
+        "Dumbbell or kettlebell held at the chest",
+        "Down to about parallel and no deeper, pain-free; knees out, not caving — deep flexion with the knees caving in is a documented provocative position"
+      ]
     }
   },
   "phases": [

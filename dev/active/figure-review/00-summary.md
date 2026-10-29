@@ -157,9 +157,10 @@ glyphs show at every size.
     Its fixes are applied: glyph weight 9 with filled heads, arc r20, plumb and level lines at 2px, ghosts
     0.4 opacity and dotted.
 - **Still open:**
-  - The `air_squat_daily` and `goblet_squat` cues in `exercises.json` say "full depth", while the figures and
-    their new limit line say "no deeper than parallel". Changing the copy is a data edit outside `lib/figures/`.
-    The figure's own text alternative now says "to about parallel and no deeper".
+  - ~~The `air_squat_daily` and `goblet_squat` cues said "full depth" while the figures say "no deeper than
+    parallel".~~ Fixed 2026-10-29 at the founder's request: `anterior-hip-rebuild`'s `exercise_overrides` now
+    replace both cue lists with "down to about parallel and no deeper, pain-free". The shared library is
+    unchanged; no other program uses either drill.
   - Alignment lines mostly show the target, not feedback, because the figures are drawn straight.
   - No cue yet for: neutral back on the block pull; shoulder-to-ear distance on the hangs; low back flat on
     the hollow and dead bug.
