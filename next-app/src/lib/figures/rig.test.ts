@@ -29,19 +29,22 @@ const contrast = (a: string, b: string) => {
 
 describe("figure rig", () => {
   it("builds every figure on every side, without NaN, with slot headroom to spare", () => {
+    // Collect, then assert once: ~20k fleshed frames with an expect each timed out on CI.
+    const bad: string[] = [];
     for (const id of Object.keys(FIGS)) {
       for (const side of ["L", "R", "B"] as const) {
         for (const reduced of [false, true]) {
           for (const t of TIMES) {
             const f = drawFigure(id, side, t, reduced);
-            expect(JSON.stringify(f)).not.toContain("NaN");
+            if (JSON.stringify(f).includes("NaN")) bad.push(`${id} ${side} ${t} NaN`);
             // A full slot list means items were silently dropped.
-            expect(used(f).length).toBeLessThan(FIGURE_SLOTS);
+            if (f.slots.filter((s) => s.w > 0 || s.shape).length >= FIGURE_SLOTS) bad.push(`${id} ${side} ${t} slots full`);
           }
         }
       }
     }
-  });
+    expect(bad).toEqual([]);
+  }, 30000);
 
   it("keeps every meaningful stroke at 3:1 or better on the card AND the Today tile tint (WCAG 1.4.11)", () => {
     const colors = new Set<string>();
