@@ -60,7 +60,7 @@ describe("the task index covers every workstream", () => {
           "regenerating the index. Run: python3 dev/scripts/task-index.py",
     ).toBe(false);
     expect(out).toContain("already current");
-  });
+  }, 20_000); // shells out to python + git per workstream: ~10 s under a full parallel run, over the 5 s default (2026-10-29)
 });
 
 /**
