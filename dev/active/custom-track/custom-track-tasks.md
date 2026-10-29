@@ -9,12 +9,15 @@
 - [x] Owner decision: opt-in autoplay for demo clips (Settings switch, one-time ask, privacy page updated)
 - [x] Owner agreed the final screens (`shots/v8`) — "Yes, ship it", 2026-10-29
 - [x] Unit tests updated; e2e specs updated for renamed controls; harness rail walk → exercise switcher
-- [ ] Persona harness (31) on the build
-- [ ] `npm run verify`, commit, rebase, push to main, CI green
-- [ ] Re-shoot from live, rescore with the same five lenses
+- [x] Persona harness (31) on the build — all pass (one real fix: intake-deferral reasons now show on guided-only days)
+- [x] `npm run verify`, commit, rebase, push to main, CI green — f847e5b, 2026-10-29
+- [x] Re-shoot from live, rescore with the same five lenses — every lens ≥ 9 (`scores.md`)
 
 Follow-ups (not this pass):
 - Hip thrust's linked video is a podcast with no hip thrust in it — needs a new official clip.
 - Done: "vs plan" line and volume need planned values plumbed into the session summary.
 - Off-plan e2e specs assert copy that no longer exists ("lives in your sessions now", "Log a run, row, or class"
   button) and one picks a timed hold expecting "Done — set 1" — pre-existing, not from this pass.
+- Polish the lenses still list (none below 9): done-screen boxes into fewer cards (VC), "Switch exercise" quieter
+  (VC, DL), loads on brief rows 2–4 (DL, SC), "Last" per working set and on rest (SC), brief row 4 under Start at
+  375 (MX). Each lens's open items: `live-*.md`.

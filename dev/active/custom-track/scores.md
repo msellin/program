@@ -13,6 +13,7 @@ Peers: GOWOD / Runna / Pliability (+ Hevy / Strong for strength logging). Built 
 | 7 | 9.3 | 9.1 | 9.4 | 8.9 | |
 | 8 | 9.4 | 9.2 | 9.4 | 9.15 | two scores < 9 (done: DL, VC) |
 | 9 (final, `shots/v8`) | 9.4 | 9.3 | 9.4 | 9.3 | every lens ≥ 9 |
+| **Live** (f847e5b, `shots/live`) | **9.4** | **9.3** | **9.45** | **9.3** | every lens ≥ 9; live = approved build |
 
 Final per lens (round 9 for DL and VC, round 8 for the rest):
 
@@ -30,3 +31,6 @@ exercises (parallel session). Open single-lens ideas are listed in each `round*-
 
 Screenshots kept in the repo: `shots/before` and `shots/v8` (final). The intermediate rounds' shots (v2–v7) that the
 round notes cite were pruned before commit to keep the repo small.
+
+Live rescore per lens (`live-*.md`): DL 9.3 / 9.3 / 9.4 / 9.2 · MX 9.5 / 9.2 / 9.5 / 9.4 · VC 9.5 / 9.1 / 9.5 / 9.2 ·
+CP 9.3 / 9.4 / 9.4 / 9.4 · SC 9.45 / 9.45 / 9.45 / 9.15 (brief / player / rest / done).
