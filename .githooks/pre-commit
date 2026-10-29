@@ -1,5 +1,5 @@
 #!/bin/sh
-# Runs the vitest suite when shipped data or app source is staged.
+# Runs lint and the verify suite when shipped data or app source is staged.
 #
 # Added 2026-09-01. Before this there was NO automated gate between an edit and
 # production: no husky, no active .git/hooks, the only GitHub workflow is path-
@@ -16,6 +16,15 @@ echo "$staged" | grep -qE '^next-app/(public/data/|src/)' || exit 0
 
 echo "pre-commit: verifying next-app…"
 cd "$(git rev-parse --show-toplevel)/next-app" || exit 1
+# Lint added 2026-10-29: CI's Verify job runs `npm run lint` before verify, and a
+# lone prefer-const error passed this hook yet blocked a deploy. Same command as
+# CI; eslint exits non-zero on errors only, so existing warnings do not block.
+npm run lint --silent || {
+  echo ""
+  echo "pre-commit: lint FAILED — commit aborted."
+  echo "Fix the lint errors, or bypass deliberately with: git commit --no-verify"
+  exit 1
+}
 npm run verify --silent || {
   echo ""
   echo "pre-commit: verify FAILED — commit aborted."

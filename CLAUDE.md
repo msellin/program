@@ -157,8 +157,11 @@ drills — were invisible to JSON syntax checking by construction.
 
 Enforced at three points, all running `npm run verify`:
 
-1. **pre-commit hook** — `.githooks/pre-commit`, versioned. Enable once per clone:
-   `git config core.hooksPath .githooks`
+1. **pre-commit hook** — `.githooks/pre-commit`, versioned. Runs `npm run lint`
+   then `npm run verify`, the same two commands as CI's Verify job (lint added
+   2026-10-29: a lone `prefer-const` error passed the hook and blocked a deploy).
+   eslint fails on errors only; the existing warnings do not block. Enable once
+   per clone: `git config core.hooksPath .githooks`
 2. **`npm run deploy`** — verify runs before the build. Still available as a
    manual fallback from the laptop.
 3. **CI — `.github/workflows/deploy.yml`** (since 2026-09-01). Push to main
