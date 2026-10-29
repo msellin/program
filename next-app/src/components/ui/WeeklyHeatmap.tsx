@@ -60,10 +60,13 @@ export function dayCellState(
       }
     | undefined,
 ): WeeklyHeatmapCellState {
-  if (log?.derived_state) return log.derived_state as WeeklyHeatmapCellState;
+  // Red first (a safety signal stays visible even on a day trained anyway); then work done; then the check. Before
+  // 2026-10-29 any check won, so a trained day with an amber check read amber and done work vanished from the grid.
+  if (log?.derived_state === "red") return "red";
   const trained =
     Object.values(log?.exercises ?? {}).some((e) => e.done) || (log?.runs?.length ?? 0) > 0;
-  return trained ? "green" : "none";
+  if (trained) return "green";
+  return (log?.derived_state as WeeklyHeatmapCellState | null | undefined) || "none";
 }
 
 // Batch 36 P0 fix (visual-craft audit) — "green" was mapped to bg-bronze
@@ -172,8 +175,8 @@ export function WeeklyHeatmap({
 function Legend() {
   const items: { label: string; cls: string }[] = [
     { label: "Done", cls: STATE_CLASS.green },
-    { label: "Amber", cls: STATE_CLASS.amber },
-    { label: "Red-flag", cls: STATE_CLASS.red },
+    { label: "Amber check", cls: STATE_CLASS.amber },
+    { label: "Red check", cls: STATE_CLASS.red },
     { label: "Rest or missed", cls: STATE_CLASS.rest },
   ];
   return (

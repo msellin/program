@@ -101,15 +101,6 @@ function pickLatestRetest(
   return { metric: bestMetric, nextRetestInDays };
 }
 
-function formatSinceBaseline(m: RetestValue, retestCount: number): string {
-  if (m.current == null || m.baseline == null) return "";
-  const delta = m.current - m.baseline;
-  const sign = delta > 0 ? "+" : delta < 0 ? "−" : "";
-  const abs = Math.abs(delta);
-  const formatted = m.unit === "seconds" ? `${Math.round(abs)}s` : abs.toFixed(1);
-  return `${sign}${formatted} ${m.unit} since baseline · ${retestCount} retest${retestCount === 1 ? "" : "s"}`;
-}
-
 export function CutCLatestRetestTile({ program, store, className }: CutCLatestRetestTileProps) {
   const picked = useMemo(() => pickLatestRetest(program, store), [program, store]);
 
@@ -129,54 +120,25 @@ export function CutCLatestRetestTile({ program, store, className }: CutCLatestRe
   const readings = readingsForMetric(store, program, metric.metric_id).slice().reverse();
   const prev = readings[1];
 
+  // One reference, one change (founder-feedback round 4 rescore, 2026-10-29): the delta was "since baseline" but
+  // sat beside the value as if it were vs the previous reading, which read as a contradiction. Sentence-case sans
+  // labels, like the rest of Record.
+  const change = delta && delta.value !== 0
+    ? `${delta.value < 0 ? "Down" : "Up"} ${formatMetric(Math.abs(delta.value), metric.unit)} since your first test`
+    : delta
+      ? "Same as your first test"
+      : null;
+
   return (
-    <div
-      className={cn(
-        cardClass(),
-        className,
-      )}
-    >
-      <p className="text-eyebrow font-medium uppercase tracking-widest text-muted mb-2">
-        Latest retest · {metric.display_name}
+    <section className={cn(cardClass(), "space-y-1.5", className)} aria-label={`Progress: ${metric.display_name}`}>
+      <h2 className="text-body font-semibold text-strong">{metric.display_name}</h2>
+      <p className="text-h2 text-strong tabular-nums">{formatMetric(metric.current, metric.unit)}</p>
+      {change ? <p className={cn("text-small", deltaColor)}>{change}</p> : null}
+      <p className="text-small text-muted">
+        {prev ? `Previous ${formatMetric(prev.value, metric.unit)} · ` : ""}
+        {retestCount} test{retestCount === 1 ? "" : "s"}
+        {nextRetestInDays != null ? ` · next in ${nextRetestInDays} day${nextRetestInDays === 1 ? "" : "s"}` : ""}
       </p>
-
-      {/* Metric row: name + value + delta */}
-      <div className="flex items-baseline justify-between gap-2 flex-wrap">
-        <span className="text-small font-semibold text-strong">
-          {metric.display_name}
-        </span>
-        <span className="inline-flex items-baseline gap-2">
-          <span className="text-h2 text-strong font-mono tabular-nums">
-            {formatMetric(metric.current, metric.unit)}
-          </span>
-          {delta ? (
-            <span className={`font-mono text-small tabular-nums ${deltaColor}`}>
-              {delta.value > 0 ? "+" : delta.value < 0 ? "−" : ""}
-              {Math.abs(delta.value).toFixed(1)}
-            </span>
-          ) : null}
-        </span>
-      </div>
-
-      {/* vs-previous line */}
-      {prev ? (
-        <div className="mt-1 flex items-baseline justify-between text-caption text-muted">
-          <span>vs previous ({prev.observed_at})</span>
-          <span className="mono">{formatMetric(prev.value, metric.unit)}</span>
-        </div>
-      ) : null}
-
-      {/* Since-baseline tenure line */}
-      <p className="mt-1 font-mono text-eyebrow uppercase tracking-widest text-muted tabular-nums">
-        {formatSinceBaseline(metric, retestCount)}
-      </p>
-
-      {/* Next-retest chip */}
-      {nextRetestInDays != null ? (
-        <p className="mt-2 text-right text-eyebrow text-muted font-mono tabular-nums">
-          Next test in {nextRetestInDays} day{nextRetestInDays === 1 ? "" : "s"}
-        </p>
-      ) : null}
-    </div>
+    </section>
   );
 }

@@ -35,15 +35,20 @@ export function WeeklyNarrativeTile({ program }: { program: Program }) {
   const summary = useMemo(() => computeWeekSummary(store, program, anchorDate), [store, program, anchorDate]);
 
   const isCurrentWeek = weekDates(todayISO())[0] === summary.weekStart;
-  const { completed, scheduled, dueSoFar } = summary.sessions;
-  const behind = Math.max(0, dueSoFar - completed);
-  const status = !isCurrentWeek
-    ? completed >= scheduled
-      ? "All planned sessions done"
-      : `${completed} of ${scheduled} planned sessions done`
-    : behind === 0
-      ? "On track"
-      : `${behind} session${behind === 1 ? "" : "s"} behind`;
+  const { completed, scheduled } = summary.sessions;
+  // The rule, stated (rescore 2026-10-29): mid-week there is no "behind" — only what is left; a closed week says how
+  // many planned sessions were done. A week with nothing planned says so instead of "On track" over an empty ring.
+  const left = Math.max(0, scheduled - completed);
+  const status =
+    scheduled === 0
+      ? "No sessions planned"
+      : isCurrentWeek
+        ? left === 0
+          ? "All done this week"
+          : `${left} left this week`
+        : left === 0
+          ? "All planned sessions done"
+          : `${completed} of ${scheduled} planned sessions done`;
   const top = summary.training.topLift;
   const topName = top ? (byId[top.exerciseId] ? exerciseListName(byId[top.exerciseId]) : top.exerciseId.replace(/_/g, " ")) : null;
   const flagged = summary.states.red + summary.states.amber;
@@ -80,16 +85,18 @@ export function WeeklyNarrativeTile({ program }: { program: Program }) {
         <SessionsRing done={completed} of={scheduled} />
         <div className="min-w-0 space-y-1">
           <p className="text-h3 font-semibold text-strong leading-tight">{status}</p>
-          <p className="text-small text-muted">
-            {completed} of {scheduled} session{scheduled === 1 ? "" : "s"} {isCurrentWeek ? "so far" : "done"}
-          </p>
+          {scheduled > 0 ? (
+            <p className="text-small text-muted">
+              {completed} of {scheduled} planned session{scheduled === 1 ? "" : "s"} done
+            </p>
+          ) : null}
         </div>
       </div>
 
       {summary.hasAnyActivity ? (
         <ul className="space-y-2 border-t border-line-soft pt-3 text-small">
           {top && topName ? (
-            <Line label="Heaviest set" value={`${topName} · ${top.weight_kg} kg × ${top.reps}`} />
+            <Line label="Heaviest set" value={topName} figure={`${top.weight_kg} kg × ${top.reps}`} />
           ) : null}
           {summary.training.newBests > 0 ? <Line label="New bests" value={String(summary.training.newBests)} /> : null}
           {summary.endurance.runsCount > 0 ? (
@@ -105,7 +112,7 @@ export function WeeklyNarrativeTile({ program }: { program: Program }) {
             />
           ) : null}
           {flagged > 0 ? (
-            <li className="text-small text-amber">
+            <li className={cn("text-small", summary.states.red > 0 ? "text-red" : "text-amber")}>
               {summary.states.red > 0
                 ? `${summary.states.red} red check${summary.states.red === 1 ? "" : "s"}`
                 : `${summary.states.amber} amber check${summary.states.amber === 1 ? "" : "s"}`}{" "}
@@ -149,11 +156,14 @@ function SessionsRing({ done, of }: { done: number; of: number }) {
   );
 }
 
-function Line({ label, value }: { label: string; value: string }) {
+function Line({ label, value, figure }: { label: string; value: string; figure?: string }) {
   return (
     <li className="flex items-baseline justify-between gap-3">
-      <span className="text-muted">{label}</span>
-      <span className="text-right text-ink">{value}</span>
+      <span className="flex-shrink-0 text-muted">{label}</span>
+      <span className="text-right text-ink">
+        {value}
+        {figure ? <span className="whitespace-nowrap tabular-nums"> · {figure}</span> : null}
+      </span>
     </li>
   );
 }

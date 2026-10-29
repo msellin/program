@@ -3,7 +3,9 @@ import { dayCellState } from "./WeeklyHeatmap";
 
 describe("dayCellState", () => {
   it("uses the morning check when there is one", () => {
-    expect(dayCellState({ derived_state: "amber", exercises: { a: { done: true } } })).toBe("amber");
+    expect(dayCellState({ derived_state: "amber", exercises: { a: { done: true } } })).toBe("green");
+    expect(dayCellState({ derived_state: "amber" })).toBe("amber");
+    expect(dayCellState({ derived_state: "red", exercises: { a: { done: true } } })).toBe("red");
   });
   it("counts a trained day without a check as done", () => {
     expect(dayCellState({ exercises: { a: { done: true } } })).toBe("green");
