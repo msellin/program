@@ -351,25 +351,15 @@ First Strict Pull-Up
 FIRST STRICT PULL-UP
 1/8
 
-TODAY
+Hang, scap, row base
 
-3 blocks · 6 exercises
+SETUP · ONE MINUTE
 
-Week 1. Start with your first session at an easy effort.
+Week 1. Start with your first session.
 
-25–30 MIN
+Do it at an easy effort and log what you get. A morning check is optional.
 
-· Ring rows — pulling with feet down
-· Shoulder-blade pulls — scap pull-ups
-· Shoulder and grip prep
-M
-T
-W
-T
-F
-S
-S
-Start your first session
+Start your first session now
 Do a morning check first
 
 Find your exact level
@@ -378,6 +368,9 @@ A few quick tests sharpen your plan.
 
 Start tests
 Drills run in a set order while you learn them. Why?
+Rest day.
+
+Next session: Friday, Ring rows — pulling with feet down. Trained anyway? Log it.
 
 Log extra session →
 
@@ -404,16 +397,62 @@ First Strict Pull-Up
 FIRST STRICT PULL-UP
 1/8
 
+Hang, scap, row base
+
+SETUP · ONE MINUTE
+
+Week 1. Start with your first session.
+
+Do it at an easy effort and log what you get. A morning check is optional.
+
+Start your first session now
+Do a morning check first
+
+Find your exact level
+
+A few quick tests sharpen your plan.
+
+Start tests
+Drills run in a set order while you learn them. Why?
+Rest day.
+
+Next session: Friday, Ring rows — pulling with feet down. Trained anyway? Log it.
+
+Log extra session →
+
+Runs, rows, walks, classes, mobility — anything not in the prescribed block. Optional. Nothing here changes the plan.
+
+Log session
+Import GPX
+Today
+Plan
+Record
+Profile
+
+Start-now tap: ok; now at https://app.terav.fit/; offer still shown: false
+
+## 07b-today-after-start-now
+url: https://app.terav.fit/
+horizontal overflow: false
+
+Skip to content
+
+TODAY · WEEK 1 OF 8
+
+First Strict Pull-Up
+FIRST STRICT PULL-UP
+1/8
+
 TODAY
 
-3 blocks · 6 exercises
+6 exercises
 
 Week 1. Start with your first session at an easy effort.
 
 25–30 MIN
 
+· Dead hangs — build grip time
 · Ring rows — pulling with feet down
-· Shoulder-blade pulls — scap pull-ups
 · Shoulder and grip prep
 M
 T
@@ -424,6 +463,8 @@ S
 S
 Start your first session
 Do a morning check first
+
+Rescheduled session
 
 Find your exact level
 
@@ -438,6 +479,7 @@ Runs, rows, walks, classes, mobility — anything not in the prescribed block. O
 
 Log session
 Import GPX
+Moved 3 sessions to 2026-10-29
 Today
 Plan
 Record
@@ -451,12 +493,17 @@ Skip to content
 
 FIRST STRICT PULL-UP
 
-Wednesday
+Thursday
 
-5 exercises · 25–30 min · +1 optional
+6 exercises · 25–30 min · week 1 of 8
 
-Hang, scap, row base · week 1 of 8 · ends 22 Dec
-
+Follow along ·
+Dead hangs
+2 moves · with a timer
+Dead hang (passive)
+4 sets
+Active hang (scap-engaged)
+3 sets
 Follow along ·
 Ring rows
 3 moves · with a timer
@@ -466,14 +513,6 @@ Ring row (horizontal)
 4 sets
 Ring row (feet elevated)
 4 sets
-Follow along ·
-Shoulder-blade pulls
-2 moves · with a timer
-Scapular pull-up
-4 sets
-Scap retraction hold at top
-3 sets
-OPTIONAL
 Follow along ·
 Shoulder and grip prep
 1 move · with a timer
@@ -497,12 +536,17 @@ Skip to content
 
 FIRST STRICT PULL-UP
 
-Wednesday
+Thursday
 
-5 exercises · 25–30 min · +1 optional
+6 exercises · 25–30 min · week 1 of 8
 
-Hang, scap, row base · week 1 of 8 · ends 22 Dec
-
+Follow along ·
+Dead hangs
+2 moves · with a timer
+Dead hang (passive)
+4 sets
+Active hang (scap-engaged)
+3 sets
 Follow along ·
 Ring rows
 3 moves · with a timer
@@ -512,14 +556,6 @@ Ring row (horizontal)
 4 sets
 Ring row (feet elevated)
 4 sets
-Follow along ·
-Shoulder-blade pulls
-2 moves · with a timer
-Scapular pull-up
-4 sets
-Scap retraction hold at top
-3 sets
-OPTIONAL
 Follow along ·
 Shoulder and grip prep
 1 move · with a timer
@@ -540,23 +576,30 @@ url: https://app.terav.fit/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
-Done
+Session done
 
-11 sets across 3 movements.
-
-11
-SETS
-3
-MOVEMENTS
-86
-REPS
+Thursday · Dead hang (passive), Active hang (scap-engaged)
 
 BEST SET
 
-10 reps
+20 s hold
 
-Ring row
+Dead hang
 
+20 s
+20 s
+20 s
+20 s
+15 s
+15 s
+15 s
+7/20
+Sets done
+2
+Exercises
+7
+Reps
+2 of 6 exercises logged — Ring row (incline, easy), Ring row (horizontal), Ring row (feet elevated), Band shoulder prep (I-Y-T + face pull) not logged
 1
 No hang yet
 (you are here)
@@ -569,18 +612,17 @@ Multiple reps, adding volume
 
 Next level: Hang established, no strict rep yet.
 
+Dead hang (passive)
+4 sets · best 20 s hold
+Active hang (scap-engaged)
+3 sets · best 15 s hold
+
 NEXT SESSION
 
-Friday 30 Oct
+Monday 2 Nov
 
-Ring rows — pulling with feet down
+Dead hangs — build grip time
 
-Ring row (incline, easy)
-3 sets
-Ring row (horizontal)
-4 sets
-Ring row (feet elevated)
-4 sets
 Back to Today
 Session done.
 Today
@@ -593,23 +635,30 @@ url: https://app.terav.fit/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
-Done
+Session done
 
-11 sets across 3 movements.
-
-11
-SETS
-3
-MOVEMENTS
-86
-REPS
+Thursday · Dead hang (passive), Active hang (scap-engaged)
 
 BEST SET
 
-10 reps
+20 s hold
 
-Ring row
+Dead hang
 
+20 s
+20 s
+20 s
+20 s
+15 s
+15 s
+15 s
+7/20
+Sets done
+2
+Exercises
+7
+Reps
+2 of 6 exercises logged — Ring row (incline, easy), Ring row (horizontal), Ring row (feet elevated), Band shoulder prep (I-Y-T + face pull) not logged
 1
 No hang yet
 (you are here)
@@ -622,18 +671,17 @@ Multiple reps, adding volume
 
 Next level: Hang established, no strict rep yet.
 
+Dead hang (passive)
+4 sets · best 20 s hold
+Active hang (scap-engaged)
+3 sets · best 15 s hold
+
 NEXT SESSION
 
-Friday 30 Oct
+Monday 2 Nov
 
-Ring rows — pulling with feet down
+Dead hangs — build grip time
 
-Ring row (incline, easy)
-3 sets
-Ring row (horizontal)
-4 sets
-Ring row (feet elevated)
-4 sets
 Back to Today
 Session done.
 Today
@@ -693,8 +741,8 @@ REST OR MISSED
 
 1 active day · showing last 1
 
-Wed 28 Oct
-3 done
+Thu 29 Oct
+2 done
 Terav — Record
 FEEDBACK? →
 Today

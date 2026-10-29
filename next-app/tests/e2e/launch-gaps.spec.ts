@@ -148,6 +148,17 @@ test("A · stranger first run at 375×667", async ({ page }) => {
 
   await page.goto("/");
   await shot(page, "A-first-run", "07-today-day-1", notes);
+  // Through Today's day-1 offer, the way a new user starts: going straight to the session URL lands on a rest
+  // card on weekdays the schedule has none (it did on a Thursday, 2026-10-29).
+  const startNow = page.getByRole("button", { name: /start your first session now/i })
+    .or(page.getByRole("link", { name: /start your first session now/i })).first();
+  if (await startNow.isVisible({ timeout: 5000 }).catch(() => false)) {
+    // The tap moves the next session to today; Today re-renders and the button goes away.
+    const err = await startNow.click({ timeout: 5000 }).then(() => "ok", (e: Error) => e.message.split("\n")[0]);
+    await page.waitForTimeout(1500);
+    notes.push(`Start-now tap: ${err}; now at ${page.url()}; offer still shown: ${await startNow.isVisible().catch(() => false)}\n`);
+    await shot(page, "A-first-run", "07b-today-after-start-now", notes);
+  }
   await page.goto("/session/first-strict-pullup/");
   await shot(page, "A-first-run", "08-first-session", notes);
   await page.mouse.wheel(0, 4000);

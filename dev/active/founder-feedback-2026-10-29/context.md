@@ -12,3 +12,10 @@
   because the phase is ~week 12, not 7–10), L3 all-done brief, L4 figure clock fix, L5 insights + rep-max signal.
 - **Coach's "stale working max" was wrong under the app's own rule:** TM = 85% of est. 1RM; 115×3 → 126.5 → 107.5 = the
   current TM. The new rep-max-test signal (≤3 reps, RPE ≥9, any exercise with a TM) proposes from ~117.5×3.
+- **Live (afa3e4e, CI green).** Live re-shoot (`launch-gaps`, 3/3 pass) after a harness fix: path A visited
+  `/session/` before tapping Today's day-1 offer, so the app's resume-last-screen took Today straight back to the
+  session (a rest card on a Thursday). The spec now taps "Start your first session now" right after the first Today
+  shot; on live the tap pulls the session to today (`07b-today-after-start-now.png`). Not an app bug.
+- Insights line capped at two missing names + "and N more" (the stranger run listed four).
+- Not done: the five-lens rescore. The captures cover the pull-up stranger path, not the founder's two-track hip Today;
+  his phone is the real check.

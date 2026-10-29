@@ -82,7 +82,11 @@ export function sessionInsights(
   );
   if (planned.length > 1 && missing.length > 0 && missing.length < planned.length) {
     lines.push(
-      `${planned.length - missing.length} of ${planned.length} exercises logged — ${missing.map((m) => m.name).join(", ")} not logged`,
+      // Two names at most: a four-name list read as a paragraph on a 375px done screen (2026-10-29).
+      `${planned.length - missing.length} of ${planned.length} exercises logged — ${missing
+        .slice(0, 2)
+        .map((m) => m.name)
+        .join(", ")}${missing.length > 2 ? ` and ${missing.length - 2} more` : ""} not logged`,
     );
   }
   return lines.slice(0, MAX_LINES);

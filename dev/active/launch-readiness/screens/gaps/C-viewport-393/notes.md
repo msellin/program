@@ -8,7 +8,7 @@ Extra session
 
 Anything outside your plan: a run, a class, mobility. Logging to today.
 
-Wednesday 28 Oct
+Thursday 29 Oct
 
 Today
 
@@ -20,17 +20,14 @@ Band shoulder prep (I-Y-T + face pull)
 Shoulder and grip prep · 2 sets
 Dead hang (passive)
 Dead hangs — build grip time · 4 sets
-HELD
 Active hang (scap-engaged)
 Dead hangs — build grip time · 3 sets
-HELD
 Scapular pull-up
 Shoulder-blade pulls — scap pull-ups · 4 sets
 Scap retraction hold at top
 Shoulder-blade pulls — scap pull-ups · 3 sets
 Ring row (incline, easy)
 Ring rows — pulling with feet down · 3 sets
-HELD
 Ring row (horizontal)
 Ring rows — pulling with feet down · 4 sets
 Ring row (feet elevated)
@@ -58,7 +55,7 @@ Slow-tempo pull-ups · 3 sets
 Grease-the-groove single pull-ups
 Single pull-ups — through the day · 5 sets
 First strict pull-up attempt
-
+Grip variety — w
 
 ## 01-today-bottom
 url: https://app.terav.fit/off-plan/
@@ -70,7 +67,7 @@ Extra session
 
 Anything outside your plan: a run, a class, mobility. Logging to today.
 
-Wednesday 28 Oct
+Thursday 29 Oct
 
 Today
 
@@ -82,17 +79,14 @@ Band shoulder prep (I-Y-T + face pull)
 Shoulder and grip prep · 2 sets
 Dead hang (passive)
 Dead hangs — build grip time · 4 sets
-HELD
 Active hang (scap-engaged)
 Dead hangs — build grip time · 3 sets
-HELD
 Scapular pull-up
 Shoulder-blade pulls — scap pull-ups · 4 sets
 Scap retraction hold at top
 Shoulder-blade pulls — scap pull-ups · 3 sets
 Ring row (incline, easy)
 Ring rows — pulling with feet down · 3 sets
-HELD
 Ring row (horizontal)
 Ring rows — pulling with feet down · 4 sets
 Ring row (feet elevated)
@@ -120,7 +114,7 @@ Slow-tempo pull-ups · 3 sets
 Grease-the-groove single pull-ups
 Single pull-ups — through the day · 5 sets
 First strict pull-up attempt
-
+Grip variety — w
 
 fixed/sticky on 01-today: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57
 
@@ -143,14 +137,13 @@ This week
 
 ›
 Mixed practice · After your first rep: each session mixes 2–3 drills for the parts still holding you back.
-first strict pullup: skipped
+first strict pullup: planned
 Mon
 26 Oct
-Skipped
+· 1 logged
 
-Skipped session
+Hollow-body holds + Dead hangs — build grip time + Shoulder and grip prep
 
-Unskip
 Tue
 27 Oct
 Rest
@@ -160,12 +153,12 @@ Rest / accessory day
 first strict pullup: planned
 Wed
 28 Oct
-TODAY
 
 Ring rows — pulling with feet down + Shoulder-blade pulls — scap pull-ups + Shoulder and grip prep
 
 Thu
 29 Oct
+TODAY
 Rest
 
 Rest / accessory day
@@ -214,14 +207,13 @@ This week
 
 ›
 Mixed practice · After your first rep: each session mixes 2–3 drills for the parts still holding you back.
-first strict pullup: skipped
+first strict pullup: planned
 Mon
 26 Oct
-Skipped
+· 1 logged
 
-Skipped session
+Hollow-body holds + Dead hangs — build grip time + Shoulder and grip prep
 
-Unskip
 Tue
 27 Oct
 Rest
@@ -231,12 +223,12 @@ Rest / accessory day
 first strict pullup: planned
 Wed
 28 Oct
-TODAY
 
 Ring rows — pulling with feet down + Shoulder-blade pulls — scap pull-ups + Shoulder and grip prep
 
 Thu
 29 Oct
+TODAY
 Rest
 
 Rest / accessory day
@@ -273,44 +265,16 @@ url: https://app.terav.fit/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
+Rest day.
 
-FIRST STRICT PULL-UP
+Next session: Friday. Trained anyway? Log it.
 
-Wednesday
+Log extra session →
 
-5 exercises · 25–30 min · +1 optional
+Runs, rows, walks, classes, mobility — anything not in the prescribed block. Optional. Nothing here changes the plan.
 
-Interleaved consolidation · week 7 of 8 · ends 7 Nov
-
-Follow along ·
-Ring rows
-3 moves · with a timer
-Ring row (incline, easy)
-3 sets
-HELD
-Ring row (horizontal)
-4 sets
-Ring row (feet elevated)
-4 sets
-Follow along ·
-Shoulder-blade pulls
-2 moves · with a timer
-Scapular pull-up
-4 sets
-Scap retraction hold at top
-3 sets
-OPTIONAL
-Follow along ·
-Shoulder and grip prep
-1 move · with a timer
-Band shoulder prep (I-Y-T + face pull)
-2 sets
-How to run this
-›
-Log an extra session
-›
-Finish session
-Continue session
+Log session
+Import GPX
 Today
 Plan
 Record
@@ -321,50 +285,22 @@ url: https://app.terav.fit/session/first-strict-pullup/
 horizontal overflow: false
 
 Skip to content
+Rest day.
 
-FIRST STRICT PULL-UP
+Next session: Friday. Trained anyway? Log it.
 
-Wednesday
+Log extra session →
 
-5 exercises · 25–30 min · +1 optional
+Runs, rows, walks, classes, mobility — anything not in the prescribed block. Optional. Nothing here changes the plan.
 
-Interleaved consolidation · week 7 of 8 · ends 7 Nov
-
-Follow along ·
-Ring rows
-3 moves · with a timer
-Ring row (incline, easy)
-3 sets
-HELD
-Ring row (horizontal)
-4 sets
-Ring row (feet elevated)
-4 sets
-Follow along ·
-Shoulder-blade pulls
-2 moves · with a timer
-Scapular pull-up
-4 sets
-Scap retraction hold at top
-3 sets
-OPTIONAL
-Follow along ·
-Shoulder and grip prep
-1 move · with a timer
-Band shoulder prep (I-Y-T + face pull)
-2 sets
-How to run this
-›
-Log an extra session
-›
-Finish session
-Continue session
+Log session
+Import GPX
 Today
 Plan
 Record
 Profile
 
-fixed/sticky on 03-session: div.sticky bottom-[calc(64px+env(safe-area-i @y=723 h=65 | nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57
+fixed/sticky on 03-session: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57
 
 ## 04-record-top
 url: https://app.terav.fit/record/
@@ -392,7 +328,7 @@ This week so far
 Sessions
 1 / 1
 Morning check
-1 green · 2 amber
+2 green · 2 amber
 Signals
 2 fatigue
 
@@ -401,7 +337,7 @@ LATEST RETEST · STRICT PULL-UP MAX REPS
 Strict pull-up max reps
 112 reps
 +12.0
-vs previous (2026-10-11)
+vs previous (2026-10-12)
 106 reps
 
 +12.0 REPS SINCE BASELINE · 3 RETESTS
@@ -417,9 +353,9 @@ ALL
 
 14-DAY ROLLING STRICT PULL-UP MAX REPS · HIGHER IS BETTER
 
-27 Sep
-11 Oct
-25 Oct
+28 Sep
+12 Oct
+26 Oct
 100
 104
 108
@@ -428,12 +364,12 @@ ALL
 14-day rolling avg
 retest event
 
-Avg 109 reps +9.0 since 2026-09-27
+Avg 109 reps +9.0 since 2026-09-28
 
 RETESTS · 3 EVENTS
 
 ▲
-2026-09-27
+2026-09-28
 TODAY
 
 Base 100 reps · Now 112 reps · +12.0
@@ -452,18 +388,20 @@ REST OR MISSED
 
 45 active days · showing last 30
 
+Thu 29 Oct
+logged
 Wed 28 Oct
-1 done
+logged
 Tue 27 Oct
 logged
 Mon 26 Oct
-logged
+1 done
 Sun 25 Oct
 logged
 Sat 24 Oct
 logged
 Fri 23 Oct
-logged
+3 done
 Thu 22 Oct
 logged
 Wed 21 Oct
@@ -485,7 +423,7 @@ logged
 Tue 13 Oct
 logged
 Mon 12 Oct
-1 done
+logged
 Sun 11 Oct
 logged
 Sat 10 Oct
@@ -499,7 +437,7 @@ logged
 Tue 6 Oct
 logged
 Mon 5 Oct
-logged
+1 done
 Sun 4 Oct
 logged
 Sat 3 Oct
@@ -509,8 +447,6 @@ Fri 2 Oct
 Thu 1 Oct
 logged
 Wed 30 Sept
-logged
-Tue 29 Sept
 logged
 LOAD 30 MORE
 Terav — Record
@@ -547,7 +483,7 @@ This week so far
 Sessions
 1 / 1
 Morning check
-1 green · 2 amber
+2 green · 2 amber
 Signals
 2 fatigue
 
@@ -556,7 +492,7 @@ LATEST RETEST · STRICT PULL-UP MAX REPS
 Strict pull-up max reps
 112 reps
 +12.0
-vs previous (2026-10-11)
+vs previous (2026-10-12)
 106 reps
 
 +12.0 REPS SINCE BASELINE · 3 RETESTS
@@ -572,9 +508,9 @@ ALL
 
 14-DAY ROLLING STRICT PULL-UP MAX REPS · HIGHER IS BETTER
 
-27 Sep
-11 Oct
-25 Oct
+28 Sep
+12 Oct
+26 Oct
 100
 104
 108
@@ -583,12 +519,12 @@ ALL
 14-day rolling avg
 retest event
 
-Avg 109 reps +9.0 since 2026-09-27
+Avg 109 reps +9.0 since 2026-09-28
 
 RETESTS · 3 EVENTS
 
 ▲
-2026-09-27
+2026-09-28
 TODAY
 
 Base 100 reps · Now 112 reps · +12.0
@@ -607,18 +543,20 @@ REST OR MISSED
 
 45 active days · showing last 30
 
+Thu 29 Oct
+logged
 Wed 28 Oct
-1 done
+logged
 Tue 27 Oct
 logged
 Mon 26 Oct
-logged
+1 done
 Sun 25 Oct
 logged
 Sat 24 Oct
 logged
 Fri 23 Oct
-logged
+3 done
 Thu 22 Oct
 logged
 Wed 21 Oct
@@ -640,7 +578,7 @@ logged
 Tue 13 Oct
 logged
 Mon 12 Oct
-1 done
+logged
 Sun 11 Oct
 logged
 Sat 10 Oct
@@ -654,7 +592,7 @@ logged
 Tue 6 Oct
 logged
 Mon 5 Oct
-logged
+1 done
 Sun 4 Oct
 logged
 Sat 3 Oct
@@ -664,8 +602,6 @@ Fri 2 Oct
 Thu 1 Oct
 logged
 Wed 30 Sept
-logged
-Tue 29 Sept
 logged
 LOAD 30 MORE
 Terav — Record
@@ -686,7 +622,7 @@ Skip to content
 Back
 Morning check
 
-Wednesday 28 Oct
+Thursday 29 Oct
 
 Workout ready
 
@@ -748,7 +684,7 @@ Skip to content
 Back
 Morning check
 
-Wednesday 28 Oct
+Thursday 29 Oct
 
 Workout ready
 
@@ -1190,6 +1126,11 @@ HAPTICS
 Haptic feedback
 Buzz on tap, accept, skip.
 
+DEMO CLIPS
+
+Play demo clips automatically
+Muted, on the first set of an exercise. They load from YouTube, which then receives your IP address.
+
 EXTRA SESSION
 
 Extra session drills
@@ -1229,6 +1170,11 @@ HAPTICS
 Haptic feedback
 Buzz on tap, accept, skip.
 
+DEMO CLIPS
+
+Play demo clips automatically
+Muted, on the first set of an exercise. They load from YouTube, which then receives your IP address.
+
 EXTRA SESSION
 
 Extra session drills
@@ -1262,7 +1208,7 @@ Extra session
 
 Anything outside your plan: a run, a class, mobility. Logging to today.
 
-Wednesday 28 Oct
+Thursday 29 Oct
 
 Today
 
@@ -1274,17 +1220,14 @@ Band shoulder prep (I-Y-T + face pull)
 Shoulder and grip prep · 2 sets
 Dead hang (passive)
 Dead hangs — build grip time · 4 sets
-HELD
 Active hang (scap-engaged)
 Dead hangs — build grip time · 3 sets
-HELD
 Scapular pull-up
 Shoulder-blade pulls — scap pull-ups · 4 sets
 Scap retraction hold at top
 Shoulder-blade pulls — scap pull-ups · 3 sets
 Ring row (incline, easy)
 Ring rows — pulling with feet down · 3 sets
-HELD
 Ring row (horizontal)
 Ring rows — pulling with feet down · 4 sets
 Ring row (feet elevated)
@@ -1312,7 +1255,7 @@ Slow-tempo pull-ups · 3 sets
 Grease-the-groove single pull-ups
 Single pull-ups — through the day · 5 sets
 First strict pull-up attempt
-
+Grip variety — w
 
 ## 10-off-plan-bottom
 url: https://app.terav.fit/off-plan/
@@ -1324,7 +1267,7 @@ Extra session
 
 Anything outside your plan: a run, a class, mobility. Logging to today.
 
-Wednesday 28 Oct
+Thursday 29 Oct
 
 Today
 
@@ -1336,17 +1279,14 @@ Band shoulder prep (I-Y-T + face pull)
 Shoulder and grip prep · 2 sets
 Dead hang (passive)
 Dead hangs — build grip time · 4 sets
-HELD
 Active hang (scap-engaged)
 Dead hangs — build grip time · 3 sets
-HELD
 Scapular pull-up
 Shoulder-blade pulls — scap pull-ups · 4 sets
 Scap retraction hold at top
 Shoulder-blade pulls — scap pull-ups · 3 sets
 Ring row (incline, easy)
 Ring rows — pulling with feet down · 3 sets
-HELD
 Ring row (horizontal)
 Ring rows — pulling with feet down · 4 sets
 Ring row (feet elevated)
@@ -1374,6 +1314,6 @@ Slow-tempo pull-ups · 3 sets
 Grease-the-groove single pull-ups
 Single pull-ups — through the day · 5 sets
 First strict pull-up attempt
-
+Grip variety — w
 
 fixed/sticky on 10-off-plan: nav.fixed left-0 right-0 bottom-0 z-40 borde @y=795 h=57

@@ -40,6 +40,15 @@ describe("sessionInsights", () => {
     const out = sessionInsights([ex("a", "A"), ex("b", "Split squat"), ex("c", "Nordic curl")], s, "2026-10-29");
     expect(out).toEqual(["1 of 3 exercises logged — Split squat, Nordic curl not logged"]);
   });
+  it("names two missing exercises at most", () => {
+    const s = mk({ "2026-10-29": { "b:a": log([[50, 5]]) } });
+    const out = sessionInsights(
+      [ex("a", "A"), ex("b", "B"), ex("c", "C"), ex("d", "D"), ex("e", "E")],
+      s,
+      "2026-10-29",
+    );
+    expect(out).toEqual(["1 of 5 exercises logged — B, C and 2 more not logged"]);
+  });
   it("says nothing when everything was logged and nothing is provable", () => {
     const s = mk({ "2026-10-29": { "b:a": log([[50, 5]]) } });
     expect(sessionInsights([ex("a", "A")], s, "2026-10-29")).toEqual([]);
