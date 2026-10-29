@@ -205,7 +205,9 @@ export function SetView({
     if (holdSeconds != null) parts.push(`${holdSeconds}s hold`);
     else if (authoredMinutes != null) parts.push(`${authoredMinutes} min`);
     else if (authoredReps != null) parts.push(`${authoredReps} reps`);
-    if (authoredSets != null) parts.push(`${authoredSets} sets`);
+    // "Plan: 6 sets" on a sled never said how far (r23b re-shoot).
+    const authoredDistance = active.item?.distance_m ?? num("distance_m");
+    if (authoredSets != null) parts.push(authoredDistance != null && authoredReps == null ? `${authoredSets} × ${authoredDistance} m` : `${authoredSets} sets`);
     if (perSide) parts.push("per side");
     return parts.length ? parts.join(" · ") : null;
   })();

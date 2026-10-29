@@ -406,10 +406,13 @@ export function BriefView({
                     ) : null}
                     <span className="min-w-0 flex-grow">
                       <span className="block text-body font-semibold text-strong tracking-[-.01em]">
-                        {exerciseListName(r.exercise)}
+                        {r.exercise.name}
                       </span>
+                      {/* Variant on the dose line: "Nordic curl (or GHR, or slider
+                          leg curl)" wrapped the title to two lines (copy, r23). */}
                       <span className="block text-small text-muted tabular-nums">
                         {prescriptionLine(r, store, activeDate)}
+                        {r.exercise.variant ? ` · ${r.exercise.variant}` : ""}
                         {hasOptionalTail ? ` · last ${r.optionalRows} optional` : ""}
                       </span>
                     </span>
