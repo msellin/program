@@ -1009,7 +1009,7 @@ const HIP_FIGS: Record<string, Fig> = {
     // shin vertical); at the bottom the shoulder slides 7 px down the bench and the trunk is 32 deg (was 40), so
     // the shin is ~18 deg (was 32). Knee 100-110 at the bottom is not reachable with the feet fixed: the hips
     // are nearer the feet at the bottom than at the top, so the knee closes, it cannot open.
-    const S = [lerp(125, 118, p), 106], F = [268, 167], th = lerp(32, 0, p);
+    const S = [lerp(125, 118, p), 106], F = [268, 167], th = lerp(40, 0, p);
     const H = P(S, 78, th), K = ik(H, F, 66, 62, true);
     sc.mark("shoulder", S); sc.mark("hip", H); sc.mark("knee", K);
     sc.floor();
@@ -1095,7 +1095,7 @@ const HIP_FIGS: Record<string, Fig> = {
     sc.dot(hand, lerp(7, 10, p), BODY);
     return "Pallof press: standing side-on to a band anchored at chest height; press the hands straight out from the chest and hold, the trunk refusing to turn toward the anchor, then bring them back";
   } },
-  nordic: { dur: 8000, kind: "move", k: [0.05, 0.52, 0.58, 0.95], poster: 0.7, sided: false, tempo: ["control", "drive"], cues: [{ align: ["knee", "hip", "shoulder"] }], build(sc, _s, p) {
+  nordic: { dur: 8000, kind: "move", k: [0.05, 0.52, 0.58, 0.95], poster: 0.5, sided: false, tempo: ["control", "drive"], cues: [{ align: ["knee", "hip", "shoulder"] }], build(sc, _s, p) {
     // The eccentric is the exercise: ~3.9 s down (was 5.4 s of an 8 s cycle), then a quick push back up with the
     // hands. The body falls to ~85 deg from vertical (trainer review: it stopped at 68), the chest ~13 px off
     // the floor, and the hands catch there, elbows bent like the bottom of a push-up; they stay planted from
@@ -1133,11 +1133,12 @@ const HIP_FIGS: Record<string, Fig> = {
     // reaches knee ~170 with ankle, hip and shoulder nearly in one line (it stopped at knee 133); the arms are
     // ARM86 long and reach the posts at elbow ~165 (they were bent ~110, 43 px for a 67 px arm); the swing foot
     // clears the ground by 8 px, a short heavy step (it was 18, a shin up to 85 deg).
+    // Round 3 (S&C r2): the lift is the sled's own, 10 px (the carries keep 6), so the push reads as a knee driven through, not a shuffle.
     const H = [150, 91 + 1.5 * Math.cos(4 * Math.PI * (p - 0.8))], S = P(H, 56, -42), hand = P(S, 66, 19);
     const back = 110 + 47 * SWING_OVER, front = 157 - 47 * SWING_OVER;   // the swing's drift stays inside 110..157
     const foot2 = (q: number): Pt[] => {
       const st = stride(q);
-      return leg(H, st.stance ? [lerp(front, back, st.u), 166] : [lerp(back, front, swingPos(st.u, 0.6)), 166 - Math.sin(st.u * Math.PI) * 8]);
+      return leg(H, st.stance ? [lerp(front, back, st.u), 166] : [lerp(back, front, swingPos(st.u, 0.6)), 166 - Math.sin(st.u * Math.PI) * 10]);
     };
     const near = foot2(p), far = foot2(p + 0.5);
     sc.floor();
@@ -1157,7 +1158,7 @@ const HIP_FIGS: Record<string, Fig> = {
     // It shifts sideways over the standing foot as a whole, upright, which is not a lean.
     // Cadence ~0.55 s a step (trainer review; it was 1.2 s), feet at hip width and the trunk swaying
     // +-7 px so the weight is over the stance foot in single support (physics review).
-    const work = COL[side], g = carryGait(p), sh: Pt = [g.shift[0] * 2.8, g.shift[1] + breathe(t)];
+    const work = COL[side], g = carryGait(p), sh: Pt = [g.shift[0] * 2, g.shift[1] + breathe(t)];
     sc.mark("mid", [179, 88]); sc.mark("head", [179, 6]);
     carryBody(sc, g.lift, sh);
     const loaded = add(side === "R" ? [158, 36] : [200, 36], sh), free = add(side === "R" ? [200, 36] : [158, 36], sh);
@@ -1169,7 +1170,7 @@ const HIP_FIGS: Record<string, Fig> = {
     return "Suitcase carry, weight in the " + sideWord(side) + " hand: walk tall with small steps, ribs down, the trunk staying upright instead of leaning toward the load";
   } },
   farmer: { dur: 1100, kind: "gait", k: [0, 1, 1], poster: 0.8, sided: false, front: true, build(sc, _s, p, _r, t = 0) {
-    const g = carryGait(p), sh: Pt = [g.shift[0] * 2.8, g.shift[1] + breathe(t)];
+    const g = carryGait(p), sh: Pt = [g.shift[0] * 2, g.shift[1] + breathe(t)];
     carryBody(sc, g.lift, sh);
     for (const [s0, dx] of [[[158, 36], -5], [[200, 36], 5]] as [Pt, number][]) {
       const s = add(s0, sh), hand = add(s, [dx, ARM86[0] + ARM86[1]]);
@@ -1178,7 +1179,12 @@ const HIP_FIGS: Record<string, Fig> = {
     return "Farmer's carry: a heavy weight in each hand, arms long; walk tall with small fast steps and controlled breathing";
   } },
   airsquat: { kind: "move", dur: 5500, k: [0.05, 0.4, 0.5, 0.8], poster: 0.9, sided: false, tempo: ["control", "drive"], cues: [{ level: "knee", span: ["hip", "knee"], limit: true }], build(sc, _s, p) { return squatPose(sc, p, 30, "air", 134, 119); } },
-  goblet: { kind: "move", dur: 5500, k: [0.05, 0.4, 0.5, 0.8], poster: 0.9, sided: false, tempo: ["control", "drive"], cues: [{ level: "knee", span: ["hip", "knee"], limit: true }], build(sc, _s, p) { return squatPose(sc, p, 26, "goblet", 137, 127); } },
+  goblet: { kind: "move", dur: 5500, k: [0.05, 0.4, 0.5, 0.8], poster: 0.9, sided: false, tempo: ["control", "drive"], cues: [{ level: "knee", span: ["hip", "knee"], limit: true }], build(sc, _s, p, _r, t = 0) {
+    // Round 3 (S&C r2): the bottom is a visible pause (k1..k2, 0.55 s) in which the elbows press into the knees:
+    // the whole arm opens 5 deg about the shoulder (35 -> 40), then eases back as the rise starts.
+    const x = (t % 5500) / 5500, h = x < 0.4 ? 0 : x < 0.5 ? ease((x - 0.4) / 0.1) : Math.max(0, 1 - (x - 0.5) / 0.08);
+    return squatPose(sc, p, 26, "goblet", 137, 127, 5 * h);
+  } },
   amarch: { dur: 3000, kind: "move2", k: [0.05, 0.4, 0.62], sided: false, cues: [{ angle: ["knee", "hip", "shoulder"] }], build(sc, _s, p, rep = 0) {
     // Knee to a level thigh (90°) and no higher; the opposite arm drives forward to ~65° of shoulder flexion
     // with the elbow at ~90, the other arm swings back ~40° (ARM86; trainer review 11).
@@ -1230,7 +1236,7 @@ const HIP_FIGS: Record<string, Fig> = {
   } },
 };
 
-function squatPose(sc: Scene, p: number, leanDeg: number, load: "back" | "front" | "air" | "goblet", hipX: number, hipY: number): string {
+function squatPose(sc: Scene, p: number, leanDeg: number, load: "back" | "front" | "air" | "goblet", hipX: number, hipY: number, armOpen = 0): string {
   // Depth stops at about parallel (no deep flexion with the knees caving: a documented provocateur).
   // Hips sit back behind the heel and the shin tilts ~25° (it stood near vertical before review).
   // Sequenced (motion round, 2026-10-29): the hips start back before they go down, so they also come
@@ -1255,9 +1261,10 @@ function squatPose(sc: Scene, p: number, leanDeg: number, load: "back" | "front"
     return "Air squat: feet shoulder-width, slow tempo; sit down between the hips to about parallel and no deeper, pain-free, knees tracking over the toes, arms forward for balance, then stand";
   }
   if (load === "goblet") {
-    const bell = [S[0] + 16, S[1] + 18];
+    const o = -armOpen * Math.PI / 180, rot = (d: Pt): Pt => [S[0] + d[0] * Math.cos(o) - d[1] * Math.sin(o), S[1] + d[0] * Math.sin(o) + d[1] * Math.cos(o)];
+    const bell = rot([16, 18]);
     sc.mark("bar", bell);
-    sc.line([S, [S[0] + 4, S[1] + 26], bell], COL.B, 8);
+    sc.line([S, rot([4, 26]), bell], COL.B, 8);
     sc.ring(bell, 11, PROP, 3); sc.ring(add(bell, [0, -13]), 5, PROP, 3);
     return "Goblet squat: a dumbbell or kettlebell held at the chest, elbows down; sit down between the hips keeping the chest tall, pressing the knees out with the elbows inside them, then stand";
   }

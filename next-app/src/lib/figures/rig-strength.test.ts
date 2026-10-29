@@ -96,11 +96,13 @@ describe("strength figures", () => {
     }
     expect(maxKnee).toBeGreaterThanOrEqual(165);
     expect(maxElbow).toBeGreaterThanOrEqual(160);
-    // Heavy steps are low: the swing foot never rises more than ~10 px.
+    // Heavy steps are low: the swing foot never rises more than ~10 px (round 3: it reaches ~10, the carries keep 6).
     for (const t of times("sled", 80)) {
       const feet = used("sled", t).filter((s) => s.w === 8 && pts(s.pts).length === 3 && (s.color === ACCENT || s.color === FIGURE_COLORS.FAR) && pts(s.pts)[2][1] > 120).map((s) => pts(s.pts)[2][1]);
-      for (const y of feet) expect(y).toBeGreaterThanOrEqual(166 - 9);
+      for (const y of feet) expect(y).toBeGreaterThanOrEqual(166 - 10.01);
     }
+    const lowest = Math.min(...times("sled", 160).flatMap((t) => used("sled", t).filter((s) => s.w === 8 && pts(s.pts).length === 3 && (s.color === ACCENT || s.color === FIGURE_COLORS.FAR) && pts(s.pts)[2][1] > 120).map((s) => pts(s.pts)[2][1])));
+    expect(lowest).toBeLessThanOrEqual(166 - 9.5);
   });
 
   it("carries step at walking cadence and keep the bell hanging from a long arm", () => {
@@ -171,5 +173,17 @@ describe("strength figures", () => {
     const rear = legs(bot).find((c) => c[2][0] < 120)!;
     expect(inc(rear[0], rear[1], rear[2])).toBeGreaterThan(84); expect(inc(rear[0], rear[1], rear[2])).toBeLessThan(100);
     expect(deg(Math.atan2(Math.abs(rear[1][0] - rear[2][0]), Math.abs(rear[1][1] - rear[2][1])))).toBeGreaterThan(28);
+  });
+
+  it("round 3: hip thrust starts with the trunk ~50 deg from vertical, the goblet presses the elbows out in its pause, the nordic tile is the half-way frame", () => {
+    const hip = (t: number) => { const [S, H] = pts(used("hipthrust", t).find((s) => s.w === 12)!.pts); return { trunk: deg(Math.atan2(Math.abs(S[0] - H[0]), Math.abs(S[1] - H[1]))) }; };
+    expect(hip(0).trunk).toBeGreaterThan(48); expect(hip(0).trunk).toBeLessThan(52);
+    const bell = (t: number) => { const r = used("goblet", t).filter((s) => s.color === FIGURE_COLORS.PROP && s.w === 3 && pts(s.pts).length > 10)[0]; return pts(r.pts)[0]; };
+    const f = FIGS.goblet, e0 = bell(f.dur! * f.k![1]), e1 = bell(f.dur! * (f.k![2] - 0.001));
+    expect(Math.hypot(e0[0] - e1[0], e0[1] - e1[1])).toBeGreaterThan(1.5);   // the arm opens during the pause
+    expect(FIGS.nordic.poster).toBeGreaterThanOrEqual(0.45); expect(FIGS.nordic.poster).toBeLessThanOrEqual(0.55);
+    // Carries sway +-5 px.
+    const xs = times("farmer", 110).map((t) => pts(used("farmer", t).find((s) => s.w === 12)!.pts)[0][0]);
+    expect(Math.max(...xs) - Math.min(...xs)).toBeLessThan(11);
   });
 });
