@@ -17,3 +17,10 @@ Rejected again: animator's "deadlift hips lead the shoulders on the ascent" (the
 biomechanist: hips and shoulders rise together until the bar passes the knees).
 The nordic "tile reads lying down" partly a review-sheet artifact (the sheet's tile column samples 4240 ms; the
 app's tile animates).
+
+## Final (after round 3 pass 3, live 3ab1cca)
+Movement lenses ≥ 9 on 58/60 figures for every lens. The two exceptions are caps the reviewers name, not defects:
+- bridge (physio 8): start hip 137; a flatter start breaks the knee rule. Physio recommends accepting it.
+- fingerraise (hand-balance 8): the finger lift is < 2 px at thumbnail size; the coach accepts 8 as a scale cap.
+Visual lenses (optional polish): illustrator 47/60 ≥ 9 (13 drawing-only items in 77), animator mean 7.8 (phase
+beats; flat-rig ceiling). Strips were re-rendered to span whole cycles (they had covered only the first 2 s).

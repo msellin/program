@@ -48,3 +48,10 @@ plan-row-open, profile(-full), record(-hip-open), hip-brief, set-sled/nordic/bul
 **Animation round done:** `dev/active/figure-animation/00-recommendation.md`. 4/4 experts: improve the rig's motion
 (sequenced joints, per-phase easing, breathing holds, real gait); no MediaPipe/mocap. Awaiting owner approval.
 **Open [M]:** "Cycles 3 and 4" phase name (copy wants plainer); Plan rows still say "Home rehab and activation" x4.
+
+## Figure round (2026-10-29 evening) — done
+Owner approved the motion round, then asked for trainer/physics review of every figure's angles, ranges and motion,
+then set the bar at movement scores ≥ 9. Three fix rounds by family lanes, three rescores by nine standing agents
+(`.claude/agents/figure-*.md`, runbook `dev/figure-review-kit/README.md`). Live 3ab1cca. Status and open owner
+decisions: `dev/active/figure-animation/00-summary-r3.md` (bridge start-hip cap, fingerraise scale cap, optional
+visual polish). Recurring CI flake: `next/font` Google Fonts fetch failed twice; re-run passes.

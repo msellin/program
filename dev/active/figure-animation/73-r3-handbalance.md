@@ -28,3 +28,6 @@ No safety rule in rig.ts / CLAUDE.md is in tension with these figures.
 - hswalk 9: strip-hswalk now shows a clear scissor V on 8 of 10 "after" frames, hip drift 6 px, elbow > 163. Short of 10: sheet-07 still shows the old near-closed tile (sheet not regenerated, or the tile phase is not at mid-step).
 - wallwalk 8: the lane reports trunk 52 at 25% and a staircase, but strip-wallwalk.png as read looks unchanged from pass 2: first ~6 of 10 sampled frames are the same long plank (trunk ~70), pike only in the last 2 rows. Cannot confirm the change; hand walk-in is 9 and 7 px per step (under the 15 ask, the lane says it trades off against trunk). [H] Re-render strip-wallwalk and check frames 2-6 differ by >= 10 px in foot height; if so, 9.
 - fingerraise 8: 1.5 px shoulder lean is below what a 144 px tile can show (and 56x40 hides it). Geometry cap; accept at 8.
+
+## Pass 3b (wallwalk, full-cycle strip)
+- wallwalk 9: the 10-frame strip across the whole cycle now reads as a staircase: plank, hips rising and pike by frame 3, feet climbing the wall, a near-vertical stack by frame 7-8, then the walk back out. Short of 10: hand walk-in is only ~9/7 px per step, and the feet never visibly press the wall at the stack (a contact mark would sell it).
