@@ -10,6 +10,7 @@ import { snapshotCitation } from "./engine/citations";
 import { announce } from "./announce";
 import { validateTMWrite, type TMSource } from "./engine/tm-write";
 import { deriveState } from "./symptom-state";
+import { moveDayBlocks, restoreDayBlocks } from "./engine/block-moves";
 
 /**
  * Save to persistence AND fire a debounced remote push.
@@ -793,6 +794,8 @@ export const useStore = create<StoreState>((set, get) => ({
         delete s.scheduled_overrides[ovDate];
       }
     }
+    // The blocks Today reads: unskip / un-move this day there too.
+    if (s.scheduled_blocks) s.scheduled_blocks = restoreDayBlocks(s.scheduled_blocks, date).blocks;
 
     commit(s);
     set({ store: s });
@@ -813,6 +816,11 @@ export const useStore = create<StoreState>((set, get) => ({
     skipped[fromDate] = { moved_to: toDate };
     s.scheduled_overrides = overrides;
     s.skipped = skipped;
+    // The block half (2026-10-29): Today and the session page read only scheduled_blocks, so without this a move
+    // from Plan left the session on its old day. The legacy fields above still drive Plan's labels and Undo.
+    if (s.scheduled_blocks) {
+      s.scheduled_blocks = moveDayBlocks(s.scheduled_blocks, fromDate, toDate, blockIds, composed, new Date().toISOString()).blocks;
+    }
     commit(s);
     set({ store: s });
   },
@@ -820,8 +828,24 @@ export const useStore = create<StoreState>((set, get) => ({
   clearSkip: (date) => {
     const s = { ...get().store };
     const skipped = { ...(s.skipped ?? {}) };
+    const movedTo = skipped[date]?.moved_to;
     delete skipped[date];
     s.skipped = skipped;
+    // Undo move from the destination row: drop the override and the source's skip entry that point here.
+    const overrides = { ...(s.scheduled_overrides ?? {}) };
+    const here = overrides[date];
+    const from = here?.reason?.match(/moved from (\d{4}-\d{2}-\d{2})$/)?.[1];
+    if (from) {
+      delete overrides[date];
+      if (s.skipped[from]?.moved_to === date) {
+        s.skipped = { ...s.skipped };
+        delete s.skipped[from];
+      }
+    }
+    if (movedTo && overrides[movedTo]?.reason?.endsWith(`moved from ${date}`)) delete overrides[movedTo];
+    s.scheduled_overrides = overrides;
+    // Unskip / Undo move on the blocks Today reads (skipDay already wrote them there).
+    if (s.scheduled_blocks) s.scheduled_blocks = restoreDayBlocks(s.scheduled_blocks, date).blocks;
     commit(s);
     set({ store: s });
   },
