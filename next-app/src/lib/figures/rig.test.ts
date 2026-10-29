@@ -274,7 +274,7 @@ describe("figure rig", () => {
 
   it("a planted foot or hand sits on one ground mark for its whole stance (no moonwalk)", () => {
     // Camera follows the athlete; the ground marks scroll back at stance speed (physics review).
-    for (const [id, dur] of [["sled", 2600], ["hswalk", 3600]] as const) {
+    for (const [id, dur] of [["sled", 2000], ["hswalk", 3600]] as const) {
       const at = (t: number) => {
         const f = drawFigure(id, "B", t, false);
         const marks = f.slots.find((s) => s.bg && s.dash !== "none")!;
