@@ -573,7 +573,10 @@ function handstand(o: HsOpts): Fig {
       const kp = ease(clamp01(p / 0.4)), hp = ease(clamp01((p - 0.3) / 0.7));
       const th = a + lerp(0, 115, hp), K = P(H, 41, th);
       sc.mark("hip", H);
-      sc.line([H, K, P(K, 39, th - lerp(0, 145, kp))], COL.B, 8);
+      // r3 (illustrator): the thigh is a grey 6 px limb and only the shin is the orange side, as on the floor figures.
+      const foot = P(K, 39, th - lerp(0, 145, kp));
+      sc.line([H, K], BODY, 6);
+      sc.line([K, foot], COL.B, 8);
     } else {
       const F = P(H, LEG, a);
       sc.mark("hand", hand); sc.mark("shoulder", S); sc.mark("hip", H); sc.mark("foot", F);
@@ -614,7 +617,8 @@ function wristFig(fingers: boolean, label: string): Fig {
     sc.line([hand, S], COL.B, 8);
     if (fingers) {
       const base: Pt = [hand[0] + 2, 167];
-      sc.line([[hand[0] - 14, 167], base, P(base, 14, -lerp(0, 40, p))], BODY, 4);
+      sc.line([[hand[0] - 14, 167], base], BODY, 4);
+      sc.line([base, P(base, 14, -lerp(0, 40, p))], ACCENT, 4);   // r3: the lifted fingers are the accent
     } else sc.line([[hand[0] - 14, 167], [hand[0] + 14, 167]], BODY, 4);
     if (!fingers) sc.ring(hand, 9, COL.B, 2, p);
     return label;
@@ -627,17 +631,16 @@ function wristFig(fingers: boolean, label: string): Fig {
  * (the hand pivots up about the wrist, palm facing up, marked with a short tick) over 3 s and returns in 1 s.
  */
 function wristBackFig(): Fig {
-  return { kind: "move", dur: 4500, k: [0.02, 0.69, 0.71, 0.93], sided: false, build(sc, _s, p) {
-    const hand: Pt = [208, 166], arm = ARM80[0] + ARM80[1], S = P(hand, arm, -90), K: Pt = [152, 160], H = ik(K, S, 41, 56, true);
+  return { kind: "move", dur: 4500, k: [0.02, 0.687, 0.722, 0.944], sided: false, build(sc, _s, p) {
+    // r3: the shoulders drift 3 px forward over the hands while the wrist extends (the load goes onto the knuckles).
+    const hand: Pt = [208, 166], arm = ARM80[0] + ARM80[1], S = P(hand, arm, -90 + (Math.asin(3 / arm) * 180 / Math.PI) * p), K: Pt = [152, 160], H = ik(K, S, 41, 56, true);
     sc.floor();
     sc.line([[K[0] - 39, 166], K, H], BODY, 8);
     sc.line([H, S], BODY, TORSO);
     sc.dot(add(S, [16, -8]), 11, BODY);
     sc.line([hand, S], COL.B, 8);
-    const tip = P(hand, 16, 180 + lerp(0, 65, p));
-    sc.line([hand, tip], BODY, 4);
-    // Palm side: a short tick on the face of the hand that points up (away from the floor).
-    sc.line([lerpP(hand, tip, 0.45), P(lerpP(hand, tip, 0.45), 5, 90 + lerp(0, 65, p))], ACCENT, 3);
+    // r3: the hand is a 11 px accented segment so the 0 to 65 deg lift reads at 144 px and in the thumbnail.
+    sc.line([hand, P(hand, 11, 180 + lerp(0, 65, p))], ACCENT, 4);
     return "Wrist push-ups, palms up: kneeling with the backs of the hands flat on the floor, fingers pointing toward the knees; press slowly onto the knuckles for three seconds, then ease back in one";
   } };
 }
@@ -761,7 +764,7 @@ const AD_FIGS: Record<string, Fig> = {
     const arm = ARM80[0] + ARM80[1], STEP = 24;
     const hand = (q: number): Pt => {
       const st = stride(q, 0.55);
-      return st.stance ? [lerp(180 + STEP / 2, 180 - STEP / 2, st.u), 168] : [lerp(180 - STEP / 2, 180 + STEP / 2, swingPos(st.u, 0.55)), 168 - Math.sin(st.u * Math.PI) * 5];
+      return st.stance ? [lerp(180 + STEP / 2, 180 - STEP / 2, st.u), 168] : [lerp(180 - STEP / 2, 180 + STEP / 2, swingPos(st.u, 0.55)), 168 - Math.sin(st.u * Math.PI) * 9];
     };
     const near = hand(p), far = hand(p + 0.5);
     const lean = 2 + 1 * Math.cos(4 * Math.PI * (p - 0.275)), a = -90 + lean;
@@ -770,13 +773,16 @@ const AD_FIGS: Record<string, Fig> = {
     const planted = [near, far].filter((h) => h[1] > 167.9), dx = Math.max(...planted.map((h) => Math.abs(h[0] - sx)));
     const S: Pt = [sx, 168 - Math.sqrt(arm * arm - dx * dx)];
     // Weight shift: the hips drift 3 px toward the step as the lean peaks (r2 animator), the legs scissor ~12 deg.
-    const H = add(P(S, 56, a), [1.5 + 1.5 * Math.cos(4 * Math.PI * (p - 0.275)), 0]);
+    // r3 (biomechanist): over the 0.4 s before each lift (0.11 of the cycle) the hip also counter-drifts 3.5 px toward the
+    // hand that stays planted, and lets go once the other hand is off the floor.
+    const v = (p - 0.05 + 1) % 0.5, wl = v >= 0.389 ? ease((v - 0.389) / 0.111) : v < 0.1 ? 1 - ease(v / 0.1) : 0;
+    const H = add(P(S, 56, a), [1.5 + 1.5 * Math.cos(4 * Math.PI * (p - 0.275)) - 3.5 * wl, 0]);
     const split = 12 * Math.sin(2 * Math.PI * p);
     // A walking hand leaves the floor with a locked elbow: the arm hangs from the shoulder, which lifts up to
     // 7 px on the free side (shoulder-girdle elevation), so the elbow never closes past ~165 (r2 trainer).
     const armOf = (h: Pt): Pt[] => {
       const ddx = h[0] - S[0], need = Math.sqrt(Math.max(0, 61.8 * 61.8 - ddx * ddx)) - (h[1] - S[1]);
-      const So: Pt = [S[0], S[1] - clamp01(need / 7) * 7];
+      const So: Pt = [S[0], S[1] - clamp01(need / 9) * 9];
       return [So, ikSide(So, h, ARM80[0], ARM80[1], 1), h];
     };
     sc.floor();
@@ -796,8 +802,10 @@ const AD_FIGS: Record<string, Fig> = {
     // r2: front knee ~112 (was 129) with the hands 6 px further forward, so the hips start lower and the body
     // reads as a real lunge; the push foot sits under the hip; a 6 px countdown dip precedes the kick.
     const arm = ARM80[0] + ARM80[1], hand: Pt = [196, 168];
-    const S0 = P(hand, arm, -110), S1 = P(hand, arm, -90), F: Pt = [120, 166];
-    const kd = Math.sqrt(41 * 41 + 39 * 39 - 2 * 41 * 39 * Math.cos(112 * Math.PI / 180)), H0 = circleHit(F, kd, S0, 56);
+    // r3 (biomechanist): knee 125 and the arm leaning from -132 deg put the hips 25 px above the shoulders at the start (trunk ~62);
+    // the shoulder travels on its arc about the hand (arm length stays 62), not along a chord.
+    const SA = (g: number): Pt => P(hand, arm, lerp(-132, -90, g)), S0 = SA(0), F: Pt = [120, 166];
+    const kd = Math.sqrt(41 * 41 + 39 * 39 - 2 * 41 * 39 * Math.cos(125 * Math.PI / 180)), H0 = circleHit(F, kd, S0, 56);
     const D = Math.PI / 180, ph0 = Math.atan2(H0[1] - S0[1], H0[0] - S0[0]) / D + 360;   // hips behind and a little above the shoulders
     const kick = (x: number) => clamp01(x), r = (x: number) => ease(clamp01(x));
     let g: number, back = 0;
@@ -807,7 +815,7 @@ const AD_FIGS: Record<string, Fig> = {
     else if (p < 0.93) { back = TEMPO.control(kick((p - 0.47) / 0.46)); g = 1 - back; }
     else g = 0;
     const dip = p < 0.05 ? 6.3 * Math.sin((Math.PI / 2) * (p / 0.05)) : p < 0.09 ? 6.3 * (1 - ease((p - 0.05) / 0.04)) : 0;
-    const S = lerpP(S0, S1, g), phi = (lerp(ph0, 270, g) - dip) * D, H: Pt = [S[0] + 56 * Math.cos(phi), S[1] + 56 * Math.sin(phi)];
+    const S = SA(g), phi = (lerp(ph0, 270, g) - dip) * D, H: Pt = [S[0] + 56 * Math.cos(phi), S[1] + 56 * Math.sin(phi)];
     const swing = P(H, LEG, lerp(155, 268, g));
     // Push foot: planted until the hip is a leg's length away, then it follows the hip up (or, coming down, lands last).
     const dF = Math.hypot(H[0] - F[0], H[1] - F[1]);
@@ -818,9 +826,9 @@ const AD_FIGS: Record<string, Fig> = {
     } else if (dF <= 78.5) push = F;
     else {
       // r2: how far the push leg has travelled from the floor to the stack; reuse the swing leg's progress after the foot leaves.
-      let gL = 0; for (let i = 0; i <= 100; i++) { const gg = i / 100, SS = lerpP(S0, S1, gg), ff = lerp(ph0, 270, gg) * D; if (Math.hypot(SS[0] + 56 * Math.cos(ff) - F[0], SS[1] + 56 * Math.sin(ff) - F[1]) > 78.5) { gL = gg; break; } }
-      const r2 = clamp01((g - gL) / (1 - gL)), SL = lerpP(S0, S1, gL), fl = lerp(ph0, 270, gL) * D, HL: Pt = [SL[0] + 56 * Math.cos(fl), SL[1] + 56 * Math.sin(fl)];
-      const dirL = Math.atan2(F[1] - HL[1], F[0] - HL[0]) / D, dir = lerp(dirL, 268, ease(r2));
+      let gL = 0; for (let i = 0; i <= 100; i++) { const gg = i / 100, SS = SA(gg), ff = lerp(ph0, 270, gg) * D; if (Math.hypot(SS[0] + 56 * Math.cos(ff) - F[0], SS[1] + 56 * Math.sin(ff) - F[1]) > 78.5) { gL = gg; break; } }
+      const r2 = clamp01((g - gL) / (1 - gL)), SL = SA(gL), fl = lerp(ph0, 270, gL) * D, HL: Pt = [SL[0] + 56 * Math.cos(fl), SL[1] + 56 * Math.sin(fl)];
+      const dirL = Math.atan2(F[1] - HL[1], F[0] - HL[0]) / D, dir = lerp(dirL, 268, ease(r2)) - 2 * ease(r2) * (1 - clamp01((p - 0.17) / 0.3));   // r3: the second leg keeps drifting in over the hold, no stop
       push = P(H, 79 - 16 * Math.sin(Math.PI * r2), dir);
     }
     sc.floor();
