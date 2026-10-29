@@ -1,18 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-
-const sans = Inter({
-  variable: "--font-sans",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const mono = JetBrains_Mono({
-  variable: "--font-mono",
-  subsets: ["latin"],
-  display: "swap",
-});
+import { inter as sans, jetbrainsMono as mono } from "./fonts";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://terav.fit"),

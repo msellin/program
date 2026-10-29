@@ -4,7 +4,7 @@ import { AuthGate } from "@/components/AuthGate";
 import { AppShell } from "@/components/AppShell";
 import "./globals.css";
 import { SPLASH_SCREENS } from "@/lib/brand-splash";
-import { sans, mono } from "./fonts";
+import { inter as sans, jetbrainsMono as mono } from "./fonts";
 
 // P1-26 — Inter 700 dropped; one fewer woff2 per subset.
 // 2026-09-01: the original note said `font-bold` was "only used on font-mono",
