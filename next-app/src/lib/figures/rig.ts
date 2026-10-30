@@ -507,10 +507,11 @@ function wallExit(sc: Scene, praw: number, mat: boolean) {
   const kf = (v: number[], t: number[], x: number, e: (q: number) => number = TEMPO.control) => { let i = 0; while (i < t.length - 2 && x > t[i + 1]) i++; return lerp(v[i], v[i + 1], e(clamp01((x - t[i]) / (t[i + 1] - t[i])))); };
   const D = Math.PI / 180, A: Pt = [166, 168], B: Pt = [192, 168], arm = ARM80[0] + ARM80[1], SH = 13, STAND = mat ? 78 : 74;
   // matfall: a quicker tip and a deeper fold (a soft, low landing); cartwheel: straighter legs, a wider straddle, a slower wheel.
-  const T = mat ? [0, 0.12, 0.45, 0.66, 1] :[0, 0.12, 0.58, 0.82, 1], DL = mat ? 70 : 96, DT = mat ? 30 : -35, BEND = mat ? 0.45 : 0.4, GAP = mat ? 28 : 52;
+  const T = mat ? [0, 0.12, 0.48, 0.67, 1] :[0, 0.12, 0.58, 0.82, 1], DL = mat ? 58 : 96, DT = mat ? 30 : -35, BEND = mat ? 0.45 : 0.4, GAP = mat ? 28 : 52;
+  const LIN = mat ? 0.7 : 0.4;
   const rig = (x: number) => {
     // matfall: the 90 -> 180 span accelerates (a short ease-in, gravity taking the tip); the foot contact is the soft settle
-    const psi = mat && x > T[2] && x < T[3] ? lerp(90, 180, Math.pow(clamp01((x - T[2]) / (T[3] - T[2])), 1.6)) : kf([0, 0, 90, 180, 180], T, x), r = psi * D;
+    const psi = mat && x > T[2] && x < T[3] ? lerp(90, 180, Math.pow(clamp01((x - T[2]) / (T[3] - T[2])), 1.6)) : x > T[1] && x <= T[2] ? 90 * (LIN * clamp01((x - T[1]) / (T[2] - T[1])) + (1 - LIN) * TEMPO.control(clamp01((x - T[1]) / (T[2] - T[1])))) : kf([0, 0, 90, 180, 180], T, x), r = psi * D;   // r4: the 0 -> 90 turn is a flatter ease (35% linear) so the foot swing stays under 6 px/frame
     const Sc = add(P(A, arm, -90 + 0.15 * psi), [SH * Math.cos(r), SH * Math.sin(r)]);
     const Hc = P(Sc, 56, psi - 90), dl = DL * Math.sin(r), dt = DT * Math.sin(r);
     const Hp = add(Hc, [9 * Math.cos(r), 9 * Math.sin(r)]), Hm = add(Hc, [-9 * Math.cos(r), -9 * Math.sin(r)]);
@@ -520,12 +521,12 @@ function wallExit(sc: Scene, praw: number, mat: boolean) {
   let p1 = 1, p2 = 1;
   for (let i = 0; i <= 400; i++) { const x = i / 400, g = rig(x); if (p1 === 1 && g.F1[1] >= 166) p1 = x; if (p1 < 1 && p2 === 1 && x > p1 && g.F2[1] >= 166) p2 = x; }
   // Dwell beats (>= 195 ms each): hold at the first foot contact and again on the final stand. The ring runs on real time.
-  const HOLD = 0.03, pE = Math.max(p1 + 0.22, p2, T[3]) + 0.02;
-  const p = praw <= p1 ? praw : praw <= p1 + HOLD ? p1 : Math.min(praw - HOLD, pE);
+  const HOLD = 0.03, pE = Math.max(p1 + 0.25, p2, T[3]) + 0.02;
+  const p = praw <= p1 ? praw : praw <= p1 + HOLD ? p1 : Math.min(p1 + (praw - HOLD - p1) * 0.85, pE);   // r4: after the first foot contact the rig runs at 0.85 x, so the landing and the stand-up are ~18% longer
   const g = rig(p), g1 = rig(p1), g2 = rig(p2);
   const fx1 = g1.F1[0], fx2 = Math.max(g2.F2[0], fx1 + GAP);
   const Hend: Pt = [(fx1 + fx2) / 2, 166 - STAND];
-  const w1 = ease(clamp01((p - p1) / 0.22));
+  const w1 = ease(clamp01((p - p1) / 0.25));
   const r = g.psi * D, ux = Math.cos(r), uy = Math.sin(r);
   const toward = (s: Pt, t: Pt, len: number): Pt => { const d = Math.hypot(t[0] - s[0], t[1] - s[1]) || 1, m = Math.min(len, d); return [s[0] + (t[0] - s[0]) / d * m, s[1] + (t[1] - s[1]) / d * m]; };
   const pin = (h: Pt, f: Pt): Pt => { const dx = h[0] - f[0], dy = h[1] - 166, dd = Math.hypot(dx, dy); return dd > 79 ? [f[0] + dx / dd * 79, 166 + dy / dd * 79] : h; };
@@ -539,7 +540,7 @@ function wallExit(sc: Scene, praw: number, mat: boolean) {
   let F2: Pt = g.F2;
   if (p >= p2) F2 = [fx2, 166];
   else if (p > p1) {
-    const rel: Pt = add(Hm, [g.F2[0] - g.Hm[0], g.F2[1] - g.Hm[1]]), uq = (p - p1) / (p2 - p1), u = 0.5 * uq + 0.5 * ease(uq);   // a flatter ease keeps the swing under 6 px/frame
+    const rel: Pt = add(Hm, [g.F2[0] - g.Hm[0], g.F2[1] - g.Hm[1]]), uq = (p - p1) / (p2 - p1), u = 0.7 * uq + 0.3 * ease(uq);   // a flatter ease keeps the swing under 6 px/frame
     F2 = lerpP(rel, [fx2, 166], u);
     F2 = toward(Hm, [F2[0], Math.min(F2[1], 166)], 79.9);
   }
@@ -1054,12 +1055,12 @@ const AD_FIGS: Record<string, Fig> = {
     sc.line([[hand[0] - 2, 167], [hand[0] + 13, 167]], COL.B, 5);
     return "Straddle L stand, straight-arm version (forearms optional): hands on the floor with straight arms, shoulders over the hands, hips high and the legs out wide in front at hip height; push the floor away and keep the legs lifted";
   } },
-  crowroll: { kind: "gait", dur: 5000, k: [0, 1, 1], poster: 0.42, sided: false, scale: 1.1, fade: [0.96, 0.985], build(sc, _s, p) {
+  crowroll: { kind: "gait", dur: 5000, k: [0, 1, 1], poster: 0.42, sided: false, scale: 1.26, fade: [0.96, 0.985], build(sc, _s, p) {
     // Crow (hands planted, knees on the backs of the upper arms, feet off the floor); the chin tucks and the hips
     // rise over the shoulders (controlled, 1.4 s); the upper back rolls over the mat while the hands stay planted
     // until the shoulders have passed; then on to the back with the knees tucked and the hands to the shins.
     // Forward kinematics: every segment keeps its length (trunk 56, thigh 41, shin 39, ARM80 arms).
-    const kf = (v: number[], t: number[]) => { let i = 0; while (i < t.length - 2 && p > t[i + 1]) i++; return lerp(v[i], v[i + 1], TEMPO.control(clamp01((p - t[i]) / (t[i + 1] - t[i])))); };
+    const kf = (v: number[], t: number[]) => { let i = 0; while (i < t.length - 2 && p > t[i + 1]) i++; const q = clamp01((p - t[i]) / (t[i + 1] - t[i])); return lerp(v[i], v[i + 1], 0.2 * q + 0.8 * TEMPO.control(q)); };   // r4: 20% linear, one more ease on the roll-over
     // r4 (65): the crow holds 0.6 s; the chin leads the hips by 0.3 s; the roll passes vertical (trunk at -95 at
     // p .5) and carries on to the back; the knees overshoot 8 degrees on landing and settle back by p .84.
     const T = [0, 0.12, 0.3, 0.5, 0.84, 0.92, 1];   // r5: the roll-over leg is one ease longer (0.5 -> 0.84) to stay under 5 px/frame
@@ -1067,7 +1068,7 @@ const AD_FIGS: Record<string, Fig> = {
     const tau = kf([-165, -165, -130, -95, 0, 0, 0], T), th = kf([25, 25, 55, 40, -118, -110, -110], T), sh = kf([165, 165, 160, 140, 66, 60, 60], T), eta = kf([5, 5, 60, -20, -170, -170], [0, 0.06, 0.26, 0.5, 0.84, 1]);
     const YM = 160, HA: Pt = [168, YM], H = P(S, 56, tau), K = P(H, 41, th), F = P(K, 39, sh), head = P(S, 17, eta);
     const d = Math.hypot(K[0] - S[0], K[1] - S[1]) || 1, rs = Math.min(58, d);
-    const hand = lerpP(HA, [S[0] + (K[0] - S[0]) / d * rs, S[1] + (K[1] - S[1]) / d * rs], ease(clamp01((p - 0.42) / 0.42)));
+    const hand = lerpP(HA, [S[0] + (K[0] - S[0]) / d * rs, S[1] + (K[1] - S[1]) / d * rs], ((q) => 0.4 * q + 0.6 * ease(q))(clamp01((p - 0.42) / 0.42)));
     sc.mark("hand", hand); sc.mark("hip", H);
     sc.floor();
     sc.box(120, YM, 298, 168);
