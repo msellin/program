@@ -215,3 +215,21 @@ describe("handstand family (trainer lane, 2026-10-29)", () => {
     expect(sh(4000 * 0.4) - sh(0)).toBeGreaterThan(1); expect(sh(4000 * 0.4) - sh(0)).toBeLessThan(2.5);
   });
 });
+
+describe("hand-balance lane additions: new figures keep constant segment lengths", () => {
+  it("finger-tap and L-stand arms are ARM80 long; crow-roll and mat-fall legs never stretch", () => {
+    const d = (a: number[], b: number[]) => Math.hypot(a[0] - b[0], a[1] - b[1]);
+    for (const id of ["fingertaps", "elbowstand"])
+      for (const t of [0, 700, 1500, 2500, 3500]) {
+        const arms = used(id, t).filter((s) => s.w === 8 && pts(s.pts).length === 2 && d(pts(s.pts)[0], pts(s.pts)[1]) > 50);
+        expect(arms.length, id).toBeGreaterThan(0);
+        for (const a of arms.filter((s) => s.color === ACCENT)) expect(d(pts(a.pts)[0], pts(a.pts)[1])).toBeCloseTo(62, 0);
+      }
+    for (const id of ["crowroll", "matfall"])
+      for (let i = 0; i < 20; i++) {
+        const leg = used(id, (i / 20) * T(id)).find((s) => s.w === 8 && s.color === FIGURE_COLORS.BODY && pts(s.pts).length === 3)!;
+        const [H, K, F] = pts(leg.pts);
+        expect(d(H, K), id).toBeCloseTo(41, 0); expect(d(K, F), id).toBeCloseTo(39, 0);
+      }
+  });
+});
