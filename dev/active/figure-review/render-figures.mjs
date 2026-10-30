@@ -45,7 +45,10 @@ function figSvg(f, x, y, w, h, bg, id, side, zoom = 1, fit = "cycle") {
   return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6" fill="${bg}"/><svg x="${x}" y="${y}" width="${w}" height="${h}" viewBox="${box.x} ${box.y} ${box.w} ${box.h}"><g transform="${f.tf}">${floor}${polys}${badges}</g></svg>`;
 }
 
+// FRAMES=N: N frames evenly over the whole cycle (both reps of a move2, 12 s of a hold), for judging timing.
+const NF = Number(process.env.FRAMES) || 0;
 function times(fig) {
+  if (NF) { const span = fig.kind === "hold" ? 12000 : fig.dur; return Array.from({ length: NF }, (_, i) => Math.round((i * span) / NF)); }
   if (fig.kind === "hold") return [0, 300, 2000];
   const dur = fig.kind === "move2" ? fig.dur / 2 : fig.dur, k = fig.k;
   // A gait's k is [0, 1, 1], which put three of four frames on the cycle's zero crossings (0, 1.01, 1.0) and hid
@@ -57,7 +60,7 @@ function times(fig) {
 }
 
 async function sheet(name, ids) {
-  const FW = 268, FH = 151, rowH = FH + 34, cols = 9;
+  const FW = 268, FH = 151, rowH = FH + 34, cols = Math.max(9, NF + 1);
   const W = 16 + cols * (FW + 10) + 2 * 112 + 2 * 288 + 40;
   let body = "", y = 10;
   for (const id of ids) {
