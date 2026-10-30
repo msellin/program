@@ -500,26 +500,31 @@ const ARM80: [number, number] = [32, 30];   // bar and handstand figures, leg 80
  * feet and the shoulders follow on the trunk line. Segments keep their length every frame; knees and elbows
  * sit on a fixed side of each limb (ikFixed), so nothing flips as the body passes through horizontal.
  */
-function wallExit(sc: Scene, p: number, mat: boolean) {
+function wallExit(sc: Scene, praw: number, mat: boolean) {
   const kf = (v: number[], t: number[], x: number, e: (q: number) => number = TEMPO.control) => { let i = 0; while (i < t.length - 2 && x > t[i + 1]) i++; return lerp(v[i], v[i + 1], e(clamp01((x - t[i]) / (t[i + 1] - t[i])))); };
-  const D = Math.PI / 180, A: Pt = [166, 168], B: Pt = [192, 168], arm = ARM80[0] + ARM80[1], SH = 13, STAND = 78;
+  const D = Math.PI / 180, A: Pt = [166, 168], B: Pt = [192, 168], arm = ARM80[0] + ARM80[1], SH = 13, STAND = mat ? 78 : 74;
+  // matfall: a quicker tip and a deeper fold (a soft, low landing); cartwheel: straighter legs, a wider straddle, a slower wheel.
+  const T = mat ? [0, 0.12, 0.45, 0.62, 1] : [0, 0.12, 0.52, 0.8, 1], DL = mat ? 80 : 110, DT = mat ? 30 : -35, BEND = mat ? 0.45 : 0.78, GAP = mat ? 28 : 44;
   const rig = (x: number) => {
-    const psi = kf([0, 0, 90, 180, 180], [0, 0.12, 0.5, 0.8, 1], x), r = psi * D;
+    const psi = kf([0, 0, 90, 180, 180], T, x), r = psi * D;
     const Sc = add(P(A, arm, -90 + 0.15 * psi), [SH * Math.cos(r), SH * Math.sin(r)]);
-    const Hc = P(Sc, 56, psi - 90), dl = 110 * Math.sin(r), dt = 40 * Math.sin(r);
+    const Hc = P(Sc, 56, psi - 90), dl = DL * Math.sin(r), dt = DT * Math.sin(r);
     const Hp = add(Hc, [9 * Math.cos(r), 9 * Math.sin(r)]), Hm = add(Hc, [-9 * Math.cos(r), -9 * Math.sin(r)]);
-    const bend = lerp(1, 0.55, ease(clamp01((psi - 20) / 60)));   // the knees bend early and the legs fold as they come down
+    const bend = lerp(1, BEND, ease(clamp01((psi - 20) / 60)));   // the knees bend early and the legs fold as they come down
     return { psi, Sc, Hc, Hm, F1: P(Hp, LEG * bend, psi - 90 + dl), F2: P(Hm, LEG * bend, psi - 90 + dt) };
   };
   let p1 = 1, p2 = 1;
   for (let i = 0; i <= 400; i++) { const x = i / 400, g = rig(x); if (p1 === 1 && g.F1[1] >= 166) p1 = x; if (p1 < 1 && p2 === 1 && x > p1 && g.F2[1] >= 166) p2 = x; }
+  // Dwell beats (>= 195 ms each): hold at the first foot contact and again on the final stand. The ring runs on real time.
+  const HOLD = 0.03, pE = Math.max(p1 + 0.22, p2, T[3]) + 0.02;
+  const p = praw <= p1 ? praw : praw <= p1 + HOLD ? p1 : Math.min(praw - HOLD, pE);
   const g = rig(p), g1 = rig(p1), g2 = rig(p2);
-  const fx1 = g1.F1[0], fx2 = Math.max(g2.F2[0], fx1 + 28);
+  const fx1 = g1.F1[0], fx2 = Math.max(g2.F2[0], fx1 + GAP);
   const Hend: Pt = [(fx1 + fx2) / 2, 166 - STAND];
   const w1 = ease(clamp01((p - p1) / 0.22));
   const r = g.psi * D, ux = Math.cos(r), uy = Math.sin(r);
   const toward = (s: Pt, t: Pt, len: number): Pt => { const d = Math.hypot(t[0] - s[0], t[1] - s[1]) || 1, m = Math.min(len, d); return [s[0] + (t[0] - s[0]) / d * m, s[1] + (t[1] - s[1]) / d * m]; };
-  const pin = (h: Pt, f: Pt): Pt => { const dx = h[0] - f[0], dy = h[1] - 166, dd = Math.hypot(dx, dy); return dd > STAND ? [f[0] + dx / dd * STAND, 166 + dy / dd * STAND] : h; };
+  const pin = (h: Pt, f: Pt): Pt => { const dx = h[0] - f[0], dy = h[1] - 166, dd = Math.hypot(dx, dy); return dd > 79 ? [f[0] + dx / dd * 79, 166 + dy / dd * 79] : h; };
   let Hc: Pt = p > p1 ? lerpP(g.Hc, Hend, w1) : g.Hc;
   if (p > p1) Hc = pin(Hc, [fx1, 166]);
   if (p > p2) Hc = pin(Hc, [fx2, 166]);
@@ -547,15 +552,16 @@ function wallExit(sc: Scene, p: number, mat: boolean) {
   const handA = p < pRel ? A : hang(shm, A, -1, ease(clamp01((p - pRel) / 0.15)));
   const handB = hang(shp, B, 1, ease(clamp01((p - 0.12) / 0.14)));
   sc.floor();
-  if (mat) sc.box(fx1 - 26, 163, fx2 + 34, 168);
-  sc.line([Hm, ikFixed(Hm, F2, 41, 39, -1), F2], FAR, 8);
+  if (mat) sc.box(fx1 - 25, 162, fx2 + 52, 168);
+  // Near leg BODY, far leg a darker grey: ~3.2:1 between them so the legs stay two legs at 56x40.
+  sc.line([Hm, ikFixed(Hm, F2, 41, 39, -1), F2], "#686e7a", 8);
   sc.line([Hp, ikFixed(Hp, F1, 41, 39, 1), F1], BODY, 8);
   sc.line([Sc, Hc], BODY, TORSO);
   sc.line([shm, shp], BODY, 8);
   sc.dot(head, 11, BODY);
   sc.line([shm, ikFixed(shm, handA, ARM80[0], ARM80[1], 1), handA], COL.B, 8);
   sc.line([shp, ikFixed(shp, handB, ARM80[0], ARM80[1], -1), handB], COL.B, 8);
-  if (mat && p >= p1 && p < p1 + 0.1) { const u = (p - p1) / 0.1; sc.ring(add(head, [10, -6]), 7 + 13 * u, ACCENT, 2, 1 - u); }
+  if (mat && praw >= p1 && praw < p1 + 0.1) { const u = (praw - p1) / 0.1; sc.ring(add(head, [10, -6]), 7 + 13 * u, ACCENT, 2, 1 - u); }
 }
 
 /** Arm length of a LYING figure (leg 62 + 58 = 120, so 0.78 x 120): the old 70-78 was ~18% short. */
@@ -1045,7 +1051,7 @@ const AD_FIGS: Record<string, Fig> = {
     sc.line([S, ikFixed(S, hand, ARM80[0], ARM80[1], 1), hand], COL.B, 8);
     return "Crow roll: from crow, knees on the backs of the upper arms and feet off the floor, tuck the chin, let the hips rise over the shoulders and roll forward over the upper back onto the mat, finishing on the back with the knees tucked";
   } },
-  matfall: { kind: "gait", dur: 6500, k: [0, 1, 1], poster: 0.4, sided: false, front: true, scale: 0.75, fade: [0.965, 0.985], build(sc, _s, p) {
+  matfall: { kind: "gait", dur: 6500, k: [0, 1, 1], poster: 0.42, sided: false, front: true, scale: 0.85, fade: [0.965, 0.985], build(sc, _s, p) {
     // A deliberate fall off a chest-to-wall handstand, taken as the SIDE exit (the wall is behind the camera,
     // the chest toward it): the lead hand lifts, the body turns over the other arm, the feet land on the mat
     // one at a time and the body stands up (wallExit). Facing the wall there is no safe backward exit, and the
@@ -1053,7 +1059,7 @@ const AD_FIGS: Record<string, Fig> = {
     wallExit(sc, p, true);
     return "Fall onto a mat, side exit: from a chest-to-wall handstand lift one hand, turn the body over the other arm and land on the mat on one foot, then the other; breathe out on landing and stand up";
   } },
-  cartwheel: { kind: "gait", dur: 6500, k: [0, 1, 1], poster: 0.04, sided: false, front: true, scale: 0.75, fade: [0.965, 0.985], build(sc, _s, p) {
+  cartwheel: { kind: "gait", dur: 6500, k: [0, 1, 1], poster: 0.26, sided: false, front: true, scale: 0.85, fade: [0.965, 0.985], build(sc, _s, p) {
     // Wall cartwheel exit seen from the front (the wall is behind the camera, the chest toward it): from the
     // handstand the lead hand lifts, the body turns over the other hand and the legs come down one at a time,
     // piked, to land 55-65 px (about 60 cm) from it, a wide stance, then the body stands up (wallExit).
