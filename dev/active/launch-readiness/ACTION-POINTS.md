@@ -126,7 +126,7 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 |----|--------|------|-----|--------|--------|
 | B-01 | A separate Terav Stripe account under the owner's login; Stripe Tax on | S | O | S | O5 |
 | B-02 | Products/prices (€9.99/€89), Customer Portal, webhook endpoint via Stripe CLI (test mode → owner flips to live) | S | A+O | S | O5 |
-| B-03 | `entitlements()`, a 14-day Pro reverse trial at sign-up, webhook → `tier`, per-user multi-focus, history/report gates, trial-end email | S | A | L (1–1.5 d) | free-tier-design |
+| B-03 (owner 2026-10-30: build after M-06 is read) | `entitlements()`, a 14-day Pro reverse trial at sign-up, webhook → `tier`, per-user multi-focus, history/report gates, trial-end email | S | A | L (1–1.5 d) | free-tier-design |
 | B-04 | Upgrade moments (trial day 12, program end, history >30 d, retest report) | S | A | M | free-tier-design |
 | B-05 | Accountant: EU VAT / OSS | S | O | — | O7 |
 
