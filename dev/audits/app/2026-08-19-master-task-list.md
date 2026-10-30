@@ -1,5 +1,10 @@
 # Master open-task list — Terav app
 
+<!-- SUPERSEDED-BY: dev/active/ROADMAP.md -->
+> **Not maintained since 2026-10-30.** The one task list is `dev/active/ROADMAP.md`. Every open item here was
+> checked against the code (`dev/active/roadmap-reconcile/`) and the live ones moved there. Statuses below are history.
+
+
 **Synth date:** 2026-08-19  ·  **Sources reconciled:** every 2026-08-17 / 08-18 / 08-19 audit + `dev/active/session-audit-2026-08-17/backlog.md` + `dev/active/post-audit-p0s/tasks.md` + `dev/active/product-concerns-2026-08-17/roadmap.md` + persona harness manifests.
 **Batch 16 filter applied:** items about Profile identity chip, footer collapse + Danger zone, Week padding + Programs pill off header, or 32px H1s were shipped and removed from the open list — see the closed-items appendix at the bottom.
 **Harness state:** persona artifacts refreshed 2026-08-19 15:02-15:12 (post-Batch-22, 15/15 personas passed against app.terav.fit). Cross-references reflect current UI.

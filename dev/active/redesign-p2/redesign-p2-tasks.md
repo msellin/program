@@ -1,12 +1,17 @@
 # Redesign P2: tasks
+
+<!-- SUPERSEDED-BY: dev/active/ROADMAP.md -->
+> **Not maintained since 2026-10-30.** The one task list is `dev/active/ROADMAP.md`. Every open item here was
+> checked against the code (`dev/active/roadmap-reconcile/`) and the live ones moved there. Statuses below are history.
+
 - [x] L1 Today hero first; one check prompt; day-1 hero; plain proposal "because" copy
 - [x] L2 Brief follow-along as compact rows with figures; short titles; content clears footer
 - [x] L3 Sticky bars never cover content at first view; 44px text links; line-strong chip borders
 - [x] L4 Quick start: Continue hint, no mid-word hyphenation, shorter safety questions
 - [x] L5 One duration source; plan and program page agree with the brief
 - [x] L6 Harness: session-done capture, activity selector, rest-day check
-- [ ] Lead: wire duration, verify, walkthroughs, deploy
-- [ ] Re-shoot + rescore (1–10)
+- [x] Lead: wire duration, verify, walkthroughs, deploy
+- [x] Re-shoot + rescore (1–10) (d92e032)
 
 ## Found during P2 (2026-10-28): guided sessions could not be finished
 The new session-done capture could not reach the done screen. Three defects, all live before P2:

@@ -1,5 +1,10 @@
 # Launch readiness — tasks
 
+<!-- SUPERSEDED-BY: dev/active/ROADMAP.md -->
+> **Not maintained since 2026-10-30.** The one task list is `dev/active/ROADMAP.md`. Every open item here was
+> checked against the code (`dev/active/roadmap-reconcile/`) and the live ones moved there. Statuses below are history.
+
+
 - [x] Read brief + CLAUDE.md
 - [x] Commit brief
 - [x] Write plan / context / tasks
@@ -28,8 +33,8 @@
 - [x] Fresh persona run (23/24 pass) + exploratory app audit x01–x13 (Haiku) + findings-app (Sonnet verify) + findings-design (design lead)
 - [x] personal-separation.md, findings-evidence-angle.md
 - [x] ACTION-POINTS.md (master register) + HACKATHON.md (1-day roadmap)
-- [ ] Hackathon on the new account  ← next
-- [ ] Build sprint B1-B11 (new account session)
+- [x] Hackathon on the new account (lanes A-C, 2026-10-27)
+- [x] Build sprint B1-B11 (see ACTION-POINTS ✓ rows)
 
 ## (superseded) Phase 0 — capture
 - [ ] Persona run against app.terav.fit

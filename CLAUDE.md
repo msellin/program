@@ -3,6 +3,8 @@
 Project context for Claude Code sessions in this repo.
 
 **Current state and next steps:** `dev/active/HANDOVER-2026-10-30.md` (read it first in a new session).
+**The one task list:** `dev/active/ROADMAP.md` (to the first paying user). Review rounds add rows there, never a
+new list; a list whose items moved there carries `<!-- SUPERSEDED-BY: dev/active/ROADMAP.md -->` and drops out of the index.
 
 ## What this is
 

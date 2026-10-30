@@ -1,5 +1,10 @@
 # August 19 app audit — what remains
 
+<!-- SUPERSEDED-BY: dev/active/ROADMAP.md -->
+> **Not maintained since 2026-10-30.** The one task list is `dev/active/ROADMAP.md`. Every open item here was
+> checked against the code (`dev/active/roadmap-reconcile/`) and the live ones moved there. Statuses below are history.
+
+
 > **Triaged 2026-09-08.** Every `- [ ]` in the original was checked against the
 > codebase, not against its own description. Result: **40 already done and
 > never ticked · 4 obsolete or superseded · 9 genuinely remaining.**

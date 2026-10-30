@@ -34,6 +34,8 @@ END = "<!-- TASK-INDEX:END -->"
 # workstream. Listing those would bury the real ones.
 MIN_ITEMS = 5
 
+SUPERSEDED = "<!-- SUPERSEDED-BY: dev/active/ROADMAP.md -->"
+
 MARKER = re.compile(r"^\s*- \[([ x~!])\]", re.M)
 
 
@@ -88,6 +90,11 @@ def build() -> str:
         # first triage pass INCREASE the backlog by 12, which is the clearest
         # possible sign that a number was measuring the wrong thing.
         if any(part in ("archive", "completed") for part in path.parts):
+            continue
+        # A list whose open items were checked and moved into ROADMAP.md
+        # (2026-10-30). Counting its leftover checkboxes reported 96 dead
+        # saas-launch items as open work.
+        if SUPERSEDED in path.read_text(encoding="utf-8", errors="replace"):
             continue
         c = counts(path)
         total = sum(c.values())

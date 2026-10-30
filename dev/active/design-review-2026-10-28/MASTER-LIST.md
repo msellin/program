@@ -1,5 +1,10 @@
 # MASTER LIST: design/defect review (2026-10-28)
 
+<!-- SUPERSEDED-BY: dev/active/ROADMAP.md -->
+> **Not maintained since 2026-10-30.** The one task list is `dev/active/ROADMAP.md`. Every open item here was
+> checked against the code (`dev/active/roadmap-reconcile/`) and the live ones moved there. Statuses below are history.
+
+
 Merged from the lead verdict, reviewers 01-06 and sweeps 01-05 (~494 raw findings). Severity: B ads-blocker, H fix this week, M soon, L polish. Status: VERIFIED (checked in code or extracts), CORROBORATED (2+ independent sources, not code-traced), UNVERIFIED, PARTIAL, DESIGN-DECISION. Kind: D = defect, VG = visual-gap (needs imagery or charts), D+VG both. Screens use the sweeps' paths (A = launch-readiness/screens/gaps/A-first-run, C = .../C-viewport-375|393, P = next-app/tests/e2e/artifacts/personas).
 
 **Read first: capture freshness.** 497 of the 3,438 persona PNGs predate Oct 2026 (Aug captures of retired routes) and ~895 predate Oct 28. About 70 raw sweep findings, including two raw B, cite Aug files. They sit under 'Needs recapture' and are not in the counts. The harness should delete orphaned captures (01-today, 02-week, 03-coach, 04-history, 05-progress, 12-extras, 15-events) so the next sweep cannot read them.

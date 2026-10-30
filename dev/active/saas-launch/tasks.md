@@ -1,5 +1,10 @@
 # SaaS Launch — Tasks
 
+<!-- SUPERSEDED-BY: dev/active/ROADMAP.md -->
+> **Not maintained since 2026-10-30.** The one task list is `dev/active/ROADMAP.md`. Every open item here was
+> checked against the code (`dev/active/roadmap-reconcile/`) and the live ones moved there. Statuses below are history.
+
+
 Checkbox list per phase. Mark done as we ship.
 
 **Reconciliation pass 2026-08-18:** Doc originally written when the plan was to

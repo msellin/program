@@ -1,5 +1,10 @@
 # SaaS Launch Plan
 
+<!-- SUPERSEDED-BY: dev/active/ROADMAP.md -->
+> **Not maintained since 2026-10-30.** The one task list is `dev/active/ROADMAP.md`. Every open item here was
+> checked against the code (`dev/active/roadmap-reconcile/`) and the live ones moved there. Statuses below are history.
+
+
 **Goal:** Turn the single-user rehab app into a freemium multi-user product that Margus's CrossFit gym members can beta-test within 4-6 weeks.
 
 ## 1. Product positioning (locked)

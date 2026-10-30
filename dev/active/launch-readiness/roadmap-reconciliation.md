@@ -1,5 +1,10 @@
 # Roadmap reconciliation (2026-10-27)
 
+<!-- SUPERSEDED-BY: dev/active/ROADMAP.md -->
+> **Not maintained since 2026-10-30.** The one task list is `dev/active/ROADMAP.md`. Every open item here was
+> checked against the code (`dev/active/roadmap-reconcile/`) and the live ones moved there. Statuses below are history.
+
+
 **Coverage:** a full pass this time, by 5 Haiku agents: `roadmap/r1` (OPEN-TASKS), `r2` (master list A–D), `r3`
 (master list E–H), `r4` (saas-launch, traffic, README, NEXT, whitepaper roadmap) and `r5` (in-flight
 workstreams). Code status was checked by grep, not by running tests.

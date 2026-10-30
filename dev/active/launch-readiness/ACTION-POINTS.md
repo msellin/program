@@ -1,5 +1,10 @@
 # Terav: master action-point register (2026-10-27)
 
+<!-- SUPERSEDED-BY: dev/active/ROADMAP.md -->
+> **Not maintained since 2026-10-30.** The one task list is `dev/active/ROADMAP.md`. Every open item here was
+> checked against the code (`dev/active/roadmap-reconcile/`) and the live ones moved there. Statuses below are history.
+
+
 Every action found by the launch-readiness audit, in one place, de-duplicated.
 - **When:** **H** = 1-day hackathon (before ads) · **S** = before scaling ad spend · **L** = later.
 - **Who:** **A** = agent · **O** = owner only · **A+O** = agent does it once the owner provides a token or approval.

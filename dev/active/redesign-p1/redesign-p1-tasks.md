@@ -1,5 +1,10 @@
 # Redesign P1: tasks
 
+<!-- SUPERSEDED-BY: dev/active/ROADMAP.md -->
+> **Not maintained since 2026-10-30.** The one task list is `dev/active/ROADMAP.md`. Every open item here was
+> checked against the code (`dev/active/roadmap-reconcile/`) and the live ones moved there. Statuses below are history.
+
+
 - [x] L1 Session brief: exercises first, one compact "how this runs" line, footer ≤ ~15% of 375×667, no nested scroll
 - [x] L2 Figures: bronze accent on working limb/bar, tinted ground, heavier stroke
 - [x] L3 Today hero card: figure, focus, duration, Start; then week strip + readiness
@@ -8,7 +13,7 @@
 - [x] L6 Session done: best set / PB, ladder tick, next session
 - [x] L7 Mono sweep: sans for chips, footers, descriptions
 - [x] Verify, deploy, confirm live
-- [ ] Re-shoot ad path from live, rescore (1–10)
+- [x] Re-shoot ad path from live, rescore (1–10) (7fb23c6)
 
 ## Notes (2026-10-28)
 - L5 had bundled every consent into one generic checkbox; reverted. Health-data consent and each program's stop rule stay
