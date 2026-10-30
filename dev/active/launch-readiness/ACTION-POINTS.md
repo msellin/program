@@ -109,6 +109,7 @@ Every action found by the launch-readiness audit, in one place, de-duplicated.
 | M-05 | Meta Business + Google Ads accounts, payment, upload, spend €150 (Meta €100 / Google €50) | H | O | M | O3 |
 | M-06 | Read the test after 3–5 days: sign-ups and activations per campaign | S | A+O | S | launch-plan |
 | M-07 | Consent Mode v2 + a consent banner, then conversion tags (never health events) | S | A | M | compliance §4 |
+| M-08 | Marketing channels beyond the ad test: 15 ideas mapped onto Terav (comparison pages, cited guides, one free calculator, daily figure posts, directories, coach outreach, paid niche placements, creators), ordered after M-06 | L | A+O | L | marketing-channels.md (owner 2026-10-30) |
 
 ## 8. Infrastructure and ops
 | ID | Action | When | Who | Effort | Source |
