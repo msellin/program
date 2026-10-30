@@ -968,17 +968,17 @@ const AD_FIGS: Record<string, Fig> = {
     // other hand (shift first, then lift): the shoulders dip 1.5 px about the planted hands (arm length kept), hips 0.9 px, feet planted.
     const arm = ARM80[0] + ARM80[1], th = 20 * Math.PI / 180, wx = 268;
     const k8 = p * 10, idx = Math.floor(k8), c = k8 - idx, nearTap = idx % 2 === 0;
-    const shift = 1.5 * (0.5 - 0.5 * Math.cos(2 * Math.PI * (k8 + 0.3)));
+    const shift = 2.5 * (0.5 - 0.5 * Math.cos(2 * Math.PI * (k8 + 0.3)));
     const S0: Pt = [wx - 4 - arm, 166 - 136 * Math.cos(th)], F: Pt = [S0[0] - 136 * Math.sin(th), 166];
     const H0 = lerpP(F, S0, 80 / 136), ARM80_LEN = arm, hand0x = wx - 4;
     const dip = shift / ARM80_LEN, S: Pt = [hand0x - ARM80_LEN * Math.cos(dip), S0[1] + ARM80_LEN * Math.sin(dip)], H: Pt = [H0[0], H0[1] + 0.6 * shift];
     const hand: Pt = [wx - 4, S0[1]];
-    const peel = 0.5 - 0.5 * Math.cos(2 * Math.PI * c);
+    const peel = c < 0.3 ? ease(c / 0.3) : c < 0.6 ? 1 : ease(1 - (c - 0.6) / 0.4);   // rise, 0.15 s dwell at the top, set down
     const nearT = nearTap ? peel : 0, farT = nearTap ? 0 : peel;
     sc.mark("shoulder", S); sc.mark("hip", H); sc.mark("foot", F);
     sc.floor();
     sc.bg([[wx + 2, 168], [wx + 2, -600]], PROP, 4);
-    const fingers = (t: number, col: string) => { sc.line([[hand[0] + 1.5 * t, hand[1] + 2], P(hand, 11, -90 - 40 * t)], col, 6); };
+    const fingers = (t: number, col: string) => { sc.line([[hand[0] + 1.5 * t, hand[1] + 2], P(hand, 13, -90 - 65 * t)], col, 6); };
     sc.line([S, hand], FAR, 8); fingers(farT, FAR);
     sc.line([H, F], BODY, 8); foot(sc, F);
     sc.line([S, H], BODY, TORSO);
@@ -995,14 +995,17 @@ const AD_FIGS: Record<string, Fig> = {
     // up as the legs go down, then back. One full rock (there and back) takes 2.4 s: 1.2 s each way, eased.
     const C: Pt = [190, 164], rho = 15 * Math.sin(2 * Math.PI * p), R = rho * Math.PI / 180, dx = 18 * R;
     const rot = (q: Pt): Pt => { const c = Math.cos(R), s = Math.sin(R), x = q[0] - C[0], y = q[1] - C[1]; return [C[0] + x * c - y * s + dx, C[1] + x * s + y * c]; };
-    const a = 20, H0: Pt = [190, 158], S0 = P(H0, 80, 180 + a), foot0 = P(H0, 120, -17);
-    const H = rot(H0), S = rot(S0), foot = rot(foot0), hand = rot(P(S0, ARMLY, 180 + a + 4)), head = rot(P(S0, 26, 180 + a - 2));
+    // r4 (62, 66): the trunk is two 40 px segments bowed 8 degrees so the ribs sit 5.6 px below the pelvis-shoulder
+    // chord (ribs down, lower back pressed into the floor); the bowed trunk rocks as one rigid shape.
+    const a = 20, H0: Pt = [190, 158], dl = 8 * Math.PI / 180, chord = 80 * Math.cos(dl), S0 = P(H0, chord, 180 + a), foot0 = P(H0, 120, -17);
+    const th0 = (180 + a) * Math.PI / 180, M0: Pt = [(H0[0] + S0[0]) / 2 + 40 * Math.sin(dl) * Math.sin(th0), (H0[1] + S0[1]) / 2 - 40 * Math.sin(dl) * Math.cos(th0)];
+    const H = rot(H0), S = rot(S0), M = rot(M0), foot = rot(foot0), hand = rot(P(S0, ARMLY, 180 + a + 4)), head = rot(P(S0, 26, 180 + a - 2));
     sc.floor();
     sc.line([H, foot], BODY, 8);
-    sc.line([S, H], BODY, TORSO);
+    sc.line([S, M, H], BODY, TORSO);
     sc.dot(head, 11, BODY);
     sc.line([S, hand], COL.B, 8);
-    sc.ring([C[0] + dx, 166], 6, COL.B, 2, 1);
+    sc.ring([C[0], 166], 6, COL.B, 2, 1);   // fixed mark of the pressed-down lower back: it also keeps the reduced-motion ghost to the body alone
     return "Hollow rock: in the hollow hold with the lower back pressed down, arms overhead and legs long and low, rock forward and back along the spine as one rigid shape without letting the lower back lift";
   } },
   elbowstand: { kind: "hold", sided: false, cues: [{ angle: ["shoulder", "hip", "foot"] }], build(sc, _s, q, _rep = 0, t = 0) {
@@ -1016,12 +1019,18 @@ const AD_FIGS: Record<string, Fig> = {
     const lift = lerp(10, 0, q) + 1.5 * Math.sin((2 * Math.PI * t) / 3200) * q, F = P(H, LEG, lift), Ff = P(H, 70, lift + 16);
     sc.mark("shoulder", S); sc.mark("hip", H); sc.mark("foot", F);
     sc.floor();
+    // r4 (66): two arms, shoulder width apart (the far one in FAR, behind), each ending in a flat hand with the
+    // fingers pointing forward; the head hangs between the arms just below the shoulders, so the support reads
+    // as arms and hands and not as a leg.
+    const hand2: Pt = [hand[0] + 7, 168], S2: Pt = [S[0] + 7, S[1] + 0.5];
     sc.line([H, Ff], FAR, 8);
+    sc.line([S2, hand2], FAR, 7);
+    sc.line([[hand2[0] - 2, 167], [hand2[0] + 12, 167]], FAR, 5);
     sc.line([H, F], BODY, 8);
     sc.line([S, H], BODY, TORSO);
-    sc.dot(P(S, 18, tr + 180 - 10), 10, BODY);
+    sc.dot([S[0] + 3.5, S[1] + 18], 10, BODY);
     sc.line([hand, S], COL.B, 8);
-    sc.line([[hand[0] - 2, 167], [hand[0] + 8, 167]], BODY, 4);
+    sc.line([[hand[0] - 2, 167], [hand[0] + 13, 167]], COL.B, 5);
     return "Straddle L stand, straight-arm version (forearms optional): hands on the floor with straight arms, shoulders over the hands, hips high and the legs out wide in front at hip height; push the floor away and keep the legs lifted";
   } },
   crowroll: { kind: "gait", dur: 5000, k: [0, 1, 1], poster: 0.08, sided: false, scale: 1.1, fade: [0.96, 0.985], build(sc, _s, p) {
@@ -1030,9 +1039,11 @@ const AD_FIGS: Record<string, Fig> = {
     // until the shoulders have passed; then on to the back with the knees tucked and the hands to the shins.
     // Forward kinematics: every segment keeps its length (trunk 56, thigh 41, shin 39, ARM80 arms).
     const kf = (v: number[], t: number[]) => { let i = 0; while (i < t.length - 2 && p > t[i + 1]) i++; return lerp(v[i], v[i + 1], TEMPO.control(clamp01((p - t[i]) / (t[i + 1] - t[i])))); };
-    const T = [0, 0.12, 0.3, 0.5, 0.74, 1];
-    const S: Pt = [kf([188, 188, 196, 212, 226, 226], T), kf([135, 135, 138, 153, 155.5, 155.5], T)];
-    const tau = kf([-165, -165, -130, -95, 0, 0], T), th = kf([25, 25, 55, 40, -110, -110], T), sh = kf([165, 165, 160, 140, 60, 60], T), eta = kf([5, 5, 60, -20, -170, -170], [0, 0.06, 0.26, 0.5, 0.74, 1]);
+    // r4 (65): the crow holds 0.6 s; the chin leads the hips by 0.3 s; the roll passes vertical (trunk at -95 at
+    // p .5) and carries on to the back; the knees overshoot 8 degrees on landing and settle back by p .84.
+    const T = [0, 0.12, 0.3, 0.5, 0.74, 0.84, 1];
+    const S: Pt = [kf([188, 188, 196, 212, 226, 226, 226], T), kf([135, 135, 138, 153, 155.5, 155.5, 155.5], T)];
+    const tau = kf([-165, -165, -130, -95, 0, 0, 0], T), th = kf([25, 25, 55, 40, -118, -110, -110], T), sh = kf([165, 165, 160, 140, 66, 60, 60], T), eta = kf([5, 5, 60, -20, -170, -170], [0, 0.06, 0.26, 0.5, 0.74, 1]);
     const YM = 160, HA: Pt = [168, YM], H = P(S, 56, tau), K = P(H, 41, th), F = P(K, 39, sh), head = P(S, 17, eta);
     const d = Math.hypot(K[0] - S[0], K[1] - S[1]) || 1, rs = Math.min(58, d);
     const hand = lerpP(HA, [S[0] + (K[0] - S[0]) / d * rs, S[1] + (K[1] - S[1]) / d * rs], ease(clamp01((p - 0.42) / 0.32)));
@@ -1646,13 +1657,13 @@ function flesh(items: FigureSlot[], floor: boolean, front: boolean, breath = 0):
   const body = items.filter((it) => !it.bg && FLESH.has(it.color));
   const isHead = (it: FigureSlot) => it.w >= 18 && it.w <= 24 && dist(...(parse(it.pts) as [Pt, Pt])) < 1;
   const heads = body.filter(isHead).map((it) => parse(it.pts)[0]);
-  const trunks = body.filter((it) => it.w === TORSO && it.pts.split(" ").length === 2);
+  const trunks = body.filter((it) => it.w === TORSO && [2, 3].includes(it.pts.split(" ").length));   // 3 points = a bowed trunk (shoulder, ribs, pelvis)
   if (!trunks.length || !heads.length) return items;
   const head = heads[0];
   // The trunk whose end is nearest the head; that end is the shoulder.
   let best = trunks[0], S: Pt = [0, 0], H: Pt = [0, 0], dBest = Infinity;
   for (const t of trunks) {
-    const [a, b] = parse(t.pts);
+    const tp = parse(t.pts), a = tp[0], b = tp[tp.length - 1];
     for (const [s0, h0] of [[a, b], [b, a]]) if (dist(s0, head) < dBest) { dBest = dist(s0, head); best = t; S = s0; H = h0; }
   }
   const T = Math.max(45, Math.min(120, dist(S, H)));
@@ -1661,7 +1672,13 @@ function flesh(items: FigureSlot[], floor: boolean, front: boolean, breath = 0):
     const pts = parse(it.pts);
     if (it === best || (it.w === TORSO && pts.length === 2)) {
       const [a, b] = it === best ? [H, S] : pts;
-      return { ...it, shape: fmt(fleshTrunk(a, b, front, it === best ? breath : 0)) };
+      let shp = fleshTrunk(a, b, front, it === best ? breath : 0);
+      if (it === best && pts.length === 3) {
+        // Bowed trunk: the ribs point sits off the pelvis-shoulder chord; bend the whole outline by that offset (sine along the chord).
+        const mid: Pt = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2], off: Pt = [pts[1][0] - mid[0], pts[1][1] - mid[1]], L = dist(a, b) || 1, ux = (b[0] - a[0]) / L, uy = (b[1] - a[1]) / L;
+        shp = shp.map((q) => { const t = Math.max(0, Math.min(1, ((q[0] - a[0]) * ux + (q[1] - a[1]) * uy) / L)), k = Math.sin(Math.PI * t); return [q[0] + off[0] * k, q[1] + off[1] * k] as Pt; });
+      }
+      return { ...it, shape: fmt(shp) };
     }
     if (it.w >= 18 && pts.length === 2 && dist(pts[0], head) < 1) return { ...it, shape: fmt(circle(pts[0], Math.max(9, Math.min(16, 0.21 * T)))) };
     if (it.w !== 8 || pts.length < 2) return it;
