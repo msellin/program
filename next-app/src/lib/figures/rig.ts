@@ -380,7 +380,7 @@ export const FIGS: Record<string, Fig> = {
     sc.line([[108, 155], S], BODY, 8); sc.dot([98, 153], 11, BODY);
     return "Supine dowel pullover: lying on the back, knees bent, both hands on a dowel; the arms travel slowly overhead toward the floor and hold";
   } },
-  threadneedle: { dur: 10000, kind: "move2", k: [0.06, 0.42, 0.56, 0.94], sided: false, build(sc, _s, p, rep = 0) {
+  threadneedle: { dur: 10000, kind: "move2", k: [0.06, 0.42, 0.56, 0.94], sided: false, tempo: ["control", "control"], build(sc, _s, p, rep = 0) {
     // Quadruped thread-the-needle (founder 2026-10-30): a tabletop, hips over the knees (thigh vertical, 44) and
     // shoulders over the hand (arm 62), so the trunk slopes only ~15 degrees, as it does on a real person (review
     // 60/61: a hip-high incline read as a down dog). The near hand starts behind the head, elbow down. Rep A

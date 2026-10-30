@@ -395,7 +395,6 @@ describe("exercise → figure map", () => {
     "hs_elbow_stand_straddle_l",
     "hs_fingertip_taps",
     "hs_hollow_rock",
-    "hs_video_review",
     "mu_false_grip_hang",
     "mu_false_grip_pullup",
     "mu_false_grip_ring_row",
@@ -413,7 +412,6 @@ describe("exercise → figure map", () => {
     "mu_transition_negative_high",
     "mu_transition_negative_low",
     "mu_transition_seated_band",
-    "mu_video_review",
     "om_bottom_up_kb_press",
     "om_empty_bar_ohs",
     "om_half_kneeling_dowel_press",
@@ -424,13 +422,12 @@ describe("exercise → figure map", () => {
     "om_wall_slides",
     "pu_arch_hold",
     "pu_dumbbell_row",
-    "pu_farmers_carry",
-    "pu_isometric_chin_over_bar",
     "pu_lat_pulldown",
-    "pu_video_review",
     "tuck_forward_roll_from_crow",
     "wall_cartwheel_exit",
   ]);
+  // Not a movement: "record a set and watch it back". These never get a figure.
+  const NO_FIGURE_BY_DESIGN = new Set(["pu_video_review", "hs_video_review", "mu_video_review"]);
   it("every drill any program can reach has a figure, or is on the named backlog", () => {
     const manifest = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../../../public/data/programs/manifest.json"), "utf8"));
     const slugs: string[] = (manifest.programs ?? manifest).map((p: { slug?: string; id?: string }) => p.slug ?? p.id);
@@ -446,7 +443,7 @@ describe("exercise → figure map", () => {
     };
     for (const slug of slugs) walk(JSON.parse(fs.readFileSync(path.resolve(__dirname, `../../../public/data/programs/${slug}.json`), "utf8")));
     const missing = [...reach].filter((id) => ids.has(id) && !EXERCISE_FIGURES[id]);
-    expect(missing.filter((id) => !FIGURE_BACKLOG.has(id)), "reachable drill with no figure").toEqual([]);
+    expect(missing.filter((id) => !FIGURE_BACKLOG.has(id) && !NO_FIGURE_BY_DESIGN.has(id)), "reachable drill with no figure").toEqual([]);
     expect([...FIGURE_BACKLOG].filter((id) => EXERCISE_FIGURES[id]), "drawn: remove from the backlog").toEqual([]);
     expect(EXERCISE_FIGURES.om_quadruped_thoracic_rotation).toBe("threadneedle");
   });
