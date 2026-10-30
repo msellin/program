@@ -8,9 +8,9 @@
     "primary_intent": "Ongoing lower-body strength progression, competitive for CrossFit and Hyrox where legs are the main driver. Not a fixed finish line — the plan continues past every waypoint. Numeric targets are milestones, not endpoints.",
     "waypoints": [
       {
-        "id": "birthday_2027",
+        "id": "peak_2027",
         "date": "2027-04-24",
-        "label": "Birthday waypoint",
+        "label": "Peak waypoint",
         "condition": "at_least_one_of",
         "of": [
           {
@@ -24,7 +24,7 @@
             "stretch_kg": 220
           }
         ],
-        "note": "Hitting either is the birthday PR win. Both is stretch. 180/200 are floor targets given the training history; 190/210+ is realistic on 4x/week with muscle-memory return in cycles 1-2. Plan continues after regardless of outcome."
+        "note": "Hitting either is the peak PR win. Both is stretch. 180/200 are floor targets given the training history; 190/210+ is realistic on 4x/week with muscle-memory return in cycles 1-2. Plan continues after regardless of outcome."
       }
     ],
     "muscle_memory_expectation": {
@@ -52,12 +52,12 @@
           "tm_squat": 155,
           "tm_pull": 178
         },
-        "2027-04-17_pre_birthday": {
+        "2027-04-17_pre_peak": {
           "tm_squat": 165,
           "tm_pull": 188,
           "note": "TM 165 supports 180 kg squat attempt; TM 188 supports 205+ kg pull"
         },
-        "2027-04-24_birthday": {
+        "2027-04-24_peak": {
           "tm_squat": 165,
           "tm_pull": 188,
           "note": "Attempt window — both PRs plausible if muscle memory returns cleanly"
@@ -90,11 +90,11 @@
       "training_years_crossfit": 10
     },
     "progression_targets": {
-      "note": "Trajectory milestones anchored to the April 24 2027 birthday waypoint. TM = training max, ≈ 90% of 5RM. These are what the plan needs to hit to be on-track for AT LEAST ONE of the birthday goals. If both trend on target, the birthday attempt becomes a double-PR opportunity.",
+      "note": "Trajectory milestones anchored to the April 24 2027 peak waypoint. TM = training max, ≈ 90% of 5RM. These are what the plan needs to hit to be on-track for AT LEAST ONE of the peak goals. If both trend on target, the peak attempt becomes a double-PR opportunity.",
       "target_date": "2027-04-24",
       "target_condition": "at_least_one_of",
-      "auto_adjust_policy": "Beating a milestone by ≥1 cycle → offer to accelerate remaining milestones OR bring the birthday attempt forward. Missing a milestone → slip subsequent ones back by one cycle and keep the birthday date fixed. Plan continues past 2027-04-24 regardless of outcome.",
-      "trajectory_note": "Back squat starts at TM 110, needs ~165 for a 180 kg 1RM. Block pull starts at TM 130, needs ~180 for 200 kg. Deadlift is the more likely birthday PR — trajectory below reflects that.",
+      "auto_adjust_policy": "Beating a milestone by ≥1 cycle → offer to accelerate remaining milestones OR bring the peak attempt forward. Missing a milestone → slip subsequent ones back by one cycle and keep the peak date fixed. Plan continues past 2027-04-24 regardless of outcome.",
+      "trajectory_note": "Back squat starts at TM 110, needs ~165 for a 180 kg 1RM. Block pull starts at TM 130, needs ~180 for 200 kg. Deadlift is the more likely peak PR — trajectory below reflects that.",
       "milestones": [
         {
           "date": "2026-09-27",
@@ -166,32 +166,32 @@
           "phase": "phase_6_peak_test",
           "lift": "back_squat_highbar",
           "target_tm_kg": 165,
-          "note": "One week pre-birthday. TM 165 → 180 kg 1RM plausible, 190 stretch."
+          "note": "One week pre-peak. TM 165 → 180 kg 1RM plausible, 190 stretch."
         },
         {
           "date": "2027-04-17",
           "phase": "phase_6_peak_test",
           "lift": "block_pull_midshin",
           "target_tm_kg": 188,
-          "note": "One week pre-birthday. TM 188 → 205+ kg pull plausible, 220 stretch."
+          "note": "One week pre-peak. TM 188 → 205+ kg pull plausible, 220 stretch."
         },
         {
           "date": "2027-04-24",
-          "phase": "birthday_waypoint",
+          "phase": "peak_waypoint",
           "lift": "back_squat_highbar",
           "target_tm_kg": 165,
           "waypoint": true,
           "stretch_tm_kg": 172,
-          "note": "BIRTHDAY. Attempt 180 kg squat (floor) or 190 kg (stretch)."
+          "note": "PEAK. Attempt 180 kg squat (floor) or 190 kg (stretch)."
         },
         {
           "date": "2027-04-24",
-          "phase": "birthday_waypoint",
+          "phase": "peak_waypoint",
           "lift": "block_pull_midshin",
           "target_tm_kg": 188,
           "waypoint": true,
           "stretch_tm_kg": 200,
-          "note": "BIRTHDAY. Attempt 200 kg pull (floor) or 210+ kg (stretch)."
+          "note": "PEAK. Attempt 200 kg pull (floor) or 210+ kg (stretch)."
         }
       ]
     },
@@ -513,7 +513,7 @@
     },
     {
       "id": "phase_6_peak_test",
-      "name": "Peak — birthday waypoint",
+      "name": "Peak and 1RM attempt",
       "starts": "2027-03-29",
       "ends": "2027-04-24",
       "duration_weeks": 4,
@@ -526,11 +526,11 @@
         "block_daily_skill"
       ],
       "template": "3-week peaking block (5s → 3s → 1s) + 1RM attempt window",
-      "test_window": "2027-04-20 to 2027-04-24 — birthday. Attempt 180 kg squat AND/OR 200 kg deadlift (with stretch: 190 / 210+). Hitting one is the win. Plan continues after."
+      "test_window": "2027-04-20 to 2027-04-24 — peak. Attempt 180 kg squat AND/OR 200 kg deadlift (with stretch: 190 / 210+). Hitting one is the win. Plan continues after."
     },
     {
       "id": "phase_7_continue",
-      "name": "Post-birthday — ongoing progression",
+      "name": "Post-peak — ongoing progression",
       "starts": "2027-04-25",
       "ends": null,
       "duration_weeks": null,
@@ -541,8 +541,8 @@
         "block_squat_variant",
         "block_daily_skill"
       ],
-      "template": "Adaptive — engine generates next cycle structure based on birthday outcome and updated TMs",
-      "note": "Strength progression does not end at the birthday waypoint. On 2027-04-25 the engine generates the next waypoint (typically +10-15 kg on the achieved lifts, similar duration ahead) and resumes 5/3/1 FSL."
+      "template": "Adaptive — engine generates next cycle structure based on peak outcome and updated TMs",
+      "note": "Strength progression does not end at the peak waypoint. On 2027-04-25 the engine generates the next waypoint (typically +10-15 kg on the achieved lifts, similar duration ahead) and resumes 5/3/1 FSL."
     }
   ],
   "adaptive_engine": {

@@ -88,7 +88,7 @@ export function HurtSheet({
           <button
             type="button"
             onClick={onStopSession}
-            className="min-h-[48px] w-full rounded-lg bg-amber px-4 py-3 text-small font-semibold text-ground"
+            className="min-h-[48px] w-full rounded-lg border border-line-strong px-4 py-3 text-small font-semibold text-strong"
           >
             Stop session
           </button>

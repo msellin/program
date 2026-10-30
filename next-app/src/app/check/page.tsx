@@ -288,7 +288,14 @@ export default function CheckPage() {
       {saved ? (
         <p className="text-caption text-green flex items-center gap-1.5">
           <span aria-hidden>✓</span>
-          Saved. Today&apos;s plan is adjusted.
+          {/* M-033: it said "Today's plan is adjusted." on every save, green
+              included, and amber leaves a skill session unchanged. Only red
+              changes the day (it becomes rest), so only red claims a change. */}
+          {state === "red"
+            ? "Saved. Today is a rest day."
+            : state === "amber"
+              ? "Saved. Train, and ease off if it builds."
+              : "Saved. Train as planned."}
         </p>
       ) : prefilledFrom ? (
         <Card flush className="px-3 py-2 flex items-baseline justify-between gap-3 text-caption">

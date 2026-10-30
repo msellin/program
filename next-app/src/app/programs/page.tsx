@@ -180,7 +180,7 @@ export default function ProgramCatalogPage() {
           >
             cited
           </button>{" "}
-          = every claim references a study, simulator harness passes.{" "}
+          = every claim references a study.{" "}
           <button
             type="button"
             onClick={() => setLadderSheetOpen(true)}
@@ -196,8 +196,7 @@ export default function ProgramCatalogPage() {
           pass over the citations — currently Terav&apos;s own audit process, not an
           outside clinician. No program has yet been signed off by an independent
           specialist, and none has five completed field arcs. When one does, we
-          will say so and name them. Personal programs (author&apos;s own clinical
-          context) sit outside this ladder — see the &ldquo;personal&rdquo; badge instead.
+          will say so and name them.
         </p>
         </details>
       </header>
@@ -369,8 +368,8 @@ export default function ProgramCatalogPage() {
             <ul className="list-disc pl-5 space-y-1 text-small">
               <li>Every claim in the program cites a peer-reviewed paper.</li>
               <li>
-                The adaptive engine passes the simulator harness across
-                archetypes (novice, intermediate, advanced) without stalling.
+                The plan is tested on simulated beginner, intermediate and
+                advanced users, and keeps progressing for each.
               </li>
               <li>Written by Terav, reviewed once.</li>
             </ul>
@@ -414,10 +413,6 @@ export default function ProgramCatalogPage() {
               </li>
             </ul>
           </section>
-          <p className="text-caption text-muted italic pt-1 border-t border-line-soft">
-            Personal programs (author&apos;s own clinical context) sit outside this
-            ladder entirely — see the &ldquo;personal&rdquo; badge instead.
-          </p>
         </InfoSheet>
       ) : null}
     </div>

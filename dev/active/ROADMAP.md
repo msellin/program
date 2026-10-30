@@ -20,17 +20,19 @@ conversion to paid: paid conversion is first read from the trial cohort after St
 - [ ] M-05: Meta + Google accounts, payment, auto-tagging off, replace the `{meta|google}` / `{ad}` UTM placeholders
 
 ### Agent: trust and safety a stranger would hit (small, do first)
-- [ ] M-069 privacy: `public/data/programs/anterior-hip-rebuild.json:11,55,60,93` ships the founder's birthday
+- [x] M-069 privacy (2026-10-30: "birthday" labels removed, dates kept; `data-integrity.test.ts` guards public/data): `public/data/programs/anterior-hip-rebuild.json:11,55,60,93` ships the founder's birthday
       (24 Apr) and birthday goals, and everything under `public/` can be downloaded
-- [ ] G-12: `ScaleAnchorStep.tsx:34-38` teaches amber 4-6 / red 7-10; the gate reds at >5. Align the copy to the gate
-- [ ] M-011: the extra-session list offers hangs on a red shoulder day (`OffPlanSession.tsx`, no symptom filter)
-- [ ] M-033: the check says "Saved. Today's plan is adjusted." when Today is unchanged (`check/page.tsx:291`)
-- [ ] M-026: "simulator harness", "archetypes" on the programs page (`programs/page.tsx:183,372`)
-- [ ] M-022: "will be lawyer-reviewed before public launch" on privacy + terms; privacy table crushed at 393
-- [ ] M-049: "Stop session" in the hurt sheet is an amber primary (`HurtSheet.tsx:93`)
+- [x] G-12 (2026-10-30: bands 0-3/4-5/6-10, pinned to `deriveState` by `ScaleAnchorStep.test.ts`): `ScaleAnchorStep.tsx:34-38` teaches amber 4-6 / red 7-10; the gate reds at >5. Align the copy to the gate
+- [x] M-011 (2026-10-30: red day leads with the rest card; list opens via "Log something you already did"): the extra-session list offers hangs on a red shoulder day (`OffPlanSession.tsx`, no symptom filter)
+- [x] M-033 (2026-10-30: saved line per state; only red claims a change): the check says "Saved. Today's plan is adjusted." when Today is unchanged (`check/page.tsx:291`)
+- [x] M-026 (2026-10-30: plain lines, personal-program sentences removed): "simulator harness", "archetypes" on the programs page (`programs/page.tsx:183,372`)
+- [ ] M-022: review line replaced with "Applies to the Terav beta." (2026-10-30); privacy table crushed at 393 still open
+- [ ] M-049: hurt-sheet Stop is now a secondary outline (2026-10-30); still to check: the stopped state leaves the note sheet open
 - [ ] RECHECK-new-4: "Shoulder 8/10" vs "above 5/10" wording mismatch on the red card
 - [ ] P-09: `DEFAULT_PROGRAM_SLUG` = hip in `data-loader.ts:11`; `LEGACY_REGIONS` fallback
 - [ ] P-10: `guide/page.tsx:160` hip case study
+- [ ] Personal program behind sign-in: `anterior-hip-rebuild.json` (clinical overrides, lift history) is a public
+      static file; serve it through an auth-checked function like the removed clinical files (follow-up to M-069)
 
 ### Agent: ad-path clarity
 - [ ] O-06: Playwright spec signed-out → sign-up → quick-start intake → day-1 session (the ad visitor's path)

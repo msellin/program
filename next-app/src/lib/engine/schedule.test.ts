@@ -328,7 +328,7 @@ describe("hip program runs three barbell days from cycle 2 week 4 (2026-10-19)",
   // Saturday is the founder's Hyrox / run day. The Sat volume squat was
   // logged 0 of 3 times in cycle 2, so it went. Phase 7 schedules by block
   // NAME ("Sat — ..."), so the block also has to leave that phase's list or
-  // Saturday comes back after the birthday waypoint.
+  // Saturday comes back after the peak waypoint.
   const program = loadProgramJson("anterior-hip-rebuild");
   const ids = (d: string) =>
     strengthBlocksForDate(program, activePhaseFor(program, d), d).map((b) => b.id);
@@ -343,7 +343,7 @@ describe("hip program runs three barbell days from cycle 2 week 4 (2026-10-19)",
     expect(ids("2026-10-24")).toEqual(["block_a_home"]); // this week's Saturday too
   });
 
-  it("keeps Saturday clear of barbell work after the birthday waypoint", () => {
+  it("keeps Saturday clear of barbell work after the peak waypoint", () => {
     expect(ids("2027-05-01")).toEqual([]);
   });
 });

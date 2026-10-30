@@ -131,6 +131,31 @@ describe("catalog-public programs render only general copy", () => {
   });
 });
 
+/**
+ * Everything under `public/data/` is downloadable by anyone, personal program
+ * included. Until 2026-10-30 `anterior-hip-rebuild.json` labelled its April
+ * 2027 milestone as the founder's birthday in eleven places, which turns a
+ * de-identified training log into one with a date of birth attached
+ * (MASTER-LIST M-069). The milestone dates stay; the label does not.
+ */
+describe("served data carries no date-of-birth label", () => {
+  it("no file under public/data mentions a birthday", () => {
+    const dir = path.join(__dirname, "../../public/data");
+    const offenders: string[] = [];
+    const walk = (d: string) => {
+      for (const f of fs.readdirSync(d, { withFileTypes: true })) {
+        const p = path.join(d, f.name);
+        if (f.isDirectory()) walk(p);
+        else if (f.name.endsWith(".json") && /birth\s?day|date of birth/i.test(fs.readFileSync(p, "utf8"))) {
+          offenders.push(path.relative(dir, p));
+        }
+      }
+    };
+    walk(dir);
+    expect(offenders).toEqual([]);
+  });
+});
+
 describe("anterior-hip-rebuild keeps its clinical constraints", () => {
   const hip = programs.find((p) => p.id === "anterior-hip-rebuild")!.program;
   const resolved = applyProgramExerciseOverrides(byId, hip);

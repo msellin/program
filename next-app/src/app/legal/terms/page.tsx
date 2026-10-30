@@ -9,7 +9,7 @@ export default function TermsPage() {
     <div className="max-w-2xl mx-auto space-y-4 pt-4 text-small leading-relaxed">
       <h1 className="text-h1 tracking-tight text-strong leading-none">Terms of service</h1>
       <p className="text-muted italic">
-        Last updated: 2026-08-18. Beta — these terms will be lawyer-reviewed before public launch.
+        Last updated: 2026-08-18. Applies to the Terav beta.
       </p>
 
       <h2 className="text-h3 text-strong pt-2">Who runs Terav</h2>

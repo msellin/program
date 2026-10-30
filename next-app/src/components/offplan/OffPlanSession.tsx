@@ -19,6 +19,8 @@ import { NoteSheet } from "@/components/session/NoteSheet";
 import type { RailExercise, SessionSheet } from "@/components/session/DaySession";
 import type { Exercise, Program } from "@/lib/schemas";
 import { Card, cardClass } from "@/components/ui/Card";
+import { redDayDirective } from "@/lib/engine/red-day";
+import { RedRestCard } from "@/components/workout/RedRestCard";
 
 /**
  * Off-plan redesign (2026-08-24) — brings /off-plan onto the same
@@ -72,6 +74,8 @@ export function OffPlanSession() {
   /** Whether that restored rest had already run out. See `RestTakeover`. */
   const [restExpired, setRestExpired] = useState(false);
   const [effortAnswered, setEffortAnswered] = useState(false);
+  /** On a red day the list opens only to record work already done (M-011). */
+  const [recordAnyway, setRecordAnyway] = useState(false);
 
   // Same category → group labels the pre-redesign page used. Run-category
   // copy depends on the primary program (hip-rebuild users read these as
@@ -391,6 +395,9 @@ export function OffPlanSession() {
     );
   }
 
+  const redDay = activeDate === todayISO() ? redDayDirective(program, store.logs, activeDate) : null;
+  const listHeldForRed = !!redDay?.hold && !recordAnyway;
+
   return (
     <div className="space-y-6 pt-4">
       <header>
@@ -403,7 +410,28 @@ export function OffPlanSession() {
 
       <DateNav date={activeDate} onChange={setActiveDate} />
 
+      {/*
+        M-011 (2026-10-30): on a red day this screen offered dead hangs right
+        after Today had said "Rest today". The gate is not re-derived here:
+        `redDayDirective` is the same hold Today and the session read. The list
+        stays reachable, because a class you already did is a record, not a
+        prescription; it is just no longer offered as something to do.
+      */}
+      {listHeldForRed && redDay?.hold ? (
+          <div className="space-y-3">
+            <RedRestCard sourceDate={redDay.sourceDate} />
+            <button
+              type="button"
+              onClick={() => setRecordAnyway(true)}
+              className="inline-flex min-h-[44px] items-center text-small font-semibold text-strong underline underline-offset-4"
+            >
+              Log something you already did
+            </button>
+          </div>
+      ) : null}
+
       {(() => {
+        if (listHeldForRed) return null;
         const rendered = groupDefs
           .map((def) => {
             const rows = railExercises.filter((r) => {
