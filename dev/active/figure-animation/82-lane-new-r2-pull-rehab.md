@@ -1,0 +1,9 @@
+# Lane C r2: arch, dbrow, pulldown, threadneedle, hipflex (2026-10-30)
+
+Measured through drawFigure every 33 ms over the cycle (heavy strokes). Tests in src/lib/figures pass (93).
+
+- arch: breath added in the skeleton (chest +-1.1 deg, ~1.5 px, 4 s cycle after the 900 ms ease-in; hand follows half of it, legs/hips fixed). Lift raised 11 -> 12.5 deg chest, legs 6 -> 9 deg, scale 1.15 -> 1.3 so the lift reads at 144 px (rendered, tile and thumb checked). Head still continues the trunk line (same +5 px drop rule). Max jump 2.5 px.
+- dbrow: no change needed. k and dur already give pull 1456 ms, top dwell 520 ms, lowering 2496 ms (1.7x the pull), bottom dwell 312 ms start / 416 ms end. Back stays at 17 deg; bench hand untouched. Max jump 2.4 px.
+- pulldown: scale 1.3; second (right) upright removed (cable, pad rod and bar ring remain, so the 56x40 thumb is the figure + cable); trunk lean-back at the bottom 6 -> 8 deg total (-100 -> -108). Timing was already pull 1680 ms, dwell 720 ms, return 2820 ms (1.7x). Max jump 5.5 px.
+- threadneedle: cycle 10000 -> 11000 ms with k [0.06,0.40,0.66,0.95]: full-rotation hold 1000 -> 1430 ms per rep (+430), out 1870 ms, back 1600 ms. Reaching hand now rests 14.3 px from the head centre (was 11.2, overlapping the 11 px head) at 0 ms and the end, 20 px mid-rep: head offset moved 4 px forward ([20,-6] start) with the wrist offset [-14,3]; the thread rep's start wrist is unchanged, so the loop seam is intact. Also fixed forearm length in the open rep (it shrank to ~17 px mid-rep; now 30 px throughout, hand aimed from the elbow toward the resting point). Elbow angle interpolation kept; max jump 4.2 px (was 3.8).
+- hipflex: arrow already sat over the hand x (207.7). Pulse made readable: ring radius 6 -> 12 (stroke 3), arrow length 14 -> 22 px, opacity 0.25 -> 1 over the 3 s cycle. Joints untouched (max jump 0.22 px); the hold test (skeleton fixed, markers differ) passes.
