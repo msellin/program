@@ -13,6 +13,13 @@ export function useFocusTrap(
   active = true,
 ) {
   const previouslyFocused = useRef<HTMLElement | null>(null);
+  // Callers pass inline closures. With onEscape in the deps, every re-render
+  // of an open dialog re-ran the effect and threw focus back to the first
+  // item (plan-tab-review r2). Read the latest callback from a ref instead.
+  const onEscapeRef = useRef(onEscape);
+  useEffect(() => {
+    onEscapeRef.current = onEscape;
+  });
 
   useEffect(() => {
     if (!active) return;
@@ -27,7 +34,7 @@ export function useFocusTrap(
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         e.preventDefault();
-        onEscape();
+        onEscapeRef.current();
         return;
       }
       if (e.key !== "Tab") return;
@@ -65,7 +72,7 @@ export function useFocusTrap(
         fallback?.focus?.();
       }
     };
-  }, [active, onEscape, ref]);
+  }, [active, ref]);
 }
 
 function getFocusable(root: HTMLElement): HTMLElement[] {

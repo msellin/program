@@ -496,7 +496,12 @@ export default function WeekPage() {
 
             // The row already says the day: "Mon — heavy squat day" under
             // "Mon" said it twice (copy, r23).
-            const names = displayBlocks.map((b) => withoutDayPrefix(humanBlockName(b.name))).join(" + ");
+            const blockNames = displayBlocks.map((b) => withoutDayPrefix(humanBlockName(b.name)));
+            const names = blockNames.join(" + ");
+            // Collapsed, the line clamp cut mid-phrase ("pre-bed +…"); name the
+            // first block and count the rest instead (plan-tab-review r2).
+            const collapsedNames =
+              blockNames.length > 1 ? `${blockNames[0]} + ${blockNames.length - 1} more` : names;
             const isRest = displayBlocks.length === 0 && !override;
             // A skip on a day with nothing scheduled is a rest day, not a skipped session.
             const daySkipped = rawSkipped && !(isRest && dayBlocks.length === 0);
@@ -542,7 +547,8 @@ export default function WeekPage() {
                       ? loggedStatus
                       : isRest
                         ? "rest"
-                        : isPast && !isRest && totalPrescribed === 0 && displayBlocks.length > 0
+                        // A log row with no set done is still not logged (Wed, r2).
+                        : isPast && displayBlocks.length > 0
                           ? "missed"
                           : "planned";
 
@@ -638,7 +644,7 @@ export default function WeekPage() {
                         !isExpanded && "line-clamp-1",
                       )}
                     >
-                      {names || displayLabel}
+                      {(isExpanded ? names : collapsedNames) || displayLabel}
                     </p>
                   </button>
                   {/* Move / Skip live behind "⋯" on the open day, not in the

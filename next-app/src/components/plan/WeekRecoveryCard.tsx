@@ -92,8 +92,8 @@ export function WeekRecoveryCard({
   const dayWord = missedCount === 1 ? "day" : "days";
   const headline =
     totalScheduledThisWeek > 0
-      ? `${missedCount} of ${totalScheduledThisWeek} not logged this week`
-      : `${missedCount} ${dayWord} not logged this week`;
+      ? `${missedCount} of ${totalScheduledThisWeek} strength days not logged`
+      : `${missedCount} strength ${dayWord} not logged`;
   const left =
     remainingScheduledCount > 0
       ? ` · ${remainingScheduledCount} ${remainingScheduledCount === 1 ? "day" : "days"} left`

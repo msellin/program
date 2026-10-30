@@ -145,3 +145,14 @@ Rejected: renaming "Open day", per-track dots on collapsed rows, and the "two bu
    wraps beside "⋯" at 375 px.
 Checked locally on a seeded two-track user (393 and 375) and the hip persona at 375; test user deleted.
 Still open: follow-ups 4-5, and a past day whose log holds only unlogged rows still reads Planned (Wed).
+
+## Remaining review items (2026-10-30)
+- Collapsed days show the first block and a count ("Home rehab and activation + 3 more") instead of a line clamp
+  that cut mid-phrase. Open days still list every block.
+- `useFocusTrap` reads `onEscape` from a ref, so a re-render of an open dialog no longer throws focus back to its
+  first item (all 9 users). Checked: the "⋯" sheet opens on Move…, Esc returns focus to "⋯".
+- A past day whose log holds only unlogged rows reads "Not logged", not "Planned" (Wed).
+- The banner names what it counts: "2 of 3 strength days not logged". It counts strength days only, so a plain
+  "2 of 3" disagreed with the day badges.
+- Not done: docking the "⋯" sheet to the bottom edge. Every sheet in the app (ConfirmSheet, MoveSheet) floats
+  with the same 12 px margin; docking one would make it the odd one out. The lead rated it an idea.
