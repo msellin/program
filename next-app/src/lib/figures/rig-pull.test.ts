@@ -130,3 +130,26 @@ describe("pull family round 3", () => {
     expect(w("pullup_band")).toBeGreaterThanOrEqual(2 * w("pullup_band_light") - 1);
   });
 });
+
+describe("pull figures: arch, dumbbell row, pulldown", () => {
+  const len = (a: number[], b: number[]) => Math.hypot(a[0] - b[0], a[1] - b[1]);
+  const working = (id: string, side: "L" | "R" | "B", frac: number) => {
+    const col = side === "B" ? ACCENT : side === "L" ? "#6db8c6" : "#c79fcd";
+    return drawFigure(id, side, frac * FIGS[id].dur! * 0.999, false).slots.filter((s) => !s.cue && s.color === col && pts(s.pts).length === 3).map((s) => pts(s.pts))[0];
+  };
+  it("row and pulldown arms keep their segment lengths and start straight", () => {
+    for (const [id, side] of [["dbrow", "L"], ["dbrow", "R"], ["pulldown", "B"]] as const) {
+      const base = working(id, side, 0);
+      expect(inc(base[0], base[1], base[2]), id).toBeGreaterThanOrEqual(175);
+      for (const f of [0, 0.2, 0.34, 0.6]) { const [a, e, h] = working(id, side, f); expect(len(a, e), id).toBeCloseTo(35, 0); expect(len(e, h), id).toBeCloseTo(32, 0); }
+    }
+  });
+  it("the row ends with the elbow behind the shoulder and the hand below it", () => {
+    const [s, e, h] = working("dbrow", "R", 0.4);
+    expect(e[0]).toBeLessThan(s[0] + 1);
+    expect(h[1]).toBeGreaterThan(s[1]);
+  });
+  it("the arch hold draws with a face-down label", () => {
+    expect(drawFigure("arch", "B", 0, false, true).label).toMatch(/face down/);
+  });
+});
