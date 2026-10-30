@@ -26,9 +26,9 @@ gate, not how lenient it is).
 | P5 | `lib/symptom-state.ts` deriveState | Hip-clinical red/amber triggers in the shared gate | this file |
 | P6 | `app/check/page.tsx:169` LEGACY_REGIONS, data-loader `DEFAULT_PROGRAM_SLUG` | Fallbacks to the hip regions and program | compliance §4 |
 | P7 | `app/programs/[slug]/page.tsx:9-17` | Personal slug prerendered publicly | compliance §4 |
-| P8 | `app/guide/page.tsx:155` | Hip case study in the guide | compliance §4 |
+| P8 | `app/guide/page.tsx:155` | Hip case study in the guide (fixed 2026-10-30, ROADMAP P-10) | compliance §4 |
 | P9 | `landing/.../TodayMockup.tsx:21`, `en.ts:93-95` | "Left hip stiffness" mock; founder hip story | product 3 |
-| P10 | persona fixtures | "no groin pain" note on the pull-up persona | app §2 |
+| P10 | persona fixtures | "no groin pain" note on the pull-up persona (fixed 2026-10-30, ROADMAP P-10) | app §2 |
 | P11 | `anterior-hip-rebuild.json` (~`:293`) | Personal clinical override note | compliance 1 |
 
 ## New safety flow for public programs

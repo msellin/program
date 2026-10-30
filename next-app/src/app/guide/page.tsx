@@ -157,8 +157,8 @@ export default function GuidePage() {
           <li>Any injury with a clear mechanism you don&apos;t bounce back from in 72 h</li>
         </ul>
         <p className="text-small text-muted italic pt-2">
-          Programs that already carry a specific clinical context (e.g. the anterior-hip
-          case study) apply extra program-specific red flags on top of this general list.
+          Some programs add red flags of their own on top of this general list, shown in
+          that program&apos;s morning check.
         </p>
       </Section>
     </div>

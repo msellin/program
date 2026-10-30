@@ -1234,7 +1234,7 @@ export const FLOWS: Flow[] = [
       // flagged as having receded after the redesign.
       const field = ctx.page.locator('[role="dialog"] textarea, [role="dialog"] input[type="text"]');
       if (await field.count()) {
-        await field.first().fill("harness: felt solid, no groin pain");
+        await field.first().fill("harness: felt solid, nothing sore");
         await ctx.page.waitForTimeout(250);
         await ctx.capture("02-note-typed");
       }
@@ -1286,7 +1286,7 @@ export const FLOWS: Flow[] = [
         }
       }
 
-      const kept = "harness: felt solid, no groin pain";
+      const kept = "harness: felt solid, nothing sore";
       const reopened = ctx.page.locator('[role="dialog"] textarea, [role="dialog"] input[type="text"]');
       if (await reopened.count()) {
         await reopened.first().fill(kept);
