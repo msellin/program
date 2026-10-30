@@ -257,7 +257,8 @@ export const FIGS: Record<string, Fig> = {
     const effort = t > 0 ? 0.5 - 0.5 * Math.cos((2 * Math.PI * t) / 3000) : 1;
     const top: Pt = [hand[0], wK[1] - 16 - 4 * effort]   /* over the hands, where the press meets them */, op = q * (0.25 + 0.75 * effort), len = 14 + 8 * effort;
     sc.ring(hand, 6 + 6 * effort, work, 3, op * 0.9);
-    sc.line([top, add(top, [0, -len])], work, 3, op);
+    sc.line([top, add(top, [0, -len])], work, 4.5, op);
+    sc.line([add(top, [-6, -len + 7]), add(top, [0, -len]), add(top, [6, -len + 7])], work, 4.5, op);
     sc.line([add(top, [-5, -len + 5]), add(top, [0, -len - 1]), add(top, [5, -len + 5])], work, 3, op);
     sc.badge(beyond(wK, wF, 16), work, side);
     return "Seated hip-flexor hold, " + sideWord(side) + " leg: sitting tall, the " + sideWord(side) + " thigh presses up into the hands at about 60% effort and holds";
@@ -389,8 +390,8 @@ export const FIGS: Record<string, Fig> = {
     const K: Pt = [160, 162], H: Pt = [160, 118], S0: Pt = [214, 104], hand: Pt = [214, 166];
     const open = rep % 2 === 0, q = ease(p);
     const S = add(S0, [0, open ? -7 * q : 12 * q]);
-    const head = open ? add(S, lerpP([20, -6], [9, -17], q)) : add(S, lerpP([20, -6], [8, 6], q));
-    const W0 = add(head, [-14, 3]);
+    const head = open ? add(S, lerpP([26, -6], [9, -17], q)) : add(S, lerpP([26, -6], [8, 6], q));
+    const W0 = add(head, [-20, 3]);
     let E: Pt, W: Pt;
     if (open) {
       // Starts where the thread rep starts (same elbow, pointing down), so the loop has no seam.
@@ -407,7 +408,7 @@ export const FIGS: Record<string, Fig> = {
       const ang = (a: Pt, b: Pt) => Math.atan2(b[1] - a[1], b[0] - a[0]) * 180 / Math.PI;
       const turn = (a: number, b: number) => ((b - a + 540) % 360) - 180;
       const Wa = add(S0, [6, -3]), Ea = ikSide(S0, Wa, ARM80[0], ARM80[1], 1);
-      const Se = add(S0, [0, 12]), Wb: Pt = [184, 163], Eb = ik(Se, Wb, ARM80[0], ARM80[1], false);
+      const Se = add(S0, [0, 12]), Wb: Pt = [178, 163], Eb = ik(Se, Wb, ARM80[0], ARM80[1], false);
       const e0 = ang(S0, Ea), f0 = ang(Ea, Wa), e1 = ang(Se, Eb), f1 = ang(Eb, Wb);
       E = P(S, ARM80[0], e0 + turn(e0, e1) * q);
       W = P(E, ARM80[1], f0 + turn(f0, f1) * q);
@@ -868,13 +869,13 @@ const AD_FIGS: Record<string, Fig> = {
   } },
   arch: { kind: "hold", sided: false, scale: 1.3, poster: 1, build(sc, _s, q, _rep = 0, t = 0) {
     // Prone arch (Superman) hold: face down, the hips stay on the floor and the lift comes from the mid and
-    // upper back (chest 7 deg), the legs only a few centimetres, the arms reach overhead in line with the
+    // upper back (chest 12.5 deg), the legs only a few centimetres, the arms reach overhead in line with the
     // trunk. The head continues the trunk line, so the neck stays neutral and the low back is not cranked.
     // Lying proportions as the hollow: trunk 78, arm ARMLY, leg 120. Segment lengths never change.
     // A breath: the chest rises about 1.5 px and settles on a 4 s cycle once the lift is set; legs and hips stay.
     const br = t > 900 ? 1.1 * (0.5 - 0.5 * Math.cos((2 * Math.PI * (t - 900)) / 4000)) : 0;
     const a = lerp(0, 12.5, q) + br, H = [200, 158], S = P(H, 78, 180 + a), foot = P(H, 120, -lerp(0, 9, q));
-    const hand = P(S, ARMLY, 180 + lerp(0, 16, q) + br * 0.5);
+    const hand = P(S, ARMLY, 180 + lerp(0, 20.5, q) + br * 0.5);
     sc.floor();
     sc.line([H, foot], BODY, 8);
     sc.line([S, H], BODY, TORSO);
@@ -882,9 +883,9 @@ const AD_FIGS: Record<string, Fig> = {
     sc.line([S, hand], COL.B, 8);
     return "Prone arch hold: lying face down with the arms straight overhead and the legs together; the chest, arms and legs lift a little off the floor from the upper back, the neck stays in line with the spine, then hold";
   } },
-  dbrow: { kind: "move", dur: 5200, k: [0.06, 0.34, 0.44, 0.92], poster: 0.9, sided: true, tempo: ["drive", "control"], cues: [{ angle: ["shoulder", "elbow", "hand"] }], build(sc, side, p) {
+  dbrow: { kind: "move", dur: 5200, k: [0.06, 0.34, 0.44, 0.92], poster: 0.9, sided: true, tempo: ["drive", "control"], cues: [{ angle: ["shoulder", "elbow", "hand"] }], build(sc, side, p, _rep = 0, t = 0) {
     // One knee and the same-side hand on a bench, the other foot planted behind it; the back is near level
-    // (about 17 deg: a bench knee 44 below the hip puts the shoulder above it; the bench arm is a hair short of locked) and does not move, nor do the
+    // (about 12 deg: a bench knee 44 below the hip puts the shoulder above it; the bench arm is a hair short of locked) and does not move, nor do the
     // bench hand, knee and planted foot. The weight travels from a straight arm to the side of the ribs, the
     // elbow rising along the body behind the shoulder (trainer: elbows back along the ribs, never overhead).
     const work = COL[side], B = 140, K = [176, B - 4], H = [172, B - 4 - 43.8];
@@ -895,7 +896,9 @@ const AD_FIGS: Record<string, Fig> = {
     const plant = [H, ikSide(H, F, 44, 42, 1), F];
     // End of the pull: just below the ribcage, a little behind the shoulder.
     const top = add(lerpP(H, S, 0.45), [0, 7]);
-    const hand = lerpP(P(S, ARM86[0] + ARM86[1] - 0.01, 90), top, p);
+    // A 2 px elbow settle (150 ms) as the lowered arm arrives at the bottom: the hand eases 0.07 px toward the shoulder (the locked arm bends, the elbow moves ~2 px) and back.
+    const dt = t > 0 ? ((t % 5200) - 0.92 * 5200) / 150 : 1, settle = dt >= 0 && dt < 1 ? 0.07 * Math.sin(Math.PI * dt) : 0;
+    const hand0 = lerpP(P(S, ARM86[0] + ARM86[1] - 0.01, 90), top, p), hand = lerpP(hand0, S, settle / (ARM86[0] + ARM86[1]));
     const el = ikSide(S, hand, ARM86[0], ARM86[1], -1);
     sc.mark("shoulder", S); sc.mark("elbow", el); sc.mark("hand", hand);
     sc.floor();
@@ -908,13 +911,16 @@ const AD_FIGS: Record<string, Fig> = {
     sc.badge(beyond(S, hand, 16), work, side);
     return "Single-arm dumbbell row, " + sideWord(side) + " arm working: the other knee and hand on a bench, the opposite foot planted, back flat; pull the dumbbell from a straight arm to just below the ribs with the elbow close to the side, then lower under control";
   } },
-  pulldown: { kind: "move", scale: 1.3, dur: 6000, k: [0.08, 0.36, 0.48, 0.95], poster: 0.9, sided: false, tempo: ["drive", "control"], cues: [{ angle: ["shoulder", "elbow", "hand"] }], build(sc, _s, p) {
+  pulldown: { kind: "move", scale: 1.3, dur: 6000, k: [0.08, 0.36, 0.48, 0.95], poster: 0.9, sided: false, tempo: ["drive", "control"], cues: [{ angle: ["shoulder", "elbow", "hand"] }], build(sc, _s, p, _rep = 0, t = 0) {
     // Seated at a cable stack, thighs under the pad, a slight lean back (10 deg) that stays put. The bar
     // travels in front of the face from straight arms overhead to the upper chest, elbows down and back.
     // The cable runs straight from the bar to a fixed pulley above; seat, pad and feet do not move.
     const H = [170, 130], K = P(H, 44, -8), foot = P(K, 42, 93), S = P(H, 56, -100 - 8 * p), arm = ARM86[0] + ARM86[1];
     // The hand starts 19 ahead of the shoulder and ends at the clavicle line (S + [12, 16]); x stays >= 12 so the bar passes in front of the chin.
-    const hand = lerpP([S[0] + 19, S[1] - Math.sqrt(arm * arm - 19 * 19) + 0.01], add(S, [12, 16]), p);
+    const hand0 = lerpP([S[0] + 19, S[1] - Math.sqrt(arm * arm - 19 * 19) + 0.01], add(S, [16, 20]), p);
+    // A 2 px elbow settle (150 ms) once the bar is back overhead: the hand eases 0.07 px toward the shoulder (the elbow moves ~2 px) and back.
+    const dt = t > 0 ? ((t % 6000) - 0.95 * 6000) / 150 : 1, settle = dt >= 0 && dt < 1 ? 0.07 * Math.sin(Math.PI * dt) : 0;
+    const hand = lerpP(hand0, S, settle / dist(S, hand0));
     // Always the lower elbow solution: the chain swings from overhead to below the shoulder, and a left/right pick flips there (64 px pop).
     const el = ik(S, hand, ARM86[0], ARM86[1], false);
     sc.mark("shoulder", S); sc.mark("elbow", el); sc.mark("hand", hand);
@@ -922,7 +928,7 @@ const AD_FIGS: Record<string, Fig> = {
     sc.floor();
         sc.bg([hand, beyond(hand, Q, 800)], PROP, 2);
     sc.box(H[0] - 22, H[1] + 7, H[0] + 28, 167);
-    sc.line([[pad[0] + 7, pad[1]], [258, pad[1]]], PROP, 3);
+    sc.line([[pad[0] + 7, pad[1]], [226, pad[1]]], PROP, 3);
     sc.line([H, K, foot], BODY, 8);
     sc.ring(pad, 7, PROP, 3);
     sc.line([S, H], BODY, TORSO); sc.dot(P(S, 22, -100 - 8 * p), 11, BODY);

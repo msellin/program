@@ -1,0 +1,9 @@
+# Lane C r3: arch, pulldown, dbrow, threadneedle, hipflex (2026-10-30)
+
+Measured through drawFigure every 33 ms (jumps.mjs). Tests (93), typegen, tsc pass. Sheets rendered and read.
+
+- arch: hand 16 -> 20.5 deg (+4.5 deg over the chest line; main already had 16, not the brief's 12.5 base), arm centreline 8.2 px from the head centre at the lift (head dot r 5.5, arm half-width 4: ~1 px of clear air, not 4; not pushed further, the arm would leave the chest line). Stale "7 deg" comment fixed (12.5). Thumb crop NOT tightened: the poster box is width-limited (figure ~200 px long, 56x40 is 1.4:1), so a tighter crop would cut the feet or hand; treated as a ceiling. Max jump 2.9 px.
+- pulldown: end hand S+[16,20] (was [12,16]); pad rod now ends at x 226 (was 258), so no floating second bar; 2 px elbow settle: after the return (0.95 of 6000 ms) the hand eases 0.07 px toward the shoulder over 150 ms, which moves the elbow 2.8 px and back. Figure scale/bar ring unchanged (thumb now reads figure + cable + short pad rod). Max jump 4.7 px.
+- dbrow: elbow settle after the lower, same method over 150 ms at 4784 ms: elbow excursion 2.1 px; stale comment "17 deg" -> 12 deg (S = P(H,56,-12)). Max jump 2.4 px.
+- threadneedle: head moved 6 px forward at rest ([26,-6]) and wrist offset [-20,3], so the wrist stays S0+[6,-3] (loop seam and elbow-interpolation intact): wrist to head centre 20.2 px at 0 ms and at the end of the opening rep (5400 ms) (was 14.3); threading end wrist x 178 (was 184). Elbow interpolation kept. Max jump 4.9 px (was 4.2). Trade-off: shoulder-to-head gap 21 -> 27 px at rest; hip-rehab limits untouched (no extra range, hand/knee/hip planted).
+- hipflex: press arrow stroke 3 -> 4.5 and an arrowhead (two 7 px barbs) added so it reads as an arrow at 56x40; ring/joints untouched. Max jump 0.3 px, hold test passes.
