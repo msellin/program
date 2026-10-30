@@ -221,18 +221,24 @@ describe("figure rig", () => {
   it("holds ease into effort once, then only breathe: the skeleton never moves and the body barely does", () => {
     // Motion round (2026-10-29): a frozen hold read as a photo. The breath widens the ribcage shape only;
     // the joints a coach panel set stay exactly where they are (no rep-like pulsing).
+    // The thin effort markers (hipflex's press arrow and contact ring, founder 2026-10-30) may build and ease;
+    // limbs and trunk are the thick strokes, and those are what must not move.
     const shapePts = (f: FigureFrame) => f.slots.flatMap((s) => (s.shape ? pts(s.shape) : []));
+    const skeleton = (f: FigureFrame) => { const max = Math.max(...f.slots.map((s) => s.w)); return f.slots.filter((s) => s.w > max * 0.4).map((s) => s.pts); };
     for (const id of ["hipflex", "hang"]) {
-      const a = drawFigure(id, "L", 1000, false), aPts = a.slots.map((s) => s.pts);
+      const a = drawFigure(id, "L", 1000, false), aPts = skeleton(a);
       let moved = 0;
       for (const t of [2000, 3150, 5000, 9000]) {
         const f = drawFigure(id, "L", t, false);
-        expect(f.slots.map((s) => s.pts), id).toEqual(aPts);
+        expect(skeleton(f), id).toEqual(aPts);
         const sp = shapePts(f), ap = shapePts(a);
         sp.forEach((q, i) => { const d = len(q, ap[i]); moved = Math.max(moved, d); expect(d, id).toBeLessThan(1.6); });
       }
       expect(moved, id + " breathes").toBeGreaterThan(0.2);
     }
+    // ...and the hip-flexor hold visibly works: its effort markers differ between the eased and the full press.
+    const marks = (t: number) => drawFigure("hipflex", "L", t, false).slots.filter((s) => s.w <= 3).map((s) => s.pts + s.op);
+    expect(marks(3000)).not.toEqual(marks(4500));
   });
 
   it("tempo curves run 0 to 1 and never go back: no overshoot past an end pose, no bounce", () => {
@@ -372,6 +378,79 @@ describe("exercise → figure map", () => {
     "tuck_forward_roll_from_crow",
     "wall_cartwheel_exit",
   ]);
+  // Drills a program picks from its drill_library pool are as visible as the ones it names (founder 2026-10-30:
+  // thread-the-needle reached Today with no figure because only named exercise_ids were checked). This is the
+  // known backlog of reachable drills without a figure; a NEW gap fails here. Draw one, then delete it below.
+  const FIGURE_BACKLOG = new Set([
+    "aerobic_easy_recovery",
+    "aerobic_norwegian_4x4",
+    "aerobic_retest",
+    "aerobic_short_intervals",
+    "aerobic_sustained_tempo",
+    "aerobic_threshold_cruise",
+    "aerobic_threshold_test",
+    "aerobic_z1_steady",
+    "deliberate_mat_falls",
+    "hs_arch_hold",
+    "hs_elbow_stand_straddle_l",
+    "hs_fingertip_taps",
+    "hs_hollow_rock",
+    "hs_video_review",
+    "mu_false_grip_hang",
+    "mu_false_grip_pullup",
+    "mu_false_grip_ring_row",
+    "mu_first_strict_ring_mu_attempt",
+    "mu_jump_muscle_up",
+    "mu_low_ring_muscle_up",
+    "mu_ring_dip_deep",
+    "mu_ring_dip_full",
+    "mu_ring_dip_negative",
+    "mu_ring_dip_support_hold",
+    "mu_ring_support_lockout",
+    "mu_rto_dip",
+    "mu_straight_arm_pulldown_band",
+    "mu_straight_arm_pulldown_cable",
+    "mu_transition_negative_high",
+    "mu_transition_negative_low",
+    "mu_transition_seated_band",
+    "mu_video_review",
+    "om_bottom_up_kb_press",
+    "om_empty_bar_ohs",
+    "om_half_kneeling_dowel_press",
+    "om_kb_arm_bar",
+    "om_prone_y_raise",
+    "om_snatch_grip_sotts_press",
+    "om_tgu_hold",
+    "om_wall_slides",
+    "pu_arch_hold",
+    "pu_dumbbell_row",
+    "pu_farmers_carry",
+    "pu_isometric_chin_over_bar",
+    "pu_lat_pulldown",
+    "pu_video_review",
+    "tuck_forward_roll_from_crow",
+    "wall_cartwheel_exit",
+  ]);
+  it("every drill any program can reach has a figure, or is on the named backlog", () => {
+    const manifest = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../../../public/data/programs/manifest.json"), "utf8"));
+    const slugs: string[] = (manifest.programs ?? manifest).map((p: { slug?: string; id?: string }) => p.slug ?? p.id);
+    const reach = new Set<string>();
+    const walk = (o: unknown) => {
+      if (Array.isArray(o)) o.forEach(walk);
+      else if (o && typeof o === "object")
+        for (const [k, v] of Object.entries(o)) {
+          if (k === "exercise_id" && typeof v === "string") reach.add(v);
+          else if (k === "drill_library" && Array.isArray(v)) v.forEach((d) => typeof d === "string" && reach.add(d));
+          else walk(v);
+        }
+    };
+    for (const slug of slugs) walk(JSON.parse(fs.readFileSync(path.resolve(__dirname, `../../../public/data/programs/${slug}.json`), "utf8")));
+    const missing = [...reach].filter((id) => ids.has(id) && !EXERCISE_FIGURES[id]);
+    expect(missing.filter((id) => !FIGURE_BACKLOG.has(id)), "reachable drill with no figure").toEqual([]);
+    expect([...FIGURE_BACKLOG].filter((id) => EXERCISE_FIGURES[id]), "drawn: remove from the backlog").toEqual([]);
+    expect(EXERCISE_FIGURES.om_quadruped_thoracic_rotation).toBe("threadneedle");
+  });
+
   it("every anterior-hip-rebuild exercise has a figure", () => {
     const seen = new Set<string>();
     const walk = (o: unknown) => {

@@ -18,8 +18,8 @@ type ActivityType = NonNullable<RunLog["activity_type"]>;
  * Extra-session slot on Today.
  *
  * Covers anything the user might do outside the barbell block: run, HYROX
- * simulation, CrossFit class, ride, row, ski erg, walk. Recommendation is
- * per-day-of-week (48h squat spacing enforced). Log form supports manual
+ * simulation, CrossFit class, ride, row, ski erg, walk. One quiet line until
+ * something is logged. Log form supports manual
  * entry or GPX import from a Garmin/Suunto/Coros/Wahoo export; parsed
  * client-side, file never leaves the device.
  */
@@ -28,11 +28,6 @@ export function RunSlotCard({ date }: { date: string }) {
   const logRun = useStore((s) => s.logRun);
   const removeRun = useStore((s) => s.removeRun);
   const activeProgramSlug = store.user_profile?.active_program_id;
-  // slotForDow's copy is anterior-hip-specific (heavy-squat days, 48h squat
-  // spacing) — for other programs it misleads. Show a generic "log extras" card
-  // instead so aerobic / skill users can still record cross-modal work without
-  // being told to keep it easy on their primary lift day.
-  const useGenericSlot = activeProgramSlug !== "anterior-hip-rebuild";
   // FIT import is admin-only until a real device export has confirmed the
   // field-number mapping. See lib/fit.ts.
   const isAdmin = useIsSuperAdmin();
@@ -76,28 +71,11 @@ export function RunSlotCard({ date }: { date: string }) {
   const [importError, setImportError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const dow = new Date(date + "T12:00:00").getDay();
-  const slot = useGenericSlot
-    ? {
-        type: "optional" as const,
-        // Batch 36 P1 (audit 2026-08-21 · app-copy) — matched §2.13
-        // CTA vocabulary. "Log an extra session" → "Log extra session →"
-        // (dropped article, added arrow suffix per §2.13 row 8).
-        title: "Log extra session →",
-        detail:
-          "Runs, rows, walks, classes, mobility — anything not in the prescribed block. Optional. Nothing here changes the plan.",
-      }
-    : slotForDow(dow);
   const runs = store.logs[date]?.runs ?? [];
-  // Card always renders — even on rest / heavy-lift days — because the user
-  // may still do a walk, mobility session, easy row, or class. The slot copy
-  // adjusts to warn on ill-advised choices; nothing is blocked.
-
-  const cardStatus = slot.type === "primary" ? "green" : undefined;
-  // Advisory-only slots ("heavy squat day", "rest day") are one muted line,
-  // not a framed card; the ⓘ reveals the reason inline.
-  const quiet = slot.type === "none";
-  const [whyOpen, setWhyOpen] = useState(false);
+  // One quiet line until something is logged or the form is open (founder 2026-10-30). The weekday advice it used
+  // to carry ("Primary conditioning day", "Heavy squat day") was typed for the hip program's old fixed week and
+  // knew nothing of the plan actually scheduled, so it went; logging an outside session is all this is for.
+  const compact = !open && runs.length === 0;
 
   const reset = () => {
     setActivity("run");
@@ -321,40 +299,21 @@ export function RunSlotCard({ date }: { date: string }) {
   return (
     <section
       aria-label="Extra session slot"
-      className={quiet ? "space-y-1" : cn(cardClass({ status: cardStatus }), "space-y-2")}
+      className={compact ? undefined : cn(cardClass(), "space-y-2")}
     >
-      {quiet ? (
-        <header>
-          <div className="flex items-center gap-1">
-            <p className="flex-1 text-caption text-muted">{slot.title}</p>
-            <button
-              type="button"
-              onClick={() => setWhyOpen((v) => !v)}
-              aria-expanded={whyOpen}
-              aria-label="Why?"
-              className="w-11 h-11 flex items-center justify-center text-muted hover:text-ink rounded-lg"
-            >
-              <Info size={16} strokeWidth={1.75} />
-            </button>
-          </div>
-          {whyOpen ? <p className="text-caption text-muted">{slot.detail}</p> : null}
+      {compact ? null : (
+        <header className="flex items-center gap-2">
+          <Footprints size={16} className="text-slate flex-shrink-0" aria-hidden />
+          <p className="flex-1 min-w-0 text-small font-semibold text-strong">Outside sessions</p>
+          <button
+            type="button"
+            onClick={() => setPrimerOpen(true)}
+            aria-label="Warm-up + cool-down"
+            className="w-11 h-11 flex items-center justify-center text-muted hover:text-ink rounded-lg"
+          >
+            <Info size={16} strokeWidth={1.75} />
+          </button>
         </header>
-      ) : (
-      <header className="flex items-center gap-2">
-        <Footprints size={16} className="text-slate flex-shrink-0" aria-hidden />
-        <div className="flex-1 min-w-0">
-          <p className="text-small font-semibold text-strong">{slot.title}</p>
-          <p className="text-small text-muted mt-0.5">{slot.detail}</p>
-        </div>
-        <button
-          type="button"
-          onClick={() => setPrimerOpen(true)}
-          aria-label="Warm-up + cool-down"
-          className="w-11 h-11 flex items-center justify-center text-muted hover:text-ink rounded-lg"
-        >
-          <Info size={16} strokeWidth={1.75} />
-        </button>
-      </header>
       )}
 
       {runs.length > 0 ? (
@@ -709,7 +668,8 @@ export function RunSlotCard({ date }: { date: string }) {
           </div>
         </div>
       ) : (
-        <div className="flex flex-wrap gap-2 pt-0.5">
+        <div className="flex flex-wrap items-center gap-x-2 pt-0.5">
+          {compact ? <span className="text-small text-muted mr-1">Outside session?</span> : null}
           <button
             type="button"
             onClick={() => setOpen(true)}
@@ -902,39 +862,3 @@ function prettyActivity(a: ActivityType | undefined): string {
   return a ? map[a] : "Session";
 }
 
-function slotForDow(dow: number): {
-  type: "primary" | "optional" | "none";
-  title: string;
-  detail: string;
-} {
-  if (dow === 2 || dow === 5) {
-    return {
-      type: "primary",
-      title: "Primary conditioning day",
-      detail:
-        "30-45 min. CrossFit class, run, HYROX simulation, or intervals of your choice.",
-    };
-  }
-  if (dow === 3 || dow === 6) {
-    return {
-      type: "optional",
-      title: "Optional easy session",
-      detail:
-        "Up to 20-30 min Z1 only — after the barbell work, never before. Keep it conversational.",
-    };
-  }
-  if (dow === 1 || dow === 4) {
-    return {
-      type: "none",
-      title: "Heavy squat day — keep conditioning light",
-      detail:
-        "The plan doesn't schedule anything here. If you do something, keep it easy (walk, mobility, easy row) — a hard session eats into next barbell day.",
-    };
-  }
-  return {
-    type: "none",
-    title: "Rest day — nothing scheduled",
-    detail:
-      "The plan wants a full rest. If you did something anyway (walk, class, easy ride), log it here so the engine sees the load.",
-  };
-}

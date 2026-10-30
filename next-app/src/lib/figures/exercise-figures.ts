@@ -19,6 +19,7 @@ export const EXERCISE_FIGURES: Record<string, keyof typeof FIGS> = {
   om_passive_bar_hang: "hang",
   om_supine_dowel_pullover: "pullover",
   om_foam_roller_thoracic_ext: "roller",
+  om_quadruped_thoracic_rotation: "threadneedle",
   // Ad path (2026-10-28): first-strict-pullup, handstand-walk, concurrent-strength-maintenance.
   pu_dead_hang: "hang",
   pu_active_hang: "activehang",

@@ -236,7 +236,7 @@ function sideWord(s: string) { return s === "L" ? "left" : s === "R" ? "right" :
 // Side views face RIGHT or lie with the head LEFT: either way we see her RIGHT side,
 // so right limbs are near (drawn in front) and left limbs are far (drawn behind).
 export const FIGS: Record<string, Fig> = {
-  hipflex: { kind: "hold", sided: true, build(sc, side, q) {
+  hipflex: { kind: "hold", sided: true, build(sc, side, q, _rep = 0, t = 0) {
     // Seated on a chair set-up: hip and knee both near 90, trunk upright. The thigh presses UP into the hand
     // and the hand does not give (3 degrees of thigh, none of hand), so the hip never goes past 90 of flexion
     // (FADIR range, trainer review 11). Standard leg 44 + 42 and ARM86 like the other upright figures.
@@ -251,9 +251,14 @@ export const FIGS: Record<string, Fig> = {
     sc.line([H, S], BODY, TORSO); sc.line([S, [176, 56]], BODY, 8); sc.dot([176, 48], 11, BODY);
     if (side === "L") { restLeg(); } else { workLeg(); }
     sc.line([S, elbow, hand], BODY, 8);
-    const top = add(wK, [0, -16]);
-    sc.line([top, add(top, [0, -16])], work, 3, 0.6 + 0.4 * q);
-    sc.line([add(top, [-5, -11]), add(top, [0, -17]), add(top, [5, -11])], work, 3, 0.6 + 0.4 * q);
+    // The effort is shown, not the joint (founder 2026-10-30: the hold read as a photo). The thigh stays inside
+    // its 3 degrees; the press arrow and a contact ring at the hands build and ease on a 3 s cycle. Still
+    // frames and reduced motion get the full-effort frame.
+    const effort = t > 0 ? 0.5 - 0.5 * Math.cos((2 * Math.PI * t) / 3000) : 1;
+    const top: Pt = [hand[0], wK[1] - 16 - 4 * effort]   /* over the hands, where the press meets them */, op = q * (0.45 + 0.55 * effort);
+    sc.ring(hand, 7 + 3 * effort, work, 2, op * 0.8);
+    sc.line([top, add(top, [0, -16])], work, 3, op);
+    sc.line([add(top, [-5, -11]), add(top, [0, -17]), add(top, [5, -11])], work, 3, op);
     sc.badge(beyond(wK, wF, 16), work, side);
     return "Seated hip-flexor hold, " + sideWord(side) + " leg: sitting tall, the " + sideWord(side) + " thigh presses up into the hands at about 60% effort and holds";
   } },
@@ -374,6 +379,39 @@ export const FIGS: Record<string, Fig> = {
     sc.line([S, hand], COL.B, 8); sc.dot(hand, 8.5, COL.B); sc.dot(hand, 7, WOOD);
     sc.line([[108, 155], S], BODY, 8); sc.dot([98, 153], 11, BODY);
     return "Supine dowel pullover: lying on the back, knees bent, both hands on a dowel; the arms travel slowly overhead toward the floor and hold";
+  } },
+  threadneedle: { dur: 10000, kind: "move2", k: [0.06, 0.42, 0.56, 0.94], sided: false, build(sc, _s, p, rep = 0) {
+    // Quadruped thread-the-needle (founder 2026-10-30): a tabletop, hips over the knees (thigh vertical, 44) and
+    // shoulders over the hand (arm 62), so the trunk slopes only ~15 degrees, as it does on a real person (review
+    // 60/61: a hip-high incline read as a down dog). The near hand starts behind the head, elbow down. Rep A
+    // opens: the elbow sweeps up to the ceiling, the near shoulder lifts and the head follows. Rep B threads: the
+    // arm slides under the chest to the floor, the near shoulder dips toward it. Support arm, knees, hips planted.
+    const K: Pt = [160, 162], H: Pt = [160, 118], S0: Pt = [214, 104], hand: Pt = [214, 166];
+    const open = rep % 2 === 0, q = ease(p);
+    const S = add(S0, [0, open ? -7 * q : 12 * q]);
+    const head = open ? add(S, lerpP([16, -8], [9, -17], q)) : add(S, lerpP([16, -8], [8, 6], q));
+    const W0 = add(head, [-6, 2]);
+    let E: Pt, W: Pt;
+    if (open) {
+      // Starts where the thread rep starts (same elbow, pointing down), so the loop has no seam.
+      W = W0;
+      const E0 = ikSide(S, W, ARM80[0], ARM80[1], 1), a0 = Math.atan2(E0[1] - S[1], E0[0] - S[0]) * 180 / Math.PI;
+      E = P(S, ARM80[0], lerp(a0, -100, q));
+    } else {
+      // To the floor under the chest, forearm low along the floor, elbow slightly bent.
+      W = lerpP(W0, [172, 163], q);
+      E = ikSide(S, W, ARM80[0], ARM80[1], 1);
+    }
+    sc.floor();
+    sc.line([[K[0] - 39, 166], K, H], BODY, 8);
+    sc.line([H, S], BODY, TORSO);
+    sc.line([hand, S0], FAR, 8);   // support arm stays straight and planted
+    sc.line([[hand[0] - 14, 167], [hand[0] + 14, 167]], FAR, 4);
+    sc.dot(head, 11, BODY);
+    sc.line([S, E, W], COL.B, 8);   // the working arm is the accent
+    return open
+      ? "Thread-the-needle, opening: on hands and knees with one hand behind the head, the elbow turns up toward the ceiling and the eyes follow it"
+      : "Thread-the-needle, threading: the same arm slides under the chest along the floor, the upper back turning the other way";
   } },
   roller: { dur: 7000, kind: "move", k: [0.08, 0.4, 0.62], sided: false, scale: 1.15, build(sc, side, p) {
     // The upper back really extends: the segment above the roller turns 22 degrees past the line of the
