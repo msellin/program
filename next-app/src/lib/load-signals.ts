@@ -140,7 +140,7 @@ const SIGNAL_BY_ID: Record<string, LoadSignal> = Object.fromEntries(
 /**
  * What the chart drew before programs could declare anything. Kept as the
  * fallback so a program that somehow ships without a declaration renders what
- * it always did, rather than nothing — the same reasoning as `LEGACY_REGIONS`
+ * it always did, rather than nothing — the same reasoning as `GENERAL_REGIONS`
  * in `symptom-regions.ts`. The data test is what stops a program relying on
  * it.
  */

@@ -138,9 +138,9 @@ export default function CheckPage() {
    * `null` means NOT YET KNOWN, which is not the same as "declares nothing"
    * (fixed 2026-09-14, found by persona sweep #8).
    *
-   * These seeded with `regionsForProgram(null)`, and that fallback is
+   * These seeded with `regionsForProgram(null)`, and that fallback was then
    * `LEGACY_REGIONS` — `groin_left`, `low_back`, `buttock_left`,
-   * `shoulder_right`. So every load of this page opened with the ANTERIOR-HIP
+   * `shoulder_right` (now the general set, P-09). So every load of this page opened with the ANTERIOR-HIP
    * programme's clinical map, for every user, until the programme resolved a
    * moment later.
    *
@@ -168,8 +168,8 @@ export default function CheckPage() {
   const [regionsError, setRegionsError] = useState(false);
   useEffect(() => {
     if (!activeSlug) {
-      // No programme picked: the historical four are the only sensible set,
-      // and this is the case the fallback was written for.
+      // No programme picked: the general set (neck, shoulder, elbow, wrist,
+      // low back, knee), never the hip programme's map (P-09).
       setRegions(regionsForProgram(null));
       setFlags(flagsForProgram(null));
       return;

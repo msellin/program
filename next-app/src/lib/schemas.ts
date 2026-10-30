@@ -675,7 +675,7 @@ export const programSchema = z.object({
    * Region ids this program asks about in the morning check. Ids must resolve
    * against `SYMPTOM_REGIONS`; `data-integrity.test.ts` fails otherwise, which
    * is what keeps this from becoming another authored key nothing reads.
-   * Absent → the historical four (see `regionsForProgram`).
+   * Absent → the general set (see `regionsForProgram`).
    *
    * A program declares WHAT feeds the safety gate. It does not declare how
    * lenient the gate is — thresholds stay central and audited in `deriveState`.

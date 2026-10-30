@@ -67,7 +67,10 @@ export function reasonForState(s: Symptoms, state: CheckState): string {
     if (s.night_pain) return "Red flag: night pain woke you.";
     if (s.gait_change) return "Red flag: gait change (shortened stride).";
     if (s.click_present && s.click_painful) return "Red flag: painful clicking.";
-    if (peak > 5) return label ? `${label} is above 5/10.` : "A symptom score is above 5/10.";
+    // One sentence for every red-day surface (RECHECK-new-4): Today's rest card
+    // and the check both render this, so they can no longer read "8/10" in one
+    // place and "above 5/10" in the other.
+    if (peak > 5) return label ? `${label} is ${peak}/10, above the 5/10 line.` : `A symptom is ${peak}/10, above the 5/10 line.`;
     if (life >= 8) return "Life load is at the ceiling — cooked.";
     return "A red-flag signal fired.";
   }

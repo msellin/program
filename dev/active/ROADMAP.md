@@ -28,8 +28,8 @@ conversion to paid: paid conversion is first read from the trial cohort after St
 - [x] M-026 (2026-10-30: plain lines, personal-program sentences removed): "simulator harness", "archetypes" on the programs page (`programs/page.tsx:183,372`)
 - [ ] M-022: review line replaced with "Applies to the Terav beta." (2026-10-30); privacy table crushed at 393 still open
 - [ ] M-049: hurt-sheet Stop is now a secondary outline (2026-10-30); still to check: the stopped state leaves the note sheet open
-- [ ] RECHECK-new-4: "Shoulder 8/10" vs "above 5/10" wording mismatch on the red card
-- [ ] P-09: `DEFAULT_PROGRAM_SLUG` = hip in `data-loader.ts:11`; `LEGACY_REGIONS` fallback
+- [x] RECHECK-new-4 (2026-10-30: one line, "Shoulder R is 8/10, above the 5/10 line.", from `reasonForState` on Today's rest card and the check; `RedRestCard.test.tsx`): "Shoulder 8/10" vs "above 5/10" wording mismatch on the red card
+- [x] P-09 (2026-10-30: `loadProgram` requires a slug and rejects without one, every caller already guarded; fallback regions are the general unsided set, legacy ids still resolve for history; `data-loader.test.ts`, `symptom-state.test.ts`): `DEFAULT_PROGRAM_SLUG` = hip in `data-loader.ts:11`; `LEGACY_REGIONS` fallback
 - [ ] P-10: `guide/page.tsx:160` hip case study
 - [ ] Personal program behind sign-in: `anterior-hip-rebuild.json` (clinical overrides, lift history) is a public
       static file; serve it through an auth-checked function like the removed clinical files (follow-up to M-069)

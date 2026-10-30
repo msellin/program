@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
-import { regionsForProgram, LEGACY_REGIONS } from "@/lib/symptom-regions";
+import { regionsForProgram, GENERAL_REGIONS } from "@/lib/symptom-regions";
 
 const src = (rel: string) => fs.readFileSync(path.resolve(process.cwd(), "src", rel), "utf8");
 const stripComments = (s: string) =>
@@ -17,8 +17,8 @@ const stripComments = (s: string) =>
  * saw green."
  *
  * The RESOLVER was fixed. The INITIAL STATE was not: `/check` seeded
- * `useState(() => regionsForProgram(null))`, and that fallback is
- * `LEGACY_REGIONS` — the hip programme's four. So every load opened with them,
+ * `useState(() => regionsForProgram(null))`, and that fallback was
+ * `LEGACY_REGIONS` — the hip programme's four (now the general set, P-09). So every load opened with them,
  * for every user, until the programme resolved a moment later.
  *
  * Persona sweep #8 caught it on production, 2026-09-14.
@@ -70,22 +70,17 @@ describe("check page region resolution", () => {
     expect(page.slice(at, at + 420)).toMatch(/reload/i);
   });
 
-  it("still uses the legacy four when NO programme is picked", () => {
+  it("still uses the fallback when NO programme is picked", () => {
     // That is the case the fallback was actually written for, and it stays.
     expect(page).toMatch(/if \(!activeSlug\)/);
     const at = page.indexOf("if (!activeSlug)");
     expect(page.slice(at, at + 220)).toContain("regionsForProgram(null)");
   });
 
-  it("the fallback is still the hip four, which is why seeding with it mattered", () => {
-    // Guards the premise: if LEGACY_REGIONS ever became generic, the severity
-    // of the original defect changes and this file should be re-read.
-    expect([...LEGACY_REGIONS]).toEqual([
-      "groin_left",
-      "low_back",
-      "buttock_left",
-      "shoulder_right",
-    ]);
+  it("the fallback is general now, and a programme still gets its own set", () => {
+    // P-09 (2026-10-30): the fallback was the hip four; seeding with it is
+    // still wrong (a pull-up user scores the wrong ids), so the tests above stay.
+    expect([...GENERAL_REGIONS]).toEqual(["neck", "shoulder", "elbow", "wrist", "low_back", "knee"]);
     const pullup = regionsForProgram({
       symptom_regions: ["shoulder", "elbow", "low_back"],
     }).map((r) => r.id);
@@ -94,9 +89,6 @@ describe("check page region resolution", () => {
       "elbow",
       "low_back",
     ]);
-    // And the two sets share exactly one id — which is why the sweep reported
-    // "missing: Shoulder, Elbow" rather than missing everything.
-    const overlap = pullup.filter((id) => (LEGACY_REGIONS as readonly string[]).includes(id));
-    expect(overlap).toEqual(["low_back"]);
+
   });
 });

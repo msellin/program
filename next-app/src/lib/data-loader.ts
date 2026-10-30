@@ -7,9 +7,6 @@ import {
   type ProgramManifest,
 } from "./schemas";
 
-/** Canonical fallback program — Margus's original. Preserves current single-user behaviour. */
-export const DEFAULT_PROGRAM_SLUG = "anterior-hip-rebuild";
-
 export type ClinicalContext = {
   schema_version?: string;
   generated?: string;
@@ -32,12 +29,13 @@ let cache: {
 } = { programBySlug: new Map() };
 
 /**
- * Load a program template by slug. Falls back to Margus's canonical program
- * when no slug is provided — preserves single-user behaviour for existing users
- * whose `user_profile.active_program_id` isn't set yet.
+ * Load a program template by slug. The slug is required (P-09, 2026-10-30): no
+ * slug means no program, never a fallback to the founder's personal hip
+ * program, which every slug-less caller used to render to strangers.
  */
-export async function loadProgram(slug?: string): Promise<Program> {
-  const effectiveSlug = slug ?? DEFAULT_PROGRAM_SLUG;
+export async function loadProgram(slug: string): Promise<Program> {
+  if (!slug) throw new Error("loadProgram: no program slug");
+  const effectiveSlug = slug;
   const cached = cache.programBySlug.get(effectiveSlug);
   if (cached) return cached;
   const res = await fetch(`/data/programs/${effectiveSlug}.json`);

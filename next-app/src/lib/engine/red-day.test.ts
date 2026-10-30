@@ -42,7 +42,7 @@ describe("redDayDirective", () => {
     expect(d.hold).toBe(true);
     if (!d.hold) return;
     expect(d.redFlag).toBe(false);
-    expect(d.reason).toMatch(/above 5\/10/);
+    expect(d.reason).toBe("Elbow is 7/10, above the 5/10 line.");
     expect(d.alternative?.blocks.map((b) => b.id)).toEqual(["block_shoulder_prep", "block_active_hollow"]);
   });
 

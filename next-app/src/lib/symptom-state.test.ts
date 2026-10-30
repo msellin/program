@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { deriveState, reasonForState, peakRegionScore } from "./symptom-state";
-import { regionsForProgram, REGION_BY_ID, LEGACY_REGIONS } from "./symptom-regions";
+import { regionsForProgram, REGION_BY_ID, GENERAL_REGIONS } from "./symptom-regions";
 import type { Symptoms } from "./schemas";
 
 const s = (o: Partial<Symptoms>): Symptoms => o as Symptoms;
@@ -11,7 +11,7 @@ describe("the safety gate sees every scored region, not four hip fields", () => 
     // elbow_symptom_score because medial epicondylitis is the classic pull-up
     // injury, there was no elbow field, and the engine saw green.
     expect(deriveState(s({ elbow_right: 7 }))).toBe("red");
-    expect(reasonForState(s({ elbow_right: 7 }), "red")).toBe("Elbow R is above 5/10.");
+    expect(reasonForState(s({ elbow_right: 7 }), "red")).toBe("Elbow R is 7/10, above the 5/10 line.");
   });
 
   it("a wrist at 4/10 ambers a muscle-up user", () => {
@@ -47,9 +47,18 @@ describe("the safety gate sees every scored region, not four hip fields", () => 
 });
 
 describe("programs select their regions from the shared library", () => {
-  it("falls back to the historical four when a program declares none", () => {
-    expect(regionsForProgram(null).map((r) => r.id)).toEqual([...LEGACY_REGIONS]);
-    expect(regionsForProgram({}).map((r) => r.id)).toEqual([...LEGACY_REGIONS]);
+  it("falls back to the general set when a program declares none", () => {
+    expect(regionsForProgram(null).map((r) => r.id)).toEqual([...GENERAL_REGIONS]);
+    expect(regionsForProgram({}).map((r) => r.id)).toEqual([...GENERAL_REGIONS]);
+  });
+
+  it("P-09: no program never means the founder's hip map", () => {
+    const ids = regionsForProgram(null).map((r) => r.id);
+    for (const hip of ["groin_left", "groin_right", "buttock_left", "buttock_right"]) {
+      expect(ids).not.toContain(hip);
+    }
+    // And no sided region: a stranger has no documented left or right.
+    expect(ids.some((id) => /_(left|right)$/.test(id))).toBe(false);
   });
 
   it("returns exactly what a program declares, in order", () => {
@@ -65,6 +74,10 @@ describe("programs select their regions from the shared library", () => {
   });
 
   it("every legacy id still resolves, so old history keeps its labels", () => {
-    for (const id of LEGACY_REGIONS) expect(REGION_BY_ID[id], id).toBeDefined();
+    // The original four check fields; history stored under them must render.
+    for (const id of ["groin_left", "low_back", "buttock_left", "shoulder_right"]) {
+      expect(REGION_BY_ID[id], id).toBeDefined();
+    }
+    for (const id of GENERAL_REGIONS) expect(REGION_BY_ID[id], id).toBeDefined();
   });
 });

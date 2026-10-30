@@ -76,24 +76,30 @@ export const REGION_BY_ID: Record<string, SymptomRegion> = Object.fromEntries(
 );
 
 /**
- * What the check asked before programs could declare anything. Used when a
- * program declares no `symptom_regions[]`, so an un-migrated program keeps
- * exactly its previous behaviour rather than silently asking nothing.
+ * What the check asks when there is no program to ask for: none picked yet, or
+ * the program failed to load in the hurt sheet. General and unsided on purpose.
+ *
+ * This used to be `LEGACY_REGIONS` — `groin_left`, `low_back`, `buttock_left`,
+ * `shoulder_right`, the founder's hip map — so a stranger with no program was
+ * asked about someone else's left groin (P-09, 2026-10-30). Those ids stay in
+ * `SYMPTOM_REGIONS`, so history stored under them still validates and renders.
  */
-export const LEGACY_REGIONS = [
-  "groin_left",
+export const GENERAL_REGIONS = [
+  "neck",
+  "shoulder",
+  "elbow",
+  "wrist",
   "low_back",
-  "buttock_left",
-  "shoulder_right",
+  "knee",
 ] as const;
 
-/** Region ids a program asks about, falling back to the historical four. */
+/** Region ids a program asks about, falling back to the general set. */
 export function regionsForProgram(
   program?: { symptom_regions?: string[] } | null,
 ): SymptomRegion[] {
   const ids = program?.symptom_regions?.length
     ? program.symptom_regions
-    : [...LEGACY_REGIONS];
+    : [...GENERAL_REGIONS];
   return ids.map((id) => REGION_BY_ID[id]).filter((r): r is SymptomRegion => !!r);
 }
 

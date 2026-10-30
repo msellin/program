@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import { useStore } from "@/lib/useStore";
-import { peakRegionScore } from "@/lib/symptom-state";
-import { SYMPTOM_REGIONS } from "@/lib/symptom-regions";
+import { deriveState, reasonForState } from "@/lib/symptom-state";
 import { Card } from "@/components/ui/Card";
 
 /**
@@ -13,11 +12,10 @@ import { Card } from "@/components/ui/Card";
  */
 export function RedRestCard({ sourceDate }: { sourceDate: string }) {
   const symptoms = useStore((s) => s.store.logs[sourceDate]?.symptoms ?? null);
-  const { value, regionId } = symptoms ? peakRegionScore(symptoms) : { value: 0, regionId: null };
-  const region = regionId ? SYMPTOM_REGIONS.find((r) => r.id === regionId)?.short : null;
+  // The same reason line the check shows (RECHECK-new-4), not a second wording.
   const lead =
-    region && value > 5
-      ? `Your ${region.toLowerCase()} is ${value}/10, so hard training waits.`
+    symptoms && deriveState(symptoms) === "red"
+      ? `${reasonForState(symptoms, "red")} Hard training waits.`
       : "Your check flagged something, so hard training waits.";
   return (
     <Card status="red" className="bg-red/10 text-small">
