@@ -4,6 +4,64 @@ export const metadata = {
   title: "Privacy policy",
 };
 
+const STORED: { data: string; why: string; retention: string }[] = [
+  {
+    data: "Email address",
+    why: "Sign-in, account emails, recovery, beta announcements",
+    retention: "Until you delete your account",
+  },
+  {
+    data: "Training logs (sets, reps, weights, notes)",
+    why: "Core function — the engine reads your log",
+    retention: "Until you delete your account",
+  },
+  {
+    data: "Morning check + symptom scores + pain ratings",
+    why: "Adaptive load adjustments; symptom-load history",
+    retention: "Until you delete your account",
+  },
+  {
+    data: "Self-scored assessments (hip check, etc.)",
+    why: "Rehab-programme gating + retest history",
+    retention: "Until you delete your account",
+  },
+  {
+    data: "Program state (accepted proposals, phase, week)",
+    why: "Continuity across devices",
+    retention: "Until you delete your account",
+  },
+  {
+    data: "Personal contraindications (movements flagged painful)",
+    why: "Safety — the engine refuses to prescribe these",
+    retention: "Until you delete your account",
+  },
+  {
+    data: "GPX / FIT files you import",
+    why: "Endurance-session parsing",
+    retention: "Never uploaded. Read in your browser; only the numbers you see are saved",
+  },
+  {
+    data: "Consent timestamps",
+    why: "Proof of consent (GDPR requirement)",
+    retention: "Stored in your account record. Deleted with your account",
+  },
+  {
+    data: "How you found Terav (campaign tags from the link you clicked, e.g. utm_campaign)",
+    why: "Used only to measure which campaigns bring people in",
+    retention: "Stored in your account record. Deleted with your account",
+  },
+  {
+    data: "Automatic error reports (Sentry)",
+    why: "Debugging crashes",
+    retention: "90 days. Email addresses are stripped and known symptom fields are removed before sending; free-text you type may still appear",
+  },
+  {
+    data: "Bug reports you send from the app",
+    why: "Acting on the problem you reported, and replying to you",
+    retention: "90 days. Includes whatever you type, plus a screenshot only if you attach one",
+  },
+];
+
 export default function PrivacyPage() {
   return (
     <div className="max-w-2xl mx-auto space-y-4 pt-4 text-small leading-relaxed">
@@ -23,7 +81,20 @@ export default function PrivacyPage() {
       </p>
 
       <h2 className="text-h3 text-strong pt-2">What we store, why, and for how long</h2>
-      <table className="w-full text-small border-collapse">
+      {/*
+        M-022 (2026-10-30): three columns crushed to a word per line at 393 px.
+        Narrow screens get one card per row, labelled; the table returns at sm.
+      */}
+      <ul className="space-y-2 sm:hidden" aria-label="What we store">
+        {STORED.map((r) => (
+          <li key={r.data} className="rounded-lg border border-line-soft px-3 py-2.5 space-y-1">
+            <p className="font-semibold text-strong">{r.data}</p>
+            <p><span className="text-muted">Why: </span>{r.why}</p>
+            <p><span className="text-muted">Kept: </span>{r.retention}</p>
+          </li>
+        ))}
+      </ul>
+      <table className="hidden sm:table w-full text-small border-collapse">
         <thead>
           <tr className="text-left border-b border-line">
             <th className="py-1.5 pr-2 font-semibold">Data</th>
@@ -32,67 +103,13 @@ export default function PrivacyPage() {
           </tr>
         </thead>
         <tbody className="align-top">
-          <tr className="border-b border-line-soft">
-            <td className="py-1.5 pr-2">Email address</td>
-            <td className="py-1.5 pr-2">Sign-in, account emails, recovery, beta announcements</td>
-            <td className="py-1.5">Until you delete your account</td>
-          </tr>
-          <tr className="border-b border-line-soft">
-            <td className="py-1.5 pr-2">Training logs (sets, reps, weights, notes)</td>
-            <td className="py-1.5 pr-2">Core function — the engine reads your log</td>
-            <td className="py-1.5">Until you delete your account</td>
-          </tr>
-          <tr className="border-b border-line-soft">
-            <td className="py-1.5 pr-2">Morning check + symptom scores + pain ratings</td>
-            <td className="py-1.5 pr-2">Adaptive load adjustments; symptom-load history</td>
-            <td className="py-1.5">Until you delete your account</td>
-          </tr>
-          <tr className="border-b border-line-soft">
-            <td className="py-1.5 pr-2">Self-scored assessments (hip check, etc.)</td>
-            <td className="py-1.5 pr-2">Rehab-programme gating + retest history</td>
-            <td className="py-1.5">Until you delete your account</td>
-          </tr>
-          <tr className="border-b border-line-soft">
-            <td className="py-1.5 pr-2">Program state (accepted proposals, phase, week)</td>
-            <td className="py-1.5 pr-2">Continuity across devices</td>
-            <td className="py-1.5">Until you delete your account</td>
-          </tr>
-          <tr className="border-b border-line-soft">
-            <td className="py-1.5 pr-2">Personal contraindications (movements flagged painful)</td>
-            <td className="py-1.5 pr-2">Safety — the engine refuses to prescribe these</td>
-            <td className="py-1.5">Until you delete your account</td>
-          </tr>
-          <tr className="border-b border-line-soft">
-            <td className="py-1.5 pr-2">GPX / FIT files you import</td>
-            <td className="py-1.5 pr-2">Endurance-session parsing</td>
-            <td className="py-1.5">
-              Never uploaded. Read in your browser; only the numbers you see are saved
-            </td>
-          </tr>
-          <tr className="border-b border-line-soft">
-            <td className="py-1.5 pr-2">Consent timestamps</td>
-            <td className="py-1.5 pr-2">Proof of consent (GDPR requirement)</td>
-            <td className="py-1.5">Stored in your account record. Deleted with your account</td>
-          </tr>
-          <tr className="border-b border-line-soft">
-            <td className="py-1.5 pr-2">How you found Terav (campaign tags from the link you clicked, e.g. utm_campaign)</td>
-            <td className="py-1.5 pr-2">Used only to measure which campaigns bring people in</td>
-            <td className="py-1.5">Stored in your account record. Deleted with your account</td>
-          </tr>
-          <tr className="border-b border-line-soft">
-            <td className="py-1.5 pr-2">Automatic error reports (Sentry)</td>
-            <td className="py-1.5 pr-2">Debugging crashes</td>
-            <td className="py-1.5">90 days. Email addresses are stripped and known symptom fields are removed before sending; free-text you type may still appear</td>
-          </tr>
-          <tr className="border-b border-line-soft">
-            <td className="py-1.5 pr-2">Bug reports you send from the app</td>
-            <td className="py-1.5 pr-2">
-              Acting on the problem you reported, and replying to you
-            </td>
-            <td className="py-1.5">
-              90 days. Includes whatever you type, plus a screenshot only if you attach one
-            </td>
-          </tr>
+          {STORED.map((r) => (
+            <tr key={r.data} className="border-b border-line-soft">
+              <td className="py-1.5 pr-2">{r.data}</td>
+              <td className="py-1.5 pr-2">{r.why}</td>
+              <td className="py-1.5">{r.retention}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
 
