@@ -390,8 +390,8 @@ export const FIGS: Record<string, Fig> = {
     const K: Pt = [160, 162], H: Pt = [160, 118], S0: Pt = [214, 104], hand: Pt = [214, 166];
     const open = rep % 2 === 0, q = ease(p);
     const S = add(S0, [0, open ? -7 * q : 12 * q]);
-    const head = open ? add(S, lerpP([26, -6], [9, -17], q)) : add(S, lerpP([26, -6], [8, 6], q));
-    const W0 = add(head, [-20, 3]);
+    const head = open ? add(S, lerpP([23, -6], [9, -17], q)) : add(S, lerpP([23, -6], [8, 6], q));
+    const W0 = add(head, [-18, 5]);
     let E: Pt, W: Pt;
     if (open) {
       // Starts where the thread rep starts (same elbow, pointing down), so the loop has no seam.
@@ -407,7 +407,7 @@ export const FIGS: Record<string, Fig> = {
       // solution), never re-solved per frame; the elbow can only turn one way and stays below the line.
       const ang = (a: Pt, b: Pt) => Math.atan2(b[1] - a[1], b[0] - a[0]) * 180 / Math.PI;
       const turn = (a: number, b: number) => ((b - a + 540) % 360) - 180;
-      const Wa = add(S0, [6, -3]), Ea = ikSide(S0, Wa, ARM80[0], ARM80[1], 1);
+      const Wa = add(S0, [5, -1]), Ea = ikSide(S0, Wa, ARM80[0], ARM80[1], 1);
       const Se = add(S0, [0, 12]), Wb: Pt = [178, 163], Eb = ik(Se, Wb, ARM80[0], ARM80[1], false);
       const e0 = ang(S0, Ea), f0 = ang(Ea, Wa), e1 = ang(Se, Eb), f1 = ang(Eb, Wb);
       E = P(S, ARM80[0], e0 + turn(e0, e1) * q);
@@ -992,7 +992,7 @@ const AD_FIGS: Record<string, Fig> = {
     const H0 = lerpP(F, S0, 80 / 136), ARM80_LEN = arm, hand0x = wx - 4;
     const dip = shift / ARM80_LEN, S: Pt = [hand0x - ARM80_LEN * Math.cos(dip), S0[1] + ARM80_LEN * Math.sin(dip)], H: Pt = [H0[0], H0[1] + 0.6 * shift];
     const hand: Pt = [wx - 4, S0[1]];
-    const peel = c < 0.36 ? ease(c / 0.36) : c < 0.66 ? 1 : ease(1 - (c - 0.66) / 0.34);   // rise 0.18 s, 0.15 s dwell at the top, set down
+    const peel = c < 0.30 ? 0.85 * (c / 0.30) + 0.15 * ease(c / 0.30) : c < 0.56 ? 1 : ease(1 - (c - 0.56) / 0.44);   // rise 0.15 s, 0.13 s dwell at the top, set down 0.22 s
     const nearT = nearTap ? peel : 0, farT = nearTap ? 0 : peel;
     sc.mark("shoulder", S); sc.mark("hip", H); sc.mark("foot", F);
     sc.floor();
