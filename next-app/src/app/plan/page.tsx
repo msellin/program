@@ -508,6 +508,24 @@ export default function WeekPage() {
             // TrainingPeaks-style compliance colouring: partial completion gets
             // its own shade, missed-past-day gets muted red.
             const blockDone = dayBlocks.some((b) => b.state === "done");
+            const tracks = dayTracks({
+              activeSlugs,
+              displayBlocks,
+              blocksByProgram: blocksTodayByProgram,
+              dayLog,
+              isPast,
+              names: manifestNames,
+            });
+            // The day reads Done only when every track it shows is settled.
+            // Logged work that belongs to no track (an off-plan session) made
+            // today a filled check over two "Planned" lines (rescore r2).
+            const tracksOpen = tracks.some((t) => t.state === "planned" || t.state === "notLogged");
+            const loggedStatus =
+              complianceRatio >= 1 || (totalPrescribed === 0 && dayBlocks.every((b) => b.state === "done"))
+                ? tracksOpen
+                  ? "logged-partial"
+                  : "logged-full"
+                : "logged-partial";
             const status:
               | "skipped"
               | "moved"
@@ -521,9 +539,7 @@ export default function WeekPage() {
                   : override
                     ? "moved"
                     : doneCount > 0 || blockDone
-                      ? complianceRatio >= 1 || (totalPrescribed === 0 && dayBlocks.every((b) => b.state === "done"))
-                        ? "logged-full"
-                        : "logged-partial"
+                      ? loggedStatus
                       : isRest
                         ? "rest"
                         : isPast && !isRest && totalPrescribed === 0 && displayBlocks.length > 0
@@ -532,14 +548,6 @@ export default function WeekPage() {
 
             // One aggregate status dot per row; the per-track breakdown
             // lives in the expanded detail. Today is marked by tint + chip.
-            const tracks = dayTracks({
-              activeSlugs,
-              displayBlocks,
-              blocksByProgram: blocksTodayByProgram,
-              dayLog,
-              isPast,
-              names: manifestNames,
-            });
             const dayLogged = status === "logged-full" || status === "logged-partial" || tracks.some((t) => t.state === "done");
             // With 2+ tracks on a day the track lines are the entry points;
             // the single button exists only where there is one thing to open
@@ -554,7 +562,7 @@ export default function WeekPage() {
               moved: "Moved",
               "logged-full": "Done",
               "logged-partial": "Partly done",
-              missed: "Missed",
+              missed: "Not logged",
               rest: "Rest",
               planned: "Planned",
             }[status];
@@ -607,11 +615,11 @@ export default function WeekPage() {
                           </span>
                         ) : null}
                       </div>
-                      <span className="text-eyebrow text-muted text-right flex items-center gap-1">
+                      <span className="text-eyebrow text-muted text-right flex items-center gap-1 whitespace-nowrap flex-shrink-0">
                         {daySkipped ? (
                           <span className="text-amber">Skipped</span>
                         ) : status === "missed" ? (
-                          <span className="text-amber">Missed</span>
+                          <span className="text-amber">Not logged</span>
                         ) : isRest ? "Rest" : names ? "" : "—"}
                         <ChevronDown
                           size={14}
@@ -664,11 +672,16 @@ export default function WeekPage() {
                             const line = (
                               <>
                                 <TrackMarker state={t.state} />
-                                <span className="min-w-0 truncate">
-                                  <span className="text-ink">{t.name}</span>
-                                  <span className={cn(t.state === "done" ? "text-green" : "text-muted")}>
-                                    {" "}· {TRACK_STATE_LABEL[t.state]}
-                                  </span>
+                                {/* The state is the point of the row: the name
+                                    wraps, the state never clips (rescore r2). */}
+                                <span className="min-w-0 flex-1 text-ink">{t.name}</span>
+                                <span
+                                  className={cn(
+                                    "flex-shrink-0 whitespace-nowrap",
+                                    t.state === "done" ? "text-green" : "text-muted",
+                                  )}
+                                >
+                                  {TRACK_STATE_LABEL[t.state]}
                                 </span>
                               </>
                             );
@@ -681,7 +694,7 @@ export default function WeekPage() {
                                     className="flex items-center gap-2 min-h-[44px] text-small hover:bg-line-soft rounded-lg -mx-2 px-2"
                                   >
                                     {line}
-                                    <ChevronRight size={16} aria-hidden className="ml-auto text-muted flex-shrink-0" />
+                                    <ChevronRight size={16} aria-hidden className="text-muted flex-shrink-0" />
                                   </Link>
                                 ) : (
                                   <p className="flex items-center gap-2 py-1 text-small">{line}</p>
@@ -755,7 +768,7 @@ export default function WeekPage() {
           [
             ["planned", "Planned"],
             ["logged-full", "Done"],
-            ["missed", "Missed"],
+            ["missed", "Not logged"],
             ["skipped", "Skipped"],
             ["moved", "Moved"],
           ] as const

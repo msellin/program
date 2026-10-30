@@ -134,3 +134,14 @@ All lenses say every shipped change landed. The lead's ranked follow-ups (not bu
    re-runs and focus jumps to the first item when the sheet re-renders. Return focus stays correct (the lead
    checked the a11y claim against `useFocusTrap.ts:68`). Fix in the hook (9 users) by holding `onEscape` in a ref.
 Rejected: renaming "Open day", per-track dots on collapsed rows, and the "two button styles" note (intentional).
+
+## Built after the rescore (2026-10-30, owner: "Fix top three")
+1. Track lines: the name wraps and the state sits in its own column, so "Not logged" / "Planned" never clips.
+2. The day marker reads Done only when no track on that day is still Planned or Not logged. Logged work outside
+   every track (an off-plan session; in the seeded user, a back squat on a home-rehab day) now shows Partly done,
+   not a filled check over two "Planned" lines.
+3. One word: the day badge, the legend and the banner say "Not logged" ("2 of 3 not logged this week"); the
+   banner button is "Adjust the week ›" and its first option "Skip the unlogged days". The day badge no longer
+   wraps beside "⋯" at 375 px.
+Checked locally on a seeded two-track user (393 and 375) and the hip persona at 375; test user deleted.
+Still open: follow-ups 4-5, and a past day whose log holds only unlogged rows still reads Planned (Wed).

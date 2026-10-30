@@ -55,7 +55,7 @@ export function WeekRecoveryCard({
   };
 
   const skipOnly = () =>
-    apply("Skipped what's missed", () => {
+    apply("Skipped the unlogged days", () => {
       for (const d of missedDates) {
         if (blockObjectOn) skipWholeDay(d, reason ?? undefined);
         else skipDay(d, reason ?? undefined);
@@ -92,8 +92,8 @@ export function WeekRecoveryCard({
   const dayWord = missedCount === 1 ? "day" : "days";
   const headline =
     totalScheduledThisWeek > 0
-      ? `${missedCount} of ${totalScheduledThisWeek} missed this week`
-      : `${missedCount} ${dayWord} missed this week`;
+      ? `${missedCount} of ${totalScheduledThisWeek} not logged this week`
+      : `${missedCount} ${dayWord} not logged this week`;
   const left =
     remainingScheduledCount > 0
       ? ` · ${remainingScheduledCount} ${remainingScheduledCount === 1 ? "day" : "days"} left`
@@ -112,7 +112,7 @@ export function WeekRecoveryCard({
           aria-expanded={false}
           className="text-small font-semibold text-strong flex-shrink-0 min-h-11 px-1"
         >
-          Fix the week ›
+          Adjust the week ›
         </button>
       </Card>
     );
@@ -143,7 +143,7 @@ export function WeekRecoveryCard({
           onClick={skipOnly}
           className="w-full text-left rounded-lg border border-line-strong bg-surface px-3.5 py-3 hover:bg-line-soft"
         >
-          <p className="text-small font-semibold text-strong">Skip what&apos;s missed</p>
+          <p className="text-small font-semibold text-strong">Skip the unlogged days</p>
           <p className="text-caption text-muted mt-0.5 leading-snug">
             Marks {missedCount === 1 ? "that day" : `those ${missedCount} days`} skipped. Rest of the week
             runs as scheduled — progression order breaks if you&apos;re on a wave.
