@@ -2,6 +2,8 @@
 
 Project context for Claude Code sessions in this repo.
 
+**Current state and next steps:** `dev/active/HANDOVER-2026-10-30.md` (read it first in a new session).
+
 ## What this is
 
 **Terav** — a focused-improvement training app. Landing: https://terav.fit. App: https://app.terav.fit.
