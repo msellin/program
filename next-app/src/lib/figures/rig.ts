@@ -772,6 +772,66 @@ const AD_FIGS: Record<string, Fig> = {
     sc.line([hL, [(hL[0] + hR[0]) / 2, 80 + sag], hR], BAND, lerp(4, 2.5, p));
     return "Band pull-apart: standing with a band held in front at shoulder height; the arms sweep out to the sides, the shoulder blades squeeze together, then return";
   } },
+  arch: { kind: "hold", sided: false, scale: 1.15, poster: 1, build(sc, _s, q) {
+    // Prone arch (Superman) hold: face down, the hips stay on the floor and the lift comes from the mid and
+    // upper back (chest 7 deg), the legs only a few centimetres, the arms reach overhead in line with the
+    // trunk. The head continues the trunk line, so the neck stays neutral and the low back is not cranked.
+    // Lying proportions as the hollow: trunk 78, arm ARMLY, leg 120. Segment lengths never change.
+    const a = lerp(0, 7, q), H = [200, 158], S = P(H, 78, 180 + a), foot = P(H, 120, -lerp(0, 4, q));
+    const hand = P(S, ARMLY, 180 + lerp(0, 9, q));
+    sc.floor();
+    sc.line([H, foot], BODY, 8);
+    sc.line([S, H], BODY, TORSO);
+    sc.dot(P(S, 26, 180 + a), 11, BODY);
+    sc.line([S, hand], COL.B, 8);
+    return "Prone arch hold: lying face down with the arms straight overhead and the legs together; the chest, arms and legs lift a little off the floor from the upper back, the neck stays in line with the spine, then hold";
+  } },
+  dbrow: { kind: "move", dur: 5200, k: [0.06, 0.34, 0.44, 0.92], poster: 0.9, sided: true, tempo: ["drive", "control"], cues: [{ angle: ["shoulder", "elbow", "hand"] }], build(sc, side, p) {
+    // One knee and the same-side hand on a bench, the other foot planted behind it; the back is near level
+    // (about 17 deg: a bench knee 44 below the hip puts the shoulder above it; the bench arm is a hair short of locked) and does not move, nor do the
+    // bench hand, knee and planted foot. The weight travels from a straight arm to the side of the ribs, the
+    // elbow rising along the body behind the shoulder (trainer: elbows back along the ribs, never overhead).
+    const work = COL[side], B = 140, K = [176, B - 4], H = [172, B - 4 - 43.8];
+    const S = P(H, 56, -17), F = [124, 166], bh = [S[0] + 19, B - 4];
+    const rest = [S, ikSide(S, bh, ARM86[0], ARM86[1], 1), bh];
+    const kneel = [H, K, [K[0] - 42, B - 6]];
+    const plant = [H, ikSide(H, F, 44, 42, 1), F];
+    // End of the pull: just below the ribcage, a little behind the shoulder.
+    const top = add(lerpP(H, S, 0.45), [0, 7]);
+    const hand = lerpP(P(S, ARM86[0] + ARM86[1] - 0.01, 90), top, p);
+    const el = ikSide(S, hand, ARM86[0], ARM86[1], -1);
+    sc.mark("shoulder", S); sc.mark("elbow", el); sc.mark("hand", hand);
+    sc.floor();
+    sc.box(126, B, 262, 167);
+    const arm = () => { sc.line([S, el, hand], work, 8); sc.plate(hand, 7); };   // end-on dumbbell, hanging plumb from the hand
+    if (side === "R") { sc.line(rest, FAR, 8); sc.line(kneel, FAR, 8); } else { sc.line(plant, FAR, 8); arm(); }
+    sc.line([S, H], BODY, TORSO); sc.dot(P(S, 22, -17), 11, BODY);
+    if (side === "R") { sc.line(plant, BODY, 8); arm(); }
+    else { sc.line(kneel, BODY, 8); sc.line(rest, BODY, 8); }
+    sc.badge(beyond(S, hand, 16), work, side);
+    return "Single-arm dumbbell row, " + sideWord(side) + " arm working: the other knee and hand on a bench, the opposite foot planted, back flat; pull the dumbbell from a straight arm to just below the ribs with the elbow close to the side, then lower under control";
+  } },
+  pulldown: { kind: "move", dur: 6000, k: [0.08, 0.36, 0.48, 0.95], poster: 0.9, sided: false, tempo: ["drive", "control"], cues: [{ angle: ["shoulder", "elbow", "hand"] }], build(sc, _s, p) {
+    // Seated at a cable stack, thighs under the pad, a slight lean back (10 deg) that stays put. The bar
+    // travels in front of the face from straight arms overhead to the upper chest, elbows down and back.
+    // The cable runs straight from the bar to a fixed pulley above; seat, pad and feet do not move.
+    const H = [170, 130], K = P(H, 44, -8), foot = P(K, 42, 93), S = P(H, 56, -100), arm = ARM86[0] + ARM86[1];
+    const hand = lerpP([S[0] + 17, S[1] - Math.sqrt(arm * arm - 17 * 17) + 0.01], add(S, [22, 14]), p);
+    const el = ikSide(S, hand, ARM86[0], ARM86[1], -1);
+    sc.mark("shoulder", S); sc.mark("elbow", el); sc.mark("hand", hand);
+    const Q: Pt = [207, -120], pad: Pt = [K[0] - 12, K[1] - 13];
+    sc.floor();
+    sc.bg([[258, -600], [258, 168]], PROP, 4);
+    sc.bg([hand, beyond(hand, Q, 800)], PROP, 2);
+    sc.box(H[0] - 22, H[1] + 7, H[0] + 28, 167);
+    sc.line([[pad[0] + 7, pad[1]], [258, pad[1]]], PROP, 3);
+    sc.line([H, K, foot], BODY, 8);
+    sc.ring(pad, 7, PROP, 3);
+    sc.line([S, H], BODY, TORSO); sc.dot(P(S, 22, -100), 11, BODY);
+    sc.line([S, el, hand], COL.B, 8);
+    sc.ring(hand, 6, WOOD, 3);
+    return "Lat pulldown: seated at a cable stack with the thighs under the pad and a slight lean back; pull the bar from straight arms overhead down to the upper chest, elbows going down and back, then return slowly";
+  } },
   hollow: hollowFig(false, "Hollow body hold: lying on the back, lower back pressed into the floor, arms overhead, shoulders and straight legs lifted off the floor"),
   hollowpull: hollowFig(true, "Hollow body pullover: holding the hollow, lower back pressed down, the arms travel slowly from over the chest to overhead and back"),
   wristprep: wristFig(false, "Wrist prep on hands and knees: hands flat on the floor, fingers forward; the shoulders rock slowly forward over the hands, then back"),
