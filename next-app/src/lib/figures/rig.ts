@@ -977,17 +977,19 @@ const AD_FIGS: Record<string, Fig> = {
     // other hand (shift first, then lift): the shoulders dip 1.5 px about the planted hands (arm length kept), hips 0.9 px, feet planted.
     const arm = ARM80[0] + ARM80[1], th = 20 * Math.PI / 180, wx = 268;
     const k8 = p * 10, idx = Math.floor(k8), c = k8 - idx, nearTap = idx % 2 === 0;
-    const shift = 2.5 * (0.5 - 0.5 * Math.cos(2 * Math.PI * (k8 + 0.3)));
+    // weight shift: loads on over the 0.15 s before each peel (c .7 -> 1), holds through the lift, unloads as the fingers set down
+    const sh = (cc: number) => cc < 0.3 ? 1 : cc < 0.6 ? 1 - ease((cc - 0.3) / 0.3) : cc < 0.7 ? 0 : ease((cc - 0.7) / 0.3);
+    const shift = 4 * sh(k8 - Math.floor(k8));
     const S0: Pt = [wx - 4 - arm, 166 - 136 * Math.cos(th)], F: Pt = [S0[0] - 136 * Math.sin(th), 166];
     const H0 = lerpP(F, S0, 80 / 136), ARM80_LEN = arm, hand0x = wx - 4;
     const dip = shift / ARM80_LEN, S: Pt = [hand0x - ARM80_LEN * Math.cos(dip), S0[1] + ARM80_LEN * Math.sin(dip)], H: Pt = [H0[0], H0[1] + 0.6 * shift];
     const hand: Pt = [wx - 4, S0[1]];
-    const peel = c < 0.3 ? ease(c / 0.3) : c < 0.6 ? 1 : ease(1 - (c - 0.6) / 0.4);   // rise, 0.15 s dwell at the top, set down
+    const peel = c < 0.36 ? ease(c / 0.36) : c < 0.66 ? 1 : ease(1 - (c - 0.66) / 0.34);   // rise 0.18 s, 0.15 s dwell at the top, set down
     const nearT = nearTap ? peel : 0, farT = nearTap ? 0 : peel;
     sc.mark("shoulder", S); sc.mark("hip", H); sc.mark("foot", F);
     sc.floor();
     sc.bg([[wx + 2, 168], [wx + 2, -600]], PROP, 4);
-    const fingers = (t: number, col: string) => { sc.line([[hand[0] + 1.5 * t, hand[1] + 2], P(hand, 13, -90 - 65 * t)], col, 6); };
+    const fingers = (t: number, col: string) => { sc.line([[hand[0] + 1.5 * t, hand[1] + 2], P(hand, 16, -90 - 72 * t)], col, 6); };
     sc.line([S, hand], FAR, 8); fingers(farT, FAR);
     sc.line([H, F], BODY, 8); foot(sc, F);
     sc.line([S, H], BODY, TORSO);
@@ -1001,20 +1003,22 @@ const AD_FIGS: Record<string, Fig> = {
     // The hollow hold's shape (trunk 80, legs 120, arms overhead, lower back pressed down; shoulders lifted 20
     // degrees, legs 17, so the trunk and legs open a banana at the pelvis), held rigid while it rocks on the lower
     // back: the whole shape turns 15 degrees each way about the pelvis and the contact rolls about 5 px, shoulders
-    // up as the legs go down, then back. One full rock (there and back) takes 2.4 s: 1.2 s each way, eased.
-    const C: Pt = [190, 164], rho = 15 * Math.sin(2 * Math.PI * p), R = rho * Math.PI / 180, dx = 18 * R;
+    // up as the legs go down, then back. One full rock (there and back) takes 2.4 s: 1.05 s each way, eased, with a 0.15 s dwell at each extreme; the legs trail the trunk by 3.8 degrees (0.04 of the cycle).
+    const C: Pt = [190, 164];
+    // 2.4 s per rock: 0.15 s dwell at each extreme (p .25 and .75, +-.03), eased 1.05 s between; the legs trail the trunk by 0.04 p.
+    const rkk = (u: number) => { u = ((u % 1) + 1) % 1; return u < 0.22 ? -1 + 2 * ease((u + 0.22) / 0.44) : u < 0.28 ? 1 : u < 0.72 ? 1 - 2 * ease((u - 0.28) / 0.44) : u < 0.78 ? -1 : -1 + 2 * ease((u - 0.78) / 0.44); };
+    const R = 15 * rkk(p) * Math.PI / 180, dx = 18 * R, Rl = 15 * rkk(p - 0.04) * Math.PI / 180;
     const rot = (q: Pt): Pt => { const c = Math.cos(R), s = Math.sin(R), x = q[0] - C[0], y = q[1] - C[1]; return [C[0] + x * c - y * s + dx, C[1] + x * s + y * c]; };
     // r4 (62, 66): the trunk is two 40 px segments bowed 8 degrees so the ribs sit 5.6 px below the pelvis-shoulder
     // chord (ribs down, lower back pressed into the floor); the bowed trunk rocks as one rigid shape.
     const a = 20, H0: Pt = [190, 158], dl = 8 * Math.PI / 180, chord = 80 * Math.cos(dl), S0 = P(H0, chord, 180 + a), foot0 = P(H0, 120, -17);
     const th0 = (180 + a) * Math.PI / 180, M0: Pt = [(H0[0] + S0[0]) / 2 + 40 * Math.sin(dl) * Math.sin(th0), (H0[1] + S0[1]) / 2 - 40 * Math.sin(dl) * Math.cos(th0)];
-    const H = rot(H0), S = rot(S0), M = rot(M0), foot = rot(foot0), hand = rot(P(S0, ARMLY, 180 + a + 4)), head = rot(P(S0, 26, 180 + a - 2));
+    const H = rot(H0), S = rot(S0), M = rot(M0), foot: Pt = [H[0] + (foot0[0] - H0[0]) * Math.cos(Rl) - (foot0[1] - H0[1]) * Math.sin(Rl), H[1] + (foot0[0] - H0[0]) * Math.sin(Rl) + (foot0[1] - H0[1]) * Math.cos(Rl)], hand = rot(P(S0, ARMLY, 180 + a + 4)), head = rot(P(S0, 26, 180 + a - 2));
     sc.floor();
     sc.line([H, foot], BODY, 8);
     sc.line([S, M, H], BODY, TORSO);
     sc.dot(head, 11, BODY);
     sc.line([S, hand], COL.B, 8);
-    sc.ring([C[0], 166], 6, COL.B, 2, 1);   // fixed mark of the pressed-down lower back: it also keeps the reduced-motion ghost to the body alone
     return "Hollow rock: in the hollow hold with the lower back pressed down, arms overhead and legs long and low, rock forward and back along the spine as one rigid shape without letting the lower back lift";
   } },
   elbowstand: { kind: "hold", sided: false, cues: [{ angle: ["shoulder", "hip", "foot"] }], build(sc, _s, q, _rep = 0, t = 0) {
@@ -1022,14 +1026,14 @@ const AD_FIGS: Record<string, Fig> = {
     // (56) straight up from the shoulders and leaning back so the hips sit behind the hands; the legs (80) are out
     // in front level with the hips. Seen from the side the straddle shows as the far leg dropping 16 degrees below
     // the near one and ending 10 px short (the foreshortening of a leg turned away). The legs are heavy out in
-    // front, so the hips sit behind the hands to keep the weight over the fingers. The legs sway 1.5 degrees on a
-    // 3.2 s cycle once the hold is set, so a hold is never a photograph.
+    // front, so the hips sit behind the hands to keep the weight over the fingers. The legs sway 2.5 degrees on a
+    // 3 s cycle once the hold is set, so a hold is never a photograph.
     const hand: Pt = [180, 168], S = P(hand, ARM80[0] + ARM80[1], -86), tr = -112, H = P(S, 56, tr);
-    const lift = lerp(10, 0, q) + 1.5 * Math.sin((2 * Math.PI * t) / 3200) * q, F = P(H, LEG, lift), Ff = P(H, 70, lift + 16);
+    const lift = lerp(10, 0, q) + 2.5 * Math.sin((2 * Math.PI * t) / 3000) * q, F = P(H, LEG, lift), Ff = P(H, 70, lift + 16);
     sc.mark("shoulder", S); sc.mark("hip", H); sc.mark("foot", F);
     sc.floor();
     // r4 (66): two arms, shoulder width apart (the far one in FAR, behind), each ending in a flat hand with the
-    // fingers pointing forward; the head hangs between the arms just below the shoulders, so the support reads
+    // fingers pointing forward; the head hangs between the arms, 28 px below the shoulders and a little forward toward the hands, well clear of the hips, so the support reads
     // as arms and hands and not as a leg.
     const hand2: Pt = [hand[0] + 7, 168], S2: Pt = [S[0] + 7, S[1] + 0.5];
     sc.line([H, Ff], FAR, 8);
@@ -1037,7 +1041,7 @@ const AD_FIGS: Record<string, Fig> = {
     sc.line([[hand2[0] - 2, 167], [hand2[0] + 12, 167]], FAR, 5);
     sc.line([H, F], BODY, 8);
     sc.line([S, H], BODY, TORSO);
-    sc.dot([S[0] + 3.5, S[1] + 18], 10, BODY);
+    sc.dot([S[0] + 8, S[1] + 28], 10, BODY);
     sc.line([hand, S], COL.B, 8);
     sc.line([[hand[0] - 2, 167], [hand[0] + 13, 167]], COL.B, 5);
     return "Straddle L stand, straight-arm version (forearms optional): hands on the floor with straight arms, shoulders over the hands, hips high and the legs out wide in front at hip height; push the floor away and keep the legs lifted";
