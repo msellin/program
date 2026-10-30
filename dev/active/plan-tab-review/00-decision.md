@@ -113,3 +113,24 @@ The rule: a day never has two controls that open the same thing. With 1 track, t
   - The `e2e-persona-concurrent` week renders all Rest on live too (persona data).
   - The orphan "None. This is the second squat day…" conditioning line (r23 [M]).
   - A past day with an unlogged log row still reads "planned" in the day marker (Wed in one-track shots).
+
+## Rescore on live (2026-10-30, round 2)
+Evidence: `shots/live/` (seeded two-track test user at 393 and 375, hip persona at 393; the test user is since
+deleted). Brief: `RESCORE-BRIEF.md`. Lens files: `r2-01..r2-06`.
+
+| Visual | Mobile UX | Copy | A11y | Two-track user | Design lead |
+|---|---|---|---|---|---|
+| 7 (was 4) | 7 (4) | 6 (5) | 8 (6) | 8 (5) | 7 (5) |
+
+All lenses say every shipped change landed. The lead's ranked follow-ups (not built; owner decides):
+1. **Track row clips its own state** ("Anterior hip + strength rebuild · No…"), 5/5, real defect. Let the label
+   wrap or give the state its own right-aligned column (`page.tsx` track `Link` row).
+2. **Today shows a green check while both tracks read "Planned"** (two-track-393-01-load). Real per the lead;
+   the cause is not yet traced: the day marker and the track lines read the log differently.
+3. **One word for one state:** the "Missed" badge and the "2 of 3 missed" banner vs "Not logged" in the rows; also
+   "Fix the week" is vague. 2/5.
+4. Collapsed summaries cut mid-phrase ("pre-bed +…"). Polish, 2/5.
+5. The "⋯" sheet floats above the bottom edge; `closeMenu` is a new function each render, so the focus trap
+   re-runs and focus jumps to the first item when the sheet re-renders. Return focus stays correct (the lead
+   checked the a11y claim against `useFocusTrap.ts:68`). Fix in the hook (9 users) by holding `onEscape` in a ref.
+Rejected: renaming "Open day", per-track dots on collapsed rows, and the "two button styles" note (intentional).

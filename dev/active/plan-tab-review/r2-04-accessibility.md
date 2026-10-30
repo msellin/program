@@ -1,0 +1,15 @@
+# Accessibility (WCAG 2.2 AA) — Plan tab rescore (live)
+Score now: 8/10 (was 6). Keeps it from a 10: the focus-trap effect re-arms on re-render, the long toggle name, the dialog has no visible heading, and the muted text and 375px truncation were not measured.
+
+Did each shipped change land?
+- Accordion: yes. Native `<button aria-expanded aria-controls>` (page.tsx:586-592), name computed from visible text, chevron aria-hidden. The old Move/Skip buttons no longer sit inside the toggle (F6).
+- One action: yes. A single `<Link>` per day (page.tsx:846-901). Accessible names "Log, Mon 26 Oct", "Open day, …" and "Edit log, …" start with the visible text, so 2.5.3 passes. They are links to a route, which is correct.
+- "⋯" sheet: mostly. `role=dialog aria-modal aria-label` (950-952), `aria-haspopup="dialog"`, icon-only button named "More for Mon 26 Oct" (941), 44px target (943). Esc closes, Tab cycles and focus returns via `useFocusTrap` (lib/useFocusTrap.ts). The screenshot `two-track-375-03-menu` shows the sheet is legible. See finding 1.
+- Hidden verbs: yes. Move… and Skip are real `<button>`s (963-985) with 48px targets and a Cancel button. Skip goes through ConfirmSheet, which gives a 3.3.4-style confirmation.
+- Track rows: yes. `<ul aria-label="Tracks">` with `<li><Link>` (662-689), 44px min-height. The name reads "Overhead Mobility · Not logged", so state is carried in text and the marker is aria-hidden. The chevron is aria-hidden.
+- Not logged: yes. It is text in the row, not colour or icon alone (1.4.1 passes). The dashed amber marker is decorative and the text carries the meaning.
+
+Top 3 remaining findings
+1. Focus trap re-arms on every render (2.4.3). `closeMenu` at page.tsx:931 is a new function each render and sits in the `useFocusTrap` deps (useFocusTrap.ts:68). Any parent re-render while the sheet is open, such as a store update, re-runs the effect. That refocuses the first item and overwrites `previouslyFocused` with a node inside the sheet, so Esc can then return focus to the wrong place. Fix: `useCallback` for `closeMenu`, or keep `onEscape` in a ref inside the hook. Not verified live, only read from source.
+2. The dialog has no visible heading, only `aria-label={dayLabel}` (952) and a `<p>` (961) (4.1.2/1.3.1, minor). Use `aria-labelledby` pointing at that paragraph (give it an id) so the sighted and SR names match. `aria-controls` on the toggle (591) points at an id that exists only while expanded; it is harmless but noisy.
+3. Toggle accessible name is long (593-634). It concatenates day, date, "Today", "· N activities", status and the full session summary, because the `<p>` sits inside the button. The sr-only `statusLabel` (572) sits outside the button, so it is not in the name. Consider keeping the summary out of the button, or adding `aria-describedby`. Also unmeasured: `text-muted` on bg-ground at `text-eyebrow` and `text-caption` sizes (1.4.3), and the truncation of "Anterior hip + strength rebuild · …" at 375px (two-track-375-03-menu, 1.4.4/1.4.10 reflow). The prev/next/jump-to-this-week controls at 351-363 are correctly aria-hidden, tabindex -1 and disabled together.
