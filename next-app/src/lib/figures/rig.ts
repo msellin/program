@@ -508,7 +508,7 @@ function wallExit(sc: Scene, praw: number, mat: boolean) {
   const D = Math.PI / 180, A: Pt = [166, 168], B: Pt = [192, 168], arm = ARM80[0] + ARM80[1], SH = 13, STAND = mat ? 78 : 74;
   // matfall: a quicker tip and a deeper fold (a soft, low landing); cartwheel: straighter legs, a wider straddle, a slower wheel.
   const T = mat ? [0, 0.12, 0.48, 0.67, 1] :[0, 0.12, 0.58, 0.82, 1], DL = mat ? 58 : 96, DT = mat ? 30 : -35, BEND = mat ? 0.45 : 0.4, GAP = mat ? 28 : 52;
-  const LIN = mat ? 0.7 : 0.4;
+  const LIN = mat ? 0.7 : 0.55;
   const rig = (x: number) => {
     // matfall: the 90 -> 180 span accelerates (a short ease-in, gravity taking the tip); the foot contact is the soft settle
     const psi = mat && x > T[2] && x < T[3] ? lerp(90, 180, Math.pow(clamp01((x - T[2]) / (T[3] - T[2])), 1.6)) : x > T[1] && x <= T[2] ? 90 * (LIN * clamp01((x - T[1]) / (T[2] - T[1])) + (1 - LIN) * TEMPO.control(clamp01((x - T[1]) / (T[2] - T[1])))) : kf([0, 0, 90, 180, 180], T, x), r = psi * D;   // r4: the 0 -> 90 turn is a flatter ease (35% linear) so the foot swing stays under 6 px/frame
