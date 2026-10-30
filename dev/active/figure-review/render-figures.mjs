@@ -48,6 +48,9 @@ function figSvg(f, x, y, w, h, bg, id, side, zoom = 1, fit = "cycle") {
 function times(fig) {
   if (fig.kind === "hold") return [0, 300, 2000];
   const dur = fig.kind === "move2" ? fig.dur / 2 : fig.dur, k = fig.k;
+  // A gait's k is [0, 1, 1], which put three of four frames on the cycle's zero crossings (0, 1.01, 1.0) and hid
+  // the motion of a rock or a tap from every reviewer (2026-10-30). Gaits sample the quarters instead.
+  if (fig.kind === "gait") return [0, 0.25, 0.5, 0.75].map((x) => Math.round(x * dur));
   const fr = [0, (k[0] + k[1]) / 2, k[1] + 0.01, (k[2] + 1) / 2];
   const t = fr.map((x) => Math.round(x * dur));
   return fig.kind === "move2" ? [...t, ...t.map((x) => x + dur)] : t;
@@ -74,8 +77,8 @@ async function sheet(name, ids) {
     body += `<text x="${x + 6}" y="${y + 36}" font-family="Helvetica" font-size="11" fill="#6b717d">reduced</text>`;
     x += FW + 20;
     // Today tile: 144px square (before: the 358x201 box letterboxed to 144x81), drawn 2x. Brief thumb: 56x40, drawn 2x.
-    body += figSvg(drawFigure(id, side, ts[2] ?? 2000, false), x, y + 22 + 40, fitted ? 288 : 288, fitted ? 288 : 162, TILE, id, side, 2);
-    body += `<text x="${x}" y="${y + 50}" font-family="Helvetica" font-size="11" fill="#6b717d">Today tile 144px (2x, one moment: the app animates it)</text>`;
+    body += figSvg(fig.kind === "gait" ? drawFigure(id, side, 0, false, true) : drawFigure(id, side, ts[2] ?? 2000, false), x, y + 22 + 40, fitted ? 288 : 288, fitted ? 288 : 162, TILE, id, side, 2);
+    body += `<text x="${x}" y="${y + 50}" font-family="Helvetica" font-size="11" fill="#6b717d">Today tile 144px (2x; gait: poster pose; the app animates it)</text>`;
     x += 300;
     body += figSvg(drawFigure(id, side, 0, false, true), x, y + 22 + 40, 112, 80, GROUND, id, side, 2, "poster");
     body += `<text x="${x}" y="${y + 50}" font-family="Helvetica" font-size="11" fill="#6b717d">brief 56x40 (2x)</text>`;
