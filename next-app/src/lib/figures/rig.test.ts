@@ -373,10 +373,7 @@ describe("exercise → figure map", () => {
   // Every drill on the ad path (first-strict-pullup, handstand-walk, concurrent
   // strength) has a figure, except the few with no meaningful side-view pose.
   const NO_FIGURE_YET = new Set([
-    "deliberate_mat_falls",
     "hs_video_review",
-    "tuck_forward_roll_from_crow",
-    "wall_cartwheel_exit",
   ]);
   // Drills a program picks from its drill_library pool are as visible as the ones it names (founder 2026-10-30:
   // thread-the-needle reached Today with no figure because only named exercise_ids were checked). This is the
@@ -390,11 +387,6 @@ describe("exercise → figure map", () => {
     "aerobic_threshold_cruise",
     "aerobic_threshold_test",
     "aerobic_z1_steady",
-    "deliberate_mat_falls",
-    "hs_arch_hold",
-    "hs_elbow_stand_straddle_l",
-    "hs_fingertip_taps",
-    "hs_hollow_rock",
     "mu_false_grip_hang",
     "mu_false_grip_pullup",
     "mu_false_grip_ring_row",
@@ -420,11 +412,6 @@ describe("exercise → figure map", () => {
     "om_snatch_grip_sotts_press",
     "om_tgu_hold",
     "om_wall_slides",
-    "pu_arch_hold",
-    "pu_dumbbell_row",
-    "pu_lat_pulldown",
-    "tuck_forward_roll_from_crow",
-    "wall_cartwheel_exit",
   ]);
   // Not a movement: "record a set and watch it back". These never get a figure.
   const NO_FIGURE_BY_DESIGN = new Set(["pu_video_review", "hs_video_review", "mu_video_review"]);

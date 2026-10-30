@@ -20,6 +20,17 @@ export const EXERCISE_FIGURES: Record<string, keyof typeof FIGS> = {
   om_supine_dowel_pullover: "pullover",
   om_foam_roller_thoracic_ext: "roller",
   om_quadruped_thoracic_rotation: "threadneedle",
+  // Founder 2026-10-30: reachable through drill_library on the ad path.
+  pu_arch_hold: "arch",
+  hs_arch_hold: "arch",
+  pu_dumbbell_row: "dbrow",
+  pu_lat_pulldown: "pulldown",
+  hs_fingertip_taps: "fingertaps",
+  hs_hollow_rock: "hollowrock",
+  hs_elbow_stand_straddle_l: "elbowstand",
+  tuck_forward_roll_from_crow: "crowroll",
+  deliberate_mat_falls: "matfall",
+  wall_cartwheel_exit: "cartwheel",
   // Ad path (2026-10-28): first-strict-pullup, handstand-walk, concurrent-strength-maintenance.
   pu_dead_hang: "hang",
   pu_active_hang: "activehang",
