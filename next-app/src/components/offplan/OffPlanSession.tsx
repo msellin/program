@@ -16,6 +16,7 @@ import { writeRest, clearRest, restoreRest } from "@/lib/rest-persistence";
 import { RestTakeover } from "@/components/session/RestTakeover";
 import { nextAfterSet } from "@/components/session/shared/advance";
 import { NoteSheet } from "@/components/session/NoteSheet";
+import { SessionDone, type SessionEnd } from "@/components/session/SessionDone";
 import type { RailExercise, SessionSheet } from "@/components/session/DaySession";
 import type { Exercise, Program } from "@/lib/schemas";
 import { Card, cardClass } from "@/components/ui/Card";
@@ -63,6 +64,7 @@ export function OffPlanSession() {
   const [activeSetIndex, setActiveSetIndex] = useState(0);
   const [editingLoad, setEditingLoad] = useState(false);
   const [sheet, setSheet] = useState<SessionSheet>(null);
+  const [ended, setEnded] = useState<SessionEnd | null>(null);
   const [resting, setResting] = useState(false);
   const [restSeconds, setRestSeconds] = useState(90);
   /**
@@ -293,6 +295,21 @@ export function OffPlanSession() {
     setMode("set");
   };
 
+  // M-049 (2026-10-30): Stop used to drop back onto the drill list, which
+  // reads as "pick the next one". It now lands where DaySession's Stop does,
+  // on "Session stopped", with every sheet closed.
+  const stopSession = () => {
+    setSheet(null);
+    setResting(false);
+    clearRest();
+    setMode("brief");
+    setEnded("stopped");
+  };
+
+  if (ended) {
+    return <SessionDone end={ended} rail={railExercises} date={activeDate} slug={primarySlug} />;
+  }
+
   const upNext = nextAfterSet(
     railExercises,
     activeIdx,
@@ -319,12 +336,7 @@ export function OffPlanSession() {
             setActiveSetIndex(i);
           }}
           onBackToBrief={() => setMode("brief")}
-          onStopSession={() => {
-            setSheet(null);
-            setResting(false);
-            clearRest();
-            setMode("brief");
-          }}
+          onStopSession={stopSession}
           onConfirmed={(secs) => {
             setRestSeconds(secs);
             setRestStartedAt(null);
@@ -383,12 +395,7 @@ export function OffPlanSession() {
             date={activeDate}
             isSkillProgram={true}
             onClose={() => setSheet(null)}
-            onStopSession={() => {
-              setSheet(null);
-              setResting(false);
-              clearRest();
-              setMode("brief");
-            }}
+            onStopSession={stopSession}
           />
         ) : null}
       </div>

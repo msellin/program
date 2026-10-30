@@ -45,6 +45,8 @@ vi.mock("@/lib/useStore", async (orig) => {
           user_profile: { active_program_id: "first-strict-pullup" },
         },
         hydrated: true,
+        setNotes: () => {},
+        reportInSessionSymptom: () => {},
       }),
   };
 });
@@ -72,5 +74,43 @@ describe("extra session on a red day", () => {
     render(<OffPlanSession />);
     await waitFor(() => expect(screen.queryAllByText(/hang/i).length).toBeGreaterThan(0));
     expect(screen.queryByText("Rest today.")).toBeNull();
+  });
+});
+
+/**
+ * M-049: Stop from the hurt sheet, and from the note sheet's stop offer, lands
+ * on "Session stopped" with no sheet left open; it used to drop back onto the
+ * drill list.
+ */
+describe("stopping an extra session", () => {
+  const openFirstDrill = async () => {
+    logs = dayLog("green", 0);
+    render(<OffPlanSession />);
+    await waitFor(() => expect(screen.queryAllByText(/hang/i).length).toBeGreaterThan(0));
+    fireEvent.click(screen.getAllByRole("button").find((b) => /hang/i.test(b.textContent ?? ""))!);
+    await waitFor(() => expect(screen.getByText("Something hurt")).toBeDefined());
+    fireEvent.click(screen.getByText("Something hurt"));
+  };
+
+  it("Stop in the hurt sheet lands on the stopped screen", async () => {
+    await openFirstDrill();
+    fireEvent.click(screen.getByRole("button", { name: "Stop session" }));
+    await waitFor(() => expect(screen.getByText("Session stopped")).toBeDefined());
+    expect(screen.queryByRole("dialog")).toBeNull();
+    expect(screen.queryByText("Extra session")).toBeNull();
+  });
+
+  it("Stop offered by the note sheet closes it and lands on the stopped screen", async () => {
+    await openFirstDrill();
+    fireEvent.click(screen.getByText("Note it"));
+    await waitFor(() => expect(screen.getByText("Anything worth knowing?")).toBeDefined());
+    fireEvent.click(screen.getAllByText("Something hurt").at(-1)!);
+    fireEvent.click(screen.getByText(/^Save to/));
+    await waitFor(() => expect(screen.getByText("Stop the session?")).toBeDefined());
+    fireEvent.click(screen.getByRole("button", { name: "Stop session" }));
+    await waitFor(() => expect(screen.getByText("Session stopped")).toBeDefined());
+    expect(screen.queryByText("Stop the session?")).toBeNull();
+    expect(screen.queryByText("Anything worth knowing?")).toBeNull();
+    expect(screen.queryByRole("dialog")).toBeNull();
   });
 });
