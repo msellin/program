@@ -54,7 +54,7 @@ Final scores (r4; C = ceiling the reviewer named, with its reason in the lens fi
 
 Physics 11/11 at 10. 13 trainer/animator 10s. No [H] in any lens; every jump <= 5.9 px/33 ms (was up to 7.8).
 
-Still open (not ceilings), for the owner:
+Still open (not ceilings). **Owner 2026-10-30: leave as is; the ceilings and these two items are accepted.**
 - **elbowstand, illustrator 8:** head ball the same grey as the hip at 56x40 -> 1 px darker head outline. Not done:
   the outline comes from the one shared `shapeEdge` rule for every figure. Hand-balance 9 also names a route: a
   front-view variant would show the straddle (and lose the L). Owner's call.
